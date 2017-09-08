@@ -1,0 +1,4 @@
+package cats
+package syntax
+
+trait NonEmptyTraverseSyntax extends NonEmptyTraverse.ToNonEmptyTraverseOps

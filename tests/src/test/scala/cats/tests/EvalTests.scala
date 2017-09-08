@@ -72,14 +72,17 @@ class EvalTests extends CatsSuite {
   }
 
   test(".value should evaluate only once on the result of .memoize"){
-    forAll { i: Eval[Int] =>
-      val spooky = new Spooky
-      val i2 = i.map(_ => spooky.increment).memoize
-      i2.value
-      spooky.counter should === (1)
-      i2.value
-      spooky.counter should === (1)
-    }
+    val spooky = new Spooky
+    val i2 = Eval.always(spooky.increment()).memoize
+    val i3 = Eval.now(()).flatMap(_ => Eval.later(spooky.increment())).memoize
+    i2.value
+    spooky.counter should === (1)
+    i2.value
+    spooky.counter should === (1)
+    i3.value
+    spooky.counter should === (2)
+    i3.value
+    spooky.counter should === (2)
   }
 
   {

@@ -4,13 +4,15 @@ sudo: required
 
 dist: trusty
 
+group: edge 
+
 git:
   depth: 9999
 
 scala:
   - 2.10.6
   - 2.11.11
-  - 2.12.2
+  - 2.12.3
 
 jdk:
   - oraclejdk7
@@ -18,7 +20,7 @@ jdk:
 
 matrix:
   exclude:
-  - scala: 2.12.2
+  - scala: 2.12.3
     jdk: oraclejdk7
   - scala: 2.10.6
     jdk: oraclejdk8

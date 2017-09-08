@@ -90,9 +90,9 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
     }
   }
 
-  test(s"Reducible[$name].intercalate1") {
+  test(s"Reducible[$name].nonEmptyIntercalate") {
     forAll { (fa: F[String], a: String) =>
-      fa.intercalate1(a) === (fa.toList.mkString(a))
+      fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
     }
   }
 }

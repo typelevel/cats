@@ -2,9 +2,11 @@ package cats
 package syntax
 
 trait AllSyntax
-    extends ApplicativeSyntax
+    extends AlternativeSyntax
+    with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
+    with ArrowSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax
@@ -19,16 +21,12 @@ trait AllSyntax
     with FlatMapSyntax
     with FoldableSyntax
     with FunctorSyntax
-    with FunctorFilterSyntax
     with GroupSyntax
     with InvariantSyntax
     with IorSyntax
     with ListSyntax
-    with MonadCombineSyntax
     with MonadErrorSyntax
-    with MonadFilterSyntax
     with MonadSyntax
-    with MonadTransSyntax
     with MonoidSyntax
     with OptionSyntax
     with OrderSyntax
@@ -38,11 +36,9 @@ trait AllSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
     with ShowSyntax
-    with SplitSyntax
     with StrongSyntax
-    with TraverseFilterSyntax
     with TraverseSyntax
-    with TupleSyntax
+    with NonEmptyTraverseSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax

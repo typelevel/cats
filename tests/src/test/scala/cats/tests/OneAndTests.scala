@@ -5,7 +5,7 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
@@ -15,8 +15,14 @@ class OneAndTests extends CatsSuite {
 
   checkAll("OneAnd[Stream, Int]", OrderLaws[OneAnd[Stream, Int]].eqv)
 
-  checkAll("OneAnd[Stream, Int] with Option", TraverseTests[OneAnd[Stream, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[OneAnd[Stream, A]]", SerializableTests.serializable(Traverse[OneAnd[Stream, ?]]))
+  checkAll("OneAnd[Stream, Int] with Option", NonEmptyTraverseTests[OneAnd[Stream, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[Stream, ?]]))
+
+  {
+    implicit val traverse = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)
+    checkAll("OneAnd[ListWrapper, Int] with Option", TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, ?]]))
+  }
 
   checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[Stream, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[Stream, ?]]", SerializableTests.serializable(Reducible[OneAnd[Stream, ?]]))
@@ -25,9 +31,10 @@ class OneAndTests extends CatsSuite {
 
   // Test instances that have more general constraints
   {
-    implicit val monadCombine = ListWrapper.monadCombine
-    checkAll("OneAnd[ListWrapper, Int]", CartesianTests[OneAnd[ListWrapper, ?]].cartesian[Int, Int, Int])
-    checkAll("Cartesian[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Cartesian[OneAnd[ListWrapper, ?]]))
+    implicit val monad = ListWrapper.monad
+    implicit val alt = ListWrapper.alternative
+    checkAll("OneAnd[ListWrapper, Int]", MonadTests[OneAnd[ListWrapper, ?]].monad[Int, Int, Int])
+    checkAll("MonadTests[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monad[OneAnd[ListWrapper, ?]]))
   }
 
   {
@@ -37,7 +44,7 @@ class OneAndTests extends CatsSuite {
   }
 
   {
-    implicit val monadCombine = ListWrapper.monadCombine
+    implicit val alternative = ListWrapper.alternative
     checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
     checkAll("OneAnd[Stream, Int]", GroupLaws[OneAnd[Stream, Int]].semigroup)
     checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
@@ -90,13 +97,6 @@ class OneAndTests extends CatsSuite {
       val stream = i #:: tail
       val oneAnd = NonEmptyStream(i, tail: _*)
       stream should === (oneAnd.unwrap)
-    }
-  }
-
-  test("NonEmptyStream#filter is consistent with Stream#filter") {
-    forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
-      val stream = nel.unwrap
-      nel.filter(p) should === (stream.filter(p))
     }
   }
 
@@ -174,6 +174,13 @@ class OneAndTests extends CatsSuite {
       got should === (expected)
     }
   }
+
+  test("filter includes elements based on a predicate") {
+    forAll { (nes: NonEmptyStream[Int], pred: Int => Boolean) =>
+      nes.filter(pred) should ===(nes.unwrap.filter(pred))
+    }
+  }
+
 }
 
 class ReducibleNonEmptyStreamCheck extends ReducibleCheck[NonEmptyStream]("NonEmptyStream") {

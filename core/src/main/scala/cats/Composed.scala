@@ -71,20 +71,12 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[�
     F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[cats] trait ComposedTraverseFilter[F[_], G[_]] extends TraverseFilter[λ[α => F[G[α]]]] with ComposedTraverse[F, G] {
-  def F: Traverse[F]
-  def G: TraverseFilter[G]
+private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]] extends NonEmptyTraverse[λ[α => F[G[α]]]] with ComposedTraverse[F, G] with ComposedReducible[F, G] {
+  def F: NonEmptyTraverse[F]
+  def G: NonEmptyTraverse[G]
 
-  override def traverseFilter[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[Option[B]]): H[F[G[B]]] =
-    F.traverse[H, G[A], G[B]](fga)(ga => G.traverseFilter(ga)(f))
-}
-
-private[cats] trait ComposedFunctorFilter[F[_], G[_]] extends FunctorFilter[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
-  def F: Functor[F]
-  def G: FunctorFilter[G]
-
-  override def mapFilter[A, B](fga: F[G[A]])(f: A => Option[B]): F[G[B]] =
-    F.map(fga)(G.mapFilter(_)(f))
+  override def nonEmptyTraverse[H[_]: Apply, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
+    F.nonEmptyTraverse(fga)(ga => G.nonEmptyTraverse(ga)(f))
 }
 
 private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] { outer =>

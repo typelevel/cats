@@ -13,14 +13,14 @@ import scala.annotation.tailrec
  *  - `[[Ior.Right Right]][B]`
  *  - `[[Ior.Both Both]][A, B]`
  *
- * `A [[Ior]] B` is similar to `Either[A, B]`, except that it can represent the simultaneous presence of
+ * `A [[Ior]] B` is similar to `scala.util.Either[A, B]`, except that it can represent the simultaneous presence of
  * an `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the
  * `B` value. Some methods, like `flatMap`, handle the presence of two [[Ior.Both Both]] values using a
  * `[[Semigroup]][A]`, while other methods, like [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
  *
  * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
  * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic [[scala.util.Either]] form can be accessed via the [[unwrap]] method.
+ * The isomorphic `scala.util.Either` form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
@@ -169,6 +169,12 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
         }
 
       def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
+
+      override def map2Eval[B, C, Z](fa: Ior[A, B], fb: Eval[Ior[A, C]])(f: (B, C) => Z): Eval[Ior[A, Z]] =
+        fa match {
+          case l @ Ior.Left(_) => Eval.now(l) // no need to evaluate fb
+          case notLeft => fb.map(fb => map2(notLeft, fb)(f))
+        }
 
       def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
         @tailrec

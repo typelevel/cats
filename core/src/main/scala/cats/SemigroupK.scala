@@ -7,7 +7,7 @@ import simulacrum.typeclass
  *
  * This type class is useful when its type parameter F[_] has a
  * structure that can be combined for any particular type. Thus,
- * SemigroupK is like a Semigroup for kinds (i.e. parameterized
+ * SemigroupK is like a Semigroup for kinds (i.e. parametrized
  * types).
  *
  * A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.

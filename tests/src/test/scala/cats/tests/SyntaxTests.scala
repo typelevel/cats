@@ -139,6 +139,19 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.sequence
   }
 
+
+  def testNonEmptyTraverse[F[_]: NonEmptyTraverse: FlatMap, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
+    val fa = mock[F[A]]
+    val f1 = mock[A => G[B]]
+    val gfb: G[F[B]] = fa.nonEmptyTraverse(f1)
+
+    val f2 = mock[A => G[F[B]]]
+    val gfb2: G[F[B]] = fa.nonEmptyFlatTraverse(f2)
+
+    val fga = mock[F[G[A]]]
+    val gunit: G[F[A]] = fga.nonEmptySequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
@@ -164,9 +177,9 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val lb: Eval[B] = fa.reduceRightTo(f4)(f6)
 
     val f7 = mock[A => G[B]]
-    val gu1: G[Unit] = fa.traverse1_(f7)
+    val gu1: G[Unit] = fa.nonEmptyTraverse_(f7)
 
-    val gu2: G[Unit] = fga.sequence1_
+    val gu2: G[Unit] = fga.nonEmptySequence_
   }
 
   def testFunctor[F[_]: Functor, A, B]: Unit = {
@@ -180,28 +193,37 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val fb1: F[B] = fa.as(b)
   }
 
-  def testApply[F[_]: Apply, A, B, C, D, Z]: Unit = {
+  def testApply[F[_]: Apply : Cartesian, G[_]: Contravariant : Cartesian, H[_]: Invariant : Cartesian, A, B, C, D, E, Z] = {
+    val tfabc = mock[(F[A], F[B], F[C])]
     val fa = mock[F[A]]
-    val fab = mock[F[A => B]]
-    val fb0: F[B] = fab.ap(fa)
-
     val fb = mock[F[B]]
-    val fabz = mock[F[(A, B) => Z]]
-    val fz0: F[Z] = fabz.ap2(fa, fb)
-
-    val f = mock[(A, B) => Z]
-    val fz1: F[Z] = fa.map2(fb)(f)
-
-    val f1 = mock[(A, B) => Z]
-    val ff1 = mock[F[(A, B) => Z]]
-    val fz2: F[Z] = (fa |@| fb).map(f1)
-    val fz3: F[Z] = (fa |@| fb).apWith(ff1)
-
     val fc = mock[F[C]]
-    val f2 = mock[(A, B, C) => Z]
-    val ff2 = mock[F[(A, B, C) => Z]]
-    val fz4: F[Z] = (fa |@| fb |@| fc).map(f2)
-    val fz5: F[Z] = (fa |@| fb |@| fc).apWith(ff2)
+    val f = mock[(A, B, C) => Z]
+    val ff = mock[F[(A, B, C) => Z]]
+
+    tfabc mapN f
+    (fa, fb, fc) mapN f
+    (fa, fb, fc) apWith ff
+
+    val tgabc = mock[(G[A], G[B])]
+    val ga = mock[G[A]]
+    val gb = mock[G[B]]
+    val g = mock[Z => (A, B)]
+
+    tgabc contramapN g
+    (ga, gb) contramapN g
+
+    val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
+    val ha = mock[H[A]]
+    val hb = mock[H[B]]
+    val hc = mock[H[C]]
+    val hd = mock[H[D]]
+    val he = mock[H[E]]
+    val f5 = mock[(A, B, C, D, E) => Z]
+    val g5 = mock[Z => (A, B, C, D, E)]
+
+    thabcde.imapN(f5)(g5)
+    (ha, hb, hc, hd, he).imapN(f5)(g5)
   }
 
   def testBifoldable[F[_, _]: Bifoldable, A, B, C, D: Monoid]: Unit = {
@@ -231,7 +253,7 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gfab = fgagb.bisequence
   }
 
-  def testMonadCombine[F[_]: MonadCombine, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+  def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
     val fga = mock[F[G[A]]]
     val fa = fga.unite
 
@@ -244,9 +266,10 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val fa = a.pure[F]
   }
 
-  def testMonadTrans[MT[_[_], _], M[_], A](implicit MT: MonadTrans[MT], M: Monad[M]): Unit = {
-    val fa = mock[M[A]]
-    val mtf = fa.liftT[MT]
+  def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
+    val a = mock[A]
+    val returnValue = mock[F[Either[A, B]]]
+    val done = a.tailRecM[F, B](a => returnValue)
   }
 
   def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
@@ -274,59 +297,5 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val gea4 = ga.recoverWith(pfegea)
   }
 
-  def testTupleArity[F[_]: Apply : Cartesian, G[_]: Contravariant : Cartesian, H[_]: Invariant : Cartesian, A, B, C, D, E, Z] = {
-    val tfabc = mock[(F[A], F[B], F[C])]
-    val fa = mock[F[A]]
-    val fb = mock[F[B]]
-    val fc = mock[F[C]]
-    val f = mock[(A, B, C) => Z]
-    val ff = mock[F[(A, B, C) => Z]]
-
-    tfabc map3 f
-    (fa, fb, fc) map3 f
-    (fa, fb, fc) apWith ff
-
-    val tgabc = mock[(G[A], G[B])]
-    val ga = mock[G[A]]
-    val gb = mock[G[B]]
-    val g = mock[Z => (A, B)]
-
-    tgabc contramap2 g
-    (ga, gb) contramap2 g
-
-    val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
-    val ha = mock[H[A]]
-    val hb = mock[H[B]]
-    val hc = mock[H[C]]
-    val hd = mock[H[D]]
-    val he = mock[H[E]]
-    val f5 = mock[(A, B, C, D, E) => Z]
-    val g5 = mock[Z => (A, B, C, D, E)]
-
-    thabcde.imap5(f5)(g5)
-    (ha, hb, hc, hd, he).imap5(f5)(g5)
-  }
 }
 
-/**
- * Similar to [[SyntaxTests]] but doesn't automatically include all
- * instances/syntax, so that piecemeal imports can be tested.
- */
-object AdHocSyntaxTests {
-  import SyntaxTests.mock
-
-  def testFunctorFilterSyntax[F[_]:FunctorFilter, A]: Unit = {
-    import cats.syntax.functorFilter._
-
-    val fa = mock[F[A]]
-    val filtered = fa.mapFilter(_ => None)
-  }
-
-  def testTraverseFilterSyntax[F[_]:TraverseFilter, G[_]: Applicative, A, B]: Unit = {
-    import cats.syntax.traverseFilter._
-
-    val fa = mock[F[A]]
-    val f = mock[A => G[Option[B]]]
-    val filtered = fa.traverseFilter(f)
-  }
-}

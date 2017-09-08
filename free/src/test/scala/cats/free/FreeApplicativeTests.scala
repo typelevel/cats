@@ -9,19 +9,7 @@ import cats.data.State
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeApplicativeTests extends CatsSuite {
-  implicit def freeApplicativeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
-    Arbitrary(
-      Gen.oneOf(
-        A.arbitrary.map(FreeApplicative.pure[F, A]),
-        F.arbitrary.map(FreeApplicative.lift[F, A])))
-
-  implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
-    new Eq[FreeApplicative[S, A]] {
-      def eqv(a: FreeApplicative[S, A], b: FreeApplicative[S, A]): Boolean = {
-        val nt = FunctionK.id[S]
-        SA.eqv(a.foldMap(nt), b.foldMap(nt))
-      }
-    }
+  import FreeApplicativeTests._
 
   implicit val iso = CartesianTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
 
@@ -32,6 +20,14 @@ class FreeApplicativeTests extends CatsSuite {
     val r = FreeApplicative.pure[List, Int](333)
     val rr = (1 to 1000000).foldLeft(r)((r, _) => r.map(_ + 1))
     rr.toString.length should be > 0
+  }
+
+  test("fold/map is stack-safe") {
+    val r = FreeApplicative.lift[List, Int](List(333))
+    val rr = (1 to 70000).foldLeft(r)((r, _) => r.ap(FreeApplicative.lift[List, Int => Int](List((_: Int) + 1))))
+    rr.fold should be (List(333 + 70000))
+    val rx = (1 to 70000).foldRight(r)((_, r) => r.ap(FreeApplicative.lift[List, Int => Int](List((_: Int) + 1))))
+    rx.fold should be (List(333 + 70000))
   }
 
   test("FreeApplicative#fold") {
@@ -47,23 +43,30 @@ class FreeApplicativeTests extends CatsSuite {
   }
 
   test("FreeApplicative#compile") {
-    val x = FreeApplicative.lift[Id, Int](1)
-    val y = FreeApplicative.pure[Id, Int](2)
-    val f = x.map(i => (j: Int) => i + j)
-    val nt = FunctionK.id[Id]
-    val r1 = y.ap(f)
-    val r2 = r1.compile(nt)
-    r1.foldMap(nt) should === (r2.foldMap(nt))
+    forAll { (x: FreeApplicative[List, Int], y: FreeApplicative[List, Int], nt: List ~> List) =>
+      x.compile(nt).fold should ===(x.foldMap(nt))
+    }
+  }
+
+  test("FreeApplicative#flatCompile") {
+    forAll { (x: FreeApplicative[Option, Int]) =>
+      val nt: Option ~> FreeApplicative[Option, ?]  = new FunctionK[Option, FreeApplicative[Option, ?]] {
+        def apply[A](a: Option[A]): FreeApplicative[Option, A] = FreeApplicative.lift(a)
+      }
+      x.foldMap[FreeApplicative[Option, ?]](nt).fold should === (x.flatCompile[Option](nt).fold)
+    }
   }
 
   test("FreeApplicative#monad") {
-    val x = FreeApplicative.lift[Id, Int](1)
-    val y = FreeApplicative.pure[Id, Int](2)
-    val f = x.map(i => (j: Int) => i + j)
-    val r1 = y.ap(f)
-    val r2 = r1.monad
-    val nt = FunctionK.id[Id]
-    r1.foldMap(nt) should === (r2.foldMap(nt))
+    forAll { (x: FreeApplicative[List, Int]) =>
+      x.monad.foldMap(FunctionK.id) should === (x.fold)
+    }
+  }
+
+  test("FreeApplicative#ap") {
+    val x = FreeApplicative.ap[Id, Int, Int](1)(FreeApplicative.pure((_: Int) + 1))
+    val y = FreeApplicative.lift[Id, Int](1).ap(FreeApplicative.pure((_: Int) + 1))
+    x should === (y)
   }
 
   // Ensure that syntax and implicit resolution work as expected.
@@ -73,7 +76,7 @@ class FreeApplicativeTests extends CatsSuite {
     // fixed by #568
     val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
     val fli2 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
-    (fli1 |@| fli2).map(_ + _)
+    (fli1, fli2).mapN(_ + _)
   }
 
   test("FreeApplicative#analyze") {
@@ -125,4 +128,45 @@ class FreeApplicativeTests extends CatsSuite {
 
     z.analyze(asString) should === ("xy")
   }
+}
+
+object FreeApplicativeTests {
+  private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Gen[FreeApplicative[F, A]] = {
+    val noFlatMapped = Gen.oneOf(
+      A.arbitrary.map(FreeApplicative.pure[F, A]),
+      F.arbitrary.map(FreeApplicative.lift[F, A]))
+
+    val nextDepth = Gen.chooseNum(1, math.max(1, maxDepth - 1))
+
+    def withFlatMapped = for {
+      fDepth <- nextDepth
+      freeDepth <- nextDepth
+      ff <- FF.arbitrary
+      f <- freeGen[F, A](fDepth).map(_.map(l => (u: A) => ff(l, u)))
+      freeFA <- freeGen[F, A](freeDepth)
+    } yield freeFA.ap(f)
+
+    if (maxDepth <= 1) noFlatMapped
+    else Gen.oneOf(noFlatMapped, withFlatMapped)
+  }
+
+  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
+    Arbitrary(freeGen[F, A](4))
+
+  implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
+    new Eq[FreeApplicative[S, A]] {
+      def eqv(a: FreeApplicative[S, A], b: FreeApplicative[S, A]): Boolean = {
+        SA.eqv(a.fold, b.fold)
+      }
+    }
+
+  implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
+    Arbitrary(Gen.oneOf(
+      FunctionK.id[List],
+      new (List ~> List) {
+        def apply[A](fa: List[A]): List[A] = {
+          fa ++ fa
+        }
+      }))
+
 }

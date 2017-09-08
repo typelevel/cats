@@ -31,4 +31,20 @@ class CoyonedaTests extends CatsSuite {
       val c = Coyoneda.lift(o)
       c.transform(nt).run should === (nt(o))
   }
+
+  test("map order") {
+    Coyoneda
+      .lift[Option, Int](Some(0))
+      .map(_ + 1)
+      .map(_ * 3)
+      .run === Some(3)
+  }
+
+  test("stack-safe map") {
+    def loop(n: Int, acc: Coyoneda[Option, Int]): Coyoneda[Option, Int] =
+      if (n <= 0) acc
+      else loop(n - 1, acc.map(_ + 1))
+
+    loop(20000, Coyoneda.lift[Option, Int](Some(1))).run
+  }
 }

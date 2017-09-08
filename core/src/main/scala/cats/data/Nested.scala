@@ -31,14 +31,13 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
     FGA.on(_.value)
 
-  implicit def catsDataTraverseFilterForNested[F[_]: Traverse, G[_]: TraverseFilter]: TraverseFilter[Nested[F, G, ?]] =
-    new NestedTraverseFilter[F, G] {
-      val FG: TraverseFilter[λ[α => F[G[α]]]] = Traverse[F].composeFilter[G]
+  implicit def catsDataNonEmptyTraverseForNested[F[_]: NonEmptyTraverse, G[_]: NonEmptyTraverse]: NonEmptyTraverse[Nested[F, G, ?]] =
+    new NestedNonEmptyTraverse[F, G] {
+      val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
-
   implicit def catsDataTraverseForNested[F[_]: Traverse, G[_]: Traverse]: Traverse[Nested[F, G, ?]] =
     new NestedTraverse[F, G] {
       val FG: Traverse[λ[α => F[G[α]]]] = Traverse[F].compose[G]
@@ -126,14 +125,7 @@ private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
     }
 }
 
-private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
-  implicit def catsDataFunctorFilterForNested[F[_]: Functor, G[_]: FunctorFilter]: FunctorFilter[Nested[F, G, ?]] =
-    new NestedFunctorFilter[F, G] {
-      val FG: FunctorFilter[λ[α => F[G[α]]]] = Functor[F].composeFilter[G]
-    }
-}
-
-private[data] sealed abstract class NestedInstances10 {
+private[data] sealed abstract class NestedInstances9 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
@@ -152,26 +144,6 @@ private[data] trait NestedFunctor[F[_], G[_]] extends Functor[Nested[F, G, ?]] w
 
   override def map[A, B](fga: Nested[F, G, A])(f: A => B): Nested[F, G, B] =
     Nested(FG.map(fga.value)(f))
-}
-
-private[data] trait NestedFunctorFilter[F[_], G[_]] extends FunctorFilter[Nested[F, G, ?]] with NestedFunctor[F, G] {
-  override def FG: FunctorFilter[λ[α => F[G[α]]]]
-
-  override def mapFilter[A, B](fga: Nested[F, G, A])(f: A => Option[B]): Nested[F, G, B] =
-    Nested(FG.mapFilter(fga.value)(f))
-
-  override def collect[A, B](fga: Nested[F, G, A])(f: PartialFunction[A, B]): Nested[F, G, B] =
-    Nested(FG.collect(fga.value)(f))
-
-  override def filter[A](fga: Nested[F, G, A])(f: A => Boolean): Nested[F, G, A] =
-    Nested(FG.filter(fga.value)(f))
-}
-
-private[data] trait NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nested[F, G, ?]] with NestedFunctorFilter[F, G] with NestedTraverse[F, G] {
-  override def FG: TraverseFilter[λ[α => F[G[α]]]]
-
-  override def traverseFilter[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[Option[B]]): H[Nested[F, G, B]] =
-    Applicative[H].map(FG.traverseFilter(fga.value)(f))(Nested(_))
 }
 
 private[data] trait NestedApply[F[_], G[_]] extends Apply[Nested[F, G, ?]] with NestedFunctor[F, G] {
@@ -231,6 +203,13 @@ private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?
 
   def reduceRightTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     FG.reduceRightTo(fga.value)(f)(g)
+}
+
+private[data] trait NestedNonEmptyTraverse[F[_], G[_]] extends NonEmptyTraverse[Nested[F, G, ?]] with NestedTraverse[F, G] with NestedReducible[F, G] {
+  def FG: NonEmptyTraverse[λ[α => F[G[α]]]]
+
+  override def nonEmptyTraverse[H[_]: Apply, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
+    Apply[H].map(FG.nonEmptyTraverse(fga.value)(f))(Nested(_))
 }
 
 private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested[F, G, ?]] {

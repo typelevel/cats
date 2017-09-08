@@ -5,9 +5,9 @@ import cats._
 import cats.arrow.FunctionK
 import cats.data._
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 import cats.instances.option._
-import cats.laws.discipline.arbitrary.catsLawArbitraryForState
 import org.scalacheck.{Arbitrary, Gen, Cogen}
 
 class FreeTTests extends CatsSuite {
@@ -27,31 +27,21 @@ class FreeTTests extends CatsSuite {
   }
 
   {
-    implicit val freeTSemigroupK: SemigroupK[FreeTOption] = FreeT.catsFreeCombineForFreeT[Option, Option]
+    implicit val freeTSemigroupK: SemigroupK[FreeTOption] = FreeT.catsFreeSemigroupKForFreeT[Option, Option]
     checkAll("FreeT[Option, Option, Int]", SemigroupKTests[FreeTOption].semigroupK[Int])
     checkAll("SemigroupK[FreeT[Option, Option, ?]]", SerializableTests.serializable(SemigroupK[FreeTOption]))
   }
 
   {
-    implicit val freeTCombine: MonadCombine[FreeTOption] = FreeT.catsFreeMonadCombineForFreeT[Option, Option]
-    checkAll("FreeT[Option, Option, Int]", MonadCombineTests[FreeTOption].monadCombine[Int, Int, Int])
-    checkAll("MonadCombine[FreeT[Option, Option, ?]]", SerializableTests.serializable(MonadCombine[FreeTOption]))
+    implicit val freeTAlternative: Alternative[FreeTOption] = FreeT.catsFreeAlternativeForFreeT[Option, Option]
+    checkAll("FreeT[Option, Option, Int]", AlternativeTests[FreeTOption].alternative[Int, Int, Int])
+    checkAll("Alternative[FreeT[Option, Option, ?]]", SerializableTests.serializable(Alternative[FreeTOption]))
   }
 
   {
     implicit val eqEitherTFA: Eq[EitherT[FreeTOption, Unit, Int]] = EitherT.catsDataEqForEitherT[FreeTOption, Unit, Int]
     checkAll("FreeT[Option, Option, Int]", MonadErrorTests[FreeTOption, Unit].monadError[Int, Int, Int])
     checkAll("MonadError[FreeT[Option, Option, ?], Unit]", SerializableTests.serializable(MonadError[FreeTOption, Unit]))
-  }
-
-  {
-    import StateT._
-    checkAll("FreeT[State[Int, ?], State[Int, ?], Int]", MonadStateTests[FreeTState, Int].monadState[Int, Int, Int])
-    checkAll("MonadState[FreeT[State[Int, ?],State[Int, ?], ?], Int]", SerializableTests.serializable(MonadState[FreeTState, Int]))
-  }
-
-  {
-    checkAll("MonadTrans[FreeT[Option, ?[_], ?]]", MonadTransTests[FreeT[Option, ?[_], ?]].monadTrans[Option, Int, Int])
   }
 
   test("FlatMap stack safety tested with 50k flatMaps") {

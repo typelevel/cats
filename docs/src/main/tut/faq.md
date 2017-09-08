@@ -110,24 +110,13 @@ nl.traverse(even)
 
 ## <a id="task" href="#task"></a>Where is IO/Task?
 
-In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. There [have](https://github.com/typelevel/cats/pull/894) [been](https://github.com/typelevel/cats/pull/907) [several](https://github.com/typelevel/cats/issues/1224) GitHub issues/PRs about this and many more Gitter/IRL conversations, but they all seem to arrive at the conclusion that there isn't a clear canonical `IO` or `Task` that serves everyones' needs. Some of the questions that come up are:
+In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. In some languages and frameworks, such a type also serves as the primary abstraction through which parallelism is achieved.  Nearly every real-world purely functional application or service is going to require such a data type, and this gives rise to an obvious question: why doesn't cats include such a type?
 
-- Should tasks be interruptible?
-- Should there be a single `Task` that subsumes `IO` and adds support for asynchrony and concurrency, or should there be separate `IO` and `Task` types?
-- How should concurrency be managed/configured?
-- Is [scala.js](https://www.scala-js.org/) supported?
-- Should you be able to block a thread waiting for the result of a task? This is really convenient for tests, but it isn't really compatible with a JavaScript runtime and therefore is an issue for [scala.js](https://www.scala-js.org/).
+The answer is that cats *does* include an `IO`, it just isn't included in the core library.  The decision was made to split `IO` away from cats-core and (indeed the whole cats release cycle!) in order to make it easier to ensure modular versioning and compatibility across the ecosystem.  The [cats-effect](https://github.com/typelevel/cats-effect) project defines a type, `cats.effect.IO`, which is intended to be a very minimal, very performant data type for managing synchronous and asynchronous side-effects, integrated into the cats ecosystem.
 
-For some use-cases, a very simple `IO` is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own `IO`/`Task` types and instead encourage users to use a separate library that best serves their use-case.
+However, we acknowledge that this type may not meet everyone's needs.  Notably, `cats.effect.IO` does not provide any mechanism for achieving parallel computation (though such functionality can be built on top of it, which is what libraries like [fs2](https://github.com/functional-streams-for-scala/fs2) achieve).  For these and other needs, we would invite you to consider one of the other `Task`-like data types within the cats ecosystem, such as [Monix's `Task`](https://monix.io).  The cats-effect project characterizes the space of side-effect-capturing data types with a set of typeclasses (deriving from `cats.Monad`), and so all such data types are, broadly-speaking, mutually compatible and interchangeable in many generic contexts.
 
-Here are a couple libraries with `Task` implementations that you may find useful (in no particular order):
-
-- [Monix](https://monix.io/) - Asynchronous Programming for Scala and [Scala.js](https://www.scala-js.org/).
-  - The `monix-eval` module provides a full-featured [Task](https://monix.io/docs/2x/eval/task.html) that is both cancellable and Scala.js-compatible.
-- [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
-  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/shared/src/main/scala/fs2/Task.scala) that is a convenient option if you are already using fs2. fs2's `Task` is also Scala.js-compatible.
-
-It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/datatypes/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/typeclasses/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
+It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/datatypes/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
@@ -214,7 +203,6 @@ All other symbols can be imported with `import cats.implicits._`
 
 | Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
 | -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
-| <code>fa &#124;@&#124; fb</code> | Cartesian builder      | Cinnabon, scream | `Cartesian[F[_]]`       | <code>&#124;@&#124;(fa: F[A])(fb: F[B]): F[(A, B)]</code> |
 | `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[A]`                            |
 | `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[B]`                            |
 | `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |

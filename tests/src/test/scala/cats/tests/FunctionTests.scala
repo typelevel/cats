@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice}
+import cats.arrow.{CommutativeArrow, Choice}
 import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -24,11 +24,11 @@ class FunctionTests extends CatsSuite {
   checkAll("Function1[Int, Int]", CartesianTests[Function1[Int, ?]].cartesian[Int, Int, Int])
   checkAll("Cartesian[Function1[Int, ?]]", SerializableTests.serializable(Cartesian[Function1[Int, ?]]))
 
-  checkAll("Function1[Int, Int]", MonadReaderTests[Int => ?, Int].monadReader[Int, Int, Int])
-  checkAll("MonadReader[Int => ?, Int]", SerializableTests.serializable(MonadReader[Int => ?, Int]))
+  checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
+  checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[Int => ?]))
 
-  checkAll("Function1[Int, Int]", ArrowTests[Function1].arrow[Int, Int, Int, Int, Int, Int])
-  checkAll("Arrow[Function1]", SerializableTests.serializable(Arrow[Function1]))
+  checkAll("Function1[Int, Int]", CommutativeArrowTests[Function1].commutativeArrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Arrow[Function1]", SerializableTests.serializable(CommutativeArrow[Function1]))
 
   checkAll("Function1[Int, Int]", ChoiceTests[Function1].choice[Int, Int, Int, Int])
   checkAll("Choice[Function1]", SerializableTests.serializable(Choice[Function1]))

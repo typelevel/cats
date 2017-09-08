@@ -2,8 +2,7 @@ package cats
 package laws
 package discipline
 
-import scala.util.{Try, Success, Failure}
-
+import scala.util.{Failure, Success, Try}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -76,8 +75,6 @@ object arbitrary extends ArbitraryInstances0 {
       B.perturb(seed, _),
       (a, b) => A.perturb(B.perturb(seed, b), a)))
 
-  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
-    Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
 
   implicit def catsLawsArbitraryForOptionT[F[_], A](implicit F: Arbitrary[F[Option[A]]]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.arbitrary.map(OptionT.apply))
@@ -136,21 +133,37 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForFn0[A: Arbitrary]: Arbitrary[() => A] =
     Arbitrary(getArbitrary[A].map(() => _))
 
+  // TODO: we should probably be using Cogen for generating Eq, Order,
+  // etc. however, we'd still have to ensure that (x.## == y.##)
+  // implies equal, in order to avoid producing invalid instances.
+
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(new Eq[A] { def eqv(x: A, y: A) = x.hashCode == y.hashCode })
+    Arbitrary(getArbitrary[Int => Int].map(f => new Eq[A] {
+      def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
+    }))
+
+  implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
+    Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(Gen.oneOf(
-      PartialOrder.from[A]((_: A, _: A) => Double.NaN),
-      PartialOrder.from[A]((_: A, _: A) => -1.0),
-      PartialOrder.from[A]((_: A, _: A) => 0.0),
-      PartialOrder.from[A]((_: A, _: A) => 1.0)))
+    Arbitrary(getArbitrary[Int => Double].map(f => new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double =
+        if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
+    }))
+
+  implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
+    Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
-    Arbitrary(Gen.oneOf(
-      Order.from[A]((_: A, _: A) => -1),
-      Order.from[A]((_: A, _: A) => 0),
-      Order.from[A]((_: A, _: A) => 1)))
+    Arbitrary(getArbitrary[Int => Int].map(f => new Order[A] {
+      def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
+    }))
+
+  implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =
+    Arbitrary(getArbitrary[Order[A]].map(Order.catsKernelOrderingForOrder(_)))
+
+  implicit def catsLawsArbitraryForHash[A: Hash]: Arbitrary[Hash[A]] =
+    Arbitrary(Hash.fromUniversalHashCode[A])
 
   implicit def catsLawsArbitraryForHash[A: Hash]: Arbitrary[Hash[A]] =
     Arbitrary(Hash.fromUniversalHashCode[A])
@@ -163,12 +176,19 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawArbitraryForReader[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Reader[A, B]] =
     catsLawsArbitraryForKleisli[Id, A, B]
+
+  implicit def catsLawArbitraryForCokleisliId[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Cokleisli[Id, A, B]] =
+    catsLawsArbitraryForCokleisli[Id, A, B]
+
+  implicit def catsLawsArbitraryForReaderWriterStateT[F[_]: Applicative, E, L, S, A](implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, L, S, A]] =
+    Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
+
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
 
-  implicit def catsLawArbitraryForStateT[F[_]: Applicative, S, A](implicit AS: Arbitrary[S], CS: Cogen[S], F: Arbitrary[F[(S, A)]]): Arbitrary[StateT[F, S, A]] =
-    Arbitrary(Arbitrary.arbitrary[S => F[(S, A)]].map(StateT(_)))
+  implicit def catsLawArbitraryForStateT[F[_], S, A](implicit F: Arbitrary[F[S => F[(S, A)]]]): Arbitrary[StateT[F, S, A]] =
+    Arbitrary(F.arbitrary.map(StateT.applyF))
 
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))
@@ -179,4 +199,6 @@ private[discipline] sealed trait ArbitraryInstances0 {
   implicit def catsLawsArbitraryForKleisli[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Kleisli(_)))
 
+  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
+    Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
 }

@@ -6,7 +6,7 @@ import catalysts.Platform
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -18,8 +18,8 @@ class NonEmptyVectorTests extends CatsSuite {
 
   checkAll("NonEmptyVector[Int]", OrderLaws[NonEmptyVector[Int]].eqv)
 
-  checkAll("NonEmptyVector[Int] with Option", TraverseTests[NonEmptyVector].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[NonEmptyVector[A]]", SerializableTests.serializable(Traverse[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int] with Option", NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[NonEmptyVector[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyVector]", SerializableTests.serializable(Reducible[NonEmptyVector]))
@@ -311,6 +311,12 @@ class NonEmptyVectorTests extends CatsSuite {
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
       nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
+  }
+
+  test("NonEmptyVector#zipWith is consistent with Vector#zip and then Vector#map") {
+    forAll { (a: NonEmptyVector[Int], b: NonEmptyVector[Int], f: (Int, Int) => Int) =>
+      a.zipWith(b)(f).toVector should === (a.toVector.zip(b.toVector).map { case (x, y) => f(x, y)})
     }
   }
 }

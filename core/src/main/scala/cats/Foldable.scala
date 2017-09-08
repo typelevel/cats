@@ -186,16 +186,31 @@ import simulacrum.typeclass
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Left associative monadic folding on `F`.
+   * Perform a stack-safe monadic left fold from the source context `F`
+   * into the target monad `G`.
    *
-   * The default implementation of this is based on `foldLeft`, and thus will
-   * always fold across the entire structure. Certain structures are able to
-   * implement this in such a way that folds can be short-circuited (not
-   * traverse the entirety of the structure), depending on the `G` result
-   * produced at a given step.
+   * This method can express short-circuiting semantics. Even when
+   * `fa` is an infinite structure, this method can potentially
+   * terminate if the `foldRight` implementation for `F` and the
+   * `tailRecM` implementation for `G` are sufficiently lazy.
+   *
+   * Instances for concrete structures (e.g. `List`) will often
+   * have a more efficient implementation than the default one
+   * in terms of `foldRight`.
    */
-  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-    foldLeft(fa, G.pure(z))((gb, a) => G.flatMap(gb)(f(_, a)))
+  def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+    val src = Foldable.Source.fromFoldable(fa)(self)
+    G.tailRecM((z, src)) { case (b, src) => src.uncons match {
+      case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
+      case None => G.pure(Right(b))
+    }}
+  }
+
+  /**
+   * Alias for [[foldM]].
+   */
+  final def foldLeftM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+    foldM(fa, z)(f)
 
   /**
    * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
@@ -312,6 +327,78 @@ import simulacrum.typeclass
     }.value
 
   /**
+    * Check whether at least one element satisfies the effectful predicate.
+    *
+    * If there are no elements, the result is `false`.  `existsM` short-circuits,
+    * i.e. once a `true` result is encountered, no further effects are produced.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => Option(n > 4))
+    * res1: Option[Boolean] = Some(false)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res2: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else None)
+    * res3: Option[Boolean] = Some(true)
+    *
+    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) None else Option(true))
+    * res4: Option[Boolean] = None
+    * }}}
+    */
+  def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
+      src => src.uncons match {
+        case Some((a, src)) => G.map(p(a))(bb => if (bb) Right(true) else Left(src.value))
+        case None => G.pure(Right(false))
+      }
+    }
+  }
+
+  /**
+    * Check whether all elements satisfy the effectful predicate.
+    *
+    * If there are no elements, the result is `true`.  `forallM` short-circuits,
+    * i.e. once a `false` result is encountered, no further effects are produced.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
+    * res0: Option[Boolean] = Some(true)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 1))
+    * res1: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+    * res2: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(false) else None)
+    * res3: Option[Boolean] = Some(false)
+    *
+    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) None else Option(false))
+    * res4: Option[Boolean] = None
+    * }}}
+    */
+  def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
+      src => src.uncons match {
+        case Some((a, src)) => G.map(p(a))(bb => if (!bb) Right(false) else Left(src.value))
+        case None => G.pure(Right(true))
+      }
+    }
+  }
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
@@ -399,38 +486,33 @@ object Foldable {
     loop()
   }
 
+
   /**
-   * Implementation of [[Foldable.foldM]] which can short-circuit for
-   * structures with an `Iterator`.
+   * Isomorphic to
    *
-   * For example we can sum a `Stream` of integers and stop if
-   * the sum reaches 100 (if we reach the end of the `Stream`
-   * before getting to 100 we return the total sum) :
+   *     type Source[+A] = () => Option[(A, Source[A])]
    *
-   * {{{
-   * scala> import cats.implicits._
-   * scala> type LongOr[A] = Either[Long, A]
-   * scala> def sumStream(s: Stream[Int]): Long =
-   *      |   Foldable.iteratorFoldM[LongOr, Int, Long](s.toIterator, 0L){ (acc, n) =>
-   *      |     val sum = acc + n
-   *      |     if (sum < 100L) Right(sum) else Left(sum)
-   *      |   }.merge
+   * (except that recursive type aliases are not allowed).
    *
-   * scala> sumStream(Stream.continually(1))
-   * res0: Long = 100
-   *
-   * scala> sumStream(Stream(1,2,3,4))
-   * res1: Long = 10
-   * }}}
-   *
-   * Note that `Foldable[Stream].foldM` uses this method underneath, so
-   * you wouldn't call this method explicitly like in the example above.
+   * It could be made a value class after
+   * https://github.com/scala/bug/issues/9600 is resolved.
    */
-  def iteratorFoldM[M[_], A, B](it: Iterator[A], z: B)(f: (B, A) => M[B])(implicit M: Monad[M]): M[B] = {
-    val go: B => M[Either[B, B]] = { b =>
-      if (it.hasNext) M.map(f(b, it.next))(Left(_))
-      else M.pure(Right(b))
+  private sealed abstract class Source[+A] {
+    def uncons: Option[(A, Eval[Source[A]])]
+  }
+
+  private object Source {
+    val Empty: Source[Nothing] = new Source[Nothing] {
+      def uncons = None
     }
-    M.tailRecM(z)(go)
+
+    def cons[A](a: A, src: Eval[Source[A]]): Source[A] = new Source[A] {
+      def uncons = Some((a, src))
+    }
+
+    def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
+      F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) =>
+        Later(cons(a, evalSrc))
+      ).value
   }
 }

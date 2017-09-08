@@ -4,7 +4,6 @@ package tests
 import cats.data.{Const, NonEmptyList}
 
 import scala.collection.mutable
-
 class RegressionTests extends CatsSuite {
 
   // toy state class
@@ -17,15 +16,10 @@ class RegressionTests extends CatsSuite {
   }
 
   object State {
-    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] {
+    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] with StackSafeMonad[State[S, ?]] {    // lies!
       def pure[A](a: A): State[S, A] = State(s => (a, s))
       def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
-      def tailRecM[A, B](a: A)(fn: A => State[S, Either[A, B]]): State[S, B] =
-        flatMap(fn(a)) {
-          case Left(a)  => tailRecM(a)(fn)
-          case Right(b) => pure(b)
-        }
-      }
+    }
   }
 
   // used to test side-effects
@@ -128,4 +122,5 @@ class RegressionTests extends CatsSuite {
     NonEmptyList.of(6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
+
 }

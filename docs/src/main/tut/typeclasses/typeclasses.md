@@ -199,7 +199,7 @@ combine(x, combine(y, z)) = combine(combine(x, y), z)
 combine(x, id) = combine(id, x) = x
 ```
 
-With these laws in place, functions parameterized over a `Monoid` can leverage them for say, performance
+With these laws in place, functions parametrized over a `Monoid` can leverage them for say, performance
 reasons. A function that collapses a `List[A]` into a single `A` can do so with `foldLeft` or
 `foldRight` since `combine` is assumed to be associative, or it can break apart the list into smaller
 lists and collapse in parallel, such as
@@ -223,7 +223,7 @@ type class instances easy.
 
 ## Type classes in cats
 
-![infographic](https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg)
+<img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
 
 
@@ -235,7 +235,7 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 | Type            | Functor | Apply             | Applicative | Monad | MonoidK | ApplicativeError  | MonadError | CoflatMap | Comonad |
 | --------------- |:-------:|:-----------------:|:-----------:|:-----:|:-------:|:-----------------:|:----------:|:---------:|:-------:|
 | Id[A]           | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
-| Eval[A]         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✔                 | ✔          | ✔         | ✔       |
+| Eval[A]         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
 | Option[A]       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
 | Const[K, A]     | ✔       | ✔ (`K:Monoid`)    | ✔           | ✗     | ✗       | ✗                 | ✗          | ✗         | ✗       |
 | Either[E, A]    | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✗         | ✗       |

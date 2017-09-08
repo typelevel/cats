@@ -8,8 +8,8 @@ import scala.collection.mutable.ListBuffer
 
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] =
-    new TraverseFilter[List] with MonadCombine[List] with Monad[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList: Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] =
+    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
@@ -23,7 +23,12 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         fa.flatMap(f)
 
       override def map2[A, B, Z](fa: List[A], fb: List[B])(f: (A, B) => Z): List[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
+        if (fb.isEmpty) Nil // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: List[A], fb: Eval[List[B]])(f: (A, B) => Z): Eval[List[Z]] =
+        if (fa.isEmpty) Eval.now(Nil) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {
         val buf = List.newBuilder[B]
@@ -60,15 +65,16 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         Eval.defer(loop(fa))
       }
 
-      def traverseFilter[G[_], A, B](fa: List[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
-          G.map2Eval(f(a), lglb)((ob, l) => ob.fold(l)(_ :: l))
-        }.value
-
-      override def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
+      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value
+
+      override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
+        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toList
+
+      override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
+        fa.zipWithIndex
 
       @tailrec
       override def get[A](fa: List[A])(idx: Long): Option[A] =
@@ -88,10 +94,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
 
-      override def filter[A](fa: List[A])(f: A => Boolean): List[A] = fa.filter(f)
+      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
+          case (Nil, b) => G.pure(Right(b))
+          case (a :: tail, b) => G.map(f(b, a)) { bnext => Left((tail, bnext)) }
+        }
 
-      override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
+        G.tailRecM((fa, z))(step)
+      }
 
       override def fold[A](fa: List[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
