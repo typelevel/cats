@@ -30,7 +30,7 @@ The goal for both Cats and [Scalaz](https://github.com/scalaz/scalaz) are the sa
 
 Based on this core strategy, Cats took a [modular](/cats/#modularity) approach and focuses on providing core, [binary compatible](/cats/#a-namebinary-compatibility-and-versioning), [approachable](/cats/#approachability) and [efficient](/cats/#efficiency) abstractions. It also takes great effort in providing a welcoming and supportive [community environment](https://gitter.im/typelevel/cats) and a comprehensive beginner-friendly [documentation](/cats/#documentation). 
 
-We believe that both Cats and Scalaz strategies have its merits and shortcomings, and it's a positive thing for the scala community to have both.                           
+We believe that both Cats and Scalaz strategies have their merits and shortcomings, and it's a positive thing for the scala community to have both.                           
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
