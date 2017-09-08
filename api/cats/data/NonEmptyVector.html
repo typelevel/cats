@@ -952,6 +952,26 @@ universal .toString method.
       
       <p class="shortcomment cmt">Updates the element at the index, or throws an <code>IndexOutOfBoundsException</code>
 if none exists (if <code>i</code> does not satisfy <code>0 &lt;= i &lt; length</code>).</p>
+    </li><li name="cats.data.NonEmptyVector#zipWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zipWith[B,C](b:cats.data.NonEmptyVector[B])(f:(A,B)=&gt;C):cats.data.NonEmptyVector[C]"></a><a id="zipWith[B,C](NonEmptyVector[B])((A,B)⇒C):NonEmptyVector[C]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#zipWith[B,C](b:cats.data.NonEmptyVector[B])(f:(A,B)=&gt;C):cats.data.NonEmptyVector[C]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zipWith</span><span class="tparams">[<span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="b">b: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.zipWith.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyVector.A">A</span>, <span class="extype" name="cats.data.NonEmptyVector.zipWith.B">B</span>) ⇒ <span class="extype" name="cats.data.NonEmptyVector.zipWith.C">C</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.zipWith.C">C</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Zips this <code>NonEmptyVector</code> with another <code>NonEmptyVector</code> and applies a function for each pair of elements.</p><div class="fullcomment"><div class="comment cmt"><p>Zips this <code>NonEmptyVector</code> with another <code>NonEmptyVector</code> and applies a function for each pair of elements.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyVector
+scala&gt; <span class="kw">val</span> as = NonEmptyVector.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+scala&gt; <span class="kw">val</span> bs = NonEmptyVector.of(<span class="lit">"A"</span>, <span class="lit">"B"</span>, <span class="lit">"C"</span>)
+scala&gt; as.zipWith(bs)(_ + _)
+res0: cats.data.NonEmptyVector[<span class="std">String</span>] = NonEmptyVector(<span class="num">1</span>A, <span class="num">2</span>B, <span class="num">3</span>C)</pre></div></div>
     </li>
               </ol>
             </div>

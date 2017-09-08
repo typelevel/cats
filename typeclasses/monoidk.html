@@ -5,7 +5,7 @@
 <p>This type class is useful when its type parameter <code class="highlighter-rouge">F[_]</code> has a
 structure that can be combined for any particular type, and which
 also has an “empty” representation. Thus, <code class="highlighter-rouge">MonoidK</code> is like a <code class="highlighter-rouge">Monoid</code>
-for kinds (i.e. parameterized types).</p>
+for kinds (i.e. parametrized types).</p>
 
 <p>A <code class="highlighter-rouge">MonoidK[F]</code> can produce a <code class="highlighter-rouge">Monoid[F[A]]</code> for any type <code class="highlighter-rouge">A</code>.</p>
 
@@ -33,7 +33,7 @@ structure of <code class="highlighter-rouge">F</code>, but not on the structure 
 </code></pre>
 </div>
 
-<p>Just like <code class="highlighter-rouge">Monoid[A]</code>, <code class="highlighter-rouge">MonoidK[F]</code> has an <code class="highlighter-rouge">empty</code> method, but it is parameterized on the type of the element contained in <code class="highlighter-rouge">F</code>:</p>
+<p>Just like <code class="highlighter-rouge">Monoid[A]</code>, <code class="highlighter-rouge">MonoidK[F]</code> has an <code class="highlighter-rouge">empty</code> method, but it is parametrized on the type of the element contained in <code class="highlighter-rouge">F</code>:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Monoid</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]].</span><span class="n">empty</span>
 <span class="c1">// res0: List[String] = List()

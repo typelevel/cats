@@ -405,6 +405,22 @@ res0: (<span class="std">Option</span>[<span class="std">String</span>], <span c
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.functor.Bifunctor#leftFunctor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="leftFunctor[X]:cats.Functor[[α$1$]F[α$1$,X]]"></a><a id="leftFunctor[X]:Functor[[α$1$]F[α$1$,X]]"></a>
+      <span class="permalink">
+      <a href="../../cats/functor/Bifunctor.html#leftFunctor[X]:cats.Functor[[α$1$]F[α$1$,X]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftFunctor</span><span class="tparams">[<span name="X">X</span>]</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[α$1$]<span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.α$1$">α$1$</span>, <span class="extype" name="cats.functor.Bifunctor.leftFunctor.X">X</span>]]</span>
+      </span>
+      
+      
     </li><li name="cats.functor.Bifunctor#leftMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="leftMap[A,B,C](fab:F[A,B])(f:A=&gt;C):F[C,B]"></a><a id="leftMap[A,B,C](F[A,B])((A)⇒C):F[C,B]"></a>
       <span class="permalink">
@@ -443,6 +459,22 @@ scala&gt; <span class="kw">sealed</span> <span class="kw">trait</span> Foo
 scala&gt; <span class="kw">case</span> <span class="kw">object</span> Bar <span class="kw">extends</span> Foo
 scala&gt; <span class="kw">val</span> x1: Either[Bar.<span class="kw">type</span>, <span class="std">Int</span>] = Either.left(Bar)
 scala&gt; <span class="kw">val</span> x2: Either[Foo, <span class="std">Int</span>] = x1.leftWiden</pre></div></div>
+    </li><li name="cats.functor.Bifunctor#rightFunctor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rightFunctor[X]:cats.Functor[[β$0$]F[X,β$0$]]"></a><a id="rightFunctor[X]:Functor[[β$0$]F[X,β$0$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/functor/Bifunctor.html#rightFunctor[X]:cats.Functor[[β$0$]F[X,β$0$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightFunctor</span><span class="tparams">[<span name="X">X</span>]</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[β$0$]<span class="extype" name="cats.functor.Bifunctor.F">F</span>[<span class="extype" name="cats.functor.Bifunctor.rightFunctor.X">X</span>, <span class="extype" name="cats.functor.Bifunctor.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

@@ -1748,6 +1748,25 @@ res1: scala.<span class="std">Option</span>[<span class="std">Nothing</span>] = 
 and return that result, discarding all others.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until its result satisfies the given predicate
 and return that result, discarding all others.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
+    </li><li name="cats.Monad#iterateUntilM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterateUntilM[A](init:A)(f:A=&gt;F[A])(p:A=&gt;Boolean):F[A]"></a><a id="iterateUntilM[A](A)((A)⇒F[A])((A)⇒Boolean):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/MonadError.html#iterateUntilM[A](init:A)(f:A=&gt;F[A])(p:A=&gt;Boolean):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterateUntilM</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="init">init: <span class="extype" name="cats.Monad.iterateUntilM.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Monad.iterateUntilM.A">A</span>) ⇒ <span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.Monad.iterateUntilM.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Monad.iterateUntilM.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.Monad.iterateUntilM.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Apply a monadic function iteratively until its result satisfies
+the given predicate and return that result.</p><div class="fullcomment"><div class="comment cmt"><p>Apply a monadic function iteratively until its result satisfies
+the given predicate and return that result.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="cats.Monad#iterateWhile" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iterateWhile[A](f:F[A])(p:A=&gt;Boolean):F[A]"></a><a id="iterateWhile[A](F[A])((A)⇒Boolean):F[A]"></a>
       <span class="permalink">
@@ -1766,6 +1785,25 @@ and return that result, discarding all others.
       <p class="shortcomment cmt">Execute an action repeatedly until its result fails to satisfy the given predicate
 and return that result, discarding all others.</p><div class="fullcomment"><div class="comment cmt"><p>Execute an action repeatedly until its result fails to satisfy the given predicate
 and return that result, discarding all others.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
+    </li><li name="cats.Monad#iterateWhileM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterateWhileM[A](init:A)(f:A=&gt;F[A])(p:A=&gt;Boolean):F[A]"></a><a id="iterateWhileM[A](A)((A)⇒F[A])((A)⇒Boolean):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/MonadError.html#iterateWhileM[A](init:A)(f:A=&gt;F[A])(p:A=&gt;Boolean):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterateWhileM</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="init">init: <span class="extype" name="cats.Monad.iterateWhileM.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Monad.iterateWhileM.A">A</span>) ⇒ <span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.Monad.iterateWhileM.A">A</span>]</span>)</span><span class="params">(<span name="p">p: (<span class="extype" name="cats.Monad.iterateWhileM.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="cats.MonadError.F">F</span>[<span class="extype" name="cats.Monad.iterateWhileM.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Apply a monadic function iteratively until its result fails
+to satisfy the given predicate and return that result.</p><div class="fullcomment"><div class="comment cmt"><p>Apply a monadic function iteratively until its result fails
+to satisfy the given predicate and return that result.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monad.html" class="extype" name="cats.Monad">Monad</a></dd></dl></div>
     </li><li name="cats.Functor#lift" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lift[A,B](f:A=&gt;B):F[A]=&gt;F[B]"></a><a id="lift[A,B]((A)⇒B):(F[A])⇒F[B]"></a>

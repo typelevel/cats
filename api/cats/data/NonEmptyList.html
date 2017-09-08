@@ -1200,6 +1200,26 @@ res0: scala.collection.immutable.<span class="std">List</span>[<span class="std"
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.NonEmptyList#zipWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zipWith[B,C](b:cats.data.NonEmptyList[B])(f:(A,B)=&gt;C):cats.data.NonEmptyList[C]"></a><a id="zipWith[B,C](NonEmptyList[B])((A,B)⇒C):NonEmptyList[C]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#zipWith[B,C](b:cats.data.NonEmptyList[B])(f:(A,B)=&gt;C):cats.data.NonEmptyList[C]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zipWith</span><span class="tparams">[<span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="b">b: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.zipWith.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyList.A">A</span>, <span class="extype" name="cats.data.NonEmptyList.zipWith.B">B</span>) ⇒ <span class="extype" name="cats.data.NonEmptyList.zipWith.C">C</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.zipWith.C">C</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Zips this <code>NonEmptyList</code> with another <code>NonEmptyList</code> and applies a function for each pair of elements.</p><div class="fullcomment"><div class="comment cmt"><p>Zips this <code>NonEmptyList</code> with another <code>NonEmptyList</code> and applies a function for each pair of elements.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+scala&gt; <span class="kw">val</span> as = NonEmptyList.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+scala&gt; <span class="kw">val</span> bs = NonEmptyList.of(<span class="lit">"A"</span>, <span class="lit">"B"</span>, <span class="lit">"C"</span>)
+scala&gt; as.zipWith(bs)(_ + _)
+res0: cats.data.NonEmptyList[<span class="std">String</span>] = NonEmptyList(<span class="num">1</span>A, <span class="num">2</span>B, <span class="num">3</span>C)</pre></div></div>
     </li><li name="cats.data.NonEmptyList#zipWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="zipWithIndex:cats.data.NonEmptyList[(A,Int)]"></a><a id="zipWithIndex:NonEmptyList[(A,Int)]"></a>
       <span class="permalink">

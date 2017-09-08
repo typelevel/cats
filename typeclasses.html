@@ -211,7 +211,7 @@ combine(x, id) = combine(id, x) = x
 </code></pre>
 </div>
 
-<p>With these laws in place, functions parameterized over a <code class="highlighter-rouge">Monoid</code> can leverage them for say, performance
+<p>With these laws in place, functions parametrized over a <code class="highlighter-rouge">Monoid</code> can leverage them for say, performance
 reasons. A function that collapses a <code class="highlighter-rouge">List[A]</code> into a single <code class="highlighter-rouge">A</code> can do so with <code class="highlighter-rouge">foldLeft</code> or
 <code class="highlighter-rouge">foldRight</code> since <code class="highlighter-rouge">combine</code> is assumed to be associative, or it can break apart the list into smaller
 lists and collapse in parallel, such as</p>

@@ -246,6 +246,24 @@
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="class" href="DurationGroup.html" title="This group models addition, but has a few problematic edge cases."></a>
+                        <a href="DurationGroup.html" title="This group models addition, but has a few problematic edge cases.">
+                          DurationGroup
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="DurationInstances.html" title=""></a>
+                        <a href="DurationInstances.html" title="">
+                          DurationInstances
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="DurationOrder.html" title="This ordering is valid for all defined durations."></a>
+                        <a href="DurationOrder.html" title="This ordering is valid for all defined durations.">
+                          DurationOrder
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="EitherInstances.html" title=""></a>
                         <a href="EitherInstances.html" title="">
                           EitherInstances
@@ -493,6 +511,48 @@ approximation of an exact value.">
                         <a class="class" href="OptionPartialOrder.html" title=""></a>
                         <a href="OptionPartialOrder.html" title="">
                           OptionPartialOrder
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueEq.html" title=""></a>
+                        <a href="QueueEq.html" title="">
+                          QueueEq
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="QueueInstances.html" title=""></a>
+                        <a href="QueueInstances.html" title="">
+                          QueueInstances
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="QueueInstances1.html" title=""></a>
+                        <a href="QueueInstances1.html" title="">
+                          QueueInstances1
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="QueueInstances2.html" title=""></a>
+                        <a href="QueueInstances2.html" title="">
+                          QueueInstances2
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueMonoid.html" title=""></a>
+                        <a href="QueueMonoid.html" title="">
+                          QueueMonoid
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueOrder.html" title=""></a>
+                        <a href="QueueOrder.html" title="">
+                          QueueOrder
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="QueuePartialOrder.html" title=""></a>
+                        <a href="QueuePartialOrder.html" title="">
+                          QueuePartialOrder
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -1103,6 +1163,65 @@ approximation of an exact value.">
       </span>
       
       
+    </li><li name="cats.kernel.instances.DurationGroup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DurationGroupextendsCommutativeGroup[scala.concurrent.duration.Duration]"></a><a id="DurationGroup:DurationGroup"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#DurationGroupextendsCommutativeGroup[scala.concurrent.duration.Duration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="This group models addition, but has a few problematic edge cases." href="DurationGroup.html">
+              <span class="name">DurationGroup</span>
+            </a><span class="result"> extends <a href="../CommutativeGroup.html" class="extype" name="cats.kernel.CommutativeGroup">CommutativeGroup</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/concurrent/duration/Duration.html#scala.concurrent.duration.Duration" class="extype" name="scala.concurrent.duration.Duration">Duration</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This group models addition, but has a few problematic edge cases.</p><div class="fullcomment"><div class="comment cmt"><p>This group models addition, but has a few problematic edge cases.</p><ol class="decimal"><li>finite values can overflow, throwing an exception
+  2. inf + (-inf) = undefined, not zero
+  3. undefined + zero = undefined
+</li></ol></div></div>
+    </li><li name="cats.kernel.instances.DurationInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DurationInstancesextendsAnyRef"></a><a id="DurationInstances:DurationInstances"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#DurationInstancesextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="DurationInstances.html">
+              <span class="name">DurationInstances</span>
+            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.DurationOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DurationOrderextendsOrder[scala.concurrent.duration.Duration]"></a><a id="DurationOrder:DurationOrder"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#DurationOrderextendsOrder[scala.concurrent.duration.Duration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="This ordering is valid for all defined durations." href="DurationOrder.html">
+              <span class="name">DurationOrder</span>
+            </a><span class="result"> extends <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/concurrent/duration/Duration.html#scala.concurrent.duration.Duration" class="extype" name="scala.concurrent.duration.Duration">Duration</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This ordering is valid for all defined durations.</p><div class="fullcomment"><div class="comment cmt"><p>This ordering is valid for all defined durations.</p><p>The value Duration.Undefined breaks our laws, because undefined
+values are not equal to themselves.
+</p></div></div>
     </li><li name="cats.kernel.instances.EitherInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="EitherInstancesextendsEitherInstances0"></a><a id="EitherInstances:EitherInstances"></a>
       <span class="permalink">
@@ -1846,6 +1965,132 @@ need to investigate rational numbers or more exotic types.
         <a title="" href="OptionPartialOrder.html">
               <span class="name">OptionPartialOrder</span>
             </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.instances.OptionPartialOrder.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueEq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QueueEq[A]extendsEq[scala.collection.immutable.Queue[A]]"></a><a id="QueueEq[A]:QueueEq[A]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueEq[A]extendsEq[scala.collection.immutable.Queue[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueEq.html">
+              <span class="name">QueueEq</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueEq.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="QueueInstancesextendsQueueInstances1"></a><a id="QueueInstances:QueueInstances"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueInstancesextendsQueueInstances1" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueInstances.html">
+              <span class="name">QueueInstances</span>
+            </a><span class="result"> extends <a href="QueueInstances1.html" class="extype" name="cats.kernel.instances.QueueInstances1">QueueInstances1</a></span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueInstances1" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="QueueInstances1extendsQueueInstances2"></a><a id="QueueInstances1:QueueInstances1"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueInstances1extendsQueueInstances2" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueInstances1.html">
+              <span class="name">QueueInstances1</span>
+            </a><span class="result"> extends <a href="QueueInstances2.html" class="extype" name="cats.kernel.instances.QueueInstances2">QueueInstances2</a></span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueInstances2" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="QueueInstances2extendsAnyRef"></a><a id="QueueInstances2:QueueInstances2"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueInstances2extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueInstances2.html">
+              <span class="name">QueueInstances2</span>
+            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueMonoid" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QueueMonoid[A]extendsMonoid[scala.collection.immutable.Queue[A]]"></a><a id="QueueMonoid[A]:QueueMonoid[A]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueMonoid[A]extendsMonoid[scala.collection.immutable.Queue[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueMonoid.html">
+              <span class="name">QueueMonoid</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueMonoid.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueueOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QueueOrder[A]extendsOrder[scala.collection.immutable.Queue[A]]"></a><a id="QueueOrder[A]:QueueOrder[A]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueueOrder[A]extendsOrder[scala.collection.immutable.Queue[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueueOrder.html">
+              <span class="name">QueueOrder</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../Order.html" class="extype" name="cats.kernel.Order">Order</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueueOrder.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.instances.QueuePartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QueuePartialOrder[A]extendsPartialOrder[scala.collection.immutable.Queue[A]]"></a><a id="QueuePartialOrder[A]:QueuePartialOrder[A]"></a>
+      <span class="permalink">
+      <a href="../../../cats/kernel/instances/index.html#QueuePartialOrder[A]extendsPartialOrder[scala.collection.immutable.Queue[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="QueuePartialOrder.html">
+              <span class="name">QueuePartialOrder</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../PartialOrder.html" class="extype" name="cats.kernel.PartialOrder">PartialOrder</a>[<a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/Queue.html#scala.collection.immutable.Queue" class="extype" name="scala.collection.immutable.Queue">Queue</a>[<span class="extype" name="cats.kernel.instances.QueuePartialOrder.A">A</span>]]</span>
       </span>
       
       
