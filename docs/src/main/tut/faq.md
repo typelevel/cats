@@ -43,7 +43,7 @@ Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: facilita
 Based on this core strategy, Cats took a [modular](/cats/#modularity) approach and focuses on providing core, [binary compatible](/cats/#a-namebinary-compatibility-and-versioning), [approachable](/cats/#approachability) and [efficient](/cats/#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed 
 by the [typelevel code of conduct](https://typelevel.org/conduct). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation). 
 
-We believe that both Cats and Scalaz strategies have their merits and shortcomings, and it's a positive thing for the scala community to have both.                           
+We believe that the Cats and Scalaz strategies have their merits and shortcomings, and it's a positive thing for the scala community to have both.                           
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
