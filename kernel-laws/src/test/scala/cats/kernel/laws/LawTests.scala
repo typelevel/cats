@@ -24,7 +24,18 @@ import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS}
 
-object KernelCheck {
+class LawTests extends FunSuite with Discipline {
+
+  // The scalacheck defaults (100,100) are too high for scala-js.
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+
+  implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
+  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
+  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
