@@ -36,7 +36,7 @@ import cats.implicits._
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
 
-## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between cats and scalaz? 
+## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz? 
 
 The goal for both Cats and [Scalaz](https://github.com/scalaz/scalaz) are the same: facilitate pure functional programming in Scala applications; the underlying core strategy is different. Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation. These libaries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs. 
 
