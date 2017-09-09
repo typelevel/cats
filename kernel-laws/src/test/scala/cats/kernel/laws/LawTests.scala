@@ -91,22 +91,6 @@ class LawTests extends FunSuite with Discipline {
         case NANOSECONDS => 6128745701389500153L
       })
     }
-}
-
-class LawTests extends FunSuite with Discipline {
-
-  import KernelCheck._
-
-  // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
-
-  implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
-  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   {
     // needed for Cogen[Map[...]]
