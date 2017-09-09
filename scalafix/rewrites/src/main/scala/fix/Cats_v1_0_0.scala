@@ -8,9 +8,9 @@ import scala.meta._
 object Utils {
 
   private[fix] def rename(
-      ctx: RewriteCtx,
+      ctx: RuleCtx,
       t: Term.Name,
-      renames: Map[String, String])(implicit semanticCtx: SemanticCtx): Patch = {
+      renames: Map[String, String])(implicit index: SemanticdbIndex): Patch = {
     renames.collect {
       case (target, rename) if t.isSymbol(target) =>
         ctx.replaceTree(t, rename)
@@ -18,15 +18,16 @@ object Utils {
   }
 
   implicit class TermNameOps(t: Name) {
-    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+    def isSymbol(s: String)(implicit index: SemanticdbIndex): Boolean =
       t.symbol.exists(_.normalized.syntax == s)
 
-    def isOneOfSymbols(symbols: Set[String])(implicit semanticCtx: SemanticCtx): Boolean =
+    def isOneOfSymbols(symbols: Set[String])(
+        implicit index: SemanticdbIndex): Boolean =
       t.symbol.exists(s => symbols.contains(s.normalized.syntax))
   }
 
   implicit class OptionTermNameOps(t: Option[Name]) {
-    def isSymbol(s: String)(implicit semanticCtx: SemanticCtx): Boolean =
+    def isSymbol(s: String)(implicit index: SemanticdbIndex): Boolean =
       t.flatMap(_.symbol).exists(_.normalized.syntax == s)
   }
 
@@ -34,8 +35,8 @@ object Utils {
 import Utils._
 
 // ref: https://github.com/typelevel/cats/pull/1745
-case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
-    extends SemanticRewrite(semanticCtx) {
+case class RemoveCartesianBuilder(index: SemanticdbIndex)
+    extends SemanticRule(index, "RemoveCartesianBuilder") {
 
   private[this] val cartesianBuilders =
     (1 to 22)
@@ -63,7 +64,7 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
 
   // Hackish way to work around duplicate fixes due to recursion
   val alreadyFixedOps = collection.mutable.Set.empty[Term.Name]
-  private[this] def replaceOpWithComma(ctx: RewriteCtx, op: Term.Name): Patch =
+  private[this] def replaceOpWithComma(ctx: RuleCtx, op: Term.Name): Patch =
     if (op.isOneOfSymbols(cartesianBuilders) && !alreadyFixedOps.contains(op)) {
       alreadyFixedOps += op
       // remove the space before |@|
@@ -75,7 +76,7 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
     }
 
   private[this] def removeCartesianBuilderOp(
-      ctx: RewriteCtx,
+      ctx: RuleCtx,
       applyInfix: Term.ApplyInfix): Patch = {
     applyInfix match {
       case Term.ApplyInfix(lhs: Term.ApplyInfix, op, _, _) =>
@@ -85,7 +86,7 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
     }
   }
 
-  private[this] def wrapInParensIfNeeded(ctx: RewriteCtx, t: Term): Patch = {
+  private[this] def wrapInParensIfNeeded(ctx: RuleCtx, t: Term): Patch = {
     if (t.tokens.head.is[Token.LeftParen] && t.tokens.last
         .is[Token.RightParen]) {
       Patch.empty
@@ -94,7 +95,7 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
     }
   }
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case t: Term.ApplyInfix if t.op.isOneOfSymbols(cartesianBuilders) =>
         removeCartesianBuilderOp(ctx, t)
@@ -115,7 +116,8 @@ case class RemoveCartesianBuilder(semanticCtx: SemanticCtx)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1583
-case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class RemoveUnapply(index: SemanticdbIndex)
+    extends SemanticRule(index, "RemoveUnapply") {
 
   private[this] val renames = Map(
     "_root_.cats.Traverse.Ops.traverseU." -> "traverse",
@@ -136,7 +138,7 @@ case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(seman
     }
 
   private[this] def removeImportee(
-      ctx: RewriteCtx,
+      ctx: RuleCtx,
       importee: Importee,
       fixes: Map[String, String]): Patch =
     fixes.collect {
@@ -144,7 +146,7 @@ case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(seman
         ctx.removeImportee(importee)
     }.asPatch
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case t: Term.Name => rename(ctx, t, renames)
       case t: Importee.Name => removeImportee(ctx, t, renames)
@@ -153,14 +155,15 @@ case class RemoveUnapply(semanticCtx: SemanticCtx) extends SemanticRewrite(seman
 }
 
 // ref: https://github.com/typelevel/cats/pull/1709
-case class RenameFreeSuspend(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class RenameFreeSuspend(index: SemanticdbIndex)
+    extends SemanticRule(index, "RenameFreeSuspend") {
 
   private[this] val renames = Map(
     "_root_.cats.free.Free.suspend." -> "defer",
     "_root_.cats.free.TrampolineFunctions.suspend." -> "defer"
   )
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case t: Term.Name => rename(ctx, t, renames)
     }.asPatch
@@ -169,8 +172,8 @@ case class RenameFreeSuspend(semanticCtx: SemanticCtx) extends SemanticRewrite(s
 }
 
 // ref: https://github.com/typelevel/cats/pull/1611
-case class RenameReducibleMethods(semanticCtx: SemanticCtx)
-    extends SemanticRewrite(semanticCtx) {
+case class RenameReducibleMethods(index: SemanticdbIndex)
+    extends SemanticRule(index, "RenameReducibleMethods") {
 
   private[this] val renames = Map(
     "_root_.cats.Reducible.traverse1_." -> "nonEmptyTraverse_",
@@ -181,7 +184,7 @@ case class RenameReducibleMethods(semanticCtx: SemanticCtx)
     "_root_.cats.Reducible.Ops.sequence1_." -> "nonEmptySequence_"
   )
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case t: Term.Name => rename(ctx, t, renames)
     }.asPatch
@@ -190,12 +193,13 @@ case class RenameReducibleMethods(semanticCtx: SemanticCtx)
 }
 
 // ref: https://github.com/typelevel/cats/pull/1614
-case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class SimplifyEitherTLift(index: SemanticdbIndex)
+    extends SemanticRule(index, "SimplifyEitherTLift") {
 
   private[this] val leftSymbol = "_root_.cats.data.EitherTFunctions.left."
   private[this] val rightSymbol = "_root_.cats.data.EitherTFunctions.right."
 
-  private[this] def removeWithLeadingComma(ctx: RewriteCtx, t: Tree): Patch =
+  private[this] def removeWithLeadingComma(ctx: RuleCtx, t: Tree): Patch =
     (for {
       leadingComma <- ctx.tokenList.leading(t.tokens.head).find(_.syntax == ",")
     } yield {
@@ -205,7 +209,7 @@ case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite
         ctx.removeTokens(t.tokens)
     }).asPatch
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case Term.ApplyType(Term.Select(_, name), Seq(f, a, b))
           if name.isSymbol(leftSymbol) =>
@@ -220,9 +224,10 @@ case class SimplifyEitherTLift(semanticCtx: SemanticCtx) extends SemanticRewrite
 
 // ref: https://github.com/typelevel/cats/pull/1589
 //      https://github.com/typelevel/cats/pull/1596
-case class RenameInjectProdAndCoproduct(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class RenameInjectProdAndCoproduct(index: SemanticdbIndex)
+    extends SemanticRule(index, "RenameInjectProdAndCoproduct") {
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
       "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
       "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
@@ -233,7 +238,8 @@ case class RenameInjectProdAndCoproduct(semanticCtx: SemanticCtx) extends Semant
 }
 
 // ref: https://github.com/typelevel/cats/pull/1487
-case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class RenameTupleApplySyntax(index: SemanticdbIndex)
+    extends SemanticRule(index, "RenameTupleApplySyntax") {
 
   private[this] val renames: Map[String, String] =
     (1 to 22)
@@ -247,7 +253,7 @@ case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewr
       .flatten
       .toMap
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
       case t: Term.Name => rename(ctx, t, renames)
       case t @ q"import cats.syntax.tuple._" =>
@@ -257,9 +263,10 @@ case class RenameTupleApplySyntax(semanticCtx: SemanticCtx) extends SemanticRewr
 }
 
 // ref: https://github.com/typelevel/cats/pull/1766
-case class RemoveSplit(semanticCtx: SemanticCtx) extends SemanticRewrite(semanticCtx) {
+case class RemoveSplit(index: SemanticdbIndex)
+    extends SemanticRule(index, "RemoveSplit") {
 
-  def rewrite(ctx: RewriteCtx): Patch = {
+  override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
       "_root_.cats.arrow.Split." -> "_root_.cats.arrow.Arrow."
     ) + ctx.tree.collect {
