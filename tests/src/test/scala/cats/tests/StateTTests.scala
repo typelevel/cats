@@ -1,8 +1,9 @@
 package cats
 package tests
 
+import cats.arrow.Arrow
 import cats.data.{State, StateT, IndexedStateT, EitherT}
-import cats.functor.{Contravariant, Bifunctor, Profunctor}
+import cats.functor.{Contravariant, Bifunctor, Profunctor, Strong}
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -306,9 +307,29 @@ class IndexedStateTTests extends CatsSuite {
     implicit val FS: Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataProfunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, String, Int, Int]", ProfunctorTests[IndexedStateT[ListWrapper, ?, ?, Int]].profunctor[String, String, String, Int, Int, Int])
-    checkAll("Profunctor[IndexedStateT[ListWrapper, ?, Int, Int]]", SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]))
+    checkAll("Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]", SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]))
 
     Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]
+  }
+
+  {
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FS: Strong[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
+
+    checkAll("IndexedStateT[ListWrapper, String, Int, Int]", StrongTests[IndexedStateT[ListWrapper, ?, ?, Int]].strong[String, String, String, Int, Int, Int])
+    checkAll("Strong[IndexedStateT[ListWrapper, ?, ?, Int]]", SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, ?, ?, Int]]))
+
+    Strong[IndexedStateT[ListWrapper, ?, ?, Int]]
+  }
+
+  {
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FS: Arrow[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataArrowForIndexedStateT
+
+    checkAll("IndexedStateT[ListWrapper, String, Int, Int]", ArrowTests[IndexedStateT[ListWrapper, ?, ?, Int]].arrow[String, String, String, Int, Int, Int])
+    checkAll("Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]", SerializableTests.serializable(Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]))
+
+    Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]
   }
 
   {
