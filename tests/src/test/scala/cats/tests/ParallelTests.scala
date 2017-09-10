@@ -93,6 +93,8 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)
   checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
 
+  checkAll("Parallel[Id, Id]", ParallelTypeclassTests[Id, Id, Int].parallel)
+
   checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(Parallel[NonEmptyList, ZipNonEmptyList]))
 
   {

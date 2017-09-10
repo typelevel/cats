@@ -35,6 +35,11 @@ trait FutureInstances extends FutureInstances1 {
 private[instances] sealed trait FutureInstances1 extends FutureInstances2 {
   implicit def catsStdMonoidForFuture[A: Monoid](implicit ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A]
+
+  implicit def catsStdParallelForFuture[A](implicit ec: ExecutionContext): Parallel[Future, Future] = {
+    implicit val M: Monad[Future] = cats.instances.future.catsStdInstancesForFuture
+    Parallel.identity[Future]
+  }
 }
 
 private[instances] sealed trait FutureInstances2 {

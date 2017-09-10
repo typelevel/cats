@@ -41,6 +41,7 @@ class FutureTests extends CatsSuite {
   checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
+  checkAll("Parallel[Future, Future]", ParallelTests[Future, Future, Int].parallel)
 
   {
     implicit val F = ListWrapper.semigroup[Int]
