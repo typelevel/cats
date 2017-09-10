@@ -1,4 +1,4 @@
-# Scalafix rewrites for cats
+# Scalafix rules for cats
 
 ## Try this!
 
@@ -14,7 +14,7 @@ run
 sbt scalafix github:typelevel/cats/v1.0.0
 ```
 
-## Available rewrites
+## Available rules
 
 - [x] All Unapply enabled methods, e.g. sequenceU, traverseU, etc. are removed. Unapply enabled syntax ops are also removed. Please use the partial unification SI-2712 fix instead. The easiest way might be this sbt-plugin.
 
