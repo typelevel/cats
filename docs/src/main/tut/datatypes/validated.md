@@ -76,8 +76,8 @@ case object AgeIsInvalid extends DomainValidation {
 
 We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using it for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
-```scala
-trait FormValidator{
+```tut:silent
+sealed trait FormValidator{
   private def validateUserName(userName: String): Either[DomainValidation, String] =
     if (userName.matches("^[a-zA-Z0-9]+$")) Right(userName) else Left(UsernameHasSpecialCharacters)
 
@@ -108,6 +108,8 @@ trait FormValidator{
 
 }
 
+object FormValidator extends FormValidator
+
 ```
 
 The logic of the validation process is as follows: **check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a `Right` instance; If not, then return a `DomainValidation` with the respective message, wrapped in a `Left` instance**.
@@ -118,7 +120,7 @@ Well, yes, but the error reporting part will have the downside of showing only t
 
 Let's look in detail this part:
 
-```scala
+```tut:silent:fail
     for {
       validatedUserName <- validateUserName(username)
       validatedPassword <- validatePassword(password)
@@ -134,12 +136,8 @@ A for-comprehension is _fail-fast_. If some of the evaluations in the `for` bloc
 
 If we run our code:
 
-```scala
-scala> object FormValidator extends FormValidator
-defined object FormValidator
-
-scala> FormValidator.validateForm("fakeUs3rname", "password", "John", "Doe", 15)
-res0: Either[DomainValidation,RegistrationData] = Left(PasswordDoesNotMeetCriteria)
+```tut:book
+FormValidator.validateForm("fakeUs3rname", "password", "John", "Doe", 15)
 ```
 
 We should have gotten another `DomainValidation` with the invalid age.
@@ -150,9 +148,10 @@ Time to do some refactoring! We're going to try a `Validated` approach:
 
 ```scala
 import cats.data._
+import cats.data.Validated._
 import cats.implicits._
 
-trait FormValidator{
+sealed trait FormValidatorValidated{
   private def validateUserName(userName: String): Validated[DomainValidation, String] =
     if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(UsernameHasSpecialCharacters)
 
@@ -166,7 +165,7 @@ trait FormValidator{
   private def validateLastName(lastName: String): Validated[DomainValidation, String] =
     if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(LastNameHasSpecialCharacters)
 
-  private def validateAge(age: Int): Either[DomainValidation, Int] =
+  private def validateAge(age: Int): Validated[DomainValidation, Int] =
     if (age >= 18 && age <= 75) Valid(age) else Invalid(AgeIsInvalid)
 
   def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
@@ -182,6 +181,8 @@ trait FormValidator{
   }
 
 }
+
+object FormValidatorValidated extends FormValidatorValidated
 ```
 
 Looks similar to the first version. What we've done here was to use `Validated` instead of `Either`. Please note that our `Right` is now a `Valid` and `Left` is an `Invalid`.
@@ -195,7 +196,7 @@ value flatMap is not a member of cats.data.Validated[DomainValidation,String]
 
 The problem lies here:
 
-```scala
+```tut:silent:fail
  for {
       validatedUserName <- validateUserName(username)
       validatedPassword <- validatePassword(password)
@@ -214,11 +215,12 @@ So, how do we do here?
 
 We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.
 
-```scala
+```tut:silent
 import cats.data._
+import cats.data.Validated._
 import cats.implicits._
 
-trait FormValidatorNel {
+sealed trait FormValidatorNel {
 
   type ValidationResult[A] = Validated[NonEmptyList[DomainValidation], A]
 
@@ -239,14 +241,16 @@ trait FormValidatorNel {
     if (age >= 18 && age <= 75) age.validNel else AgeIsInvalid.invalidNel
 
   def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): ValidationResult[RegistrationData] = {
-    (validateUserName(username) |@|
-    validatePassword(password) |@|
-    validateFirstName(firstName) |@|
-    validateLastName(lastName) |@|
-    validateAge(age)).map(RegistrationData)
+    (validateUserName(username),
+    validatePassword(password),
+    validateFirstName(firstName),
+    validateLastName(lastName),
+    validateAge(age)).mapN(RegistrationData)
   }
 
 }
+
+object FormValidatorNel extends FormValidatorNel
 ```
 
 Let's see what changed here:
@@ -254,21 +258,30 @@ Let's see what changed here:
 1. In this new implementation, we're using a `NonEmptyList`, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
 2. We've declared the type alias `ValidationResult` that conveniently express the return type of our validation.
 3. `.validNel` and `.invalidNel` combinators let us _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
-4. The [applicative](../typeclasses/applicative.html) syntax `|@|` provides us a way to accumulatively apply the validation functions and yield a cartesian product with their successful result or the accumulated errors in the `NonEmptyList`.
+4. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
+
+**Deprecation notice:** since cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
 
 Note that, at the end, we expect to lift the result of the validation functions in a `RegistrationData` instance. If the process fails, we'll get our `NonEmptyList` detailing what went wrong.
 
 For example:
 
-```scala
-scala> object FormValidator extends FormValidatorNel
-defined object FormValidator
+```tut:book
+FormValidatorNel.validateForm(
+            username = "Joe",
+            password = "Passw0r$1234",
+            firstName = "John",
+            lastName = "Doe",
+            age = 21
+          )
 
-scala> FormValidator.validateForm("Joe", "Passw0r$1234", "John", "Doe", 21)
-res0: FormValidator.ValidationResult[RegistrationData] = Valid(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
-
-scala> FormValidator.validateForm("Joe%%%", "password", "John", "Doe", 21)
-res1: FormValidator.ValidationResult[RegistrationData] = Invalid(NonEmptyList(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria))
+FormValidatorNel.validateForm(
+            username = "Joe%%%",
+            password = "password",
+            firstName = "John",
+            lastName = "Doe",
+            age = 21
+          )
 ```
 
 Sweet success! Now you can take your validation process to the next level!
@@ -280,26 +293,22 @@ Please note that, if you're using an `Either`-based approach as seen in our firs
 
 To do this, you'll need to use either `.toValidated` or `.toValidatedNel`. Let's see an example:
 
-```scala
-scala> FormValidator.validateForm(
-     |       username = "MrJohnDoe$$",
-     |       password = "password",
-     |       firstName = "John",
-     |       lastName = "Doe",
-     |       age = 31
-     |     ).toValidated
-     
-res0: cats.data.Validated[DomainValidation,RegistrationData] = Invalid(UsernameHasSpecialCharacters)
+```tut:book
+FormValidator.validateForm(
+            username = "MrJohnDoe$$",
+            password = "password",
+            firstName = "John",
+            lastName = "Doe",
+            age = 31
+          ).toValidated
 
-scala> FormValidator.validateForm(
-     |       username = "MrJohnDoe$$",
-     |       password = "password",
-     |       firstName = "John",
-     |       lastName = "Doe",
-     |       age = 31
-     |     ).toValidatedNel
-     
-res1: cats.data.ValidatedNel[DomainValidation,RegistrationData] = Invalid(NonEmptyList(UsernameHasSpecialCharacters))
+FormValidator.validateForm(
+            username = "MrJohnDoe$$",
+            password = "password",
+            firstName = "John",
+            lastName = "Doe",
+            age = 31
+          ).toValidatedNel
 ```
 
 The difference between the previous examples is that `.toValidated` gives you an `Invalid` instance in case of failure. Meanwhile, `.toValidatedNel` will give you a `NonEmptyList` with the possible failures. Don't forget about the caveat with `Either`-based approaches, mentioned before.
