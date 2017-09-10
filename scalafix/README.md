@@ -5,7 +5,7 @@
 Install the scalafix sbt plugin (globally or in a specific project):
 
 ```scala
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-M3")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
 ```
 
 run
