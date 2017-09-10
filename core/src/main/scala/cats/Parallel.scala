@@ -98,7 +98,13 @@ object Parallel extends ParallelArityFunctions {
                                         (implicit P: Parallel[M, F]): M[Z] =
     Monad[M].map(parProduct(ma, parProduct(mb, ff))) { case (a, (b, f)) => f(a, b) }
 
-  def applicativeError[F[_], M[_], E]
+  /**
+    * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel[M, F]`
+    * and a `MonadError[M, E]` instance.
+    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
+    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
+    */
+  def applicativeError[M[_], F[_], E]
   (implicit P: Parallel[M, F], E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
 
     def raiseError[A](e: E): F[A] =

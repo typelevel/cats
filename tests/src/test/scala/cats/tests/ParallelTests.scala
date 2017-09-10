@@ -113,7 +113,7 @@ trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
   import cats.instances.unit._
   import cats.instances.tuple._
 
-  implicit val parVal = Parallel.applicativeError[Validated[String, ?], Either[String, ?], String]
+  implicit val parVal = Parallel.applicativeError[Either[String, ?], Validated[String, ?], String]
 
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
