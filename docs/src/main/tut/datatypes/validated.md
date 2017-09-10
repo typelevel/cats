@@ -77,6 +77,8 @@ case object AgeIsInvalid extends DomainValidation {
 We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using it for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
 ```tut:silent
+import cats.syntax.either._
+
 sealed trait FormValidator{
   private def validateUserName(userName: String): Either[DomainValidation, String] =
     if (userName.matches("^[a-zA-Z0-9]+$")) Right(userName) else Left(UsernameHasSpecialCharacters)
@@ -140,34 +142,39 @@ If we run our code:
 FormValidator.validateForm("fakeUs3rname", "password", "John", "Doe", 15)
 ```
 
-We should have gotten another `DomainValidation` with the invalid age.
+We should have gotten another `DomainValidation` object denoting the invalid age.
 
 ### An iteration with `Validated`
 
 Time to do some refactoring! We're going to try a `Validated` approach:
 
-```scala
+```tut:silent
 import cats.data._
 import cats.data.Validated._
 import cats.implicits._
 
-sealed trait FormValidatorValidated{
-  private def validateUserName(userName: String): Validated[DomainValidation, String] =
+ def validateUserName(userName: String): Validated[DomainValidation, String] = {
     if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(UsernameHasSpecialCharacters)
+ }
 
-  private def validatePassword(password: String): Validated[DomainValidation, String] =
+ def validatePassword(password: String): Validated[DomainValidation, String] = {
     if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Valid(password)
     else Invalid(PasswordDoesNotMeetCriteria)
+ }
 
-  private def validateFirstName(firstName: String): Validated[DomainValidation, String] =
+ def validateFirstName(firstName: String): Validated[DomainValidation, String] = {
     if (firstName.matches("^[a-zA-Z]+$")) Valid(firstName) else Invalid(FirstNameHasSpecialCharacters)
+}
 
-  private def validateLastName(lastName: String): Validated[DomainValidation, String] =
+ def validateLastName(lastName: String): Validated[DomainValidation, String] = {
     if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(LastNameHasSpecialCharacters)
+}
 
-  private def validateAge(age: Int): Validated[DomainValidation, Int] =
+ def validateAge(age: Int): Validated[DomainValidation, Int] = {
     if (age >= 18 && age <= 75) Valid(age) else Invalid(AgeIsInvalid)
-
+}
+```
+```tut:book:fail
   def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
 
     for {
@@ -180,34 +187,15 @@ sealed trait FormValidatorValidated{
       yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
   }
 
-}
-
-object FormValidatorValidated extends FormValidatorValidated
 ```
 
 Looks similar to the first version. What we've done here was to use `Validated` instead of `Either`. Please note that our `Right` is now a `Valid` and `Left` is an `Invalid`.
 Remember, our goal is to get all the validation errors for displaying it to the user.
 
-But this approach won't compile. Why? Here is an excerpt of the compiler output:
-
-```
-value flatMap is not a member of cats.data.Validated[DomainValidation,String]
-```
-
-The problem lies here:
-
-```tut:silent:fail
- for {
-      validatedUserName <- validateUserName(username)
-      validatedPassword <- validatePassword(password)
-      validatedFirstName <- validateFirstName(firstName)
-      validatedLastName <- validateLastName(lastName)
-      validatedAge <- validateAge(age)
-    }
-      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
-```
+But this approach won't compile, as you can see in the previous snippet. Why?
 
 Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.html).
+That's why you see the message: `error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]`.
 
 So, how do we do here?
 
