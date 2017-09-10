@@ -1,5 +1,7 @@
 package cats
 
+import cats.arrow.FunctionK
+
 /**
   * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
   * The Parallel type class allows us to represent this relationship.
@@ -118,5 +120,20 @@ object Parallel extends ParallelArityFunctions {
     def pure[A](x: A): F[A] = P.applicative.pure(x)
 
     def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = P.applicative.ap(ff)(fa)
+  }
+
+  /**
+    * A Parallel instance for any type `M[_]` that supports parallel composition through itself.
+    * Can also be used for giving `Parallel` instances to types that do not support parallel composition,
+    * but are required to have an instance of `Parallel` defined,
+    * in which case parallel composition will actually be sequential.
+    */
+  def identity[M[_]: Monad]: Parallel[M, M] = new Parallel[M, M] {
+
+    def applicative: Applicative[M] = implicitly[Monad[M]]
+
+    def sequential(implicit M: Monad[M]): M ~> M = FunctionK.id
+
+    def parallel(implicit M: Monad[M]): M ~> M = FunctionK.id
   }
 }
