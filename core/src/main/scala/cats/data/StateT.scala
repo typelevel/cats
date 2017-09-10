@@ -7,12 +7,15 @@ import cats.syntax.either._
 /**
  *
  * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding
- * a value of type `A`. Its state transitions from a value of type `SA` to a value
+ * a value of type `A`. The state transitions from a value of type `SA` to a value
  * of type `SB`.
  *
- * Given `IndexedStateT[F, S, S, A]`, this yields the plain `StateT[F, S, A]`.
+ * Note that for the `SA != SB` case, this is an indexed monad. Indexed monads
+ * are monadic type constructors annotated by an additional type for effect
+ * tracking purposes. In this case, the annotation tracks the initial state and
+ * the resulting state.
  *
- * Note that `IndexedStateT[F, SA, SB, A]` is not a monad, but an indexed monad.
+ * Given `IndexedStateT[F, S, S, A]`, this yields the `StateT[F, S, A]` monad.
  */
 final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extends Serializable {
 
