@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.functor.{ Bifunctor, Contravariant, Profunctor, Strong }
-import cats.arrow.Arrow
 import cats.syntax.either._
 
 /**
@@ -458,13 +457,6 @@ private[data] sealed abstract class IRWSTInstances2 extends IRWSTInstances3 {
       implicit def F: Monad[F] = FM
       implicit def L: Monoid[L] = L0
     }
-
-  implicit def catsDataArrowForIRWST[F[_], E, L, T](implicit F0: Monad[F], L0: Monoid[L], T0: Monoid[T]): Arrow[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
-    new IRWSTArrow[F, E, L, T] {
-      implicit def F: Monad[F] = F0
-      implicit def L: Monoid[L] = L0
-      implicit def T: Monoid[T] = T0
-    }
 }
 
 private[data] sealed abstract class IRWSTInstances3 {
@@ -514,29 +506,6 @@ private[data] sealed abstract class IRWSTStrong[F[_], E, L, T] extends IRWSTProf
 
   def second[A, B, C](fa: IndexedReaderWriterStateT[F, E, L, A, B, T]): IndexedReaderWriterStateT[F, E, L, (C, A), (C, B), T] =
     first(fa).dimap((_: (C, A)).swap)(_.swap)
-}
-
-private[data] sealed abstract class IRWSTArrow[F[_], E, L, T] extends IRWSTStrong[F, E, L, T] with Arrow[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] {
-  implicit def F: Monad[F]
-  implicit def T: Monoid[T]
-  implicit def L: Monoid[L]
-
-  def lift[A, B](f: A => B): IndexedReaderWriterStateT[F, E, L, A, B, T] =
-    IndexedReaderWriterStateT { (e, a) =>
-      F.pure((L.empty, f(a), T.empty))
-    }
-
-  def id[A]: IndexedReaderWriterStateT[F, E, L, A, A, T] =
-    IndexedReaderWriterStateT.pure(T.empty)
-
-  def compose[A, B, C](f: IndexedReaderWriterStateT[F, E, L, B, C, T], g: IndexedReaderWriterStateT[F, E, L, A, B, T]): IndexedReaderWriterStateT[F, E, L, A, C, T] =
-    IndexedReaderWriterStateT { (e, a) =>
-      F.flatMap(g.run(e, a)) { case (la, b, ta) =>
-        F.map(f.run(e, b)) { case (lb, c, tb) =>
-          (L.combine(la, lb), c, T.combine(ta, tb))
-        }
-      }
-    }
 }
 
 private[data] sealed abstract class IRWSTBifunctor[F[_], E, L, SA] extends Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] {

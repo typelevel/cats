@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
 import cats.data.{ IRWST, IndexedReaderWriterStateT, ReaderWriterStateT, ReaderWriterState, EitherT }
 import cats.functor.{ Contravariant, Bifunctor, Profunctor, Strong }
 import cats.laws.discipline._
@@ -327,11 +326,6 @@ class ReaderWriterStateTTests extends CatsSuite {
       StrongTests[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]].strong[Int, Int, Int, String, String, String])
     checkAll("Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
       SerializableTests.serializable(Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]))
-
-    checkAll("IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, Int]",
-      ArrowTests[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]].arrow[Int, Int, Int, String, String, String])
-    checkAll("Arrow[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
-      SerializableTests.serializable(Arrow[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]))
 
     checkAll("IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, String]",
       BifunctorTests[IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
