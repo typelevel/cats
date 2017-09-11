@@ -132,7 +132,7 @@ case class SimplifyEitherTLift(index: SemanticdbIndex)
         .leading(t.tokens.head)
         .find(_.is[Token.Comma])
     } yield {
-      val leadingSpaces = ctx.tokenList.slice(leadingComma, t.tokens.last)
+      val leadingSpaces = ctx.tokenList.slice(leadingComma, t.tokens.head)
       ctx.removeToken(leadingComma) ++
         leadingSpaces.map(ctx.removeToken) +
         ctx.removeTokens(t.tokens)
