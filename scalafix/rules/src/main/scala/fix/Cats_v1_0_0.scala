@@ -3,23 +3,8 @@ package v1_0_0
 
 import scalafix._
 import scalafix.util.SymbolMatcher
-import scalafix.syntax._
 import scala.meta._
-
-object Utils {
-
-  private[fix] def rename(
-      ctx: RuleCtx,
-      t: Term.Name,
-      renames: Map[Symbol, String])(implicit index: SemanticdbIndex): Patch = {
-    renames.collect {
-      case (target, rename) if SymbolMatcher.normalized(target).matches(t) =>
-        ctx.replaceTree(t, rename)
-    }.asPatch
-  }
-
-}
-import Utils._
+import scala.meta.contrib._
 
 // ref: https://github.com/typelevel/cats/pull/1745
 case class RemoveCartesianBuilder(index: SemanticdbIndex)
@@ -29,81 +14,62 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
     Symbol("_root_.cats.syntax.CartesianOps.`|@|`.") ::
       (1 to 22).toList.map(arity =>
       Symbol(
-        s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.`|@|`.")): _*)
+        s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.`|@|`.")): _*
+  )
 
   private[this] val partialApplies = SymbolMatcher.normalized(
     Symbol(s"_root_.cats.syntax.CartesianOps.`*>`."),
     Symbol(s"_root_.cats.syntax.CartesianOps.`<*`.")
   )
 
-  private[this] val renames: Map[Symbol, String] =
-    (1 to 22)
-      .map { arity =>
-        Seq(
-          Symbol(
-            s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.map.") -> "mapN",
-          Symbol(
-            s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.imap.") -> "imapN",
-          Symbol(
-            s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.contramap.") -> "contramapN"
-        )
-      }
-      .flatten
-      .toMap
+  private[this] val renames: Map[String, String] = (1 to 22).flatMap { arity =>
+    Seq(
+      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.map." -> "mapN",
+      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.imap." -> "imapN",
+      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.contramap." -> "contramapN"
+    )
+  }.toMap
 
   private[this] val cartesianOps =
-    SymbolMatcher.normalized(renames.keys.toSeq: _*)
+    SymbolMatcher.normalized(renames.keys.map(Symbol.apply).toSeq: _*)
 
-  // Hackish way to work around duplicate fixes due to recursion
-  val alreadyFixedOps = collection.mutable.Set.empty[Term.Name]
   private[this] def replaceOpWithComma(ctx: RuleCtx, op: Term.Name): Patch =
-    if (op.matches(cartesianBuilders) && !alreadyFixedOps.contains(op)) {
-      alreadyFixedOps += op
+    // replace |@| with ,
+    ctx.replaceTree(op, ",") ++
       // remove the space before |@|
-      ctx.removeToken(ctx.tokenList.prev(op.tokens.head)) +
-        // replace |@| with ,
-        ctx.replaceTree(op, ",")
-    } else {
-      Patch.empty
-    }
-
-  private[this] def removeCartesianBuilderOp(
-      ctx: RuleCtx,
-      applyInfix: Term.ApplyInfix): Patch = {
-    applyInfix match {
-      case Term.ApplyInfix(lhs: Term.ApplyInfix, op, _, _) =>
-        removeCartesianBuilderOp(ctx, lhs) + replaceOpWithComma(ctx, op)
-      case Term.ApplyInfix(_, op, _, _) =>
-        replaceOpWithComma(ctx, op)
-    }
-  }
+      ctx.tokenList
+        .leading(op.tokens.head)
+        .takeWhile(_.is[Whitespace])
+        .map(ctx.removeToken)
 
   private[this] def wrapInParensIfNeeded(ctx: RuleCtx, t: Term): Patch = {
-    if (t.tokens.head.is[Token.LeftParen] && t.tokens.last
-        .is[Token.RightParen]) {
-      Patch.empty
-    } else {
-      ctx.addLeft(t.tokens.head, "(") + ctx.addRight(t.tokens.last, ")")
-    }
-  }
+    for {
+      head <- t.tokens.headOption
+      if !head.is[Token.LeftParen]
+      last <- t.tokens.lastOption
+      if !last.is[Token.RightParen]
+    } yield
+      ctx.addLeft(head, "(") +
+        ctx.addRight(last, ")")
+  }.asPatch
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.tree.collect {
-      case t: Term.ApplyInfix if t.op.matches(cartesianBuilders) =>
-        removeCartesianBuilderOp(ctx, t)
-      case t: Term.ApplyInfix if t.op.matches(cartesianOps) =>
-        wrapInParensIfNeeded(ctx, t.lhs)
-      case t: Term.Name => rename(ctx, t, renames)
+      case Term.ApplyInfix(_, cartesianBuilders(op: Term.Name), _, _) =>
+        replaceOpWithComma(ctx, op)
+      case Term.ApplyInfix(lhs, cartesianOps(_), _, _) =>
+        wrapInParensIfNeeded(ctx, lhs)
       case t @ q"import cats.syntax.cartesian._" =>
-        val usesPartialApplies = ctx.tree.collect {
-          case partialApplies(t: Term.Name) => ()
-        }.length > 0
+        val usesPartialApplies = ctx.tree.exists {
+          case partialApplies(_: Term.Name) => true
+          case _ => false
+        }
         if (usesPartialApplies) {
           ctx.addRight(t.tokens.last, "\n  import cats.syntax.apply._")
         } else {
           ctx.replaceTree(t, "import cats.syntax.apply._")
         }
-    }.asPatch
+    }.asPatch + ctx.replaceSymbols(renames.toSeq: _*)
   }
 }
 
@@ -111,56 +77,26 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
 case class RemoveUnapply(index: SemanticdbIndex)
     extends SemanticRule(index, "RemoveUnapply") {
 
-  private[this] val renames = Map(
-    Symbol("_root_.cats.Traverse.Ops.traverseU.") -> "traverse",
-    Symbol("_root_.cats.Foldable.Ops.traverseU_.") -> "traverse_",
-    Symbol("_root_.cats.Foldable.traverseU_.") -> "traverse_",
-    Symbol("_root_.cats.Traverse.Ops.sequenceU.") -> "sequence",
-    Symbol("_root_.cats.Foldable.Ops.sequenceU_.") -> "sequence_",
-    Symbol("_root_.cats.Foldable.sequenceU_.") -> "sequence_",
-    Symbol("_root_.cats.data.Func.appFuncU.") -> "appFunc",
-    Symbol("_root_.cats.free.FreeT.liftTU.") -> "liftT"
+  override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
+    "_root_.cats.Traverse.Ops.traverseU." -> "traverse",
+    "_root_.cats.Foldable.Ops.traverseU_." -> "traverse_",
+    "_root_.cats.Foldable.traverseU_." -> "traverse_",
+    "_root_.cats.Traverse.Ops.sequenceU." -> "sequence",
+    "_root_.cats.Foldable.Ops.sequenceU_." -> "sequence_",
+    "_root_.cats.Foldable.sequenceU_." -> "sequence_",
+    "_root_.cats.data.Func.appFuncU." -> "appFunc",
+    "_root_.cats.free.FreeT.liftTU." -> "liftT"
   )
-
-  private[this] def importeeName(importee: Importee): Option[Name] =
-    importee match {
-      case Importee.Name(name) => Some(name)
-      case Importee.Rename(name, _) => Some(name)
-      case _ => None
-    }
-
-  private[this] def removeImportee(
-      ctx: RuleCtx,
-      importee: Importee,
-      fixes: Map[Symbol, String]): Patch = {
-    val importsToRemove = SymbolMatcher.normalized(fixes.keys.toSeq: _*)
-    importeeName(importee).collect {
-      case importsToRemove(n) => ctx.removeImportee(importee)
-    }.asPatch
-  }
-
-  override def fix(ctx: RuleCtx): Patch = {
-    ctx.tree.collect {
-      case t: Term.Name => rename(ctx, t, renames)
-      case t: Importee.Name => removeImportee(ctx, t, renames)
-    }.asPatch
-  }
 }
 
 // ref: https://github.com/typelevel/cats/pull/1709
 case class RenameFreeSuspend(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameFreeSuspend") {
 
-  private[this] val renames = Map(
-    Symbol("_root_.cats.free.Free.suspend.") -> "defer",
-    Symbol("_root_.cats.free.TrampolineFunctions.suspend.") -> "defer"
+  override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
+    "_root_.cats.free.Free.suspend." -> "defer",
+    "_root_.cats.free.TrampolineFunctions.suspend." -> "defer"
   )
-
-  override def fix(ctx: RuleCtx): Patch = {
-    ctx.tree.collect {
-      case t: Term.Name => rename(ctx, t, renames)
-    }.asPatch
-  }
 
 }
 
@@ -168,20 +104,14 @@ case class RenameFreeSuspend(index: SemanticdbIndex)
 case class RenameReducibleMethods(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameReducibleMethods") {
 
-  private[this] val renames = Map(
-    Symbol("_root_.cats.Reducible.traverse1_.") -> "nonEmptyTraverse_",
-    Symbol("_root_.cats.Reducible.Ops.traverse1_.") -> "nonEmptyTraverse_",
-    Symbol("_root_.cats.Reducible.intercalate1.") -> "nonEmptyIntercalate",
-    Symbol("_root_.cats.Reducible.Ops.intercalate1.") -> "nonEmptyIntercalate",
-    Symbol("_root_.cats.Reducible.sequence1_.") -> "nonEmptySequence_",
-    Symbol("_root_.cats.Reducible.Ops.sequence1_.") -> "nonEmptySequence_"
+  override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
+    "_root_.cats.Reducible.traverse1_." -> "nonEmptyTraverse_",
+    "_root_.cats.Reducible.Ops.traverse1_." -> "nonEmptyTraverse_",
+    "_root_.cats.Reducible.intercalate1." -> "nonEmptyIntercalate",
+    "_root_.cats.Reducible.Ops.intercalate1." -> "nonEmptyIntercalate",
+    "_root_.cats.Reducible.sequence1_." -> "nonEmptySequence_",
+    "_root_.cats.Reducible.Ops.sequence1_." -> "nonEmptySequence_"
   )
-
-  override def fix(ctx: RuleCtx): Patch = {
-    ctx.tree.collect {
-      case t: Term.Name => rename(ctx, t, renames)
-    }.asPatch
-  }
 
 }
 
@@ -198,11 +128,13 @@ case class SimplifyEitherTLift(index: SemanticdbIndex)
 
   private[this] def removeWithLeadingComma(ctx: RuleCtx, t: Tree): Patch =
     (for {
-      leadingComma <- ctx.tokenList.leading(t.tokens.head).find(_.syntax == ",")
+      leadingComma <- ctx.tokenList
+        .leading(t.tokens.head)
+        .find(_.is[Token.Comma])
     } yield {
-      val leadingSpaces = ctx.tokenList.slice(leadingComma, t.tokens.head)
-      ctx.removeToken(leadingComma) +
-        leadingSpaces.map(ctx.removeToken).asPatch +
+      val leadingSpaces = ctx.tokenList.slice(leadingComma, t.tokens.last)
+      ctx.removeToken(leadingComma) ++
+        leadingSpaces.map(ctx.removeToken) +
         ctx.removeTokens(t.tokens)
     }).asPatch
 
@@ -222,13 +154,11 @@ case class SimplifyEitherTLift(index: SemanticdbIndex)
 case class RenameInjectProdAndCoproduct(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameInjectProdAndCoproduct") {
 
-  override def fix(ctx: RuleCtx): Patch = {
-    ctx.replaceSymbols(
-      "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
-      "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
-      "_root_.cats.data.Coproduct." -> "_root_.cats.data.EitherK."
-    )
-  }
+  override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
+    "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
+    "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
+    "_root_.cats.data.Coproduct." -> "_root_.cats.data.EitherK."
+  )
 
 }
 
@@ -236,25 +166,20 @@ case class RenameInjectProdAndCoproduct(index: SemanticdbIndex)
 case class RenameTupleApplySyntax(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameTupleApplySyntax") {
 
-  private[this] val renames: Map[Symbol, String] =
-    (1 to 22)
-      .map { arity =>
-        Seq(
-          Symbol(s"_root_.cats.syntax.Tuple${arity}CartesianOps.map$arity.") -> "mapN",
-          Symbol(
-            s"_root_.cats.syntax.Tuple${arity}CartesianOps.contramap$arity.") -> "contramapN",
-          Symbol(s"_root_.cats.syntax.Tuple${arity}CartesianOps.imap$arity.") -> "imapN"
-        )
-      }
-      .flatten
-      .toMap
-
   override def fix(ctx: RuleCtx): Patch = {
-    ctx.tree.collect {
-      case t: Term.Name => rename(ctx, t, renames)
-      case t @ q"import cats.syntax.tuple._" =>
-        ctx.replaceTree(t, "import cats.syntax.apply._")
-    }.asPatch
+    ctx.replaceSymbols(
+      (1 to 22).flatMap { arity =>
+        Seq(
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.map$arity." -> "mapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.contramap$arity." -> "contramapN",
+          s"_root_.cats.syntax.Tuple${arity}CartesianOps.imap$arity." -> "imapN"
+        )
+      }: _*
+    ) ++
+      ctx.tree.collect {
+        case t @ q"import cats.syntax.tuple._" =>
+          ctx.replaceTree(t, "import cats.syntax.apply._")
+      }
   }
 }
 
