@@ -170,9 +170,9 @@ object FreeTTests extends FreeTTestsInstances {
 trait FreeTTestsInstances {
 
   import FreeT._
-  import StateT._
+  import IndexedStateT._
   import cats.kernel.instances.option._
-  import cats.tests.StateTTests._
+  import cats.tests.IndexedStateTTests._
   import CartesianTests._
 
   type IntState[A] = State[Int, A]
