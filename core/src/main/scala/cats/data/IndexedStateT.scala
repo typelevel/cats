@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.functor.{ Contravariant, Bifunctor, Profunctor, Strong }
-import cats.arrow.Arrow
 import cats.syntax.either._
 
 /**
@@ -252,14 +251,9 @@ private[data] sealed abstract class IndexedStateTInstances3 extends IndexedState
     new IndexedStateTBifunctor[F, SA] { implicit def F = F0 }
 }
 
-private[data] sealed abstract class IndexedStateTInstances4 extends IndexedStateTInstances5 {
+private[data] sealed abstract class IndexedStateTInstances4 {
   implicit def catsDataStrongForIndexedStateT[F[_], V](implicit F0: Monad[F]): Strong[IndexedStateT[F, ?, ?, V]] =
     new IndexedStateTStrong[F, V] { implicit def F = F0 }
-}
-
-private[data] sealed abstract class IndexedStateTInstances5 {
-  implicit def catsDataArrowForIndexedStateT[F[_], V](implicit F0: Monad[F], V0: Monoid[V]): Arrow[IndexedStateT[F, ?, ?, V]] =
-    new IndexedStateTArrow[F, V] { implicit def F = F0; implicit def V = V0 }
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -335,28 +329,6 @@ private[data] sealed abstract class IndexedStateTStrong[F[_], V] extends Indexed
 
   def second[A, B, C](fa: IndexedStateT[F, A, B, V]): IndexedStateT[F, (C, A), (C, B), V] =
     first(fa).dimap((_: (C, A)).swap)(_.swap)
-}
-
-private[data] sealed abstract class IndexedStateTArrow[F[_], V] extends IndexedStateTStrong[F, V] with Arrow[IndexedStateT[F, ?, ?, V]] {
-  implicit def F: Monad[F]
-  implicit def V: Monoid[V]
-
-  def lift[A, B](f: A => B): IndexedStateT[F, A, B, V] =
-    IndexedStateT { a =>
-      F.pure((f(a), V.empty))
-    }
-
-  def id[A]: IndexedStateT[F, A, A, V] =
-    IndexedStateT.pure(V.empty)
-
-  def compose[A, B, C](f: IndexedStateT[F, B, C, V], g: IndexedStateT[F, A, B, V]): IndexedStateT[F, A, C, V] =
-    IndexedStateT { a =>
-      F.flatMap(g.run(a)) { case (b, va) =>
-        F.map(f.run(b)) { case (c, vb) =>
-          (c, V.combine(va, vb))
-        }
-      }
-    }
 }
 
 private[data] sealed abstract class IndexedStateTMonad[F[_], S] extends IndexedStateTFunctor[F, S, S] with Monad[IndexedStateT[F, S, S, ?]] {

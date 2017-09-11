@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.arrow.Arrow
 import cats.data.{State, StateT, IndexedStateT, EitherT}
 import cats.functor.{Contravariant, Bifunctor, Profunctor, Strong}
 import cats.kernel.instances.tuple._
@@ -320,16 +319,6 @@ class IndexedStateTTests extends CatsSuite {
     checkAll("Strong[IndexedStateT[ListWrapper, ?, ?, Int]]", SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, ?, ?, Int]]))
 
     Strong[IndexedStateT[ListWrapper, ?, ?, Int]]
-  }
-
-  {
-    implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Arrow[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataArrowForIndexedStateT
-
-    checkAll("IndexedStateT[ListWrapper, String, Int, Int]", ArrowTests[IndexedStateT[ListWrapper, ?, ?, Int]].arrow[String, String, String, Int, Int, Int])
-    checkAll("Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]", SerializableTests.serializable(Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]))
-
-    Arrow[IndexedStateT[ListWrapper, ?, ?, Int]]
   }
 
   {
