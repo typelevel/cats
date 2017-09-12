@@ -60,18 +60,18 @@ case class User(name: Username, pw: Password)
 
 def validateUsername(u: String): Failures Ior Username = {
   if (u.isEmpty)
-    Nel.of("Can't be empty").leftIor
+    Nel.one("Can't be empty").leftIor
   else if (u.contains("."))
-    Ior.both(Nel.of("Dot in name is deprecated"), Username(u))
+    Ior.both(Nel.one("Dot in name is deprecated"), Username(u))
   else
     Username(u).rightIor
 }
 
 def validatePassword(p: String): Failures Ior Password = {
   if (p.length < 8)
-    Nel.of("Password too short").leftIor
+    Nel.one("Password too short").leftIor
   else if (p.length < 10)
-    Ior.both(Nel.of("Password should be longer"), Password(p))
+    Ior.both(Nel.one("Password should be longer"), Password(p))
   else
     Password(p).rightIor
 }
