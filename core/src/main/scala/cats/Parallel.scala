@@ -26,6 +26,15 @@ trait Parallel[M[_], F[_]] extends Serializable {
     * Natural Transformation from the sequential Monad M[_] to the parallel Applicative F[_].
     */
   def parallel: M ~> F
+
+  /**
+    * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel[M, F]`
+    * and a `MonadError[M, E]` instance.
+    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
+    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
+    */
+  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
+    Parallel.applicativeError[M, F, E](this, E)
 }
 
 object Parallel extends ParallelArityFunctions {

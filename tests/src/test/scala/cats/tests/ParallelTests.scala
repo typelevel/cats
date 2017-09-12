@@ -108,6 +108,7 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
 }
 
 trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
+
   import cats.instances.either._
   import cats.instances.parallel._
   import cats.instances.string._
@@ -115,11 +116,17 @@ trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
   import cats.instances.unit._
   import cats.instances.tuple._
 
-  implicit val parVal = Parallel.applicativeError[Either[String, ?], Validated[String, ?], String]
-
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
+  {
+    implicit val parVal = Parallel.applicativeError[Either[String, ?], Validated[String, ?], String]
 
+    checkAll("ApplicativeError[Validated[String, Int]]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+  }
 
-  checkAll("ApplicativeError[Validated[String, Int]]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+  {
+    implicit val parVal = Parallel[Either[String, ?], Validated[String, ?]].applicativeError
+
+    checkAll("Parallel[Validated[String, Int]].applicativeError", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+  }
 }
