@@ -97,9 +97,9 @@ object Parallel extends ParallelArityFunctions {
     */
   def parAp2[M[_]: Monad, F[_], A, B, Z](ff: M[(A, B) => Z])
                                         (ma: M[A], mb: M[B])
-                                        (implicit P: Parallel[M, F]): M[Z] =
-    Monad[M].map(parProduct(ma, parProduct(mb, ff))) { case (a, (b, f)) => f(a, b) }
-
+                                        (implicit P: Parallel[M, F]): M[Z] = P.sequential.apply(
+    P.applicative.ap2(P.parallel.apply(ff))(P.parallel.apply(ma), P.parallel.apply(mb))
+  )
   /**
     * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel[M, F]`
     * and a `MonadError[M, E]` instance.
