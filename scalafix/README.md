@@ -1,11 +1,11 @@
-# Scalafix rewrites for cats
+# Scalafix rules for cats
 
 ## Try this!
 
 Install the scalafix sbt plugin (globally or in a specific project):
 
 ```scala
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-M3")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
 ```
 
 run
@@ -14,7 +14,7 @@ run
 sbt scalafix github:typelevel/cats/v1.0.0
 ```
 
-## Available rewrites
+## Available rules
 
 - [x] All Unapply enabled methods, e.g. sequenceU, traverseU, etc. are removed. Unapply enabled syntax ops are also removed. Please use the partial unification SI-2712 fix instead. The easiest way might be this sbt-plugin.
 
