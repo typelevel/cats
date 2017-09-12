@@ -6,17 +6,16 @@ package laws
   * Laws that must be obeyed by any `cats.Parallel`.
   */
 trait ParallelLaws[M[_], F[_]] {
-  def monadM: Monad[M]
   def P: Parallel[M, F]
 
   def parallelRoundTrip[A](ma: M[A]): IsEq[M[A]] =
-    P.sequential(monadM)(P.parallel(monadM)(ma)) <-> ma
+    P.sequential(P.parallel(ma)) <-> ma
 
   def sequentialRoundTrip[A](fa: F[A]): IsEq[F[A]] =
-    P.parallel(monadM)(P.sequential(monadM)(fa)) <-> fa
+    P.parallel(P.sequential(fa)) <-> fa
 
   def isomorphicPure[A](a: A): IsEq[F[A]] =
-    P.applicative.pure(a) <-> P.parallel(monadM)(monadM.pure(a))
+    P.applicative.pure(a) <-> P.parallel(P.monad.pure(a))
 }
 
 object ParallelLaws {

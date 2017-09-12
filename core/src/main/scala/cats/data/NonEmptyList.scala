@@ -496,12 +496,14 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
   implicit def catsDataParallelForNonEmptyList[A]: Parallel[NonEmptyList, ZipNonEmptyList] =
     new Parallel[NonEmptyList, ZipNonEmptyList] {
 
+      def monad: Monad[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
+
       def applicative: Applicative[ZipNonEmptyList] = ZipNonEmptyList.zipNelApplicative
 
-      def sequential(implicit M: Monad[NonEmptyList]): ZipNonEmptyList ~> NonEmptyList =
+      def sequential: ZipNonEmptyList ~> NonEmptyList =
         λ[ZipNonEmptyList ~> NonEmptyList](_.value)
 
-      def parallel(implicit M: Monad[NonEmptyList]): NonEmptyList ~> ZipNonEmptyList =
+      def parallel: NonEmptyList ~> ZipNonEmptyList =
         λ[NonEmptyList ~> ZipNonEmptyList](nel => new ZipNonEmptyList(nel))
     }
 }

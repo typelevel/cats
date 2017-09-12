@@ -129,15 +129,17 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
   implicit def catsDataMonadForKleisli[F[_], A](implicit M: Monad[F]): Monad[Kleisli[F, A, ?]] =
     new KleisliMonad[F, A] { def F: Monad[F] = M }
 
-  implicit def catsDataParallelForKleisli[F[_], M[_]: Monad, A]
+  implicit def catsDataParallelForKleisli[F[_], M[_], A]
   (implicit P: Parallel[M, F]): Parallel[Kleisli[M, A, ?], Kleisli[F, A, ?]] = new Parallel[Kleisli[M, A, ?], Kleisli[F, A, ?]]{
     implicit val appF = P.applicative
+    implicit val monadM = P.monad
     def applicative: Applicative[Kleisli[F, A, ?]] = catsDataApplicativeForKleisli
+    def monad: Monad[Kleisli[M, A, ?]] = catsDataMonadForKleisli
 
-    def sequential(implicit M: Monad[Kleisli[M, A, ?]]): Kleisli[F, A, ?] ~> Kleisli[M, A, ?] =
+    def sequential: Kleisli[F, A, ?] ~> Kleisli[M, A, ?] =
       λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.transform(P.sequential))
 
-    def parallel(implicit M: Monad[Kleisli[M, A, ?]]): Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
+    def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
       λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.transform(P.parallel))
   }
 }

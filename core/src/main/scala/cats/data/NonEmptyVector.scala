@@ -309,11 +309,12 @@ private[data] sealed trait NonEmptyVectorInstances {
     new Parallel[NonEmptyVector, ZipNonEmptyVector] {
 
       def applicative: Applicative[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApplicative
+      def monad: Monad[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
-      def sequential(implicit M: Monad[NonEmptyVector]): ZipNonEmptyVector ~> NonEmptyVector =
+      def sequential: ZipNonEmptyVector ~> NonEmptyVector =
         λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
 
-      def parallel(implicit M: Monad[NonEmptyVector]): NonEmptyVector ~> ZipNonEmptyVector =
+      def parallel: NonEmptyVector ~> ZipNonEmptyVector =
         λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
     }
 
