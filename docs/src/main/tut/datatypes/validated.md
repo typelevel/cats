@@ -27,7 +27,7 @@ Signature of the structure is as follows:
 
 ```scala
 sealed abstract class Validated[+E, +A] extends Product with Serializable {
-	// Implementation elided
+  // Implementation elided
 }
 ```
 
@@ -123,15 +123,14 @@ Well, yes, but the error reporting part will have the downside of showing only t
 Let's look in detail this part:
 
 ```tut:silent:fail
-    for {
-      validatedUserName <- validateUserName(username)
-      validatedPassword <- validatePassword(password)
-      validatedFirstName <- validateFirstName(firstName)
-      validatedLastName <- validateLastName(lastName)
-      validatedAge <- validateAge(age)
-    }
-      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
-  }
+for {
+  validatedUserName <- validateUserName(username)
+  validatedPassword <- validatePassword(password)
+  validatedFirstName <- validateFirstName(firstName)
+  validatedLastName <- validateLastName(lastName)
+  validatedAge <- validateAge(age)
+}
+  yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
 ```
 
 A for-comprehension is _fail-fast_. If some of the evaluations in the `for` block fails for some reason, the `yield` statement will not complete. In our case, if that happens we won't be getting the accumulated list of errors.
@@ -139,7 +138,13 @@ A for-comprehension is _fail-fast_. If some of the evaluations in the `for` bloc
 If we run our code:
 
 ```tut:book
-FormValidator.validateForm("fakeUs3rname", "password", "John", "Doe", 15)
+FormValidator.validateForm(
+  username = "fakeUs3rname", 
+  password = "password", 
+  firstName = "John", 
+  lastName = "Doe",
+  age = 15
+)
 ```
 
 We should have gotten another `DomainValidation` object denoting the invalid age.
@@ -153,40 +158,38 @@ import cats.data._
 import cats.data.Validated._
 import cats.implicits._
 
- def validateUserName(userName: String): Validated[DomainValidation, String] = {
-    if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(UsernameHasSpecialCharacters)
- }
-
- def validatePassword(password: String): Validated[DomainValidation, String] = {
-    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Valid(password)
-    else Invalid(PasswordDoesNotMeetCriteria)
- }
-
- def validateFirstName(firstName: String): Validated[DomainValidation, String] = {
-    if (firstName.matches("^[a-zA-Z]+$")) Valid(firstName) else Invalid(FirstNameHasSpecialCharacters)
+def validateUserName(userName: String): Validated[DomainValidation, String] = {
+  if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(UsernameHasSpecialCharacters)
 }
 
- def validateLastName(lastName: String): Validated[DomainValidation, String] = {
-    if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(LastNameHasSpecialCharacters)
+def validatePassword(password: String): Validated[DomainValidation, String] = {
+  if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Valid(password)
+  else Invalid(PasswordDoesNotMeetCriteria)
 }
 
- def validateAge(age: Int): Validated[DomainValidation, Int] = {
-    if (age >= 18 && age <= 75) Valid(age) else Invalid(AgeIsInvalid)
+def validateFirstName(firstName: String): Validated[DomainValidation, String] = {
+  if (firstName.matches("^[a-zA-Z]+$")) Valid(firstName) else Invalid(FirstNameHasSpecialCharacters)
+}
+
+def validateLastName(lastName: String): Validated[DomainValidation, String] = {
+  if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(LastNameHasSpecialCharacters)
+}
+
+def validateAge(age: Int): Validated[DomainValidation, Int] = {
+  if (age >= 18 && age <= 75) Valid(age) else Invalid(AgeIsInvalid)
 }
 ```
 ```tut:book:fail
-  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
-
-    for {
-      validatedUserName <- validateUserName(username)
-      validatedPassword <- validatePassword(password)
-      validatedFirstName <- validateFirstName(firstName)
-      validatedLastName <- validateLastName(lastName)
-      validatedAge <- validateAge(age)
-    }
-      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
+  for {
+    validatedUserName <- validateUserName(username)
+    validatedPassword <- validatePassword(password)
+    validatedFirstName <- validateFirstName(firstName)
+    validatedLastName <- validateLastName(lastName)
+    validatedAge <- validateAge(age)
   }
-
+    yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+}
 ```
 
 Looks similar to the first version. What we've done here was to use `Validated` instead of `Either`. Please note that our `Right` is now a `Valid` and `Left` is an `Invalid`.
@@ -256,47 +259,97 @@ For example:
 
 ```tut:book
 FormValidatorNel.validateForm(
-            username = "Joe",
-            password = "Passw0r$1234",
-            firstName = "John",
-            lastName = "Doe",
-            age = 21
-          )
+  username = "Joe",
+  password = "Passw0r$1234",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+)
 
 FormValidatorNel.validateForm(
-            username = "Joe%%%",
-            password = "password",
-            firstName = "John",
-            lastName = "Doe",
-            age = 21
-          )
+  username = "Joe%%%",
+  password = "password",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+)
 ```
 
 Sweet success! Now you can take your validation process to the next level!
 
-### Coming from `Either`-based validation
+### A short detour
 
-cats offer you a nice set of combinators to transform your `Either` based approach to a `Validated` one and vice-versa.
-Please note that, if you're using an `Either`-based approach as seen in our first example, you're constrained to the fail-fast nature of `Either`, but you're gaining a broader set of features with `Validated`.
+Typically, you'll see that `Validated` will be accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
 
-To do this, you'll need to use either `.toValidated` or `.toValidatedNel`. Let's see an example:
+For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, let's see a simple example.
+
+#### Accumulative Structures
+
+According to [Wikipedia](https://en.wikipedia.org/wiki/Semigroup):
+
+> A semigroup is an algebraic structure consisting of a set together with an associative binary operation.
+
+You can find more about how `Semigroup` works in cats [here](../typeclasses/semigroup.html).
+
+Let's take a look at `ap` method of `Validated`:
+
+```tut:silent:fail
+/**
+   * From Apply:
+   * if both the function and this value are Valid, apply the function
+   */
+def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE, B] =
+  (this, f) match {
+    // ...
+    case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2, e1))
+    // ...
+  }
+}
+```
+
+We've omitted the complete implementation because our focus here is the case in where you need to append (that's the function of this method) two failures. Note the `implicit EE: Semigroup[EE]` parameter and the usage of its `.combine` operation. In the case of `NonEmptyList`, we're talking about a `List`, with certain properties that allow us to _combine_ (append) more than one element to it. That's because, apart from the fact that it is a `List`, it also has an instance of `Semigroup`, telling it how to operate with the accumulation.
+
+As we've said before: if you need another data type for processing the failures, you can use it, providing an instance of a `Semigroup` with the `.combine` logic.
+
+### Going back and forth
+
+cats offer you a nice set of combinators to transform your `Validated` based approach to an `Either` one and vice-versa.
+Please note that, if you're using an `Either`-based approach as seen in our first example and you choose to convert it to a `Validated` one, you're constrained to the fail-fast nature of `Either`, but you're gaining a broader set of features with `Validated`.
+
+#### From `Validated` to `Either`
+
+To do this, simply use `.toEither` combinator:
+
+```tut:book
+FormValidatorNel.validateForm(
+  username = "Joe",
+  password = "Passw0r$1234",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+).toEither
+```
+
+#### From `Either` to `Validated`
+
+To do this, you'll need to use either `.toValidated` or `.toValidatedNel`:
 
 ```tut:book
 FormValidator.validateForm(
-            username = "MrJohnDoe$$",
-            password = "password",
-            firstName = "John",
-            lastName = "Doe",
-            age = 31
-          ).toValidated
+  username = "MrJohnDoe$$",
+  password = "password",
+  firstName = "John",
+  lastName = "Doe",
+  age = 31
+).toValidated
 
 FormValidator.validateForm(
-            username = "MrJohnDoe$$",
-            password = "password",
-            firstName = "John",
-            lastName = "Doe",
-            age = 31
-          ).toValidatedNel
+  username = "MrJohnDoe$$",
+  password = "password",
+  firstName = "John",
+  lastName = "Doe",
+  age = 31
+).toValidatedNel
 ```
 
 The difference between the previous examples is that `.toValidated` gives you an `Invalid` instance in case of failure. Meanwhile, `.toValidatedNel` will give you a `NonEmptyList` with the possible failures. Don't forget about the caveat with `Either`-based approaches, mentioned before.
