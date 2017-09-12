@@ -338,7 +338,7 @@ class ReaderWriterStateTTests extends CatsSuite {
 
     val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, String, String, Int](ListWrapper.monad, ListWrapper.alternative, Monoid[String])
 
-    checkAll("IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, Int]", AlternativeTests[IRWST[ListWrapper, String, String, Int, Int, ?]](SA).monoidK[Int])
+    checkAll("IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, Int]", AlternativeTests[IRWST[ListWrapper, String, String, Int, Int, ?]](SA).alternative[Int, Int, Int])
     checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, ?]]", SerializableTests.serializable(SA))
   }
 

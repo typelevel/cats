@@ -33,6 +33,9 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * scala> type Log = List[String]
    * scala> val xLocal: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
    * scala> val xGlobal: IndexedReaderWriterStateT[Option, GlobalEnv, Log, Int, Int, Int] = xLocal.local(_._2)
+   * scala> val globalEnv: GlobalEnv = (5, "env")
+   * scala> xGlobal.run(globalEnv, 5)
+   * res0: Option[(List[String], Int, Int)] = Some((List(),5,5))
    * }}}
    */
   def local[EE](f: EE => E)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, EE, L, SA, SB, A] =
