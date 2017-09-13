@@ -348,6 +348,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 object NonEmptyList extends NonEmptyListInstances {
   def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
 
+  def ofInitLast[A](init: List[A], last: A): NonEmptyList[A] =
+    init match {
+      case Nil => NonEmptyList(last, Nil)
+      case h :: t => NonEmptyList(h, t :+ last)
+    }
+
   def one[A](head: A): NonEmptyList[A] = NonEmptyList(head, Nil)
 
   /**
