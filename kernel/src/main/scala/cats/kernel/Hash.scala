@@ -25,7 +25,7 @@ trait Hash[@sp A] extends Any with Eq[A] with Serializable { self =>
 
 abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
 
-  def hash[@sp A](x: A)(implicit ev: H[A]): Int = ev hash x
+  def hash[@sp A](x: A)(implicit ev: H[A]): Int = ev.hash(x)
 
 }
 

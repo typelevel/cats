@@ -44,6 +44,7 @@ class FunctionTests extends CatsSuite {
   checkAll("Function0[Eqed]", OrderLaws[Function0[Eqed]].eqv)
   checkAll("Function0[POrd]", OrderLaws[Function0[POrd]].partialOrder)
   checkAll("Function0[Ord]", OrderLaws[Function0[Ord]].order)
+  checkAll("Function0[Hsh]", HashLaws[Function0[Hsh].hash])
   checkAll("Function0[Semi]", GroupLaws[Function0[Semi]].semigroup)
   checkAll("Function0[CSemi]", GroupLaws[Function0[CSemi]].commutativeSemigroup)
   checkAll("Function0[Bnd]", GroupLaws[Function0[Bnd]].band)
