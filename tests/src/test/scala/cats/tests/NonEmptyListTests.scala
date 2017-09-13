@@ -74,6 +74,13 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
+  test("Creating NonEmptyList with init/last + toList is identity") {
+    forAll { (init: List[Int], last: Int) =>
+      val list = init :+ last
+      val nonEmptyList = NonEmptyList.ofInitLast(init, last)
+      list should === (nonEmptyList.toList)
+    }
+  }
 
   test("NonEmptyList#filter is consistent with List#filter") {
     forAll { (nel: NonEmptyList[Int], p: Int => Boolean) =>
