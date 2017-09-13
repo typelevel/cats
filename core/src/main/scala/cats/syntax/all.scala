@@ -22,6 +22,7 @@ trait AllSyntax
     with FoldableSyntax
     with FunctorSyntax
     with GroupSyntax
+    with HashSyntax
     with InvariantSyntax
     with IorSyntax
     with ListSyntax

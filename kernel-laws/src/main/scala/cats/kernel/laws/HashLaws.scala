@@ -42,6 +42,15 @@ trait HashLaws[A] extends Laws {
     }
   )
 
+  def sameAsIdentityHash(implicit A: Hash[A]): HashProperties = new HashProperties(
+    name = "sameAsIdentityHash",
+    parent = None,
+    Rules.serializable(Equ),
+    "same-as-identity-hash" -> forAll { x: A =>
+      (A.hash(x) == System.identityHashCode(x) && (Hash.fromIdentityHashCode[AnyRef].asInstanceOf[Hash[A]].hash(x) == System.identityHashCode(x))
+    }
+  )
+
   def sameAsScalaHashing(implicit catsHash: Hash[A], scalaHashing: Hashing[A]): HashProperties = new HashProperties(
     name = "sameAsScalaHashing",
     parent = None,
