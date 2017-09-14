@@ -9,18 +9,12 @@
 
 ### Overview
 
-Cats is a library which provides abstractions for functional programming in Scala.
-
+Cats is a library which provides abstractions for functional
+programming in the [Scala programming language](https://scala-lang.org).
 The name is a playful shortening of the word *category*.
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
-#### Why?
-
-Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats augments the standard library with tools that further enable functional programming such as
-`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
-[ecosystem of pure, typeful libraries](https://github.com/typelevel/cats#the-cats-ecosystem).
 
 ### Getting Started
 
@@ -53,32 +47,16 @@ functionality, you can pick-and-choose from amongst these modules
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
  
 
-Release notes for Cats are available in [CHANGES.md](CHANGES.md).
+Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
 *Cats is still under active development. While we don't anticipate any
  major redesigns, changes that are neither source nor binary
- compatible are to be expected in upcoming cats releases. We will
- update the minor version of cats accordingly for such changes. Once
- cats 1.0 is released (ETA: Q4 2017), there will be an increased focus
- on making changes in compatible ways.*
+ compatible are to be expected in upcoming RC1 and 1.0 releases.*
 
 #### Enhancing type inference
 
 To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
 
-### Documentation
-
-Cats information and documentation is available on the
-[website](http://typelevel.org/cats).
-
-We also have a Scaladoc [index](http://typelevel.org/cats/api/#package).
-
-Finally, we have a list of
-[frequently-asked questions](docs/src/main/tut/faq.md).
-
-Our goal is to have clear and comprehensive documentation. If you
-notice problems, omissions, or errors, please
-[let us know](CONTRIBUTING.md).
 
 ### The cats ecosystem
 
@@ -95,8 +73,8 @@ language", and integrate with each other with ease.
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [origami](https://github.com/atnos-org/origami): monadic folds
- * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes. 
- 
+ * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes.
+
 #### Libraries with more specific uses
 
  * [Circe](https://github.com/circe/circe): pure functional JSON library.
@@ -111,17 +89,68 @@ language", and integrate with each other with ease.
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
- * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
+ * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
- 
+
 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
 
+## <a name="motivations" href="#motivations"></a>Motivations
+
+### Foundation for ecosystem of FP libraries
+
+Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats augments the standard library with tools that further enable functional programming such as
+`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats#the-cats-ecosystem).
+
+
+#### Approachability
+
+As this library evolves, we are placing a lot of emphasis on trying to
+make decisions which will help keep this library approachable for
+people new to the concepts in this library. We are collecting
+anecdotes from successes and failures we have experienced in the past
+in trying to teach others about these concepts, and trying to make
+decisions which will help ease the process of getting acquainted to
+the library for a newcomer. If you have any feedback for us in this
+regard, we would love to hear from you. See the [Contributing
+page](contributing.html) to find out ways to give us feedback.
+
+#### Modularity
+
+We are trying to make the library modular. It will have a tight
+core which will contain only the [type classes](typeclasses.html),
+the bare minimum of data structures that are needed to support
+them, and type class instances for those data structures and standard
+library types.
+
+#### Documentation
+
+We feel that having lots of documentation is a very important goal for
+our project. It will be a big win towards our goal of
+approachability. We will strive to have the code well documented, we
+will strive to have lots of documentation external to the code, and we
+will strive to have a large corpus of compiler verified examples of
+how the software can be used.
+
+Writing documentation is a huge part of developing software, and one
+that is often neglected. It is also a very easy way to get started
+with [contributing](contributing.html) to the project.
+
+#### Efficiency
+
+Although unfortunately there are times when programming only with
+pure functions and writing efficient code in Scala can be at odds, we
+are attempting to do our best at keeping our library as efficient as
+we can without making unnecessary sacrifices of purity and
+usability. Where sacrifices have to be made, we will strive to make
+these obvious, and will keep them well documented.
+
 ### How can I contribute to Cats?
 
 We welcome contributions to Cats and would love for you to help build
-Cats. See our [contributor guide](CONTRIBUTING.md) for more
+Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
 information about how you can get involved.
 
 ### Community
