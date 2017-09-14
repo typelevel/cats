@@ -157,6 +157,22 @@ fail-fast effect of Either.">
                           IdT
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedReaderWriterStateT$.html" title=""></a>
+                        <a class="class" href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB,
+ with an initial environment E, an accumulated log L and a result A."></a>
+                        <a href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB,
+ with an initial environment E, an accumulated log L and a result A.">
+                          IndexedReaderWriterStateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedStateT$.html" title=""></a>
+                        <a class="class" href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding
+a value of type A."></a>
+                        <a href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding
+a value of type A.">
+                          IndexedStateT
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Ior$.html" title=""></a>
                         <a class="class" href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B."></a>
                         <a href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B.">
@@ -217,11 +233,9 @@ convenient methods for working with this nested structure.">
                           ReaderWriterState
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="ReaderWriterStateT$.html" title=""></a>
-                        <a class="class" href="ReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], over state S, with an initial environment E,
-an accumulated log L and a result A."></a>
-                        <a href="ReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], over state S, with an initial environment E,
-an accumulated log L and a result A.">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ReaderWriterStateT$.html" title=""></a>
+                        <a href="package$$ReaderWriterStateT$.html" title="">
                           ReaderWriterStateT
                         </a>
                       </li><li class="current-entities indented2">
@@ -231,11 +245,9 @@ an accumulated log L and a result A.">
                           State
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="StateT$.html" title=""></a>
-                        <a class="class" href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
-argument and produces an A value wrapped in F."></a>
-                        <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
-argument and produces an A value wrapped in F.">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StateT$.html" title=""></a>
+                        <a href="package$$StateT$.html" title="">
                           StateT
                         </a>
                       </li><li class="current-entities indented2">
@@ -407,7 +419,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>) ⇒ (<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>, <span class="extype" name="cats.data.StateFunctions.apply.A">A</span>)</span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>, <span class="extype" name="cats.data.StateFunctions.apply.A">A</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>) ⇒ (<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>, <span class="extype" name="cats.data.StateFunctions.apply.A">A</span>)</span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.apply.S">S</span>, <span class="extype" name="cats.data.StateFunctions.apply.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StateFunctions</dd></dl></div>
@@ -515,7 +527,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="S">S</span>]</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.get.S">S</span>, <span class="extype" name="cats.data.StateFunctions.get.S">S</span>]</span>
+        <span class="name">get</span><span class="tparams">[<span name="S">S</span>]</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.get.S">S</span>, <span class="extype" name="cats.data.StateFunctions.get.S">S</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Return the input state without modifying it.</p><div class="fullcomment"><div class="comment cmt"><p>Return the input state without modifying it.
@@ -564,7 +576,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">inspect</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.inspect.S">S</span>) ⇒ <span class="extype" name="cats.data.StateFunctions.inspect.T">T</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.inspect.S">S</span>, <span class="extype" name="cats.data.StateFunctions.inspect.T">T</span>]</span>
+        <span class="name">inspect</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.inspect.S">S</span>) ⇒ <span class="extype" name="cats.data.StateFunctions.inspect.T">T</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.inspect.S">S</span>, <span class="extype" name="cats.data.StateFunctions.inspect.T">T</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Inspect a value from the input state, without modifying the state.</p><div class="fullcomment"><div class="comment cmt"><p>Inspect a value from the input state, without modifying the state.
@@ -597,7 +609,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">modify</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.modify.S">S</span>) ⇒ <span class="extype" name="cats.data.StateFunctions.modify.S">S</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.modify.S">S</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">modify</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.StateFunctions.modify.S">S</span>) ⇒ <span class="extype" name="cats.data.StateFunctions.modify.S">S</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.modify.S">S</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Modify the input state and return Unit.</p><div class="fullcomment"><div class="comment cmt"><p>Modify the input state and return Unit.
@@ -662,7 +674,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pure</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.StateFunctions.pure.A">A</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.pure.S">S</span>, <span class="extype" name="cats.data.StateFunctions.pure.A">A</span>]</span>
+        <span class="name">pure</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.StateFunctions.pure.A">A</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.pure.S">S</span>, <span class="extype" name="cats.data.StateFunctions.pure.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Return <code>a</code> and maintain the input state.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> and maintain the input state.
@@ -679,7 +691,7 @@ argument and produces an A value wrapped in F.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="s">s: <span class="extype" name="cats.data.StateFunctions.set.S">S</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.set.S">S</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">set</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="s">s: <span class="extype" name="cats.data.StateFunctions.set.S">S</span></span>)</span><span class="result">: <a href="index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" class="extmbr" name="cats.data.State">State</a>[<span class="extype" name="cats.data.StateFunctions.set.S">S</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Set the state to <code>s</code> and return Unit.</p><div class="fullcomment"><div class="comment cmt"><p>Set the state to <code>s</code> and return Unit.

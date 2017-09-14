@@ -173,6 +173,22 @@ fail-fast effect of Either.">
                           IdT
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedReaderWriterStateT$.html" title=""></a>
+                        <a class="class" href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB,
+ with an initial environment E, an accumulated log L and a result A."></a>
+                        <a href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB,
+ with an initial environment E, an accumulated log L and a result A.">
+                          IndexedReaderWriterStateT
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="IndexedStateT$.html" title=""></a>
+                        <a class="class" href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding
+a value of type A."></a>
+                        <a href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding
+a value of type A.">
+                          IndexedStateT
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Ior$.html" title=""></a>
                         <a class="class" href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B."></a>
                         <a href="Ior.html" title="Represents a right-biased disjunction that is either an A, or a B, or both an A and a B.">
@@ -233,11 +249,9 @@ convenient methods for working with this nested structure.">
                           ReaderWriterState
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="ReaderWriterStateT$.html" title=""></a>
-                        <a class="class" href="ReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], over state S, with an initial environment E,
-an accumulated log L and a result A."></a>
-                        <a href="ReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], over state S, with an initial environment E,
-an accumulated log L and a result A.">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$ReaderWriterStateT$.html" title=""></a>
+                        <a href="package$$ReaderWriterStateT$.html" title="">
                           ReaderWriterStateT
                         </a>
                       </li><li class="current-entities indented2">
@@ -247,11 +261,9 @@ an accumulated log L and a result A.">
                           State
                         </a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="StateT$.html" title=""></a>
-                        <a class="class" href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
-argument and produces an A value wrapped in F."></a>
-                        <a href="StateT.html" title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
-argument and produces an A value wrapped in F.">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$StateT$.html" title=""></a>
+                        <a href="package$$StateT$.html" title="">
                           StateT
                         </a>
                       </li><li class="current-entities indented2">
@@ -601,6 +613,22 @@ and lifted in to a <code>EitherT[F, C, B]</code> via <code>EitherT.left</code>.
       
       <p class="shortcomment cmt"><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p><a href="Func.html" class="extype" name="cats.data.Func">Func</a> is a function <code>A =&gt; F[B]</code>.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
 </p></div></div>
+    </li><li name="cats.data.IRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IRWST[F[_],E,L,SA,SB,A]=cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,A]"></a><a id="IRWST[F[_],E,L,SA,SB,A]:IRWST[F,E,L,SA,SB,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IRWST[F[_],E,L,SA,SB,A]=cats.data.IndexedReaderWriterStateT[F,E,L,SA,SB,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IRWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.IRWST.F">F</span>, <span class="extype" name="cats.data.IRWST.E">E</span>, <span class="extype" name="cats.data.IRWST.L">L</span>, <span class="extype" name="cats.data.IRWST.SA">SA</span>, <span class="extype" name="cats.data.IRWST.SB">SB</span>, <span class="extype" name="cats.data.IRWST.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.IdT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="IdT[F[_],A]extendsProductwithSerializable"></a><a id="IdT[F[_],A]:IdT[F,A]"></a>
       <span class="permalink">
@@ -619,6 +647,55 @@ and lifted in to a <code>EitherT[F, C, B]</code> via <code>EitherT.left</code>.
       </span>
       
       <p class="shortcomment cmt"><code>IdT[F[_], A]</code> is the identity monad transformer.</p>
+    </li><li name="cats.data.IndexedReaderWriterStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IndexedReaderWriterStateT[F[_],E,L,SA,SB,A]extendsSerializable"></a><a id="IndexedReaderWriterStateT[F[_],E,L,SA,SB,A]:IndexedReaderWriterStateT[F,E,L,SA,SB,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IndexedReaderWriterStateT[F[_],E,L,SA,SB,A]extendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Represents a stateful computation in a context F[_], from state SA to state SB,
+ with an initial environment E, an accumulated log L and a result A." href="IndexedReaderWriterStateT.html">
+              <span class="name">IndexedReaderWriterStateT</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="SA">SA</span>, <span name="SB">SB</span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Represents a stateful computation in a context <code>F[_]</code>, from state <code>SA</code> to state <code>SB</code>,
+ with an initial environment <code>E</code>, an accumulated log <code>L</code> and a result <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a stateful computation in a context <code>F[_]</code>, from state <code>SA</code> to state <code>SB</code>,
+ with an initial environment <code>E</code>, an accumulated log <code>L</code> and a result <code>A</code>.</p><p>In other words, it is a pre-baked stack of <code><a href="#ReaderT[F[_],A,B]=cats.data.Kleisli[F,A,B]" class="extmbr" name="cats.data.ReaderT">ReaderT</a>[F, E, A]</code>, <code><a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[F, L, A]</code>
+and <code><a href="IndexedStateT.html" class="extype" name="cats.data.IndexedStateT">IndexedStateT</a>[F, SA, SB, A]</code>.
+</p></div></div>
+    </li><li name="cats.data.IndexedStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IndexedStateT[F[_],SA,SB,A]extendsSerializable"></a><a id="IndexedStateT[F[_],SA,SB,A]:IndexedStateT[F,SA,SB,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IndexedStateT[F[_],SA,SB,A]extendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding
+a value of type A." href="IndexedStateT.html">
+              <span class="name">IndexedStateT</span>
+            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="SA">SA</span>, <span name="SB">SB</span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt"><code>IndexedStateT[F, SA, SB, A]</code> is a stateful computation in a context <code>F</code> yielding
+a value of type <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>IndexedStateT[F, SA, SB, A]</code> is a stateful computation in a context <code>F</code> yielding
+a value of type <code>A</code>. The state transitions from a value of type <code>SA</code> to a value
+of type <code>SB</code>.</p><p>Note that for the <code>SA != SB</code> case, this is an indexed monad. Indexed monads
+are monadic type constructors annotated by an additional type for effect
+tracking purposes. In this case, the annotation tracks the initial state and
+the resulting state.</p><p>Given <code>IndexedStateT[F, S, S, A]</code>, this yields the <code>StateT[F, S, A]</code> monad.
+</p></div></div>
     </li><li name="cats.data.Ior" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Ior[+A,+B]extendsProductwithSerializable"></a><a id="Ior[+A,+B]:Ior[A,B]"></a>
       <span class="permalink">
@@ -822,14 +899,14 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RWS</span><span class="tparams">[<span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="ReaderWriterStateT.html" class="extype" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.RWS.E">E</span>, <span class="extype" name="cats.data.RWS.L">L</span>, <span class="extype" name="cats.data.RWS.S">S</span>, <span class="extype" name="cats.data.RWS.A">A</span>]</span>
+        <span class="name">RWS</span><span class="tparams">[<span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.RWS.E">E</span>, <span class="extype" name="cats.data.RWS.L">L</span>, <span class="extype" name="cats.data.RWS.S">S</span>, <span class="extype" name="cats.data.RWS.S">S</span>, <span class="extype" name="cats.data.RWS.A">A</span>]</span>
       </span>
       
       
     </li><li name="cats.data.RWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RWST[F[_],E,S,L,A]=cats.data.ReaderWriterStateT[F,E,S,L,A]"></a><a id="RWST[F[_],E,S,L,A]:RWST[F,E,S,L,A]"></a>
+      <a id="RWST[F[_],E,L,S,A]=cats.data.package.ReaderWriterStateT[F,E,L,S,A]"></a><a id="RWST[F[_],E,L,S,A]:RWST[F,E,L,S,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#RWST[F[_],E,S,L,A]=cats.data.ReaderWriterStateT[F,E,S,L,A]" title="Permalink">
+      <a href="../../cats/data/index.html#RWST[F[_],E,L,S,A]=cats.data.package.ReaderWriterStateT[F,E,L,S,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -838,7 +915,7 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="S">S</span>, <span name="L">L</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="ReaderWriterStateT.html" class="extype" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>[<span class="extype" name="cats.data.RWST.F">F</span>, <span class="extype" name="cats.data.RWST.E">E</span>, <span class="extype" name="cats.data.RWST.S">S</span>, <span class="extype" name="cats.data.RWST.L">L</span>, <span class="extype" name="cats.data.RWST.A">A</span>]</span>
+        <span class="name">RWST</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.RWST.F">F</span>, <span class="extype" name="cats.data.RWST.E">E</span>, <span class="extype" name="cats.data.RWST.L">L</span>, <span class="extype" name="cats.data.RWST.S">S</span>, <span class="extype" name="cats.data.RWST.S">S</span>, <span class="extype" name="cats.data.RWST.A">A</span>]</span>
       </span>
       
       
@@ -875,9 +952,9 @@ convenient methods for working with this nested structure.</p><p>It may also be 
       
       
     </li><li name="cats.data.ReaderWriterState" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ReaderWriterState[E,L,S,A]=cats.data.ReaderWriterStateT[cats.Eval,E,L,S,A]"></a><a id="ReaderWriterState[E,L,S,A]:ReaderWriterState[E,L,S,A]"></a>
+      <a id="ReaderWriterState[E,L,S,A]=cats.data.package.ReaderWriterStateT[cats.Eval,E,L,S,A]"></a><a id="ReaderWriterState[E,L,S,A]:ReaderWriterState[E,L,S,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#ReaderWriterState[E,L,S,A]=cats.data.ReaderWriterStateT[cats.Eval,E,L,S,A]" title="Permalink">
+      <a href="../../cats/data/index.html#ReaderWriterState[E,L,S,A]=cats.data.package.ReaderWriterStateT[cats.Eval,E,L,S,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -886,37 +963,31 @@ convenient methods for working with this nested structure.</p><p>It may also be 
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ReaderWriterState</span><span class="tparams">[<span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="ReaderWriterStateT.html" class="extype" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.ReaderWriterState.E">E</span>, <span class="extype" name="cats.data.ReaderWriterState.L">L</span>, <span class="extype" name="cats.data.ReaderWriterState.S">S</span>, <span class="extype" name="cats.data.ReaderWriterState.A">A</span>]</span>
+        <span class="name">ReaderWriterState</span><span class="tparams">[<span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.ReaderWriterState.E">E</span>, <span class="extype" name="cats.data.ReaderWriterState.L">L</span>, <span class="extype" name="cats.data.ReaderWriterState.S">S</span>, <span class="extype" name="cats.data.ReaderWriterState.S">S</span>, <span class="extype" name="cats.data.ReaderWriterState.A">A</span>]</span>
       </span>
       
       
-    </li><li name="cats.data.ReaderWriterStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ReaderWriterStateT[F[_],E,L,S,A]extendsSerializable"></a><a id="ReaderWriterStateT[F[_],E,L,S,A]:ReaderWriterStateT[F,E,L,S,A]"></a>
+    </li><li name="cats.data.ReaderWriterStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReaderWriterStateT[F[_],E,L,S,A]=cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]"></a><a id="ReaderWriterStateT[F[_],E,L,S,A]:ReaderWriterStateT[F,E,L,S,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#ReaderWriterStateT[F[_],E,L,S,A]extendsSerializable" title="Permalink">
+      <a href="../../cats/data/index.html#ReaderWriterStateT[F[_],E,L,S,A]=cats.data.IndexedReaderWriterStateT[F,E,L,S,S,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <a title="Represents a stateful computation in a context F[_], over state S, with an initial environment E,
-an accumulated log L and a result A." href="ReaderWriterStateT.html">
-              <span class="name">ReaderWriterStateT</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">ReaderWriterStateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedReaderWriterStateT.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>[<span class="extype" name="cats.data.ReaderWriterStateT.F">F</span>, <span class="extype" name="cats.data.ReaderWriterStateT.E">E</span>, <span class="extype" name="cats.data.ReaderWriterStateT.L">L</span>, <span class="extype" name="cats.data.ReaderWriterStateT.S">S</span>, <span class="extype" name="cats.data.ReaderWriterStateT.S">S</span>, <span class="extype" name="cats.data.ReaderWriterStateT.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Represents a stateful computation in a context <code>F[_]</code>, over state <code>S</code>, with an initial environment <code>E</code>,
-an accumulated log <code>L</code> and a result <code>A</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a stateful computation in a context <code>F[_]</code>, over state <code>S</code>, with an initial environment <code>E</code>,
-an accumulated log <code>L</code> and a result <code>A</code>.</p><p>In other words, it is a pre-baked stack of <code><a href="#ReaderT[F[_],A,B]=cats.data.Kleisli[F,A,B]" class="extmbr" name="cats.data.ReaderT">ReaderT</a>[F, E, A]</code>, <code><a href="WriterT.html" class="extype" name="cats.data.WriterT">WriterT</a>[F, L, A]</code>
-and <code><a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[F, S, A]</code>.
-</p></div></div>
+      <p class="shortcomment cmt">Represents a stateful computation in a context <code>F[_]</code>, over state <code>S</code>, with an
+initial environment <code>E</code>, an accumulated log <code>L</code> and a result <code>A</code>.</p>
     </li><li name="cats.data.State" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="State[S,A]=cats.data.StateT[cats.Eval,S,A]"></a><a id="State[S,A]:State[S,A]"></a>
+      <a id="State[S,A]=cats.data.package.StateT[cats.Eval,S,A]"></a><a id="State[S,A]:State[S,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#State[S,A]=cats.data.StateT[cats.Eval,S,A]" title="Permalink">
+      <a href="../../cats/data/index.html#State[S,A]=cats.data.package.StateT[cats.Eval,S,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -925,26 +996,23 @@ and <code><a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">State</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="StateT.html" class="extype" name="cats.data.StateT">StateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.State.S">S</span>, <span class="extype" name="cats.data.State.A">A</span>]</span>
+        <span class="name">State</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedStateT.html" class="extype" name="cats.data.IndexedStateT">IndexedStateT</a>[<a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>, <span class="extype" name="cats.data.State.S">S</span>, <span class="extype" name="cats.data.State.S">S</span>, <span class="extype" name="cats.data.State.A">A</span>]</span>
       </span>
       
       
     </li><li name="cats.data.StateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="StateT[F[_],S,A]extendsSerializable"></a><a id="StateT[F[_],S,A]:StateT[F,S,A]"></a>
+      <a id="StateT[F[_],S,A]=cats.data.IndexedStateT[F,S,S,A]"></a><a id="StateT[F[_],S,A]:StateT[F,S,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#StateT[F[_],S,A]extendsSerializable" title="Permalink">
+      <a href="../../cats/data/index.html#StateT[F[_],S,A]=cats.data.IndexedStateT[F,S,S,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <a title="StateT[F, S, A] is similar to Kleisli[F, S, A] in that it takes an S
-argument and produces an A value wrapped in F." href="StateT.html">
-              <span class="name">StateT</span>
-            </a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">StateT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="result alias"> = <a href="IndexedStateT.html" class="extype" name="cats.data.IndexedStateT">IndexedStateT</a>[<span class="extype" name="cats.data.StateT.F">F</span>, <span class="extype" name="cats.data.StateT.S">S</span>, <span class="extype" name="cats.data.StateT.S">S</span>, <span class="extype" name="cats.data.StateT.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt"><code>StateT[F, S, A]</code> is similar to <code>Kleisli[F, S, A]</code> in that it takes an <code>S</code>
@@ -1048,7 +1116,23 @@ context along with the <code>A</code> value.
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="cats.data#NonEmptyStream" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="cats.data#IRWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IRWST:cats.data.IndexedReaderWriterStateT.type"></a><a id="IRWST:IndexedReaderWriterStateT.type"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IRWST:cats.data.IndexedReaderWriterStateT.type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IRWST</span><span class="result">: <a href="IndexedReaderWriterStateT$.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>.type</span>
+      </span>
+      
+      
+    </li><li name="cats.data#NonEmptyStream" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NonEmptyStream[A](head:A,tail:A*):cats.data.package.NonEmptyStream[A]"></a><a id="NonEmptyStream[A](A,A*):NonEmptyStream[A]"></a>
       <span class="permalink">
       <a href="../../cats/data/index.html#NonEmptyStream[A](head:A,tail:A*):cats.data.package.NonEmptyStream[A]" title="Permalink">
@@ -1097,9 +1181,9 @@ context along with the <code>A</code> value.
       
       
     </li><li name="cats.data#RWST" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RWST:cats.data.ReaderWriterStateT.type"></a><a id="RWST:ReaderWriterStateT.type"></a>
+      <a id="RWST:cats.data.package.ReaderWriterStateT.type"></a><a id="RWST:ReaderWriterStateT.type"></a>
       <span class="permalink">
-      <a href="../../cats/data/index.html#RWST:cats.data.ReaderWriterStateT.type" title="Permalink">
+      <a href="../../cats/data/index.html#RWST:cats.data.package.ReaderWriterStateT.type" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1108,7 +1192,7 @@ context along with the <code>A</code> value.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">RWST</span><span class="result">: <a href="ReaderWriterStateT$.html" class="extype" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>.type</span>
+        <span class="name">RWST</span><span class="result">: <a href="package$$ReaderWriterStateT$.html" class="extype" name="cats.data.ReaderWriterStateT">ReaderWriterStateT</a>.type</span>
       </span>
       
       
@@ -1251,6 +1335,42 @@ context along with the <code>A</code> value.
         <a title="" href="IdT$.html">
               <span class="name">IdT</span>
             </a><span class="result"> extends <span class="extype" name="cats.data.IdTInstances">IdTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.IndexedReaderWriterStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IndexedReaderWriterStateT"></a><a id="IndexedReaderWriterStateT:IndexedReaderWriterStateT"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IndexedReaderWriterStateT" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IndexedReaderWriterStateT$.html">
+              <span class="name">IndexedReaderWriterStateT</span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.IRWSTInstances">IRWSTInstances</span> with <span class="extype" name="cats.data.CommonIRWSTConstructors">CommonIRWSTConstructors</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.IndexedStateT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IndexedStateT"></a><a id="IndexedStateT:IndexedStateT"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IndexedStateT" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IndexedStateT$.html">
+              <span class="name">IndexedStateT</span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.IndexedStateTInstances">IndexedStateTInstances</span> with <span class="extype" name="cats.data.CommonStateTConstructors">CommonStateTConstructors</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
@@ -1428,9 +1548,9 @@ context along with the <code>A</code> value.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ReaderWriterStateT$.html">
+        <a title="" href="package$$ReaderWriterStateT$.html">
               <span class="name">ReaderWriterStateT</span>
-            </a><span class="result"> extends <span class="extype" name="cats.data.RWSTInstances">RWSTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.RWSTFunctions">RWSTFunctions</span></span>
       </span>
       
       
@@ -1464,9 +1584,9 @@ context along with the <code>A</code> value.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="StateT$.html">
+        <a title="" href="package$$StateT$.html">
               <span class="name">StateT</span>
-            </a><span class="result"> extends <span class="extype" name="cats.data.StateTInstances">StateTInstances</span> with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+            </a><span class="result"> extends <span class="extype" name="cats.data.StateTFunctions">StateTFunctions</span></span>
       </span>
       
       
