@@ -60,7 +60,7 @@ case class User(name: Username, pw: Password)
 
 def validateUsername(u: String): Failures Ior Username = {
   if (u.isEmpty)
-    Nel.one("Can't be empty").leftIor
+    Ior.leftNel("Can't be empty")
   else if (u.contains("."))
     Ior.both(Nel.one("Dot in name is deprecated"), Username(u))
   else
@@ -69,7 +69,7 @@ def validateUsername(u: String): Failures Ior Username = {
 
 def validatePassword(p: String): Failures Ior Password = {
   if (p.length < 8)
-    Nel.one("Password too short").leftIor
+    Ior.leftNel("Password too short")
   else if (p.length < 10)
     Ior.both(Nel.one("Password should be longer"), Password(p))
   else
