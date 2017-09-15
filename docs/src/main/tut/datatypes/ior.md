@@ -21,7 +21,7 @@ def map[B, C](fa: A Ior B)(f: B => C): A Ior C
 We can create `Ior` values using `Ior.left`, `Ior.right` and `Ior.both`:
 
 ```tut
-import cats.data.Ior
+import cats.data._
 
 val right = Ior.right[String, Int](3)
 
@@ -60,7 +60,7 @@ case class User(name: Username, pw: Password)
 
 def validateUsername(u: String): Failures Ior Username = {
   if (u.isEmpty)
-    Ior.leftNel("Can't be empty")
+    Nel.one("Can't be empty").leftIor
   else if (u.contains("."))
     Ior.both(Nel.one("Dot in name is deprecated"), Username(u))
   else
@@ -69,7 +69,7 @@ def validateUsername(u: String): Failures Ior Username = {
 
 def validatePassword(p: String): Failures Ior Password = {
   if (p.length < 8)
-    Ior.leftNel("Password too short")
+    Nel.one("Password too short").leftIor
   else if (p.length < 10)
     Ior.both(Nel.one("Password should be longer"), Password(p))
   else
@@ -102,6 +102,18 @@ validateUser("john.doe", "password").fold(
   user => s"Success: $user",
   (warnings, user) => s"Warning: ${user.name.value}; The following warnings occurred: ${warnings.show}"
 )
+
+```
+Similar to [Validated](validated.html), there is also a type alias for using a `NonEmptyList` on the left side.
+
+```tut:silent
+type IorNel[B, A] = Ior[NonEmptyList[B], A]
+```
+
+
+```tut
+
+val left: IorNel[String, Int] = Ior.leftNel("Error")
 
 ```
 
