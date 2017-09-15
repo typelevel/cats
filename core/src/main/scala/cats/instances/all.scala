@@ -14,14 +14,12 @@ trait AllInstances
   with    InvariantInstances
   with    ListInstances
   with    MapInstances
-  with    MonoidInstances
   with    OptionInstances
   with    OrderInstances
   with    OrderingInstances
   with    PartialOrderInstances
   with    PartialOrderingInstances
   with    QueueInstances
-  with    SemigroupInstances
   with    SetInstances
   with    StreamInstances
   with    StringInstances

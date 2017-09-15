@@ -19,7 +19,7 @@ class MonoidTests extends CatsSuite {
 
 object MonoidTests {
   def summonInstance(): Unit = {
-    import cats.instances.monoid._
+    import cats.instances.invariant._
     Invariant[Monoid]
     Cartesian[Monoid]
     InvariantMonoidal[Monoid]
