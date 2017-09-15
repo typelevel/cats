@@ -9,9 +9,14 @@
 
 ### Overview
 
-Cats is a library which provides abstractions for functional
-programming in the [Scala programming language](https://scala-lang.org).
+Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
 The name is a playful shortening of the word *category*.
+
+Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats strives to provide function programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#a-namebinary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations/#modularity), [approachable](http://typelevel.org/cats/motivations/#approachability) and [efficient](http://typelevel.org//cats/motivations/#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats#the-cats-ecosystem) to support functional programming in Scala applications.
+
+For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
+
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
@@ -45,7 +50,10 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
  * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
- 
+
+#### Enhancing type inference
+
+ To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -53,16 +61,10 @@ Release notes for Cats are available in [CHANGES.md](https://github.com/typeleve
  major redesigns, changes that are neither source nor binary
  compatible are to be expected in upcoming RC1 and 1.0 releases.*
 
-#### Enhancing type inference
-
-To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
-
 
 ### The cats ecosystem
 
-Many projects integrate with cats. By sharing the same set of
-type classes, instances and data types, projects can speak the same "cats
-language", and integrate with each other with ease.
+By sharing the same set of type classes, instances and data types provided by cats, projects can speak the same "cats language", and integrate with each other with ease.
 
 #### General purpose libraries to support pure functional programming
 
@@ -95,57 +97,6 @@ language", and integrate with each other with ease.
 
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
-
-## <a name="motivations" href="#motivations"></a>Motivations
-
-### Foundation for ecosystem of FP libraries
-
-Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats augments the standard library with tools that further enable functional programming such as
-`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats#the-cats-ecosystem).
-
-
-#### Approachability
-
-As this library evolves, we are placing a lot of emphasis on trying to
-make decisions which will help keep this library approachable for
-people new to the concepts in this library. We are collecting
-anecdotes from successes and failures we have experienced in the past
-in trying to teach others about these concepts, and trying to make
-decisions which will help ease the process of getting acquainted to
-the library for a newcomer. If you have any feedback for us in this
-regard, we would love to hear from you. See the [Contributing
-page](contributing.html) to find out ways to give us feedback.
-
-#### Modularity
-
-We are trying to make the library modular. It will have a tight
-core which will contain only the [type classes](typeclasses.html),
-the bare minimum of data structures that are needed to support
-them, and type class instances for those data structures and standard
-library types.
-
-#### Documentation
-
-We feel that having lots of documentation is a very important goal for
-our project. It will be a big win towards our goal of
-approachability. We will strive to have the code well documented, we
-will strive to have lots of documentation external to the code, and we
-will strive to have a large corpus of compiler verified examples of
-how the software can be used.
-
-Writing documentation is a huge part of developing software, and one
-that is often neglected. It is also a very easy way to get started
-with [contributing](contributing.html) to the project.
-
-#### Efficiency
-
-Although unfortunately there are times when programming only with
-pure functions and writing efficient code in Scala can be at odds, we
-are attempting to do our best at keeping our library as efficient as
-we can without making unnecessary sacrifices of purity and
-usability. Where sacrifices have to be made, we will strive to make
-these obvious, and will keep them well documented.
 
 ### How can I contribute to Cats?
 
