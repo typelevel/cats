@@ -17,6 +17,7 @@ package object instances {
   object function        extends FunctionInstances
   object future          extends FutureInstances
   object int             extends IntInstances
+  object invariant       extends InvariantInstances
   object list            extends ListInstances
   object long            extends LongInstances
   object map             extends MapInstances
