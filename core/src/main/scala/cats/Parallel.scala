@@ -33,8 +33,20 @@ trait Parallel[M[_], F[_]] extends Serializable {
     * I.e. if you have a type M[_], that supports parallel composition through type F[_],
     * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
     */
-  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
-    Parallel.applicativeError[M, F, E](this, E)
+  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
+
+    def raiseError[A](e: E): F[A] =
+      parallel(MonadError[M, E].raiseError(e))
+
+    def handleErrorWith[A](fa: F[A])(f: (E) => F[A]): F[A] = {
+      val ma = MonadError[M, E].handleErrorWith(sequential(fa))(f andThen sequential.apply)
+      parallel(ma)
+    }
+
+    def pure[A](x: A): F[A] = applicative.pure(x)
+
+    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
+  }
 }
 
 object Parallel extends ParallelArityFunctions {
@@ -118,7 +130,7 @@ object Parallel extends ParallelArityFunctions {
                                         (ma: M[A], mb: M[B])
                                         (implicit P: Parallel[M, F]): M[Z] = {
     implicit val M = P.monad
-    P.sequential.apply(
+    P.sequential(
       P.applicative.ap2(P.parallel(ff))(P.parallel(ma), P.parallel(mb))
     )
   }
@@ -130,20 +142,7 @@ object Parallel extends ParallelArityFunctions {
     * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
     */
   def applicativeError[M[_], F[_], E]
-  (implicit P: Parallel[M, F], E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
-
-    def raiseError[A](e: E): F[A] =
-      P.parallel.apply(MonadError[M, E].raiseError(e))
-
-    def handleErrorWith[A](fa: F[A])(f: (E) => F[A]): F[A] = {
-      val ma = MonadError[M, E].handleErrorWith(P.sequential.apply(fa))(f andThen P.sequential.apply)
-      P.parallel.apply(ma)
-    }
-
-    def pure[A](x: A): F[A] = P.applicative.pure(x)
-
-    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = P.applicative.ap(ff)(fa)
-  }
+  (implicit P: Parallel[M, F], E: MonadError[M, E]): ApplicativeError[F, E] = P.applicativeError
 
   /**
     * A Parallel instance for any type `M[_]` that supports parallel composition through itself.

@@ -31,10 +31,10 @@ trait ParallelInstances extends ParallelInstances1 {
     def monad: Monad[OptionT[M, ?]] = cats.data.OptionT.catsDataMonadForOptionT[M]
 
     def sequential: Nested[F, Option, ?] ~> OptionT[M, ?] =
-      λ[Nested[F, Option, ?] ~> OptionT[M, ?]](nested => OptionT(P.sequential.apply(nested.value)))
+      λ[Nested[F, Option, ?] ~> OptionT[M, ?]](nested => OptionT(P.sequential(nested.value)))
 
     def parallel: OptionT[M, ?]~> Nested[F, Option, ?] =
-      λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel.apply(optT.value)))
+      λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel(optT.value)))
   }
 
   implicit def catsStdParallelForZipVector[A]: Parallel[Vector, ZipVector] =
@@ -65,13 +65,13 @@ trait ParallelInstances extends ParallelInstances1 {
 
     def sequential: Nested[F, Validated[E, ?], ?] ~> EitherT[M, E, ?] =
       λ[Nested[F, Validated[E, ?], ?] ~> EitherT[M, E, ?]] { nested =>
-        val mva = P.sequential.apply(nested.value)
+        val mva = P.sequential(nested.value)
         EitherT(Functor[M].map(mva)(_.toEither))
       }
 
     def parallel: EitherT[M, E, ?]~> Nested[F, Validated[E, ?], ?] =
       λ[EitherT[M, E, ?] ~> Nested[F, Validated[E, ?], ?]] { eitherT =>
-        val fea = P.parallel.apply(eitherT.value)
+        val fea = P.parallel(eitherT.value)
         Nested(Functor[F].map(fea)(_.toValidated))
       }
   }

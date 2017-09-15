@@ -90,10 +90,10 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
     def monad: Monad[WriterT[M, L, ?]] = catsDataMonadForWriterT
 
     def sequential: WriterT[F, L, ?] ~> WriterT[M, L, ?] =
-      λ[WriterT[F, L, ?] ~> WriterT[M, L, ?]](wfl => WriterT(P.sequential.apply(wfl.run)))
+      λ[WriterT[F, L, ?] ~> WriterT[M, L, ?]](wfl => WriterT(P.sequential(wfl.run)))
 
     def parallel: WriterT[M, L, ?] ~> WriterT[F, L, ?] =
-      λ[WriterT[M, L, ?] ~> WriterT[F, L, ?]](wml => WriterT(P.parallel.apply(wml.run)))
+      λ[WriterT[M, L, ?] ~> WriterT[F, L, ?]](wml => WriterT(P.parallel(wml.run)))
   }
 
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
