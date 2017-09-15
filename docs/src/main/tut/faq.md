@@ -9,7 +9,7 @@ position: 40
 
 ## Questions
  * [What imports do I need?](#what-imports)
- * [What is the difference between cats and scalaz](#diff-scalaz) 
+ * [What is the difference between Cats and Scalaz?](#diff-scalaz) 
  * [Where is right-biased `Either`?](#either)
  * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
