@@ -392,6 +392,8 @@ object NonEmptyList extends NonEmptyListInstances {
       def pure[A](x: A): ZipNonEmptyList[A] = new ZipNonEmptyList(NonEmptyList.one(x))
       def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
         new ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+      override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
+        new ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
     }
 
     implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)

@@ -59,9 +59,7 @@ object Parallel extends ParallelArityFunctions {
     */
   def parSequence[T[_]: Traverse, M[_], F[_], A]
   (tma: T[M[A]])(implicit P: Parallel[M, F]): M[T[A]] = {
-    implicit val F = P.applicative
-    implicit val M = P.monad
-    val fta: F[T[A]] = Traverse[T].traverse(tma)(P.parallel.apply)
+    val fta: F[T[A]] = Traverse[T].traverse(tma)(P.parallel.apply)(P.applicative)
     P.sequential(fta)
   }
 
@@ -71,9 +69,7 @@ object Parallel extends ParallelArityFunctions {
     */
   def parTraverse[T[_]: Traverse, M[_], F[_], A, B]
   (ta: T[A])(f: A => M[B])(implicit P: Parallel[M, F]): M[T[B]] = {
-    implicit val F = P.applicative
-    implicit val M = P.monad
-    val gtb: F[T[B]] = Traverse[T].traverse(ta)(f andThen P.parallel.apply)
+    val gtb: F[T[B]] = Traverse[T].traverse(ta)(f andThen P.parallel.apply)(P.applicative)
     P.sequential(gtb)
   }
 
@@ -83,9 +79,7 @@ object Parallel extends ParallelArityFunctions {
     */
   def parSequence_[T[_]: Foldable, M[_], F[_], A]
   (tma: T[M[A]])(implicit P: Parallel[M, F]): M[Unit] = {
-    implicit val F = P.applicative
-    implicit val M = P.monad
-    val fu: F[Unit] = Foldable[T].traverse_(tma)(P.parallel.apply)
+    val fu: F[Unit] = Foldable[T].traverse_(tma)(P.parallel.apply)(P.applicative)
     P.sequential(fu)
   }
 
@@ -95,9 +89,7 @@ object Parallel extends ParallelArityFunctions {
     */
   def parTraverse_[T[_]: Foldable, M[_], F[_], A, B]
   (ta: T[A])(f: A => M[B])(implicit P: Parallel[M, F]): M[Unit] = {
-    implicit val F = P.applicative
-    implicit val M = P.monad
-    val gtb: F[Unit] = Foldable[T].traverse_(ta)(f andThen P.parallel.apply)
+    val gtb: F[Unit] = Foldable[T].traverse_(ta)(f andThen P.parallel.apply)(P.applicative)
     P.sequential(gtb)
   }
 
@@ -107,33 +99,27 @@ object Parallel extends ParallelArityFunctions {
     */
   def parAp[M[_], F[_], A, B](mf: M[A => B])
                                     (ma: M[A])
-                                    (implicit P: Parallel[M, F]): M[B] = {
-    implicit val F = P.applicative
-    implicit val M = P.monad
-    val fb = Applicative[F].ap(P.parallel(mf))(P.parallel(ma))
-    P.sequential(fb)
-  }
+                                    (implicit P: Parallel[M, F]): M[B] =
+    P.sequential(P.applicative.ap(P.parallel(mf))(P.parallel(ma)))
 
   /**
     * Like `Applicative[F].product`, but uses the applicative instance
     * corresponding to the Parallel instance instead.
     */
-  def parProduct[M[_]: Monad, F[_], A, B](ma: M[A], mb: M[B])
+  def parProduct[M[_], F[_], A, B](ma: M[A], mb: M[B])
                                          (implicit P: Parallel[M, F]): M[(A, B)] =
-    parAp(Monad[M].map(ma)(a => (b: B) => (a, b)))(mb)
+    P.sequential(P.applicative.product(P.parallel(ma), P.parallel(mb)))
 
   /**
     * Like `Applicative[F].ap2`, but uses the applicative instance
     * corresponding to the Parallel instance instead.
     */
-  def parAp2[M[_]: Monad, F[_], A, B, Z](ff: M[(A, B) => Z])
+  def parAp2[M[_], F[_], A, B, Z](ff: M[(A, B) => Z])
                                         (ma: M[A], mb: M[B])
-                                        (implicit P: Parallel[M, F]): M[Z] = {
-    implicit val M = P.monad
+                                        (implicit P: Parallel[M, F]): M[Z] =
     P.sequential(
       P.applicative.ap2(P.parallel(ff))(P.parallel(ma), P.parallel(mb))
     )
-  }
 
   /**
     * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel[M, F]`

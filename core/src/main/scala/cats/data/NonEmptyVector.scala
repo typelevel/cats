@@ -350,6 +350,8 @@ object NonEmptyVector extends NonEmptyVectorInstances {
       def pure[A](x: A): ZipNonEmptyVector[A] = new ZipNonEmptyVector(NonEmptyVector.one(x))
       def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
         new ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+      override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
+        new ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
     }
 
     implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
