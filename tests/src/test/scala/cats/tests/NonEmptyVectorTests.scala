@@ -323,6 +323,13 @@ class NonEmptyVectorTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyVector#zipWith is consistent with #zipWithIndex") {
+    forAll { nev: NonEmptyVector[Int] =>
+      val zw = nev.zipWith(NonEmptyVector.fromVectorUnsafe((0 until nev.length).toVector))(Tuple2.apply)
+      nev.zipWithIndex should === (zw)
+    }
+  }
+
   test("NonEmptyVector#nonEmptyPartition remains sorted") {
     forAll { (nev: NonEmptyVector[Int], f: Int => Either[String, String]) =>
 
@@ -370,7 +377,9 @@ class NonEmptyVectorTests extends CatsSuite {
 
   test("NonEmptyVector#zipWithIndex is consistent with Vector#zipWithIndex") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.zipWithIndex should === (NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.zipWithIndex))
+      val expected = NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.zipWithIndex)
+      nonEmptyVector.zipWithIndex should === (expected)
+      Traverse[NonEmptyVector].zipWithIndex(nonEmptyVector) should === (expected)
     }
   }
 
