@@ -47,7 +47,7 @@ trait HashLaws[A] extends Laws {
     parent = None,
     Rules.serializable(Equ),
     "same-as-scala-hashing" -> forAll { (x: A) =>
-      catsHash.hash(x) == scalaHashing.hash(x)
+      catsHash.hash(x) == Hash.fromHashing(scalaHashing).hash(x)
     }
   )
 

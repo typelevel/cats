@@ -1,4 +1,3 @@
-addSbtPlugin("io.get-coursier"     % "sbt-coursier"          % "1.0.0-RC10")
 addSbtPlugin("com.eed3si9n"        % "sbt-unidoc"            % "0.4.1")
 addSbtPlugin("com.github.gseitz"   % "sbt-release"           % "1.0.6")
 addSbtPlugin("com.jsuereth"        % "sbt-pgp"               % "1.1.0")
