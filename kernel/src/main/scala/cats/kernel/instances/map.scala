@@ -26,7 +26,7 @@ class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[
     var c = 1;
     x foreach { case (k, v) =>
       // use the default hash on keys because that's what Scala's Map does
-      val h = StaticMethods.product2Hash(k.##, V.hash(v))
+      val h = StaticMethods.product2Hash(k.hashCode(), V.hash(v))
       a += h
       b ^= h
       if (h != 0) c *= h

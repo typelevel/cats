@@ -10,7 +10,7 @@ trait BooleanInstances {
 
 class BooleanOrder extends Order[Boolean] with Hash[Boolean] {
 
-  def hash(x: Boolean): Int = x.##
+  def hash(x: Boolean): Int = x.hashCode()
   def compare(x: Boolean, y: Boolean): Int =
     if (x == y) 0 else if (x) 1 else -1
 

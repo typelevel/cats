@@ -17,7 +17,7 @@ class LongGroup extends CommutativeGroup[Long] {
 
 class LongOrder extends Order[Long] with Hash[Long] {
 
-  def hash(x: Long): Int = x.##
+  def hash(x: Long): Int = x.hashCode()
 
   // use java.lang.Long.compare if we can rely on java >= 1.7
   def compare(x: Long, y: Long): Int =

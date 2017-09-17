@@ -38,7 +38,7 @@ trait HashLaws[A] extends Laws {
     Rules.serializable(Equ),
     "same-as-universal-hash" -> forAll { (x: A, y: A) =>
       (A.hash(x) == x.##) && (Hash.fromUniversalHashCode[A].hash(x) == x.##) &&
-        (!(A.eqv(x, y)) || (Hash.fromUniversalHashCode[A].eqv(x, y)))
+        (A.eqv(x, y) == Hash.fromUniversalHashCode[A].eqv(x, y))
     }
   )
 
@@ -46,8 +46,9 @@ trait HashLaws[A] extends Laws {
     name = "sameAsScalaHashing",
     parent = None,
     Rules.serializable(Equ),
-    "same-as-scala-hashing" -> forAll { (x: A) =>
-      catsHash.hash(x) == Hash.fromHashing(scalaHashing).hash(x)
+    "same-as-scala-hashing" -> forAll { (x: A, y: A) =>
+      (catsHash.hash(x) == Hash.fromHashing(scalaHashing).hash(x)) &&
+        (catsHash.eqv(x, y) == Hash.fromHashing(scalaHashing).eqv(x, y))
     }
   )
 

@@ -14,7 +14,7 @@ trait UnitInstances {
 class UnitOrder extends Order[Unit] with Hash[Unit] {
   def compare(x: Unit, y: Unit): Int = 0
 
-  def hash(x: Unit): Int = 0 // ().## == 0
+  def hash(x: Unit): Int = 0 // ().hashCode() == 0
 
   override def eqv(x: Unit, y: Unit): Boolean = true
   override def neqv(x: Unit, y: Unit): Boolean = false

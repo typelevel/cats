@@ -30,7 +30,7 @@ class SetPartialOrder[A] extends PartialOrder[Set[A]] {
 
 class SetHash[A] extends Hash[Set[A]] {
   // Does not require a Hash on elements: Scala sets must use the universal `hashCode`.
-  def hash(x: Set[A]): Int = x.##
+  def hash(x: Set[A]): Int = x.hashCode()
 
   // Does not require an Eq on elements: Scala sets must use the universal `equals`.
   def eqv(x: Set[A], y: Set[A]): Boolean = x == y

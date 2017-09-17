@@ -16,7 +16,7 @@ class IntGroup extends CommutativeGroup[Int] {
 }
 
 class IntOrder extends Order[Int] with Hash[Int] {
-  def hash(x: Int): Int = x.##
+  def hash(x: Int): Int = x.hashCode()
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 

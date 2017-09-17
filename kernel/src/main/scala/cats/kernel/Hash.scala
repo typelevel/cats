@@ -52,7 +52,7 @@ object Hash extends HashFunctions[Hash] {
    */
   def fromUniversalHashCode[A]: Hash[A] =
     new Hash[A] {
-      def hash(x: A) = x.##
+      def hash(x: A) = x.hashCode()
       def eqv(x: A, y: A) = x == y
     }
 

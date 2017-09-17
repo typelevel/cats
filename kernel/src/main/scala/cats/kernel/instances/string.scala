@@ -10,7 +10,7 @@ trait StringInstances {
 
 class StringOrder extends Order[String] with Hash[String] {
 
-  def hash(x: String): Int = x.##
+  def hash(x: String): Int = x.hashCode()
 
   override def eqv(x: String, y: String): Boolean =
     x == y

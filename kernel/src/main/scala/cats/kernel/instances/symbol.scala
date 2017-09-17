@@ -9,7 +9,7 @@ trait SymbolInstances {
 
 class SymbolOrder extends Order[Symbol] with Hash[Symbol] {
 
-  def hash(x: Symbol): Int = x.##
+  def hash(x: Symbol): Int = x.hashCode()
 
   override def eqv(x: Symbol, y: Symbol): Boolean = {
     // Symbols are interned

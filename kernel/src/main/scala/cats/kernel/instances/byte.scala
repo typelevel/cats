@@ -17,7 +17,7 @@ class ByteGroup extends CommutativeGroup[Byte] {
 
 class ByteOrder extends Order[Byte] with Hash[Byte] {
 
-  def hash(x: Byte): Int = x.##
+  def hash(x: Byte): Int = x.hashCode()
 
   def compare(x: Byte, y: Byte): Int =
     if (x < y) -1 else if (x > y) 1 else 0
