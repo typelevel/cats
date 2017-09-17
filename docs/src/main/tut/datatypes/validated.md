@@ -43,7 +43,7 @@ Before diving into `Validated`, let's take a look at an `Either` based first app
 Our data will be represented this way:
 
 ```tut:silent
-case class RegistrationData(username: String, password: String, firstName: String, lastName: String, age: Int)
+final case class RegistrationData(username: String, password: String, firstName: String, lastName: String, age: Int)
 ```
 
 And our error model:
@@ -74,27 +74,46 @@ case object AgeIsInvalid extends DomainValidation {
 }
 ```
 
-We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using it for displaying the possible errors of every field. Now, let's explore the proposed implementation:
+We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
 ```tut:silent
 import cats.syntax.either._
 
 sealed trait FormValidator{
-  private def validateUserName(userName: String): Either[DomainValidation, String] =
-    if (userName.matches("^[a-zA-Z0-9]+$")) Right(userName) else Left(UsernameHasSpecialCharacters)
+ def validateUserName(userName: String): Either[DomainValidation, String] =
+    Either.cond(
+      userName.matches("^[a-zA-Z0-9]+$"), 
+      userName, 
+      UsernameHasSpecialCharacters
+    )
 
-  private def validatePassword(password: String): Either[DomainValidation, String] =
-    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Right(password)
-    else Left(PasswordDoesNotMeetCriteria)
+ def validatePassword(password: String): Either[DomainValidation, String] =
+    Either.cond(
+      password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"),
+      password,
+      PasswordDoesNotMeetCriteria
+    )
 
-  private def validateFirstName(firstName: String): Either[DomainValidation, String] =
-    if (firstName.matches("^[a-zA-Z]+$")) Right(firstName) else Left(FirstNameHasSpecialCharacters)
+ def validateFirstName(firstName: String): Either[DomainValidation, String] =
+    Either.cond(
+      firstName.matches("^[a-zA-Z]+$"),
+      firstName,
+      FirstNameHasSpecialCharacters
+    )
 
-  private def validateLastName(lastName: String): Either[DomainValidation, String] =
-    if (lastName.matches("^[a-zA-Z]+$")) Right(lastName) else Left(LastNameHasSpecialCharacters)
+ def validateLastName(lastName: String): Either[DomainValidation, String] =
+    Either.cond(
+      lastName.matches("^[a-zA-Z]+$"),
+      lastName,
+      LastNameHasSpecialCharacters
+    )
 
-  private def validateAge(age: Int): Either[DomainValidation, Int] =
-    if (age >= 18 && age <= 75) Right(age) else Left(AgeIsInvalid)
+ def validateAge(age: Int): Either[DomainValidation, Int] =
+    Either.cond(
+      age >= 18 && age <= 75,
+      age,
+      AgeIsInvalid
+    )
 
   def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Either[DomainValidation, RegistrationData] = {
 
@@ -115,12 +134,13 @@ object FormValidator extends FormValidator
 ```
 
 The logic of the validation process is as follows: **check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a `Right` instance; If not, then return a `DomainValidation` with the respective message, wrapped in a `Left` instance**.
+Note that we took advantage of the `.cond` method of `Either`, that is equivalent to do `if (cond) Right(value) else Left(error)`.
 
 Our service has the `validateForm` method for checking all the fields and, if the process succeeds it will create an instance of `RegistrationData`, right?
 
 Well, yes, but the error reporting part will have the downside of showing only the first error.
 
-Let's look in detail this part:
+Let's look this in detail:
 
 ```tut:silent:fail
 for {
@@ -158,26 +178,15 @@ import cats.data._
 import cats.data.Validated._
 import cats.implicits._
 
-def validateUserName(userName: String): Validated[DomainValidation, String] = {
-  if (userName.matches("^[a-zA-Z0-9]+$")) Valid(userName) else Invalid(UsernameHasSpecialCharacters)
-}
+def validateUserName(userName: String): Validated[DomainValidation, String] = FormValidator.validateUserName(userName).toValidated
 
-def validatePassword(password: String): Validated[DomainValidation, String] = {
-  if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) Valid(password)
-  else Invalid(PasswordDoesNotMeetCriteria)
-}
+def validatePassword(password: String): Validated[DomainValidation, String] = FormValidator.validatePassword(password).toValidated
 
-def validateFirstName(firstName: String): Validated[DomainValidation, String] = {
-  if (firstName.matches("^[a-zA-Z]+$")) Valid(firstName) else Invalid(FirstNameHasSpecialCharacters)
-}
+def validateFirstName(firstName: String): Validated[DomainValidation, String] = FormValidator.validateFirstName(firstName).toValidated
 
-def validateLastName(lastName: String): Validated[DomainValidation, String] = {
-  if (lastName.matches("^[a-zA-Z]+$")) Valid(lastName) else Invalid(LastNameHasSpecialCharacters)
-}
+def validateLastName(lastName: String): Validated[DomainValidation, String] = FormValidator.validateLastName(lastName).toValidated
 
-def validateAge(age: Int): Validated[DomainValidation, Int] = {
-  if (age >= 18 && age <= 75) Valid(age) else Invalid(AgeIsInvalid)
-}
+def validateAge(age: Int): Validated[DomainValidation, Int] = FormValidator.validateAge(age).toValidated
 ```
 ```tut:book:fail
 def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
@@ -192,10 +201,10 @@ def validateForm(username: String, password: String, firstName: String, lastName
 }
 ```
 
-Looks similar to the first version. What we've done here was to use `Validated` instead of `Either`. Please note that our `Right` is now a `Valid` and `Left` is an `Invalid`.
-Remember, our goal is to get all the validation errors for displaying it to the user.
+What we've done here was to reuse the previously created validation functions and convert their output to a `Validated` instance with the `.toValidated` combinator. This one takes an `Either` and converts it to its equivalent `Validated`.
+This datatype, as with `Either` has two projections: `Valid` and `Invalid`, analogous to `Right` and `Left`, respectively.
 
-But this approach won't compile, as you can see in the previous snippet. Why?
+Remember that our goal is to get all the validation errors for displaying it to the user, but you'll find that this approach won't compile, as you can see in the previous snippet. Why?
 
 Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.html).
 That's why you see the message: `error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]`.
@@ -207,13 +216,9 @@ So, how do we do here?
 We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.
 
 ```tut:silent
-import cats.data._
-import cats.data.Validated._
-import cats.implicits._
-
 sealed trait FormValidatorNel {
 
-  type ValidationResult[A] = Validated[NonEmptyList[DomainValidation], A]
+  type ValidationResult[A] = ValidatedNel[DomainValidation, A]
 
   private def validateUserName(userName: String): ValidationResult[String] =
     if (userName.matches("^[a-zA-Z0-9]+$")) userName.validNel else UsernameHasSpecialCharacters.invalidNel
@@ -246,10 +251,11 @@ object FormValidatorNel extends FormValidatorNel
 
 Let's see what changed here:
 
-1. In this new implementation, we're using a `NonEmptyList`, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
-2. We've declared the type alias `ValidationResult` that conveniently express the return type of our validation.
-3. `.validNel` and `.invalidNel` combinators let us _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
-4. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
+1. In this new implementation, we're using a [NonEmptyList](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyList.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
+2. `ValidatedNel[DomainValidation, A]` is an alias for `Validation[NonEmptyList[DomainValidation], A]`. When you use `ValidatedNel` you're stating that your accumulative structure will be a `NonEmptyList`. With `Validation`, you have the choice about which data structure you want for reporting the errors (more on that soon).
+3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
+4. `.validNel` and `.invalidNel` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
+5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
 
 **Deprecation notice:** since cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
 
@@ -279,48 +285,33 @@ Sweet success! Now you can take your validation process to the next level!
 
 ### A short detour
 
-Typically, you'll see that `Validated` will be accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
+As previously stated, `ValidatedNel[DomainValidation, A]` is an alias for `Validation[NonEmptyList[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
 
-For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, let's see a simple example.
+For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
 
 #### Accumulative Structures
 
-According to [Wikipedia](https://en.wikipedia.org/wiki/Semigroup):
+Let's take a look about how a `Semigroup` works in a `NonEmptyList`:
 
-> A semigroup is an algebraic structure consisting of a set together with an associative binary operation.
-
-You can find more about how `Semigroup` works in cats [here](../typeclasses/semigroup.html).
-
-Let's take a look at `ap` method of `Validated`:
-
-```tut:silent:fail
-/**
-   * From Apply:
-   * if both the function and this value are Valid, apply the function
-   */
-def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE, B] =
-  (this, f) match {
-    // ...
-    case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2, e1))
-    // ...
-  }
-}
+```tut:book
+NonEmptyList.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyList[DomainValidation](FirstNameHasSpecialCharacters, List(LastNameHasSpecialCharacters))
 ```
 
-We've omitted the complete implementation because our focus here is the case in where you need to append (that's the function of this method) two failures. Note the `implicit EE: Semigroup[EE]` parameter and the usage of its `.combine` operation. In the case of `NonEmptyList`, we're talking about a `List`, with certain properties that allow us to _combine_ (append) more than one element to it. That's because, apart from the fact that it is a `List`, it also has an instance of `Semigroup`, telling it how to operate with the accumulation.
+We're combining a couple of `NonEmptyList`'s. The first one has its mandatory element (note that we've built an instance of it with `.one`) and the second has a couple of elements. As you can see, the output of the combination, expressed by the `|+|` operator is another `NonEmptyList` with the three elements.
 
-As we've said before: if you need another data type for processing the failures, you can use it, providing an instance of a `Semigroup` with the `.combine` logic.
+But, what about if we want _another_ way of combining? We can provide our custom `Semigroup` instance with the desired combining logic and pass it implicitly to your scope.
 
 ### Going back and forth
 
-cats offer you a nice set of combinators to transform your `Validated` based approach to an `Either` one and vice-versa.
-Please note that, if you're using an `Either`-based approach as seen in our first example and you choose to convert it to a `Validated` one, you're constrained to the fail-fast nature of `Either`, but you're gaining a broader set of features with `Validated`.
+cats offers you a nice set of combinators for transforming your `Validated` based approach to an `Either` one and vice-versa.
+We've used `.toValidated` in our second example, now let's see how to use `.toEither`.
 
 #### From `Validated` to `Either`
 
 To do this, simply use `.toEither` combinator:
 
 ```tut:book
+// Successful case
 FormValidatorNel.validateForm(
   username = "Joe",
   password = "Passw0r$1234",
@@ -328,31 +319,18 @@ FormValidatorNel.validateForm(
   lastName = "Doe",
   age = 21
 ).toEither
-```
 
-#### From `Either` to `Validated`
-
-To do this, you'll need to use either `.toValidated` or `.toValidatedNel`:
-
-```tut:book
-FormValidator.validateForm(
-  username = "MrJohnDoe$$",
+// Invalid case
+FormValidatorNel.validateForm(
+  username = "Joe123#",
   password = "password",
   firstName = "John",
   lastName = "Doe",
-  age = 31
-).toValidated
-
-FormValidator.validateForm(
-  username = "MrJohnDoe$$",
-  password = "password",
-  firstName = "John",
-  lastName = "Doe",
-  age = 31
-).toValidatedNel
+  age = 5
+).toEither
 ```
 
-The difference between the previous examples is that `.toValidated` gives you an `Invalid` instance in case of failure. Meanwhile, `.toValidatedNel` will give you a `NonEmptyList` with the possible failures. Don't forget about the caveat with `Either`-based approaches, mentioned before.
+With this conversion, as you can see, we got an `Either` with a `NonEmptyList` detailing the possible validation errors or our `RegistrationData` object.
 
 ## Another case
 
