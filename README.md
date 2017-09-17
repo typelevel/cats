@@ -68,33 +68,34 @@ By sharing the same set of type classes, instances and data types provided by ca
 
 #### General purpose libraries to support pure functional programming
 
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
- * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
- * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
- * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
- * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
+ * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
+ * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
+ * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
+ * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
+ * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
+ * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes
  * [origami](https://github.com/atnos-org/origami): monadic folds
- * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes.
+ * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
 
 #### Libraries with more specific uses
 
- * [Circe](https://github.com/circe/circe): pure functional JSON library.
- * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
- * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark.
- * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
- * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
- * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs.
- * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
- * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+ * [Circe](https://github.com/circe/circe): pure functional JSON library
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
- * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
- * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
+ * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
+ * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
+ * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
+ * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
+ * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
-
-
+ * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+  
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
 
