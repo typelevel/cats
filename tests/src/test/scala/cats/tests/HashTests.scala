@@ -10,6 +10,8 @@ class HashTests extends CatsSuite {
     Contravariant[Hash]
   }
 
-  //TODO: operator `hash` test
+  assert(1.hash == 1.hashCode)
+  assert("ABC".hash == "ABC".hashCode)
+
 
 }

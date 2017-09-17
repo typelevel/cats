@@ -34,6 +34,7 @@ class LawTests extends FunSuite with Discipline {
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
 
   implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
+
   implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
   implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
@@ -122,22 +123,6 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, (Int, String)].check(_.hash)
   laws[HashLaws, Either[Int, String]].check(_.hash)
   laws[HashLaws, Map[Int, String]].check(_.hash)
-
-  laws[HashLaws, String].check(_.sameAsIdentityHash)
-  laws[HashLaws, Symbol].check(_.sameAsIdentityHash)
-  laws[HashLaws, BitSet].check(_.sameAsIdentityHash)
-  laws[HashLaws, BigDecimal].check(_.sameAsIdentityHash)
-  laws[HashLaws, BigInt].check(_.sameAsIdentityHash)
-  laws[HashLaws, UUID].check(_.sameAsIdentityHash)
-  laws[HashLaws, List[Int]].check(_.sameAsIdentityHash)
-  laws[HashLaws, Option[String]].check(_.sameAsIdentityHash)
-  laws[HashLaws, List[String]].check(_.sameAsIdentityHash)
-  laws[HashLaws, Vector[Int]].check(_.sameAsIdentityHash)
-  laws[HashLaws, Stream[Int]].check(_.sameAsIdentityHash)
-  laws[HashLaws, Set[Int]].check(_.sameAsIdentityHash)
-  laws[HashLaws, (Int, String)].check(_.sameAsIdentityHash)
-  laws[HashLaws, Either[Int, String]].check(_.sameAsIdentityHash)
-  laws[HashLaws, Map[Int, String]].check(_.sameAsIdentityHash)
 
   laws[HashLaws, Unit].check(_.sameAsUniversalHash)
   laws[HashLaws, Boolean].check(_.sameAsUniversalHash)

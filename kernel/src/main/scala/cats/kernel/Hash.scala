@@ -56,13 +56,4 @@ object Hash extends HashFunctions[Hash] {
       def eqv(x: A, y: A) = x == y
     }
 
-  /**
-   * Constructs a `Hash` instance by only using the object identity.
-   */
-  def fromIdentityHashCode[A <: AnyRef]: Hash[A] =
-    new Hash[A] {
-      def hash(x: A) = System.identityHashCode(x)
-      def eqv(x: A, y: A) = x eq y
-    }
-
 }

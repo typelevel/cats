@@ -11,5 +11,8 @@ trait HashSyntax {
 }
 
 final class HashOps[A: Hash](a: A) {
-  def hash: Int = macro Ops.unop[Int]
+  /**
+   * Gets the hash code of this object given an implicit `Hash` instance.
+   */
+  def hash: Int = macro Ops.unop0[Int]
 }
