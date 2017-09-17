@@ -62,7 +62,7 @@ Release notes for Cats are available in [CHANGES.md](https://github.com/typeleve
  compatible are to be expected in upcoming RC1 and 1.0 releases.*
 
 
-### The cats ecosystem
+### <a name="ecosystem" href="#ecosystem"></a>The cats ecosystem
 
 By sharing the same set of type classes, instances and data types provided by cats, projects can speak the same "cats language", and integrate with each other with ease.
 
