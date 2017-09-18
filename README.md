@@ -1,4 +1,5 @@
 ## Cats
+![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 [![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
 [![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
@@ -13,12 +14,9 @@ Cats is a library which provides abstractions for functional programming in the 
 The name is a playful shortening of the word *category*.
 
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats strives to provide function programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#a-namebinary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations/#modularity), [approachable](http://typelevel.org/cats/motivations/#approachability) and [efficient](http://typelevel.org//cats/motivations/#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats#the-cats-ecosystem) to support functional programming in Scala applications.
+standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#binary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations#modularity), [approachable](http://typelevel.org/cats/motivations#approachability) and [efficient](http://typelevel.org//cats/motivations#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/#ecosystem) to support functional programming in Scala applications.
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
-
-
-![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 
 ### Getting Started
@@ -98,6 +96,7 @@ By sharing the same set of type classes, instances and data types provided by ca
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
+*The full-size [cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
 ### How can I contribute to Cats?
 
