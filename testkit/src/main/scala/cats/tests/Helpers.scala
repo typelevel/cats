@@ -62,7 +62,7 @@ object Helpers {
   case class Hsh(n: Int) extends N
   object Hsh extends Arb(new Hsh(_)) {
     implicit object O extends Hash[Hsh] {
-      def hash(x: Hsh): Int = x.##
+      def hash(x: Hsh): Int = x.hashCode()
       def eqv(x: Hsh, y: Hsh): Boolean = x.n == y.n
     }
   }

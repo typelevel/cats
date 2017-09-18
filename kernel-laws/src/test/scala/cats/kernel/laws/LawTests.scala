@@ -149,6 +149,8 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Either[Int, String]].check(_.sameAsUniversalHash)
   laws[HashLaws, Map[Int, String]].check(_.sameAsUniversalHash)
 
+  // NOTE: Do not test for Float/Double/Long. These types'
+  // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
   laws[HashLaws, Unit].check(_.sameAsScalaHashing)
   laws[HashLaws, Boolean].check(_.sameAsScalaHashing)
   laws[HashLaws, String].check(_.sameAsScalaHashing)
@@ -157,9 +159,6 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Short].check(_.sameAsScalaHashing)
   laws[HashLaws, Char].check(_.sameAsScalaHashing)
   laws[HashLaws, Int].check(_.sameAsScalaHashing)
-  laws[HashLaws, Float].check(_.sameAsScalaHashing)
-  laws[HashLaws, Double].check(_.sameAsScalaHashing)
-  laws[HashLaws, Long].check(_.sameAsScalaHashing)
   laws[HashLaws, BitSet].check(_.sameAsScalaHashing)
   laws[HashLaws, BigDecimal].check(_.sameAsScalaHashing)
   laws[HashLaws, BigInt].check(_.sameAsScalaHashing)

@@ -213,7 +213,7 @@ object KernelBoiler {
         |trait TupleInstances1 extends TupleInstances2 {
         -  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
         -    new Hash[${`(A..N)`}] {
-        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.##
+        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
         -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
         -    }
         -

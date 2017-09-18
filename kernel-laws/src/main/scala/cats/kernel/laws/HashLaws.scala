@@ -37,7 +37,7 @@ trait HashLaws[A] extends Laws {
     parent = None,
     Rules.serializable(Equ),
     "same-as-universal-hash" -> forAll { (x: A, y: A) =>
-      (A.hash(x) == x.##) && (Hash.fromUniversalHashCode[A].hash(x) == x.##) &&
+      (A.hash(x) == x.hashCode) && (Hash.fromUniversalHashCode[A].hash(x) == x.hashCode()) &&
         (A.eqv(x, y) == Hash.fromUniversalHashCode[A].eqv(x, y))
     }
   )
