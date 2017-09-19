@@ -3,14 +3,14 @@ package laws
 
 import catalysts.Platform
 import catalysts.macros.TypeTagM
-
 import cats.kernel.instances.all._
+import cats.kernel.laws.discipline._
 
 // these aren't included in all due to bincompat
 import cats.kernel.instances.duration._
 import cats.kernel.instances.queue._
 
-import org.typelevel.discipline.{ Laws }
+import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
 import Arbitrary.arbitrary
@@ -94,7 +94,6 @@ class LawTests extends FunSuite with Discipline {
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
 
   implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
-  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   {
     // needed for Cogen[Map[...]]
@@ -142,40 +141,40 @@ class LawTests extends FunSuite with Discipline {
   laws[OrderLaws, Int]("reverse").check(_.order(Order[Int].reverse))
   laws[OrderLaws, Int]("reverse.reverse").check(_.order(Order[Int].reverse.reverse))
 
-  laws[GroupLaws, String].check(_.monoid)
-  laws[GroupLaws, Option[Int]].check(_.monoid)
-  laws[GroupLaws, Option[String]].check(_.monoid)
-  laws[GroupLaws, List[Int]].check(_.monoid)
-  laws[GroupLaws, Vector[Int]].check(_.monoid)
-  laws[GroupLaws, Stream[Int]].check(_.monoid)
-  laws[GroupLaws, List[String]].check(_.monoid)
-  laws[GroupLaws, Map[String, Int]].check(_.monoid)
-  laws[GroupLaws, Queue[Int]].check(_.monoid)
+  checkAll("Monoid[String]]", MonoidTests[String].monoid)
+  checkAll("Monoid[Option[Int]]", MonoidTests[Option[Int]].monoid)
+  checkAll("Monoid[Option[String]]", MonoidTests[Option[String]].monoid)
+  checkAll("Monoid[List[Int]]", MonoidTests[List[Int]].monoid)
+  checkAll("Monoid[Vector[Int]]", MonoidTests[Vector[Int]].monoid)
+  checkAll("Monoid[Stream[Int]]", MonoidTests[Stream[Int]].monoid)
+  checkAll("Monoid[List[String]]", MonoidTests[List[String]].monoid)
+  checkAll("Monoid[Map[String, Int]", MonoidTests[Map[String, Int]].monoid)
+  checkAll("Monoid[Queue[Int]", MonoidTests[Queue[Int]].monoid)
 
-  laws[GroupLaws, BitSet].check(_.boundedSemilattice)
-  laws[GroupLaws, Set[Int]].check(_.boundedSemilattice)
+  checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
+  checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]].boundedSemilattice)
 
-  laws[GroupLaws, Unit].check(_.commutativeGroup)
-  laws[GroupLaws, Byte].check(_.commutativeGroup)
-  laws[GroupLaws, Short].check(_.commutativeGroup)
-  laws[GroupLaws, Int].check(_.commutativeGroup)
-  laws[GroupLaws, Long].check(_.commutativeGroup)
-  //laws[GroupLaws, Float].check(_.commutativeGroup) // approximately associative
-  //laws[GroupLaws, Double].check(_.commutativeGroup) // approximately associative
-  laws[GroupLaws, BigInt].check(_.commutativeGroup)
-  laws[GroupLaws, Duration].check(_.commutativeGroup)
+  checkAll("CommutativeGroup[Unit]", CommutativeGroupTests[Unit].commutativeGroup)
+  checkAll("CommutativeGroup[Byte]", CommutativeGroupTests[Byte].commutativeGroup)
+  checkAll("CommutativeGroup[Short]", CommutativeGroupTests[Short].commutativeGroup)
+  checkAll("CommutativeGroup[Int]", CommutativeGroupTests[Int].commutativeGroup)
+  checkAll("CommutativeGroup[Long]", CommutativeGroupTests[Long].commutativeGroup)
+  //checkAll("CommutativeGroup[Float]", CommutativeGroupTests[Float].commutativeGroup) // approximately associative
+  //checkAll("CommutativeGroup[Double]", CommutativeGroupTests[Double].commutativeGroup) // approximately associative
+  checkAll("CommutativeGroup[BigInt]", CommutativeGroupTests[BigInt].commutativeGroup)
+  checkAll("CommutativeGroup[Duration]", CommutativeGroupTests[Duration].commutativeGroup)
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
     implicit val arbBigDecimal: Arbitrary[BigDecimal] =
       Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
     laws[OrderLaws, BigDecimal].check(_.order)
-    laws[GroupLaws, BigDecimal].check(_.commutativeGroup)
+    checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
   }
 
-  laws[GroupLaws, (Int, Int)].check(_.band)
+  checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
 
-  laws[GroupLaws, Unit].check(_.boundedSemilattice)
+  checkAll("BoundedSemilattice[Unit]", BoundedSemilatticeTests[Unit].boundedSemilattice)
 
   // Comparison related
 
@@ -276,16 +275,16 @@ class LawTests extends FunSuite with Discipline {
     }
 
     implicit val monoidOrderN = Order.whenEqualMonoid[N]
-    laws[GroupLaws, Order[N]].check(_.monoid)
-    laws[GroupLaws, Order[N]].check(_.band)
+    checkAll("Monoid[Order[N]]", MonoidTests[Order[N]].monoid)
+    checkAll("Band[Order[N]]", BandTests[Order[N]].band)
 
     {
       implicit val bsEqN: BoundedSemilattice[Eq[N]] = Eq.allEqualBoundedSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.boundedSemilattice)
+      checkAll("BoundedSemilattice[Eq[N]]", BoundedSemilatticeTests[Eq[N]].boundedSemilattice)
     }
     {
       implicit val sEqN: Semilattice[Eq[N]] = Eq.anyEqualSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.semilattice)
+      checkAll("Semilattice[Eq[N]]", SemilatticeTests[Eq[N]].semilattice)
     }
   }
 

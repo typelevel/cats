@@ -19,6 +19,10 @@ package object laws {
       }
   }
 
+  implicit final class IsEqArrow[A](val lhs: A) extends AnyVal {
+    def <->(rhs: A): IsEq[A] = IsEq(lhs, rhs)
+  }
+
   implicit class CheckEqOps[A](lhs: A)(implicit ev: Eq[A], pp: A => Pretty) {
     def ?==(rhs: A): Prop = Ops.run("?==")(lhs, rhs)(ev.eqv)
     def ?!=(rhs: A): Prop = Ops.run("?!=")(lhs, rhs)(ev.neqv)
