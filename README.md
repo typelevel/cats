@@ -80,7 +80,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 #### Libraries with more specific uses
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
- * [Circe](https://github.com/circe/circe): pure functional JSON library
+ * [circe](https://github.com/circe/circe): pure functional JSON library
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
