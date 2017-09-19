@@ -90,6 +90,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
+ * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
