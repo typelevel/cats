@@ -74,10 +74,14 @@ to make this intermediate class a [Value Class](http://docs.scala-lang.org/overv
 In a widely-used library it's important to minimize the chance that the names of implicits will be used by others and
 therefore name our implicits according to the following rules:
 
-- Implicits should start with "cats" -- a third-party will less likely do this.
+- Implicits should start with "cats" followed by the package name (where the instance is defined).
+- If the package contains `instances` leave `instances` out.
 - The type and the type class should be mentioned in the name.
+- If the instance is for multiple type classes, use `InstancesFor` instead of a type class name.
+- If the instance is for a standard library type add `Std` after the package. i.e. `catsStdShowForVector` and `catsKernelStdGroupForTuple`.
 
-As an example, for `Monoid[List[A]]`, the name of the implicit should be `catsMonoidForList`.
+As an example, for `cats.kernel.Monoid[List[A]]`, the name of the implicit should be `catsKernelMonoidForList`.
+This rule is relatively flexible. Use what you see appropriate. The goal is to maintain uniqueness and avoid conflicts.
 
 #### TODO:
 Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
