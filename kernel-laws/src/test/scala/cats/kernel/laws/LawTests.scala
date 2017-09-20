@@ -93,53 +93,53 @@ class LawTests extends FunSuite with Discipline {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
 
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
 
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
-    laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
+    checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
   }
 
-  laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Vector[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Queue[HasEq[Int]]].check(_.eqv)
+  checkAll("Eq[List[HasEq[Int]]]", EqTests[List[HasEq[Int]]].eqv)
+  checkAll("Eq[Option[HasEq[Int]]]", EqTests[Option[HasEq[Int]]].eqv)
+  checkAll("Eq[Vector[HasEq[Int]]]", EqTests[Vector[HasEq[Int]]].eqv)
+  checkAll("Eq[Stream[HasEq[Int]]]", EqTests[Stream[HasEq[Int]]].eqv)
+  checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
-  laws[OrderLaws, Set[Int]].check(_.partialOrder)
-  laws[OrderLaws, Set[Int]]("reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse))
-  laws[OrderLaws, Set[Int]]("reverse.reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse.reverse))
-  laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Queue[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Set[Int]]("asMeetPartialOrder").check(_.partialOrder(Semilattice.asMeetPartialOrder[Set[Int]]))
-  laws[OrderLaws, Set[Int]]("asJoinPartialOrder").check(_.partialOrder(Semilattice.asJoinPartialOrder[Set[Int]]))
+  checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
+  checkAll("PartialOrder[Set[Int]].reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse).partialOrder)
+  checkAll("PartialOrder[Set[Int]].reverse.reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse.reverse).partialOrder)
+  checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
+  checkAll("Semilattice.asMeetPartialOrder[Set[Int]]", PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
+  checkAll("Semilattice.asJoinPartialOrder[Set[Int]]", PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
 
-  laws[OrderLaws, Unit].check(_.order)
-  laws[OrderLaws, Boolean].check(_.order)
-  laws[OrderLaws, String].check(_.order)
-  laws[OrderLaws, Symbol].check(_.order)
-  laws[OrderLaws, Byte].check(_.order)
-  laws[OrderLaws, Short].check(_.order)
-  laws[OrderLaws, Char].check(_.order)
-  laws[OrderLaws, Int].check(_.order)
-  laws[OrderLaws, Long].check(_.order)
-  laws[OrderLaws, BitSet].check(_.partialOrder)
-  laws[OrderLaws, BigInt].check(_.order)
-  laws[OrderLaws, Duration].check(_.order)
-  laws[OrderLaws, UUID].check(_.order)
-  laws[OrderLaws, List[Int]].check(_.order)
-  laws[OrderLaws, Option[String]].check(_.order)
-  laws[OrderLaws, List[String]].check(_.order)
-  laws[OrderLaws, Vector[Int]].check(_.order)
-  laws[OrderLaws, Stream[Int]].check(_.order)
-  laws[OrderLaws, Queue[Int]].check(_.order)
-  laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
-  laws[OrderLaws, Int]("reverse").check(_.order(Order[Int].reverse))
-  laws[OrderLaws, Int]("reverse.reverse").check(_.order(Order[Int].reverse.reverse))
+  checkAll("Order[Unit]", OrderTests[Unit].order)
+  checkAll("Order[Unit]", OrderTests[Unit].order)
+  checkAll("Order[Boolean]", OrderTests[Boolean].order)
+  checkAll("Order[String]", OrderTests[String].order)
+  checkAll("Order[Symbol]", OrderTests[Symbol].order)
+  checkAll("Order[Byte]", OrderTests[Byte].order)
+  checkAll("Order[Short]", OrderTests[Short].order)
+  checkAll("Order[Char]", OrderTests[Char].order)
+  checkAll("Order[Int]", OrderTests[Int].order)
+  checkAll("Order[Long]", OrderTests[Long].order)
+  checkAll("PartialOrder[BitSet]", PartialOrderTests[BitSet].partialOrder)
+  checkAll("Order[BigInt]", OrderTests[BigInt].order)
+  checkAll("Order[Duration]", OrderTests[Duration].order)
+  checkAll("Order[UUID]", OrderTests[UUID].order)
+  checkAll("Order[List[Int]]", OrderTests[List[Int]]  .order)
+  checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
+  checkAll("Order[List[String]", OrderTests[List[String]].order)
+  checkAll("Order[Vector[Int]]", OrderTests[Vector[Int]].order)
+  checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
+  checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
+  checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
+  checkAll("Order[Int].reverse", OrderTests(Order[Int].reverse).order)
+  checkAll("Order[Int].reverse.reverse", OrderTests(Order[Int].reverse.reverse).order)
 
   checkAll("Monoid[String]]", MonoidTests[String].monoid)
   checkAll("Monoid[Option[Int]]", MonoidTests[Option[Int]].monoid)
@@ -168,7 +168,7 @@ class LawTests extends FunSuite with Discipline {
     // default Arbitrary[BigDecimal] is a bit too intense :/
     implicit val arbBigDecimal: Arbitrary[BigDecimal] =
       Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
-    laws[OrderLaws, BigDecimal].check(_.order)
+    checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
     checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
   }
 
@@ -187,7 +187,7 @@ class LawTests extends FunSuite with Discipline {
       else Double.NaN
   }
 
-  laws[OrderLaws, Set[Int]]("subset").check(_.partialOrder(subsetPartialOrder[Int]))
+  checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
 
   implicit val arbitraryComparison: Arbitrary[Comparison] =
     Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
@@ -195,7 +195,7 @@ class LawTests extends FunSuite with Discipline {
   implicit val cogenComparison: Cogen[Comparison] =
     Cogen[Int].contramap(_.toInt)
 
-  laws[OrderLaws, Comparison].check(_.eqv)
+  checkAll("Eq[Comparison]", EqTests[Comparison].eqv)
 
   test("comparison") {
     val order = Order[Int]
