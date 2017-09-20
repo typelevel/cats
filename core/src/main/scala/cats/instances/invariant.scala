@@ -3,7 +3,7 @@ package cats.instances
 import cats.kernel._
 import cats.InvariantMonoidal
 
-trait InvariantInstances {
+trait InvariantMonoidalInstances {
 
   implicit val catsInvariantMonoidalSemigroup: InvariantMonoidal[Semigroup] = new InvariantMonoidal[Semigroup] {
     def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] = new Semigroup[(A, B)] {
@@ -32,14 +32,15 @@ trait InvariantInstances {
     def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAll(bs: TraversableOnce[B]): B =
-        f(fa.combineAll(bs.map(g)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): Monoid[A] = new Monoid[A] {
       val empty = a
       def combine(x: A, y: A): A = a
-      override def combineAll(as: TraversableOnce[A]): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -50,10 +51,14 @@ trait InvariantInstances {
 
     def imap[A, B](fa: Band[A])(f: A => B)(g: B => A): Band[B] = new Band[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): Band[A] = new Band[A] {
       def combine(x: A, y: A): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -64,10 +69,14 @@ trait InvariantInstances {
 
     def imap[A, B](fa: Semilattice[A])(f: A => B)(g: B => A): Semilattice[B] = new Semilattice[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): Semilattice[A] = new Semilattice[A] {
       def combine(x: A, y: A): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -78,10 +87,14 @@ trait InvariantInstances {
 
     def imap[A, B](fa: CommutativeSemigroup[A])(f: A => B)(g: B => A): CommutativeSemigroup[B] = new CommutativeSemigroup[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
       def combine(x: A, y: A): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -94,6 +107,8 @@ trait InvariantInstances {
     def imap[A, B](fa: CommutativeMonoid[A])(f: A => B)(g: B => A): CommutativeMonoid[B] = new CommutativeMonoid[B] {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): CommutativeMonoid[A] = new CommutativeMonoid[A] {
@@ -112,12 +127,15 @@ trait InvariantInstances {
     def imap[A, B](fa: BoundedSemilattice[A])(f: A => B)(g: B => A): BoundedSemilattice[B] = new BoundedSemilattice[B] {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): BoundedSemilattice[A] = new BoundedSemilattice[A] {
       val empty = a
       def combine(x: A, y: A): A = a
-      override def combineAll(as: TraversableOnce[A]): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
     }
   }
 
@@ -133,12 +151,15 @@ trait InvariantInstances {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
       def inverse(b: B): B = f(fa.inverse(g(b)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): Group[A] = new Group[A] {
       val empty = a
       def combine(x: A, y: A): A = a
-      override def combineAll(as: TraversableOnce[A]): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
       def inverse(a: A): A = a
     }
   }
@@ -154,12 +175,15 @@ trait InvariantInstances {
       val empty = f(fa.empty)
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
       def inverse(b: B): B = f(fa.inverse(g(b)))
+      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
+        fa.combineAllOption(bs.map(g)).map(f)
     }
 
     def pure[A](a: A): CommutativeGroup[A] = new CommutativeGroup[A] {
       val empty = a
       def combine(x: A, y: A): A = a
-      override def combineAll(as: TraversableOnce[A]): A = a
+      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+        if (as.isEmpty) None else Some(a)
       def inverse(a: A): A = a
     }
   }
