@@ -81,6 +81,16 @@ private[data] sealed abstract class NestedInstances3 extends NestedInstances4 {
 }
 
 private[data] sealed abstract class NestedInstances4 extends NestedInstances5 {
+  implicit def catsDataApplicativeErrorForNested[F[_]: ApplicativeError[?[_], E], G[_]: Applicative, E]: ApplicativeError[Nested[F, G, ?], E] =
+    new NestedApplicativeError[F, G, E] {
+      val G: Applicative[G] = Applicative[G]
+
+      val AEF: ApplicativeError[F, E] = ApplicativeError[F, E]
+    }
+
+}
+
+private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
   implicit def catsDataApplicativeForNested[F[_]: Applicative, G[_]: Applicative]: Applicative[Nested[F, G, ?]] =
     new NestedApplicative[F, G] {
       val FG: Applicative[λ[α => F[G[α]]]] = Applicative[F].compose[G]
@@ -92,7 +102,7 @@ private[data] sealed abstract class NestedInstances4 extends NestedInstances5 {
     }
 }
 
-private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
+private[data] sealed abstract class NestedInstances6 extends NestedInstances7 {
   implicit def catsDataApplyForNested[F[_]: Apply, G[_]: Apply]: Apply[Nested[F, G, ?]] =
     new NestedApply[F, G] {
       val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
@@ -104,28 +114,28 @@ private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
     }
 }
 
-private[data] sealed abstract class NestedInstances6 extends NestedInstances7 {
+private[data] sealed abstract class NestedInstances7 extends NestedInstances8 {
   implicit def catsDataFunctorForNested[F[_]: Functor, G[_]: Functor]: Functor[Nested[F, G, ?]] =
     new NestedFunctor[F, G] {
       val FG: Functor[λ[α => F[G[α]]]] = Functor[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances7 extends NestedInstances8 {
+private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
   implicit def catsDataInvariantForNested[F[_]: Invariant, G[_]: Invariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
+private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
   implicit def catsDataInvariantForCovariantNested[F[_]: Invariant, G[_]: Functor]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeFunctor[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances9 {
+private[data] sealed abstract class NestedInstances10 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
@@ -160,6 +170,19 @@ private[data] trait NestedApplicative[F[_], G[_]] extends Applicative[Nested[F, 
   def FG: Applicative[λ[α => F[G[α]]]]
 
   def pure[A](x: A): Nested[F, G, A] = Nested(FG.pure(x))
+}
+
+private[data] abstract class NestedApplicativeError[F[_], G[_], E] extends ApplicativeError[Nested[F, G, ?], E] with NestedApplicative[F, G] {
+  def G: Applicative[G]
+  def AEF: ApplicativeError[F, E]
+
+  def FG: Applicative[λ[α => F[G[α]]]] = AEF.compose[G](G)
+
+  def raiseError[A](e: E): Nested[F, G, A] = Nested(AEF.map(AEF.raiseError(e))(G.pure))
+
+  def handleErrorWith[A](fa: Nested[F, G, A])(f: E => Nested[F, G, A]): Nested[F, G, A] =
+    Nested(AEF.handleErrorWith(fa.value)(f andThen (_.value)))
+
 }
 
 private[data] trait NestedSemigroupK[F[_], G[_]] extends SemigroupK[Nested[F, G, ?]] {

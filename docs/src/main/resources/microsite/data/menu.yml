@@ -108,6 +108,10 @@ options:
     url: datatypes/either.html
     menu_type: data
 
+  - title: Eval
+    url: datatypes/eval.html
+    menu_type: data
+
   - title: FreeApplicatives
     url: datatypes/freeapplicative.html
     menu_type: data
@@ -122,6 +126,10 @@ options:
 
   - title: Id
     url: datatypes/id.html
+    menu_type: data
+
+  - title: Ior
+    url: datatypes/ior.html
     menu_type: data
 
   - title: Kleisli
