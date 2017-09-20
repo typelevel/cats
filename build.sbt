@@ -132,7 +132,12 @@ lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site t
 lazy val docSettings = Seq(
   micrositeName := "Cats",
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
-  micrositeAuthor := "Typelevel contributors",
+  micrositeAuthor := "Cats contributors",
+  micrositeFooterText := Some(
+    """
+      |<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+      |""".stripMargin),
   micrositeHighlightTheme := "atom-one-light",
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
