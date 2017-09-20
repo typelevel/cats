@@ -6,9 +6,9 @@ source: "core/src/main/scala/cats/NonEmptyTraverse.scala"
 scaladoc: "#cats.NonEmptyTraverse"
 ---
 
-# NonEmptyTraverse`
+# NonEmptyTraverse
 
-`NonEmptyTraverse` is a non-empty version of the [Traverse](traverse.html) type class, just like [Reducible](reducible.html) is a non-empty version of [Foldable](foldable.html)`.
+`NonEmptyTraverse` is a non-empty version of the [Traverse](traverse.html) type class, just like [Reducible](reducible.html) is a non-empty version of [Foldable](foldable.html).
 As such, it extends both `Reducible` and `Traverse` in the type class hierarchy.
 It provides the `nonEmptyTraverse` and `nonEmptySequence` methods that require an instance of `Apply` instead of `Applicative`:
 
