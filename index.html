@@ -1,17 +1,29 @@
-<html><head><title>Cats</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Typelevel contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/kazari-style.css" /><link rel="stylesheet" href="/cats/css/monokai.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-6"><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><div class="col-xs-6"><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api/"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Lightweight, modular, and extensible library for functional programming</h1><h2></h2><p class="text-center"><a href="https://github.com/typelevel/cats" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div><ul class="horizontalNav">                                                             <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class="" href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><p>Cats is a library which provides abstractions for functional
-programming in the <a href="https://scala-lang.org">Scala programming language</a>.
+<html><head><title>Cats</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Typelevel contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/kazari-style.css" /><link rel="stylesheet" href="/cats/css/monokai.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-6"><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><div class="col-xs-6"><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="api/"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Lightweight, modular, and extensible library for functional programming</h1><h2></h2><p class="text-center"><a href="https://github.com/typelevel/cats" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div><ul class="horizontalNav">                                                               <li><a class=" active " href="/cats/">Home</a></li>  <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/motivations.html">Motivations</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class="" href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h2 id="cats">Cats</h2>
+<p><img src="http://plastic-idolatry.com/erik/cats2.png" alt="cats image" /></p>
+
+<p><a href="https://travis-ci.org/typelevel/cats"><img src="https://api.travis-ci.org/typelevel/cats.svg" alt="Build Status" /></a>
+<a href="https://waffle.io/typelevel/cats"><img src="https://badge.waffle.io/typelevel/cats.svg?label=ready&amp;title=Ready" alt="Workflow" /></a>
+<a href="https://gitter.im/typelevel/cats"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Chat" /></a>
+<a href="http://codecov.io/github/typelevel/cats?branch=master"><img src="http://codecov.io/github/typelevel/cats/coverage.svg?branch=master" alt="codecov.io" /></a>
+<a href="https://index.scala-lang.org/typelevel/cats/cats-core"><img src="https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&amp;v=1" alt="Latest version" /></a>
+<a href="http://scala-js.org"><img src="http://scala-js.org/assets/badges/scalajs-0.6.14.svg" alt="Scala.js" /></a></p>
+
+<h3 id="overview">Overview</h3>
+
+<p>Cats is a library which provides abstractions for functional programming in the <a href="https://scala-lang.org">Scala programming language</a>.
 The name is a playful shortening of the word <em>category</em>.</p>
 
-<div class="msg warn"> <p><strong> Cats is a new project under active
-  development</strong>. Feedback and contributions are welcomed as we look
-  to improve it. This project is evolving quickly and we are making no
-  guarantees about stability until a 1.0 release is made.</p></div>
+<p>Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
+standard library. Cats strives to provide functional programming abstractions that are core, <a href="http://typelevel.org/cats/#binary-compatibility-and-versioning">binary compatible</a>, <a href="http://typelevel.org/cats/motivations#modularity">modular</a>, <a href="http://typelevel.org/cats/motivations#approachability">approachable</a> and <a href="http://typelevel.org//cats/motivations#efficiency">efficient</a>. A broader goal of Cats is to provide a foundation for an <a href="https://typelevel.org/cats/#ecosystem">ecosystem of pure, typeful libraries</a> to support functional programming in Scala applications.</p>
 
-<h2 id="a-namegetting-started-hrefgetting-startedagetting-started"><a name="getting-started" href="#getting-started"></a>Getting Started</h2>
+<p>For more detail about Cats’ motivations, go <a href="http://typelevel.org/cats/motivations">here</a>.</p>
 
-<p>Cats is currently available for Scala 2.10, 2.11, 2.12 and scala.js</p>
+<h3 id="getting-started">Getting Started</h3>
 
-<p>To get started with SBT, simply add the following to your build.sbt file:</p>
+<p>Cats is currently available for Scala 2.10, 2.11 and 2.12, and <a href="http://www.scala-js.org/">Scala.js</a>.</p>
+
+<p>To get started with SBT, simply add the following to your <code class="highlighter-rouge">build.sbt</code>
+file:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"1.0.0-MF"</span>
 </code></pre>
@@ -40,92 +52,161 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/benhutchison/mouse"><code class="highlighter-rouge">mouse</code></a>: a small companion to cats that provides convenient syntax (aka extension methods)</li>
 </ul>
 
+<h4 id="enhancing-type-inference">Enhancing type inference</h4>
+
+<p>To use cats you’ll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this <a href="https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification">sbt plugin</a>.</p>
+
 <p>Release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/master/CHANGES.md">CHANGES.md</a>.</p>
 
-<h2 id="a-namemotivations-hrefmotivationsamotivations"><a name="motivations" href="#motivations"></a>Motivations</h2>
+<p><em>Cats is still under active development. While we don’t anticipate any
+ major redesigns, changes that are neither source nor binary
+ compatible are to be expected in upcoming RC1 and 1.0 releases.</em></p>
 
-<h3 id="approachability">Approachability</h3>
+<h3 id="a-nameecosystem-hrefecosystemathe-cats-ecosystem"><a name="ecosystem" href="#ecosystem"></a>The cats ecosystem</h3>
 
-<p>As this library evolves, we are placing a lot of emphasis on trying to
-make decisions which will help keep this library approachable for
-people new to the concepts in this library. We are collecting
-anecdotes from successes and failures we have experienced in the past
-in trying to teach others about these concepts, and trying to make
-decisions which will help ease the process of getting acquainted to
-the library for a newcomer. If you have any feedback for us in this
-regard, we would love to hear from you. See the <a href="contributing.html">Contributing
-page</a> to find out ways to give us feedback.</p>
-
-<h3 id="modularity">Modularity</h3>
-
-<p>We are trying to make the library modular. It will have a tight
-core which will contain only the <a href="typeclasses.html">type classes</a>,
-the bare minimum of data structures that are needed to support
-them, and type class instances for those data structures and standard
-library types.</p>
-
-<h3 id="documentation">Documentation</h3>
-
-<p>We feel that having lots of documentation is a very important goal for
-our project. It will be a big win towards our goal of
-approachability. We will strive to have the code well documented, we
-will strive to have lots of documentation external to the code, and we
-will strive to have a large corpus of compiler verified examples of
-how the software can be used.</p>
-
-<p>Writing documentation is a huge part of developing software, and one
-that is often neglected. It is also a very easy way to get started
-with <a href="contributing.html">contributing</a> to the project</p>
-
-<h3 id="efficiency">Efficiency</h3>
-
-<p>Although unfortunately there are times when programming only with
-pure functions and writing efficient code in Scala can be at odds, we
-are attempting to do our best at keeping our library as efficient as
-we can without making unnecessary sacrifices of purity and
-usability. Where sacrifices have to be made, we will strive to make
-these obvious, and will keep them well documented.</p>
-
-<h2 id="a-nameecosystem-hrefecosystemathe-cats-ecosystem"><a name="ecosystem" href="#ecosystem"></a>The cats ecosystem</h2>
-
-<p>Many projects integrate with cats. By sharing the same set of 
-type classes, instances and data types, projects can speak the same “cats
-language”, and integrate with each other with ease.</p>
+<p>By sharing the same set of type classes, instances and data types provided by cats, projects can speak the same “cats language”, and integrate with each other with ease.</p>
 
 <h4 id="general-purpose-libraries-to-support-pure-functional-programming">General purpose libraries to support pure functional programming</h4>
 
 <ul>
-  <li><a href="https://github.com/stew/dogs">Dogs</a>: pure functional collections and data structures.</li>
-  <li><a href="https://github.com/milessabin/kittens">Kittens</a>: automatic type class derivation for Cats and generic utility functions</li>
-  <li><a href="https://github.com/atnos-org/eff">eff</a>: functional effects and effect handlers (alternative to monad transformers).</li>
-  <li><a href="https://github.com/47deg/freestyle">Freestyle</a>: pure functional framework for Free and Tagless Final apps &amp; libs.</li>
-  <li><a href="https://github.com/kailuowang/mainecoon">mainecoon</a>: Transform and compose tagless final encoded algebras</li>
+  <li><a href="https://github.com/stew/dogs">Dogs</a>: pure functional collections and data structures</li>
+  <li><a href="https://github.com/atnos-org/eff">eff</a>: functional effects and effect handlers (alternative to monad transformers)</li>
+  <li><a href="https://github.com/47deg/freestyle">Freestyle</a>: pure functional framework for Free and Tagless Final apps &amp; libs</li>
   <li><a href="https://github.com/frees-io/iota">iota</a>: Fast [co]product types with a clean syntax</li>
+  <li><a href="https://github.com/milessabin/kittens">Kittens</a>: automatic type class derivation for Cats and generic utility functions</li>
+  <li><a href="https://github.com/kailuowang/mainecoon">mainecoon</a>: Transform and compose tagless final encoded algebras</li>
+  <li><a href="https://github.com/julien-truffaut/Monocle">Monocle</a>: an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.</li>
+  <li><a href="https://github.com/julien-truffaut/newts">newts</a>: Defines newtypes compatible with cats type classes</li>
+  <li><a href="https://github.com/atnos-org/origami">origami</a>: monadic folds</li>
+  <li><a href="https://github.com/fthomas/refined">refined</a>: simple refinement types for Scala</li>
 </ul>
 
 <h4 id="libraries-with-more-specific-uses">Libraries with more specific uses</h4>
 
 <ul>
-  <li><a href="https://github.com/circe/circe">Circe</a>: pure functional JSON library.</li>
-  <li><a href="https://github.com/47deg/fetch">Fetch</a>: efficient data access to heterogeneous data sources.</li>
-  <li><a href="https://github.com/typelevel/frameless">Frameless</a>: Expressive types for Spark.</li>
-  <li><a href="https://github.com/functional-streams-for-scala">FS2</a>: compositional, streaming I/O library</li>
-  <li><a href="https://github.com/tpolecat/doobie">doobie</a>: a pure functional JDBC layer for Scala</li>
-  <li><a href="https://github.com/monix/monix">Monix</a>: high-performance library for composing asynchronous and event-based programs.</li>
-  <li><a href="https://github.com/http4s/http4s">http4s</a>: A minimal, idiomatic Scala interface for HTTP</li>
-  <li><a href="https://github.com/pepegar/hammock">hammock</a>: Purely functional HTTP client</li>
   <li><a href="https://github.com/tpolecat/atto">atto</a>: friendly little text parsers</li>
+  <li><a href="https://github.com/circe/circe">circe</a>: pure functional JSON library</li>
   <li><a href="https://github.com/bkirwi/decline">decline</a>: A composable command-line parser</li>
+  <li><a href="https://github.com/tpolecat/doobie">doobie</a>: a pure functional JDBC layer for Scala</li>
+  <li><a href="https://github.com/47deg/fetch">Fetch</a>: efficient data access to heterogeneous data sources</li>
+  <li><a href="https://github.com/finagle/finch">finch</a>: Scala combinator library for building Finagle HTTP services</li>
+  <li><a href="https://github.com/typelevel/frameless">Frameless</a>: Expressive types for Spark</li>
+  <li><a href="https://github.com/functional-streams-for-scala">FS2</a>: compositional, streaming I/O library</li>
+  <li><a href="https://github.com/zalando/grafter">grafter</a>: dependency-injection library using the <code class="highlighter-rouge">Reader</code> pattern</li>
+  <li><a href="https://github.com/pepegar/hammock">hammock</a>: Purely functional HTTP client</li>
+  <li><a href="https://github.com/http4s/http4s">http4s</a>: A minimal, idiomatic Scala interface for HTTP</li>
+  <li><a href="https://github.com/OlivierBlanvillain/monadic-html">monadic-html</a>: Tiny DOM binding library for Scala.js</li>
+  <li><a href="https://github.com/monix/monix">Monix</a>: high-performance library for composing asynchronous and event-based programs</li>
+  <li><a href="https://github.com/pureconfig/pureconfig">pureconfig</a>: A boilerplate-free library for loading configuration files</li>
+  <li><a href="https://github.com/guardian/scanamo">scanamo</a>: simpler DynamoDB access for Scala</li>
+  <li><a href="https://github.com/durban/seals">seals</a>: tools for schema evolution and language-integrated schemata</li>
 </ul>
 
-<h2 id="a-namecopyright-hrefcopyrightacopyright-and-license"><a name="copyright" href="#copyright"></a>Copyright and License</h2>
+<p><em>Feel free to submit a PR if you want a project you maintain to be added to this list.</em></p>
+
+<p><em>The full-size <a href="https://typelevel.org/cats/img/cats-logo.png">cats logo</a> is available for use for Cats related projects, contents, souvenirs, etc.</em></p>
+
+<h3 id="how-can-i-contribute-to-cats">How can I contribute to Cats?</h3>
+
+<p>We welcome contributions to Cats and would love for you to help build
+Cats. See our <a href="https://typelevel.org/cats/contributing.html">contributor guide</a> for more
+information about how you can get involved.</p>
+
+<h3 id="community">Community</h3>
+
+<p>Discussion around Cats is currently happening on Github issue and PR pages
+as well as in two Gitter channels:</p>
+
+<p><a href="https://gitter.im/typelevel/cats">Gitter channel cats</a> is for general user 
+questions and discussions, and</p>
+
+<p><a href="https://gitter.im/typelevel/cats-dev">Gitter channel cats-dev</a>
+is dedicated for cats development related discussions. For people who wants to 
+follow closely and/or to participate in the decisions in cats development, 
+this is the room to join.</p>
+
+<p>You can get an overview of who is working on what
+via <a href="https://waffle.io/typelevel/cats">Waffle.io</a>.</p>
+
+<p>People are expected to follow the
+<a href="http://typelevel.org/conduct.html">Typelevel Code of Conduct</a> when
+discussing Cats on the Github page, Gitter channel, or other
+venues.</p>
+
+<p>We hope that our community will be respectful, helpful, and kind. If
+you find yourself embroiled in a situation that becomes heated, or
+that fails to live up to our expectations, you should disengage and
+contact one of the <a href="#maintainers">project maintainers</a> in private. We
+hope to avoid letting minor aggressions and misunderstandings escalate
+into larger problems.</p>
+
+<p>If you are being harassed, please contact one of <a href="#maintainers">us</a>
+immediately so that we can support you.</p>
+
+<h3 id="binary-compatibility-and-versioning">Binary compatibility and versioning</h3>
+
+<p>After <code class="highlighter-rouge">1.0.0</code> release, we <a href="https://github.com/typelevel/cats/issues/1233">decided</a> 
+to use <em>MAJOR.MINOR.PATCH</em> <a href="http://semver.org/">Semantic Versioning 2.0.0</a>
+going forward, which is different from the <em>EPOCH.MAJOR.MINOR</em> scheme common among 
+Java and Scala libraries (including the Scala lang).</p>
+
+<p>Cats strives to provide a solid and stable foundation for an ecosystem of
+FP libraries. Thus, we treat backward binary compatibility maintainence with a high priority. 
+In semantic versioning, backward breaking change is <strong>ONLY</strong> allowed between <em>MAJOR</em> versions.
+We will maintain backward binary compatibility between <em>PATCH</em> AND <em>MINOR</em> versions.
+For example, when we release cats <code class="highlighter-rouge">1.1.0</code>, it will be backward binary compatible 
+with the previous <code class="highlighter-rouge">1.0.x</code> versions. I.E. the new JAR will be a drop-in replacement for 
+the old one. This is critical when your application has a diamond
+dependency on Cats - depending on two or more libraries that all depend on Cats. 
+If one library upgrades to the new <code class="highlighter-rouge">1.1.0</code> Cats before the other one does, your 
+application still runs thanks to this backward binary compatibility.</p>
+
+<p>Also worth noting is that according to semantic versioning, 
+<em>MINOR</em> version Y (x.Y.z | x &gt; 0) MUST be incremented 
+if new, backwards compatible functionality is introduced to the public API. 
+It MUST be incremented if any public API functionality is marked as deprecated.</p>
+
+<p>Any binary breaking changes will require a <em>MAJOR</em> version bump, which we will be very
+cautious about. We will also consider using <code class="highlighter-rouge">organization</code> and package name for major 
+versioning in the future. But that decision is yet to be made.</p>
+
+<h3 id="maintainers">Maintainers</h3>
+
+<p>The current maintainers (people who can merge pull requests) are:</p>
+
+<ul>
+  <li><a href="https://github.com/ceedubs">ceedubs</a> Cody Allen</li>
+  <li><a href="https://github.com/rossabaker">rossabaker</a> Ross Baker</li>
+  <li><a href="https://github.com/johnynek">johnynek</a> P. Oscar Boykin</li>
+  <li><a href="https://github.com/travisbrown">travisbrown</a> Travis Brown</li>
+  <li><a href="https://github.com/adelbertc">adelbertc</a> Adelbert Chang</li>
+  <li><a href="https://github.com/peterneyens">peterneyens</a> Peter Neyens</li>
+  <li><a href="https://github.com/edmundnoble">edmundnoble</a> Edmund Noble</li>
+  <li><a href="https://github.com/tpolecat">tpolecat</a> Rob Norris</li>
+  <li><a href="https://github.com/stew">stew</a> Mike O’Connor</li>
+  <li><a href="https://github.com/non">non</a> Erik Osheim</li>
+  <li><a href="https://github.com/mpilquist">mpilquist</a> Michael Pilquist</li>
+  <li><a href="https://github.com/milessabin">milessabin</a> Miles Sabin</li>
+  <li><a href="https://github.com/djspiewak">djspiewak</a> Daniel Spiewak</li>
+  <li><a href="https://github.com/fthomas">fthomas</a> Frank Thomas</li>
+  <li><a href="https://github.com/julien-truffaut">julien-truffaut</a> Julien Truffaut</li>
+  <li><a href="https://github.com/kailuowang">kailuowang</a> Kailuo Wang</li>
+</ul>
+
+<p>We are currently following a practice of requiring at least two
+sign-offs to merge PRs (and for large or contentious issues we may
+wait for more). For typos or other small fixes to documentation we
+relax this to a single sign-off.</p>
+
+<h3 id="copyright-and-license">Copyright and License</h3>
 
 <p>All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the
-<a href="https://raw.githubusercontent.com/typelevel/cats/master/COPYING">COPYING</a> file. The design is informed by many other
-projects, in particular Scalaz.</p>
+<a href="COPYING">COPYING</a> file. The design is informed by many other
+projects, in particular <a href="https://github.com/scalaz/scalaz">Scalaz</a>.</p>
 
-<p>Copyright the maintainers, 2016.</p>
+<p>Copyright the maintainers, 2015-2017.</p>
+
 </div></div></section><section class="technologies"><div class="container"><div class="row"></div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank">Typelevel contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6"><p>Website built with <a href="https://47deg.github.io/sbt-microsites/" target="_blank">Sbt-microsites</a> - © 2016 <a href="https://www.47deg.com/" target="_blank">47 Degrees</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });
