@@ -13,7 +13,7 @@ All guidelines in cats should have clear justifications. There is no room for tr
 
 ### <a id="implicit-syntax-conversions" href="#implicit-syntax-conversions"></a> Composing Implicit Conversions in Traits
 
-Implicit syntax conversions provided in publicly-exposed traits should be marked final 
+Implicit syntax conversions provided in publicly-exposed traits should be marked final
 so that any composition of the traits provides conversions that can all be inlined.
 
 ### <a id="ops-classes" href="#ops-classes"></a> Ops Classes
@@ -69,6 +69,15 @@ The user doesn't need to specify the type `A` which is given by the parameter.
 You probably noticed that there is a `val dummy: Boolean` in the `PurePartiallyApplied` class. This is a trick we used
 to make this intermediate class a [Value Class](http://docs.scala-lang.org/overviews/core/value-classes.html) so that there is no cost of allocation, i.e. at runtime, it doesn't create an instance of `PurePartiallyApplied`. We also hide this partially applied class by making it package private and placing it inside an object.
 
+### <a id="ops-classes" href="#implicit-naming"></a> Implicit naming
 
-#### TODO: 
+In a widely-used library it's important to minimize the chance that the names of implicits will be used by others and
+therefore name our implicits according to the following rules:
+
+- Implicits should start with "cats" -- a third-party will less likely do this.
+- The type and the type class should be mentioned in the name.
+
+As an example, for `Monoid[List[A]]`, the name of the implicit should be `catsMonoidForList`.
+
+#### TODO:
 Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
