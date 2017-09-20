@@ -7,7 +7,13 @@ import cats.laws.discipline._
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  MonoidTests => MonoidTypeclassTests,
+  SemigroupTests => SemigroupTypeclassTests,
+  OrderTests => OrderTypeclassTests,
+  PartialOrderTests => PartialOrderTypeclassTests,
+  EqTests => EqTypeclassTests
+}
 
 import scala.util.Try
 
@@ -27,12 +33,12 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String, ?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
-  checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
+  checkAll("Validated[String, Int]", OrderTypeclassTests[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
 
-  checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
+  checkAll("Validated[String, Int]", MonoidTypeclassTests[Validated[String, Int]].monoid)
 
-  checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
+  checkAll("Validated[String, NonEmptyList[Int]]", SemigroupTypeclassTests[Validated[String, NonEmptyList[Int]]].semigroup)
 
   {
     implicit val L = ListWrapper.semigroup[String]
@@ -43,14 +49,14 @@ class ValidatedTests extends CatsSuite {
   {
     implicit val S = ListWrapper.partialOrder[String]
     implicit val I = ListWrapper.partialOrder[Int]
-    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", PartialOrderTypeclassTests[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]))
   }
 
   {
     implicit val S = ListWrapper.eqv[String]
     implicit val I = ListWrapper.eqv[Int]
-    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", EqTypeclassTests[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
   }
 

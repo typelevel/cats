@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.{GroupTests => GroupTypeclassTests}
 
 class GroupTests extends CatsSuite {
   test("combine minValue") {
@@ -18,9 +18,9 @@ class GroupTests extends CatsSuite {
     Group[Int].remove(1, 2) should ===(-1)
   }
 
-  checkAll("Int", GroupLaws[Int].group)
+  checkAll("Int", GroupTypeclassTests[Int].group)
 // float and double are *not* associative, and scalacheck knows
 //  checkAll("Double", GroupLaws[Double].group)
 //  checkAll("Float", GroupLaws[Float].group)
-  checkAll("Long", GroupLaws[Long].group)
+  checkAll("Long", GroupTypeclassTests[Long].group)
 }

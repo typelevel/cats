@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.{SemigroupTests => SemigroupTypeclassTests}
 import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._
@@ -23,7 +23,7 @@ class IorTests extends CatsSuite {
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
   checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
-  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", GroupLaws[Ior[List[Int], List[Int]]].semigroup)
+  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupTypeclassTests[Ior[List[Int], List[Int]]].semigroup)
   checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]", SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
 
   test("left Option is defined left and both") {

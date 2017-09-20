@@ -2,7 +2,13 @@ package cats
 package tests
 
 import cats.data.OptionT
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  MonoidTests => MonoidTypeclassTests,
+  SemigroupTests => SemigroupTypeclassTests,
+  OrderTests => OrderTypeclassTests,
+  PartialOrderTests => PartialOrderTypeclassTests,
+  EqTests => EqTypeclassTests
+}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
@@ -12,14 +18,14 @@ class OptionTTests extends CatsSuite {
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
 
-    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].eqv)
+    checkAll("OptionT[ListWrapper, Int]", EqTypeclassTests[OptionT[ListWrapper, Int]].eqv)
     checkAll("Eq[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Eq[OptionT[ListWrapper, Int]]))
   }
 
   {
     implicit val F = ListWrapper.partialOrder[Option[Int]]
 
-    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].partialOrder)
+    checkAll("OptionT[ListWrapper, Int]", PartialOrderTypeclassTests[OptionT[ListWrapper, Int]].partialOrder)
     checkAll("PartialOrder[OptionT[ListWrapper, Int]]", SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]]))
 
     Eq[OptionT[ListWrapper, Int]]
@@ -28,7 +34,7 @@ class OptionTTests extends CatsSuite {
   {
     implicit val F = ListWrapper.order[Option[Int]]
 
-    checkAll("OptionT[ListWrapper, Int]", OrderLaws[OptionT[ListWrapper, Int]].order)
+    checkAll("OptionT[ListWrapper, Int]", OrderTypeclassTests[OptionT[ListWrapper, Int]].order)
     checkAll("Order[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Order[OptionT[ListWrapper, Int]]))
 
     PartialOrder[OptionT[ListWrapper, Int]]
@@ -108,7 +114,7 @@ class OptionTTests extends CatsSuite {
      // F[Option[A]] has a monoid
     implicit val FA: Monoid[ListWrapper[Option[Int]]] = ListWrapper.monoid[Option[Int]]
 
-    checkAll("OptionT[ListWrapper, Int]", GroupLaws[OptionT[ListWrapper, Int]].monoid)
+    checkAll("OptionT[ListWrapper, Int]", MonoidTypeclassTests[OptionT[ListWrapper, Int]].monoid)
     checkAll("Monoid[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Monoid[OptionT[ListWrapper, Int]]))
 
     Semigroup[OptionT[ListWrapper, Int]]
@@ -118,7 +124,7 @@ class OptionTTests extends CatsSuite {
     // F[Option[A]] has a semigroup
     implicit val FA: Semigroup[ListWrapper[Option[Int]]] = ListWrapper.semigroup[Option[Int]]
 
-    checkAll("OptionT[ListWrapper, Int]", GroupLaws[OptionT[ListWrapper, Int]].semigroup)
+    checkAll("OptionT[ListWrapper, Int]", SemigroupTypeclassTests[OptionT[ListWrapper, Int]].semigroup)
     checkAll("Semigroup[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
   }
 

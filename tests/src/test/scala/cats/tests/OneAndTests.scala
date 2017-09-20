@@ -1,7 +1,10 @@
 package cats
 package tests
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  SemigroupTests => SemigroupTypeclassTests,
+  EqTests => EqTypeclassTests
+}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
@@ -13,7 +16,7 @@ class OneAndTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-  checkAll("OneAnd[Stream, Int]", OrderLaws[OneAnd[Stream, Int]].eqv)
+  checkAll("OneAnd[Stream, Int]", EqTypeclassTests[OneAnd[Stream, Int]].eqv)
 
   checkAll("OneAnd[Stream, Int] with Option", NonEmptyTraverseTests[OneAnd[Stream, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[Stream, ?]]))
@@ -46,7 +49,7 @@ class OneAndTests extends CatsSuite {
   {
     implicit val alternative = ListWrapper.alternative
     checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
-    checkAll("OneAnd[Stream, Int]", GroupLaws[OneAnd[Stream, Int]].semigroup)
+    checkAll("OneAnd[Stream, Int]", SemigroupTypeclassTests[OneAnd[Stream, Int]].semigroup)
     checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
     checkAll("Semigroup[NonEmptyStream[Int]]", SerializableTests.serializable(Semigroup[OneAnd[Stream, Int]]))
   }

@@ -98,31 +98,31 @@ class EvalTests extends CatsSuite {
   checkAll("Eval[Int]", ReducibleTests[Eval].reducible[Option, Int, Int])
   checkAll("Reducible[Eval]", SerializableTests.serializable(Reducible[Eval]))
 
-  checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
+  checkAll("Eval[Int]", GroupTypeclassTests[Eval[Int]].group)
 
   {
     implicit val A = ListWrapper.monoid[Int]
-    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].monoid)
+    checkAll("Eval[ListWrapper[Int]]", MonoidTypeclassTests[Eval[ListWrapper[Int]]].monoid)
   }
 
   {
     implicit val A = ListWrapper.semigroup[Int]
-    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].semigroup)
+    checkAll("Eval[ListWrapper[Int]]", SemigroupTypeclassTests[Eval[ListWrapper[Int]]].semigroup)
   }
 
   {
     implicit val A = ListWrapper.order[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].order)
+    checkAll("Eval[ListWrapper[Int]]", OrderTypeclassTests[Eval[ListWrapper[Int]]].order)
   }
 
   {
     implicit val A = ListWrapper.partialOrder[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].partialOrder)
+    checkAll("Eval[ListWrapper[Int]]", PartialOrderTypeclassTests[Eval[ListWrapper[Int]]].partialOrder)
   }
 
   {
     implicit val A = ListWrapper.eqv[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].eqv)
+    checkAll("Eval[ListWrapper[Int]]", EqTypeclassTests[Eval[ListWrapper[Int]]].eqv)
   }
 
   // The following tests check laws which are a different formulation of

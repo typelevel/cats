@@ -118,7 +118,6 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Semilattice.asJoinPartialOrder[Set[Int]]", PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
 
   checkAll("Order[Unit]", OrderTests[Unit].order)
-  checkAll("Order[Unit]", OrderTests[Unit].order)
   checkAll("Order[Boolean]", OrderTests[Boolean].order)
   checkAll("Order[String]", OrderTests[String].order)
   checkAll("Order[Symbol]", OrderTests[Symbol].order)
