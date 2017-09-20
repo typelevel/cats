@@ -67,15 +67,5 @@ implicit val eqFoo: Eq[Foo] = Eq.fromUniversalEquals
 Foo(10, "") === Foo(10, "")
 ```
 
-You can even go one step further by making this implicitly available for all `scala.Product`s (which include case classes).
-```tut:book
-
-case class Bar(a: Double, b: Int)
-
-implicit def eqProduct[A <: Product]: Eq[A] = Eq.fromUniversalEquals
-
-Bar(2, 0) === Bar(2, 0)
-```
-
 
 For an example using Kittens check out the [kittens repo](https://github.com/milessabin/kittens).
