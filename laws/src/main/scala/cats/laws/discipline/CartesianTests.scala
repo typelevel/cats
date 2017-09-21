@@ -16,6 +16,7 @@ trait CartesianTests[F[_]] extends Laws {
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
+    EqFA: Eq[F[A]],
     EqFABC: Eq[F[(A, B, C)]]
   ): RuleSet = {
     new DefaultRuleSet(
@@ -31,24 +32,23 @@ object CartesianTests {
     new CartesianTests[F] { val laws: CartesianLaws[F] = CartesianLaws[F] }
 
   trait Isomorphisms[F[_]] {
-    def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]): Prop
-    def leftIdentity[A](fs: (F[(Unit, A)], F[A]))(implicit EqFA: Eq[F[A]]): Prop
-    def rightIdentity[A](fs: (F[(A, Unit)], F[A]))(implicit EqFA: Eq[F[A]]): Prop
+    def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)])): IsEq[F[(A, B, C)]]
+    def leftIdentity[A](fs: (F[(Unit, A)], F[A])): IsEq[F[A]]
+    def rightIdentity[A](fs: (F[(A, Unit)], F[A])): IsEq[F[A]]
   }
 
   object Isomorphisms {
-    import cats.kernel.laws._
     implicit def invariant[F[_]](implicit F: functor.Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {
-        def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)]))(implicit EqFABC: Eq[F[(A, B, C)]]) =
-          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } ?==
+        def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)])): IsEq[F[(A, B, C)]] =
+          F.imap(fs._1) { case (a, (b, c)) => (a, b, c) } { case (a, b, c) => (a, (b, c)) } <->
           F.imap(fs._2) { case ((a, b), c) => (a, b, c) } { case (a, b, c) => ((a, b), c) }
 
-        def leftIdentity[A](fs: (F[(Unit, A)], F[A]))(implicit EqFA: Eq[F[A]]): Prop =
-          F.imap(fs._1) { case (_, a) => a } { a => ((), a) } ?== fs._2
+        def leftIdentity[A](fs: (F[(Unit, A)], F[A])): IsEq[F[A]] =
+          F.imap(fs._1) { case (_, a) => a } { a => ((), a) } <-> fs._2
 
-        def rightIdentity[A](fs: (F[(A, Unit)], F[A]))(implicit EqFA: Eq[F[A]]): Prop =
-          F.imap(fs._1) { case (a, _) => a } { a => (a, ()) } ?== fs._2
+        def rightIdentity[A](fs: (F[(A, Unit)], F[A])): IsEq[F[A]] =
+          F.imap(fs._1) { case (a, _) => a } { a => (a, ()) } <-> fs._2
       }
   }
 
