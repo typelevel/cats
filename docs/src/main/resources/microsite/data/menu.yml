@@ -76,6 +76,10 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Eq
+    url: typeclasses/eq.html
+    menu_type: typeclasses
+
   - title: Foldable
     url: typeclasses/foldable.html
     menu_type: typeclasses
