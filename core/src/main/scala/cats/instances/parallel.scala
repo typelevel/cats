@@ -5,6 +5,7 @@ import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.{Applicative, Functor, Monad, Parallel, ~>}
 
+import scala.concurrent.{ExecutionContext, Future}
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, ?], Validated[E, ?]] = new Parallel[Either[E, ?], Validated[E, ?]] {
@@ -49,6 +50,20 @@ trait ParallelInstances extends ParallelInstances1 {
       def parallel: Vector ~> ZipVector =
         λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
+
+  implicit def catsStdParallelForFailFastFuture[A](implicit ec: ExecutionContext): Parallel[Future, FailFastFuture] =
+    new Parallel[Future, FailFastFuture] {
+
+      def monad: Monad[Future] = cats.instances.future.catsStdInstancesForFuture
+      def applicative: Applicative[FailFastFuture] = FailFastFuture.catsDataApplicativeForFailFastFuture
+
+      def sequential: FailFastFuture ~> Future =
+        λ[FailFastFuture ~> Future](_.value)
+
+      def parallel: Future ~> FailFastFuture =
+        λ[Future ~> FailFastFuture](f => FailFastFuture(f))
+    }
+
 
   implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_], E: Semigroup]
   (implicit P: Parallel[M, F]): Parallel[EitherT[M, E, ?], Nested[F, Validated[E, ?], ?]] =

@@ -2,6 +2,7 @@ package cats
 package js
 package tests
 
+import cats.data.FailFastFuture
 import cats.kernel.laws.GroupLaws
 import cats.laws.discipline._
 import cats.js.instances.Await
@@ -10,7 +11,6 @@ import cats.tests.{CatsSuite, ListWrapper}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 import cats.laws.discipline.arbitrary._
@@ -37,6 +37,13 @@ class FutureTests extends CatsSuite {
       }
     }
 
+  implicit def eqffa[A: Eq]: Eq[FailFastFuture[A]] =
+    Eq.by(_.value)
+
+
+  implicit def failFastArbitrary[A: Arbitrary]: Arbitrary[FailFastFuture[A]] =
+    Arbitrary(implicitly[Arbitrary[Future[A]]].arbitrary.map(FailFastFuture.apply))
+
   implicit val throwableEq: Eq[Throwable] =
     Eq[String].on(_.toString)
 
@@ -55,7 +62,7 @@ class FutureTests extends CatsSuite {
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
-  checkAll("Parallel[Future, Future]", ParallelTests[Future, Future, Int].parallel)
+  checkAll("Parallel[Future, FailFastFuture]", ParallelTests[Future, FailFastFuture, Int].parallel)
 
   {
     implicit val F = ListWrapper.semigroup[Int]
