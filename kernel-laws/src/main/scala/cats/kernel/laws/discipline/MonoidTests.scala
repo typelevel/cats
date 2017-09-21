@@ -14,7 +14,7 @@ trait MonoidTests[A] extends SemigroupTests[A] {
       "monoid",
       Some(semigroup),
       "left identity" -> forAll(laws.leftIdentity _),
-      "right identity" -> forAll(laws.leftIdentity _),
+      "right identity" -> forAll(laws.rightIdentity _),
       "combine all" -> forAll(laws.combineAll _),
       "collect0" -> forAll(laws.collect0 _),
       "repeat0" -> forAll(laws.repeat0 _))
