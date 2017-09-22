@@ -103,10 +103,6 @@ object eq {
   }
 
   implicit def catsLawsEqForBand[A](implicit arbAA: Arbitrary[(A, A)], eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Band[A]] = {
-    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
-      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
-    }
-
     catsLawsEqForFn1[(A, A), Boolean].on(f =>
       Function.tupled((x, y) => f.combine(x, y) === f.combine(f.combine(x, y), y))
     )

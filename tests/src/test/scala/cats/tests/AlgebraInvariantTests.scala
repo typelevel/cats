@@ -58,6 +58,69 @@ class AlgebraInvariantTests extends CatsSuite {
   implicit val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
+  test("Semigroup combineAllOption after imap with id is consistent"){
+    forAll { (s: Semigroup[Int], is: Vector[Int]) =>
+      val S: Semigroup[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("Monoid combineAllOption after imap with id is consistent"){
+    forAll { (s: Monoid[Int], is: Vector[Int]) =>
+      val S: Monoid[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("Group combineAllOption after imap with id is consistent"){
+    forAll { (s: Group[Int], is: Vector[Int]) =>
+      val S: Group[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("CommuativeSemigroup combineAllOption after imap with id is consistent"){
+    forAll { (s: CommutativeSemigroup[Int], is: Vector[Int]) =>
+      val S: CommutativeSemigroup[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("CommutativeMonoid combineAllOption after imap with id is consistent"){
+    forAll { (s: CommutativeMonoid[Int], is: Vector[Int]) =>
+      val S: CommutativeMonoid[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("CommutativeGroup combineAllOption after imap with id is consistent"){
+    forAll { (s: CommutativeGroup[Int], is: Vector[Int]) =>
+      val S: CommutativeGroup[Int] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("Band combineAllOption after imap with id is consistent"){
+    forAll { (s: Band[Set[Int]], is: Vector[Set[Int]]) =>
+      val S: Band[Set[Int]] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("Semilattice combineAllOption after imap with id is consistent"){
+    forAll { (s: Semilattice[Set[Int]], is: Vector[Set[Int]]) =>
+      val S: Semilattice[Set[Int]] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
+  test("BoundedSemilattice combineAllOption after imap with id is consistent"){
+    forAll { (s: BoundedSemilattice[Set[Int]], is: Vector[Set[Int]]) =>
+      val S: BoundedSemilattice[Set[Int]] = s.imap(identity)(identity)
+      S.combineAllOption(is) should === (is.reduceOption(s.combine))
+    }
+  }
+
 
   checkAll("Invariant[Semigroup]", InvariantTests[Semigroup].invariant[Int, Int, Int])
   checkAll("Invariant[Semigroup]", SerializableTests.serializable(Invariant[Semigroup]))
