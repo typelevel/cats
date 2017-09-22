@@ -42,13 +42,26 @@ trait ParallelInstances extends ParallelInstances1 {
     new Parallel[Vector, ZipVector] {
 
       def monad: Monad[Vector] = cats.instances.vector.catsStdInstancesForVector
-      def applicative: Applicative[ZipVector] = ZipVector.catsDataApplicativeForZipVector
+      def applicative: Applicative[ZipVector] = ZipVector.catsDataAlternativeForZipVector
 
       def sequential: ZipVector ~> Vector =
         λ[ZipVector ~> Vector](_.value)
 
       def parallel: Vector ~> ZipVector =
         λ[Vector ~> ZipVector](v => new ZipVector(v))
+    }
+
+  implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
+    new Parallel[Stream, ZipStream] {
+
+      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
+
+      def sequential: ZipStream ~> Stream =
+        λ[ZipStream ~> Stream](_.value)
+
+      def parallel: Stream ~> ZipStream =
+        λ[Stream ~> ZipStream](v => new ZipStream(v))
     }
 
   implicit def catsStdParallelForFailFastFuture[A](implicit ec: ExecutionContext): Parallel[Future, FailFastFuture] =
