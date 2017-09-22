@@ -140,28 +140,46 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Order[Int].reverse", OrderTests(Order[Int].reverse).order)
   checkAll("Order[Int].reverse.reverse", OrderTests(Order[Int].reverse.reverse).order)
 
-  checkAll("Monoid[String]]", MonoidTests[String].monoid)
+  checkAll("Monoid[String]", MonoidTests[String].monoid)
+  checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
   checkAll("Monoid[Option[Int]]", MonoidTests[Option[Int]].monoid)
+  checkAll("Monoid[Option[Int]]", SerializableTests.serializable(Monoid[String]))
   checkAll("Monoid[Option[String]]", MonoidTests[Option[String]].monoid)
+  checkAll("Monoid[Option[String]]", SerializableTests.serializable(Monoid[String]))
   checkAll("Monoid[List[Int]]", MonoidTests[List[Int]].monoid)
+  checkAll("Monoid[List[Int]]", SerializableTests.serializable(Monoid[List[Int]]))
   checkAll("Monoid[Vector[Int]]", MonoidTests[Vector[Int]].monoid)
+  checkAll("Monoid[Vector[Int]]", SerializableTests.serializable(Monoid[Vector[Int]]))
   checkAll("Monoid[Stream[Int]]", MonoidTests[Stream[Int]].monoid)
+  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
   checkAll("Monoid[List[String]]", MonoidTests[List[String]].monoid)
-  checkAll("Monoid[Map[String, Int]", MonoidTests[Map[String, Int]].monoid)
-  checkAll("Monoid[Queue[Int]", MonoidTests[Queue[Int]].monoid)
+  checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
+  checkAll("Monoid[Map[String, Int]]", MonoidTests[Map[String, Int]].monoid)
+  checkAll("Monoid[Map[String, Int]]", SerializableTests.serializable(Monoid[Map[String, Int]]))
+  checkAll("Monoid[Queue[Int]]", MonoidTests[Queue[Int]].monoid)
+  checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
+  checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
   checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]].boundedSemilattice)
+  checkAll("BoundedSemilattice[Set[Int]]", SerializableTests.serializable(BoundedSemilattice[Set[Int]]))
 
   checkAll("CommutativeGroup[Unit]", CommutativeGroupTests[Unit].commutativeGroup)
+  checkAll("CommutativeGroup[Unit]", SerializableTests.serializable(CommutativeGroup[Unit]))
   checkAll("CommutativeGroup[Byte]", CommutativeGroupTests[Byte].commutativeGroup)
+  checkAll("CommutativeGroup[Byte]", SerializableTests.serializable(CommutativeGroup[Byte]))
   checkAll("CommutativeGroup[Short]", CommutativeGroupTests[Short].commutativeGroup)
+  checkAll("CommutativeGroup[Short]", SerializableTests.serializable(CommutativeGroup[Short]))
   checkAll("CommutativeGroup[Int]", CommutativeGroupTests[Int].commutativeGroup)
+  checkAll("CommutativeGroup[Int]", SerializableTests.serializable(CommutativeGroup[Int]))
   checkAll("CommutativeGroup[Long]", CommutativeGroupTests[Long].commutativeGroup)
+  checkAll("CommutativeGroup[Long]", SerializableTests.serializable(CommutativeGroup[Long]))
   //checkAll("CommutativeGroup[Float]", CommutativeGroupTests[Float].commutativeGroup) // approximately associative
   //checkAll("CommutativeGroup[Double]", CommutativeGroupTests[Double].commutativeGroup) // approximately associative
   checkAll("CommutativeGroup[BigInt]", CommutativeGroupTests[BigInt].commutativeGroup)
+  checkAll("CommutativeGroup[BigInt]", SerializableTests.serializable(CommutativeGroup[BigInt]))
   checkAll("CommutativeGroup[Duration]", CommutativeGroupTests[Duration].commutativeGroup)
+  checkAll("CommutativeGroup[Duration]", SerializableTests.serializable(CommutativeGroup[Duration]))
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
@@ -169,11 +187,14 @@ class LawTests extends FunSuite with Discipline {
       Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
     checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
     checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
+    checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
   }
 
   checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
+  checkAll("Band[(Int, Int)]", SerializableTests.serializable(Band[(Int, Int)]))
 
   checkAll("BoundedSemilattice[Unit]", BoundedSemilatticeTests[Unit].boundedSemilattice)
+  checkAll("BoundedSemilattice[Unit]", SerializableTests.serializable(BoundedSemilattice[Unit]))
 
   // Comparison related
 
