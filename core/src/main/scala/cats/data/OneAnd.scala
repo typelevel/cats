@@ -98,7 +98,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed trait OneAndInstances extends OneAndLowPriority4 {
+private[data] sealed abstract class OneAndInstances extends OneAndLowPriority4 {
 
   implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F[_]: Alternative]
   (implicit P: Parallel[M, F]): Parallel[OneAnd[M, ?], OneAnd[F, ?]] =
@@ -193,7 +193,7 @@ private[data] sealed trait OneAndInstances extends OneAndLowPriority4 {
     }
 }
 
-private[data] trait OneAndLowPriority0 {
+private[data] sealed abstract class OneAndLowPriority0 {
   implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, ?]] =
     new Comonad[OneAnd[Stream, ?]] {
       def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
@@ -214,7 +214,7 @@ private[data] trait OneAndLowPriority0 {
     }
 }
 
-private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
+private[data] sealed abstract class OneAndLowPriority1 extends OneAndLowPriority0 {
   implicit def catsDataApplicativeForOneAnd[F[_]](implicit F: Alternative[F]): Applicative[OneAnd[F, ?]] =
     new Applicative[OneAnd[F, ?]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -233,7 +233,7 @@ private[data] trait OneAndLowPriority1 extends OneAndLowPriority0 {
 
 }
 
-private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
+private[data] sealed abstract class OneAndLowPriority2 extends OneAndLowPriority1 {
   implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -242,7 +242,7 @@ private[data] trait OneAndLowPriority2 extends OneAndLowPriority1 {
 
 }
 
-private[data] trait OneAndLowPriority3 extends OneAndLowPriority2 {
+private[data] sealed abstract class OneAndLowPriority3 extends OneAndLowPriority2 {
   implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
     new Traverse[OneAnd[F, ?]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
@@ -259,7 +259,7 @@ private[data] trait OneAndLowPriority3 extends OneAndLowPriority2 {
     }
 }
 
-private[data] trait OneAndLowPriority4 extends OneAndLowPriority3 {
+private[data] sealed abstract class OneAndLowPriority4 extends OneAndLowPriority3 {
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F, ?], F] with NonEmptyTraverse[OneAnd[F, ?]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
