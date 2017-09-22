@@ -180,7 +180,7 @@ object arbitrary extends ArbitraryInstances0 {
     Arbitrary(FG.arbitrary.map(Nested(_)))
 
   implicit def catsLawArbitraryForState[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
-    catsLawArbitraryForStateT[Eval, S, A]
+    catsLawArbitraryForIndexedStateT[Eval, S, S, A]
 
   implicit def catsLawArbitraryForReader[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Reader[A, B]] =
     catsLawsArbitraryForKleisli[Id, A, B]
@@ -188,15 +188,16 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawArbitraryForCokleisliId[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Cokleisli[Id, A, B]] =
     catsLawsArbitraryForCokleisli[Id, A, B]
 
-  implicit def catsLawsArbitraryForReaderWriterStateT[F[_]: Applicative, E, L, S, A](implicit F: Arbitrary[(E, S) => F[(L, S, A)]]): Arbitrary[ReaderWriterStateT[F, E, L, S, A]] =
-    Arbitrary(F.arbitrary.map(ReaderWriterStateT(_)))
+  implicit def catsLawsArbitraryForIRWST[F[_]: Applicative, E, L, SA, SB, A](implicit
+    F: Arbitrary[(E, SA) => F[(L, SB, A)]]): Arbitrary[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
+    Arbitrary(F.arbitrary.map(IndexedReaderWriterStateT(_)))
 
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
 
-  implicit def catsLawArbitraryForStateT[F[_], S, A](implicit F: Arbitrary[F[S => F[(S, A)]]]): Arbitrary[StateT[F, S, A]] =
-    Arbitrary(F.arbitrary.map(StateT.applyF))
+  implicit def catsLawArbitraryForIndexedStateT[F[_], SA, SB, A](implicit F: Arbitrary[F[SA => F[(SB, A)]]]): Arbitrary[IndexedStateT[F, SA, SB, A]] =
+    Arbitrary(F.arbitrary.map(IndexedStateT.applyF))
 
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
     Arbitrary(F.arbitrary.map(WriterT(_)))

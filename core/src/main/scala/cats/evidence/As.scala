@@ -75,7 +75,7 @@ object As extends AsInstances {
     g.substitute[λ[`-α` => α As C]](f)
 
   /**
-   * reify a subtype relationship as a Liskov relaationship
+   * reify a subtype relationship as a Liskov relationship
    */
   @inline def reify[A, B >: A]: (A As B) = refl
 

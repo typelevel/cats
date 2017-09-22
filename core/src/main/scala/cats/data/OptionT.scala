@@ -195,7 +195,7 @@ object OptionT extends OptionTInstances {
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 }
 
-private[data] sealed trait OptionTInstances extends OptionTInstances0 {
+private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 
@@ -212,7 +212,7 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
     functor.Contravariant[Show].contramap(F)(_.value)
 }
 
-private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
+private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
 
@@ -226,7 +226,7 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
+private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 {
 
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
@@ -235,12 +235,12 @@ private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
     new OptionTEq[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
+private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
     new OptionTTraverse[F] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances3 {
+private[data] sealed abstract class OptionTInstances3 {
   implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
     new OptionTFunctor[F] { implicit val F = F0 }
 }

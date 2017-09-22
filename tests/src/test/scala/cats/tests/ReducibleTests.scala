@@ -95,4 +95,26 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
       fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
     }
   }
+
+
+  test("Reducible#nonEmptyPartition retains size") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val folded = fi.nonEmptyPartition(f).fold(identity, identity, _ ++ _.toList)
+      folded.size.toLong should === (fi.size)
+    }
+  }
+
+  test("Reducible#nonEmptyPartition to one side is identity") {
+    forAll { (fi: F[Int], f: Int => String) =>
+      val g: Int => Either[Double, String] = f andThen Right.apply
+      val h: Int => Either[String, Double] = f andThen Left.apply
+
+      val withG = fi.nonEmptyPartition(g).right.getOrElse(NonEmptyList.one(""))
+      withG should === (Reducible[F].toNonEmptyList(fi).map(f))
+
+      val withH = fi.nonEmptyPartition(h).left.getOrElse(NonEmptyList.one(""))
+      withH should === (Reducible[F].toNonEmptyList(fi).map(f))
+    }
+  }
+
 }

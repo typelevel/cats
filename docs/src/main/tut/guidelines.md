@@ -2,7 +2,7 @@
 layout: page
 title:  "Guidelines"
 section: "guidelines"
-position: 7
+position: 70
 ---
 
 # Guidelines

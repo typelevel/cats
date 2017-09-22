@@ -2,7 +2,7 @@
 val V = _root_.scalafix.Versions
 scalaVersion in ThisBuild := V.scala212
 
-lazy val rewrites = project.settings(
+lazy val rules = project.settings(
   libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.version
 )
 
@@ -35,5 +35,5 @@ lazy val tests = project
         classDirectory.in(input, Compile).value
     )
   )
-  .dependsOn(input, rewrites)
+  .dependsOn(input, rules)
   .enablePlugins(BuildInfoPlugin)
