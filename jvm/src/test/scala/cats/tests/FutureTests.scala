@@ -51,12 +51,12 @@ class FutureTests extends CatsSuite {
     val exA = new Exception("A")
     val exB = new Exception("B")
     val fa: Future[Int] = Future {
-      blocking(Thread.sleep(500))
+      blocking(Thread.sleep(200))
       throw exA
     }
 
     val fb: Future[Int] = Future {
-      blocking(Thread.sleep(100))
+      blocking(Thread.sleep(1))
       throw exB
     }
 
@@ -68,12 +68,12 @@ class FutureTests extends CatsSuite {
     val exA = new Exception("A")
     val exB = new Exception("B")
     val fa: Future[Int] = Future {
-      blocking(Thread.sleep(100))
+      blocking(Thread.sleep(1))
       throw exA
     }
 
     val fb: Future[Int] = Future {
-      blocking(Thread.sleep(500))
+      blocking(Thread.sleep(200))
       throw exB
     }
 
