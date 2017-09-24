@@ -7,35 +7,94 @@ scaladoc: "#cats.arrow.Arrow"
 ---
 # Arrow
 
-`Arrow` is a useful type class for modeling something that behaves like functions, such as `Function1`: `A => B`, `Kleisli`: `A => F[B]` (also known as `ReaderT`), `Cokleisli`: `F[A] => B`, etc. So useful, that Haskell provides special syntax (the `proc` notation) for composing and combining arrows, similar to the `do` notation for sequencing monadic operations.
+`Arrow` is a type class for modeling something that behaves like functions. For example, `scala.Function1`(`A => B`), `cats.data.Kleisli`(wrapping an `A => F[B]`, also known as `ReaderT`), and `cats.data.Cokleisli`(wrapping an `F[A] => B`), have `Arrow` instances.
 
-To create an `Arrow` instance for a type `F[A, B]`, the following abstract methods need to be implemented:
+Having an `Arrow` instance for a type `F[_, _]` means it supports a number of methods for composing and combining multiple `Arrow`s. You will be able to do things like:
+- Lifting a function `ab: A => B` into arrow `F[A, B]` with `Arrow[F].lift(ab)`. If `F` is `Function1` then `A => B` is the same as `F[A, B]` so `lift` is just the identity function.
+- Composing `fab: F[A, B]` and `fbc: F[B, C]` into `fac: F[A, C]` with `Arrow[F].compose(fbc, fab)`, or `fab >>> fbc`. If `F` is `Function1` then `>>>` becomes an alias for `andThen`.
+- Taking two arrows `fab: F[A, B]` and `fbc: F[B, C]` and combining them into `F[(A, C) => (B, D)]` with `fab.split(fbc)` or `fab *** fbc`. The resulting arrow takes two inputs and processes them with two arrows, one for each input.
+- Taking an arrow `fab: F[A, B]` and turning it into `F[(A, C), (B, C)]` with `fab.first`. The resulting arrow takes two inputs, processes the first input and leaves the second input as it is. A similar method, `fab.second`, turns `F[A, B]` into `F[(C, A), (B, A)]`.
 
+## Examples
+
+### `Function1`
+
+`scala.Function1` has an `Arrow` instance, so you can use all the above methods on `Function1`. The Scala standard library has the `compose` and `andThen` methods for composing `Function1`s, but the `Arrow` instance offers more powerful options.
+
+Suppose we want to write a function `expAndVar`, that takes a `List[Int]` and returns the pair of expected value and variance. To do so, we first define a `combine` function that takes an input and processes two copies of it with two arrows, using `Arrow` operations `lift`, `>>>` and `***`:
+
+```tut:book:silent
+import cats.arrow.Arrow
+import cats.implicits._
+
+def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
+  Arrow[F].lift((a: A) => (a, a)) >>> (fab *** fac)
 ```
-def lift[A, B](f: A => B): F[A, B]
 
-def id[A]: F[A, A]
+We can then create functions `expected: List[Int] => Double`, `variance: List[Int] => Double` and `expAndVar: List[Int] => (Double, Double)` using the `combine` method and `Arrow` operations:
 
-def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
+```tut:book:silent
+val expected: List[Int] => Double =
+    combine((_: List[Int]).sum, (_: List[Int]).size) >>> {case (x, y) => x.toDouble / y}
 
-def first[A, B, C](fa: F[A, B]): F[(A, C), (B, C)]
+val variance: List[Int] => Double =
+  // Variance is mean of square minus square of mean
+  combine(((_: List[Int]).map(x => x * x)) >>> expected, expected) >>> {case (x, y) => x - y * y}
+
+val expAndVar: List[Int] => (Double, Double) = combine(expected, variance)
 ```
 
-Once a type `F` has an `Arrow` instance, it gets for free a number of methods for composing and combining multiple `Arrow`s. You will be able to do things like:
-- Composing `fab: F[A, B]` and `fbc: F[B, C]` into `fac: F[A, C]` with `fab >>> fbc`. If `F` is `Function1` then `>>>` becomes an alias for `andThen`.
-- Taking two arrows `fab: F[A, B]` and `fbc: F[B, C]` and combining them into `F[(A, C) => (B, D)]` with `fab *** fbc`. The resulting arrow takes two inputs and processes them with two arrows, one for each input.
-- Taking two arrows `fab: F[A, B]` and `fac: F[A, C]` and combining them into `F[A => (B, C)]` with `fab &&& fbc`. The resulting arrow takes an input, duplicates it and processes each copy with a different arrow.
-- Taking an arrow `fab: F[A, B]` and turning it into `F[(C, A), (C, B)]` with `fab.second`. The resulting arrow takes two inputs, processes the second input and leaves the first input as it is.
+```tut:book
+expAndVar(List(1, 2, 3, 4))
+```
 
-## Example
+Of course, a more natural way to implement `expected` and `variance` would be:
 
-As an example, let's create a fancy version of `Function1` called `FancyFunction`, that is capable of maintaining states. We then create an `Arrow` instance for `FancyFunction` and use it to compute the moving average of a list of numbers.
+```tut:book:silent
+val expected2: List[Int] => Double = xs => xs.sum.toDouble / xs.size
+
+val variance2: List[Int] => Double = xs => expected2(xs.map(x => x * x)) - scala.math.pow(expected2(xs), 2.0)
+```
+
+However, `Arrow` methods are more general and provide a common structure for types that have `Arrow` instances. They are also a more abstract way of stitching computations together.
+
+
+### `Kleisli`
+
+A `Kleisli[F[_], A, B]` represents a function `A => F[B]`. You cannot directly compose an `A => F[B]` with a `B => F[C]` since the codomain of the first function is `F[B]` while the domain of the second function is `B`; however, since `Kleisli` is an `Arrow`, you can easily compose `Kleisli[F[_], A, B]` with `Kleisli[F[_], B, C]` using `Arrow` operations.
+
+
+Suppose you want to take a `List[Int]`, and return the sum of the first and the last element (if exists). To do so, we can create two `Kleisli`s that find the `headOption` and `lastOption` of a `List[Int]`, respectively:
+
+```tut:book:silent
+import cats.data.Kleisli
+
+val headK = Kleisli((_: List[Int]).headOption)
+val lastK = Kleisli((_: List[Int]).lastOption)
+```
+
+With `headK` and `lastK`, we can obtain the `Kleisli` arrow we want by combining them, and composing it with `_ + _`:
+
+```tut:book:silent
+val headPlusLast = combine(headK, lastK) >>> Arrow[Kleisli[Option, ?, ?]].lift(((_: Int) + (_: Int)).tupled)
+```
+
+```tut:book
+headPlusLast.run(List(2, 3, 5, 8))
+headPlusLast.run(Nil)
+```
+
+### `FancyFunction`
+
+In this example let's create our own `Arrow`. We shall create a fancy version of `Function1` called `FancyFunction`, that is capable of maintaining states. We then create an `Arrow` instance for `FancyFunction` and use it to compute the moving average of a list of numbers.
 
 ```tut:book:silent
 case class FancyFunction[A, B](run: A => (FancyFunction[A, B], B))
 ```
 
-That is, given an `A`, it not only returns a `B`, but also returns a new `FancyFunction[A, B]`. This sounds similar to the `State` monad (which returns a result and a new `State` from an initial `State`), and indeed, `FancyFunction` can be used to perform stateful transformations. For example, to run a stateful computation using a `FancyFunction` on a list of inputs, and collect the output into another list, we can define the following `runList` helper function:
+That is, given an `A`, it not only returns a `B`, but also returns a new `FancyFunction[A, B]`. This sounds similar to the `State` monad (which returns a result and a new `State` from an initial `State`), and indeed, `FancyFunction` can be used to perform stateful transformations.
+
+To run a stateful computation using a `FancyFunction` on a list of inputs, and collect the output into another list, we can define the following `runList` helper function:
 
 ```tut:book:silent
 def runList[A, B](ff: FancyFunction[A, B], as: List[A]): List[B] = as match {
@@ -48,12 +107,22 @@ def runList[A, B](ff: FancyFunction[A, B], as: List[A]): List[B] = as match {
 
 In `runList`, the head element in `List[A]` is fed to `ff`, and each subsequent element is fed to a `FancyFunction` which is generated by running the previous `FancyFunction` on the previous element. If we have an `as: List[Int]`, and an `avg: FancyFunction[Int, Double]` which takes an integer and computes the average of all integers it has seen so far, we can call `runList(avg, as)` to get the list of moving average of `as`.
 
-Next let's create an `Arrow` instance for `FancyFunction` and see how to implement the `avg` arrow.
+Next let's create an `Arrow` instance for `FancyFunction` and see how to implement the `avg` arrow. To create an `Arrow` instance for a type `F[A, B]`, the following abstract methods need to be implemented:
+
+```
+def lift[A, B](f: A => B): F[A, B]
+
+def id[A]: F[A, A]
+
+def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
+
+def first[A, B, C](fa: F[A, B]): F[(A, C), (B, C)]
+```
+
+Thus the `Arrow` instance for `FancyFunction` would be:
 
 
 ```tut:book:silent
-import cats.arrow.Arrow
-
 implicit val arrowInstance: Arrow[FancyFunction] = new Arrow[FancyFunction] {
 
   override def lift[A, B](f: A => B): FancyFunction[A, B] = FancyFunction(lift(f) -> f(_))
@@ -83,8 +152,6 @@ def accum[A, B](b: B)(f: (A, B) => B): FancyFunction[A, B] = FancyFunction {a =>
 }
 ```
 
-Now we can try it out:
-
 ```tut:book
 runList(accum[Int, Int](0)(_ + _), List(6, 5, 4, 3, 2, 1))
 ```
@@ -94,24 +161,18 @@ To make the aformentioned `avg` arrow, we need to keep track of both the count a
 We first define arrow `sum` in terms of `accum`, and define arrow `count` by composing `_ => 1` with `sum`:
 
 ```tut:book:silent
-import cats.implicits._
 import cats.kernel.Monoid
 
 def sum[A: Monoid]: FancyFunction[A, A] = accum(Monoid[A].empty)(_ |+| _)
 def count[A]: FancyFunction[A, Int] = Arrow[FancyFunction].lift((_: A) => 1) >>> sum
 ```
 
-Then we define a `combine` function that takes an input and processes two copies of it with two arrows, and finally, the `avg` arrow in terms of the arrows we have so far:
+Finally, we create the `avg` arrow in terms of the arrows we have so far:
 
 ```tut:book:silent
-def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
-  Arrow[F].lift((a: A) => (a, a)) >>> (fab *** fac)
-
 def avg: FancyFunction[Int, Double] =
   combine(sum[Int], count[Int]) >>> Arrow[FancyFunction].lift{case (x, y) => x.toDouble / y}
 ```
-
-And try it out:
 
 ```tut:book
 runList(avg, List(1, 10, 100, 1000))
