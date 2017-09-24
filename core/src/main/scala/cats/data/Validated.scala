@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.data.Validated.{Invalid, Valid}
+import cats.kernel.CommutativeSemigroup
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
@@ -372,6 +373,20 @@ private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstanc
   implicit def catsDataSemigroupForValidated[A, B](implicit A: Semigroup[A], B: Semigroup[B]): Semigroup[Validated[A, B]] =
     new Semigroup[Validated[A, B]] {
       def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
+    }
+
+  implicit def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]: CommutativeApplicative[Validated[E, ?]] =
+    new CommutativeApplicative[Validated[E, ?]] {
+      override def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] =
+        fa.map(f)
+
+      def pure[A](a: A): Validated[E, A] = Validated.valid(a)
+
+      def ap[A, B](ff: Validated[E, (A) => B])(fa: Validated[E, A]): Validated[E, B] =
+        fa.ap(ff)(Semigroup[E])
+
+      override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+        fa.product(fb)(Semigroup[E])
     }
 
   implicit def catsDataPartialOrderForValidated[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A, B]] =
