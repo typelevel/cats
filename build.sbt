@@ -236,7 +236,7 @@ val binaryCompatibleVersion = "0.8.0"
 val binaryCompatibleExceptions = {
   import com.typesafe.tools.mima.core._
   import com.typesafe.tools.mima.core.ProblemFilters._
-  Seq(
+  Seq( //todo: remove these once we release 1.0.0-RC1
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
