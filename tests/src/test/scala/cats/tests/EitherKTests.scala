@@ -1,9 +1,8 @@
 package cats.tests
 
-import cats._
+import cats.{Contravariant, _}
 import cats.kernel.laws.OrderLaws
 import cats.data.EitherK
-import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._

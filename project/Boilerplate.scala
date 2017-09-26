@@ -134,7 +134,7 @@ object Boilerplate {
         |package cats
         |package syntax
         |
-        |import cats.functor.{Contravariant, Invariant}
+        |
         |
         |@deprecated("replaced by apply syntax", "1.0.0-MF")
         |private[syntax] final class CartesianBuilder[F[_]] {
@@ -211,11 +211,11 @@ object Boilerplate {
          |trait CartesianArityFunctions {
         -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit cartesian: Cartesian[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
-        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: functor.Contravariant[F]):F[Z] =
+        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
-        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[Z] =
+        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
-        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
+        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
          |}
       """
@@ -259,7 +259,7 @@ object Boilerplate {
         |package cats
         |package syntax
         |
-        |import cats.functor.{Contravariant, Invariant}
+        |
         |
         |trait TupleCartesianSyntax {
         -  implicit def catsSyntaxTuple${arity}Cartesian[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}CartesianOps[F, ${`A..N`}] = new Tuple${arity}CartesianOps(t$arity)

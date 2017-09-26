@@ -4,7 +4,7 @@ package tests
 import cats.arrow.Compose
 import cats.instances.AllInstances
 import cats.syntax.AllSyntax
-import cats.functor.{Contravariant, Invariant}
+
 
 /**
  * Test that our syntax implicits are working.

@@ -2,9 +2,9 @@ package cats
 package laws
 package discipline
 
-import cats.functor.Invariant
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
+import cats.Invariant
 import org.typelevel.discipline.Laws
 
 trait InvariantTests[F[_]] extends Laws {

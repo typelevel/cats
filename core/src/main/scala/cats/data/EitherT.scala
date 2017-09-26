@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
 
@@ -426,7 +426,7 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
     }
 
   implicit def catsDataShowForEitherT[F[_], L, R](implicit sh: Show[F[Either[L, R]]]): Show[EitherT[F, L, R]] =
-    functor.Contravariant[Show].contramap(sh)(_.value)
+    Contravariant[Show].contramap(sh)(_.value)
 
   implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, ?, ?]] =
     new Bifunctor[EitherT[F, ?, ?]] {

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.functor._
+
 import cats.kernel.laws.OrderLaws
 
 class OrderTests extends CatsSuite {

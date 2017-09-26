@@ -1,15 +1,15 @@
 package cats
 package tests
 
+import cats.Contravariant
 import cats.arrow._
 import cats.data.{EitherT, Kleisli, Reader}
-import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
+import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =

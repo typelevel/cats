@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Contravariant
 import cats.arrow._
-import cats.functor.Contravariant
 
 /**
  * Represents a function `A => F[B]`.

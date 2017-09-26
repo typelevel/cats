@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.functor.{Bifunctor, Contravariant}
+
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._

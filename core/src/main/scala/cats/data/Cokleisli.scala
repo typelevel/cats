@@ -2,8 +2,7 @@ package cats
 package data
 
 import cats.arrow._
-import cats.functor.Contravariant
-import cats.{CoflatMap, Comonad, Functor, Monad}
+import cats.{CoflatMap, Comonad, Contravariant, Functor, Monad}
 
 import scala.annotation.tailrec
 

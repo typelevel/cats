@@ -2,7 +2,7 @@ package cats
 package data
 
 import cats.kernel.instances.tuple._
-import cats.functor.{Bifunctor, Contravariant}
+
 import cats.kernel.CommutativeMonoid
 import cats.syntax.semigroup._
 

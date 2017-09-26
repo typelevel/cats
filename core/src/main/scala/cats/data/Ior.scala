@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Bifunctor
 import cats.data.Validated.{Invalid, Valid}
-import cats.functor.Bifunctor
 
 import scala.annotation.tailrec
 

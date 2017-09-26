@@ -1,9 +1,8 @@
 package cats
 package tests
 
-import cats.functor.Invariant
+import cats.Invariant
 import cats.instances.list._
-
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 

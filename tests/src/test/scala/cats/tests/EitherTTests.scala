@@ -1,9 +1,9 @@
 package cats
 package tests
 
+import cats.Bifunctor
 import cats.data.EitherT
-import cats.functor.Bifunctor
-import cats.functor._
+
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
