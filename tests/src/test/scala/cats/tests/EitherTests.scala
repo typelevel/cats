@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.EitherT
+import cats.data.{ EitherT, Validated }
 import cats.laws.discipline._
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import scala.util.Try
@@ -273,6 +273,13 @@ class EitherTests extends CatsSuite {
     forAll { (fa: Either[String, Int],
               f: Int => String) =>
       fa.ap(Either.right(f)) should === (fab.map(fa)(f))
+    }
+  }
+
+  test("raiseOrPure syntax consistent with fromEither") {
+    val ev = ApplicativeError[Validated[String, ?], String]
+    forAll { (fa: Either[String, Int]) =>
+      fa.raiseOrPure[Validated[String, ?]] should === (ev.fromEither(fa))
     }
   }
 
