@@ -1,8 +1,10 @@
 package cats
 package tests
 
-import cats.data.{State, StateT, IndexedStateT, EitherT}
-import cats.functor.{Contravariant, Bifunctor, Profunctor, Strong}
+import cats.arrow.{Profunctor, Strong}
+import cats.data.{EitherT, IndexedStateT, State, StateT}
+import cats.functor.{Bifunctor, Contravariant}
+import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._

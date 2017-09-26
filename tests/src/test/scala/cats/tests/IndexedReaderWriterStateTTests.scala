@@ -2,11 +2,12 @@ package cats
 package tests
 
 import cats.data.{ IRWST, IndexedReaderWriterStateT, ReaderWriterStateT, ReaderWriterState, EitherT }
-import cats.functor.{ Contravariant, Bifunctor, Profunctor, Strong }
+import cats.functor.{ Contravariant, Bifunctor }
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
+import cats.arrow.{Strong, Profunctor}
 
 class ReaderWriterStateTTests extends CatsSuite {
   import ReaderWriterStateTTests._

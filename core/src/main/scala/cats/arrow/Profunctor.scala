@@ -1,5 +1,5 @@
 package cats
-package functor
+package arrow
 
 import simulacrum.typeclass
 

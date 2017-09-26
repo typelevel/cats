@@ -1,8 +1,8 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Category, Choice, CommutativeArrow, Compose, FunctionK}
-import cats.functor.{Contravariant, Strong}
+import cats.arrow._
+import cats.functor.Contravariant
 
 /**
  * Represents a function `A => F[B]`.

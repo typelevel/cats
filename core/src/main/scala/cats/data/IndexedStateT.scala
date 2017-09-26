@@ -1,7 +1,8 @@
 package cats
 package data
 
-import cats.functor.{ Contravariant, Bifunctor, Profunctor, Strong }
+import cats.arrow.{Profunctor, Strong}
+import cats.functor.{Bifunctor, Contravariant}
 import cats.syntax.either._
 
 /**

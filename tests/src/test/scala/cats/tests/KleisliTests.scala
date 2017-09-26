@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.arrow.{Arrow, Choice, CommutativeArrow, FunctionK}
+import cats.arrow._
 import cats.data.{EitherT, Kleisli, Reader}
-import cats.functor.{Contravariant, Strong}
+import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
