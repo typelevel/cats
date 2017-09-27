@@ -2,7 +2,7 @@ package cats
 package jvm
 package tests
 
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
+import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.tests.{CatsSuite, ListWrapper}
@@ -44,8 +44,8 @@ class FutureTests extends CatsSuite {
 
   {
     implicit val F = ListWrapper.semigroup[Int]
-    checkAll("Future[ListWrapper[Int]]", SemigroupTests[Future[ListWrapper[Int]]].semigroup)
+    checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
   }
 
-  checkAll("Future[Int]", MonoidTests[Future[Int]].monoid)
+  checkAll("Future[Int]", MonoidLawTests[Future[Int]].monoid)
 }

@@ -7,7 +7,7 @@ import cats.kernel.instances.boolean._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait PartialOrderTests[A] extends EqTests[A] {
+trait PartialOrderLawTests[A] extends EqLawTests[A] {
 
   def laws: PartialOrderLaws[A]
 
@@ -28,7 +28,7 @@ trait PartialOrderTests[A] extends EqTests[A] {
 
 }
 
-object PartialOrderTests {
-  def apply[A: PartialOrder]: PartialOrderTests[A] =
-    new PartialOrderTests[A] { def laws: PartialOrderLaws[A] = PartialOrderLaws[A] }
+object PartialOrderLawTests {
+  def apply[A: PartialOrder]: PartialOrderLawTests[A] =
+    new PartialOrderLawTests[A] { def laws: PartialOrderLaws[A] = PartialOrderLaws[A] }
 }

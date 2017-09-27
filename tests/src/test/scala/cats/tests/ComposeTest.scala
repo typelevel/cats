@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{SemigroupTests => SemigroupTypeclassTests}
+import cats.kernel.laws.discipline.{SemigroupLawTests}
 
 import cats.arrow.Compose
 import cats.laws.discipline.{SemigroupKTests, SerializableTests}
@@ -15,7 +15,7 @@ class ComposeTest extends CatsSuite {
   checkAll("Compose[Function1].algebraK", SerializableTests.serializable(functionCompose.algebraK))
 
   val functionAlgebra = functionCompose.algebra[Int]
-  checkAll("Compose[Function1].algebra[Int]", SemigroupTypeclassTests[Endo[Int]](functionAlgebra).semigroup)
+  checkAll("Compose[Function1].algebra[Int]", SemigroupLawTests[Endo[Int]](functionAlgebra).semigroup)
 
   test("syntax") {
     (((_: Int) + 1) <<< ((_: Int) / 2))(2) should be(2)

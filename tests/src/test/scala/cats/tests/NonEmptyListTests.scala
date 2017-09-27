@@ -2,10 +2,10 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{
-  SemigroupTests => SemigroupTypeclassTests,
-  OrderTests => OrderTypeclassTests,
-  PartialOrderTests => PartialOrderTypeclassTests,
-  EqTests => EqTypeclassTests
+  SemigroupLawTests,
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
 }
 
 import cats.data.{NonEmptyList, NonEmptyVector}
@@ -17,7 +17,7 @@ class NonEmptyListTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-  checkAll("NonEmptyList[Int]", OrderTypeclassTests[NonEmptyList[Int]].order)
+  checkAll("NonEmptyList[Int]", OrderLawTests[NonEmptyList[Int]].order)
 
   checkAll("NonEmptyList[Int] with Option", NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyList]))
@@ -31,18 +31,18 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
 
-  checkAll("NonEmptyList[Int]", SemigroupTypeclassTests[NonEmptyList[Int]].semigroup)
+  checkAll("NonEmptyList[Int]", SemigroupLawTests[NonEmptyList[Int]].semigroup)
   checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
 
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
-  checkAll("NonEmptyList[ListWrapper[Int]]", EqTypeclassTests[NonEmptyList[ListWrapper[Int]]].eqv)
+  checkAll("NonEmptyList[ListWrapper[Int]]", EqLawTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
 
   {
     implicit val A = ListWrapper.partialOrder[Int]
-    checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderTypeclassTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
+    checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderLawTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
 
     Eq[NonEmptyList[ListWrapper[Int]]]
@@ -50,7 +50,7 @@ class NonEmptyListTests extends CatsSuite {
 
   {
     implicit val A = ListWrapper.order[Int]
-    checkAll("NonEmptyList[ListWrapper[Int]]", OrderTypeclassTests[NonEmptyList[ListWrapper[Int]]].order)
+    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLawTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
 
     Eq[NonEmptyList[ListWrapper[Int]]]

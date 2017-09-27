@@ -5,7 +5,7 @@ package discipline
 
 import org.scalacheck.{Arbitrary, Prop}
 
-trait CommutativeGroupTests[A] extends CommutativeMonoidTests[A] with GroupTests[A] {
+trait CommutativeGroupTests[A] extends CommutativeMonoidTests[A] with GroupLawTests[A] {
   def laws: CommutativeGroupLaws[A]
 
   def commutativeGroup(implicit arbA: Arbitrary[A], eqA: Eq[A]): RuleSet =

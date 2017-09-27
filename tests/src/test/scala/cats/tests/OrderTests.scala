@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.functor._
-import cats.kernel.laws.discipline.{OrderTests => OrderTypeclassTests}
+import cats.kernel.laws.discipline.{OrderLawTests}
 
 class OrderTests extends CatsSuite {
   {
@@ -10,10 +10,10 @@ class OrderTests extends CatsSuite {
     Contravariant[Order]
   }
 
-  checkAll("Int", OrderTypeclassTests[Int].order)
-  checkAll("Double", OrderTypeclassTests[Double].order)
-  checkAll("Float", OrderTypeclassTests[Float].order)
-  checkAll("Long", OrderTypeclassTests[Long].order)
+  checkAll("Int", OrderLawTests[Int].order)
+  checkAll("Double", OrderLawTests[Double].order)
+  checkAll("Float", OrderLawTests[Float].order)
+  checkAll("Long", OrderLawTests[Long].order)
 }
 
 object OrderTests {

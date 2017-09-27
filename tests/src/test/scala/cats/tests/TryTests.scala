@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{
-  SemigroupTests => SemigroupTypeclassTests,
-  MonoidTests => MonoidTypeclassTests
+  SemigroupLawTests,
+  MonoidLawTests
 }
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
@@ -32,11 +32,11 @@ class TryTests extends CatsSuite {
   {
     implicit val F = ListWrapper.semigroup[Int]
 
-    checkAll("Try[ListWrapper[Int]]", SemigroupTypeclassTests[Try[ListWrapper[Int]]].semigroup)
+    checkAll("Try[ListWrapper[Int]]", SemigroupLawTests[Try[ListWrapper[Int]]].semigroup)
     checkAll("Semigroup[Try[ListWrapper[Int]]", SerializableTests.serializable(Semigroup[Try[ListWrapper[Int]]]))
   }
 
-  checkAll("Try[Int]", MonoidTypeclassTests[Try[Int]].monoid)
+  checkAll("Try[Int]", MonoidLawTests[Try[Int]].monoid)
   checkAll("Monoid[Try[Int]]", SerializableTests.serializable(Monoid[Try[Int]]))
 
   test("show") {

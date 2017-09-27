@@ -8,7 +8,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws
 
-trait SemigroupTests[A] extends Laws {
+trait SemigroupLawTests[A] extends Laws {
   def laws: SemigroupLaws[A]
 
   def semigroup(implicit arbA: Arbitrary[A], eqA: Eq[A]): RuleSet =
@@ -21,7 +21,7 @@ trait SemigroupTests[A] extends Laws {
       "semigroup combineAllOption" -> forAll(laws.combineAllOption _))
 }
 
-object SemigroupTests {
-  def apply[A: Semigroup]: SemigroupTests[A] =
-    new SemigroupTests[A] { def laws: SemigroupLaws[A] = SemigroupLaws[A] }
+object SemigroupLawTests {
+  def apply[A: Semigroup]: SemigroupLawTests[A] =
+    new SemigroupLawTests[A] { def laws: SemigroupLaws[A] = SemigroupLaws[A] }
 }

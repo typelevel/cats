@@ -6,7 +6,7 @@ package discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait GroupTests[A] extends MonoidTests[A] {
+trait GroupLawTests[A] extends MonoidLawTests[A] {
 
   def laws: GroupLaws[A]
 
@@ -20,7 +20,7 @@ trait GroupTests[A] extends MonoidTests[A] {
 
 }
 
-object GroupTests {
-  def apply[A: Group]: GroupTests[A] =
-    new GroupTests[A] { def laws: GroupLaws[A] = GroupLaws[A] }
+object GroupLawTests {
+  def apply[A: Group]: GroupLawTests[A] =
+    new GroupLawTests[A] { def laws: GroupLaws[A] = GroupLaws[A] }
 }

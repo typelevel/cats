@@ -7,9 +7,9 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.kernel.laws.discipline.{
-  OrderTests => OrderTypeclassTests,
-  PartialOrderTests => PartialOrderTypeclassTests,
-  EqTests => EqTypeclassTests
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
 }
 
 class Tuple2KTests extends CatsSuite {
@@ -81,9 +81,9 @@ class Tuple2KTests extends CatsSuite {
     implicit val O = ListWrapper.order[Int]
     implicit val P = ListWrapper.partialOrder[Int]
 
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", EqTypeclassTests[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderTypeclassTests[Tuple2K[ListWrapper, ListWrapper, Int]].order)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderTypeclassTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", EqLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].order)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
   }
 
   test("show") {
