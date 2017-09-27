@@ -6,8 +6,6 @@ package tests
 class MonoidTests extends CatsSuite {
   {
     Invariant[Monoid]
-    Cartesian[Monoid]
-    InvariantMonoidal[Monoid]
   }
 
   test("companion object syntax") {
@@ -19,10 +17,7 @@ class MonoidTests extends CatsSuite {
 
 object MonoidTests {
   def summonInstance(): Unit = {
-    import cats.instances.invariant._
     Invariant[Monoid]
-    Cartesian[Monoid]
-    InvariantMonoidal[Monoid]
     ()
   }
 

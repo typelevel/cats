@@ -59,22 +59,11 @@ class AlgebraInvariantTests extends CatsSuite {
   implicit val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
-  def combineAllOption_Ref[F[_] : InvariantMonoidal, A: Eq](name: String, a: A)(implicit ev: F[A] <:< Semigroup[A]): Unit = {
-    val pure: Semigroup[A] = ev(InvariantMonoidal[F].pure(a))
-
-    test(s"InvariantMonoidal[$name].pure combineAllOption reference")(pure.combineAllOption(List(a)) === Option(a))
-  }
 
 
-  combineAllOption_Ref[Semigroup, Int]("Semigroup[Int]", 0)
-  combineAllOption_Ref[Monoid, Int]("Monoid[Int]", 0)
-  combineAllOption_Ref[Group, Int]("Group[Int]", 0)
-  combineAllOption_Ref[CommutativeSemigroup, Int]("CommutativeSemigroup[Int]", 0)
-  combineAllOption_Ref[Band, Int]("Band[Int]", 0)
-  combineAllOption_Ref[Semilattice, Int]("Semilattice[Int]", 0)
-  combineAllOption_Ref[CommutativeMonoid, Int]("CommutativeMonoid[Int]", 0)
-  combineAllOption_Ref[BoundedSemilattice, Int]("BoundedSemilattice[Int]", 0)
-  combineAllOption_Ref[CommutativeGroup, Int]("CommutativeGroup[Int]", 0)
+  checkAll("InvariantMonoidal[Semigroup]", GroupLaws[Int].semigroup(InvariantMonoidal[Semigroup].pure(0)))
+  checkAll("InvariantMonoidal[CommutativeSemigroup]", GroupLaws[Int].commutativeSemigroup(InvariantMonoidal[CommutativeSemigroup].pure(0)))
+
 
 
   {
@@ -158,24 +147,4 @@ class AlgebraInvariantTests extends CatsSuite {
   checkAll("InvariantMonoidal[CommutativeSemigroup]", InvariantMonoidalTests[CommutativeSemigroup].invariantMonoidal[Int, Int, Int])
   checkAll("InvariantMonoidal[CommutativeSemigroup]", SerializableTests.serializable(InvariantMonoidal[CommutativeSemigroup]))
 
-  checkAll("InvariantMonoidal[Band]", InvariantMonoidalTests[Band].invariantMonoidal[Set[Int], Set[Int], Set[Int]])
-  checkAll("InvariantMonoidal[Band]", SerializableTests.serializable(InvariantMonoidal[Band]))
-
-  checkAll("InvariantMonoidal[Monoid]", InvariantMonoidalTests[Monoid].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[Monoid]", SerializableTests.serializable(InvariantMonoidal[Monoid]))
-
-  checkAll("InvariantMonoidal[Semilattice]", InvariantMonoidalTests[Semilattice].invariantMonoidal[Set[Int], Set[Int], Set[Int]])
-  checkAll("InvariantMonoidal[Semilattice]", SerializableTests.serializable(InvariantMonoidal[Semilattice]))
-
-  checkAll("InvariantMonoidal[CommutativeMonoid]", InvariantMonoidalTests[CommutativeMonoid].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[CommutativeMonoid]", SerializableTests.serializable(InvariantMonoidal[CommutativeMonoid]))
-
-  checkAll("InvariantMonoidal[BoundedSemilattice]", InvariantMonoidalTests[BoundedSemilattice].invariantMonoidal[Set[Int], Set[Int], Set[Int]])
-  checkAll("InvariantMonoidal[BoundedSemilattice]", SerializableTests.serializable(InvariantMonoidal[BoundedSemilattice]))
-
-  checkAll("InvariantMonoidal[Group]", InvariantMonoidalTests[Group].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[Group]", SerializableTests.serializable(InvariantMonoidal[Group]))
-
-  checkAll("InvariantMonoidal[CommutativeGroup]", InvariantMonoidalTests[CommutativeGroup].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[CommutativeGroup]", SerializableTests.serializable(InvariantMonoidal[CommutativeGroup]))
 }
