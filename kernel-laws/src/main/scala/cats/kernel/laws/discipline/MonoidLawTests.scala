@@ -1,7 +1,9 @@
-package cats.kernel.laws.discipline
+package cats
+package kernel
+package laws
+package discipline
 
-import cats.kernel.{Monoid, Eq}
-import cats.kernel.laws.MonoidLaws
+import cats.kernel.instances.boolean._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
@@ -17,6 +19,7 @@ trait MonoidLawTests[A] extends SemigroupLawTests[A] {
       "right identity" -> forAll(laws.rightIdentity _),
       "combine all" -> forAll(laws.combineAll _),
       "collect0" -> forAll(laws.collect0 _),
+      "is id" -> forAll((a: A) => laws.isId(a, eqA)),
       "repeat0" -> forAll(laws.repeat0 _))
 
 }
