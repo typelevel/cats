@@ -13,7 +13,7 @@ trait BoundedSemilatticeTests[A] extends CommutativeMonoidTests[A] with Semilatt
     new RuleSet {
       val name: String = "boundedSemilattice"
       val bases: Seq[(String, RuleSet)] = Nil
-      val parents: Seq[RuleSet] = Seq(commutativeSemigroup, band)
+      val parents: Seq[RuleSet] = Seq(commutativeMonoid, semilattice)
       val props: Seq[(String, Prop)] = Nil
     }
 
