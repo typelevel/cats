@@ -37,6 +37,11 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("parAp accumulates errors in order") {
+    val right: Either[String, Int => Int] = Left("Hello")
+    Parallel.parAp(right)("World".asLeft) should === (Left("HelloWorld"))
+  }
+
   test("parAp2 accumulates errors in order") {
     val plus = (_: Int) + (_: Int)
     val rightPlus: Either[String, (Int, Int) => Int] = Right(plus)
