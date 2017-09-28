@@ -40,6 +40,7 @@ class FutureTests extends CatsSuite {
 
   checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
+  checkAll("Future", CommutativeApplicativeTests[Future].commutativeApplicative[Int, Int, Int])
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
 
   {
