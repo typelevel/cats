@@ -15,20 +15,20 @@ trait OrderLaws[A] extends PartialOrderLaws[A] {
     (((c < 0) == E.lt(x, y)) && ((c == 0) == E.eqv(x, y)) && ((c > 0) == E.gt(x, y))) <-> true
   }
 
-  def min(x: A, y: A): IsEq[A] = {
+  def min(x: A, y: A): IsEq[Boolean] = {
     val c = E.compare(x, y)
     val m = E.min(x, y)
-    if (c < 0) m <-> x
-    else if (c == 0) x <-> y
-    else m <-> y
+    if (c < 0) E.eqv(m, x) <-> true
+    else if (c == 0) (E.eqv(m, x) && (E.eqv(m, y))) <-> true
+    else E.eqv(m, y) <-> true
   }
 
-  def max(x: A, y: A): IsEq[A] = {
+  def max(x: A, y: A): IsEq[Boolean] = {
     val c = E.compare(x, y)
     val m = E.max(x, y)
-    if (c < 0) m <-> y
-    else if (c == 0) x <-> y
-    else m <-> x
+    if (c < 0) E.eqv(m, y) <-> true
+    else if (c == 0) (E.eqv(m, x) && (E.eqv(m, y))) <-> true
+    else E.eqv(m, x) <-> true
   }
 
 }

@@ -1,11 +1,15 @@
 package cats.kernel.laws
 
-import cats.kernel.PartialOrder
+import cats.kernel.{Eq, PartialOrder}
+import cats.kernel.instances.option._
 
 trait PartialOrderLaws[A] extends EqLaws[A] {
   override implicit def E: PartialOrder[A]
 
-  def reflexitivity(x: A): IsEq[Boolean] =
+  def reflexitivityLt(x: A): IsEq[Boolean] =
+    E.lteqv(x, x) <-> true
+
+  def reflexitivityGt(x: A): IsEq[Boolean] =
     E.gteqv(x, x) <-> true
 
   def antisymmetry(x: A, y: A): IsEq[Boolean] =
@@ -28,22 +32,22 @@ trait PartialOrderLaws[A] extends EqLaws[A] {
     (((c < 0) == E.lt(x, y)) && ((c == 0) == E.eqv(x, y)) && ((c > 0) == E.gt(x, y))) <-> true
   }
 
-  def pmin(x: A, y: A): IsEq[Option[A]] = {
+  def pmin(x: A, y: A): IsEq[Boolean] = {
     val c = E.partialCompare(x, y)
     val m = E.pmin(x, y)
-    if (c < 0) m <-> Option(x)
-    else if (c == 0) Option(x) <-> Option(y)
-    else if (c > 0) m <-> Option(y)
-    else m <-> None
+    if (c < 0) Eq[Option[A]].eqv(m, Option(x)) <-> true
+    else if (c == 0) (Eq[Option[A]].eqv(m, Option(x)) && Eq[Option[A]].eqv(m, Option(y))) <-> true
+    else if (c > 0) Eq[Option[A]].eqv(m, Option(y)) <-> true
+    else Eq[Option[A]].eqv(m, None) <-> true
   }
 
-  def pmax(x: A, y: A): IsEq[Option[A]] = {
+  def pmax(x: A, y: A): IsEq[Boolean] = {
     val c = E.partialCompare(x, y)
     val m = E.pmax(x, y)
-    if (c < 0) m <-> Option(y)
-    else if (c == 0) Option(x) <-> Option(y)
-    else if (c > 0) m <-> Option(x)
-    else m <-> None
+    if (c < 0) Eq[Option[A]].eqv(m, Option(y)) <-> true
+    else if (c == 0) (Eq[Option[A]].eqv(m, Option(x)) && Eq[Option[A]].eqv(m, Option(y))) <-> true
+    else if (c > 0) Eq[Option[A]].eqv(m, Option(x)) <-> true
+    else Eq[Option[A]].eqv(m, None) <-> true
   }
 
 
