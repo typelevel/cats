@@ -3,7 +3,7 @@ package cats.instances
 import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
-import cats.{Applicative, Functor, Monad, Parallel, ~>}
+import cats.{Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel, ~>}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,11 +38,11 @@ trait ParallelInstances extends ParallelInstances1 {
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel(optT.value)))
   }
 
-  implicit def catsStdParallelForZipList[A]: Parallel[List, ZipList] =
-    new Parallel[List, ZipList] {
+  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel[List, ZipList] =
+    new NonEmptyParallel[List, ZipList] {
 
-      def monad: Monad[List] = cats.instances.list.catsStdInstancesForList
-      def applicative: Applicative[ZipList] = ZipList.catsDataApplicativeForZipList
+      def monad: FlatMap[List] = cats.instances.list.catsStdInstancesForList
+      def applicative: Apply[ZipList] = ZipList.catsDataApplyForZipList
 
       def sequential: ZipList ~> List =
         λ[ZipList ~> List](_.value)
@@ -51,11 +51,11 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[List ~> ZipList](v => new ZipList(v))
     }
 
-  implicit def catsStdParallelForZipVector[A]: Parallel[Vector, ZipVector] =
-    new Parallel[Vector, ZipVector] {
+  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel[Vector, ZipVector] =
+    new NonEmptyParallel[Vector, ZipVector] {
 
-      def monad: Monad[Vector] = cats.instances.vector.catsStdInstancesForVector
-      def applicative: Applicative[ZipVector] = ZipVector.catsDataApplicativeForZipVector
+      def monad: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
+      def applicative: Apply[ZipVector] = ZipVector.catsDataApplyForZipVector
 
       def sequential: ZipVector ~> Vector =
         λ[ZipVector ~> Vector](_.value)

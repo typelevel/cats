@@ -6,7 +6,7 @@ import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
 import cats.tests.CatsSuite
 import org.scalatest.FunSuite
-import cats.laws.discipline.{ApplicativeErrorTests, SerializableTests, ParallelTests => ParallelTypeclassTests}
+import cats.laws.discipline.{ApplicativeErrorTests, NonEmptyParallelTests, SerializableTests, ParallelTests => ParallelTypeclassTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
@@ -118,17 +118,19 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
   checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?], Int].parallel)
   checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?], Int].parallel)
-  checkAll("Parallel[Vector, ZipVector]", ParallelTypeclassTests[Vector, ZipVector, Int].parallel)
-  checkAll("Parallel[List, ZipList]", ParallelTypeclassTests[List, ZipList, Int].parallel)
-  checkAll("Parallel[Stream, ZipStream]", ParallelTypeclassTests[Stream, ZipStream, Int].parallel)
-  checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)
-  checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
+  checkAll("NonEmptyParallel[Vector, ZipVector]", NonEmptyParallelTests[Vector, ZipVector, Int].nonEmptyParallel)
+  checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList, Int].nonEmptyParallel)
+  // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
+  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[Stream, ZipStream, Int].nonEmptyParallel)
+  checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]", NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector, Int].nonEmptyParallel)
+  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList, Int].nonEmptyParallel)
   checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]", ParallelTypeclassTests[NonEmptyStream, OneAnd[ZipStream, ?], Int].parallel)
 
 
   checkAll("Parallel[Id, Id]", ParallelTypeclassTests[Id, Id, Int].parallel)
 
-  checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(Parallel[NonEmptyList, ZipNonEmptyList]))
+  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(NonEmptyParallel[NonEmptyList, ZipNonEmptyList]))
+  checkAll("Parallel[Either[String, ?], Validated[String, ?]]", SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
 
   {
     implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =

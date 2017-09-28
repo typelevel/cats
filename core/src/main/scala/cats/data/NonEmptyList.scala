@@ -398,8 +398,7 @@ object NonEmptyList extends NonEmptyListInstances {
     def apply[A](nev: NonEmptyList[A]): ZipNonEmptyList[A] =
       new ZipNonEmptyList(nev)
 
-    implicit val zipNelApplicative: Applicative[ZipNonEmptyList] = new Applicative[ZipNonEmptyList] {
-      def pure[A](x: A): ZipNonEmptyList[A] = ZipNonEmptyList(NonEmptyList.one(x))
+    implicit val zipNelApply: Apply[ZipNonEmptyList] = new Apply[ZipNonEmptyList] {
       def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
         ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
 
@@ -410,7 +409,7 @@ object NonEmptyList extends NonEmptyListInstances {
         ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
     }
 
-    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
 }
 
@@ -526,12 +525,12 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
       val A0 = A
     }
 
-  implicit def catsDataParallelForNonEmptyList[A]: Parallel[NonEmptyList, ZipNonEmptyList] =
-    new Parallel[NonEmptyList, ZipNonEmptyList] {
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
 
-      def monad: Monad[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
+      def monad: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 
-      def applicative: Applicative[ZipNonEmptyList] = ZipNonEmptyList.zipNelApplicative
+      def applicative: Apply[ZipNonEmptyList] = ZipNonEmptyList.zipNelApply
 
       def sequential: ZipNonEmptyList ~> NonEmptyList =
         λ[ZipNonEmptyList ~> NonEmptyList](_.value)

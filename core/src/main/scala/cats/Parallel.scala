@@ -6,7 +6,34 @@ import cats.arrow.FunctionK
   * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
   * The Parallel type class allows us to represent this relationship.
   */
-trait Parallel[M[_], F[_]] extends Serializable {
+trait NonEmptyParallel[M[_], F[_]] extends Serializable {
+  /**
+    * The applicative instance for F[_]
+    */
+  def applicative: Apply[F]
+
+  /**
+    * The monad instance for M[_]
+    */
+  def monad: FlatMap[M]
+
+  /**
+    * Natural Transformation from the parallel Applicative F[_] to the sequential Monad M[_].
+    */
+  def sequential: F ~> M
+
+  /**
+    * Natural Transformation from the sequential Monad M[_] to the parallel Applicative F[_].
+    */
+  def parallel: M ~> F
+
+}
+
+/**
+  * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
+  * The Parallel type class allows us to represent this relationship.
+  */
+trait Parallel[M[_], F[_]] extends NonEmptyParallel[M, F] {
   /**
     * The applicative instance for F[_]
     */
@@ -47,6 +74,10 @@ trait Parallel[M[_], F[_]] extends Serializable {
 
     def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
   }
+}
+
+object NonEmptyParallel {
+  def apply[M[_], F[_]](implicit P: NonEmptyParallel[M, F]): NonEmptyParallel[M, F] = P
 }
 
 object Parallel extends ParallelArityFunctions {
@@ -94,12 +125,52 @@ object Parallel extends ParallelArityFunctions {
   }
 
   /**
+    * Like `NonEmptyTraverse[A].nonEmptySequence`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptySequence[T[_]: NonEmptyTraverse, M[_], F[_], A]
+  (tma: T[M[A]])(implicit P: NonEmptyParallel[M, F]): M[T[A]] = {
+    val fta: F[T[A]] = NonEmptyTraverse[T].nonEmptyTraverse(tma)(P.parallel.apply)(P.applicative)
+    P.sequential(fta)
+  }
+
+  /**
+    * Like `NonEmptyTraverse[A].nonEmptyTraverse`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptyTraverse[T[_]: NonEmptyTraverse, M[_], F[_], A, B]
+  (ta: T[A])(f: A => M[B])(implicit P: NonEmptyParallel[M, F]): M[T[B]] = {
+    val gtb: F[T[B]] = NonEmptyTraverse[T].nonEmptyTraverse(ta)(f andThen P.parallel.apply)(P.applicative)
+    P.sequential(gtb)
+  }
+
+  /**
+    * Like `Reducible[A].nonEmptySequence_`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptySequence_[T[_]: Reducible, M[_], F[_], A]
+  (tma: T[M[A]])(implicit P: NonEmptyParallel[M, F]): M[Unit] = {
+    val fu: F[Unit] = Reducible[T].nonEmptyTraverse_(tma)(P.parallel.apply)(P.applicative)
+    P.sequential(fu)
+  }
+
+  /**
+    * Like `Reducible[A].nonEmptyTraverse_`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptyTraverse_[T[_]: Reducible, M[_], F[_], A, B]
+  (ta: T[A])(f: A => M[B])(implicit P: NonEmptyParallel[M, F]): M[Unit] = {
+    val gtb: F[Unit] = Reducible[T].nonEmptyTraverse_(ta)(f andThen P.parallel.apply)(P.applicative)
+    P.sequential(gtb)
+  }
+
+  /**
     * Like `Applicative[F].ap`, but uses the applicative instance
     * corresponding to the Parallel instance instead.
     */
   def parAp[M[_], F[_], A, B](mf: M[A => B])
-                                    (ma: M[A])
-                                    (implicit P: Parallel[M, F]): M[B] =
+                             (ma: M[A])
+                             (implicit P: NonEmptyParallel[M, F]): M[B] =
     P.sequential(P.applicative.ap(P.parallel(mf))(P.parallel(ma)))
 
   /**
@@ -107,7 +178,7 @@ object Parallel extends ParallelArityFunctions {
     * corresponding to the Parallel instance instead.
     */
   def parProduct[M[_], F[_], A, B](ma: M[A], mb: M[B])
-                                         (implicit P: Parallel[M, F]): M[(A, B)] =
+                                  (implicit P: NonEmptyParallel[M, F]): M[(A, B)] =
     P.sequential(P.applicative.product(P.parallel(ma), P.parallel(mb)))
 
   /**
@@ -115,8 +186,8 @@ object Parallel extends ParallelArityFunctions {
     * corresponding to the Parallel instance instead.
     */
   def parAp2[M[_], F[_], A, B, Z](ff: M[(A, B) => Z])
-                                        (ma: M[A], mb: M[B])
-                                        (implicit P: Parallel[M, F]): M[Z] =
+                                 (ma: M[A], mb: M[B])
+                                 (implicit P: NonEmptyParallel[M, F]): M[Z] =
     P.sequential(
       P.applicative.ap2(P.parallel(ff))(P.parallel(ma), P.parallel(mb))
     )

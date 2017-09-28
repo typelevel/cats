@@ -211,8 +211,8 @@ object Boilerplate {
       block"""
          |package cats
          |trait ParallelArityFunctions {
-        -  def parMap$arity[M[_]: Monad, F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: Parallel[M, F]): M[Z] =
-        -    Monad[M].map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+        -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
+        -    p.monad.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
       """
     }
@@ -264,21 +264,21 @@ object Boilerplate {
       val n = if (arity == 1) { "" } else { arity.toString }
 
       val parMap =
-        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: Parallel[M, F]): M[Z] = Monad[M].map($tupleArgs)(f)"
-        else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: Parallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
+        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.monad.map($tupleArgs)(f)"
+        else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
 
       block"""
          |package cats
          |package syntax
          |
-         |import cats.{Monad, Parallel}
+         |import cats.Parallel
          |
          |trait TupleParallelSyntax {
-         -  implicit def catsSyntaxTuple${arity}Parallel[M[_]: Monad, ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
+         -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
          |}
          |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_]: Monad, ${`A..N`}]($tupleTpe) {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
          -  $parMap
          -}
          |

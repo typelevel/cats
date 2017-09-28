@@ -318,11 +318,11 @@ private[data] sealed abstract class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
-  implicit def catsDataParallelForNonEmptyVector[A]: Parallel[NonEmptyVector, ZipNonEmptyVector] =
-    new Parallel[NonEmptyVector, ZipNonEmptyVector] {
+  implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
+    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
 
-      def applicative: Applicative[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApplicative
-      def monad: Monad[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
+      def applicative: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApply
+      def monad: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
         λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
@@ -363,8 +363,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] =
       new ZipNonEmptyVector(nev)
 
-    implicit val zipNevApplicative: Applicative[ZipNonEmptyVector] = new Applicative[ZipNonEmptyVector] {
-      def pure[A](x: A): ZipNonEmptyVector[A] = ZipNonEmptyVector(NonEmptyVector.one(x))
+    implicit val zipNevApply: Apply[ZipNonEmptyVector] = new Apply[ZipNonEmptyVector] {
       def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
         ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
 
