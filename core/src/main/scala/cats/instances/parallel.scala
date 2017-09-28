@@ -38,11 +38,24 @@ trait ParallelInstances extends ParallelInstances1 {
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel(optT.value)))
   }
 
+  implicit def catsStdParallelForZipList[A]: Parallel[List, ZipList] =
+    new Parallel[List, ZipList] {
+
+      def monad: Monad[List] = cats.instances.list.catsStdInstancesForList
+      def applicative: Applicative[ZipList] = ZipList.catsDataApplicativeForZipList
+
+      def sequential: ZipList ~> List =
+        λ[ZipList ~> List](_.value)
+
+      def parallel: List ~> ZipList =
+        λ[List ~> ZipList](v => new ZipList(v))
+    }
+
   implicit def catsStdParallelForZipVector[A]: Parallel[Vector, ZipVector] =
     new Parallel[Vector, ZipVector] {
 
       def monad: Monad[Vector] = cats.instances.vector.catsStdInstancesForVector
-      def applicative: Applicative[ZipVector] = ZipVector.catsDataAlternativeForZipVector
+      def applicative: Applicative[ZipVector] = ZipVector.catsDataApplicativeForZipVector
 
       def sequential: ZipVector ~> Vector =
         λ[ZipVector ~> Vector](_.value)

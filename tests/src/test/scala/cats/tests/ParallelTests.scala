@@ -107,11 +107,11 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?], Int].parallel)
   checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?], Int].parallel)
   checkAll("Parallel[Vector, ZipVector]", ParallelTypeclassTests[Vector, ZipVector, Int].parallel)
+  checkAll("Parallel[List, ZipList]", ParallelTypeclassTests[List, ZipList, Int].parallel)
   checkAll("Parallel[Stream, ZipStream]", ParallelTypeclassTests[Stream, ZipStream, Int].parallel)
   checkAll("Parallel[NonEmptyVector, ZipNonEmptyVector]", ParallelTypeclassTests[NonEmptyVector, ZipNonEmptyVector, Int].parallel)
   checkAll("Parallel[NonEmptyList, ZipNonEmptyList]", ParallelTypeclassTests[NonEmptyList, ZipNonEmptyList, Int].parallel)
   checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]", ParallelTypeclassTests[NonEmptyStream, OneAnd[ZipStream, ?], Int].parallel)
-  checkAll("Parallel[OneAnd[Vector, ?], OneAnd[ZipVector, ?]", ParallelTypeclassTests[OneAnd[Vector, ?], OneAnd[ZipVector, ?], Int].parallel)
 
 
   checkAll("Parallel[Id, Id]", ParallelTypeclassTests[Id, Id, Int].parallel)

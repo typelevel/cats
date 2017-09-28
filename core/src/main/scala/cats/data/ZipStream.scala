@@ -11,6 +11,10 @@ object ZipStream {
 
   implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] = new Alternative[ZipStream] {
     def pure[A](x: A): ZipStream[A] = new ZipStream(Stream(x))
+
+    override def map[A, B](fa: ZipStream[A])(f: (A) => B): ZipStream[B] =
+      ZipStream(fa.value.map(f))
+
     def ap[A, B](ff: ZipStream[A => B])(fa: ZipStream[A]): ZipStream[B] =
       ZipStream((ff.value, fa.value).zipped.map(_ apply _))
 

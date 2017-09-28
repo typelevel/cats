@@ -394,15 +394,23 @@ object NonEmptyList extends NonEmptyListInstances {
   class ZipNonEmptyList[A](val value: NonEmptyList[A]) extends AnyVal
 
   object ZipNonEmptyList {
+
+    def apply[A](nev: NonEmptyList[A]): ZipNonEmptyList[A] =
+      new ZipNonEmptyList(nev)
+
     implicit val zipNelApplicative: Applicative[ZipNonEmptyList] = new Applicative[ZipNonEmptyList] {
-      def pure[A](x: A): ZipNonEmptyList[A] = new ZipNonEmptyList(NonEmptyList.one(x))
+      def pure[A](x: A): ZipNonEmptyList[A] = ZipNonEmptyList(NonEmptyList.one(x))
       def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
-        new ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+        ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+
+      override def map[A, B](fa: ZipNonEmptyList[A])(f: (A) => B): ZipNonEmptyList[B] =
+        ZipNonEmptyList(fa.value.map(f))
+
       override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
-        new ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+        ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
     }
 
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
 }
 

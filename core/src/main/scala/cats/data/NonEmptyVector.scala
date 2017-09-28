@@ -359,12 +359,20 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
   class ZipNonEmptyVector[A](val value: NonEmptyVector[A]) extends Serializable
 
   object ZipNonEmptyVector {
+
+    def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] =
+      new ZipNonEmptyVector(nev)
+
     implicit val zipNevApplicative: Applicative[ZipNonEmptyVector] = new Applicative[ZipNonEmptyVector] {
-      def pure[A](x: A): ZipNonEmptyVector[A] = new ZipNonEmptyVector(NonEmptyVector.one(x))
+      def pure[A](x: A): ZipNonEmptyVector[A] = ZipNonEmptyVector(NonEmptyVector.one(x))
       def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
-        new ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+        ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+
+      override def map[A, B](fa: ZipNonEmptyVector[A])(f: (A) => B): ZipNonEmptyVector[B] =
+        ZipNonEmptyVector(fa.value.map(f))
+
       override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
-        new ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+        ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
     }
 
     implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
