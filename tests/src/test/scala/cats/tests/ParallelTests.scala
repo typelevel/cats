@@ -77,6 +77,18 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParMap over List should be consistent with zip") {
+    forAll { (as: List[Int], bs: List[Int], cs: List[Int]) =>
+      val zipped = as.zip(bs).map {
+        case (a, b) => a + b
+      }.zip(cs).map {
+        case (a, b) => a + b
+      }
+
+      (as, bs, cs).parMapN(_ + _ + _) should === (zipped)
+    }
+  }
+
   test("ParMap over Vector should be consistent with zip") {
     forAll { (as: Vector[Int], bs: Vector[Int], cs: Vector[Int]) =>
       val zipped = as.zip(bs).map {
