@@ -4,8 +4,9 @@ package tests
 import catalysts.Platform
 
 import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{ApplyTests, ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -51,6 +52,8 @@ class NonEmptyVectorTests extends CatsSuite {
 
   checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
+
+  checkAll("ZipNonEmptyVector[Int]", ApplyTests[ZipNonEmptyVector].apply[Int, Int, Int])
 
   test("size is consistent with toList.size") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
