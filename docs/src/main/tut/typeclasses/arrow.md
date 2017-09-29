@@ -21,7 +21,7 @@ Having an `Arrow` instance for a type constructor `F[_, _]` means that an `F[_, 
 
 `scala.Function1` has an `Arrow` instance, so you can use all the above methods on `Function1`. The Scala standard library has the `compose` and `andThen` methods for composing `Function1`s, but the `Arrow` instance offers more powerful options.
 
-Suppose we want to write a function `expAndVar`, that takes a `List[Int]` and returns the pair of expected value and variance. To do so, we first define a `combine` function that takes an input and processes two copies of it with two arrows, using `Arrow` operations `lift`, `>>>` and `***`:
+Suppose we want to write a function `meanAndVar`, that takes a `List[Int]` and returns the pair of mean and variance. To do so, we first define a `combine` function that combines two arrows into a single arrow, which takes an input and processes two copies of it with two arrows. `combine` can be defined in terms of `Arrow` operations `lift`, `>>>` and `***`:
 
 ```tut:book:silent
 import cats.arrow.Arrow
@@ -31,37 +31,37 @@ def combine[F[_, _]: Arrow, A, B, C](fab: F[A, B], fac: F[A, C]): F[A, (B, C)] =
   Arrow[F].lift((a: A) => (a, a)) >>> (fab *** fac)
 ```
 
-We can then create functions `expected: List[Int] => Double`, `variance: List[Int] => Double` and `expAndVar: List[Int] => (Double, Double)` using the `combine` method and `Arrow` operations:
+We can then create functions `mean: List[Int] => Double`, `variance: List[Int] => Double` and `meanAndVar: List[Int] => (Double, Double)` using the `combine` method and `Arrow` operations:
 
 ```tut:book:silent
-val expected: List[Int] => Double =
+val mean: List[Int] => Double =
     combine((_: List[Int]).sum, (_: List[Int]).size) >>> {case (x, y) => x.toDouble / y}
 
 val variance: List[Int] => Double =
   // Variance is mean of square minus square of mean
-  combine(((_: List[Int]).map(x => x * x)) >>> expected, expected) >>> {case (x, y) => x - y * y}
+  combine(((_: List[Int]).map(x => x * x)) >>> mean, mean) >>> {case (x, y) => x - y * y}
 
-val expAndVar: List[Int] => (Double, Double) = combine(expected, variance)
+val meanAndVar: List[Int] => (Double, Double) = combine(mean, variance)
 ```
 
 ```tut:book
-expAndVar(List(1, 2, 3, 4))
+meanAndVar(List(1, 2, 3, 4))
 ```
 
-Of course, a more natural way to implement `expected` and `variance` would be:
+Of course, a more natural way to implement `mean` and `variance` would be:
 
 ```tut:book:silent
-val expected2: List[Int] => Double = xs => xs.sum.toDouble / xs.size
+val mean2: List[Int] => Double = xs => xs.sum.toDouble / xs.size
 
-val variance2: List[Int] => Double = xs => expected2(xs.map(x => x * x)) - scala.math.pow(expected2(xs), 2.0)
+val variance2: List[Int] => Double = xs => mean2(xs.map(x => x * x)) - scala.math.pow(mean2(xs), 2.0)
 ```
 
-However, `Arrow` methods are more general and provide a common structure for types that have `Arrow` instances. They are also a more abstract way of stitching computations together.
+However, `Arrow` methods are more general and provide a common structure for type constructors that have `Arrow` instances. They are also a more abstract way of stitching computations together.
 
 
 ### `Kleisli`
 
-A `Kleisli[F[_], A, B]` represents a function `A => F[B]`. You cannot directly compose an `A => F[B]` with a `B => F[C]` since the codomain of the first function is `F[B]` while the domain of the second function is `B`; however, since `Kleisli` is an `Arrow`, you can easily compose `Kleisli[F[_], A, B]` with `Kleisli[F[_], B, C]` using `Arrow` operations.
+A `Kleisli[F[_], A, B]` represents a function `A => F[B]`. You cannot directly compose an `A => F[B]` with a `B => F[C]` with functional composition, since the codomain of the first function is `F[B]` while the domain of the second function is `B`; however, since `Kleisli` is an arrow (as long as `F` is a monad), you can easily compose `Kleisli[F[_], A, B]` with `Kleisli[F[_], B, C]` using `Arrow` operations.
 
 
 Suppose you want to take a `List[Int]`, and return the sum of the first and the last element (if exists). To do so, we can create two `Kleisli`s that find the `headOption` and `lastOption` of a `List[Int]`, respectively:
