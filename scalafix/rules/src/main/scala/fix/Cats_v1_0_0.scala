@@ -78,9 +78,6 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
 case class ContraMapToLMap(index: SemanticdbIndex)
   extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
 
-  //val contraMap = Symbol("_root_.cats.functor.Contravariant.Ops.contramap")
-
-
   override def fix(ctx: RuleCtx): Patch = {
 
     val contraMatcher = SymbolMatcher.normalized(Symbol("_root_.cats.functor.Contravariant.Ops.`contramap`."))
@@ -90,7 +87,7 @@ case class ContraMapToLMap(index: SemanticdbIndex)
     ctx.tree.collect {
       case Term.Apply(fun, _) =>
         if (contraMatcher.matches(fun) &&
-          fun.children.headOption.flatMap(index.denotation).exists{ x => println(x.name == unApplyName); x.name == unApplyName }) {
+          fun.children.headOption.flatMap(index.denotation).exists(_.name == unApplyName )) {
           fun.children.find(contraMatcher.matches).map(tree => ctx.replaceTree(tree, "lmap")).getOrElse(Patch.empty)
         } else {
           Patch.empty
