@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
@@ -318,18 +317,6 @@ private[data] sealed abstract class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
-  implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
-    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
-
-      def applicative: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApply
-      def monad: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
-
-      def sequential: ZipNonEmptyVector ~> NonEmptyVector =
-        λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
-
-      def parallel: NonEmptyVector ~> ZipNonEmptyVector =
-        λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
-    }
 
 }
 
@@ -356,24 +343,5 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 
-  class ZipNonEmptyVector[A](val value: NonEmptyVector[A]) extends Serializable
 
-  object ZipNonEmptyVector {
-
-    def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] =
-      new ZipNonEmptyVector(nev)
-
-    implicit val zipNevApply: Apply[ZipNonEmptyVector] = new Apply[ZipNonEmptyVector] {
-      def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
-        ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
-
-      override def map[A, B](fa: ZipNonEmptyVector[A])(f: (A) => B): ZipNonEmptyVector[B] =
-        ZipNonEmptyVector(fa.value.map(f))
-
-      override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
-        ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
-    }
-
-    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
-  }
 }

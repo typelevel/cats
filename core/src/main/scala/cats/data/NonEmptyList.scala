@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
 
@@ -391,26 +390,6 @@ object NonEmptyList extends NonEmptyListInstances {
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
 
-  class ZipNonEmptyList[A](val value: NonEmptyList[A]) extends AnyVal
-
-  object ZipNonEmptyList {
-
-    def apply[A](nev: NonEmptyList[A]): ZipNonEmptyList[A] =
-      new ZipNonEmptyList(nev)
-
-    implicit val zipNelApply: Apply[ZipNonEmptyList] = new Apply[ZipNonEmptyList] {
-      def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
-        ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
-
-      override def map[A, B](fa: ZipNonEmptyList[A])(f: (A) => B): ZipNonEmptyList[B] =
-        ZipNonEmptyList(fa.value.map(f))
-
-      override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
-        ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
-    }
-
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
-  }
 }
 
 private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
@@ -523,20 +502,6 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
   implicit def catsDataOrderForNonEmptyList[A](implicit A: Order[A]): Order[NonEmptyList[A]] =
     new NonEmptyListOrder[A] {
       val A0 = A
-    }
-
-  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
-    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
-
-      def monad: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
-
-      def applicative: Apply[ZipNonEmptyList] = ZipNonEmptyList.zipNelApply
-
-      def sequential: ZipNonEmptyList ~> NonEmptyList =
-        λ[ZipNonEmptyList ~> NonEmptyList](_.value)
-
-      def parallel: NonEmptyList ~> ZipNonEmptyList =
-        λ[NonEmptyList ~> ZipNonEmptyList](nel => new ZipNonEmptyList(nel))
     }
 }
 
