@@ -3,27 +3,27 @@ package cats
 import cats.arrow.FunctionK
 
 /**
-  * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
-  * The Parallel type class allows us to represent this relationship.
+  * Some types that form a FlatMap, are also capable of forming an Apply that supports parallel composition.
+  * The NonEmptyParallel type class allows us to represent this relationship.
   */
 trait NonEmptyParallel[M[_], F[_]] extends Serializable {
   /**
-    * The applicative instance for F[_]
+    * The Apply instance for F[_]
     */
   def applicative: Apply[F]
 
   /**
-    * The monad instance for M[_]
+    * The FlatMap instance for M[_]
     */
   def monad: FlatMap[M]
 
   /**
-    * Natural Transformation from the parallel Applicative F[_] to the sequential Monad M[_].
+    * Natural Transformation from the parallel Apply F[_] to the sequential FlatMap M[_].
     */
   def sequential: F ~> M
 
   /**
-    * Natural Transformation from the sequential Monad M[_] to the parallel Applicative F[_].
+    * Natural Transformation from the sequential FlatMap M[_] to the parallel Apply F[_].
     */
   def parallel: M ~> F
 
