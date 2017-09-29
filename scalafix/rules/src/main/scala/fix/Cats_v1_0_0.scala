@@ -2,6 +2,7 @@ package fix
 package v1_0_0
 
 import scalafix._
+import scalafix.syntax._
 import scalafix.util.SymbolMatcher
 import scala.meta._
 import scala.meta.contrib._
@@ -70,6 +71,33 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
           ctx.replaceTree(t, "import cats.syntax.apply._")
         }
     }.asPatch + ctx.replaceSymbols(renames.toSeq: _*)
+  }
+}
+
+// ref: https://github.com/typelevel/cats/issues/1850
+case class ContraMapToLMap(index: SemanticdbIndex)
+  extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
+
+  //val contraMap = Symbol("_root_.cats.functor.Contravariant.Ops.contramap")
+
+
+  override def fix(ctx: RuleCtx): Patch = {
+
+    val contraMatcher = SymbolMatcher.normalized(Symbol("_root_.cats.functor.Contravariant.Ops.`contramap`."))
+
+    val unApplyName = "catsUnapply2left"
+
+    ctx.tree.collect {
+      case Term.Apply(fun, _) =>
+        if (contraMatcher.matches(fun) &&
+          fun.children.headOption.flatMap(index.denotation).exists{ x => println(x.name == unApplyName); x.name == unApplyName }) {
+          fun.children.find(contraMatcher.matches).map(tree => ctx.replaceTree(tree, "lmap")).getOrElse(Patch.empty)
+        } else {
+          Patch.empty
+        }
+      case _ => Patch.empty
+
+    }.asPatch
   }
 }
 
