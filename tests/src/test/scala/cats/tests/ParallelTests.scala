@@ -37,6 +37,18 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
+    forAll { es: NonEmptyVector[List[Int]] =>
+      (Parallel.parNonEmptyTraverse(es)(identity)) should === (Parallel.parNonEmptySequence(es))
+    }
+  }
+
+  test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
+    forAll { es: NonEmptyList[List[Int]] =>
+      (Parallel.parNonEmptyTraverse_(es)(identity)) should === (Parallel.parNonEmptySequence_(es))
+    }
+  }
+
   test("parAp accumulates errors in order") {
     val right: Either[String, Int => Int] = Left("Hello")
     Parallel.parAp(right)("World".asLeft) should === (Left("HelloWorld"))
