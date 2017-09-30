@@ -212,7 +212,7 @@ object Boilerplate {
          |package cats
          |trait ParallelArityFunctions {
         -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
-        -    p.monad.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+        -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
       """
     }
@@ -264,7 +264,7 @@ object Boilerplate {
       val n = if (arity == 1) { "" } else { arity.toString }
 
       val parMap =
-        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.monad.map($tupleArgs)(f)"
+        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
         else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
 
