@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.data.{Nested, Tuple2K}
 import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
 
 class SetTests extends CatsSuite {
@@ -18,6 +19,37 @@ class SetTests extends CatsSuite {
 
     forAll { fs: Set[String] =>
       fs.show should === (fs.toString)
+    }
+  }
+
+  test("traverseUnordered identity") {
+    forAll { (si: Set[Int], f: Int => String) =>
+      CommutativeApplicative.traverseUnordered[Id, Int, String](si)(f) should === (si.map(f))
+    }
+  }
+
+  test("traverseUnordered sequential composition") {
+    forAll { (si: Set[Int], f: Int => Option[String], g: String => Option[Int]) =>
+      val lhs = Nested(CommutativeApplicative.traverseUnordered(si)(f).map(ss => CommutativeApplicative.traverseUnordered(ss)(g)))
+      val rhs = CommutativeApplicative.traverseUnordered(si)(i => Nested(f(i).map(g)))
+      lhs should === (rhs)
+    }
+  }
+
+  test("traverseUnordered parallel composition") {
+    forAll { (si: Set[Int], f: Int => Option[String], g: Int => Option[String]) =>
+      type Two[A] = Tuple2K[Option, Option, A]
+
+      val lhs = CommutativeApplicative.traverseUnordered(si)(i => Tuple2K(f(i), g(i)))
+      val rhs = Tuple2K(CommutativeApplicative.traverseUnordered(si)(f), CommutativeApplicative.traverseUnordered(si)(g))
+      lhs should ===(rhs)
+    }
+  }
+
+  test("traverseUnordered consistent with sequenceUnordered") {
+    forAll { (si: Set[Int], f: Int => String) =>
+      CommutativeApplicative.traverseUnordered(si)(i => f(i).valid[Int]) should
+        === (CommutativeApplicative.sequenceUnordered(si.map(i => f(i).valid[Int])))
     }
   }
 

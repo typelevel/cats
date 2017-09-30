@@ -135,10 +135,24 @@ private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
     }
 }
 
-private[data] sealed abstract class NestedInstances10 {
+private[data] sealed abstract class NestedInstances10 extends NestedInstances11 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
+    }
+}
+
+private[data] sealed abstract class NestedInstances11 extends NestedInstances12 {
+  implicit def catsDataCommutativeApplyForNestedContravariant[F[_]: CommutativeApply, G[_]: CommutativeApply]: CommutativeApply[Nested[F, G, ?]] =
+    new NestedApply[F, G] with CommutativeApply[Nested[F, G, ?]] {
+      val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
+    }
+}
+
+private[data] sealed abstract class NestedInstances12 {
+  implicit def catsDataCommutativeApplicativeForNestedContravariant[F[_]: CommutativeApplicative, G[_]: CommutativeApplicative]: CommutativeApplicative[Nested[F, G, ?]] =
+    new NestedApplicative[F, G] with CommutativeApplicative[Nested[F, G, ?]] {
+      val FG: Applicative[λ[α => F[G[α]]]] = Applicative[F].compose[G]
     }
 }
 

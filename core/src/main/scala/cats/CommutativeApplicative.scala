@@ -17,8 +17,8 @@ import simulacrum.typeclass
 object CommutativeApplicative {
 
   def traverseUnordered[F[_]: CommutativeApplicative, A, B](sa: Set[A])(f: A => F[B]): F[Set[B]] =
-    sa.foldLeft(Applicative[F].pure(Set.empty[B])) { (buf, a) =>
-      Applicative[F].map2(buf, f(a))(_ + _)
+    sa.foldLeft(Applicative[F].pure(Set.empty[B])) { (acc, a) =>
+      Applicative[F].map2(acc, f(a))(_ + _)
     }
 
   def sequenceUnordered[F[_]: CommutativeApplicative, A](sa: Set[F[A]]): F[Set[A]] =

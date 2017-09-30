@@ -38,7 +38,7 @@ trait CommutativeApplyTests[F[_]] extends ApplyTests[F] {
 }
 
 object CommutativeApplyTests {
-  def apply[F[_]:  CommutativeFlatMap]: CommutativeApplyTests[F] =
+  def apply[F[_]:  CommutativeApply]: CommutativeApplyTests[F] =
     new CommutativeApplyTests[F] {
       def laws: CommutativeApplyLaws[F] = CommutativeApplyLaws[F]
     }
