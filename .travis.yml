@@ -30,11 +30,6 @@ matrix:
 before_install:
  - export PATH=${PATH}:./vendor/bundle
 
-before_script:
-  - cd scalafix
-  - sbt tests/test
-  - cd ..
-
 script:
   - scripts/travis-publish.sh
 
