@@ -76,16 +76,12 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Eq
+    url: typeclasses/eq.html
+    menu_type: typeclasses
+
   - title: Foldable
     url: typeclasses/foldable.html
-    menu_type: typeclasses
-
-  - title: MonadCombine
-    url: typeclasses/monadcombine.html
-    menu_type: typeclasses
-
-  - title: MonadFilter
-    url: typeclasses/monadfilter.html
     menu_type: typeclasses
 
   - title: MonoidK
@@ -100,8 +96,13 @@ options:
     url: typeclasses/show.html
     menu_type: typeclasses
 
+
   - title: NonEmptyTraverse
     url: typeclasses/nonemptytraverse.html
+    menu_type: typeclasses
+
+  - title: Arrow
+    url: typeclasses/arrow.html
     menu_type: typeclasses
 
   ###########################
@@ -120,6 +121,10 @@ options:
     url: datatypes/either.html
     menu_type: data
 
+  - title: Eval
+    url: datatypes/eval.html
+    menu_type: data
+
   - title: FreeApplicatives
     url: datatypes/freeapplicative.html
     menu_type: data
@@ -136,6 +141,10 @@ options:
     url: datatypes/id.html
     menu_type: data
 
+  - title: Ior
+    url: datatypes/ior.html
+    menu_type: data
+
   - title: Kleisli
     url: datatypes/kleisli.html
     menu_type: data
@@ -146,6 +155,10 @@ options:
 
   - title: OptionT
     url: datatypes/optiont.html
+    menu_type: data
+
+  - title: EitherT
+    url: datatypes/eithert.html
     menu_type: data
 
   - title: State

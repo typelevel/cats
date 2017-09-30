@@ -182,7 +182,7 @@ object FreeT extends FreeTInstances {
     λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
 }
 
-private[free] sealed trait FreeTInstances extends FreeTInstances0 {
+private[free] sealed abstract class FreeTInstances extends FreeTInstances0 {
   implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
       override def M = E
@@ -193,21 +193,21 @@ private[free] sealed trait FreeTInstances extends FreeTInstances0 {
     }
 }
 
-private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
+private[free] sealed abstract class FreeTInstances0 extends FreeTInstances1 {
   implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, ?]] =
     new FreeTMonad[S, M] {
       def M = M0
     }
 }
 
-private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
+private[free] sealed abstract class FreeTInstances1 extends FreeTInstances2 {
   implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
     new FreeTFlatMap[S, M] {
       implicit def M: Applicative[M] = M0
     }
 }
 
-private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
+private[free] sealed abstract class FreeTInstances2 extends FreeTInstances3 {
   implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, ?]] =
     new Alternative[FreeT[S, M, ?]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
       override def M = Alternative[M]
@@ -215,7 +215,7 @@ private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
     }
 }
 
-private[free] sealed trait FreeTInstances3 {
+private[free] sealed abstract class FreeTInstances3 {
   implicit def catsFreeSemigroupKForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
     new FreeTSemigroupK[S, M] {
       override def M = Applicative[M]

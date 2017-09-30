@@ -29,7 +29,12 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         fa.map { case (k, a) => (k, f(a)) }
 
       override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
-        fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
+        if (fb.isEmpty) Map.empty // do O(1) work if fb is empty
+        else fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
+
+      override def map2Eval[A, B, Z](fa: Map[K, A], fb: Eval[Map[K, B]])(f: (A, B) => Z): Eval[Map[K, Z]] =
+        if (fa.isEmpty) Eval.now(Map.empty) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       override def ap[A, B](ff: Map[K, A => B])(fa: Map[K, A]): Map[K, B] =
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
@@ -69,11 +74,13 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def size[A](fa: Map[K, A]): Long = fa.size.toLong
 
-      override def get[A](fa: Map[K, A])(idx: Long): Option[A] = {
-        if (idx >= 0L && idx < fa.size && idx < Int.MaxValue)
-          Some(fa.valuesIterator.drop(idx.toInt - 1).next)
-        else None
-      }
+      override def get[A](fa: Map[K, A])(idx: Long): Option[A] =
+        if (idx < 0L || Int.MaxValue < idx) None
+        else {
+          val n = idx.toInt
+          if (n >= fa.size) None
+          else Some(fa.valuesIterator.drop(n).next)
+        }
 
       override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
 

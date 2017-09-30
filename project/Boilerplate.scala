@@ -217,6 +217,8 @@ object Boilerplate {
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
         -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit cartesian: Cartesian[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
+        -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
       """
     }
@@ -239,21 +241,26 @@ object Boilerplate {
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map($tupleArgs)(f)"
-        else s"def mapN[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = Cartesian.map$arity($tupleArgs)(f)"
+        else s"def mapN[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$arity($tupleArgs)(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap($tupleArgs)(f)"
-        else s"def contramapN[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = Cartesian.contramap$arity($tupleArgs)(f)"
+        else s"def contramapN[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$arity($tupleArgs)(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap($tupleArgs)(f)(g)"
-        else s"def imapN[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = Cartesian.imap$arity($tupleArgs)(f)(g)"
+        else s"def imapN[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$arity($tupleArgs)(f)(g)"
 
       val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F]): F[(${`A..N`})] = Cartesian.tuple$n($tupleArgs)"
+        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$n($tupleArgs)"
       } else {
         ""
       }
+
+      val traverse =
+        if (arity == 1) s"def traverse[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F]): G[F[Z]] = traverse.traverse($tupleArgs)(f)"
+        else s"def traverseN[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F], cartesian: Cartesian[F]): G[F[Z]] = Cartesian.traverse$arity($tupleArgs)(f)"
+
 
       block"""
         |package cats
@@ -262,15 +269,15 @@ object Boilerplate {
         |import cats.functor.{Contravariant, Invariant}
         |
         |trait TupleCartesianSyntax {
-        -  implicit def catsSyntaxTuple${arity}Cartesian[F[_], ${`A..N`}]($tupleTpe)(implicit C: Cartesian[F]): Tuple${arity}CartesianOps[F, ${`A..N`}] = new Tuple${arity}CartesianOps(t$arity, C)
+        -  implicit def catsSyntaxTuple${arity}Cartesian[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}CartesianOps[F, ${`A..N`}] = new Tuple${arity}CartesianOps(t$arity)
         |}
         |
-        -private[syntax] final class Tuple${arity}CartesianOps[F[_], ${`A..N`}]($tupleTpe, C: Cartesian[F]) {
-        -  implicit val cartesian: Cartesian[F] = C
+        -private[syntax] final class Tuple${arity}CartesianOps[F[_], ${`A..N`}]($tupleTpe) {
         -  $map
         -  $contramap
         -  $imap
         -  $tupled
+        -  $traverse
         -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
         -}
         |

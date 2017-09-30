@@ -23,7 +23,12 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         fa.flatMap(f)
 
       override def map2[A, B, Z](fa: List[A], fb: List[B])(f: (A, B) => Z): List[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
+        if (fb.isEmpty) Nil // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: List[A], fb: Eval[List[B]])(f: (A, B) => Z): Eval[List[Z]] =
+        if (fa.isEmpty) Eval.now(Nil) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {
         val buf = List.newBuilder[B]
@@ -70,6 +75,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
         fa.zipWithIndex
+
+      override def partitionEither[A, B, C](fa: List[A])
+                                           (f: (A) => Either[B, C])
+                                           (implicit A: Alternative[List]): (List[B], List[C]) =
+        fa.foldRight((List.empty[B], List.empty[C]))((a, acc) => f(a) match {
+          case Left(b) => (b :: acc._1, acc._2)
+          case Right(c) => (acc._1, c :: acc._2)
+        })
 
       @tailrec
       override def get[A](fa: List[A])(idx: Long): Option[A] =

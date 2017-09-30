@@ -55,6 +55,20 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   }
 
   /**
+   * A combination of step and fold.
+   */
+  private[free] final def foldStep[B](
+    onPure: A => B,
+    onSuspend: S[A] => B,
+    onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
+  ): B = this.step match {
+    case Pure(a) => onPure(a)
+    case Suspend(a) => onSuspend(a)
+    case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
+    case _ => sys.error("FlatMapped should be right associative after step")
+  }
+
+  /**
    * Run to completion, using a function that extracts the resumption
    * from its suspension functor.
    */
@@ -161,7 +175,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     "Free(...)"
 }
 
-object Free {
+object Free extends FreeInstances {
 
   /**
    * Return from the computation with the given value.
@@ -248,5 +262,58 @@ object Free {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
+    }
+}
+
+private trait FreeFoldable[F[_]] extends Foldable[Free[F, ?]] {
+
+  implicit def F: Foldable[F]
+
+  override final def foldLeft[A, B](fa: Free[F, A], b: B)(f: (B, A) => B): B =
+    fa.foldStep(
+      a => f(b, a),
+      fa => F.foldLeft(fa, b)(f),
+      { case (fx, g) => F.foldLeft(fx, b)((bb, x) => foldLeft(g(x), bb)(f)) }
+    )
+
+  override final def foldRight[A, B](fa: Free[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    fa.foldStep(
+      a => f(a, lb),
+      fa => F.foldRight(fa, lb)(f),
+      { case (fx, g) => F.foldRight(fx, lb)( (a, lbb) => foldRight(g(a), lbb)(f)) }
+    )
+}
+
+private trait FreeTraverse[F[_]] extends Traverse[Free[F, ?]] with FreeFoldable[F] {
+  implicit def TraversableF: Traverse[F]
+
+  def F: Foldable[F] = TraversableF
+
+  override final def traverse[G[_], A, B](fa: Free[F, A])(f: A => G[B])(implicit G: Applicative[G]): G[Free[F, B]] =
+    fa.resume match {
+      case Right(a) => G.map(f(a))(Free.pure(_))
+      case Left(ffreeA) => G.map(TraversableF.traverse(ffreeA)(traverse(_)(f)))(Free.roll(_))
+    }
+
+  // Override Traverse's map to use Free's map for better performance
+  override final def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = fa.map(f)
+}
+
+sealed private[free] abstract class FreeInstances {
+
+  implicit def catsFreeFoldableForFree[F[_]](
+    implicit
+    foldableF: Foldable[F]
+  ): Foldable[Free[F, ?]] =
+    new FreeFoldable[F] {
+      val F = foldableF
+    }
+
+  implicit def catsFreeTraverseForFree[F[_]](
+    implicit
+    traversableF: Traverse[F]
+  ): Traverse[Free[F, ?]] =
+    new FreeTraverse[F] {
+      val TraversableF = traversableF
     }
 }

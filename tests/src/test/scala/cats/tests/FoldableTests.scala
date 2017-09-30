@@ -25,6 +25,54 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test("Foldable#partitionEither retains size") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val vector = Foldable[F].toList(fi).toVector
+      val (lefts, rights) = Foldable[Vector].partitionEither(vector)(f)
+      (lefts <+> rights).size.toLong should === (fi.size)
+    }
+  }
+
+  test("Foldable#partitionEither consistent with List#partition") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val list = Foldable[F].toList(fi)
+      val (lefts, rights) = Foldable[List].partitionEither(list)(f)
+      val (ls, rs) = list.map(f).partition({
+        case Left(_) => true
+        case Right(_) => false
+      })
+
+      lefts.map(_.asLeft[String]) should === (ls)
+      rights.map(_.asRight[String]) should === (rs)
+    }
+  }
+
+  test("Foldable#partitionEither to one side is identity") {
+    forAll { (fi: F[Int], f: Int => String) =>
+      val list = Foldable[F].toList(fi)
+      val g: Int => Either[Double, String] = f andThen Right.apply
+      val h: Int => Either[String, Double] = f andThen Left.apply
+
+      val withG = Foldable[List].partitionEither(list)(g)._2
+      withG should === (list.map(f))
+
+      val withH = Foldable[List].partitionEither(list)(h)._1
+      withH should === (list.map(f))
+    }
+  }
+
+  test("Foldable#partitionEither remains sorted") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val list = Foldable[F].toList(fi)
+
+      val sorted = list.map(f).sorted
+      val (lefts, rights) = Foldable[List].partitionEither(sorted)(identity)
+
+      lefts.sorted should === (lefts)
+      rights.sorted should === (rights)
+    }
+  }
+
   test(s"Foldable[$name] summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
@@ -35,11 +83,13 @@ abstract class FoldableCheck[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
-  test(s"Foldable[$name].find/exists/forall/filter_/dropWhile_") {
+  test(s"Foldable[$name].find/exists/forall/existsM/forallM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
       fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.existsM(k => Option(k > n)) should === (Option(iterator(fa).exists(_ > n)))
+      fa.forallM(k => Option(k > n)) should === (Option(iterator(fa).forall(_ > n)))
       fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
       fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
       fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
@@ -237,6 +287,13 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
     assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
     assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+  }
+
+  test(".existsM/.forallM short-circuiting") {
+    implicit val F = foldableStreamWithDefaultImpl
+    def boom: Stream[Boolean] = sys.error("boom")
+    assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
+    assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
   }
 
   test("Foldable[List] doesn't break substitution") {

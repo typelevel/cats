@@ -184,9 +184,23 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
     NonEmptyVector(head, buf.result())
   }
+
+  /**
+    * Zips this `NonEmptyVector` with another `NonEmptyVector` and applies a function for each pair of elements.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val as = NonEmptyVector.of(1, 2, 3)
+    * scala> val bs = NonEmptyVector.of("A", "B", "C")
+    * scala> as.zipWith(bs)(_ + _)
+    * res0: cats.data.NonEmptyVector[String] = NonEmptyVector(1A, 2B, 3C)
+    * }}}
+    */
+  def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
+    NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
 }
 
-private[data] sealed trait NonEmptyVectorInstances {
+private[data] sealed abstract class NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector] with Reducible[NonEmptyVector]
     with Comonad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] with Monad[NonEmptyVector] =
@@ -243,8 +257,21 @@ private[data] sealed trait NonEmptyVectorInstances {
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
+      override def nonEmptyPartition[A, B, C](fa: NonEmptyVector[A])(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+        import cats.syntax.either._
+        import cats.syntax.reducible._
+
+        reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) => (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
+          case (Right(c), _) => ior.map(_ :+ c)
+          case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
+          case (Left(b), _) => ior.leftMap(_ :+ b)
+        }).bimap(_.toNonEmptyList, _.toNonEmptyList)
+
+      }
+
       override def get[A](fa: NonEmptyVector[A])(idx: Long): Option[A] =
-        if (idx < Int.MaxValue) fa.get(idx.toInt) else None
+        if (0 <= idx && idx < Int.MaxValue) fa.get(idx.toInt) else None
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
@@ -292,7 +319,7 @@ private[data] sealed trait NonEmptyVectorInstances {
 
 }
 
-object NonEmptyVector extends NonEmptyVectorInstances {
+object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
 
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     new NonEmptyVector(head +: tail)

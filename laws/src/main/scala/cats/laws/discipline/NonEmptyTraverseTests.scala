@@ -23,6 +23,7 @@ trait NonEmptyTraverseTests[F[_]] extends TraverseTests[F] with ReducibleTests[F
     CogenC: Cogen[C],
     CogenM: Cogen[M],
     M: Monoid[M],
+    MA: Monoid[A],
     MB: Monoid[B],
     EqFA: Eq[F[A]],
     EqFC: Eq[F[C]],

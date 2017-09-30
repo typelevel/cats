@@ -22,6 +22,7 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     EqA: Eq[A],
     EqB: Eq[B],
     EqOptionA: Eq[Option[A]],
+    MonoidA: Monoid[A],
     MonoidB: Monoid[B]
   ): RuleSet =
     new DefaultRuleSet(

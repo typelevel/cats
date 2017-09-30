@@ -41,6 +41,7 @@ trait OrderLaws[A] extends Laws {
     }
   )
 
+  // scalastyle:off cyclomatic.complexity
   def partialOrder(implicit A: PartialOrder[A]): OrderProperties = new OrderProperties(
     name = "partialOrder",
     parent = Some(eqv),
@@ -84,6 +85,7 @@ trait OrderLaws[A] extends Laws {
       else m ?== None
     }
   )
+  // scalastyle:on cyclomatic.complexity
 
   def order(implicit A: Order[A]): OrderProperties = new OrderProperties(
     name = "order",

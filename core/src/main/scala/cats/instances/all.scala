@@ -2,26 +2,30 @@ package cats
 package instances
 
 trait AllInstances
-  extends FunctionInstances
-  with    StringInstances
-  with    EitherInstances
-  with    EqInstances
-  with    ListInstances
-  with    OptionInstances
-  with    OrderInstances
-  with    MonoidInstances
-  with    PartialOrderInstances
-  with    SemigroupInstances
-  with    SetInstances
-  with    StreamInstances
-  with    VectorInstances
-  with    AnyValInstances
-  with    MapInstances
+  extends AnyValInstances
   with    BigIntInstances
   with    BigDecimalInstances
   with    BitSetInstances
+  with    EitherInstances
+  with    EqInstances
+  with    EquivInstances
+  with    FunctionInstances
   with    FutureInstances
+  with    ListInstances
+  with    MapInstances
+  with    MonoidInstances
+  with    OptionInstances
+  with    OrderInstances
+  with    OrderingInstances
+  with    PartialOrderInstances
+  with    PartialOrderingInstances
+  with    QueueInstances
+  with    SemigroupInstances
+  with    SetInstances
+  with    StreamInstances
+  with    StringInstances
+  with    SymbolInstances
   with    TryInstances
   with    TupleInstances
   with    UUIDInstances
-  with    SymbolInstances
+  with    VectorInstances
