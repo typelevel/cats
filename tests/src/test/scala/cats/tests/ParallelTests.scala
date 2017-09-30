@@ -112,10 +112,4 @@ trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
 
     checkAll("ApplicativeError[Validated[String, Int]]", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
   }
-
-  {
-    implicit val parVal = Parallel[Either[String, ?], Validated[String, ?]].applicativeError
-
-    checkAll("Parallel[Validated[String, Int]].applicativeError", ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
-  }
 }

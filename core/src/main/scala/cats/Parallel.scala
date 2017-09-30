@@ -67,6 +67,19 @@ trait Parallel[M[_], F[_]] extends NonEmptyParallel[M, F] {
     def pure[A](x: A): F[A] = applicative.pure(x)
 
     def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
+
+    override def map[A, B](fa: F[A])(f: (A) => B): F[B] = applicative.map(fa)(f)
+
+    override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = applicative.product(fa, fb)
+
+    override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] = applicative.map2(fa, fb)(f)
+
+    override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+      applicative.map2Eval(fa, fb)(f)
+
+    override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
+
+    override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
   }
 }
 
