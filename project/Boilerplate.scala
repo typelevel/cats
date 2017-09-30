@@ -217,6 +217,8 @@ object Boilerplate {
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
         -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit cartesian: Cartesian[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
+        -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
       """
     }
@@ -255,6 +257,11 @@ object Boilerplate {
         ""
       }
 
+      val traverse =
+        if (arity == 1) s"def traverse[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F]): G[F[Z]] = traverse.traverse($tupleArgs)(f)"
+        else s"def traverseN[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F], cartesian: Cartesian[F]): G[F[Z]] = Cartesian.traverse$arity($tupleArgs)(f)"
+
+
       block"""
         |package cats
         |package syntax
@@ -270,6 +277,7 @@ object Boilerplate {
         -  $contramap
         -  $imap
         -  $tupled
+        -  $traverse
         -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
         -}
         |
