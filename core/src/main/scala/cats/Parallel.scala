@@ -112,6 +112,26 @@ object Parallel extends ParallelArityFunctions {
   }
 
   /**
+    * Like `Traverse[A].flatTraverse`, but uses the applicative instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parFlatTraverse[T[_]: Traverse: FlatMap, M[_], F[_], A, B]
+  (ta: T[A])(f: A => M[T[B]])(implicit P: Parallel[M, F]): M[T[B]] = {
+    val gtb: F[T[B]] = Traverse[T].flatTraverse(ta)(f andThen P.parallel.apply)(P.applicative, FlatMap[T])
+    P.sequential(gtb)
+  }
+
+  /**
+    * Like `Traverse[A].flatSequence`, but uses the applicative instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parFlatSequence[T[_]: Traverse: FlatMap, M[_], F[_], A]
+  (tma: T[M[T[A]]])(implicit P: Parallel[M, F]): M[T[A]] = {
+    val fta: F[T[A]] = Traverse[T].flatTraverse(tma)(P.parallel.apply)(P.applicative, FlatMap[T])
+    P.sequential(fta)
+  }
+
+  /**
     * Like `Foldable[A].sequence_`, but uses the applicative instance
     * corresponding to the Parallel instance instead.
     */
@@ -149,6 +169,28 @@ object Parallel extends ParallelArityFunctions {
   (ta: T[A])(f: A => M[B])(implicit P: NonEmptyParallel[M, F]): M[T[B]] = {
     val gtb: F[T[B]] = NonEmptyTraverse[T].nonEmptyTraverse(ta)(f andThen P.parallel.apply)(P.apply)
     P.sequential(gtb)
+  }
+
+
+  /**
+    * Like `NonEmptyTraverse[A].nonEmptyFlatTraverse`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptyFlatTraverse[T[_]: NonEmptyTraverse: FlatMap, M[_], F[_], A, B]
+  (ta: T[A])(f: A => M[T[B]])(implicit P: NonEmptyParallel[M, F]): M[T[B]] = {
+    val gtb: F[T[B]] = NonEmptyTraverse[T].nonEmptyFlatTraverse(ta)(f andThen P.parallel.apply)(P.apply, FlatMap[T])
+    P.sequential(gtb)
+  }
+
+
+  /**
+    * Like `NonEmptyTraverse[A].nonEmptyFlatSequence`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parNonEmptyFlatSequence[T[_]: NonEmptyTraverse: FlatMap, M[_], F[_], A]
+  (tma: T[M[T[A]]])(implicit P: NonEmptyParallel[M, F]): M[T[A]] = {
+    val fta: F[T[A]] = NonEmptyTraverse[T].nonEmptyFlatTraverse(tma)(P.parallel.apply)(P.apply, FlatMap[T])
+    P.sequential(fta)
   }
 
   /**

@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyList}
+import cats.data.NonEmptyList
 import cats.laws.discipline.{TraverseTests, CoflatMapTests, AlternativeTests, SerializableTests, CartesianTests}
 import cats.laws.discipline.arbitrary._
 

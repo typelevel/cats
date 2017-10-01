@@ -163,7 +163,7 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val mta = tma.parSequence
   }
 
-  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: Parallel[M, F]) = {
+  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
     val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]
     val fb = mock[M[B]]

@@ -19,31 +19,59 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
         case Left(e) => e
       }.foldMap(identity)
 
-      (es.parSequence.fold(identity, i => Monoid[String].empty)) should === (lefts)
+      es.parSequence.fold(identity, i => Monoid[String].empty) should === (lefts)
     }
   }
 
   test("ParTraverse identity should be equivalent to parSequence") {
     forAll { es: List[Either[String, Int]] =>
-      (es.parTraverse(identity)) should === (es.parSequence)
+      es.parTraverse(identity) should === (es.parSequence)
     }
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
     forAll { es: Set[Either[String, Int]] =>
-      (Parallel.parTraverse_(es)(identity)) should === (Parallel.parSequence_(es))
+      Parallel.parTraverse_(es)(identity) should === (Parallel.parSequence_(es))
     }
   }
 
   test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
     forAll { es: NonEmptyVector[Either[String, Int]] =>
-      (Parallel.parNonEmptyTraverse(es)(identity)) should === (Parallel.parNonEmptySequence(es))
+      Parallel.parNonEmptyTraverse(es)(identity) should === (Parallel.parNonEmptySequence(es))
     }
   }
 
   test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
     forAll { es: NonEmptyList[Either[String, Int]] =>
-      (Parallel.parNonEmptyTraverse_(es)(identity)) should === (Parallel.parNonEmptySequence_(es))
+      Parallel.parNonEmptyTraverse_(es)(identity) should === (Parallel.parNonEmptySequence_(es))
+    }
+  }
+
+  test("ParFlatTraverse should be equivalent to parTraverse map flatten") {
+    forAll { es: List[Either[String, Int]] =>
+      val f: Int => List[Int] = i => List(i, i + 1)
+      Parallel.parFlatTraverse(es)(e => e.map(f)) should
+        === (es.parTraverse(e => e.map(f)).map(_.flatten))
+    }
+  }
+
+  test("ParFlatTraverse identity should be equivalent to parFlatSequence") {
+    forAll { es: List[Either[String, List[Int]]] =>
+      Parallel.parFlatTraverse(es)(identity) should === (Parallel.parFlatSequence(es))
+    }
+  }
+
+  test("ParNonEmptyFlatTraverse should be equivalent to parNonEmptyTraverse map flatten") {
+    forAll { es: NonEmptyList[Either[String, Int]] =>
+      val f: Int => NonEmptyList[Int] = i => NonEmptyList.of(i, i + 1)
+      Parallel.parNonEmptyFlatTraverse(es)(e => e.map(f)) should
+        === (Parallel.parNonEmptyTraverse(es)(e => e.map(f)).map(_.flatten))
+    }
+  }
+
+  test("ParNonEmptyFlatTraverse identity should be equivalent to parNonEmptyFlatSequence") {
+    forAll { es: NonEmptyList[Either[String, NonEmptyList[Int]]] =>
+      Parallel.parNonEmptyFlatTraverse(es)(identity) should === (Parallel.parNonEmptyFlatSequence(es))
     }
   }
 
