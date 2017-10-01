@@ -434,4 +434,28 @@ class EitherTTests extends CatsSuite {
     } yield s1 ++ s2
   }
 
+  test("leftFlatMap consistent with leftMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
+      eithert.leftFlatMap(v => EitherT.left[Int](List(f(v)))) should ===(eithert.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with swap and then flatMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => EitherT[List, String, Int]) =>
+      eithert.leftFlatMap(f) should ===(eithert.swap.flatMap(a => f(a).swap).swap)
+    }
+  }
+
+  test("leftSemiflatMap consistent with leftMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
+      eithert.leftSemiflatMap(v => List(f(v))) should ===(eithert.leftMap(f))
+    }
+  }
+
+  test("leftSemiflatmap consistent with swap and the semiflatMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => List[String]) =>
+      eithert.leftSemiflatMap(f) should ===(eithert.swap.semiflatMap(a => f(a)).swap)
+    }
+  }
+
 }
