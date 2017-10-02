@@ -26,4 +26,16 @@ object CommutativeApplicative {
       Applicative[F].map2(acc, a)(_ + _)
     }
 
+
+  def traverseUnorderedMap[F[_]: CommutativeApplicative, K, L, A, B](sa: Map[K, A])(f: (K, A) => F[(L, B)]): F[Map[L, B]] =
+    sa.foldLeft(Applicative[F].pure(Map.empty[L, B])) { (acc, a) =>
+      Applicative[F].map2(acc, f.tupled(a))(_ + _)
+    }
+
+  def sequenceUnorderedMap[F[_]: CommutativeApplicative, K, L, A](sa: Map[K, F[(K, A)]]): F[Map[K, A]] = {
+    sa.foldLeft(Applicative[F].pure(Map.empty[K, A])) { (acc, a) =>
+      Applicative[F].map2(acc, a._2)(_ + _)
+    }
+  }
+
 }

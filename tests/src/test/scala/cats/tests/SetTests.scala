@@ -38,8 +38,6 @@ class SetTests extends CatsSuite {
 
   test("traverseUnordered parallel composition") {
     forAll { (si: Set[Int], f: Int => Option[String], g: Int => Option[String]) =>
-      type Two[A] = Tuple2K[Option, Option, A]
-
       val lhs = CommutativeApplicative.traverseUnordered(si)(i => Tuple2K(f(i), g(i)))
       val rhs = Tuple2K(CommutativeApplicative.traverseUnordered(si)(f), CommutativeApplicative.traverseUnordered(si)(g))
       lhs should ===(rhs)

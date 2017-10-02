@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.laws.discipline.{TraverseTests, FlatMapTests, SerializableTests, CartesianTests}
+import cats.data.Tuple2K
+import cats.laws.discipline.{CartesianTests, FlatMapTests, SerializableTests, TraverseTests}
 
 class MapTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Map[Int, ?]]
@@ -14,6 +15,28 @@ class MapTests extends CatsSuite {
 
   checkAll("Map[Int, Int] with Option", TraverseTests[Map[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Map[Int, ?]]", SerializableTests.serializable(Traverse[Map[Int, ?]]))
+
+  test("traverseUnordered identity") {
+    forAll { (mi: Map[Int, Int], f: (Int, Int) => (String, String)) =>
+      CommutativeApplicative.traverseUnorderedMap[Id, Int, String, Int, String](mi)(f) should === (mi.map(f.tupled))
+    }
+  }
+
+  test("traverseUnordered parallel composition") {
+    forAll { (si: Map[Int, Int], f: (Int, Int) => Option[(String, String)], g: (Int, Int) => Option[(String, String)]) =>
+
+      val lhs = CommutativeApplicative.traverseUnorderedMap(si)((i, j) => Tuple2K(f(i, j), g(i, j)))
+      val rhs = Tuple2K(CommutativeApplicative.traverseUnorderedMap(si)(f), CommutativeApplicative.traverseUnorderedMap(si)(g))
+      lhs should ===(rhs)
+    }
+  }
+
+  test("traverseUnordered consistent with sequenceUnordered") {
+    forAll { (mi: Map[Int, Int], f: (Int, Int) => (String, String)) =>
+      CommutativeApplicative.traverseUnorderedMap(mi)((i,j) => f(i, j).valid[Int]) should
+        === (CommutativeApplicative.sequenceUnorderedMap(mi.map(i => (f.tupled(i)._1, f.tupled(i).valid[Int]))))
+    }
+  }
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>
