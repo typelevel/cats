@@ -61,10 +61,11 @@ private[data] sealed abstract class Tuple2KInstances2 extends Tuple2KInstances3 
 }
 
 private[data] sealed abstract class Tuple2KInstances3 extends Tuple2KInstances4 {
-  implicit def catsDataApplicativeForTuple2K[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[λ[α => Tuple2K[F, G, α]]] = new Tuple2KApplicative[F, G] {
-    def F: Applicative[F] = FF
-    def G: Applicative[G] = GG
-  }
+  implicit def catsDataCommutativeApplicativeForTuple2K[F[_], G[_]](implicit FF: CommutativeApplicative[F], GG: CommutativeApplicative[G]): CommutativeApplicative[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KApplicative[F, G] with CommutativeApplicative[λ[α => Tuple2K[F, G, α]]] {
+      def F: Applicative[F] = FF
+      def G: Applicative[G] = GG
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances4 extends Tuple2KInstances5 {
@@ -72,22 +73,6 @@ private[data] sealed abstract class Tuple2KInstances4 extends Tuple2KInstances5 
     def F: SemigroupK[F] = FF
     def G: SemigroupK[G] = GG
   }
-  implicit def catsDataApplyForTuple2K[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[λ[α => Tuple2K[F, G, α]]] = new Tuple2KApply[F, G] {
-    def F: Apply[F] = FF
-    def G: Apply[G] = GG
-  }
-}
-
-private[data] sealed abstract class Tuple2KInstances5 extends Tuple2KInstances6 {
-  implicit def catsDataFunctorForTuple2K[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Tuple2K[F, G, α]]] = new Tuple2KFunctor[F, G] {
-    def F: Functor[F] = FF
-    def G: Functor[G] = GG
-  }
-}
-
-
-private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 {
-
   implicit def catsDataCommutativeApplyForTuple2K[F[_], G[_]](implicit FF: CommutativeApply[F], GG: CommutativeApply[G]): CommutativeApply[λ[α => Tuple2K[F, G, α]]] =
     new Tuple2KApply[F, G] with CommutativeApply[λ[α => Tuple2K[F, G, α]]] {
       def F: Apply[F] = FF
@@ -95,12 +80,27 @@ private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 
     }
 }
 
+private[data] sealed abstract class Tuple2KInstances5 extends Tuple2KInstances6 {
+  implicit def catsDataApplicativeForTuple2K[F[_], G[_]](implicit FF: Applicative[F], GG: Applicative[G]): Applicative[λ[α => Tuple2K[F, G, α]]] = new Tuple2KApplicative[F, G] {
+    def F: Applicative[F] = FF
+    def G: Applicative[G] = GG
+  }
+}
+
+
+private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 {
+  implicit def catsDataApplyForTuple2K[F[_], G[_]](implicit FF: Apply[F], GG: Apply[G]): Apply[λ[α => Tuple2K[F, G, α]]] = new Tuple2KApply[F, G] {
+    def F: Apply[F] = FF
+    def G: Apply[G] = GG
+  }
+}
+
 private[data] sealed abstract class Tuple2KInstances7 {
-  implicit def catsDataCommutativeApplicativeForTuple2K[F[_], G[_]](implicit FF: CommutativeApplicative[F], GG: CommutativeApplicative[G]): CommutativeApplicative[λ[α => Tuple2K[F, G, α]]] =
-    new Tuple2KApplicative[F, G] with CommutativeApplicative[λ[α => Tuple2K[F, G, α]]] {
-      def F: Applicative[F] = FF
-      def G: Applicative[G] = GG
-    }
+
+  implicit def catsDataFunctorForTuple2K[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Tuple2K[F, G, α]]] = new Tuple2KFunctor[F, G] {
+    def F: Functor[F] = FF
+    def G: Functor[G] = GG
+  }
 }
 
 private[data] sealed trait Tuple2KFunctor[F[_], G[_]] extends Functor[λ[α => Tuple2K[F, G, α]]] {
