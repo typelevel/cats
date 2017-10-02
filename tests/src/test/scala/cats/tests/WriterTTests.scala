@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{EitherT, Validated, Writer, WriterT}
-import cats.functor.{Bifunctor, Contravariant}
+
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._

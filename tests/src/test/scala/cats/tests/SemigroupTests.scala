@@ -3,7 +3,7 @@ package tests
 
 import org.scalatest._
 
-import cats.functor._
+
 
 class SemigroupTests extends FunSuite {
   {

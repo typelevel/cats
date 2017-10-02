@@ -209,7 +209,7 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
     new OptionTOrder[F, A] { implicit val F = F0 }
 
   implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
-    functor.Contravariant[Show].contramap(F)(_.value)
+    Contravariant[Show].contramap(F)(_.value)
 }
 
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {

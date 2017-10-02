@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.functor.Contravariant
+import cats.Contravariant
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.laws.discipline.eq._

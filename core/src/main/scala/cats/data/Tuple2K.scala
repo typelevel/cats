@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.Contravariant
 
 /**
  * [[Tuple2K]] is a product to two independent functor values.

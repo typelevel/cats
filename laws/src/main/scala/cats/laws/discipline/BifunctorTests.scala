@@ -1,7 +1,6 @@
 package cats.laws.discipline
 
-import cats.Eq
-import cats.functor.Bifunctor
+import cats.{Bifunctor, Eq}
 import cats.laws.BifunctorLaws
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._

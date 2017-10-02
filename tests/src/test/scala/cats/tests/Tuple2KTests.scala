@@ -1,8 +1,8 @@
 package cats
 package tests
 
+import cats.Contravariant
 import cats.data.Tuple2K
-import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
