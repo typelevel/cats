@@ -1,6 +1,7 @@
 package cats
 package tests
 
+
 import cats.kernel.laws.discipline.{
   MonoidLawTests,
   SemigroupLawTests,
@@ -8,8 +9,8 @@ import cats.kernel.laws.discipline.{
   PartialOrderLawTests,
   EqLawTests
 }
+import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
-import cats.functor.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 

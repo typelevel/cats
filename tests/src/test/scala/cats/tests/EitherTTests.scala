@@ -1,9 +1,9 @@
 package cats
 package tests
 
+import cats.Bifunctor
 import cats.data.EitherT
-import cats.functor.Bifunctor
-import cats.functor._
+
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{
@@ -438,6 +438,30 @@ class EitherTTests extends CatsSuite {
       s1 <- EitherT(either1)
       s2 <- EitherT.pure[Id, AppError]("1")
     } yield s1 ++ s2
+  }
+
+  test("leftFlatMap consistent with leftMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
+      eithert.leftFlatMap(v => EitherT.left[Int](List(f(v)))) should ===(eithert.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with swap and then flatMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => EitherT[List, String, Int]) =>
+      eithert.leftFlatMap(f) should ===(eithert.swap.flatMap(a => f(a).swap).swap)
+    }
+  }
+
+  test("leftSemiflatMap consistent with leftMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
+      eithert.leftSemiflatMap(v => List(f(v))) should ===(eithert.leftMap(f))
+    }
+  }
+
+  test("leftSemiflatmap consistent with swap and the semiflatMap") {
+    forAll { (eithert: EitherT[List, String, Int], f: String => List[String]) =>
+      eithert.leftSemiflatMap(f) should ===(eithert.swap.semiflatMap(a => f(a)).swap)
+    }
   }
 
 }

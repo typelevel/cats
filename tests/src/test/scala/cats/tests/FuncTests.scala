@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.{ Func, AppFunc }
-import cats.functor.Contravariant
+import cats.data.{AppFunc, Func}
 import Func.appFunc
+import cats.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary

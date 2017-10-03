@@ -2,26 +2,13 @@ package cats
 package tests
 
 import cats.arrow.{Choice, CommutativeArrow}
-import cats.functor.Contravariant
-import cats.kernel.laws.discipline.{
-  MonoidLawTests,
-  SemigroupLawTests,
-  EqLawTests,
-  CommutativeSemigroupTests,
-  PartialOrderLawTests,
-  OrderLawTests,
-  BandTests,
-  SemilatticeTests,
-  CommutativeMonoidTests,
-  BoundedSemilatticeTests,
-  GroupLawTests,
-  CommutativeGroupTests
-}
+import cats.kernel.laws.discipline.{SerializableTests, _}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.{ CommutativeSemigroup, CommutativeMonoid, CommutativeGroup }
 import cats.kernel.{ Band, Semilattice, BoundedSemilattice }
+
 
 class FunctionTests extends CatsSuite {
 

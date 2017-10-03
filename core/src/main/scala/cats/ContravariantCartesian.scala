@@ -1,6 +1,5 @@
 package cats
 
-import functor.Contravariant
 import simulacrum.typeclass
 
 /**

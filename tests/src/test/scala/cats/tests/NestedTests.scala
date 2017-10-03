@@ -3,7 +3,7 @@ package tests
 
 import cats.Functor
 import cats.data._
-import cats.functor._
+
 import cats.laws.discipline._
 import cats.laws.discipline.CartesianTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._

@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.functor.Profunctor
+import cats.arrow.Profunctor
 import cats.syntax.profunctor._
 
 /**
