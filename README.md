@@ -145,7 +145,7 @@ going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common amo
 Java and Scala libraries (including the Scala lang). 
 
 Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintainence with a high priority. 
+FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
 For example, when we release cats `1.1.0`, it will be backward binary compatible 
@@ -173,6 +173,7 @@ The current maintainers (people who can merge pull requests) are:
  * [johnynek](https://github.com/johnynek) P. Oscar Boykin
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
+ * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris

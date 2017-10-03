@@ -233,6 +233,17 @@ lazy val macrosJS = macros.js
 
 val binaryCompatibleVersion = "0.8.0"
 
+val binaryCompatibleExceptions = {
+  import com.typesafe.tools.mima.core._
+  import com.typesafe.tools.mima.core.ProblemFilters._
+  Seq( //todo: remove these once we release 1.0.0-RC1
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*")
+  )
+}
+
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
@@ -242,13 +253,15 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
-  .jvmSettings((commonJvmSettings ++
-    (mimaPreviousArtifacts := {
+  .jvmSettings(commonJvmSettings ++ Seq(
+    mimaPreviousArtifacts := {
       if (scalaVersion.value startsWith "2.12")
         Set()
       else
         Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
-    })))
+    },
+    mimaBinaryIssueFilters ++= binaryCompatibleExceptions
+  ))
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js

@@ -1,6 +1,5 @@
 package cats
 
-import cats.functor._
 
 private[cats] trait ComposedInvariant[F[_], G[_]] extends Invariant[λ[α => F[G[α]]]] { outer =>
   def F: Invariant[F]

@@ -163,6 +163,6 @@ private[data] sealed abstract class IdTInstances extends IdTInstances0 {
     F.on(_.value)
 
   implicit def catsDataShowForIdT[F[_], A](implicit F: Show[F[A]]): Show[IdT[F, A]] =
-    functor.Contravariant[Show].contramap(F)(_.value)
+    Contravariant[Show].contramap(F)(_.value)
 
 }

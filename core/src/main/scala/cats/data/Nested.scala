@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor._
+
 
 /** Similar to [[cats.data.Tuple2K]], but for nested composition.
  *

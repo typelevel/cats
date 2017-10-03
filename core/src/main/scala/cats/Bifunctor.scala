@@ -1,8 +1,5 @@
 package cats
-package functor
-
 import simulacrum.typeclass
-
 /**
  * A type class of types which give rise to two independent, covariant
  * functors.
@@ -58,7 +55,7 @@ import simulacrum.typeclass
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
-    extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
+  extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
   def F: Bifunctor[F]
   def G: Bifunctor[G]
 

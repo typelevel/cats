@@ -102,7 +102,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     Validated.fromEither(f(toEither))
 
   /**
-   * Validated is a [[functor.Bifunctor]], this method applies one of the
+   * Validated is a [[Bifunctor]], this method applies one of the
    * given functions.
    */
   def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =

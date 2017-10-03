@@ -1,5 +1,5 @@
 package cats
-package functor
+package arrow
 
 import simulacrum.typeclass
 
@@ -17,7 +17,7 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.functor.Profunctor
+   * scala> import cats.arrow.Profunctor
    * scala> val fab: Double => Double = x => x + 0.3
    * scala> val f: Int => Double = x => x.toDouble / 2
    * scala> val g: Double => Double = x => x * 3
