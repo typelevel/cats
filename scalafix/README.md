@@ -20,6 +20,8 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] The creation methods (left, right, apply, pure, etc.) in EitherT were improved to take less type arguments.
 
+- [x] EitherT.liftT was renamed to EitherT.liftF
+
 - [x] CartesianBuilder (i.e. |@|) syntax is deprecated, use the apply syntax on tuples instead. E.g. (x |@| y |@| z).map(...) should be replaced by (x, y, z).mapN(...)
 
 - [x] Free.suspend is renamed to Free.defer for consistency.
