@@ -23,7 +23,11 @@ For more detail about Cats' motivations, go [here](http://typelevel.org/cats/mot
 
 Cats is currently available for Scala 2.10, 2.11 and 2.12, and [Scala.js](http://www.scala-js.org/).
 
-To get started with SBT, simply add the following to your `build.sbt`
+In order for Cats to work correctly with regards to type inference you'll sometimes need support for improved type inference.
+We strongly recommend you to enable improved type inference using `partial-unification`. 
+To do so for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
+
+Next, to create the cats dependency, simply add the following to your `build.sbt`
 file:
 
 ```scala
@@ -49,9 +53,6 @@ functionality, you can pick-and-choose from amongst these modules
  * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
 
-#### Enhancing type inference
-
- To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
