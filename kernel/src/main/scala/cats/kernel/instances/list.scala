@@ -15,6 +15,9 @@ trait ListInstances extends ListInstances1 {
 trait ListInstances1 extends ListInstances2 {
   implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     new ListPartialOrder[A]
+
+  implicit def catsKernelStdHashForList[A: Hash]: Hash[List[A]] =
+    new ListHash[A]
 }
 
 trait ListInstances2 {
@@ -55,6 +58,25 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
           }
       }
     if (xs eq ys) 0.0 else loop(xs, ys)
+  }
+}
+
+class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(ev) with Hash[List[A]] {
+  // adapted from [[scala.util.hashing.MurmurHash3]],
+  // but modified standard `Any#hashCode` to `ev.hash`.
+  import scala.util.hashing.MurmurHash3._
+  def hash(x: List[A]): Int = {
+    var n = 0
+    var h = seqSeed
+    var elems = x
+    while (!elems.isEmpty) {
+      val head = elems.head
+      val tail = elems.tail
+      h = mix(h, ev.hash(head))
+      n += 1
+      elems = tail
+    }
+    finalizeHash(h, n)
   }
 }
 

@@ -21,7 +21,19 @@ import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS}
 
-object KernelCheck {
+class LawTests extends FunSuite with Discipline {
+
+  // The scalacheck defaults (100,100) are too high for scala-js.
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+
+  implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
+
+  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
+  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
@@ -77,27 +89,82 @@ object KernelCheck {
         case NANOSECONDS => 6128745701389500153L
       })
     }
-}
-
-class LawTests extends FunSuite with Discipline {
-
-  import KernelCheck._
-
-  // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
-
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
-  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
     laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
   }
+
+  laws[HashLaws, Unit].check(_.hash)
+  laws[HashLaws, Boolean].check(_.hash)
+  laws[HashLaws, String].check(_.hash)
+  laws[HashLaws, Symbol].check(_.hash)
+  laws[HashLaws, Byte].check(_.hash)
+  laws[HashLaws, Short].check(_.hash)
+  laws[HashLaws, Char].check(_.hash)
+  laws[HashLaws, Int].check(_.hash)
+  laws[HashLaws, Float].check(_.hash)
+  laws[HashLaws, Double].check(_.hash)
+  laws[HashLaws, Long].check(_.hash)
+  laws[HashLaws, BitSet].check(_.hash)
+  laws[HashLaws, BigDecimal].check(_.hash)
+  laws[HashLaws, BigInt].check(_.hash)
+  laws[HashLaws, UUID].check(_.hash)
+  laws[HashLaws, List[Int]].check(_.hash)
+  laws[HashLaws, Option[String]].check(_.hash)
+  laws[HashLaws, List[String]].check(_.hash)
+  laws[HashLaws, Vector[Int]].check(_.hash)
+  laws[HashLaws, Stream[Int]].check(_.hash)
+  laws[HashLaws, Set[Int]].check(_.hash)
+  laws[HashLaws, (Int, String)].check(_.hash)
+  laws[HashLaws, Either[Int, String]].check(_.hash)
+  laws[HashLaws, Map[Int, String]].check(_.hash)
+
+  laws[HashLaws, Unit].check(_.sameAsUniversalHash)
+  laws[HashLaws, Boolean].check(_.sameAsUniversalHash)
+  laws[HashLaws, String].check(_.sameAsUniversalHash)
+  laws[HashLaws, Symbol].check(_.sameAsUniversalHash)
+  laws[HashLaws, Byte].check(_.sameAsUniversalHash)
+  laws[HashLaws, Short].check(_.sameAsUniversalHash)
+  laws[HashLaws, Char].check(_.sameAsUniversalHash)
+  laws[HashLaws, Int].check(_.sameAsUniversalHash)
+  laws[HashLaws, Float].check(_.sameAsUniversalHash)
+  laws[HashLaws, Double].check(_.sameAsUniversalHash)
+  laws[HashLaws, Long].check(_.sameAsUniversalHash)
+  laws[HashLaws, BitSet].check(_.sameAsUniversalHash)
+  laws[HashLaws, BigDecimal].check(_.sameAsUniversalHash)
+  laws[HashLaws, BigInt].check(_.sameAsUniversalHash)
+  laws[HashLaws, UUID].check(_.sameAsUniversalHash)
+  laws[HashLaws, List[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Option[String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, List[String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Vector[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Stream[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Set[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, (Int, String)].check(_.sameAsUniversalHash)
+  laws[HashLaws, Either[Int, String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Map[Int, String]].check(_.sameAsUniversalHash)
+
+  // NOTE: Do not test for Float/Double/Long. These types'
+  // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
+  laws[HashLaws, Unit].check(_.sameAsScalaHashing)
+  laws[HashLaws, Boolean].check(_.sameAsScalaHashing)
+  laws[HashLaws, String].check(_.sameAsScalaHashing)
+  laws[HashLaws, Symbol].check(_.sameAsScalaHashing)
+  laws[HashLaws, Byte].check(_.sameAsScalaHashing)
+  laws[HashLaws, Short].check(_.sameAsScalaHashing)
+  laws[HashLaws, Char].check(_.sameAsScalaHashing)
+  laws[HashLaws, Int].check(_.sameAsScalaHashing)
+  laws[HashLaws, BitSet].check(_.sameAsScalaHashing)
+  laws[HashLaws, BigDecimal].check(_.sameAsScalaHashing)
+  laws[HashLaws, BigInt].check(_.sameAsScalaHashing)
+  laws[HashLaws, UUID].check(_.sameAsScalaHashing)
+
+  laws[HashLaws, Option[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, List[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Vector[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Stream[HasHash[Int]]].check(_.hash)
 
   laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
   laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
@@ -305,6 +372,17 @@ class LawTests extends FunSuite with Discipline {
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
+      Cogen[A].contramap(_.a)
+  }
+
+  case class HasHash[A](a: A)
+
+  object HasHash {
+    implicit def hasHash[A: Hash]: Hash[HasHash[A]] =
+      Hash.by(_.a) // not Hash[A].on(_.a) because of diamond inheritance problems with Eq
+    implicit def hasHashArbitrary[A: Arbitrary]: Arbitrary[HasHash[A]] =
+      Arbitrary(arbitrary[A].map(HasHash(_)))
+    implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
 

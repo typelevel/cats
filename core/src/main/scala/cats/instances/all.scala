@@ -12,6 +12,7 @@ trait AllInstances
   with    FunctionInstances
   with    FutureInstances
   with    InvariantMonoidalInstances
+  with    HashInstances
   with    ListInstances
   with    MapInstances
   with    OptionInstances
