@@ -14,6 +14,14 @@ run
 sbt scalafix github:typelevel/cats/v1.0.0
 ```
 
+to run all rules that apply to version `1.0.0`.
+
+If you only want to run the rules that apply to version `1.0.0-MF` run
+
+```sh
+sbt scalafix github:typelevel/cats/v1.0.0?sha=c131fe4
+```
+
 ## Available rules
 
 - [x] All Unapply enabled methods, e.g. sequenceU, traverseU, etc. are removed. Unapply enabled syntax ops are also removed. Please use the partial unification SI-2712 fix instead. The easiest way might be this sbt-plugin.
