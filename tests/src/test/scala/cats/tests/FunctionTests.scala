@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.arrow.{Choice, CommutativeArrow}
+import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{SerializableTests, _}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -53,6 +54,13 @@ class FunctionTests extends CatsSuite {
   checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
   checkAll("Function0[Grp]", GroupLawTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
+
+  test("Function0[Hsh]") {
+    forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
+      HashLaws[Function0[Hsh]].hashCompatibility(x, y)
+    }
+  }
+
 
   // serialization tests for the various Function0-related instances
   checkAll("Eq[() => Eqed]", SerializableTests.serializable(Eq[() => Eqed]))
