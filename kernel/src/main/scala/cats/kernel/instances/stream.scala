@@ -13,6 +13,9 @@ trait StreamInstances extends StreamInstances1 {
 trait StreamInstances1 extends StreamInstances2 {
   implicit def catsKernelStdPartialOrderForStream[A: PartialOrder]: PartialOrder[Stream[A]] =
     new StreamPartialOrder[A]
+
+  implicit def catsKernelStdHashForStream[A: Hash]: Hash[Stream[A]] =
+    new StreamHash[A]
 }
 
 trait StreamInstances2 {
@@ -30,6 +33,20 @@ class StreamPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[S
   def partialCompare(xs: Stream[A], ys: Stream[A]): Double =
     if (xs eq ys) 0.0
     else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
+}
+
+class StreamHash[A](implicit ev: Hash[A]) extends StreamEq[A]()(ev) with Hash[Stream[A]] {
+  import scala.util.hashing.MurmurHash3._
+  // adapted from scala.util.hashing.MurmurHash3
+  def hash(xs: Stream[A]): Int = {
+    var n = 0
+    var h = seqSeed
+    xs foreach { x =>
+      h = mix(h, ev.hash(x))
+      n += 1
+    }
+    finalizeHash(h, n)
+  }
 }
 
 class StreamEq[A](implicit ev: Eq[A]) extends Eq[Stream[A]] {
