@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECOND
 
 object KernelCheck {
 
+  implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
+
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
 
@@ -96,6 +98,7 @@ class LawTests extends FunSuite with Discipline {
     implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqLawTests[Map[String, HasEq[Int]]].eqv)
   }
+
 
   checkAll("Eq[List[HasEq[Int]]]", EqLawTests[List[HasEq[Int]]].eqv)
   checkAll("Eq[Option[HasEq[Int]]]", EqLawTests[Option[HasEq[Int]]].eqv)
@@ -177,6 +180,78 @@ class LawTests extends FunSuite with Discipline {
   checkAll("CommutativeGroup[BigInt]", SerializableTests.serializable(CommutativeGroup[BigInt]))
   checkAll("CommutativeGroup[Duration]", CommutativeGroupTests[Duration].commutativeGroup)
   checkAll("CommutativeGroup[Duration]", SerializableTests.serializable(CommutativeGroup[Duration]))
+
+
+  laws[HashLaws, Unit].check(_.hash)
+  laws[HashLaws, Boolean].check(_.hash)
+  laws[HashLaws, String].check(_.hash)
+  laws[HashLaws, Symbol].check(_.hash)
+  laws[HashLaws, Byte].check(_.hash)
+  laws[HashLaws, Short].check(_.hash)
+  laws[HashLaws, Char].check(_.hash)
+  laws[HashLaws, Int].check(_.hash)
+  laws[HashLaws, Float].check(_.hash)
+  laws[HashLaws, Double].check(_.hash)
+  laws[HashLaws, Long].check(_.hash)
+  laws[HashLaws, BitSet].check(_.hash)
+  laws[HashLaws, BigDecimal].check(_.hash)
+  laws[HashLaws, BigInt].check(_.hash)
+  laws[HashLaws, UUID].check(_.hash)
+  laws[HashLaws, List[Int]].check(_.hash)
+  laws[HashLaws, Option[String]].check(_.hash)
+  laws[HashLaws, List[String]].check(_.hash)
+  laws[HashLaws, Vector[Int]].check(_.hash)
+  laws[HashLaws, Stream[Int]].check(_.hash)
+  laws[HashLaws, Set[Int]].check(_.hash)
+  laws[HashLaws, (Int, String)].check(_.hash)
+  laws[HashLaws, Either[Int, String]].check(_.hash)
+  laws[HashLaws, Map[Int, String]].check(_.hash)
+
+  laws[HashLaws, Unit].check(_.sameAsUniversalHash)
+  laws[HashLaws, Boolean].check(_.sameAsUniversalHash)
+  laws[HashLaws, String].check(_.sameAsUniversalHash)
+  laws[HashLaws, Symbol].check(_.sameAsUniversalHash)
+  laws[HashLaws, Byte].check(_.sameAsUniversalHash)
+  laws[HashLaws, Short].check(_.sameAsUniversalHash)
+  laws[HashLaws, Char].check(_.sameAsUniversalHash)
+  laws[HashLaws, Int].check(_.sameAsUniversalHash)
+  laws[HashLaws, Float].check(_.sameAsUniversalHash)
+  laws[HashLaws, Double].check(_.sameAsUniversalHash)
+  laws[HashLaws, Long].check(_.sameAsUniversalHash)
+  laws[HashLaws, BitSet].check(_.sameAsUniversalHash)
+  laws[HashLaws, BigDecimal].check(_.sameAsUniversalHash)
+  laws[HashLaws, BigInt].check(_.sameAsUniversalHash)
+  laws[HashLaws, UUID].check(_.sameAsUniversalHash)
+  laws[HashLaws, List[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Option[String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, List[String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Vector[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Stream[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Set[Int]].check(_.sameAsUniversalHash)
+  laws[HashLaws, (Int, String)].check(_.sameAsUniversalHash)
+  laws[HashLaws, Either[Int, String]].check(_.sameAsUniversalHash)
+  laws[HashLaws, Map[Int, String]].check(_.sameAsUniversalHash)
+
+  // NOTE: Do not test for Float/Double/Long. These types'
+  // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
+  laws[HashLaws, Unit].check(_.sameAsScalaHashing)
+  laws[HashLaws, Boolean].check(_.sameAsScalaHashing)
+  laws[HashLaws, String].check(_.sameAsScalaHashing)
+  laws[HashLaws, Symbol].check(_.sameAsScalaHashing)
+  laws[HashLaws, Byte].check(_.sameAsScalaHashing)
+  laws[HashLaws, Short].check(_.sameAsScalaHashing)
+  laws[HashLaws, Char].check(_.sameAsScalaHashing)
+  laws[HashLaws, Int].check(_.sameAsScalaHashing)
+  laws[HashLaws, BitSet].check(_.sameAsScalaHashing)
+  laws[HashLaws, BigDecimal].check(_.sameAsScalaHashing)
+  laws[HashLaws, BigInt].check(_.sameAsScalaHashing)
+  laws[HashLaws, UUID].check(_.sameAsScalaHashing)
+
+  laws[HashLaws, Option[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, List[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Vector[HasHash[Int]]].check(_.hash)
+  laws[HashLaws, Stream[HasHash[Int]]].check(_.hash)
+
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
@@ -324,6 +399,17 @@ class LawTests extends FunSuite with Discipline {
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
+      Cogen[A].contramap(_.a)
+  }
+
+  case class HasHash[A](a: A)
+
+  object HasHash {
+    implicit def hasHash[A: Hash]: Hash[HasHash[A]] =
+      Hash.by(_.a) // not Hash[A].on(_.a) because of diamond inheritance problems with Eq
+    implicit def hasHashArbitrary[A: Arbitrary]: Arbitrary[HasHash[A]] =
+      Arbitrary(arbitrary[A].map(HasHash(_)))
+    implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
 

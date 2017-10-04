@@ -30,4 +30,8 @@ class KernelContravariantTests extends CatsSuite {
   checkAll("Contravariant[Order]", ContravariantTests[Order].contravariant[Int, Int, Int])
   checkAll("Cartesian[Order]", CartesianTests[Order].cartesian[Int, Int, Int])
   checkAll("Contravariant[Order]", SerializableTests.serializable(Contravariant[Order]))
+
+  Contravariant[Hash]
+  checkAll("Contravariant[Hash]", ContravariantTests[Hash].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Hash]", SerializableTests.serializable(Contravariant[Hash]))
 }
