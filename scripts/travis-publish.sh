@@ -35,6 +35,7 @@ free_js="$sbt_cmd validateFreeJS"
 js="$core_js && $free_js && $kernel_js"
 jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
 
+sbt ;coreJVM/publishLocal;freeJVM/publishLocal
 cd scalafix
 sbt tests/test
 cd ..
