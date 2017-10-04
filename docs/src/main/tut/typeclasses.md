@@ -2,6 +2,6 @@
 layout: docs
 title:  "Type Classes"
 section: "typeclasses"
-position: 1
+position: 10
 ---
 {% include_relative typeclasses/typeclasses.md %}

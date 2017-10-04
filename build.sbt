@@ -17,6 +17,8 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
+val CompileTime = config("compile-time").hide
+
 lazy val kernelSettings = Seq(
   // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
   scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
@@ -36,7 +38,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % "compile-time",
+    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % CompileTime,
     "org.typelevel" %%% "machinist" % "0.6.2",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
@@ -44,8 +46,8 @@ lazy val commonSettings = Seq(
   fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  ivyConfigurations += config("compile-time").hide,
-  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time")),
+  ivyConfigurations += CompileTime,
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name)),
   unmanagedSourceDirectories in Test ++= {
     val bd = baseDirectory.value
     if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
@@ -71,7 +73,6 @@ lazy val commonJsSettings = Seq(
   },
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
-  requiresDOM := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
@@ -131,7 +132,12 @@ lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site t
 lazy val docSettings = Seq(
   micrositeName := "Cats",
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
-  micrositeAuthor := "Typelevel contributors",
+  micrositeAuthor := "Cats contributors",
+  micrositeFooterText := Some(
+    """
+      |<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+      |""".stripMargin),
   micrositeHighlightTheme := "atom-one-light",
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
@@ -140,7 +146,13 @@ lazy val docSettings = Seq(
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
       "contributing.md",
-      "home"
+      "home",
+       Map("title" -> "Contributing", "section" -> "contributing", "position" -> "50")
+    ),
+    file("README.md") -> ExtraMdFileConfig(
+      "index.md",
+      "home",
+      Map("title" -> "Home", "section" -> "home", "position" -> "0")
     )
   ),
   micrositeGithubRepo := "cats",
@@ -181,7 +193,7 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, freeJVM)
+  .dependsOn(coreJVM, freeJVM, kernelLawsJVM, lawsJVM, testkitJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -339,7 +351,12 @@ val binaryCompatibleExceptions = {
     exclude[ReversedMissingMethodProblem]("cats.kernel.instances.FunctionInstances0.catsKernelHashForFunction0"),
     exclude[ReversedMissingMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
     exclude[DirectMissingMethodProblem]("cats.kernel.instances.all.package.catsKernelStdPartialOrderForBitSet"),
-    exclude[DirectMissingMethodProblem]("cats.kernel.instances.bitSet.package.catsKernelStdPartialOrderForBitSet")
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.bitSet.package.catsKernelStdPartialOrderForBitSet"),
+    //todo: remove these once we release 1.0.0-RC1
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*")
   )
 }
 

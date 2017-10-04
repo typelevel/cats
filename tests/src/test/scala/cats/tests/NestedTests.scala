@@ -3,7 +3,7 @@ package tests
 
 import cats.Functor
 import cats.data._
-import cats.functor._
+
 import cats.laws.discipline._
 import cats.laws.discipline.CartesianTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
@@ -75,6 +75,14 @@ class NestedTests extends CatsSuite {
     implicit val instance = ListWrapper.applicative
     checkAll("Nested[List, ListWrapper, ?]", ApplicativeTests[Nested[List, ListWrapper, ?]].applicative[Int, Int, Int])
     checkAll("Applicative[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Applicative[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
+    //ApplicativeError composition
+    implicit val instance = ListWrapper.applicative
+
+    checkAll("Nested[Validated[String, ?], ListWrapper, ?]", ApplicativeErrorTests[Nested[Validated[String, ?], ListWrapper, ?], String].applicativeError[Int, Int, Int])
+    checkAll("ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?]]", SerializableTests.serializable(ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?], String]))
   }
 
   {

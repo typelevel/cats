@@ -2,7 +2,7 @@
 layout: page
 title:  "Colophon"
 section: "colophon"
-position: 6
+position: 60
 ---
 Cats has been made a much better project, and is a much more enjoyable
 project to work on because of many of the other projects on which Cats

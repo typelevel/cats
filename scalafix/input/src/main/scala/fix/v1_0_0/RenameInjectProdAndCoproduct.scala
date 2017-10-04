@@ -1,5 +1,5 @@
-/* 
-rewrite = "scala:fix.v1_0_0.RenameInjectProdAndCoproduct"
+/*
+rule = "scala:fix.v1_0_0.RenameInjectProdAndCoproduct"
  */
 package fix
 package to1_0_0

@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Bifunctor
+import cats.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
 
@@ -95,6 +95,18 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     flatMap(b => EitherT.right(f(b)))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
+
+  def leftFlatMap[BB >: B, D](f: A => EitherT[F, D, BB])(implicit F: Monad[F]): EitherT[F, D, BB] =
+    EitherT(F.flatMap(value) {
+      case Left(a) => f(a).value
+      case r@Right(_) => F.pure(r.leftCast)
+    })
+
+  def leftSemiflatMap[D](f: A => F[D])(implicit F: Monad[F]): EitherT[F, D, B] =
+    EitherT(F.flatMap(value) {
+      case Left(a) => F.map(f(a)) { d => Left(d) }
+      case r@Right(_) => F.pure(r.leftCast)
+    })
 
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
     o.compare(value, that.value)
@@ -426,7 +438,7 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
     }
 
   implicit def catsDataShowForEitherT[F[_], L, R](implicit sh: Show[F[Either[L, R]]]): Show[EitherT[F, L, R]] =
-    functor.Contravariant[Show].contramap(sh)(_.value)
+    Contravariant[Show].contramap(sh)(_.value)
 
   implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, ?, ?]] =
     new Bifunctor[EitherT[F, ?, ?]] {

@@ -4,7 +4,7 @@ import scala.meta._
 import scalafix.testkit._
 
 class Cats_Tests
-  extends SemanticRewriteSuite(
+  extends SemanticRuleSuite(
     Database.load(Classpath(AbsolutePath(BuildInfo.inputClassdirectory))),
     AbsolutePath(BuildInfo.inputSourceroot),
     Seq(AbsolutePath(BuildInfo.outputSourceroot))

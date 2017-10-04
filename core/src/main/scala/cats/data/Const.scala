@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.Contravariant
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`

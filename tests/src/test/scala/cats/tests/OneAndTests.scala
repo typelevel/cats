@@ -128,6 +128,19 @@ class OneAndTests extends CatsSuite {
     }
   }
 
+  test("NonEmptyStream#nonEmptyPartition remains sorted") {
+    forAll { (nes: NonEmptyStream[Int], f: Int => Either[String, String]) =>
+
+      val nesf = nes.map(f)
+      val sortedStream = (nesf.head #:: nesf.tail).sorted
+      val sortedNes = OneAnd(sortedStream.head, sortedStream.tail)
+      val ior = Reducible[NonEmptyStream].nonEmptyPartition(sortedNes)(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
+    }
+  }
+
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyStream[Int], f: (Int, Int) => Int) =>
       nel.reduceLeft(f) should === (nel.tail.foldLeft(nel.head)(f))

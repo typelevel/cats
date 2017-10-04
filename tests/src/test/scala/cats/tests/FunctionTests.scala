@@ -1,14 +1,15 @@
 package cats
 package tests
 
-import cats.arrow.{CommutativeArrow, Choice}
-import cats.functor.Contravariant
+import cats.Contravariant
+import cats.arrow.{Choice, CommutativeArrow}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws._
-import cats.kernel.{ CommutativeSemigroup, CommutativeMonoid, CommutativeGroup }
-import cats.kernel.{ Band, Semilattice, BoundedSemilattice }
+import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
+import cats.kernel.{Band, BoundedSemilattice, Semilattice}
+
 
 class FunctionTests extends CatsSuite {
 

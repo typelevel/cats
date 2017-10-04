@@ -1,11 +1,11 @@
 package cats
 package tests
 
-import cats.data.{StateT}
+import cats.data.{IndexedStateT, StateT}
 import org.scalacheck.Gen
 
 class MonadTest extends CatsSuite {
-  implicit val testInstance: Monad[StateT[Id, Int, ?]] = StateT.catsDataMonadForStateT[Id, Int]
+  implicit val testInstance: Monad[StateT[Id, Int, ?]] = IndexedStateT.catsDataMonadForIndexedStateT[Id, Int]
 
   val smallPosInt = Gen.choose(1, 5000)
 

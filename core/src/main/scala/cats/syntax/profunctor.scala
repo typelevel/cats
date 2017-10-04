@@ -1,6 +1,6 @@
 package cats
 package syntax
 
-import cats.functor.Profunctor
+import cats.arrow.Profunctor
 
 trait ProfunctorSyntax extends Profunctor.ToProfunctorOps
