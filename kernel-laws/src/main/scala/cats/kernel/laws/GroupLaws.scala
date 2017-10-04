@@ -2,8 +2,6 @@ package cats.kernel
 package laws
 
 
-final case class IsEq[A](lhs: A, rhs: A)
-
 trait GroupLaws[A] extends MonoidLaws[A] {
   override implicit def S: Group[A]
 
