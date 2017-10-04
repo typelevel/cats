@@ -347,7 +347,7 @@ object EitherT extends EitherTInstances {
    */
   final def liftF[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
-  @deprecated("Use EitherT.liftF.", "1.0.0-MF")
+  @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
   /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
