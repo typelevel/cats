@@ -6,7 +6,6 @@ import cats.kernel.laws.discipline.{SerializableTests, _}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws._
 import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.{Band, BoundedSemilattice, Semilattice}
 
@@ -45,7 +44,6 @@ class FunctionTests extends CatsSuite {
   checkAll("Function0[Eqed]", EqLawTests[Function0[Eqed]].eqv)
   checkAll("Function0[POrd]", PartialOrderLawTests[Function0[POrd]].partialOrder)
   checkAll("Function0[Ord]", OrderLawTests[Function0[Ord]].order)
-  checkAll("Function0[Hsh]", HashLaws[Function0[Hsh]].hash)
   checkAll("Function0[Semi]", SemigroupLawTests[Function0[Semi]].semigroup)
   checkAll("Function0[CSemi]", CommutativeSemigroupTests[Function0[CSemi]].commutativeSemigroup)
   checkAll("Function0[Bnd]", BandTests[Function0[Bnd]].band)
