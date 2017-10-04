@@ -8,18 +8,16 @@ Install the scalafix sbt plugin (globally or in a specific project):
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
 ```
 
-run
-
-```sh
-sbt scalafix github:typelevel/cats/v1.0.0
-```
-
-to run all rules that apply to version `1.0.0`.
-
-If you only want to run the rules that apply to version `1.0.0-MF` run
+to run all rules that apply to version `1.0.0-MF` run
 
 ```sh
 sbt scalafix github:typelevel/cats/v1.0.0?sha=c131fe4
+```
+
+to run all rules that apply to the current `1.0.0-SNAPSHOT` run
+
+```sh
+sbt scalafix github:typelevel/cats/v1.0.0
 ```
 
 ## Available rules
