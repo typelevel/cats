@@ -350,6 +350,7 @@ val binaryCompatibleExceptions = {
     exclude[ReversedMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdHashForOption"),
     exclude[ReversedMissingMethodProblem]("cats.kernel.instances.FunctionInstances0.catsKernelHashForFunction0"),
     exclude[ReversedMissingMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdPartialOrderForOption"),
     exclude[DirectMissingMethodProblem]("cats.kernel.instances.all.package.catsKernelStdPartialOrderForBitSet"),
     exclude[DirectMissingMethodProblem]("cats.kernel.instances.bitSet.package.catsKernelStdPartialOrderForBitSet"),
     //todo: remove these once we release 1.0.0-RC1
