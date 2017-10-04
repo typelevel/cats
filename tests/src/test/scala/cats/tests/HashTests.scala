@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.functor._
 
 class HashTests extends CatsSuite {
 
