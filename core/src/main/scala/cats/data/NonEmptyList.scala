@@ -99,6 +99,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   def prepend[AA >: A](a: AA): NonEmptyList[AA] =
     NonEmptyList(a, head :: tail)
 
+  /**
+    * Alias for [[concat]]
+    */
   def :::[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
     other.concat(this)
 
