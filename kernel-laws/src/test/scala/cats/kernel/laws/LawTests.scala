@@ -119,7 +119,6 @@ class LawTests extends FunSuite with Discipline {
   laws[HashLaws, Queue[Int]].check(_.hash)
   laws[HashLaws, Stream[Int]].check(_.hash)
   laws[HashLaws, Set[Int]].check(_.hash)
-  laws[HashLaws, Queue[Int]].check(_.hash)
   laws[HashLaws, (Int, String)].check(_.hash)
   laws[HashLaws, Either[Int, String]].check(_.hash)
   laws[HashLaws, Map[Int, String]].check(_.hash)
