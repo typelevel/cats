@@ -35,18 +35,8 @@ class VectorPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[V
     else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
 }
 
-class VectorHash[A](implicit ev: Hash[A]) extends VectorEq[A]()(ev) with Hash[Vector[A]] {
-  // adapted from scala.util.hashing
-  import scala.util.hashing.MurmurHash3._
-  def hash(xs: Vector[A]): Int = {
-    var n = 0
-    var h = seqSeed
-    xs foreach { x =>
-      h = mix(h, ev.hash(x))
-      n += 1
-    }
-    finalizeHash(h, n)
-  }
+class VectorHash[A](implicit ev: Hash[A]) extends VectorEq[A] with Hash[Vector[A]] {
+  def hash(xs: Vector[A]): Int = StaticMethods.orderedHash(xs)
 }
 
 class VectorEq[A](implicit ev: Eq[A]) extends Eq[Vector[A]] {
