@@ -3,11 +3,11 @@ package laws
 
 import catalysts.Platform
 import catalysts.macros.TypeTagM
-
 import cats.kernel.instances.all._
+import cats.kernel.laws.discipline._
 
 
-import org.typelevel.discipline.{ Laws }
+import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{ Arbitrary, Cogen, Gen }
 import Arbitrary.arbitrary
@@ -21,19 +21,8 @@ import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS}
 
-class LawTests extends FunSuite with Discipline {
+object KernelCheck {
 
-  // The scalacheck defaults (100,100) are too high for scala-js.
-  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
-  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
-
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
-
-  implicit def hashLaws[A: Cogen: Eq: Arbitrary]: HashLaws[A] = HashLaws[A]
-
-  implicit def orderLaws[A: Cogen: Eq: Arbitrary]: OrderLaws[A] = OrderLaws[A]
-  implicit def groupLaws[A: Cogen: Eq: Arbitrary]: GroupLaws[A] = GroupLaws[A]
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
@@ -89,162 +78,154 @@ class LawTests extends FunSuite with Discipline {
         case NANOSECONDS => 6128745701389500153L
       })
     }
+}
+
+class LawTests extends FunSuite with Discipline {
+
+  import KernelCheck._
+
+  // The scalacheck defaults (100,100) are too high for scala-js.
+  final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
+  final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+
 
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
-    laws[OrderLaws, Map[String, HasEq[Int]]].check(_.eqv)
+    checkAll("Eq[Map[String, HasEq[Int]]]", EqLawTests[Map[String, HasEq[Int]]].eqv)
   }
 
-  laws[HashLaws, Unit].check(_.hash)
-  laws[HashLaws, Boolean].check(_.hash)
-  laws[HashLaws, String].check(_.hash)
-  laws[HashLaws, Symbol].check(_.hash)
-  laws[HashLaws, Byte].check(_.hash)
-  laws[HashLaws, Short].check(_.hash)
-  laws[HashLaws, Char].check(_.hash)
-  laws[HashLaws, Int].check(_.hash)
-  laws[HashLaws, Float].check(_.hash)
-  laws[HashLaws, Double].check(_.hash)
-  laws[HashLaws, Long].check(_.hash)
-  laws[HashLaws, BitSet].check(_.hash)
-  laws[HashLaws, BigDecimal].check(_.hash)
-  laws[HashLaws, BigInt].check(_.hash)
-  laws[HashLaws, UUID].check(_.hash)
-  laws[HashLaws, Duration].check(_.hash)
-  laws[HashLaws, List[Int]].check(_.hash)
-  laws[HashLaws, Option[String]].check(_.hash)
-  laws[HashLaws, List[String]].check(_.hash)
-  laws[HashLaws, Vector[Int]].check(_.hash)
-  laws[HashLaws, Queue[Int]].check(_.hash)
-  laws[HashLaws, Stream[Int]].check(_.hash)
-  laws[HashLaws, Set[Int]].check(_.hash)
-  laws[HashLaws, (Int, String)].check(_.hash)
-  laws[HashLaws, Either[Int, String]].check(_.hash)
-  laws[HashLaws, Map[Int, String]].check(_.hash)
 
-  laws[HashLaws, Unit].check(_.sameAsUniversalHash)
-  laws[HashLaws, Boolean].check(_.sameAsUniversalHash)
-  laws[HashLaws, String].check(_.sameAsUniversalHash)
-  laws[HashLaws, Symbol].check(_.sameAsUniversalHash)
-  laws[HashLaws, Byte].check(_.sameAsUniversalHash)
-  laws[HashLaws, Short].check(_.sameAsUniversalHash)
-  laws[HashLaws, Char].check(_.sameAsUniversalHash)
-  laws[HashLaws, Int].check(_.sameAsUniversalHash)
-  laws[HashLaws, Float].check(_.sameAsUniversalHash)
-  laws[HashLaws, Double].check(_.sameAsUniversalHash)
-  laws[HashLaws, Long].check(_.sameAsUniversalHash)
-  laws[HashLaws, BitSet].check(_.sameAsUniversalHash)
-  laws[HashLaws, BigDecimal].check(_.sameAsUniversalHash)
-  laws[HashLaws, BigInt].check(_.sameAsUniversalHash)
-  laws[HashLaws, UUID].check(_.sameAsUniversalHash)
-  laws[HashLaws, List[Int]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Option[String]].check(_.sameAsUniversalHash)
-  laws[HashLaws, List[String]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Queue[Int]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Vector[Int]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Stream[Int]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Set[Int]].check(_.sameAsUniversalHash)
-  laws[HashLaws, (Int, String)].check(_.sameAsUniversalHash)
-  laws[HashLaws, Either[Int, String]].check(_.sameAsUniversalHash)
-  laws[HashLaws, Map[Int, String]].check(_.sameAsUniversalHash)
+  checkAll("Eq[List[HasEq[Int]]]", EqLawTests[List[HasEq[Int]]].eqv)
+  checkAll("Eq[Option[HasEq[Int]]]", EqLawTests[Option[HasEq[Int]]].eqv)
+  checkAll("Eq[Vector[HasEq[Int]]]", EqLawTests[Vector[HasEq[Int]]].eqv)
+  checkAll("Eq[Stream[HasEq[Int]]]", EqLawTests[Stream[HasEq[Int]]].eqv)
+  checkAll("Eq[Queue[HasEq[Int]]]", EqLawTests[Queue[HasEq[Int]]].eqv)
+
+  checkAll("PartialOrder[Set[Int]]", PartialOrderLawTests[Set[Int]].partialOrder)
+  checkAll("PartialOrder[Set[Int]].reverse", PartialOrderLawTests(PartialOrder[Set[Int]].reverse).partialOrder)
+  checkAll("PartialOrder[Set[Int]].reverse.reverse", PartialOrderLawTests(PartialOrder[Set[Int]].reverse.reverse).partialOrder)
+  checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderLawTests[Option[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderLawTests[List[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderLawTests[Vector[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderLawTests[Stream[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderLawTests[Queue[HasPartialOrder[Int]]].partialOrder)
+  checkAll("Semilattice.asMeetPartialOrder[Set[Int]]", PartialOrderLawTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
+  checkAll("Semilattice.asJoinPartialOrder[Set[Int]]", PartialOrderLawTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
+
+  checkAll("Order[Unit]", OrderLawTests[Unit].order)
+  checkAll("Order[Boolean]", OrderLawTests[Boolean].order)
+  checkAll("Order[String]", OrderLawTests[String].order)
+  checkAll("Order[Symbol]", OrderLawTests[Symbol].order)
+  checkAll("Order[Byte]", OrderLawTests[Byte].order)
+  checkAll("Order[Short]", OrderLawTests[Short].order)
+  checkAll("Order[Char]", OrderLawTests[Char].order)
+  checkAll("Order[Int]", OrderLawTests[Int].order)
+  checkAll("Order[Long]", OrderLawTests[Long].order)
+  checkAll("PartialOrder[BitSet]", PartialOrderLawTests[BitSet].partialOrder)
+  checkAll("Order[BigInt]", OrderLawTests[BigInt].order)
+  checkAll("Order[Duration]", OrderLawTests[Duration].order)
+  checkAll("Order[UUID]", OrderLawTests[UUID].order)
+  checkAll("Order[List[Int]]", OrderLawTests[List[Int]]  .order)
+  checkAll("Order[Option[String]]", OrderLawTests[Option[String]].order)
+  checkAll("Order[List[String]", OrderLawTests[List[String]].order)
+  checkAll("Order[Vector[Int]]", OrderLawTests[Vector[Int]].order)
+  checkAll("Order[Stream[Int]]", OrderLawTests[Stream[Int]].order)
+  checkAll("Order[Queue[Int]]", OrderLawTests[Queue[Int]].order)
+  checkAll("fromOrdering[Int]", OrderLawTests(Order.fromOrdering[Int]).order)
+  checkAll("Order[Int].reverse", OrderLawTests(Order[Int].reverse).order)
+  checkAll("Order[Int].reverse.reverse", OrderLawTests(Order[Int].reverse.reverse).order)
+
+  checkAll("Monoid[String]", MonoidLawTests[String].monoid)
+  checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
+  checkAll("Monoid[Option[Int]]", MonoidLawTests[Option[Int]].monoid)
+  checkAll("Monoid[Option[Int]]", SerializableTests.serializable(Monoid[String]))
+  checkAll("Monoid[Option[String]]", MonoidLawTests[Option[String]].monoid)
+  checkAll("Monoid[Option[String]]", SerializableTests.serializable(Monoid[String]))
+  checkAll("Monoid[List[Int]]", MonoidLawTests[List[Int]].monoid)
+  checkAll("Monoid[List[Int]]", SerializableTests.serializable(Monoid[List[Int]]))
+  checkAll("Monoid[Vector[Int]]", MonoidLawTests[Vector[Int]].monoid)
+  checkAll("Monoid[Vector[Int]]", SerializableTests.serializable(Monoid[Vector[Int]]))
+  checkAll("Monoid[Stream[Int]]", MonoidLawTests[Stream[Int]].monoid)
+  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
+  checkAll("Monoid[List[String]]", MonoidLawTests[List[String]].monoid)
+  checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
+  checkAll("Monoid[Map[String, Int]]", MonoidLawTests[Map[String, Int]].monoid)
+  checkAll("Monoid[Map[String, Int]]", SerializableTests.serializable(Monoid[Map[String, Int]]))
+  checkAll("Monoid[Queue[Int]]", MonoidLawTests[Queue[Int]].monoid)
+  checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
+
+  checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
+  checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
+  checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]].boundedSemilattice)
+  checkAll("BoundedSemilattice[Set[Int]]", SerializableTests.serializable(BoundedSemilattice[Set[Int]]))
+
+  checkAll("CommutativeGroup[Unit]", CommutativeGroupTests[Unit].commutativeGroup)
+  checkAll("CommutativeGroup[Unit]", SerializableTests.serializable(CommutativeGroup[Unit]))
+  checkAll("CommutativeGroup[Byte]", CommutativeGroupTests[Byte].commutativeGroup)
+  checkAll("CommutativeGroup[Byte]", SerializableTests.serializable(CommutativeGroup[Byte]))
+  checkAll("CommutativeGroup[Short]", CommutativeGroupTests[Short].commutativeGroup)
+  checkAll("CommutativeGroup[Short]", SerializableTests.serializable(CommutativeGroup[Short]))
+  checkAll("CommutativeGroup[Int]", CommutativeGroupTests[Int].commutativeGroup)
+  checkAll("CommutativeGroup[Int]", SerializableTests.serializable(CommutativeGroup[Int]))
+  checkAll("CommutativeGroup[Long]", CommutativeGroupTests[Long].commutativeGroup)
+  checkAll("CommutativeGroup[Long]", SerializableTests.serializable(CommutativeGroup[Long]))
+  // checkAll("CommutativeGroup[Float]", CommutativeGroupTests[Float].commutativeGroup) // approximately associative
+  // checkAll("CommutativeGroup[Double]", CommutativeGroupTests[Double].commutativeGroup) // approximately associative
+  checkAll("CommutativeGroup[BigInt]", CommutativeGroupTests[BigInt].commutativeGroup)
+  checkAll("CommutativeGroup[BigInt]", SerializableTests.serializable(CommutativeGroup[BigInt]))
+  checkAll("CommutativeGroup[Duration]", CommutativeGroupTests[Duration].commutativeGroup)
+  checkAll("CommutativeGroup[Duration]", SerializableTests.serializable(CommutativeGroup[Duration]))
+
+
+  checkAll("Hash[Unit]" , HashTests[Unit].hash)
+  checkAll("Hash[Boolean]" , HashTests[Boolean].hash)
+  checkAll("Hash[String]" , HashTests[String].hash)
+  checkAll("Hash[Symbol]" , HashTests[Symbol].hash)
+  checkAll("Hash[Byte]" , HashTests[Byte].hash)
+  checkAll("Hash[Short]" , HashTests[Short].hash)
+  checkAll("Hash[Char]" , HashTests[Char].hash)
+  checkAll("Hash[Int]" , HashTests[Int].hash)
+  checkAll("Hash[Duration]", HashTests[Duration].hash)
 
   // NOTE: Do not test for Float/Double/Long. These types'
   // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
-  laws[HashLaws, Unit].check(_.sameAsScalaHashing)
-  laws[HashLaws, Boolean].check(_.sameAsScalaHashing)
-  laws[HashLaws, String].check(_.sameAsScalaHashing)
-  laws[HashLaws, Symbol].check(_.sameAsScalaHashing)
-  laws[HashLaws, Byte].check(_.sameAsScalaHashing)
-  laws[HashLaws, Short].check(_.sameAsScalaHashing)
-  laws[HashLaws, Char].check(_.sameAsScalaHashing)
-  laws[HashLaws, Int].check(_.sameAsScalaHashing)
-  laws[HashLaws, BitSet].check(_.sameAsScalaHashing)
-  laws[HashLaws, BigDecimal].check(_.sameAsScalaHashing)
-  laws[HashLaws, BigInt].check(_.sameAsScalaHashing)
-  laws[HashLaws, UUID].check(_.sameAsScalaHashing)
-  laws[HashLaws, Duration].check(_.sameAsScalaHashing)
+  // checkAll("Hash[Float]" , HashTests[Float].hash)
+  // checkAll("Hash[Double]" , HashTests[Double].hash)
+  checkAll("Hash[BitSet]" , HashTests[BitSet].hash)
+  checkAll("Hash[BigDecimal]" , HashTests[BigDecimal].hash)
+  checkAll("Hash[BigInt]" , HashTests[BigInt].hash)
+  checkAll("Hash[UUID]" , HashTests[UUID].hash)
+  checkAll("Hash[List[Int]]" , HashTests[List[Int]].hash)
+  checkAll("Hash[Option[String]]" , HashTests[Option[String]].hash)
+  checkAll("Hash[List[String]]" , HashTests[List[String]].hash)
+  checkAll("Hash[Vector[Int]]" , HashTests[Vector[Int]].hash)
+  checkAll("Hash[Stream[Int]]" , HashTests[Stream[Int]].hash)
+  checkAll("Hash[Set[Int]]" , HashTests[Set[Int]].hash)
+  checkAll("Hash[(Int, String)]" , HashTests[(Int, String)].hash)
+  checkAll("Hash[Either[Int, String]]" , HashTests[Either[Int, String]].hash)
+  checkAll("Hash[Map[Int, String]]" , HashTests[Map[Int, String]].hash)
+  checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
-  laws[HashLaws, Option[HasHash[Int]]].check(_.hash)
-  laws[HashLaws, List[HasHash[Int]]].check(_.hash)
-  laws[HashLaws, Vector[HasHash[Int]]].check(_.hash)
-  laws[HashLaws, Stream[HasHash[Int]]].check(_.hash)
-  laws[HashLaws, Queue[HasHash[Int]]].check(_.hash)
 
-  laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Vector[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Stream[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, Queue[HasEq[Int]]].check(_.eqv)
-
-  laws[OrderLaws, Set[Int]].check(_.partialOrder)
-  laws[OrderLaws, Set[Int]]("reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse))
-  laws[OrderLaws, Set[Int]]("reverse.reverse").check(_.partialOrder(PartialOrder[Set[Int]].reverse.reverse))
-  laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Vector[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Stream[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Queue[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, Set[Int]]("asMeetPartialOrder").check(_.partialOrder(Semilattice.asMeetPartialOrder[Set[Int]]))
-  laws[OrderLaws, Set[Int]]("asJoinPartialOrder").check(_.partialOrder(Semilattice.asJoinPartialOrder[Set[Int]]))
-
-  laws[OrderLaws, Unit].check(_.order)
-  laws[OrderLaws, Boolean].check(_.order)
-  laws[OrderLaws, String].check(_.order)
-  laws[OrderLaws, Symbol].check(_.order)
-  laws[OrderLaws, Byte].check(_.order)
-  laws[OrderLaws, Short].check(_.order)
-  laws[OrderLaws, Char].check(_.order)
-  laws[OrderLaws, Int].check(_.order)
-  laws[OrderLaws, Long].check(_.order)
-  laws[OrderLaws, BitSet].check(_.partialOrder)
-  laws[OrderLaws, BigInt].check(_.order)
-  laws[OrderLaws, Duration].check(_.order)
-  laws[OrderLaws, UUID].check(_.order)
-  laws[OrderLaws, List[Int]].check(_.order)
-  laws[OrderLaws, Option[String]].check(_.order)
-  laws[OrderLaws, List[String]].check(_.order)
-  laws[OrderLaws, Vector[Int]].check(_.order)
-  laws[OrderLaws, Stream[Int]].check(_.order)
-  laws[OrderLaws, Queue[Int]].check(_.order)
-  laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
-  laws[OrderLaws, Int]("reverse").check(_.order(Order[Int].reverse))
-  laws[OrderLaws, Int]("reverse.reverse").check(_.order(Order[Int].reverse.reverse))
-
-  laws[GroupLaws, String].check(_.monoid)
-  laws[GroupLaws, Option[Int]].check(_.monoid)
-  laws[GroupLaws, Option[String]].check(_.monoid)
-  laws[GroupLaws, List[Int]].check(_.monoid)
-  laws[GroupLaws, Vector[Int]].check(_.monoid)
-  laws[GroupLaws, Stream[Int]].check(_.monoid)
-  laws[GroupLaws, List[String]].check(_.monoid)
-  laws[GroupLaws, Map[String, Int]].check(_.monoid)
-  laws[GroupLaws, Queue[Int]].check(_.monoid)
-
-  laws[GroupLaws, BitSet].check(_.boundedSemilattice)
-  laws[GroupLaws, Set[Int]].check(_.boundedSemilattice)
-
-  laws[GroupLaws, Unit].check(_.commutativeGroup)
-  laws[GroupLaws, Byte].check(_.commutativeGroup)
-  laws[GroupLaws, Short].check(_.commutativeGroup)
-  laws[GroupLaws, Int].check(_.commutativeGroup)
-  laws[GroupLaws, Long].check(_.commutativeGroup)
-  //laws[GroupLaws, Float].check(_.commutativeGroup) // approximately associative
-  //laws[GroupLaws, Double].check(_.commutativeGroup) // approximately associative
-  laws[GroupLaws, BigInt].check(_.commutativeGroup)
-  laws[GroupLaws, Duration].check(_.commutativeGroup)
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
     implicit val arbBigDecimal: Arbitrary[BigDecimal] =
       Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
-    laws[OrderLaws, BigDecimal].check(_.order)
-    laws[GroupLaws, BigDecimal].check(_.commutativeGroup)
+    checkAll("Order[BigDecimal]", OrderLawTests[BigDecimal].order)
+    checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
+    checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
   }
 
-  laws[GroupLaws, (Int, Int)].check(_.band)
+  checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
+  checkAll("Band[(Int, Int)]", SerializableTests.serializable(Band[(Int, Int)]))
 
-  laws[GroupLaws, Unit].check(_.boundedSemilattice)
+  checkAll("BoundedSemilattice[Unit]", BoundedSemilatticeTests[Unit].boundedSemilattice)
+  checkAll("BoundedSemilattice[Unit]", SerializableTests.serializable(BoundedSemilattice[Unit]))
 
   // Comparison related
 
@@ -257,7 +238,7 @@ class LawTests extends FunSuite with Discipline {
       else Double.NaN
   }
 
-  laws[OrderLaws, Set[Int]]("subset").check(_.partialOrder(subsetPartialOrder[Int]))
+  checkAll("subsetPartialOrder[Int]", PartialOrderLawTests(subsetPartialOrder[Int]).partialOrder)
 
   implicit val arbitraryComparison: Arbitrary[Comparison] =
     Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
@@ -265,7 +246,7 @@ class LawTests extends FunSuite with Discipline {
   implicit val cogenComparison: Cogen[Comparison] =
     Cogen[Int].contramap(_.toInt)
 
-  laws[OrderLaws, Comparison].check(_.eqv)
+  checkAll("Eq[Comparison]", EqLawTests[Comparison].eqv)
 
   test("comparison") {
     val order = Order[Int]
@@ -345,16 +326,16 @@ class LawTests extends FunSuite with Discipline {
     }
 
     implicit val monoidOrderN = Order.whenEqualMonoid[N]
-    laws[GroupLaws, Order[N]].check(_.monoid)
-    laws[GroupLaws, Order[N]].check(_.band)
+    checkAll("Monoid[Order[N]]", MonoidLawTests[Order[N]].monoid)
+    checkAll("Band[Order[N]]", BandTests[Order[N]].band)
 
     {
       implicit val bsEqN: BoundedSemilattice[Eq[N]] = Eq.allEqualBoundedSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.boundedSemilattice)
+      checkAll("BoundedSemilattice[Eq[N]]", BoundedSemilatticeTests[Eq[N]].boundedSemilattice)
     }
     {
       implicit val sEqN: Semilattice[Eq[N]] = Eq.anyEqualSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.semilattice)
+      checkAll("Semilattice[Eq[N]]", SemilatticeTests[Eq[N]].semilattice)
     }
   }
 
