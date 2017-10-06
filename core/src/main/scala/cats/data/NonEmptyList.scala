@@ -80,6 +80,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   def concat[AA >: A](other: List[AA]): NonEmptyList[AA] =
     NonEmptyList(head, tail ::: other)
 
+  @deprecated("Use concatNel", since = "1.0.0-RC1")
+  def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
+    concatNel(other)
+
   /**
    * Append another NonEmptyList
    */
