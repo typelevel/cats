@@ -189,6 +189,7 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Hash[Short]" , HashTests[Short].hash)
   checkAll("Hash[Char]" , HashTests[Char].hash)
   checkAll("Hash[Int]" , HashTests[Int].hash)
+  checkAll("Hash[Duration]", HashTests[Duration].hash)
 
   // NOTE: Do not test for Float/Double/Long. These types'
   // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
@@ -207,6 +208,7 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Hash[(Int, String)]" , HashTests[(Int, String)].hash)
   checkAll("Hash[Either[Int, String]]" , HashTests[Either[Int, String]].hash)
   checkAll("Hash[Map[Int, String]]" , HashTests[Map[Int, String]].hash)
+  checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
 
 

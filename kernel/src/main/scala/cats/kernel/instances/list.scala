@@ -62,22 +62,7 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
 }
 
 class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(ev) with Hash[List[A]] {
-  // adapted from [[scala.util.hashing.MurmurHash3]],
-  // but modified standard `Any#hashCode` to `ev.hash`.
-  import scala.util.hashing.MurmurHash3._
-  def hash(x: List[A]): Int = {
-    var n = 0
-    var h = seqSeed
-    var elems = x
-    while (!elems.isEmpty) {
-      val head = elems.head
-      val tail = elems.tail
-      h = mix(h, ev.hash(head))
-      n += 1
-      elems = tail
-    }
-    finalizeHash(h, n)
-  }
+  def hash(x: List[A]): Int = StaticMethods.listHash(x)(ev)
 }
 
 class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
