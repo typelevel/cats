@@ -189,7 +189,7 @@ class FreeTests extends CatsSuite {
     forAll { (x: Int, y: Int) =>
       val expr1: Free[T, Int] = Free.injectRoll[T, Test1Algebra, Int](Test1(x, Free.pure))
       val expr2: Free[T, Int] = Free.injectRoll[T, Test2Algebra, Int](Test2(y, Free.pure))
-      val res = distr[T, Int](expr1 >> expr2)
+      val res = distr[T, Int](expr1 >>= (_ => expr2))
       res == Some(Free.pure(x + y)) should ===(true)
     }
   }
