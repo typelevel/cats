@@ -12,6 +12,7 @@ import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
 
+@deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
 class NonEmptyListTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
@@ -288,6 +289,7 @@ class NonEmptyListTests extends CatsSuite {
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
       (nel ++ l).toList should === (nel.toList ::: l)
       nel.concat(l).toList should === (nel.toList ::: l)
+      nel.concat(NonEmptyList(n, l)).toList should === (nel.toList ::: (n :: l))
       nel.concatNel(NonEmptyList(n, l)).toList should === (nel.toList ::: (n :: l))
     }
   }
