@@ -50,6 +50,19 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
      */
     bounce(1) <-> bounce(0).flatMap(f)
   }
+
+  /**
+   * It is possible to implement flatMap from tailRecM and map
+   * and it should agree with the flatMap implementation.
+   */
+  def flatMapFromTailRecMConsistency[A, B](fa: F[A], fn: A => F[B]): IsEq[F[B]] = {
+    val tailRecMFlatMap = F.tailRecM[Option[A], B](Option.empty[A]) {
+      case None => F.map(fa) { a => Left(Some(a)) }
+      case Some(a) => F.map(fn(a)) { b => Right(b) }
+    }
+
+    F.flatMap(fa)(fn) <-> tailRecMFlatMap
+  }
 }
 
 object FlatMapLaws {
