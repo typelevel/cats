@@ -8,8 +8,8 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
+import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
+import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class KleisliTests extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -107,13 +107,13 @@ class KleisliTests extends CatsSuite {
 
   {
     implicit val catsDataMonoidForKleisli = Kleisli.catsDataMonoidForKleisli[Option, Int, String]
-    checkAll("Kleisli[Option, Int, String]", GroupLaws[Kleisli[Option, Int, String]].monoid)
+    checkAll("Kleisli[Option, Int, String]", MonoidLawTests[Kleisli[Option, Int, String]].monoid)
     checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(catsDataMonoidForKleisli))
   }
 
   {
     implicit val catsDataSemigroupForKleisli = Kleisli.catsDataSemigroupForKleisli[Option, Int, String]
-    checkAll("Kleisli[Option, Int, String]", GroupLaws[Kleisli[Option, Int, String]].semigroup)
+    checkAll("Kleisli[Option, Int, String]", SemigroupLawTests[Kleisli[Option, Int, String]].semigroup)
     checkAll("Semigroup[Kleisli[Option, Int, String]]", SerializableTests.serializable(catsDataSemigroupForKleisli))
   }
 

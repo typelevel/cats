@@ -3,13 +3,19 @@ package tests
 
 import cats.data.{ EitherT, Validated }
 import cats.laws.discipline._
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  MonoidLawTests,
+  SemigroupLawTests,
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
+}
 import scala.util.Try
 
 class EitherTests extends CatsSuite {
   implicit val iso = CartesianTests.Isomorphisms.invariant[Either[Int, ?]]
 
-  checkAll("Either[String, Int]", GroupLaws[Either[String, Int]].monoid)
+  checkAll("Either[String, Int]", MonoidLawTests[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))
 
   checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
@@ -29,7 +35,7 @@ class EitherTests extends CatsSuite {
   checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
   checkAll("SemigroupK[Either[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
 
-  checkAll("Either[ListWrapper[String], Int]", GroupLaws[Either[ListWrapper[String], Int]].semigroup)
+  checkAll("Either[ListWrapper[String], Int]", SemigroupLawTests[Either[ListWrapper[String], Int]].semigroup)
   checkAll("Semigroup[Either[ListWrapper[String], Int]]", SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
   val partialOrder = catsStdPartialOrderForEither[Int, String]
@@ -40,13 +46,12 @@ class EitherTests extends CatsSuite {
   {
     implicit val S = ListWrapper.eqv[String]
     implicit val I = ListWrapper.eqv[Int]
-    checkAll("Either[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Either[ListWrapper[String], ListWrapper[Int]]", EqLawTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]]))
   }
 
-  val orderLaws = OrderLaws[Either[Int, String]]
-  checkAll("Either[Int, String]", orderLaws.partialOrder(partialOrder))
-  checkAll("Either[Int, String]", orderLaws.order(order))
+  checkAll("Either[Int, String]", PartialOrderLawTests[Either[Int, String]](partialOrder).partialOrder)
+  checkAll("Either[Int, String]", OrderLawTests[Either[Int, String]](order).order)
 
   test("Left/Right cast syntax") {
     forAll { (e: Either[Int, String]) =>

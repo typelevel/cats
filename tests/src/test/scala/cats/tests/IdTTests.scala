@@ -2,7 +2,10 @@ package cats
 package tests
 
 import cats.data.{IdT, NonEmptyList}
-import cats.kernel.laws.OrderLaws
+import cats.kernel.laws.discipline.{
+  OrderLawTests,
+  EqLawTests
+}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
@@ -13,14 +16,14 @@ class IdTTests extends CatsSuite {
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
 
-    checkAll("IdT[ListWrapper, Int]", OrderLaws[IdT[ListWrapper, Int]].eqv)
+    checkAll("IdT[ListWrapper, Int]", EqLawTests[IdT[ListWrapper, Int]].eqv)
     checkAll("Eq[IdT[ListWrapper, Int]]", SerializableTests.serializable(Eq[IdT[ListWrapper, Int]]))
   }
 
   {
     implicit val F = ListWrapper.order[Int]
 
-    checkAll("IdT[ListWrapper, Int]", OrderLaws[IdT[ListWrapper, Int]].order)
+    checkAll("IdT[ListWrapper, Int]", OrderLawTests[IdT[ListWrapper, Int]].order)
     checkAll("Order[IdT[ListWrapper, Int]]", SerializableTests.serializable(Order[IdT[ListWrapper, Int]]))
   }
 
