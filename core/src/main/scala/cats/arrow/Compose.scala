@@ -8,7 +8,7 @@ import simulacrum.typeclass
  */
 @typeclass trait Compose[F[_, _]] { self =>
 
-  /** 
+  /**
    * Here's how you can use `>>>` and `<<<`
    * Example:
    * {{{
