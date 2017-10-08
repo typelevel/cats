@@ -14,12 +14,6 @@ import simulacrum.typeclass
  */
 @typeclass trait Cartesian[F[_]] {
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
-
-  @inline final def *>[A, B](fa: F[A])(fb: F[B])(implicit F: Functor[F]): F[B] =
-    F.map(product(fa, fb)) { case (_, b) => b }
-
-  @inline final def <*[A, B](fa: F[A])(fb: F[B])(implicit F: Functor[F]): F[A] =
-    F.map(product(fa, fb)) { case (a, _) => a }
 }
 
 object Cartesian extends CartesianArityFunctions
