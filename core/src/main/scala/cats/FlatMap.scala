@@ -127,4 +127,24 @@ import simulacrum.typeclass
    * Implementations of this method should use constant stack space relative to `f`.
    */
   def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+
+  /**
+    * Apply a monadic function and discard the result while keeping the effect.
+    *
+    * {{{
+    * scala> import cats._, implicits._
+    * scala> Option(1).flatTap(_ => None)
+    * res0: Option[Int] = None
+    * scala> Option(1).flatTap(_ => Some("123"))
+    * res1: Option[Int] = Some(1)
+    * scala> def nCats(n: Int) = List.fill(n)("cat")
+    * nCats: (n: Int)List[String]
+    * scala> List[Int](0).flatTap(nCats)
+    * res2: List[Int] = List()
+    * scala> List[Int](4).flatTap(nCats)
+    * res3: List[Int] = List(4, 4, 4, 4)
+    * }}}
+    */
+  def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
+    flatMap(fa)(a => map(f(a))(_ => a))
 }
