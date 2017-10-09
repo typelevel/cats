@@ -8,6 +8,20 @@ import simulacrum.typeclass
  */
 @typeclass trait Compose[F[_, _]] { self =>
 
+  /**
+   * Here's how you can use `>>>` and `<<<`
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.arrow._
+   * scala> val f = (_ + 1)
+   * scala> val g = (_ * 100)
+   * scala> (f >>> g)(3)
+   * res0: Int = 400
+   * scala> (f <<< g)(3)
+   * res1: Int = 301
+   * }}}
+   */
   @simulacrum.op("<<<", alias = true)
   def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
