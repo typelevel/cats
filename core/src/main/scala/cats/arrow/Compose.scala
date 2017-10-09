@@ -14,8 +14,8 @@ import simulacrum.typeclass
    * {{{
    * scala> import cats.implicits._
    * scala> import cats.arrow._
-   * scala> val f = (_ + 1)
-   * scala> val g = (_ * 100)
+   * scala> val f : Int => Int = (_ + 1)
+   * scala> val g : Int => Int = (_ * 100)
    * scala> (f >>> g)(3)
    * res0: Int = 400
    * scala> (f <<< g)(3)
