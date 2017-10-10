@@ -10,7 +10,7 @@ package object syntax {
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
-  object cartesian extends CartesianSyntax
+  object semigroupal extends SemigroupalSyntax
   object coflatMap extends CoflatMapSyntax
   object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax

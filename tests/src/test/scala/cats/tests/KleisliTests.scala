@@ -21,8 +21,8 @@ class KleisliTests extends CatsSuite {
   implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, Int, ?], Unit, Int]
   implicit val eitherTEq2 = EitherT.catsDataEqForEitherT[Reader[Int, ?], Unit, Int]
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
-  implicit val iso2 = CartesianTests.Isomorphisms.invariant[Reader[Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
+  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[Reader[Int, ?]]
 
   {
     implicit val instance: ApplicativeError[Kleisli[Option, Int, ?], Unit] = Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, Int](cats.instances.option.catsStdInstancesForOption)
@@ -33,8 +33,8 @@ class KleisliTests extends CatsSuite {
   checkAll("Kleisli[Option, Int, Int] with Unit", MonadErrorTests[Kleisli[Option, Int, ?], Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(MonadError[Kleisli[Option, Int, ?], Unit]))
 
-  checkAll("Kleisli[Option, Int, Int]", CartesianTests[Kleisli[Option, Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Cartesian[Kleisli[Option, Int, ?]]))
+  checkAll("Kleisli[Option, Int, Int]", SemigroupalTests[Kleisli[Option, Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Semigroupal[Kleisli[Option, Int, ?]]))
 
   checkAll("Kleisli[Option, Int, ?]", CommutativeMonadTests[Kleisli[Option, Int, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))

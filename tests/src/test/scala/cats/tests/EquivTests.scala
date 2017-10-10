@@ -10,10 +10,10 @@ class EquivTests extends CatsSuite {
 
   Invariant[Equiv]
   Contravariant[Equiv]
-  Cartesian[Equiv]
-  ContravariantCartesian[Equiv]
+  Semigroupal[Equiv]
+  ContravariantSemigroupal[Equiv]
 
   checkAll("Contravariant[Equiv]", ContravariantTests[Equiv].contravariant[Int, Int, Int])
-  checkAll("Cartesian[Equiv]", CartesianTests[Equiv].cartesian[Int, Int, Int])
+  checkAll("Semigroupal[Equiv]", SemigroupalTests[Equiv].semigroupal[Int, Int, Int])
   checkAll("Contravariant[Equiv]", SerializableTests.serializable(Contravariant[Equiv]))
 }

@@ -723,9 +723,9 @@ previously been provided by `Apply`, you'll need to change your imports from
 `cats.syntax.apply._` to `cats.syntax.cartesian._`. For example:
 
 ```scala
-scala> import cats.Eval, cats.syntax.cartesian._
+scala> import cats.Eval, cats.syntax.semigroupal._
 import cats.Eval
-import cats.syntax.cartesian._
+import cats.syntax.semigroupal._
 
 scala> (Eval.now("v") |@| Eval.now(0.4)).tupled
 res0: cats.Eval[(String, Double)] = cats.Eval$$anon$5@104f8bbd

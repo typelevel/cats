@@ -2,11 +2,11 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait ApplyTests[F[_]] extends FunctorTests[F] with CartesianTests[F] {
+trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
   def laws: ApplyLaws[F]
 
   def apply[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
@@ -24,7 +24,7 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with CartesianTests[F] {
     iso: Isomorphisms[F]
   ): RuleSet = new RuleSet {
     val name = "apply"
-    val parents = Seq(functor[A, B, C], cartesian[A, B, C])
+    val parents = Seq(functor[A, B, C], semigroupal[A, B, C])
     val bases = Seq.empty
     val props = Seq(
       "apply composition" -> forAll(laws.applyComposition[A, B, C] _),

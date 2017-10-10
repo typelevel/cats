@@ -143,7 +143,7 @@ class IndexedStateTTests extends CatsSuite {
     }
   }
 
-  test("Cartesian syntax is usable on State") {
+  test("Semigroupal syntax is usable on State") {
     val x = add1 *> add1
     x.runS(0).value should === (2)
   }
@@ -245,7 +245,7 @@ class IndexedStateTTests extends CatsSuite {
   }
 
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad))
 
   {
     // F has a Functor
@@ -366,7 +366,7 @@ class IndexedStateTTests extends CatsSuite {
   }
 
   {
-    implicit val iso = CartesianTests.Isomorphisms.invariant[State[Long, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[State[Long, ?]]
 
     checkAll("State[Long, ?]", MonadTests[State[Long, ?]].monad[Int, Int, Int])
     checkAll("Monad[State[Long, ?]]", SerializableTests.serializable(Monad[State[Long, ?]]))
@@ -374,7 +374,7 @@ class IndexedStateTTests extends CatsSuite {
 
   {
     // F has a MonadError
-    implicit val iso = CartesianTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
     implicit val eqEitherTFA: Eq[EitherT[StateT[Option, Int , ?], Unit, Int]] = EitherT.catsDataEqForEitherT[StateT[Option, Int , ?], Unit, Int]
 
     checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int, ?], Unit].monadError[Int, Int, Int])

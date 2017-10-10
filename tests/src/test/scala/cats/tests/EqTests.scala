@@ -10,15 +10,15 @@ class EqTests extends FunSuite {
     import cats.implicits._
     Invariant[Eq]
     Contravariant[Eq]
-    Cartesian[Eq]
-    ContravariantCartesian[Eq]
+    Semigroupal[Eq]
+    ContravariantSemigroupal[Eq]
   }
 
   {
     import cats.instances.eq._
     Invariant[Eq]
     Contravariant[Eq]
-    Cartesian[Eq]
-    ContravariantCartesian[Eq]
+    Semigroupal[Eq]
+    ContravariantSemigroupal[Eq]
   }
 }
