@@ -215,3 +215,14 @@ case class RemoveSplit(index: SemanticdbIndex)
   }
 
 }
+
+// ref: https://github.com/typelevel/cats/pull/1947
+case class RenameEitherTLiftT(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameEitherTLiftT") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.EitherTFunctions.liftT." -> "liftF"
+    )
+
+}

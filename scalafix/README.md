@@ -8,7 +8,13 @@ Install the scalafix sbt plugin (globally or in a specific project):
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
 ```
 
-run
+to run all rules that apply to version `1.0.0-MF` run
+
+```sh
+sbt scalafix github:typelevel/cats/v1.0.0?sha=c131fe4
+```
+
+to run all rules that apply to the current `1.0.0-SNAPSHOT` run
 
 ```sh
 sbt scalafix github:typelevel/cats/v1.0.0
@@ -19,6 +25,8 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [x] All Unapply enabled methods, e.g. sequenceU, traverseU, etc. are removed. Unapply enabled syntax ops are also removed. Please use the partial unification SI-2712 fix instead. The easiest way might be this sbt-plugin.
 
 - [x] The creation methods (left, right, apply, pure, etc.) in EitherT were improved to take less type arguments.
+
+- [x] EitherT.liftT was renamed to EitherT.liftF
 
 - [x] CartesianBuilder (i.e. |@|) syntax is deprecated, use the apply syntax on tuples instead. E.g. (x |@| y |@| z).map(...) should be replaced by (x, y, z).mapN(...)
 
