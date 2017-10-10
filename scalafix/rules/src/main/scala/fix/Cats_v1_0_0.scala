@@ -227,7 +227,7 @@ case class RenameEitherTLiftT(index: SemanticdbIndex)
 
 }
 
-// ref: https://github.com/typelevel/cats/pull/1960
+// ref: https://github.com/typelevel/cats/pull/1961
 case class RenameCartesian(index: SemanticdbIndex)
   extends SemanticRule(index, "RenameCartesian") {
 
