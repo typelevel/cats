@@ -8,7 +8,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class KleisliTests extends CatsSuite {

@@ -7,11 +7,11 @@ import cats.data.EitherT
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{
-MonoidLawTests,
-SemigroupLawTests,
-OrderLawTests,
-PartialOrderLawTests,
-EqLawTests
+MonoidTests => MonoidLawTests,
+SemigroupTests => SemigroupLawTests,
+OrderTests => OrderLawTests,
+PartialOrderTests => PartialOrderLawTests,
+EqTests => EqLawTests
 }
 
 

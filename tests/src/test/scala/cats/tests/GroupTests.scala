@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{GroupLawTests}
+import cats.kernel.laws.discipline.{GroupTests => GroupLawTests}
 
 class GroupTests extends CatsSuite {
   test("combine minValue") {

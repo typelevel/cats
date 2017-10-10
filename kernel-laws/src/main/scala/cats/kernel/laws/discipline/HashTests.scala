@@ -9,7 +9,7 @@ import org.scalacheck.Prop.forAll
 
 import scala.util.hashing.Hashing
 
-trait HashTests[A] extends EqLawTests[A] {
+trait HashTests[A] extends EqTests[A] {
 
   def laws: HashLaws[A]
 

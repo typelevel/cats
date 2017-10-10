@@ -4,11 +4,11 @@ package tests
 import cats.data.{ EitherT, Validated }
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{
-  MonoidLawTests,
-  SemigroupLawTests,
-  OrderLawTests,
-  PartialOrderLawTests,
-  EqLawTests
+  MonoidTests => MonoidLawTests,
+  SemigroupTests => SemigroupLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  EqTests => EqLawTests
 }
 import scala.util.Try
 

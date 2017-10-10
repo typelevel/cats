@@ -6,7 +6,7 @@ package discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait CommutativeSemigroupTests[A] extends SemigroupLawTests[A] {
+trait CommutativeSemigroupTests[A] extends SemigroupTests[A] {
 
   def laws: CommutativeSemigroupLaws[A]
 

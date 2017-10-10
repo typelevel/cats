@@ -3,7 +3,21 @@ package tests
 
 import cats.arrow.{Choice, CommutativeArrow}
 import cats.kernel.laws.HashLaws
-import cats.kernel.laws.discipline.{SerializableTests, _}
+import cats.kernel.laws.discipline.{
+  BandTests,
+  BoundedSemilatticeTests,
+  CommutativeGroupTests,
+  CommutativeMonoidTests,
+  CommutativeSemigroupTests,
+  EqTests => EqLawTests,
+  GroupTests => GroupLawTests,
+  MonoidTests => MonoidLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  SemigroupTests => SemigroupLawTests,
+  SemilatticeTests,
+  SerializableTests
+}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._

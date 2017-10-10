@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{SemigroupLawTests}
+import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._

@@ -3,11 +3,11 @@ package tests
 
 
 import cats.kernel.laws.discipline.{
-  MonoidLawTests,
-  SemigroupLawTests,
-  OrderLawTests,
-  PartialOrderLawTests,
-  EqLawTests
+  MonoidTests => MonoidLawTests,
+  SemigroupTests => SemigroupLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  EqTests => EqLawTests
 }
 import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
