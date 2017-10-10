@@ -13,7 +13,6 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.arrow._
    * scala> val f : Int => Int = (_ + 1)
    * scala> val g : Int => Int = (_ * 100)
    * scala> (f >>> g)(3)
