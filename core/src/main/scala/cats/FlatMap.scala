@@ -44,11 +44,7 @@ import simulacrum.typeclass
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-  /** Sequentially compose two actions, discarding any value produced by the first. */
-  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] = flatMap(fa)(_ => fb)
 
-  /** Alias for [[followedBy]]. */
-  @inline final def >>[A, B](fa: F[A])(fb: F[B]): F[B] = followedBy(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the first. This variant of
@@ -66,11 +62,7 @@ import simulacrum.typeclass
    */
   def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
-  /** Sequentially compose two actions, discarding any value produced by the second. */
-  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] = flatMap(fa)(a => map(fb)(_ => a))
 
-  /** Alias for [[forEffect]]. */
-  @inline final def <<[A, B](fa: F[A])(fb: F[B]): F[A] = forEffect(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of

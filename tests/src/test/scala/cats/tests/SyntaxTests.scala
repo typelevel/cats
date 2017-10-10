@@ -209,6 +209,9 @@ object SyntaxTests extends AllInstances with AllSyntax {
     val f = mock[(A, B, C) => Z]
     val ff = mock[F[(A, B, C) => Z]]
 
+    fa *> fb
+    fb <* fc
+
     tfabc mapN f
     (fa, fb, fc) mapN f
     (fa, fb, fc) apWith ff
