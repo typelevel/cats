@@ -50,3 +50,13 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [ ] foldLeftM is removed from Free, use foldM on Foldable instead, see #1117 for detail.
 
 - [ ] iteratorFoldM was removed from Foldable due to #1716
+
+
+## To test scala fix
+
+```bash
+sbt ;coreJVM/publishLocal;coreFree/publishLocal
+cd scalafix
+sbt test
+
+```
