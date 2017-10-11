@@ -16,8 +16,8 @@ lazy val input = project.settings(
 
 lazy val output = project.settings(
   libraryDependencies ++= Seq(
-    "org.typelevel" %% "cats-core" % "1.0.0-MF",
-    "org.typelevel" %% "cats-free" % "1.0.0-MF"
+    "org.typelevel" %% "cats-core" % "1.0.0-SNAPSHOT",
+    "org.typelevel" %% "cats-free" % "1.0.0-SNAPSHOT"
   ),
   scalacOptions += "-language:higherKinds"
 )

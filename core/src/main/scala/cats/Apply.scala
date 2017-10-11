@@ -19,6 +19,22 @@ trait Apply[F[_]] extends Functor[F] with Cartesian[F] with ApplyArityFunctions[
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
+  /** Compose two actions, discarding any value produced by the first. */
+  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+    map2(fa, fb)((_, b) => b)
+
+  /** Alias for [[followedBy]]. */
+  @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
+    followedBy(fa)(fb)
+
+  /** Compose two actions, discarding any value produced by the second. */
+  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+    map2(fa, fb)((a, _) => a)
+
+  /** Alias for [[forEffect]]. */
+  @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
+    forEffect(fa)(fb)
+
   /**
    * ap2 is a binary version of ap, defined in terms of ap.
    */

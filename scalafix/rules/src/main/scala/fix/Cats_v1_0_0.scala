@@ -2,6 +2,7 @@ package fix
 package v1_0_0
 
 import scalafix._
+import scalafix.syntax._
 import scalafix.util.SymbolMatcher
 import scala.meta._
 import scala.meta.contrib._
@@ -70,6 +71,23 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
           ctx.replaceTree(t, "import cats.syntax.apply._")
         }
     }.asPatch + ctx.replaceSymbols(renames.toSeq: _*)
+  }
+}
+
+// ref: https://github.com/typelevel/cats/issues/1850
+case class ContraMapToLMap(index: SemanticdbIndex)
+  extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
+
+  override def fix(ctx: RuleCtx): Patch = {
+
+    val contraMatcher = SymbolMatcher.normalized(Symbol("_root_.cats.functor.Contravariant.Ops.`contramap`."))
+
+    val unApplyName = "catsUnapply2left"
+
+    ctx.tree.collect {
+      case Term.Apply(Term.Select(f, contraMatcher(contramap)), _) if f.denotation.exists(_.name == unApplyName) =>
+        ctx.replaceTree(contramap, "lmap")
+    }.asPatch
   }
 }
 
@@ -195,5 +213,16 @@ case class RemoveSplit(index: SemanticdbIndex)
         ctx.replaceTree(t, "import cats.syntax.arrow._")
     }.asPatch
   }
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/1947
+case class RenameEitherTLiftT(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameEitherTLiftT") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.EitherTFunctions.liftT." -> "liftF"
+    )
 
 }
