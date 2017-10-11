@@ -325,20 +325,20 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     *
     * {{{
     * scala> import cats.data.NonEmptyList
+    * scala> import cats.instances.boolean._
     * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
     * scala> nel.groupBy(_ >= 0)
     * res0: Map[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
     * }}}
     */
-  def groupBy[B](f: A => B): Map[B, NonEmptyList[A]] = {
-    val m = mutable.Map.empty[B, mutable.Builder[A, List[A]]]
+  def groupBy[B](f: A => B)(implicit B: Order[B]): Map[B, NonEmptyList[A]] = {
+    val m = mutable.TreeMap.empty[B, mutable.Builder[A, List[A]]](B.toOrdering)
     for { elem <- toList } {
       m.getOrElseUpdate(f(elem), List.newBuilder[A]) += elem
     }
-    val b = immutable.Map.newBuilder[B, NonEmptyList[A]]
+    val b = immutable.TreeMap.newBuilder[B, NonEmptyList[A]](B.toOrdering)
     for { (k, v) <- m } {
-      val head :: tail = v.result // we only create non empty list inside of the map `m`
-      b += ((k, NonEmptyList(head, tail)))
+      b += k -> NonEmptyList.fromListUnsafe(v.result)
     }
     b.result
   }
