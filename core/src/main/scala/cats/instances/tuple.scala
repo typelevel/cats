@@ -66,6 +66,9 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
 
       override def size[A](fa: (X, A)): Long = 1L
 
+      override def get[A](fa: (X, A))(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa._2) else None
+
       override def exists[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)
 
       override def forall[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)

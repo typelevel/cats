@@ -14,21 +14,13 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForMap[K]: TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] =
-    new TraverseFilter[Map[K, ?]] with FlatMap[Map[K, ?]] {
+  implicit def catsStdInstancesForMap[K]: Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
+    new Traverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
 
-      override def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
+      def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
           G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
-        }.value
-        G.map(gbb)(_.toMap)
-      }
-
-      def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
-        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
-        val gbb = Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
-          G.map2Eval(f(kv._2), lbuf)({ (ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b))})
         }.value
         G.map(gbb)(_.toMap)
       }
@@ -37,7 +29,12 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         fa.map { case (k, a) => (k, f(a)) }
 
       override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
-        fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
+        if (fb.isEmpty) Map.empty // do O(1) work if fb is empty
+        else fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
+
+      override def map2Eval[A, B, Z](fa: Map[K, A], fb: Eval[Map[K, B]])(f: (A, B) => Z): Eval[Map[K, Z]] =
+        if (fa.isEmpty) Eval.now(Map.empty) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       override def ap[A, B](ff: Map[K, A => B])(fa: Map[K, A]): Map[K, B] =
         fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }
@@ -77,10 +74,15 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
       override def size[A](fa: Map[K, A]): Long = fa.size.toLong
 
-      override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
+      override def get[A](fa: Map[K, A])(idx: Long): Option[A] =
+        if (idx < 0L || Int.MaxValue < idx) None
+        else {
+          val n = idx.toInt
+          if (n >= fa.size) None
+          else Some(fa.valuesIterator.drop(n).next)
+        }
 
-      override def foldM[G[_], A, B](fa: Map[K, A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.valuesIterator, z)(f)
+      override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
 
       override def fold[A](fa: Map[K, A])(implicit A: Monoid[A]): A =
         A.combineAll(fa.values)

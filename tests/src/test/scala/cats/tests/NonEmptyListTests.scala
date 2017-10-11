@@ -1,21 +1,26 @@
 package cats
 package tests
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  SemigroupLawTests,
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
+}
 
-import cats.data.NonEmptyList
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, MonadTests, SerializableTests, TraverseTests, ReducibleTests}
+import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.{ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
 
 class NonEmptyListTests extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-  checkAll("NonEmptyList[Int]", OrderLaws[NonEmptyList[Int]].order)
+  checkAll("NonEmptyList[Int]", OrderLawTests[NonEmptyList[Int]].order)
 
-  checkAll("NonEmptyList[Int] with Option", TraverseTests[NonEmptyList].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[NonEmptyList[A]]", SerializableTests.serializable(Traverse[NonEmptyList]))
+  checkAll("NonEmptyList[Int] with Option", NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
@@ -26,18 +31,18 @@ class NonEmptyListTests extends CatsSuite {
   checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
 
-  checkAll("NonEmptyList[Int]", GroupLaws[NonEmptyList[Int]].semigroup)
+  checkAll("NonEmptyList[Int]", SemigroupLawTests[NonEmptyList[Int]].semigroup)
   checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
 
   checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
   checkAll("Comonad[NonEmptyList]", SerializableTests.serializable(Comonad[NonEmptyList]))
 
-  checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].eqv)
+  checkAll("NonEmptyList[ListWrapper[Int]]", EqLawTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
 
   {
     implicit val A = ListWrapper.partialOrder[Int]
-    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].partialOrder)
+    checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderLawTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
 
     Eq[NonEmptyList[ListWrapper[Int]]]
@@ -45,7 +50,7 @@ class NonEmptyListTests extends CatsSuite {
 
   {
     implicit val A = ListWrapper.order[Int]
-    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLaws[NonEmptyList[ListWrapper[Int]]].order)
+    checkAll("NonEmptyList[ListWrapper[Int]]", OrderLawTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
 
     Eq[NonEmptyList[ListWrapper[Int]]]
@@ -70,6 +75,14 @@ class NonEmptyListTests extends CatsSuite {
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
       val nonEmptyList = NonEmptyList.of(i, tail: _*)
+      list should === (nonEmptyList.toList)
+    }
+  }
+
+  test("Creating NonEmptyList with init/last + toList is identity") {
+    forAll { (init: List[Int], last: Int) =>
+      val list = init :+ last
+      val nonEmptyList = NonEmptyList.ofInitLast(init, last)
       list should === (nonEmptyList.toList)
     }
   }
@@ -269,9 +282,32 @@ class NonEmptyListTests extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
+  test("NonEmptyList#fromFoldable is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
+    }
+  }
+
+  test("NonEmptyList#fromReducible is consistent with Reducible#toNonEmptyList") {
+    forAll { (xs: NonEmptyVector[Int]) =>
+      NonEmptyList.fromReducible(xs) should === (Reducible[NonEmptyVector].toNonEmptyList(xs))
+    }
+  }
+
+
+  test("NonEmptyList#zipWith is consistent with List#zip and then List#map") {
+    forAll { (a: NonEmptyList[Int], b: NonEmptyList[Int], f: (Int, Int) => Int) =>
+      a.zipWith(b)(f).toList should ===(a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
+    }
+  }
+  test("NonEmptyList#nonEmptyPartition remains sorted") {
+    forAll { (nel: NonEmptyList[Int], f: Int => Either[String, String]) =>
+
+      val sorted = nel.map(f).sorted
+      val ior = Reducible[NonEmptyList].nonEmptyPartition(sorted)(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
     }
   }
 }

@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import scala.annotation.tailrec
+
 import cats.syntax.show._
 
 trait SetInstances extends cats.kernel.instances.SetInstances {
@@ -18,6 +20,19 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa.iterator, lb)(f)
 
+      override def get[A](fa: Set[A])(idx: Long): Option[A] = {
+        @tailrec
+        def go(idx: Int, it: Iterator[A]): Option[A] = {
+          if (it.hasNext) {
+            if (idx == 0) Some(it.next) else {
+              it.next
+              go(idx - 1, it)
+            }
+          } else None
+        }
+        if (idx < Int.MaxValue && idx >= 0L)  go(idx.toInt, fa.toIterator) else None
+      }
+
       override def size[A](fa: Set[A]): Long = fa.size.toLong
 
       override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
@@ -27,9 +42,6 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
-
-      override def foldM[G[_], A, B](fa: Set[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
 
       override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 

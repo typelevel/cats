@@ -3,7 +3,7 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{CartesianTests, MonadTests, SerializableTests}
+import cats.laws.discipline.{CartesianTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.tests.CatsSuite
 
@@ -17,6 +17,19 @@ class FreeTests extends CatsSuite {
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+
+  locally {
+    implicit val instance = Free.catsFreeFoldableForFree[Option]
+
+    checkAll("Free[Option, ?]", FoldableTests[Free[Option,?]].foldable[Int,Int])
+    checkAll("Foldable[Free[Option,?]]", SerializableTests.serializable(Foldable[Free[Option,?]]))
+  }
+
+  locally {
+    implicit val instance = Free.catsFreeTraverseForFree[Option]
+    checkAll("Free[Option,?]", TraverseTests[Free[Option,?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Free[Option,?]]", SerializableTests.serializable(Traverse[Free[Option,?]]))
+  }
 
   test("toString is stack-safe") {
     val r = Free.pure[List, Int](333)
@@ -32,16 +45,16 @@ class FreeTests extends CatsSuite {
     }
   }
 
-  test("suspend doesn't change value"){
+  test("defer doesn't change value"){
     forAll { x: Free[List, Int] =>
-      Free.suspend(x) should === (x)
+      Free.defer(x) should === (x)
     }
   }
 
-  test("suspend is lazy"){
+  test("defer is lazy"){
     def yikes[F[_], A]: Free[F, A] = throw new RuntimeException("blargh")
     // this shouldn't throw an exception unless we try to run it
-    val _ = Free.suspend(yikes[Option, Int])
+    val _ = Free.defer(yikes[Option, Int])
   }
 
   test("compile consistent with foldMap"){
@@ -90,23 +103,12 @@ class FreeTests extends CatsSuite {
     assert(res == List(112358))
   }
 
-  test(".foldLeftM") {
-    // you can see .foldLeftM traversing the entire structure by
-    // changing the constant argument to .take and observing the time
-    // this test takes.
-    val ns = Stream.from(1).take(1000)
-    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 2) Either.left(sum) else Either.right(sum + n)
-    }
-    assert(res == Either.left(3))
-  }
-
-  test(".foldLeftM short-circuiting") {
-    val ns = Stream.continually(1)
-    val res = Free.foldLeftM[Stream, Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
-      if (sum >= 100000) Either.left(sum) else Either.right(sum + n)
-    }
-    assert(res == Either.left(100000))
+  test(".run") {
+    val r = Free.pure[Id, Int](12358)
+    def recurse(r: Free[Id, Int], n: Int): Free[Id, Int] =
+      if (n > 0) recurse(r.flatMap(x => Free.pure(x + 1)), n - 1) else r
+    val res = recurse(r, 100000).run
+    assert(res == 112358)
   }
 
   sealed trait Test1Algebra[A]
@@ -187,8 +189,8 @@ class FreeTests extends CatsSuite {
     forAll { (x: Int, y: Int) =>
       val expr1: Free[T, Int] = Free.injectRoll[T, Test1Algebra, Int](Test1(x, Free.pure))
       val expr2: Free[T, Int] = Free.injectRoll[T, Test2Algebra, Int](Test2(y, Free.pure))
-      val res = distr[T, Int](expr1 >> expr2)
-      res == Some(Free.pure(x + y)) should ===(true)
+      val res = distr[T, Int](expr1 *> expr2)
+      res.map(_.foldMap(eitherKInterpreter)) should === (Some(Free.pure[Id, Int](x + y).foldMap(FunctionK.id)))
     }
   }
 }

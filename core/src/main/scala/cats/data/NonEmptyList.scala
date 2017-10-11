@@ -245,6 +245,29 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   /**
+    * Zips this `NonEmptyList` with another `NonEmptyList` and applies a function for each pair of elements.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val as = NonEmptyList.of(1, 2, 3)
+    * scala> val bs = NonEmptyList.of("A", "B", "C")
+    * scala> as.zipWith(bs)(_ + _)
+    * res0: cats.data.NonEmptyList[String] = NonEmptyList(1A, 2B, 3C)
+    * }}}
+    */
+  def zipWith[B, C](b: NonEmptyList[B])(f: (A, B) => C): NonEmptyList[C] = {
+
+    @tailrec
+    def zwRev(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
+      case (Nil, _) => acc
+      case (_, Nil) => acc
+      case (x :: xs, y :: ys) => zwRev(xs, ys, f(x, y) :: acc)
+    }
+
+    NonEmptyList(f(head, b.head), zwRev(tail, b.tail, Nil).reverse)
+  }
+
+  /**
    * Zips each element of this `NonEmptyList` with its index.
    *
    * {{{
@@ -276,11 +299,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * res0: cats.data.NonEmptyList[(Char, Int)] = NonEmptyList((z,1), (a,4), (e,22))
     * }}}
     */
-  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
-    toList.sortBy(f)(B.toOrdering) match {
-      case x :: xs => NonEmptyList(x, xs)
-      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
-    }
+  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] = {
+    // safe: sorting a NonEmptyList cannot produce an empty List
+    NonEmptyList.fromListUnsafe(toList.sortBy(f)(B.toOrdering))
+  }
 
   /**
     * Sorts this `NonEmptyList` according to an `Order`
@@ -293,11 +315,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * res0: cats.data.NonEmptyList[Int] = NonEmptyList(3, 4, 9, 12)
     * }}}
     */
-  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
-    toList.sorted(AA.toOrdering) match {
-      case x :: xs => NonEmptyList(x, xs)
-      case Nil     => sys.error("unreachable: sorting a NonEmptyList cannot produce an empty List")
-    }
+  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] = {
+    // safe: sorting a NonEmptyList cannot produce an empty List
+    NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
+  }
 
   /**
     * Groups elements inside of this `NonEmptyList` using a mapping function
@@ -326,6 +347,14 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
 object NonEmptyList extends NonEmptyListInstances {
   def of[A](head: A, tail: A*): NonEmptyList[A] = NonEmptyList(head, tail.toList)
+
+  def ofInitLast[A](init: List[A], last: A): NonEmptyList[A] =
+    init match {
+      case Nil => NonEmptyList(last, Nil)
+      case h :: t => NonEmptyList(h, t :+ last)
+    }
+
+  def one[A](head: A): NonEmptyList[A] = NonEmptyList(head, Nil)
 
   /**
    * Create a `NonEmptyList` from a `List`.
@@ -362,12 +391,12 @@ object NonEmptyList extends NonEmptyListInstances {
     F.toNonEmptyList(fa)
 }
 
-private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 {
+private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList] with Reducible[NonEmptyList]
-      with Comonad[NonEmptyList] with Traverse[NonEmptyList] with Monad[NonEmptyList] =
+      with Comonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Monad[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Comonad[NonEmptyList]
-      with Traverse[NonEmptyList] with Monad[NonEmptyList] {
+      with Monad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a concat b
@@ -384,7 +413,7 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
         fa map f
 
       def pure[A](x: A): NonEmptyList[A] =
-        NonEmptyList(x, List.empty)
+        NonEmptyList.one(x)
 
       def flatMap[A, B](fa: NonEmptyList[A])(f: A => NonEmptyList[B]): NonEmptyList[B] =
         fa flatMap f
@@ -394,7 +423,15 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
+      def nonEmptyTraverse[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] =
+        Foldable[List].reduceRightToOption[A, G[List[B]]](nel.tail)(a => G.map(f(a))(_ :: Nil)) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ :: _)
+        }.map {
+          case None => G.map(f(nel.head))(NonEmptyList(_, Nil))
+          case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyList(_, _))
+        }.value
+
+      override def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa traverse f
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =
@@ -421,8 +458,22 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def fold[A](fa: NonEmptyList[A])(implicit A: Monoid[A]): A =
         fa.reduce
 
-      override def foldM[G[_], A, B](fa: NonEmptyList[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toList.toIterator, z)(f)
+      override def nonEmptyPartition[A, B, C](fa: NonEmptyList[A])
+                                             (f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+        import cats.syntax.either._
+
+        val reversed = fa.reverse
+        val lastIor = f(reversed.head).bimap(NonEmptyList.one, NonEmptyList.one).toIor
+
+        reversed.tail.foldLeft(lastIor)((ior, a) => (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+          case (Right(c), _) => ior.map(c :: _)
+          case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+          case (Left(b), _) => ior.leftMap(b :: _)
+        })
+
+      }
+
 
       override def find[A](fa: NonEmptyList[A])(f: A => Boolean): Option[A] =
         fa find f
@@ -436,6 +487,9 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
       override def toList[A](fa: NonEmptyList[A]): List[A] = fa.toList
 
       override def toNonEmptyList[A](fa: NonEmptyList[A]): NonEmptyList[A] = fa
+
+      override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
@@ -450,14 +504,14 @@ private[data] sealed trait NonEmptyListInstances extends NonEmptyListInstances0 
     }
 }
 
-private[data] sealed trait NonEmptyListInstances0 extends NonEmptyListInstances1 {
+private[data] sealed abstract class NonEmptyListInstances0 extends NonEmptyListInstances1 {
   implicit def catsDataPartialOrderForNonEmptyList[A](implicit A: PartialOrder[A]): PartialOrder[NonEmptyList[A]] =
     new NonEmptyListPartialOrder[A] {
       val A0 = A
     }
 }
 
-private[data] sealed trait NonEmptyListInstances1 {
+private[data] sealed abstract class NonEmptyListInstances1 {
 
   implicit def catsDataEqForNonEmptyList[A](implicit A: Eq[A]): Eq[NonEmptyList[A]] =
     new NonEmptyListEq[A] {

@@ -1,6 +1,7 @@
 package cats
 
 import cats.data.EitherK
+import cats.laws.discipline.{ InjectKTests => InjectKTypeclassTests }
 import cats.tests.CatsSuite
 import org.scalacheck._
 
@@ -20,6 +21,8 @@ class InjectKTests extends CatsSuite {
 
     implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
       Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test1(s, f))
+
+    implicit def test1AlgebraEq[A](implicit ev: Eq[A]): Eq[Test1Algebra[A]] = Eq.fromUniversalEquals
   }
 
   sealed trait Test2Algebra[A]
@@ -36,9 +39,17 @@ class InjectKTests extends CatsSuite {
 
     implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
       Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
+
+    implicit def test2AlgebraEq[A](implicit ev: Eq[A]): Eq[Test2Algebra[A]] = Eq.fromUniversalEquals
   }
 
   type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
+
+  implicit def tArbitrary[A](
+    implicit arb1: Arbitrary[Test1Algebra[A]], arb2: Arbitrary[Test2Algebra[A]]
+  ): Arbitrary[T[A]] = Arbitrary(Gen.oneOf(
+    arb1.arbitrary.map(EitherK.leftc(_): T[A]),
+    arb2.arbitrary.map(EitherK.rightc(_): T[A])))
 
   test("inj & prj") {
     def distr[F[_], A](f1: F[A], f2: F[A])
@@ -96,4 +107,6 @@ class InjectKTests extends CatsSuite {
     InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
   }
 
+  checkAll("InjectK[Test1Algebra, T]", InjectKTypeclassTests[Test1Algebra, T].injectK[String])
+  checkAll("InjectK[Test2Algebra, T]", InjectKTypeclassTests[Test2Algebra, T].injectK[String])
 }

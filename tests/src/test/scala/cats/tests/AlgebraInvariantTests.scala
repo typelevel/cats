@@ -1,10 +1,9 @@
 package cats
 package tests
 
-import cats.functor.Invariant
-import cats.laws.discipline.{InvariantTests, InvariantMonoidalTests, SerializableTests}
+import cats.Invariant
+import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests}
 import cats.laws.discipline.eq._
-
 import org.scalacheck.{Arbitrary, Gen}
 
 class AlgebraInvariantTests extends CatsSuite {

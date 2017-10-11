@@ -7,20 +7,10 @@ import scala.concurrent.{ExecutionContext, Future}
 trait FutureInstances extends FutureInstances1 {
 
   implicit def catsStdInstancesForFuture(implicit ec: ExecutionContext): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] =
-    new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] {
+    new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] with StackSafeMonad[Future] {
       def pure[A](x: A): Future[A] = Future.successful(x)
 
       def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
-
-      /**
-       * Note that while this implementation will not compile with `@tailrec`,
-       * it is in fact stack-safe.
-       */
-      final def tailRecM[B, C](b: B)(f: B => Future[Either[B, C]]): Future[C] =
-        f(b).flatMap {
-          case Left(b1) => tailRecM(b1)(f)
-          case Right(c) => Future.successful(c)
-        }
 
       def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
 

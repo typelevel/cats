@@ -1,14 +1,18 @@
 package cats
 package arrow
 
-import cats.functor.Strong
-
 import simulacrum.typeclass
 
-@typeclass trait Arrow[F[_, _]] extends Split[F] with Strong[F] with Category[F] { self =>
+/**
+ * Must obey the laws defined in cats.laws.ArrowLaws.
+ */
+@typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**
-   * Lift a function into the context of an Arrow
+   * Lift a function into the context of an Arrow.
+   *
+   * In the reference articles "Arrows are Promiscuous...", and in the corresponding Haskell
+   * library `Control.Arrow`, this function is called `arr`.
    */
   def lift[A, B](f: A => B): F[A, B]
 
@@ -20,6 +24,25 @@ import simulacrum.typeclass
     compose(swap, compose(first[A, B, C](fa), swap))
   }
 
-  override def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
+  /**
+   * Create a new computation `F` that splits its input between `f` and `g`
+   * and combines the output of each.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.arrow.Arrow
+   * scala> val toLong: Int => Long = _.toLong
+   * scala> val toDouble: Float => Double = _.toDouble
+   * scala> val f: ((Int, Float)) => (Long, Double) = Arrow[Function1].split(toLong, toDouble)
+   * scala> f((3, 4.0f))
+   * res0: (Long, Double) = (3,4.0)
+   * }}}
+   *
+   * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
+   *  `f` and `g` in the context of F. This means that `f *** g` may not be equivalent to `g *** f`.
+   */
+  @simulacrum.op("***", alias = true)
+  def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
 }

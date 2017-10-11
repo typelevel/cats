@@ -1,21 +1,23 @@
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
-import sbtunidoc.Plugin.UnidocKeys._
+import microsites._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import org.scalajs.sbtplugin.cross.CrossProject
 
-lazy val botBuild = settingKey[Boolean]("Build by TravisCI instead of local dev environment")
-
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
-  coverageFailOnMinimum := false
+  coverageFailOnMinimum := false,
+  //https://github.com/scoverage/sbt-scoverage/issues/72
+  coverageHighlighting := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 10)) => false
+      case _ => true
+    }
+  }
 )
 
 organization in ThisBuild := "org.typelevel"
 
-lazy val catsDoctestSettings = Seq(
-  doctestWithDependencies := false
-)
+val CompileTime = config("compile-time").hide
 
 lazy val kernelSettings = Seq(
   // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
@@ -36,18 +38,23 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.10.0" % "compile-time",
-    "org.typelevel" %%% "machinist" % "0.6.1",
+    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % CompileTime,
+    "org.typelevel" %%% "machinist" % "0.6.2",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
   ),
   fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  // workaround for https://github.com/scalastyle/scalastyle-sbt-plugin/issues/47
-  scalastyleSources in Compile ++= (unmanagedSourceDirectories in Compile).value,
-  ivyConfigurations += config("compile-time").hide,
-  unmanagedClasspath in Compile ++= update.value.select(configurationFilter("compile-time"))
+  ivyConfigurations += CompileTime,
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name)),
+  unmanagedSourceDirectories in Test ++= {
+    val bd = baseDirectory.value
+    if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
+      CrossType.Pure.sharedSrcDir(bd, "test").toList map (f => file(f.getPath + "-2.11+"))
+    else
+      Nil
+  }
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 
@@ -66,21 +73,17 @@ lazy val commonJsSettings = Seq(
   },
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
-  requiresDOM := false,
-  jsEnv := NodeJSEnv().value,
-  // Only used for scala.js for now
-  botBuild := scala.sys.env.get("TRAVIS").isDefined,
+  jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(botBuild.value),
-  doctestGenTests := Seq.empty,
-  doctestWithDependencies := false
+  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
+  // currently sbt-doctest doesn't work in JS builds
+  // https://github.com/tkawachi/sbt-doctest/issues/52
+  doctestGenTests := Seq.empty
 )
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
-// currently sbt-doctest doesn't work in JS builds, so this has to go in the
-// JVM settings. https://github.com/tkawachi/sbt-doctest/issues/52
-) ++ catsDoctestSettings
+)
 
 lazy val includeGeneratedSrc: Setting[_] = {
   mappings in (Compile, packageSrc) ++= {
@@ -93,17 +96,18 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
-lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.1"
-lazy val disciplineVersion = "0.7.3"
+lazy val scalaCheckVersion = "1.13.5"
+lazy val scalaTestVersion = "3.0.3"
+lazy val disciplineVersion = "0.8"
+lazy val catalystsVersion = "0.0.5"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % "0.0.5",
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % "0.0.5" % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
 
 
@@ -128,13 +132,29 @@ lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site t
 lazy val docSettings = Seq(
   micrositeName := "Cats",
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
-  micrositeAuthor := "Typelevel contributors",
+  micrositeAuthor := "Cats contributors",
+  micrositeFooterText := Some(
+    """
+      |<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+      |""".stripMargin),
   micrositeHighlightTheme := "atom-one-light",
-  micrositeHomepage := "http://typelevel.org/cats",
+  micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "api",
+  micrositeDocumentationUrl := "api/",
   micrositeGithubOwner := "typelevel",
-  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeExtraMdFiles := Map(
+    file("CONTRIBUTING.md") -> ExtraMdFileConfig(
+      "contributing.md",
+      "home",
+       Map("title" -> "Contributing", "section" -> "contributing", "position" -> "50")
+    ),
+    file("README.md") -> ExtraMdFileConfig(
+      "index.md",
+      "home",
+      Map("title" -> "Home", "section" -> "home", "position" -> "0")
+    )
+  ),
   micrositeGithubRepo := "cats",
   micrositePalette := Map(
     "brand-primary" -> "#5B5988",
@@ -159,21 +179,21 @@ lazy val docSettings = Seq(
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
   ),
+  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
+  includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
-  .dependsOn(coreJVM, freeJVM)
+  .dependsOn(coreJVM, freeJVM, kernelLawsJVM, lawsJVM, testkitJVM)
 
 lazy val cats = project.in(file("."))
   .settings(moduleName := "root")
@@ -184,26 +204,27 @@ lazy val cats = project.in(file("."))
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
+  .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
+  .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
-
 
 
 lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros", name := "Cats macros")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
@@ -212,22 +233,155 @@ lazy val macrosJS = macros.js
 
 val binaryCompatibleVersion = "0.8.0"
 
+val binaryCompatibleExceptions = {
+  import com.typesafe.tools.mima.core._
+  import com.typesafe.tools.mima.core.ProblemFilters._
+  Seq( // todo: remove these once we release 1.0.0-RC1
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.MapInstances.catsKernelStdEqForMap"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.MapInstances.catsKernelStdMonoidForMap"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.MapInstances.catsKernelStdHashForMap"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.OptionInstances0.catsKernelStdEqForOption"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple6"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple13"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.StreamInstances1.catsKernelStdHashForStream"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.ListInstances1.catsKernelStdHashForList"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.SetInstances.catsKernelStdPartialOrderForSet"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.SetInstances.catsKernelStdSemilatticeForSet"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.SetInstances.catsKernelStdHashForSet"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.VectorInstances1.catsKernelStdHashForVector"),
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.BitSetInstances.catsKernelStdPartialOrderForBitSet"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.BitSetInstances.cats$kernel$instances$BitSetInstances$_setter_$catsKernelStdOrderForBitSet_="),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.BitSetInstances.catsKernelStdOrderForBitSet"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple6"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple13"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances1.catsStdEqForEither"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances.catsStdOrderForEither"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances.catsDataMonoidForEither"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsDataSemigroupForEither"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdPartialOrderForEither"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdHashForOption"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.FunctionInstances0.catsKernelHashForFunction0"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.OptionInstances0.catsKernelStdPartialOrderForOption"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdPartialOrderForOption"),
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.all.package.catsKernelStdPartialOrderForBitSet"),
+    exclude[DirectMissingMethodProblem]("cats.kernel.instances.bitSet.package.catsKernelStdPartialOrderForBitSet"),
+    exclude[MissingTypesProblem]("cats.kernel.instances.OptionInstances1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdHashForOption"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*")
+  )
+}
+
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
-  .settings(kernelSettings: _*)
-  .settings(publishSettings: _*)
-  .settings(scoverageSettings: _*)
+  .settings(kernelSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings((commonJvmSettings ++
-    (mimaPreviousArtifacts := {
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings ++ Seq(
+    mimaPreviousArtifacts := {
       if (scalaVersion.value startsWith "2.12")
         Set()
       else
         Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
-    })):_*)
+    },
+    mimaBinaryIssueFilters ++= binaryCompatibleExceptions
+  ))
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -235,13 +389,13 @@ lazy val kernelJS = kernel.js
 lazy val kernelLaws = crossProject.crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
-  .settings(kernelSettings: _*)
-  .settings(publishSettings: _*)
-  .settings(scoverageSettings: _*)
-  .settings(disciplineDependencies: _*)
-  .settings(testingDependencies: _*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(kernelSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
 
@@ -251,14 +405,14 @@ lazy val kernelLawsJS = kernelLaws.js
 lazy val core = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
-  .settings(catsSettings:_*)
+  .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .configureCross(disableScoverage210Jvm)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -266,12 +420,12 @@ lazy val coreJS = core.js
 lazy val laws = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
-  .settings(catsSettings:_*)
-  .settings(disciplineDependencies:_*)
+  .settings(catsSettings)
+  .settings(disciplineDependencies)
   .configureCross(disableScoverage210Jvm)
-  .settings(testingDependencies: _*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
 
 lazy val lawsJVM = laws.jvm
@@ -280,25 +434,37 @@ lazy val lawsJS = laws.js
 lazy val free = crossProject.crossType(CrossType.Pure)
   .dependsOn(macros, core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
-  .settings(catsSettings:_*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
 
 lazy val tests = crossProject.crossType(CrossType.Pure)
-  .dependsOn(macros, core, laws)
+  .dependsOn(testkit % "test")
   .settings(moduleName := "cats-tests")
-  .settings(catsSettings:_*)
-  .settings(disciplineDependencies:_*)
-  .settings(noPublishSettings:_*)
-  .settings(testingDependencies: _*)
-  .jsSettings(commonJsSettings:_*)
-  .jvmSettings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
 
 lazy val testsJVM = tests.jvm
 lazy val testsJS = tests.js
+
+
+lazy val testkit = crossProject.crossType(CrossType.Pure)
+  .dependsOn(macros, core, laws)
+  .settings(moduleName := "cats-testkit")
+  .settings(catsSettings)
+  .settings(disciplineDependencies)
+  .settings(
+    libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+
+lazy val testkitJVM = testkit.jvm
+lazy val testkitJS = testkit.js
 
 // bench is currently JVM-only
 
@@ -309,15 +475,15 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.7"))
+    "org.scalaz" %% "scalaz-core" % "7.2.15"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
 lazy val js = project
   .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
   .settings(moduleName := "cats-js")
-  .settings(catsSettings:_*)
-  .settings(commonJsSettings:_*)
+  .settings(catsSettings)
+  .settings(commonJsSettings)
   .configure(disableScoverage210Js)
   .enablePlugins(ScalaJSPlugin)
 
@@ -326,8 +492,8 @@ lazy val js = project
 lazy val jvm = project
   .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
   .settings(moduleName := "cats-jvm")
-  .settings(catsSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(catsSettings)
+  .settings(commonJvmSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/typelevel/cats")),
@@ -368,6 +534,11 @@ lazy val publishSettings = Seq(
         <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
+        <id>edmundnoble</id>
+        <name>Edmund Noble</name>
+        <url>https://github.com/edmundnoble/</url>
+      </developer>
+      <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
         <url>https://github.com/tpolecat/</url>
@@ -391,6 +562,11 @@ lazy val publishSettings = Seq(
         <id>milessabin</id>
         <name>Miles Sabin</name>
         <url>https://github.com/milessabin/</url>
+      </developer>
+      <developer>
+        <id>djspiewak</id>
+        <name>Daniel Spiewak</name>
+        <url>https://github.com/djspiewak/</url>
       </developer>
       <developer>
         <id>fthomas</id>
@@ -433,8 +609,8 @@ addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;v
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
@@ -484,6 +660,8 @@ lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
   releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseVcsSign := true,
+  useGpg := true,   // bouncycastle has bugs with subkeys, so we use gpg instead
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := Function.const(false),

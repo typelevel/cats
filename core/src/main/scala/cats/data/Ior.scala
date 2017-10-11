@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Bifunctor
 import cats.data.Validated.{Invalid, Valid}
-import cats.functor.Bifunctor
 
 import scala.annotation.tailrec
 
@@ -13,14 +13,14 @@ import scala.annotation.tailrec
  *  - `[[Ior.Right Right]][B]`
  *  - `[[Ior.Both Both]][A, B]`
  *
- * `A [[Ior]] B` is similar to `Either[A, B]`, except that it can represent the simultaneous presence of
+ * `A [[Ior]] B` is similar to `scala.util.Either[A, B]`, except that it can represent the simultaneous presence of
  * an `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the
  * `B` value. Some methods, like `flatMap`, handle the presence of two [[Ior.Both Both]] values using a
  * `[[Semigroup]][A]`, while other methods, like [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
  *
  * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
  * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic [[scala.util.Either]] form can be accessed via the [[unwrap]] method.
+ * The isomorphic `scala.util.Either` form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
@@ -170,6 +170,12 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
 
       def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
 
+      override def map2Eval[B, C, Z](fa: Ior[A, B], fb: Eval[Ior[A, C]])(f: (B, C) => Z): Eval[Ior[A, Z]] =
+        fa match {
+          case l @ Ior.Left(_) => Eval.now(l) // no need to evaluate fb
+          case notLeft => fb.map(fb => map2(notLeft, fb)(f))
+        }
+
       def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
         @tailrec
         def loop(v: Ior[A, Either[B, C]]): A Ior C = v match {
@@ -209,6 +215,11 @@ private[data] sealed abstract class IorInstances0 {
     def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
       fa.foldRight(lc)(f)
 
+    override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
+
+    override def get[B](fa: A Ior B)(idx: Long): Option[B] =
+      if (idx == 0L) fa.toOption else None
+
     override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
 
     override def exists[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.exists(p)
@@ -222,8 +233,8 @@ private[data] sealed trait IorFunctions {
   def left[A, B](a: A): A Ior B = Ior.Left(a)
   def right[A, B](b: B): A Ior B = Ior.Right(b)
   def both[A, B](a: A, b: B): A Ior B = Ior.Both(a, b)
-  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.of(a))
-  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.of(a), b)
+  def leftNel[A, B](a: A): IorNel[A, B] = left(NonEmptyList.one(a))
+  def bothNel[A, B](a: A, b: B): IorNel[A, B] = both(NonEmptyList.one(a), b)
 
   /**
    * Create an `Ior` from two Options if at least one of them is defined.

@@ -1,12 +1,14 @@
 package cats
 package tests
 
-import scala.math.min
-import scala.util.Try
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{BimonadTests, CartesianTests, MonadErrorTests, ReducibleTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, CartesianTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline._
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+import org.scalacheck.Arbitrary.arbitrary
+import scala.annotation.tailrec
+import scala.math.min
 
 class EvalTests extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
@@ -73,99 +75,54 @@ class EvalTests extends CatsSuite {
   }
 
   test(".value should evaluate only once on the result of .memoize"){
-    forAll { i: Eval[Int] =>
-      val spooky = new Spooky
-      val i2 = i.map(_ => spooky.increment).memoize
-      i2.value
-      spooky.counter should === (1)
-      i2.value
-      spooky.counter should === (1)
-    }
-  }
-
-  test("handleErrorWith is semi-stacksafe") {
-    def loop(i: Int, e: Eval[Int]): Eval[Int] =
-      if (i <= 0) e
-      else if (i % 100 == 0) loop(i - 1, e.map(n => n).handleErrorWith(_ => Now(-999)))
-      else loop(i - 1, e.map(n => n))
-
-    // we expect to use ~1k stack frames of error handling, which
-    // should be safe.
-    loop(100000, Now(6)).value should === (6)
-  }
-
-  test("Eval.raise(t).handleErrorWith(f) = f(t)") {
-    forAll { (t: Throwable, f: Throwable => Eval[Int]) =>
-      Eval.raise(t).handleErrorWith(f) should === (f(t))
-    }
-  }
-
-  test(".recoverWith and .handleErrorWith are equivalent") {
-    forAll { (e0: Eval[Int], f: Throwable => Eval[Int], p: PartialFunction[Throwable, Eval[Int]]) =>
-
-      // should be an error at least 1/3 of the time.
-      val e = e0.map { n => if (n % 3 == 0) n / 0 else n / 2 }
-
-      // test with a total recovery function
-      val x1 = Try(e.handleErrorWith(f))
-      val y1 = Try(e.recoverWith { case e => f(e) })
-      x1 should === (y1)
-
-      // test with a partial recovery function
-      val x2 = Try(e.recoverWith(p).value)
-      val y2 = Try(e.handleErrorWith(t => if (p.isDefinedAt(t)) p(t) else Eval.raise(t)).value)
-      x2 should === (y2)
-
-      // ensure that this works if we throw directly
-      val z2 = Try(e.handleErrorWith(t => if (p.isDefinedAt(t)) p(t) else throw t).value)
-      x2 should === (z2)
-    }
+    val spooky = new Spooky
+    val i2 = Eval.always(spooky.increment()).memoize
+    val i3 = Eval.now(()).flatMap(_ => Eval.later(spooky.increment())).memoize
+    i2.value
+    spooky.counter should === (1)
+    i2.value
+    spooky.counter should === (1)
+    i3.value
+    spooky.counter should === (2)
+    i3.value
+    spooky.counter should === (2)
   }
 
   {
     implicit val iso = CartesianTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
-
-    {
-      // we need exceptions which occur during .value calls to be
-      // equal to each other (equivalent behavior).
-      implicit def eqWithTry[A: Eq]: Eq[Eval[A]] =
-        Eq[Try[A]].on((e: Eval[A]) => Try(e.value))
-
-      checkAll("Eval[Int]", MonadErrorTests[Eval, Throwable].monadError[Int, Int, Int])
-    }
   }
+
   checkAll("Bimonad[Eval]", SerializableTests.serializable(Bimonad[Eval]))
-  checkAll("MonadError[Eval, Throwable]", SerializableTests.serializable(MonadError[Eval, Throwable]))
 
   checkAll("Eval[Int]", ReducibleTests[Eval].reducible[Option, Int, Int])
   checkAll("Reducible[Eval]", SerializableTests.serializable(Reducible[Eval]))
 
-  checkAll("Eval[Int]", GroupLaws[Eval[Int]].group)
+  checkAll("Eval[Int]", GroupLawTests[Eval[Int]].group)
 
   {
     implicit val A = ListWrapper.monoid[Int]
-    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].monoid)
+    checkAll("Eval[ListWrapper[Int]]", MonoidLawTests[Eval[ListWrapper[Int]]].monoid)
   }
 
   {
     implicit val A = ListWrapper.semigroup[Int]
-    checkAll("Eval[ListWrapper[Int]]", GroupLaws[Eval[ListWrapper[Int]]].semigroup)
+    checkAll("Eval[ListWrapper[Int]]", SemigroupLawTests[Eval[ListWrapper[Int]]].semigroup)
   }
 
   {
     implicit val A = ListWrapper.order[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].order)
+    checkAll("Eval[ListWrapper[Int]]", OrderLawTests[Eval[ListWrapper[Int]]].order)
   }
 
   {
     implicit val A = ListWrapper.partialOrder[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].partialOrder)
+    checkAll("Eval[ListWrapper[Int]]", PartialOrderLawTests[Eval[ListWrapper[Int]]].partialOrder)
   }
 
   {
     implicit val A = ListWrapper.eqv[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLaws[Eval[ListWrapper[Int]]].eqv)
+    checkAll("Eval[ListWrapper[Int]]", EqLawTests[Eval[ListWrapper[Int]]].eqv)
   }
 
   // The following tests check laws which are a different formulation of
@@ -184,6 +141,110 @@ class EvalTests extends CatsSuite {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliRightIdentity(fa, f)
       isEq.lhs should === (isEq.rhs)
+    }
+  }
+
+  // the following machinery is all to faciliate testing deeply-nested
+  // eval values for stack safety. the idea is that we want to
+  // randomly generate deep chains of eval operations.
+  //
+  // there are three ways to construct Eval[A] values from expressions
+  // returning A (and which are generated by Arbitrary[Eval[A]]):
+  //
+  //   - Eval.now(...)
+  //   - Eval.later(...)
+  //   - Eval.always(...)
+  //
+  // there are four operations that transform expressions returning
+  // Eval[A] into a new Eval[A] value:
+  //
+  //   - (...).map(f)
+  //   - (...).flatMap(g)
+  //   - (...).memoize
+  //   - Eval.defer(...)
+  //
+  // the O[A] ast represents these four operations. we generate a very
+  // long Vector[O[A]] and a starting () => Eval[A] expression (which
+  // we call a "leaf") and then compose these to produce one
+  // (deeply-nested) Eval[A] value, which we wrap in DeepEval(_).
+
+  case class DeepEval[A](eval: Eval[A])
+
+  object DeepEval {
+
+    sealed abstract class O[A]
+
+    case class OMap[A](f: A => A) extends O[A]
+    case class OFlatMap[A](f: A => Eval[A]) extends O[A]
+    case class OMemoize[A]() extends O[A]
+    case class ODefer[A]() extends O[A]
+
+    implicit def arbitraryO[A: Arbitrary: Cogen]: Arbitrary[O[A]] =
+      Arbitrary(Gen.oneOf(
+        arbitrary[A => A].map(OMap(_)),
+        arbitrary[A => Eval[A]].map(OFlatMap(_)),
+        Gen.const(OMemoize[A]),
+        Gen.const(ODefer[A])))
+
+    def build[A](leaf: () => Eval[A], os: Vector[O[A]]): DeepEval[A] = {
+
+      def restart(i: Int, leaf: () => Eval[A], cbs: List[Eval[A] => Eval[A]]): Eval[A] =
+        step(i, leaf, cbs)
+
+      @tailrec def step(i: Int, leaf: () => Eval[A], cbs: List[Eval[A] => Eval[A]]): Eval[A] =
+        if (i >= os.length) cbs.foldLeft(leaf())((e, f) => f(e))
+        else os(i) match {
+          case ODefer() => Eval.defer(restart(i + 1, leaf, cbs))
+          case OMemoize() => step(i + 1, leaf, ((e: Eval[A]) => e.memoize) :: cbs)
+          case OMap(f) => step(i + 1, leaf, ((e: Eval[A]) => e.map(f)) :: cbs)
+          case OFlatMap(f) => step(i + 1, leaf, ((e: Eval[A]) => e.flatMap(f)) :: cbs)
+        }
+
+      DeepEval(step(0, leaf, Nil))
+    }
+
+    // we keep this low in master to keep travis happy.
+    // for an actual stress test increase to 200K or so.
+    val MaxDepth = 100
+
+    implicit def arbitraryDeepEval[A: Arbitrary: Cogen]: Arbitrary[DeepEval[A]] = {
+      val gen: Gen[O[A]] = arbitrary[O[A]]
+      Arbitrary(for {
+        leaf <- arbitrary[() => Eval[A]]
+        xs <- Gen.containerOfN[Vector, O[A]](MaxDepth, gen)
+      } yield DeepEval.build(leaf, xs))
+    }
+  }
+
+  // all that work for this one little test.
+
+  test("stack safety stress test") {
+    forAll { (d: DeepEval[Int]) =>
+      try {
+        d.eval.value
+        succeed
+      } catch { case (e: StackOverflowError) =>
+        fail(s"stack overflowed with eval-depth ${DeepEval.MaxDepth}")
+      }
+    }
+  }
+
+  test("memoize handles branched evaluation correctly") {
+    forAll { (e: Eval[Int], fn: Int => Eval[Int]) =>
+      var n0 = 0
+      val a0 = e.flatMap { i => n0 += 1; fn(i); }.memoize
+      assert(a0.flatMap(i1 => a0.map(i1 == _)).value == true)
+      assert(n0 == 1)
+
+      var n1 = 0
+      val a1 = Eval.defer { n1 += 1; fn(0) }.memoize
+      assert(a1.flatMap(i1 => a1.map(i1 == _)).value == true)
+      assert(n1 == 1)
+
+      var n2 = 0
+      val a2 = Eval.defer { n2 += 1; fn(0) }.memoize
+      assert(Eval.defer(a2).value == Eval.defer(a2).value)
+      assert(n2 == 1)
     }
   }
 }

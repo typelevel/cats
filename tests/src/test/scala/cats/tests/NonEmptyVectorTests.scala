@@ -3,10 +3,13 @@ package tests
 
 import catalysts.Platform
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  SemigroupLawTests,
+  EqLawTests
+}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, TraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -16,10 +19,10 @@ class NonEmptyVectorTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-  checkAll("NonEmptyVector[Int]", OrderLaws[NonEmptyVector[Int]].eqv)
+  checkAll("NonEmptyVector[Int]", EqLawTests[NonEmptyVector[Int]].eqv)
 
-  checkAll("NonEmptyVector[Int] with Option", TraverseTests[NonEmptyVector].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[NonEmptyVector[A]]", SerializableTests.serializable(Traverse[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int] with Option", NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[NonEmptyVector[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyVector]", SerializableTests.serializable(Reducible[NonEmptyVector]))
@@ -28,7 +31,7 @@ class NonEmptyVectorTests extends CatsSuite {
   // Test instances that have more general constraints
 
   checkAll("NonEmptyVector[Int]", SemigroupKTests[NonEmptyVector].semigroupK[Int])
-  checkAll("NonEmptyVector[Int]", GroupLaws[NonEmptyVector[Int]].semigroup)
+  checkAll("NonEmptyVector[Int]", SemigroupLawTests[NonEmptyVector[Int]].semigroup)
   checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
   checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
 
@@ -212,7 +215,7 @@ class NonEmptyVectorTests extends CatsSuite {
 
   test("+: is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      i +: nonEmptyVector should === (NonEmptyVector.of(i).concatNev(nonEmptyVector))
+      i +: nonEmptyVector should === (NonEmptyVector.one(i).concatNev(nonEmptyVector))
     }
   }
   test("prepend is consistent with +:") {
@@ -311,6 +314,23 @@ class NonEmptyVectorTests extends CatsSuite {
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
       nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+    }
+  }
+
+
+  test("NonEmptyVector#zipWith is consistent with Vector#zip and then Vector#map") {
+    forAll { (a: NonEmptyVector[Int], b: NonEmptyVector[Int], f: (Int, Int) => Int) =>
+      a.zipWith(b)(f).toVector should ===(a.toVector.zip(b.toVector).map { case (x, y) => f(x, y) })
+    }
+  }
+  test("NonEmptyVector#nonEmptyPartition remains sorted") {
+    forAll { (nev: NonEmptyVector[Int], f: Int => Either[String, String]) =>
+
+      val sorted = NonEmptyVector.fromVectorUnsafe(nev.map(f).toVector.sorted)
+      val ior = Reducible[NonEmptyVector].nonEmptyPartition(sorted)(identity)
+
+      ior.left.map(xs => xs.sorted should === (xs))
+      ior.right.map(xs => xs.sorted should === (xs))
     }
   }
 }

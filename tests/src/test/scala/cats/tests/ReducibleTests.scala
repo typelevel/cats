@@ -23,6 +23,15 @@ class ReducibleTestsAdditional extends CatsSuite {
       if (a === goal) Now(true) else lb
     }
 
+  test("Reducible[NonEmptyList] default get/size implementation") {
+    val R = new NonEmptyReducible[NonEmptyList, List] {
+      def split[A](nel: NonEmptyList[A]): (A, List[A]) = (nel.head, nel.tail)
+    }
+    val nel = NonEmptyList.of(1, 2, 3)
+    R.get(nel)(1L) should === (nel.get(1L))
+    R.size(nel) should === (nel.size.toLong)
+    R.get(nel)(4L) should === (None)
+  }
 
   test("Reducible[NonEmptyList]") {
     val R = Reducible[NonEmptyList]
@@ -81,9 +90,31 @@ abstract class ReducibleCheck[F[_]: Reducible](name: String)(implicit ArbFInt: A
     }
   }
 
-  test(s"Reducible[$name].intercalate1") {
+  test(s"Reducible[$name].nonEmptyIntercalate") {
     forAll { (fa: F[String], a: String) =>
-      fa.intercalate1(a) === (fa.toList.mkString(a))
+      fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
     }
   }
+
+
+  test("Reducible#nonEmptyPartition retains size") {
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val folded = fi.nonEmptyPartition(f).fold(identity, identity, _ ++ _.toList)
+      folded.size.toLong should === (fi.size)
+    }
+  }
+
+  test("Reducible#nonEmptyPartition to one side is identity") {
+    forAll { (fi: F[Int], f: Int => String) =>
+      val g: Int => Either[Double, String] = f andThen Right.apply
+      val h: Int => Either[String, Double] = f andThen Left.apply
+
+      val withG = fi.nonEmptyPartition(g).right.getOrElse(NonEmptyList.one(""))
+      withG should === (Reducible[F].toNonEmptyList(fi).map(f))
+
+      val withH = fi.nonEmptyPartition(h).left.getOrElse(NonEmptyList.one(""))
+      withH should === (Reducible[F].toNonEmptyList(fi).map(f))
+    }
+  }
+
 }

@@ -3,11 +3,17 @@ package tests
 
 import cats.data._
 import cats.data.Validated.{Invalid, Valid}
-import cats.laws.discipline.{ApplicativeErrorTests, BitraverseTests, CartesianTests, SerializableTests, TraverseTests}
+import cats.laws.discipline._
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  MonoidLawTests,
+  SemigroupLawTests,
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
+}
 
 import scala.util.Try
 
@@ -27,12 +33,12 @@ class ValidatedTests extends CatsSuite {
   checkAll("Validated[String, Int] with Option", TraverseTests[Validated[String,?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Validated[String, ?]]", SerializableTests.serializable(Traverse[Validated[String,?]]))
 
-  checkAll("Validated[String, Int]", OrderLaws[Validated[String, Int]].order)
+  checkAll("Validated[String, Int]", OrderLawTests[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
 
-  checkAll("Validated[String, Int]", GroupLaws[Validated[String, Int]].monoid)
+  checkAll("Validated[String, Int]", MonoidLawTests[Validated[String, Int]].monoid)
 
-  checkAll("Validated[String, NonEmptyList[Int]]", GroupLaws[Validated[String, NonEmptyList[Int]]].semigroup)
+  checkAll("Validated[String, NonEmptyList[Int]]", SemigroupLawTests[Validated[String, NonEmptyList[Int]]].semigroup)
 
   {
     implicit val L = ListWrapper.semigroup[String]
@@ -43,14 +49,14 @@ class ValidatedTests extends CatsSuite {
   {
     implicit val S = ListWrapper.partialOrder[String]
     implicit val I = ListWrapper.partialOrder[Int]
-    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", PartialOrderLawTests[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]))
   }
 
   {
     implicit val S = ListWrapper.eqv[String]
     implicit val I = ListWrapper.eqv[Int]
-    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", OrderLaws[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Validated[ListWrapper[String], ListWrapper[Int]]", EqLawTests[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
   }
 
@@ -245,6 +251,22 @@ class ValidatedTests extends CatsSuite {
     forAll { (x: Validated[String, Int], s: String, p: Int => Boolean) =>
       if (x.exists(!p(_))) {
         x.ensure(s)(p) should === (Validated.invalid(s))
+      }
+    }
+  }
+
+  test("ensureOr on Invalid is identity") {
+    forAll { (x: Validated[Int,String], f: String => Int, p: String => Boolean) =>
+      if (x.isInvalid) {
+        x.ensureOr(f)(p) should === (x)
+      }
+    }
+  }
+
+  test("ensureOr should fail if predicate not satisfied") {
+    forAll { (x: Validated[String, Int], f: Int => String, p: Int => Boolean) =>
+      if (x.exists(!p(_))) {
+        x.ensureOr(f)(p).isInvalid shouldBe true
       }
     }
   }

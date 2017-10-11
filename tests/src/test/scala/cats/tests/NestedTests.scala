@@ -3,7 +3,7 @@ package tests
 
 import cats.Functor
 import cats.data._
-import cats.functor._
+
 import cats.laws.discipline._
 import cats.laws.discipline.CartesianTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
@@ -45,25 +45,6 @@ class NestedTests extends CatsSuite {
   }
 
   {
-    // FunctorFilter composition
-    implicit val instance = ListWrapper.functorFilter
-    checkAll("Nested[List, ListWrapper, ?]", FunctorFilterTests[Nested[List, ListWrapper, ?]].functorFilter[Int, Int, Int])
-    checkAll("FunctorFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(FunctorFilter[Nested[List, ListWrapper, ?]]))
-
-    test("collect consistency") {
-      forAll { l: Nested[List, ListWrapper, Int] =>
-        l.collect(evenPf).value should === (l.value.map(_.collect(evenPf)))
-      }
-    }
-
-    test("filter consistency") {
-      forAll { l: Nested[List, ListWrapper, Int] =>
-        l.filter(even).value should === (l.value.map(_.filter(even)))
-      }
-    }
-  }
-
-  {
     // Covariant + contravariant functor composition
     checkAll("Nested[Option, Show, ?]", ContravariantTests[Nested[Option, Show, ?]].contravariant[Int, Int, Int])
     checkAll("Contravariant[Nested[Option, Show, ?]]", SerializableTests.serializable(Contravariant[Nested[Option, Show, ?]]))
@@ -97,6 +78,14 @@ class NestedTests extends CatsSuite {
   }
 
   {
+    //ApplicativeError composition
+    implicit val instance = ListWrapper.applicative
+
+    checkAll("Nested[Validated[String, ?], ListWrapper, ?]", ApplicativeErrorTests[Nested[Validated[String, ?], ListWrapper, ?], String].applicativeError[Int, Int, Int])
+    checkAll("ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?]]", SerializableTests.serializable(ApplicativeError[Nested[Validated[String, ?], ListWrapper, ?], String]))
+  }
+
+  {
     // Alternative composition
     implicit val instance = ListWrapper.alternative
     checkAll("Nested[List, ListWrapper, ?]", AlternativeTests[Nested[List, ListWrapper, ?]].alternative[Int, Int, Int])
@@ -118,14 +107,17 @@ class NestedTests extends CatsSuite {
   }
 
   {
-    // TraverseFilter composition
-    implicit val instance = ListWrapper.traverseFilter
-    checkAll("Nested[List, ListWrapper, ?]", TraverseFilterTests[Nested[List, ListWrapper, ?]].traverseFilter[Int, Int, Int, List[Int], Option, Option])
-    checkAll("TraverseFilter[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(TraverseFilter[Nested[List, ListWrapper, ?]]))
+    // Reducible composition
+    implicit val instance = ListWrapper.foldable
+    checkAll("Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]", ReducibleTests[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]].reducible[Option, Int, Int])
+    checkAll("Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]]", SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, ?], ?]]))
   }
 
-  checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", ReducibleTests[Nested[NonEmptyList, NonEmptyVector, ?]].reducible[Option, Int, Int])
-  checkAll("Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(Reducible[Nested[NonEmptyList, NonEmptyVector, ?]]))
+  {
+    //NonEmptyTraverse composition
+    checkAll("Nested[NonEmptyList, NonEmptyVector, ?]", NonEmptyTraverseTests[Nested[NonEmptyList, NonEmptyVector, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+    checkAll("NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]", SerializableTests.serializable(NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, ?]]))
+  }
 
   {
     // SemigroupK composition

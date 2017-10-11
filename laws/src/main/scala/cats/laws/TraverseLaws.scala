@@ -2,7 +2,7 @@ package cats
 package laws
 
 import cats.Id
-import cats.data.{Const, Nested}
+import cats.data.{Const, Nested, State, StateT}
 import cats.syntax.traverse._
 import cats.syntax.foldable._
 
@@ -64,6 +64,26 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
   )(implicit B: Monoid[B]): IsEq[B] = {
     val lhs: B = fa.traverse[Const[B, ?], B](a => Const(f(a))).getConst
     val rhs: B = fa.foldMap(f)
+    lhs <-> rhs
+  }
+
+  def mapWithIndexRef[A, B](fa: F[A], f: (A, Int) => B): IsEq[F[B]] = {
+    val lhs = F.mapWithIndex(fa)(f)
+    val rhs = F.traverse(fa)(a =>
+      State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+    lhs <-> rhs
+  }
+
+  def traverseWithIndexMRef[G[_], A, B](fa: F[A], f: (A, Int) => G[B])(implicit G: Monad[G]): IsEq[G[F[B]]] = {
+    val lhs = F.traverseWithIndexM(fa)(f)
+    val rhs = F.traverse(fa)(a =>
+      StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+    lhs <-> rhs
+  }
+
+  def zipWithIndexRef[A, B](fa: F[A], f: ((A, Int)) => B): IsEq[F[B]] = {
+    val lhs = F.map(F.zipWithIndex(fa))(f)
+    val rhs = F.map(F.mapWithIndex(fa)((a, i) => (a, i)))(f)
     lhs <-> rhs
   }
 }

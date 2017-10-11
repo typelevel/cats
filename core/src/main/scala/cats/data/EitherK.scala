@@ -1,13 +1,13 @@
 package cats
 package data
 
+import cats.Contravariant
 import cats.arrow.FunctionK
-import cats.functor.Contravariant
 import cats.syntax.either._
 
-/** `F` on the left and `G` on the right of [[scala.util.Either]].
+/** `F` on the left and `G` on the right of `scala.util.Either`.
  *
- * @param run The underlying [[scala.util.Either]].
+ * @param run The underlying `scala.util.Either`.
  */
 final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 
@@ -188,6 +188,12 @@ private[data] trait EitherKFoldable[F[_], G[_]] extends Foldable[EitherK[F, G, ?
 
   def foldLeft[A, B](fa: EitherK[F, G, A], z: B)(f: (B, A) => B): B =
     fa.foldLeft(z)(f)
+
+  override def size[A](fa: EitherK[F, G, A]): Long =
+    fa.run.fold(F.size, G.size)
+
+  override def get[A](fa: EitherK[F, G, A])(idx: Long): Option[A] =
+    fa.run.fold(F.get(_)(idx), G.get(_)(idx))
 
   override def foldMap[A, B](fa: EitherK[F, G, A])(f: A => B)(implicit M: Monoid[B]): B =
     fa foldMap f

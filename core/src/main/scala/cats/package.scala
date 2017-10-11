@@ -32,8 +32,8 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] =
-    new Bimonad[Id] with Monad[Id] with Traverse[Id] with Reducible[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -51,7 +51,7 @@ package object cats {
       def foldLeft[A, B](a: A, b: B)(f: (B, A) => B) = f(b, a)
       def foldRight[A, B](a: A, lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         f(a, lb)
-      def traverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Applicative[G]): G[B] =
+      def nonEmptyTraverse[G[_], A, B](a: A)(f: A => G[B])(implicit G: Apply[G]): G[B] =
         f(a)
       override def foldMap[A, B](fa: Id[A])(f: A => B)(implicit B: Monoid[B]): B = f(fa)
       override def reduce[A](fa: Id[A])(implicit A: Semigroup[A]): A =
@@ -70,12 +70,15 @@ package object cats {
         Now(Some(f(fa)))
       override def reduceMap[A, B](fa: Id[A])(f: A => B)(implicit B: Semigroup[B]): B = f(fa)
       override def size[A](fa: Id[A]): Long = 1L
+      override def get[A](fa: Id[A])(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
   type Order[A] = cats.kernel.Order[A]
+  type Hash[A] = cats.kernel.Hash[A]
   type Semigroup[A] = cats.kernel.Semigroup[A]
   type Monoid[A] = cats.kernel.Monoid[A]
   type Group[A] = cats.kernel.Group[A]
@@ -83,6 +86,7 @@ package object cats {
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
   val Order = cats.kernel.Order
+  val Hash = cats.kernel.Hash
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group

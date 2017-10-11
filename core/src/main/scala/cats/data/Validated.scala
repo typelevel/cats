@@ -101,7 +101,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     Validated.fromEither(f(toEither))
 
   /**
-   * Validated is a [[functor.Bifunctor]], this method applies one of the
+   * Validated is a [[Bifunctor]], this method applies one of the
    * given functions.
    */
   def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
@@ -237,6 +237,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    */
   def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
     fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure))
+
+  /**
+    * Ensure that a successful result passes the given predicate,
+    * falling back to the an Invalid of the result of `onFailure` if the predicate
+    * returns false.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid("ab").ensureOr(s => new IllegalArgumentException("Must be longer than 3, provided '" + s + "'"))(_.length > 3)
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must be longer than 3, provided 'ab')
+    * }}}
+    */
+  def ensureOr[EE >: E](onFailure: A => EE)(f: A => Boolean): Validated[EE, A] =
+    fold(_ => this, a => if (f(a)) this else Validated.invalid(onFailure(a)))
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions{
@@ -404,6 +418,9 @@ private[data] sealed abstract class ValidatedInstances2 {
       override def size[A](fa: Validated[E, A]): Long =
         fa.fold(_ => 0L, _ => 1L)
 
+      override def get[A](fa: Validated[E, A])(idx: Long): Option[A] =
+        if (idx == 0L) fa.toOption else None
+
       override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
         fa.fold(_ => B.empty, f)
 
@@ -425,12 +442,49 @@ private[data] sealed abstract class ValidatedInstances2 {
 }
 
 private[data] trait ValidatedFunctions {
+  /**
+    * Converts an `A` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalid[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)
+    * }}}
+    */
   def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
 
+  /**
+    * Converts an `A` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.invalidNel[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+    * res0: ValidatedNel[IllegalArgumentException, String] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))
+    * }}}
+    */
   def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
 
+  /**
+    * Converts a `B` to a `Validated[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.valid[IllegalArgumentException, String]("Hello world")
+    * res0: Validated[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
   def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
 
+  /**
+    * Converts a `B` to a `ValidatedNel[A, B]`.
+    *
+    * For example:
+    * {{{
+    * scala> Validated.validNel[IllegalArgumentException, String]("Hello world")
+    * res0: ValidatedNel[IllegalArgumentException, String] = Valid(Hello world)
+    * }}}
+    */
+  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
