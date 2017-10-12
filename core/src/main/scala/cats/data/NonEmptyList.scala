@@ -3,9 +3,8 @@ package data
 
 import cats.instances.list._
 import cats.syntax.order._
-
 import scala.annotation.tailrec
-import scala.collection.immutable.{ TreeMap, TreeSet }
+import scala.collection.immutable.{ SortedMap, TreeMap, TreeSet }
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -321,18 +320,21 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   /**
-    * Groups elements inside of this `NonEmptyList` using a mapping function
+    * Groups elements inside this `NonEmptyList` according to the `Order`
+    * of the keys produced by the given mapping function.
     *
     * {{{
+    * scala> import scala.collection.immutable.SortedMap
     * scala> import cats.data.NonEmptyList
     * scala> import cats.instances.boolean._
     * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
     * scala> nel.groupBy(_ >= 0)
-    * res0: Map[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+    * res0: SortedMap[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
     * }}}
     */
-  def groupBy[B](f: A => B)(implicit B: Order[B]): Map[B, NonEmptyList[A]] = {
-    var m = TreeMap.empty[B, mutable.Builder[A, List[A]]](B.toOrdering)
+  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    var m = TreeMap.empty[B, mutable.Builder[A, List[A]]]
 
     for { elem <- toList } {
       val k = f(elem)
@@ -343,7 +345,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       }
     }
 
-    m.map { case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result)) }
+    m.map {
+      case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result))
+    } : TreeMap[B, NonEmptyList[A]]
   }
 }
 
