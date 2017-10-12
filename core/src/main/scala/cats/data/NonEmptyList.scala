@@ -343,7 +343,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       }
     }
 
-    m.mapValues(v => NonEmptyList.fromListUnsafe(v.result))
+    m.map { case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result)) }
   }
 }
 
