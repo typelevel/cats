@@ -5,9 +5,9 @@ import cats.instances.list._
 import cats.syntax.order._
 
 import scala.annotation.tailrec
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{ TreeMap, TreeSet }
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.collection.{immutable, mutable}
 
 /**
  * A data type which represents a non empty list of A, with
@@ -332,17 +332,19 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * }}}
     */
   def groupBy[B](f: A => B)(implicit B: Order[B]): Map[B, NonEmptyList[A]] = {
-    val m = mutable.TreeMap.empty[B, mutable.Builder[A, List[A]]](B.toOrdering)
-    for { elem <- toList } {
-      m.getOrElseUpdate(f(elem), List.newBuilder[A]) += elem
-    }
-    val b = immutable.TreeMap.newBuilder[B, NonEmptyList[A]](B.toOrdering)
-    for { (k, v) <- m } {
-      b += k -> NonEmptyList.fromListUnsafe(v.result)
-    }
-    b.result
-  }
+    var m = TreeMap.empty[B, mutable.Builder[A, List[A]]](B.toOrdering)
 
+    for { elem <- toList } {
+      val k = f(elem)
+
+      m.get(k) match {
+        case None => m += ((k, List.newBuilder[A] += elem))
+        case Some(builder) => builder += elem
+      }
+    }
+
+    m.mapValues(v => NonEmptyList.fromListUnsafe(v.result))
+  }
 }
 
 object NonEmptyList extends NonEmptyListInstances {
