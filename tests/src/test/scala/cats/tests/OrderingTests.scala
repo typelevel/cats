@@ -10,10 +10,10 @@ class OrderingTests extends CatsSuite {
 
   Invariant[Ordering]
   Contravariant[Ordering]
-  Cartesian[Ordering]
-  ContravariantCartesian[Ordering]
+  Semigroupal[Ordering]
+  ContravariantSemigroupal[Ordering]
 
   checkAll("Contravariant[Ordering]", ContravariantTests[Ordering].contravariant[Int, Int, Int])
-  checkAll("Cartesian[Ordering]", CartesianTests[Ordering].cartesian[Int, Int, Int])
+  checkAll("Semigroupal[Ordering]", SemigroupalTests[Ordering].semigroupal[Int, Int, Int])
   checkAll("Contravariant[Ordering]", SerializableTests.serializable(Contravariant[Ordering]))
 }

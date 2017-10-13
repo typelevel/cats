@@ -2,16 +2,16 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import Prop._
 import org.typelevel.discipline.Laws
 
-trait CartesianTests[F[_]] extends Laws {
-  def laws: CartesianLaws[F]
+trait SemigroupalTests[F[_]] extends Laws {
+  def laws: SemigroupalLaws[F]
 
-  def cartesian[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
+  def semigroupal[A : Arbitrary, B : Arbitrary, C : Arbitrary](implicit
     iso: Isomorphisms[F],
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
@@ -20,16 +20,16 @@ trait CartesianTests[F[_]] extends Laws {
     EqFABC: Eq[F[(A, B, C)]]
   ): RuleSet = {
     new DefaultRuleSet(
-      name = "cartesian",
+      name = "semigroupal",
       parent = None,
-      "cartesian associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.cartesianAssociativity(fa, fb, fc)))
+      "semigroupal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.semigroupalAssociativity(fa, fb, fc)))
     )
   }
 }
 
-object CartesianTests {
-  def apply[F[_] : Cartesian](implicit ev: Isomorphisms[F]): CartesianTests[F] =
-    new CartesianTests[F] { val laws: CartesianLaws[F] = CartesianLaws[F] }
+object SemigroupalTests {
+  def apply[F[_] : Semigroupal](implicit ev: Isomorphisms[F]): SemigroupalTests[F] =
+    new SemigroupalTests[F] { val laws: SemigroupalLaws[F] = SemigroupalLaws[F] }
 
   trait Isomorphisms[F[_]] {
     def associativity[A, B, C](fs: (F[(A, (B, C))], F[((A, B), C)])): IsEq[F[(A, B, C)]]

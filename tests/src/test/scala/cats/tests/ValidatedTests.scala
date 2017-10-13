@@ -18,9 +18,9 @@ import cats.kernel.laws.discipline.{
 import scala.util.Try
 
 class ValidatedTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Validated[String, ?]]
-  checkAll("Validated[String, Int]", CartesianTests[Validated[String,?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Validated[String,?]]", SerializableTests.serializable(Cartesian[Validated[String,?]]))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Validated[String, ?]]
+  checkAll("Validated[String, Int]", SemigroupalTests[Validated[String,?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Validated[String,?]]", SerializableTests.serializable(Semigroupal[Validated[String,?]]))
 
   checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))

@@ -14,8 +14,8 @@ import scala.util.{Success, Try}
 class TryTests extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
 
-  checkAll("Try[Int]", CartesianTests[Try].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Try]", SerializableTests.serializable(Cartesian[Try]))
+  checkAll("Try[Int]", SemigroupalTests[Try].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Try]", SerializableTests.serializable(Semigroupal[Try]))
 
   checkAll("Try[Int]", CoflatMapTests[Try].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Try]", SerializableTests.serializable(CoflatMap[Try]))

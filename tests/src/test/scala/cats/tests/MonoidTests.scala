@@ -6,7 +6,7 @@ package tests
 class MonoidTests extends CatsSuite {
   {
     Invariant[Monoid]
-    Cartesian[Monoid]
+    Semigroupal[Monoid]
     InvariantMonoidal[Monoid]
   }
 
@@ -21,7 +21,7 @@ object MonoidTests {
   def summonInstance(): Unit = {
     import cats.instances.monoid._
     Invariant[Monoid]
-    Cartesian[Monoid]
+    Semigroupal[Monoid]
     InvariantMonoidal[Monoid]
     ()
   }

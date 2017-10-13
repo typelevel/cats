@@ -15,15 +15,15 @@ class FunctionTests extends CatsSuite {
 
   import Helpers._
 
-  checkAll("Function0[Int]", CartesianTests[Function0].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Function0]", SerializableTests.serializable(Cartesian[Function0]))
+  checkAll("Function0[Int]", SemigroupalTests[Function0].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Function0]", SerializableTests.serializable(Semigroupal[Function0]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Function1[Int, ?]]
-  checkAll("Function1[Int, Int]", CartesianTests[Function1[Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Function1[Int, ?]]", SerializableTests.serializable(Cartesian[Function1[Int, ?]]))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[Int, ?]]
+  checkAll("Function1[Int, Int]", SemigroupalTests[Function1[Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
   checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[Int => ?]))

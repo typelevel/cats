@@ -5,8 +5,8 @@ import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 
 class OptionTests extends CatsSuite {
-  checkAll("Option[Int]", CartesianTests[Option].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Option]", SerializableTests.serializable(Cartesian[Option]))
+  checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Option]", SerializableTests.serializable(Semigroupal[Option]))
 
   checkAll("Option[Int]", CoflatMapTests[Option].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Option]", SerializableTests.serializable(CoflatMap[Option]))
