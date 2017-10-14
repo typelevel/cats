@@ -7,12 +7,16 @@ import cats.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.kernel.laws.OrderLaws
+import cats.kernel.laws.discipline.{
+  OrderLawTests,
+  PartialOrderLawTests,
+  EqLawTests
+}
 
 class Tuple2KTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[Option, List, ?]]
-  checkAll("Tuple2K[Option, List, Int]", CartesianTests[λ[α => Tuple2K[Option, List, α]]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Tuple2K[Option, List, Int]]", SerializableTests.serializable(Cartesian[λ[α => Tuple2K[Option, List, α]]]))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[Option, List, ?]]
+  checkAll("Tuple2K[Option, List, Int]", SemigroupalTests[λ[α => Tuple2K[Option, List, α]]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Tuple2K[Option, List, Int]]", SerializableTests.serializable(Semigroupal[λ[α => Tuple2K[Option, List, α]]]))
 
   checkAll("Tuple2K[Option, List, Int]", AlternativeTests[λ[α => Tuple2K[Option, List, α]]].alternative[Int, Int, Int])
   checkAll("Alternative[Tuple2K[Option, List, Int]]", SerializableTests.serializable(Alternative[λ[α => Tuple2K[Option, List, α]]]))
@@ -36,7 +40,7 @@ class Tuple2KTests extends CatsSuite {
 
   {
     implicit val apply = ListWrapper.applyInstance
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
     checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", ApplyTests[Tuple2K[ListWrapper, ListWrapper, ?]].apply[Int, Int, Int])
     checkAll("Apply[Tuple2K[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Apply[Tuple2K[ListWrapper, ListWrapper, ?]]))
   }
@@ -59,7 +63,7 @@ class Tuple2KTests extends CatsSuite {
 
   {
     implicit val monad = ListWrapper.monad
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
     checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", MonadTests[Tuple2K[ListWrapper, ListWrapper, ?]].monad[Int, Int, Int])
     checkAll("Monad[Tuple2K[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Monad[Tuple2K[ListWrapper, ListWrapper, ?]]))
   }
@@ -78,7 +82,7 @@ class Tuple2KTests extends CatsSuite {
 
   {
     implicit val alternative = ListWrapper.alternative
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
     checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", AlternativeTests[Tuple2K[ListWrapper, ListWrapper, ?]].alternative[Int, Int, Int])
     checkAll("Alternative[Tuple2K[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Alternative[Tuple2K[ListWrapper, ListWrapper, ?]]))
   }
@@ -88,9 +92,9 @@ class Tuple2KTests extends CatsSuite {
     implicit val O = ListWrapper.order[Int]
     implicit val P = ListWrapper.partialOrder[Int]
 
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLaws[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLaws[Tuple2K[ListWrapper, ListWrapper, Int]].order)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLaws[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", EqLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].order)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
   }
 
   test("show") {

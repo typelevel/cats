@@ -10,7 +10,7 @@ trait AllSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax
-    with CartesianSyntax
+    with SemigroupalSyntax
     with CoflatMapSyntax
     with ComonadSyntax
     with ComposeSyntax
@@ -22,6 +22,7 @@ trait AllSyntax
     with FoldableSyntax
     with FunctorSyntax
     with GroupSyntax
+    with HashSyntax
     with InvariantSyntax
     with IorSyntax
     with ListSyntax

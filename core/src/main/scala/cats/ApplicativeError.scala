@@ -93,7 +93,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * scala> type F[A] = EitherT[State[String, ?], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
-   *      |   case Err("one") => EitherT.liftT(State.set("one"))
+   *      |   case Err("one") => EitherT.liftF(State.set("one"))
    *      | }
    *
    * scala> val prog1: F[Int] = (Err("one")).raiseError[F, Int]

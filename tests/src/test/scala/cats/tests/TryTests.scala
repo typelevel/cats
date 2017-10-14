@@ -1,7 +1,10 @@
 package cats
 package tests
 
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.{
+  SemigroupLawTests,
+  MonoidLawTests
+}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -11,8 +14,8 @@ import scala.util.{Success, Try}
 class TryTests extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
 
-  checkAll("Try[Int]", CartesianTests[Try].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Try]", SerializableTests.serializable(Cartesian[Try]))
+  checkAll("Try[Int]", SemigroupalTests[Try].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Try]", SerializableTests.serializable(Semigroupal[Try]))
 
   checkAll("Try[Int]", CoflatMapTests[Try].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Try]", SerializableTests.serializable(CoflatMap[Try]))
@@ -29,11 +32,11 @@ class TryTests extends CatsSuite {
   {
     implicit val F = ListWrapper.semigroup[Int]
 
-    checkAll("Try[ListWrapper[Int]]", GroupLaws[Try[ListWrapper[Int]]].semigroup)
+    checkAll("Try[ListWrapper[Int]]", SemigroupLawTests[Try[ListWrapper[Int]]].semigroup)
     checkAll("Semigroup[Try[ListWrapper[Int]]", SerializableTests.serializable(Semigroup[Try[ListWrapper[Int]]]))
   }
 
-  checkAll("Try[Int]", GroupLaws[Try[Int]].monoid)
+  checkAll("Try[Int]", MonoidLawTests[Try[Int]].monoid)
   checkAll("Monoid[Try[Int]]", SerializableTests.serializable(Monoid[Try[Int]]))
 
   test("show") {

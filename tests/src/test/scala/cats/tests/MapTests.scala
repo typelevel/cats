@@ -2,13 +2,13 @@ package cats
 package tests
 
 import cats.data.Tuple2K
-import cats.laws.discipline.{CartesianTests, FlatMapTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{TraverseTests, FlatMapTests, SerializableTests, SemigroupalTests}
 
 class MapTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Map[Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
 
-  checkAll("Map[Int, Int]", CartesianTests[Map[Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Map[Int, ?]]", SerializableTests.serializable(Cartesian[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", SemigroupalTests[Map[Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Map[Int, ?]]", SerializableTests.serializable(Semigroupal[Map[Int, ?]]))
 
   checkAll("Map[Int, Int]", FlatMapTests[Map[Int, ?]].flatMap[Int, Int, Int])
   checkAll("FlatMap[Map[Int, ?]]", SerializableTests.serializable(FlatMap[Map[Int, ?]]))

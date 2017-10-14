@@ -210,13 +210,11 @@ All other symbols can be imported with `import cats.implicits._`
 
 | Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
 | -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
-| `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[B]`                            |
-| `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[A]`                            |
+| `fa *> fb`                       | followed by            |                  | `Apply[F[_]]`           | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
+| `fa <* fb`                       | for effect             |                  | `Apply[F[_]]`           | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
 | `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |
 | `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
 | `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
-| `fa >> fb`                       | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
-| `fa << fb`                       | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
 | <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
 | `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
 | `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
@@ -231,6 +229,8 @@ All other symbols can be imported with `import cats.implicits._`
 | `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
 | `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
 | `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
+| `fa >> fb` (Deprecated)          | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
+| `fa << fb` (Deprecated)          | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 

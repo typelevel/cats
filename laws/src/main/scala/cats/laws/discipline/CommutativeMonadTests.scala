@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 
 trait CommutativeMonadTests[F[_]] extends MonadTests[F] with CommutativeFlatMapTests[F] with CommutativeApplicativeTests[F] {

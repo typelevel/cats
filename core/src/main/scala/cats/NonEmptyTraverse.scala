@@ -53,9 +53,8 @@ import simulacrum.typeclass
     * {{{
     * scala> import cats.implicits._
     * scala> import cats.data.NonEmptyList
-    * scala> def countWords(words: List[String]): Map[String, Int] = words.groupBy(identity).mapValues(_.length)
     * scala> val x = NonEmptyList.of(List("How", "do", "you", "fly"), List("What", "do", "you", "do"))
-    * scala> x.nonEmptyFlatTraverse(_.groupByNel(identity))
+    * scala> x.nonEmptyFlatTraverse(_.groupByNel(identity) : Map[String, NonEmptyList[String]])
     * res0: Map[String,cats.data.NonEmptyList[String]] = Map(do -> NonEmptyList(do, do, do), you -> NonEmptyList(you, you))
     * }}}
     */

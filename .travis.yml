@@ -4,7 +4,7 @@ sudo: required
 
 dist: trusty
 
-group: edge 
+group: edge
 
 git:
   depth: 9999

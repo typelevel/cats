@@ -1,28 +1,29 @@
 package cats
 package tests
 
-import cats.Contravariant
 import cats.arrow.{Choice, CommutativeArrow}
+import cats.kernel.laws.HashLaws
+import cats.kernel.laws.discipline.{SerializableTests, _}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.{Band, BoundedSemilattice, Semilattice}
+
 
 class FunctionTests extends CatsSuite {
 
   import Helpers._
 
-  checkAll("Function0[Int]", CartesianTests[Function0].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Function0]", SerializableTests.serializable(Cartesian[Function0]))
+  checkAll("Function0[Int]", SemigroupalTests[Function0].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Function0]", SerializableTests.serializable(Semigroupal[Function0]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Function1[Int, ?]]
-  checkAll("Function1[Int, Int]", CartesianTests[Function1[Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Function1[Int, ?]]", SerializableTests.serializable(Cartesian[Function1[Int, ?]]))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[Int, ?]]
+  checkAll("Function1[Int, Int]", SemigroupalTests[Function1[Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
   checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[Int => ?]))
@@ -41,18 +42,25 @@ class FunctionTests extends CatsSuite {
 
 
   // law checks for the various Function0-related instances
-  checkAll("Function0[Eqed]", OrderLaws[Function0[Eqed]].eqv)
-  checkAll("Function0[POrd]", OrderLaws[Function0[POrd]].partialOrder)
-  checkAll("Function0[Ord]", OrderLaws[Function0[Ord]].order)
-  checkAll("Function0[Semi]", GroupLaws[Function0[Semi]].semigroup)
-  checkAll("Function0[CSemi]", GroupLaws[Function0[CSemi]].commutativeSemigroup)
-  checkAll("Function0[Bnd]", GroupLaws[Function0[Bnd]].band)
-  checkAll("Function0[SL]", GroupLaws[Function0[SL]].semilattice)
-  checkAll("Function0[BSL]", GroupLaws[Function0[BSL]].boundedSemilattice)
-  checkAll("Function0[Mono]", GroupLaws[Function0[Mono]].monoid)
-  checkAll("Function0[CMono]", GroupLaws[Function0[CMono]].commutativeMonoid)
-  checkAll("Function0[Grp]", GroupLaws[Function0[Grp]].group)
-  checkAll("Function0[CGrp]", GroupLaws[Function0[CGrp]].commutativeGroup)
+  checkAll("Function0[Eqed]", EqLawTests[Function0[Eqed]].eqv)
+  checkAll("Function0[POrd]", PartialOrderLawTests[Function0[POrd]].partialOrder)
+  checkAll("Function0[Ord]", OrderLawTests[Function0[Ord]].order)
+  checkAll("Function0[Semi]", SemigroupLawTests[Function0[Semi]].semigroup)
+  checkAll("Function0[CSemi]", CommutativeSemigroupTests[Function0[CSemi]].commutativeSemigroup)
+  checkAll("Function0[Bnd]", BandTests[Function0[Bnd]].band)
+  checkAll("Function0[SL]", SemilatticeTests[Function0[SL]].semilattice)
+  checkAll("Function0[BSL]", BoundedSemilatticeTests[Function0[BSL]].boundedSemilattice)
+  checkAll("Function0[Mono]", MonoidLawTests[Function0[Mono]].monoid)
+  checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
+  checkAll("Function0[Grp]", GroupLawTests[Function0[Grp]].group)
+  checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
+
+  test("Function0[Hsh]") {
+    forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
+      HashLaws[Function0[Hsh]].hashCompatibility(x, y)
+    }
+  }
+
 
   // serialization tests for the various Function0-related instances
   checkAll("Eq[() => Eqed]", SerializableTests.serializable(Eq[() => Eqed]))
@@ -70,15 +78,15 @@ class FunctionTests extends CatsSuite {
 
 
   // law checks for the various Function1-related instances
-  checkAll("Function1[String, Semi]", GroupLaws[Function1[String, Semi]].semigroup)
-  checkAll("Function1[String, CSemi]", GroupLaws[Function1[String, CSemi]].commutativeSemigroup)
-  checkAll("Function1[String, Bnd]", GroupLaws[Function1[String, Bnd]].band)
-  checkAll("Function1[String, SL]", GroupLaws[Function1[String, SL]].semilattice)
-  checkAll("Function1[String, BSL]", GroupLaws[Function1[String, BSL]].boundedSemilattice)
-  checkAll("Function1[String, Mono]", GroupLaws[Function1[String, Mono]].monoid)
-  checkAll("Function1[String, CMono]", GroupLaws[Function1[String, CMono]].commutativeMonoid)
-  checkAll("Function1[String, Grp]", GroupLaws[Function1[String, Grp]].group)
-  checkAll("Function1[String, CGrp]", GroupLaws[Function1[String, CGrp]].commutativeGroup)
+  checkAll("Function1[String, Semi]", SemigroupLawTests[Function1[String, Semi]].semigroup)
+  checkAll("Function1[String, CSemi]", CommutativeSemigroupTests[Function1[String, CSemi]].commutativeSemigroup)
+  checkAll("Function1[String, Bnd]", BandTests[Function1[String, Bnd]].band)
+  checkAll("Function1[String, SL]", SemilatticeTests[Function1[String, SL]].semilattice)
+  checkAll("Function1[String, BSL]", BoundedSemilatticeTests[Function1[String, BSL]].boundedSemilattice)
+  checkAll("Function1[String, Mono]", MonoidLawTests[Function1[String, Mono]].monoid)
+  checkAll("Function1[String, CMono]", CommutativeMonoidTests[Function1[String, CMono]].commutativeMonoid)
+  checkAll("Function1[String, Grp]", GroupLawTests[Function1[String, Grp]].group)
+  checkAll("Function1[String, CGrp]", CommutativeGroupTests[Function1[String, CGrp]].commutativeGroup)
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))

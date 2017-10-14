@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import catalysts.Platform
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
