@@ -3,7 +3,7 @@ package tests
 
 import cats.Invariant
 import cats.kernel._
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline._
 import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
@@ -61,56 +61,56 @@ class AlgebraInvariantTests extends CatsSuite {
 
 
 
-  checkAll("InvariantMonoidal[Semigroup]", GroupLaws[Int].semigroup(InvariantMonoidal[Semigroup].pure(0)))
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", GroupLaws[Int].commutativeSemigroup(InvariantMonoidal[CommutativeSemigroup].pure(0)))
+  checkAll("InvariantMonoidal[Semigroup]", SemigroupLawTests[Int](InvariantMonoidal[Semigroup].pure(0)).semigroup)
+  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].pure(0)).commutativeSemigroup)
 
 
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
-    checkAll("Semigroup[Int]", GroupLaws[Int].semigroup(S))
+    checkAll("Semigroup[Int]", SemigroupLawTests[Int](S).semigroup)
   }
 
   {
     val S: Monoid[Int] = Monoid[Int].imap(identity)(identity)
-    checkAll("Monoid[Int]", GroupLaws[Int].monoid(S))
+    checkAll("Monoid[Int]", MonoidLawTests[Int](S).monoid)
   }
 
   {
     val S: Group[Int] = Group[Int].imap(identity)(identity)
-    checkAll("Group[Int]", GroupLaws[Int].group(S))
+    checkAll("Group[Int]", GroupLawTests[Int](S).group)
   }
 
   {
     val S: CommutativeSemigroup[Int] = CommutativeSemigroup[Int].imap(identity)(identity)
-    checkAll("CommutativeSemigroup[Int]", GroupLaws[Int].commutativeSemigroup(S))
+    checkAll("CommutativeSemigroup[Int]", CommutativeSemigroupTests[Int](S).commutativeSemigroup)
   }
 
   {
     val S: CommutativeMonoid[Int] = CommutativeMonoid[Int].imap(identity)(identity)
-    checkAll("CommutativeMonoid[Int]", GroupLaws[Int].commutativeMonoid(S))
+    checkAll("CommutativeMonoid[Int]", CommutativeMonoidTests[Int](S).commutativeMonoid)
   }
 
 
   {
     val S: CommutativeGroup[Int] = CommutativeGroup[Int].imap(identity)(identity)
-    checkAll("CommutativeGroup[Int]", GroupLaws[Int].commutativeGroup(S))
+    checkAll("CommutativeGroup[Int]", CommutativeGroupTests[Int](S).commutativeGroup)
   }
 
 
   {
     val S: Band[Set[Int]] = Band[Set[Int]].imap(identity)(identity)
-    checkAll("Band[Set[Int]]", GroupLaws[Set[Int]].band(S))
+    checkAll("Band[Set[Int]]", BandTests[Set[Int]](S).band)
   }
 
   {
     val S: Semilattice[Set[Int]] = Semilattice[Set[Int]].imap(identity)(identity)
-    checkAll("Semilattice[Set[Int]]", GroupLaws[Set[Int]].semilattice(S))
+    checkAll("Semilattice[Set[Int]]", SemilatticeTests[Set[Int]](S).semilattice)
   }
 
   {
     val S: BoundedSemilattice[Set[Int]] = BoundedSemilattice[Set[Int]].imap(identity)(identity)
-    checkAll("BoundedSemilattice[Set[Int]]", GroupLaws[Set[Int]].boundedSemilattice(S))
+    checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]](S).boundedSemilattice)
   }
 
 
