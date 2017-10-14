@@ -11,31 +11,26 @@ import simulacrum.typeclass
   *
   * Must obey the laws defined in cats.laws.CommutativeApplicativeLaws.
   */
-@typeclass trait CommutativeApplicative[F[_]] extends Applicative[F] with CommutativeApply[F]
-
-
-object CommutativeApplicative {
-
-  def traverseUnordered[F[_]: CommutativeApplicative, A, B](sa: Set[A])(f: A => F[B]): F[Set[B]] =
-    sa.foldLeft(Applicative[F].pure(Set.empty[B])) { (acc, a) =>
-      Applicative[F].map2(acc, f(a))(_ + _)
+@typeclass trait CommutativeApplicative[F[_]] extends Applicative[F] with CommutativeApply[F] {
+  def traverseUnordered[A, B](sa: Set[A])(f: A => F[B]): F[Set[B]] =
+    sa.foldLeft(pure(Set.empty[B])) { (acc, a) =>
+      map2(acc, f(a))(_ + _)
     }
 
-  def sequenceUnordered[F[_]: CommutativeApplicative, A](sa: Set[F[A]]): F[Set[A]] =
-    sa.foldLeft(Applicative[F].pure(Set.empty[A])) { (acc, a) =>
-      Applicative[F].map2(acc, a)(_ + _)
+  def sequenceUnordered[A](sa: Set[F[A]]): F[Set[A]] =
+    sa.foldLeft(pure(Set.empty[A])) { (acc, a) =>
+      map2(acc, a)(_ + _)
     }
 
 
-  def traverseUnorderedMap[F[_]: CommutativeApplicative, K, L, A, B](sa: Map[K, A])(f: (K, A) => F[(L, B)]): F[Map[L, B]] =
-    sa.foldLeft(Applicative[F].pure(Map.empty[L, B])) { (acc, a) =>
-      Applicative[F].map2(acc, f.tupled(a))(_ + _)
+  def traverseUnorderedMap[K, L, A, B](sa: Map[K, A])(f: (K, A) => F[(L, B)]): F[Map[L, B]] =
+    sa.foldLeft(pure(Map.empty[L, B])) { (acc, a) =>
+      map2(acc, f.tupled(a))(_ + _)
     }
 
-  def sequenceUnorderedMap[F[_]: CommutativeApplicative, K, L, A](sa: Map[K, F[(K, A)]]): F[Map[K, A]] = {
-    sa.foldLeft(Applicative[F].pure(Map.empty[K, A])) { (acc, a) =>
-      Applicative[F].map2(acc, a._2)(_ + _)
+  def sequenceUnorderedMap[K, L, A](sa: Map[K, F[(K, A)]]): F[Map[K, A]] = {
+    sa.foldLeft(pure(Map.empty[K, A])) { (acc, a) =>
+      map2(acc, a._2)(_ + _)
     }
   }
-
 }
