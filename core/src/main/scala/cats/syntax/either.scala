@@ -263,6 +263,10 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    * }}}
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
+
+  def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
+    ev.fromEither(eab)
+
 }
 
 final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token

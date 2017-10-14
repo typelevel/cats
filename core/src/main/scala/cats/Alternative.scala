@@ -22,6 +22,10 @@ import simulacrum.typeclass
     (as, bs)
   }
 
+  /** Return ().pure[F] if `condition` is true, `empty` otherwise */
+  def guard(condition: Boolean): F[Unit] =
+    if (condition) pure(()) else empty
+
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
       val F = self

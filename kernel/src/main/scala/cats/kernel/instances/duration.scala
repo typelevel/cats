@@ -6,7 +6,7 @@ import scala.concurrent.duration.Duration
 package object duration extends DurationInstances
 
 trait DurationInstances {
-  implicit val catsKernelStdOrderForDuration: Order[Duration] = new DurationOrder
+  implicit val catsKernelStdOrderForDuration: Order[Duration] with Hash[Duration] = new DurationOrder
   implicit val catsKernelStdGroupForDuration: CommutativeGroup[Duration] = new DurationGroup
 }
 
@@ -18,7 +18,9 @@ trait DurationInstances {
  * The value Duration.Undefined breaks our laws, because undefined
  * values are not equal to themselves.
  */
-class DurationOrder extends Order[Duration] {
+class DurationOrder extends Order[Duration] with Hash[Duration] {
+  def hash(x: Duration): Int = x.hashCode()
+
   def compare(x: Duration, y: Duration): Int = x compare y
 
   override def eqv(x: Duration, y: Duration): Boolean = x == y

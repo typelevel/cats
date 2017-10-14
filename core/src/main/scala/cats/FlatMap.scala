@@ -44,11 +44,7 @@ import simulacrum.typeclass
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-  /** Sequentially compose two actions, discarding any value produced by the first. */
-  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] = flatMap(fa)(_ => fb)
 
-  /** Alias for [[followedBy]]. */
-  @inline final def >>[A, B](fa: F[A])(fb: F[B]): F[B] = followedBy(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the first. This variant of
@@ -66,11 +62,7 @@ import simulacrum.typeclass
    */
   def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
-  /** Sequentially compose two actions, discarding any value produced by the second. */
-  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] = flatMap(fa)(a => map(fb)(_ => a))
 
-  /** Alias for [[forEffect]]. */
-  @inline final def <<[A, B](fa: F[A])(fb: F[B]): F[A] = forEffect(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
@@ -127,4 +119,24 @@ import simulacrum.typeclass
    * Implementations of this method should use constant stack space relative to `f`.
    */
   def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+
+  /**
+    * Apply a monadic function and discard the result while keeping the effect.
+    *
+    * {{{
+    * scala> import cats._, implicits._
+    * scala> Option(1).flatTap(_ => None)
+    * res0: Option[Int] = None
+    * scala> Option(1).flatTap(_ => Some("123"))
+    * res1: Option[Int] = Some(1)
+    * scala> def nCats(n: Int) = List.fill(n)("cat")
+    * nCats: (n: Int)List[String]
+    * scala> List[Int](0).flatTap(nCats)
+    * res2: List[Int] = List()
+    * scala> List[Int](4).flatTap(nCats)
+    * res3: List[Int] = List(4, 4, 4, 4)
+    * }}}
+    */
+  def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
+    flatMap(fa)(a => map(f(a))(_ => a))
 }

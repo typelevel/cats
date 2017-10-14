@@ -91,9 +91,9 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForEval[A: Arbitrary]: Arbitrary[Eval[A]] =
     Arbitrary(Gen.oneOf(
-      getArbitrary[A].map(Eval.now(_)),
-      getArbitrary[A].map(Eval.later(_)),
-      getArbitrary[A].map(Eval.always(_))))
+      getArbitrary[A].map(a => Eval.now(a)),
+      getArbitrary[() => A].map(f => Eval.later(f())),
+      getArbitrary[() => A].map(f => Eval.always(f()))))
 
   implicit def catsLawsCogenForEval[A: Cogen]: Cogen[Eval[A]] =
     Cogen[A].contramap(_.value)
@@ -162,6 +162,9 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =
     Arbitrary(getArbitrary[Order[A]].map(Order.catsKernelOrderingForOrder(_)))
+
+  implicit def catsLawsArbitraryForHash[A: Hash]: Arbitrary[Hash[A]] =
+    Arbitrary(Hash.fromUniversalHashCode[A])
 
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))

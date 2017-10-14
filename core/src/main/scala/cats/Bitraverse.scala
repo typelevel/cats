@@ -1,6 +1,6 @@
 package cats
 
-import cats.functor.{Bifunctor, ComposedBifunctor}
+
 
 import simulacrum.typeclass
 

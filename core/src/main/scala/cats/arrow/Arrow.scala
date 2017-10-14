@@ -1,8 +1,6 @@
 package cats
 package arrow
 
-import cats.functor.Strong
-
 import simulacrum.typeclass
 
 /**
