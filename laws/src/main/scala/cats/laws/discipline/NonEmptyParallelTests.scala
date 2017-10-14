@@ -10,12 +10,13 @@ trait NonEmptyParallelTests[M[_], F[_], A] extends Laws {
   def laws: NonEmptyParallelLaws[M, F]
 
   def nonEmptyParallel
-  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
+  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], Arbf: Arbitrary[A => A], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       "parallel",
       None,
       "parallel round trip" -> forAll((ma: M[A]) => laws.parallelRoundTrip(ma)),
-      "sequential round trip" -> forAll((fa: F[A]) => laws.sequentialRoundTrip(fa))
+      "sequential round trip" -> forAll((fa: F[A]) => laws.sequentialRoundTrip(fa)),
+      "isomorphic functor" -> forAll((fa: F[A], f: A => A) => laws.isomorphicFunctor(fa, f))
     )
 }
 
