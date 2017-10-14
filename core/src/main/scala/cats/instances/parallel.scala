@@ -64,6 +64,19 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
 
+  implicit def catsStdNonEmptyParallelForZipMap[K: Semigroup, A]: NonEmptyParallel[Map[K, ?], ZipMap[K, ?]] =
+    new NonEmptyParallel[Map[K, ?], ZipMap[K, ?]] {
+
+      def flatMap: FlatMap[Map[K, ?]] = cats.instances.map.catsStdInstancesForMap
+      def apply: Apply[ZipMap[K, ?]] = ZipMap.catsDataApplyForZipMap
+
+      def sequential: ZipMap[K, ?] ~> Map[K, ?] =
+        λ[ZipMap[K, ?] ~> Map[K, ?]](_.value)
+
+      def parallel: Map[K, ?] ~> ZipMap[K, ?] =
+        λ[Map[K, ?] ~> ZipMap[K, ?]](v => new ZipMap(v))
+    }
+
   implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
     new Parallel[Stream, ZipStream] {
 
