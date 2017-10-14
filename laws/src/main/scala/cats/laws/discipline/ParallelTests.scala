@@ -9,7 +9,7 @@ trait ParallelTests[M[_], F[_], A] extends NonEmptyParallelTests[M, F, A] {
   def laws: ParallelLaws[M, F]
 
   def parallel
-  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
+  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], Arbf: Arbitrary[A => A], EqMa: Eq[M[A]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       "parallel",
       Some(nonEmptyParallel),

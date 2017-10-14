@@ -13,6 +13,9 @@ trait NonEmptyParallelLaws[M[_], F[_]] {
 
   def sequentialRoundTrip[A](fa: F[A]): IsEq[F[A]] =
     P.parallel(P.sequential(fa)) <-> fa
+
+  def isomorphicFunctor[A, B](fa: F[A], f: A => A): IsEq[M[A]] =
+    P.flatMap.map(P.sequential(fa))(f) <-> P.sequential(P.apply.map(fa)(f))
 }
 
 object NonEmptyParallelLaws {
