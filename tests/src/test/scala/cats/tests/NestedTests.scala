@@ -5,7 +5,7 @@ import cats.Functor
 import cats.data._
 
 import cats.laws.discipline._
-import cats.laws.discipline.CartesianTests.Isomorphisms._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq.catsLawsEqForShow
 

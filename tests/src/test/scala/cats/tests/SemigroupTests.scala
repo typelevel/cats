@@ -9,14 +9,14 @@ class SemigroupTests extends FunSuite {
   {
     import cats.implicits._
     Invariant[Semigroup]
-    Cartesian[Semigroup]
+    Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]
   }
 
   {
     import cats.instances.invariant._
     Invariant[Semigroup]
-    Cartesian[Semigroup]
+    Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]
   }
 }

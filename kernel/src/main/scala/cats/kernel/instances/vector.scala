@@ -13,6 +13,9 @@ trait VectorInstances extends VectorInstances1 {
 trait VectorInstances1 extends VectorInstances2 {
   implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
     new VectorPartialOrder[A]
+
+  implicit def catsKernelStdHashForVector[A: Hash]: Hash[Vector[A]] =
+    new VectorHash[A]
 }
 
 trait VectorInstances2 {
@@ -30,6 +33,10 @@ class VectorPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[V
   def partialCompare(xs: Vector[A], ys: Vector[A]): Double =
     if (xs eq ys) 0.0
     else StaticMethods.iteratorPartialCompare(xs.iterator, ys.iterator)
+}
+
+class VectorHash[A](implicit ev: Hash[A]) extends VectorEq[A] with Hash[Vector[A]] {
+  def hash(xs: Vector[A]): Int = StaticMethods.orderedHash(xs)
 }
 
 class VectorEq[A](implicit ev: Eq[A]) extends Eq[Vector[A]] {

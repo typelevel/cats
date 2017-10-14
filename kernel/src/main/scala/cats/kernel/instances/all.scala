@@ -11,6 +11,7 @@ trait AllInstances
     with ByteInstances
     with CharInstances
     with DoubleInstances
+    with EitherInstances
     with DurationInstances
     with FloatInstances
     with FunctionInstances

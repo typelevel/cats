@@ -199,7 +199,7 @@ class ReaderWriterStateTTests extends CatsSuite {
     }
   }
 
-  test("Cartesian syntax is usable on ReaderWriterState") {
+  test("Semigroupal syntax is usable on ReaderWriterState") {
     val rws = addAndLog(5) *> addAndLog(10)
     val (log, state, result) = rws.run("context", 0).value
 
@@ -302,7 +302,7 @@ class ReaderWriterStateTTests extends CatsSuite {
     }
   }
 
-  implicit val iso = CartesianTests.Isomorphisms
+  implicit val iso = SemigroupalTests.Isomorphisms
     .invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]](IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor))
 
   {
@@ -353,7 +353,7 @@ class ReaderWriterStateTTests extends CatsSuite {
   }
 
   {
-    implicit val iso = CartesianTests.Isomorphisms.invariant[ReaderWriterStateT[Option, String, String, Int, ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[ReaderWriterStateT[Option, String, String, Int, ?]]
     implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, String, String, Int, ?], Unit, Int]] =
       EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, String, String, Int, ?], Unit, Int]
 

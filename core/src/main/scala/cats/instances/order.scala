@@ -3,8 +3,8 @@ package instances
 
 trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
 
-  implicit val catsContravariantCartesianForOrder: ContravariantCartesian[Order] =
-    new ContravariantCartesian[Order] {
+  implicit val catsContravariantSemigroupalForOrder: ContravariantSemigroupal[Order] =
+    new ContravariantSemigroupal[Order] {
       /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)

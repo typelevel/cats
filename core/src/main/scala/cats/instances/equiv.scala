@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait EquivInstances {
-  implicit val catsContravariantCartesianEquiv: ContravariantCartesian[Equiv] =
-    new ContravariantCartesian[Equiv] {
+  implicit val catsContravariantSemigroupalEquiv: ContravariantSemigroupal[Equiv] =
+    new ContravariantSemigroupal[Equiv] {
       def contramap[A, B](fa: Equiv[A])(f: B => A): Equiv[B] =
         new Equiv[B] {
           def equiv(x: B, y: B): Boolean = fa.equiv(f(x), f(y))

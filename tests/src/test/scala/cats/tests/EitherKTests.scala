@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats._
-import cats.kernel.laws.OrderLaws
+import cats.kernel.laws.discipline.{EqLawTests}
 import cats.data.EitherK
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -27,7 +27,7 @@ class EitherKTests extends CatsSuite {
     checkAll("CoflatMap[EitherK[Eval, Eval, ?]]", SerializableTests.serializable(CoflatMap[EitherK[Eval, Eval, ?]]))
   }
 
-  checkAll("EitherK[Option, Option, Int]", OrderLaws[EitherK[Option, Option, Int]].eqv)
+  checkAll("EitherK[Option, Option, Int]", EqLawTests[EitherK[Option, Option, Int]].eqv)
   checkAll("Eq[EitherK[Option, Option, Int]]", SerializableTests.serializable(Eq[EitherK[Option, Option, Int]]))
 
   checkAll("EitherK[Show, Show, ?]", ContravariantTests[EitherK[Show, Show, ?]].contravariant[Int, Int, Int])
