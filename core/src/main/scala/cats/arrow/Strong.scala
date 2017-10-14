@@ -1,5 +1,5 @@
 package cats
-package functor
+package arrow
 
 import simulacrum.typeclass
 
@@ -14,7 +14,7 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.functor.Strong
+   * scala> import cats.arrow.Strong
    * scala> val f: Int => Int = _ * 2
    * scala> val fab = Strong[Function1].first[Int,Int,Int](f)
    * scala> fab((2,3))
@@ -29,7 +29,7 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.functor.Strong
+   * scala> import cats.arrow.Strong
    * scala> val f: Int => Int = _ * 2
    * scala> val fab = Strong[Function1].second[Int,Int,Int](f)
    * scala> fab((2,3))

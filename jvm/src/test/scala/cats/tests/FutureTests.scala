@@ -3,7 +3,7 @@ package jvm
 package tests
 
 import cats.data.FailFastFuture
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.tests.{CatsSuite, ListWrapper}
@@ -88,8 +88,8 @@ class FutureTests extends CatsSuite {
 
   {
     implicit val F = ListWrapper.semigroup[Int]
-    checkAll("Future[ListWrapper[Int]]", GroupLaws[Future[ListWrapper[Int]]].semigroup)
+    checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
   }
 
-  checkAll("Future[Int]", GroupLaws[Future[Int]].monoid)
+  checkAll("Future[Int]", MonoidLawTests[Future[Int]].monoid)
 }

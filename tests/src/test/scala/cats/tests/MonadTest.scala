@@ -10,7 +10,7 @@ class MonadTest extends CatsSuite {
   val smallPosInt = Gen.choose(1, 5000)
 
   val increment: StateT[Id, Int, Unit] = StateT.modify(_ + 1)
-  val incrementAndGet: StateT[Id, Int, Int] = increment >> StateT.get
+  val incrementAndGet: StateT[Id, Int, Int] = increment *> StateT.get
 
   test("whileM_") {
     forAll(smallPosInt) { (max: Int) =>

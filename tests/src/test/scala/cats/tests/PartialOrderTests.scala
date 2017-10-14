@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.functor._
+
 
 class PartialOrderTests extends CatsSuite {
   {

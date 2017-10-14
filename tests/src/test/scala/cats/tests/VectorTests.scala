@@ -2,12 +2,12 @@ package cats
 package tests
 
 import cats.data.{NonEmptyVector, ZipVector}
-import cats.laws.discipline.{AlternativeTests, ApplyTests, CoflatMapTests, SerializableTests, TraverseTests, CartesianTests}
+import cats.laws.discipline.{ApplyTests, AlternativeTests, CoflatMapTests, SerializableTests, TraverseTests, SemigroupalTests}
 import cats.laws.discipline.arbitrary._
 
 class VectorTests extends CatsSuite {
-  checkAll("Vector[Int]", CartesianTests[Vector].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Vector]", SerializableTests.serializable(Cartesian[Vector]))
+  checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Vector]", SerializableTests.serializable(Semigroupal[Vector]))
 
   checkAll("Vector[Int]", CoflatMapTests[Vector].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Vector]", SerializableTests.serializable(CoflatMap[Vector]))

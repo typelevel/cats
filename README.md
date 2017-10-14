@@ -23,8 +23,22 @@ For more detail about Cats' motivations, go [here](http://typelevel.org/cats/mot
 
 Cats is currently available for Scala 2.10, 2.11 and 2.12, and [Scala.js](http://www.scala-js.org/).
 
-To get started with SBT, simply add the following to your `build.sbt`
-file:
+
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
+
+```scala
+scalacOptions += "-Ypartial-unification"
+
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
+```
+
+**Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
+
+```scala
+addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
+```
+
+And then create the cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
 libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
@@ -49,9 +63,6 @@ functionality, you can pick-and-choose from amongst these modules
  * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
 
-#### Enhancing type inference
-
- To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -145,7 +156,7 @@ going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common amo
 Java and Scala libraries (including the Scala lang). 
 
 Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintainence with a high priority. 
+FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
 For example, when we release cats `1.1.0`, it will be backward binary compatible 
@@ -173,6 +184,7 @@ The current maintainers (people who can merge pull requests) are:
  * [johnynek](https://github.com/johnynek) P. Oscar Boykin
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
+ * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris

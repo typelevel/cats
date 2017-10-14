@@ -1,9 +1,9 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Category, CommutativeArrow, Compose}
-import cats.functor.{Contravariant, Profunctor}
-import cats.{CoflatMap, Comonad, Functor, Monad}
+import cats.arrow._
+import cats.{CoflatMap, Comonad, Contravariant, Functor, Monad}
+
 import scala.annotation.tailrec
 
 /**

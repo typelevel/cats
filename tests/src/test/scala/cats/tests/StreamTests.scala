@@ -1,13 +1,14 @@
 package cats
 package tests
 
+import cats.laws.discipline.{ApplyTests, CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
 import cats.data.ZipStream
-import cats.laws.discipline.{AlternativeTests, ApplyTests, CartesianTests, CoflatMapTests, MonadTests, SerializableTests, TraverseTests}
+
 import cats.laws.discipline.arbitrary._
 
 class StreamTests extends CatsSuite {
-  checkAll("Stream[Int]", CartesianTests[Stream].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Stream]", SerializableTests.serializable(Cartesian[Stream]))
+  checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Stream]", SerializableTests.serializable(Semigroupal[Stream]))
 
   checkAll("Stream[Int]", CoflatMapTests[Stream].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Stream]", SerializableTests.serializable(CoflatMap[Stream]))
