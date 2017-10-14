@@ -153,21 +153,21 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
-  checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?], Int].parallel)
-  checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?], Int].parallel)
-  checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?], Int].parallel)
-  checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?], Int].parallel)
-  checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?], Int].parallel)
-  checkAll("NonEmptyParallel[Vector, ZipVector]", NonEmptyParallelTests[Vector, ZipVector, Int].nonEmptyParallel)
-  checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList, Int].nonEmptyParallel)
+  checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTypeclassTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
+  checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
+  checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]].parallel[Int, String])
+  checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTypeclassTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String])
+  checkAll("Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]", ParallelTypeclassTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?]].parallel[Int, String])
+  checkAll("NonEmptyParallel[Vector, ZipVector]", NonEmptyParallelTests[Vector, ZipVector].nonEmptyParallel[Int, String])
+  checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList].nonEmptyParallel[Int, String])
   // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
-  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[Stream, ZipStream, Int].nonEmptyParallel)
-  checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]", NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector, Int].nonEmptyParallel)
-  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList, Int].nonEmptyParallel)
-  checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]", ParallelTypeclassTests[NonEmptyStream, OneAnd[ZipStream, ?], Int].parallel)
+  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[Stream, ZipStream].nonEmptyParallel[Int, String])
+  checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]", NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector].nonEmptyParallel[Int, String])
+  checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList].nonEmptyParallel[Int, String])
+  checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]", ParallelTypeclassTests[NonEmptyStream, OneAnd[ZipStream, ?]].parallel[Int, String])
 
 
-  checkAll("Parallel[Id, Id]", ParallelTypeclassTests[Id, Id, Int].parallel)
+  checkAll("Parallel[Id, Id]", ParallelTypeclassTests[Id, Id].parallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(NonEmptyParallel[NonEmptyList, ZipNonEmptyList]))
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
@@ -176,7 +176,7 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
     implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-    checkAll("Parallel[KlesliT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?], Int].parallel)
+    checkAll("Parallel[KlesliT[M, ?], Nested[F, Option, ?]]", ParallelTypeclassTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?]].parallel[Int, String])
   }
 
 
