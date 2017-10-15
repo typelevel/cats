@@ -132,7 +132,7 @@ class WriterTTests extends CatsSuite {
     checkAll("Bifunctor[WriterT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, ?, ?]]))
   }
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.catsDataCoflatMapForWriterT(ListWrapper.functor))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[ListWrapper, ListWrapper[Int], ?]](WriterT.catsDataCoflatMapForWriterT(ListWrapper.functor))
 
   // We have varying instances available depending on `F` and `L`.
   // We also battle some inference issues with `Id`.
@@ -317,7 +317,7 @@ class WriterTTests extends CatsSuite {
     // F has an Applicative and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     implicit val app = WriterT.catsDataApplicativeForWriterT[Validated[String, ?], ListWrapper[Int]]
-    implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
     implicit def eq1[A:Eq]: Eq[WriterT[Validated[String, ?], ListWrapper[Int], A]] =
       WriterT.catsDataEqForWriterT[Validated[String, ?], ListWrapper[Int], A]
     implicit val eq2: Eq[EitherT[WriterT[Validated[String, ?], ListWrapper[Int], ?], String, Int]] =
@@ -335,7 +335,7 @@ class WriterTTests extends CatsSuite {
     // F has an ApplicativeError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     implicit val appErr = WriterT.catsDataApplicativeErrorForWriterT[Validated[String, ?], ListWrapper[Int], String]
-    implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Validated[String, ?], ListWrapper[Int], ?]]
     checkAll("WriterT[Validated[String, ?], ListWrapper[Int], ?]", ApplicativeErrorTests[WriterT[Validated[String, ?], ListWrapper[Int], ?], String].applicativeError[Int, Int, Int])
     checkAll("ApplicativeError[WriterT[Validated[String, ?], ListWrapper[Int], ?], Unit]", SerializableTests.serializable(ApplicativeError[WriterT[Validated[String, ?], ListWrapper[Int], ?], String]))
   }
@@ -343,7 +343,7 @@ class WriterTTests extends CatsSuite {
   {
     // F has a MonadError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    implicit val iso = CartesianTests.Isomorphisms.invariant[WriterT[Option, ListWrapper[Int], ?]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Option, ListWrapper[Int], ?]]
     implicit val eq0: Eq[EitherT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]] = EitherT.catsDataEqForEitherT[WriterT[Option, ListWrapper[Int], ?], Unit, Int]
 
 

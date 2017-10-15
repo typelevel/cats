@@ -96,6 +96,11 @@ options:
     url: typeclasses/show.html
     menu_type: typeclasses
 
+
+  - title: NonEmptyTraverse
+    url: typeclasses/nonemptytraverse.html
+    menu_type: typeclasses
+
   - title: Arrow
     url: typeclasses/arrow.html
     menu_type: typeclasses

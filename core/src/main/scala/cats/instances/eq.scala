@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait EqInstances {
-  implicit val catsContravariantCartesianForEq: ContravariantCartesian[Eq] =
-    new ContravariantCartesian[Eq] {
+  implicit val catsContravariantSemigroupalForEq: ContravariantSemigroupal[Eq] =
+    new ContravariantSemigroupal[Eq] {
       def contramap[A, B](fa: Eq[A])(fn: B => A): Eq[B] =
         fa.on(fn)
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =

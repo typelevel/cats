@@ -8,7 +8,7 @@ import cats.kernel.laws.discipline.{
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, CartesianTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
+import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, SemigroupalTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 class OneAndTests extends CatsSuite {
@@ -30,7 +30,7 @@ class OneAndTests extends CatsSuite {
   checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[Stream, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[Stream, ?]]", SerializableTests.serializable(Reducible[OneAnd[Stream, ?]]))
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
@@ -67,7 +67,7 @@ class OneAndTests extends CatsSuite {
     implicitly[Comonad[NonEmptyStream]]
   }
 
-  implicit val iso2 = CartesianTests.Isomorphisms.invariant[OneAnd[Stream, ?]]
+  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[OneAnd[Stream, ?]]
 
   checkAll("NonEmptyStream[Int]", MonadTests[NonEmptyStream].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyStream[A]]", SerializableTests.serializable(Monad[NonEmptyStream]))

@@ -3,12 +3,12 @@ package cats
 import simulacrum.typeclass
 
 /**
- * [[ContravariantCartesian]] is nothing more than something both contravariant
- * and Cartesian. It comes up enough to be useful, and composes well
+ * [[ContravariantSemigroupal]] is nothing more than something both contravariant
+ * and Semigroupal. It comes up enough to be useful, and composes well
  */
-@typeclass trait ContravariantCartesian[F[_]] extends Cartesian[F] with Contravariant[F] { self =>
-  override def composeFunctor[G[_]: Functor]: ContravariantCartesian[λ[α => F[G[α]]]] =
-    new ComposedCartesian[F, G] {
+@typeclass trait ContravariantSemigroupal[F[_]] extends Semigroupal[F] with Contravariant[F] { self =>
+  override def composeFunctor[G[_]: Functor]: ContravariantSemigroupal[λ[α => F[G[α]]]] =
+    new ComposedSemigroupal[F, G] {
       def F = self
       def G = Functor[G]
     }

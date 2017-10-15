@@ -2,17 +2,17 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests}
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{BifunctorTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Ior[String, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Ior[String, ?]]
 
-  checkAll("Ior[String, Int]", CartesianTests[Ior[String, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[String Ior ?]]", SerializableTests.serializable(Cartesian[String Ior ?]))
+  checkAll("Ior[String, Int]", SemigroupalTests[Ior[String, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[String Ior ?]]", SerializableTests.serializable(Semigroupal[String Ior ?]))
 
   implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, ?], String, Int]
 

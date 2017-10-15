@@ -3,11 +3,11 @@ package tests
 
 import scala.collection.immutable.Queue
 
-import cats.laws.discipline.{CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, CartesianTests}
+import cats.laws.discipline.{CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
 
 class QueueTests extends CatsSuite {
-  checkAll("Queue[Int]", CartesianTests[Queue].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Queue]", SerializableTests.serializable(Cartesian[Queue]))
+  checkAll("Queue[Int]", SemigroupalTests[Queue].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Queue]", SerializableTests.serializable(Semigroupal[Queue]))
 
   checkAll("Queue[Int]", CoflatMapTests[Queue].coflatMap[Int, Int, Int])
   checkAll("CoflatMap[Queue]", SerializableTests.serializable(CoflatMap[Queue]))

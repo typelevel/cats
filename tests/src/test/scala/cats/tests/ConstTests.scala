@@ -16,10 +16,10 @@ import cats.laws.discipline.arbitrary._
 
 class ConstTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
 
-  checkAll("Const[String, Int]", CartesianTests[Const[String, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Const[String, ?]]", SerializableTests.serializable(Cartesian[Const[String, ?]]))
+  checkAll("Const[String, Int]", SemigroupalTests[Const[String, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Const[String, ?]]", SerializableTests.serializable(Semigroupal[Const[String, ?]]))
 
   checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
   checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
@@ -30,7 +30,7 @@ class ConstTests extends CatsSuite {
   // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
   {
     implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = SemigroupK[NonEmptyList].algebra
-    implicit val iso = CartesianTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataContravariantForConst)
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataContravariantForConst)
     checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], ?]].apply[Int, Int, Int])
     checkAll("Apply[Const[NonEmptyList[String], ?]]", SerializableTests.serializable(Apply[Const[NonEmptyList[String], ?]]))
   }

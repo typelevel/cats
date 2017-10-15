@@ -4,7 +4,7 @@ package discipline
 
 import cats.instances.eq._
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
@@ -28,7 +28,7 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
   ): RuleSet = {
     implicit def functorF: Functor[F] = laws.F
     implicit val EqFAB: Eq[F[(A, B)]] =
-      ContravariantCartesian[Eq].composeFunctor[F].product(EqFA, EqFB)
+      ContravariantSemigroupal[Eq].composeFunctor[F].product(EqFA, EqFB)
 
     new DefaultRuleSet(
       name = "flatMap",
@@ -36,8 +36,6 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
       "flatMap associativity" -> forAll(laws.flatMapAssociativity[A, B, C] _),
       "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _),
       "flatMap from tailRecM consistency" -> forAll(laws.flatMapFromTailRecMConsistency[A, B] _),
-      "followedBy consistent flatMap" -> forAll(laws.followedByConsistency[A, B] _),
-      "forEffect consistent flatMap" -> forAll(laws.forEffectConsistency[A, B] _),
       "mproduct consistent flatMap" -> forAll(laws.mproductConsistency[A, B] _),
       "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _))
   }

@@ -11,7 +11,7 @@ import cats.laws.discipline.arbitrary._
 
 class IdTTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
 
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
