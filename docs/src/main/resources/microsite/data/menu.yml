@@ -160,6 +160,10 @@ options:
     url: datatypes/kleisli.html
     menu_type: data
 
+  - title: NonEmptyList
+    url: datatypes/nonemptylist.html
+    menu_type: data
+
   - title: OneAnd
     url: datatypes/oneand.html
     menu_type: data
