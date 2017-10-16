@@ -51,7 +51,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Is this Valid and matching the given predicate
    */
-  def exists(predicate: A => Boolean): Boolean =  this match {
+  def exists(predicate: A => Boolean): Boolean = this match {
     case Valid(a) => predicate(a)
     case _ => false
   }
@@ -59,7 +59,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Is this Invalid or matching the predicate
    */
-  def forall(f: A => Boolean): Boolean =  this match {
+  def forall(f: A => Boolean): Boolean = this match {
     case Valid(a) => f(a)
     case _ => true
   }
@@ -115,7 +115,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * Convert this value to a single element List if it is Valid,
    * otherwise return an empty List
    */
-  def toList: List[A] =  this match {
+  def toList: List[A] = this match {
     case Valid(a) => List(a)
     case _ => Nil
   }
@@ -142,7 +142,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     fold(fe andThen Invalid.apply,
          fa andThen Valid.apply)
 
-  def compare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Order[EE], AA: Order[AA]): Int =  (this, that) match {
+  def compare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Order[EE], AA: Order[AA]): Int = (this, that) match {
     case (Valid(a), Valid(aa)) => AA.compare(a, aa)
     case (Invalid(e), Invalid(ee)) => EE.compare(e, ee)
     case (Invalid(_), _) => -1
@@ -156,7 +156,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     case (Valid(_), _) => 1
   }
 
-  def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean =  (this, that) match {
+  def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean = (this, that) match {
     case (Invalid(e), Invalid(ee)) => EE.eqv(e, ee)
     case (Valid(a), Valid(aa)) => AA.eqv(a, aa)
     case _ => false
