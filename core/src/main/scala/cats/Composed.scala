@@ -113,8 +113,8 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
     F.contramap(fga)(gb => G.map(gb)(f))
 }
 
-private[cats] trait ComposedCartesian[F[_], G[_]] extends ContravariantCartesian[λ[α => F[G[α]]]] with ComposedContravariantCovariant[F, G] { outer =>
-  def F: ContravariantCartesian[F]
+private[cats] trait ComposedSemigroupal[F[_], G[_]] extends ContravariantSemigroupal[λ[α => F[G[α]]]] with ComposedContravariantCovariant[F, G] { outer =>
+  def F: ContravariantSemigroupal[F]
   def G: Functor[G]
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =

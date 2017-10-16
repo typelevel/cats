@@ -10,7 +10,8 @@ package object syntax {
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
-  object cartesian extends CartesianSyntax
+  @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
+  object cartesian extends SemigroupalSyntax
   object coflatMap extends CoflatMapSyntax
   object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
@@ -34,6 +35,7 @@ package object syntax {
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax
   object semigroup extends SemigroupSyntax
+  object semigroupal extends SemigroupalSyntax
   object semigroupk extends SemigroupKSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax

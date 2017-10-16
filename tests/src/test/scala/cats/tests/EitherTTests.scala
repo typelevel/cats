@@ -16,7 +16,7 @@ EqLawTests
 
 
 class EitherTTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
   {
     checkAll("EitherT[Option, ListWrapper[String], ?]", SemigroupKTests[EitherT[Option, ListWrapper[String], ?]].semigroupK[Int])

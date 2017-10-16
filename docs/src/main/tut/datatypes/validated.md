@@ -522,7 +522,7 @@ implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
 ```
 
 Awesome! And now we also get access to all the goodness of `Applicative`, which includes `map{2-22}`, as well as the
-`Cartesian` tuple syntax.
+`Semigroupal` tuple syntax.
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
 
