@@ -153,8 +153,6 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
   checkAll("Monoid[List[String]]", MonoidLawTests[List[String]].monoid)
   checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
-  checkAll("Monoid[Map[String, Int]]", MonoidLawTests[Map[String, Int]].monoid)
-  checkAll("Monoid[Map[String, Int]]", SerializableTests.serializable(Monoid[Map[String, Int]]))
   checkAll("Monoid[Queue[Int]]", MonoidLawTests[Queue[Int]].monoid)
   checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
 
