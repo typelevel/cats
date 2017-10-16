@@ -172,7 +172,7 @@ trait FreeTTestsInstances {
   import FreeT._
   import IndexedStateT._
   import cats.kernel.instances.option._
-  import cats.tests.IndexedStateTTests._
+  import cats.tests.IndexedStateTSuite._
   import SemigroupalTests._
 
   type IntState[A] = State[Int, A]

@@ -6,7 +6,7 @@ import cats.free.FreeInvariantMonoidal
 import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Gen}
-import cats.tests.CsvCodecInvariantMonoidalTests._
+import cats.tests.CsvCodecInvariantMonoidalSuite._
 
 class FreeInvariantMonoidalTests extends CatsSuite {
   implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[FreeInvariantMonoidal[F, A]] =
