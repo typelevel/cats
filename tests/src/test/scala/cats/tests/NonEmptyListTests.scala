@@ -2,10 +2,10 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{
-  SemigroupLawTests,
-  OrderLawTests,
-  PartialOrderLawTests,
-  EqLawTests
+  SemigroupTests => SemigroupLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  EqTests => EqLawTests
 }
 
 import cats.data.{NonEmptyList, NonEmptyVector}
