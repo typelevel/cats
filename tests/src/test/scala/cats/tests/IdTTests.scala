@@ -3,8 +3,8 @@ package tests
 
 import cats.data.{IdT, NonEmptyList}
 import cats.kernel.laws.discipline.{
-  OrderLawTests,
-  EqLawTests
+  OrderTests => OrderLawTests,
+  EqTests => EqLawTests
 }
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

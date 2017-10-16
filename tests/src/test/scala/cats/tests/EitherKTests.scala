@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats._
-import cats.kernel.laws.discipline.{EqLawTests}
+import cats.kernel.laws.discipline.{EqTests => EqLawTests}
 import cats.data.EitherK
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

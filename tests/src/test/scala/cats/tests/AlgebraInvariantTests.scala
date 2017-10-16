@@ -3,7 +3,7 @@ package tests
 
 import cats.Invariant
 import cats.kernel._
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests, MonoidTests => MonoidLawTests, GroupTests => GroupLawTests, _}
 import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
