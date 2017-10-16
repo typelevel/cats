@@ -6,14 +6,13 @@ import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
-import scala.collection.mutable
 
 trait SortedMapInstances extends SortedMapInstances1 {
 
-  implicit def catsKernelStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
+  implicit def catsStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
     new SortedMapHash[K, V]
 
-  implicit def catsKernelStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
+  implicit def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 
   implicit def catsStdShowForSortedMap[A: Order, B](implicit showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
@@ -44,16 +43,10 @@ trait SortedMapInstances extends SortedMapInstances1 {
       override def map[A, B](fa: SortedMap[K, A])(f: A => B): SortedMap[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
 
-      override def map2[A, B, Z](fa: SortedMap[K, A], fb: SortedMap[K, B])(f: (A, B) => Z): SortedMap[K, Z] =
-        if (fb.isEmpty) SortedMap.empty(Order[K].toOrdering) // do O(1) work if fb is empty
-        else fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }
 
       override def map2Eval[A, B, Z](fa: SortedMap[K, A], fb: Eval[SortedMap[K, B]])(f: (A, B) => Z): Eval[SortedMap[K, Z]] =
         if (fa.isEmpty) Eval.now(SortedMap.empty(Order[K].toOrdering)) // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
-
-      override def ap[A, B](ff: SortedMap[K, A => B])(fa: SortedMap[K, A]): SortedMap[K, B] =
-        fa.flatMap { case (k, a) => ff.get(k).map(f => (k, f(a))) }(scala.collection.breakOut)
 
       override def ap2[A, B, Z](f: SortedMap[K, (A, B) => Z])(fa: SortedMap[K, A], fb: SortedMap[K, B]): SortedMap[K, Z] =
         f.flatMap { case (k, f) =>
@@ -110,7 +103,7 @@ trait SortedMapInstances1 {
     new SortedMapEq[K, V]
 }
 
-class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K]) extends SortedMapEq[K, V]()(V, O) with Hash[SortedMap[K, V]] {
+class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K]) extends SortedMapEq[K, V]()(V, O) with Hash[SortedMap[K, V]] {
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
   import scala.util.hashing.MurmurHash3._
@@ -159,15 +152,4 @@ class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends Monoi
       }
     }
 
-  override def combineAll(xss: TraversableOnce[SortedMap[K, V]]): SortedMap[K, V] = {
-    val acc = mutable.SortedMap.empty[K, V](O.toOrdering)
-    xss.foreach { m =>
-      val it = m.iterator
-      while (it.hasNext) {
-        val (k, v) = it.next
-        acc(k) = Semigroup.maybeCombine(acc.get(k), v)
-      }
-    }
-    SortedMap.empty[K, V](O.toOrdering) ++ acc
-  }
 }

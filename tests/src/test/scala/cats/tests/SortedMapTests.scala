@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.{HashTests => HashLawTests, MonoidTests => MonoidLawTests}
 import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseTests}
-
+import cats.laws.discipline.arbitrary._
 import scala.collection.immutable.SortedMap
 
 class SortedMapTests extends CatsSuite {
@@ -26,7 +26,7 @@ class SortedMapTests extends CatsSuite {
     }
   }
 
-  checkAll("Hash[Map[Int, String]]" , HashLawTests[Map[Int, String]].hash)
-  checkAll("Monoid[Map[String, Int]]", MonoidLawTests[Map[String, Int]].monoid)
-  checkAll("Monoid[Map[String, Int]]", SerializableTests.serializable(Monoid[Map[String, Int]]))
+  checkAll("Hash[SortedMap[Int, String]]" , HashLawTests[SortedMap[Int, String]].hash)
+  checkAll("Monoid[SortedMap[String, Int]]", MonoidLawTests[SortedMap[String, Int]].monoid)
+  checkAll("Monoid[SortedMap[String, Int]]", SerializableTests.serializable(Monoid[SortedMap[String, Int]]))
 }
