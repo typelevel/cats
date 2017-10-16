@@ -5,8 +5,8 @@ import catalysts.Platform
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.kernel.laws.discipline.{
-  SemigroupLawTests,
-  EqLawTests
+  SemigroupTests => SemigroupLawTests,
+  EqTests => EqLawTests
 }
 
 import cats.data.NonEmptyVector

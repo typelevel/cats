@@ -2,8 +2,8 @@ package cats
 package jvm
 package tests
 
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.data.FailFastFuture
-import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.tests.{CatsSuite, ListWrapper}
@@ -84,7 +84,7 @@ class FutureTests extends CatsSuite {
   checkAll("Future with Throwable", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
-  checkAll("Parallel[Future, FailFastFuture]", ParallelTests[Future, FailFastFuture, Int].parallel)
+  checkAll("Parallel[Future, FailFastFuture]", ParallelTests[Future, FailFastFuture].parallel[Int, String])
 
   {
     implicit val F = ListWrapper.semigroup[Int]

@@ -3,7 +3,7 @@ package js
 package tests
 
 import cats.data.FailFastFuture
-import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
@@ -63,7 +63,7 @@ class FutureTests extends CatsSuite {
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
-  checkAll("Parallel[Future, FailFastFuture]", ParallelTests[Future, FailFastFuture, Int].parallel)
+  checkAll("Parallel[Future, FailFastFuture]", ParallelTests[Future, FailFastFuture].parallel[Int, String])
 
   {
     implicit val F = ListWrapper.semigroup[Int]

@@ -3,11 +3,11 @@ package tests
 
 import cats.data.OptionT
 import cats.kernel.laws.discipline.{
-  MonoidLawTests,
-  SemigroupLawTests,
-  OrderLawTests,
-  PartialOrderLawTests,
-  EqLawTests
+  MonoidTests => MonoidLawTests,
+  SemigroupTests => SemigroupLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  EqTests => EqLawTests
 }
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

@@ -1,7 +1,11 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{EqLawTests, SemigroupLawTests}
+import cats.kernel.laws.discipline.{
+  SemigroupTests => SemigroupLawTests,
+  EqTests => EqLawTests
+}
+
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
 import cats.laws.discipline.{ApplicativeTests, SemigroupalTests, ComonadTests, FoldableTests, FunctorTests, MonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests, TraverseTests}

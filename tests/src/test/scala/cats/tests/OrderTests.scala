@@ -2,7 +2,7 @@ package cats
 package tests
 
 
-import cats.kernel.laws.discipline.{OrderLawTests}
+import cats.kernel.laws.discipline.{OrderTests => OrderLawTests}
 
 class OrderTests extends CatsSuite {
   {
