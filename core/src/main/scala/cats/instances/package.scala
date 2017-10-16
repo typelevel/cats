@@ -20,6 +20,7 @@ package object instances {
   object list            extends ListInstances
   object long            extends LongInstances
   object map             extends MapInstances
+  object sortedMap       extends SortedMapInstances
   object monoid          extends MonoidInstances
   object option          extends OptionInstances
   object order           extends OrderInstances
