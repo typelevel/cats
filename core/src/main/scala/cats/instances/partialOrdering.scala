@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait PartialOrderingInstances {
-  implicit val catsContravariantCartesianForPartialOrdering: ContravariantCartesian[PartialOrdering] =
-    new ContravariantCartesian[PartialOrdering] {
+  implicit val catsContravariantSemigroupalForPartialOrdering: ContravariantSemigroupal[PartialOrdering] =
+    new ContravariantSemigroupal[PartialOrdering] {
       /** Derive a `PartialOrdering` for `B` given a `PartialOrdering[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)

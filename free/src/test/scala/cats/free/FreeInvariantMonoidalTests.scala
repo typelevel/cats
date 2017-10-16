@@ -4,7 +4,7 @@ package tests
 import cats.arrow.FunctionK
 import cats.free.FreeInvariantMonoidal
 import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Gen}
 import cats.tests.CsvCodecInvariantMonoidalTests._
 

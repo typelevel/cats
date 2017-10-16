@@ -90,4 +90,7 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+
+  @deprecated("renamed to Semigroupal", "1.0.0-RC1")
+  type Cartesian[F[_]] = Semigroupal[F]
 }

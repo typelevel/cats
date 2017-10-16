@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.data.{NonEmptyList, OptionT}
-import cats.laws.discipline.{CartesianTests, ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{SemigroupalTests, ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -11,7 +11,7 @@ class CofreeTests extends CatsSuite {
 
   import CofreeTests._
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Cofree[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
 
   checkAll("Cofree[Option, ?]", ComonadTests[Cofree[Option, ?]].comonad[Int, Int, Int])
   locally {

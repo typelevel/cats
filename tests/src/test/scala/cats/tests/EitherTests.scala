@@ -13,13 +13,13 @@ import cats.kernel.laws.discipline.{
 import scala.util.Try
 
 class EitherTests extends CatsSuite {
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Either[Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Either[Int, ?]]
 
   checkAll("Either[String, Int]", MonoidLawTests[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))
 
-  checkAll("Either[Int, Int]", CartesianTests[Either[Int, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[Either[Int, ?]]", SerializableTests.serializable(Cartesian[Either[Int, ?]]))
+  checkAll("Either[Int, Int]", SemigroupalTests[Either[Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Either[Int, ?]]", SerializableTests.serializable(Semigroupal[Either[Int, ?]]))
 
   implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, ?], Int, Int]
 

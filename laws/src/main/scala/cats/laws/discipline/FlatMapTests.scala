@@ -4,7 +4,7 @@ package discipline
 
 import cats.instances.eq._
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
@@ -28,7 +28,7 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
   ): RuleSet = {
     implicit def functorF: Functor[F] = laws.F
     implicit val EqFAB: Eq[F[(A, B)]] =
-      ContravariantCartesian[Eq].composeFunctor[F].product(EqFA, EqFB)
+      ContravariantSemigroupal[Eq].composeFunctor[F].product(EqFA, EqFB)
 
     new DefaultRuleSet(
       name = "flatMap",

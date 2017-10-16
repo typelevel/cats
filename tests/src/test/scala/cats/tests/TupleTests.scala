@@ -8,8 +8,8 @@ import cats.laws.discipline.arbitrary._
 
 class TupleTests extends CatsSuite {
 
-  implicit val iso1 = CartesianTests.Isomorphisms.invariant[(NonEmptyList[Int], ?)]
-  implicit val iso2 = CartesianTests.Isomorphisms.invariant[(String, ?)]
+  implicit val iso1 = SemigroupalTests.Isomorphisms.invariant[(NonEmptyList[Int], ?)]
+  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[(String, ?)]
 
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
@@ -30,8 +30,8 @@ class TupleTests extends CatsSuite {
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, ?)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, ?)]", SerializableTests.serializable(Reducible[(String, ?)]))
 
-  test("Cartesian composition") {
-    val cart = ContravariantCartesian[Eq].composeFunctor[(Int, ?)]
+  test("Semigroupal composition") {
+    val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, ?)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
     forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
       (a == b) should === (eq.eqv(a, b))

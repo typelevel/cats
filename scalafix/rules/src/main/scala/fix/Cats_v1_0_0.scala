@@ -226,3 +226,18 @@ case class RenameEitherTLiftT(index: SemanticdbIndex)
     )
 
 }
+
+// ref: https://github.com/typelevel/cats/pull/1961
+case class RenameCartesian(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameCartesian") {
+
+  override def fix(ctx: RuleCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.Cartesian." -> "_root_.cats.Semigroupal."
+    )+ ctx.tree.collect {
+      case t @ q"import cats.syntax.cartesian._" =>
+        ctx.replaceTree(t, "import cats.syntax.semigroupal._")
+    }.asPatch
+  }
+
+}
