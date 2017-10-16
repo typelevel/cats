@@ -53,6 +53,13 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     transform { (l, s, a) => (l, s, f(a)) }
 
   /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G)(implicit F: Functor[F]): IndexedReaderWriterStateT[G, E, L, SA, SB, A] =
+    IndexedReaderWriterStateT.applyF(
+      f(F.map(runF)(rwsa => (e, sa) => f(rwsa(e, sa)))))
+
+  /**
    * Modify the resulting state using `f` and the resulting value using `g`.
    */
   def bimap[SC, B](f: SB => SC, g: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =

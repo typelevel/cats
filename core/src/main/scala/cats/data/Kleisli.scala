@@ -21,6 +21,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
+    Kleisli[G, A, B](run andThen f.apply)
+
   def flatMap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli((r: A) => F.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
 

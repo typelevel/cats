@@ -233,6 +233,13 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
+  test("StateT#mapK transforms effect") {
+    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    forAll { (state: StateT[Eval, Long, Int], initial: Long) =>
+      state.mapK(f).runA(initial) should === (state.runA(initial).value)
+    }
+  }
+
   test("StateT#transformS modifies state") {
     final case class Env(int: Int, str: String)
     val x = StateT((x: Int) => Option((x + 1, x)))

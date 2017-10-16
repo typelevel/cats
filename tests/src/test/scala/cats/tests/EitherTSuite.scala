@@ -242,6 +242,13 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("mapK consistent with f(value)+pure") {
+    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.mapK(f) should === (EitherT(f(eithert.value)))
+    }
+  }
+
   test("semiflatMap consistent with value.flatMap+f+pure") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => List[String]) =>
       eithert.semiflatMap(f) should === (EitherT(eithert.value.flatMap {
