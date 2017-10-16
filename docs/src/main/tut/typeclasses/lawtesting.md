@@ -133,10 +133,10 @@ Then we can again test the instance inside our class extending `CatsSuite`:
 
 ```tut:book
 import cats.laws.discipline.FunctorTests
-import cats.kernel.laws.discipline.SemigroupLawTests
+import cats.kernel.laws.discipline.SemigroupTests
 
 class TreeLawTests extends CatsSuite {
-  checkAll("Tree[Int].SemigroupLaws", SemigroupLawTests[Tree[Int]].semigroup)
+  checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
 }
 ```

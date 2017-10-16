@@ -4,7 +4,14 @@ package tests
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{BimonadTests, SemigroupalTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.{
+  EqTests => EqLawTests,
+  GroupTests => GroupLawTests,
+  MonoidTests => MonoidLawTests,
+  OrderTests => OrderLawTests,
+  PartialOrderTests => PartialOrderLawTests,
+  SemigroupTests => SemigroupLawTests
+}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import scala.annotation.tailrec

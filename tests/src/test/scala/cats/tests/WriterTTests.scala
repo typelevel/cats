@@ -8,9 +8,9 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
 import cats.kernel.laws.discipline.{
-  MonoidLawTests,
-  SemigroupLawTests,
-  EqLawTests
+  MonoidTests => MonoidLawTests,
+  SemigroupTests => SemigroupLawTests,
+  EqTests => EqLawTests
 }
 
 class WriterTTests extends CatsSuite {

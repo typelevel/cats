@@ -6,7 +6,7 @@ package discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait BandTests[A] extends SemigroupLawTests[A] {
+trait BandTests[A] extends SemigroupTests[A] {
 
   def laws: BandLaws[A]
 

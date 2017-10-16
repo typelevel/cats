@@ -7,7 +7,7 @@ import cats.kernel.instances.boolean._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
-trait MonoidLawTests[A] extends SemigroupLawTests[A] {
+trait MonoidTests[A] extends SemigroupTests[A] {
 
   def laws: MonoidLaws[A]
 
@@ -24,7 +24,7 @@ trait MonoidLawTests[A] extends SemigroupLawTests[A] {
 
 }
 
-object MonoidLawTests {
-  def apply[A: Monoid]: MonoidLawTests[A] =
-    new MonoidLawTests[A] { def laws: MonoidLaws[A] = MonoidLaws[A] }
+object MonoidTests {
+  def apply[A: Monoid]: MonoidTests[A] =
+    new MonoidTests[A] { def laws: MonoidLaws[A] = MonoidLaws[A] }
 }
