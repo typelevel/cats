@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{HashTests => HashLawTests, MonoidLawTests}
+import cats.kernel.laws.discipline.{HashTests => HashLawTests, MonoidTests => MonoidLawTests}
 import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseTests}
 
 import scala.collection.immutable.SortedMap

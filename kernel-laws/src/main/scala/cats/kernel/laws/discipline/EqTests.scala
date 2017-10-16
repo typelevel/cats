@@ -8,7 +8,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws
 
-trait EqLawTests[A] extends Laws {
+trait EqTests[A] extends Laws {
   def laws: EqLaws[A]
 
   def eqv(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqA: Eq[A]): RuleSet =
@@ -21,8 +21,8 @@ trait EqLawTests[A] extends Laws {
       "eq transitivity" -> forAll(laws.transitivityEq _))
 }
 
-object EqLawTests {
-  def apply[A: Eq]: EqLawTests[A] =
-    new EqLawTests[A] { def laws: EqLaws[A] = EqLaws[A] }
+object EqTests {
+  def apply[A: Eq]: EqTests[A] =
+    new EqTests[A] { def laws: EqLaws[A] = EqLaws[A] }
 }
 
