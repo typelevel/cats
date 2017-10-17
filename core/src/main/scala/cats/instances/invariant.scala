@@ -45,7 +45,4 @@ trait InvariantMonoidalInstances {
     }
   }
 
-
-
-
 }
