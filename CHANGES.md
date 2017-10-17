@@ -106,7 +106,8 @@ To migrate from 1.0.0-MF.
 * [#1781](https://github.com/typelevel/cats/pull/1781) promoting the ecosystem in readme a bit and fixed a typo  by @kailuowang
 * [#1779](https://github.com/typelevel/cats/pull/1779) quick date fix  by @kailuowang
 * [#1756](https://github.com/typelevel/cats/pull/1756) Add piecemeal import guide  by @LukaJCB
- 
+* [#1777](https://github.com/typelevel/cats/pull/1777) Add `Reducible` docs  by @LukaJCB
+
 ### Build improvements/dependency updates
  
 * [#1948](https://github.com/typelevel/cats/pull/1948) Update scalafix project dependencies  by @aeons
