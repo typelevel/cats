@@ -2,9 +2,74 @@ package cats
 package tests
 
 import cats.data.{Ior, IorT}
+import cats.kernel.laws.discipline.{
+  EqLawTests,
+  MonoidLawTests,
+  SemigroupLawTests
+}
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
 class IorTTests extends CatsSuite {
+
+  {
+    implicit val F = ListWrapper.functor
+
+    checkAll("IorT[ListWrapper, ?, ?]", BifunctorTests[IorT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
+    checkAll("Bifunctor[IorT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[IorT[ListWrapper, ?, ?]]))
+
+    checkAll("IorT[ListWrapper, Int, ?]", FunctorTests[IorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
+    checkAll("Functor[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[IorT[ListWrapper, Int, ?]]))
+  }
+
+  {
+    implicit val F = ListWrapper.traverse
+
+    checkAll("IorT[ListWrapper, Int, ?]", TraverseTests[IorT[ListWrapper, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Traverse[IorT[ListWrapper, Int, ?]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monad
+
+    checkAll("IorT[ListWrapper, String, Int]", MonadErrorTests[IorT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
+    checkAll("MonadError[IorT[List, ?, ?]]", SerializableTests.serializable(MonadError[IorT[ListWrapper, String, ?], String]))
+  }
+
+  {
+    implicit val F: MonadError[Option, Unit] = catsStdInstancesForOption
+
+    checkAll("IorT[Option, String, String]", MonadErrorTests[IorT[Option, String, ?], Unit].monadError[String, String, String])
+    checkAll("MonadError[IorT[Option, ?, ?]]", SerializableTests.serializable(MonadError[IorT[Option, String, ?], Unit]))
+  }
+
+  {
+    implicit val F = ListWrapper.foldable
+
+    checkAll("IorT[ListWrapper, Int, ?]", FoldableTests[IorT[ListWrapper, Int, ?]].foldable[Int, Int])
+    checkAll("Foldable[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, ?]]))
+  }
+
+  {
+    implicit val F = ListWrapper.semigroup[Ior[String, Int]]
+
+    checkAll("IorT[ListWrapper, String, Int]", SemigroupLawTests[IorT[ListWrapper, String, Int]].semigroup)
+    checkAll("Semigroup[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Semigroup[IorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.monoid[Ior[String, Int]]
+
+    checkAll("IorT[ListWrapper, String, Int]", MonoidLawTests[IorT[ListWrapper, String, Int]].monoid)
+    checkAll("Monoid[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Monoid[IorT[ListWrapper, String, Int]]))
+  }
+
+  {
+    implicit val F = ListWrapper.eqv[Ior[String, Int]]
+
+    checkAll("IorT[ListWrapper, String, Int]", EqLawTests[IorT[ListWrapper, String, Int]].eqv)
+    checkAll("Eq[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[IorT[ListWrapper, String, Int]]))
+  }
 
   test("fold with Id consistent with Ior fold") {
     forAll { (iort: IorT[Id, String, Int], fa: String => Long, fb: Int => Long, fab: (String, Int) => Long) =>
@@ -99,6 +164,46 @@ class IorTTests extends CatsSuite {
   test("merge with Id consistent with Ior merge") {
     forAll { (iort: IorT[Id, Int, Int]) =>
       iort.merge should === (iort.value.merge)
+    }
+  }
+
+  test("leftMap with Id consistent with Ior leftMap") {
+    forAll { (iort: IorT[Id, String, Int], f: String => Long) =>
+      iort.leftMap(f).value should === (iort.value.leftMap(f))
+    }
+  }
+
+  test("transform consistent with value.map") {
+    forAll { (iort: IorT[List, String, Int], f: Ior[String, Int] => Ior[Long, Double]) =>
+      iort.transform(f) should === (IorT(iort.value.map(f)))
+    }
+  }
+
+  test("applyAlt with Id consistent with map") {
+    forAll { (iort: IorT[Id, String, Int], f: Int => String) =>
+      iort.applyAlt(IorT.pure(f)) should === (iort.map(f))
+    }
+  }
+
+  test("flatMapF consistent with flatMap") {
+    forAll { (iort: IorT[List, String, Int], f: Int => IorT[List, String, Int])  =>
+      iort.flatMapF(f(_).value) should === (iort.flatMap(f))
+    }
+  }
+
+  test("subflatMap consistent with value.map+flatMap") {
+    forAll { (iort: IorT[List, String, Int], f: Int => Ior[String, Double]) =>
+      iort.subflatMap(f) should === (IorT(iort.value.map(_.flatMap(f))))
+    }
+  }
+
+  test("semiflatMap consistent with value.flatMap+f+right/both") {
+    forAll { (iort: IorT[List, String, Int], f: Int => List[Long]) =>
+      iort.semiflatMap(f) should === (IorT(iort.value.flatMap {
+        case l @ Ior.Left(_) => List(l.asInstanceOf[Ior[String, Long]])
+        case Ior.Right(b) => f(b).map(Ior.right)
+        case Ior.Both(a, b) => f(b).map(Ior.both(a, _))
+      }))
     }
   }
 
