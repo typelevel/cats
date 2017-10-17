@@ -3,7 +3,7 @@ layout: docs
 title:  "Contravariant"
 section: "typeclasses"
 source: "core/src/main/scala/cats/functor/Contravariant.scala"
-scaladoc: "#cats.functor.Contravariant"
+scaladoc: "#cats.Contravariant"
 ---
 # Contravariant
 
@@ -28,7 +28,7 @@ Say we have class `Money` with a `Show` instance, and `Salary` class.
 
 ```tut:silent
 import cats._
-import cats.functor._
+
 import cats.implicits._
 
 case class Money(amount: Int)

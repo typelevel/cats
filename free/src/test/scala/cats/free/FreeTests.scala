@@ -3,7 +3,7 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{CartesianTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{SemigroupalTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.tests.CatsSuite
 
@@ -13,7 +13,7 @@ import Arbitrary.arbFunction1
 class FreeTests extends CatsSuite {
   import FreeTests._
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Free[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
@@ -189,8 +189,8 @@ class FreeTests extends CatsSuite {
     forAll { (x: Int, y: Int) =>
       val expr1: Free[T, Int] = Free.injectRoll[T, Test1Algebra, Int](Test1(x, Free.pure))
       val expr2: Free[T, Int] = Free.injectRoll[T, Test2Algebra, Int](Test2(y, Free.pure))
-      val res = distr[T, Int](expr1 >> expr2)
-      res == Some(Free.pure(x + y)) should ===(true)
+      val res = distr[T, Int](expr1 *> expr2)
+      res.map(_.foldMap(eitherKInterpreter)) should === (Some(Free.pure[Id, Int](x + y).foldMap(FunctionK.id)))
     }
   }
 }

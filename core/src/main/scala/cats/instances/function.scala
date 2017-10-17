@@ -1,8 +1,9 @@
 package cats
 package instances
 
-import cats.arrow.{CommutativeArrow, Category, Choice}
-import cats.functor.Contravariant
+import cats.Contravariant
+import cats.arrow.{Category, Choice, CommutativeArrow}
+
 import annotation.tailrec
 
 

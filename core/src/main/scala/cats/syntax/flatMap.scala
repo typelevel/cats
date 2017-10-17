@@ -11,6 +11,18 @@ trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
   implicit final def catsSyntaxFlatMapIdOps[A](a: A): FlatMapIdOps[A] =
     new FlatMapIdOps[A](a)
+
+  implicit final def catsSyntaxFlatMapOps[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
+    new FlatMapOps[F, A](fa)
+}
+
+final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
+
+  @deprecated("Use *> instead", "1.0.0-RC1")
+  def >>[B](fb: F[B])(implicit F: FlatMap[F]): F[B] = F.followedBy(fa)(fb)
+
+  @deprecated("Use <* instead", "1.0.0-RC1")
+  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.forEffect(fa)(fb)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {

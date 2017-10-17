@@ -1,18 +1,18 @@
 package cats
 package tests
 
-import cats.kernel.laws.GroupLaws
-import cats.laws.discipline.{BifunctorTests, CartesianTests, MonadErrorTests, SerializableTests, TraverseTests}
+import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests}
+import cats.laws.discipline.{BifunctorTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
 class IorTests extends CatsSuite {
 
-  implicit val iso = CartesianTests.Isomorphisms.invariant[Ior[String, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Ior[String, ?]]
 
-  checkAll("Ior[String, Int]", CartesianTests[Ior[String, ?]].cartesian[Int, Int, Int])
-  checkAll("Cartesian[String Ior ?]]", SerializableTests.serializable(Cartesian[String Ior ?]))
+  checkAll("Ior[String, Int]", SemigroupalTests[Ior[String, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[String Ior ?]]", SerializableTests.serializable(Semigroupal[String Ior ?]))
 
   implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, ?], String, Int]
 
@@ -23,7 +23,7 @@ class IorTests extends CatsSuite {
   checkAll("Traverse[String Ior ?]", SerializableTests.serializable(Traverse[String Ior ?]))
   checkAll("? Ior ?", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
-  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", GroupLaws[Ior[List[Int], List[Int]]].semigroup)
+  checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupLawTests[Ior[List[Int], List[Int]]].semigroup)
   checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]", SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
 
   test("left Option is defined left and both") {

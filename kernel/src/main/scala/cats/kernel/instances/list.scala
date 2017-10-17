@@ -15,6 +15,9 @@ trait ListInstances extends ListInstances1 {
 trait ListInstances1 extends ListInstances2 {
   implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     new ListPartialOrder[A]
+
+  implicit def catsKernelStdHashForList[A: Hash]: Hash[List[A]] =
+    new ListHash[A]
 }
 
 trait ListInstances2 {
@@ -56,6 +59,10 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
       }
     if (xs eq ys) 0.0 else loop(xs, ys)
   }
+}
+
+class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(ev) with Hash[List[A]] {
+  def hash(x: List[A]): Int = StaticMethods.listHash(x)(ev)
 }
 
 class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {

@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Contravariant
 import cats.arrow.FunctionK
-import cats.functor.Contravariant
 import cats.syntax.either._
 
 /** `F` on the left and `G` on the right of `scala.util.Either`.

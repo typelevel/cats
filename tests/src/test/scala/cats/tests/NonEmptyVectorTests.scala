@@ -3,7 +3,10 @@ package tests
 
 import catalysts.Platform
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{
+  SemigroupTests => SemigroupLawTests,
+  EqTests => EqLawTests
+}
 
 import cats.data.NonEmptyVector
 import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
@@ -16,7 +19,7 @@ class NonEmptyVectorTests extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-  checkAll("NonEmptyVector[Int]", OrderLaws[NonEmptyVector[Int]].eqv)
+  checkAll("NonEmptyVector[Int]", EqLawTests[NonEmptyVector[Int]].eqv)
 
   checkAll("NonEmptyVector[Int] with Option", NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyVector[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyVector]))
@@ -28,7 +31,7 @@ class NonEmptyVectorTests extends CatsSuite {
   // Test instances that have more general constraints
 
   checkAll("NonEmptyVector[Int]", SemigroupKTests[NonEmptyVector].semigroupK[Int])
-  checkAll("NonEmptyVector[Int]", GroupLaws[NonEmptyVector[Int]].semigroup)
+  checkAll("NonEmptyVector[Int]", SemigroupLawTests[NonEmptyVector[Int]].semigroup)
   checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
   checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
 

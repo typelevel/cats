@@ -3,8 +3,8 @@ package instances
 
 trait OrderingInstances {
 
-  implicit val catsContravariantCartesianForOrdering: ContravariantCartesian[Ordering] =
-    new ContravariantCartesian[Ordering] {
+  implicit val catsContravariantSemigroupalForOrdering: ContravariantSemigroupal[Ordering] =
+    new ContravariantSemigroupal[Ordering] {
       /** Derive an `Ordering` for `B` given an `Ordering[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
