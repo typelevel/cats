@@ -34,3 +34,33 @@ import simulacrum.typeclass
     }
   }
 }
+
+@typeclass trait TraverseUnordered[F[_]] {
+  def traverseUnordered[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: A => G[B]): G[F[B]]
+
+  def sequenceUnordered[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
+    traverseUnordered(fga)(identity)
+}
+
+@typeclass trait NonEmptyTraverseUnordered[F[_]] {
+  def nonEmptyTraverseUnordered[G[_]: CommutativeApply, A, B](sa: F[A])(f: A => G[B]): G[F[B]]
+
+  def nonEmptySequenceUnordered[G[_]: CommutativeApply, A](fga: F[G[A]]): G[F[A]] =
+    nonEmptyTraverseUnordered(fga)(identity)
+}
+
+@typeclass trait NonEmptyCommutativeParallel[F[_], M[_]] {
+  def commutativeApply: CommutativeApply[F]
+  def commutativeFlatMap: CommutativeFlatMap[M]
+
+  def sequential: F ~> M
+  def parallel: M ~> F
+}
+
+@typeclass trait CommutativeParallel[F[_], M[_]] extends NonEmptyCommutativeParallel[F, M] {
+  def commutativeApplicative: CommutativeApplicative[F]
+  def commutativeMonad: CommutativeMonad[M]
+
+  def commutativeApply = commutativeApplicative
+  def commutativeFlatMap = commutativeMonad
+}
