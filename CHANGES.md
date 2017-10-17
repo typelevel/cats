@@ -14,8 +14,8 @@ This is the only planned release candidate release prior to 1.0.0.
 * [#1803](https://github.com/typelevel/cats/pull/1803) Convert `ReaderWriterStateT` to `IndexedReaderWriterStateT`  by @iravid
 * [#1775](https://github.com/typelevel/cats/pull/1775) Convert `StateT` to `IndexedStateT`  by @iravid
 * [#1098](https://github.com/typelevel/cats/pull/1098) Add a different `MonoidK` and `SemigroupK` instance for `Kleisli`  by @peterneyens
-* [#1922](https://github.com/typelevel/cats/pull/#922) Make kernel laws consistent with core laws  by @LukaJCB
-* [#1838](https://github.com/typelevel/cats/pull/#1838) Sync `NonEmptyList` and `NonEmptyVector methods` by @durban
+* [#1922](https://github.com/typelevel/cats/pull/922) Make kernel laws consistent with core laws  by @LukaJCB
+* [#1838](https://github.com/typelevel/cats/pull/1838) Sync `NonEmptyList` and `NonEmptyVector` methods by @durban
 
 To migrate from 1.0.0-MF.
 
