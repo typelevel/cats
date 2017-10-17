@@ -24,7 +24,7 @@ To migrate from 1.0.0-MF.
 * `SemigroupK[λ[α => Kleisli[F, α, α]]]` and `MonoidK[λ[α => Kleisli[F, α, α]]]` are no longer implicitly available, Use `Kleisli.endoSemigroupK` and `Kleisli.endoMonoidK` to get them explicitly.
 * law testing for type classes in `cats.kernel` was made consistent with the law testing in `cats.core`. Check [here](https://typelevel.org/cats/typeclasses/lawtesting.html) for a guide on how to test cats type class instances. 
 
-### New features (API, instances, data types, etc.):
+### New features / enhancements (API, instances, data types, etc.):
 
 * [#1958](https://github.com/typelevel/cats/pull/1958) Add `FlatMap#flatTap`, a more principled version of the kestrel combinator.  by @hrhino
 * [#1950](https://github.com/typelevel/cats/pull/1950) more instances for `Hash` (#1712): `Queue`/`Duration`  by @ctongfei
@@ -46,6 +46,7 @@ To migrate from 1.0.0-MF.
 * [#1790](https://github.com/typelevel/cats/pull/1790) Implement EitherT#leftFlatMap and EitherT#leftSemiflatMap  by @vendethiel
 * [#1784](https://github.com/typelevel/cats/pull/1784) Add `existsM` and `forallM` to Foldable  by @refried
 * [#1712](https://github.com/typelevel/cats/pull/1712) Hash typeclass  by @ctongfei
+* [#1976](https://github.com/typelevel/cats/pull/1976) Reduced usage of `fold` in `Validated` for better performance by @kailuowang
 
 ### Bug fixes:
 
