@@ -188,6 +188,12 @@ class KleisliTests extends CatsSuite {
     }
   }
 
+  test("toReader") {
+    forAll { (f: Kleisli[List, Int, String], i: Int) =>
+      f.run(i) should === (f.toReader.run(i))
+    }
+  }
+
   test("apply") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       f.run(i) should === (f(i))
