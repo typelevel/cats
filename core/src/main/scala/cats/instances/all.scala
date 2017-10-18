@@ -24,6 +24,7 @@ trait AllInstances
   with    SemigroupInstances
   with    SetInstances
   with    SortedMapInstances
+  with    SortedSetInstances
   with    StreamInstances
   with    StringInstances
   with    SymbolInstances

@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import scala.util.{Failure, Success, Try}
-import scala.collection.immutable.SortedMap
+import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -168,6 +168,15 @@ object arbitrary extends ArbitraryInstances0 {
     implicit val orderingV = Order[V].toOrdering
 
     implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
+  }
+
+  implicit def catsLawsArbitraryForSortedSet[A: Arbitrary]: Arbitrary[SortedSet[A]] =
+    Arbitrary(getArbitrary[Set[A]].flatMap(s => implicitly[Arbitrary[Order[A]]].arbitrary.map(o => SortedSet[A]()(o.toOrdering) ++ s)))
+
+  implicit def catsLawsCogenForSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
+    implicit val orderingA = Order[A].toOrdering
+
+    implicitly[Cogen[Set[A]]].contramap(_.toSet)
   }
 
   implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =

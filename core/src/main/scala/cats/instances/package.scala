@@ -20,7 +20,6 @@ package object instances {
   object list            extends ListInstances
   object long            extends LongInstances
   object map             extends MapInstances
-  object sortedMap       extends SortedMapInstances
   object monoid          extends MonoidInstances
   object option          extends OptionInstances
   object order           extends OrderInstances
@@ -31,6 +30,8 @@ package object instances {
   object semigroup       extends SemigroupInstances
   object set             extends SetInstances
   object short           extends ShortInstances
+  object sortedMap       extends SortedMapInstances
+  object sortedSet       extends SortedSetInstances
   object stream          extends StreamInstances
   object string          extends StringInstances
   object try_            extends TryInstances
