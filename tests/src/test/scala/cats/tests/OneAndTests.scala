@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{
-  SemigroupLawTests,
-  EqLawTests
+  SemigroupTests => SemigroupLawTests,
+  EqTests => EqLawTests
 }
 
 import cats.instances.stream._

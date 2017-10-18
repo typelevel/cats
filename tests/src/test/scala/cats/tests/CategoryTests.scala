@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{MonoidLawTests}
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests}
 
 import cats.arrow.Category
 import cats.laws.discipline.{MonoidKTests, SerializableTests}

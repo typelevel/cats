@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{SemigroupLawTests}
+import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests}
 
 import cats.arrow.Compose
 import cats.laws.discipline.{SemigroupKTests, SerializableTests}

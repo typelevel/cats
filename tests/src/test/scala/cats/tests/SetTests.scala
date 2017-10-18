@@ -3,7 +3,7 @@ package tests
 
 import cats.data.Validated
 import cats.laws.discipline.{MonoidKTests, SerializableTests, UnorderedTraverseTests}
-import cats.kernel.laws.discipline.MonoidLawTests
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests}
 import cats.laws.discipline.arbitrary._
 
 class SetTests extends CatsSuite {

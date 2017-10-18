@@ -8,7 +8,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
-import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
 
 class KleisliTests extends CatsSuite {
@@ -185,6 +185,12 @@ class KleisliTests extends CatsSuite {
   test("tapWith") {
     forAll { (f: Kleisli[List, Int, String], g: (Int, String) => Boolean, i: Int) =>
       f.run(i).map(s => g(i, s)) should === (f.tapWith(g).run(i))
+    }
+  }
+
+  test("toReader") {
+    forAll { (f: Kleisli[List, Int, String], i: Int) =>
+      f.run(i) should === (f.toReader.run(i))
     }
   }
 
