@@ -51,6 +51,7 @@ To migrate from 1.0.0-MF.
 * [#1784](https://github.com/typelevel/cats/pull/1784) Add `existsM` and `forallM` to Foldable  by @refried
 * [#1712](https://github.com/typelevel/cats/pull/1712) Hash typeclass  by @ctongfei
 * [#1976](https://github.com/typelevel/cats/pull/1976) Reduced usage of `fold` in `Validated` for better performance by @kailuowang
+* [#1967](https://github.com/typelevel/cats/pull/1967) Add a few type classes to generated tuple instances by @edmundnoble/@kailuowang
 
 ### Bug fixes:
 
