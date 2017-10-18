@@ -206,14 +206,6 @@ class FoldableTestsAdditional extends CatsSuite {
     checkFoldMStackSafety[Vector](_.toVector)
   }
 
-  test("Foldable[Set].foldM stack safety") {
-    checkFoldMStackSafety[Set](_.toSet)
-  }
-
-  test("Foldable[Map[String, ?]].foldM stack safety") {
-    checkFoldMStackSafety[Map[String, ?]](_.map(x => x.toString -> x).toMap)
-  }
-
   test("Foldable[NonEmptyList].foldM stack safety") {
     checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
   }
@@ -311,16 +303,8 @@ class FoldableVectorCheck extends FoldableCheck[Vector]("vector") {
   def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
 }
 
-class FoldableSetCheck extends FoldableCheck[Set]("set") {
-  def iterator[T](set: Set[T]): Iterator[T] = set.iterator
-}
-
 class FoldableStreamCheck extends FoldableCheck[Stream]("stream") {
   def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
-}
-
-class FoldableMapCheck extends FoldableCheck[Map[Int, ?]]("map") {
-  def iterator[T](map: Map[Int, T]): Iterator[T] = map.valuesIterator
 }
 
 class FoldableOptionCheck extends FoldableCheck[Option]("option") {

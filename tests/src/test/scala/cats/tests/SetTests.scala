@@ -1,17 +1,19 @@
 package cats
 package tests
 
-import cats.data.{Nested, Tuple2K, Validated}
-import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
-import cats.kernel.laws.discipline.{MonoidLawTests}
+import cats.data.Validated
+import cats.laws.discipline.{MonoidKTests, SerializableTests, UnorderedTraverseTests}
+import cats.kernel.laws.discipline.MonoidLawTests
+import cats.laws.discipline.arbitrary._
+
 class SetTests extends CatsSuite {
   checkAll("Set[Int]", MonoidLawTests[Set[Int]].monoid)
 
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))
 
-  checkAll("Set[Int]", FoldableTests[Set].foldable[Int, Int])
-  checkAll("Foldable[Set]", SerializableTests.serializable(Foldable[Set]))
+  checkAll("Set[Int]", UnorderedTraverseTests[Set].unorderedTraverse[Int, Int, Int, Validated[Int, ?], Option])
+  checkAll("UnorderedTraverse[Set]", SerializableTests.serializable(UnorderedTraverse[Set]))
 
   test("show"){
     Set(1, 1, 2, 3).show should === ("Set(1, 2, 3)")
@@ -19,35 +21,6 @@ class SetTests extends CatsSuite {
 
     forAll { fs: Set[String] =>
       fs.show should === (fs.toString)
-    }
-  }
-
-  test("traverseUnordered identity") {
-    forAll { (si: Set[Int], f: Int => String) =>
-      CommutativeApplicative[Id].traverseUnordered[Int, String](si)(f) should === (si.map(f))
-    }
-  }
-
-  test("traverseUnordered sequential composition") {
-    forAll { (si: Set[Int], f: Int => Option[String], g: String => Option[Int]) =>
-      val lhs = Nested(CommutativeApplicative[Option].traverseUnordered(si)(f).map(ss => CommutativeApplicative[Option].traverseUnordered(ss)(g)))
-      val rhs = CommutativeApplicative[Nested[Option, Option, ?]].traverseUnordered(si)(i => Nested(f(i).map(g)))
-      lhs should === (rhs)
-    }
-  }
-
-  test("traverseUnordered parallel composition") {
-    forAll { (si: Set[Int], f: Int => Option[String], g: Int => Option[String]) =>
-      val lhs = CommutativeApplicative[Tuple2K[Option, Option, ?]].traverseUnordered(si)(i => Tuple2K(f(i), g(i)))
-      val rhs = Tuple2K(CommutativeApplicative[Option].traverseUnordered(si)(f), CommutativeApplicative[Option].traverseUnordered(si)(g))
-      lhs should ===(rhs)
-    }
-  }
-
-  test("traverseUnordered consistent with sequenceUnordered") {
-    forAll { (si: Set[Int], f: Int => String) =>
-      CommutativeApplicative[Validated[Int, ?]].traverseUnordered(si)(i => f(i).valid[Int]) should
-        === (CommutativeApplicative[Validated[Int, ?]].sequenceUnordered(si.map(i => f(i).valid[Int])))
     }
   }
 
