@@ -14,8 +14,9 @@ This is the only planned release candidate release prior to 1.0.0.
 * [#1803](https://github.com/typelevel/cats/pull/1803) Convert `ReaderWriterStateT` to `IndexedReaderWriterStateT`  by @iravid
 * [#1775](https://github.com/typelevel/cats/pull/1775) Convert `StateT` to `IndexedStateT`  by @iravid
 * [#1098](https://github.com/typelevel/cats/pull/1098) Add a different `MonoidK` and `SemigroupK` instance for `Kleisli`  by @peterneyens
-* [#1922](https://github.com/typelevel/cats/pull/922) Make kernel laws consistent with core laws  by @LukaJCB
+* [#1922](https://github.com/typelevel/cats/pull/1922) Make kernel laws consistent with core laws  by @LukaJCB
 * [#1838](https://github.com/typelevel/cats/pull/1838) Sync `NonEmptyList` and `NonEmptyVector` methods by @durban
+* [#1914](https://github.com/typelevel/cats/pull/1914) Add `Invariant` instances for kernel type classes by @LukaJCB 
 
 To migrate from 1.0.0-MF.
 
@@ -25,6 +26,7 @@ To migrate from 1.0.0-MF.
 * `SemigroupK[λ[α => Kleisli[F, α, α]]]` and `MonoidK[λ[α => Kleisli[F, α, α]]]` are no longer implicitly available, Use `Kleisli.endoSemigroupK` and `Kleisli.endoMonoidK` to get them explicitly.
 * law testing for type classes in `cats.kernel` was made consistent with the law testing in `cats.core`. Check [here](https://typelevel.org/cats/typeclasses/lawtesting.html) for a guide on how to test cats type class instances. 
 * `NonEmptyList.concat` that takes `NonEmptlyList` was deprecated, use `NonEmptyList.concatNel` instead.
+* `Monoid` no longer has a `InvariantMonoidal` instance, we discovered that it's not lawful. It has have an `Invariant` and a `Semigroupal` (new name for `Cartesian`) instance. 
 
 ### New features / enhancements (API, instances, data types, etc.):
 
