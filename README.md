@@ -106,6 +106,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose security library.
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
