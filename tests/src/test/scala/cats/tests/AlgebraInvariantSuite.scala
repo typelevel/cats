@@ -3,7 +3,7 @@ package tests
 
 import cats.Invariant
 import cats.kernel._
-import cats.kernel.laws.discipline.{SemigroupTests => SemigroupLawTests, MonoidTests => MonoidLawTests, GroupTests => GroupLawTests, _}
+import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
 import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests, SemigroupalTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
@@ -61,7 +61,7 @@ class AlgebraInvariantSuite extends CatsSuite {
 
 
 
-  checkAll("InvariantMonoidal[Semigroup]", SemigroupLawTests[Int](InvariantMonoidal[Semigroup].pure(0)).semigroup)
+  checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].pure(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].pure(0)).commutativeSemigroup)
 
   checkAll("Semigroupal[Monoid]", SemigroupalTests[Monoid].semigroupal[Int, Int, Int])
@@ -69,17 +69,17 @@ class AlgebraInvariantSuite extends CatsSuite {
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
-    checkAll("Semigroup[Int]", SemigroupLawTests[Int](S).semigroup)
+    checkAll("Semigroup[Int]", SemigroupTests[Int](S).semigroup)
   }
 
   {
     val S: Monoid[Int] = Monoid[Int].imap(identity)(identity)
-    checkAll("Monoid[Int]", MonoidLawTests[Int](S).monoid)
+    checkAll("Monoid[Int]", MonoidTests[Int](S).monoid)
   }
 
   {
     val S: Group[Int] = Group[Int].imap(identity)(identity)
-    checkAll("Group[Int]", GroupLawTests[Int](S).group)
+    checkAll("Group[Int]", GroupTests[Int](S).group)
   }
 
   {

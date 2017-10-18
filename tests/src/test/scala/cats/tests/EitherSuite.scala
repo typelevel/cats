@@ -3,19 +3,13 @@ package tests
 
 import cats.data.{ EitherT, Validated }
 import cats.laws.discipline._
-import cats.kernel.laws.discipline.{
-  MonoidTests => MonoidLawTests,
-  SemigroupTests => SemigroupLawTests,
-  OrderTests => OrderLawTests,
-  PartialOrderTests => PartialOrderLawTests,
-  EqTests => EqLawTests
-}
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Either[Int, ?]]
 
-  checkAll("Either[String, Int]", MonoidLawTests[Either[String, Int]].monoid)
+  checkAll("Either[String, Int]", MonoidTests[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))
 
   checkAll("Either[Int, Int]", SemigroupalTests[Either[Int, ?]].semigroupal[Int, Int, Int])
@@ -35,7 +29,7 @@ class EitherSuite extends CatsSuite {
   checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
   checkAll("SemigroupK[Either[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
 
-  checkAll("Either[ListWrapper[String], Int]", SemigroupLawTests[Either[ListWrapper[String], Int]].semigroup)
+  checkAll("Either[ListWrapper[String], Int]", SemigroupTests[Either[ListWrapper[String], Int]].semigroup)
   checkAll("Semigroup[Either[ListWrapper[String], Int]]", SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
   val partialOrder = catsStdPartialOrderForEither[Int, String]
@@ -46,12 +40,12 @@ class EitherSuite extends CatsSuite {
   {
     implicit val S = ListWrapper.eqv[String]
     implicit val I = ListWrapper.eqv[Int]
-    checkAll("Either[ListWrapper[String], ListWrapper[Int]]", EqLawTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Either[ListWrapper[String], ListWrapper[Int]]", EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]]))
   }
 
-  checkAll("Either[Int, String]", PartialOrderLawTests[Either[Int, String]](partialOrder).partialOrder)
-  checkAll("Either[Int, String]", OrderLawTests[Either[Int, String]](order).order)
+  checkAll("Either[Int, String]", PartialOrderTests[Either[Int, String]](partialOrder).partialOrder)
+  checkAll("Either[Int, String]", OrderTests[Either[Int, String]](order).order)
 
   test("Left/Right cast syntax") {
     forAll { (e: Either[Int, String]) =>

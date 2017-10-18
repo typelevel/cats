@@ -11,10 +11,10 @@ import cats.kernel.laws.discipline.{
   CommutativeSemigroupTests,
   EqTests,
   GroupTests,
-  MonoidTests => MonoidLawTests,
-  OrderTests => OrderLawTests,
-  PartialOrderTests => PartialOrderLawTests,
-  SemigroupTests => SemigroupLawTests,
+  MonoidTests,
+  OrderTests,
+  PartialOrderTests,
+  SemigroupTests,
   SemilatticeTests,
   SerializableTests
 }
@@ -57,14 +57,14 @@ class FunctionSuite extends CatsSuite {
 
   // law checks for the various Function0-related instances
   checkAll("Function0[Eqed]", EqTests[Function0[Eqed]].eqv)
-  checkAll("Function0[POrd]", PartialOrderLawTests[Function0[POrd]].partialOrder)
-  checkAll("Function0[Ord]", OrderLawTests[Function0[Ord]].order)
-  checkAll("Function0[Semi]", SemigroupLawTests[Function0[Semi]].semigroup)
+  checkAll("Function0[POrd]", PartialOrderTests[Function0[POrd]].partialOrder)
+  checkAll("Function0[Ord]", OrderTests[Function0[Ord]].order)
+  checkAll("Function0[Semi]", SemigroupTests[Function0[Semi]].semigroup)
   checkAll("Function0[CSemi]", CommutativeSemigroupTests[Function0[CSemi]].commutativeSemigroup)
   checkAll("Function0[Bnd]", BandTests[Function0[Bnd]].band)
   checkAll("Function0[SL]", SemilatticeTests[Function0[SL]].semilattice)
   checkAll("Function0[BSL]", BoundedSemilatticeTests[Function0[BSL]].boundedSemilattice)
-  checkAll("Function0[Mono]", MonoidLawTests[Function0[Mono]].monoid)
+  checkAll("Function0[Mono]", MonoidTests[Function0[Mono]].monoid)
   checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
   checkAll("Function0[Grp]", GroupTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
@@ -92,12 +92,12 @@ class FunctionSuite extends CatsSuite {
 
 
   // law checks for the various Function1-related instances
-  checkAll("Function1[String, Semi]", SemigroupLawTests[Function1[String, Semi]].semigroup)
+  checkAll("Function1[String, Semi]", SemigroupTests[Function1[String, Semi]].semigroup)
   checkAll("Function1[String, CSemi]", CommutativeSemigroupTests[Function1[String, CSemi]].commutativeSemigroup)
   checkAll("Function1[String, Bnd]", BandTests[Function1[String, Bnd]].band)
   checkAll("Function1[String, SL]", SemilatticeTests[Function1[String, SL]].semilattice)
   checkAll("Function1[String, BSL]", BoundedSemilatticeTests[Function1[String, BSL]].boundedSemilattice)
-  checkAll("Function1[String, Mono]", MonoidLawTests[Function1[String, Mono]].monoid)
+  checkAll("Function1[String, Mono]", MonoidTests[Function1[String, Mono]].monoid)
   checkAll("Function1[String, CMono]", CommutativeMonoidTests[Function1[String, CMono]].commutativeMonoid)
   checkAll("Function1[String, Grp]", GroupTests[Function1[String, Grp]].group)
   checkAll("Function1[String, CGrp]", CommutativeGroupTests[Function1[String, CGrp]].commutativeGroup)
