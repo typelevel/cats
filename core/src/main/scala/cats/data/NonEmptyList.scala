@@ -110,7 +110,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     * }}}
     */
   def :::[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
-    other.concat(this)
+    other.concatNel(this)
 
   /**
    * Remove elements not matching the predicate
