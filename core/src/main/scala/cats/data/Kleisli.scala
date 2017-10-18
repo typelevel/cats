@@ -68,8 +68,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def tapWith[C](f: (A, B) => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
 
-  def toReader: Kleisli[Id, A, F[B]] =
-    mapF[Id, F[B]](scala.Predef.identity)
+  def toReader: Kleisli[Id, A, F[B]] = Kleisli[Id, A, F[B]](run)
 
   def apply(a: A): F[B] = run(a)
 }
