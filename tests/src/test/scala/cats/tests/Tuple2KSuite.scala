@@ -6,11 +6,7 @@ import cats.data.Tuple2K
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.kernel.laws.discipline.{
-  OrderTests => OrderLawTests,
-  PartialOrderTests => PartialOrderLawTests,
-  EqTests => EqLawTests
-}
+import cats.kernel.laws.discipline.{OrderTests, PartialOrderTests, EqTests}
 
 class Tuple2KSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[Option, List, ?]]
@@ -81,9 +77,9 @@ class Tuple2KSuite extends CatsSuite {
     implicit val O = ListWrapper.order[Int]
     implicit val P = ListWrapper.partialOrder[Int]
 
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", EqLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].order)
-    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderLawTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", EqTests[Tuple2K[ListWrapper, ListWrapper, Int]].eqv)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", OrderTests[Tuple2K[ListWrapper, ListWrapper, Int]].order)
+    checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
   }
 
   test("show") {

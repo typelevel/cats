@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests}
+import cats.kernel.laws.discipline.MonoidTests
 
 import cats.arrow.Category
 import cats.laws.discipline.{MonoidKTests, SerializableTests}
@@ -15,5 +15,5 @@ class CategorySuite extends CatsSuite {
   checkAll("Category[Function1].algebraK", SerializableTests.serializable(functionCategory.algebraK))
 
   val functionAlgebra = functionCategory.algebra[Int]
-  checkAll("Category[Function1].algebra[Int]", MonoidLawTests[Endo[Int]](functionAlgebra).monoid)
+  checkAll("Category[Function1].algebra[Int]", MonoidTests[Endo[Int]](functionAlgebra).monoid)
 }

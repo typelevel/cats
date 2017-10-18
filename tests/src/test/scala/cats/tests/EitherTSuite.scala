@@ -6,13 +6,7 @@ import cats.data.EitherT
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.discipline.{
-MonoidTests => MonoidLawTests,
-SemigroupTests => SemigroupLawTests,
-OrderTests => OrderLawTests,
-PartialOrderTests => PartialOrderLawTests,
-EqTests => EqLawTests
-}
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 
 
 class EitherTSuite extends CatsSuite {
@@ -26,7 +20,7 @@ class EitherTSuite extends CatsSuite {
   {
     implicit val F = ListWrapper.order[Either[String, Int]]
 
-    checkAll("EitherT[List, String, Int]", OrderLawTests[EitherT[ListWrapper, String, Int]].order)
+    checkAll("EitherT[List, String, Int]", OrderTests[EitherT[ListWrapper, String, Int]].order)
     checkAll("Order[EitherT[List, String, Int]]", SerializableTests.serializable(Order[EitherT[ListWrapper, String, Int]]))
   }
 
@@ -106,14 +100,14 @@ class EitherTSuite extends CatsSuite {
   {
     implicit val F = ListWrapper.partialOrder[Either[String, Int]]
 
-    checkAll("EitherT[ListWrapper, String, Int]", PartialOrderLawTests[EitherT[ListWrapper, String, Int]].partialOrder)
+    checkAll("EitherT[ListWrapper, String, Int]", PartialOrderTests[EitherT[ListWrapper, String, Int]].partialOrder)
     checkAll("PartialOrder[EitherT[ListWrapper, String, Int]]", SerializableTests.serializable(PartialOrder[EitherT[ListWrapper, String, Int]]))
   }
 
   {
     implicit val F = ListWrapper.semigroup[Either[String, Int]]
 
-    checkAll("EitherT[ListWrapper, String, Int]", SemigroupLawTests[EitherT[ListWrapper, String, Int]].semigroup)
+    checkAll("EitherT[ListWrapper, String, Int]", SemigroupTests[EitherT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[EitherT[ListWrapper, String, Int]]", SerializableTests.serializable(Semigroup[EitherT[ListWrapper, String, Int]]))
   }
 
@@ -122,14 +116,14 @@ class EitherTSuite extends CatsSuite {
 
     Semigroup[EitherT[ListWrapper, String, Int]]
 
-    checkAll("EitherT[ListWrapper, String, Int]", MonoidLawTests[EitherT[ListWrapper, String, Int]].monoid)
+    checkAll("EitherT[ListWrapper, String, Int]", MonoidTests[EitherT[ListWrapper, String, Int]].monoid)
     checkAll("Monoid[EitherT[ListWrapper, String, Int]]", SerializableTests.serializable(Monoid[EitherT[ListWrapper, String, Int]]))
   }
 
   {
     implicit val F = ListWrapper.eqv[Either[String, Int]]
 
-    checkAll("EitherT[ListWrapper, String, Int]", EqLawTests[EitherT[ListWrapper, String, Int]].eqv)
+    checkAll("EitherT[ListWrapper, String, Int]", EqTests[EitherT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[EitherT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[EitherT[ListWrapper, String, Int]]))
   }
 

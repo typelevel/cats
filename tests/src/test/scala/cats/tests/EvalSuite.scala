@@ -4,14 +4,7 @@ package tests
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{BimonadTests, SemigroupalTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.discipline.{
-  EqTests => EqLawTests,
-  GroupTests => GroupLawTests,
-  MonoidTests => MonoidLawTests,
-  OrderTests => OrderLawTests,
-  PartialOrderTests => PartialOrderLawTests,
-  SemigroupTests => SemigroupLawTests
-}
+import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import scala.annotation.tailrec
@@ -105,31 +98,31 @@ class EvalSuite extends CatsSuite {
   checkAll("Eval[Int]", ReducibleTests[Eval].reducible[Option, Int, Int])
   checkAll("Reducible[Eval]", SerializableTests.serializable(Reducible[Eval]))
 
-  checkAll("Eval[Int]", GroupLawTests[Eval[Int]].group)
+  checkAll("Eval[Int]", GroupTests[Eval[Int]].group)
 
   {
     implicit val A = ListWrapper.monoid[Int]
-    checkAll("Eval[ListWrapper[Int]]", MonoidLawTests[Eval[ListWrapper[Int]]].monoid)
+    checkAll("Eval[ListWrapper[Int]]", MonoidTests[Eval[ListWrapper[Int]]].monoid)
   }
 
   {
     implicit val A = ListWrapper.semigroup[Int]
-    checkAll("Eval[ListWrapper[Int]]", SemigroupLawTests[Eval[ListWrapper[Int]]].semigroup)
+    checkAll("Eval[ListWrapper[Int]]", SemigroupTests[Eval[ListWrapper[Int]]].semigroup)
   }
 
   {
     implicit val A = ListWrapper.order[Int]
-    checkAll("Eval[ListWrapper[Int]]", OrderLawTests[Eval[ListWrapper[Int]]].order)
+    checkAll("Eval[ListWrapper[Int]]", OrderTests[Eval[ListWrapper[Int]]].order)
   }
 
   {
     implicit val A = ListWrapper.partialOrder[Int]
-    checkAll("Eval[ListWrapper[Int]]", PartialOrderLawTests[Eval[ListWrapper[Int]]].partialOrder)
+    checkAll("Eval[ListWrapper[Int]]", PartialOrderTests[Eval[ListWrapper[Int]]].partialOrder)
   }
 
   {
     implicit val A = ListWrapper.eqv[Int]
-    checkAll("Eval[ListWrapper[Int]]", EqLawTests[Eval[ListWrapper[Int]]].eqv)
+    checkAll("Eval[ListWrapper[Int]]", EqTests[Eval[ListWrapper[Int]]].eqv)
   }
 
   // The following tests check laws which are a different formulation of

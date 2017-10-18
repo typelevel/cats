@@ -2,13 +2,7 @@ package cats
 package tests
 
 
-import cats.kernel.laws.discipline.{
-  MonoidTests => MonoidLawTests,
-  SemigroupTests => SemigroupLawTests,
-  OrderTests => OrderLawTests,
-  PartialOrderTests => PartialOrderLawTests,
-  EqTests => EqLawTests
-}
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
 import cats.laws.discipline._
@@ -36,17 +30,17 @@ class ConstSuite extends CatsSuite {
   }
 
   // Algebra checks for Serializability of instances as part of the laws
-  checkAll("Monoid[Const[Int, String]]", MonoidLawTests[Const[Int, String]].monoid)
+  checkAll("Monoid[Const[Int, String]]", MonoidTests[Const[Int, String]].monoid)
 
-  checkAll("Const[NonEmptyList[Int], String]", SemigroupLawTests[Const[NonEmptyList[Int], String]].semigroup)
+  checkAll("Const[NonEmptyList[Int], String]", SemigroupTests[Const[NonEmptyList[Int], String]].semigroup)
 
   // Note while Eq is a superclass of PartialOrder and PartialOrder a superclass
   // of Order, you can get different instances with different (more general) constraints.
   // For instance, you can get an Order for Const if the first type parameter has an Order,
   // but you can also get just an Eq for Const if the first type parameter has just an Eq
-  checkAll("Const[Map[Int, Int], String]", EqLawTests[Const[Map[Int, Int], String]].eqv)
-  checkAll("PartialOrder[Const[Set[Int], String]]", PartialOrderLawTests[Const[Set[Int], String]].partialOrder)
-  checkAll("Order[Const[Int, String]]", OrderLawTests[Const[Int, String]].order)
+  checkAll("Const[Map[Int, Int], String]", EqTests[Const[Map[Int, Int], String]].eqv)
+  checkAll("PartialOrder[Const[Set[Int], String]]", PartialOrderTests[Const[Set[Int], String]].partialOrder)
+  checkAll("Order[Const[Int, String]]", OrderTests[Const[Int, String]].order)
 
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))

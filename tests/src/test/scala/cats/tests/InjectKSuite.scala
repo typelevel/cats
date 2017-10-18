@@ -1,7 +1,7 @@
 package cats
 
 import cats.data.EitherK
-import cats.laws.discipline.{ InjectKTests => InjectKTypeclassTests }
+import cats.laws.discipline.InjectKTests
 import cats.tests.CatsSuite
 import org.scalacheck._
 
@@ -107,6 +107,6 @@ class InjectKSuite extends CatsSuite {
     InjectK.catsReflexiveInjectKInstance[List].prj[Int](listIntNull) should ===(Some(listIntNull))
   }
 
-  checkAll("InjectK[Test1Algebra, T]", InjectKTypeclassTests[Test1Algebra, T].injectK[String])
-  checkAll("InjectK[Test2Algebra, T]", InjectKTypeclassTests[Test2Algebra, T].injectK[String])
+  checkAll("InjectK[Test1Algebra, T]", InjectKTests[Test1Algebra, T].injectK[String])
+  checkAll("InjectK[Test2Algebra, T]", InjectKTests[Test2Algebra, T].injectK[String])
 }

@@ -7,11 +7,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
-import cats.kernel.laws.discipline.{
-  MonoidTests => MonoidLawTests,
-  SemigroupTests => SemigroupLawTests,
-  EqTests => EqLawTests
-}
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, EqTests}
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -22,7 +18,7 @@ class WriterTSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration.copy(sizeRange = 5)
 
-  checkAll("WriterT[List, Int, Int]", EqLawTests[WriterT[List, Int, Int]].eqv)
+  checkAll("WriterT[List, Int, Int]", EqTests[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
 
   checkAll("WriterT[Show, Int, Int]", ContravariantTests[WriterT[Show, Int, ?]].contravariant[Int, Int, Int])
@@ -294,11 +290,11 @@ class WriterTSuite extends CatsSuite {
     implicit val FLV: Monoid[ListWrapper[(Int, Int)]] = ListWrapper.monoid[(Int, Int)]
 
     Monoid[WriterT[ListWrapper, Int, Int]]
-    checkAll("WriterT[ListWrapper, Int, Int]", MonoidLawTests[WriterT[ListWrapper, Int, Int]].monoid)
+    checkAll("WriterT[ListWrapper, Int, Int]", MonoidTests[WriterT[ListWrapper, Int, Int]].monoid)
     checkAll("Monoid[WriterT[ListWrapper, Int, Int]]", SerializableTests.serializable(Monoid[WriterT[ListWrapper, Int, Int]]))
 
     Monoid[Writer[Int, Int]]
-    checkAll("Writer[Int, Int]", MonoidLawTests[Writer[Int, Int]].monoid)
+    checkAll("Writer[Int, Int]", MonoidTests[Writer[Int, Int]].monoid)
   }
 
   {
@@ -306,11 +302,11 @@ class WriterTSuite extends CatsSuite {
     implicit val FLV: Semigroup[ListWrapper[(Int, Int)]] = ListWrapper.semigroup[(Int, Int)]
 
     Semigroup[WriterT[ListWrapper, Int, Int]]
-    checkAll("WriterT[ListWrapper, Int, Int]", SemigroupLawTests[WriterT[ListWrapper, Int, Int]].semigroup)
+    checkAll("WriterT[ListWrapper, Int, Int]", SemigroupTests[WriterT[ListWrapper, Int, Int]].semigroup)
     checkAll("Semigroup[WriterT[ListWrapper, Int, Int]]", SerializableTests.serializable(Semigroup[WriterT[ListWrapper, Int, Int]]))
 
     Semigroup[Writer[Int, Int]]
-    checkAll("Writer[Int, Int]", SemigroupLawTests[Writer[Int, Int]].semigroup)
+    checkAll("Writer[Int, Int]", SemigroupTests[Writer[Int, Int]].semigroup)
   }
 
   {

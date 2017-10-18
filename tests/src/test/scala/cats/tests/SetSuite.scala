@@ -2,9 +2,9 @@ package cats
 package tests
 
 import cats.laws.discipline.{FoldableTests, MonoidKTests, SerializableTests}
-import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests}
+import cats.kernel.laws.discipline.MonoidTests
 class SetSuite extends CatsSuite {
-  checkAll("Set[Int]", MonoidLawTests[Set[Int]].monoid)
+  checkAll("Set[Int]", MonoidTests[Set[Int]].monoid)
 
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))

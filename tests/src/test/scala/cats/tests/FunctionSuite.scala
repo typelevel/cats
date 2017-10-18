@@ -9,8 +9,8 @@ import cats.kernel.laws.discipline.{
   CommutativeGroupTests,
   CommutativeMonoidTests,
   CommutativeSemigroupTests,
-  EqTests => EqLawTests,
-  GroupTests => GroupLawTests,
+  EqTests,
+  GroupTests,
   MonoidTests => MonoidLawTests,
   OrderTests => OrderLawTests,
   PartialOrderTests => PartialOrderLawTests,
@@ -56,7 +56,7 @@ class FunctionSuite extends CatsSuite {
 
 
   // law checks for the various Function0-related instances
-  checkAll("Function0[Eqed]", EqLawTests[Function0[Eqed]].eqv)
+  checkAll("Function0[Eqed]", EqTests[Function0[Eqed]].eqv)
   checkAll("Function0[POrd]", PartialOrderLawTests[Function0[POrd]].partialOrder)
   checkAll("Function0[Ord]", OrderLawTests[Function0[Ord]].order)
   checkAll("Function0[Semi]", SemigroupLawTests[Function0[Semi]].semigroup)
@@ -66,7 +66,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[BSL]", BoundedSemilatticeTests[Function0[BSL]].boundedSemilattice)
   checkAll("Function0[Mono]", MonoidLawTests[Function0[Mono]].monoid)
   checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
-  checkAll("Function0[Grp]", GroupLawTests[Function0[Grp]].group)
+  checkAll("Function0[Grp]", GroupTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
 
   test("Function0[Hsh]") {
@@ -99,7 +99,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[String, BSL]", BoundedSemilatticeTests[Function1[String, BSL]].boundedSemilattice)
   checkAll("Function1[String, Mono]", MonoidLawTests[Function1[String, Mono]].monoid)
   checkAll("Function1[String, CMono]", CommutativeMonoidTests[Function1[String, CMono]].commutativeMonoid)
-  checkAll("Function1[String, Grp]", GroupLawTests[Function1[String, Grp]].group)
+  checkAll("Function1[String, Grp]", GroupTests[Function1[String, Grp]].group)
   checkAll("Function1[String, CGrp]", CommutativeGroupTests[Function1[String, CGrp]].commutativeGroup)
 
   // serialization tests for the various Function1-related instances

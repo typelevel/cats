@@ -1,6 +1,6 @@
 package cats
 
-import cats.laws.discipline.{ InjectTests => InjectTypeclassTests }
+import cats.laws.discipline.InjectTests
 import cats.tests.CatsSuite
 
 class InjectSuite extends CatsSuite {
@@ -63,6 +63,6 @@ class InjectSuite extends CatsSuite {
     Inject.catsReflexiveInjectInstance[String].prj(stringNull) should ===(Some(stringNull))
   }
 
-  checkAll("Inject[String, StringOrInt]", InjectTypeclassTests[String, StringOrInt].inject)
-  checkAll("Inject[Int, StringOrInt]", InjectTypeclassTests[Int, StringOrInt].inject)
+  checkAll("Inject[String, StringOrInt]", InjectTests[String, StringOrInt].inject)
+  checkAll("Inject[Int, StringOrInt]", InjectTests[Int, StringOrInt].inject)
 }
