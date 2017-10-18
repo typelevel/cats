@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{
-  SemigroupLawTests,
-  MonoidLawTests
+  SemigroupTests => SemigroupLawTests,
+  MonoidTests => MonoidLawTests
 }
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._

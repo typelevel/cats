@@ -14,7 +14,7 @@ class SemigroupTests extends FunSuite {
   }
 
   {
-    import cats.instances.semigroup._
+    import cats.instances.invariant._
     Invariant[Semigroup]
     Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]

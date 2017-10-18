@@ -96,6 +96,9 @@ options:
     url: typeclasses/show.html
     menu_type: typeclasses
 
+  - title: Reducible
+    url: typeclasses/reducible.html
+    menu_type: typeclasses
 
   - title: NonEmptyTraverse
     url: typeclasses/nonemptytraverse.html
