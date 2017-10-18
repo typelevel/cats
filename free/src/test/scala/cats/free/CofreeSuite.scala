@@ -7,9 +7,9 @@ import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 
-class CofreeTests extends CatsSuite {
+class CofreeSuite extends CatsSuite {
 
-  import CofreeTests._
+  import CofreeSuite._
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
 
@@ -116,9 +116,9 @@ class CofreeTests extends CatsSuite {
 
 }
 
-object CofreeTests extends CofreeTestsInstances
+object CofreeSuite extends CofreeSuiteInstances
 
-sealed trait CofreeTestsInstances {
+sealed trait CofreeSuiteInstances {
 
   type CofreeNel[A] = Cofree[Option, A]
   type CofreeRoseTree[A] = Cofree[List, A]

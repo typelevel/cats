@@ -8,8 +8,8 @@ import cats.data.State
 
 import org.scalacheck.{Arbitrary, Gen}
 
-class FreeApplicativeTests extends CatsSuite {
-  import FreeApplicativeTests._
+class FreeApplicativeSuite extends CatsSuite {
+  import FreeApplicativeSuite._
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
 
@@ -130,7 +130,7 @@ class FreeApplicativeTests extends CatsSuite {
   }
 }
 
-object FreeApplicativeTests {
+object FreeApplicativeSuite {
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Gen[FreeApplicative[F, A]] = {
     val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(FreeApplicative.pure[F, A]),

@@ -10,9 +10,9 @@ import cats.tests.CatsSuite
 import cats.instances.option._
 import org.scalacheck.{Arbitrary, Gen, Cogen}
 
-class FreeTTests extends CatsSuite {
+class FreeTSuite extends CatsSuite {
 
-  import FreeTTests._
+  import FreeTSuite._
 
   {
     implicit val freeTFlatMap: FlatMap[FreeTOption] = FreeT.catsFreeFlatMapForFreeT[Option, Option]
@@ -137,7 +137,7 @@ class FreeTTests extends CatsSuite {
 
 }
 
-object FreeTTests extends FreeTTestsInstances {
+object FreeTSuite extends FreeTSuiteInstances {
 
   import Arbitrary._
   import org.scalacheck.Arbitrary
@@ -167,7 +167,7 @@ object FreeTTests extends FreeTTestsInstances {
 
 }
 
-trait FreeTTestsInstances {
+trait FreeTSuiteInstances {
 
   import FreeT._
   import IndexedStateT._

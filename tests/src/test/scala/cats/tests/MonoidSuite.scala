@@ -7,7 +7,6 @@ class MonoidSuite extends CatsSuite {
   {
     Invariant[Monoid]
     Semigroupal[Monoid]
-    InvariantMonoidal[Monoid]
   }
 
   test("companion object syntax") {
@@ -19,10 +18,8 @@ class MonoidSuite extends CatsSuite {
 
 object MonoidSuite {
   def summonInstance(): Unit = {
-    import cats.instances.monoid._
     Invariant[Monoid]
     Semigroupal[Monoid]
-    InvariantMonoidal[Monoid]
     ()
   }
 

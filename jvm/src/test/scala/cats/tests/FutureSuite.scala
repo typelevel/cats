@@ -14,7 +14,7 @@ import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.rng.Seed
 
-class FutureTests extends CatsSuite {
+class FutureSuite extends CatsSuite {
   val timeout = 3.seconds
 
   def futureEither[A](f: Future[A]): Future[Either[Throwable, A]] =

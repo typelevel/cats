@@ -219,6 +219,7 @@ class NonEmptyListSuite extends CatsSuite {
   test(":: consistent with List") {
     forAll { (nel: NonEmptyList[Int], i: Int) =>
       (i :: nel).toList should === (i :: nel.toList)
+      nel.prepend(i).toList should === (i :: nel.toList)
     }
   }
 
@@ -252,9 +253,10 @@ class NonEmptyListSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#size is consistent with List#size") {
+  test("NonEmptyList#size and length is consistent with List#size") {
     forAll { nel: NonEmptyList[Int] =>
       nel.size should === (nel.toList.size)
+      nel.length should === (nel.toList.size)
     }
   }
 
@@ -277,7 +279,15 @@ class NonEmptyListSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyList#fromFoldable is consistent with NonEmptyList#fromList") {
+  test("NonEmptyList#concat/concatNel is consistent with List#:::") {
+    forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
+      (nel ++ l).toList should === (nel.toList ::: l)
+      nel.concat(l).toList should === (nel.toList ::: l)
+      nel.concatNel(NonEmptyList(n, l)).toList should === (nel.toList ::: (n :: l))
+    }
+  }
+
+  test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
     forAll { (xs: List[Int]) =>
       NonEmptyList.fromList(xs) should === (NonEmptyList.fromFoldable(xs))
     }
@@ -303,6 +313,16 @@ class NonEmptyListSuite extends CatsSuite {
 
       ior.left.map(xs => xs.sorted should === (xs))
       ior.right.map(xs => xs.sorted should === (xs))
+    }
+  }
+}
+
+@deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
+class DeprecatedNonEmptyListSuite extends CatsSuite {
+
+  test("Deprecated NonEmptyList#concat is consistent with List#:::") {
+    forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
+      nel.concat(NonEmptyList(n, l)).toList should === (nel.toList ::: (n :: l))
     }
   }
 }

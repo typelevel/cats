@@ -6,7 +6,7 @@ import cats.laws.discipline.{FunctorTests, SerializableTests}
 
 import org.scalacheck.Arbitrary
 
-class YonedaTests extends CatsSuite {
+class YonedaSuite extends CatsSuite {
   implicit def yonedaArbitrary[F[_] : Functor, A](implicit F: Arbitrary[F[A]]): Arbitrary[Yoneda[F, A]] =
     Arbitrary(F.arbitrary.map(Yoneda(_)))
 

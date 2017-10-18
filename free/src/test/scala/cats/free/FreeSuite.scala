@@ -10,8 +10,8 @@ import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen, Cogen}
 import Arbitrary.arbFunction1
 
-class FreeTests extends CatsSuite {
-  import FreeTests._
+class FreeSuite extends CatsSuite {
+  import FreeSuite._
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
@@ -195,7 +195,7 @@ class FreeTests extends CatsSuite {
   }
 }
 
-object FreeTests extends FreeTestsInstances {
+object FreeSuite extends FreeSuiteInstances {
   import cats.instances.function._
 
   implicit def trampolineArbitrary[A:Arbitrary]: Arbitrary[Trampoline[A]] =
@@ -205,7 +205,7 @@ object FreeTests extends FreeTestsInstances {
     freeEq[Function0, A]
 }
 
-sealed trait FreeTestsInstances {
+sealed trait FreeSuiteInstances {
   val headOptionU = λ[FunctionK[List,Option]](_.headOption)
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
