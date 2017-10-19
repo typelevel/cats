@@ -4,7 +4,7 @@ package discipline
 
 import cats.instances.option._
 import cats.instances.long._
-
+import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
 
@@ -22,8 +22,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     EqA: Eq[A],
     EqB: Eq[B],
     EqOptionA: Eq[Option[A]],
-    MonoidA: Monoid[A],
-    MonoidB: Monoid[B]
+    MonoidA: CommutativeMonoid[A],
+    MonoidB: CommutativeMonoid[B]
   ): RuleSet =
     new DefaultRuleSet(
       name = "reducible",

@@ -6,7 +6,7 @@ import cats.data.{Const, Nested, State, StateT}
 import cats.syntax.traverse._
 import cats.syntax.foldable._
 
-trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
+trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with UnorderedTraverseLaws[F] {
   implicit override def F: Traverse[F]
 
   def traverseIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {

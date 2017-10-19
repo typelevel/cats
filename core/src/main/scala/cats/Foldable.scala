@@ -3,6 +3,7 @@ package cats
 import scala.collection.mutable
 import cats.instances.either._
 import cats.instances.long._
+import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
 
 /**
@@ -24,12 +25,8 @@ import simulacrum.typeclass
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
-  /**
-   * Left associative fold on 'F' using the function 'f'.
-   */
-  def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
@@ -301,7 +298,7 @@ import simulacrum.typeclass
   /**
    * Find the first element matching the predicate, if one exists.
    */
-  def find[A](fa: F[A])(f: A => Boolean): Option[A] =
+  override def find[A](fa: F[A])(f: A => Boolean): Option[A] =
     foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
       if (f(a)) Now(Some(a)) else lb
     }.value
@@ -311,7 +308,7 @@ import simulacrum.typeclass
    *
    * If there are no elements, the result is `false`.
    */
-  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.False) { (a, lb) =>
       if (p(a)) Eval.True else lb
     }.value
@@ -321,7 +318,7 @@ import simulacrum.typeclass
    *
    * If there are no elements, the result is `true`.
    */
-  def forall[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.True) { (a, lb) =>
       if (p(a)) lb else Eval.False
     }.value
@@ -460,10 +457,10 @@ import simulacrum.typeclass
   /**
    * Returns true if there are no elements. Otherwise false.
    */
-  def isEmpty[A](fa: F[A]): Boolean =
+  override def isEmpty[A](fa: F[A]): Boolean =
     foldRight(fa, Eval.True)((_, _) => Eval.False).value
 
-  def nonEmpty[A](fa: F[A]): Boolean =
+  override def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
   /**
@@ -502,6 +499,11 @@ import simulacrum.typeclass
       val F = self
       val G = Foldable[G]
     }
+
+  override def unorderedFold[A: CommutativeMonoid](fa: F[A]): A = fold(fa)
+
+  override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
+    foldMap(fa)(f)
 }
 
 object Foldable {

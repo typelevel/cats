@@ -16,7 +16,7 @@ import simulacrum.typeclass
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] { self =>
+@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -124,4 +124,10 @@ import simulacrum.typeclass
    */
   def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
     mapWithIndex(fa)((a, i) => (a, i))
+
+  override def unorderedTraverse[G[_] : CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
+    traverse(sa)(f)
+
+  override def unorderedSequence[G[_] : CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
+    sequence(fga)
 }

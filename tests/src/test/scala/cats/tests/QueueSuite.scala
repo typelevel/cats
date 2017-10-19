@@ -18,7 +18,7 @@ class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", MonadTests[Queue].monad[Int, Int, Int])
   checkAll("Monad[Queue]", SerializableTests.serializable(Monad[Queue]))
 
-  checkAll("Queue[Int] with Option", TraverseTests[Queue].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("Queue[Int] with Option", TraverseTests[Queue].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Queue]", SerializableTests.serializable(Traverse[Queue]))
 
   test("show") {
