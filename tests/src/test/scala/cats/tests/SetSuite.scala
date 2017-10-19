@@ -12,8 +12,8 @@ class SetSuite extends CatsSuite {
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))
 
-  checkAll("Set[Int]", UnorderedTraverseTests[Set].unorderedTraverse[Int, Int, Int, Validated[Int, ?], Option])
-  checkAll("UnorderedTraverse[Set]", SerializableTests.serializable(UnorderedTraverse[Set]))
+  checkAll("Set[Int]", FoldableTests[Set].foldable[Int, Int])
+  checkAll("Foldable[Set]", SerializableTests.serializable(Foldable[Set]))
 
   test("show"){
     Set(1, 1, 2, 3).show should === ("Set(1, 2, 3)")
