@@ -3,14 +3,14 @@ package tests
 
 import cats.data.{Ior, IorT}
 import cats.kernel.laws.discipline.{
-  EqLawTests,
-  MonoidLawTests,
-  SemigroupLawTests
+  EqTests,
+  MonoidTests,
+  SemigroupTests
 }
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
-class IorTTests extends CatsSuite {
+class IorTSuite extends CatsSuite {
 
   {
     implicit val F = ListWrapper.functor
@@ -53,21 +53,21 @@ class IorTTests extends CatsSuite {
   {
     implicit val F = ListWrapper.semigroup[Ior[String, Int]]
 
-    checkAll("IorT[ListWrapper, String, Int]", SemigroupLawTests[IorT[ListWrapper, String, Int]].semigroup)
+    checkAll("IorT[ListWrapper, String, Int]", SemigroupTests[IorT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Semigroup[IorT[ListWrapper, String, Int]]))
   }
 
   {
     implicit val F = ListWrapper.monoid[Ior[String, Int]]
 
-    checkAll("IorT[ListWrapper, String, Int]", MonoidLawTests[IorT[ListWrapper, String, Int]].monoid)
+    checkAll("IorT[ListWrapper, String, Int]", MonoidTests[IorT[ListWrapper, String, Int]].monoid)
     checkAll("Monoid[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Monoid[IorT[ListWrapper, String, Int]]))
   }
 
   {
     implicit val F = ListWrapper.eqv[Ior[String, Int]]
 
-    checkAll("IorT[ListWrapper, String, Int]", EqLawTests[IorT[ListWrapper, String, Int]].eqv)
+    checkAll("IorT[ListWrapper, String, Int]", EqTests[IorT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[IorT[ListWrapper, String, Int]]))
   }
 
