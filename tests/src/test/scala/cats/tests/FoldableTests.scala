@@ -193,6 +193,17 @@ class FoldableTestsAdditional extends CatsSuite {
     assert(foldMResult.get == expected)
     ()
   }
+  test(s"Foldable.iterateRight") {
+    forAll { (fa: List[Int]) =>
+      val eval = Foldable.iterateRight(fa, Eval.later(0)) { (a, eb) =>
+        Eval.always(a + eb.value)
+      }
+      eval.value should === (fa.sum)
+
+      //Repeat here so the result is evaluated again
+      eval.value should === (fa.sum)
+    }
+  }
 
   test("Foldable[List].foldM stack safety") {
     checkFoldMStackSafety[List](_.toList)
