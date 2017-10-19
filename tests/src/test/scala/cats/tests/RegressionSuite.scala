@@ -102,11 +102,6 @@ class RegressionSuite extends CatsSuite {
     Stream(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    type StringMap[A] = Map[String, A]
-    val intMap: StringMap[Int] = Map("one" -> 1, "two" -> 2, "six" -> 6, "eight" -> 8)
-    intMap.traverse(validate) should === (Either.left("6 is greater than 5"))
-    checkAndResetCount(3)
-
     NonEmptyList.of(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
