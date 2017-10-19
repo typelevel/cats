@@ -1,3 +1,4 @@
+import KernelBoiler.TemplateVals
 import sbt._
 
 /**
@@ -21,9 +22,7 @@ object KernelBoiler {
     }
   }
 
-  val templates: Seq[Template] = Seq(
-    GenTupleInstances, GenTupleInstances1, GenTupleInstances2
-  )
+  val templates: Seq[Template] = Seq(GenTupleInstances)
 
   val header = "// auto-generated boilerplate"
   val maxArity = 22
@@ -65,16 +64,63 @@ object KernelBoiler {
    */
   trait Template {
     def filename(root: File): File
-    def content(tv: TemplateVals): String
+    def preBody: String
+    def instances: Seq[InstanceDef]
     def range: IndexedSeq[Int] = 1 to maxArity
     def body: String = {
       val headerLines = header.split('\n')
-      val raw = range.map(n => content(new TemplateVals(n)).split('\n').filterNot(_.isEmpty))
-      val preBody = raw.head.takeWhile(_.startsWith("|")).map(_.tail)
-      val instances = raw.flatMap(_.filter(_.startsWith("-")).map(_.tail))
-      val postBody = raw.head.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")).map(_.tail)
-      (headerLines ++ preBody ++ instances ++ postBody).mkString("\n")
+      val tvs = range.map(n => new TemplateVals(n))
+      (headerLines ++ Seq(preBody) ++ instances.flatMap(_.body(tvs))).mkString("\n")
     }
+  }
+
+  case class InstanceDef(start: String,  methods: TemplateVals => TemplatedBlock, end: String = "}") {
+    def body(tvs: Seq[TemplateVals]): Seq[String] = Seq(start) ++ tvs.map(methods(_).content) ++ Seq(end)
+  }
+
+
+  abstract class TemplatedBlock(tv: TemplateVals) {
+    import tv._
+
+    def constraints(constraint: String) =
+      synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+
+    def tuple(results: TraversableOnce[String]) = {
+      val resultsVec = results.toVector
+      val a = synTypes.size
+      val r = s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
+      if (a == 1) "Tuple1(" ++ r ++ ")"
+      else s"(${r})"
+    }
+
+    def tupleNHeader = s"Tuple${synTypes.size}"
+
+    def binMethod(name: String) =
+      synTypes.zipWithIndex.iterator.map {
+        case (tpe, i) =>
+          val j = i + 1
+          s"${tpe}.${name}(x._${j}, y._${j})"
+      }
+
+    def binTuple(name: String) =
+      tuple(binMethod(name))
+
+    def unaryTuple(name: String) = {
+      val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
+      tuple(m)
+    }
+
+    def unaryMethod(name: String) =
+      synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
+        s"$tpe.$name(x._${i + 1})"
+      }
+
+    def nullaryTuple(name: String) = {
+      val m = synTypes.map(tpe => s"${tpe}.${name}")
+      tuple(m)
+    }
+
+    def content: String
   }
 
   object GenTupleInstances extends Template {
@@ -82,202 +128,115 @@ object KernelBoiler {
 
     def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances.scala"
 
-    def content(tv: TemplateVals): String = {
-      import tv._
-
-      def constraints(constraint: String) =
-        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
-
-      def tuple(results: TraversableOnce[String]) = {
-        val resultsVec = results.toVector
-        val a = synTypes.size
-        val r =  s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
-        if (a == 1) "Tuple1(" ++ r ++ ")"
-        else s"(${r})"
-      }
-
-      def binMethod(name: String) =
-        synTypes.zipWithIndex.iterator.map {
-          case (tpe, i) =>
-            val j = i + 1
-            s"${tpe}.${name}(x._${j}, y._${j})"
-        }
-
-      def binTuple(name: String) =
-        tuple(binMethod(name))
-
-      def unaryTuple(name: String) = {
-        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
-        tuple(m)
-      }
-
-      def nullaryTuple(name: String) = {
-        val m = synTypes.map(tpe => s"${tpe}.${name}")
-        tuple(m)
-      }
-
+    val preBody: String =
       block"""
-        |package cats.kernel
-        |package instances
-        |
-        |trait TupleInstances extends TupleInstances1 {
-        -  implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
-        -    new Band[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -    }
-        -
-        -  implicit def catsKernelStdGroupForTuple${arity}[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
-        -    new Group[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-        -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-        -    }
-        -
-        -  implicit def catsKernelStdMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
-        -    new Monoid[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-        -    }
-        -
-        -  implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
-        -    new Order[${`(A..N)`}] {
-        -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
-        -        ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
-        -    }
-        -
-        -  implicit def catsKernelStdSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
-        -    new Semigroup[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -    }
-        -
-        -  implicit def catsKernelStdSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
-        -    new Semilattice[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -    }
-        |}
-      """
-    }
-  }
+         package cats.kernel
+         package instances
+     """
 
+    def instances: Seq[InstanceDef] = {
 
-  object GenTupleInstances1 extends Template {
-    override def range: IndexedSeq[Int] = 1 to maxArity
+      Seq(
+        InstanceDef("trait TupleInstances extends TupleInstances1 {",
+          tv => new TemplatedBlock(tv) {
+            import tv._
+            def content =
+              block"""
+                implicit def catsKernelStdCommutativeGroupForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeGroup")}): CommutativeGroup[${`(A..N)`}] =
+                  new CommutativeGroup[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+                    def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
+                  }
 
-    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances1.scala"
+                implicit def catsKernelStdOrderForTuple${arity}[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
+                  new Order[${`(A..N)`}] {
+                    def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
+                      ${binMethod("compare").mkString("Array(", ", ", ")")}.find(_ != 0).getOrElse(0)
+                  }
 
-    def content(tv: TemplateVals): String = {
-      import tv._
+                implicit def catsKernelStdBoundedSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("BoundedSemilattice")}): BoundedSemilattice[${`(A..N)`}] =
+                  new BoundedSemilattice[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+                  }
+              """
+          }
+        ),
 
-      def constraints(constraint: String) =
-        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
+        InstanceDef("trait TupleInstances1 extends TupleInstances2 {",
+          tv => new TemplatedBlock(tv) {
+            import tv._
+            def content =
+              block"""
+                implicit def catsKernelStdSemilatticeForTuple${arity}[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
+                  new Semilattice[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                  }
 
-      def tuple(results: TraversableOnce[String]) = {
-        val resultsVec = results.toVector
-        val a = synTypes.size
-        val r =  s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
-        if (a == 1) "Tuple1(" ++ r ++ ")"
-        else s"(${r})"
-      }
+                implicit def catsKernelStdCommutativeMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeMonoid")}): CommutativeMonoid[${`(A..N)`}] =
+                  new CommutativeMonoid[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+                  }
 
-      def tupleNHeader = s"Tuple${synTypes.size}"
+                implicit def catsKernelStdGroupForTuple${arity}[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
+                  new Group[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+                    def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
+                  }
 
-      def binMethod(name: String) =
-        synTypes.zipWithIndex.iterator.map {
-          case (tpe, i) =>
-            val j = i + 1
-            s"${tpe}.${name}(x._${j}, y._${j})"
-        }
+                implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
+                  new Hash[${`(A..N)`}] {
+                    def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
+                    def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
+                  }
 
-      def unaryMethod(name: String) =
-        synTypes.zipWithIndex.iterator.map { case (tpe, i) =>
-            s"$tpe.$name(x._${i + 1})"
-        }
+                implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
+                  new PartialOrder[${`(A..N)`}] {
+                    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
+                      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
+                }
+        """}),
 
-      def binTuple(name: String) =
-        tuple(binMethod(name))
+        InstanceDef("trait TupleInstances2 extends TupleInstances3 {",
+          tv => new TemplatedBlock(tv) {
+            import tv._
+            def content =
+              block"""
+                implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
+                  new Band[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                  }
 
-      def unaryTuple(name: String) = {
-        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
-        tuple(m)
-      }
+                implicit def catsKernelStdCommutativeSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("CommutativeSemigroup")}): CommutativeSemigroup[${`(A..N)`}] =
+                  new CommutativeSemigroup[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                  }
 
-      def nullaryTuple(name: String) = {
-        val m = synTypes.map(tpe => s"${tpe}.${name}")
-        tuple(m)
-      }
+                implicit def catsKernelStdMonoidForTuple${arity}[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
+                  new Monoid[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                    def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+                  }
+              """}),
 
-      block"""
-        |package cats.kernel
-        |package instances
-        |
-        |trait TupleInstances1 extends TupleInstances2 {
-        -  implicit def catsKernelStdHashForTuple${arity}[${`A..N`}](implicit ${constraints("Hash")}): Hash[${`(A..N)`}] =
-        -    new Hash[${`(A..N)`}] {
-        -      def hash(x: ${`(A..N)`}): Int = ${unaryMethod("hash").mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
-        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-        -    }
-        -
-        -  implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
-        -    new PartialOrder[${`(A..N)`}] {
-        -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-        -        ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
-        -    }
-        |}
-      """
-    }
-  }
+        InstanceDef("trait TupleInstances3 {",
+          tv => new TemplatedBlock(tv) {
+            import tv._
+            def content =
+              block"""
+                implicit def catsKernelStdSemigroupForTuple${arity}[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
+                  new Semigroup[${`(A..N)`}] {
+                    def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+                  }
 
-
-  object GenTupleInstances2 extends Template {
-    override def range: IndexedSeq[Int] = 1 to maxArity
-
-    def filename(root: File): File = root / "cats" / "kernel" / "instances" / "TupleInstances2.scala"
-
-    def content(tv: TemplateVals): String = {
-      import tv._
-
-      def constraints(constraint: String) =
-        synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
-
-      def tuple(results: TraversableOnce[String]) = {
-        val resultsVec = results.toVector
-        val a = synTypes.size
-        val r = s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
-        if (a == 1) "Tuple1(" ++ r ++ ")"
-        else s"(${r})"
-      }
-
-      def binMethod(name: String) =
-        synTypes.zipWithIndex.iterator.map {
-          case (tpe, i) =>
-            val j = i + 1
-            s"${tpe}.${name}(x._${j}, y._${j})"
-        }
-
-      def binTuple(name: String) =
-        tuple(binMethod(name))
-
-      def unaryTuple(name: String) = {
-        val m = synTypes.zipWithIndex.map { case (tpe, i) => s"${tpe}.${name}(x._${i + 1})" }
-        tuple(m)
-      }
-
-      def nullaryTuple(name: String) = {
-        val m = synTypes.map(tpe => s"${tpe}.${name}")
-        tuple(m)
-      }
-
-      block"""
-        |package cats.kernel
-        |package instances
-        |
-        |trait TupleInstances2 {
-        -  implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
-        -    new Eq[${`(A..N)`}] {
-        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-        -    }
-        |}
-      """
+                implicit def catsKernelStdEqForTuple${arity}[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
+                  new Eq[${`(A..N)`}] {
+                    def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
+                  }
+              """}))
     }
   }
 
