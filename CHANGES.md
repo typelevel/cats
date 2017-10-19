@@ -154,8 +154,9 @@ To migrate from 1.0.0-MF.
 
 * [#1963](https://github.com/typelevel/cats/pull/#1963) Move `followedBy`/`forEffect` tests to `ApplyTests`  by @peterneyens 
 * [#1960](https://github.com/typelevel/cats/pull/#1960) Harmonize naming of discipline test classes in cats-kernel-laws.  by @denisrosset 
-* [#1953](https://github.com/typelevel/cats/pull/#1953) Add a more direct tailRecM law  by @johnynek 
-* [#1906](https://github.com/typelevel/cats/pull/#1906) Fix `Alternative` law checking for `IndexedStateT`  by @iravid 
+* [#1953](https://github.com/typelevel/cats/pull/#1953) Add a more direct tailRecM law.  by @johnynek 
+* [#1906](https://github.com/typelevel/cats/pull/#1906) Fix `Alternative` law checking for `IndexedStateT`.  by @iravid 
+* [#1975](https://github.com/typelevel/cats/pull/#1975) Unifies test naming standard.  by @AlejandroME  
 
 
 ### Scalafix for migration
