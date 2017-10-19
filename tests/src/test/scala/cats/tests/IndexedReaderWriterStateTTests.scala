@@ -9,8 +9,8 @@ import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 import cats.arrow.{Strong, Profunctor}
 
-class ReaderWriterStateTTests extends CatsSuite {
-  import ReaderWriterStateTTests._
+class ReaderWriterStateTSuite extends CatsSuite {
+  import ReaderWriterStateTSuite._
 
   test("Basic ReaderWriterState usage") {
     forAll { (context: String, initial: Int) =>
@@ -375,7 +375,7 @@ class ReaderWriterStateTTests extends CatsSuite {
 
 }
 
-object ReaderWriterStateTTests {
+object ReaderWriterStateTSuite {
   def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] = {
     import cats.instances.vector._
 
