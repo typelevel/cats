@@ -23,7 +23,6 @@ trait SortedMapInstances extends SortedMapInstances1 {
           .mkString("SortedMap(", ", ", ")")
     }
 
-
   // scalastyle:off method.length
   implicit def catsStdInstancesForSortedMap[K: Order]: Traverse[SortedMap[K, ?]] with FlatMap[SortedMap[K, ?]] =
     new Traverse[SortedMap[K, ?]] with FlatMap[SortedMap[K, ?]] {
@@ -111,8 +110,7 @@ class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K]) extends 
     var a, b, n = 0
     var c = 1;
     x foreach { case (k, v) =>
-      // use the default hash on keys because that's what Scala's Map does
-      val h = StaticMethods.product2Hash(k.hashCode(), V.hash(v))
+      val h = StaticMethods.product2Hash(K.hash(k), V.hash(v))
       a += h
       b ^= h
       if (h != 0) c *= h

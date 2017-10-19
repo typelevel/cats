@@ -1,10 +1,10 @@
 package cats
 package instances
 
-import cats.kernel.{BoundedSemilattice, Hash, PartialOrder}
+import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
-import cats.syntax.show._
+import cats.implicits._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -52,41 +52,46 @@ trait SortedSetInstances extends SortedSetInstances1 {
       override def find[A](fa: SortedSet[A])(f: A => Boolean): Option[A] = fa.find(f)
     }
 
-  implicit def catsStdShowForSortedSet[A:Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
+  implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
     def show(fa: SortedSet[A]): String =
       fa.toIterator.map(_.show).mkString("SortedSet(", ", ", ")")
   }
 
-  implicit def catsKernelStdHashForSortedSet[A]: Hash[SortedSet[A]] =
-    new SortedSetHash[A]
+  implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
+    new SortedSetOrder[A]
 }
 
 trait SortedSetInstances1 {
-  implicit def catsKernelStdPartialOrderForSortedSet[A]: PartialOrder[SortedSet[A]] =
-    new SortedSetPartialOrder[A]
+  implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    new SortedSetHash[A]
 
   implicit def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
     new SortedSetSemilattice[A]
 }
 
-class SortedSetPartialOrder[A] extends PartialOrder[SortedSet[A]] {
-  def partialCompare(x: SortedSet[A], y: SortedSet[A]): Double =
-    if (x eq y) 0.0
-    else if (x.size < y.size) if (x.subsetOf(y)) -1.0 else Double.NaN
-    else if (y.size < x.size) if (y.subsetOf(x)) 1.0 else Double.NaN
-    else if (x == y) 0.0
-    else Double.NaN
+class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
+  def compare(a1: SortedSet[A], a2: SortedSet[A]) = {
 
-  // Does not require an Eq on elements: Scala sets must use the universal `equals`.
-  override def eqv(x: SortedSet[A], y: SortedSet[A]): Boolean = x == y
+    Order[Int].compare(a1.size, a2.size) match {
+      case 0 => Order.compare(a1.toStream, a2.toStream)
+      case x => x
+    }
+  }
+
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]) = {
+    implicit val x = Order[A].toOrdering
+    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
+  }
 }
 
-class SortedSetHash[A] extends Hash[SortedSet[A]] {
-  // Does not require a Hash on elements: Scala sets must use the universal `hashCode`.
+class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
+  // TODO replace
   def hash(x: SortedSet[A]): Int = x.hashCode()
 
-  // Does not require an Eq on elements: Scala sets must use the universal `equals`.
-  def eqv(x: SortedSet[A], y: SortedSet[A]): Boolean = x == y
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]) = {
+    implicit val x = Order[A].toOrdering
+    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
+  }
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
