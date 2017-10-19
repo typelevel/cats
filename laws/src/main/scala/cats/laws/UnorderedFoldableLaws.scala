@@ -17,17 +17,11 @@ trait UnorderedFoldableLaws[F[_]] {
   def unorderedFoldConsistentWithUnorderedFoldMap[A: CommutativeMonoid](fa: F[A]): IsEq[A] =
     F.unorderedFoldMap(fa)(identity) <-> F.unorderedFold(fa)
 
-  def existsConsistentWithFind[A](
-                                   fa: F[A],
-                                   p: A => Boolean
-                                 ): Boolean = {
+  def existsConsistentWithFind[A](fa: F[A], p: A => Boolean): Boolean = {
     F.exists(fa)(p) == F.find(fa)(p).isDefined
   }
 
-  def forallConsistentWithExists[A](
-                                     fa: F[A],
-                                     p: A => Boolean
-                                   ): Boolean = {
+  def forallConsistentWithExists[A](fa: F[A], p: A => Boolean): Boolean = {
     if (F.forall(fa)(p)) {
       val negationExists = F.exists(fa)(a => !(p(a)))
 
@@ -43,10 +37,7 @@ trait UnorderedFoldableLaws[F[_]] {
   /**
     * If `F[A]` is empty, forall must return true.
     */
-  def forallEmpty[A](
-                      fa: F[A],
-                      p: A => Boolean
-                    ): Boolean = {
+  def forallEmpty[A](fa: F[A], p: A => Boolean): Boolean = {
     !F.isEmpty(fa) || F.forall(fa)(p)
   }
 
@@ -54,6 +45,9 @@ trait UnorderedFoldableLaws[F[_]] {
     F.toSet(fa) <-> F.foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
       buf += a
     }.toSet
+
+  def nonEmptyRef[A](fa: F[A]): IsEq[Boolean] =
+    F.nonEmpty(fa) <-> !F.isEmpty(fa)
 
 }
 
