@@ -20,7 +20,7 @@ import cats.instances.set._
     * Returns true if there are no elements. Otherwise false.
     */
   def isEmpty[A](fa: F[A]): Boolean =
-    unorderedFoldMap(fa)(a => true)(UnorderedFoldable.orMonoid)
+    exists(fa)(Function.const(true))
 
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
