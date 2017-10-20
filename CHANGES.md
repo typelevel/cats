@@ -17,6 +17,7 @@ This is the only planned release candidate release prior to 1.0.0.
 * [#1922](https://github.com/typelevel/cats/pull/1922) Make kernel laws consistent with core laws  by @LukaJCB
 * [#1838](https://github.com/typelevel/cats/pull/1838) Sync `NonEmptyList` and `NonEmptyVector` methods by @durban
 * [#1914](https://github.com/typelevel/cats/pull/1914) Add `Invariant` instances for kernel type classes by @LukaJCB 
+* [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
 
 To migrate from 1.0.0-MF.
 
@@ -27,6 +28,7 @@ To migrate from 1.0.0-MF.
 * law testing for type classes in `cats.kernel` was made consistent with the law testing in `cats.core`. Check [here](https://typelevel.org/cats/typeclasses/lawtesting.html) for a guide on how to test cats type class instances. 
 * `NonEmptyList.concat` that takes `NonEmptlyList` was deprecated, use `NonEmptyList.concatNel` instead.
 * `Monoid` no longer has a `InvariantMonoidal` instance, we discovered that it's not lawful. It has have an `Invariant` and a `Semigroupal` (new name for `Cartesian`) instance. 
+* `Foldable.iterateRight` now takes an `Iterable` instead of `Iterator`, see #1973 for rationale. 
 
 ### New features / enhancements (API, instances, data types, etc.):
 
