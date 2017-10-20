@@ -31,7 +31,7 @@ trait SortedMapInstances extends SortedMapInstances1 {
 
       def traverse[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
         val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty(Order[K].toOrdering)))
-        Foldable.iterateRight(fa.iterator, gba){ (kv, lbuf) =>
+        Foldable.iterateRight(fa, gba){ (kv, lbuf) =>
           G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
         }.value
       }
@@ -56,7 +56,7 @@ trait SortedMapInstances extends SortedMapInstances1 {
         fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
 
       def foldRight[A, B](fa: SortedMap[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.values.iterator, lb)(f)
+        Foldable.iterateRight(fa.values, lb)(f)
 
       def tailRecM[A, B](a: A)(f: A => SortedMap[K, Either[A, B]]): SortedMap[K, B] = {
         val bldr = SortedMap.newBuilder[K, B](Order[K].toOrdering)

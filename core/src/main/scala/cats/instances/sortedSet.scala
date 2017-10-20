@@ -17,7 +17,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
         fa.foldLeft(b)(f)
 
       def foldRight[A, B](fa: SortedSet[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.iterator, lb)(f)
+        Foldable.iterateRight(fa, lb)(f)
 
       override def get[A](fa: SortedSet[A])(idx: Long): Option[A] = {
         @tailrec
