@@ -25,9 +25,7 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
     new DefaultRuleSet(
       name = "unorderedFoldable",
       parent = None,
-      "foldLeft consistent with unorderedFoldMap" -> forAll(laws.foldLeftConsistentWithUnorderedFoldMap[A, B] _),
       "unorderedFold consistent with unorderedFoldMap" -> forAll(laws.unorderedFoldConsistentWithUnorderedFoldMap[A] _),
-      "exists consistent with find" -> forAll(laws.existsConsistentWithFind[A] _),
       "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "toSet reference" -> forAll(laws.toSetRef[A] _),

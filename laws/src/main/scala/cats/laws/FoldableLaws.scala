@@ -26,6 +26,10 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
     fa.foldMap(f) <-> fa.foldRight(Later(M.empty))((a, lb) => lb.map(f(a) |+| _)).value
   }
 
+  def existsConsistentWithFind[A](fa: F[A], p: A => Boolean): Boolean = {
+    F.exists(fa)(p) == F.find(fa)(p).isDefined
+  }
+
 
   def existsLazy[A](fa: F[A]): Boolean = {
     var i = 0

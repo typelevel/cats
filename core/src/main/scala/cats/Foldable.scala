@@ -27,6 +27,11 @@ import simulacrum.typeclass
  */
 @typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
+  /**
+    * Left associative fold on 'F' using the function 'f'.
+    */
+  def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
+
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
@@ -298,7 +303,7 @@ import simulacrum.typeclass
   /**
    * Find the first element matching the predicate, if one exists.
    */
-  override def find[A](fa: F[A])(f: A => Boolean): Option[A] =
+  def find[A](fa: F[A])(f: A => Boolean): Option[A] =
     foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
       if (f(a)) Now(Some(a)) else lb
     }.value

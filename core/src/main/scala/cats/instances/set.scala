@@ -24,13 +24,8 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       def combineK[A](x: Set[A], y: Set[A]): Set[A] = x | y
 
-      def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b)(f)
-
-      def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.iterator, lb)(f)
-
-      def insert[A](fa: Set[A], a: A): Set[A] = fa + a
+      def unorderedFoldMap[A, B](fa: Set[A])(f: A => B)(implicit B: CommutativeMonoid[B]): B =
+        fa.foldLeft(B.empty)((b, a) => B.combine(f(a), b))
 
       override def unorderedFold[A](fa: Set[A])(implicit A: CommutativeMonoid[A]): A = A.combineAll(fa)
 
@@ -40,8 +35,6 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
         fa.forall(p)
 
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
-
-      override def find[A](fa: Set[A])(f: A => Boolean): Option[A] = fa.find(f)
     }
 
   implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {

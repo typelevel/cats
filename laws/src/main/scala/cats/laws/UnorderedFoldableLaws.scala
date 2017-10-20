@@ -4,22 +4,13 @@ package laws
 import cats.implicits._
 import cats.kernel.CommutativeMonoid
 
-import scala.collection.mutable
-
-
 trait UnorderedFoldableLaws[F[_]] {
   implicit def F: UnorderedFoldable[F]
-
-  def foldLeftConsistentWithUnorderedFoldMap[A, B](fa: F[A], f: A => B)
-                                         (implicit B: CommutativeMonoid[B]): IsEq[B] =
-    F.unorderedFoldMap(fa)(f) <-> F.foldLeft(fa, B.empty) { (b, a) => b |+| f(a) }
 
   def unorderedFoldConsistentWithUnorderedFoldMap[A: CommutativeMonoid](fa: F[A]): IsEq[A] =
     F.unorderedFoldMap(fa)(identity) <-> F.unorderedFold(fa)
 
-  def existsConsistentWithFind[A](fa: F[A], p: A => Boolean): Boolean = {
-    F.exists(fa)(p) == F.find(fa)(p).isDefined
-  }
+
 
   def forallConsistentWithExists[A](fa: F[A], p: A => Boolean): Boolean = {
     if (F.forall(fa)(p)) {
@@ -42,9 +33,7 @@ trait UnorderedFoldableLaws[F[_]] {
   }
 
   def toSetRef[A](fa: F[A]): IsEq[Set[A]] =
-    F.toSet(fa) <-> F.foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      buf += a
-    }.toSet
+    F.unorderedFoldMap(fa)(a => Set(a)) <-> F.toSet(fa)
 
   def nonEmptyRef[A](fa: F[A]): IsEq[Boolean] =
     F.nonEmpty(fa) <-> !F.isEmpty(fa)

@@ -49,11 +49,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
         fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
 
-      def foldLeft[A, B](fa: Map[K, A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b) { case (x, (k, a)) => f(x, a)}
-
-      def foldRight[A, B](fa: Map[K, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.values.iterator, lb)(f)
+      def unorderedFoldMap[A, B: CommutativeMonoid](fa: Map[K, A])(f: (A) => B) =
+        fa.foldLeft(Monoid[B].empty){ case (b, (k, a)) => Monoid[B].combine(b, f(a)) }
 
       def tailRecM[A, B](a: A)(f: A => Map[K, Either[A, B]]): Map[K, B] = {
         val bldr = Map.newBuilder[K, B]
