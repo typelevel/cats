@@ -25,11 +25,11 @@ class CoyonedaSuite extends CatsSuite {
     }
   }
 
-  test("transform and run is same as applying natural trans") {
+  test("mapK and run is same as applying natural trans") {
       val nt = λ[FunctionK[Option, List]](_.toList)
       val o = Option("hello")
       val c = Coyoneda.lift(o)
-      c.transform(nt).run should === (nt(o))
+      c.mapK(nt).run should === (nt(o))
   }
 
   test("map order") {

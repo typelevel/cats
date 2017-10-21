@@ -21,6 +21,17 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   final def map[B](f: A => B)(implicit M: Applicative[M]): FreeT[S, M, B] =
     flatMap(a => pure(f(a)))
 
+  /**
+    * Modify the context `M` using transformation `mn`.
+    */
+  def mapK[N[_]](mn: M ~> N): FreeT[S, N, A] =
+    step match {
+      case e @ FlatMapped(_, _) =>
+        FlatMapped(e.a.mapK(mn), e.f.andThen(_.mapK(mn)))
+      case Suspend(m) =>
+        Suspend(mn(m))
+    }
+
   /** Binds the given continuation to the result of this computation. */
   final def flatMap[B](f: A => FreeT[S, M, B]): FreeT[S, M, B] =
     FlatMapped(this, f)
@@ -28,14 +39,10 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   /**
    * Changes the underlying `Monad` for this `FreeT`, ie.
    * turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
-   */
+    */
+  @deprecated("Use mapK", "1.0.0")
   def hoist[N[_]](mn: FunctionK[M, N]): FreeT[S, N, A] =
-    step match {
-      case e @ FlatMapped(_, _) =>
-        FlatMapped(e.a.hoist(mn), e.f.andThen(_.hoist(mn)))
-      case Suspend(m) =>
-        Suspend(mn(m))
-    }
+    mapK(mn)
 
   @deprecated("Use compile", "0.8.0")
   def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
@@ -251,4 +258,3 @@ private[free] sealed trait FreeTSemigroupK[S[_], M[_]] extends SemigroupK[FreeT[
   override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
     FreeT.liftT(M1.combineK(a.toM, b.toM))(M).flatMap(identity)
 }
-

@@ -76,18 +76,18 @@ class FreeTSuite extends CatsSuite {
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
   }
 
-  test("hoist to universal id equivalent to original instance") {
+  test("mapK to universal id equivalent to original instance") {
     forAll { a: FreeTOption[Int] =>
-      val b = a.hoist(FunctionK.id)
+      val b = a.mapK(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
     }
   }
 
-  test("hoist stack-safety") {
+  test("mapK stack-safety") {
     val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
       (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
-    val b = a.hoist(FunctionK.id)
+    val b = a.mapK(FunctionK.id)
   }
 
   test("compile to universal id equivalent to original instance") {
