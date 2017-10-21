@@ -219,15 +219,6 @@ class KleisliSuite extends CatsSuite {
     (List(1, 2, 3) >>= l.run) should === (List(Some(2), Some(3), Some(4)))
   }
 
-  test("transform") {
-    val opt = Kleisli { (x: Int) => Option(x.toDouble) }
-    val optToList = λ[FunctionK[Option,List]](_.toList)
-    val list = opt.transform(optToList)
-
-    val is = 0.to(10).toList
-    is.map(list.run) should === (is.map(Kleisli { (x: Int) => List(x.toDouble) }.run))
-  }
-
   test("local") {
     case class Config(i: Int, s: String)
 
