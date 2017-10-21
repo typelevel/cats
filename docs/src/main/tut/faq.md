@@ -22,7 +22,7 @@ position: 40
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
  * [What does this symbol mean?](#symbol)
- * [How can I test `laws`?](#law-testing)
+ * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -233,7 +233,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `fa >> fb` (Deprecated)          | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
 | `fa << fb` (Deprecated)          | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
 
-## <a id="law-testing" href="#law-testing"></a>How can I test `laws`? 
+## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
 
 You can find more information [here](typeclasses/lawtesting.html).
 
