@@ -187,7 +187,6 @@ The current maintainers (people who can merge pull requests) are:
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
- * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
