@@ -107,6 +107,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
+ * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
