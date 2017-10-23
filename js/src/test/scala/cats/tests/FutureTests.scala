@@ -2,7 +2,7 @@ package cats
 package js
 package tests
 
-import cats.kernel.laws.discipline.{MonoidLawTests, SemigroupLawTests}
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad

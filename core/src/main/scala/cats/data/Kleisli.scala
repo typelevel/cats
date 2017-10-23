@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.Contravariant
+import cats.{Contravariant, Id}
 import cats.arrow._
 
 /**
@@ -67,6 +67,8 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   /** Yield computed B combined with input value. */
   def tapWith[C](f: (A, B) => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
+
+  def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
 
   def apply(a: A): F[B] = run(a)
 }

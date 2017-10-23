@@ -2,9 +2,9 @@ package cats
 package tests
 
 
-import ExtraRegressionTests._
+import ExtraRegressionSuite._
 
-class ExtraRegressionTests extends CatsSuite {
+class ExtraRegressionSuite extends CatsSuite {
   /**
    * Placed here to work around scala/bug#6260 on scala 2.10
    */
@@ -14,7 +14,7 @@ class ExtraRegressionTests extends CatsSuite {
 }
 
 
-object ExtraRegressionTests {
+object ExtraRegressionSuite {
   final case class First[A](getFirst: A) extends AnyVal
   object First {
     implicit def showInstance[A](implicit ev: Show[A]): Show[First[A]] = new Show[First[A]] {

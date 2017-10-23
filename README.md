@@ -106,6 +106,8 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
+ * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
@@ -186,7 +188,6 @@ The current maintainers (people who can merge pull requests) are:
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
- * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
