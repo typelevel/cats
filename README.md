@@ -79,7 +79,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
- * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs
+ * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
