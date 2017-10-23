@@ -66,7 +66,7 @@ object SetInstances {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.iterator, lb)(f)
+        Foldable.iterateRight(fa, lb)(f)
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
         sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>

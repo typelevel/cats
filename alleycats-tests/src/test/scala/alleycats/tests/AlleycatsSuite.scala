@@ -7,7 +7,7 @@ import catalysts.Platform
 import cats._
 import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
-
+import cats.tests.StrictCatsEquality
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
