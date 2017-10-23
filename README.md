@@ -28,8 +28,6 @@ Cats relies on improved type inference via the fix for [SI-2712](https://github.
 
 ```scala
 scalacOptions += "-Ypartial-unification"
-
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
 ```
 
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
