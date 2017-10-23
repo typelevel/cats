@@ -112,6 +112,7 @@ To migrate from 1.0.0-MF.
 * [#1779](https://github.com/typelevel/cats/pull/1779) quick date fix  by @kailuowang
 * [#1756](https://github.com/typelevel/cats/pull/1756) Add piecemeal import guide  by @LukaJCB
 * [#1777](https://github.com/typelevel/cats/pull/1777) Add `Reducible` docs  by @LukaJCB
+* [#1985](https://github.com/typelevel/cats/pull/1985) Links "LawTesting.md" in FAQ and TypeClasses pages  by @AlejandroME 
 
 ### Build improvements/dependency updates
  
