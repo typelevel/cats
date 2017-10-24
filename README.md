@@ -100,6 +100,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
