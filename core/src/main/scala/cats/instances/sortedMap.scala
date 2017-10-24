@@ -98,7 +98,7 @@ trait SortedMapInstances extends SortedMapInstances1 {
 }
 
 trait SortedMapInstances1 {
-  implicit def catsKernelStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
+  implicit def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 }
 

@@ -1,12 +1,13 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{HashTests => HashLawTests, MonoidTests => MonoidLawTests}
+import cats.kernel.laws.discipline.{HashTests, MonoidTests}
 import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
+
 import scala.collection.immutable.SortedMap
 
-class SortedMapTests extends CatsSuite {
+class SortedMapSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[SortedMap[Int, ?]]
 
   checkAll("SortedMap[Int, Int]", SemigroupalTests[SortedMap[Int, ?]].semigroupal[Int, Int, Int])
@@ -26,7 +27,7 @@ class SortedMapTests extends CatsSuite {
     }
   }
 
-  checkAll("Hash[SortedMap[Int, String]]" , HashLawTests[SortedMap[Int, String]].hash)
-  checkAll("Monoid[SortedMap[String, Int]]", MonoidLawTests[SortedMap[String, Int]].monoid)
+  checkAll("Hash[SortedMap[Int, String]]" , HashTests[SortedMap[Int, String]].hash)
+  checkAll("Monoid[SortedMap[String, Int]]", MonoidTests[SortedMap[String, Int]].monoid)
   checkAll("Monoid[SortedMap[String, Int]]", SerializableTests.serializable(Monoid[SortedMap[String, Int]]))
 }
