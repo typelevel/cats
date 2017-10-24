@@ -100,7 +100,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(a, head :: tail)
 
   /**
-    * Alias for [[concat]]
+    * Alias for concat
     *
     * {{{
     * scala> import cats.data.NonEmptyList
