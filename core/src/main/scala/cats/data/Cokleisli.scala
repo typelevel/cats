@@ -11,9 +11,31 @@ import scala.annotation.tailrec
  */
 final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
 
+  /**
+    * Example:
+    * {{{
+    * scala> import cats.Id, cats.implicits._
+    * scala> val x : Id[Int] = 42
+    * scala> def before(x: Int) = x + 1
+    * scala> def after(x: Int) = x - 1
+    * scala> val example : Cokleisli[Id,Int,Int] = Cokleisli((f: Id[Int]) => f.extract)
+    * scala> example.dimap(before)(after) == 42
+    * }}}
+    */
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Cokleisli[F, C, D] =
     Cokleisli(fc => g(run(F.map(fc)(f))))
 
+  /**
+    * Example:
+    * {{{
+    * scala> import cats.Id, cats.implicits._
+    * scala> val x : Id[Int] = 42
+    * scala> def before(x: Int) = x + 1
+    * scala> def after(x: Int) = x - 1
+    * scala> val example : Cokleisli[Id,Int,Int] = Cokleisli((f: Id[Int]) => f.extract)
+    * scala> example.lmap(before).rmap(after) == 42
+    * }}}
+    */
   def lmap[C](f: C => A)(implicit F: Functor[F]): Cokleisli[F, C, B] =
     Cokleisli(fc => run(F.map(fc)(f)))
 
