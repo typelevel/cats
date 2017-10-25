@@ -37,6 +37,15 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def toNested: Nested[F, Ior[A, ?], B] = Nested[F, Ior[A, ?], B](value)
 
+  def toNestedValidated(implicit F: Functor[F]): Nested[F, Validated[A, ?], B] =
+    Nested[F, Validated[A, ?], B](F.map(value)(_.toValidated))
+
+  def toValidated(implicit F: Functor[F]): F[Validated[A, B]] = F.map(value)(_.toValidated)
+
+  def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] = F.map(value)(_.to[G, B])
+
+  def collectRight(implicit FA: Alternative[F], FM: Monad[F]): F[B] = FM.flatMap(value)(_.to[F, B])
+
   def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F], AA: Semigroup[AA]): F[AA] = F.map(value)(_.merge(ev, AA))
 
   def show(implicit show: Show[F[Ior[A, B]]]): String = show.show(value)
@@ -46,6 +55,24 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): IorT[F, C, D] = IorT(F.map(value)(_.bimap(fa, fb)))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): IorT[F, C, B] = IorT(F.map(value)(_.leftMap(f)))
+
+  def leftFlatMap[BB >: B, C](f: A => IorT[F, C, BB])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, C, BB] =
+    IorT(F.flatMap(value) {
+      case Ior.Left(a) => f(a).value
+      case r @ Ior.Right(_) => F.pure(r.asInstanceOf[Ior[C, BB]])
+      case Ior.Both(a, b) => F.map(f(a).value) {
+        case Ior.Left(c) => Ior.Both(c, b)
+        case Ior.Right(b1) => Ior.Right(BB.combine(b, b1))
+        case Ior.Both(c, b1) => Ior.Both(c, BB.combine(b, b1))
+      }
+    })
+
+  def leftSemiflatMap[C](f: A => F[C])(implicit F: Monad[F]): IorT[F, C, B] =
+    IorT(F.flatMap(value) {
+      case Ior.Left(a) => F.map(f(a))(Ior.Left(_))
+      case r @ Ior.Right(_) => F.pure(r.asInstanceOf[Ior[C, B]])
+      case Ior.Both(a, b) => F.map(f(a))(Ior.Both(_, b))
+    })
 
   def transform[C, D](f: Ior[A, B] => Ior[C, D])(implicit F: Functor[F]): IorT[F, C, D] = IorT(F.map(value)(f))
 

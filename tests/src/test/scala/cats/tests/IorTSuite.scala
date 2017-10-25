@@ -161,6 +161,30 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("toNestedValidated consistent with Ior toValidated") {
+    forAll { (iort: IorT[List, String, Int]) =>
+      iort.toNestedValidated.value should === (iort.value.map(_.toValidated))
+    }
+  }
+
+  test("toValidated consistent with Ior toValidated") {
+    forAll { (iort: IorT[List, String, Int]) =>
+      iort.toValidated should === (iort.value.map(_.toValidated))
+    }
+  }
+
+  test("to consistent with toOption") {
+    forAll { (iort: IorT[List, String, Int]) =>
+      iort.to[Option] should === (iort.toOption.value)
+    }
+  }
+
+  test("collectRight with List consistent with flattening a to[List]") {
+    forAll { (iort: IorT[List, String, Int]) =>
+      iort.collectRight should === (iort.to[List].flatten)
+    }
+  }
+
   test("merge with Id consistent with Ior merge") {
     forAll { (iort: IorT[Id, Int, Int]) =>
       iort.merge should === (iort.value.merge)
@@ -170,6 +194,30 @@ class IorTSuite extends CatsSuite {
   test("leftMap with Id consistent with Ior leftMap") {
     forAll { (iort: IorT[Id, String, Int], f: String => Long) =>
       iort.leftMap(f).value should === (iort.value.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with leftMap") {
+    forAll { (iort: IorT[List, String, Int], f: String => String) =>
+      iort.leftFlatMap(v => IorT.left[Int](List(f(v)))) should ===(iort.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with swap and then flatMap") {
+    forAll { (iort: IorT[List, String, Int], f: String => IorT[List, String, Int]) =>
+      iort.leftFlatMap(f) should ===(iort.swap.flatMap(a => f(a).swap).swap)
+    }
+  }
+
+  test("leftSemiflatMap consistent with leftMap") {
+    forAll { (iort: IorT[List, String, Int], f: String => String) =>
+      iort.leftSemiflatMap(v => List(f(v))) should ===(iort.leftMap(f))
+    }
+  }
+
+  test("leftSemiflatmap consistent with swap and the semiflatMap") {
+    forAll { (iort: IorT[List, String, Int], f: String => List[String]) =>
+      iort.leftSemiflatMap(f) should ===(iort.swap.semiflatMap(a => f(a)).swap)
     }
   }
 
