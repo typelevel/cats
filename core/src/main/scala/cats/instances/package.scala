@@ -24,6 +24,7 @@ package object instances {
   object option          extends OptionInstances
   object order           extends OrderInstances
   object ordering        extends OrderingInstances
+  object parallel        extends ParallelInstances
   object partialOrder    extends PartialOrderInstances
   object partialOrdering extends PartialOrderingInstances
   object queue           extends QueueInstances

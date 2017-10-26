@@ -6,7 +6,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait CommutativeFlatMapTests[F[_]] extends FlatMapTests[F] {
+trait CommutativeFlatMapTests[F[_]] extends FlatMapTests[F] with CommutativeApplyTests[F] {
   def laws: CommutativeFlatMapLaws[F]
 
   def commutativeFlatMap[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -28,7 +28,7 @@ trait CommutativeFlatMapTests[F[_]] extends FlatMapTests[F] {
     new RuleSet {
       def name: String = "commutative flatMap"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(flatMap[A, B, C])
+      def parents: Seq[RuleSet] = Seq(flatMap[A, B, C], commutativeApply[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
         "flatmap commutativity" -> forAll(laws.flatmapCommutative[A, B, C] _)
       )
