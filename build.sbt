@@ -207,16 +207,16 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -708,6 +708,55 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
 lazy val testkitJVM = testkit.jvm
 lazy val testkitJS = testkit.js
 
+lazy val alleycatsCore = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-core"))
+  .dependsOn(core)
+  .settings(moduleName := "alleycats-core", name := "Alleycats core")
+  .settings(libraryDependencies ++= Seq(
+    "org.typelevel" %% "export-hook" % "1.2.0"
+  ))
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions ~= {_.filterNot("-Ywarn-unused-import" == _)}) //export-hook triggers unused import
+
+
+lazy val alleycatsCoreJVM = alleycatsCore.jvm
+lazy val alleycatsCoreJS = alleycatsCore.js
+
+lazy val alleycatsLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-laws"))
+  .dependsOn(alleycatsCore, laws)
+  .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .jsSettings(coverageEnabled := false)
+  .dependsOn(alleycatsCore)
+
+lazy val alleycatsLawsJVM = alleycatsLaws.jvm
+lazy val alleycatsLawsJS = alleycatsLaws.js
+
+lazy val alleycatsTests = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-tests"))
+  .dependsOn(alleycatsLaws, testkit % "test")
+  .settings(moduleName := "alleycats-tests")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+
+lazy val alleycatsTestsJVM = alleycatsTests.jvm
+lazy val alleycatsTestsJS = alleycatsTests.js
+
+
 // bench is currently JVM-only
 
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
@@ -789,6 +838,11 @@ lazy val publishSettings = Seq(
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>LukaJCB</id>
+        <name>LukaJCB</name>
+        <url>https://github.com/LukaJCB/</url>
       </developer>
       <developer>
         <id>mpilquist</id>
