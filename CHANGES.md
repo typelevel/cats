@@ -54,6 +54,9 @@ To migrate from 1.0.0-MF.
 * [#1712](https://github.com/typelevel/cats/pull/1712) Hash typeclass  by @ctongfei
 * [#1976](https://github.com/typelevel/cats/pull/1976) Reduced usage of `fold` in `Validated` for better performance by @kailuowang
 * [#1967](https://github.com/typelevel/cats/pull/1967) Add a few type classes to generated tuple instances by @edmundnoble/@kailuowang
+* [#1984](https://github.com/typelevel/cats/pull/1984) Welcome, Alleycats  by @kailuowang
+* [#1927](https://github.com/typelevel/cats/pull/1927) Add `CommutativeApply` and `CommutativeApplicative`  by @LukaJCB
+* [#1837](https://github.com/typelevel/cats/pull/1837) Add `Parallel` type class  by @LukaJCB
 
 ### Bug fixes:
 
