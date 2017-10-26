@@ -30,6 +30,8 @@ package object instances {
   object queue           extends QueueInstances
   object set             extends SetInstances
   object short           extends ShortInstances
+  object sortedMap       extends SortedMapInstances
+  object sortedSet       extends SortedSetInstances
   object stream          extends StreamInstances
   object string          extends StringInstances
   object try_            extends TryInstances
