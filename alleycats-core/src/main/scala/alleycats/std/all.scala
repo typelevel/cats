@@ -10,4 +10,4 @@ import export._
   SetInstances,
   TryInstances,
   IterableInstances
-) object all extends LegacySetInstances with LegacyTryInstances with LegacyIterableInstances
+) object all extends LegacySetInstances with LegacyTryInstances with LegacyIterableInstances with MapInstances

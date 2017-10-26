@@ -1,6 +1,6 @@
 package alleycats.std
 
-import cats.{Applicative, Eval, Foldable, Monad, Traverse}
+import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse}
 import export._
 
 import scala.annotation.tailrec
@@ -67,12 +67,45 @@ object SetInstances {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa, lb)(f)
+
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
         sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>
           G.map2(buf, f(a))(_ + _)
         }
       }
+
+      override def get[A](fa: Set[A])(idx: Long): Option[A] = {
+        @tailrec
+        def go(idx: Int, it: Iterator[A]): Option[A] = {
+          if (it.hasNext) {
+            if (idx == 0) Some(it.next) else {
+              it.next
+              go(idx - 1, it)
+            }
+          } else None
+        }
+        if (idx < Int.MaxValue && idx >= 0L)  go(idx.toInt, fa.toIterator) else None
+      }
+
+      override def size[A](fa: Set[A]): Long = fa.size.toLong
+
+      override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: Set[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
+
+      override def fold[A](fa: Set[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def toList[A](fa: Set[A]): List[A] = fa.toList
+
+      override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: Set[A])(f: A => Boolean): Option[A] = fa.find(f)
     }
 }
 
