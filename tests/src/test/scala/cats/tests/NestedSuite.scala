@@ -71,10 +71,23 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // CommutativeApply composition
+    checkAll("Nested[Option, Validated[Int, ?], ?]", CommutativeApplyTests[Nested[Option, Validated[Int, ?], ?]].commutativeApply[Int, Int, Int])
+    checkAll("CommutativeApply[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(CommutativeApply[Nested[Option, Validated[Int, ?], ?]]))
+  }
+
+  {
     // Applicative composition
     implicit val instance = ListWrapper.applicative
     checkAll("Nested[List, ListWrapper, ?]", ApplicativeTests[Nested[List, ListWrapper, ?]].applicative[Int, Int, Int])
     checkAll("Applicative[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Applicative[Nested[List, ListWrapper, ?]]))
+  }
+
+  {
+    // CommutativeApplicative composition
+    implicit val instance = ListWrapper.applicative
+    checkAll("Nested[Option, Validated[Int, ?], ?]", CommutativeApplicativeTests[Nested[Option, Validated[Int, ?], ?]].commutativeApplicative[Int, Int, Int])
+    checkAll("CommutativeApplicative[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(CommutativeApplicative[Nested[Option, Validated[Int, ?], ?]]))
   }
 
   {
