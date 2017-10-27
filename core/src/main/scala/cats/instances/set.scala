@@ -15,7 +15,7 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
           Apply[G].map2(acc, f(a))(_ + _)
         }
 
-      def sequenceUnordered[G[_]: CommutativeApplicative, A](sa: Set[G[A]]): G[Set[A]] =
+      override def unorderedSequence[G[_]: CommutativeApplicative, A](sa: Set[G[A]]): G[Set[A]] =
         sa.foldLeft(Applicative[G].pure(Set.empty[A])) { (acc, a) =>
           Apply[G].map2(acc, a)(_ + _)
         }
