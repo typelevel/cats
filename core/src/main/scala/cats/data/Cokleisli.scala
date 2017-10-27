@@ -14,13 +14,12 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
   /**
     * Example:
     * {{{
-    * scala> import cats.Id, cats.data.NonEmptyList, cats.implicits._
-    * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * f: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
-    * scala> def before(x: String) = x.toInt
-    * scala> def after(x: Int) = x.toString
-    * scala> f.dimap(before)(after).run(NonEmptyList.of("1","2"))
-    * res0: String = 2
+    * scala> import cats.Id, cats.implicits._
+    * scala> val x : Id[Int] = 42
+    * scala> def before(x: Int) = x + 1
+    * scala> def after(x: Int) = x - 1
+    * scala> val example : Cokleisli[Id,Int,Int] = Cokleisli((f: Id[Int]) => f.extract)
+    * scala> example.dimap(before)(after) == 42
     * }}}
     */
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Cokleisli[F, C, D] =
@@ -29,13 +28,12 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
   /**
     * Example:
     * {{{
-    * scala> import cats.Id, cats.data.NonEmptyList, cats.implicits._
-    * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * f: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
-    * scala> def before(x: String) = x.toInt
-    * scala> def after(x: Int) = x.toString
-    * scala> f.lmap(before).rmap(after).run(NonEmptyList.of("1","2"))
-    * res0: String = 2
+    * scala> import cats.Id, cats.implicits._
+    * scala> val x : Id[Int] = 42
+    * scala> def before(x: Int) = x + 1
+    * scala> def after(x: Int) = x - 1
+    * scala> val example : Cokleisli[Id,Int,Int] = Cokleisli((f: Id[Int]) => f.extract)
+    * scala> example.lmap(before).rmap(after) == 42
     * }}}
     */
   def lmap[C](f: C => A)(implicit F: Functor[F]): Cokleisli[F, C, B] =
@@ -44,16 +42,6 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
   def map[C](f: B => C): Cokleisli[F, A, C] =
     Cokleisli(f compose run)
 
-  /**
-   * Example:
-   * {{{
-   * scala> val sum = Cokleisli((xs: NonEmptyList[Int]) => xs.reduceLeft(_ + _))
-   * sum: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
-   *
-   * scala> sum.contramapValue((xs: NonEmptyList[String]) => xs.map(_.toInt)).run(NonEmptyList.of("1","2","3"))
-   * res4: Int = 6
-   * }}}
-   */
   def contramapValue[C](f: F[C] => F[A]): Cokleisli[F, C, B] =
     Cokleisli(run compose f)
 
