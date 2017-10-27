@@ -85,9 +85,26 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
 }
 
 class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
-  // TODO replace
-  def hash(x: SortedSet[A]): Int = x.hashCode()
+  import scala.util.hashing.MurmurHash3._
 
+  // adapted from [[scala.util.hashing.MurmurHash3]],
+  // but modified standard `Any#hashCode` to `ev.hash`.
+  def hash(xs: SortedSet[A]): Int = {
+    var a, b, n = 0
+    var c = 1
+    xs foreach { x =>
+      val h = Hash[A].hash(x)
+      a += h
+      b ^= h
+      if (h != 0) c *= h
+      n += 1
+    }
+    var h = setSeed
+    h = mix(h, a)
+    h = mix(h, b)
+    h = mixLast(h, c)
+    finalizeHash(h, n)
+  }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
     s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
