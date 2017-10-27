@@ -1,8 +1,9 @@
 package cats
 package tests
 
+
+import cats.data.{Tuple2K, Validated}
 import cats.Contravariant
-import cats.data.Tuple2K
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -38,6 +39,16 @@ class Tuple2KSuite extends CatsSuite {
     implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[ListWrapper, ListWrapper, ?]]
     checkAll("Tuple2K[ListWrapper, ListWrapper, ?]", ApplyTests[Tuple2K[ListWrapper, ListWrapper, ?]].apply[Int, Int, Int])
     checkAll("Apply[Tuple2K[ListWrapper, ListWrapper, ?]]", SerializableTests.serializable(Apply[Tuple2K[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
+    checkAll("Tuple2K[Option, Validated[Int, ?], ?]", CommutativeApplyTests[Tuple2K[Option, Validated[Int, ?], ?]].commutativeApply[Int, Int, Int])
+    checkAll("Apply[Tuple2K[Option, Validated[Int, ?], ?]]", SerializableTests.serializable(CommutativeApply[Tuple2K[Option, Validated[Int, ?], ?]]))
+  }
+
+  {
+    checkAll("Tuple2K[Option, Validated[Int, ?], ?]", CommutativeApplicativeTests[Tuple2K[Option, Validated[Int, ?], ?]].commutativeApplicative[Int, Int, Int])
+    checkAll("Applicative[Tuple2K[Option, Validated[Int, ?], ?]]", SerializableTests.serializable(CommutativeApplicative[Tuple2K[Option, Validated[Int, ?], ?]]))
   }
 
   {

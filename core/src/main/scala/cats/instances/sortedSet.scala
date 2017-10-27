@@ -70,7 +70,7 @@ trait SortedSetInstances1 {
 }
 
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
-  def compare(a1: SortedSet[A], a2: SortedSet[A]) = {
+  def compare(a1: SortedSet[A], a2: SortedSet[A]): Int = {
 
     Order[Int].compare(a1.size, a2.size) match {
       case 0 => Order.compare(a1.toStream, a2.toStream)
@@ -78,7 +78,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
     }
   }
 
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]) = {
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
     s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
   }
@@ -88,7 +88,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
   // TODO replace
   def hash(x: SortedSet[A]): Int = x.hashCode()
 
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]) = {
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
     s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
   }

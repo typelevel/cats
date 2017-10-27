@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.data.Validated.{Invalid, Valid}
+import cats.kernel.CommutativeSemigroup
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
@@ -404,19 +405,7 @@ private[data] sealed abstract class ValidatedInstances extends ValidatedInstance
     }
 
   implicit def catsDataApplicativeErrorForValidated[E](implicit E: Semigroup[E]): ApplicativeError[Validated[E, ?], E] =
-    new ApplicativeError[Validated[E, ?], E] {
-
-      def pure[A](a: A): Validated[E, A] =
-        Validated.valid(a)
-
-      override def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] =
-        fa.map(f)
-
-      def ap[A, B](f: Validated[E, A => B])(fa: Validated[E, A]): Validated[E, B] =
-        fa.ap(f)(E)
-
-      override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
-        fa.product(fb)(E)
+    new ValidatedApplicative[E] with ApplicativeError[Validated[E, ?], E] {
 
       def handleErrorWith[A](fa: Validated[E, A])(f: E => Validated[E, A]): Validated[E, A] =
         fa match {
@@ -433,6 +422,9 @@ private[data] sealed abstract class ValidatedInstances1 extends ValidatedInstanc
     new Semigroup[Validated[A, B]] {
       def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x combine y
     }
+
+  implicit def catsDataCommutativeApplicativeForValidated[E: CommutativeSemigroup]: CommutativeApplicative[Validated[E, ?]] =
+    new ValidatedApplicative[E] with CommutativeApplicative[Validated[E, ?]]
 
   implicit def catsDataPartialOrderForValidated[A: PartialOrder, B: PartialOrder]: PartialOrder[Validated[A, B]] =
     new PartialOrder[Validated[A, B]] {
@@ -505,6 +497,19 @@ private[data] sealed abstract class ValidatedInstances2 {
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
   // scalastyle:off method.length
+}
+
+private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplicative[Validated[E, ?]] {
+  override def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] =
+    fa.map(f)
+
+  def pure[A](a: A): Validated[E, A] = Validated.valid(a)
+
+  def ap[A, B](ff: Validated[E, (A) => B])(fa: Validated[E, A]): Validated[E, B] =
+    fa.ap(ff)(Semigroup[E])
+
+  override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
+    fa.product(fb)(Semigroup[E])
 }
 
 private[data] trait ValidatedFunctions {

@@ -338,6 +338,7 @@ private[data] sealed abstract class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
+
 }
 
 object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
@@ -362,4 +363,6 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
   def fromVectorUnsafe[A](vector: Vector[A]): NonEmptyVector[A] =
     if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
+
+
 }
