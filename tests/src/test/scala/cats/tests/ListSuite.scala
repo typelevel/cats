@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{NonEmptyList, ZipList}
-import cats.laws.discipline.{ApplyTests, TraverseTests, CoflatMapTests, AlternativeTests, SerializableTests, SemigroupalTests}
+import cats.laws.discipline.{CommutativeApplyTests, TraverseTests, CoflatMapTests, AlternativeTests, SerializableTests, SemigroupalTests}
 import cats.laws.discipline.arbitrary._
 
 class ListSuite extends CatsSuite {
@@ -19,7 +19,7 @@ class ListSuite extends CatsSuite {
   checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, List[Int], Option, Option])
   checkAll("Traverse[List]", SerializableTests.serializable(Traverse[List]))
 
-  checkAll("ZipList[Int]", ApplyTests[ZipList].apply[Int, Int, Int])
+  checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
   test("nel => list => nel returns original nel")(
     forAll { fa: NonEmptyList[Int] =>

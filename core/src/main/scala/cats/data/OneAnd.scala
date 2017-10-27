@@ -101,7 +101,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 
 private[data] sealed abstract class OneAndInstances extends OneAndLowPriority4 {
 
-  implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F[_]: Alternative]
+  implicit def catsDataParallelForOneAnd[A, M[_] : Alternative, F[_] : Alternative]
   (implicit P: Parallel[M, F]): Parallel[OneAnd[M, ?], OneAnd[F, ?]] =
     new Parallel[OneAnd[M, ?], OneAnd[F, ?]] {
       def monad: Monad[OneAnd[M, ?]] = catsDataMonadForOneAnd(P.monad, Alternative[M])
@@ -115,7 +115,6 @@ private[data] sealed abstract class OneAndInstances extends OneAndLowPriority4 {
         λ[OneAnd[M, ?] ~> OneAnd[F, ?]](ofa => OneAnd(ofa.head, P.parallel(ofa.tail)))
 
     }
-
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{

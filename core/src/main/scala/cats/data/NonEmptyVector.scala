@@ -342,7 +342,7 @@ private[data] sealed abstract class NonEmptyVectorInstances {
   implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
     new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
 
-      def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.zipNevApply
+      def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
@@ -384,16 +384,17 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] =
       new ZipNonEmptyVector(nev)
 
-    implicit val zipNevApply: Apply[ZipNonEmptyVector] = new Apply[ZipNonEmptyVector] {
-      def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
-        ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+    implicit val catsDataCommutativeApplyForZipNonEmptyVector: CommutativeApply[ZipNonEmptyVector] =
+      new CommutativeApply[ZipNonEmptyVector] {
+        def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
+          ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
 
-      override def map[A, B](fa: ZipNonEmptyVector[A])(f: (A) => B): ZipNonEmptyVector[B] =
-        ZipNonEmptyVector(fa.value.map(f))
+        override def map[A, B](fa: ZipNonEmptyVector[A])(f: (A) => B): ZipNonEmptyVector[B] =
+          ZipNonEmptyVector(fa.value.map(f))
 
-      override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
-        ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
-    }
+        override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
+          ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+      }
 
     implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
   }

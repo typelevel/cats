@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{ApplyTests, CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
+import cats.laws.discipline.{CommutativeApplyTests, CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
 import cats.data.ZipStream
 
 import cats.laws.discipline.arbitrary._
@@ -23,7 +23,7 @@ class StreamSuite extends CatsSuite {
   checkAll("Traverse[Stream]", SerializableTests.serializable(Traverse[Stream]))
 
   // Can't test applicative laws as they don't terminate
-  checkAll("ZipStream[Int]", ApplyTests[ZipStream].apply[Int, Int, Int])
+  checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
 
   test("show") {
     Stream(1, 2, 3).show should === ("Stream(1, ?)")

@@ -1,6 +1,6 @@
 package cats.data
 
-import cats.{Apply, Eq}
+import cats.{CommutativeApply, Eq}
 import cats.instances.list.catsKernelStdEqForList
 
 class ZipList[A](val value: List[A]) extends AnyVal
@@ -9,7 +9,7 @@ object ZipList {
 
   def apply[A](value: List[A]): ZipList[A] = new ZipList(value)
 
-  implicit val catsDataApplyForZipList: Apply[ZipList] = new Apply[ZipList] {
+  implicit val catsDataCommutativeApplyForZipList: CommutativeApply[ZipList] = new CommutativeApply[ZipList] {
 
     override def map[A, B](fa: ZipList[A])(f: (A) => B): ZipList[B] =
       ZipList(fa.value.map(f))

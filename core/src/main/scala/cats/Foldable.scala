@@ -505,10 +505,11 @@ import simulacrum.typeclass
 }
 
 object Foldable {
-  def iterateRight[A, B](it: Iterator[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-    def loop(): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
-    loop()
+  def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(it: Iterator[A]): Eval[B] =
+      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+
+    Eval.always(iterable.iterator).flatMap(loop)
   }
 
 

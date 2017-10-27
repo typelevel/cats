@@ -416,16 +416,17 @@ object NonEmptyList extends NonEmptyListInstances {
     def apply[A](nev: NonEmptyList[A]): ZipNonEmptyList[A] =
       new ZipNonEmptyList(nev)
 
-    implicit val zipNelApply: Apply[ZipNonEmptyList] = new Apply[ZipNonEmptyList] {
-      def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
-        ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+    implicit val catsDataCommutativeApplyForZipNonEmptyList: CommutativeApply[ZipNonEmptyList] =
+      new CommutativeApply[ZipNonEmptyList] {
+        def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
+          ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
 
-      override def map[A, B](fa: ZipNonEmptyList[A])(f: (A) => B): ZipNonEmptyList[B] =
-        ZipNonEmptyList(fa.value.map(f))
+        override def map[A, B](fa: ZipNonEmptyList[A])(f: (A) => B): ZipNonEmptyList[B] =
+          ZipNonEmptyList(fa.value.map(f))
 
-      override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
-        ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
-    }
+        override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
+          ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+      }
 
     implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
@@ -548,7 +549,7 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
 
       def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 
-      def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.zipNelApply
+      def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
 
       def sequential: ZipNonEmptyList ~> NonEmptyList =
         λ[ZipNonEmptyList ~> NonEmptyList](_.value)

@@ -6,7 +6,7 @@ import cats.kernel.laws.discipline.{SemigroupTests, OrderTests, PartialOrderTest
 import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{ApplyTests, ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{CommutativeApplyTests, ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
 
 class NonEmptyListSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -36,7 +36,7 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("NonEmptyList[ListWrapper[Int]]", EqTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
 
-  checkAll("ZipNonEmptyList[Int]", ApplyTests[ZipNonEmptyList].apply[Int, Int, Int])
+  checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
   {
     implicit val A = ListWrapper.partialOrder[Int]

@@ -1,6 +1,6 @@
 package cats.data
 
-import cats.{Apply, Eq}
+import cats.{CommutativeApply, Eq}
 import cats.instances.vector._
 
 class ZipVector[A](val value: Vector[A]) extends AnyVal
@@ -9,7 +9,7 @@ object ZipVector {
 
   def apply[A](value: Vector[A]): ZipVector[A] = new ZipVector(value)
 
-  implicit val catsDataApplyForZipVector: Apply[ZipVector] = new Apply[ZipVector] {
+  implicit val catsDataCommutativeApplyForZipVector: CommutativeApply[ZipVector] = new CommutativeApply[ZipVector] {
 
     override def map[A, B](fa: ZipVector[A])(f: (A) => B): ZipVector[B] =
       ZipVector(fa.value.map(f))

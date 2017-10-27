@@ -42,7 +42,7 @@ trait ParallelInstances extends ParallelInstances1 {
     new NonEmptyParallel[List, ZipList] {
 
       def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
-      def apply: Apply[ZipList] = ZipList.catsDataApplyForZipList
+      def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
 
       def sequential: ZipList ~> List =
         λ[ZipList ~> List](_.value)
@@ -55,7 +55,7 @@ trait ParallelInstances extends ParallelInstances1 {
     new NonEmptyParallel[Vector, ZipVector] {
 
       def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
-      def apply: Apply[ZipVector] = ZipVector.catsDataApplyForZipVector
+      def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
 
       def sequential: ZipVector ~> Vector =
         λ[ZipVector ~> Vector](_.value)
