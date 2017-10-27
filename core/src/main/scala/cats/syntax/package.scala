@@ -31,6 +31,7 @@ package object syntax {
   object monoid extends MonoidSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
+  object parallel extends ParallelSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax

@@ -11,4 +11,4 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.CommutativeFlatMapLaws.
  */
-@typeclass trait CommutativeFlatMap[F[_]] extends FlatMap[F]
+@typeclass trait CommutativeFlatMap[F[_]] extends FlatMap[F] with CommutativeApply[F]

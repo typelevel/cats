@@ -34,6 +34,9 @@ class ValidatedSuite extends CatsSuite {
 
   checkAll("Validated[String, NonEmptyList[Int]]", SemigroupTests[Validated[String, NonEmptyList[Int]]].semigroup)
 
+  checkAll("Validated[Int, Int]", CommutativeApplicativeTests[Validated[Int, ?]].commutativeApplicative[Int, Int, Int])
+  checkAll("CommutativeApplicative[Validated[Int, ?]]", SerializableTests.serializable(CommutativeApplicative[Validated[Int, ?]]))
+
   {
     implicit val L = ListWrapper.semigroup[String]
     checkAll("Validated[ListWrapper[String], ?]", SemigroupKTests[Validated[ListWrapper[String], ?]].semigroupK[Int])

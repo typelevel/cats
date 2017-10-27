@@ -28,8 +28,6 @@ Cats relies on improved type inference via the fix for [SI-2712](https://github.
 
 ```scala
 scalacOptions += "-Ypartial-unification"
-
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
 ```
 
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
@@ -100,6 +98,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
