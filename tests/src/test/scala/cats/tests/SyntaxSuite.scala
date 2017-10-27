@@ -160,6 +160,28 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
+
+
+  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parSequence
+  }
+
+  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
+    val tfabc = mock[(M[A], M[B], M[C])]
+    val fa = mock[M[A]]
+    val fb = mock[M[B]]
+    val fc = mock[M[C]]
+    val f = mock[(A, B, C) => Z]
+
+    tfabc parMapN f
+    (fa, fb, fc) parMapN f
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]

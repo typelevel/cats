@@ -407,6 +407,7 @@ object NonEmptyList extends NonEmptyListInstances {
 
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
+
 }
 
 private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
