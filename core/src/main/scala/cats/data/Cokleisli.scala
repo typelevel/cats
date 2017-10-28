@@ -16,7 +16,6 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     * {{{
     * scala> import cats._, data._
     * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * f: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
     * scala> def before(x: String) = x.toInt
     * scala> def after(x: Int) = x.toString
     * scala> f.dimap(before)(after).run(NonEmptyList.of("1","2"))
@@ -31,7 +30,6 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     * {{{
     * scala> import cats._, data._, implicits._
     * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * f: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
     * scala> def before(x: String) = x.toInt
     * scala> def after(x: Int) = x.toString
     * scala> f.lmap(before).rmap(after).run(NonEmptyList.of("1","2"))
@@ -49,7 +47,6 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     * {{{
     * scala> import cats._, data._
     * scala> val sum = Cokleisli((xs: NonEmptyList[Int]) => xs.reduceLeft(_ + _))
-    * sum: cats.data.Cokleisli[cats.data.NonEmptyList,Int,Int] = Cokleisli(<function1>)
     *
     * scala> sum.contramapValue((xs: NonEmptyList[String]) => xs.map(_.toInt)).run(NonEmptyList.of("1","2","3"))
     * res4: Int = 6
