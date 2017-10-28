@@ -218,6 +218,14 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkFoldMStackSafety[Vector](_.toVector)
   }
 
+  test("Foldable[SortedSet].foldM stack safety") {
+    checkFoldMStackSafety[SortedSet](_.to)
+  }
+
+  test("Foldable[SortedMap[String, ?]].foldM stack safety") {
+    checkFoldMStackSafety[SortedMap[String, ?]](xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap)
+  }
+
   test("Foldable[NonEmptyList].foldM stack safety") {
     checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
   }
