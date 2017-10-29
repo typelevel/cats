@@ -77,6 +77,12 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     OneAnd(f(head), F.map(tail)(f))
 
   /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): OneAnd[G, A] =
+    OneAnd(head, f(tail))
+
+  /**
    * Typesafe equality operator.
    *
    * This method is similar to == except that it only allows two
