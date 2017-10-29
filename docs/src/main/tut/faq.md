@@ -227,7 +227,6 @@ All other symbols can be imported with `import cats.implicits._`
 | `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
 | `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
 | `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
-| `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
 | `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
 | `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
 | `fa >> fb` (Deprecated)          | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
