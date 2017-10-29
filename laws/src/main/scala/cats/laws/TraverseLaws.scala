@@ -67,7 +67,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     lhs <-> rhs
   }
 
-  def traverseOrderConsistent[A](fa: F[A]) = {
+  def traverseOrderConsistent[A](fa: F[A]): IsEq[Option[A]] = {
     class FirstOption[T](val o: Option[T])
 
     implicit val firstOptionMonoid = new Monoid[FirstOption[A]] {
@@ -84,10 +84,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     )(store).getConst.o
 
     first <-> traverseFirst
-
-
   }
-
   def mapWithIndexRef[A, B](fa: F[A], f: (A, Int) => B): IsEq[F[B]] = {
     val lhs = F.mapWithIndex(fa)(f)
     val rhs = F.traverse(fa)(a =>
