@@ -16,7 +16,7 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     * {{{
     * scala> import cats._, data._
     * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * scala> def before(x: String) = x.toInt
+    * scala> def before(x: Double) = x.toInt
     * scala> def after(x: Int) = x.toString
     * scala> f.dimap(before)(after).run(NonEmptyList.of("1","2"))
     * res0: String = 2
@@ -30,7 +30,7 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     * {{{
     * scala> import cats._, data._, implicits._
     * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
-    * scala> def before(x: String) = x.toInt
+    * scala> def before(x: Double) = x.toInt
     * scala> def after(x: Int) = x.toString
     * scala> f.lmap(before).rmap(after).run(NonEmptyList.of("1","2"))
     * res0: String = 2
