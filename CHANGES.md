@@ -116,6 +116,7 @@ To migrate from 1.0.0-MF.
 * [#1756](https://github.com/typelevel/cats/pull/1756) Add piecemeal import guide  by @LukaJCB
 * [#1777](https://github.com/typelevel/cats/pull/1777) Add `Reducible` docs  by @LukaJCB
 * [#1985](https://github.com/typelevel/cats/pull/1985) Links "LawTesting.md" in FAQ and TypeClasses pages  by @AlejandroME 
+* [#1993](https://github.com/typelevel/cats/pull/1993) Added examples for `Cokleisli`  by @raymondtay  
 
 ### Build improvements/dependency updates
  
