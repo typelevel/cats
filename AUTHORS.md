@@ -19,6 +19,7 @@ possible:
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
+ * Alejandro Marín E.
  * Alexandru Nedelcu
  * Alexander Semenov
  * Alexey Levan
@@ -37,9 +38,11 @@ possible:
  * Ben Hutchison
  * Benjamin Thuillier
  * Binh Nguyen
+ * Bjørn Madsen
  * Bobby Rauchenberg
  * Brendan McAdams
  * Brian McKenna
+ * Bryan Tan
  * Chris Birchall
  * Cody Allen
  * Colt Frederickson
@@ -53,11 +56,13 @@ possible:
  * Dave Rostron
  * David Allsopp
  * David Gregory
+ * David R. Bild
  * Denis Mikhaylov
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
  * Earl St Sauver
+ * Edd Steel
  * Edmund Noble
  * Eric Torreborre
  * Erik LaBianca
@@ -68,12 +73,15 @@ possible:
  * Fabio Labella
  * Feynman Liang
  * Frank S. Thomas
+ * Gabriele Petronella
  * Giulio De Luise
  * Greg Pfeil
  * Guillaume Massé
  * Hamish Dickson
+ * Harrison Houghton
  * Ian McIntosh
  * ImLiar
+ * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
  * Jan-Hendrik Zab
@@ -89,6 +97,7 @@ possible:
  * Juan Pedro Moreno
  * Julien Richard-Foy
  * Julien Truffaut
+ * Jun Tomioka
  * Kailuo Wang
  * Kenji Yoshida
  * Leandro Bolivar
@@ -108,6 +117,7 @@ possible:
  * Matthias Lüneberg
  * Max Worgan
  * Merlin Göttlinger
+ * Michael Ledin
  * Michael Pilquist
  * Mike Curry
  * Miles Sabin
@@ -128,6 +138,8 @@ possible:
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
+ * Raymond Tay
+ * Richard Imaoka
  * Richard Miller
  * Rintcius Blok
  * Rob Norris
@@ -137,6 +149,7 @@ possible:
  * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
+ * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
  * Simeon H. K. Fitch
@@ -144,12 +157,17 @@ possible:
  * Stephen Carman
  * Stephen Judkins
  * Stew O'Connor
+ * Suhas Gaddam
  * Sumedh Mungee
  * Takayuki Sakai
  * Taylor Brown
  * Tom Switzer
  * Tomas Mikula
+ * Tongfei Chen
  * Travis Brown
+ * Trond Bjerkestrand
+ * Tya
+ * ven
  * Vladimir Samoylov
  * Wedens
  * Xavier Fernández Salas
@@ -157,6 +175,7 @@ possible:
  * Yilin Wei
  * Zach Abbott
  * zainab-ali
+ * Ziyang Liu
 
 Cats has been heavily inspired by many libraries, including [Scalaz](https://github.com/scalaz/scalaz),
 Haskell's [Prelude](https://hackage.haskell.org/package/base-4.9.0.0/docs/Prelude.html), and others.
