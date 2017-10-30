@@ -106,8 +106,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
-  checkAll("PartialOrder[Set[Int]].reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse).partialOrder)
-  checkAll("PartialOrder[Set[Int]].reverse.reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse.reverse).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])", PartialOrderLawTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))", PartialOrderLawTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder)
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
@@ -343,7 +343,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasEq {
     implicit def hasEq[A: Eq]: Eq[HasEq[A]] =
-      Eq[A].on(_.a)
+      Eq.by(_.a)
     implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
       Arbitrary(arbitrary[A].map(HasEq(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasEq[A]] =
@@ -354,7 +354,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasPartialOrder {
     implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] =
-      PartialOrder[A].on(_.a)
+      PartialOrder.by(_.a)
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =

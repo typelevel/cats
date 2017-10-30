@@ -151,7 +151,7 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
     new IdTTraverse[F] { implicit val F0: Traverse[F] = F }
 
   implicit def catsDataEqForIdT[F[_], A](implicit F: Eq[F[A]]): Eq[IdT[F, A]] =
-    F.on(_.value)
+    Eq.by[IdT[F, A], F[A]](_.value)
 }
 
 private[data] sealed abstract class IdTInstances extends IdTInstances0 {
@@ -160,7 +160,7 @@ private[data] sealed abstract class IdTInstances extends IdTInstances0 {
     new IdTNonEmptyTraverse[F] { implicit val F0: NonEmptyTraverse[F] = F }
 
   implicit def catsDataOrderForIdT[F[_], A](implicit F: Order[F[A]]): Order[IdT[F, A]] =
-    F.on(_.value)
+    Order.by[IdT[F, A], F[A]](_.value)
 
   implicit def catsDataShowForIdT[F[_], A](implicit F: Show[F[A]]): Show[IdT[F, A]] =
     Contravariant[Show].contramap(F)(_.value)

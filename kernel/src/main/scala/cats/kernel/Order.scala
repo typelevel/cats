@@ -46,17 +46,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   def max(x: A, y: A): A = if (gt(x, y)) x else y
 
-  /**
-   * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
-   * order to order `B`.
-   */
-  override def on[@sp B](f: B => A): Order[B] = Order.by[B, A](f)(self)
-
-  /**
-   * Defines an ordering on `A` where all arrows switch direction.
-   */
-  override def reverse: Order[A] = Order.reverse(self)
-
   // The following may be overridden for performance:
 
   /**
@@ -94,15 +83,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   override def gt(x: A, y: A): Boolean =
     compare(x, y) > 0
-
-  /**
-   * Returns a new `Order[A]` instance that first compares by the original
-   * `Order` instance and uses the provided `Order` instance to "break ties".
-   *
-   * That is, `x.whenEqual(y)` creates an `Order` that first orders by `x` and
-   * then (if two elements are equal) falls back to `y` for the comparison.
-   */
-  def whenEqual(o: Order[A]): Order[A] = Order.whenEqual(self, o)
 
   /**
    * Convert a `Order[A]` to a `scala.math.Ordering[A]`
@@ -214,7 +194,7 @@ object Order extends OrderFunctions[Order] {
   def whenEqualMonoid[A]: Monoid[Order[A]] with Band[Order[A]] =
     new Monoid[Order[A]] with Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
-      def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
+      def combine(x: Order[A], y: Order[A]): Order[A] = Order.whenEqual(x, y)
     }
 
   def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =

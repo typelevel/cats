@@ -73,17 +73,6 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
     else None
   }
 
-  /**
-   * Defines a partial order on `B` by mapping `B` to `A` using `f`
-   * and using `A`s order to order `B`.
-   */
-  override def on[@sp B](f: B => A): PartialOrder[B] = PartialOrder.by[B, A](f)(self)
-
-  /**
-   * Defines a partial order on `A` where all arrows switch direction.
-   */
-  def reverse: PartialOrder[A] = PartialOrder.reverse(self)
-
   // The following may be overridden for performance:
 
   /**

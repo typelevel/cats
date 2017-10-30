@@ -101,10 +101,10 @@ object eq {
    * Create an approximation of Eq[Semigroup[A]] by generating values for A
    * and comparing the application of the two combine functions.
    */
-  implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] =
-    catsLawsEqForFn1[(A, A), A].on(f =>
-      Function.tupled((x, y) => f.combine(x, y))
-    )
+  implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] = {
+    val instance: Eq[((A, A)) => A] = catsLawsEqForFn1[(A, A), A]
+    Eq.by[Semigroup[A], ((A, A)) => A]( f => Function.tupled((x, y) => f.combine(x, y)))(instance)
+  }
 
   implicit def catsLawsEqForCommutativeSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[CommutativeSemigroup[A]] = {
     implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {

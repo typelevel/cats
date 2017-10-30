@@ -29,7 +29,7 @@ object Nested extends NestedInstances
 
 private[data] sealed abstract class NestedInstances extends NestedInstances0 {
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
-    FGA.on(_.value)
+    Eq.by[Nested[F, G, A], F[G[A]]](_.value)
 
   implicit def catsDataNonEmptyTraverseForNested[F[_]: NonEmptyTraverse, G[_]: NonEmptyTraverse]: NonEmptyTraverse[Nested[F, G, ?]] =
     new NestedNonEmptyTraverse[F, G] {
