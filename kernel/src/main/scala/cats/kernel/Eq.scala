@@ -31,18 +31,13 @@ trait Eq[@sp A] extends Any with Serializable { self =>
    * Return an Eq that gives the result of the and of this and that
    * note this is idempotent
    */
-  def and(that: Eq[A]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = self.eqv(x, y) && that.eqv(x, y)
-    }
+  def and(that: Eq[A]): Eq[A] = Eq.and(self, that)
+
   /**
    * Return an Eq that gives the result of the or of this and that
    * Note this is idempotent
    */
-  def or(that: Eq[A]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A) = self.eqv(x, y) || that.eqv(x, y)
-    }
+  def or(that: Eq[A]): Eq[A] = Eq.or(self, that)
 }
 
 abstract class EqFunctions[E[T] <: Eq[T]] {
@@ -69,6 +64,24 @@ object Eq extends EqFunctions[Eq] {
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A) = ev.eqv(f(x), f(y))
+    }
+
+  /**
+    * Return an Eq that gives the result of the and of eq1 and eq2
+    * note this is idempotent
+    */
+  def and[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = eq1.eqv(x, y) && eq2.eqv(x, y)
+    }
+
+  /**
+    * Return an Eq that gives the result of the or of this and that
+    * Note this is idempotent
+    */
+  def or[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = eq1.eqv(x, y) || eq2.eqv(x, y)
     }
 
   /**

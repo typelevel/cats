@@ -55,12 +55,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
   /**
    * Defines an ordering on `A` where all arrows switch direction.
    */
-  override def reverse: Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = self.compare(y, x)
-
-      override def reverse: Order[A] = self
-    }
+  override def reverse: Order[A] = Order.reverse(self)
 
   // The following may be overridden for performance:
 
@@ -107,13 +102,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * That is, `x.whenEqual(y)` creates an `Order` that first orders by `x` and
    * then (if two elements are equal) falls back to `y` for the comparison.
    */
-  def whenEqual(o: Order[A]): Order[A] = new Order[A] {
-    def compare(x: A, y: A) = {
-      val c = self.compare(x, y)
-      if (c == 0) o.compare(x, y)
-      else c
-    }
-  }
+  def whenEqual(o: Order[A]): Order[A] = Order.whenEqual(self, o)
 
   /**
    * Convert a `Order[A]` to a `scala.math.Ordering[A]`
@@ -160,6 +149,20 @@ object Order extends OrderFunctions[Order] {
       def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
     }
 
+  def reverse[@sp A](order: Order[A]): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A): Int = order.compare(y, x)
+    }
+
+  def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A) = {
+        val c = first.compare(x, y)
+        if (c == 0) second.compare(x, y)
+        else c
+      }
+    }
+
   /**
    * Define an `Order[A]` using the given function `f`.
    */
@@ -182,7 +185,6 @@ object Order extends OrderFunctions[Order] {
     new Order[A] {
       def compare(x: A, y: A): Int = 0
     }
-
 
   /**
    * A `Monoid[Order[A]]` can be generated for all `A` with the following
