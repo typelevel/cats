@@ -111,7 +111,7 @@ object eq {
       case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
     }
 
-    Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>    
+    Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>
       Function.tupled((x, y) => (f.combine(x, y), f.combine(x, y) === f.combine(y, x)))
     )(catsLawsEqForFn1[(A, A), (A, Boolean)])
   }
