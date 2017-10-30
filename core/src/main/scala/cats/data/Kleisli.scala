@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.Contravariant
+import cats.{Contravariant, Id}
 import cats.arrow._
 
 /**
@@ -67,6 +67,8 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   /** Yield computed B combined with input value. */
   def tapWith[C](f: (A, B) => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
+
+  def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
 
   def apply(a: A): F[B] = run(a)
 }
@@ -137,6 +139,20 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
 private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
   implicit def catsDataMonadForKleisli[F[_], A](implicit M: Monad[F]): Monad[Kleisli[F, A, ?]] =
     new KleisliMonad[F, A] { def F: Monad[F] = M }
+
+  implicit def catsDataParallelForKleisli[F[_], M[_], A]
+  (implicit P: Parallel[M, F]): Parallel[Kleisli[M, A, ?], Kleisli[F, A, ?]] = new Parallel[Kleisli[M, A, ?], Kleisli[F, A, ?]]{
+    implicit val appF = P.applicative
+    implicit val monadM = P.monad
+    def applicative: Applicative[Kleisli[F, A, ?]] = catsDataApplicativeForKleisli
+    def monad: Monad[Kleisli[M, A, ?]] = catsDataMonadForKleisli
+
+    def sequential: Kleisli[F, A, ?] ~> Kleisli[M, A, ?] =
+      λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.transform(P.sequential))
+
+    def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
+      λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.transform(P.parallel))
+  }
 }
 
 private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {

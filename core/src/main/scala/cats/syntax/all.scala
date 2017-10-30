@@ -31,6 +31,7 @@ trait AllSyntax
     with MonoidSyntax
     with OptionSyntax
     with OrderSyntax
+    with ParallelSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
     with ReducibleSyntax

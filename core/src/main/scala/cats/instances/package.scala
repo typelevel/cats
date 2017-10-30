@@ -17,17 +17,17 @@ package object instances {
   object function        extends FunctionInstances
   object future          extends FutureInstances
   object int             extends IntInstances
+  object invariant       extends InvariantMonoidalInstances
   object list            extends ListInstances
   object long            extends LongInstances
   object map             extends MapInstances
-  object monoid          extends MonoidInstances
   object option          extends OptionInstances
   object order           extends OrderInstances
   object ordering        extends OrderingInstances
+  object parallel        extends ParallelInstances
   object partialOrder    extends PartialOrderInstances
   object partialOrdering extends PartialOrderingInstances
   object queue           extends QueueInstances
-  object semigroup       extends SemigroupInstances
   object set             extends SetInstances
   object short           extends ShortInstances
   object stream          extends StreamInstances

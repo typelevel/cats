@@ -63,7 +63,6 @@ possible:
  * Diego Esteban Alonso Blas
  * Earl St Sauver
  * Edd Steel
- * Edmund Noble
  * Eric Torreborre
  * Erik LaBianca
  * Erik Osheim

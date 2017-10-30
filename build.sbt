@@ -207,16 +207,16 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -237,6 +237,248 @@ val binaryCompatibleExceptions = {
   import com.typesafe.tools.mima.core._
   import com.typesafe.tools.mima.core.ProblemFilters._
   Seq( // todo: remove these once we release 1.0.0-RC1
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple7"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple13"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple20"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple6"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple9"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple14"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple17"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple1"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple12"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple16"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple3"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple10"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple11"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple18"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple21"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemigroupForTuple4"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple15"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple22"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple5"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdGroupForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple8"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdSemilatticeForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBandForTuple2"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple19"),
+    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdMonoidForTuple10"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple19"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple1"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple10"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple11"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple20"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple14"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple4"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple13"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple2"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple5"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple8"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple3"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple15"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple21"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple16"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple22"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple6"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple10"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple19"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple18"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple9"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple13"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple12"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple1"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple4"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple8"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple11"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple7"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple12"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple2"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple5"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple14"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple20"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple15"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple21"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple18"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple17"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple6"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple9"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple22"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple3"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdCommutativeGroupForTuple17"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple16"),
+    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.TupleInstances.catsKernelStdBoundedSemilatticeForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple13"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple6"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple13"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple6"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple13"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple6"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdCommutativeMonoidForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple9"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple14"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple20"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple17"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple11"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple8"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple2"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple5"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple19"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple10"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple13"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple16"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple22"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple7"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple1"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple21"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple4"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple18"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple12"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple15"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple3"),
+    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances2.catsKernelStdCommutativeSemigroupForTuple6"),
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
     exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
@@ -466,6 +708,55 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
 lazy val testkitJVM = testkit.jvm
 lazy val testkitJS = testkit.js
 
+lazy val alleycatsCore = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-core"))
+  .dependsOn(core)
+  .settings(moduleName := "alleycats-core", name := "Alleycats core")
+  .settings(libraryDependencies ++= Seq(
+    "org.typelevel" %% "export-hook" % "1.2.0"
+  ))
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions ~= {_.filterNot("-Ywarn-unused-import" == _)}) //export-hook triggers unused import
+
+
+lazy val alleycatsCoreJVM = alleycatsCore.jvm
+lazy val alleycatsCoreJS = alleycatsCore.js
+
+lazy val alleycatsLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-laws"))
+  .dependsOn(alleycatsCore, laws)
+  .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .jsSettings(coverageEnabled := false)
+  .dependsOn(alleycatsCore)
+
+lazy val alleycatsLawsJVM = alleycatsLaws.jvm
+lazy val alleycatsLawsJS = alleycatsLaws.js
+
+lazy val alleycatsTests = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-tests"))
+  .dependsOn(alleycatsLaws, testkit % "test")
+  .settings(moduleName := "alleycats-tests")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+
+lazy val alleycatsTestsJVM = alleycatsTests.jvm
+lazy val alleycatsTestsJS = alleycatsTests.js
+
+
 // bench is currently JVM-only
 
 lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
@@ -534,11 +825,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
-        <id>edmundnoble</id>
-        <name>Edmund Noble</name>
-        <url>https://github.com/edmundnoble/</url>
-      </developer>
-      <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
         <url>https://github.com/tpolecat/</url>
@@ -552,6 +838,11 @@ lazy val publishSettings = Seq(
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>LukaJCB</id>
+        <name>LukaJCB</name>
+        <url>https://github.com/LukaJCB/</url>
       </developer>
       <developer>
         <id>mpilquist</id>

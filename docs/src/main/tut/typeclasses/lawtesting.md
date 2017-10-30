@@ -1,3 +1,9 @@
+---
+layout: docs
+title:  "Law Testing"
+section: "typeclasses"
+---
+
 # Law testing
 
 [Laws](https://typelevel.org/cats/typeclasses.html#laws) are an important part of cats.

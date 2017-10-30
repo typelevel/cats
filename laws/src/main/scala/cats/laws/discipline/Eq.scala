@@ -6,6 +6,7 @@ import catalysts.Platform
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
+import cats.kernel._
 import cats.syntax.eq._
 import org.scalacheck.Arbitrary
 
@@ -105,9 +106,56 @@ object eq {
       Function.tupled((x, y) => f.combine(x, y))
     )
 
+  implicit def catsLawsEqForCommutativeSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[CommutativeSemigroup[A]] = {
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
+      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    }
+
+    catsLawsEqForFn1[(A, A), (A, Boolean)].on(f =>
+      Function.tupled((x, y) => (f.combine(x, y), f.combine(x, y) === f.combine(y, x)))
+    )
+  }
+
+  implicit def catsLawsEqForBand[A](implicit arbAA: Arbitrary[(A, A)], eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Band[A]] = {
+    catsLawsEqForFn1[(A, A), Boolean].on(f =>
+      Function.tupled((x, y) => f.combine(x, y) === f.combine(f.combine(x, y), y))
+    )
+  }
+
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
     def eqv(f: Monoid[A], g: Monoid[A]): Boolean = {
       eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
     }
   }
+
+  implicit def catsLawsEqForSemilattice[A](implicit eqBA: Eq[Band[A]], eqCA: Eq[CommutativeSemigroup[A]], eqA: Eq[A]): Eq[Semilattice[A]] =
+    Eq.instance((f, g) => eqBA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForCommutativeMonoid[A](implicit eqSA: Eq[CommutativeSemigroup[A]], eqMA: Eq[Monoid[A]], eqA: Eq[A]): Eq[CommutativeMonoid[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqMA.eqv(f, g))
+
+  implicit def catsLawsEqForBoundedSemilattice[A](implicit eqSA: Eq[Semilattice[A]], eqCA: Eq[CommutativeMonoid[A]], eqA: Eq[A]): Eq[BoundedSemilattice[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForGroup[A](implicit arbAA: Arbitrary[(A, A)], eqMA: Eq[Monoid[A]], eqA: Eq[A]): Eq[Group[A]] = {
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
+      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    }
+
+    val inverseEq = catsLawsEqForFn1[(A, A), (A, Boolean)].on[Group[A]](f =>
+      Function.tupled((x, y) => (
+        f.combine(x, y),
+        f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
+          f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
+          f.inverse(f.empty) == f.empty
+      )
+    ))
+
+    Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))
+  }
+
+  implicit def catsLawsEqForCommutativeGroup[A](implicit eqMA: Eq[CommutativeMonoid[A]], eqGA: Eq[Group[A]], eqA: Eq[A]): Eq[CommutativeGroup[A]] =
+    Eq.instance((f, g) => eqMA.eqv(f, g) && eqGA.eqv(f, g))
+
+
 }

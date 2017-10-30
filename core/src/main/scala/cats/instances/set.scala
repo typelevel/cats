@@ -18,7 +18,7 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
         fa.foldLeft(b)(f)
 
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable.iterateRight(fa.iterator, lb)(f)
+        Foldable.iterateRight(fa, lb)(f)
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
         @tailrec
