@@ -267,4 +267,16 @@ class ValidatedSuite extends CatsSuite {
       }
     }
   }
+
+  test("cond consistent with Either.cond + toValidated") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      Validated.cond(cond, s, i) should === (Either.cond(cond, s, i).toValidated)
+    }
+  }
+
+  test("condNel consistent with Either.cond + toValidatedNel") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      Validated.condNel(cond, s, i) should === (Either.cond(cond, s, i).toValidatedNel)
+    }
+  }
 }
