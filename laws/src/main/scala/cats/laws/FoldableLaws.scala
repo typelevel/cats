@@ -141,6 +141,10 @@ trait FoldableLaws[F[_]] {
     F.dropWhile_(fa)(p) <-> F.foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
       if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList
+
+  def orderedConsistency[A: Eq](x: F[A], y: F[A])(implicit ev: Eq[F[A]]): IsEq[List[A]] =
+    if (x === y) (F.toList(x) <-> F.toList(y))
+    else List.empty[A] <-> List.empty[A]
 }
 
 object FoldableLaws {
