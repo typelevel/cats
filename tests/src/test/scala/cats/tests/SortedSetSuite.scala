@@ -14,8 +14,8 @@ class SortedSetSuite extends CatsSuite {
 
   checkAll("SortedSet[Int]", FoldableTests[SortedSet].foldable[Int, Int])
   checkAll("PartialOrder[SortedSet[Int]]", PartialOrderTests[SortedSet[Int]].partialOrder)
-  checkAll("PartialOrder[SortedSet[Int]].reverse", PartialOrderTests(PartialOrder[SortedSet[Int]].reverse).partialOrder)
-  checkAll("PartialOrder[SortedSet[Int]].reverse.reverse", PartialOrderTests(PartialOrder[SortedSet[Int]].reverse.reverse).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder[SortedSet[Int]])", PartialOrderTests(PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))", PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))).partialOrder)
 
   checkAll("BoundedSemilattice[SortedSet[String]]", BoundedSemilatticeTests[SortedSet[String]].boundedSemilattice)
   checkAll("BoundedSemilattice[SortedSet[String]]", SerializableTests.serializable(BoundedSemilattice[SortedSet[String]]))
