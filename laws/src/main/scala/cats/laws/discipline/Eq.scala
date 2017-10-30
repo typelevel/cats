@@ -111,15 +111,15 @@ object eq {
       case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
     }
 
-    catsLawsEqForFn1[(A, A), (A, Boolean)].on(f =>
+    Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>    
       Function.tupled((x, y) => (f.combine(x, y), f.combine(x, y) === f.combine(y, x)))
-    )
+    )(catsLawsEqForFn1[(A, A), (A, Boolean)])
   }
 
   implicit def catsLawsEqForBand[A](implicit arbAA: Arbitrary[(A, A)], eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Band[A]] = {
-    catsLawsEqForFn1[(A, A), Boolean].on(f =>
+    Eq.by[Band[A], ((A, A)) => Boolean](f =>
       Function.tupled((x, y) => f.combine(x, y) === f.combine(f.combine(x, y), y))
-    )
+    )(catsLawsEqForFn1[(A, A), Boolean])
   }
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
@@ -142,14 +142,14 @@ object eq {
       case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
     }
 
-    val inverseEq = catsLawsEqForFn1[(A, A), (A, Boolean)].on[Group[A]](f =>
+    val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>
       Function.tupled((x, y) => (
         f.combine(x, y),
         f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
           f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
           f.inverse(f.empty) == f.empty
       )
-    ))
+    ))(catsLawsEqForFn1[(A, A), (A, Boolean)])
 
     Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))
   }
