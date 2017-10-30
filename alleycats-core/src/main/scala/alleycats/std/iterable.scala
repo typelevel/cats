@@ -23,5 +23,4 @@ object IterableInstances {
 // TODO: remove when cats.Foldable support export-hook
 trait LegacyIterableInstances {
   implicit def legacyIterableFoldable(implicit e: ExportOrphan[Foldable[Iterable]]): Foldable[Iterable] = e.instance
-
 }
