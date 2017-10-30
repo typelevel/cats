@@ -25,10 +25,7 @@ trait Eq[@sp A] extends Any with Serializable { self =>
    * Constructs a new `Eq` instance for type `B` where 2 elements are
    * equivalent iff `eqv(f(x), f(y))`.
    */
-  def on[@sp B](f: B => A): Eq[B] =
-    new Eq[B] {
-      def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(y))
-    }
+  def on[@sp B](f: B => A): Eq[B] = Eq.by[B, A](f)(self)
 
   /**
    * Return an Eq that gives the result of the and of this and that
@@ -70,7 +67,9 @@ object Eq extends EqFunctions[Eq] {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
-    ev.on(f)
+    new Eq[A] {
+      def eqv(x: A, y: A) = ev.eqv(f(x), f(y))
+    }
 
   /**
    * This gives compatibility with scala's Equiv trait

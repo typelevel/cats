@@ -50,10 +50,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
    * order to order `B`.
    */
-  override def on[@sp B](f: B => A): Order[B] =
-    new Order[B] {
-      def compare(x: B, y: B): Int = self.compare(f(x), f(y))
-    }
+  override def on[@sp B](f: B => A): Order[B] = Order.by[B, A](f)(self)
 
   /**
    * Defines an ordering on `A` where all arrows switch direction.
@@ -159,7 +156,9 @@ object Order extends OrderFunctions[Order] {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =
-    ev.on(f)
+    new Order[A] {
+      def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
+    }
 
   /**
    * Define an `Order[A]` using the given function `f`.
