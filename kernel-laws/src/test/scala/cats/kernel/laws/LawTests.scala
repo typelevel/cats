@@ -94,7 +94,7 @@ class Tests extends FunSuite with Discipline {
 
   {
     // needed for Cogen[Map[...]]
-    implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
+    implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
   }
 
@@ -365,7 +365,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasHash {
     implicit def hasHash[A: Hash]: Hash[HasHash[A]] =
-      Hash.by(_.a) // not Hash[A].on(_.a) because of diamond inheritance problems with Eq
+      Hash.by(_.a)
     implicit def hasHashArbitrary[A: Arbitrary]: Arbitrary[HasHash[A]] =
       Arbitrary(arbitrary[A].map(HasHash(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
