@@ -106,8 +106,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
-  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])", PartialOrderLawTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
-  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))", PartialOrderLawTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])", PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))", PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder)
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
@@ -136,8 +136,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
-  checkAll("Order[Int].reverse", OrderTests(Order[Int].reverse).order)
-  checkAll("Order[Int].reverse.reverse", OrderTests(Order[Int].reverse.reverse).order)
+  checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
+  checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
