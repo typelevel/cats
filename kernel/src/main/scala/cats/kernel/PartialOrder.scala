@@ -150,7 +150,7 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
     }
 
   /**
-    * Defines a partial order on `A` where all arrows switch direction.
+    * Defines a partial order on `A` from p where all arrows switch direction.
     */
   def reverse[@sp A](p: PartialOrder[A]): PartialOrder[A] =
     new PartialOrder[A] {

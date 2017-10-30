@@ -149,11 +149,21 @@ object Order extends OrderFunctions[Order] {
       def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
     }
 
+  /**
+    * Defines an ordering on `A` from the given order such that all arrows switch direction.
+    */
   def reverse[@sp A](order: Order[A]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = order.compare(y, x)
     }
 
+  /**
+    * Returns a new `Order[A]` instance that first compares by the first
+    * `Order` instance and uses the second `Order` instance to "break ties".
+    *
+    * That is, `Order.whenEqual(x, y)` creates an `Order` that first orders by `x` and
+    * then (if two elements are equal) falls back to `y` for the comparison.
+    */
   def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A) = {
