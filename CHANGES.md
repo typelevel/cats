@@ -20,7 +20,7 @@ This is the only planned release candidate release prior to 1.0.0.
 * [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
 * [#1972](https://github.com/typelevel/cats/pull/1972) Add `SortedMap` and `SortedSet` instances/Move `Set` and `Map` instances to Alleycats by @LukaJCB/@kailuowang 
 * [#1997](https://github.com/typelevel/cats/pull/1997) Minimizing typeclass surface in cats-kernel  by @denisrosset  
-
+* [#1987](https://github.com/typelevel/cats/pull/1987) Add `mapK` to `transformers`  by @andyscott / @LukaJCB  
 
 To migrate from 1.0.0-MF.
 
@@ -32,7 +32,8 @@ To migrate from 1.0.0-MF.
 * `NonEmptyList.concat` that takes `NonEmptlyList` was deprecated, use `NonEmptyList.concatNel` instead.
 * `Monoid` no longer has a `InvariantMonoidal` instance, we discovered that it's not lawful. It has have an `Invariant` and a `Semigroupal` (new name for `Cartesian`) instance. 
 * `Foldable.iterateRight` now takes an `Iterable` instead of `Iterator`, see #1973 for rationale. 
-* `Foldable` for `Set` and `Traversable` for `Map` were moved to Alleycats, see #1831 for rationale. 
+* `Foldable` for `Set` and `Traversable` for `Map` were moved to Alleycats, see #1831 for rationale.
+* `cats.data.Kleisli#transform` and `cats.free.Coyoneda#transform` were deprecated and replaced by `mapK`
 
 ### New features / enhancements (API, instances, data types, etc.):
 
