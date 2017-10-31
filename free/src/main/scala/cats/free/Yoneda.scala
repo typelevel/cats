@@ -28,6 +28,14 @@ abstract class Yoneda[F[_], A] extends Serializable { self =>
     new Yoneda[F, B] {
       def apply[C](g: B => C): F[C] = self(f andThen g)
     }
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): Yoneda[G, A] =
+    new Yoneda[G, A] {
+      def apply[B](g: A => B): G[B] = f(self(g))
+    }
 }
 
 object Yoneda {
@@ -48,4 +56,3 @@ object Yoneda {
       def apply[B](f: A => B): F[B] = F.map(fa)(f)
     }
 }
-

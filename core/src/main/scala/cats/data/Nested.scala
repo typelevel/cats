@@ -23,7 +23,15 @@ package data
  * res1: List[Option[String]] = List(Some(2), None)
  * }}}
  */
-final case class Nested[F[_], G[_], A](value: F[G[A]])
+final case class Nested[F[_], G[_], A](value: F[G[A]]) {
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[H[_]](f: F ~> H): Nested[H, G, A] =
+    Nested(f(value))
+
+}
 
 object Nested extends NestedInstances
 
