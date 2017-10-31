@@ -21,6 +21,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
+    Kleisli[G, A, B](run andThen f.apply)
+
   def flatMap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli((r: A) => F.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
 
@@ -48,8 +54,9 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
     Kleisli(f.andThen(run))
 
+  @deprecated("Use mapK", "1.0.0")
   def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
-    Kleisli(a => f(run(a)))
+    mapK(f)
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
     Kleisli(a => F.pure(run(a)))
@@ -148,10 +155,10 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def monad: Monad[Kleisli[M, A, ?]] = catsDataMonadForKleisli
 
     def sequential: Kleisli[F, A, ?] ~> Kleisli[M, A, ?] =
-      λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.transform(P.sequential))
+      λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.mapK(P.sequential))
 
     def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
-      λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.transform(P.parallel))
+      λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.mapK(P.parallel))
   }
 }
 
