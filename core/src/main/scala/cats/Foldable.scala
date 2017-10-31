@@ -16,6 +16,7 @@ import simulacrum.typeclass
  * `Foldable[_]` instance.
  *
  * Instances of Foldable should be ordered collections to allow for consistent folding.
+ * Use the `UnorderedFoldable` type class if you want to fold over unordered collections.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
