@@ -150,6 +150,20 @@ in the same manner that function A =&gt; B is a morphism from values
 of type A to B.">
                           FunctionK
                         </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Profunctor$.html" title=""></a>
+                        <a class="trait" href="Profunctor.html" title="A Profunctor is a Contravariant functor on its first type parameter
+and a Functor on its second type parameter."></a>
+                        <a href="Profunctor.html" title="A Profunctor is a Contravariant functor on its first type parameter
+and a Functor on its second type parameter.">
+                          Profunctor
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Strong$.html" title=""></a>
+                        <a class="trait" href="Strong.html" title="Must obey the laws defined in cats.laws.StrongLaws."></a>
+                        <a href="Strong.html" title="Must obey the laws defined in cats.laws.StrongLaws.">
+                          Strong
+                        </a>
                       </li>
               </ul>
             </div>
@@ -186,7 +200,7 @@ which means that there is non-interference between the effect of the paired arro
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>], <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -212,7 +226,7 @@ which means that there is non-interference between the effect of the paired arro
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.arrow.CommutativeArrow"><span>CommutativeArrow</span></li><li class="in" name="cats.arrow.Arrow"><span>Arrow</span></li><li class="in" name="cats.functor.Strong"><span>Strong</span></li><li class="in" name="cats.functor.Profunctor"><span>Profunctor</span></li><li class="in" name="cats.arrow.Category"><span>Category</span></li><li class="in" name="cats.arrow.Compose"><span>Compose</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.arrow.CommutativeArrow"><span>CommutativeArrow</span></li><li class="in" name="cats.arrow.Arrow"><span>Arrow</span></li><li class="in" name="cats.arrow.Strong"><span>Strong</span></li><li class="in" name="cats.arrow.Profunctor"><span>Profunctor</span></li><li class="in" name="cats.arrow.Category"><span>Category</span></li><li class="in" name="cats.arrow.Compose"><span>Compose</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -251,8 +265,25 @@ which means that there is non-interference between the effect of the paired arro
         <span class="name">compose</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.B">B</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
-    </li><li name="cats.functor.Strong#first" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
+Example:</p><div class="fullcomment"><div class="comment cmt"><p>Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ + <span class="num">1</span>)
+scala&gt; <span class="kw">val</span> g : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ * <span class="num">100</span>)
+scala&gt; (f &gt;&gt;&gt; g)(<span class="num">3</span>)
+res0: <span class="std">Int</span> = <span class="num">400</span>
+scala&gt; (f &lt;&lt;&lt; g)(<span class="num">3</span>)
+res1: <span class="std">Int</span> = <span class="num">301</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@op</span><span class="args">(<span>
+      
+      <span class="symbol">&quot;&lt;&lt;&lt;&quot;</span>
+    </span>, <span>
+      
+      <span class="symbol">true</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="cats.arrow.Strong#first" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="first[A,B,C](fa:F[A,B]):F[(A,C),(B,C)]"></a><a id="first[A,B,C](F[A,B]):F[(A,C),(B,C)]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/CommutativeArrow.html#first[A,B,C](fa:F[A,B]):F[(A,C),(B,C)]" title="Permalink">
@@ -264,15 +295,15 @@ which means that there is non-interference between the effect of the paired arro
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">first</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.functor.Strong.first.A">A</span>, <span class="extype" name="cats.functor.Strong.first.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[(<span class="extype" name="cats.functor.Strong.first.A">A</span>, <span class="extype" name="cats.functor.Strong.first.C">C</span>), (<span class="extype" name="cats.functor.Strong.first.B">B</span>, <span class="extype" name="cats.functor.Strong.first.C">C</span>)]</span>
+        <span class="name">first</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Strong.first.A">A</span>, <span class="extype" name="cats.arrow.Strong.first.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[(<span class="extype" name="cats.arrow.Strong.first.A">A</span>, <span class="extype" name="cats.arrow.Strong.first.C">C</span>), (<span class="extype" name="cats.arrow.Strong.first.B">B</span>, <span class="extype" name="cats.arrow.Strong.first.C">C</span>)]</span>
       </span>
       
       <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the first input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">import</span> cats.functor.Strong
+scala&gt; <span class="kw">import</span> cats.arrow.Strong
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
 scala&gt; <span class="kw">val</span> fab = Strong[Function1].first[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
 scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
-res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">4</span>,<span class="num">3</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a></dd></dl></div>
+res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">4</span>,<span class="num">3</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a></dd></dl></div>
     </li><li name="cats.arrow.Category#id" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id[A]:F[A,A]"></a>
       <span class="permalink">
@@ -463,13 +494,13 @@ library <code>Control.Arrow</code>, this function is called <code>arr</code>.
       </span>
       
       <p class="shortcomment cmt">Contramap on the first type parameter and map on the second type parameter</p><div class="fullcomment"><div class="comment cmt"><p>Contramap on the first type parameter and map on the second type parameter</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">import</span> cats.functor.Profunctor
+scala&gt; <span class="kw">import</span> cats.arrow.Profunctor
 scala&gt; <span class="kw">val</span> fab: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x + <span class="num">0.3</span>
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x.toDouble / <span class="num">2</span>
 scala&gt; <span class="kw">val</span> g: <span class="std">Double</span> <span class="kw">=&gt;</span> <span class="std">Double</span> = x <span class="kw">=&gt;</span> x * <span class="num">3</span>
 scala&gt; <span class="kw">val</span> h = Profunctor[Function1].dimap(fab)(f)(g)
 scala&gt; h(<span class="num">3</span>)
-res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
+res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -572,7 +603,7 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.functor.Profunctor#lmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.arrow.Profunctor#lmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]"></a><a id="lmap[A,B,C](F[A,B])((C)⇒A):F[C,B]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/CommutativeArrow.html#lmap[A,B,C](fab:F[A,B])(f:C=&gt;A):F[C,B]" title="Permalink">
@@ -584,12 +615,12 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.lmap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.functor.Profunctor.lmap.C">C</span>, <span class="extype" name="cats.functor.Profunctor.lmap.B">B</span>]</span>
+        <span class="name">lmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Profunctor.lmap.A">A</span>, <span class="extype" name="cats.arrow.Profunctor.lmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.arrow.Profunctor.lmap.C">C</span>) ⇒ <span class="extype" name="cats.arrow.Profunctor.lmap.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Profunctor.lmap.C">C</span>, <span class="extype" name="cats.arrow.Profunctor.lmap.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">contramap on the first type parameter
 </p><div class="fullcomment"><div class="comment cmt"><p>contramap on the first type parameter
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -638,7 +669,7 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="cats.functor.Profunctor#rmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.arrow.Profunctor#rmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]"></a><a id="rmap[A,B,C](F[A,B])((B)⇒C):F[A,C]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/CommutativeArrow.html#rmap[A,B,C](fab:F[A,B])(f:B=&gt;C):F[A,C]" title="Permalink">
@@ -650,12 +681,12 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">rmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.functor.Profunctor.rmap.B">B</span>) ⇒ <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.functor.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.functor.Profunctor.rmap.C">C</span>]</span>
+        <span class="name">rmap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="fab">fab: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.arrow.Profunctor.rmap.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.arrow.Profunctor.rmap.B">B</span>) ⇒ <span class="extype" name="cats.arrow.Profunctor.rmap.C">C</span></span>)</span><span class="result">: <span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>[<span class="extype" name="cats.arrow.Profunctor.rmap.A">A</span>, <span class="extype" name="cats.arrow.Profunctor.rmap.C">C</span>]</span>
       </span>
       
       <p class="shortcomment cmt">map on the second type parameter
 </p><div class="fullcomment"><div class="comment cmt"><p>map on the second type parameter
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a></dd></dl></div>
     </li><li name="cats.arrow.Arrow#second" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="second[A,B,C](fa:F[A,B]):F[(C,A),(C,B)]"></a><a id="second[A,B,C](F[A,B]):F[(C,A),(C,B)]"></a>
       <span class="permalink">
@@ -672,11 +703,11 @@ res0: <span class="std">Double</span> = <span class="num">5.4</span></pre></div>
       </span>
       
       <p class="shortcomment cmt">Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><div class="fullcomment"><div class="comment cmt"><p>Create a new <code>F</code> that takes two inputs, but only modifies the second input</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">import</span> cats.functor.Strong
+scala&gt; <span class="kw">import</span> cats.arrow.Strong
 scala&gt; <span class="kw">val</span> f: <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = _ * <span class="num">2</span>
 scala&gt; <span class="kw">val</span> fab = Strong[Function1].second[<span class="std">Int</span>,<span class="std">Int</span>,<span class="std">Int</span>](f)
 scala&gt; fab((<span class="num">2</span>,<span class="num">3</span>))
-res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">2</span>,<span class="num">6</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a></dd></dl></div>
+res0: (<span class="std">Int</span>, <span class="std">Int</span>) = (<span class="num">2</span>,<span class="num">6</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a> → <a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a></dd></dl></div>
     </li><li name="cats.arrow.Arrow#split" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="split[A,B,C,D](f:F[A,B],g:F[C,D]):F[(A,C),(B,D)]"></a><a id="split[A,B,C,D](F[A,B],F[C,D]):F[(A,C),(B,D)]"></a>
       <span class="permalink">
@@ -822,10 +853,10 @@ res0: (<span class="std">Long</span>, <span class="std">Double</span>) = (<span 
         <div id="inheritedMembers">
         <div class="parent" name="cats.arrow.Arrow">
               <h3>Inherited from <a href="Arrow.html" class="extype" name="cats.arrow.Arrow">Arrow</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
-            </div><div class="parent" name="cats.functor.Strong">
-              <h3>Inherited from <a href="../functor/Strong.html" class="extype" name="cats.functor.Strong">Strong</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
-            </div><div class="parent" name="cats.functor.Profunctor">
-              <h3>Inherited from <a href="../functor/Profunctor.html" class="extype" name="cats.functor.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
+            </div><div class="parent" name="cats.arrow.Strong">
+              <h3>Inherited from <a href="Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
+            </div><div class="parent" name="cats.arrow.Profunctor">
+              <h3>Inherited from <a href="Profunctor.html" class="extype" name="cats.arrow.Profunctor">Profunctor</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
             </div><div class="parent" name="cats.arrow.Category">
               <h3>Inherited from <a href="Category.html" class="extype" name="cats.arrow.Category">Category</a>[<span class="extype" name="cats.arrow.CommutativeArrow.F">F</span>]</h3>
             </div><div class="parent" name="cats.arrow.Compose">

@@ -499,7 +499,7 @@ convenient methods for working with this nested structure.">
       </span>
       
       
-    </li><li name="cats.data.Cokleisli#contramapValue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Cokleisli#contramapValue" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contramapValue[C](f:F[C]=&gt;F[A]):cats.data.Cokleisli[F,C,B]"></a><a id="contramapValue[C]((F[C])⇒F[A]):Cokleisli[F,C,B]"></a>
       <span class="permalink">
       <a href="../../cats/data/Cokleisli.html#contramapValue[C](f:F[C]=&gt;F[A]):cats.data.Cokleisli[F,C,B]" title="Permalink">
@@ -514,8 +514,12 @@ convenient methods for working with this nested structure.">
         <span class="name">contramapValue</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Cokleisli.F">F</span>[<span class="extype" name="cats.data.Cokleisli.contramapValue.C">C</span>]) ⇒ <span class="extype" name="cats.data.Cokleisli.F">F</span>[<span class="extype" name="cats.data.Cokleisli.A">A</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, <span class="extype" name="cats.data.Cokleisli.contramapValue.C">C</span>, <span class="extype" name="cats.data.Cokleisli.B">B</span>]</span>
       </span>
       
-      
-    </li><li name="cats.data.Cokleisli#dimap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats._, data._
+scala&gt; <span class="kw">val</span> sum = Cokleisli((xs: NonEmptyList[<span class="std">Int</span>]) <span class="kw">=&gt;</span> xs.reduceLeft(_ + _))
+
+scala&gt; sum.contramapValue((xs: NonEmptyList[<span class="std">String</span>]) <span class="kw">=&gt;</span> xs.map(_.toInt)).run(NonEmptyList.of(<span class="lit">"1"</span>,<span class="lit">"2"</span>,<span class="lit">"3"</span>))
+res4: <span class="std">Int</span> = <span class="num">6</span></pre></div></div>
+    </li><li name="cats.data.Cokleisli#dimap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dimap[C,D](f:C=&gt;A)(g:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.Cokleisli[F,C,D]"></a><a id="dimap[C,D]((C)⇒A)((B)⇒D)(Functor[F]):Cokleisli[F,C,D]"></a>
       <span class="permalink">
       <a href="../../cats/data/Cokleisli.html#dimap[C,D](f:C=&gt;A)(g:B=&gt;D)(implicitF:cats.Functor[F]):cats.data.Cokleisli[F,C,D]" title="Permalink">
@@ -530,7 +534,12 @@ convenient methods for working with this nested structure.">
         <span class="name">dimap</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Cokleisli.dimap.C">C</span>) ⇒ <span class="extype" name="cats.data.Cokleisli.A">A</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.data.Cokleisli.B">B</span>) ⇒ <span class="extype" name="cats.data.Cokleisli.dimap.D">D</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, <span class="extype" name="cats.data.Cokleisli.dimap.C">C</span>, <span class="extype" name="cats.data.Cokleisli.dimap.D">D</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats._, data._
+scala&gt; <span class="kw">val</span> f = Cokleisli((xs: NonEmptyList[<span class="std">Int</span>]) <span class="kw">=&gt;</span> xs.reverse.head)
+scala&gt; <span class="kw">def</span> before(x: <span class="std">Double</span>) = x.toInt
+scala&gt; <span class="kw">def</span> after(x: <span class="std">Int</span>) = x.toString
+scala&gt; f.dimap(before)(after).run(NonEmptyList.of(<span class="num">1.0</span>,<span class="num">2.0</span>))
+res0: <span class="std">String</span> = <span class="num">2</span></pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -633,7 +642,7 @@ convenient methods for working with this nested structure.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="cats.data.Cokleisli#lmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Cokleisli#lmap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lmap[C](f:C=&gt;A)(implicitF:cats.Functor[F]):cats.data.Cokleisli[F,C,B]"></a><a id="lmap[C]((C)⇒A)(Functor[F]):Cokleisli[F,C,B]"></a>
       <span class="permalink">
       <a href="../../cats/data/Cokleisli.html#lmap[C](f:C=&gt;A)(implicitF:cats.Functor[F]):cats.data.Cokleisli[F,C,B]" title="Permalink">
@@ -648,7 +657,12 @@ convenient methods for working with this nested structure.">
         <span class="name">lmap</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Cokleisli.lmap.C">C</span>) ⇒ <span class="extype" name="cats.data.Cokleisli.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Cokleisli">Cokleisli</a>[<span class="extype" name="cats.data.Cokleisli.F">F</span>, <span class="extype" name="cats.data.Cokleisli.lmap.C">C</span>, <span class="extype" name="cats.data.Cokleisli.B">B</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Example:</p><div class="fullcomment"><div class="comment cmt"><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats._, data._, implicits._
+scala&gt; <span class="kw">val</span> f = Cokleisli((xs: NonEmptyList[<span class="std">Int</span>]) <span class="kw">=&gt;</span> xs.reverse.head)
+scala&gt; <span class="kw">def</span> before(x: <span class="std">Double</span>) = x.toInt
+scala&gt; <span class="kw">def</span> after(x: <span class="std">Int</span>) = x.toString
+scala&gt; f.lmap(before).rmap(after).run(NonEmptyList.of(<span class="num">1.0</span>,<span class="num">2.0</span>))
+res0: <span class="std">String</span> = <span class="num">2</span></pre></div></div>
     </li><li name="cats.data.Cokleisli#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="map[C](f:B=&gt;C):cats.data.Cokleisli[F,A,C]"></a><a id="map[C]((B)⇒C):Cokleisli[F,A,C]"></a>
       <span class="permalink">

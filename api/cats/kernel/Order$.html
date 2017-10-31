@@ -193,6 +193,18 @@ type.">
                           GroupFunctions
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="Hash$.html" title=""></a>
+                        <a class="trait" href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type."></a>
+                        <a href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type.">
+                          Hash
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="HashFunctions.html" title=""></a>
+                        <a href="HashFunctions.html" title="">
+                          HashFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Monoid$.html" title=""></a>
                         <a class="trait" href="Monoid.html" title="A monoid is a semigroup with an identity."></a>
                         <a href="Monoid.html" title="A monoid is a semigroup with an identity.">
@@ -893,6 +905,22 @@ instance.</p>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PartialOrderFunctions.html" class="extype" name="cats.kernel.PartialOrderFunctions">PartialOrderFunctions</a></dd></dl></div>
+    </li><li name="cats.kernel.Order#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reverse[A](order:cats.kernel.Order[A]):cats.kernel.Order[A]"></a><a id="reverse[A](Order[A]):Order[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Order$.html#reverse[A](order:cats.kernel.Order[A]):cats.kernel.Order[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverse</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="order">order: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.reverse.A">A</span>]</span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.reverse.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Defines an ordering on <code>A</code> from the given order such that all arrows switch direction.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -1007,6 +1035,26 @@ instance.</p>
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.kernel.Order#whenEqual" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whenEqual[A](first:cats.kernel.Order[A],second:cats.kernel.Order[A]):cats.kernel.Order[A]"></a><a id="whenEqual[A](Order[A],Order[A]):Order[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Order$.html#whenEqual[A](first:cats.kernel.Order[A],second:cats.kernel.Order[A]):cats.kernel.Order[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whenEqual</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="first">first: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.whenEqual.A">A</span>]</span>, <span name="second">second: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.whenEqual.A">A</span>]</span>)</span><span class="result">: <a href="Order.html" class="extype" name="cats.kernel.Order">Order</a>[<span class="extype" name="cats.kernel.Order.whenEqual.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns a new <code>Order[A]</code> instance that first compares by the first
+<code>Order</code> instance and uses the second <code>Order</code> instance to &quot;break ties&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <code>Order[A]</code> instance that first compares by the first
+<code>Order</code> instance and uses the second <code>Order</code> instance to &quot;break ties&quot;.</p><p>That is, <code>Order.whenEqual(x, y)</code> creates an <code>Order</code> that first orders by <code>x</code> and
+then (if two elements are equal) falls back to <code>y</code> for the comparison.
+</p></div></div>
     </li><li name="cats.kernel.Order#whenEqualMonoid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="whenEqualMonoid[A]:cats.kernel.Monoid[cats.kernel.Order[A]]withcats.kernel.Band[cats.kernel.Order[A]]"></a><a id="whenEqualMonoid[A]:Monoid[Order[A]]withBand[Order[A]]"></a>
       <span class="permalink">
@@ -1028,7 +1076,7 @@ properties:</p><p><code>empty</code> returns a trivial <code>Order[A]</code> whi
 be equal.</p><p><code>combine(x: Order[A], y: Order[A])</code> creates an <code>Order[A]</code> that first
 orders by <code>x</code> and then (if two elements are equal) falls back to <code>y</code>.</p><p>This monoid is also a <code>Band[Order[A]]</code> since its combine
 operations is idempotent.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Order.html#whenEqual(o:cats.kernel.Order[A]):cats.kernel.Order[A]" class="extmbr" name="cats.kernel.Order#whenEqual">Order.whenEqual</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#whenEqual[A](first:cats.kernel.Order[A],second:cats.kernel.Order[A]):cats.kernel.Order[A]" class="extmbr" name="cats.kernel.Order#whenEqual">Order.whenEqual</a></p></span></dd></dl></div>
     </li>
               </ol>
             </div>

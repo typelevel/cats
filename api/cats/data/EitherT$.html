@@ -426,9 +426,9 @@ convenient methods for working with this nested structure.">
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataBifunctorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.functor.Bifunctor[[β$8$,γ$9$]cats.data.EitherT[F,β$8$,γ$9$]]"></a><a id="catsDataBifunctorForEitherT[F[_]](Functor[F]):Bifunctor[[β$8$,γ$9$]EitherT[F,β$8$,γ$9$]]"></a>
+      <a id="catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$8$,γ$9$]cats.data.EitherT[F,β$8$,γ$9$]]"></a><a id="catsDataBifunctorForEitherT[F[_]](Functor[F]):Bifunctor[[β$8$,γ$9$]EitherT[F,β$8$,γ$9$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.functor.Bifunctor[[β$8$,γ$9$]cats.data.EitherT[F,β$8$,γ$9$]]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataBifunctorForEitherT[F[_]](implicitF:cats.Functor[F]):cats.Bifunctor[[β$8$,γ$9$]cats.data.EitherT[F,β$8$,γ$9$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -437,7 +437,7 @@ convenient methods for working with this nested structure.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataBifunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../functor/Bifunctor.html" class="extype" name="cats.functor.Bifunctor">Bifunctor</a>[[β$8$, γ$9$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$9$">γ$9$</span>]]</span>
+        <span class="name">catsDataBifunctorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../Bifunctor.html" class="extype" name="cats.Bifunctor">Bifunctor</a>[[β$8$, γ$9$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances.catsDataBifunctorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>, <span class="extype" name="cats.data.EitherTInstances.&lt;refinement&gt;.Λ$.γ$9$">γ$9$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances</dd></dl></div>
@@ -912,10 +912,10 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
 scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; EitherT.leftT[<span class="std">Option</span>, <span class="std">Int</span>](<span class="lit">"err"</span>)
 res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Left(err)))</pre></div></div>
-    </li><li name="cats.data.EitherT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftT[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
+    </li><li name="cats.data.EitherT#liftF" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftF[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftF[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#liftF[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -924,16 +924,16 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">liftT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.EitherT.liftT.F">F</span>[<span class="extype" name="cats.data.EitherT.liftT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.liftT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.liftT.F">F</span>, <span class="extype" name="cats.data.EitherT.liftT.A">A</span>, <span class="extype" name="cats.data.EitherT.liftT.B">B</span>]</span>
+        <span class="name">liftF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.EitherT.liftF.F">F</span>[<span class="extype" name="cats.data.EitherT.liftF.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.liftF.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.liftF.F">F</span>, <span class="extype" name="cats.data.EitherT.liftF.A">A</span>, <span class="extype" name="cats.data.EitherT.liftF.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for <a href="#right[A]:cats.data.EitherT.RightPartiallyApplied[A]" class="extmbr" name="cats.data.EitherT#right">right</a></p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="#right[A]:cats.data.EitherT.RightPartiallyApplied[A]" class="extmbr" name="cats.data.EitherT#right">right</a></p><pre>scala&gt; <span class="kw">import</span> cats.data.EitherT
 scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">val</span> o: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
 scala&gt; <span class="kw">val</span> n: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
-scala&gt; EitherT.liftT(o)
+scala&gt; EitherT.liftF(o)
 res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">Nothing</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))
-scala&gt; EitherT.liftT(n)
+scala&gt; EitherT.liftF(n)
 res1: cats.data.EitherT[<span class="std">Option</span>,<span class="std">Nothing</span>,<span class="std">Int</span>] = EitherT(<span class="std">None</span>)</pre></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
@@ -1144,7 +1144,29 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="cats.data.EitherT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]"></a><a id="liftT[F[_],A,B](F[B])(Functor[F]):EitherT[F,A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT$.html#liftT[F[_],A,B](fb:F[B])(implicitF:cats.Functor[F]):cats.data.EitherT[F,A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC1) Use EitherT.liftF.">liftT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.data.EitherT.liftT.F">F</span>[<span class="extype" name="cats.data.EitherT.liftT.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.liftT.F">F</span>]</span>)</span><span class="result">: <a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.liftT.F">F</span>, <span class="extype" name="cats.data.EitherT.liftT.A">A</span>, <span class="extype" name="cats.data.EitherT.liftT.B">B</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC1)</i> Use EitherT.liftF.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

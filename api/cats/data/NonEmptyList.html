@@ -559,9 +559,9 @@ scala&gt; nel.collect {
      | }
 res1: scala.collection.immutable.<span class="std">List</span>[<span class="std">String</span>] = <span class="std">List</span>(odd, even, odd, even, odd)</pre></div></div>
     </li><li name="cats.data.NonEmptyList#concat" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="concat[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]"></a><a id="concat[AA&gt;:A](NonEmptyList[AA]):NonEmptyList[AA]"></a>
+      <a id="concat[AA&gt;:A](other:List[AA]):cats.data.NonEmptyList[AA]"></a><a id="concat[AA&gt;:A](List[AA]):NonEmptyList[AA]"></a>
       <span class="permalink">
-      <a href="../../cats/data/NonEmptyList.html#concat[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]" title="Permalink">
+      <a href="../../cats/data/NonEmptyList.html#concat[AA&gt;:A](other:List[AA]):cats.data.NonEmptyList[AA]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -570,7 +570,23 @@ res1: scala.collection.immutable.<span class="std">List</span>[<span class="std"
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">concat</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>
+        <span class="name">concat</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="other">other: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptyList#concatNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="concatNel[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]"></a><a id="concatNel[AA&gt;:A](NonEmptyList[AA]):NonEmptyList[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#concatNel[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concatNel</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concatNel.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concatNel.AA">AA</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Append another NonEmptyList
@@ -784,9 +800,9 @@ res0: scala.collection.immutable.<span class="std">List</span>[<span class="std"
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.data.NonEmptyList#groupBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="groupBy[B](f:A=&gt;B):Map[B,cats.data.NonEmptyList[A]]"></a><a id="groupBy[B]((A)⇒B):Map[B,NonEmptyList[A]]"></a>
+      <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.NonEmptyList[A]]"></a><a id="groupBy[B]((A)⇒B)(Order[B]):SortedMap[B,NonEmptyList[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/NonEmptyList.html#groupBy[B](f:A=&gt;B):Map[B,cats.data.NonEmptyList[A]]" title="Permalink">
+      <a href="../../cats/data/NonEmptyList.html#groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.NonEmptyList[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -795,13 +811,17 @@ res0: scala.collection.immutable.<span class="std">List</span>[<span class="std"
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyList.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyList.groupBy.B">B</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="cats.data.NonEmptyList.groupBy.B">B</span>, <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]]</span>
+        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyList.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyList.groupBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyList.groupBy.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.data.NonEmptyList.groupBy.B">B</span>, <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]]</span>
       </span>
       
-      <p class="shortcomment cmt">Groups elements inside of this <code>NonEmptyList</code> using a mapping function</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside of this <code>NonEmptyList</code> using a mapping function</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyList</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyList</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><pre>scala&gt; <span class="kw">import</span> scala.collection.immutable.SortedMap
+scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+scala&gt; <span class="kw">import</span> cats.instances.boolean._
 scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
 scala&gt; nel.groupBy(_ &gt;= <span class="num">0</span>)
-res0: <span class="std">Map</span>[<span class="std">Boolean</span>, cats.data.NonEmptyList[<span class="std">Int</span>]] = <span class="std">Map</span>(<span class="kw">false</span> -&gt; NonEmptyList(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyList(<span class="num">12</span>, <span class="num">3</span>))</pre></div></div>
+res0: SortedMap[<span class="std">Boolean</span>, cats.data.NonEmptyList[<span class="std">Int</span>]] = <span class="std">Map</span>(<span class="kw">false</span> -&gt; NonEmptyList(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyList(<span class="num">12</span>, <span class="num">3</span>))</pre></div></div>
     </li><li name="cats.data.NonEmptyList#head" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="head:A"></a>
       <span class="permalink">
@@ -872,6 +892,22 @@ res0: scala.collection.immutable.<span class="std">List</span>[<span class="std"
 scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)
 scala&gt; nel.last
 res0: <span class="std">Int</span> = <span class="num">5</span></pre></div></div>
+    </li><li name="cats.data.NonEmptyList#length" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="length:Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#length:Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">length</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyList#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="map[B](f:A=&gt;B):cats.data.NonEmptyList[B]"></a><a id="map[B]((A)⇒B):NonEmptyList[B]"></a>
       <span class="permalink">
@@ -937,6 +973,22 @@ res0: <span class="std">Int</span> = <span class="num">5</span></pre></div></div
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.data.NonEmptyList#prepend" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="prepend[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]"></a><a id="prepend[AA&gt;:A](AA):NonEmptyList[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#prepend[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">prepend</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.NonEmptyList.prepend.AA">AA</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.prepend.AA">AA</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyList#reduce" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="reduce[AA&gt;:A](implicitS:cats.Semigroup[AA]):AA"></a><a id="reduce[AA&gt;:A](Semigroup[AA]):AA"></a>
       <span class="permalink">
@@ -1257,7 +1309,29 @@ res0: cats.data.NonEmptyList[(<span class="std">String</span>, <span class="std"
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="cats.data.NonEmptyList#concat" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concat[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]"></a><a id="concat[AA&gt;:A](NonEmptyList[AA]):NonEmptyList[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#concat[AA&gt;:A](other:cats.data.NonEmptyList[AA]):cats.data.NonEmptyList[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC1) Use concatNel">concat</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.concat.AA">AA</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC1)</i> Use concatNel</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

@@ -517,6 +517,22 @@ universal equality provided by .equals.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.NonEmptyVector#collect" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collect[B](pf:PartialFunction[A,B]):Vector[B]"></a><a id="collect[B](PartialFunction[A,B]):Vector[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#collect[B](pf:PartialFunction[A,B]):Vector[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.12.3/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>, <span class="extype" name="cats.data.NonEmptyVector.collect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.data.NonEmptyVector.collect.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyVector#concat" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="concat[AA&gt;:A](other:Vector[AA]):cats.data.NonEmptyVector[AA]"></a><a id="concat[AA&gt;:A](Vector[AA]):NonEmptyVector[AA]"></a>
       <span class="permalink">
@@ -766,6 +782,22 @@ res0: scala.collection.immutable.Vector[<span class="std">Int</span>] = Vector(<
       </span>
       
       
+    </li><li name="cats.data.NonEmptyVector#init" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="init:Vector[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#init:Vector[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">init</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -782,6 +814,22 @@ res0: scala.collection.immutable.Vector[<span class="std">Int</span>] = Vector(<
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.data.NonEmptyVector#last" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="last:A"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#last:A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">last</span><span class="result">: <span class="extype" name="cats.data.NonEmptyVector.A">A</span></span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyVector#length" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="length:Int"></a>
       <span class="permalink">
@@ -864,6 +912,22 @@ res0: scala.collection.immutable.Vector[<span class="std">Int</span>] = Vector(<
       </span>
       
       <p class="shortcomment cmt">Left-associative reduce using f.</p>
+    </li><li name="cats.data.NonEmptyVector#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reverse:cats.data.NonEmptyVector[A]"></a><a id="reverse:NonEmptyVector[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#reverse:cats.data.NonEmptyVector[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverse</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyVector#show" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="show[AA&gt;:A](implicitAA:cats.Show[AA]):String"></a><a id="show[AA&gt;:A](Show[AA]):String"></a>
       <span class="permalink">
@@ -883,6 +947,38 @@ res0: scala.collection.immutable.Vector[<span class="std">Int</span>] = Vector(<
 values according to Show[_] instances, rather than using the
 universal .toString method.
 </p></div></div>
+    </li><li name="cats.data.NonEmptyVector#sortBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sortBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyVector[A]"></a><a id="sortBy[B]((A)⇒B)(Order[B]):NonEmptyVector[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#sortBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyVector[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sortBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyVector.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyVector.sortBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyVector.sortBy.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptyVector#sorted" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sorted[AA&gt;:A](implicitAA:cats.Order[AA]):cats.data.NonEmptyVector[AA]"></a><a id="sorted[AA&gt;:A](Order[AA]):NonEmptyVector[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#sorted[AA&gt;:A](implicitAA:cats.Order[AA]):cats.data.NonEmptyVector[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sorted</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyVector.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyVector.sorted.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.sorted.AA">AA</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyVector#tail" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="tail:Vector[A]"></a>
       <span class="permalink">
@@ -984,6 +1080,22 @@ scala&gt; <span class="kw">val</span> as = NonEmptyVector.of(<span class="num">1
 scala&gt; <span class="kw">val</span> bs = NonEmptyVector.of(<span class="lit">"A"</span>, <span class="lit">"B"</span>, <span class="lit">"C"</span>)
 scala&gt; as.zipWith(bs)(_ + _)
 res0: cats.data.NonEmptyVector[<span class="std">String</span>] = NonEmptyVector(<span class="num">1</span>A, <span class="num">2</span>B, <span class="num">3</span>C)</pre></div></div>
+    </li><li name="cats.data.NonEmptyVector#zipWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="zipWithIndex:cats.data.NonEmptyVector[(A,Int)]"></a><a id="zipWithIndex:NonEmptyVector[(A,Int)]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#zipWithIndex:cats.data.NonEmptyVector[(A,Int)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zipWithIndex</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[(<span class="extype" name="cats.data.NonEmptyVector.A">A</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
+      </span>
+      
+      
     </li>
               </ol>
             </div>

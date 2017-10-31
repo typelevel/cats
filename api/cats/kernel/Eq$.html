@@ -193,6 +193,18 @@ type.">
                           GroupFunctions
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="Hash$.html" title=""></a>
+                        <a class="trait" href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type."></a>
+                        <a href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type.">
+                          Hash
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="HashFunctions.html" title=""></a>
+                        <a href="HashFunctions.html" title="">
+                          HashFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Monoid$.html" title=""></a>
                         <a class="trait" href="Monoid.html" title="A monoid is a semigroup with an identity."></a>
                         <a href="Monoid.html" title="A monoid is a semigroup with an identity.">
@@ -429,6 +441,24 @@ type.">
       
       <p class="shortcomment cmt">This is a monoid that creates an Eq that
 checks that all equality checks pass
+</p>
+    </li><li name="cats.kernel.Eq#and" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="and[A](eq1:cats.kernel.Eq[A],eq2:cats.kernel.Eq[A]):cats.kernel.Eq[A]"></a><a id="and[A](Eq[A],Eq[A]):Eq[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Eq$.html#and[A](eq1:cats.kernel.Eq[A],eq2:cats.kernel.Eq[A]):cats.kernel.Eq[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">and</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="eq1">eq1: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.and.A">A</span>]</span>, <span name="eq2">eq2: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.and.A">A</span>]</span>)</span><span class="result">: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.and.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Return an Eq that gives the result of the and of eq1 and eq2
+note this is idempotent
 </p>
     </li><li name="cats.kernel.Eq#anyEqualSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="anyEqualSemilattice[A]:cats.kernel.Semilattice[cats.kernel.Eq[A]]"></a><a id="anyEqualSemilattice[A]:Semilattice[Eq[A]]"></a>
@@ -756,6 +786,24 @@ implementations
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="cats.kernel.Eq#or" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="or[A](eq1:cats.kernel.Eq[A],eq2:cats.kernel.Eq[A]):cats.kernel.Eq[A]"></a><a id="or[A](Eq[A],Eq[A]):Eq[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/Eq$.html#or[A](eq1:cats.kernel.Eq[A],eq2:cats.kernel.Eq[A]):cats.kernel.Eq[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">or</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="eq1">eq1: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.or.A">A</span>]</span>, <span name="eq2">eq2: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.or.A">A</span>]</span>)</span><span class="result">: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Eq.or.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Return an Eq that gives the result of the or of this and that
+Note this is idempotent
+</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

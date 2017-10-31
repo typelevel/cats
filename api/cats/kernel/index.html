@@ -162,24 +162,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
-    </li><li name="cats.functor" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="functor"></a><a id="functor:functor"></a>
-      <span class="permalink">
-      <a href="../cats/index.html#functor" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="../functor/index.html">
-              <span class="name">functor</span>
-            </a>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li name="cats.instances" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instances"></a><a id="instances:instances"></a>
       <span class="permalink">
@@ -297,6 +279,18 @@ type.">
                         <a class="class" href="GroupFunctions.html" title=""></a>
                         <a href="GroupFunctions.html" title="">
                           GroupFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Hash$.html" title=""></a>
+                        <a class="trait" href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type."></a>
+                        <a href="Hash.html" title="A type class used to represent a hashing scheme for objects of a given type.">
+                          Hash
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="HashFunctions.html" title=""></a>
+                        <a href="HashFunctions.html" title="">
+                          HashFunctions
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Monoid$.html" title=""></a>
@@ -637,6 +631,44 @@ Moreover, <code>eqv</code> should form an equivalence relation.
         <a title="" href="GroupFunctions.html">
               <span class="name">GroupFunctions</span>
             </a><span class="tparams">[<span name="G">G<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>[<span class="extype" name="cats.kernel.GroupFunctions.G.T">T</span>]</span>]</span><span class="result"> extends <a href="MonoidFunctions.html" class="extype" name="cats.kernel.MonoidFunctions">MonoidFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>]</span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.Hash" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Hash[A]extendsAnywithEq[A]withSerializable"></a><a id="Hash[A]:Hash[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/index.html#Hash[A]extendsAnywithEq[A]withSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A type class used to represent a hashing scheme for objects of a given type." href="Hash.html">
+              <span class="name">Hash</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.Hash.A">A</span>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A type class used to represent a hashing scheme for objects of a given type.</p><div class="fullcomment"><div class="comment cmt"><p>A type class used to represent a hashing scheme for objects of a given type.
+For any two instances <code>x</code> and <code>y</code> that are considered equivalent under the
+equivalence relation defined by this object, <code>hash(x)</code> should equal <code>hash(y)</code>.</p></div></div>
+    </li><li name="cats.kernel.HashFunctions" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HashFunctions[H[T]&lt;:cats.kernel.Hash[T]]extendsEqFunctions[H]"></a><a id="HashFunctions[H[T]&lt;:Hash[T]]:HashFunctions[H]"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/index.html#HashFunctions[H[T]&lt;:cats.kernel.Hash[T]]extendsEqFunctions[H]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HashFunctions.html">
+              <span class="name">HashFunctions</span>
+            </a><span class="tparams">[<span name="H">H<span class="tparams">[<span name="T">T</span>]</span> &lt;: <a href="Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.HashFunctions.H.T">T</span>]</span>]</span><span class="result"> extends <a href="EqFunctions.html" class="extype" name="cats.kernel.EqFunctions">EqFunctions</a>[<span class="extype" name="cats.kernel.HashFunctions.H">H</span>]</span>
       </span>
       
       
@@ -1011,6 +1043,24 @@ false     true        = 1.0     (corresponds to x &gt; y)
         <a title="" href="Group$.html">
               <span class="name">Group</span>
             </a><span class="result"> extends <a href="GroupFunctions.html" class="extype" name="cats.kernel.GroupFunctions">GroupFunctions</a>[<a href="Group.html" class="extype" name="cats.kernel.Group">Group</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.kernel.Hash" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Hash"></a><a id="Hash:Hash"></a>
+      <span class="permalink">
+      <a href="../../cats/kernel/index.html#Hash" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Hash$.html">
+              <span class="name">Hash</span>
+            </a><span class="result"> extends <a href="HashFunctions.html" class="extype" name="cats.kernel.HashFunctions">HashFunctions</a>[<a href="Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
