@@ -19,6 +19,8 @@ This is the only planned release candidate release prior to 1.0.0.
 * [#1914](https://github.com/typelevel/cats/pull/1914) Add `Invariant` instances for kernel type classes by @LukaJCB 
 * [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
 * [#1972](https://github.com/typelevel/cats/pull/1972) Add `SortedMap` and `SortedSet` instances/Move `Set` and `Map` instances to Alleycats by @LukaJCB/@kailuowang 
+* [#1997](https://github.com/typelevel/cats/pull/1997) Minimizing typeclass surface in cats-kernel  by @denisrosset  
+
 
 To migrate from 1.0.0-MF.
 
@@ -59,6 +61,8 @@ To migrate from 1.0.0-MF.
 * [#1984](https://github.com/typelevel/cats/pull/1984) Welcome, Alleycats  by @kailuowang
 * [#1927](https://github.com/typelevel/cats/pull/1927) Add `CommutativeApply` and `CommutativeApplicative`  by @LukaJCB
 * [#1837](https://github.com/typelevel/cats/pull/1837) Add `Parallel` type class  by @LukaJCB
+* [#1998](https://github.com/typelevel/cats/pull/1998) Add `Validated.cond` and `Validated.condNel`  by @andyscott
+
 
 ### Bug fixes:
 
@@ -161,16 +165,16 @@ To migrate from 1.0.0-MF.
 
 ### Testing improvements
 
-* [#1963](https://github.com/typelevel/cats/pull/#1963) Move `followedBy`/`forEffect` tests to `ApplyTests`  by @peterneyens 
-* [#1960](https://github.com/typelevel/cats/pull/#1960) Harmonize naming of discipline test classes in cats-kernel-laws.  by @denisrosset 
-* [#1953](https://github.com/typelevel/cats/pull/#1953) Add a more direct tailRecM law.  by @johnynek 
-* [#1906](https://github.com/typelevel/cats/pull/#1906) Fix `Alternative` law checking for `IndexedStateT`.  by @iravid 
-* [#1975](https://github.com/typelevel/cats/pull/#1975) Unifies test naming standard.  by @AlejandroME  
-
+* [#1963](https://github.com/typelevel/cats/pull/1963) Move `followedBy`/`forEffect` tests to `ApplyTests`  by @peterneyens 
+* [#1960](https://github.com/typelevel/cats/pull/1960) Harmonize naming of discipline test classes in cats-kernel-laws.  by @denisrosset 
+* [#1953](https://github.com/typelevel/cats/pull/1953) Add a more direct tailRecM law.  by @johnynek 
+* [#1906](https://github.com/typelevel/cats/pull/1906) Fix `Alternative` law checking for `IndexedStateT`.  by @iravid 
+* [#1975](https://github.com/typelevel/cats/pull/1975) Unifies test naming standard.  by @AlejandroME  
+* [#1999](https://github.com/typelevel/cats/pull/1999) Fix order of comparison for `EitherT.cond`.  by @andyscott  
 
 ### Scalafix for migration
 
-* [#1813](https://github.com/typelevel/cats/pull/#1813) Add `RenameInjectProdAndCoproduct`, `RenameTupleApplySyntax` and `RemoveSplit` Scalafix rewrites by @gabro
+* [#1813](https://github.com/typelevel/cats/pull/1813) Add `RenameInjectProdAndCoproduct`, `RenameTupleApplySyntax` and `RemoveSplit` Scalafix rewrites by @gabro
 * [#1937](https://github.com/typelevel/cats/pull/1937) Add scalafix for `contramap`  by @LukaJCB
 
 
