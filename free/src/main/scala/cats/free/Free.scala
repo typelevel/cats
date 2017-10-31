@@ -163,7 +163,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * If your natural transformation is effectful, be careful. These
    * effects will be applied by `compile`.
     */
-  @deprecated("Use mapK", "1.0.0")
   final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] = mapK(f)
 
   /**
@@ -239,7 +238,6 @@ object Free extends FreeInstances {
   /**
    * a FunctionK, suitable for composition, which calls compile
    */
-  @deprecated("Use mapK", "1.0.0")
   def compile[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
     mapK(fk)
 

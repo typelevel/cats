@@ -155,10 +155,10 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def monad: Monad[Kleisli[M, A, ?]] = catsDataMonadForKleisli
 
     def sequential: Kleisli[F, A, ?] ~> Kleisli[M, A, ?] =
-      λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.transform(P.sequential))
+      λ[Kleisli[F, A, ?] ~> Kleisli[M, A, ?]](_.mapK(P.sequential))
 
     def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
-      λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.transform(P.parallel))
+      λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.mapK(P.parallel))
   }
 }
 

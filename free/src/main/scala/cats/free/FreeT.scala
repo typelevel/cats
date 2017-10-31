@@ -40,7 +40,6 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * Changes the underlying `Monad` for this `FreeT`, ie.
    * turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
     */
-  @deprecated("Use mapK", "1.0.0")
   def hoist[N[_]](mn: FunctionK[M, N]): FreeT[S, N, A] =
     mapK(mn)
 
