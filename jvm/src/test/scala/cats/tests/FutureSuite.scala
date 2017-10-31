@@ -32,7 +32,7 @@ class FutureSuite extends CatsSuite {
     Cogen[Future[A]] { (seed: Seed, t: Future[A]) => Cogen[A].perturb(seed, Await.result(t, timeout)) }
 
   implicit val throwableEq: Eq[Throwable] =
-    Eq[String].on(_.toString)
+    Eq.by[Throwable, String](_.toString)
 
   // Need non-fatal Throwables for Future recoverWith/handleError
   implicit val nonFatalArbitrary: Arbitrary[Throwable] =

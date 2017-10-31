@@ -118,7 +118,7 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
     catsDataMonadForWriterT[Id, L]
 
   implicit def catsDataEqForWriterT[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
-    F.on(_.run)
+    Eq.by[WriterT[F, L, V], F[(L, V)]](_.run)
 
   implicit def catsDataSemigroupForWriterTId[L:Semigroup, V:Semigroup]: Semigroup[WriterT[Id, L, V]] =
     catsDataSemigroupForWriterT[Id, L, V]
