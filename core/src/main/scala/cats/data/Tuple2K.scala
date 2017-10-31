@@ -33,6 +33,11 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
     def F: Contravariant[F] = FC
     def G: Contravariant[G] = GC
   }
+  implicit def catsDataDivisibleForTuple2k[F[_], G[_]](implicit FD: Divisible[F], GD: Divisible[G]): Divisible[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KDivisible[F, G] {
+      def F: Divisible[F] = FD
+      def G: Divisible[G] = GD
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances0 extends Tuple2KInstances1 {
@@ -121,6 +126,14 @@ private[data] sealed trait Tuple2KContravariant[F[_], G[_]] extends Contravarian
   def F: Contravariant[F]
   def G: Contravariant[G]
   def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] = Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
+}
+
+private[data] sealed trait Tuple2KDivisible[F[_], G[_]] extends Divisible[λ[α => Tuple2K[F, G, α]]] {
+  def F: Divisible[F]
+  def G: Divisible[G]
+  def unit[A]: Tuple2K[F, G, A] = Tuple2K(F.unit, G.unit)
+  def contramap2[A, B, C](fb: Tuple2K[F, G, B], fc: Tuple2K[F, G, C])(f: A => (B, C)): Tuple2K[F, G, A] =
+    Tuple2K(F.contramap2(fb.first, fc.first)(f), G.contramap2(fb.second, fc.second)(f))
 }
 
 private[data] sealed trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple2K[F, G, α]]] with Tuple2KFunctor[F, G] {

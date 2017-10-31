@@ -76,6 +76,10 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Divisible
+    url: typeclasses/divisible.html
+    menu_type: typeclasses
+
   - title: Eq
     url: typeclasses/eq.html
     menu_type: typeclasses

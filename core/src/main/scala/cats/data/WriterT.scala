@@ -178,6 +178,11 @@ private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 
       implicit val F0: Alternative[F] = F
       implicit val L0: Monoid[L] = L
     }
+
+  implicit def catsDataDivisibleForWriterT[F[_], L](implicit F: Divisible[F]): Divisible[WriterT[F, L, ?]] =
+    new WriterTDivisible[F, L] {
+      implicit val F0: Divisible[F] = F
+    }
 }
 
 private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 {
@@ -351,6 +356,17 @@ private[data] sealed trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
 
 private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[WriterT[F, L, ?]] with WriterTMonoidK[F, L] with WriterTApplicative[F, L] {
   override implicit def F0: Alternative[F]
+}
+
+private[data] sealed trait WriterTDivisible[F[_], L] extends Divisible[WriterT[F, L, ?]] {
+  implicit def F0: Divisible[F]
+
+  override def unit[A]: WriterT[F, L, A] = WriterT(F0.unit[(L, A)])
+
+  override def contramap2[A, B, C](fb: WriterT[F, L, B], fc: WriterT[F, L, C])(f: A => (B, C)): WriterT[F, L, A] =
+    WriterT(F0.contramap2(fb.run, fc.run)((tup: (L, A)) => f(tup._2) match {
+      case (b, c) => ((tup._1, b), (tup._1, c))
+    }))
 }
 
 private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {

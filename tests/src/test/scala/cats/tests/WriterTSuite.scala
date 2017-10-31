@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, Validated, Writer, WriterT}
+import cats.data.{Const, EitherT, Validated, Writer, WriterT}
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -360,6 +360,11 @@ class WriterTSuite extends CatsSuite {
 
     checkAll("WriterT[Option, ListWrapper[Int], ?]", MonadErrorTests[WriterT[Option, ListWrapper[Int], ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]", SerializableTests.serializable(MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]))
+  }
+
+  {
+    // F has a Divisible
+    Divisible[WriterT[Const[String, ?], Int, ?]]
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])

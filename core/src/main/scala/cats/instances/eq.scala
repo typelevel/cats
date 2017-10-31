@@ -2,11 +2,25 @@ package cats
 package instances
 
 trait EqInstances {
-  implicit val catsContravariantSemigroupalForEq: ContravariantSemigroupal[Eq] =
-    new ContravariantSemigroupal[Eq] {
-      def contramap[A, B](fa: Eq[A])(fn: B => A): Eq[B] = Eq.by[B, A](fn)(fa)
+  implicit val catsDivisibleForEq: Divisible[Eq] =
+    new Divisible[Eq] {
+      /**
+       * Defaults to the trivial equivalence relation
+       * contracting the type to a point
+       */
+      def unit[A]: Eq[A] = Eq.allEqual
 
-      def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
-        Eq.instance { (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2) }
+      /** Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
+       *
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       */
+      def contramap2[A, B, C](fb: Eq[B], fc: Eq[C])(f: A => (B, C)): Eq[A] =
+        Eq.instance { (l, r) =>
+          (f(l), f(r)) match {
+            case (derivedL, derivedR) =>
+              fb.eqv(derivedL._1, derivedR._1) &&
+                fc.eqv(derivedL._2, derivedR._2)
+          }
+        }
     }
 }

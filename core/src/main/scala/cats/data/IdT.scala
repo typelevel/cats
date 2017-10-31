@@ -73,6 +73,15 @@ private[data] sealed trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] w
   def pure[A](a: A): IdT[F, A] = IdT.pure(a)
 }
 
+private[data] sealed trait IdTDivisible[F[_]] extends Divisible[IdT[F, ?]] {
+  implicit val F0: Divisible[F]
+
+  override def unit[A]: IdT[F, A] = IdT(F0.unit[A])
+
+  override def contramap2[A, B, C](fb: IdT[F, B], fc: IdT[F, C])(f: A => (B, C)): IdT[F, A] =
+    IdT(F0.contramap2(fb.value, fc.value)(f))
+}
+
 private[data] sealed trait IdTFlatMap[F[_]] extends FlatMap[IdT[F, ?]] with IdTApply[F] {
   implicit val F0: FlatMap[F]
 
@@ -123,7 +132,12 @@ private[data] sealed trait IdTNonEmptyTraverse[F[_]] extends IdTTraverse[F] with
     fa.reduceRightTo(f)(g)
 }
 
-private[data] sealed abstract class IdTInstances5 {
+private[data] sealed abstract class IdTInstances6 {
+  implicit def catsDataDivisibleForIdT[F[_]](implicit F: Divisible[F]): Divisible[IdT[F, ?]] =
+    new IdTDivisible[F] { implicit val F0: Divisible[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances5 extends IdTInstances6 {
   implicit def catsDataFunctorForIdT[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
     new IdTFunctor[F] { implicit val F0: Functor[F] = F }
 }

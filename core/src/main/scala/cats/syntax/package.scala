@@ -13,6 +13,7 @@ package object syntax {
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
   object coflatMap extends CoflatMapSyntax
+  object divisible extends DivisibleSyntax
   object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax

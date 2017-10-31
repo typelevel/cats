@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.OptionT
+import cats.data.{Const, OptionT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -41,6 +41,13 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
     checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
+  }
+
+  
+  {
+    // F has a  Divisible
+    checkAll("OptionT[Const[String, ?], Int]", DivisibleTests[OptionT[Const[String, ?], ?]].divisible[Int, Int, Int])
+    checkAll("Divisible[OptionT[Const[String, ?], Int]]", SerializableTests.serializable(Divisible[OptionT[Const[String, ?], ?]])) 
   }
 
   {

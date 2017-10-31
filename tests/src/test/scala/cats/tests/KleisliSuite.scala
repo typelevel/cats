@@ -3,7 +3,7 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -85,6 +85,12 @@ class KleisliSuite extends CatsSuite {
     implicit val catsDataAlternativeForKleisli = Kleisli.catsDataAlternativeForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", AlternativeTests[Kleisli[Option, Int, ?]].alternative[Int, Int, Int])
     checkAll("Alternative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, ?]]))
+  }
+
+  {
+    implicit val catsDataDivisibleForKleisli = Kleisli.catsDataDivisibleForKleisli[Const[String, ?], Int]
+    checkAll("Kleisli[Const[String, ?], Int, Int]", DivisibleTests[Kleisli[Const[String, ?], Int, ?]].divisible[Int, Int, Int])
+    checkAll("Divisible[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Divisible[Kleisli[Const[String, ?], Int, ?]]))
   }
 
   {

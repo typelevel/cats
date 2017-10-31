@@ -2,17 +2,28 @@ package cats
 package instances
 
 trait EquivInstances {
-  implicit val catsContravariantSemigroupalEquiv: ContravariantSemigroupal[Equiv] =
-    new ContravariantSemigroupal[Equiv] {
-      def contramap[A, B](fa: Equiv[A])(f: B => A): Equiv[B] =
-        new Equiv[B] {
-          def equiv(x: B, y: B): Boolean = fa.equiv(f(x), f(y))
-        }
+  implicit val catsDivisibleForEquiv: Divisible[Equiv] =
+    new Divisible[Equiv] {
+      /**
+       * Defaults to trivially contracting the type
+       * to a point
+       */
+      def unit[A]: Equiv[A] = new Equiv[A] {
+        def equiv(x: A, y: A): Boolean = true
+      }
 
-      def product[A, B](fa: Equiv[A], fb: Equiv[B]): Equiv[(A, B)] =
-        new Equiv[(A, B)] {
-          def equiv(x: (A, B), y: (A, B)): Boolean =
-            fa.equiv(x._1, y._1) && fb.equiv(x._2, y._2)
+      /** Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
+       *
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       */
+      def contramap2[A, B, C](fb: Equiv[B], fc: Equiv[C])(f: A => (B, C)): Equiv[A] =
+        new Equiv[A] {
+          def equiv(l: A, r: A): Boolean =
+            (f(l), f(r)) match {
+              case (derivedL, derivedR) =>
+                fb.equiv(derivedL._1, derivedR._1) &&
+                  fc.equiv(derivedL._2, derivedR._2)
+            }
         }
     }
 }

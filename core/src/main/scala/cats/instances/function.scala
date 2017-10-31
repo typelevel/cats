@@ -43,6 +43,15 @@ private[instances] sealed trait Function1Instances {
         fa.compose(f)
     }
 
+  implicit def catsStdDivisibleForFunction1[R: Monoid]: Divisible[? => R] =
+    new Divisible[? => R] {
+      def unit[A]: A => R = Function.const(Monoid[R].empty)
+      def contramap2[A, B, C](fb: B => R, fc: C => R)(f: A => (B, C)): A => R =
+        a => f(a) match {
+          case (b, c) => Monoid[R].combine(fb(b), fc(c))
+        }
+    }
+
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
     new Monad[T1 => ?] {
       def pure[R](r: R): T1 => R = _ => r
