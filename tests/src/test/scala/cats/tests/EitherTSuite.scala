@@ -175,9 +175,9 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
-  test("cond") {
+  test("cond consistent with Either.cond") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      Either.cond(cond, s, i) should === (EitherT.cond[Id](cond, s, i).value)
+      EitherT.cond[Id](cond, s, i).value should === (Either.cond(cond, s, i))
     }
   }
 
