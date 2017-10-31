@@ -237,7 +237,6 @@ lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
 
-
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")

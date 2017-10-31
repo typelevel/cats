@@ -23,13 +23,21 @@ package data
  * res1: List[Option[String]] = List(Some(2), None)
  * }}}
  */
-final case class Nested[F[_], G[_], A](value: F[G[A]])
+final case class Nested[F[_], G[_], A](value: F[G[A]]) {
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[H[_]](f: F ~> H): Nested[H, G, A] =
+    Nested(f(value))
+
+}
 
 object Nested extends NestedInstances
 
 private[data] sealed abstract class NestedInstances extends NestedInstances0 {
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
-    FGA.on(_.value)
+    Eq.by[Nested[F, G, A], F[G[A]]](_.value)
 
   implicit def catsDataNonEmptyTraverseForNested[F[_]: NonEmptyTraverse, G[_]: NonEmptyTraverse]: NonEmptyTraverse[Nested[F, G, ?]] =
     new NestedNonEmptyTraverse[F, G] {

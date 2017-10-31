@@ -9,6 +9,7 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 import org.typelevel.discipline.scalatest.Discipline
+import scala.collection.immutable.SortedSet
 
 class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
 
@@ -30,7 +31,7 @@ class ParallelTests extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
-    forAll { es: Set[Either[String, Int]] =>
+    forAll { es: SortedSet[Either[String, Int]] =>
       Parallel.parTraverse_(es)(identity) should === (Parallel.parSequence_(es))
     }
   }

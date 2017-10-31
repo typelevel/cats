@@ -27,6 +27,12 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
       functorF.map(run) { z => (z._1, fn(z._2)) }
     }
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): WriterT[G, L, V] =
+    WriterT[G, L, V](f(run))
+
   def contramap[Z](fn: Z => V)(implicit F: Contravariant[F]): WriterT[F, L, Z] =
     WriterT {
       F.contramap(run) { z => (z._1, fn(z._2)) }
@@ -118,7 +124,7 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
     catsDataMonadForWriterT[Id, L]
 
   implicit def catsDataEqForWriterT[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
-    F.on(_.run)
+    Eq.by[WriterT[F, L, V], F[(L, V)]](_.run)
 
   implicit def catsDataSemigroupForWriterTId[L:Semigroup, V:Semigroup]: Semigroup[WriterT[Id, L, V]] =
     catsDataSemigroupForWriterT[Id, L, V]

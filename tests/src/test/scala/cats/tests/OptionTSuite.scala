@@ -264,6 +264,13 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("mapK consistent with f(value)+pure") {
+    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (optiont: OptionT[List, Int]) =>
+      optiont.mapK(f) should === (OptionT(f(optiont.value)))
+    }
+  }
+
   test("semiflatMap consistent with value.flatMap+f+pure") {
     forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
       o.semiflatMap(f) should === (OptionT(o.value.flatMap {

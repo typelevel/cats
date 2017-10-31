@@ -587,4 +587,18 @@ private[data] trait ValidatedFunctions {
     * Converts an `Ior[A, B]` to a `Validated[A, B]`.
     */
   def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
+
+  /**
+   * If the condition is satisfied, return the given `B` as valid,
+   * otherwise return the given `A` as invalid.
+   */
+  final def cond[A, B](test: Boolean, b: => B, a: => A): Validated[A, B] =
+    if (test) valid(b) else invalid(a)
+
+  /**
+   * If the condition is satisfied, return the given `B` as valid NEL,
+   * otherwise return the given `A` as invalid NEL.
+   */
+  final def condNel[A, B](test: Boolean, b: => B, a: => A): ValidatedNel[A, B] =
+    if (test) validNel(b) else invalidNel(a)
 }

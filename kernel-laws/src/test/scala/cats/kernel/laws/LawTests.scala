@@ -94,7 +94,7 @@ class Tests extends FunSuite with Discipline {
 
   {
     // needed for Cogen[Map[...]]
-    implicit val ohe: Ordering[HasEq[Int]] = Ordering[Int].on(_.a)
+    implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
   }
 
@@ -106,8 +106,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
-  checkAll("PartialOrder[Set[Int]].reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse).partialOrder)
-  checkAll("PartialOrder[Set[Int]].reverse.reverse", PartialOrderTests(PartialOrder[Set[Int]].reverse.reverse).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])", PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))", PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder)
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
@@ -136,8 +136,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
-  checkAll("Order[Int].reverse", OrderTests(Order[Int].reverse).order)
-  checkAll("Order[Int].reverse.reverse", OrderTests(Order[Int].reverse.reverse).order)
+  checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
+  checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
@@ -343,7 +343,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasEq {
     implicit def hasEq[A: Eq]: Eq[HasEq[A]] =
-      Eq[A].on(_.a)
+      Eq.by(_.a)
     implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
       Arbitrary(arbitrary[A].map(HasEq(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasEq[A]] =
@@ -354,7 +354,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasPartialOrder {
     implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] =
-      PartialOrder[A].on(_.a)
+      PartialOrder.by(_.a)
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
@@ -365,7 +365,7 @@ class Tests extends FunSuite with Discipline {
 
   object HasHash {
     implicit def hasHash[A: Hash]: Hash[HasHash[A]] =
-      Hash.by(_.a) // not Hash[A].on(_.a) because of diamond inheritance problems with Eq
+      Hash.by(_.a)
     implicit def hasHashArbitrary[A: Arbitrary]: Arbitrary[HasHash[A]] =
       Arbitrary(arbitrary[A].map(HasHash(_)))
     implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
