@@ -23,6 +23,8 @@ trait AllInstances
   with    PartialOrderingInstances
   with    QueueInstances
   with    SetInstances
+  with    SortedMapInstances
+  with    SortedSetInstances
   with    StreamInstances
   with    StringInstances
   with    SymbolInstances

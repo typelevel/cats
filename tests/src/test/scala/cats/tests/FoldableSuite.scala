@@ -4,7 +4,7 @@ package tests
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import scala.util.Try
-
+import scala.collection.immutable._
 import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
@@ -218,6 +218,14 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkFoldMStackSafety[Vector](_.toVector)
   }
 
+  test("Foldable[SortedSet].foldM stack safety") {
+    checkFoldMStackSafety[SortedSet](_.to)
+  }
+
+  test("Foldable[SortedMap[String, ?]].foldM stack safety") {
+    checkFoldMStackSafety[SortedMap[String, ?]](xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap)
+  }
+
   test("Foldable[NonEmptyList].foldM stack safety") {
     checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
   }
@@ -315,8 +323,16 @@ class FoldableVectorSuite extends FoldableSuite[Vector]("vector") {
   def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
 }
 
+class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
+  def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
+}
+
 class FoldableStreamSuite extends FoldableSuite[Stream]("stream") {
   def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
+}
+
+class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, ?]]("sortedMap") {
+  def iterator[T](map: SortedMap[Int, T]): Iterator[T] = map.valuesIterator
 }
 
 class FoldableOptionSuite extends FoldableSuite[Option]("option") {

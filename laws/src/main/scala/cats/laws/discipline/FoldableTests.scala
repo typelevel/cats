@@ -17,6 +17,7 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     EqA: Eq[A],
+    EqFA: Eq[F[A]],
     EqB: Eq[B],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
@@ -25,6 +26,7 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
       parent = Some(unorderedFoldable[A, B]),
       "foldLeft consistent with foldMap" -> forAll(laws.leftFoldConsistentWithFoldMap[A, B] _),
       "foldRight consistent with foldMap" -> forAll(laws.rightFoldConsistentWithFoldMap[A, B] _),
+      "ordered constistency" -> forAll(laws.orderedConsistency[A] _),
       "exists consistent with find" -> forAll(laws.existsConsistentWithFind[A] _),
       "exists is lazy" -> forAll(laws.existsLazy[A] _),
       "forall is lazy" -> forAll(laws.forallLazy[A] _),

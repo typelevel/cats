@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.data.{Const, NonEmptyList}
-
 import scala.collection.mutable
+import scala.collection.immutable.SortedMap
 class RegressionSuite extends CatsSuite {
 
   // toy state class
@@ -100,6 +100,11 @@ class RegressionSuite extends CatsSuite {
     checkAndResetCount(3)
 
     Stream(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
+    checkAndResetCount(3)
+
+    type StringMap[A] = SortedMap[String, A]
+    val intMap: StringMap[Int] = SortedMap("A" -> 1, "B" -> 2, "C" -> 6, "D" -> 8)
+    intMap.traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     NonEmptyList.of(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
