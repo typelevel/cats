@@ -9,6 +9,12 @@ final case class IdT[F[_], A](value: F[A]) {
   def map[B](f: A => B)(implicit F: Functor[F]): IdT[F, B] =
     IdT(F.map(value)(f))
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): IdT[G, A] =
+    IdT[G, A](f(value))
+
   def flatMap[B](f: A => IdT[F, B])(implicit F: FlatMap[F]): IdT[F, B] =
     IdT(F.flatMap(value)(f.andThen(_.value)))
 
