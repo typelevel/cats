@@ -69,6 +69,7 @@ To migrate from 1.0.0-MF.
 
 * [#1917](https://github.com/typelevel/cats/pull/1917) Don't use package object convention for object source path  by @travisbrown
 * [#1804](https://github.com/typelevel/cats/pull/1804) workaround for a possible scala bug in show for value class  by @kailuowang
+* [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
 
 ### Documentation Improvements/Additions:
 
