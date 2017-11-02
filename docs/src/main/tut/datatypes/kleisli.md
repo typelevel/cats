@@ -56,7 +56,7 @@ The output type of `parse` is `Option[Int]` whereas the input type of `reciproca
 This is where `Kleisli` comes into play.
 
 ## Kleisli
-At it's core, `Kleisli[F[_], A, B]` is just a wrapper around the function `A => F[B]`. Depending on the
+At its core, `Kleisli[F[_], A, B]` is just a wrapper around the function `A => F[B]`. Depending on the
 properties of the `F[_]`, we can do different things with `Kleisli`s. For instance, if `F[_]` has a
 `FlatMap[F]` instance (we can call `flatMap` on `F[A]` values), we can
 compose two `Kleisli`s much like we can two functions.
