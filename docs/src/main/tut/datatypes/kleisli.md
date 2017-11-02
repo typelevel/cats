@@ -215,7 +215,7 @@ Functional programming advocates the creation of programs and modules by composi
 philosophy intentionally mirrors that of function composition - write many small functions, and compose them
 to build larger ones. After all, our programs are just functions.
 
-Let's look at some example modules, where each module has it's own configuration that is validated by a function.
+Let's look at some example modules, where each module has its own configuration that is validated by a function.
 If the configuration is good, we return a `Some` of the module, otherwise a `None`. This example uses `Option` for
 simplicity - if you want to provide error messages or other failure context, consider using `Either` instead.
 
