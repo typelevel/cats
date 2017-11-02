@@ -2,16 +2,12 @@
 
 ## Try this!
 
-Install the scalafix sbt plugin (globally or in a specific project):
+[Install the scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
-```scala
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
-```
-
-to run all rules that apply to version `1.0.0-MF` run
+To run all rules that apply to version `1.0.0-RC1` run
 
 ```sh
-sbt scalafix github:typelevel/cats/v1.0.0?sha=c131fe4
+sbt scalafix github:typelevel/cats/v1.0.0?sha=v1.0.0-RC1
 ```
 
 to run all rules that apply to the current `1.0.0-SNAPSHOT` run
@@ -39,6 +35,7 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [x] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
 
 - [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
+
 # WIP
 
 - [ ] cats no longer publishes the all-inclusive bundle package "org.typelevel" % "cats", use cats-core, cats-free, or cats-law accordingly instead. If you need cats.free, use "org.typelevel" % "cats-free", if you need cats-laws use "org.typelevel" % "cats-laws", if neither, use "org.typelevel" % "cats-core".
