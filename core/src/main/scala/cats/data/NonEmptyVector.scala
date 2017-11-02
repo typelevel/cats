@@ -72,6 +72,18 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
   def ++[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = concat(other)
 
   /**
+    * Append this NEV to another NEV, producing a new `NonEmptyVector`.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyVector
+    * scala> val nev = NonEmptyVector.of(1, 2, 3)
+    * scala> nev ++: NonEmptyVector.of(4, 5)
+    * res0: cats.data.NonEmptyVector[Int] = NonEmptyVector(1, 2, 3, 4, 5)
+    * }}}
+    */
+  def ++:[AA >: A](other: NonEmptyVector[AA]): NonEmptyVector[AA] = other.concatNev(this)
+
+  /**
    * Append another `Vector` to this, producing a new `NonEmptyVector`.
    */
   def concat[AA >: A](other: Vector[AA]): NonEmptyVector[AA] = new NonEmptyVector(toVector ++ other)
