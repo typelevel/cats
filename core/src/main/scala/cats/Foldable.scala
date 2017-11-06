@@ -8,11 +8,13 @@ import simulacrum.typeclass
 /**
  * Data structures that can be folded to a summary value.
  *
- * In the case of a collection (such as `List` or `Set`), these
+ * In the case of a collection (such as `List` or `Vector`), these
  * methods will fold together (combine) the values contained in the
  * collection to produce a single result. Most collection types have
  * `foldLeft` methods, which will usually be used by the associated
  * `Foldable[_]` instance.
+ *
+ * Instances of Foldable should be ordered collections to allow for consistent folding.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
@@ -505,10 +507,11 @@ import simulacrum.typeclass
 }
 
 object Foldable {
-  def iterateRight[A, B](it: Iterator[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-    def loop(): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
-    loop()
+  def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(it: Iterator[A]): Eval[B] =
+      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+
+    Eval.always(iterable.iterator).flatMap(loop)
   }
 
 

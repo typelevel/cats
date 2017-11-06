@@ -23,13 +23,21 @@ package data
  * res1: List[Option[String]] = List(Some(2), None)
  * }}}
  */
-final case class Nested[F[_], G[_], A](value: F[G[A]])
+final case class Nested[F[_], G[_], A](value: F[G[A]]) {
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[H[_]](f: F ~> H): Nested[H, G, A] =
+    Nested(f(value))
+
+}
 
 object Nested extends NestedInstances
 
 private[data] sealed abstract class NestedInstances extends NestedInstances0 {
   implicit def catsDataEqForNested[F[_], G[_], A](implicit FGA: Eq[F[G[A]]]): Eq[Nested[F, G, A]] =
-    FGA.on(_.value)
+    Eq.by[Nested[F, G, A], F[G[A]]](_.value)
 
   implicit def catsDataNonEmptyTraverseForNested[F[_]: NonEmptyTraverse, G[_]: NonEmptyTraverse]: NonEmptyTraverse[Nested[F, G, ?]] =
     new NestedNonEmptyTraverse[F, G] {
@@ -50,7 +58,7 @@ private[data] sealed abstract class NestedInstances1 extends NestedInstances2 {
       val FG: Reducible[λ[α => F[G[α]]]] = Reducible[F].compose[G]
     }
 
-  implicit def catsDataContravariantForNested[F[_]: Contravariant, G[_]: Contravariant]: Functor[Nested[F, G, ?]] =
+  implicit def catsDataFunctorForContravariantForNested[F[_]: Contravariant, G[_]: Contravariant]: Functor[Nested[F, G, ?]] =
     new NestedFunctor[F, G] {
       val FG: Functor[λ[α => F[G[α]]]] = Contravariant[F].compose[G]
     }
@@ -91,8 +99,8 @@ private[data] sealed abstract class NestedInstances4 extends NestedInstances5 {
 }
 
 private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
-  implicit def catsDataApplicativeForNested[F[_]: Applicative, G[_]: Applicative]: Applicative[Nested[F, G, ?]] =
-    new NestedApplicative[F, G] {
+  implicit def catsDataCommutativeApplicativeForNestedContravariant[F[_]: CommutativeApplicative, G[_]: CommutativeApplicative]: CommutativeApplicative[Nested[F, G, ?]] =
+    new NestedApplicative[F, G] with CommutativeApplicative[Nested[F, G, ?]] {
       val FG: Applicative[λ[α => F[G[α]]]] = Applicative[F].compose[G]
     }
 
@@ -103,8 +111,8 @@ private[data] sealed abstract class NestedInstances5 extends NestedInstances6 {
 }
 
 private[data] sealed abstract class NestedInstances6 extends NestedInstances7 {
-  implicit def catsDataApplyForNested[F[_]: Apply, G[_]: Apply]: Apply[Nested[F, G, ?]] =
-    new NestedApply[F, G] {
+  implicit def catsDataCommutativeApplyForNestedContravariant[F[_]: CommutativeApply, G[_]: CommutativeApply]: CommutativeApply[Nested[F, G, ?]] =
+    new NestedApply[F, G] with CommutativeApply[Nested[F, G, ?]] {
       val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
     }
 
@@ -115,27 +123,41 @@ private[data] sealed abstract class NestedInstances6 extends NestedInstances7 {
 }
 
 private[data] sealed abstract class NestedInstances7 extends NestedInstances8 {
+  implicit def catsDataApplicativeForNested[F[_]: Applicative, G[_]: Applicative]: Applicative[Nested[F, G, ?]] =
+    new NestedApplicative[F, G] {
+      val FG: Applicative[λ[α => F[G[α]]]] = Applicative[F].compose[G]
+    }
+}
+
+private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
+  implicit def catsDataApplyForNested[F[_]: Apply, G[_]: Apply]: Apply[Nested[F, G, ?]] =
+    new NestedApply[F, G] {
+      val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
+    }
+}
+
+private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
   implicit def catsDataFunctorForNested[F[_]: Functor, G[_]: Functor]: Functor[Nested[F, G, ?]] =
     new NestedFunctor[F, G] {
       val FG: Functor[λ[α => F[G[α]]]] = Functor[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
+private[data] sealed abstract class NestedInstances10 extends NestedInstances11 {
   implicit def catsDataInvariantForNested[F[_]: Invariant, G[_]: Invariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
+private[data] sealed abstract class NestedInstances11 extends NestedInstances12 {
   implicit def catsDataInvariantForCovariantNested[F[_]: Invariant, G[_]: Functor]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeFunctor[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances10 {
+private[data] sealed abstract class NestedInstances12 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]

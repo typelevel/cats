@@ -185,6 +185,11 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
+lazy val binaryCompatibleVersion = "1.0.0-RC1"
+
+def mimaSettings(moduleName: String) = Seq(
+    mimaPreviousArtifacts :=  Set("org.typelevel" %% moduleName % binaryCompatibleVersion))
+
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
@@ -207,16 +212,16 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -231,138 +236,6 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
-val binaryCompatibleVersion = "0.8.0"
-
-val binaryCompatibleExceptions = {
-  import com.typesafe.tools.mima.core._
-  import com.typesafe.tools.mima.core.ProblemFilters._
-  Seq( // todo: remove these once we release 1.0.0-RC1
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.MapInstances.catsKernelStdEqForMap"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.MapInstances.catsKernelStdMonoidForMap"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.MapInstances.catsKernelStdHashForMap"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.OptionInstances0.catsKernelStdEqForOption"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple12"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple7"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple4"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple13"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple11"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple1"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple7"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple16"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple22"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple1"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple14"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple4"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple20"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple19"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple10"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple17"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple18"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple3"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple9"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple6"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple3"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple12"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple22"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple6"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple19"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple10"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple9"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple21"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple15"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple13"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple16"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple20"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple14"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple5"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple2"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple8"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple17"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple5"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple15"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple21"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple11"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdPartialOrderForTuple2"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple8"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.TupleInstances.catsKernelStdEqForTuple18"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple9"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple16"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple22"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple3"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple6"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple21"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple18"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple12"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple15"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple8"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple2"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple5"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple20"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple14"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple17"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple4"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple11"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple7"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple1"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple10"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple19"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple13"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.StreamInstances1.catsKernelStdHashForStream"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.ListInstances1.catsKernelStdHashForList"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.SetInstances.catsKernelStdPartialOrderForSet"),
-    exclude[UpdateForwarderBodyProblem]("cats.kernel.instances.SetInstances.catsKernelStdSemilatticeForSet"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.SetInstances.catsKernelStdHashForSet"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.VectorInstances1.catsKernelStdHashForVector"),
-    exclude[DirectMissingMethodProblem]("cats.kernel.instances.BitSetInstances.catsKernelStdPartialOrderForBitSet"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.BitSetInstances.cats$kernel$instances$BitSetInstances$_setter_$catsKernelStdOrderForBitSet_="),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.BitSetInstances.catsKernelStdOrderForBitSet"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple9"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple16"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple22"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple3"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple6"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple21"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple18"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple12"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple15"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple8"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple2"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple5"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple20"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple14"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple17"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple4"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple11"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple7"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple1"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple10"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple19"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.TupleInstances1.catsKernelStdHashForTuple13"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances1.catsStdEqForEither"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances.catsStdOrderForEither"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances.catsDataMonoidForEither"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsDataSemigroupForEither"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdPartialOrderForEither"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdHashForOption"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.FunctionInstances0.catsKernelHashForFunction0"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.OptionInstances0.catsKernelStdPartialOrderForOption"),
-    exclude[ReversedMissingMethodProblem]("cats.kernel.instances.EitherInstances0.catsStdHashForEither"),
-    exclude[DirectMissingMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdPartialOrderForOption"),
-    exclude[DirectMissingMethodProblem]("cats.kernel.instances.all.package.catsKernelStdPartialOrderForBitSet"),
-    exclude[DirectMissingMethodProblem]("cats.kernel.instances.bitSet.package.catsKernelStdPartialOrderForBitSet"),
-    exclude[MissingTypesProblem]("cats.kernel.instances.OptionInstances1"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.OptionInstances1.catsKernelStdHashForOption"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances1.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.QueueInstances2.*"),
-    exclude[InheritedNewAbstractMethodProblem]("cats.kernel.instances.DurationInstances.*")
-  )
-}
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
@@ -373,15 +246,8 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings ++ Seq(
-    mimaPreviousArtifacts := {
-      if (scalaVersion.value startsWith "2.12")
-        Set()
-      else
-        Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
-    },
-    mimaBinaryIssueFilters ++= binaryCompatibleExceptions
-  ))
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
+
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -412,7 +278,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core") )
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -436,7 +302,7 @@ lazy val free = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
@@ -465,6 +331,55 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
 
 lazy val testkitJVM = testkit.jvm
 lazy val testkitJS = testkit.js
+
+lazy val alleycatsCore = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-core"))
+  .dependsOn(core)
+  .settings(moduleName := "alleycats-core", name := "Alleycats core")
+  .settings(libraryDependencies ++= Seq(
+    "org.typelevel" %% "export-hook" % "1.2.0"
+  ))
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions ~= {_.filterNot("-Ywarn-unused-import" == _)}) //export-hook triggers unused import
+
+
+lazy val alleycatsCoreJVM = alleycatsCore.jvm
+lazy val alleycatsCoreJS = alleycatsCore.js
+
+lazy val alleycatsLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-laws"))
+  .dependsOn(alleycatsCore, laws)
+  .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .jsSettings(coverageEnabled := false)
+  .dependsOn(alleycatsCore)
+
+lazy val alleycatsLawsJVM = alleycatsLaws.jvm
+lazy val alleycatsLawsJS = alleycatsLaws.js
+
+lazy val alleycatsTests = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-tests"))
+  .dependsOn(alleycatsLaws, testkit % "test")
+  .settings(moduleName := "alleycats-tests")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+
+lazy val alleycatsTestsJVM = alleycatsTests.jvm
+lazy val alleycatsTestsJS = alleycatsTests.js
+
 
 // bench is currently JVM-only
 
@@ -534,11 +449,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
-        <id>edmundnoble</id>
-        <name>Edmund Noble</name>
-        <url>https://github.com/edmundnoble/</url>
-      </developer>
-      <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
         <url>https://github.com/tpolecat/</url>
@@ -552,6 +462,11 @@ lazy val publishSettings = Seq(
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>LukaJCB</id>
+        <name>LukaJCB</name>
+        <url>https://github.com/LukaJCB/</url>
       </developer>
       <developer>
         <id>mpilquist</id>

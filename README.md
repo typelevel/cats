@@ -28,8 +28,6 @@ Cats relies on improved type inference via the fix for [SI-2712](https://github.
 
 ```scala
 scalacOptions += "-Ypartial-unification"
-
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
 ```
 
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
@@ -41,7 +39,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 And then create the cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-RC1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -54,14 +52,14 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
+ * `alleycats`: cats instances and classes which are not lawful. 
  
  There are several other cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
- * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
- * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
+ * [`mouse`](https://github.com/typelevel/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
 
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
@@ -79,7 +77,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
- * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs
+ * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
@@ -100,12 +98,15 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
+ * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
@@ -186,7 +187,6 @@ The current maintainers (people who can merge pull requests) are:
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
- * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim

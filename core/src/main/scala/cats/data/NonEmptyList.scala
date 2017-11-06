@@ -66,6 +66,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    */
   def size: Int = 1 + tail.size
 
+  def length: Int = size
+
   /**
    *  Applies f to all the elements of the structure
    */
@@ -73,13 +75,42 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(f(head), tail.map(f))
 
   def ++[AA >: A](l: List[AA]): NonEmptyList[AA] =
-    NonEmptyList(head, tail ++ l)
+    concat(l)
+
+  def concat[AA >: A](other: List[AA]): NonEmptyList[AA] =
+    NonEmptyList(head, tail ::: other)
+
+  @deprecated("Use concatNel", since = "1.0.0-RC1")
+  def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
+    concatNel(other)
+
+  /**
+   * Append another NonEmptyList
+   */
+  def concatNel[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
+    NonEmptyList(head, tail ::: other.toList)
 
   def flatMap[B](f: A => NonEmptyList[B]): NonEmptyList[B] =
     f(head) ++ tail.flatMap(f andThen (_.toList))
 
   def ::[AA >: A](a: AA): NonEmptyList[AA] =
+    prepend(a)
+
+  def prepend[AA >: A](a: AA): NonEmptyList[AA] =
     NonEmptyList(a, head :: tail)
+
+  /**
+    * Alias for concat
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3)
+    * scala> nel ::: NonEmptyList.of(4, 5)
+    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
+    * }}}
+    */
+  def :::[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
+    other.concatNel(this)
 
   /**
    * Remove elements not matching the predicate
@@ -136,12 +167,6 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       tail.collect(pf)
     }
   }
-
-  /**
-   * Append another NonEmptyList
-   */
-  def concat[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
-    NonEmptyList(head, tail ::: other.toList)
 
   /**
    * Find the first element matching the predicate, if one exists
@@ -395,6 +420,7 @@ object NonEmptyList extends NonEmptyListInstances {
 
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
+
 }
 
 private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
@@ -405,7 +431,7 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
       with Monad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
-        a concat b
+        a concatNel b
 
       override def split[A](fa: NonEmptyList[A]): (A, List[A]) = (fa.head, fa.tail)
 

@@ -11,4 +11,4 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.CommutativeMonadLaws.
  */
-@typeclass trait CommutativeMonad[F[_]] extends Monad[F] with CommutativeFlatMap[F]
+@typeclass trait CommutativeMonad[F[_]] extends Monad[F] with CommutativeFlatMap[F] with CommutativeApplicative[F]

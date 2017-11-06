@@ -9,7 +9,7 @@ trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] = fa.on(f)
+      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] = Order.by[B, A](f)(fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] =
         new Order[(A, B)] {

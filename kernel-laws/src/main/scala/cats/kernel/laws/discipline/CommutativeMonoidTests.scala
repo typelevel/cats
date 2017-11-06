@@ -5,7 +5,7 @@ package discipline
 
 import org.scalacheck.{Arbitrary, Prop}
 
-trait CommutativeMonoidTests[A] extends CommutativeSemigroupTests[A] with MonoidLawTests[A] {
+trait CommutativeMonoidTests[A] extends CommutativeSemigroupTests[A] with MonoidTests[A] {
   def laws: CommutativeMonoidLaws[A]
 
   def commutativeMonoid(implicit arbA: Arbitrary[A], eqA: Eq[A]): RuleSet =

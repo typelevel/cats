@@ -75,6 +75,8 @@ package object cats {
       override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 
+  implicit val catsParallelForId: Parallel[Id, Id] = Parallel.identity
+
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
   type Order[A] = cats.kernel.Order[A]

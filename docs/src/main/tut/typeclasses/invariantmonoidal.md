@@ -17,7 +17,7 @@ trait InvariantMonoidal[F[_]] {
 }
 ```
 
-Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Other notable examples are [`Semigroup`](semigroup.html) and [`Monoid`](monoid.html).
+Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Another notable examples is [`Semigroup`](semigroup.html).
 
 This tutorial first shows how `Semigroup` is `InvariantMonoidal`, and how this can be used create `Semigroup` instances by combining other `Semigroup` instances. Secondly, we present a complete example of `Codec` for the CSV format, and show how it is `InvariantMonoidal`. Lastly, we present an alternative definition of `InvariantMonoidal` as a generalization of `Invariant`, and show that both definitions are equivalent.
 
@@ -189,7 +189,7 @@ fooCodec.read(fooCodec.write(foo)) == ((Some(foo), List()))
 
 # `InvariantMonoidal` as a generalization of `Invariant`
 
-To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to it's definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
+To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to its definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
 
 Given an `Invariant[F]` instance for a certain *context* `F[_]`, its `imap` method gives a way to lift two *unary* pure functions `A => B` and `B => A` into *contextualized* functions `F[A] => F[B]`. But what about functions of other arity?
 

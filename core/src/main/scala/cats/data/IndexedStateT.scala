@@ -39,6 +39,13 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SB, B] =
     transform { case (s, a) => (s, f(a)) }
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G)(implicit F: Functor[F]): IndexedStateT[G, SA, SB, A] =
+    IndexedStateT.applyF(
+      f(F.map(runF)(_.andThen(fsa => f(fsa)))))
+
   def contramap[S0](f: S0 => SA)(implicit F: Functor[F]): IndexedStateT[F, S0, SB, A] =
     IndexedStateT.applyF {
       F.map(runF) { safsba =>

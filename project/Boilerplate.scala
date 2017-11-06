@@ -28,7 +28,9 @@ object Boilerplate {
     GenSemigroupalBuilders,
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
-    GenTupleSemigroupalSyntax
+    GenTupleSemigroupalSyntax,
+    GenParallelArityFunctions,
+    GenTupleParallelSyntax
   )
 
   val header = "// auto-generated boilerplate" // TODO: put something meaningful here?
@@ -192,6 +194,30 @@ object Boilerplate {
     }
   }
 
+  object GenParallelArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val fargs = (0 until arity) map { "m" + _ }
+      val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
+      val fargsS = fargs mkString ", "
+
+      val nestedProducts = (0 until (arity - 2)).foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
+      val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
+
+      block"""
+         |package cats
+         |trait ParallelArityFunctions {
+        -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
+        -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+         |}
+      """
+    }
+  }
+
   object GenSemigroupalArityFunctions extends Template {
     def filename(root: File) = root / "cats" / "SemigroupalArityFunctions.scala"
     override def range = 2 to maxArity
@@ -220,6 +246,44 @@ object Boilerplate {
         -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit semigroupal: Semigroupal[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
         -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
+      """
+    }
+  }
+
+  object GenTupleParallelSyntax extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "TupleParallelSyntax.scala"
+
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val tpesString = tpes mkString ", "
+
+      val tuple = s"Tuple$arity[$tpesString]"
+      val tupleTpe = s"t$arity: $tuple"
+      val tupleArgs = (1 to arity) map { case n => s"t$arity._$n" } mkString ", "
+
+      val n = if (arity == 1) { "" } else { arity.toString }
+
+      val parMap =
+        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
+        else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
+
+
+      block"""
+         |package cats
+         |package syntax
+         |
+         |import cats.Parallel
+         |
+         |trait TupleParallelSyntax {
+         -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
+         |}
+         |
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
+         -  $parMap
+         -}
+         |
       """
     }
   }

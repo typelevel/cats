@@ -27,6 +27,12 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
       functorF.map(run) { z => (z._1, fn(z._2)) }
     }
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): WriterT[G, L, V] =
+    WriterT[G, L, V](f(run))
+
   def contramap[Z](fn: Z => V)(implicit F: Contravariant[F]): WriterT[F, L, Z] =
     WriterT {
       F.contramap(run) { z => (z._1, fn(z._2)) }
@@ -81,6 +87,21 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
       implicit val L0: Monoid[L] = L
     }
 
+  implicit def catsDataParallelForWriterT[F[_], M[_], L: Monoid]
+  (implicit P: Parallel[M, F]): Parallel[WriterT[M, L, ?], WriterT[F, L, ?]] = new Parallel[WriterT[M, L, ?], WriterT[F, L, ?]]{
+    implicit val appF = P.applicative
+    implicit val monadM = P.monad
+
+    def applicative: Applicative[WriterT[F, L, ?]] = catsDataApplicativeForWriterT
+    def monad: Monad[WriterT[M, L, ?]] = catsDataMonadForWriterT
+
+    def sequential: WriterT[F, L, ?] ~> WriterT[M, L, ?] =
+      λ[WriterT[F, L, ?] ~> WriterT[M, L, ?]](wfl => WriterT(P.sequential(wfl.run)))
+
+    def parallel: WriterT[M, L, ?] ~> WriterT[F, L, ?] =
+      λ[WriterT[M, L, ?] ~> WriterT[F, L, ?]](wml => WriterT(P.parallel(wml.run)))
+  }
+
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
     catsDataEqForWriterT[Id, L, V]
 
@@ -103,7 +124,7 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
     catsDataMonadForWriterT[Id, L]
 
   implicit def catsDataEqForWriterT[F[_], L, V](implicit F: Eq[F[(L, V)]]): Eq[WriterT[F, L, V]] =
-    F.on(_.run)
+    Eq.by[WriterT[F, L, V], F[(L, V)]](_.run)
 
   implicit def catsDataSemigroupForWriterTId[L:Semigroup, V:Semigroup]: Semigroup[WriterT[Id, L, V]] =
     catsDataSemigroupForWriterT[Id, L, V]
