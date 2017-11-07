@@ -103,10 +103,12 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val b = mock[B]
     val f1 = mock[(B, A) => B]
     val b0: B = fa.foldLeft(b)(f1)
+    val b1: B = fa.foldl(b)(f1)
     val a0: A = fa.fold
 
     val f2 = mock[(A, Eval[B]) => Eval[B]]
     val lb0: Eval[B] = fa.foldRight(Now(b))(f2)
+    val lb1: Eval[B] = fa.foldr(Now(b))(f2)
 
     val fz = mock[F[Z]]
     val f3 = mock[Z => A]
