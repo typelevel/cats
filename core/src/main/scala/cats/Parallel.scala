@@ -97,9 +97,9 @@ object NonEmptyParallel {
 
   /** Default implementation for [[NonEmptyParallel.mirror]]. */
   private def defaultMirror[M[_], F[_]](P: NonEmptyParallel[M, F]): NonEmptyParallel[M, M] =
-    new Mirror(P, new MirrorApply(P))
+    new Wrap(P, new MirrorApply(P))
 
-  private[cats] class Mirror[M[_], F[_]](P: NonEmptyParallel[M, F], A: Apply[M])
+  private[cats] class Wrap[M[_], F[_]](P: NonEmptyParallel[M, F], A: Apply[M])
     extends NonEmptyParallel[M, M] {
 
     override def apply: Apply[M] =
@@ -308,10 +308,10 @@ object Parallel extends ParallelArityFunctions {
 
   /** Default implementation for [[Parallel.mirror]]. */
   private def defaultMirror[M[_], F[_]](P: Parallel[M, F]): Parallel[M, M] =
-    new Mirror(P, new MirrorApplicative(P))
+    new Wrap(P, new MirrorApplicative(P))
 
-  private[cats] class Mirror[M[_], F[_]](P: Parallel[M, F], A: Applicative[M])
-    extends NonEmptyParallel.Mirror[M, F](P, A) with Parallel[M, M] {
+  private[cats] class Wrap[M[_], F[_]](P: Parallel[M, F], A: Applicative[M])
+    extends NonEmptyParallel.Wrap[M, F](P, A) with Parallel[M, M] {
 
     override def applicative: Applicative[M] = A
     override def monad: Monad[M] = P.monad
