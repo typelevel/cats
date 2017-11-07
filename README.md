@@ -52,7 +52,7 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
- * `alleycats`: cats instances and classes which are not lawful. 
+ * `alleycats-core`: cats instances and classes which are not lawful. 
  
  There are several other cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
