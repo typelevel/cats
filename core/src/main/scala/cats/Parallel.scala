@@ -27,6 +27,12 @@ trait NonEmptyParallel[M[_], F[_]] extends Serializable {
     */
   def parallel: M ~> F
 
+  /**
+    * Converts the source into an instance that uses the same type for
+    * both `M[_]` and `F[_]`
+    */
+  def mirror: NonEmptyParallel[M, M] =
+    NonEmptyParallel.defaultMirror(this)
 }
 
 /**
@@ -81,10 +87,43 @@ trait Parallel[M[_], F[_]] extends NonEmptyParallel[M, F] {
 
     override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
   }
+
+  override def mirror: Parallel[M, M] =
+    Parallel.defaultMirror(this)
 }
 
 object NonEmptyParallel {
   def apply[M[_], F[_]](implicit P: NonEmptyParallel[M, F]): NonEmptyParallel[M, F] = P
+
+  /** Default implementation for [[NonEmptyParallel.mirror]]. */
+  private def defaultMirror[M[_], F[_]](P: NonEmptyParallel[M, F]): NonEmptyParallel[M, M] =
+    new Mirror(P, new MirrorApply(P))
+
+  private[cats] class Mirror[M[_], F[_]](P: NonEmptyParallel[M, F], A: Apply[M])
+    extends NonEmptyParallel[M, M] {
+
+    override def apply: Apply[M] =
+      A
+    override def flatMap: FlatMap[M] =
+      P.flatMap
+    override def sequential: ~>[F, M] =
+      P.sequential
+    override def parallel: ~>[M, F] =
+      P.parallel
+  }
+
+  private[cats] class MirrorApply[M[_], F[_]](P: NonEmptyParallel[M, F])
+    extends Apply[M] {
+
+    override def ap[A, B](ff: M[A => B])(fa: M[A]): M[B] =
+      P.sequential(P.apply.ap(P.parallel(ff))(P.parallel(fa)))
+    override def product[A, B](fa: M[A], fb: M[B]): M[(A, B)] =
+      P.sequential(P.apply.product(P.parallel(fa), P.parallel(fb)))
+    override def map2[A, B, Z](fa: M[A], fb: M[B])(f: (A, B) => Z): M[Z] =
+      P.sequential(P.apply.map2(P.parallel(fa), P.parallel(fb))(f))
+    override def map[A, B](fa: M[A])(f: A => B): M[B] =
+      P.flatMap.map(fa)(f)
+  }
 }
 
 object Parallel extends ParallelArityFunctions {
@@ -265,5 +304,25 @@ object Parallel extends ParallelArityFunctions {
     val sequential: M ~> M = FunctionK.id
 
     val parallel: M ~> M = FunctionK.id
+  }
+
+  /** Default implementation for [[Parallel.mirror]]. */
+  private def defaultMirror[M[_], F[_]](P: Parallel[M, F]): Parallel[M, M] =
+    new Mirror(P, new MirrorApplicative(P))
+
+  private[cats] class Mirror[M[_], F[_]](P: Parallel[M, F], A: Applicative[M])
+    extends NonEmptyParallel.Mirror[M, F](P, A) with Parallel[M, M] {
+
+    override def applicative: Applicative[M] = A
+    override def monad: Monad[M] = P.monad
+  }
+
+  private[cats] class MirrorApplicative[M[_], F[_]](P: Parallel[M, F])
+    extends NonEmptyParallel.MirrorApply[M, F](P) with Applicative[M] {
+
+    override def pure[A](x: A): M[A] =
+      P.sequential(P.applicative.pure(x))
+    override def unit: M[Unit] =
+      P.sequential(P.applicative.unit)
   }
 }
