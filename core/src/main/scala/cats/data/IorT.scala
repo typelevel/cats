@@ -44,13 +44,15 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] = F.map(value)(_.to[G, B])
 
-  def collectRight(implicit FA: Alternative[F], FM: Monad[F]): F[B] = FM.flatMap(value)(_.to[F, B])
+  def collectRight(implicit FA: Alternative[F], FM: FlatMap[F]): F[B] = FM.flatMap(value)(_.to[F, B])
 
   def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F], AA: Semigroup[AA]): F[AA] = F.map(value)(_.merge(ev, AA))
 
   def show(implicit show: Show[F[Ior[A, B]]]): String = show.show(value)
 
   def map[D](f: B => D)(implicit F: Functor[F]): IorT[F, A, D] = IorT(F.map(value)(_.map(f)))
+
+  def mapK[G[_]](f: F ~> G): IorT[G, A, B] = IorT[G, A, B](f(value))
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): IorT[F, C, D] = IorT(F.map(value)(_.bimap(fa, fb)))
 
@@ -93,7 +95,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
   def flatMapF[AA >: A, D](f: B => F[Ior[AA, D]])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, D] =
     flatMap(f andThen IorT.apply)
 
-  def subflatMap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, D] =
+  def subflatMap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Functor[F], AA: Semigroup[AA]): IorT[F, AA, D] =
     IorT(F.map(value)(_.flatMap(f)))
 
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): IorT[F, A, D] =

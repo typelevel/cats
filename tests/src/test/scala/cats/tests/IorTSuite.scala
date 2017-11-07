@@ -191,6 +191,13 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("mapK consistent with f(value)+pure") {
+    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (iort: IorT[List, String, Int]) =>
+      iort.mapK(f) should === (IorT(f(iort.value)))
+    }
+  }
+
   test("leftMap with Id consistent with Ior leftMap") {
     forAll { (iort: IorT[Id, String, Int], f: String => Long) =>
       iort.leftMap(f).value should === (iort.value.leftMap(f))
