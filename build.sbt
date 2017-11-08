@@ -188,7 +188,14 @@ lazy val docSettings = Seq(
 lazy val binaryCompatibleVersion = "1.0.0-RC1"
 
 def mimaSettings(moduleName: String) = Seq(
-    mimaPreviousArtifacts :=  Set("org.typelevel" %% moduleName % binaryCompatibleVersion))
+  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion),
+  // TODO: remove this post-release of 1.0.0
+  mimaBinaryIssueFilters += {
+    import com.typesafe.tools.mima.core._
+    import com.typesafe.tools.mima.core.ProblemFilters._
+    exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps")
+  }
+)
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
