@@ -13,7 +13,7 @@ Having an `Arrow` instance for a type constructor `F[_, _]` means that an `F[_, 
 - Lifting a function `ab: A => B` into arrow `F[A, B]` with `Arrow[F].lift(ab)`. If `F` is `Function1` then `A => B` is the same as `F[A, B]` so `lift` is just the identity function.
 - Composing `fab: F[A, B]` and `fbc: F[B, C]` into `fac: F[A, C]` with `Arrow[F].compose(fbc, fab)`, or `fab >>> fbc`. If `F` is `Function1` then `>>>` becomes an alias for `andThen`.
 - Taking two arrows `fab: F[A, B]` and `fbc: F[B, C]` and combining them into `F[(A, C) => (B, D)]` with `fab.split(fbc)` or `fab *** fbc`. The resulting arrow takes two inputs and processes them with two arrows, one for each input.
-- Taking an arrow `fab: F[A, B]` and turning it into `F[(A, C), (B, C)]` with `fab.first`. The resulting arrow takes two inputs, processes the first input and leaves the second input as it is. A similar method, `fab.second`, turns `F[A, B]` into `F[(C, A), (B, A)]`.
+- Taking an arrow `fab: F[A, B]` and turning it into `F[(A, C), (B, C)]` with `fab.first`. The resulting arrow takes two inputs, processes the first input and leaves the second input as it is. A similar method, `fab.second`, turns `F[A, B]` into `F[(C, A), (C, B)]`.
 
 ## Examples
 
