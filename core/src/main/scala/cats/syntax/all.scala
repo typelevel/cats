@@ -41,6 +41,7 @@ trait AllSyntax
     with StrongSyntax
     with TraverseSyntax
     with NonEmptyTraverseSyntax
+    with UnorderedFoldableSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax

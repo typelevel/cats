@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.kernel.CommutativeMonoid
+
 import scala.annotation.tailrec
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
@@ -14,8 +16,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForMap[K]: FlatMap[Map[K, ?]] =
-    new FlatMap[Map[K, ?]] {
+  implicit def catsStdInstancesForMap[K]: FlatMap[Map[K, ?]] with UnorderedFoldable[Map[K, ?]] =
+    new FlatMap[Map[K, ?]] with UnorderedFoldable[Map[K, ?]] {
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
@@ -57,6 +59,9 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         f(a).foreach { case (k, a) => descend(k, a) }
         bldr.result
       }
+
+      def foldMapUnordered[A, B](fa: Map[K, A])(f: A => B)(implicit B: CommutativeMonoid[B]): B =
+        fa.valuesIterator.foldLeft(B.empty)((b, a) => B.combine(b, f(a)))
     }
   // scalastyle:on method.length
 }

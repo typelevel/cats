@@ -5,7 +5,7 @@ import cats.implicits._
 
 import scala.collection.mutable
 
-trait FoldableLaws[F[_]] {
+trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: Foldable[F]
 
   def leftFoldConsistentWithFoldMap[A, B](
@@ -33,48 +33,8 @@ trait FoldableLaws[F[_]] {
     F.exists(fa)(p) == F.find(fa)(p).isDefined
   }
 
-  def existsLazy[A](fa: F[A]): Boolean = {
-    var i = 0
-    F.exists(fa){ _ =>
-      i = i + 1
-      true
-    }
-    i == (if (F.isEmpty(fa)) 0 else 1)
-  }
-
-  def forallLazy[A](fa: F[A]): Boolean = {
-    var i = 0
-    F.forall(fa){ _ =>
-      i = i + 1
-      false
-    }
-    i == (if (F.isEmpty(fa)) 0 else 1)
-  }
-
-  def forallConsistentWithExists[A](
-    fa: F[A],
-    p: A => Boolean
-  ): Boolean = {
-    if (F.forall(fa)(p)) {
-      val negationExists = F.exists(fa)(a => !(p(a)))
-
-      // if p is true for all elements, then there cannot be an element for which
-      // it does not hold.
-      !negationExists &&
-        // if p is true for all elements, then either there must be no elements
-        // or there must exist an element for which it is true.
-        (F.isEmpty(fa) || F.exists(fa)(p))
-    } else true // can't test much in this case
-  }
-
-  /**
-   * If `F[A]` is empty, forall must return true.
-   */
-  def forallEmpty[A](
-    fa: F[A],
-    p: A => Boolean
-  ): Boolean = {
-    !F.isEmpty(fa) || F.forall(fa)(p)
+  def forallConsistentWithFind[A](fa: F[A], p: A => Boolean): Boolean = {
+    F.forall(fa)(a => !p(a)) == F.find(fa)(p).isEmpty
   }
 
   /**

@@ -8,11 +8,12 @@ import org.typelevel.discipline.Laws
 
 import cats.instances.list._
 
-trait FoldableTests[F[_]] extends Laws {
+trait FoldableTests[F[_]] extends Laws with UnorderedFoldableTests[F] {
   def laws: FoldableLaws[F]
 
   def foldable[A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
+    ArbFOptA: Arbitrary[F[Option[A]]],
     A: Monoid[A],
     B: Monoid[B],
     CogenA: Cogen[A],
@@ -24,15 +25,12 @@ trait FoldableTests[F[_]] extends Laws {
   ): RuleSet = {
     new DefaultRuleSet(
       name = "foldable",
-      parent = None,
+      parent = Some(unorderedFoldable[A, B]),
       "foldLeft consistent with foldMap" -> forAll(laws.leftFoldConsistentWithFoldMap[A, B] _),
       "foldRight consistent with foldMap" -> forAll(laws.rightFoldConsistentWithFoldMap[A, B] _),
       "ordered constistency" -> forAll(laws.orderedConsistency[A] _),
       "exists consistent with find" -> forAll(laws.existsConsistentWithFind[A] _),
-      "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
-      "forall true if empty" -> forAll(laws.forallEmpty[A] _),
-      "exists is lazy" -> forAll(laws.existsLazy[A] _),
-      "forall is lazy" -> forAll(laws.forallLazy[A] _),
+      "forall consistent with find" -> forAll(laws.forallConsistentWithFind[A] _),
       "foldM identity" -> forAll(laws.foldMIdentity[A, B] _),
       "reduceLeftOption consistent with reduceLeftToOption" ->
         forAll(laws.reduceLeftOptionConsistentWithReduceLeftToOption[A] _),

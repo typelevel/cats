@@ -16,6 +16,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] {
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
     ArbYC: Arbitrary[Y[C]],
+    ArbFOptA: Arbitrary[F[Option[A]]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     CogenC: Cogen[C],
