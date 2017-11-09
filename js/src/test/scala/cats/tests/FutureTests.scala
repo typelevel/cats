@@ -38,7 +38,7 @@ class FutureTests extends CatsSuite {
     }
 
   implicit val throwableEq: Eq[Throwable] =
-    Eq[String].on(_.toString)
+    Eq.by[Throwable, String](_.toString)
 
   implicit val comonad: Comonad[Future] = futureComonad(timeout)
 

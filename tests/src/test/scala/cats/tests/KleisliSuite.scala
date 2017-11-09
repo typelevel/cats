@@ -164,6 +164,13 @@ class KleisliSuite extends CatsSuite {
     }
   }
 
+  test("mapK") {
+    val t: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      t(f.run(i)) should === (f.mapK(t).run(i))
+    }
+  }
+
   test("flatMapF") {
     forAll { (f: Kleisli[List, Int, Int], t: Int => List[Int], i: Int) =>
       f.run(i).flatMap(t) should === (f.flatMapF(t).run(i))
@@ -210,15 +217,6 @@ class KleisliSuite extends CatsSuite {
     val f = Kleisli { (x: Int) => (Some(x + 1): Option[Int]) }
     val l = f.lift[List]
     (List(1, 2, 3) >>= l.run) should === (List(Some(2), Some(3), Some(4)))
-  }
-
-  test("transform") {
-    val opt = Kleisli { (x: Int) => Option(x.toDouble) }
-    val optToList = λ[FunctionK[Option,List]](_.toList)
-    val list = opt.transform(optToList)
-
-    val is = 0.to(10).toList
-    is.map(list.run) should === (is.map(Kleisli { (x: Int) => List(x.toDouble) }.run))
   }
 
   test("local") {

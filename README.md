@@ -39,7 +39,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 And then create the cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-RC1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -52,13 +52,13 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
+ * `alleycats-core`: cats instances and classes which are not lawful. 
  
  There are several other cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
- * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
  * [`mouse`](https://github.com/typelevel/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
 
 

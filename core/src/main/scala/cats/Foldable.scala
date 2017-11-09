@@ -31,8 +31,29 @@ import simulacrum.typeclass
 @typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
   /**
-    * Left associative fold on 'F' using the function 'f'.
-    */
+   * Left associative fold on 'F' using the function 'f'.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Foldable, cats.implicits._
+   * scala> val fa = Option(1)
+   *
+   * Folding by addition to zero:
+   * scala> Foldable[Option].foldLeft(fa, Option(0))((a, n) => a.map(_ + n))
+   * res0: Option[Int] = Some(1)
+   * }}}
+   *
+   * With syntax extensions, `foldLeft` can be used like:
+   * {{{
+   * Folding `Option` with addition from zero:
+   * scala> fa.foldLeft(Option(0))((a, n) => a.map(_ + n))
+   * res1: Option[Int] = Some(1)
+   *
+   * There's also an alias `foldl` which is equivalent:
+   * scala> fa.foldl(Option(0))((a, n) => a.map(_ + n))
+   * res2: Option[Int] = Some(1)
+   * }}}
+   */
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
 
 
@@ -46,6 +67,32 @@ import simulacrum.typeclass
    *
    * For more detailed information about how this method works see the
    * documentation for `Eval[_]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Foldable, cats.Eval, cats.implicits._
+   * scala> val fa = Option(1)
+   *
+   * Folding by addition to zero:
+   * scala> val folded1 = Foldable[Option].foldRight(fa, Eval.now(0))((n, a) => a.map(_ + n))
+   * Since `foldRight` yields a lazy computation, we need to force it to inspect the result:
+   * scala> folded1.value
+   * res0: Int = 1
+   *
+   * With syntax extensions, we can write the same thing like this:
+   * scala> val folded2 = fa.foldRight(Eval.now(0))((n, a) => a.map(_ + n))
+   * scala> folded2.value
+   * res1: Int = 1
+   *
+   * Unfortunately, since `foldRight` is defined on many collections - this
+   * extension clashes with the operation defined in `Foldable`.
+   *
+   * To get past this and make sure you're getting the lazy `foldRight` defined
+   * in `Foldable`, there's an alias `foldr`:
+   * scala> val folded3 = fa.foldr(Eval.now(0))((n, a) => a.map(_ + n))
+   * scala> folded3.value
+   * res1: Int = 1
+   * }}}
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
