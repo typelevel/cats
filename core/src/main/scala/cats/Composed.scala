@@ -51,7 +51,15 @@ private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α =>
   def F: Alternative[F]
 }
 
-private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>
+private[cats] trait ComposedUnorderedFoldable[F[_], G[_]] extends UnorderedFoldable[λ[α => F[G[α]]]] { outer =>
+  def F: UnorderedFoldable[F]
+  def G: UnorderedFoldable[G]
+
+  override def foldMapUnordered[A, B](fga: F[G[A]])(f: A => B)(implicit B: kernel.CommutativeMonoid[B]): B =
+    F.foldMapUnordered[G[A], B](fga)(ga => G.foldMapUnordered(ga)(f))
+}
+
+private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] with ComposedUnorderedFoldable[F, G] { outer =>
   def F: Foldable[F]
   def G: Foldable[G]
 

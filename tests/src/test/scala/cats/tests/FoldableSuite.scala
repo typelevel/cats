@@ -3,6 +3,7 @@ package tests
 
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
+
 import scala.util.Try
 import scala.collection.immutable._
 import cats.instances.all._

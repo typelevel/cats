@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.laws.discipline.{FlatMapTests, SerializableTests, SemigroupalTests}
+import cats.laws.discipline._
 
 class MapSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
@@ -11,6 +11,9 @@ class MapSuite extends CatsSuite {
 
   checkAll("Map[Int, Int]", FlatMapTests[Map[Int, ?]].flatMap[Int, Int, Int])
   checkAll("FlatMap[Map[Int, ?]]", SerializableTests.serializable(FlatMap[Map[Int, ?]]))
+
+  checkAll("Map[Int, Int]", UnorderedFoldableTests[Map[Int, ?]].unorderedFoldable[Int, String])
+  checkAll("UnorderedFoldable[Map[Int, Int]]", SerializableTests.serializable(UnorderedFoldable[Map[Int, ?]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>

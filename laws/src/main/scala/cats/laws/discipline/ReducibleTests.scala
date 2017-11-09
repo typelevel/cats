@@ -16,6 +16,7 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     ArbFB: Arbitrary[F[B]],
     ArbFGA: Arbitrary[F[G[A]]],
     ArbGB: Arbitrary[G[B]],
+    ArbFOptA: Arbitrary[F[Option[A]]],
     CogenA: Cogen[A],
     CogenB: Cogen[B],
     EqG: Eq[G[Unit]],

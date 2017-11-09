@@ -2,7 +2,7 @@ package cats
 
 import scala.collection.mutable
 import cats.instances.either._
-import cats.instances.long._
+import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
 
 /**
@@ -26,7 +26,7 @@ import simulacrum.typeclass
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -192,16 +192,6 @@ import simulacrum.typeclass
     reduceLeftOption(fa)(A.max)
 
   /**
-   * The size of this Foldable.
-   *
-   * This is overriden in structures that have more efficient size implementations
-   * (e.g. Vector, Set, Map).
-   *
-   * Note: will not terminate for infinite-sized collections.
-   */
-  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
-
-  /**
     * Get the element at the index of the `Foldable`.
     */
   def get[A](fa: F[A])(idx: Long): Option[A] =
@@ -222,6 +212,9 @@ import simulacrum.typeclass
       A.combine(acc, a)
     }
 
+  override def foldUnordered[A](fa: F[A])(implicit A: CommutativeMonoid[A]): A =
+    fold(fa)
+
   /**
    * Alias for [[fold]].
    */
@@ -233,6 +226,9 @@ import simulacrum.typeclass
    */
   def foldMap[A, B](fa: F[A])(f: A => B)(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
+
+  override def foldMapUnordered[A, B](fa: F[A])(f: A => B)(implicit B: CommutativeMonoid[B]): B =
+    foldMap(fa)(f)
 
   /**
    * Perform a stack-safe monadic left fold from the source context `F`
@@ -309,6 +305,9 @@ import simulacrum.typeclass
       G.map2Eval(f(a), acc) { (_, _) => () }
     }.value
 
+  override def traverseUnordered_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Unit] =
+    traverse_(fa)(f)
+
   /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
@@ -328,6 +327,9 @@ import simulacrum.typeclass
    */
   def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
     traverse_(fga)(identity)
+
+  override def sequenceUnordered_[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[Unit] =
+    sequence_(fga)
 
   /**
    * Fold implemented using the given `MonoidK[G]` instance.
@@ -353,26 +355,6 @@ import simulacrum.typeclass
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
     foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
       if (f(a)) Now(Some(a)) else lb
-    }.value
-
-  /**
-   * Check whether at least one element satisfies the predicate.
-   *
-   * If there are no elements, the result is `false`.
-   */
-  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
-
-  /**
-   * Check whether all elements satisfy the predicate.
-   *
-   * If there are no elements, the result is `true`.
-   */
-  def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
     }.value
 
   /**
@@ -509,11 +491,8 @@ import simulacrum.typeclass
   /**
    * Returns true if there are no elements. Otherwise false.
    */
-  def isEmpty[A](fa: F[A]): Boolean =
+  override def isEmpty[A](fa: F[A]): Boolean =
     foldRight(fa, Eval.True)((_, _) => Eval.False).value
-
-  def nonEmpty[A](fa: F[A]): Boolean =
-    !isEmpty(fa)
 
   /**
    * Intercalate/insert an element between the existing elements while folding.
