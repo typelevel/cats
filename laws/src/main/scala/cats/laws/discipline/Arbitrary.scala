@@ -5,6 +5,7 @@ package discipline
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.util.{Failure, Success, Try}
+import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.data._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
@@ -176,6 +177,25 @@ object arbitrary extends ArbitraryInstances0 {
     Arbitrary(getArbitrary[Int => Int].map(f => new Order[A] {
       def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
     }))
+
+  implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
+    Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
+
+  implicit def catsLawsCogenForSortedMap[K: Order: Cogen, V: Order: Cogen]: Cogen[SortedMap[K, V]] = {
+    implicit val orderingK = Order[K].toOrdering
+    implicit val orderingV = Order[V].toOrdering
+
+    implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
+  }
+
+  implicit def catsLawsArbitraryForSortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] =
+    Arbitrary(getArbitrary[Set[A]].map(s => SortedSet.empty[A](implicitly[Order[A]].toOrdering) ++ s))
+
+  implicit def catsLawsCogenForSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
+    implicit val orderingA = Order[A].toOrdering
+
+    implicitly[Cogen[Set[A]]].contramap(_.toSet)
+  }
 
   implicit def catsLawsArbitraryForOrdering[A: Arbitrary]: Arbitrary[Ordering[A]] =
     Arbitrary(getArbitrary[Order[A]].map(Order.catsKernelOrderingForOrder(_)))

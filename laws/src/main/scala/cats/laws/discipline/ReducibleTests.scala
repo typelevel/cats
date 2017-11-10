@@ -21,6 +21,7 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     EqG: Eq[G[Unit]],
     EqA: Eq[A],
     EqB: Eq[B],
+    EqFA: Eq[F[A]],
     EqOptionA: Eq[Option[A]],
     MonoidA: Monoid[A],
     MonoidB: Monoid[B]

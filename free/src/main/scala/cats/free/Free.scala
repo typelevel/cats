@@ -18,6 +18,21 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     flatMap(a => Pure(f(a)))
 
   /**
+   * Modify the functor context `S` using transformation `f`.
+   *
+   * This is effectively compiling your free monad into another
+   * language by changing the suspension functor using the given
+   * natural transformation `f`.
+   *
+   * If your natural transformation is effectful, be careful. These
+   * effects will be applied by `mapK`.
+   */
+  final def mapK[T[_]](f: S ~> T): Free[T, A] =
+    foldMap[Free[T, ?]] { // this is safe because Free is stack safe
+      λ[FunctionK[S, Free[T, ?]]](fa => Suspend(f(fa)))
+    }(Free.catsFreeMonadForFree)
+
+  /**
    * Bind the given continuation to the result of this computation.
    * All left-associated binds are reassociated to the right.
    */
@@ -147,11 +162,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    *
    * If your natural transformation is effectful, be careful. These
    * effects will be applied by `compile`.
-   */
-  final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] =
-    foldMap[Free[T, ?]] { // this is safe because Free is stack safe
-      λ[FunctionK[S, Free[T, ?]]](fa => Suspend(f(fa)))
-    }(Free.catsFreeMonadForFree)
+    */
+  final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] = mapK(f)
 
   /**
    * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
@@ -169,7 +181,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    *}}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
-    compile(λ[S ~> G](ev.inj(_)))
+    mapK(λ[S ~> G](ev.inj(_)))
 
   override def toString: String =
     "Free(...)"
@@ -218,10 +230,16 @@ object Free extends FreeInstances {
     pure(()).flatMap(_ => value)
 
   /**
+   * a FunctionK, suitable for composition, which calls mapK
+   */
+  def mapK[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
+    λ[FunctionK[Free[F, ?], Free[G, ?]]](f => f.mapK(fk))
+
+  /**
    * a FunctionK, suitable for composition, which calls compile
    */
   def compile[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
-    λ[FunctionK[Free[F, ?], Free[G, ?]]](f => f.compile(fk))
+    mapK(fk)
 
   /**
    * a FunctionK, suitable for composition, which calls foldMap

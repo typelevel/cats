@@ -8,10 +8,10 @@ trait SemigroupLaws[A] {
   def semigroupAssociative(x: A, y: A, z: A): IsEq[A] =
     S.combine(S.combine(x, y), z) <-> S.combine(x, S.combine(y, z))
 
-  def repeat1(a: A, i: Int): IsEq[A] =
+  def repeat1(a: A): IsEq[A] =
     S.combineN(a, 1) <-> a
 
-  def repeat2(a: A, i: Int): IsEq[A] =
+  def repeat2(a: A): IsEq[A] =
     S.combineN(a, 2) <-> S.combine(a, a)
 
   def combineAllOption(xs: Vector[A]): IsEq[Option[A]] =

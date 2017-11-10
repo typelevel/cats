@@ -101,6 +101,19 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(a, head :: tail)
 
   /**
+    * Alias for concat
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3)
+    * scala> nel ::: NonEmptyList.of(4, 5)
+    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
+    * }}}
+    */
+  def :::[AA >: A](other: NonEmptyList[AA]): NonEmptyList[AA] =
+    other.concatNel(this)
+
+  /**
    * Remove elements not matching the predicate
    *
    * {{{

@@ -8,7 +8,15 @@ import cats.Contravariant
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A])
+final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A]) {
+
+  /**
+   * Modify the context `G` of `second` using transformation `f`.
+   */
+  def mapK[H[_]](f: G ~> H): Tuple2K[F, H, A] =
+    Tuple2K(first, f(second))
+
+}
 
 object Tuple2K extends Tuple2KInstances
 

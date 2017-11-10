@@ -1,16 +1,16 @@
 package cats.tests
 
-
+import cats._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
-import cats.tests.CatsSuite
 import org.scalatest.FunSuite
 import cats.laws.discipline.{ApplicativeErrorTests, NonEmptyParallelTests, SerializableTests, ParallelTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary
 import org.typelevel.discipline.scalatest.Discipline
+import scala.collection.immutable.SortedSet
 
 class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
@@ -32,7 +32,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
-    forAll { es: Set[Either[String, Int]] =>
+    forAll { es: SortedSet[Either[String, Int]] =>
       Parallel.parTraverse_(es)(identity) should === (Parallel.parSequence_(es))
     }
   }

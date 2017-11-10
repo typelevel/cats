@@ -175,9 +175,9 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
-  test("cond") {
+  test("cond consistent with Either.cond") {
     forAll { (cond: Boolean, s: String, i: Int) =>
-      Either.cond(cond, s, i) should === (EitherT.cond[Id](cond, s, i).value)
+      EitherT.cond[Id](cond, s, i).value should === (Either.cond(cond, s, i))
     }
   }
 
@@ -239,6 +239,13 @@ class EitherTSuite extends CatsSuite {
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should === (EitherT(eithert.value.map(f)))
+    }
+  }
+
+  test("mapK consistent with f(value)+pure") {
+    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.mapK(f) should === (EitherT(f(eithert.value)))
     }
   }
 
