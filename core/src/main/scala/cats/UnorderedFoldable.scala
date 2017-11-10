@@ -40,6 +40,16 @@ import cats.instances.set._
     */
   def forall[A](fa: F[A])(p: A => Boolean): Boolean =
     unorderedFoldMap(fa)(p)(UnorderedFoldable.andMonoid)
+
+  /**
+    * The size of this UnorderedFoldable.
+    *
+    * This is overriden in structures that have more efficient size implementations
+    * (e.g. Vector, Set, Map).
+    *
+    * Note: will not terminate for infinite-sized collections.
+    */
+  def size[A](fa: F[A]): Long = unorderedFoldMap(fa)(_ => 1)
 }
 
 object UnorderedFoldable {

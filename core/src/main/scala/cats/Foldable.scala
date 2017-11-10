@@ -148,16 +148,6 @@ import simulacrum.typeclass
     reduceLeftOption(fa)(A.max)
 
   /**
-   * The size of this Foldable.
-   *
-   * This is overriden in structures that have more efficient size implementations
-   * (e.g. Vector, Set, Map).
-   *
-   * Note: will not terminate for infinite-sized collections.
-   */
-  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
-
-  /**
     * Get the element at the index of the `Foldable`.
     */
   def get[A](fa: F[A])(idx: Long): Option[A] =
