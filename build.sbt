@@ -190,10 +190,21 @@ lazy val binaryCompatibleVersion = "1.0.0-RC1"
 def mimaSettings(moduleName: String) = Seq(
   mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion),
   // TODO: remove this post-release of 1.0.0
-  mimaBinaryIssueFilters += {
+  mimaBinaryIssueFilters ++= {
     import com.typesafe.tools.mima.core._
     import com.typesafe.tools.mima.core.ProblemFilters._
-    exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps")
+    Seq(
+      exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority3"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority2"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority1"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority3.catsDataNonEmptyTraverseForOneAnd"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipVector"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForZipStream"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipList"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForFailFastFuture")
+    )
   }
 )
 
