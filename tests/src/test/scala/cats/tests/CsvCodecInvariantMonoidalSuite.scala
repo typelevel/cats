@@ -79,8 +79,11 @@ object CsvCodecInvariantMonoidalSuite {
   implicit val arbNumericSystemCodec: Arbitrary[CsvCodec[Int]] =
     Arbitrary(Gen.choose(2, 16).map(numericSystemCodec))
 
-  implicit def csvCodecsEq[A](implicit a: Arbitrary[A], e: Eq[A]): Eq[CsvCodec[A]] =
-    catsLawsEqForFn1[A, CSV].on[CsvCodec[A]](_.write) and catsLawsEqForFn1[CSV, (Option[A], CSV)].on[CsvCodec[A]](_.read)
+  implicit def csvCodecsEq[A](implicit a: Arbitrary[A], e: Eq[A]): Eq[CsvCodec[A]] = {
+    val writeEq: Eq[CsvCodec[A]] = Eq.by[CsvCodec[A], A => CSV](_.write)(catsLawsEqForFn1[A, CSV])
+    val readEq: Eq[CsvCodec[A]] = Eq.by[CsvCodec[A], CSV => (Option[A], CSV)](_.read)(catsLawsEqForFn1[CSV, (Option[A], CSV)])
+    Eq.and(writeEq, readEq)
+  }
 }
 
 class CsvCodecInvariantMonoidalSuite extends CatsSuite {

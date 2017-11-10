@@ -16,9 +16,6 @@ trait Hash[@sp A] extends Any with Eq[A] with Serializable { self =>
    */
   def hash(x: A): Int
 
-  // `Hash#on` deliberately not implemented to avoid `Hash`/`Order` diamond inheritance problem.
-  // Please use `Hash.by` for the same functionality.
-
   // `Hash#toHashing` deliberately not implemented since `scala.util.hashing.Hashing` is only
   // compatible with universal equality.
 }

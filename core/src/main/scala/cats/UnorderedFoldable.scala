@@ -3,6 +3,7 @@ package cats
 import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
 import cats.instances.set._
+import cats.instances.long._
 /**
   * `UnorderedFoldable` is like a `Foldable` for unordered containers.
   */
@@ -49,7 +50,7 @@ import cats.instances.set._
     *
     * Note: will not terminate for infinite-sized collections.
     */
-  def size[A](fa: F[A]): Long = unorderedFoldMap(fa)(_ => 1)
+  def size[A](fa: F[A]): Long = unorderedFoldMap(fa)(_ => 1L)
 }
 
 object UnorderedFoldable {
