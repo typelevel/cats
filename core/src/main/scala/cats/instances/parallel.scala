@@ -5,7 +5,6 @@ import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.{Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel, ~>}
 
-import scala.concurrent.{ExecutionContext, Future}
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, ?], Validated[E, ?]] = new Parallel[Either[E, ?], Validated[E, ?]] {
@@ -75,19 +74,6 @@ trait ParallelInstances extends ParallelInstances1 {
 
       def parallel: Stream ~> ZipStream =
         λ[Stream ~> ZipStream](v => new ZipStream(v))
-    }
-
-  implicit def catsStdParallelForFailFastFuture[A](implicit ec: ExecutionContext): Parallel[Future, FailFastFuture] =
-    new Parallel[Future, FailFastFuture] {
-
-      def monad: Monad[Future] = cats.instances.future.catsStdInstancesForFuture
-      def applicative: Applicative[FailFastFuture] = FailFastFuture.catsDataApplicativeForFailFastFuture
-
-      def sequential: FailFastFuture ~> Future =
-        λ[FailFastFuture ~> Future](_.value)
-
-      def parallel: Future ~> FailFastFuture =
-        λ[Future ~> FailFastFuture](f => FailFastFuture(f))
     }
 
 
