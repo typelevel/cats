@@ -483,26 +483,6 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
       val F0: Traverse[F] = F
     }
 
-  /**  Monad error instance for recovering errors in F instead of
-    *  the underlying Either.
-    *
-    * {{{
-    * scala> import cats.data.EitherT
-    * scala> import cats.MonadError
-    * scala> import cats.instances.option._
-    * scala> val noInt: Option[Either[String, Int]] = None
-    * scala> val et = EitherT[Option, String, Int](noInt)
-    * scala> val me = MonadError[EitherT[Option, String, ?], Unit]
-    * scala> me.recover(et) { case () => 1 }
-    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
-    * }}}
-    */
-  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
-    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
-}
-
-private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
-
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] {
       implicit val F = F0
@@ -512,6 +492,26 @@ private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
       override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
         fa.ensureOr(error)(predicate)(F)
     }
+}
+
+private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
+  /**  Monad error instance for recovering errors in F instead of
+   *  the underlying Either.
+   *
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.MonadError
+   * scala> import cats.instances.option._
+   * scala> val noInt: Option[Either[String, Int]] = None
+   * scala> val et = EitherT[Option, String, Int](noInt)
+   * scala> val me = MonadError[EitherT[Option, String, ?], Unit]
+   * scala> me.recover(et) { case () => 1 }
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
+   * }}}
+   */
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
+    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
+
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }
