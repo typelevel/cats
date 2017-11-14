@@ -190,10 +190,13 @@ lazy val binaryCompatibleVersion = "1.0.0-RC1"
 def mimaSettings(moduleName: String) = Seq(
   mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion),
   // TODO: remove this post-release of 1.0.0
-  mimaBinaryIssueFilters += {
+  mimaBinaryIssueFilters ++= {
     import com.typesafe.tools.mima.core._
     import com.typesafe.tools.mima.core.ProblemFilters._
-    exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps")
+    Seq(
+      exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps"),
+      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT")
+    )
   }
 )
 
