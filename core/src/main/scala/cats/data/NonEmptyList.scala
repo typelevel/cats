@@ -494,6 +494,9 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
       override def foldRight[A, B](fa: NonEmptyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
+      override def foldMap[A, B](fa: NonEmptyList[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.toList.iterator.map(f))
+
       def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] = {
         val buf = new ListBuffer[B]
         @tailrec def go(v: NonEmptyList[Either[A, B]]): Unit = v.head match {

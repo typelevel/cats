@@ -2,7 +2,6 @@ package cats
 package instances
 
 import cats.syntax.show._
-
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
 import scala.util.Try
@@ -74,6 +73,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
           }
         Eval.defer(loop(fa))
       }
+
+      override def foldMap[A, B](fa: Queue[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
         foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))){ (a, lglb) =>

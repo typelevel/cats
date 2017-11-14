@@ -123,4 +123,18 @@ class RegressionSuite extends CatsSuite {
     checkAndResetCount(1)
   }
 
+  test("#2022 EitherT syntax no long works the old way") {
+    import data._
+
+
+    EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
+
+    {
+      implicit val me = MonadError[EitherT[Option, String, ?], Unit]
+      EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
+    }
+
+
+  }
+
 }

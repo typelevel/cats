@@ -41,6 +41,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         Eval.defer(loop(0))
       }
 
+      override def foldMap[A, B](fa: Vector[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
+
       def tailRecM[A, B](a: A)(fn: A => Vector[Either[A, B]]): Vector[B] = {
         val buf = Vector.newBuilder[B]
         var state = List(fn(a).iterator)
