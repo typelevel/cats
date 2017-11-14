@@ -111,6 +111,7 @@ We can even perform more complicated operations, such as a `traverse` of the nes
 import cats.data.ValidatedNel
 type ErrorsOr[A] = ValidatedNel[String, A]
 def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+```
 
 ```tut:book
 nl.traverse(even)

@@ -1,7 +1,7 @@
 package alleycats
 package std
 
-import cats.{Eval, Foldable}
+import cats.{Eval, Foldable, Monoid}
 import export._
 
 @reexports(IterableInstances)
@@ -16,6 +16,9 @@ object IterableInstances {
 
       override def foldRight[A, B](fa: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa, lb)(f)
+
+      override def foldMap[A, B](fa: Iterable[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
     }
 
 }
