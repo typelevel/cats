@@ -110,11 +110,11 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
-  test("State.pure, StateT.lift and IndexedStateT.lift are consistent") {
+  test("State.pure, StateT.liftF and IndexedStateT.liftF are consistent") {
     forAll { (s: String, i: Int) =>
       val state: State[String, Int] = State.pure(i)
-      val stateT: State[String, Int] = StateT.lift(Eval.now(i))
-      val indexedStateT: State[String, Int] = IndexedStateT.lift(Eval.now(i))
+      val stateT: State[String, Int] = StateT.liftF(Eval.now(i))
+      val indexedStateT: State[String, Int] = IndexedStateT.liftF(Eval.now(i))
 
       state.run(s) should === (stateT.run(s))
       state.run(s) should === (indexedStateT.run(s))

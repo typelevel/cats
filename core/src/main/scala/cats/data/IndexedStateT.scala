@@ -173,6 +173,10 @@ private[data] trait CommonStateTConstructors {
   def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.pure((s, a)))
 
+  def liftF[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
+    IndexedStateT(s => F.map(fa)(a => (s, a)))
+
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(fa)(a => (s, a)))
 
@@ -369,14 +373,14 @@ private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends In
     IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(G)
 
   def empty[A]: IndexedStateT[F, S, S, A] =
-    IndexedStateT.lift[F, S, A](G.empty[A])(G)
+    IndexedStateT.liftF[F, S, A](G.empty[A])(G)
 }
 
 private[data] sealed abstract class IndexedStateTMonadError[F[_], S, E] extends IndexedStateTMonad[F, S]
     with MonadError[IndexedStateT[F, S, S, ?], E] {
   implicit def F: MonadError[F, E]
 
-  def raiseError[A](e: E): IndexedStateT[F, S, S, A] = IndexedStateT.lift(F.raiseError(e))
+  def raiseError[A](e: E): IndexedStateT[F, S, S, A] = IndexedStateT.liftF(F.raiseError(e))
 
   def handleErrorWith[A](fa: IndexedStateT[F, S, S, A])(f: E => IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.handleErrorWith(fa.run(s))(e => f(e).run(s)))

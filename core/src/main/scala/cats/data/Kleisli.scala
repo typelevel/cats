@@ -84,6 +84,10 @@ object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplic
 
 private[data] sealed trait KleisliFunctions {
 
+  def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
+    Kleisli(_ => x)
+
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
@@ -287,7 +291,7 @@ private[data] sealed trait KleisliSemigroupK[F[_], A] extends SemigroupK[Kleisli
 private[data] sealed trait KleisliMonoidK[F[_], A] extends MonoidK[Kleisli[F, A, ?]] with KleisliSemigroupK[F, A] {
   implicit def F: MonoidK[F]
 
-  override def empty[B]: Kleisli[F, A, B] = Kleisli.lift(F.empty[B])
+  override def empty[B]: Kleisli[F, A, B] = Kleisli.liftF(F.empty[B])
 }
 
 private[data] trait KleisliAlternative[F[_], A] extends Alternative[Kleisli[F, A, ?]] with KleisliApplicative[F, A] with KleisliMonoidK[F, A] {

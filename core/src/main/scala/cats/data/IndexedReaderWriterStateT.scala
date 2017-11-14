@@ -266,6 +266,10 @@ private[data] sealed trait CommonIRWSTConstructors {
   /**
    * Return an effectful `a` and an empty log without modifying the input state.
    */
+  def liftF[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
+
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
     IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
 
@@ -570,7 +574,7 @@ private[data] sealed abstract class RWSTAlternative[F[_], E, L, S]
       G.combineK(x.run(e, sa), y.run(e, sa))
     }
 
-  def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.lift(G.empty[A])
+  def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.liftF(G.empty[A])
 
   def pure[A](a: A): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.pure[F, E, L, S, A](a)
 
@@ -584,7 +588,7 @@ private[data] sealed abstract class RWSTMonadError[F[_], E, L, S, R]
 
   implicit def F: MonadError[F, R]
 
-  def raiseError[A](r: R): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.lift(F.raiseError(r))
+  def raiseError[A](r: R): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.liftF(F.raiseError(r))
 
   def handleErrorWith[A](fa: ReaderWriterStateT[F, E, L, S, A])(f: R => ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, A] =
     ReaderWriterStateT { (e, s) =>
