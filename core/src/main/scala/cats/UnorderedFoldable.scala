@@ -32,7 +32,8 @@ import cats.instances.long._
     * If there are no elements, the result is `false`.
     */
   def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(p)(UnorderedFoldable.orMonoid)
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.commutativeMonoidEval(UnorderedFoldable.orMonoid))
+      .value
 
   /**
     * Check whether all elements satisfy the predicate.
@@ -40,7 +41,8 @@ import cats.instances.long._
     * If there are no elements, the result is `true`.
     */
   def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(p)(UnorderedFoldable.andMonoid)
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.commutativeMonoidEval(UnorderedFoldable.andMonoid))
+      .value
 
   /**
     * The size of this UnorderedFoldable.
@@ -65,5 +67,8 @@ object UnorderedFoldable {
 
     def combine(x: Boolean, y: Boolean): Boolean = x && y
   }
+
+  private def commutativeMonoidEval[A: CommutativeMonoid]: CommutativeMonoid[Eval[A]] =
+    new EvalMonoid[A] with CommutativeMonoid[Eval[A]] { val algebra = Monoid[A] }
 
 }
