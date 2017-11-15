@@ -50,7 +50,7 @@ The output type of <code class="highlighter-rouge">parse</code> is <code class="
 <p>This is where <code class="highlighter-rouge">Kleisli</code> comes into play.</p>
 
 <h2 id="kleisli-1">Kleisli</h2>
-<p>At it’s core, <code class="highlighter-rouge">Kleisli[F[_], A, B]</code> is just a wrapper around the function <code class="highlighter-rouge">A =&gt; F[B]</code>. Depending on the
+<p>At its core, <code class="highlighter-rouge">Kleisli[F[_], A, B]</code> is just a wrapper around the function <code class="highlighter-rouge">A =&gt; F[B]</code>. Depending on the
 properties of the <code class="highlighter-rouge">F[_]</code>, we can do different things with <code class="highlighter-rouge">Kleisli</code>s. For instance, if <code class="highlighter-rouge">F[_]</code> has a
 <code class="highlighter-rouge">FlatMap[F]</code> instance (we can call <code class="highlighter-rouge">flatMap</code> on <code class="highlighter-rouge">F[A]</code> values), we can
 compose two <code class="highlighter-rouge">Kleisli</code>s much like we can two functions.</p>
@@ -209,7 +209,7 @@ they were so inclined.</p>
 philosophy intentionally mirrors that of function composition - write many small functions, and compose them
 to build larger ones. After all, our programs are just functions.</p>
 
-<p>Let’s look at some example modules, where each module has it’s own configuration that is validated by a function.
+<p>Let’s look at some example modules, where each module has its own configuration that is validated by a function.
 If the configuration is good, we return a <code class="highlighter-rouge">Some</code> of the module, otherwise a <code class="highlighter-rouge">None</code>. This example uses <code class="highlighter-rouge">Option</code> for
 simplicity - if you want to provide error messages or other failure context, consider using <code class="highlighter-rouge">Either</code> instead.</p>
 

@@ -259,7 +259,7 @@
 <span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">StateT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">AsyncSeed</span>, <span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nc">StateT</span> <span class="o">{</span> <span class="n">seed</span> <span class="k">=&gt;</span>
   <span class="n">seed</span><span class="o">.</span><span class="n">next</span> <span class="n">zip</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// nextLong: cats.data.StateT[scala.concurrent.Future,AsyncSeed,Long] = cats.data.IndexedStateT@572dab64
+<span class="c1">// nextLong: cats.data.StateT[scala.concurrent.Future,AsyncSeed,Long] = cats.data.IndexedStateT@30663c5
 </span></code></pre>
 </div>
 
@@ -353,7 +353,7 @@
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">close</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">open</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span>
-<span class="c1">// valid: cats.data.IndexedStateT[cats.Eval,Open.type,Closed.type,Unit] = cats.data.IndexedStateT@4f69324a
+<span class="c1">// valid: cats.data.IndexedStateT[cats.Eval,Open.type,Closed.type,Unit] = cats.data.IndexedStateT@efb3822
 </span></code></pre>
 </div>
 

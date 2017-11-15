@@ -505,10 +505,10 @@ convenient methods for working with this nested structure.">
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances3</dd></dl></div>
-    </li><li name="cats.data.EitherTInstances1#catsDataMonadErrorFForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$16$]cats.data.EitherT[F,L,γ$16$],E]"></a><a id="catsDataMonadErrorFForEitherT[F[_],E,L](MonadError[F,E]):MonadError[[γ$16$]EitherT[F,L,γ$16$],E]"></a>
+    </li><li name="cats.data.EitherTInstances2#catsDataMonadErrorFForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$17$]cats.data.EitherT[F,L,γ$17$],E]"></a><a id="catsDataMonadErrorFForEitherT[F[_],E,L](MonadError[F,E]):MonadError[[γ$17$]EitherT[F,L,γ$17$],E]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$16$]cats.data.EitherT[F,L,γ$16$],E]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorFForEitherT[F[_],E,L](implicitFE0:cats.MonadError[F,E]):cats.MonadError[[γ$17$]cats.data.EitherT[F,L,γ$17$],E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -517,7 +517,7 @@ convenient methods for working with this nested structure.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorFForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE0">FE0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorFForEitherT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$16$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorFForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>], <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorFForEitherT.E">E</span>]</span>
+        <span class="name">catsDataMonadErrorFForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FE0">FE0: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$17$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>], <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorFForEitherT.E">E</span>]</span>
       </span>
       
       <p class="shortcomment cmt"> Monad error instance for recovering errors in F instead of
@@ -529,11 +529,11 @@ scala&gt; <span class="kw">val</span> noInt: <span class="std">Option</span>[Eit
 scala&gt; <span class="kw">val</span> et = EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>](noInt)
 scala&gt; <span class="kw">val</span> me = MonadError[EitherT[<span class="std">Option</span>, <span class="std">String</span>, ?], <span class="std">Unit</span>]
 scala&gt; me.recover(et) { <span class="kw">case</span> () <span class="kw">=&gt;</span> <span class="num">1</span> }
-res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">1</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
-    </li><li name="cats.data.EitherTInstances2#catsDataMonadErrorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$17$]cats.data.EitherT[F,L,γ$17$],L]"></a><a id="catsDataMonadErrorForEitherT[F[_],L](Monad[F]):MonadError[[γ$17$]EitherT[F,L,γ$17$],L]"></a>
+res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</span>,<span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">1</span>)))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances2</dd></dl></div>
+    </li><li name="cats.data.EitherTInstances1#catsDataMonadErrorForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$16$]cats.data.EitherT[F,L,γ$16$],L]"></a><a id="catsDataMonadErrorForEitherT[F[_],L](Monad[F]):MonadError[[γ$16$]EitherT[F,L,γ$16$],L]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$17$]cats.data.EitherT[F,L,γ$17$],L]" title="Permalink">
+      <a href="../../cats/data/EitherT$.html#catsDataMonadErrorForEitherT[F[_],L](implicitF0:cats.Monad[F]):cats.MonadError[[γ$16$]cats.data.EitherT[F,L,γ$16$],L]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -542,10 +542,10 @@ res0: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$17$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances2.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>], <span class="extype" name="cats.data.EitherTInstances2.catsDataMonadErrorForEitherT.L">L</span>]</span>
+        <span class="name">catsDataMonadErrorForEitherT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="L">L</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$16$]<a href="EitherT.html" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.F">F</span>, <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>, <span class="extype" name="cats.data.EitherTInstances1.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>], <span class="extype" name="cats.data.EitherTInstances1.catsDataMonadErrorForEitherT.L">L</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances2</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EitherTInstances1</dd></dl></div>
     </li><li name="cats.data.EitherTInstances#catsDataOrderForEitherT" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataOrderForEitherT[F[_],L,R](implicitF:cats.Order[F[Either[L,R]]]):cats.Order[cats.data.EitherT[F,L,R]]"></a><a id="catsDataOrderForEitherT[F[_],L,R](Order[F[Either[L,R]]]):Order[EitherT[F,L,R]]"></a>
       <span class="permalink">

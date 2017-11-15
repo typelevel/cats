@@ -990,8 +990,18 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <span class="name">foldLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.NonEmptyReducible.F">F</span>[<span class="extype" name="cats.NonEmptyReducible.foldLeft.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.NonEmptyReducible.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.NonEmptyReducible.foldLeft.B">B</span>, <span class="extype" name="cats.NonEmptyReducible.foldLeft.A">A</span>) ⇒ <span class="extype" name="cats.NonEmptyReducible.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.NonEmptyReducible.foldLeft.B">B</span></span>
       </span>
       
-      <p class="shortcomment cmt">Left associative fold on 'F' using the function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative fold on 'F' using the function 'f'.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a> → <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Left associative fold on 'F' using the function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative fold on 'F' using the function 'f'.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Foldable, cats.implicits._
+scala&gt; <span class="kw">val</span> fa = <span class="std">Option</span>(<span class="num">1</span>)
+
+Folding by addition to zero:
+scala&gt; Foldable[<span class="std">Option</span>].foldLeft(fa, <span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre><p>With syntax extensions, <code>foldLeft</code> can be used like:</p><pre>Folding `<span class="std">Option</span>` <span class="kw">with</span> addition from zero:
+scala&gt; fa.foldLeft(<span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)
+
+There's also an alias `foldl` which is equivalent:
+scala&gt; fa.foldl(<span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a> → <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldLeftM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foldLeftM[G[_],A,B](fa:F[A],z:B)(f:(B,A)=&gt;G[B])(implicitG:cats.Monad[G]):G[B]"></a><a id="foldLeftM[G[_],A,B](F[A],B)((B,A)⇒G[B])(Monad[G]):G[B]"></a>
       <span class="permalink">
@@ -1097,8 +1107,28 @@ res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
 needed), and returns a lazy value. We are using <code>(A, Eval[B]) =&gt;
 Eval[B]</code> to support laziness in a stack-safe way. Chained
 computation should be performed via .map and .flatMap.</p><p>For more detailed information about how this method works see the
-documentation for <code>Eval[_]</code>.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a> → <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+documentation for <code>Eval[_]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Foldable, cats.Eval, cats.implicits._
+scala&gt; <span class="kw">val</span> fa = <span class="std">Option</span>(<span class="num">1</span>)
+
+Folding by addition to zero:
+scala&gt; <span class="kw">val</span> folded1 = Foldable[<span class="std">Option</span>].foldRight(fa, Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+Since `foldRight` yields a <span class="kw">lazy</span> computation, we need to force it to inspect the result:
+scala&gt; folded1.value
+res0: <span class="std">Int</span> = <span class="num">1</span>
+
+With syntax extensions, we can write the same thing like <span class="kw">this</span>:
+scala&gt; <span class="kw">val</span> folded2 = fa.foldRight(Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+scala&gt; folded2.value
+res1: <span class="std">Int</span> = <span class="num">1</span>
+
+Unfortunately, since `foldRight` is defined on many collections - <span class="kw">this</span>
+extension clashes <span class="kw">with</span> the operation defined in `Foldable`.
+
+To get past <span class="kw">this</span> and make sure you're getting the <span class="kw">lazy</span> `foldRight` defined
+in `Foldable`, there's an alias `foldr`:
+scala&gt; <span class="kw">val</span> folded3 = fa.foldr(Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+scala&gt; folded3.value
+res1: <span class="std">Int</span> = <span class="num">1</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.NonEmptyReducible">NonEmptyReducible</a> → <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.NonEmptyReducible#forall" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forall[A](fa:F[A])(p:A=&gt;Boolean):Boolean"></a><a id="forall[A](F[A])((A)⇒Boolean):Boolean"></a>
       <span class="permalink">

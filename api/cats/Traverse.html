@@ -628,8 +628,18 @@ a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats
         <span class="name">foldLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Traverse.F">F</span>[<span class="extype" name="cats.Foldable.foldLeft.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.Foldable.foldLeft.B">B</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Foldable.foldLeft.B">B</span>, <span class="extype" name="cats.Foldable.foldLeft.A">A</span>) ⇒ <span class="extype" name="cats.Foldable.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Foldable.foldLeft.B">B</span></span>
       </span>
       
-      <p class="shortcomment cmt">Left associative fold on 'F' using the function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative fold on 'F' using the function 'f'.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+      <p class="shortcomment cmt">Left associative fold on 'F' using the function 'f'.</p><div class="fullcomment"><div class="comment cmt"><p>Left associative fold on 'F' using the function 'f'.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Foldable, cats.implicits._
+scala&gt; <span class="kw">val</span> fa = <span class="std">Option</span>(<span class="num">1</span>)
+
+Folding by addition to zero:
+scala&gt; Foldable[<span class="std">Option</span>].foldLeft(fa, <span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre><p>With syntax extensions, <code>foldLeft</code> can be used like:</p><pre>Folding `<span class="std">Option</span>` <span class="kw">with</span> addition from zero:
+scala&gt; fa.foldLeft(<span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)
+
+There's also an alias `foldl` which is equivalent:
+scala&gt; fa.foldl(<span class="std">Option</span>(<span class="num">0</span>))((a, n) <span class="kw">=&gt;</span> a.map(_ + n))
+res2: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Foldable#foldRight" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="foldRight[A,B](fa:F[A],lb:cats.Eval[B])(f:(A,cats.Eval[B])=&gt;cats.Eval[B]):cats.Eval[B]"></a><a id="foldRight[A,B](F[A],Eval[B])((A,Eval[B])⇒Eval[B]):Eval[B]"></a>
       <span class="permalink">
@@ -649,8 +659,28 @@ a <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats
 needed), and returns a lazy value. We are using <code>(A, Eval[B]) =&gt;
 Eval[B]</code> to support laziness in a stack-safe way. Chained
 computation should be performed via .map and .flatMap.</p><p>For more detailed information about how this method works see the
-documentation for <code>Eval[_]</code>.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
+documentation for <code>Eval[_]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Foldable, cats.Eval, cats.implicits._
+scala&gt; <span class="kw">val</span> fa = <span class="std">Option</span>(<span class="num">1</span>)
+
+Folding by addition to zero:
+scala&gt; <span class="kw">val</span> folded1 = Foldable[<span class="std">Option</span>].foldRight(fa, Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+Since `foldRight` yields a <span class="kw">lazy</span> computation, we need to force it to inspect the result:
+scala&gt; folded1.value
+res0: <span class="std">Int</span> = <span class="num">1</span>
+
+With syntax extensions, we can write the same thing like <span class="kw">this</span>:
+scala&gt; <span class="kw">val</span> folded2 = fa.foldRight(Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+scala&gt; folded2.value
+res1: <span class="std">Int</span> = <span class="num">1</span>
+
+Unfortunately, since `foldRight` is defined on many collections - <span class="kw">this</span>
+extension clashes <span class="kw">with</span> the operation defined in `Foldable`.
+
+To get past <span class="kw">this</span> and make sure you're getting the <span class="kw">lazy</span> `foldRight` defined
+in `Foldable`, there's an alias `foldr`:
+scala&gt; <span class="kw">val</span> folded3 = fa.foldr(Eval.now(<span class="num">0</span>))((n, a) <span class="kw">=&gt;</span> a.map(_ + n))
+scala&gt; folded3.value
+res1: <span class="std">Int</span> = <span class="num">1</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a></dd></dl></div>
     </li><li name="cats.Traverse#traverse" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="traverse[G[_],A,B](fa:F[A])(f:A=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]"></a><a id="traverse[G[_],A,B](F[A])((A)⇒G[B])(Applicative[G]):G[F[B]]"></a>
       <span class="permalink">

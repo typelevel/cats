@@ -415,6 +415,25 @@ Scala 2.10, this may be bypassed due to a compiler bug.
       
       <p class="shortcomment cmt">Alias for <a href="#concat[AA&gt;:A](other:Vector[AA]):cats.data.NonEmptyVector[AA]" class="extmbr" name="cats.data.NonEmptyVector#concat">concat</a>
 </p>
+    </li><li name="cats.data.NonEmptyVector#++:" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++:[AA&gt;:A](other:cats.data.NonEmptyVector[AA]):cats.data.NonEmptyVector[AA]"></a><a id="++:[AA&gt;:A](NonEmptyVector[AA]):NonEmptyVector[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyVector.html#++:[AA&gt;:A](other:cats.data.NonEmptyVector[AA]):cats.data.NonEmptyVector[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus$colon" class="name">++:</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyVector.A">A</span></span>]</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.++:.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyVector">NonEmptyVector</a>[<span class="extype" name="cats.data.NonEmptyVector.++:.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Append this NEV to another NEV, producing a new <code>NonEmptyVector</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Append this NEV to another NEV, producing a new <code>NonEmptyVector</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyVector
+scala&gt; <span class="kw">val</span> nev = NonEmptyVector.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+scala&gt; nev ++: NonEmptyVector.of(<span class="num">4</span>, <span class="num">5</span>)
+res0: cats.data.NonEmptyVector[<span class="std">Int</span>] = NonEmptyVector(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div></div>
     </li><li name="cats.data.NonEmptyVector#+:" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="+:[AA&gt;:A](a:AA):cats.data.NonEmptyVector[AA]"></a><a id="+:[AA&gt;:A](AA):NonEmptyVector[AA]"></a>
       <span class="permalink">

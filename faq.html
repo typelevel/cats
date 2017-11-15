@@ -112,10 +112,11 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ValidatedNel</span>
 <span class="k">type</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNel</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="k">def</span> <span class="n">even</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ErrorsOr</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="n">i</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="n">s</span><span class="s">"$i is odd"</span><span class="o">.</span><span class="n">invalidNel</span>
+</code></pre>
+</div>
 
-<span class="o">```</span><span class="n">scala</span>
-<span class="n">nl</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">even</span><span class="o">)</span>
-<span class="c1">// res6: ErrorsOr[cats.data.Nested[Option,List,Int]] = Invalid(NonEmptyList(1 is odd, 3 is odd, 5 is odd))
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">nl</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">even</span><span class="o">)</span>
+<span class="c1">// res5: ErrorsOr[cats.data.Nested[Option,List,Int]] = Invalid(NonEmptyList(1 is odd, 3 is odd, 5 is odd))
 </span></code></pre>
 </div>
 

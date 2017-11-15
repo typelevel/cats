@@ -10,9 +10,9 @@ To make things easier, cats ships with <code class="highlighter-rouge">cats-test
 To make things easier, we’ll also include the <code class="highlighter-rouge">scalacheck-shapeless</code> library in this tutorial, so we don’t have to manually write instances for ScalaCheck’s <code class="highlighter-rouge">Arbitrary</code>.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.0.0-MF"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
-  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-testkit"</span> <span class="o">%</span> <span class="s">"1.0.0-MF"</span><span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
-  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.5"</span> <span class="o">%</span> <span class="nc">Test</span>
+  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.0.0-RC1"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
+  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-testkit"</span> <span class="o">%</span> <span class="s">"1.0.0-RC1"</span><span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
+  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.6"</span> <span class="o">%</span> <span class="nc">Test</span>
 <span class="o">)</span>
 </code></pre>
 </div>
@@ -73,7 +73,7 @@ Cats has defined rulesets for all type class laws in <code class="highlighter-ro
 <p>So for our example we will want to import <code class="highlighter-rouge">cats.laws.discipline.FunctorTests</code> and call <code class="highlighter-rouge">checkAll</code> with it.
 Before we do so, however,
 we will have to bring our instances into scope as well as the derived <code class="highlighter-rouge">Arbitrary</code> instances from <code class="highlighter-rouge">scalacheck-shapeless</code>
-(We have defined an Arbitrary instance for <code class="highlighter-rouge">Tree</code> here, but you won’t need it if you import <code class="highlighter-rouge">org.scalacheck.Shapeless._</code>).</p>
+(We have defined an Arbitrary instance for <code class="highlighter-rouge">Tree</code> here, but you won’t need it if you import <code class="highlighter-rouge">org.scalacheck.ScalacheckShapeless._</code>).</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">org.scalacheck.</span><span class="o">{</span><span class="nc">Arbitrary</span><span class="o">,</span> <span class="nc">Gen</span><span class="o">}</span>
