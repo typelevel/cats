@@ -215,6 +215,33 @@ import simulacrum.typeclass
       }
 
   /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   *
+   * To avoid conflict with the original collectFirst on many data types, there is a
+   * `collectFst` alias
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val numbers = List(2,4,5,6,8,10)
+   * scala> numbers.collectFst(i => if(i % 2 == 1) Some(i.toDouble / 2d) else None)
+   * res0: Option[Double] = Some(2.5)
+   * scala> List(2, 4, 6).collectFst(i => if(i % 2 == 1) Some(i.toDouble / 2d) else None)
+   * res1: Option[Double] = None
+   * }}}
+   */
+  def collectFirst[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      val fa = f(a)
+      if (fa.isDefined) Eval.now(fa) else lb
+    }.value
+
+  /**
+   * alias for collectFirst
+   */
+  def collectFst[A, B](fa: F[A])(f: A => Option[B]): Option[B] = collectFirst(fa)(f)
+
+  /**
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
