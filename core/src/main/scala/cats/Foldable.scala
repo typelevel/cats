@@ -218,7 +218,7 @@ import simulacrum.typeclass
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
    * instead of `PartialFunction`s.
    *
-   * To avoid conflict with the original collectFirst on many data types, there is a
+   * To avoid conflict with existing `collectFirst` on many data types, there is also a
    * `collectFst` alias
    *
    * {{{
@@ -237,7 +237,8 @@ import simulacrum.typeclass
     }.value
 
   /**
-   * alias for collectFirst
+   * Alias for `collectFirst` to avoid conflict with existing 
+   * `collectFirst` on many data types,
    */
   def collectFst[A, B](fa: F[A])(f: A => Option[B]): Option[B] = collectFirst(fa)(f)
 
