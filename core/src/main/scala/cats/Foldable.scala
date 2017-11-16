@@ -224,9 +224,9 @@ import simulacrum.typeclass
    * {{{
    * scala> import cats.implicits._
    * scala> val numbers = List(2,4,5,6,8,10)
-   * scala> numbers.collectFst(i => if(i % 2 == 1) Some(i.toDouble / 2d) else None)
+   * scala> numbers.collectFst(i => if (i % 2 == 1) Some(i.toDouble / 2d) else None)
    * res0: Option[Double] = Some(2.5)
-   * scala> List(2, 4, 6).collectFst(i => if(i % 2 == 1) Some(i.toDouble / 2d) else None)
+   * scala> List(2, 4, 6).collectFst(i => if (i % 2 == 1) Some(i.toDouble / 2d) else None)
    * res1: Option[Double] = None
    * }}}
    */
