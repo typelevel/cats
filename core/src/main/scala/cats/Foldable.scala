@@ -223,11 +223,13 @@ import simulacrum.typeclass
    *
    * {{{
    * scala> import cats.implicits._
-   * scala> val numbers = List(2,4,5,6,8,10)
-   * scala> numbers.collectFst(i => if (i % 2 == 1) Some(i.toDouble / 2d) else None)
-   * res0: Option[Double] = Some(2.5)
-   * scala> List(2, 4, 6).collectFst(i => if (i % 2 == 1) Some(i.toDouble / 2d) else None)
-   * res1: Option[Double] = None
+   * scala> val keys = List(1, 2, 4, 5)
+   * scala> val map = Map(4 -> "Four", 5 -> "Five")
+   * scala> keys.collectFst(map.get)
+   * res0: Option[String] = Some(Four)
+   * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+   * scala> keys.collectFst(map2.get)
+   * res1: Option[String] = None
    * }}}
    */
   def collectFirst[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
