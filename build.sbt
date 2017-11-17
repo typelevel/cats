@@ -206,9 +206,9 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForFailFastFuture"),
       exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT")
       exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFst"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirstSome"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirst"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFst"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirstSome"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst")
     )
   }
