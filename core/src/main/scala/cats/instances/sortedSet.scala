@@ -53,6 +53,12 @@ trait SortedSetInstances extends SortedSetInstances1 {
         fa.reduceLeftOption(f)
 
       override def find[A](fa: SortedSet[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def collectFirst[A, B](fa: SortedSet[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: SortedSet[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {

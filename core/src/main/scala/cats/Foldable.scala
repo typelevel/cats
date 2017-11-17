@@ -214,35 +214,30 @@ import simulacrum.typeclass
         case Right(_) => None
       }
 
+  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      if (pf.isDefinedAt(a)) Eval.now(Some(pf.apply(a))) else lb
+    }.value
+
   /**
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
    * instead of `PartialFunction`s.
-   *
-   * To avoid conflict with existing `collectFirst` on many data types, there is also a
-   * `collectFst` alias
-   *
    * {{{
    * scala> import cats.implicits._
    * scala> val keys = List(1, 2, 4, 5)
    * scala> val map = Map(4 -> "Four", 5 -> "Five")
-   * scala> keys.collectFst(map.get)
+   * scala> keys.collectFirstSome(map.get)
    * res0: Option[String] = Some(Four)
    * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
-   * scala> keys.collectFst(map2.get)
+   * scala> keys.collectFirstSome(map2.get)
    * res1: Option[String] = None
    * }}}
    */
-  def collectFirst[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
       val fa = f(a)
       if (fa.isDefined) Eval.now(fa) else lb
     }.value
-
-  /**
-   * Alias for `collectFirst` to avoid conflict with existing 
-   * `collectFirst` on many data types,
-   */
-  def collectFst[A, B](fa: F[A])(f: A => Option[B]): Option[B] = collectFirst(fa)(f)
 
   /**
    * Fold implemented using the given Monoid[A] instance.

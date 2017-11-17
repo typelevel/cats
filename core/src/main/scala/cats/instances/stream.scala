@@ -142,6 +142,10 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def find[A](fa: Stream[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Stream[A]] = new kernel.instances.StreamMonoid[A]
+
+      override def collectFirst[A, B](fa: Stream[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =

@@ -7,6 +7,7 @@ import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
 import cats.instances.list._
+import arbitrary.catsLawsArbitraryForPartialFunction
 
 trait FoldableTests[F[_]] extends Laws {
   def laws: FoldableLaws[F]
@@ -20,6 +21,7 @@ trait FoldableTests[F[_]] extends Laws {
     EqA: Eq[A],
     EqFA: Eq[F[A]],
     EqB: Eq[B],
+    EqOptionB: Eq[Option[B]],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
     new DefaultRuleSet(
@@ -43,7 +45,9 @@ trait FoldableTests[F[_]] extends Laws {
       "toList reference" -> forAll(laws.toListRef[A] _),
       "filter_ reference" -> forAll(laws.filter_Ref[A] _),
       "takeWhile_ reference" -> forAll(laws.takeWhile_Ref[A] _),
-      "dropWhile_ reference" -> forAll(laws.dropWhile_Ref[A] _)
+      "dropWhile_ reference" -> forAll(laws.dropWhile_Ref[A] _),
+      "collectFirstSome reference" -> forAll(laws.collectFirstSome_Ref[A, B] _),
+      "collectFirst reference" -> forAll(laws.collectFirst_Ref[A, B] _)
     )
   }
 }
