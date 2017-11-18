@@ -3,10 +3,12 @@ package tests
 
 import catalysts.Platform
 
+import cats.data.NonEmptyVector.ZipNonEmptyVector
+
 import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{CommutativeApplyTests, ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -38,6 +40,8 @@ class NonEmptyVectorSuite extends CatsSuite {
   checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
 
 
+  checkAll("ZipNonEmptyVector[Int]", CommutativeApplyTests[ZipNonEmptyVector].commutativeApply[Int, Int, Int])
+  checkAll("CommutativeApply[ZipNonEmptyVector]", SerializableTests.serializable(CommutativeApply[ZipNonEmptyVector]))
 
   // Test functor and subclasses don't have implicit conflicts
   implicitly[Functor[NonEmptyVector]]

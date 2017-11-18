@@ -5,7 +5,7 @@ import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ComonadTests, FunctorTests, SemigroupKTests, FoldableTests, MonadTests, SerializableTests, SemigroupalTests, TraverseTests, NonEmptyTraverseTests, ReducibleTests}
+import cats.laws.discipline.{ApplicativeTests, SemigroupalTests, ComonadTests, FoldableTests, FunctorTests, MonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class OneAndSuite extends CatsSuite {
@@ -35,6 +35,12 @@ class OneAndSuite extends CatsSuite {
     implicit val alt = ListWrapper.alternative
     checkAll("OneAnd[ListWrapper, Int]", MonadTests[OneAnd[ListWrapper, ?]].monad[Int, Int, Int])
     checkAll("MonadTests[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monad[OneAnd[ListWrapper, ?]]))
+  }
+
+  {
+    implicit val alternative = ListWrapper.alternative
+    checkAll("OneAnd[ListWrapper, Int]", ApplicativeTests[OneAnd[ListWrapper, ?]].applicative[Int, Int, Int])
+    checkAll("Applicative[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Applicative[OneAnd[ListWrapper, ?]]))
   }
 
   {

@@ -195,6 +195,15 @@ def mimaSettings(moduleName: String) = Seq(
     import com.typesafe.tools.mima.core.ProblemFilters._
     Seq(
       exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority3"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority2"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority1"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority3.catsDataNonEmptyTraverseForOneAnd"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipVector"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForZipStream"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipList"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForFailFastFuture"),
       exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT")
     )
   }
