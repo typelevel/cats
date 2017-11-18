@@ -346,4 +346,10 @@ class IorTSuite extends CatsSuite {
       iort.isRight && !iort.isLeft && !iort.isBoth should === (test)
     }
   }
+
+  test("IorT.condF consistent with IorT.right and IorT.left") {
+    forAll { (test: Boolean, optionS: Option[String], optionI: Option[Int]) =>
+      IorT.condF(test, optionS, optionI) === (if (test) IorT.right(optionS) else IorT.left(optionI))
+    }
+  }
 }

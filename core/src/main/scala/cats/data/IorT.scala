@@ -349,8 +349,8 @@ object IorT extends IorTInstances {
   }
 
   /**
-   * If the condition is satisfied, return the given `B` in `Right`, otherwise, return the given
-   * `A` in `Left`, lifted into the specified `Applicative`.
+   * If the condition is satisfied, return the given `B` in `Ior.Right`, otherwise, return the given
+   * `A` in `Ior.Left`, lifted into the specified `Applicative`.
    * {{{
    * scala> import cats.data.IorT
    * scala> import cats.implicits._
@@ -359,10 +359,27 @@ object IorT extends IorTInstances {
    *      |   userInput.forall(_.isDigit) && userInput.size == 10,
    *      |   userInput,
    *      |   "The input does not look like a phone number")
-   * res0: IorT[Option, String, String] = IorT(Some(Left(The input does not look like a phone number)))
+   * res0: cats.data.IorT[Option,String,String] = IorT(Some(Left(The input does not look like a phone number)))
    * }}}
    */
   final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied[F]
+
+  /**
+   * If the condition is satisfied, return the value of `IorT.right` on `F[B]`, otherwise, return the
+   * value of `IorT.left` on `F[A]`.
+   * {{{
+   * scala> import cats.data.IorT
+   * scala> import cats.implicits._
+   * scala> val userInput = "hello world"
+   * scala> IorT.condF[Option, String, String](
+   *      |   userInput.forall(_.isDigit) && userInput.size == 10,
+   *      |   Some(userInput),
+   *      |   None)
+   * res0: cats.data.IorT[Option,String,String] = IorT(None)
+   * }}}
+   */
+  final def condF[F[_], A, B](test: Boolean, right: => F[B], left: => F[A])(implicit F: Functor[F]): IorT[F, A, B] =
+    IorT(if (test) F.map(right)(Ior.right) else F.map(left)(Ior.left))
 }
 
 private[data] abstract class IorTInstances extends IorTInstances1 {
