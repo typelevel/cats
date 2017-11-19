@@ -164,6 +164,10 @@ options:
     url: datatypes/eithert.html
     menu_type: data
 
+  - title: IorT
+    url: datatypes/iort.html
+    menu_type: data
+
   - title: State
     url: datatypes/state.html
     menu_type: data
