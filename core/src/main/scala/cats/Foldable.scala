@@ -240,8 +240,8 @@ import simulacrum.typeclass
    */
   def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      val fa = f(a)
-      if (fa.isDefined) Eval.now(fa) else lb
+      val ob = f(a)
+      if (ob.isDefined) Eval.now(ob) else lb
     }.value
 
   /**
