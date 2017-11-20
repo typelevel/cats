@@ -215,7 +215,7 @@ import simulacrum.typeclass
       }
 
   def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] = {
-    //trick from TravsersableOnce
+    // trick from TravsersableOnce
     val sentinel: Function1[A, Any] = new scala.runtime.AbstractFunction1[A, Any]{ def apply(a: A) = this }
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
       val x = pf.applyOrElse(a, sentinel)
