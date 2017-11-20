@@ -214,10 +214,15 @@ import simulacrum.typeclass
         case Right(_) => None
       }
 
-  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
+  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] = {
+    //trick from TravsersableOnce
+    val sentinel: Function1[A, Any] = new scala.runtime.AbstractFunction1[A, Any]{ def apply(a: A) = this }
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      if (pf.isDefinedAt(a)) Eval.now(Some(pf.apply(a))) else lb
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
+      else lb
     }.value
+  }
 
   /**
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
