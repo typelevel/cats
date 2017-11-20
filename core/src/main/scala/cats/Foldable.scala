@@ -4,6 +4,7 @@ import scala.collection.mutable
 import cats.instances.either._
 import cats.instances.long._
 import simulacrum.typeclass
+import Foldable.sentinel
 
 /**
  * Data structures that can be folded to a summary value.
@@ -214,15 +215,14 @@ import simulacrum.typeclass
         case Right(_) => None
       }
 
-  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] = {
-    // trick from TravsersableOnce
-    val sentinel: Function1[A, Any] = new scala.runtime.AbstractFunction1[A, Any]{ def apply(a: A) = this }
+  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      // trick from TravsersableOnce
       val x = pf.applyOrElse(a, sentinel)
       if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
       else lb
     }.value
-  }
+
 
   /**
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
@@ -584,6 +584,8 @@ import simulacrum.typeclass
 }
 
 object Foldable {
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
       Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
