@@ -269,6 +269,21 @@ private[data] sealed trait CommonIRWSTConstructors {
   def liftF[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
     IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[RWST[Eval, Boolean, List[String], String, ?], Int] = a.mapK(RWST.liftK)
+   * scala> b.value.runEmpty(true).value
+   * res0: (List[String], String, Option[Int]) = (List(),"",Some(1))
+   * }}}
+   */
+  def liftK[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): F ~> IndexedReaderWriterStateT[F, E, L, S, S, ?] =
+    new (F ~> IndexedReaderWriterStateT[F, E, L, S, S, ?]) {
+      def apply[A](fa: F[A]): IndexedReaderWriterStateT[F, E, L, S, S, A] = IndexedReaderWriterStateT.liftF(fa)
+    }
+
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
     IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))

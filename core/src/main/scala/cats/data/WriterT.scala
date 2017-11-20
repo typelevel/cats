@@ -70,6 +70,21 @@ object WriterT extends WriterTInstances with WriterTFunctions {
   def liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[WriterT[Eval, String, ?], Int] = a.mapK(WriterT.liftK)
+   * scala> b.value.run.value
+   * res0: (String, Option[Int]) = ("",Some(1))
+   * }}}
+   */
+  def liftK[F[_], L](implicit monoidL: Monoid[L], F: Applicative[F]): F ~> WriterT[F, L, ?] =
+    new (F ~> WriterT[F, L, ?]) {
+      def apply[V](fa: F[V]): WriterT[F, L, V] = WriterT.liftF(fa)
+    }
+
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))

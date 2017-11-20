@@ -176,6 +176,21 @@ private[data] trait CommonStateTConstructors {
   def liftF[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(fa)(a => (s, a)))
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[StateT[Eval, String, ?], Int] = a.mapK(StateT.liftK)
+   * scala> b.value.runEmpty.value
+   * res0: (String, Option[Int]) = ("",Some(1))
+   * }}}
+   */
+  def liftK[F[_], S](implicit F: Applicative[F]): F ~> IndexedStateT[F, S, S, ?] =
+    new (F ~> IndexedStateT[F, S, S, ?]) {
+      def apply[A](fa: F[A]): IndexedStateT[F, S, S, A] = IndexedStateT.liftF(fa)
+    }
+
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(fa)(a => (s, a)))

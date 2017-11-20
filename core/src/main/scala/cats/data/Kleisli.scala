@@ -87,6 +87,21 @@ private[data] sealed trait KleisliFunctions {
   def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: Kleisli[Eval, String, Int] = 1.pure[Kleisli[Eval, String, ?]]
+   * scala> val b: Kleisli[OptionT[Eval, ?], String, Int] = a.mapK(OptionT.liftK)
+   * scala> b.run("").value.value
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
+  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] = new (F ~> Kleisli[F, A, ?]) {
+    def apply[B](x: F[B]): Kleisli[F, A, B] =
+      Kleisli(_ => x)
+  }
+
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)

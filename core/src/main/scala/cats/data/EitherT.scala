@@ -352,6 +352,21 @@ object EitherT extends EitherTInstances {
    */
   final def liftF[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[EitherT[Eval, String, ?], Int] = a.mapK(EitherT.liftK)
+   * scala> b.value.value.value
+   * res0: Either[String,Option[Int]] = Right(Some(1))
+   * }}}
+   */
+  final def liftK[F[_], A](implicit F: Functor[F]): F ~> EitherT[F, A, ?] =
+    new (F ~> EitherT[F, A, ?]) {
+      def apply[B](fb: F[B]): EitherT[F, A, B] = right(fb)
+    }
+
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
