@@ -3,7 +3,7 @@ layout: docs
 title:  "Invariant"
 section: "typeclasses"
 source: "core/src/main/scala/cats/functor/Invariant.scala"
-scaladoc: "#cats.functor.Invariant"
+scaladoc: "#cats.Invariant"
 ---
 # Invariant
 

@@ -60,6 +60,23 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
+Part of the reason for this is that name `flatMap` has special significance in
+scala, as for-comprehensions rely on this method to chain together operations
+in a monadic context.
+
+```tut:book
+import scala.reflect.runtime.universe
+
+universe.reify(
+  for {
+    x <- Some(1)
+    y <- Some(2)
+  } yield x + y
+).tree
+```
+
+### tailRecM
+
 In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 `tailRecM` which encodes stack safe monadic recursion, as described in
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
@@ -87,20 +104,8 @@ implicit val optionMonad = new Monad[Option] {
 }
 ```
 
-Part of the reason for this is that name `flatMap` has special significance in
-scala, as for-comprehensions rely on this method to chain together operations
-in a monadic context.
+More discussion about `tailRecM` can be found in the [FAQ](../faq.html#tailrecm).
 
-```tut:book
-import scala.reflect.runtime.universe
-
-universe.reify(
-  for {
-    x <- Some(1)
-    y <- Some(2)
-  } yield x + y
-).tree
-```
 
 ### ifM
 
@@ -111,7 +116,7 @@ statement into the monadic context.
 ```tut:book
 import cats.implicits._
 
-Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
+Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 4))
 ```
 
 ### Composition

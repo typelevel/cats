@@ -95,7 +95,9 @@ added. You can add a release by clicking the "Draft a new release" button
 on that page, or if the relevant release already exists, you can click
 "Edit release".
 
-The website should then be updated via `sbt docs/ghpagesPushSite`.
+The website should then be updated via [sbt-microsites](https://47deg.github.io/sbt-microsites/)
+using `sbt docs/publishMicrosite`. 
+Please check the [prerequisites](https://47deg.github.io/sbt-microsites/docs/) of sbt-microsites.
 
 ### Conclusion
 

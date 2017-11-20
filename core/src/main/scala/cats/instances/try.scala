@@ -63,6 +63,7 @@ trait TryInstances extends TryInstances1 {
         ta.recoverWith { case t => f(t) }
 
       def raiseError[A](e: Throwable): Try[A] = Failure(e)
+
       override def handleError[A](ta: Try[A])(f: Throwable => A): Try[A] =
         ta.recover { case t => f(t) }
 
@@ -74,7 +75,59 @@ trait TryInstances extends TryInstances1 {
 
       override def recoverWith[A](ta: Try[A])(pf: PartialFunction[Throwable, Try[A]]): Try[A] = ta.recoverWith(pf)
 
+      override def fromTry[A](t: Try[A])(implicit ev: Throwable <:< Throwable): Try[A] = t
+
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
+
+      override def reduceLeftToOption[A, B](fa: Try[A])(f: A => B)(g: (B, A) => B): Option[B] =
+        fa.map(f).toOption
+
+      override def reduceRightToOption[A, B](fa: Try[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(fa.map(f).toOption)
+
+      override def reduceLeftOption[A](fa: Try[A])(f: (A, A) => A): Option[A] =
+        fa.toOption
+
+      override def reduceRightOption[A](fa: Try[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        Now(fa.toOption)
+
+      override def get[A](fa: Try[A])(idx: Long): Option[A] =
+        if (idx == 0L) fa.toOption else None
+
+      override def size[A](fa: Try[A]): Long =
+        fa match {
+          case Failure(_) => 0L
+          case Success(_) => 1L
+        }
+
+      override def find[A](fa: Try[A])(f: A => Boolean): Option[A] =
+        fa.toOption.filter(f)
+
+      override def foldMap[A, B](fa: Try[A])(f: A => B)(implicit B: Monoid[B]): B =
+        fa match {
+          case Failure(_) => B.empty
+          case Success(a) => f(a)
+        }
+
+      override def exists[A](fa: Try[A])(p: A => Boolean): Boolean =
+        fa match {
+          case Failure(_) => false
+          case Success(a) => p(a)
+        }
+
+      override def forall[A](fa: Try[A])(p: A => Boolean): Boolean =
+        fa match {
+          case Failure(_) => true
+          case Success(a) => p(a)
+        }
+
+      override def toList[A](fa: Try[A]): List[A] =
+        fa match {
+          case Failure(_) => Nil
+          case Success(a) => a :: Nil
+        }
+
+      override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
     }
   // scalastyle:on method.length
 

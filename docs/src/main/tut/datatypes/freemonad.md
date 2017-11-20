@@ -88,7 +88,7 @@ case class Delete(key: String) extends KVStoreA[Unit]
 
 ### Free your ADT
 
-There are six basic steps to "freeing" the ADT:
+There are five basic steps to "freeing" the ADT:
 
 1. Create a type based on `Free[_]` and `KVStoreA[_]`.
 2. Create smart constructors for `KVStore[_]` using `liftF`.
@@ -265,7 +265,7 @@ never overflow your stack.  Trampolining is heap-intensive but
 stack-safety provides the reliability required to use `Free[_]` for
 data-intensive tasks, as well as infinite processes such as streams.
 
-#### 7. Use a pure compiler (optional)
+#### 6. Use a pure compiler (optional)
 
 The previous examples used an effectful natural transformation. This
 works, but you might prefer folding your `Free` in a "purer" way. The
@@ -298,15 +298,15 @@ val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(
 ## Composing Free monads ADTs.
 
 Real world applications often time combine different algebras.
-The `Inject` type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
+The injection type class described by Swierstra in [Data types à la carte](http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf)
 lets us compose different algebras in the context of `Free`.
 
-Let's see a trivial example of unrelated ADT's getting composed as a `Coproduct` that can form a more complex program.
+Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` that can form a more complex program.
 
 ```tut:silent
-import cats.data.Coproduct
-import cats.free.{Inject, Free}
-import cats.{Id, ~>}
+import cats.data.EitherK
+import cats.free.Free
+import cats.{Id, InjectK, ~>}
 import scala.collection.mutable.ListBuffer
 ```
 
@@ -322,31 +322,31 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the Coproduct of it's Algebras.
+Once the ADTs are defined we can formally state that a `Free` program is the EitherK of it's Algebras.
 
 ```tut:silent
-type CatsApp[A] = Coproduct[DataOp, Interact, A]
+type CatsApp[A] = EitherK[DataOp, Interact, A]
 ```
 
 In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
 
 ```tut:silent
-class Interacts[F[_]](implicit I: Inject[Interact, F]) {
+class Interacts[F[_]](implicit I: InjectK[Interact, F]) {
   def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
   def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
 }
 
 object Interacts {
-  implicit def interacts[F[_]](implicit I: Inject[Interact, F]): Interacts[F] = new Interacts[F]
+  implicit def interacts[F[_]](implicit I: InjectK[Interact, F]): Interacts[F] = new Interacts[F]
 }
 
-class DataSource[F[_]](implicit I: Inject[DataOp, F]) {
+class DataSource[F[_]](implicit I: InjectK[DataOp, F]) {
   def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
   def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
 }
 
 object DataSource {
-  implicit def dataSource[F[_]](implicit I: Inject[DataOp, F]): DataSource[F] = new DataSource[F]
+  implicit def dataSource[F[_]](implicit I: InjectK[DataOp, F]): DataSource[F] = new DataSource[F]
 }
 ```
 
@@ -366,7 +366,7 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 }
 ```
 
-Finally we write one interpreter per ADT and combine them with a `FunctionK` to `Coproduct` so they can be
+Finally we write one interpreter per ADT and combine them with a `FunctionK` to `EitherK` so they can be
 compiled and applied to our `Free` program.
 
 ```tut:invisible
@@ -495,9 +495,9 @@ right-associated structure not subject to quadratic complexity.
 
 ## FreeT
 
-Often times we want to interleave the syntax tree when building a Free monad 
-with some other effect not declared as part of the ADT. 
-FreeT solves this problem by allowing us to mix building steps of the AST 
+Often times we want to interleave the syntax tree when building a Free monad
+with some other effect not declared as part of the ADT.
+FreeT solves this problem by allowing us to mix building steps of the AST
 with calling action in other base monad.
 
 In the following example a basic console application is shown.
@@ -520,34 +520,30 @@ final case class ReadLine(prompt : String) extends Teletype[String]
 type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
-/** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State 
- */
-class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
-  def writeLine(line : String) : TeletypeT[M, Unit] =
-	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
-  def readLine(prompt : String) : TeletypeT[M, String] =
-	FreeT.liftF[Teletype, M, String](ReadLine(prompt))
-  def log(s : String) : TeletypeT[M, Unit] =
-	FreeT.liftT[Teletype, M, Unit](MS.modify(s :: _))
-}
-
-object TeletypeOps {
-  implicit def teleTypeOpsInstance[M[_]](implicit MS : MonadState[M, Log]) : TeletypeOps[M] = new TeletypeOps
-}
-
 type TeletypeState[A] = State[List[String], A]
 
-def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
+/** Smart constructors, notice we are abstracting over any MonadState instance
+ *  to potentially support other types beside State
+ */
+object TeletypeOps {
+  def writeLine(line : String) : TeletypeT[TeletypeState, Unit] =
+	FreeT.liftF[Teletype, TeletypeState, Unit](WriteLine(line))
+  def readLine(prompt : String) : TeletypeT[TeletypeState, String] =
+	FreeT.liftF[Teletype, TeletypeState, String](ReadLine(prompt))
+  def log(s : String) : TeletypeT[TeletypeState, Unit] =
+	FreeT.liftT[Teletype, TeletypeState, Unit](State.modify(s :: _))
+}
+
+def program : TeletypeT[TeletypeState, Unit] = {
   for {
-	userSaid <- TO.readLine("what's up?!")
-	_ <- TO.log(s"user said : $userSaid")
-	_ <- TO.writeLine("thanks, see you soon!")
-  } yield () 
+	userSaid <- TeletypeOps.readLine("what's up?!")
+	_ <- TeletypeOps.log(s"user said : $userSaid")
+	_ <- TeletypeOps.writeLine("thanks, see you soon!")
+  } yield ()
 }
 
 def interpreter = new (Teletype ~> TeletypeState) {
-  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {  
+  def apply[A](fa : Teletype[A]) : TeletypeState[A] = {
 	fa match {
 	  case ReadLine(prompt) =>
 		println(prompt)

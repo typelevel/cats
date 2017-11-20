@@ -46,25 +46,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   def max(x: A, y: A): A = if (gt(x, y)) x else y
 
-  /**
-   * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
-   * order to order `B`.
-   */
-  override def on[@sp B](f: B => A): Order[B] =
-    new Order[B] {
-      def compare(x: B, y: B): Int = self.compare(f(x), f(y))
-    }
-
-  /**
-   * Defines an ordering on `A` where all arrows switch direction.
-   */
-  override def reverse: Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A): Int = self.compare(y, x)
-
-      override def reverse: Order[A] = self
-    }
-
   // The following may be overridden for performance:
 
   /**
@@ -104,21 +85,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
     compare(x, y) > 0
 
   /**
-   * Returns a new `Order[A]` instance that first compares by the original
-   * `Order` instance and uses the provided `Order` instance to "break ties".
-   *
-   * That is, `x.whenEqual(y)` creates an `Order` that first orders by `x` and
-   * then (if two elements are equal) falls back to `y` for the comparison.
-   */
-  def whenEqual(o: Order[A]): Order[A] = new Order[A] {
-    def compare(x: A, y: A) = {
-      val c = self.compare(x, y)
-      if (c == 0) o.compare(x, y)
-      else c
-    }
-  }
-
-  /**
    * Convert a `Order[A]` to a `scala.math.Ordering[A]`
    * instance.
    */
@@ -139,6 +105,15 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
     ev.max(x, y)
 }
 
+trait OrderToOrderingConversion {
+  /**
+   * Implicitly derive a `scala.math.Ordering[A]` from a `Order[A]`
+   * instance.
+   */
+  implicit def catsKernelOrderingForOrder[A](implicit ev: Order[A]): Ordering[A] =
+    ev.toOrdering
+}
+
 object Order extends OrderFunctions[Order] {
   /**
    * Access an implicit `Order[A]`.
@@ -150,7 +125,33 @@ object Order extends OrderFunctions[Order] {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =
-    ev.on(f)
+    new Order[A] {
+      def compare(x: A, y: A): Int = ev.compare(f(x), f(y))
+    }
+
+  /**
+    * Defines an ordering on `A` from the given order such that all arrows switch direction.
+    */
+  def reverse[@sp A](order: Order[A]): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A): Int = order.compare(y, x)
+    }
+
+  /**
+    * Returns a new `Order[A]` instance that first compares by the first
+    * `Order` instance and uses the second `Order` instance to "break ties".
+    *
+    * That is, `Order.whenEqual(x, y)` creates an `Order` that first orders by `x` and
+    * then (if two elements are equal) falls back to `y` for the comparison.
+    */
+  def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A) = {
+        val c = first.compare(x, y)
+        if (c == 0) second.compare(x, y)
+        else c
+      }
+    }
 
   /**
    * Define an `Order[A]` using the given function `f`.
@@ -175,7 +176,6 @@ object Order extends OrderFunctions[Order] {
       def compare(x: A, y: A): Int = 0
     }
 
-
   /**
    * A `Monoid[Order[A]]` can be generated for all `A` with the following
    * properties:
@@ -194,7 +194,7 @@ object Order extends OrderFunctions[Order] {
   def whenEqualMonoid[A]: Monoid[Order[A]] with Band[Order[A]] =
     new Monoid[Order[A]] with Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
-      def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
+      def combine(x: Order[A], y: Order[A]): Order[A] = Order.whenEqual(x, y)
     }
 
   def fromOrdering[A](implicit ev: Ordering[A]): Order[A] =

@@ -1,8 +1,9 @@
 package cats
 package instances
 
-import cats.arrow.{Arrow, Choice}
-import cats.functor.Contravariant
+import cats.Contravariant
+import cats.arrow.{Category, Choice, CommutativeArrow}
+
 import annotation.tailrec
 
 
@@ -42,16 +43,12 @@ private[instances] sealed trait Function1Instances {
         fa.compose(f)
     }
 
-  implicit def catsStdMonadReaderForFunction1[T1]: MonadReader[T1 => ?, T1] =
-    new MonadReader[T1 => ?, T1] {
+  implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
+    new Monad[T1 => ?] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
         t => f(fa(t))(t)
-
-      val ask: T1 => T1 = identity
-
-      def local[A](f: T1 => T1)(fa: T1 => A): T1 => A = f.andThen(fa)
 
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
@@ -67,8 +64,8 @@ private[instances] sealed trait Function1Instances {
         }
     }
 
-  implicit val catsStdInstancesForFunction1: Choice[Function1] with Arrow[Function1] =
-    new Choice[Function1] with Arrow[Function1] {
+  implicit val catsStdInstancesForFunction1: Choice[Function1] with CommutativeArrow[Function1] =
+    new Choice[Function1] with CommutativeArrow[Function1] {
       def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C = {
         case Left(a)  => f(a)
         case Right(b) => g(b)
@@ -90,8 +87,5 @@ private[instances] sealed trait Function1Instances {
     }
 
   implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
-    new MonoidK[λ[α => Function1[α, α]]] {
-      def empty[A]: A => A = identity[A]
-      def combineK[A](x: A => A, y: A => A): A => A = x compose y
-    }
+    Category[Function1].algebraK
 }

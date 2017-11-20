@@ -1,4 +1,4 @@
-  ---
+---
 layout: docs
 title:  "InvariantMonoidal"
 section: "typeclasses"
@@ -17,7 +17,7 @@ trait InvariantMonoidal[F[_]] {
 }
 ```
 
-Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Other notable examples are [`Semigroup`](semigroup.md) and [`Monoid`](monoid.md).
+Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Another notable examples is [`Semigroup`](semigroup.html).
 
 This tutorial first shows how `Semigroup` is `InvariantMonoidal`, and how this can be used create `Semigroup` instances by combining other `Semigroup` instances. Secondly, we present a complete example of `Codec` for the CSV format, and show how it is `InvariantMonoidal`. Lastly, we present an alternative definition of `InvariantMonoidal` as a generalization of `Invariant`, and show that both definitions are equivalent.
 
@@ -43,7 +43,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
   }
 ```
 
-Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Cartesian` syntax:
+Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Semigroupal` syntax:
 
 ```tut:silent
 import cats.implicits._
@@ -52,8 +52,8 @@ import cats.implicits._
 case class Foo(a: String, c: List[Double])
 
 implicit val fooSemigroup: Semigroup[Foo] = (
-  (implicitly[Semigroup[String]] |@| implicitly[Semigroup[List[Double]]])
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+  (implicitly[Semigroup[String]], implicitly[Semigroup[List[Double]]])
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 
@@ -105,7 +105,7 @@ trait CCProduct {
       def read(s: CSV): (Option[(A, B)], CSV) = {
         val (a1, s1) = fa.read(s)
         val (a2, s2) = fb.read(s1)
-        ((a1 |@| a2).map(_ -> _), s2)
+        ((a1, a2).mapN(_ -> _), s2)
       }
 
       def write(a: (A, B)): CSV =
@@ -163,15 +163,15 @@ def numericSystemCodec(base: Int): CsvCodec[Int] =
 case class BinDec(binary: Int, decimal: Int)
 
 val binDecCodec: CsvCodec[BinDec] = (
-  (numericSystemCodec(2) |@| numericSystemCodec(10))
-    .imap(BinDec.apply)(Function.unlift(BinDec.unapply))
+  (numericSystemCodec(2), numericSystemCodec(10))
+    .imapN(BinDec.apply)(Function.unlift(BinDec.unapply))
 )
 
 case class Foo(name: String, bd1: BinDec, bd2: BinDec)
 
 val fooCodec: CsvCodec[Foo] = (
-  (stringCodec |@| binDecCodec |@| binDecCodec)
-    .imap(Foo.apply)(Function.unlift(Foo.unapply))
+  (stringCodec, binDecCodec, binDecCodec)
+    .imapN(Foo.apply)(Function.unlift(Foo.unapply))
 )
 ```
 
@@ -189,7 +189,7 @@ fooCodec.read(fooCodec.write(foo)) == ((Some(foo), List()))
 
 # `InvariantMonoidal` as a generalization of `Invariant`
 
-To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to it's definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.md) are a generalization of [`Functor`](functor.md).
+To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to its definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
 
 Given an `Invariant[F]` instance for a certain *context* `F[_]`, its `imap` method gives a way to lift two *unary* pure functions `A => B` and `B => A` into *contextualized* functions `F[A] => F[B]`. But what about functions of other arity?
 

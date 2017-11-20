@@ -2,11 +2,12 @@ package cats
 package instances
 
 import cats.syntax.show._
+
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] =
-    new TraverseFilter[Stream] with MonadCombine[Stream] with CoflatMap[Stream] {
+  implicit val catsStdInstancesForStream: Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -21,7 +22,12 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         fa.flatMap(f)
 
       override def map2[A, B, Z](fa: Stream[A], fb: Stream[B])(f: (A, B) => Z): Stream[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
+        if (fb.isEmpty) Stream.empty // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Stream[A], fb: Eval[Stream[B]])(f: (A, B) => Z): Eval[Stream[Z]] =
+        if (fa.isEmpty) Eval.now(Stream.empty) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def coflatMap[A, B](fa: Stream[A])(f: Stream[A] => B): Stream[B] =
         fa.tails.toStream.init.map(f)
@@ -36,16 +42,10 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           if (s.isEmpty) lb else f(s.head, Eval.defer(foldRight(s.tail, lb)(f)))
         }
 
-      def traverseFilter[G[_], A, B](fa: Stream[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
-        // We use foldRight to avoid possible stack overflows. Since
-        // we don't want to return a Eval[_] instance, we call .value
-        // at the end.
-        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
-          G.map2Eval(f(a), lgsb)((ob, s) => ob.fold(s)(_ #:: s))
-        }.value
-      }
+      override def foldMap[A, B](fa: Stream[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
 
-      override def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
+      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
@@ -65,6 +65,12 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
         G.tailRecM((fa, List.empty[B]))(step)
       }
+
+      override def mapWithIndex[A, B](fa: Stream[A])(f: (A, Int) => B): Stream[B] =
+        fa.zipWithIndex.map(ai => f(ai._1, ai._2))
+
+      override def zipWithIndex[A](fa: Stream[A]): Stream[(A, Int)] =
+        fa.zipWithIndex
 
       def tailRecM[A, B](a: A)(fn: A => Stream[Either[A, B]]): Stream[B] = {
         val it: Iterator[B] = new Iterator[B] {
@@ -113,14 +119,41 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def forall[A](fa: Stream[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
+      override def get[A](fa: Stream[A])(idx: Long): Option[A] = {
+        @tailrec
+        def go(idx: Long, s: Stream[A]): Option[A] =
+          s match {
+            case h #:: tail =>
+              if (idx == 0L) Some(h) else go(idx - 1L, tail)
+            case _ => None
+          }
+        if (idx < 0L) None else go(idx, fa)
+      }
+
       override def isEmpty[A](fa: Stream[A]): Boolean = fa.isEmpty
 
-      override def filter[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filter(f)
+      override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {
+          val (s, b)  = in
+          if (s.isEmpty)
+            G.pure(Right(b))
+          else
+            G.map(f(b, s.head)) { bnext => Left((s.tail, bnext)) }
+        }
 
-      override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
+        G.tailRecM((fa, z))(step)
+      }
 
-      override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
+      override def fold[A](fa: Stream[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
+
+      override def toList[A](fa: Stream[A]): List[A] = fa.toList
+
+      override def reduceLeftOption[A](fa: Stream[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: Stream[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def algebra[A]: Monoid[Stream[A]] = new kernel.instances.StreamMonoid[A]
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =

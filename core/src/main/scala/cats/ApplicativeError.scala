@@ -76,6 +76,41 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e =>
       pf applyOrElse(e, raiseError))
+
+  /**
+   * Execute a callback on certain errors, then rethrow them.
+   * Any non matching error is rethrown as well.
+   *
+   * In the following example, only one of the errors is logged,
+   * but they are both rethrown, to be possibly handled by another
+   * layer of the program:
+   *
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> case class Err(msg: String)
+   *
+   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   *
+   * scala> val action: PartialFunction[Err, F[Unit]] = {
+   *      |   case Err("one") => EitherT.liftF(State.set("one"))
+   *      | }
+   *
+   * scala> val prog1: F[Int] = (Err("one")).raiseError[F, Int]
+   * scala> val prog2: F[Int] = (Err("two")).raiseError[F, Int]
+   *
+   * scala> prog1.onError(action).value.run("").value
+
+   * res0: (String, Either[Err,Int]) = (one,Left(Err(one)))
+   *
+   * scala> prog2.onError(action).value.run("").value
+   * res1: (String, Either[Err,Int]) = ("",Left(Err(two)))
+   * }}}
+   */
+  def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
+    handleErrorWith(fa)(e =>
+      (pf andThen (map2(_, raiseError[A](e))((_, b) => b))) applyOrElse(e, raiseError))
+
   /**
    * Often E is Throwable. Here we try to call pure or catch
    * and raise.
@@ -104,6 +139,24 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
       case Success(a) => pure(a)
       case Failure(e) => raiseError(e)
     }
+
+  /**
+   * Convert from scala.Either
+   *
+   * Example:
+   * {{{
+   * scala> import cats.ApplicativeError
+   * scala> import cats.instances.option._
+   *
+   * scala> ApplicativeError[Option, Unit].fromEither(Right(1))
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromEither(Left(()))
+   * res1: scala.Option[Nothing] = None
+   * }}}
+   */
+  def fromEither[A](x: E Either A): F[A] =
+    x.fold(raiseError, pure)
 }
 
 object ApplicativeError {

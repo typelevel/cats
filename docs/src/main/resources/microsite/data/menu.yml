@@ -1,6 +1,6 @@
 options:
 
-  ############################# 
+  #############################
   # Type Classes Menu Options #
   #############################
 
@@ -13,7 +13,7 @@ options:
     url: typeclasses/semigroup.html
     menu_type: typeclasses
     menu_section: semigroupsandmonoids
-    
+
     nested_options:
      - title: Semigroup
        url: typeclasses/semigroup.html
@@ -23,36 +23,31 @@ options:
        menu_section: semigroupsandmonoids
 
   - title: Applicative and Traversable Functors
-    url: typeclasses/functor.html
+    url: typeclasses/applicativetraverse.html
     menu_type: typeclasses
-    menu_section: aplicative
-    
+    menu_section: applicative
+
     nested_options:
      - title: Functor
        url: typeclasses/functor.html
-       menu_section: aplicative
-     - title: Apply
-       url: typeclasses/apply.html
-       menu_section: aplicative
+       menu_section: applicative
      - title: Applicative
        url: typeclasses/applicative.html
-       menu_section: aplicative
+       menu_section: applicative
      - title: Traverse
        url: typeclasses/traverse.html
        menu_type: typeclasses
-       menu_section: aplicative
+       menu_section: applicative
 
   - title: Monads
     url: typeclasses/functor.html
     menu_type: typeclasses
     menu_section: monads
-    
+
     nested_options:
      - title: Functor
        url: typeclasses/functor.html
        menu_section: monads
-     - title: Apply
-       url: typeclasses/apply.html
        menu_section: monads
      - title: Applicative
        url: typeclasses/applicative.html
@@ -66,7 +61,7 @@ options:
     url: typeclasses/functor.html
     menu_type: typeclasses
     menu_section: variance
-    
+
     nested_options:
      - title: Functor
        url: typeclasses/functor.html
@@ -77,17 +72,16 @@ options:
      - title: Invariant
        url: typeclasses/invariant.html
        menu_section: variance
+     - title: InvariantMonoidal
+       url: typeclasses/invariantmonoidal.html
+       menu_section: variance
+
+  - title: Eq
+    url: typeclasses/eq.html
+    menu_type: typeclasses
 
   - title: Foldable
     url: typeclasses/foldable.html
-    menu_type: typeclasses
-
-  - title: MonadCombine
-    url: typeclasses/monadcombine.html
-    menu_type: typeclasses
-
-  - title: MonadFilter
-    url: typeclasses/monadfilter.html
     menu_type: typeclasses
 
   - title: MonoidK
@@ -102,7 +96,19 @@ options:
     url: typeclasses/show.html
     menu_type: typeclasses
 
-  ########################### 
+  - title: Reducible
+    url: typeclasses/reducible.html
+    menu_type: typeclasses
+
+  - title: NonEmptyTraverse
+    url: typeclasses/nonemptytraverse.html
+    menu_type: typeclasses
+
+  - title: Arrow
+    url: typeclasses/arrow.html
+    menu_type: typeclasses
+
+  ###########################
   # Data Types Menu Options #
   ###########################
 
@@ -118,12 +124,28 @@ options:
     url: datatypes/either.html
     menu_type: data
 
+  - title: Eval
+    url: datatypes/eval.html
+    menu_type: data
+
   - title: FreeApplicatives
     url: datatypes/freeapplicative.html
     menu_type: data
 
   - title: FreeMonads
     url: datatypes/freemonad.html
+    menu_type: data
+
+  - title: FunctionK
+    url: datatypes/functionk.html
+    menu_type: data
+
+  - title: Id
+    url: datatypes/id.html
+    menu_type: data
+
+  - title: Ior
+    url: datatypes/ior.html
     menu_type: data
 
   - title: Kleisli
@@ -136,6 +158,10 @@ options:
 
   - title: OptionT
     url: datatypes/optiont.html
+    menu_type: data
+
+  - title: EitherT
+    url: datatypes/eithert.html
     menu_type: data
 
   - title: State

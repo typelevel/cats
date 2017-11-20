@@ -12,7 +12,7 @@ scaladoc: "#cats.MonoidK"
 This type class is useful when its type parameter `F[_]` has a
 structure that can be combined for any particular type, and which
 also has an "empty" representation. Thus, `MonoidK` is like a `Monoid`
-for kinds (i.e. parameterized types).
+for kinds (i.e. parametrized types).
 
 A `MonoidK[F]` can produce a `Monoid[F[A]]` for any type `A`.
 
@@ -35,7 +35,7 @@ import cats.{Monoid, MonoidK}
 import cats.implicits._
 ```
 
-Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parameterized on the type of the element contained in `F`:
+Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parametrized on the type of the element contained in `F`:
 
 ```tut:book
 Monoid[List[String]].empty

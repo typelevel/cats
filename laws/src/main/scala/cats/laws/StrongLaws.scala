@@ -1,7 +1,7 @@
 package cats
 package laws
 
-import cats.functor.Strong
+import cats.arrow.Strong
 import cats.syntax.profunctor._
 import cats.syntax.strong._
 import cats.instances.function._

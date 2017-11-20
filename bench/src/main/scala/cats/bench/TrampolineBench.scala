@@ -26,8 +26,8 @@ class TrampolineBench {
 
   def trampolineFib(n: Int): Trampoline[Int] =
     if (n < 2) Trampoline.done(n) else for {
-      x <- Trampoline.suspend(trampolineFib(n - 1))
-      y <- Trampoline.suspend(trampolineFib(n - 2))
+      x <- Trampoline.defer(trampolineFib(n - 1))
+      y <- Trampoline.defer(trampolineFib(n - 2))
     } yield x + y
 
   // TailRec[A] only has .flatMap in 2.11.

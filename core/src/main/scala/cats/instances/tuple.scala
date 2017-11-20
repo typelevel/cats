@@ -24,8 +24,8 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
     }
   }
 
-  implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] =
-    new Traverse[(X, ?)] with Comonad[(X, ?)] {
+  implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] =
+    new Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))
 
@@ -40,6 +40,40 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def extract[A](fa: (X, A)): A = fa._2
 
       override def coflatten[A](fa: (X, A)): (X, (X, A)) = (fa._1, fa)
+
+      override def foldMap[A, B](fa: (X, A))(f: A => B)(implicit B: Monoid[B]): B = f(fa._2)
+
+      override def reduce[A](fa: (X, A))(implicit A: Semigroup[A]): A = fa._2
+
+      def reduceLeftTo[A, B](fa: (X, A))(f: A => B)(g: (B, A) => B): B = f(fa._2)
+
+      override def reduceLeft[A](fa: (X, A))(f: (A, A) => A): A = fa._2
+
+      override def reduceLeftToOption[A, B](fa: (X, A))(f: A => B)(g: (B, A) => B): Option[B] =
+        Some(f(fa._2))
+
+      override def reduceRight[A](fa: (X, A))(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        Now(fa._2)
+
+      def reduceRightTo[A, B](fa: (X, A))(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Now(f(fa._2))
+
+      override def reduceRightToOption[A, B](fa: (X, A))(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(Some(f(fa._2)))
+
+      override def reduceMap[A, B](fa: (X, A))(f: A => B)(implicit B: Semigroup[B]): B =
+        f(fa._2)
+
+      override def size[A](fa: (X, A)): Long = 1L
+
+      override def get[A](fa: (X, A))(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa._2) else None
+
+      override def exists[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)
+
+      override def forall[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)
+
+      override def isEmpty[A](fa: (X, A)): Boolean = false
     }
 }
 
@@ -78,6 +112,9 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
 
   override def followedBy[A, B](a: (X, A))(b: (X, B)): (X, B) =
     (s.combine(a._1, b._1), b._2)
+
+  override def forEffect[A, B](a: (X, A))(b: (X, B)): (X, A) =
+    (s.combine(a._1, b._1), a._2)
 
   override def mproduct[A, B](fa: (X, A))(f: A => (X, B)): (X, (A, B)) = {
     val xb = f(fa._2)

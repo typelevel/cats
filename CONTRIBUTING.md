@@ -1,10 +1,3 @@
----
-layout: page
-title:  "Contributing"
-section: "contributing"
-position: 5
----
-
 # Contributor guide
 
 ## About this document
@@ -171,8 +164,8 @@ Write about checking laws
 ### source for the documentation
 The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
 
-* The source for the static pages is in `docs/src/site`
 * The source for the tut compiled pages is in `docs/src/main/tut`
+* The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
 
 ### Generating the Site
 

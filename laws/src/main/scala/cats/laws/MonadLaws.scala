@@ -36,7 +36,7 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
   def mapFlatMapCoherence[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.flatMap(a => F.pure(f(a))) <-> fa.map(f)
 
-  val tailRecMStackSafety: IsEq[F[Int]] = {
+  lazy val tailRecMStackSafety: IsEq[F[Int]] = {
     val n = 50000
     val res = F.tailRecM(0)(i => F.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
     res <-> F.pure(n)

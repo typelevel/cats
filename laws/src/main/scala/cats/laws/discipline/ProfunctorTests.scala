@@ -2,9 +2,9 @@ package cats
 package laws
 package discipline
 
-import cats.functor.Profunctor
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
+import cats.arrow.Profunctor
 import org.typelevel.discipline.Laws
 
 trait ProfunctorTests[F[_, _]] extends Laws {

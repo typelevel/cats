@@ -1,7 +1,7 @@
 package cats
 package arrow
 
-import cats.data.Coproduct
+import cats.data.{EitherK, Tuple2K}
 
 import cats.macros.MacroCompat
 
@@ -27,9 +27,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
     * transformation applied last.
     */
   def compose[E[_]](f: FunctionK[E, F]): FunctionK[E, G] =
-    new FunctionK[E, G] {
-      def apply[A](fa: E[A]): G[A] = self.apply(f(fa))
-    }
+    λ[FunctionK[E, G]](fa => self(f(fa)))
 
   /**
     * Composes two instances of FunctionK into a new FunctionK with this
@@ -40,15 +38,29 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
 
   /**
     * Composes two instances of FunctionK into a new FunctionK that transforms
-    * a [[cats.data.Coproduct]] to a single functor.
+    * a [[cats.data.EitherK]] to a single functor.
     *
     * This transformation will be used to transform left `F` values while
     * `h` will be used to transform right `H` values.
     */
-  def or[H[_]](h: FunctionK[H, G]): FunctionK[Coproduct[F, H, ?], G] =
-    new FunctionK[Coproduct[F, H, ?], G] {
-      def apply[A](fa: Coproduct[F, H, A]): G[A] = fa.fold(self, h)
-    }
+  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, ?], G] =
+    λ[FunctionK[EitherK[F, H, ?], G]](fa => fa.fold(self, h))
+
+  /**
+   * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
+   * one single functor to a [[cats.data.Tuple2K]] of two functors.
+   *
+   * {{{
+   * scala> import cats.arrow.FunctionK
+   * scala> val list2option = λ[FunctionK[List, Option]](_.headOption)
+   * scala> val list2vector = λ[FunctionK[List, Vector]](_.toVector)
+   * scala> val optionAndVector = list2option and list2vector
+   * scala> optionAndVector(List(1,2,3))
+   * res0: cats.data.Tuple2K[Option,Vector,Int] = Tuple2K(Some(1),Vector(1, 2, 3))
+   * }}}
+   */
+  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, ?]] =
+    λ[FunctionK[F, Tuple2K[G, H, ?]]](fa => Tuple2K(self(fa), h(fa)))
 }
 
 object FunctionK {
@@ -56,10 +68,8 @@ object FunctionK {
   /**
     * The identity transformation of `F` to `F`
     */
-  def id[F[_]]: FunctionK[F, F] =
-    new FunctionK[F, F] {
-      def apply[A](fa: F[A]): F[A] = fa
-    }
+  def id[F[_]]: FunctionK[F, F] = λ[FunctionK[F, F]](fa => fa)
+
 
   /**
     * Lifts function `f` of `F[A] => G[A]` into a `FunctionK[F, G]`.

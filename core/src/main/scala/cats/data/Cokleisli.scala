@@ -1,9 +1,9 @@
 package cats
 package data
 
-import cats.arrow.{Arrow, Split}
-import cats.functor.{Contravariant, Profunctor}
-import cats.{CoflatMap, Comonad, Functor, Monad}
+import cats.arrow._
+import cats.{CoflatMap, Comonad, Contravariant, Functor, Monad}
+
 import scala.annotation.tailrec
 
 /**
@@ -11,15 +11,47 @@ import scala.annotation.tailrec
  */
 final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
 
+  /**
+    * Example:
+    * {{{
+    * scala> import cats._, data._
+    * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
+    * scala> def before(x: Double) = x.toInt
+    * scala> def after(x: Int) = x.toString
+    * scala> f.dimap(before)(after).run(NonEmptyList.of(1.0,2.0))
+    * res0: String = 2
+    * }}}
+    */
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Cokleisli[F, C, D] =
     Cokleisli(fc => g(run(F.map(fc)(f))))
 
+  /**
+    * Example:
+    * {{{
+    * scala> import cats._, data._, implicits._
+    * scala> val f = Cokleisli((xs: NonEmptyList[Int]) => xs.reverse.head)
+    * scala> def before(x: Double) = x.toInt
+    * scala> def after(x: Int) = x.toString
+    * scala> f.lmap(before).rmap(after).run(NonEmptyList.of(1.0,2.0))
+    * res0: String = 2
+    * }}}
+    */
   def lmap[C](f: C => A)(implicit F: Functor[F]): Cokleisli[F, C, B] =
     Cokleisli(fc => run(F.map(fc)(f)))
 
   def map[C](f: B => C): Cokleisli[F, A, C] =
     Cokleisli(f compose run)
 
+  /**
+    * Example:
+    * {{{
+    * scala> import cats._, data._
+    * scala> val sum = Cokleisli((xs: NonEmptyList[Int]) => xs.reduceLeft(_ + _))
+    *
+    * scala> sum.contramapValue((xs: NonEmptyList[String]) => xs.map(_.toInt)).run(NonEmptyList.of("1","2","3"))
+    * res4: Int = 6
+    * }}}
+    */
   def contramapValue[C](f: F[C] => F[A]): Cokleisli[F, C, B] =
     Cokleisli(run compose f)
 
@@ -45,43 +77,33 @@ object Cokleisli extends CokleisliInstances {
 }
 
 private[data] sealed abstract class CokleisliInstances extends CokleisliInstances0 {
-  implicit def catsDataArrowForCokleisli[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
-    new CokleisliArrow[F] { def F: Comonad[F] = ev }
 
-  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] = new Monad[Cokleisli[F, A, ?]] {
-    def pure[B](x: B): Cokleisli[F, A, B] =
-      Cokleisli.pure(x)
-
-    def flatMap[B, C](fa: Cokleisli[F, A, B])(f: B => Cokleisli[F, A, C]): Cokleisli[F, A, C] =
-      fa.flatMap(f)
-
-    override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
-      fa.map(f)
-
-    def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, Either[B, C]]): Cokleisli[F, A, C] =
-      Cokleisli({ (fa: F[A]) =>
-        @tailrec
-        def loop(c: Cokleisli[F, A, Either[B, C]]): C = c.run(fa) match {
-          case Right(c) => c
-          case Left(bb) => loop(fn(bb))
-        }
-        loop(fn(b))
-      })
+  implicit val catsDataCommutativeArrowForCokleisliId: CommutativeArrow[Cokleisli[Id, ?, ?]] =
+    new CokleisliArrow[Id] with CommutativeArrow[Cokleisli[Id, ?, ?]] {
+      def F: Comonad[Id] = Comonad[Id]
   }
 
+  implicit def catsDataMonadForCokleisli[F[_], A]: Monad[Cokleisli[F, A, ?]] =
+    new CokleisliMonad[F, A]
+
   implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[λ[α => Cokleisli[F, α, α]]] =
-    new CokleisliMonoidK[F] { def F: Comonad[F] = ev }
+    Category[Cokleisli[F, ?, ?]].algebraK
 }
 
-private[data] sealed abstract class CokleisliInstances0 {
-  implicit def catsDataSplitForCokleisli[F[_]](implicit ev: CoflatMap[F]): Split[Cokleisli[F, ?, ?]] =
-    new CokleisliSplit[F] { def F: CoflatMap[F] = ev }
+private[data] sealed abstract class CokleisliInstances0 extends CokleisliInstances1 {
+  implicit def catsDataArrowForCokleisli[F[_]](implicit ev: Comonad[F]): Arrow[Cokleisli[F, ?, ?]] =
+    new CokleisliArrow[F] { def F: Comonad[F] = ev }
+}
+
+private[data] sealed abstract class CokleisliInstances1 {
+  implicit def catsDataComposeForCokleisli[F[_]](implicit ev: CoflatMap[F]): Compose[Cokleisli[F, ?, ?]] =
+    new CokleisliCompose[F] { def F: CoflatMap[F] = ev }
 
   implicit def catsDataProfunctorForCokleisli[F[_]](implicit ev: Functor[F]): Profunctor[Cokleisli[F, ?, ?]] =
     new CokleisliProfunctor[F] { def F: Functor[F] = ev }
 
   implicit def catsDataSemigroupKForCokleisli[F[_]](implicit ev: CoflatMap[F]): SemigroupK[λ[α => Cokleisli[F, α, α]]] =
-    new CokleisliSemigroupK[F] { def F: CoflatMap[F] = ev }
+    Compose[Cokleisli[F, ?, ?]].algebraK
 
   implicit def catsDataContravariantForCokleisli[F[_]: Functor, A]: Contravariant[Cokleisli[F, ?, A]] =
     new Contravariant[Cokleisli[F, ?, A]] {
@@ -89,7 +111,32 @@ private[data] sealed abstract class CokleisliInstances0 {
     }
 }
 
-private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with CokleisliSplit[F] with CokleisliProfunctor[F] {
+
+
+private[data] class CokleisliMonad[F[_], A] extends Monad[Cokleisli[F, A, ?]] {
+
+  def pure[B](x: B): Cokleisli[F, A, B] =
+    Cokleisli.pure(x)
+
+  def flatMap[B, C](fa: Cokleisli[F, A, B])(f: B => Cokleisli[F, A, C]): Cokleisli[F, A, C] =
+    fa.flatMap(f)
+
+  override def map[B, C](fa: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
+    fa.map(f)
+
+  def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, Either[B, C]]): Cokleisli[F, A, C] =
+    Cokleisli({ (fa: F[A]) =>
+      @tailrec
+      def loop(c: Cokleisli[F, A, Either[B, C]]): C = c.run(fa) match {
+        case Right(c) => c
+        case Left(bb) => loop(fn(bb))
+      }
+      loop(fn(b))
+    })
+
+}
+
+private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with CokleisliCompose[F] with CokleisliProfunctor[F] {
   implicit def F: Comonad[F]
 
   def lift[A, B](f: A => B): Cokleisli[F, A, B] =
@@ -108,17 +155,14 @@ private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with Coklei
     super[CokleisliProfunctor].dimap(fab)(f)(g)
 
   override def split[A, B, C, D](f: Cokleisli[F, A, B], g: Cokleisli[F, C, D]): Cokleisli[F, (A, C), (B, D)] =
-    super[CokleisliSplit].split(f, g)
+    Cokleisli(fac => f.run(F.map(fac)(_._1)) -> g.run(F.map(fac)(_._2)))
 }
 
-private trait CokleisliSplit[F[_]] extends Split[Cokleisli[F, ?, ?]] {
+private trait CokleisliCompose[F[_]] extends Compose[Cokleisli[F, ?, ?]] {
   implicit def F: CoflatMap[F]
 
   def compose[A, B, C](f: Cokleisli[F, B, C], g: Cokleisli[F, A, B]): Cokleisli[F, A, C] =
     f.compose(g)
-
-  def split[A, B, C, D](f: Cokleisli[F, A, B], g: Cokleisli[F, C, D]): Cokleisli[F, (A, C), (B, D)] =
-    Cokleisli(fac => f.run(F.map(fac)(_._1)) -> g.run(F.map(fac)(_._2)))
 }
 
 private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
@@ -132,16 +176,4 @@ private trait CokleisliProfunctor[F[_]] extends Profunctor[Cokleisli[F, ?, ?]] {
 
   override def rmap[A, B, C](fab: Cokleisli[F, A, B])(f: B => C): Cokleisli[F, A, C] =
     fab.map(f)
-}
-
-private trait CokleisliSemigroupK[F[_]] extends SemigroupK[λ[α => Cokleisli[F, α, α]]] {
-  implicit def F: CoflatMap[F]
-
-  def combineK[A](a: Cokleisli[F, A, A], b: Cokleisli[F, A, A]): Cokleisli[F, A, A] = a compose b
-}
-
-private trait CokleisliMonoidK[F[_]] extends MonoidK[λ[α => Cokleisli[F, α, α]]] with CokleisliSemigroupK[F] {
-  implicit def F: Comonad[F]
-
-  def empty[A]: Cokleisli[F, A, A] = Cokleisli(F.extract[A])
 }

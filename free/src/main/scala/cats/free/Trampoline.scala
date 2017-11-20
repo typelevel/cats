@@ -7,10 +7,14 @@ private[free] abstract class TrampolineFunctions {
   def done[A](a: A): Trampoline[A] =
     Free.pure[Function0, A](a)
 
+  @deprecated("Use Trampoline.defer.", "1.0.0-MF")
   def suspend[A](a: => Trampoline[A]): Trampoline[A] =
-    Free.suspend(a)
+    defer(a)
+
+  def defer[A](a: => Trampoline[A]): Trampoline[A] =
+    Free.defer(a)
 
   def delay[A](a: => A): Trampoline[A] =
-    suspend(done(a))
+    defer(done(a))
 }
 

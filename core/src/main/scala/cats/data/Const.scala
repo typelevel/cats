@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.Contravariant
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
@@ -16,9 +16,6 @@ final case class Const[A, B](getConst: A) {
 
   def combine(that: Const[A, B])(implicit A: Semigroup[A]): Const[A, B] =
     Const(A.combine(getConst, that.getConst))
-
-  def traverseFilter[F[_], C](f: B => F[Option[C]])(implicit F: Applicative[F]): F[Const[A, C]] =
-    F.pure(retag[C])
 
   def traverse[F[_], C](f: B => F[C])(implicit F: Applicative[F]): F[Const[A, C]] =
     F.pure(retag[C])
@@ -39,6 +36,23 @@ final case class Const[A, B](getConst: A) {
 object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  private[data] final class OfPartiallyApplied[B](val dummy: Boolean = true ) extends AnyVal {
+    def apply[A](a: A): Const[A, B] = Const(a)
+  }
+
+  /**
+   * Convenient syntax for creating a Const[A, B] from an `A`
+   * {{{
+   * scala> import cats.data._
+   * scala> Const.of[Int]("a")
+   * res0: Const[String, Int] = Const(a)
+   * }}}
+   */
+  def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
 }
 
 private[data] sealed abstract class ConstInstances extends ConstInstances0 {
@@ -56,15 +70,16 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       fa.retag[B]
   }
 
-  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, ?]] = new TraverseFilter[Const[C, ?]] {
-    def traverseFilter[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[Option[B]]): G[Const[C, B]] =
-      fa.traverseFilter(f)
-
+  implicit def catsDataTraverseForConst[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {
     def foldLeft[A, B](fa: Const[C, A], b: B)(f: (B, A) => B): B = b
 
     def foldRight[A, B](fa: Const[C, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = lb
 
-    override def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
+    override def size[A](fa: Const[C, A]): Long = 0L
+
+    override def get[A](fa: Const[C, A])(idx: Long): Option[A] = None
+
+    def traverse[G[_]: Applicative, A, B](fa: Const[C, A])(f: A => G[B]): G[Const[C, B]] =
       fa.traverse(f)
   }
 

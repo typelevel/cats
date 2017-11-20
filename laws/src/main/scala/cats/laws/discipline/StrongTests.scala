@@ -2,9 +2,9 @@ package cats
 package laws
 package discipline
 
-import cats.functor.Strong
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
+import cats.arrow.Strong
 
 trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
   def laws: StrongLaws[F]

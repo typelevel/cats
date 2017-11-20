@@ -199,7 +199,7 @@ combine(x, combine(y, z)) = combine(combine(x, y), z)
 combine(x, id) = combine(id, x) = x
 ```
 
-With these laws in place, functions parameterized over a `Monoid` can leverage them for say, performance
+With these laws in place, functions parametrized over a `Monoid` can leverage them for say, performance
 reasons. A function that collapses a `List[A]` into a single `A` can do so with `foldLeft` or
 `foldRight` since `combine` is assumed to be associative, or it can break apart the list into smaller
 lists and collapse in parallel, such as
@@ -221,52 +221,41 @@ val result = Monoid[Int].combine(sumLeft, sumRight)
 Cats provides laws for type classes via the `kernel-laws` and `laws` modules which makes law checking
 type class instances easy.
 
+You can find out more about law testing [here](typeclasses/lawtesting.html).
+
+## Type classes in cats
+
+<img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
+From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
+
+
+## Incomplete type class instances in cats
+
+Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ace53cb70a1fd5d)
+
+
+| Type            | Functor | Apply             | Applicative | Monad | MonoidK | ApplicativeError  | MonadError | CoflatMap | Comonad |
+| --------------- |:-------:|:-----------------:|:-----------:|:-----:|:-------:|:-----------------:|:----------:|:---------:|:-------:|
+| Id[A]           | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
+| Eval[A]         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
+| Option[A]       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
+| Const[K, A]     | ✔       | ✔ (`K:Monoid`)    | ✔           | ✗     | ✗       | ✗                 | ✗          | ✗         | ✗       |
+| Either[E, A]    | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✗         | ✗       |
+| List[A]         | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
+| NonEmptyList[A] | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
+| Stream[A]       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
+| Map[K, A]       | ✔       | ✔                 | ✗           | ✗     | ✔       | ✗                 | ✗          | ✗         | ✗       |
+| Validated[E, A] | ✔       | ✔ (`E: Semigroup`)| ✔           | ✗     | ✗       | ✔ (`E: Semigroup`)| ✗          | ✗         | ✗       |
+| Reader[E, A]    | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✗         | ✗       |
+| Writer[E, A]    | ✔       | ✔ (`E:Monoid`)    | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✗       |
+
+
+
+
 ## Further reading
 * [Returning the "Current" Type in Scala][fbounds]
 
-![Typeclass hierarchy](http://g.gravizo.com/g?
-  digraph G {
-    size ="6,6";
-    edge [dir=back]
-    node [shape=box,style="rounded"]
-    Functor [group=g2]
-    Apply [group=g2]
-    Applicative [group=g2]
-    Monad [group=g2]
-    SemigroupK [group=g1]
-    MonoidK [group=g1]
-    Alternative [group=g1]
-    MonadFilter [group=g1]
-    MonadCombine [group=g1]
-    Invariant [group=g4]
-    Contravariant [group=g4]
-    CoflatMap [group=g5]
-    Comonad [group=g5]
-    Bimonad [group=g5]
-    Functor -> Apply -> Applicative -> Monad -> MonadFilter -> MonadCombine
-    Applicative -> Alternative -> MonadCombine
-    MonoidK -> Alternative
-    Functor -> CoflatMap
-    subgraph cluster_s3{
-      Invariant -> Contravariant
-      graph[style=dotted,label="functor"]
-    }
-    Invariant -> Functor
-    subgraph cluster_s2{
-      SemigroupK -> MonoidK
-      graph[style=dotted]
-    }
-    subgraph cluster_s1{
-      CoflatMap -> Comonad -> Bimonad
-      graph[style=dotted]
-    }
-    Monad -> Bimonad
-    Apply -> FlatMap -> Monad
-    Foldable -> Traverse
-    Functor -> Traverse
-    Foldable -> Reducible
-  }
-)
+
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
 [simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"

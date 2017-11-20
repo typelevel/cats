@@ -4,7 +4,7 @@ package syntax
 import cats.data.Writer
 
 trait WriterSyntax {
-  implicit def catsSyntaxWriterId[A](a: A): WriterIdSyntax[A] = new WriterIdSyntax(a)
+  implicit final def catsSyntaxWriterId[A](a: A): WriterIdSyntax[A] = new WriterIdSyntax(a)
 }
 
 final class WriterIdSyntax[A](val a: A) extends AnyVal {

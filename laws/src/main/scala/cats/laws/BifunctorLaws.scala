@@ -1,6 +1,6 @@
 package cats.laws
 
-import cats.functor.Bifunctor
+import cats.Bifunctor
 import cats.syntax.bifunctor._
 
 /**

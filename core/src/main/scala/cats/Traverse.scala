@@ -1,5 +1,8 @@
 package cats
 
+import cats.data.State
+import cats.data.StateT
+
 import simulacrum.typeclass
 
 /**
@@ -33,32 +36,14 @@ import simulacrum.typeclass
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
-   * This is exactly like traverse, except that it requires a Monad[G].
-   * It does this so that can use tailRecM to avoid stack overflows.
-   *
-   * combinators and potentially large data-structures should ideally
-   * override this.
-   */
-  def traverseM[G[_]: Monad, A, B](fa: F[A])(f: A => G[B]): G[F[B]] =
-    traverse[G, A, B](fa)(f)
-
-  /**
-   * Behaves just like traverse, but uses [[Unapply]] to find the
-   * Applicative instance for G.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_ => "no number")
-   * scala> val ns = List("1", "2", "3")
-   * scala> ns.traverseU(parseInt)
-   * res0: Either[String, List[Int]] = Right(List(1, 2, 3))
-   * scala> ns.traverse[Either[String, ?], Int](parseInt)
-   * res1: Either[String, List[Int]] = Right(List(1, 2, 3))
-   * }}}
-   */
-  def traverseU[A, GB](fa: F[A])(f: A => GB)(implicit U: Unapply[Applicative, GB]): U.M[F[U.A]] =
-    U.TC.traverse(fa)(a => U.subst(f(a)))(this)
+    * This is exactly like traverse, except that it requires a Monad[G].
+    * It does this so that can use tailRecM to avoid stack overflows.
+    *
+    * combinators and potentially large data-structures should ideally
+    * override this.
+    */
+  def traverseM[M[_]: Monad, A, B](fa: F[A])(f: A => M[B]): M[F[B]] =
+    traverse[M, A, B](fa)(f)
 
   /**
    * A traverse followed by flattening the inner result.
@@ -111,36 +96,42 @@ import simulacrum.typeclass
   def flatSequence[G[_], A](fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]] =
     G.map(sequence(fgfa))(F.flatten)
 
-  /**
-   * Behaves just like sequence, but uses [[Unapply]] to find the
-   * Applicative instance for G.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.data.{Validated, ValidatedNel}
-   * scala> import cats.implicits._
-   * scala> val x: List[ValidatedNel[String, Int]] = List(Validated.valid(1), Validated.invalid("a"), Validated.invalid("b")).map(_.toValidatedNel)
-   * scala> x.sequenceU
-   * res0: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
-   * scala> x.sequence[ValidatedNel[String, ?], Int]
-   * res1: cats.data.ValidatedNel[String,List[Int]] = Invalid(NonEmptyList(a, b))
-   * }}}
-   */
-  def sequenceU[GA](fga: F[GA])(implicit U: Unapply[Applicative, GA]): U.M[F[U.A]] =
-    traverse(fga)(U.subst)(U.TC)
-
   def compose[G[_]: Traverse]: Traverse[λ[α => F[G[α]]]] =
     new ComposedTraverse[F, G] {
       val F = self
       val G = Traverse[G]
     }
 
-  def composeFilter[G[_]: TraverseFilter]: TraverseFilter[λ[α => F[G[α]]]] =
-    new ComposedTraverseFilter[F, G] {
-      val F = self
-      val G = TraverseFilter[G]
-    }
-
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     traverse[Id, A, B](fa)(f)
+
+  /**
+   * Akin to [[map]], but also provides the value's index in structure
+   * F when calling the function.
+   */
+  def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
+    traverse(fa)(a =>
+      State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+
+  /**
+   * Akin to [[traverse]], but also provides the value's index in
+   * structure F when calling the function.
+   *
+   * This performs the traversal in a single pass but requires that
+   * effect G is monadic. An applicative traversal can be performed in
+   * two passes using [[zipWithIndex]] followed by [[traverse]].
+   */
+  def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
+    traverse(fa)(a =>
+      StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+
+  /**
+   * Traverses through the structure F, pairing the values with
+   * assigned indices.
+   *
+   * The behavior is consistent with the Scala collection library's
+   * `zipWithIndex` for collections such as `List`.
+   */
+  def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
+    mapWithIndex(fa)((a, i) => (a, i))
 }

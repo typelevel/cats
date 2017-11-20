@@ -5,7 +5,7 @@ import cats.macros.Ops
 import cats.kernel.Comparison
 
 trait OrderSyntax extends PartialOrderSyntax {
-  implicit def catsSyntaxOrder[A: Order](a: A): OrderOps[A] =
+  implicit final def catsSyntaxOrder[A: Order](a: A): OrderOps[A] =
     new OrderOps[A](a)
 }
 

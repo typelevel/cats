@@ -1,7 +1,5 @@
 package cats
 
-import cats.functor.Contravariant
-
 import simulacrum.typeclass
 
 /**
@@ -11,10 +9,10 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.FunctorLaws.
  */
-@typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
+@typeclass trait Functor[F[_]] extends Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
-  def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = map(fa)(f)
+  override def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B] = map(fa)(f)
 
   // derived methods
 
@@ -52,16 +50,20 @@ import simulacrum.typeclass
    */
   def as[A, B](fa: F[A], b: B): F[B] = map(fa)(_ => b)
 
+  /**
+    * Tuples the `A` value in `F[A]` with the supplied `B` value, with the `B` value on the left.
+    */
+  def tupleLeft[A, B](fa: F[A], b: B): F[(B, A)] = map(fa)(a => (b, a))
+
+  /**
+    * Tuples the `A` value in `F[A]` with the supplied `B` value, with the `B` value on the right.
+    */
+  def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
+
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
     new ComposedFunctor[F, G] {
       val F = self
       val G = Functor[G]
-    }
-
-  def composeFilter[G[_]: FunctorFilter]: FunctorFilter[λ[α => F[G[α]]]] =
-    new ComposedFunctorFilter[F, G] {
-      val F = self
-      val G = FunctorFilter[G]
     }
 
   override def composeContravariant[G[_]: Contravariant]: Contravariant[λ[α => F[G[α]]]] =

@@ -4,19 +4,27 @@ sudo: required
 
 dist: trusty
 
+group: edge
+
 git:
   depth: 9999
 
 scala:
   - 2.10.6
-  - 2.11.8
+  - 2.11.11
+  - 2.12.3
 
 jdk:
   - oraclejdk7
+  - oraclejdk8
 
 matrix:
-  include:
-  - scala: 2.12.0
+  exclude:
+  - scala: 2.12.3
+    jdk: oraclejdk7
+  - scala: 2.10.6
+    jdk: oraclejdk8
+  - scala: 2.11.11
     jdk: oraclejdk8
 
 before_install:
@@ -38,11 +46,15 @@ notifications:
     on_success: change
     on_failure: always
     on_start: false
+
 env:
+  matrix:
+    - JS_BUILD=false
+    - JS_BUILD=true
   global:
-  - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
-  - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
-  - TRAVIS_NODE_VERSION="4"
+    - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
+    - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
+    - TRAVIS_NODE_VERSION="4"
 
 cache:
   directories:

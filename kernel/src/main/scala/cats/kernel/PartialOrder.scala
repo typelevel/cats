@@ -73,25 +73,6 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
     else None
   }
 
-  /**
-   * Defines a partial order on `B` by mapping `B` to `A` using `f`
-   * and using `A`s order to order `B`.
-   */
-  override def on[@sp B](f: B => A): PartialOrder[B] =
-    new PartialOrder[B] {
-      def partialCompare(x: B, y: B): Double = self.partialCompare(f(x), f(y))
-    }
-
-  /**
-   * Defines a partial order on `A` where all arrows switch direction.
-   */
-  def reverse: PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double = self.partialCompare(y, x)
-
-      override def reverse: PartialOrder[A] = self
-    }
-
   // The following may be overridden for performance:
 
   /**
@@ -153,7 +134,17 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
-    ev.on(f)
+    new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double = ev.partialCompare(f(x), f(y))
+    }
+
+  /**
+    * Defines a partial order on `A` from p where all arrows switch direction.
+    */
+  def reverse[@sp A](p: PartialOrder[A]): PartialOrder[A] =
+    new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double = p.partialCompare(y, x)
+    }
 
   /**
    * Define a `PartialOrder[A]` using the given function `f`.
