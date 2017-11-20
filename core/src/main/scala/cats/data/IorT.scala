@@ -406,18 +406,18 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
   implicit def catsDataFoldableForIorT[F[_], A](implicit F: Foldable[F]): Foldable[IorT[F, A, ?]] =
     new IorTFoldable[F, A] { val F0: Foldable[F] = F }
 
-  implicit def catsDataMonadErrorFForIorT[F[_], A, E](implicit FE: MonadError[F, E], A: Semigroup[A]): MonadError[IorT[F, A, ?], E] =
-    new IorTMonadErrorF[F, A, E] {
-      val A0: Semigroup[A] = A
-      val F0: MonadError[F, E] = FE
-    }
-}
-
-private[data] abstract class IorTInstances2 extends IorTInstances3 {
   implicit def catsDataMonadErrorForIorT[F[_], A](implicit F: Monad[F], A: Semigroup[A]): MonadError[IorT[F, A, ?], A] =
     new IorTMonadError[F, A] {
       val A0: Semigroup[A] = A
       val F0: Monad[F] = F
+    }
+}
+
+private[data] abstract class IorTInstances2 extends IorTInstances3 {
+  implicit def catsDataMonadErrorFForIorT[F[_], A, E](implicit FE: MonadError[F, E], A: Semigroup[A]): MonadError[IorT[F, A, ?], E] =
+    new IorTMonadErrorF[F, A, E] {
+      val A0: Semigroup[A] = A
+      val F0: MonadError[F, E] = FE
     }
 
   implicit def catsDataEqForIorT[F[_], A, B](implicit F: Eq[F[Ior[A, B]]]): Eq[IorT[F, A, B]] =
