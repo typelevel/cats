@@ -230,6 +230,21 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[IncompatibleResultTypeProblem]("cats.instances.package#set.catsStdInstancesForSet"),
       exclude[IncompatibleResultTypeProblem]("cats.instances.MapInstances.catsStdInstancesForMap"),
       exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT")
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority3"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority2"),
+      exclude[MissingTypesProblem]("cats.data.OneAndLowPriority1"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority3.catsDataNonEmptyTraverseForOneAnd"),
+      exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipVector"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForZipStream"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipList"),
+      exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForFailFastFuture"),
+      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
+      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirstSome"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirst"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirstSome"),
+      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst")
     )
   }
 )

@@ -137,6 +137,10 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def algebra[A]: Monoid[Queue[A]] =
         new kernel.instances.QueueMonoid[A]
+
+      override def collectFirst[A, B](fa: Queue[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Queue[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForQueue[A:Show]: Show[Queue[A]] =

@@ -109,6 +109,12 @@ object SetInstances {
         fa.reduceLeftOption(f)
 
       override def find[A](fa: Set[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def collectFirst[A, B](fa: Set[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 }
 
