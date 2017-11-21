@@ -284,7 +284,7 @@ private[data] sealed trait CommonIRWSTConstructors {
       def apply[A](fa: F[A]): IndexedReaderWriterStateT[F, E, L, S, S, A] = IndexedReaderWriterStateT.liftF(fa)
     }
 
-  @deprecated("Use liftF instead", "1.0.0-RC2")
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
     IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
 

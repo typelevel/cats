@@ -191,7 +191,7 @@ private[data] trait CommonStateTConstructors {
       def apply[A](fa: F[A]): IndexedStateT[F, S, S, A] = IndexedStateT.liftF(fa)
     }
 
-  @deprecated("Use liftF instead", "1.0.0-RC2")
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(fa)(a => (s, a)))
 

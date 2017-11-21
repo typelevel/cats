@@ -102,7 +102,7 @@ private[data] sealed trait KleisliFunctions {
       Kleisli(_ => x)
   }
 
-  @deprecated("Use liftF instead", "1.0.0-RC2")
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 

@@ -85,7 +85,7 @@ object WriterT extends WriterTInstances with WriterTFunctions {
       def apply[V](fa: F[V]): WriterT[F, L, V] = WriterT.liftF(fa)
     }
 
-  @deprecated("Use liftF instead", "1.0.0-RC2")
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))
 
