@@ -124,6 +124,10 @@ options:
     url: datatypes/either.html
     menu_type: data
 
+  - title: EitherT
+    url: datatypes/eithert.html
+    menu_type: data
+
   - title: Eval
     url: datatypes/eval.html
     menu_type: data
@@ -152,16 +156,16 @@ options:
     url: datatypes/kleisli.html
     menu_type: data
 
+  - title: NonEmptyList
+    url: datatypes/nonemptylist.html
+    menu_type: data
+
   - title: OneAnd
     url: datatypes/oneand.html
     menu_type: data
 
   - title: OptionT
     url: datatypes/optiont.html
-    menu_type: data
-
-  - title: EitherT
-    url: datatypes/eithert.html
     menu_type: data
 
   - title: State
