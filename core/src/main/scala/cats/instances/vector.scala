@@ -101,6 +101,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
+
+      override def collectFirst[A, B](fa: Vector[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

@@ -4,6 +4,7 @@ import scala.collection.mutable
 import cats.instances.either._
 import cats.instances.long._
 import simulacrum.typeclass
+import Foldable.sentinel
 
 /**
  * Data structures that can be folded to a summary value.
@@ -213,6 +214,35 @@ import simulacrum.typeclass
         case Left(a) => Some(a)
         case Right(_) => None
       }
+
+  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      // trick from TravsersableOnce
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
+      else lb
+    }.value
+
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val keys = List(1, 2, 4, 5)
+   * scala> val map = Map(4 -> "Four", 5 -> "Five")
+   * scala> keys.collectFirstSome(map.get)
+   * res0: Option[String] = Some(Four)
+   * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+   * scala> keys.collectFirstSome(map2.get)
+   * res1: Option[String] = None
+   * }}}
+   */
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      val ob = f(a)
+      if (ob.isDefined) Eval.now(ob) else lb
+    }.value
 
   /**
    * Fold implemented using the given Monoid[A] instance.
@@ -554,6 +584,8 @@ import simulacrum.typeclass
 }
 
 object Foldable {
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
       Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
