@@ -252,6 +252,21 @@ object IorT extends IorTInstances {
   final def liftF[F[_], A, B](fb: F[B])(implicit F: Applicative[F]): IorT[F, A, B] = right(fb)
 
   /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with [[IorT.mapK]]
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[IorT[Eval, String, ?], Int] = a.mapK(IorT.liftK)
+   * scala> b.value.value.value
+   * res0: cats.data.Ior[String,Option[Int]] = Right(Some(1))
+   * }}}
+   */
+  final def liftK[F[_], A](implicit F: Functor[F]): F ~> IorT[F, A, ?] =
+    new (F ~> IorT[F, A, ?]) {
+      def apply[B](fb: F[B]): IorT[F, A, B] = right(fb)
+    }
+
+  /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   private[data] final class FromIorPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
