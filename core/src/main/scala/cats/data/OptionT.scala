@@ -209,9 +209,8 @@ object OptionT extends OptionTInstances {
    * res0: Option[Either[String,Int]] = Some(Right(1))
    * }}}
    */
-  def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, ?] = new (F ~> OptionT[F, ?]) {
-      def apply[A](fa: F[A]): OptionT[F, A] = OptionT.liftF(fa)
-    }
+  def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, ?] =
+    λ[F ~> OptionT[F, ?]](OptionT.liftF(_))
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {

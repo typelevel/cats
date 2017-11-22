@@ -97,10 +97,8 @@ private[data] sealed trait KleisliFunctions {
    * res0: Option[Int] = Some(1)
    * }}}
    */
-  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] = new (F ~> Kleisli[F, A, ?]) {
-    def apply[B](x: F[B]): Kleisli[F, A, B] =
-      Kleisli(_ => x)
-  }
+  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
+    λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
 
   @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
