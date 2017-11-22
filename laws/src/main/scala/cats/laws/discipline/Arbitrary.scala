@@ -94,6 +94,11 @@ object arbitrary extends ArbitraryInstances0 {
       B.perturb(seed, _),
       (a, b) => A.perturb(B.perturb(seed, b), a)))
 
+  implicit def catsLawsArbitraryForIorT[F[_], A, B](implicit F: Arbitrary[F[Ior[A, B]]]): Arbitrary[IorT[F, A, B]] =
+    Arbitrary(F.arbitrary.map(IorT(_)))
+
+  implicit def catsLawsCogenForIorT[F[_], A, B](implicit F: Cogen[F[Ior[A, B]]]): Cogen[IorT[F, A, B]] =
+    F.contramap(_.value)
 
   implicit def catsLawsArbitraryForOptionT[F[_], A](implicit F: Arbitrary[F[Option[A]]]): Arbitrary[OptionT[F, A]] =
     Arbitrary(F.arbitrary.map(OptionT.apply))
