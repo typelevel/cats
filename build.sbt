@@ -229,7 +229,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[IncompatibleResultTypeProblem]("cats.instances.package#map.catsStdInstancesForMap"),
       exclude[IncompatibleResultTypeProblem]("cats.instances.package#set.catsStdInstancesForSet"),
       exclude[IncompatibleResultTypeProblem]("cats.instances.MapInstances.catsStdInstancesForMap"),
-      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT")
+      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority3"),
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority2"),
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority1"),
