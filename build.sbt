@@ -205,11 +205,16 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipList"),
       exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdParallelForFailFastFuture"),
       exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
-      exclude[DirectMissingMethodProblem]("cats.data.EitherTInstances2.catsDataMonadErrorForEitherT"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirstSome"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirst"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirstSome"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst")
+      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst"),
+      exclude[ReversedMissingMethodProblem]("cats.data.CommonIRWSTConstructors.liftF"),
+      exclude[ReversedMissingMethodProblem]("cats.data.CommonIRWSTConstructors.liftK"),
+      exclude[ReversedMissingMethodProblem]("cats.data.KleisliFunctions.liftF"),
+      exclude[ReversedMissingMethodProblem]("cats.data.KleisliFunctions.liftK"),
+      exclude[ReversedMissingMethodProblem]("cats.data.CommonStateTConstructors.liftF"),
+      exclude[ReversedMissingMethodProblem]("cats.data.CommonStateTConstructors.liftK")
     )
   }
 )
