@@ -234,6 +234,7 @@ case class RenameTransformersLift(index: SemanticdbIndex)
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
       "_root_.cats.data.WriterT.lift." -> "liftF",
+      "_root_.cats.data.StateT.lift." -> "liftF",
       "_root_.cats.data.CommonStateTConstructors.lift." -> "liftF",
       "_root_.cats.data.CommonIRWSTConstructors.lift." -> "liftF",
       "_root_.cats.data.KleisliFunctions.lift." -> "liftF"
