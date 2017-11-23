@@ -45,9 +45,10 @@ class OptionTSuite extends CatsSuite {
 
   
   {
-    // F has a  Divisible
-    checkAll("OptionT[Const[String, ?], Int]", DivisibleTests[OptionT[Const[String, ?], ?]].divisible[Int, Int, Int])
-    checkAll("Divisible[OptionT[Const[String, ?], Int]]", SerializableTests.serializable(Divisible[OptionT[Const[String, ?], ?]])) 
+    // F has a ContravariantMonoidal 
+    checkAll("OptionT[Const[String, ?], Int]", ContravariantMonoidalTests[OptionT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[OptionT[Const[String, ?], Int]]",
+      SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]])) 
   }
 
   {

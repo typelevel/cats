@@ -101,7 +101,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[String, CMono]", CommutativeMonoidTests[Function1[String, CMono]].commutativeMonoid)
   checkAll("Function1[String, Grp]", GroupTests[Function1[String, Grp]].group)
   checkAll("Function1[String, CGrp]", CommutativeGroupTests[Function1[String, CGrp]].commutativeGroup)
-  checkAll("Function1[?, Monoid]", DivisibleTests[Function1[?, Long]].divisible[Int, Int, Int])
+  checkAll("Function1[?, Monoid]", ContravariantMonoidalTests[Function1[?, Long]].contravariantMonoidal[Int, Int, Int])
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
@@ -113,5 +113,5 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[String => CMono]", SerializableTests.serializable(CommutativeMonoid[String => CMono]))
   checkAll("Group[String => Grp]", SerializableTests.serializable(Group[String => Grp]))
   checkAll("CommutativeGroup[String => CGrp]", SerializableTests.serializable(CommutativeGroup[String => CGrp]))
-  checkAll("Divisible[Function1[?, Monoid]]", SerializableTests.serializable(Divisible[? => Long]))
+  checkAll("ContravariantMonoidal[Function1[?, Monoid]]", SerializableTests.serializable(ContravariantMonoidal[? => Long]))
 }

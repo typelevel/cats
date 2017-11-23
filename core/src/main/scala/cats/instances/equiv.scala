@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait EquivInstances {
-  implicit val catsDivisibleForEquiv: Divisible[Equiv] =
-    new Divisible[Equiv] {
+  implicit val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
+    new ContravariantMonoidal[Equiv] {
       /**
        * Defaults to trivially contracting the type
        * to a point
@@ -16,13 +16,19 @@ trait EquivInstances {
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap2[A, B, C](fb: Equiv[B], fc: Equiv[C])(f: A => (B, C)): Equiv[A] =
-        new Equiv[A] {
-          def equiv(l: A, r: A): Boolean =
-            (f(l), f(r)) match {
-              case (derivedL, derivedR) =>
-                fb.equiv(derivedL._1, derivedR._1) &&
-                  fc.equiv(derivedL._2, derivedR._2)
+      def contramap[A, B](fa: Equiv[A])(f: B => A): Equiv[B] =
+        new Equiv[B] {
+          def equiv(l: B, r: B): Boolean =
+            fa.equiv(f(l), f(r))
+        }
+
+      def product[A, B](fa: Equiv[A], fb: Equiv[B]): Equiv[(A, B)] =
+        new Equiv[(A, B)] {
+          def equiv(l: (A, B), r: (A, B)): Boolean =
+            (l, r) match {
+              case ((aL, bL), (aR, bR)) =>
+                fa.equiv(aL, aR) &&
+                  fb.equiv(bR, bL)
             }
         }
     }

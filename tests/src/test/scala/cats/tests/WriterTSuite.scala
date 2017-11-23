@@ -363,8 +363,8 @@ class WriterTSuite extends CatsSuite {
   }
 
   {
-    // F has a Divisible
-    Divisible[WriterT[Const[String, ?], Int, ?]]
+    // F has a ContravariantMonoidal 
+    ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])

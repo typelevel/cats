@@ -8,7 +8,7 @@ class OrderSuite extends CatsSuite {
   {
     Invariant[Order]
     Contravariant[Order]
-    Divisible[Order]
+    ContravariantMonoidal[Order]
   }
 
   checkAll("Int", OrderTests[Int].order)
@@ -22,7 +22,7 @@ object OrderSuite {
     import cats.instances.order._
     Invariant[Order]
     Contravariant[Order]
-    Divisible[Order]
+    ContravariantMonoidal[Order]
     ()
   }
 

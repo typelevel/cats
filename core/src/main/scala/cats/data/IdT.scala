@@ -73,13 +73,16 @@ private[data] sealed trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] w
   def pure[A](a: A): IdT[F, A] = IdT.pure(a)
 }
 
-private[data] sealed trait IdTDivisible[F[_]] extends Divisible[IdT[F, ?]] {
-  implicit val F0: Divisible[F]
+private[data] sealed trait IdTContravariantMonoidal[F[_]] extends ContravariantMonoidal[IdT[F, ?]] {
+  implicit val F0: ContravariantMonoidal[F]
 
   override def unit[A]: IdT[F, A] = IdT(F0.unit[A])
 
-  override def contramap2[A, B, C](fb: IdT[F, B], fc: IdT[F, C])(f: A => (B, C)): IdT[F, A] =
-    IdT(F0.contramap2(fb.value, fc.value)(f))
+  override def contramap[A, B](fa: IdT[F, A])(f: B => A): IdT[F, B] =
+    IdT(F0.contramap(fa.value)(f))
+
+  override def product[A, B](fa: IdT[F, A], fb: IdT[F, B]): IdT[F, (A, B)] =
+    IdT(F0.product(fa.value, fb.value))
 }
 
 private[data] sealed trait IdTFlatMap[F[_]] extends FlatMap[IdT[F, ?]] with IdTApply[F] {
@@ -133,8 +136,8 @@ private[data] sealed trait IdTNonEmptyTraverse[F[_]] extends IdTTraverse[F] with
 }
 
 private[data] sealed abstract class IdTInstances6 {
-  implicit def catsDataDivisibleForIdT[F[_]](implicit F: Divisible[F]): Divisible[IdT[F, ?]] =
-    new IdTDivisible[F] { implicit val F0: Divisible[F] = F }
+  implicit def catsDataContravariantMonoidalForIdT[F[_]](implicit F: ContravariantMonoidal[F]): ContravariantMonoidal[IdT[F, ?]] =
+    new IdTContravariantMonoidal[F] { implicit val F0: ContravariantMonoidal[F] = F }
 }
 
 private[data] sealed abstract class IdTInstances5 extends IdTInstances6 {

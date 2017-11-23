@@ -46,8 +46,10 @@ class IdTSuite extends CatsSuite {
   }
 
   {
-    checkAll("IdT[Const[String, ?], ?]", DivisibleTests[IdT[Const[String, ?], ?]].divisible[Int, Int, Int])
-    checkAll("Divisible[IdT[Const[String, ?], ?]]", SerializableTests.serializable(Divisible[IdT[Const[String, ?], ?]]))
+    checkAll("IdT[Const[String, ?], ?]",
+      ContravariantMonoidalTests[IdT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[IdT[Const[String, ?], ?]]",
+      SerializableTests.serializable(ContravariantMonoidal[IdT[Const[String, ?], ?]]))
   }
 
   {

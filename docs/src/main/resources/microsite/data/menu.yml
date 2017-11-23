@@ -69,6 +69,9 @@ options:
      - title: Contravariant
        url: typeclasses/contravariant.html
        menu_section: variance
+     - title: ContravariantSemigroupal
+       url: typeclasses/contravariantsemigroupal.html
+       menu_type: typeclasses
      - title: Invariant
        url: typeclasses/invariant.html
        menu_section: variance
@@ -76,9 +79,6 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
-  - title: Divisible
-    url: typeclasses/divisible.html
-    menu_type: typeclasses
 
   - title: Eq
     url: typeclasses/eq.html

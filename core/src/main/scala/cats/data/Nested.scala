@@ -63,9 +63,9 @@ private[data] sealed abstract class NestedInstances1 extends NestedInstances2 {
       val FG: Functor[λ[α => F[G[α]]]] = Contravariant[F].compose[G]
     }
 
-  implicit def catsDataDivisibleForApplicativeForNested[F[_]: Applicative, G[_]: Divisible]: Divisible[Nested[F, G, ?]] =
-    new NestedDivisible[F, G] {
-      val FG: Divisible[λ[α => F[G[α]]]] = Divisible[G].composeApplicative[F]
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
+    new NestedContravariantMonoidal[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = ContravariantMonoidal[G].composeApplicative[F]
     }
 }
 
@@ -269,11 +269,14 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
     Nested(FG.contramap(fga.value)(f))
 }
 
-private[data] trait NestedDivisible[F[_], G[_]] extends Divisible[Nested[F, G, ?]] {
-  def FG: Divisible[λ[α => F[G[α]]]]
+private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, ?]] {
+  def FG: ContravariantMonoidal[λ[α => F[G[α]]]]
 
   def unit[A]: Nested[F, G, A] = Nested(FG.unit)
 
-  def contramap2[A, B, C](fb: Nested[F, G, B], fc: Nested[F, G, C])(f: A => (B, C)): Nested[F, G, A] =
-    Nested(FG.contramap2(fb.value, fc.value)(f))
+  def contramap[A, B](fa: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
+    Nested(FG.contramap(fa.value)(f))
+
+  def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+    Nested(FG.product(fa.value, fb.value))
 }

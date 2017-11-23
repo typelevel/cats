@@ -221,8 +221,8 @@ private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
 
-  implicit def catsDataDivisibleForOptionT[F[_]](implicit F0: Divisible[F]): Divisible[OptionT[F, ?]] =
-    new OptionTDivisible[F] { implicit val F = F0 }
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
+    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
   implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
     new OptionTSemigroupK[F] { implicit val F = F0 }
@@ -284,14 +284,21 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
 }
 
-private trait OptionTDivisible[F[_]] extends Divisible[OptionT[F, ?]] {
-  def F: Divisible[F]
+private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {
+  def F: ContravariantMonoidal[F]
 
   override def unit[A]: OptionT[F, A] = OptionT (F.unit)
 
-  // Really this wants to be written in terms of arrow :/
-  override def contramap2[A, B, C](fb: OptionT[F, B], fc: OptionT[F, C])(f: A => (B, C)): OptionT[F, A] =
-    OptionT(F.contramap2(fb.value, fc.value)(x => (x.map(f andThen (_._1)), x.map(f andThen (_._2)))))
+  override def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
+    OptionT(F.contramap(fa.value)(_ map f))
+
+  override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
+    OptionT(F.contramap(F.product(fa.value, fb.value))(
+        (t: Option[(A, B)]) => t match {
+          case Some((x, y)) => (Some(x), Some(y))
+          case None => (None, None)
+        }
+      ))
 }
 
 private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {

@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
-  implicit val catsDivisibleForOrder: Divisible[Order] =
-    new Divisible[Order] {
+  implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
+    new ContravariantMonoidal[Order] {
       /**
        * Provides trivial order
        */
@@ -12,13 +12,19 @@ trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap2[A, B, C](fb: Order[B], fc: Order[C])(f: A => (B, C)): Order[A] =
-        new Order[A] {
-          def compare(x: A, y: A): Int =
-            (f(x), f(y)) match {
-              case (derivedL, derivedR) => {
-                val z = fb.compare(derivedL._1, derivedR._1)
-                if (z == 0) fc.compare(derivedL._2, derivedR._2) else z
+      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
+        new Order[B] {
+          def compare(x: B, y: B): Int =
+            fa.compare(f(x), f(y))
+        }
+
+      def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] =
+        new Order[(A, B)] {
+          def compare(x: (A, B), y: (A, B)): Int =
+            (x, y) match {
+              case ((aL, bL), (aR, bR)) => {
+                val z = fa.compare(aL, aR)
+                if (z == 0) fb.compare(bL, bR) else z
               }
             }
         }

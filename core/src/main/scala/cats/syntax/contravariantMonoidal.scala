@@ -1,0 +1,6 @@
+package cats
+package syntax
+
+import cats.ContravariantMonoidal
+
+trait ContravariantMonoidalSyntax extends ContravariantMonoidal.ToContravariantMonoidalOps

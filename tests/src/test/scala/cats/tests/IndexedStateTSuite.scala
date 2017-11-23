@@ -373,10 +373,10 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   {
-    // F has a Divisible
-    val SD = Divisible[StateT[Const[String, ?], String, ?]]
+    // F has a ContravariantMonoidal
+    val SD = ContravariantMonoidal[StateT[Const[String, ?], String, ?]]
 
-    checkAll("Divisible[StateT[Const[String, ?], String, ?]]", SerializableTests.serializable(SD))
+    checkAll("ContravariantMonoidal[StateT[Const[String, ?], String, ?]]", SerializableTests.serializable(SD))
   }
 
   {

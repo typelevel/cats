@@ -43,12 +43,14 @@ private[instances] sealed trait Function1Instances {
         fa.compose(f)
     }
 
-  implicit def catsStdDivisibleForFunction1[R: Monoid]: Divisible[? => R] =
-    new Divisible[? => R] {
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
+    new ContravariantMonoidal[? => R] {
       def unit[A]: A => R = Function.const(Monoid[R].empty)
-      def contramap2[A, B, C](fb: B => R, fc: C => R)(f: A => (B, C)): A => R =
-        a => f(a) match {
-          case (b, c) => Monoid[R].combine(fb(b), fc(c))
+      def contramap[A, B](fa: A => R)(f: B => A): B => R =
+        fa compose f
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
+        (ab: (A, B)) => ab match {
+          case (a, b) => Monoid[R].combine(fa(a), fb(b))
         }
     }
 

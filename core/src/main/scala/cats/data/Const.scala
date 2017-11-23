@@ -70,10 +70,12 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       fa.retag[B]
   }
 
-  implicit def catsDataDivisibleForConst[D: Monoid]: Divisible[Const[D, ?]] = new Divisible[Const[D, ?]] {
+  implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, ?]] = new ContravariantMonoidal[Const[D, ?]] {
     override def unit[A] = Const.empty[D, A]
-    override def contramap2[A, B, C](fb: Const[D, B], fc: Const[D, C])(f: A => (B, C)): Const[D, A] =
-      fb.retag[A] combine fc.retag[A]
+    override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
+      fa.retag[B]
+    override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
+      fa.retag[(A, B)] combine fb.retag[(A, B)]
   }
 
   implicit def catsDataTraverseForConst[C]: Traverse[Const[C, ?]] = new Traverse[Const[C, ?]] {

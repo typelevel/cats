@@ -1,33 +1,30 @@
 ---
 layout: docs
-title: "Divisible"
+title: "Contravariant Semigroupal"
 section: "typeclasses"
-source: "core/src/main/scala/cats/Divisible.scala"
-scaladoc: "#cats.Divisible"
+source: "core/src/main/scala/cats/ContravariantSemigroupal.scala"
+scaladoc: "#cats.ContravariantSemigroupal"
 ---
-# Divisible
+# Contravariant Semigroupal
 
-The `Divisible` type class is for contravariant functors that define a
+The `ContravariantSemigroupal` type class is for contravariant functors that can define a
 `contramap2` function that looks like:
 
 ```scala
 def contramap2[A, B, C](fb: F[B], fc: F[C])(f: A => (B, C)): F[A]
 ```
 
-This is similar to the `map2` function on the `Apply` typeclass, but
-
-This is part of what makes people say `Divisible` is a
-contravariant version of `Applicative`.
+This is similar to the `map2` function on the `Apply` typeclass, but in reverse.
 
 Basically, if you have two contexts `F[B]` and `F[C]` for types
 `B` and `C`, as well as a way to produce types `B` and `C` simultaneously
-from a type `A`, then `Divisible` allows you to obtain
+from a type `A`, then `ContravariantMonoidal` allows you to obtain
 a context `F[A]` for the type `A`.
 
-Examples of `Divisible` instances are [`Eq`](eq.html) and [`Const`](../datatypes/const.html),
+Examples of `ContravariantMonoidal` instances are [`Eq`](eq.html) and [`Const`](../datatypes/const.html),
 but there are also interesting instances for other types.
 
-## Predicates Have `Divisible`
+## Predicates Have `ContravariantSemigroupal`
 
 An example application would be the case of predicates. Consider the type,
 
@@ -39,12 +36,12 @@ import cats.implicits._
 case class Predicate[A](run: A => Boolean)
 ```
 
-Then, we can exhibit a `Divisible` for `Predicate` by basing it on the
+Then, we can exhibit a `ContravariantSemigroupal` for `Predicate` by basing it on the
 `Monoid` for `Boolean` via `&&` as,
 
 ```tut:book:silent
-implicit val divisiblePredicate: Divisible[Predicate] =
-  new Divisible [Predicate] {
+implicit val contravariantSemigroupalPredicate: ContravariantSemigroupal[Predicate] =
+  new ContravariantMonoidal [Predicate] {
     def unit[A]: Predicate[A] = Predicate[A](Function.const(true))
 
     def contramap2[A, B, C](fb: Predicate[B], fc: Predicate[C]

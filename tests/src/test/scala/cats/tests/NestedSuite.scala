@@ -51,9 +51,11 @@ class NestedSuite extends CatsSuite {
   }
 
   {
-    // Applicative + Divisible functor composition
-    checkAll("Nested[Option, Const[String, ?], ?]", DivisibleTests[Nested[Option, Const[String, ?], ?]].divisible[Int, Int, Int])
-    checkAll("Divisible[Nested[Option, Const[String, ?], ?]", SerializableTests.serializable(Divisible[Nested[Option, Const[String, ?], ?]]))
+    // Applicative + ContravariantMonoidal functor composition
+    checkAll("Nested[Option, Const[String, ?], ?]",
+      ContravariantMonoidalTests[Nested[Option, Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[Nested[Option, Const[String, ?], ?]",
+      SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, ?], ?]]))
   }
 
   {

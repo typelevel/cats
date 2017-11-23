@@ -88,9 +88,11 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
-    implicit val catsDataDivisibleForKleisli = Kleisli.catsDataDivisibleForKleisli[Const[String, ?], Int]
-    checkAll("Kleisli[Const[String, ?], Int, Int]", DivisibleTests[Kleisli[Const[String, ?], Int, ?]].divisible[Int, Int, Int])
-    checkAll("Divisible[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Divisible[Kleisli[Const[String, ?], Int, ?]]))
+    implicit val catsDataContravariantMonoidalForKleisli = Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, ?], Int]
+    checkAll("Kleisli[Const[String, ?], Int, Int]",
+      ContravariantMonoidalTests[Kleisli[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
+      SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
   }
 
   {
