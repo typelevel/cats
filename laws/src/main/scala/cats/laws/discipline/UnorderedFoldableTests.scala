@@ -6,7 +6,6 @@ import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 import org.typelevel.discipline.Laws
 import cats.kernel.CommutativeMonoid
-import cats.instances.set._
 import cats.instances.boolean._
 
 trait UnorderedFoldableTests[F[_]] extends Laws {

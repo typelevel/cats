@@ -1,7 +1,6 @@
 package cats
 package laws
 
-import cats.implicits._
 import cats.kernel.CommutativeMonoid
 
 trait UnorderedFoldableLaws[F[_]] {
