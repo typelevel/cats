@@ -52,15 +52,6 @@ class TrySuite extends CatsSuite {
     }
   }
 
-  test("catchNonFatalEval works") {
-    forAll { e: Either[String, Int] =>
-      val str = e.fold(identity, _.toString)
-      val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
-      // the above should just never cause an uncaught exception
-      // this is a somewhat bogus test:
-      res should not be (null)
-    }
-  }
   test("fromTry works") {
     forAll { t: Try[Int] =>
       (MonadError[Try, Throwable].fromTry(t)) should === (t)

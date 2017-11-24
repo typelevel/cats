@@ -27,8 +27,6 @@ trait FutureInstances extends FutureInstances1 {
       override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
 
       override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Future[A] = Future(a)
-
-      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Future[A] = Future(a.value)
     }
 }
 

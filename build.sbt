@@ -209,7 +209,11 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirstSome"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable.collectFirst"),
       exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirstSome"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst")
+      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst"),
+      exclude[DirectMissingMethodProblem]("cats.ApplicativeError.catchNonFatalEval"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonadError.catchNonFatalEval"),
+      exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.catchNonFatalEval"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonadError.catchNonFatalEval")
     )
   }
 )
