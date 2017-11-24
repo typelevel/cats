@@ -177,7 +177,7 @@ private[data] trait CommonStateTConstructors {
     IndexedStateT(s => F.map(fa)(a => (s, a)))
 
   /**
-   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
    * scala> import cats._, data._, implicits._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]

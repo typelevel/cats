@@ -88,7 +88,7 @@ private[data] sealed trait KleisliFunctions {
     Kleisli(_ => x)
 
   /**
-   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
    * scala> import cats._, data._, implicits._
    * scala> val a: Kleisli[Eval, String, Int] = 1.pure[Kleisli[Eval, String, ?]]

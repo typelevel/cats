@@ -200,7 +200,7 @@ object OptionT extends OptionTInstances {
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
 
   /**
-   * Same as [[liftF]], but expressed as a FunctionK for use with [[mapK]]
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
    * scala> import cats._, data._,  implicits._
    * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, ?]]
