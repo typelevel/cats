@@ -42,5 +42,12 @@ trait MapInstances {
         A.combineAll(fa.values)
 
       override def toList[A](fa: Map[K, A]): List[A] = fa.values.toList
+
+      override def collectFirst[A, B](fa: Map[K, A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(new PartialFunction[(K, A), B] {
+        override def isDefinedAt(x: (K, A)) = pf.isDefinedAt(x._2)
+        override def apply(v1: (K, A)) = pf(v1._2)
+      })
+
+      override def collectFirstSome[A, B](fa: Map[K, A])(f: A => Option[B]): Option[B] = collectFirst(fa)(Function.unlift(f))
     }
 }

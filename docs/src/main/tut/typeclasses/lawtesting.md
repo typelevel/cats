@@ -18,9 +18,9 @@ To make things easier, we'll also include the `scalacheck-shapeless` library in 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "1.0.0-MF" % Test,
-  "org.typelevel" %% "cats-testkit" % "1.0.0-MF"% Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.5" % Test
+  "org.typelevel" %% "cats-laws" % "1.0.0-RC1" % Test,
+  "org.typelevel" %% "cats-testkit" % "1.0.0-RC1"% Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.6" % Test
 )
 ```
 
@@ -68,7 +68,7 @@ Cats has defined rulesets for all type class laws in `cats.laws.discipline.*`.
 So for our example we will want to import `cats.laws.discipline.FunctorTests` and call `checkAll` with it.
 Before we do so, however,
 we will have to bring our instances into scope as well as the derived `Arbitrary` instances from `scalacheck-shapeless`
-(We have defined an Arbitrary instance for `Tree` here, but you won't need it if you import `org.scalacheck.Shapeless._`).
+(We have defined an Arbitrary instance for `Tree` here, but you won't need it if you import `org.scalacheck.ScalacheckShapeless._`).
 
 
 

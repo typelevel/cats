@@ -96,6 +96,12 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
       if (buf.nonEmpty || !p(a)) buf += a else buf
     }.toList
 
+  def collectFirstSome_Ref[A, B](fa: F[A], f: A => Option[B]): IsEq[Option[B]] =
+    F.collectFirstSome(fa)(f) <-> F.foldLeft(fa, Option.empty[B]){ (ob, a) => if (ob.isDefined) ob else f(a) }
+
+  def collectFirst_Ref[A, B](fa: F[A], pf: PartialFunction[A, B]): IsEq[Option[B]] =
+    F.collectFirst(fa)(pf) <-> F.collectFirstSome(fa)(pf.lift)
+
   def orderedConsistency[A: Eq](x: F[A], y: F[A])(implicit ev: Eq[F[A]]): IsEq[List[A]] =
     if (x === y) (F.toList(x) <-> F.toList(y))
     else List.empty[A] <-> List.empty[A]

@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
@@ -290,6 +291,9 @@ private[data] sealed abstract class NonEmptyVectorInstances {
       override def foldRight[A, B](fa: NonEmptyVector[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
 
+      override def foldMap[A, B](fa: NonEmptyVector[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.toVector.iterator.map(f))
+
       override def nonEmptyPartition[A, B, C](fa: NonEmptyVector[A])(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
         import cats.syntax.either._
         import cats.syntax.reducible._
@@ -350,6 +354,18 @@ private[data] sealed abstract class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
+  implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
+    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
+
+      def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
+      def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
+
+      def sequential: ZipNonEmptyVector ~> NonEmptyVector =
+        λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
+
+      def parallel: NonEmptyVector ~> ZipNonEmptyVector =
+        λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
+    }
 
 }
 
@@ -376,5 +392,25 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
     if (vector.nonEmpty) new NonEmptyVector(vector)
     else throw new IllegalArgumentException("Cannot create NonEmptyVector from empty vector")
 
+  class ZipNonEmptyVector[A](val value: NonEmptyVector[A]) extends Serializable
 
+  object ZipNonEmptyVector {
+
+    def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] =
+      new ZipNonEmptyVector(nev)
+
+    implicit val catsDataCommutativeApplyForZipNonEmptyVector: CommutativeApply[ZipNonEmptyVector] =
+      new CommutativeApply[ZipNonEmptyVector] {
+        def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
+          ZipNonEmptyVector(ff.value.zipWith(fa.value)(_ apply _))
+
+        override def map[A, B](fa: ZipNonEmptyVector[A])(f: (A) => B): ZipNonEmptyVector[B] =
+          ZipNonEmptyVector(fa.value.map(f))
+
+        override def product[A, B](fa: ZipNonEmptyVector[A], fb: ZipNonEmptyVector[B]): ZipNonEmptyVector[(A, B)] =
+          ZipNonEmptyVector(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+      }
+
+    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
+  }
 }

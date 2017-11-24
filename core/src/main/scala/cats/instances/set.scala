@@ -29,8 +29,6 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
       override def unorderedFold[A](fa: Set[A])(implicit A: CommutativeMonoid[A]): A = A.combineAll(fa)
 
-      override def toSet[A](fa: Set[A]): Set[A] = fa
-
       override def forall[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 

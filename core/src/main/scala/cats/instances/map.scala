@@ -77,7 +77,6 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def unorderedFold[A](fa: Map[K, A])(implicit A: CommutativeMonoid[A]): A =
         A.combineAll(fa.values)
 
-      override def toSet[A](fa: Map[K, A]): Set[A] = fa.values.toSet
     }
   // scalastyle:on method.length
 }
