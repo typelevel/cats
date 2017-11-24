@@ -50,8 +50,6 @@ trait UnorderedFoldableLaws[F[_]] {
     !F.isEmpty(fa) || F.forall(fa)(p)
   }
 
-  def toSetRef[A](fa: F[A]): IsEq[Set[A]] =
-    F.unorderedFoldMap(fa)(a => Set(a)) <-> F.toSet(fa)
 
   def nonEmptyRef[A](fa: F[A]): IsEq[Boolean] =
     F.nonEmpty(fa) <-> !F.isEmpty(fa)

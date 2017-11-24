@@ -2,7 +2,6 @@ package cats
 
 import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
-import cats.instances.set._
 import cats.instances.long._
 /**
   * `UnorderedFoldable` is like a `Foldable` for unordered containers.
@@ -14,8 +13,6 @@ import cats.instances.long._
   def unorderedFold[A: CommutativeMonoid](fa: F[A]): A =
     unorderedFoldMap(fa)(identity)
 
-  def toSet[A](fa: F[A]): Set[A] =
-    unorderedFoldMap(fa)(a => Set(a))
 
   /**
     * Returns true if there are no elements. Otherwise false.
