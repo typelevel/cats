@@ -1,4 +1,6 @@
-package cats.tests
+
+package cats
+package tests
 
 import cats._
 import cats.data.NonEmptyList.ZipNonEmptyList
@@ -170,6 +172,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("Parallel[Id, Id]", ParallelTests[Id, Id].parallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]", SerializableTests.serializable(NonEmptyParallel[NonEmptyList, ZipNonEmptyList]))
+
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
 
   {

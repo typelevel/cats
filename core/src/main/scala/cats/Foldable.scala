@@ -2,7 +2,7 @@ package cats
 
 import scala.collection.mutable
 import cats.instances.either._
-import cats.instances.long._
+import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
 import Foldable.sentinel
 
@@ -16,6 +16,7 @@ import Foldable.sentinel
  * `Foldable[_]` instance.
  *
  * Instances of Foldable should be ordered collections to allow for consistent folding.
+ * Use the `UnorderedFoldable` type class if you want to fold over unordered collections.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
@@ -27,7 +28,7 @@ import Foldable.sentinel
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -54,6 +55,7 @@ import Foldable.sentinel
    * }}}
    */
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
+
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
@@ -191,16 +193,6 @@ import Foldable.sentinel
    */
   def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.max)
-
-  /**
-   * The size of this Foldable.
-   *
-   * This is overriden in structures that have more efficient size implementations
-   * (e.g. Vector, Set, Map).
-   *
-   * Note: will not terminate for infinite-sized collections.
-   */
-  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
 
   /**
     * Get the element at the index of the `Foldable`.
@@ -390,7 +382,7 @@ import Foldable.sentinel
    *
    * If there are no elements, the result is `false`.
    */
-  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.False) { (a, lb) =>
       if (p(a)) Eval.True else lb
     }.value
@@ -400,7 +392,7 @@ import Foldable.sentinel
    *
    * If there are no elements, the result is `true`.
    */
-  def forall[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.True) { (a, lb) =>
       if (p(a)) lb else Eval.False
     }.value
@@ -539,10 +531,10 @@ import Foldable.sentinel
   /**
    * Returns true if there are no elements. Otherwise false.
    */
-  def isEmpty[A](fa: F[A]): Boolean =
+  override def isEmpty[A](fa: F[A]): Boolean =
     foldRight(fa, Eval.True)((_, _) => Eval.False).value
 
-  def nonEmpty[A](fa: F[A]): Boolean =
+  override def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
   /**
@@ -581,6 +573,11 @@ import Foldable.sentinel
       val F = self
       val G = Foldable[G]
     }
+
+  override def unorderedFold[A: CommutativeMonoid](fa: F[A]): A = fold(fa)
+
+  override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
+    foldMap(fa)(f)
 }
 
 object Foldable {
