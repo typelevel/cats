@@ -39,7 +39,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 And then create the cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-RC1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0"
 ```
 
 This will pull in the cats-core module. If you require some other

@@ -1,3 +1,49 @@
+## Version 1.0.0
+
+> 2017 Nov 25
+
+### Breaking changes and migration
+
+
+### New features / enhancements (API, instances, data types, etc.):
+
+* [#1949](https://github.com/typelevel/cats/pull/1949) Add ::: to NonEmptyList by @jcranky
+* [#2020](https://github.com/typelevel/cats/pull/2020) Add `foldl` and `foldr` aliases to `Foldable` by @felixmulder
+* [#2024](https://github.com/typelevel/cats/pull/2024) Optimize foldMap implementations with combineAll by @carymrobbins
+* [#1938](https://github.com/typelevel/cats/pull/1938) Add more Parallel instances by @LukaJCB
+* [#2030](https://github.com/typelevel/cats/pull/2030) added `collectFirst` and `collectFirstSome` to `Foldable` by @kailuowang
+* [#1977](https://github.com/typelevel/cats/pull/1977) Add Ior Monad Transformer by @frroliveira
+* [#2038](https://github.com/typelevel/cats/pull/2038) Add &> and <& as syntax for Parallel by @LukaJCB
+* [#1981](https://github.com/typelevel/cats/pull/1981) Add UnorderedFoldable and UnorderedTraverse by @LukaJCB
+
+
+
+### Bug fixes:
+
+* [#2011](https://github.com/typelevel/cats/pull/2011) Rename ContravariantCartesian.scala to ContravariantSemigroupal.scala by @iravid
+* [#2016](https://github.com/typelevel/cats/pull/2016) Removed redundant Eq instance by @denisrosset
+* [#2029](https://github.com/typelevel/cats/pull/2029) make sure that EitherT MonadError syntax works the old way by @kailuowang
+
+
+### Documentation Improvements/Additions:
+
+* [#2007](https://github.com/typelevel/cats/pull/2007) move alleycats in readme by @kailuowang
+* [#2008](https://github.com/typelevel/cats/pull/2008) Upgrade Scalafix instructions by @gabro
+* [#2009](https://github.com/typelevel/cats/pull/2009) Correct it's -> its documentation errors by @kellen
+* [#2017](https://github.com/typelevel/cats/pull/2017) Fix alleycats module name by @benhutchison
+* [#2023](https://github.com/typelevel/cats/pull/2023) Fixes in Arrow docs by @Jasper-M
+* [#2026](https://github.com/typelevel/cats/pull/2026) Correctly close a tut:silent block in faq by @vendethiel
+* [#2027](https://github.com/typelevel/cats/pull/2027) Rename Validation to Validated in Validated docs by @Ttcao
+* [#2036](https://github.com/typelevel/cats/pull/2036) Clean up applicative syntax doc by @bkirwi
+* [#2035](https://github.com/typelevel/cats/pull/2035) Do not redirect to cats-mtl for MonadCombine by @vendethiel
+
+
+### Build improvements/dependency updates
+
+* [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
+
+
+
 ## Version 1.0.0-RC1
 
 > 2017 Oct 21 
