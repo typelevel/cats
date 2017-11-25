@@ -37,13 +37,7 @@ import simulacrum.typeclass
    * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
    */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
-    sequence(List.fill(n)(fa))
-
-  def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
-    G.traverse(value)(f)(this)
-
-  def sequence[G[_], A](as: G[F[A]])(implicit G: Traverse[G]): F[G[A]] =
-    G.sequence(as)(this)
+    Traverse[List].sequence(List.fill(n)(fa))(this)
 
   def compose[G[_]: Applicative]: Applicative[λ[α => F[G[α]]]] =
     new ComposedApplicative[F, G] {

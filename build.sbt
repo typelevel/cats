@@ -255,7 +255,22 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.>>="),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.>>="),
       exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.>>="),
-      exclude[DirectMissingMethodProblem]("cats.instances.FlatMapTuple2.>>=")
+      exclude[DirectMissingMethodProblem]("cats.instances.FlatMapTuple2.>>="),
+      exclude[DirectMissingMethodProblem]("cats.Applicative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.Applicative.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence")
+
     )
   }
 )
