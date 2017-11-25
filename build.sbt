@@ -248,6 +248,20 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parForEffect"),
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parFollowedBy"),
       exclude[ReversedMissingMethodProblem]("cats.syntax.ParallelSyntax.catsSyntaxParallelAp")
+      exclude[DirectMissingMethodProblem]("cats.Applicative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.Applicative.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.sequence"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence")
     )
   }
 )
