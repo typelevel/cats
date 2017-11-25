@@ -214,7 +214,10 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.data.KleisliFunctions.liftF"),
       exclude[ReversedMissingMethodProblem]("cats.data.KleisliFunctions.liftK"),
       exclude[ReversedMissingMethodProblem]("cats.data.CommonStateTConstructors.liftF"),
-      exclude[ReversedMissingMethodProblem]("cats.data.CommonStateTConstructors.liftK")
+      exclude[ReversedMissingMethodProblem]("cats.data.CommonStateTConstructors.liftK"),
+      exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parForEffect"),
+      exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parFollowedBy"),
+      exclude[ReversedMissingMethodProblem]("cats.syntax.ParallelSyntax.catsSyntaxParallelAp")
     )
   }
 )

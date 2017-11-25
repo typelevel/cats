@@ -27,6 +27,22 @@ trait NonEmptyParallel[M[_], F[_]] extends Serializable {
     */
   def parallel: M ~> F
 
+
+  /**
+    * Like `Apply[F].followedBy`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B] =
+    Parallel.parMap2(ma, mb)((_, b) => b)(this)
+
+
+  /**
+    * Like `Apply[F].forEffect`, but uses the apply instance
+    * corresponding to the Parallel instance instead.
+    */
+  def parForEffect[A, B](ma: M[A])(mb: M[B]): M[A] =
+    Parallel.parMap2(ma, mb)((a, _) => a)(this)
+
 }
 
 /**
