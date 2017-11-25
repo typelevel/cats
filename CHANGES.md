@@ -4,6 +4,8 @@
 
 ### Breaking changes and migration
 
+* [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
+
 
 ### New features / enhancements (API, instances, data types, etc.):
 
