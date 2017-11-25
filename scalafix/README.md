@@ -52,7 +52,7 @@ sbt scalafix github:typelevel/cats/v1.0.0
 ## To test scala fix
 
 ```bash
-sbt ;coreJVM/publishLocal;coreFree/publishLocal
+sbt coreJVM/publishLocal;coreFree/publishLocal
 cd scalafix
 sbt test
 
