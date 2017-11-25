@@ -91,9 +91,9 @@ private[data] sealed trait KleisliFunctions {
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
    * scala> import cats._, data._, implicits._
-   * scala> val a: Kleisli[Eval, String, Int] = 1.pure[Kleisli[Eval, String, ?]]
-   * scala> val b: Kleisli[OptionT[Eval, ?], String, Int] = a.mapK(OptionT.liftK)
-   * scala> b.run("").value.value
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
+   * scala> b.value.run("").value
    * res0: Option[Int] = Some(1)
    * }}}
    */
