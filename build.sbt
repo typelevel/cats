@@ -247,7 +247,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.collectFirst"),
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parForEffect"),
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parFollowedBy"),
-      exclude[ReversedMissingMethodProblem]("cats.syntax.ParallelSyntax.catsSyntaxParallelAp")
+      exclude[ReversedMissingMethodProblem]("cats.syntax.ParallelSyntax.catsSyntaxParallelAp"),
       exclude[DirectMissingMethodProblem]("cats.Applicative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.Applicative.sequence"),
       exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.traverse"),
