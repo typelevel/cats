@@ -21,11 +21,6 @@ import simulacrum.typeclass
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
-   * Alias for [[flatMap]].
-   */
-  def >>=[A, B](fa: F[A])(f: A => F[B]): F[B] = flatMap(fa)(f)
-
-  /**
    * "flatten" a nested `F` of `F` structure into a single-layer `F` structure.
    *
    * This is also commonly called `join`.

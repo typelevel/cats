@@ -248,6 +248,14 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parForEffect"),
       exclude[ReversedMissingMethodProblem]("cats.NonEmptyParallel.parFollowedBy"),
       exclude[ReversedMissingMethodProblem]("cats.syntax.ParallelSyntax.catsSyntaxParallelAp"),
+      exclude[DirectMissingMethodProblem]("cats.FlatMap.>>="),
+      exclude[DirectMissingMethodProblem]("cats.FlatMap#Ops.>>="),
+      exclude[IncompatibleMethTypeProblem]("cats.syntax.FlatMapOps.>>"),
+      exclude[IncompatibleMethTypeProblem]("cats.syntax.FlatMapOps.>>$extension"),
+      exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.>>="),
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTMonad.>>="),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliMonad.>>="),
+      exclude[DirectMissingMethodProblem]("cats.instances.FlatMapTuple2.>>="),
       exclude[DirectMissingMethodProblem]("cats.Applicative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.Applicative.sequence"),
       exclude[DirectMissingMethodProblem]("cats.data.IndexedStateTMonad.traverse"),
@@ -262,6 +270,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.sequence"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence")
+
     )
   }
 )
