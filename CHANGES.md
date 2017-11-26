@@ -6,7 +6,6 @@
 
 * [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
 
-
 ### New features / enhancements (API, instances, data types, etc.):
 
 * [#1949](https://github.com/typelevel/cats/pull/1949) Add ::: to NonEmptyList by @jcranky
@@ -17,6 +16,7 @@
 * [#1977](https://github.com/typelevel/cats/pull/1977) Add Ior Monad Transformer by @frroliveira
 * [#2038](https://github.com/typelevel/cats/pull/2038) Add &> and <& as syntax for Parallel by @LukaJCB
 * [#1981](https://github.com/typelevel/cats/pull/1981) Add UnorderedFoldable and UnorderedTraverse by @LukaJCB
+* [#2047](https://github.com/typelevel/cats/pull/2047) CommutativeMonoid instance for SortedMap by @alonsodomin
 
 
 
