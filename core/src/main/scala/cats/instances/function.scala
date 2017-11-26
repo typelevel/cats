@@ -36,7 +36,7 @@ private[instances] sealed trait Function0Instances {
     }
 }
 
-private[instances] sealed trait Function1Instances {
+private[instances] sealed trait Function1Instances extends Function1Instances1 {
   implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -88,4 +88,12 @@ private[instances] sealed trait Function1Instances {
 
   implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
     Category[Function1].algebraK
+}
+
+trait Function1Instances1 {
+   implicit def distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
+    def distribute[F[_]: Functor, A,B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = {t1 => Functor[F].map(fa)(a => f(a)(t1)) }
+
+    def map[A,B](fa: T1 => A)(f: A => B): T1 => B = {t1 => f(fa(t1))}
+  }
 }

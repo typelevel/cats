@@ -32,8 +32,8 @@ package object cats {
  * encodes pure unary function application.
  */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] {
+  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id]  =
+    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id]  {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -42,6 +42,7 @@ package object cats {
         case Left(a1) => tailRecM(a1)(f)
         case Right(b) => b
       }
+      override def distribute[F[_], A, B](fa: F[A])(f: A => B)(implicit F: Functor[F]): Id[F[B]] = F.map(fa)(f)
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa

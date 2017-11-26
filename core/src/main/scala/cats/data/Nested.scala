@@ -240,6 +240,13 @@ private[data] trait NestedTraverse[F[_], G[_]] extends Traverse[Nested[F, G, ?]]
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
 }
 
+private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, ?]] with NestedFunctor[F, G] {
+  def FG: Distributive[λ[α => F[G[α]]]]
+
+  def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Nested[F, G, B]): Nested[F, G, H[B]] =
+    Nested(FG.distribute(ha) { a => f(a).value })
+}
+
 private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?]] with NestedFoldable[F, G] {
   def FG: Reducible[λ[α => F[G[α]]]]
 
