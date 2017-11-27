@@ -5,6 +5,7 @@
 ### Breaking changes and migration
 
 * [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
+* [#2033](https://github.com/typelevel/cats/pull/2033) standardise on `liftF` and add `liftK` to transformers by @SystemFw
 
 ### New features / enhancements (API, instances, data types, etc.):
 
@@ -17,6 +18,7 @@
 * [#2038](https://github.com/typelevel/cats/pull/2038) Add &> and <& as syntax for Parallel by @LukaJCB
 * [#1981](https://github.com/typelevel/cats/pull/1981) Add UnorderedFoldable and UnorderedTraverse by @LukaJCB
 * [#2047](https://github.com/typelevel/cats/pull/2047) CommutativeMonoid instance for SortedMap by @alonsodomin
+* [#2043](https://github.com/typelevel/cats/pull/2043) Removed deprecation of >> and changed its param to be a by-name by @mpilquist
 
 
 
@@ -38,6 +40,7 @@
 * [#2027](https://github.com/typelevel/cats/pull/2027) Rename Validation to Validated in Validated docs by @Ttcao
 * [#2036](https://github.com/typelevel/cats/pull/2036) Clean up applicative syntax doc by @bkirwi
 * [#2035](https://github.com/typelevel/cats/pull/2035) Do not redirect to cats-mtl for MonadCombine by @vendethiel
+* [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc (#2048) by @fagossa
 
 
 ### Build improvements/dependency updates
