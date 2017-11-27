@@ -198,6 +198,19 @@ object OptionT extends OptionTInstances {
    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
    */
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._,  implicits._
+   * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, ?]]
+   * scala> val b: EitherT[OptionT[Eval, ?], String, Int] = a.mapK(OptionT.liftK)
+   * scala> b.value.value.value
+   * res0: Option[Either[String,Int]] = Some(Right(1))
+   * }}}
+   */
+  def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, ?] =
+    λ[F ~> OptionT[F, ?]](OptionT.liftF(_))
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {

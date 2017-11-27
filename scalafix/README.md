@@ -24,6 +24,8 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] EitherT.liftT was renamed to EitherT.liftF
 
+- [x] the lift method on WriterT, StateT, RWST and Kleisli was renamed to liftF
+
 - [x] CartesianBuilder (i.e. |@|) syntax is deprecated, use the apply syntax on tuples instead. E.g. (x |@| y |@| z).map(...) should be replaced by (x, y, z).mapN(...)
 
 - [x] Free.suspend is renamed to Free.defer for consistency.

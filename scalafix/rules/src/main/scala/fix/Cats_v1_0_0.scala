@@ -227,6 +227,22 @@ case class RenameEitherTLiftT(index: SemanticdbIndex)
 
 }
 
+// ref: https://github.com/typelevel/cats/pull/2033
+case class RenameTransformersLift(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameTransformersLift") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.WriterT.lift." -> "liftF",
+      "_root_.cats.data.StateT.lift." -> "liftF",
+      "_root_.cats.data.CommonStateTConstructors.lift." -> "liftF",
+      "_root_.cats.data.CommonIRWSTConstructors.lift." -> "liftF",
+      "_root_.cats.data.KleisliFunctions.lift." -> "liftF"
+    )
+
+}
+
+
 // ref: https://github.com/typelevel/cats/pull/1961
 case class RenameCartesian(index: SemanticdbIndex)
   extends SemanticRule(index, "RenameCartesian") {

@@ -100,8 +100,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("WriterT with Either should accumulate errors") {
-    val w1: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("Too "))
-    val w2: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("bad."))
+    val w1: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("Too "))
+    val w2: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("bad."))
 
     ((w1,w2).parMapN(_ + _).value) should === (Left("Too bad."))
 
