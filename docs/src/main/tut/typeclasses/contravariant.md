@@ -2,7 +2,7 @@
 layout: docs
 title:  "Contravariant"
 section: "typeclasses"
-source: "core/src/main/scala/cats/functor/Contravariant.scala"
+source: "core/src/main/scala/cats/Contravariant.scala"
 scaladoc: "#cats.Contravariant"
 ---
 # Contravariant
