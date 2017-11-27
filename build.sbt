@@ -227,6 +227,8 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.instances.EqInstances.catsContravariantSemigroupalForEq"),
       exclude[ReversedMissingMethodProblem]("cats.instances.EqInstances.catsContravariantMonoidalForEq"),
       exclude[ReversedMissingMethodProblem]("cats.instances.EqInstances.cats$instances$EqInstances$_setter_$catsContravariantMonoidalForEq_="),
+      exclude[InheritedNewAbstractMethodProblem]("cats.syntax.ContravariantSemigroupalSyntax.catsSyntaxContravariantSemigroupal"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.syntax.ContravariantMonoidalSyntax.catsSyntaxContravariantMonoidal"),
       exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority3.catsDataNonEmptyTraverseForOneAnd"),
       exclude[DirectMissingMethodProblem]("cats.data.OneAndLowPriority2.catsDataTraverseForOneAnd"),
       exclude[ReversedMissingMethodProblem]("cats.instances.ParallelInstances.catsStdNonEmptyParallelForZipVector"),
