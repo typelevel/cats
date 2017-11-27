@@ -15,6 +15,7 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with DistributiveSyntax
     with EitherKSyntax
     with EitherSyntax
     with EqSyntax
