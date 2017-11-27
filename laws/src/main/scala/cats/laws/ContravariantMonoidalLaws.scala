@@ -17,19 +17,19 @@ trait ContravariantMonoidalLaws[F[_]] extends ContravariantLaws[F] {
   def delta[A](a: A): (A, A) = (a, a)
 
   def contravariantMonoidalUnitRight[A](fa: F[A]): IsEq[F[A]] =
-    fa.contramap2(F.unit)(delta[A]) <-> fa
+    (fa, F.unit[A]).contramapN(delta[A]) <-> fa
 
   def contravariantMonoidalUnitLeft[A](fa: F[A]): IsEq[F[A]] =
-    (F.unit).contramap2(fa)(delta[A]) <-> fa
+    (F.unit[A], fa).contramapN(delta[A]) <-> fa
 
   def contravariantMonoidalContramap2CompatibleContramapLeft[A, B, C](fa: F[A], f: B => (A, C)): IsEq[F[B]] =
-    fa.contramap2(F.unit)(f) <-> fa.contramap(f andThen (_._1))
+    (fa, F.unit[C]).contramapN(f) <-> fa.contramap(f andThen (_._1))
 
   def contravariantMonoidalContramap2CompatibleContramapRight[A, B, C](fa: F[A], f: C => (B, A)): IsEq[F[C]] =
-    (F.unit).contramap2(fa)(f) <-> fa.contramap(f andThen (_._2))
+    (F.unit[B], fa).contramapN(f) <-> fa.contramap(f andThen (_._2))
 
   def contravariantMonoidalContramap2DiagonalAssociates[A](m: F[A], n: F[A], o: F[A]): IsEq[F[A]] =
-    (m.contramap2(n)(delta[A])).contramap2(o)(delta[A]) <-> m.contramap2(n.contramap2(o)(delta[A]))(delta[A])
+    ((m, n).contramapN(delta[A]), o).contramapN(delta[A]) <-> (m, (n, o).contramapN(delta[A])).contramapN(delta[A])
 }
 
 object ContravariantMonoidalLaws {

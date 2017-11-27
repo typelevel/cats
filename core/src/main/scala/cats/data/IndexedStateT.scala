@@ -379,13 +379,13 @@ private[data] sealed abstract class IndexedStateTContravariantMonoidal[F[_], S] 
   override def product[A, B](fa: IndexedStateT[F, S, S, A], fb: IndexedStateT[F, S, S, B]): IndexedStateT[F, S, S, (A, B)] =
     contramap2(fa, fb)(identity)
 
-  override def contramap2[A, B, C](fb: IndexedStateT[F, S, S, B], fc: IndexedStateT[F, S, S, C])(f: A => (B, C)): IndexedStateT[F, S, S, A] =
+  def contramap2[A, B, C](fb: IndexedStateT[F, S, S, B], fc: IndexedStateT[F, S, S, C])(f: A => (B, C)): IndexedStateT[F, S, S, A] =
     IndexedStateT.applyF(
       G.pure((s: S) =>
-        F.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))(
+        ContravariantMonoidal.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))(
           (tup: (S, A)) => f(tup._2) match {
             case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
-          })))
+          })(G, F)))
 }
 
 private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends IndexedStateTMonad[F, S] with Alternative[IndexedStateT[F, S, S, ?]] {

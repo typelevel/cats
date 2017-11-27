@@ -12,7 +12,6 @@ import simulacrum.typeclass
       def F = self
       def G = Functor[G]
     }
-
-  def contramap2[A, B, C](fb: F[B], fc: F[C])(f: A => (B, C)): F[A] =
-    contramap(product(fb, fc))(f)
+}
+object ContravariantSemigroupal extends SemigroupalArityFunctions {
 }
