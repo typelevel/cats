@@ -363,8 +363,11 @@ class WriterTSuite extends CatsSuite {
   }
 
   {
-    // F has a ContravariantMonoidal 
+    // F has a ContravariantMonoidal
     ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]
+
+    checkAll("WriterT[Const[String, ?], Int, ?]", ContravariantMonoidalTests[WriterT[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]))
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])

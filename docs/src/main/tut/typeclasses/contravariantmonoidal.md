@@ -10,7 +10,7 @@ scaladoc: "#cats.ContravariantMonoidal"
 The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.html) functors that can define a
 `product` function and a `unit` function.
 
-```scala
+```tut:reset
 import cats.Contravariant
 
 trait ContravariantMonoidal[F[_]] extends Contravariant[F] {
