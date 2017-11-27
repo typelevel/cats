@@ -13,5 +13,4 @@ import simulacrum.typeclass
       def G = Functor[G]
     }
 }
-object ContravariantSemigroupal extends SemigroupalArityFunctions {
-}
+object ContravariantSemigroupal extends SemigroupalArityFunctions

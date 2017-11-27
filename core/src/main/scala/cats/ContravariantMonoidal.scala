@@ -29,5 +29,4 @@ import simulacrum.typeclass
       val G = self
     }
 }
-object ContravariantMonoidal extends SemigroupalArityFunctions {
-}
+object ContravariantMonoidal extends SemigroupalArityFunctions
