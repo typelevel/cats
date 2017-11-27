@@ -69,8 +69,8 @@ options:
      - title: Contravariant
        url: typeclasses/contravariant.html
        menu_section: variance
-     - title: ContravariantSemigroupal
-       url: typeclasses/contravariantsemigroupal.html
+     - title: ContravariantMonoidal
+       url: typeclasses/contravariantmonoidal.html
        menu_type: typeclasses
      - title: Invariant
        url: typeclasses/invariant.html
