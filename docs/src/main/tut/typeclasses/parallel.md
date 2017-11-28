@@ -14,7 +14,7 @@ but instead have instances of `Applicative`. E.g. `Either` and `Validated`.
 This is because defining a `Monad` instance for data types like `Validated` would be inconsistent with its error-accumulating behaviour.
 In short, `Monads` describe dependent computations and `Applicatives` describe independent computations.
 
-Sometimes however, we want to use both in conjuction with each other.
+Sometimes however, we want to use both in conjunction with each other.
 In the example of `Either` and `Validated` it is trivial albeit cumbersome to convert between the two types.
 Below is a short example of a situation where we might run into this.
 For simplicity, we'll use `String` as our type to represent errors.
@@ -107,8 +107,8 @@ We can define a different `ap` for most of them and use the `parMapN` syntax for
 
 ## NonEmptyParallel - a weakened Parallel
 
-If you recall that some types cannot form a `Monad` or an `Applicative` because it's not possible to implement the `pure` function for them.
-However, these types usually can have instances for `FlatMap` or `Apply`.
+Some types cannot form a `Monad` or an `Applicative` because it's not possible to implement the `pure` function for them.
+However, these types can often have instances for `FlatMap` or `Apply`.
 For types like these we can use the `NonEmptyParallel` type class.
 An example for one of these is `ZipList`.
 
