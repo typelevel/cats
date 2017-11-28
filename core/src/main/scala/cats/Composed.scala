@@ -1,7 +1,7 @@
 package cats
 
 
-private [cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
+private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
   def F: Distributive[F]
   def G: Distributive[G]
 

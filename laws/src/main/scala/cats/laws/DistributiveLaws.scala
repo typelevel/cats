@@ -9,9 +9,9 @@ trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
     F.cosequence[Id, A](fa) <-> fa
   }
 
-  //TODO need laws for 
+  // TODO need laws for
   // cosequence andThen cosequence == id
-  // composition 
+  // composition
 }
 
 object DistributiveLaws {
