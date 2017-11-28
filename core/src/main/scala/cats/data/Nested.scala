@@ -65,7 +65,7 @@ private[data] sealed abstract class NestedInstances1 extends NestedInstances2 {
 
   implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
     new NestedContravariantMonoidal[F, G] {
-      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = ContravariantMonoidal[G].composeApplicative[F]
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
 }
 

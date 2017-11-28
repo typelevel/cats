@@ -21,12 +21,5 @@ import simulacrum.typeclass
 
   def liftContravariant[A, B](f: A => B): F[B] => F[A] =
     ContravariantMonoidal.contramap2(unit[B], _: F[B])(((b: B) => (b, b)) compose f)(self, self)
-
-  // Technically, this is not correct, as the Applicative is composed with the ContravariantMonoidal, not the other way around
-  def composeApplicative[G[_]: Applicative]: ContravariantMonoidal[λ[α => G[F[α]]]] =
-    new ComposedApplicativeContravariantMonoidal[G, F] {
-      val F = Applicative[G]
-      val G = self
-    }
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions
