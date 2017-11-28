@@ -40,12 +40,18 @@
 * [#2027](https://github.com/typelevel/cats/pull/2027) Rename Validation to Validated in Validated docs by @Ttcao
 * [#2036](https://github.com/typelevel/cats/pull/2036) Clean up applicative syntax doc by @bkirwi
 * [#2035](https://github.com/typelevel/cats/pull/2035) Do not redirect to cats-mtl for MonadCombine by @vendethiel
-* [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc (#2048) by @fagossa
+* [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc by @fagossa
+* [#2050](https://github.com/typelevel/cats/pull/2050) Link Directly to Cats Package in ScalaDoc by @stephen-lazaro 
+* [#2031](https://github.com/typelevel/cats/pull/2031) Add parallel docs by @LukaJCB
 
 
 ### Build improvements/dependency updates
 
 * [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
+
+### Testing improvements
+
+* [#2037](https://github.com/typelevel/cats/pull/2037) Tests: MonadCombine->Alternative, add missing ones by @vendethiel 
 
 
 
