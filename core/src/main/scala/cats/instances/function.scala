@@ -11,7 +11,6 @@ trait FunctionInstances extends cats.kernel.instances.FunctionInstances
     with Function0Instances with Function1Instances
 
 private[instances] sealed trait Function0Instances {
-
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
@@ -36,13 +35,7 @@ private[instances] sealed trait Function0Instances {
     }
 }
 
-private[instances] sealed trait Function1Instances {
-  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
-    new Contravariant[? => R] {
-      def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
-        fa.compose(f)
-    }
-
+private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
     new ContravariantMonoidal[? => R] {
       def unit[A]: A => R = Function.const(Monoid[R].empty)
@@ -99,4 +92,13 @@ private[instances] sealed trait Function1Instances {
 
   implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
     Category[Function1].algebraK
+}
+
+
+private[instances] sealed trait Function1Instances0 {
+  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
+    new Contravariant[? => R] {
+      def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
+        fa.compose(f)
+    }
 }

@@ -43,6 +43,11 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
     new NestedNonEmptyTraverse[F, G] {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
+    new NestedContravariantMonoidal[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -61,11 +66,6 @@ private[data] sealed abstract class NestedInstances1 extends NestedInstances2 {
   implicit def catsDataFunctorForContravariantForNested[F[_]: Contravariant, G[_]: Contravariant]: Functor[Nested[F, G, ?]] =
     new NestedFunctor[F, G] {
       val FG: Functor[λ[α => F[G[α]]]] = Contravariant[F].compose[G]
-    }
-
-  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
-    new NestedContravariantMonoidal[F, G] {
-      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
 }
 

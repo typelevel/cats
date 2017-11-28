@@ -206,6 +206,8 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.ContravariantSemigroupal#Ops.contramap2"),
       exclude[InheritedNewAbstractMethodProblem]("cats.ContravariantMonoidal#ToContravariantMonoidalOps.toContravariantMonoidalOps"),
       exclude[InheritedNewAbstractMethodProblem]("cats.ContravariantSemigroupal#ToContravariantSemigroupalOps.toContravariantSemigroupalOps"),
+      exclude[ReversedMissingMethodProblem]("cats.Applicative.composeContravariantMonoidal"),
+      exclude[UpdateForwarderBodyProblem]("cats.instances.Function1Instances.catsStdContravariantForFunction1"),
       exclude[DirectMissingMethodProblem]("cats.instances.package=uiv.catsContravariantSemigroupalEquiv"),
       exclude[DirectMissingMethodProblem]("cats.instances.OrderingInstances.catsContravariantSemigroupalForOrdering"),
       exclude[ReversedMissingMethodProblem]("cats.instances.OrderingInstances.cats$instances$OrderingInstances$_setter_$catsContravariantMonoidalForOrdering_="),

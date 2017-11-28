@@ -136,11 +136,8 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
   implicit val catsDataCommutativeArrowForKleisliId: CommutativeArrow[Kleisli[Id, ?, ?]] =
     catsDataCommutativeArrowForKleisli[Id]
 
-  implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
-    new Contravariant[Kleisli[F, ?, C]] {
-      override def contramap[A, B](fa: Kleisli[F, A, C])(f: B => A): Kleisli[F, B, C] =
-        fa.local(f)
-    }
+  implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
+    new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
@@ -160,14 +157,17 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
       λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.mapK(P.parallel))
   }
+
+  implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
+    new Contravariant[Kleisli[F, ?, C]] {
+      override def contramap[A, B](fa: Kleisli[F, A, C])(f: B => A): Kleisli[F, B, C] =
+        fa.local(f)
+    }
 }
 
 private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
   implicit def catsDataAlternativeForKleisli[F[_], A](implicit F0: Alternative[F]): Alternative[Kleisli[F, A, ?]] =
     new KleisliAlternative[F, A] { def F: Alternative[F] = F0 }
-
-  implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
-    new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances3 extends KleisliInstances4 {
