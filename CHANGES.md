@@ -43,6 +43,7 @@
 * [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc by @fagossa
 * [#2050](https://github.com/typelevel/cats/pull/2050) Link Directly to Cats Package in ScalaDoc by @stephen-lazaro 
 * [#2031](https://github.com/typelevel/cats/pull/2031) Add parallel docs by @LukaJCB
+* [#2045](https://github.com/typelevel/cats/pull/2045) Fix scalafix testing instructions by @kubukoz
 
 
 ### Build improvements/dependency updates
@@ -52,6 +53,7 @@
 ### Testing improvements
 
 * [#2037](https://github.com/typelevel/cats/pull/2037) Tests: MonadCombine->Alternative, add missing ones by @vendethiel 
+* [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori 
 
 
 
