@@ -25,6 +25,7 @@ possible:
  * Alexey Levan
  * Alissa Pajer
  * Alistair Johnson
+ * Alonso Dominguez
  * Amir Mohammad Saied
  * Andrea Fiore
  * Andrew Jones
@@ -36,6 +37,7 @@ possible:
  * Aλ
  * Ben Fradet
  * Ben Hutchison
+ * Ben Kirwin
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -43,6 +45,7 @@ possible:
  * Brendan McAdams
  * Brian McKenna
  * Bryan Tan
+ * Cary Robbins
  * Chris Birchall
  * Cody Allen
  * Colt Frederickson
@@ -68,9 +71,11 @@ possible:
  * Erik Osheim
  * Eugene Burmako
  * Eugene Yokota
+ * Fabian Gutierrez
  * Fabian Schmitthenner
  * Fabio Labella
  * Feynman Liang
+ * Filipe Oliveira
  * Frank S. Thomas
  * Gabriele Petronella
  * Giulio De Luise
@@ -83,6 +88,7 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Jakub Kozłowski
  * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
  * Jens
@@ -98,6 +104,7 @@ possible:
  * Julien Truffaut
  * Jun Tomioka
  * Kailuo Wang
+ * kellen
  * Kenji Yoshida
  * Leandro Bolivar
  * Lars Hupel
@@ -120,6 +127,7 @@ possible:
  * Michael Pilquist
  * Mike Curry
  * Miles Sabin
+ * nigredo-tori
  * n4to4
  * Olivier Blanvillain
  * Olli Helenius
@@ -146,6 +154,7 @@ possible:
  * Ross A. Baker
  * Rüdiger Klaehn
  * Ryan Case
+ * rsoeldner
  * Sam Ritchie
  * Sarunas Valaskevicius
  * Sho Kohara
@@ -155,6 +164,7 @@ possible:
  * Sinisa Louc
  * Stephen Carman
  * Stephen Judkins
+ * Stephen Lazaro
  * Stew O'Connor
  * Suhas Gaddam
  * Sumedh Mungee
