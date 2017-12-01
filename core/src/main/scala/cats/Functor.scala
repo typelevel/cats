@@ -17,6 +17,11 @@ import simulacrum.typeclass
   // derived methods
 
   /**
+    * Alias for [[map]].
+    */
+  def fmap[A, B](fa: F[A])(f: A => B): F[B] = map(fa)(f)
+
+  /**
    * Lifts natural subtyping covariance of covariant Functors.
    *
    * NOTE: In certain (perhaps contrived) situations that rely on universal
