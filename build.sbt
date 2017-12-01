@@ -275,6 +275,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.data.NestedApplicativeError.sequence"),
       exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.sequence"),
+      exclude[ReversedMissingMethodProblem]("cats.data.IorFunctions.fromEither"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence")
 
