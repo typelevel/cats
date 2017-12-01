@@ -19,6 +19,16 @@ import simulacrum.typeclass
   /**
     * Alias for [[map]], since [[map]] can't be injected as syntax if
     * the implementing type already had a built-in `.map` method.
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    *
+    * scala> val m: Map[Int, String] = Map(1 -> "hi", 2 -> "there", 3 -> "you")
+    *
+    * scala> m.fmap(_ ++ "!")
+    * res0: Map[Int,String] = Map(1 -> hi!, 2 -> there!, 3 -> you!)
+    * }}}
     */
   final def fmap[A, B](fa: F[A])(f: A => B): F[B] = map(fa)(f)
 
