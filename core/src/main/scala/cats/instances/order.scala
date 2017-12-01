@@ -13,20 +13,14 @@ trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
-        new Order[B] {
-          def compare(x: B, y: B): Int =
-            fa.compare(f(x), f(y))
-        }
+        Order.by(f)(fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] =
         new Order[(A, B)] {
-          def compare(x: (A, B), y: (A, B)): Int =
-            (x, y) match {
-              case ((aL, bL), (aR, bR)) => {
-                val z = fa.compare(aL, aR)
-                if (z == 0) fb.compare(bL, bR) else z
-              }
-            }
+          def compare(x: (A, B), y: (A, B)): Int = {
+            val z = fa.compare(x._1, y._1)
+            if (z == 0) fb.compare(x._2, y._2) else z
+          }
         }
     }
 }

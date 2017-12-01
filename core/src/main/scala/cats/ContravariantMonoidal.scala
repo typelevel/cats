@@ -18,8 +18,5 @@ import simulacrum.typeclass
    * the diagonal
    */
   def unit[A]: F[A]
-
-  def liftContravariant[A, B](f: A => B): F[B] => F[A] =
-    ContravariantMonoidal.contramap2(unit[B], _: F[B])(((b: B) => (b, b)) compose f)(self, self)
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions

@@ -198,6 +198,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority3"),
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority2"),
       exclude[MissingTypesProblem]("cats.data.OneAndLowPriority1"),
+      exclude[ReversedMissingMethodProblem]("cats.Contravariant.liftContravariant"),
       exclude[DirectMissingMethodProblem]("cats.implicits.catsContravariantSemigroupalForEq"),
       exclude[DirectMissingMethodProblem]("cats.implicits.catsContravariantSemigroupalForOrder"),
       exclude[DirectMissingMethodProblem]("cats.implicits.catsContravariantSemigroupalForOrdering"),

@@ -25,11 +25,7 @@ trait EquivInstances {
       def product[A, B](fa: Equiv[A], fb: Equiv[B]): Equiv[(A, B)] =
         new Equiv[(A, B)] {
           def equiv(l: (A, B), r: (A, B)): Boolean =
-            (l, r) match {
-              case ((aL, bL), (aR, bR)) =>
-                fa.equiv(aL, aR) &&
-                  fb.equiv(bR, bL)
-            }
+            fa.equiv(l._1, r._1) && fb.equiv(l._2, r._2)
         }
     }
 }
