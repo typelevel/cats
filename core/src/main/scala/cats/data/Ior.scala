@@ -257,4 +257,25 @@ private[data] sealed trait IorFunctions {
         case None => None
       }
     }
+
+  /**
+   * Create an `Ior` from an `Either`.
+   * @param eab an `Either` from which the `Ior` should be created
+   *
+   * @return [[Ior.Left]] if the `Either` was a `Left`,
+   *         or [[Ior.Right]] if the `Either` was a `Right`
+   *
+   * Example:
+   * {{{
+   * scala> Ior.fromEither(Left(1))
+   * res0: Ior[Int, Nothing] = Left(1)
+   * scala> Ior.fromEither(Right('1'))
+   * res1: Ior[Nothing, Char] = Right(1)
+   * }}}
+   */
+  def fromEither[A, B](eab: Either[A, B]): A Ior B =
+    eab match {
+      case Left(a) => left(a)
+      case Right(b) => right(b)
+    }
 }
