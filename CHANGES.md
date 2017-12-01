@@ -53,7 +53,8 @@
 ### Testing improvements
 
 * [#2037](https://github.com/typelevel/cats/pull/2037) Tests: MonadCombine->Alternative, add missing ones by @vendethiel 
-* [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori 
+* [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori
+* [#2053](https://github.com/typelevel/cats/pull/2053) Fix #2051, Remove superfluous implicit by @rsoeldner
 
 
 
