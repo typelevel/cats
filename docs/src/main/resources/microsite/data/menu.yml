@@ -69,12 +69,16 @@ options:
      - title: Contravariant
        url: typeclasses/contravariant.html
        menu_section: variance
+     - title: ContravariantMonoidal
+       url: typeclasses/contravariantmonoidal.html
+       menu_type: typeclasses
      - title: Invariant
        url: typeclasses/invariant.html
        menu_section: variance
      - title: InvariantMonoidal
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
+
 
   - title: Eq
     url: typeclasses/eq.html

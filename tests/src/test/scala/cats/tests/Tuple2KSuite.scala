@@ -2,7 +2,7 @@ package cats
 package tests
 
 
-import cats.data.{Tuple2K, Validated}
+import cats.data.{Const, Tuple2K, Validated}
 import cats.Contravariant
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -19,6 +19,11 @@ class Tuple2KSuite extends CatsSuite {
 
   checkAll("Tuple2K[Show, Order, Int]", ContravariantTests[λ[α => Tuple2K[Show, Order, α]]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Tuple2K[Show, Order, Int]]", SerializableTests.serializable(Contravariant[λ[α => Tuple2K[Show, Order, α]]]))
+
+  checkAll("Tuple2K[Const[String, ?], Const[Int, ?], Int]",
+    ContravariantMonoidalTests[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[Tuple2K[Const[String, ?], Const[Int, ?], Int]]",
+    SerializableTests.serializable(ContravariantMonoidal[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]]))
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
 

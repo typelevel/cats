@@ -247,6 +247,10 @@ private[data] sealed abstract class IndexedStateTInstances extends IndexedStateT
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
     FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
+
+  implicit def catsDataContravariantMonoidalForIndexedStateT[F[_], S](implicit FD: ContravariantMonoidal[F],
+    FA: Applicative[F]): ContravariantMonoidal[IndexedStateT[F, S, S, ?]] =
+    new IndexedStateTContravariantMonoidal[F, S] { implicit def F = FD; implicit def G = FA }
 }
 
 private[data] sealed abstract class IndexedStateTInstances1 extends IndexedStateTInstances2 {
@@ -377,6 +381,28 @@ private[data] sealed abstract class IndexedStateTSemigroupK[F[_], SA, SB] extend
 
   def combineK[A](x: IndexedStateT[F, SA, SB, A], y: IndexedStateT[F, SA, SB, A]): IndexedStateT[F, SA, SB, A] =
     IndexedStateT(s => G.combineK(x.run(s), y.run(s)))
+}
+
+private[data] sealed abstract class IndexedStateTContravariantMonoidal[F[_], S] extends ContravariantMonoidal[IndexedStateT[F, S, S, ?]]{
+  implicit def F: ContravariantMonoidal[F]
+  implicit def G: Applicative[F]
+
+  override def unit[A]: IndexedStateT[F, S, S, A]  =
+    IndexedStateT.applyF(G.pure((s: S) => F.unit[(S, A)]))
+
+  override def contramap[A, B](fa: IndexedStateT[F, S, S, A])(f: B => A): IndexedStateT[F, S, S, B] =
+    contramap2(fa, unit)(((a: A) => (a, a)) compose f)
+
+  override def product[A, B](fa: IndexedStateT[F, S, S, A], fb: IndexedStateT[F, S, S, B]): IndexedStateT[F, S, S, (A, B)] =
+    contramap2(fa, fb)(identity)
+
+  def contramap2[A, B, C](fb: IndexedStateT[F, S, S, B], fc: IndexedStateT[F, S, S, C])(f: A => (B, C)): IndexedStateT[F, S, S, A] =
+    IndexedStateT.applyF(
+      G.pure((s: S) =>
+        ContravariantMonoidal.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))(
+          (tup: (S, A)) => f(tup._2) match {
+            case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
+          })(G, F)))
 }
 
 private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends IndexedStateTMonad[F, S] with Alternative[IndexedStateT[F, S, S, ?]] {

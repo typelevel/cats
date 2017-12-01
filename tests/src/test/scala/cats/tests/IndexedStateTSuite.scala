@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IndexedStateT, State, StateT}
+import cats.data.{Const, EitherT, IndexedStateT, State, StateT}
 
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
@@ -370,6 +370,13 @@ class IndexedStateTSuite extends CatsSuite {
     Functor[IndexedStateT[ListWrapper, Int, Int, ?]]
     MonoidK[IndexedStateT[ListWrapper, Int, Int, ?]]
     SemigroupK[IndexedStateT[ListWrapper, Int, Int, ?]]
+  }
+
+  {
+    // F has a ContravariantMonoidal
+    val SD = ContravariantMonoidal[StateT[Const[String, ?], String, ?]]
+
+    checkAll("ContravariantMonoidal[StateT[Const[String, ?], String, ?]]", SerializableTests.serializable(SD))
   }
 
   {

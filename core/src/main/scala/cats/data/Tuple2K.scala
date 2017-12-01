@@ -29,16 +29,21 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
     def F: Show[F[A]] = FF
     def G: Show[G[A]] = GF
   }
-  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Tuple2K[F, G, α]]] = new Tuple2KContravariant[F, G] {
-    def F: Contravariant[F] = FC
-    def G: Contravariant[G] = GC
-  }
+  implicit def catsDataContravariantMonoidalForTuple2k[F[_], G[_]](implicit FD: ContravariantMonoidal[F], GD: ContravariantMonoidal[G]): ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KContravariantMonoidal[F, G] {
+      def F: ContravariantMonoidal[F] = FD
+      def G: ContravariantMonoidal[G] = GD
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances0 extends Tuple2KInstances1 {
   implicit def catsDataTraverseForTuple2K[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Tuple2K[F, G, α]]] = new Tuple2KTraverse[F, G] {
     def F: Traverse[F] = FF
     def G: Traverse[G] = GF
+  }
+  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Tuple2K[F, G, α]]] = new Tuple2KContravariant[F, G] {
+    def F: Contravariant[F] = FC
+    def G: Contravariant[G] = GC
   }
   implicit def catsDataEqForTuple2K[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Tuple2K[F, G, A]] = new Eq[Tuple2K[F, G, A]] {
     def eqv(x: Tuple2K[F, G, A], y: Tuple2K[F, G, A]): Boolean =
@@ -121,6 +126,16 @@ private[data] sealed trait Tuple2KContravariant[F[_], G[_]] extends Contravarian
   def F: Contravariant[F]
   def G: Contravariant[G]
   def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] = Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
+}
+
+private[data] sealed trait Tuple2KContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] {
+  def F: ContravariantMonoidal[F]
+  def G: ContravariantMonoidal[G]
+  def unit[A]: Tuple2K[F, G, A] = Tuple2K(F.unit, G.unit)
+  def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
+    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
+  def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] =
+    Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
 private[data] sealed trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple2K[F, G, α]]] with Tuple2KFunctor[F, G] {

@@ -45,6 +45,12 @@ import simulacrum.typeclass
       val G = Applicative[G]
     }
 
+  def composeContravariantMonoidal[G[_]: ContravariantMonoidal]: ContravariantMonoidal[λ[α => F[G[α]]]] =
+    new ComposedApplicativeContravariantMonoidal[F, G] {
+      val F = self
+      val G = ContravariantMonoidal[G]
+    }
+
   /**
    * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
    */
