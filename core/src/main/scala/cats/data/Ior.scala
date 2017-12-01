@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.Bifunctor
+import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
 
 import scala.annotation.tailrec
@@ -203,6 +204,44 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     new Bifunctor[Ior] {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
+
+  // scalastyle:off cyclomatic.complexity
+  implicit def parallelForIor[E]
+    (implicit E: Semigroup[E]): Parallel[Ior[E, ?], Ior[E, ?]] = new Parallel[Ior[E, ?], Ior[E, ?]]
+  {
+
+    private[this] val identityK: Ior[E, ?] ~> Ior[E, ?] = FunctionK.id
+
+    def parallel: Ior[E, ?] ~> Ior[E, ?] = identityK
+    def sequential: Ior[E, ?] ~> Ior[E, ?] = identityK
+
+    val applicative: Applicative[Ior[E, ?]] = new Applicative[Ior[E, ?]] {
+      def pure[A](a: A): Ior[E, A] = Ior.right(a)
+      def ap[A, B](ff: Ior[E, A => B])(fa: Ior[E, A]): Ior[E, B] =
+        fa match {
+          case Ior.Right(a) => ff match {
+            case Ior.Right(f) => Ior.Right(f(a))
+            case Ior.Both(e1, f) => Ior.Both(e1, f(a))
+            case Ior.Left(e1) => Ior.Left(e1)
+          }
+          case Ior.Both(e1, a) => ff match {
+            case Ior.Right(f) => Ior.Both(e1, f(a))
+            case Ior.Both(e2, f) => Ior.Both(E.combine(e2, e1), f(a))
+            case Ior.Left(e2) => Ior.Left(E.combine(e2, e1))
+          }
+          case Ior.Left(e1) => ff match {
+            case Ior.Right(f) => Ior.Left(e1)
+            case Ior.Both(e2, f) => Ior.Left(E.combine(e2, e1))
+            case Ior.Left(e2) => Ior.Left(E.combine(e2, e1))
+          }
+        }
+    }
+
+    lazy val monad: Monad[Ior[E, ?]] = Monad[Ior[E, ?]]
+  }
+  // scalastyle:on cyclomatic.complexity
+
+
 }
 
 private[data] sealed abstract class IorInstances0 {
