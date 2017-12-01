@@ -205,6 +205,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
 
+  // scalastyle:off cyclomatic.complexity
   implicit def parallelForIor[E]
     (implicit E: Semigroup[E]): Parallel[Ior[E, ?], Ior[E, ?]] = new Parallel[Ior[E, ?], Ior[E, ?]]
   {
@@ -235,8 +236,10 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
           }
         }
     }
+
     lazy val monad: Monad[Ior[E, ?]] = Monad[Ior[E, ?]]
   }
+  // scalastyle:on cyclomatic.complexity
 
 
 }
