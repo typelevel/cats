@@ -171,6 +171,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
   checkAll("Parallel[Ior[String, ?], Ior[String, ?]]", ParallelTests[Ior[String, ?], Ior[String, ?]].parallel[Int, String])
+  checkAll("Parallel[IorT[F, String, ?], IorT[F, String, ?]]", ParallelTests[IorT[Option, String, ?], IorT[Option, String, ?]].parallel[Int, String])
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String])

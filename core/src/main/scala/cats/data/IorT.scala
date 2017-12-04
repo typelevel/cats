@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.arrow.FunctionK
 import cats.syntax.either._
 import cats.syntax.option._
 
@@ -426,6 +427,27 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
       val A0: Semigroup[A] = A
       val F0: Monad[F] = F
     }
+
+  implicit def parallelForIorT[F[_], E]
+    (implicit F: Monad[F], E: Semigroup[E]): Parallel[IorT[F, E, ?], IorT[F, E, ?]] = new Parallel[IorT[F, E, ?], IorT[F, E, ?]]
+  {
+
+    private[this] val identityK: IorT[F, E, ?] ~> IorT[F, E, ?] = FunctionK.id
+    private[this] val underlyingParallel: Parallel[Ior[E, ?], Ior[E, ?]] =
+      Parallel[Ior[E, ?], Ior[E, ?]]
+
+    def parallel: IorT[F, E, ?] ~> IorT[F, E, ?] = identityK
+    def sequential: IorT[F, E, ?] ~> IorT[F, E, ?] = identityK
+
+    val applicative: Applicative[IorT[F, E, ?]] = new Applicative[IorT[F, E, ?]] {
+      def pure[A](a: A): IorT[F, E, A] = IorT.pure(a)
+      def ap[A, B](ff: IorT[F, E, A => B])(fa: IorT[F, E, A]): IorT[F, E, B] =
+        IorT(F.map2(ff.value, fa.value)((f, a) => underlyingParallel.applicative.ap(f)(a)))
+    }
+
+    lazy val monad: Monad[IorT[F, E, ?]] = Monad[IorT[F, E, ?]]
+  }
+
 }
 
 private[data] abstract class IorTInstances2 extends IorTInstances3 {
