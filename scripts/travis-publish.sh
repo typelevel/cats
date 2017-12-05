@@ -29,7 +29,7 @@ fi
 
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
-set COURSIER_VERBOSITY=0
+export COURSIER_VERBOSITY=0
 
 core_js="$sbt_cmd validateJS"
 kernel_js="$sbt_cmd validateKernelJS"
