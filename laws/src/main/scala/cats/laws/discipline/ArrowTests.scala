@@ -32,7 +32,7 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
     EqFAEDE: Eq[F[(A, E), (D, E)]],
-    EqFABC: Eq[F[(A), (B, C)]],
+    EqFABC: Eq[F[A, (B, C)]],
     EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
   ): RuleSet =

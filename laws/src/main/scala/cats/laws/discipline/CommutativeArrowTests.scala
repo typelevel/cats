@@ -11,6 +11,7 @@ trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
 
   def commutativeArrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
+    ArbFAC: Arbitrary[F[A, C]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFCD: Arbitrary[F[C, D]],
     ArbFDE: Arbitrary[F[D, E]],
@@ -26,6 +27,7 @@ trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
     EqFAD: Eq[F[A, D]],
     EqFAG: Eq[F[A, G]],
     EqFACB: Eq[F[(A, C), B]],
+    EqFABC: Eq[F[A, (B, C)]],
     EqFACBC: Eq[F[(A, C), (B, C)]],
     EqFACBD: Eq[F[(A, C), (B, D)]],
     EqFADCD: Eq[F[(A, D), (C, D)]],
