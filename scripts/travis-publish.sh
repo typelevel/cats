@@ -36,12 +36,16 @@ free_js="$sbt_cmd validateFreeJS"
 js="$core_js && $free_js && $kernel_js"
 jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
 
-scalafix="$sbt_cmd ';coreJVM/publishLocal;freeJVM/publishLocal' && cd scalafix && $sbt_cmd tests/test && cd .."
+if [[ $TRAVIS_SCALA_VERSION == *"2.12"* ]]; then
+scalafix="sbt ';coreJVM/publishLocal;freeJVM/publishLocal' && cd scalafix && sbt tests/test && cd .. &&"
+else
+scalafix = ""
+fi
 
 if [[ $JS_BUILD == "true" ]]; then
 run_cmd="$js"
 else
-run_cmd="$scalafix && $jvm && $sbt_cmd $publish_cmd"
+run_cmd="$scalafix $jvm && $sbt_cmd $publish_cmd"
 fi
 
 eval $run_cmd
