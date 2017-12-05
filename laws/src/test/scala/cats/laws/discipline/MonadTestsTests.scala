@@ -12,4 +12,5 @@ class MonadTestsTests extends FunSuite with Discipline {
   // so we confirm here that the laws pass for `Eval` (the monad instance for
   // which is actually stack safe, like all other monad instances in Cats.)
   checkAll("Eval[Int]", MonadTests[Eval].stackUnsafeMonad[Int, Int, Int])
+
 }

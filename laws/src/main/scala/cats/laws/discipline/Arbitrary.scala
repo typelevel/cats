@@ -36,6 +36,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForConst[A, B](implicit A: Arbitrary[A]): Arbitrary[Const[A, B]] =
     Arbitrary(A.arbitrary.map(Const[A, B]))
 
+
+
   implicit def catsLawsCogenForConst[A, B](implicit A: Cogen[A]): Cogen[Const[A, B]] =
     A.contramap(_.getConst)
 
@@ -242,4 +244,6 @@ private[discipline] sealed trait ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
+
+
 }

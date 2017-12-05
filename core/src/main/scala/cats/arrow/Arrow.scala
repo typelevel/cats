@@ -45,4 +45,52 @@ import simulacrum.typeclass
   @simulacrum.op("***", alias = true)
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
+
+  /**
+    * Create a new computation `F` that merge outputs of `f` and `g` both having the same input
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.arrow.Arrow
+    * scala> val addEmpty: Int => Int = _ + 0
+    * scala> val multiplyEmpty: Int => Int= _ * 1d
+    * scala> val f: Int => (Int, Double) = addEmpty &&& multiplyEmpty
+    * scala> f(1)
+    * res0: (Int Double) = (1,1.0)
+    * }}}
+    *
+    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
+    *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
+    */
+  @simulacrum.op("&&&", alias = true)
+  def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] = {
+    andThen(lift((x: A) => (x, x)), split(f, g))
+  }
+
+  /**
+    * Create a new computation `F` that apply f andThen biFork the result
+    * one way is applied to g and the other pass through
+    * the result is a tuple
+    *             /-----out1 = f(input) -----\
+    *  input ----{                            }----(out1,out2)
+    *             \-----out2 = g(f(input))---/
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.arrow.Arrow
+    * scala> val twoTimes: Int => Double = _ + 2d
+    * scala> val fiveTimes: Double => Double= _ * 5
+    * scala> val f: Int => (Double, Double) = twoTimes -< fiveTimes
+    * scala> f(2)
+    * res0: (Double Double) = (4.0,20.0)
+    * }}}
+    *
+    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
+    *  `f` and `g` in the context of F. This means that `f -< g` may not be equivalent to `g -< f`.
+    */
+  @simulacrum.op("-<", alias = true)
+  def combineAndByPass[A, B, C](f: F[A, B])(g: F[B, C]): F[A, (B, C)] = {
+    andThen(lift((x: A) => (x, x)), split(f, andThen(f, g)))
+  }
 }
