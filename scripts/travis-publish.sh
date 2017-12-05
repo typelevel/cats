@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 # Build Overview:
 # The overall build is split into a number of parts
@@ -37,15 +36,12 @@ free_js="$sbt_cmd validateFreeJS"
 js="$core_js && $free_js && $kernel_js"
 jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
 
-sbt ;coreJVM/publishLocal;freeJVM/publishLocal
-cd scalafix
-sbt tests/test
-cd ..
+scalafix="$sbt_cmd ';coreJVM/publishLocal;freeJVM/publishLocal' && cd scalafix && $sbt_cmd tests/test && cd .."
 
 if [[ $JS_BUILD == "true" ]]; then
 run_cmd="$js"
 else
-run_cmd="$jvm && $sbt_cmd $publish_cmd"
+run_cmd="$scalafix && $jvm && $sbt_cmd $publish_cmd"
 fi
 
 eval $run_cmd
