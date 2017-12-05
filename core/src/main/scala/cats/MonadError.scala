@@ -50,7 +50,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * scala> import cats.implicits._
    * scala> import scala.util.{Try, Success}
    *
-   * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new Exception))
+   * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new java.lang.Exception))
    * scala> a.rethrow
    * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
    *
