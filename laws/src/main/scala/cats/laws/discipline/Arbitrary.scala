@@ -246,4 +246,6 @@ private[discipline] sealed trait ArbitraryInstances0 {
     Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
 
 
+
+
 }

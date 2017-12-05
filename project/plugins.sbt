@@ -13,3 +13,4 @@ addSbtPlugin("org.xerial.sbt"      % "sbt-sonatype"          % "2.0")
 addSbtPlugin("com.47deg"           % "sbt-microsites"        % "0.7.0")
 addSbtPlugin("com.dwijnand"        % "sbt-travisci"          % "1.1.1")
 addSbtPlugin("org.lyranthe.sbt"    % "partial-unification"   % "1.1.0")
+

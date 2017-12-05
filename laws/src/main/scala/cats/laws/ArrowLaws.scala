@@ -37,7 +37,7 @@ trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with StrongLaws[F] {
   def splitConsistentWithAndThen[A, B, C, D](f: F[A, B], g: F[C, D]): IsEq[F[(A, C), (B, D)]] =
     F.split(f, g) <-> (f.first andThen g.second)
 
-  def mergeConsistentWithAndThen[A, B, C](f: F[A, B], g: F[A, C]): IsEq[F[(A), (B, C)]] =
+  def mergeConsistentWithAndThen[A, B, C](f: F[A, B], g: F[A, C]): IsEq[F[A, (B, C)]] =
     F.merge(f, g) <-> ((F.lift((x: A) => (x, x))) andThen F.split(f, g))
 
   private def fst[A, B](p: (A, B)): A = p._1
