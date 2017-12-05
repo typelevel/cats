@@ -54,7 +54,7 @@ import simulacrum.typeclass
     * scala> import cats.implicits._
     * scala> import cats.arrow.Arrow
     * scala> val addEmpty: Int => Int = _ + 0
-    * scala> val multiplyEmpty: Int => Int= _ * 1d
+    * scala> val multiplyEmpty: Int => Double= _ * 1d
     * scala> val f: Int => (Int, Double) = addEmpty &&& multiplyEmpty
     * scala> f(1)
     * res0: (Int Double) = (1,1.0)
