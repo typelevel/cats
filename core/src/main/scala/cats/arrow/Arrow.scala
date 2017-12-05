@@ -79,7 +79,7 @@ import simulacrum.typeclass
     * {{{
     * scala> import cats.implicits._
     * scala> import cats.arrow.Arrow
-    * scala> val twoTimes: Int => Double = _ + 2d
+    * scala> val twoTimes: Int => Double = _ * 2d
     * scala> val fiveTimes: Double => Double= _ * 5
     * scala> val f: Int => (Double, Double) = twoTimes -< fiveTimes
     * scala> f(2)
@@ -90,7 +90,7 @@ import simulacrum.typeclass
     *  `f` and `g` in the context of F. This means that `f -< g` may not be equivalent to `g -< f`.
     */
   @simulacrum.op("-<", alias = true)
-  def combineAndByPass[A, B, C](f: F[A, B])(g: F[B, C]): F[A, (B, C)] = {
+  def combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)] = {
     andThen(lift((x: A) => (x, x)), split(f, andThen(f, g)))
   }
 }
