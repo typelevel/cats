@@ -52,7 +52,8 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
         "arrow unit" -> forAll(laws.arrowUnit[A, B, C] _),
         "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _),
         "split consistent with andThen" -> forAll(laws.splitConsistentWithAndThen[A, B, C, D] _),
-        "merge consistent with andThen" -> forAll(laws.mergeConsistentWithAndThen[A, B, C] _)
+        "merge consistent with andThen" -> forAll(laws.mergeConsistentWithAndThen[A, B, C] _),
+        "combineAndByPass consistent with andThen" -> forAll(laws.combineAndByPassConsistentWithAndThen[A, B, C] _)
       )
     }
 }
