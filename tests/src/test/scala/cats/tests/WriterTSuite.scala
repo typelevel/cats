@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{EitherT, Validated, Writer, WriterT}
+import cats.data.{Const, EitherT, Validated, Writer, WriterT}
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -65,10 +65,10 @@ class WriterTSuite extends CatsSuite {
     }
   }
 
-  test("Writer.pure and WriterT.lift are consistent") {
+  test("Writer.pure and WriterT.liftF are consistent") {
     forAll { (i: Int) =>
       val writer: Writer[String, Int] = Writer.value(i)
-      val writerT: WriterT[Option, String, Int] = WriterT.lift(Some(i))
+      val writerT: WriterT[Option, String, Int] = WriterT.liftF(Some(i))
       writer.run.some should === (writerT.run)
     }
   }
@@ -360,6 +360,14 @@ class WriterTSuite extends CatsSuite {
 
     checkAll("WriterT[Option, ListWrapper[Int], ?]", MonadErrorTests[WriterT[Option, ListWrapper[Int], ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]", SerializableTests.serializable(MonadError[WriterT[Option, ListWrapper[Int], ?], Unit]))
+  }
+
+  {
+    // F has a ContravariantMonoidal
+    ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]
+
+    checkAll("WriterT[Const[String, ?], Int, ?]", ContravariantMonoidalTests[WriterT[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]))
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])

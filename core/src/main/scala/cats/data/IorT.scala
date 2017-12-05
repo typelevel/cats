@@ -482,8 +482,7 @@ private[data] sealed trait IorTMonadError[F[_], A] extends MonadError[IorT[F, A,
   override def handleErrorWith[B](iort: IorT[F, A, B])(f: A => IorT[F, A, B]): IorT[F, A, B] =
     IorT(F0.flatMap(iort.value) {
       case Ior.Left(a) => f(a).value
-      case r @ Ior.Right(_) => F0.pure(r)
-      case Ior.Both(a, _) => f(a).value // should a be combined with result ??
+      case r @ (Ior.Right(_) | Ior.Both(_, _))  => F0.pure(r)
     })
 }
 

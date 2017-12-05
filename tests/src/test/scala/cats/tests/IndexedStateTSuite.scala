@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IndexedStateT, State, StateT}
+import cats.data.{Const, EitherT, IndexedStateT, State, StateT}
 
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
@@ -110,11 +110,11 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
-  test("State.pure, StateT.lift and IndexedStateT.lift are consistent") {
+  test("State.pure, StateT.liftF and IndexedStateT.liftF are consistent") {
     forAll { (s: String, i: Int) =>
       val state: State[String, Int] = State.pure(i)
-      val stateT: State[String, Int] = StateT.lift(Eval.now(i))
-      val indexedStateT: State[String, Int] = IndexedStateT.lift(Eval.now(i))
+      val stateT: State[String, Int] = StateT.liftF(Eval.now(i))
+      val indexedStateT: State[String, Int] = IndexedStateT.liftF(Eval.now(i))
 
       state.run(s) should === (stateT.run(s))
       state.run(s) should === (indexedStateT.run(s))
@@ -370,6 +370,13 @@ class IndexedStateTSuite extends CatsSuite {
     Functor[IndexedStateT[ListWrapper, Int, Int, ?]]
     MonoidK[IndexedStateT[ListWrapper, Int, Int, ?]]
     SemigroupK[IndexedStateT[ListWrapper, Int, Int, ?]]
+  }
+
+  {
+    // F has a ContravariantMonoidal
+    val SD = ContravariantMonoidal[StateT[Const[String, ?], String, ?]]
+
+    checkAll("ContravariantMonoidal[StateT[Const[String, ?], String, ?]]", SerializableTests.serializable(SD))
   }
 
   {

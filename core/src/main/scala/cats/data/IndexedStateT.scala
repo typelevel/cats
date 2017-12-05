@@ -173,6 +173,23 @@ private[data] trait CommonStateTConstructors {
   def pure[F[_], S, A](a: A)(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.pure((s, a)))
 
+  def liftF[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
+    IndexedStateT(s => F.map(fa)(a => (s, a)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[StateT[Eval, String, ?], Int] = a.mapK(StateT.liftK)
+   * scala> b.value.runEmpty.value
+   * res0: (String, Option[Int]) = ("",Some(1))
+   * }}}
+   */
+  def liftK[F[_], S](implicit F: Applicative[F]): F ~> IndexedStateT[F, S, S, ?] =
+    λ[F ~> IndexedStateT[F, S, S, ?]](IndexedStateT.liftF(_))
+
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.map(fa)(a => (s, a)))
 
@@ -230,6 +247,10 @@ private[data] sealed abstract class IndexedStateTInstances extends IndexedStateT
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
     FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
+
+  implicit def catsDataContravariantMonoidalForIndexedStateT[F[_], S](implicit FD: ContravariantMonoidal[F],
+    FA: Applicative[F]): ContravariantMonoidal[IndexedStateT[F, S, S, ?]] =
+    new IndexedStateTContravariantMonoidal[F, S] { implicit def F = FD; implicit def G = FA }
 }
 
 private[data] sealed abstract class IndexedStateTInstances1 extends IndexedStateTInstances2 {
@@ -362,6 +383,28 @@ private[data] sealed abstract class IndexedStateTSemigroupK[F[_], SA, SB] extend
     IndexedStateT(s => G.combineK(x.run(s), y.run(s)))
 }
 
+private[data] sealed abstract class IndexedStateTContravariantMonoidal[F[_], S] extends ContravariantMonoidal[IndexedStateT[F, S, S, ?]]{
+  implicit def F: ContravariantMonoidal[F]
+  implicit def G: Applicative[F]
+
+  override def unit[A]: IndexedStateT[F, S, S, A]  =
+    IndexedStateT.applyF(G.pure((s: S) => F.unit[(S, A)]))
+
+  override def contramap[A, B](fa: IndexedStateT[F, S, S, A])(f: B => A): IndexedStateT[F, S, S, B] =
+    contramap2(fa, unit)(((a: A) => (a, a)) compose f)
+
+  override def product[A, B](fa: IndexedStateT[F, S, S, A], fb: IndexedStateT[F, S, S, B]): IndexedStateT[F, S, S, (A, B)] =
+    contramap2(fa, fb)(identity)
+
+  def contramap2[A, B, C](fb: IndexedStateT[F, S, S, B], fc: IndexedStateT[F, S, S, C])(f: A => (B, C)): IndexedStateT[F, S, S, A] =
+    IndexedStateT.applyF(
+      G.pure((s: S) =>
+        ContravariantMonoidal.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))(
+          (tup: (S, A)) => f(tup._2) match {
+            case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
+          })(G, F)))
+}
+
 private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends IndexedStateTMonad[F, S] with Alternative[IndexedStateT[F, S, S, ?]] {
   def G: Alternative[F]
 
@@ -369,14 +412,14 @@ private[data] sealed abstract class IndexedStateTAlternative[F[_], S] extends In
     IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(G)
 
   def empty[A]: IndexedStateT[F, S, S, A] =
-    IndexedStateT.lift[F, S, A](G.empty[A])(G)
+    IndexedStateT.liftF[F, S, A](G.empty[A])(G)
 }
 
 private[data] sealed abstract class IndexedStateTMonadError[F[_], S, E] extends IndexedStateTMonad[F, S]
     with MonadError[IndexedStateT[F, S, S, ?], E] {
   implicit def F: MonadError[F, E]
 
-  def raiseError[A](e: E): IndexedStateT[F, S, S, A] = IndexedStateT.lift(F.raiseError(e))
+  def raiseError[A](e: E): IndexedStateT[F, S, S, A] = IndexedStateT.liftF(F.raiseError(e))
 
   def handleErrorWith[A](fa: IndexedStateT[F, S, S, A])(f: E => IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.handleErrorWith(fa.run(s))(e => f(e).run(s)))

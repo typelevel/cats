@@ -16,7 +16,7 @@ class ListSuite extends CatsSuite {
   checkAll("List[Int]", AlternativeTests[List].alternative[Int, Int, Int])
   checkAll("Alternative[List]", SerializableTests.serializable(Alternative[List]))
 
-  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("List[Int] with Option", TraverseTests[List].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[List]", SerializableTests.serializable(Traverse[List]))
 
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])

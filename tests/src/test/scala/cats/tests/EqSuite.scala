@@ -12,6 +12,7 @@ class EqSuite extends FunSuite {
     Contravariant[Eq]
     Semigroupal[Eq]
     ContravariantSemigroupal[Eq]
+    ContravariantMonoidal[Eq]
   }
 
   {
@@ -20,5 +21,6 @@ class EqSuite extends FunSuite {
     Contravariant[Eq]
     Semigroupal[Eq]
     ContravariantSemigroupal[Eq]
+    ContravariantMonoidal[Eq]
   }
 }

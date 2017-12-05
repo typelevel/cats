@@ -18,6 +18,7 @@ standard library. Cats strives to provide functional programming abstractions th
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
 
+You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
 
 ### Getting Started
 

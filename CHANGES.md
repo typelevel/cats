@@ -205,7 +205,8 @@ as many breaking changes as possible in this release before we lock down the API
  * All `Unapply` enabled methods, e.g. `sequenceU`, `traverseU`, etc. are removed. `Unapply`
    enabled syntax ops are also removed. Please use the partial unification SI-2712 fix
    instead. The easiest way might be this [sbt-plugin](https://github.com/fiadliel/sbt-partial-unification).
- *  `FunctorFilter`, `MonadCombine`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inherited by the new [cats-mtl](https://github.com/typelevel/cats-mtl) project. Please check [here](https://github.com/typelevel/cats-mtl#migration-guide) for migration guide.
+ *  `FunctorFilter`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inherited by the new [cats-mtl](https://github.com/typelevel/cats-mtl) project. Please check [here](https://github.com/typelevel/cats-mtl#migration-guide) for migration guide.
+ *  `MonadCombine` is no longer in cats. Use `Alternative` or `Monad` + `MonoidK` instead.
  * `CartesianBuilder` (i.e. `|@|`) syntax is deprecated, use the apply syntax on tuples instead. E.g. `(x |@| y |@| z).map(...)` should be replaced by `(x, y, z).mapN(...)`. If you are getting "`mapN` not found" error message, it could be due to SI-2712, see the 3rd migration item above. 
  * Apply syntax on tuple (e.g. `(x, y, z).map3(...)`)  was moved from `cats.syntax.tuple._` to `cats.syntax.apply._` and renamed to `mapN`, `contramapN` and `imapN` respectively.
  * The creation methods (`left`, `right`, `apply`, `pure`, etc.) in `EitherT` were improved to take less

@@ -2,13 +2,16 @@ package cats
 package instances
 
 trait OrderingInstances {
-
-  implicit val catsContravariantSemigroupalForOrdering: ContravariantSemigroupal[Ordering] =
-    new ContravariantSemigroupal[Ordering] {
-      /** Derive an `Ordering` for `B` given an `Ordering[A]` and a function `B => A`.
-       *
+  implicit val catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
+    new ContravariantMonoidal[Ordering] {
+      /**
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
+
+      def unit[A]: Ordering[A] = new Ordering[A] {
+        def compare(l: A, r: A): Int = 0
+      }
+
       def contramap[A, B](fa: Ordering[A])(f: B => A): Ordering[B] = fa.on(f)
 
       def product[A, B](fa: Ordering[A], fb: Ordering[B]): Ordering[(A, B)] =

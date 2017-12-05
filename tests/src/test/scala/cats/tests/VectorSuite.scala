@@ -15,7 +15,7 @@ class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", AlternativeTests[Vector].alternative[Int, Int, Int])
   checkAll("Alternative[Vector]", SerializableTests.serializable(Alternative[Vector]))
 
-  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
 
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])

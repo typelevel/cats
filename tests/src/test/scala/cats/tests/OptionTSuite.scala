@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.OptionT
+import cats.data.{Const, OptionT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -41,6 +41,14 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
     checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
+  }
+
+  
+  {
+    // F has a ContravariantMonoidal 
+    checkAll("OptionT[Const[String, ?], Int]", ContravariantMonoidalTests[OptionT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[OptionT[Const[String, ?], Int]]",
+      SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]])) 
   }
 
   {

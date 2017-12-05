@@ -19,7 +19,7 @@ class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", MonadTests[Stream].monad[Int, Int, Int])
   checkAll("Monad[Stream]", SerializableTests.serializable(Monad[Stream]))
 
-  checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Stream]", SerializableTests.serializable(Traverse[Stream]))
 
   // Can't test applicative laws as they don't terminate

@@ -51,6 +51,14 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // Applicative + ContravariantMonoidal functor composition
+    checkAll("Nested[Option, Const[String, ?], ?]",
+      ContravariantMonoidalTests[Nested[Option, Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[Nested[Option, Const[String, ?], ?]",
+      SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, ?], ?]]))
+  }
+
+  {
     // Contravariant + Contravariant = Functor
     type ConstInt[A] = Const[Int, A]
     checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])
@@ -115,7 +123,7 @@ class NestedSuite extends CatsSuite {
   {
     // Traverse composition
     implicit val instance = ListWrapper.traverse
-    checkAll("Nested[List, ListWrapper, ?]", TraverseTests[Nested[List, ListWrapper, ?]].traverse[Int, Int, Int, List[Int], Option, Option])
+    checkAll("Nested[List, ListWrapper, ?]", TraverseTests[Nested[List, ListWrapper, ?]].traverse[Int, Int, Int, Set[Int], Option, Option])
     checkAll("Traverse[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(Traverse[Nested[List, ListWrapper, ?]]))
   }
 

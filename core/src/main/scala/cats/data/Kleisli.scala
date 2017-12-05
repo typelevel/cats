@@ -84,6 +84,23 @@ object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplic
 
 private[data] sealed trait KleisliFunctions {
 
+  def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
+    Kleisli(_ => x)
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
+   * scala> b.value.run("").value
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
+  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
+    λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
+
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
@@ -136,11 +153,8 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
   implicit val catsDataCommutativeArrowForKleisliId: CommutativeArrow[Kleisli[Id, ?, ?]] =
     catsDataCommutativeArrowForKleisli[Id]
 
-  implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
-    new Contravariant[Kleisli[F, ?, C]] {
-      override def contramap[A, B](fa: Kleisli[F, A, C])(f: B => A): Kleisli[F, B, C] =
-        fa.local(f)
-    }
+  implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
+    new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
@@ -160,6 +174,12 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
     def parallel: Kleisli[M, A, ?] ~> Kleisli[F, A, ?] =
       λ[Kleisli[M, A, ?] ~> Kleisli[F, A, ?]](_.mapK(P.parallel))
   }
+
+  implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, ?, C]] =
+    new Contravariant[Kleisli[F, ?, C]] {
+      override def contramap[A, B](fa: Kleisli[F, A, C])(f: B => A): Kleisli[F, B, C] =
+        fa.local(f)
+    }
 }
 
 private[data] sealed abstract class KleisliInstances2 extends KleisliInstances3 {
@@ -287,11 +307,23 @@ private[data] sealed trait KleisliSemigroupK[F[_], A] extends SemigroupK[Kleisli
 private[data] sealed trait KleisliMonoidK[F[_], A] extends MonoidK[Kleisli[F, A, ?]] with KleisliSemigroupK[F, A] {
   implicit def F: MonoidK[F]
 
-  override def empty[B]: Kleisli[F, A, B] = Kleisli.lift(F.empty[B])
+  override def empty[B]: Kleisli[F, A, B] = Kleisli.liftF(F.empty[B])
 }
 
 private[data] trait KleisliAlternative[F[_], A] extends Alternative[Kleisli[F, A, ?]] with KleisliApplicative[F, A] with KleisliMonoidK[F, A] {
   implicit def F: Alternative[F]
+}
+
+private[data] sealed trait KleisliContravariantMonoidal[F[_], D] extends ContravariantMonoidal[Kleisli[F, D, ?]] {
+  implicit def F: ContravariantMonoidal[F]
+
+  override def unit[A]: Kleisli[F, D, A] = Kleisli(Function.const(F.unit[A]))
+
+  override def contramap[A, B](fa: Kleisli[F, D, A])(f: B => A): Kleisli[F, D, B] =
+    Kleisli(d => F.contramap(fa.run(d))(f))
+
+  override def product[A, B](fa: Kleisli[F, D, A], fb: Kleisli[F, D, B]): Kleisli[F, D, (A, B)] =
+    Kleisli(d => F.product(fa.run(d), fb.run(d)))
 }
 
 private[data] trait KleisliMonadError[F[_], A, E] extends MonadError[Kleisli[F, A, ?], E] with KleisliApplicativeError[F, A, E] with KleisliMonad[F, A] {
