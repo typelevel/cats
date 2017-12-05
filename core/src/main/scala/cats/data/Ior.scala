@@ -165,8 +165,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
       def handleErrorWith[B](fa: Ior[A, B])(f: (A) => Ior[A, B]): Ior[A, B] =
         fa match {
           case Ior.Left(e) => f(e)
-          case r @ Ior.Right(_) => r
-          case Ior.Both(e, _) => f(e)
+          case _ => fa
         }
 
       def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
