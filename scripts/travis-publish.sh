@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Build Overview:
 # The overall build is split into a number of parts
 # 1. The build for coverage is performed. This:

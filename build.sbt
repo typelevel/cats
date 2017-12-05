@@ -82,7 +82,10 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+  testOptions in Test += {
+    val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
+    Tests.Argument(TestFrameworks.ScalaTest, flag)
+  }
 )
 
 lazy val includeGeneratedSrc: Setting[_] = {
