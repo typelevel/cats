@@ -41,7 +41,7 @@ jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
 if [[ $TRAVIS_SCALA_VERSION == *"2.12"* ]]; then
 scalafix="sbt ';coreJVM/publishLocal;freeJVM/publishLocal' && cd scalafix && sbt tests/test && cd .. &&"
 else
-scalafix = ""
+scalafix=""
 fi
 
 if [[ $JS_BUILD == "true" ]]; then
