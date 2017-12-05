@@ -52,12 +52,11 @@ import simulacrum.typeclass
     * Example:
     * {{{
     * scala> import cats.implicits._
-    * scala> import cats.arrow.Arrow
     * scala> val addEmpty: Int => Int = _ + 0
     * scala> val multiplyEmpty: Int => Double= _ * 1d
     * scala> val f: Int => (Int, Double) = addEmpty &&& multiplyEmpty
     * scala> f(1)
-    * res0: (Int Double) = (1,1.0)
+    * res0: (Int, Double) = (1,1.0)
     * }}}
     *
     * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
@@ -78,12 +77,11 @@ import simulacrum.typeclass
     * Example:
     * {{{
     * scala> import cats.implicits._
-    * scala> import cats.arrow.Arrow
     * scala> val twoTimes: Int => Double = _ * 2d
     * scala> val fiveTimes: Double => Double= _ * 5
     * scala> val f: Int => (Double, Double) = twoTimes -< fiveTimes
     * scala> f(2)
-    * res0: (Double Double) = (4.0,20.0)
+    * res0: (Double, Double) = (4.0,20.0)
     * }}}
     *
     * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
