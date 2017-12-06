@@ -196,9 +196,9 @@ def mimaSettings(moduleName: String) = Seq(
     Seq(
       exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps"),
       exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow.merge"),
-      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow.combineAndByPass"),
+      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow.combineAndBypass"),
       exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.merge"),
-      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.combineAndByPass"),
+      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.combineAndBypass"),
       exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.&&&"),
       exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.-<"),
       exclude[ReversedMissingMethodProblem]("cats.Traverse.unorderedTraverse"),

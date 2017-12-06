@@ -88,7 +88,7 @@ import simulacrum.typeclass
     *
     */
   @simulacrum.op("-<", alias = true)
-  def combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)] = {
+  def combineAndBypass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)] = {
     andThen(lift((x: A) => (x, x)), split(f, andThen(f, g)))
   }
 }
