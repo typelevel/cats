@@ -81,8 +81,6 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
         case (a, c) => (fa(a), c)
       }
 
-      def id[A]: A => A = a => a
-
       override def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = {
         case (a, c) => (f(a), g(c))
       }
