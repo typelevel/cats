@@ -283,6 +283,18 @@ private[data] sealed trait IorFunctions {
    * @return `None` if both `oa` and `ob` are `None`. Otherwise `Some` wrapping
    * an [[Ior.Left]], [[Ior.Right]], or [[Ior.Both]] if `oa`, `ob`, or both are
    * defined (respectively).
+   *
+   * Example:
+   * {{{
+   * scala> Ior.fromOptions(Option.empty[String], Option.empty[Int])
+   * res0: Option[Ior[String, Int]] = None
+   * scala> Ior.fromOptions(Option.empty[String], Some(42))
+   * res1: Option[Ior[String, Int]] = Some(Right(42))
+   * scala> Ior.fromOptions(Some("Error"), Option.empty[Int])
+   * res2: Option[Ior[String, Int]] = Some(Left(Error))
+   * scala> Ior.fromOptions(Some("Warning"), Some(42))
+   * res3: Option[Ior[String, Int]] = Some(Both(Warning,42))
+   * }}}
    */
   def fromOptions[A, B](oa: Option[A], ob: Option[B]): Option[A Ior B] =
     oa match {
