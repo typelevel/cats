@@ -245,6 +245,24 @@ import Foldable.sentinel
     }
 
   /**
+   * Like `foldK` but from the right side.
+   * One use case would be endo functions (`A => A`) chaining
+   * because the default MonoidK instance for endo functions
+   * is using `compose` rather than the `andThen`
+   * {{{
+   * scala> import cats.implicits._, cats.Endo
+   * scala> val l: List[Endo[Int]] = List(_ * 2, _ + 3)
+   * scala> val f = l.reduceRightK //using `compose` to chain the functions
+   * scala> f(1)
+   * res0: Int = 5
+   * }}}
+   */
+  def reduceRightK[G[_], A](fga: F[G[A]])(implicit G: MonoidK[G]): G[A] =
+    foldRight(fga, Eval.now(G.empty[A])) { (ga, ega) =>
+      ega.map(rga => G.combineK(rga, ga))
+    }.value
+
+  /**
    * Alias for [[fold]].
    */
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
