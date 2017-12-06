@@ -68,12 +68,14 @@ import simulacrum.typeclass
   }
 
   /**
-    * Create a new computation `F` that apply f andThen biFork the result
-    * one way is applied to g and the other pass through
-    * the result is a tuple
-    *             /-----out1 = f(input) -----\
-    *  input ----{                            }----(out1,out2)
-    *             \-----out2 = g(f(input))---/
+    * Create a new computation `F` that apply f andThen biforks the result.
+    * On one way it is applied to g and on the other it is passed through.
+    * The final result is a tuple
+    * <br/><pre>
+    *             /--out1 = f(input) ----\
+    *  input -->{                          }--->(out1,out2)
+    *             \--out2 = g(f(input))--/
+    *             </pre>
     * Example:
     * {{{
     * scala> import cats.implicits._
@@ -84,8 +86,6 @@ import simulacrum.typeclass
     * res0: (Double, Double) = (4.0,20.0)
     * }}}
     *
-    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
-    *  `f` and `g` in the context of F. This means that `f -< g` may not be equivalent to `g -< f`.
     */
   @simulacrum.op("-<", alias = true)
   def combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)] = {
