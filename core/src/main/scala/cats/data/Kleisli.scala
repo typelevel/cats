@@ -274,7 +274,7 @@ private[data] trait KleisliChoice[F[_]] extends Choice[Kleisli[F, ?, ?]] with Kl
 private[data] trait KleisliCategory[F[_]] extends Category[Kleisli[F, ?, ?]] with KleisliCompose[F] {
   implicit def F: Monad[F]
 
-  def id[A]: Kleisli[F, A, A] = Kleisli.ask[F, A]
+  override def id[A]: Kleisli[F, A, A] = Kleisli.ask[F, A]
 }
 
 private[data] trait KleisliCompose[F[_]] extends Compose[Kleisli[F, ?, ?]] {

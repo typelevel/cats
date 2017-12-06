@@ -318,7 +318,9 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence"),
       exclude[ReversedMissingMethodProblem]("cats.MonadError.rethrow"),
-      exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow")
+      exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow"),
+      exclude[DirectMissingMethodProblem]("cats.data.CokleisliArrow.id"),
+      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id")
     )
   }
 )

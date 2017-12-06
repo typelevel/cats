@@ -16,6 +16,8 @@ import simulacrum.typeclass
    */
   def lift[A, B](f: A => B): F[A, B]
 
+  override def id[A]: F[A, A] = lift(identity)
+
   override def dimap[A, B, C, D](fab: F[A, B])(f: C => A)(g: B => D): F[C, D] =
     compose(lift(g), andThen(lift(f), fab))
 
