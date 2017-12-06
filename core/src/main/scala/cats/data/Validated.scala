@@ -166,11 +166,24 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * From Apply:
    * if both the function and this value are Valid, apply the function
+   *
+   * Example:
+   * {{{
+   * scala> import cats.instances.list._ // semigroup for list
+   * scala> Validated.valid[List[String], Int](1).ap(Validated.valid((x: Int) => x + 1))
+   * res0: Validated[List[String], Int] = Valid(2)
+   * scala> Validated.invalid[List[String], Int](List("Input invalid")).ap(Validated.valid((x: Int) => x + 1))
+   * res1: Validated[List[String], Int] = Invalid(List(Input invalid))
+   * scala> Validated.valid[List[String], Int](1).ap(Validated.invalid[List[String], Int => Int](List("Function invalid")))
+   * res2: Validated[List[String], Int] = Invalid(List(Function invalid))
+   * scala> Validated.invalid[List[String], Int](List("Input invalid")).ap(Validated.invalid[List[String], Int => Int](List("Function invalid")))
+   * res3: Validated[List[String], Int] = Invalid(List(Input invalid, Function invalid))
+   * }}}
    */
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE, B] =
     (this, f) match {
       case (Valid(a), Valid(f)) => Valid(f(a))
-      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e2, e1))
+      case (Invalid(e1), Invalid(e2)) => Invalid(EE.combine(e1, e2))
       case (e@Invalid(_), _) => e
       case (_, e@Invalid(_)) => e
     }
