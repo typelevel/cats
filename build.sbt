@@ -313,8 +313,9 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[DirectMissingMethodProblem]("cats.data.ValidatedApplicative.sequence"),
       exclude[ReversedMissingMethodProblem]("cats.data.IorFunctions.fromEither"),
       exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.traverse"),
-      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence")
-
+      exclude[DirectMissingMethodProblem]("cats.data.RWSTAlternative.sequence"),
+      exclude[ReversedMissingMethodProblem]("cats.MonadError.rethrow"),
+      exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow")
     )
   }
 )
