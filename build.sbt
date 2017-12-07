@@ -320,9 +320,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.MonadError.rethrow"),
       exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow"),
       exclude[DirectMissingMethodProblem]("cats.data.CokleisliArrow.id"),
-      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable.reduceRightK"),
-      exclude[ReversedMissingMethodProblem]("cats.Foldable#Ops.reduceRightK")
+      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id")
     )
   }
 )
