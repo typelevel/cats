@@ -48,3 +48,25 @@ import simulacrum.typeclass
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
     andThen(first(f), second(g))
 }
+object Arrow {
+  /**
+   * Creates a semigroupal functor for `F`, holding domain fixed and combining
+   * over the codomain.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.arrow.Arrow.catsSemigroupalForArrow
+   * scala> val toLong: Int => Long = _.toLong
+   * scala> val double: Int => Int = 2*_
+   * scala> val f: Int => (Long, Int) = catsSemigroupalForArrow.product(toLong, double)
+   * scala> f(3)
+   * res0: (Long, Int) = (3,6)
+   * }}}
+   */
+  implicit def catsSemigroupalForArrow[F[_, _], A](implicit F: Arrow[F]): Semigroupal[F[A, ?]] = new Apply[F[A, ?]] {
+    def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
+    def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =
+      F.rmap(F.andThen(F.lift((x: A) => (x, x)), F.split(ff, fb)))(tup => tup._1(tup._2))
+  }
+}
