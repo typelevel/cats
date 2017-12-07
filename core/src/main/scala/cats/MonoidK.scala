@@ -26,6 +26,13 @@ import simulacrum.typeclass
 
   /**
    * Given a type A, create an "empty" F[A] value.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> MonoidK[List].empty[Long]
+   * res0: List[Long] = List()
+   * }}}
    */
   def empty[A]: F[A]
 
