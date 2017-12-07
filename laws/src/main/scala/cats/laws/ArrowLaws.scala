@@ -40,9 +40,6 @@ trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with StrongLaws[F] {
   def mergeConsistentWithAndThen[A, B, C](f: F[A, B], g: F[A, C]): IsEq[F[A, (B, C)]] =
     F.merge(f, g) <-> ((F.lift((x: A) => (x, x))) andThen F.split(f, g))
 
-  def combineAndBypassConsistentWithAndThen[A, B, C](f: F[A, B], g: F[B, C]): IsEq[F[A, (B, C)]] =
-    F.combineAndBypass(f, g) <-> ((f andThen F.lift((x: B) => (x, x))) andThen F.split(F.id, g))
-
   private def fst[A, B](p: (A, B)): A = p._1
 
   private def assoc[A, B, C](p: ((A, B), C)): (A, (B, C)) = (p._1._1, (p._1._2, p._2))
