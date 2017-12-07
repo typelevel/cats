@@ -184,10 +184,29 @@ object Boilerplate {
 
       block"""
         |package cats
+        |
+        |/**
+        | * @groupprio Ungrouped 0
+        | *
+        | * @groupname ApArity ap arity
+        | * @groupdesc ApArity Higher-arity ap methods
+        | * @groupprio ApArity 999
+        | *
+        | * @groupname MapArity map arity
+        | * @groupdesc MapArity Higher-arity map methods
+        | * @groupprio MapArity 999
+        | *
+        | * @groupname TupleArity tuple arity
+        | * @groupdesc TupleArity Higher-arity tuple methods
+        | * @groupprio TupleArity 999
+        | */
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
         |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Semigroupal.tuple2(f1, f2)(self, self)
+        -  /** @group ApArity */
         -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
+        -  /** @group MapArity */
         -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
+        -  /** @group TupleArity */
         -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
         |}
       """
@@ -210,7 +229,16 @@ object Boilerplate {
 
       block"""
          |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname ParMapArity parMap arity
+         | * @groupdesc ParMapArity Higher-arity parMap methods
+         | * @groupprio ParMapArity 999
+         | */
          |trait ParallelArityFunctions {
+        -  /** @group ParMapArity */
         -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
         -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
@@ -234,15 +262,44 @@ object Boilerplate {
 
       block"""
          |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname MapArity map arity
+         | * @groupdesc MapArity Higher-arity map methods
+         | * @groupprio MapArity 999
+         | *
+         | * @groupname ContramapArity contramap arity
+         | * @groupdesc ContramapArity Higher-arity contramap methods
+         | * @groupprio ContramapArity 999
+         | *
+         | * @groupname ImapArity imap arity
+         | * @groupdesc ImapArity Higher-arity imap methods
+         | * @groupprio ImapArity 999
+         | *
+         | * @groupname TupleArity tuple arity
+         | * @groupdesc TupleArity Higher-arity tuple methods
+         | * @groupprio TupleArity 999
+         | *
+         | * @groupname TraverseArity traverse arity
+         | * @groupdesc TraverseArity Higher-arity traverse methods
+         | * @groupprio TraverseArity 999
+         | */
          |trait SemigroupalArityFunctions {
+        -  /** @group MapArity */
         -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit semigroupal: Semigroupal[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+        -  /** @group ContramapArity */
         -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], contravariant: Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
+        -  /** @group ImapArity */
         -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
+        -  /** @group TupleArity */
         -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  /** @group TraverseArity */
         -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit semigroupal: Semigroupal[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
         -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
