@@ -72,9 +72,9 @@ import simulacrum.typeclass
     * On one way it is applied to g and on the other it is passed through.
     * The final result is a tuple
     * <br/><pre>
-    *             /--out1 = f(input) ----\
-    *  input -->{                          }--->(out1,out2)
-    *             \--out2 = g(f(input))--/
+    *                                 /------- out1 -----\
+    *  input -->  out1= f(input) --> {                    }--->(out1,out2)
+    *                                 \--out2 = g(out1)--/
     *             </pre>
     * Example:
     * {{{
@@ -89,6 +89,6 @@ import simulacrum.typeclass
     */
   @simulacrum.op("-<", alias = true)
   def combineAndBypass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)] = {
-    andThen(lift((x: A) => (x, x)), split(f, andThen(f, g)))
+    andThen(andThen( f, lift((x: B) => (x, x)) ), split(id, g))
   }
 }
