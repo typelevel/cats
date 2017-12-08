@@ -1,6 +1,7 @@
 package cats
 
-import simulacrum.{typeclass, noop}
+import simulacrum.typeclass
+import simulacrum.noop
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
@@ -26,6 +27,18 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
 
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
+
+  /** Alias for [[ap]]. */
+  @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
+    ap(ff)(fa)
+
+  /** Alias for [[apR]]. */
+  @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
+    apR(fa)(fb)
+
+  /** Alias for [[apL]]. */
+  @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
+    apL(fa)(fb)
 
   /** Alias for [[apR]]. */
   @deprecated("Use *> or apR instead.", "1.0.0-RC2")
