@@ -33,7 +33,7 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
   def >>[B](fb: => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(_ => fb)
 
   @deprecated("Use <* instead", "1.0.0-RC1")
-  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.forEffect(fa)(fb)
+  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.apL(fa)(fb)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {

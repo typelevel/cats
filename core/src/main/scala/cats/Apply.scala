@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{typeclass, noop}
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
@@ -16,24 +16,26 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    */
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
+  /** Compose two actions, discarding any value produced by the first. */
+  def apR[A, B](fa: F[A])(fb: F[B]): F[B] =
+    map2(fa, fb)((_, b) => b)
+
+  /** Compose two actions, discarding any value produced by the second. */
+  def apL[A, B](fa: F[A])(fb: F[B]): F[A] =
+    map2(fa, fb)((a, _) => a)
+
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
-  /** Compose two actions, discarding any value produced by the first. */
-  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
-    map2(fa, fb)((_, b) => b)
+  /** Alias for [[apR]]. */
+  @deprecated("Use *> or apR instead.", "1.0.0-RC2")
+  @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+    apR(fa)(fb)
 
-  /** Alias for [[followedBy]]. */
-  @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
-    followedBy(fa)(fb)
-
-  /** Compose two actions, discarding any value produced by the second. */
-  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
-    map2(fa, fb)((a, _) => a)
-
-  /** Alias for [[forEffect]]. */
-  @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
-    forEffect(fa)(fb)
+  /** Alias for [[apL]]. */
+  @deprecated("Use <* or apL instead.", "1.0.0-RC2")
+  @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+    apL(fa)(fb)
 
   /**
    * ap2 is a binary version of ap, defined in terms of ap.

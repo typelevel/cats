@@ -43,7 +43,7 @@ import simulacrum.typeclass
 
   /**
    * Sequentially compose two actions, discarding any value produced by the first. This variant of
-   * [[followedBy]] also lets you define the evaluation strategy of the second action. For instance
+   * [[apR]] also lets you define the evaluation strategy of the second action. For instance
    * you can evaluate it only ''after'' the first action has finished:
    *
    * {{{
