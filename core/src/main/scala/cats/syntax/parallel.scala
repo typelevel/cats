@@ -32,9 +32,9 @@ final class ParallelSequenceOps[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal 
 final class ParallelApOps[M[_], A](val ma: M[A]) extends AnyVal {
 
   def &>[F[_], B](mb: M[B])(implicit P: Parallel[M, F]): M[B] =
-    P.parFollowedBy(ma)(mb)
+    P.parApR(ma)(mb)
 
   def <&[F[_], B](mb: M[B])(implicit P: Parallel[M, F]): M[A] =
-    P.parForEffect(ma)(mb)
+    P.parApL(ma)(mb)
 
 }

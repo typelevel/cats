@@ -51,17 +51,20 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val fa: Option[Int] = Some(3)
    * scala> def fb: Option[String] = Some("foo")
-   * scala> fa.followedByEval(Eval.later(fb))
+   * scala> fa.apREval(Eval.later(fb))
    * res0: Option[String] = Some(foo)
    * }}}
    */
-  def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
+  def apREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
+
+  @deprecated("Use apREval instead.", "1.0.0-RC2")
+  def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = apREval(fa)(fb)
 
 
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
-   * [[forEffect]] also lets you define the evaluation strategy of the second action. For instance
+   * [[apL]] also lets you define the evaluation strategy of the second action. For instance
    * you can evaluate it only ''after'' the first action has finished:
    *
    * {{{
@@ -70,15 +73,18 @@ import simulacrum.typeclass
    * scala> var count = 0
    * scala> val fa: Option[Int] = Some(3)
    * scala> def fb: Option[Unit] = Some(count += 1)
-   * scala> fa.forEffectEval(Eval.later(fb))
+   * scala> fa.apLEval(Eval.later(fb))
    * res0: Option[Int] = Some(3)
    * scala> assert(count == 1)
-   * scala> none[Int].forEffectEval(Eval.later(fb))
+   * scala> none[Int].apLEval(Eval.later(fb))
    * res1: Option[Int] = None
    * scala> assert(count == 1)
    * }}}
    */
-  def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
+  def apLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
+
+  @deprecated("Use apLEval instead.", "1.0.0-RC2")
+  def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = apLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
