@@ -131,7 +131,7 @@ class FreeApplicativeSuite extends CatsSuite {
 }
 
 object FreeApplicativeSuite {
-  private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Gen[FreeApplicative[F, A]] = {
+  private def freeApplicativeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Gen[FreeApplicative[F, A]] = {
     val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(FreeApplicative.pure[F, A]),
       F.arbitrary.map(FreeApplicative.lift[F, A]))
@@ -142,16 +142,16 @@ object FreeApplicativeSuite {
       fDepth <- nextDepth
       freeDepth <- nextDepth
       ff <- FF.arbitrary
-      f <- freeGen[F, A](fDepth).map(_.map(l => (u: A) => ff(l, u)))
-      freeFA <- freeGen[F, A](freeDepth)
+      f <- freeApplicativeGen[F, A](fDepth).map(_.map(l => (u: A) => ff(l, u)))
+      freeFA <- freeApplicativeGen[F, A](freeDepth)
     } yield freeFA.ap(f)
 
     if (maxDepth <= 1) noFlatMapped
     else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
-  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
-    Arbitrary(freeGen[F, A](4))
+  implicit def freeApplicativeArbitrary[F[_], A](implicit F: Arbitrary[F[A]], FF: Arbitrary[(A, A) => A], A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
+    Arbitrary(freeApplicativeGen[F, A](4))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
     new Eq[FreeApplicative[S, A]] {

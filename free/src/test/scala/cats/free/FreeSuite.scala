@@ -2,9 +2,9 @@ package cats
 package free
 
 import cats.arrow.FunctionK
-import cats.data.EitherK
-import cats.laws.discipline.{SemigroupalTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
-import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
+import cats.data.{EitherK, Validated}
+import cats.laws.discipline.{ParallelTests, SemigroupalTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 
 import org.scalacheck.{Arbitrary, Gen, Cogen}
@@ -12,11 +12,15 @@ import Arbitrary.arbFunction1
 
 class FreeSuite extends CatsSuite {
   import FreeSuite._
+  import FreeApplicativeSuite._
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+
+  checkAll("Free[Either[String, ?], ?], FreeApplicative[Validated[String, ?], ?]", ParallelTests[Free[Either[String, ?], ?], FreeApplicative[Validated[String, ?], ?]].parallel[Int, String])
+  checkAll("Parallel[Free[Either[String, ?], ?], FreeApplicative[Validated[String, ?], ?]]", SerializableTests.serializable(Parallel[Free[Either[String, ?], ?], FreeApplicative[Validated[String, ?], ?]]))
 
   locally {
     implicit val instance = Free.catsFreeFoldableForFree[Option]
