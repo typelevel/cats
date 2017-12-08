@@ -70,7 +70,7 @@ object Applicative {
     new ApplicativeMonoid[F, A](f, monoid)
 
   /**
-   * Creates a semigroupal functor for `F`, holding domain fixed and combining
+   * Creates an applicative functor for `F`, holding domain fixed and combining
    * over the codomain.
    *
    * Example:
@@ -93,10 +93,59 @@ private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid
 }
 
 private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, ?]] {
+  /**
+   * Pure for Arrows lifts the constant function at that value.
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Applicative.catsApplicativeForArrow
+   * scala> val g: Int => String = catsApplicativeForArrow.pure("hello")
+   * scala> g(5)
+   * res0: String = hello
+   * }}}
+   */
   def pure[B](b: B): F[A, B] = F.lift[A, B](_ => b)
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Applicative.catsApplicativeForArrow
+   * scala> val double: Int => Int = 2*_
+   * scala> val triple: Int => Int = 3*_
+   * scala> val sextuple: Int => Int = catsApplicativeForArrow.map(double)(triple)
+   * scala> sextuple(6)
+   * res0: Int = 36
+   * }}}
+   */
   override def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Applicative.catsApplicativeForArrow
+   * scala> val multiplyBy: Int => (Int => Int) = x => (y => x*y)
+   * scala> val triple: Int => Int = 3*_
+   * scala> val threeTimesTheSquare = catsApplicativeForArrow.ap(multiplyBy)(triple)
+   * scala> threeTimesTheSquare(5)
+   * res0: Int = 75
+   * }}}
+   */
   def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =
     F.rmap(F.andThen(F.lift((x: A) => (x, x)), F.split(ff, fb)))(tup => tup._1(tup._2))
+  /**
+   * Product is given by composing diagonal with split of given arrows
+   * Example::
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Applicative.catsApplicativeForArrow
+   * scala> val double: Int => Long = 2*_.toLong
+   * scala> val triple: Int => Long = 3*_.toLong
+   * scala> val h: Int => (Long, Long) = catsApplicativeForArrow.product(double, triple)
+   * scala> h(4)
+   * res0: (Long, Long) = (8,12)
+   * }}}
+   *
+   */
   override def product[B, C](fb: F[A, B], fc: F[A, C]): F[A, (B, C)] =
     F.andThen(F.lift((x: A) => (x, x)), F.split(fb, fc))
 }
