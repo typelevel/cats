@@ -198,6 +198,9 @@ def mimaSettings(moduleName: String) = Seq(
     import com.typesafe.tools.mima.core.ProblemFilters._
     Seq(
       exclude[ReversedMissingMethodProblem]("cats.syntax.FoldableSyntax.catsSyntaxFoldOps"),
+      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow.merge"),
+      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.merge"),
+      exclude[ReversedMissingMethodProblem]("cats.arrow.Arrow#Ops.&&&"),
       exclude[ReversedMissingMethodProblem]("cats.Traverse.unorderedTraverse"),
       exclude[ReversedMissingMethodProblem]("cats.Traverse.unorderedSequence"),
       exclude[InheritedNewAbstractMethodProblem]("cats.UnorderedTraverse.unorderedTraverse"),
