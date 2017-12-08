@@ -18,7 +18,13 @@ import simulacrum.typeclass
   /**
    * `pure` lifts any value into the Applicative Functor.
    *
-   * Applicative[Option].pure(10) = Some(10)
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Applicative[Option].pure(10)
+   * res0: Option[Int] = Some(10)
+   * }}}
    */
   def pure[A](x: A): F[A]
 
@@ -27,6 +33,14 @@ import simulacrum.typeclass
    *
    * A useful shorthand, also allowing implementations to optimize the
    * returned reference (e.g. it can be a `val`).
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Applicative[Option].unit
+   * res0: Option[Unit] = Some(())
+   * }}}
    */
   def unit: F[Unit] = pure(())
 
@@ -35,16 +49,87 @@ import simulacrum.typeclass
 
   /**
    * Given `fa` and `n`, apply `fa` `n` times to construct an `F[List[A]]` value.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   *
+   * scala> type Counter[A] = State[Int, A]
+   * scala> val getAndIncrement: Counter[Int] = State { i => (i + 1, i) }
+   * scala> val getAndIncrement5: Counter[List[Int]] =
+   *      | Applicative[Counter].replicateA(5, getAndIncrement)
+   * scala> getAndIncrement5.run(0).value
+   * res0: (Int, List[Int]) = (5,List(0, 1, 2, 3, 4))
+   * }}}
    */
   def replicateA[A](n: Int, fa: F[A]): F[List[A]] =
     Traverse[List].sequence(List.fill(n)(fa))(this)
 
+  /**
+   * Compose an `Applicative[F]` and an `Applicative[G]` into an
+   * `Applicative[λ[α => F[G[α]]]]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val alo = Applicative[List].compose[Option]
+   *
+   * scala> alo.pure(3)
+   * res0: List[Option[Int]] = List(Some(3))
+   *
+   * scala> alo.product(List(None, Some(true), Some(false)), List(Some(2), None))
+   * res1: List[Option[(Boolean, Int)]] = List(None, None, Some((true,2)), None, Some((false,2)), None)
+   * }}}
+   */
   def compose[G[_]: Applicative]: Applicative[λ[α => F[G[α]]]] =
     new ComposedApplicative[F, G] {
       val F = self
       val G = Applicative[G]
     }
 
+  /**
+   * Compose an `Applicative[F]` and a `ContravariantMonoidal[G]` into a
+   * `ContravariantMonoidal[λ[α => F[G[α]]]]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.kernel.Comparison
+   * scala> import cats.implicits._
+   *
+   * // compares strings by alphabetical order
+   * scala> val alpha: Order[String] = Order[String]
+   *
+   * // compares strings by their length
+   * scala> val strLength: Order[String] = Order.by[String, Int](_.length)
+   *
+   * scala> val stringOrders: List[Order[String]] = List(alpha, strLength)
+   *
+   * // first comparison is with alpha order, second is with string length
+   * scala> stringOrders.map(o => o.comparison("abc", "de"))
+   * res0: List[Comparison] = List(LessThan, GreaterThan)
+   *
+   * scala> val le = Applicative[List].composeContravariantMonoidal[Order]
+   *
+   * // create Int orders that convert ints to strings and then use the string orders
+   * scala> val intOrders: List[Order[Int]] = le.contramap(stringOrders)(_.toString)
+   *
+   * // first comparison is with alpha order, second is with string length
+   * scala> intOrders.map(o => o.comparison(12, 3))
+   * res1: List[Comparison] = List(LessThan, GreaterThan)
+   *
+   * // create the `product` of the string order list and the int order list
+   * // `p` contains a list of the following orders:
+   * // 1. (alpha comparison on strings followed by alpha comparison on ints)
+   * // 2. (alpha comparison on strings followed by length comparison on ints)
+   * // 3. (length comparison on strings followed by alpha comparison on ints)
+   * // 4. (length comparison on strings followed by length comparison on ints)
+   * scala> val p: List[Order[(String, Int)]] = le.product(stringOrders, intOrders)
+   *
+   * scala> p.map(o => o.comparison(("abc", 12), ("def", 3)))
+   * res2: List[Comparison] = List(LessThan, LessThan, LessThan, GreaterThan)
+   * }}}
+   */
   def composeContravariantMonoidal[G[_]: ContravariantMonoidal]: ContravariantMonoidal[λ[α => F[G[α]]]] =
     new ComposedApplicativeContravariantMonoidal[F, G] {
       val F = self
@@ -52,13 +137,49 @@ import simulacrum.typeclass
     }
 
   /**
-   * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
+   * Returns the given argument (mapped to Unit) if `cond` is `false`,
+   * otherwise, unit lifted into F.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Applicative[List].unlessA(true)(List(1, 2, 3))
+   * res0: List[Unit] = List(())
+   *
+   * scala> Applicative[List].unlessA(false)(List(1, 2, 3))
+   * res1: List[Unit] = List((), (), ())
+   *
+   * scala> Applicative[List].unlessA(true)(List.empty[Int])
+   * res2: List[Unit] = List(())
+   *
+   * scala> Applicative[List].unlessA(false)(List.empty[Int])
+   * res3: List[Unit] = List()
+   * }}}
    */
   def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) pure(()) else void(f)
 
   /**
-   * Returns the given argument if `cond` is `true`, otherwise, unit lifted into F.
+   * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise,
+   * unit lifted into F.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Applicative[List].whenA(true)(List(1, 2, 3))
+   * res0: List[Unit] = List((), (), ())
+   *
+   * scala> Applicative[List].whenA(false)(List(1, 2, 3))
+   * res1: List[Unit] = List(())
+   *
+   * scala> Applicative[List].whenA(true)(List.empty[Int])
+   * res2: List[Unit] = List()
+   *
+   * scala> Applicative[List].whenA(false)(List.empty[Int])
+   * res3: List[Unit] = List(())
+   * }}}
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else pure(())
