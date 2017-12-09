@@ -13,13 +13,66 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
   /**
    * Given a value and a function in the Apply context, applies the
    * function to the value.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val someF: Option[Int => Long] = Some(_.toLong + 1L)
+   * scala> val noneF: Option[Int => Long] = None
+   * scala> val someInt: Option[Int] = Some(3)
+   * scala> val noneInt: Option[Int] = None
+   *
+   * scala> Apply[Option].ap(someF)(someInt)
+   * res0: Option[Long] = Some(4)
+   *
+   * scala> Apply[Option].ap(noneF)(someInt)
+   * res1: Option[Long] = None
+   *
+   * scala> Apply[Option].ap(someF)(noneInt)
+   * res2: Option[Long] = None
+   *
+   * scala> Apply[Option].ap(noneF)(noneInt)
+   * res3: Option[Long] = None
+   * }}}
    */
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
-  /** Compose two actions, discarding any value produced by the first. */
+  /**
+   * Compose two actions, discarding any value produced by the first.
+   *
+   * @see [[forEffect]] to discard the value of the second instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.Validated
+   * scala> import Validated.{Valid, Invalid}
+   *
+   * scala> type ErrOr[A] = Validated[String, A]
+   *
+   * scala> val validInt: ErrOr[Int] = Valid(3)
+   * scala> val validBool: ErrOr[Boolean] = Valid(true)
+   * scala> val invalidInt: ErrOr[Int] = Invalid("Invalid int.")
+   * scala> val invalidBool: ErrOr[Boolean] = Invalid("Invalid boolean.")
+   *
+   * scala> Apply[ErrOr].followedBy(validInt)(validBool)
+   * res0: ErrOr[Boolean] = Valid(true)
+   *
+   * scala> Apply[ErrOr].followedBy(invalidInt)(validBool)
+   * res1: ErrOr[Boolean] = Invalid(Invalid int.)
+   *
+   * scala> Apply[ErrOr].followedBy(validInt)(invalidBool)
+   * res2: ErrOr[Boolean] = Invalid(Invalid boolean.)
+   *
+   * scala> Apply[ErrOr].followedBy(invalidInt)(invalidBool)
+   * res3: ErrOr[Boolean] = Invalid(Invalid int.Invalid boolean.)
+   * }}}
+   *
+   */
   def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     map2(fa, fb)((_, b) => b)
 
@@ -27,7 +80,37 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
   @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
     followedBy(fa)(fb)
 
-  /** Compose two actions, discarding any value produced by the second. */
+  /**
+   * Compose two actions, discarding any value produced by the second.
+   *
+   * @see [[followedBy]] to discard the value of the first instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.Validated
+   * scala> import Validated.{Valid, Invalid}
+   *
+   * scala> type ErrOr[A] = Validated[String, A]
+   *
+   * scala> val validInt: ErrOr[Int] = Valid(3)
+   * scala> val validBool: ErrOr[Boolean] = Valid(true)
+   * scala> val invalidInt: ErrOr[Int] = Invalid("Invalid int.")
+   * scala> val invalidBool: ErrOr[Boolean] = Invalid("Invalid boolean.")
+   *
+   * scala> Apply[ErrOr].forEffect(validInt)(validBool)
+   * res0: ErrOr[Int] = Valid(3)
+   *
+   * scala> Apply[ErrOr].forEffect(invalidInt)(validBool)
+   * res1: ErrOr[Int] = Invalid(Invalid int.)
+   *
+   * scala> Apply[ErrOr].forEffect(validInt)(invalidBool)
+   * res2: ErrOr[Int] = Invalid(Invalid boolean.)
+   *
+   * scala> Apply[ErrOr].forEffect(invalidInt)(invalidBool)
+   * res3: ErrOr[Int] = Invalid(Invalid int.Invalid boolean.)
+   * }}}
+   */
   def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     map2(fa, fb)((a, _) => a)
 
@@ -45,6 +128,28 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * Applies the pure (binary) function f to the effectful values fa and fb.
    *
    * map2 can be seen as a binary version of [[cats.Functor]]#map.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val someInt: Option[Int] = Some(3)
+   * scala> val noneInt: Option[Int] = None
+   * scala> val someLong: Option[Long] = Some(4L)
+   * scala> val noneLong: Option[Long] = None
+   *
+   * scala> Apply[Option].map2(someInt, someLong)((i, l) => i.toString + l.toString)
+   * res0: Option[String] = Some(34)
+   *
+   * scala> Apply[Option].map2(someInt, noneLong)((i, l) => i.toString + l.toString)
+   * res0: Option[String] = None
+   *
+   * scala> Apply[Option].map2(noneInt, noneLong)((i, l) => i.toString + l.toString)
+   * res0: Option[String] = None
+   *
+   * scala> Apply[Option].map2(noneInt, someLong)((i, l) => i.toString + l.toString)
+   * res0: Option[String] = None
+   * }}}
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     map(product(fa, fb)) { case (a, b) => f(a, b) }
@@ -74,6 +179,19 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
   def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
     fb.map(fb => map2(fa, fb)(f))
 
+  /**
+   * Compose an `Apply[F]` and an `Apply[G]` into an `Apply[λ[α => F[G[α]]]]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val alo = Apply[List].compose[Option]
+   *
+   * scala> alo.product(List(None, Some(true), Some(false)), List(Some(2), None))
+   * res1: List[Option[(Boolean, Int)]] = List(None, None, Some((true,2)), None, Some((false,2)), None)
+   * }}}
+   */
   def compose[G[_]: Apply]: Apply[λ[α => F[G[α]]]] =
     new ComposedApply[F, G] {
       val F = self
