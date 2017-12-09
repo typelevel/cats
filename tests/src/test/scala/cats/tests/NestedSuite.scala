@@ -145,4 +145,10 @@ class NestedSuite extends CatsSuite {
     checkAll("Nested[ListWrapper, Option, ?]", MonoidKTests[Nested[ListWrapper, Option, ?]].monoidK[Int])
     checkAll("MonoidK[Nested[ListWrapper, Option, ?]]", SerializableTests.serializable(MonoidK[Nested[ListWrapper, Option, ?]]))
   }
+
+  {
+    //Distributive composition
+    checkAll("Nested[Function0, Function0, ?]", DistributiveTests[Nested[Function0, Function0, ?]].distributive[Int, Int, Int, Option, Function0])
+    checkAll("Distributive[Nested[Function1[Int,?], Function0, ?]]", SerializableTests.serializable(Distributive[Nested[Function1[Int,?], Function0, ?]]))
+  }
 }

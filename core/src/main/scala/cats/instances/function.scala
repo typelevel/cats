@@ -10,7 +10,7 @@ import annotation.tailrec
 trait FunctionInstances extends cats.kernel.instances.FunctionInstances
     with Function0Instances with Function1Instances
 
-private[instances] sealed trait Function0Instances {
+private[instances] sealed trait Function0Instances extends Function0Instances1 {
 
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
@@ -34,6 +34,15 @@ private[instances] sealed trait Function0Instances {
           loop(a)
         }
     }
+}
+
+
+trait Function0Instances1 {
+   implicit def function0Distributive: Distributive[Function0] = new Distributive[Function0] {
+    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = {() => Functor[F].map(fa)(a => f(a)()) }
+
+    def map[A, B](fa: Function0[A])(f: A => B): Function0[B] = () => f(fa())
+  }
 }
 
 private[instances] sealed trait Function1Instances extends Function1Instances1 {
@@ -64,6 +73,7 @@ private[instances] sealed trait Function1Instances extends Function1Instances1 {
         }
     }
 
+
   implicit val catsStdInstancesForFunction1: Choice[Function1] with CommutativeArrow[Function1] =
     new Choice[Function1] with CommutativeArrow[Function1] {
       def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C = {
@@ -91,7 +101,7 @@ private[instances] sealed trait Function1Instances extends Function1Instances1 {
 }
 
 trait Function1Instances1 {
-   implicit def distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
+   implicit def functior1Distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
     def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = {t1 => Functor[F].map(fa)(a => f(a)(t1)) }
 
     def map[A, B](fa: T1 => A)(f: A => B): T1 => B = {t1 => f(fa(t1))}

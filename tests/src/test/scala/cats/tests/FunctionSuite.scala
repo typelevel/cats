@@ -54,6 +54,10 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[Int, Int]", MonoidKTests[λ[α => α => α]].monoidK[Int])
   checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(catsStdMonoidKForFunction1))
 
+  checkAll("Function1[Int, Int]", DistributiveTests[Int => ?].distributive[Int, Int, Int, Id, Function1[Int, ?]])
+  checkAll("Distributive[Int => ?]", SerializableTests.serializable(Distributive[Int => ?]))
+
+
 
   // law checks for the various Function0-related instances
   checkAll("Function0[Eqed]", EqTests[Function0[Eqed]].eqv)
@@ -68,6 +72,8 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
   checkAll("Function0[Grp]", GroupTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
+  checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
+
 
   test("Function0[Hsh]") {
     forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
@@ -89,6 +95,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[() => CMono]", SerializableTests.serializable(CommutativeMonoid[() => CMono]))
   checkAll("Group[() => Grp]", SerializableTests.serializable(Group[() => Grp]))
   checkAll("CommutativeGroup[() => CGrp]", SerializableTests.serializable(CommutativeGroup[() => CGrp]))
+  checkAll("Function0", SerializableTests.serializable(Distributive[Function0]))
 
 
   // law checks for the various Function1-related instances
