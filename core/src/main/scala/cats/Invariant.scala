@@ -6,6 +6,21 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
 @typeclass trait Invariant[F[_]] { self =>
+
+  /**
+   * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
+   * to `B` and one from `B` to `A`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.concurrent.duration._
+   * scala> val durSemigroup: Semigroup[FiniteDuration] =
+   *      | Invariant[Semigroup].imap(Semigroup[Long])(Duration.fromNanos)(_.toNanos)
+   * scala> durSemigroup.combine(2.seconds, 3.seconds)
+   * res1: FiniteDuration = 5 seconds
+   * }}}
+   */
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
   def compose[G[_]: Invariant]: Invariant[λ[α => F[G[α]]]] =

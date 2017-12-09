@@ -18,6 +18,8 @@ package object syntax {
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
+  object contravariantSemigroupal extends ContravariantSemigroupalSyntax
+  object contravariantMonoidal extends ContravariantMonoidalSyntax
   object either extends EitherSyntax
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax

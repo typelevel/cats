@@ -11,14 +11,17 @@ import org.typelevel.discipline.Laws
 trait EqTests[A] extends Laws {
   def laws: EqLaws[A]
 
-  def eqv(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqA: Eq[A]): RuleSet =
+  def eqv(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A]): RuleSet = {
+    implicit val eqA: Eq[A] = laws.E
+
     new DefaultRuleSet(
       "eq",
       None,
-      "eq reflexitivity" -> forAll(laws.reflexitivityEq _),
-      "eq symmetry" -> forAll(laws.symmetryEq _),
-      "eq antisymmetry" -> forAll(laws.antiSymmetryEq _),
-      "eq transitivity" -> forAll(laws.transitivityEq _))
+      "reflexitivity" -> forAll(laws.reflexitivityEq _),
+      "symmetry" -> forAll(laws.symmetryEq _),
+      "antisymmetry" -> forAll(laws.antiSymmetryEq _),
+      "transitivity" -> forAll(laws.transitivityEq _))
+  }
 }
 
 object EqTests {

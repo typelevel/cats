@@ -12,6 +12,7 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
   def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
+    ArbFAC: Arbitrary[F[A, C]],
     ArbFCD: Arbitrary[F[C, D]],
     ArbFDE: Arbitrary[F[D, E]],
     ArbFEG: Arbitrary[F[E, G]],
@@ -31,6 +32,7 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
     EqFAEDE: Eq[F[(A, E), (D, E)]],
+    EqFABC: Eq[F[A, (B, C)]],
     EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
   ): RuleSet =
@@ -49,7 +51,8 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
         "arrow exchange" -> forAll(laws.arrowExchange[A, B, C, D] _),
         "arrow unit" -> forAll(laws.arrowUnit[A, B, C] _),
         "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _),
-        "split consistent with andThen" -> forAll(laws.splitConsistentWithAndThen[A, B, C, D] _)
+        "split consistent with andThen" -> forAll(laws.splitConsistentWithAndThen[A, B, C, D] _),
+        "merge consistent with andThen" -> forAll(laws.mergeConsistentWithAndThen[A, B, C] _)
       )
     }
 }

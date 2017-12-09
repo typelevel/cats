@@ -2,6 +2,7 @@ package cats
 package data
 
 import cats.Bifunctor
+import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
 
 import scala.annotation.tailrec
@@ -164,8 +165,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
       def handleErrorWith[B](fa: Ior[A, B])(f: (A) => Ior[A, B]): Ior[A, B] =
         fa match {
           case Ior.Left(e) => f(e)
-          case r @ Ior.Right(_) => r
-          case Ior.Both(e, _) => f(e)
+          case _ => fa
         }
 
       def flatMap[B, C](fa: Ior[A, B])(f: B => Ior[A, C]): Ior[A, C] = fa.flatMap(f)
@@ -203,6 +203,44 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     new Bifunctor[Ior] {
       override def bimap[A, B, C, D](fab: A Ior B)(f: A => C, g: B => D): C Ior D = fab.bimap(f, g)
     }
+
+  // scalastyle:off cyclomatic.complexity
+  implicit def catsDataParallelForIor[E]
+    (implicit E: Semigroup[E]): Parallel[Ior[E, ?], Ior[E, ?]] = new Parallel[Ior[E, ?], Ior[E, ?]]
+  {
+
+    private[this] val identityK: Ior[E, ?] ~> Ior[E, ?] = FunctionK.id
+
+    def parallel: Ior[E, ?] ~> Ior[E, ?] = identityK
+    def sequential: Ior[E, ?] ~> Ior[E, ?] = identityK
+
+    val applicative: Applicative[Ior[E, ?]] = new Applicative[Ior[E, ?]] {
+      def pure[A](a: A): Ior[E, A] = Ior.right(a)
+      def ap[A, B](ff: Ior[E, A => B])(fa: Ior[E, A]): Ior[E, B] =
+        fa match {
+          case Ior.Right(a) => ff match {
+            case Ior.Right(f) => Ior.Right(f(a))
+            case Ior.Both(e1, f) => Ior.Both(e1, f(a))
+            case Ior.Left(e1) => Ior.Left(e1)
+          }
+          case Ior.Both(e1, a) => ff match {
+            case Ior.Right(f) => Ior.Both(e1, f(a))
+            case Ior.Both(e2, f) => Ior.Both(E.combine(e2, e1), f(a))
+            case Ior.Left(e2) => Ior.Left(E.combine(e2, e1))
+          }
+          case Ior.Left(e1) => ff match {
+            case Ior.Right(f) => Ior.Left(e1)
+            case Ior.Both(e2, f) => Ior.Left(E.combine(e2, e1))
+            case Ior.Left(e2) => Ior.Left(E.combine(e2, e1))
+          }
+        }
+    }
+
+    lazy val monad: Monad[Ior[E, ?]] = Monad[Ior[E, ?]]
+  }
+  // scalastyle:on cyclomatic.complexity
+
+
 }
 
 private[data] sealed abstract class IorInstances0 {
@@ -245,6 +283,18 @@ private[data] sealed trait IorFunctions {
    * @return `None` if both `oa` and `ob` are `None`. Otherwise `Some` wrapping
    * an [[Ior.Left]], [[Ior.Right]], or [[Ior.Both]] if `oa`, `ob`, or both are
    * defined (respectively).
+   *
+   * Example:
+   * {{{
+   * scala> Ior.fromOptions(Option.empty[String], Option.empty[Int])
+   * res0: Option[Ior[String, Int]] = None
+   * scala> Ior.fromOptions(Option.empty[String], Some(42))
+   * res1: Option[Ior[String, Int]] = Some(Right(42))
+   * scala> Ior.fromOptions(Some("Error"), Option.empty[Int])
+   * res2: Option[Ior[String, Int]] = Some(Left(Error))
+   * scala> Ior.fromOptions(Some("Warning"), Some(42))
+   * res3: Option[Ior[String, Int]] = Some(Both(Warning,42))
+   * }}}
    */
   def fromOptions[A, B](oa: Option[A], ob: Option[B]): Option[A Ior B] =
     oa match {
@@ -256,5 +306,26 @@ private[data] sealed trait IorFunctions {
         case Some(b) => Some(Ior.Right(b))
         case None => None
       }
+    }
+
+  /**
+   * Create an `Ior` from an `Either`.
+   * @param eab an `Either` from which the `Ior` should be created
+   *
+   * @return [[Ior.Left]] if the `Either` was a `Left`,
+   *         or [[Ior.Right]] if the `Either` was a `Right`
+   *
+   * Example:
+   * {{{
+   * scala> Ior.fromEither(Left(1))
+   * res0: Ior[Int, Nothing] = Left(1)
+   * scala> Ior.fromEither(Right('1'))
+   * res1: Ior[Nothing, Char] = Right(1)
+   * }}}
+   */
+  def fromEither[A, B](eab: Either[A, B]): A Ior B =
+    eab match {
+      case Left(a) => left(a)
+      case Right(b) => right(b)
     }
 }

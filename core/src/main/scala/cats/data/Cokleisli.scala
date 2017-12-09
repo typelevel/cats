@@ -142,9 +142,6 @@ private trait CokleisliArrow[F[_]] extends Arrow[Cokleisli[F, ?, ?]] with Coklei
   def lift[A, B](f: A => B): Cokleisli[F, A, B] =
     Cokleisli(fa => f(F.extract(fa)))
 
-  def id[A]: Cokleisli[F, A, A] =
-    Cokleisli(fa => F.extract(fa))
-
   def first[A, B, C](fa: Cokleisli[F, A, B]): Cokleisli[F, (A, C), (B, C)] =
     fa.first[C]
 

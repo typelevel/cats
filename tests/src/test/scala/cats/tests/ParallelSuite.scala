@@ -1,4 +1,3 @@
-
 package cats
 package tests
 
@@ -17,13 +16,28 @@ import scala.collection.immutable.SortedSet
 class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
 
-  test("ParTraversing Either should accumulate errors") {
+  test("ParSequence Either should accumulate errors") {
     forAll { es: List[Either[String, Int]] =>
       val lefts = es.collect {
         case Left(e) => e
       }.foldMap(identity)
 
       es.parSequence.fold(identity, i => Monoid[String].empty) should === (lefts)
+    }
+  }
+
+  test("ParSequence Ior should accumulate errors") {
+    forAll { es: List[Ior[String, Int]] =>
+      val lefts = es.map(_.left).collect {
+        case Some(e) => e
+      }.foldMap(identity)
+      es.parSequence.left.getOrElse(Monoid[String].empty) should === (lefts)
+    }
+  }
+
+  test("ParSequence Ior should sequence values") {
+    forAll { es: List[Ior[String, Int]] =>
+      es.parSequence.right should === (es.map(_.toOption).sequence)
     }
   }
 
@@ -100,8 +114,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("WriterT with Either should accumulate errors") {
-    val w1: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("Too "))
-    val w2: WriterT[Either[String, ?], String, Int] = WriterT.lift(Left("bad."))
+    val w1: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("Too "))
+    val w2: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("bad."))
 
     ((w1,w2).parMapN(_ + _).value) should === (Left("Too bad."))
 
@@ -156,6 +170,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
+  checkAll("Parallel[Ior[String, ?], Ior[String, ?]]", ParallelTests[Ior[String, ?], Ior[String, ?]].parallel[Int, String])
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String])

@@ -67,6 +67,23 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
 object WriterT extends WriterTInstances with WriterTFunctions {
 
+  def liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
+    WriterT(F.map(fv)(v => (monoidL.empty, v)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[WriterT[Eval, String, ?], Int] = a.mapK(WriterT.liftK)
+   * scala> b.value.run.value
+   * res0: (String, Option[Int]) = ("",Some(1))
+   * }}}
+   */
+  def liftK[F[_], L](implicit monoidL: Monoid[L], F: Applicative[F]): F ~> WriterT[F, L, ?] =
+    λ[F ~> WriterT[F, L, ?]](WriterT.liftF(_))
+
+  @deprecated("Use liftF instead", "1.0.0")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))
 
@@ -177,6 +194,11 @@ private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 
     new WriterTAlternative[F, L] {
       implicit val F0: Alternative[F] = F
       implicit val L0: Monoid[L] = L
+    }
+
+  implicit def catsDataContravariantMonoidalForWriterT[F[_], L](implicit F: ContravariantMonoidal[F]): ContravariantMonoidal[WriterT[F, L, ?]] =
+    new WriterTContravariantMonoidal[F, L] {
+      implicit val F0: ContravariantMonoidal[F] = F
     }
 }
 
@@ -351,6 +373,23 @@ private[data] sealed trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
 
 private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[WriterT[F, L, ?]] with WriterTMonoidK[F, L] with WriterTApplicative[F, L] {
   override implicit def F0: Alternative[F]
+}
+
+private[data] sealed trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, ?]] {
+  implicit def F0: ContravariantMonoidal[F]
+
+  override def unit[A]: WriterT[F, L, A] = WriterT(F0.unit[(L, A)])
+
+  override def contramap[A, B](fa: WriterT[F, L, A])(f: B => A): WriterT[F, L, B] =
+    WriterT(F0.contramap(fa.run)((d: (L, B)) => (d._1, f(d._2))))
+
+  override def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
+    WriterT(
+      F0.contramap(
+        F0.product(fa.run, fb.run))(
+          (t: (L, (A, B))) => t match {
+            case (l, (a, b)) => ((l, a), (l, b))
+      }))
 }
 
 private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {

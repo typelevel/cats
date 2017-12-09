@@ -97,7 +97,6 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeGroup[() => CGrp]", SerializableTests.serializable(CommutativeGroup[() => CGrp]))
   checkAll("Function0", SerializableTests.serializable(Distributive[Function0]))
 
-
   // law checks for the various Function1-related instances
   checkAll("Function1[String, Semi]", SemigroupTests[Function1[String, Semi]].semigroup)
   checkAll("Function1[String, CSemi]", CommutativeSemigroupTests[Function1[String, CSemi]].commutativeSemigroup)
@@ -108,6 +107,9 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[String, CMono]", CommutativeMonoidTests[Function1[String, CMono]].commutativeMonoid)
   checkAll("Function1[String, Grp]", GroupTests[Function1[String, Grp]].group)
   checkAll("Function1[String, CGrp]", CommutativeGroupTests[Function1[String, CGrp]].commutativeGroup)
+  // Isos for ContravariantMonoidal
+  implicit val isoCodomain = SemigroupalTests.Isomorphisms.invariant[Function1[?, Long]]
+  checkAll("Function1[?, Monoid]", ContravariantMonoidalTests[Function1[?, Long]].contravariantMonoidal[Int, Int, Int])
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
@@ -119,4 +121,5 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[String => CMono]", SerializableTests.serializable(CommutativeMonoid[String => CMono]))
   checkAll("Group[String => Grp]", SerializableTests.serializable(Group[String => Grp]))
   checkAll("CommutativeGroup[String => CGrp]", SerializableTests.serializable(CommutativeGroup[String => CGrp]))
+  checkAll("ContravariantMonoidal[Function1[?, Monoid]]", SerializableTests.serializable(ContravariantMonoidal[? => Long]))
 }

@@ -51,6 +51,14 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // Applicative + ContravariantMonoidal functor composition
+    checkAll("Nested[Option, Const[String, ?], ?]",
+      ContravariantMonoidalTests[Nested[Option, Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[Nested[Option, Const[String, ?], ?]",
+      SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, ?], ?]]))
+  }
+
+  {
     // Contravariant + Contravariant = Functor
     type ConstInt[A] = Const[Int, A]
     checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])

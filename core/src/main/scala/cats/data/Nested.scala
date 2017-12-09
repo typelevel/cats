@@ -43,6 +43,11 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
     new NestedNonEmptyTraverse[F, G] {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
+    new NestedContravariantMonoidal[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -274,4 +279,16 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
 
   def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
     Nested(FG.contramap(fga.value)(f))
+}
+
+private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, ?]] {
+  def FG: ContravariantMonoidal[λ[α => F[G[α]]]]
+
+  def unit[A]: Nested[F, G, A] = Nested(FG.unit)
+
+  def contramap[A, B](fa: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
+    Nested(FG.contramap(fa.value)(f))
+
+  def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+    Nested(FG.product(fa.value, fb.value))
 }

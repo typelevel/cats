@@ -10,8 +10,7 @@ import annotation.tailrec
 trait FunctionInstances extends cats.kernel.instances.FunctionInstances
     with Function0Instances with Function1Instances
 
-private[instances] sealed trait Function0Instances extends Function0Instances1 {
-
+private[instances] sealed trait Function0Instances extends Function0Instances0 {
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
@@ -36,8 +35,7 @@ private[instances] sealed trait Function0Instances extends Function0Instances1 {
     }
 }
 
-
-trait Function0Instances1 {
+private[instances] sealed trait Function0Instances0 {
    implicit def function0Distributive: Distributive[Function0] = new Distributive[Function0] {
     def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = {() => Functor[F].map(fa)(a => f(a)()) }
 
@@ -45,11 +43,16 @@ trait Function0Instances1 {
   }
 }
 
-private[instances] sealed trait Function1Instances extends Function1Instances1 {
-  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
-    new Contravariant[? => R] {
-      def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
-        fa.compose(f)
+private[instances] sealed trait Function1Instances extends Function1Instances0 {
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
+    new ContravariantMonoidal[? => R] {
+      def unit[A]: A => R = Function.const(Monoid[R].empty)
+      def contramap[A, B](fa: A => R)(f: B => A): B => R =
+        fa compose f
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
+        (ab: (A, B)) => ab match {
+          case (a, b) => Monoid[R].combine(fa(a), fb(b))
+        }
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
@@ -87,8 +90,6 @@ private[instances] sealed trait Function1Instances extends Function1Instances1 {
         case (a, c) => (fa(a), c)
       }
 
-      def id[A]: A => A = a => a
-
       override def split[A, B, C, D](f: A => B, g: C => D): ((A, C)) => (B, D) = {
         case (a, c) => (f(a), g(c))
       }
@@ -100,8 +101,14 @@ private[instances] sealed trait Function1Instances extends Function1Instances1 {
     Category[Function1].algebraK
 }
 
-trait Function1Instances1 {
-   implicit def functior1Distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
+private[instances] sealed trait Function1Instances0 {
+  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
+    new Contravariant[? => R] {
+      def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
+        fa.compose(f)
+    }
+
+  implicit def functior1Distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
     def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = {t1 => Functor[F].map(fa)(a => f(a)(t1)) }
 
     def map[A, B](fa: T1 => A)(f: A => B): T1 => B = {t1 => f(fa(t1))}

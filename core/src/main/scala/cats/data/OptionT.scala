@@ -198,6 +198,19 @@ object OptionT extends OptionTInstances {
    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
    */
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._,  implicits._
+   * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, ?]]
+   * scala> val b: EitherT[OptionT[Eval, ?], String, Int] = a.mapK(OptionT.liftK)
+   * scala> b.value.value.value
+   * res0: Option[Either[String,Int]] = Some(Right(1))
+   * }}}
+   */
+  def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, ?] =
+    λ[F ~> OptionT[F, ?]](OptionT.liftF(_))
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
@@ -220,6 +233,9 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
+
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
+    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
   implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
     new OptionTSemigroupK[F] { implicit val F = F0 }
@@ -279,6 +295,23 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
 
   override def handleErrorWith[A](fa: OptionT[F, A])(f: E => OptionT[F, A]): OptionT[F, A] =
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
+}
+
+private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {
+  def F: ContravariantMonoidal[F]
+
+  override def unit[A]: OptionT[F, A] = OptionT (F.unit)
+
+  override def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
+    OptionT(F.contramap(fa.value)(_ map f))
+
+  override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
+    OptionT(F.contramap(F.product(fa.value, fb.value))(
+        (t: Option[(A, B)]) => t match {
+          case Some((x, y)) => (Some(x), Some(y))
+          case None => (None, None)
+        }
+      ))
 }
 
 private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {

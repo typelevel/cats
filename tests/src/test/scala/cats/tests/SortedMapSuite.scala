@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{HashTests, MonoidTests}
+import cats.kernel.CommutativeMonoid
+import cats.kernel.laws.discipline.{HashTests, CommutativeMonoidTests, MonoidTests}
 import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
@@ -28,6 +29,8 @@ class SortedMapSuite extends CatsSuite {
   }
 
   checkAll("Hash[SortedMap[Int, String]]" , HashTests[SortedMap[Int, String]].hash)
-  checkAll("Monoid[SortedMap[String, Int]]", MonoidTests[SortedMap[String, Int]].monoid)
-  checkAll("Monoid[SortedMap[String, Int]]", SerializableTests.serializable(Monoid[SortedMap[String, Int]]))
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]", CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]", SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
+  checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
+  checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
 }
