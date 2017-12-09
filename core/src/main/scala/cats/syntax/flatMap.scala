@@ -34,6 +34,15 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   @deprecated("Use <* instead", "1.0.0-RC1")
   def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.apL(fa)(fb)
+
+
+  @deprecated("Use apREval instead.", "1.0.0")
+  def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
+    F.apREval(fa)(fb)
+
+  @deprecated("Use apLEval instead.", "1.0.0")
+  def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
+    F.apLEval(fa)(fb)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
