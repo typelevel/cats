@@ -26,5 +26,14 @@ object Comparison {
     else SomeLt
   }
 
-  implicit val catsKernelEqForComparison: Eq[Comparison] = Eq.fromUniversalEquals
+  implicit val catsKernelInstancesForComparison: Eq[Comparison] with Monoid[Comparison] =
+    new Eq[Comparison] with Monoid[Comparison] {
+      def eqv(x: Comparison, y: Comparison): Boolean = x == y
+      def empty: Comparison = EqualTo
+
+      def combine(x: Comparison, y: Comparison): Comparison = x match {
+        case EqualTo => y
+        case comp    => comp
+      }
+    }
 }

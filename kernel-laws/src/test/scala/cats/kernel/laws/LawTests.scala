@@ -248,6 +248,8 @@ class Tests extends FunSuite with Discipline {
 
   checkAll("Eq[Comparison]", EqTests[Comparison].eqv)
 
+  checkAll("Monoid[Comparison]", MonoidTests[Comparison].monoid)
+
   test("comparison") {
     val order = Order[Int]
     val eqv = Eq[Comparison]
