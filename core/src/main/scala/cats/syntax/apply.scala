@@ -16,12 +16,12 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
 final class ApplyOps[F[_], A](val fa: F[A]) extends AnyVal {
   /** Alias for [[Apply.apR]]. */
-  @deprecated("Use *> or apR instead.", "1.0.0-RC2")
+  @deprecated("Use *> or apR instead.", "1.0.0")
   @inline def followedBy[B](fb: F[B])(implicit F: Apply[F]): F[B] =
     F.apR(fa)(fb)
 
   /** Alias for [[Apply.apL]]. */
-  @deprecated("Use <* or apL instead.", "1.0.0-RC2")
+  @deprecated("Use <* or apL instead.", "1.0.0")
   @inline def forEffect[B](fb: F[B])(implicit F: Apply[F]): F[A] =
     F.apL(fa)(fb)
 }

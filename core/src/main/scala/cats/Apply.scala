@@ -41,12 +41,12 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
     apL(fa)(fb)
 
   /** Alias for [[apR]]. */
-  @deprecated("Use *> or apR instead.", "1.0.0-RC2")
+  @deprecated("Use *> or apR instead.", "1.0.0")
   @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     apR(fa)(fb)
 
   /** Alias for [[apL]]. */
-  @deprecated("Use <* or apL instead.", "1.0.0-RC2")
+  @deprecated("Use <* or apL instead.", "1.0.0")
   @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     apL(fa)(fb)
 

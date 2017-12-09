@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import simulacrum.noop
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -57,8 +58,8 @@ import simulacrum.typeclass
    */
   def apREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
-  @deprecated("Use apREval instead.", "1.0.0-RC2")
-  def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = apREval(fa)(fb)
+  @deprecated("Use apREval instead.", "1.0.0")
+  @noop def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = apREval(fa)(fb)
 
 
 
@@ -83,8 +84,8 @@ import simulacrum.typeclass
    */
   def apLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
 
-  @deprecated("Use apLEval instead.", "1.0.0-RC2")
-  def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = apLEval(fa)(fb)
+  @deprecated("Use apLEval instead.", "1.0.0")
+  @noop def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = apLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
