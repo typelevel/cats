@@ -162,6 +162,11 @@ private[data] sealed abstract class NestedInstances12 {
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
     }
+
+  implicit def catsDataDistributiveForNested[F[_]: Distributive, G[_]: Distributive]:Distributive[Nested[F, G, ?]] =
+    new NestedDistributive[F, G] {
+      val FG: Distributive[λ[α => F[G[α]]]] = Distributive[F].compose[G]
+    }
 }
 
 private[data] trait NestedInvariant[F[_], G[_]] extends Invariant[Nested[F, G, ?]] {
