@@ -323,7 +323,15 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.MonadError.rethrow"),
       exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow"),
       exclude[DirectMissingMethodProblem]("cats.data.CokleisliArrow.id"),
-      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id")
+      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.Distributive#ToDistributiveOps.toDistributiveOps"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.syntax.DistributiveSyntax.catsSyntaxDistributiveOps"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive")
     )
   }
 )
