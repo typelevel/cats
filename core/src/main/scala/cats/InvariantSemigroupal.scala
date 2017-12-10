@@ -7,14 +7,14 @@ import simulacrum.typeclass
   * and Semigroupal. It comes up enough to be useful, and composes well
   */
 @typeclass trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
-  /*
-  override def composeFunctor[G[_]: Functor]: InvariantSemigroupal[λ[α => F[G[α]]]] =
-    new ComposedSemigroupal[F, G] {
-      def F = self
-      def G = Functor[G]
-    }
 
-    */
+   def composeApply[G[_]: Apply]: InvariantSemigroupal[λ[α => F[G[α]]]] =
+     new ComposedInvariantApplySemigroupal[F, G] {
+       def F = self
+       def G = Apply[G]
+     }
+
+
 }
 
 object InvariantSemigroupal extends SemigroupalArityFunctions {
