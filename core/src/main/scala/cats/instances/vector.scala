@@ -73,9 +73,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (idx < Int.MaxValue && fa.size > idx && idx >= 0) Some(fa(idx.toInt)) else None
 
       override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-          G.map2Eval(f(a), lgvb)(_ +: _)
-        }.value
+        foldLeft[A, G[Vector[B]]](fa, G.pure(Vector.empty[B])) { (a, gvb) =>
+          G.map2(a, f(gvb))(_ :+ _)
+        }
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
