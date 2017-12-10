@@ -75,6 +75,10 @@ class FunctionSuite extends CatsSuite {
     }
   }
 
+  // Test for Arrow applicative
+  Applicative[String => ?]
+  checkAll("Function1[String, ?]",
+    ApplicativeTests[Function1[String, ?]](Applicative.catsApplicativeForArrow[Function1, String]).applicative[Int, Int, Int])
 
   // serialization tests for the various Function0-related instances
   checkAll("Eq[() => Eqed]", SerializableTests.serializable(Eq[() => Eqed]))
