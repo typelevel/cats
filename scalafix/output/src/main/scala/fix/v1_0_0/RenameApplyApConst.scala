@@ -23,8 +23,8 @@ object RenameApplyApConst {
   NonEmptyParallel[NonEmptyList, ZipNonEmptyList].parApL(l)(r)
   NonEmptyParallel[NonEmptyList, ZipNonEmptyList].parApR(l)(r)
 
-  // l parApL r
-  // l parApR r
+  l parApL r
+  l parApR r
 
   FlatMap[NonEmptyList].apLEval(l)(Eval.now(r))
   FlatMap[NonEmptyList].apREval(l)(Eval.now(r))
