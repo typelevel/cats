@@ -7,6 +7,15 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
  */
-@typeclass trait InvariantMonoidal[F[_]] extends Invariant[F] with Semigroupal[F] {
+@typeclass trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
   def pure[A](a: A): F[A]
+}
+
+object InvariantMonoidal {
+  def monoid[F[_], A](implicit f: InvariantMonoidal[F], monoid: Monoid[A]): Monoid[F[A]] =
+    new InvariantMonoidalMonoid[F, A](f, monoid)
+}
+
+private[cats] class InvariantMonoidalMonoid[F[_], A](f: InvariantMonoidal[F], monoid: Monoid[A]) extends InvariantSemigroupalSemigroup(f, monoid) with Monoid[F[A]] {
+  def empty: F[A] = f.pure(monoid.empty)
 }

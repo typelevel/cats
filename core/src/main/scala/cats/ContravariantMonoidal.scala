@@ -19,4 +19,11 @@ import simulacrum.typeclass
    */
   def unit[A]: F[A]
 }
-object ContravariantMonoidal extends SemigroupalArityFunctions
+object ContravariantMonoidal extends SemigroupalArityFunctions {
+  def monoid[F[_], A](implicit f: ContravariantMonoidal[F], monoid: Monoid[A]): Monoid[F[A]] =
+    new ContravariantMonoidalMonoid[F, A](f)
+}
+
+private[cats] class ContravariantMonoidalMonoid[F[_], A](f: ContravariantMonoidal[F]) extends ContravariantSemigroupalSemigroup[F, A](f) with Monoid[F[A]] {
+  def empty: F[A] = f.unit
+}
