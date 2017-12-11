@@ -78,7 +78,7 @@ class FunctionSuite extends CatsSuite {
   // Test for Arrow applicative
   {
     implicit val applicativeFromArrow: Applicative[String => ?] = Applicative.catsApplicativeForArrow[Function1, String]
-    checkAll("Function1[String, ?]", ApplicativeTests[Function1[String, ?].applicative[Int, Int, Int])
+    checkAll("Function1[String, ?]", ApplicativeTests[Function1[String, ?]].applicative[Int, Int, Int])
   }
                                                       
   // serialization tests for the various Function0-related instances
