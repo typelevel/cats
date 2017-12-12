@@ -139,7 +139,7 @@ private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
     new NestedApply[F, G] {
       val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
     }
-  
+
   implicit def catsDataDistributiveForNested[F[_]: Distributive, G[_]: Distributive]: Distributive[Nested[F, G, ?]] =
     new NestedDistributive[F, G] {
       val FG: Distributive[λ[α => F[G[α]]]] = Distributive[F].compose[G]

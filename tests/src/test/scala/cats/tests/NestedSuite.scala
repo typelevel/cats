@@ -155,8 +155,9 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    import cats.laws.discipline.eq._
     //Distributive composition
-    checkAll("Nested[Function0, Function0, ?]", DistributiveTests[Nested[Function0, Function0, ?]].distributive[Int, Int, Int, Option, Function0])
+    checkAll("Nested[Function1[Int, ?], Function0, ?]", DistributiveTests[Nested[Function1[Int, ?], Function0, ?]].distributive[Int, Int, Int, Option, Function0])
     checkAll("Distributive[Nested[Function1[Int,?], Function0, ?]]", SerializableTests.serializable(Distributive[Nested[Function1[Int,?], Function0, ?]]))
   }
 }
