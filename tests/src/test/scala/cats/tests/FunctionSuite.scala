@@ -48,7 +48,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[Int, Int]", ChoiceTests[Function1].choice[Int, Int, Int, Int])
   checkAll("Choice[Function1]", SerializableTests.serializable(Choice[Function1]))
 
-  checkAll("Function1[Int, Int]", ArrowChoiceTests[Function1].arrowChoice[Int, Int, Int, Int, Int])
+  checkAll("Function1[Int, Int]", ArrowChoiceTests[Function1].arrowChoice[Int, Int, Int, Int, Int, Int])
   checkAll("ArrowChoice[Function1]", SerializableTests.serializable(ArrowChoice[Function1]))
 
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])

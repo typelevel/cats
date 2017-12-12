@@ -20,24 +20,23 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import cats.arrow.ArrowChoice
    * scala> val toLong: Int => Long = _.toLong
    * scala> val toDouble: Float => Double = _.toDouble
    * scala> val f: Either[Int, Float] => Either[Long, Double] = toLong +++ toDouble
    * scala> f(Left(3))
-   * res0: Either[Long,Double] = Left(5)
+   * res0: Either[Long,Double] = Left(3)
    * scala> f(Right(3))
-   * res1: Either[Long,Double] = Right(5.0)
+   * res1: Either[Long,Double] = Right(3.0)
    * }}}
    */
   @simulacrum.op("+++", alias = true)
   def choose[A, B, C, D](f: F[A, C])(g: F[B, D]): F[Either[A, B], Either[C, D]]
 
   def left[A, B, C](fab: F[A, B]): F[Either[A, C], Either[B, C]] =
-    choose(fab)(lift(identity [C]))
+    choose(fab)(lift(identity[C]))
 
   def right[A, B, C](fab: F[A, B]): F[Either[C, A], Either[C, B]] =
-    choose(lift(identity [C]))(fab)
+    choose(lift(identity[C]))(fab)
 
   override def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C] =
     rmap(choose(f)(g))(_.fold(identity, identity))

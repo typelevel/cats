@@ -36,8 +36,8 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     EqFABC: Eq[F[A, (B, C)]],
     EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
-    EqFEitherABD: Eq[F[Either[A,B], D]],
-    EqFEitherABC: Eq[F[Either[A,B], C]],
+    EqFEitherABD: Eq[F[Either[A, B], D]],
+    EqFEitherABC: Eq[F[Either[A, B], C]],
     EqFEitherABCD: Eq[F[Either[A, B], Either[C, D]]],
     LEqFEitherABC: Eq[F[Either[A, C], Either[B, C]]],
     REqFEitherABC: Eq[F[Either[C, A], Either[C, B]]],
@@ -52,12 +52,12 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
         choice[A, B, C, D]
       )
       def props: Seq[(String, Prop)] = Seq(
-        "left and lift commute" -> forAll(laws.leftLiftCommute [A, B, C] _),
-        "right and lift commute" -> forAll(laws.rightLiftCommute [A, B, C] _),
-        "choose and lift commute" -> forAll(laws.chooseLiftCommute [A, B, C, D] _),
-        "choice and lift commute" -> forAll(laws.choiceLiftCommute [A, B, C] _),
-        "left and compose commute" -> forAll(laws.leftComposeCommute [A, B, C, D] _),
-        "right and compose commute" -> forAll(laws.rightComposeCommute [A, B, C, D] _)
+        "left and lift commute" -> forAll(laws.leftLiftCommute[A, B, C] _),
+        "right and lift commute" -> forAll(laws.rightLiftCommute[A, B, C] _),
+        "choose and lift commute" -> forAll(laws.chooseLiftCommute[A, B, C, D] _),
+        "choice and lift commute" -> forAll(laws.choiceLiftCommute[A, B, C] _),
+        "left and compose commute" -> forAll(laws.leftComposeCommute[A, B, C, D] _),
+        "right and compose commute" -> forAll(laws.rightComposeCommute[A, B, C, D] _)
       )
     }
 }
