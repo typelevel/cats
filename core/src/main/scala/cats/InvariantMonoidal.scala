@@ -8,6 +8,17 @@ import simulacrum.typeclass
  * Must obey the laws defined in cats.laws.InvariantMonoidalLaws.
  */
 @typeclass trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
+  /**
+    * `pure` lifts any value into a Monoidal Functor.
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    *
+    * scala> InvariantMonoidal[Option].pure(10)
+    * res0: Option[Int] = Some(10)
+    * }}}
+    */
   def pure[A](a: A): F[A]
 }
 

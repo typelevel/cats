@@ -11,13 +11,15 @@ import simulacrum.typeclass
  * Based on ekmett's contravariant library:
  * https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant-Divisible.html
  */
-@typeclass trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] { self =>
+@typeclass trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with InvariantMonoidal[F] {
   /**
    * `unit` produces an instance of `F` for any type `A`
    * that is trivial with respect to `contramap2` along
    * the diagonal
    */
   def unit[A]: F[A]
+
+  override def pure[A](a: A): F[A] = unit
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions {
   def monoid[F[_], A](implicit f: ContravariantMonoidal[F], monoid: Monoid[A]): Monoid[F[A]] =

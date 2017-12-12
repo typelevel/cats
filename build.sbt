@@ -323,6 +323,7 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[ReversedMissingMethodProblem]("cats.MonadError.rethrow"),
       exclude[ReversedMissingMethodProblem]("cats.syntax.MonadErrorSyntax.catsSyntaxMonadErrorRethrow"),
       exclude[InheritedNewAbstractMethodProblem]("cats.InvariantSemigroupal.composeApply"),
+      exclude[DirectMissingMethodProblem]("cats.Semigroupal.catsSemigroupalForMonoid"),
       exclude[DirectMissingMethodProblem]("cats.data.CokleisliArrow.id"),
       exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id")
     )

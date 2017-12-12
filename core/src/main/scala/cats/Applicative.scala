@@ -13,20 +13,8 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] { self =>
+@typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
-  /**
-   * `pure` lifts any value into the Applicative Functor.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   *
-   * scala> Applicative[Option].pure(10)
-   * res0: Option[Int] = Some(10)
-   * }}}
-   */
-  def pure[A](x: A): F[A]
 
   /**
    * Returns an `F[Unit]` value, equivalent with `pure(())`.
