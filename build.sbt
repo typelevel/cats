@@ -331,7 +331,10 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
       exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
       exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
-      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive")
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1")
     )
   }
 )
