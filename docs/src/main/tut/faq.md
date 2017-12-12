@@ -231,6 +231,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`                       |
 | `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`            | 
 | `f +++ g`                        | ArrowChoice choose       |                  | `ArrowChoice[F[_, _]]`  | `choose[A, B, C, D](f: F[A, C])(g: F[B, D]): F[Either [A, B], Either[C, D]]` |
+| `f ||| g`                        | Choice choice            |                  | `Choice[F[_, _]]`       | `choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]`            |
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                            |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                              |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                              |

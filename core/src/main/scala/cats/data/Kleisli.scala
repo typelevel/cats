@@ -146,11 +146,6 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
   implicit def catsDataMonadForKleisliId[A]: Monad[Kleisli[Id, A, ?]] =
     catsDataMonadForKleisli[Id, A]
 
-  implicit def catsDataArrowForKleisli[F[_]](implicit M: Monad[F]): Arrow[Kleisli[F, ?, ?]] =
-    new KleisliArrow[F] {
-      def F: Monad[F] = M
-    }
-
   implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
     new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
 }
@@ -159,7 +154,7 @@ private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 
   implicit def catsDataMonadForKleisli[F[_], A](implicit M: Monad[F]): Monad[Kleisli[F, A, ?]] =
     new KleisliMonad[F, A] { def F: Monad[F] = M }
 
-  implicit def catsDataCommutativeArrowForKleisli[F[_]](implicit M: CommutativeMonad[F]): CommutativeArrow[Kleisli[F, ?, ?]] =
+  implicit def catsDataCommutativeArrowForKleisli[F[_]](implicit M: CommutativeMonad[F]): CommutativeArrow[Kleisli[F, ?, ?]] with ArrowChoice[Kleisli[F, ?, ?]] =
     new KleisliCommutativeArrow[F] {def F: CommutativeMonad[F] = M }
 
   implicit val catsDataCommutativeArrowForKleisliId: CommutativeArrow[Kleisli[Id, ?, ?]] =
@@ -237,12 +232,18 @@ private[data] sealed abstract class KleisliInstances7 {
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
 }
 
-private[data] trait KleisliCommutativeArrow[F[_]] extends CommutativeArrow[Kleisli[F, ?, ?]] with KleisliArrow[F] {
+private[data] trait KleisliCommutativeArrow[F[_]] extends CommutativeArrow[Kleisli[F, ?, ?]] with KleisliArrowChoice[F] {
   implicit def F: CommutativeMonad[F]
 }
 
-private[data] trait KleisliArrowChoice[F[_]] extends ArrowChoice[Kleisli[F, ?, ?]] with KleisliArrow[F] {
+private[data] trait KleisliArrowChoice[F[_]] extends ArrowChoice[Kleisli[F, ?, ?]] with KleisliCategory[F] with KleisliStrong[F] {
   implicit def F: Monad[F]
+
+  def lift[A, B](f: A => B): Kleisli[F, A, B] =
+    Kleisli(a => F.pure(f(a)))
+
+  override def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
+    Kleisli{ case (a, c) => F.flatMap(f.run(a))(b => F.map(g.run(c))(d => (b, d))) }
 
   def choose[A, B, C, D](f: Kleisli[F, A, C])(g: Kleisli[F, B, D]): Kleisli[F, Either[A, B], Either[C, D]] =
     Kleisli(
@@ -251,16 +252,6 @@ private[data] trait KleisliArrowChoice[F[_]] extends ArrowChoice[Kleisli[F, ?, ?
           case Left(a) => F.map(f(a))(Left.apply _)
           case Right(b) => F.map(g(b))(Right.apply _)
         })
-}
-
-private[data] trait KleisliArrow[F[_]] extends Arrow[Kleisli[F, ?, ?]] with KleisliCategory[F] with KleisliStrong[F]  {
-  implicit def F: Monad[F]
-
-  def lift[A, B](f: A => B): Kleisli[F, A, B] =
-    Kleisli(a => F.pure(f(a)))
-
-  override def split[A, B, C, D](f: Kleisli[F, A, B], g: Kleisli[F, C, D]): Kleisli[F, (A, C), (B, D)] =
-    Kleisli{ case (a, c) => F.flatMap(f.run(a))(b => F.map(g.run(c))(d => (b, d))) }
 }
 
 private[data] trait KleisliStrong[F[_]] extends Strong[Kleisli[F, ?, ?]] {
