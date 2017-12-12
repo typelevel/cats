@@ -22,7 +22,7 @@ import simulacrum.typeclass
   override def pure[A](a: A): F[A] = unit
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions {
-  def monoid[F[_], A](implicit f: ContravariantMonoidal[F], monoid: Monoid[A]): Monoid[F[A]] =
+  def monoid[F[_], A](implicit f: ContravariantMonoidal[F]): Monoid[F[A]] =
     new ContravariantMonoidalMonoid[F, A](f)
 }
 

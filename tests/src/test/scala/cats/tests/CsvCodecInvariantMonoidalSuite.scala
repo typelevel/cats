@@ -95,7 +95,7 @@ class CsvCodecInvariantMonoidalSuite extends CatsSuite {
   checkAll("InvariantMonoidal[CsvCodec]", SerializableTests.serializable(InvariantMonoidal[CsvCodec]))
 
   {
-    implicit val csvMonoid = InvariantMonoidal.monoid[CsvCodec, Int]
+    implicit val csvMonoid = InvariantMonoidal[CsvCodec].monoid[Int]
     checkAll("InvariantMonoidal[CsvCodec].monoid", MonoidTests[CsvCodec[Int]].monoid)
   }
 }

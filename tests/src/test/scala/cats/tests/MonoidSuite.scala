@@ -19,7 +19,6 @@ class MonoidSuite extends CatsSuite {
 object MonoidSuite {
   def summonInstance(): Unit = {
     Invariant[Monoid]
-    InvariantSemigroupal[Monoid]
     ()
   }
 

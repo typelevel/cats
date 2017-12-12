@@ -171,6 +171,9 @@ import simulacrum.typeclass
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else pure(())
+
+  override def monoid[A](implicit A: Monoid[A]): Monoid[F[A]] =
+    new ApplicativeMonoid[F, A](this, A)
 }
 
 object Applicative {

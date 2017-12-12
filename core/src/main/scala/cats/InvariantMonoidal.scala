@@ -20,12 +20,15 @@ import simulacrum.typeclass
     * }}}
     */
   def pure[A](a: A): F[A]
+
+  /**
+    * Gives a `Monoid` instance if A itself has a `Monoid` instance.
+    */
+  def monoid[A](implicit A: Monoid[A]): Monoid[F[A]] =
+    new InvariantMonoidalMonoid[F, A](this, A)
+
 }
 
-object InvariantMonoidal {
-  def monoid[F[_], A](implicit f: InvariantMonoidal[F], monoid: Monoid[A]): Monoid[F[A]] =
-    new InvariantMonoidalMonoid[F, A](f, monoid)
-}
 
 private[cats] class InvariantMonoidalMonoid[F[_], A](f: InvariantMonoidal[F], monoid: Monoid[A]) extends InvariantSemigroupalSemigroup(f, monoid) with Monoid[F[A]] {
   def empty: F[A] = f.pure(monoid.empty)
