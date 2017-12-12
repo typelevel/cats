@@ -7,6 +7,7 @@ package object syntax {
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
   object arrow extends ArrowSyntax
+  object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
