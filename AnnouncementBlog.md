@@ -1,7 +1,10 @@
 Cats has been striving to provide functional programming abstractions that are core, modular, approachable and efficient. 
-Cats 1.0.0 marks the point where we believe that our API is robust and stable enough to start guarantee backward binary compatibility going forward until Cats 2.0. This is a major milestone towards
-our goal of providing a solid foundation for an ecosystem of pure, typeful functional libraries. 
+Cats 1.0.0 marks the point where we believe that our API is robust and stable enough to start guarantee backward binary compatibility going forward until Cats 2.0. We expect the Cats 1.x series to be fully backwards compatible for at least one year. This is a major milestone towards
+our goal of providing a solid foundation for an ecosystem of pure, typeful functional libraries.
 
+## Migration
+
+The vast majority of changes since 1.0.0-RC1 are API compatible, with scalafix scripts ready for those that do not.
  [Here is the change list and migration guide](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
 ## Binary compatibility
@@ -10,6 +13,6 @@ After 1.0.0 release, we'll use the *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.
 We will also consider using organization and package name for *MAJOR* versioning with binary breaking changes in the future. But that decision is yet to be made.
 
 ## Community
-Cats is built for the FP Scala community by the FP Scala community. We can't thank enough to our [182 (and growing) contributors](https://github.com/typelevel/cats/graphs/contributors) and our users who provided feedbacks and suggestions.  
+Cats is built for the FP Scala community by the FP Scala community. We can't thank enough to our [184 (and growing) contributors](https://github.com/typelevel/cats/graphs/contributors) and our users who provided feedbacks and suggestions.  
 Congratulations to all of us. Let's celebrate this exciting milestone together. 
   
