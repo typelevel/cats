@@ -48,6 +48,7 @@ possible:
  * Cary Robbins
  * Chris Birchall
  * Cody Allen
+ * Colin Woodbury
  * Colt Frederickson
  * Connie Chen
  * Csongor Kiss
@@ -116,6 +117,7 @@ possible:
  * Madder
  * Marc Siegel
  * Marcin Rzeźnicki
+ * Marco Battaglia
  * Mark de Jong
  * Markus Hauck
  * mathhun

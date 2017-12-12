@@ -19,6 +19,14 @@
 * [#1981](https://github.com/typelevel/cats/pull/1981) Add UnorderedFoldable and UnorderedTraverse by @LukaJCB
 * [#2047](https://github.com/typelevel/cats/pull/2047) CommutativeMonoid instance for SortedMap by @alonsodomin
 * [#2043](https://github.com/typelevel/cats/pull/2043) Removed deprecation of >> and changed its param to be a by-name by @mpilquist
+* [#2034](https://github.com/typelevel/cats/pull/2034) Add ContravariantMonoidal by @stephen-lazaro
+* [#2057](https://github.com/typelevel/cats/pull/2057) Add `Ior.fromEither` by @markus1189
+* [#2056](https://github.com/typelevel/cats/pull/2056) Functor.fmap by @fosskers
+* [#2059](https://github.com/typelevel/cats/pull/2059) Add Parallel instance for Ior by @andyscott
+* [#2061](https://github.com/typelevel/cats/pull/2061) Add `MonadError.rethrow` by @SystemFw
+* [#2072](https://github.com/typelevel/cats/pull/2072) added a default id for Arrow by @kailuowang
+* [#2063](https://github.com/typelevel/cats/pull/2063) Added `merge` (product) to `Arrow` for arrows composition by @marcobattaglia
+* [#2060](https://github.com/typelevel/cats/pull/2060) Add parallel instance for IorT by @andyscott
 
 
 
@@ -41,20 +49,29 @@
 * [#2036](https://github.com/typelevel/cats/pull/2036) Clean up applicative syntax doc by @bkirwi
 * [#2035](https://github.com/typelevel/cats/pull/2035) Do not redirect to cats-mtl for MonadCombine by @vendethiel
 * [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc by @fagossa
-* [#2050](https://github.com/typelevel/cats/pull/2050) Link Directly to Cats Package in ScalaDoc by @stephen-lazaro 
+* [#2050](https://github.com/typelevel/cats/pull/2050) Link Directly to Cats Package in ScalaDoc by @stephen-lazaro
 * [#2031](https://github.com/typelevel/cats/pull/2031) Add parallel docs by @LukaJCB
 * [#2045](https://github.com/typelevel/cats/pull/2045) Fix scalafix testing instructions by @kubukoz
+* [#2068](https://github.com/typelevel/cats/pull/2068) Update symbols table by @stephen-lazaro
+* [#2070](https://github.com/typelevel/cats/pull/2070) Add some doctest examples for Alternative methods by @ceedubs
+* [#2065](https://github.com/typelevel/cats/pull/2065) added entry for sbt-catalysts by @kailuowang
+* [#2071](https://github.com/typelevel/cats/pull/2071) Add doc example for imap by @ceedubs
+* [#2073](https://github.com/typelevel/cats/pull/2073) Add doctests for `Ior.fromOptions` by @markus1189
+* [#2077](https://github.com/typelevel/cats/pull/2077) Add some doctest examples for SemigroupK/MonoidK by @ceedubs
+* [#2079](https://github.com/typelevel/cats/pull/2079) Add doctest examples for Applicative by @ceedubs
 
 
 ### Build improvements/dependency updates
 
 * [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
+* [#2065](https://github.com/typelevel/cats/pull/2065) improve build by not displaying each success test by @kailuowang
 
 ### Testing improvements
 
 * [#2037](https://github.com/typelevel/cats/pull/2037) Tests: MonadCombine->Alternative, add missing ones by @vendethiel 
 * [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori
 * [#2053](https://github.com/typelevel/cats/pull/2053) Fix #2051, Remove superfluous implicit by @rsoeldner
+* [#2081](https://github.com/typelevel/cats/pull/2081) Reduce redundancy in Semigroup and Eq test names by @ceedubs
 
 
 
