@@ -114,6 +114,11 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
+    checkAll("Kleisli[Function0, Int, ?]", DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
+    checkAll("Distributive[Kleisli[Function0, Int, ?]]", SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
+  }
+
+  {
     implicit val catsDataMonoidForKleisli = Kleisli.catsDataMonoidForKleisli[Option, Int, String]
     checkAll("Kleisli[Option, Int, String]", MonoidTests[Kleisli[Option, Int, String]].monoid)
     checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(catsDataMonoidForKleisli))
@@ -296,5 +301,7 @@ class KleisliSuite extends CatsSuite {
     ApplicativeError[Kleisli[cats.data.Validated[Unit, ?], Int, ?], Unit]
     ApplicativeError[Kleisli[Option, Int, ?], Unit]
     MonadError[Kleisli[Option, Int, ?], Unit]
+
+    Distributive[Kleisli[Function0, Int, ?]]
   }
 }

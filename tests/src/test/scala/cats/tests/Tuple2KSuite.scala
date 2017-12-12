@@ -98,6 +98,11 @@ class Tuple2KSuite extends CatsSuite {
     checkAll("Tuple2K[ListWrapper, ListWrapper, Int]", PartialOrderTests[Tuple2K[ListWrapper, ListWrapper, Int]].partialOrder)
   }
 
+  {
+    checkAll("Tuple2K[Function0, Function0, ?]", DistributiveTests[Tuple2K[Function0, Function0, ?]].distributive[Int, Int, Int, Option, Function0])
+    checkAll("Distributive[Tuple2K[Function0, Function0, ?]]", SerializableTests.serializable(Distributive[Tuple2K[Function0, Function0, ?]]))
+  }
+
   test("show") {
     forAll { (l1: Option[Int], l2: Option[Int]) =>
       val tuple = Tuple2K(l1, l2)
