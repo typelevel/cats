@@ -169,8 +169,57 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("IorT leverages parallel effect instances when it exists") {
+    case class Marker(value: String) extends Exception("marker") {
+      override def fillInStackTrace: Throwable = null
+    }
+
+    def checkMarker[A](f: => A): Option[String] =
+      try { f; None } catch {
+        case marker: Marker => marker.value.some
+        case _: Throwable => None
+      }
+
+    final case class Effect[A](value: A)
+    val monadInstance: Monad[Effect] = new Monad[Effect] {
+      def pure[A](a: A): Effect[A] = Effect(a)
+      def flatMap[A, B](fa: Effect[A])(f: A => Effect[B]): Effect[B] = throw Marker("sequential")
+      def tailRecM[A, B](a: A)(f: A => Effect[Either[A, B]]): Effect[B] = ???
+    }
+    val parallelInstance: Parallel[Effect, Effect] = new Parallel[Effect, Effect] {
+      def parallel: Effect ~> Effect = arrow.FunctionK.id
+      def sequential: Effect ~> Effect = arrow.FunctionK.id
+
+      def applicative: Applicative[Effect] = new Applicative[Effect] {
+        def pure[A](a: A): Effect[A] = Effect(a)
+        def ap[A, B](ff: Effect[A => B])(fa: Effect[A]): Effect[B] = throw Marker("parallel")
+      }
+      def monad: Monad[Effect] = monadInstance
+    }
+
+    val iorts: List[IorT[Effect, String, Int]] = List(
+      IorT.leftT("hello")(monadInstance),
+      IorT.bothT(" world", 404)(monadInstance),
+      IorT.rightT(123)(monadInstance))
+
+    val resultSansInstance = {
+      implicit val ev0 = monadInstance
+      checkMarker(iorts.parSequence)
+    }
+    val resultWithInstance = {
+      implicit val ev0 = monadInstance
+      implicit val ev1 = parallelInstance
+      checkMarker(iorts.parSequence)
+    }
+
+    resultSansInstance should === ("sequential".some)
+    resultWithInstance should === ("parallel".some)
+  }
+
   checkAll("Parallel[Either[String, ?], Validated[String, ?]]", ParallelTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
   checkAll("Parallel[Ior[String, ?], Ior[String, ?]]", ParallelTests[Ior[String, ?], Ior[String, ?]].parallel[Int, String])
+  checkAll("Parallel[IorT[F, String, ?], IorT[F, String, ?]] with parallel effect", ParallelTests[IorT[Either[String, ?], String, ?], IorT[Validated[String, ?], String, ?]].parallel[Int, String])
+  checkAll("Parallel[IorT[F, String, ?], IorT[F, String, ?]] with sequential effect", ParallelTests[IorT[Option, String, ?], IorT[Option, String, ?]].parallel[Int, String])
   checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]", ParallelTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]", ParallelTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]].parallel[Int, String])
   checkAll("Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]", ParallelTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String])

@@ -522,9 +522,7 @@ type Log = List[String]
 
 type TeletypeState[A] = State[List[String], A]
 
-/** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State
- */
+/** Teletype smart constructors */
 object TeletypeOps {
   def writeLine(line : String) : TeletypeT[TeletypeState, Unit] =
 	FreeT.liftF[Teletype, TeletypeState, Unit](WriteLine(line))

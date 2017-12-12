@@ -9,7 +9,9 @@ import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
 
-abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
+abstract class FoldableSuite[F[_]: Foldable](name: String)(
+  implicit ArbFInt: Arbitrary[F[Int]],
+     ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 

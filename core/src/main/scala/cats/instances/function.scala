@@ -88,7 +88,7 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit val catsStdMonoidKForFunction1: MonoidK[λ[α => Function1[α, α]]] =
+  implicit val catsStdMonoidKForFunction1: MonoidK[Endo] =
     Category[Function1].algebraK
 }
 

@@ -1,5 +1,6 @@
 package cats
 
+import cats.arrow.Arrow
 import cats.instances.list._
 import simulacrum.typeclass
 
@@ -179,8 +180,35 @@ import simulacrum.typeclass
 object Applicative {
   def monoid[F[_], A](implicit f: Applicative[F], monoid: Monoid[A]): Monoid[F[A]] =
     f.monoid
+
+  /**
+   * Creates an applicative functor for `F`, holding domain fixed and combining
+   * over the codomain.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Applicative.catsApplicativeForArrow
+   * scala> val toLong: Int => Long = _.toLong
+   * scala> val double: Int => Int = 2*_
+   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow.product(toLong, double)
+   * scala> f(3)
+   * res0: (Long, Int) = (3,6)
+   * }}}
+   */
+  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, ?]] =
+    new ArrowApplicative[F, A](F)
 }
 
 private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
   def empty: F[A] = f.pure(monoid.empty)
+}
+
+private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, ?]] {
+  def pure[B](b: B): F[A, B] = F.lift[A, B](_ => b)
+  override def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
+  def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =
+    F.rmap(F.andThen(F.lift((x: A) => (x, x)), F.split(ff, fb)))(tup => tup._1(tup._2))
+  override def product[B, C](fb: F[A, B], fc: F[A, C]): F[A, (B, C)] =
+    F.andThen(F.lift((x: A) => (x, x)), F.split(fb, fc))
 }
