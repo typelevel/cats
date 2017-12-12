@@ -18,6 +18,7 @@ trait DistributiveTests[F[_]] extends FunctorTests[F] {
     CogenB: Cogen[B],
     CogenC: Cogen[C],
     EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqA: Eq[A],
     EqFYXC: Eq[F[Y[X[C]]]],
@@ -29,6 +30,7 @@ trait DistributiveTests[F[_]] extends FunctorTests[F] {
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(functor[A, B, C])
       def props: Seq[(String, Prop)] = Seq(
+        "distributive distribute identity" -> forAll(laws.distributeIdentity[A, B] _),
         "distributive identity" -> forAll(laws.cosequenceIdentity[A] _),
         "distributive composition" -> forAll(laws.composition[A, B, C, X, Y] _),
         "distributive double cosequence identity" -> forAll(laws.cosequenceTwiceIsId[A, Y] _)
