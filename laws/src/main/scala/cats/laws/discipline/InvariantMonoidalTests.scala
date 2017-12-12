@@ -6,7 +6,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
-trait InvariantMonoidalTests[F[_]] extends InvariantTests[F] with SemigroupalTests[F] {
+trait InvariantMonoidalTests[F[_]] extends InvariantSemigroupalTests[F] {
   def laws: InvariantMonoidalLaws[F]
 
   def invariantMonoidal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit

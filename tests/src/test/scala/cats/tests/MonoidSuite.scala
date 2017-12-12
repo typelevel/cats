@@ -6,7 +6,7 @@ package tests
 class MonoidSuite extends CatsSuite {
   {
     Invariant[Monoid]
-    Semigroupal[Monoid]
+    InvariantSemigroupal[Monoid]
   }
 
   test("companion object syntax") {
@@ -19,7 +19,7 @@ class MonoidSuite extends CatsSuite {
 object MonoidSuite {
   def summonInstance(): Unit = {
     Invariant[Monoid]
-    Semigroupal[Monoid]
+    InvariantSemigroupal[Monoid]
     ()
   }
 

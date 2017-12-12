@@ -51,6 +51,15 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // InvariantSemigroupal + Apply functor composition
+    implicit val instance = ListWrapper.invariant
+    checkAll("Nested[ListWrapper, Option, ?]",
+      InvariantSemigroupalTests[Nested[ListWrapper, Option, ?]].invariantSemigroupal[Int, Int, Int])
+    checkAll("InvariantSemigroupal[Nested[ListWrapper, Const[String, ?], ?]",
+      SerializableTests.serializable(InvariantSemigroupal[Nested[ListWrapper, Option, ?]]))
+  }
+
+  {
     // Applicative + ContravariantMonoidal functor composition
     checkAll("Nested[Option, Const[String, ?], ?]",
       ContravariantMonoidalTests[Nested[Option, Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])

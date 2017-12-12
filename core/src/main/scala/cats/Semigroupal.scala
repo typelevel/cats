@@ -16,11 +16,4 @@ import simulacrum.typeclass
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 }
 
-object Semigroupal extends SemigroupalArityFunctions {
-  implicit def catsSemigroupalForMonoid: Semigroupal[Monoid] = new Semigroupal[Monoid] {
-    def product[A, B](fa: Monoid[A], fb: Monoid[B]): Monoid[(A, B)] = new Monoid[(A, B)] {
-      val empty = fa.empty -> fb.empty
-      def combine(x: (A, B), y: (A, B)): (A, B) = fa.combine(x._1, y._1) -> fb.combine(x._2, y._2)
-    }
-  }
-}
+object Semigroupal extends SemigroupalArityFunctions

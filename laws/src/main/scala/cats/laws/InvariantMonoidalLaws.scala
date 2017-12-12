@@ -4,7 +4,7 @@ package laws
 /**
  * Laws that must be obeyed by any `cats.InvariantMonoidal`.
  */
-trait InvariantMonoidalLaws[F[_]] extends InvariantLaws[F] with SemigroupalLaws[F] {
+trait InvariantMonoidalLaws[F[_]] extends InvariantSemigroupalLaws[F] {
   override implicit def F: InvariantMonoidal[F]
   import cats.syntax.semigroupal._
   import cats.syntax.invariant._

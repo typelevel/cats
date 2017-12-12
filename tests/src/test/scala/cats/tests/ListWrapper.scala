@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.Invariant
 import cats.instances.list._
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
@@ -43,10 +42,10 @@ object ListWrapper {
 
   def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
 
-  val traverse: Traverse[ListWrapper] = {
+  val traverse: Traverse[ListWrapper] with InvariantSemigroupal[ListWrapper] = {
     val F = Traverse[List]
 
-    new Traverse[ListWrapper] {
+    new Traverse[ListWrapper] with InvariantSemigroupal[ListWrapper] {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -54,6 +53,8 @@ object ListWrapper {
       def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
         G0.map(F.traverse(fa.list)(f))(ListWrapper.apply)
       }
+      def product[A, B](fa: ListWrapper[A], fb: ListWrapper[B]): ListWrapper[(A, B)] =
+        ListWrapper(fa.list.flatMap(a => fb.list.map(b => (a, b))))
     }
   }
 
@@ -61,7 +62,7 @@ object ListWrapper {
 
   val functor: Functor[ListWrapper] = traverse
 
-  val invariant: Invariant[ListWrapper] = functor
+  val invariant: InvariantSemigroupal[ListWrapper] = traverse
 
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {
