@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.Const
-import cats.kernel.laws.discipline.MonoidTests
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.ContravariantMonoidalTests
 import org.scalactic.CanEqual
 import org.scalacheck.{Arbitrary, Cogen}
@@ -45,6 +45,10 @@ class ContravariantSuite extends CatsSuite {
   {
     implicit val predicateMonoid = ContravariantMonoidal.monoid[Predicate, Int]
     checkAll("ContravariantMonoidal[Predicate].monoid", MonoidTests[Predicate[Int]].monoid)
+  }
+  {
+    implicit val predicateSemigroup = ContravariantSemigroupal.semigroup[Predicate, Int]
+    checkAll("ContravariantSemigroupal[Predicate].semigroup", SemigroupTests[Predicate[Int]].semigroup)
   }
 
 }

@@ -6,7 +6,7 @@ import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
 import cats.instances.all._
 import cats.syntax.apply._
 import cats.Eq
-import cats.kernel.laws.discipline.MonoidTests
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
 
 object CsvCodecInvariantMonoidalSuite {
@@ -97,5 +97,10 @@ class CsvCodecInvariantMonoidalSuite extends CatsSuite {
   {
     implicit val csvMonoid = InvariantMonoidal[CsvCodec].monoid[Int]
     checkAll("InvariantMonoidal[CsvCodec].monoid", MonoidTests[CsvCodec[Int]].monoid)
+  }
+
+  {
+    implicit val csvSemigroup = InvariantSemigroupal[CsvCodec].semigroup[Int]
+    checkAll("InvariantSemigroupal[CsvCodec].semigroup", SemigroupTests[CsvCodec[Int]].semigroup)
   }
 }

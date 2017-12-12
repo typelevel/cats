@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.Applicative
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 
 
 class ApplicativeSuite extends CatsSuite {
@@ -34,6 +35,18 @@ class ApplicativeSuite extends CatsSuite {
     forAll { (l: List[Int]) =>
       l.unlessA(true) should === (List(()))
     }
+  }
+
+  {
+    implicit val listwrapperApplicative = ListWrapper.applicative
+    implicit val listwrapperMonoid = Applicative.monoid[ListWrapper, Int]
+    checkAll("Applicative[ListWrapper].monoid", MonoidTests[ListWrapper[Int]].monoid)
+  }
+
+  {
+    implicit val listwrapperApplicative = ListWrapper.applyInstance
+    implicit val listwrapperSemigroup = Apply.semigroup[ListWrapper, Int]
+    checkAll("Apply[ListWrapper].semigroup", SemigroupTests[ListWrapper[Int]].semigroup)
   }
 
 }
