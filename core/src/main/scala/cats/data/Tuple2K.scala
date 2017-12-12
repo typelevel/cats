@@ -109,18 +109,16 @@ private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 
 }
 
 private[data] sealed abstract class Tuple2KInstances7 extends Tuple2KInstances8 {
-
-  implicit def catsDataFunctorForTuple2K[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Tuple2K[F, G, α]]] = new Tuple2KFunctor[F, G] {
-    def F: Functor[F] = FF
-    def G: Functor[G] = GG
+  implicit def catsDataDistributiveForTuple2K[F[_], G[_]](implicit FF: Distributive[F], GG: Distributive[G]): Distributive[λ[α => Tuple2K[F, G, α]]] = new Tuple2KDistributive[F, G] {
+    def F: Distributive[F] = FF
+    def G: Distributive[G] = GG
   }
 }
 
 private[data] sealed abstract class Tuple2KInstances8 {
-
-  implicit def catsDataDistributiveForTuple2K[F[_], G[_]](implicit FF: Distributive[F], GG: Distributive[G]): Distributive[λ[α => Tuple2K[F, G, α]]] = new Tuple2KDistributive[F, G] {
-    def F: Distributive[F] = FF
-    def G: Distributive[G] = GG
+  implicit def catsDataFunctorForTuple2K[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Tuple2K[F, G, α]]] = new Tuple2KFunctor[F, G] {
+    def F: Functor[F] = FF
+    def G: Functor[G] = GG
   }
 }
 

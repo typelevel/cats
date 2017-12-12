@@ -108,7 +108,7 @@ private[instances] sealed trait Function1Instances0 {
         fa.compose(f)
     }
 
-  implicit def functior1Distributive[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
+  implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
     def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = {t1 => Functor[F].map(fa)(a => f(a)(t1)) }
 
     def map[A, B](fa: T1 => A)(f: A => B): T1 => B = {t1 => f(fa(t1))}

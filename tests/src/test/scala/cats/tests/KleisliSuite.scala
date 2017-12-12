@@ -115,7 +115,7 @@ class KleisliSuite extends CatsSuite {
 
   {
     checkAll("Kleisli[Function0, Int, ?]", DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
-    checkAll("Distributive[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
+    checkAll("Distributive[Kleisli[Function0, Int, ?]]", SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
   }
 
   {

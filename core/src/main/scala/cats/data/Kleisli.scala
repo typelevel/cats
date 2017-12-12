@@ -229,13 +229,13 @@ private[data] sealed abstract class KleisliInstances6 extends KleisliInstances7 
 }
 
 private[data] sealed abstract class KleisliInstances7 extends KleisliInstances8 {
-  implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
-    new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
+  implicit def catsDataDistributiveForKleisli[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
+    new KleisliDistributive[F, R] { implicit def F: Distributive[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances8 {
-  implicit def kleisliDistributive[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
-    new KleisliDistributive[F, R] { implicit def F: Distributive[F] = F0 }
+  implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
+    new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
 }
 
 private[data] trait KleisliCommutativeArrow[F[_]] extends CommutativeArrow[Kleisli[F, ?, ?]] with KleisliArrow[F] {
