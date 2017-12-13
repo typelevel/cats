@@ -2,7 +2,7 @@ package cats
 package instances
 
 import cats.Contravariant
-import cats.arrow.{Category, Choice, CommutativeArrow}
+import cats.arrow.{Category, ArrowChoice, CommutativeArrow}
 
 import annotation.tailrec
 
@@ -76,13 +76,13 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
         }
     }
 
-
-  implicit val catsStdInstancesForFunction1: Choice[Function1] with CommutativeArrow[Function1] =
-    new Choice[Function1] with CommutativeArrow[Function1] {
-      def choice[A, B, C](f: A => C, g: B => C): Either[A, B] => C = {
-        case Left(a)  => f(a)
-        case Right(b) => g(b)
-      }
+  implicit val catsStdInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
+    new ArrowChoice[Function1] with CommutativeArrow[Function1] {
+      def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] =
+        _ match {
+          case Left(a) => Left(f(a))
+          case Right(b) => Right(g(b))
+        }
 
       def lift[A, B](f: A => B): A => B = f
 
