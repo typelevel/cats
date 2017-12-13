@@ -8,6 +8,10 @@ import cats.syntax.distributive._
 trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: Distributive[F]
 
+  def distributeIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
+    fa.distribute[Id, B](f) <-> F.map(fa)(f)
+  }
+
   def cosequenceIdentity[A](fa: F[A]): IsEq[F[A]] = {
     F.cosequence[Id, A](fa) <-> fa
   }
