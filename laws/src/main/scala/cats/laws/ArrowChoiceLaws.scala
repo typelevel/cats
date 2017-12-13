@@ -32,8 +32,8 @@ trait ArrowChoiceLaws[F[_, _]] extends ArrowLaws[F] with ChoiceLaws[F] {
     (F.left(f) >>> F.lift(identity[B] _ +++ g)) <-> (F.lift(identity[A] _ +++ g) >>> F.left(f))
 
   def leftTwiceCommutesWithSumAssociation[A, B, C, D](f: F[A, D]): IsEq[F[Either[Either[A, B], C], Either[D, Either[B, C]]]] =
-    (F.left[Either[A, B], Either[D, B], C](F.left[A, D, B](f)) >>> F.lift[Either[Either[D, B], C], Either[D, Either[B, C]]](sumAssoc[D, B, C])) <->
-      (F.lift[Either[Either[A, B], C], Either[A, Either[B, C]]](sumAssoc[A, B, C]) >>> F.left(f))
+    (F.left(F.left[A, D, B](f)) >>> F.lift(sumAssoc[D, B, C])) <->
+      (F.lift(sumAssoc[A, B, C]) >>> F.left(f))
 }
 
 object ArrowChoiceLaws {
