@@ -7,7 +7,8 @@ import cats.arrow._
 /**
  * Represents a function `A => F[B]`.
  */
-final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
+final case class Kleisli[F[_], A, B](run: A => F[B])
+  extends (A => F[B]) { self =>
 
   def ap[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
@@ -77,7 +78,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
 
-  def apply(a: A): F[B] = run(a)
+  override def apply(a: A): F[B] = run(a)
 }
 
 object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplicitInstances
