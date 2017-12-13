@@ -14,6 +14,7 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFAC: Arbitrary[F[A, C]],
+    ArbFAD: Arbitrary[F[A, D]],
     ArbFCD: Arbitrary[F[C, D]],
     ArbFDE: Arbitrary[F[D, E]],
     ArbFEG: Arbitrary[F[E, G]],
@@ -37,12 +38,11 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
     EqFEitherABD: Eq[F[Either[A, B], D]],
-    EqFEitherABC: Eq[F[Either[A, B], C]],
-    EqFEitherABCD: Eq[F[Either[A, B], Either[C, D]]],
+    EqFEitherCoABC: Eq[F[A, Either[B, C]]],
+    REqFEitherACD: Eq[F[Either[A, D], Either[C, D]]],
     LEqFEitherABC: Eq[F[Either[A, C], Either[B, C]]],
-    REqFEitherABC: Eq[F[Either[C, A], Either[C, B]]],
-    LEqFEitherABCD: Eq[F[Either[D, A], Either[D, C]]],
-    REqFEitherABCD: Eq[F[Either[A, D], Either[C, D]]]
+    REqFEitherABCD: Eq[F[Either[A, C], Either[B, D]]],
+    EitherAssociationABC: Eq[F[Either[Either[A, B], C], Either[D, Either[B, C]]]]
   ): RuleSet =
     new RuleSet {
       def name: String = "arrowChoice"
@@ -53,11 +53,10 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
       )
       def props: Seq[(String, Prop)] = Seq(
         "left and lift commute" -> forAll(laws.leftLiftCommute[A, B, C] _),
-        "right and lift commute" -> forAll(laws.rightLiftCommute[A, B, C] _),
-        "choose and lift commute" -> forAll(laws.chooseLiftCommute[A, B, C, D] _),
-        "choice and lift commute" -> forAll(laws.choiceLiftCommute[A, B, C] _),
         "left and compose commute" -> forAll(laws.leftComposeCommute[A, B, C, D] _),
-        "right and compose commute" -> forAll(laws.rightComposeCommute[A, B, C, D] _)
+        "left and then lift (Left.apply) commutes" -> forAll(laws.leftAndThenLiftedLeftApplyCommutes[A, B, C] _),
+        "left and then identity +++ _ commutes" -> forAll(laws.leftAndThenRightIdentityCommutes[A, B, C, D] _),
+        "left commutes with sum association" -> forAll(laws.leftTwiceCommutesWithSumAssociation[A, B, C, D] _)
       )
     }
 }
