@@ -1,7 +1,7 @@
 package cats
 package tests
 
-
+import Helpers.Ord
 import cats.kernel.laws.discipline.OrderTests
 
 class OrderSuite extends CatsSuite {
@@ -15,6 +15,25 @@ class OrderSuite extends CatsSuite {
   checkAll("Double", OrderTests[Double].order)
   checkAll("Float", OrderTests[Float].order)
   checkAll("Long", OrderTests[Long].order)
+
+  test("order ops syntax"){
+    forAll { (i: Ord, j: Ord) =>
+      (i compare j) should ===(Order.compare(i, j))
+      (i min j) should ===(Order.min(i, j))
+      (i max j) should === (Order.max(i, j))
+      (i comparison j) should ===(Order.comparison(i, j))
+
+      // partial order syntax should also work when an Order instance exists
+      (i > j) should ===(PartialOrder.gt(i, j))
+      (i >= j) should ===(PartialOrder.gteqv(i, j))
+      (i < j) should ===(PartialOrder.lt(i, j))
+      (i <= j) should ===(PartialOrder.lteqv(i, j))
+      (i partialCompare j) should ===(PartialOrder.partialCompare(i, j))
+      (i tryCompare j) should ===(PartialOrder.tryCompare(i, j))
+      (i pmin j) should ===(PartialOrder.pmin(i, j))
+      (i pmax j) should ===(PartialOrder.pmax(i, j))
+    }
+  }
 }
 
 object OrderSuite {
