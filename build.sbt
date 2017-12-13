@@ -354,7 +354,19 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[FinalMethodProblem]("cats.data.RWSTAlternative.followedBy"),
       exclude[FinalMethodProblem]("cats.data.RWSTAlternative.forEffect"),
       exclude[IncompatibleMethTypeProblem]("cats.instances.FlatMapTuple2.followedBy"),
-      exclude[IncompatibleMethTypeProblem]("cats.instances.FlatMapTuple2.forEffect")
+      exclude[IncompatibleMethTypeProblem]("cats.instances.FlatMapTuple2.forEffect"),
+      exclude[IncompatibleResultTypeProblem]("cats.data.CokleisliArrow.id"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.Distributive#ToDistributiveOps.toDistributiveOps"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.syntax.DistributiveSyntax.catsSyntaxDistributiveOps"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.functior1Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function0Instances0.function0Distributive"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.instances.Function1Instances0.catsStdDistributiveForFunction1")
     )
   }
 )

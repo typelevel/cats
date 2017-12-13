@@ -205,7 +205,7 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     }
 
   // scalastyle:off cyclomatic.complexity
-  implicit def parallelForIor[E]
+  implicit def catsDataParallelForIor[E]
     (implicit E: Semigroup[E]): Parallel[Ior[E, ?], Ior[E, ?]] = new Parallel[Ior[E, ?], Ior[E, ?]]
   {
 

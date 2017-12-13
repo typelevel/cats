@@ -228,7 +228,12 @@ private[data] sealed abstract class KleisliInstances6 extends KleisliInstances7 
     new KleisliApply[F, A] { def F: Apply[F] = A }
 }
 
-private[data] sealed abstract class KleisliInstances7 {
+private[data] sealed abstract class KleisliInstances7 extends KleisliInstances8 {
+  implicit def catsDataDistributiveForKleisli[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
+    new KleisliDistributive[F, R] { implicit def F: Distributive[F] = F0 }
+}
+
+private[data] sealed abstract class KleisliInstances8 {
   implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
 }
@@ -378,4 +383,14 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, ?]] {
 
   override def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
     fa.map(f)
+}
+
+private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, ?]] {
+  implicit def F: Distributive[F]
+
+  override def distribute[G[_]: Functor, A, B](a: G[A])(f: A => Kleisli[F, R, B]): Kleisli[F, R, G[B]] =
+    Kleisli(r => F.distribute(a)(f(_) run r))
+
+
+  def map[A, B](fa: Kleisli[F, R, A])(f: A => B): Kleisli[F, R, B] = fa.map(f)
 }
