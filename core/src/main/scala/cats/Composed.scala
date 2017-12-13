@@ -117,7 +117,7 @@ private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]] extends
   def F: Applicative[F]
   def G: ContravariantMonoidal[G]
 
-  override def unit[A]: F[G[A]] = F.pure(G.unit)
+  override def unit: F[G[Unit]] = F.pure(G.unit)
 
   override def contramap[A, B](fa: F[G[A]])(f: B => A): F[G[B]] =
     F.map(fa)(G.contramap(_)(f))

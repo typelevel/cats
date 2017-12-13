@@ -10,10 +10,10 @@ trait InvariantMonoidalLaws[F[_]] extends InvariantSemigroupalLaws[F] {
   import cats.syntax.invariant._
 
   def invariantMonoidalLeftIdentity[A, B](fa: F[A], b: B): IsEq[F[A]] =
-    F.pure(b).product(fa).imap(_._2)(a => (b, a)) <-> fa
+    F.point(b).product(fa).imap(_._2)(a => (b, a)) <-> fa
 
   def invariantMonoidalRightIdentity[A, B](fa: F[A], b: B): IsEq[F[A]] =
-    fa.product(F.pure(b)).imap(_._1)(a => (a, b)) <-> fa
+    fa.product(F.point(b)).imap(_._1)(a => (a, b)) <-> fa
 
   def invariantMonoidalAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]):
     IsEq[F[(A, (B, C))]] =

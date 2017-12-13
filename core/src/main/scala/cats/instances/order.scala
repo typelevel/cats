@@ -7,7 +7,7 @@ trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
       /**
        * Provides trivial order
        */
-      def unit[A]: Order[A] = Order.from[A]((x: A, y: A) => 0)
+      def unit: Order[Unit] = Order.from[Unit]((x: Unit, y: Unit) => 0)
       /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)

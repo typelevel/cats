@@ -317,7 +317,7 @@ private[data] trait KleisliAlternative[F[_], A] extends Alternative[Kleisli[F, A
 private[data] sealed trait KleisliContravariantMonoidal[F[_], D] extends ContravariantMonoidal[Kleisli[F, D, ?]] {
   implicit def F: ContravariantMonoidal[F]
 
-  override def unit[A]: Kleisli[F, D, A] = Kleisli(Function.const(F.unit[A]))
+  override def unit: Kleisli[F, D, Unit] = Kleisli(Function.const(F.unit))
 
   override def contramap[A, B](fa: Kleisli[F, D, A])(f: B => A): Kleisli[F, D, B] =
     Kleisli(d => F.contramap(fa.run(d))(f))

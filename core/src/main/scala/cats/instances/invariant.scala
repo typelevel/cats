@@ -25,16 +25,10 @@ trait InvariantMonoidalInstances {
 
     def imap[A, B](fa: Semigroup[A])(f: A => B)(g: B => A): Semigroup[B] = new Semigroup[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.map(g)).map(f)
     }
 
-    def pure[A](a: A): Semigroup[A] = new Semigroup[A] {
-      def combine(x: A, y: A): A = a
-      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
-        if (as.isEmpty) None
-        else if (as.size == 1) as.toList.headOption
-        else Some(a)
+    def unit: Semigroup[Unit] = new Semigroup[Unit] {
+      def combine(x: Unit, y: Unit): Unit = ()
     }
   }
 
@@ -45,16 +39,10 @@ trait InvariantMonoidalInstances {
 
     def imap[A, B](fa: CommutativeSemigroup[A])(f: A => B)(g: B => A): CommutativeSemigroup[B] = new CommutativeSemigroup[B] {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: TraversableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.map(g)).map(f)
     }
 
-    def pure[A](a: A): CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
-      def combine(x: A, y: A): A = a
-      override def combineAllOption(as: TraversableOnce[A]): Option[A] =
-        if (as.isEmpty) None
-        else if (as.size == 1) as.toList.headOption
-        else Some(a)
+    def unit: CommutativeSemigroup[Unit] = new CommutativeSemigroup[Unit] {
+      def combine(x: Unit, y: Unit): Unit = ()
     }
   }
 

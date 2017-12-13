@@ -61,8 +61,8 @@ class AlgebraInvariantSuite extends CatsSuite {
 
 
 
-  checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].pure(0)).semigroup)
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].pure(0)).commutativeSemigroup)
+  checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
+  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
 
   checkAll("InvariantSemigroupal[Monoid]", InvariantSemigroupalTests[Monoid].invariantSemigroupal[Int, Int, Int])
 

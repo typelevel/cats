@@ -8,8 +8,8 @@ trait OrderingInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
 
-      def unit[A]: Ordering[A] = new Ordering[A] {
-        def compare(l: A, r: A): Int = 0
+      def unit: Ordering[Unit] = new Ordering[Unit] {
+        def compare(l: Unit, r: Unit): Int = 0
       }
 
       def contramap[A, B](fa: Ordering[A])(f: B => A): Ordering[B] = fa.on(f)

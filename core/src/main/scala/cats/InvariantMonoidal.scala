@@ -9,17 +9,19 @@ import simulacrum.typeclass
  */
 @typeclass trait InvariantMonoidal[F[_]] extends InvariantSemigroupal[F] {
   /**
-    * `pure` lifts any value into a Monoidal Functor.
+    * `point` lifts any value into a Monoidal Functor.
     *
     * Example:
     * {{{
     * scala> import cats.implicits._
     *
-    * scala> InvariantMonoidal[Option].pure(10)
+    * scala> InvariantMonoidal[Option].point(10)
     * res0: Option[Int] = Some(10)
     * }}}
     */
-  def pure[A](a: A): F[A]
+  def point[A](a: A): F[A] = imap(unit)(_ => a)(_ => ())
+
+  def unit: F[Unit]
 
   /**
     * Gives a `Monoid` instance if A itself has a `Monoid` instance.
@@ -31,5 +33,5 @@ import simulacrum.typeclass
 
 
 private[cats] class InvariantMonoidalMonoid[F[_], A](f: InvariantMonoidal[F], monoid: Monoid[A]) extends InvariantSemigroupalSemigroup(f, monoid) with Monoid[F[A]] {
-  def empty: F[A] = f.pure(monoid.empty)
+  def empty: F[A] = f.point(monoid.empty)
 }

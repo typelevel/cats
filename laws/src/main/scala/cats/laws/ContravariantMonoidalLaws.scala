@@ -12,16 +12,16 @@ trait ContravariantMonoidalLaws[F[_]] extends ContravariantSemigroupalLaws[F] {
   implicit override def F: ContravariantMonoidal[F]
 
   def contravariantMonoidalUnitRight[A](fa: F[A]): IsEq[F[A]] =
-    (fa, F.unit[A]).contramapN(delta[A]) <-> fa
+    (fa, F.conquer[A]).contramapN(delta[A]) <-> fa
 
   def contravariantMonoidalUnitLeft[A](fa: F[A]): IsEq[F[A]] =
-    (F.unit[A], fa).contramapN(delta[A]) <-> fa
+    (F.conquer[A], fa).contramapN(delta[A]) <-> fa
 
   def contravariantMonoidalContramap2CompatibleContramapLeft[A, B, C](fa: F[A], f: B => (A, C)): IsEq[F[B]] =
-    (fa, F.unit[C]).contramapN(f) <-> fa.contramap(f andThen (_._1))
+    (fa, F.conquer[C]).contramapN(f) <-> fa.contramap(f andThen (_._1))
 
   def contravariantMonoidalContramap2CompatibleContramapRight[A, B, C](fa: F[A], f: C => (B, A)): IsEq[F[C]] =
-    (F.unit[B], fa).contramapN(f) <-> fa.contramap(f andThen (_._2))
+    (F.conquer[B], fa).contramapN(f) <-> fa.contramap(f andThen (_._2))
 }
 
 object ContravariantMonoidalLaws {

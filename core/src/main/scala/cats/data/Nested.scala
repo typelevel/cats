@@ -279,7 +279,7 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
 private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, ?]] {
   def FG: ContravariantMonoidal[λ[α => F[G[α]]]]
 
-  def unit[A]: Nested[F, G, A] = Nested(FG.unit)
+  def unit: Nested[F, G, Unit] = Nested(FG.unit)
 
   def contramap[A, B](fa: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
     Nested(FG.contramap(fa.value)(f))

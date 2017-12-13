@@ -31,9 +31,9 @@ object CsvCodecInvariantMonoidalSuite {
     // In tut/invariantmonoidal.md pure, product and imap are defined in
     // their own trait to be introduced one by one,
     trait CCPure {
-      def pure[A](a: A): CsvCodec[A] = new CsvCodec[A] {
-        def read(s: CSV): (Option[A], CSV) = (Some(a), s)
-        def write(a: A): CSV = List.empty
+      def unit: CsvCodec[Unit] = new CsvCodec[Unit] {
+        def read(s: CSV): (Option[Unit], CSV) = (Some(()), s)
+        def write(a: Unit): CSV = List.empty
       }
     }
 

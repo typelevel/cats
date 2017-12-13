@@ -26,7 +26,7 @@ class ContravariantSuite extends CatsSuite {
 
   implicit val contravariantMonoidalPredicate: ContravariantMonoidal[Predicate] =
     new ContravariantMonoidal[Predicate] {
-      def unit[A]: Predicate[A] = Predicate[A](Function.const(true))
+      def unit: Predicate[Unit] = Predicate[Unit](Function.const(true))
       def product[A, B](fa: Predicate[A], fb: Predicate[B]): Predicate[(A, B)] =
         Predicate(x => fa.run(x._1) && fb.run(x._2))
       def contramap[A, B](fa: Predicate[A])(f: B => A): Predicate[B] =
