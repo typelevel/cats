@@ -4,6 +4,7 @@ package laws
 import cats.arrow.ArrowChoice
 import cats.syntax.arrowChoice._
 import cats.syntax.compose._
+import cats.syntax.profunctor._
 
 /**
  * Laws that must be obeyed by any `cats.arrow.ArrowChoice`.
@@ -24,6 +25,10 @@ trait ArrowChoiceLaws[F[_, _]] extends ArrowLaws[F] with ChoiceLaws[F] {
 
   def leftComposeCommute[A, B, C, D](f: F[A, B], g: F[B, C]): IsEq[F[Either[A, D], Either[C, D]]] =
     F.left(f >>> g) <-> (F.left(f) >>> F.left[B, C, D](g))
+
+  def leftRightConsistent[A, B, C](f: A => B): IsEq[F[Either[C, A], Either[C, B]]] =
+    F.right[A, B, C](F.lift[A, B](f)) <->
+      F.left[A, B, C](F.lift[A, B](f)).dimap((x: Either[C, A]) => x.swap)((y: Either[B, C]) => y.swap)
 
   def leftAndThenLiftedLeftApplyCommutes[A, B, C](f: F[A, B]): IsEq[F[A, Either[B, C]]] =
     (f >>> F.lift[B, Either[B, C]](Left.apply[B, C])) <-> (F.lift[A, Either[A, C]](Left.apply[A, C] _) >>> F.left(f))

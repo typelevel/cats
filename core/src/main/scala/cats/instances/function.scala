@@ -79,10 +79,10 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit val catsStdInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
     new ArrowChoice[Function1] with CommutativeArrow[Function1] {
       def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] =
-        _.fold(
-          Left.apply[C, D] _ compose f,
-          Right.apply[C, D] _ compose g
-        )
+        _ match {
+          case Left(a) => Left(f(a))
+          case Right(b) => Right(g(b))
+        }
 
       def lift[A, B](f: A => B): A => B = f
 
