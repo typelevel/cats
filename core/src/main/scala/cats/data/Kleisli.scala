@@ -125,7 +125,7 @@ private[data] sealed trait KleisliExplicitInstances {
 }
 
 private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
-  implicit def catsDataCommutativeMonadForKleisli[F[_], A, B](implicit F0: CommutativeMonad[F]): CommutativeMonad[Kleisli[F, A, ?]] =
+  implicit def catsDataCommutativeMonadForKleisli[F[_], A](implicit F0: CommutativeMonad[F]): CommutativeMonad[Kleisli[F, A, ?]] =
     new KleisliMonad[F, A] with CommutativeMonad[Kleisli[F, A, ?]] {
       implicit def F: Monad[F] = F0
     }
@@ -143,8 +143,14 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
   implicit def catsDataMonadErrorForKleisli[F[_], A, E](implicit ME: MonadError[F, E]): MonadError[Kleisli[F, A, ?], E] =
     new KleisliMonadError[F, A, E] { def F: MonadError[F, E] = ME }
 
-  implicit def catsDataMonadForKleisliId[A]: Monad[Kleisli[Id, A, ?]] =
-    catsDataMonadForKleisli[Id, A]
+  implicit def catsDataMonadForKleisliId[A]: CommutativeMonad[Kleisli[Id, A, ?]] =
+    // In an ideal world this would just be `catsDataCommutativeMonadForKleisli[Id, A]`
+    // but that method is higher in the hierarchy than this one, and it would
+    // take a substantial amount of moving stuff around to make this happen
+    // in a binary-compatible way.
+    new KleisliMonad[Id, A] with CommutativeMonad[Kleisli[Id, A, ?]] {
+      implicit def F: Monad[Id] = catsInstancesForId
+    }
 
   implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
     new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
@@ -215,6 +221,9 @@ private[data] sealed abstract class KleisliInstances4 extends KleisliInstances5 
 
   implicit def catsDataApplicativeErrorForKleisli[F[_], E, A](implicit F0: ApplicativeError[F, E]): ApplicativeError[Kleisli[F, A, ?], E] =
     new KleisliApplicativeError[F, A, E] { def F: ApplicativeError[F, E] = F0 }
+
+  implicit def catsDataCommutativeFlatMapForKleisli[F[_], A](implicit F0: CommutativeFlatMap[F]): CommutativeFlatMap[Kleisli[F, A, ?]] =
+    new KleisliFlatMap[F, A] with CommutativeFlatMap[Kleisli[F, A, ?]] { val F: CommutativeFlatMap[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances5 extends KleisliInstances6 {
