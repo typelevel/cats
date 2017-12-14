@@ -113,7 +113,16 @@ class RegressionSuite extends CatsSuite {
     NonEmptyList.of(6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
 
+    Vector(1,2,6,8).traverse(validate) should === (Either.left("6 is greater than 5"))
+    checkAndResetCount(3)
+
     List(1,2,6,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
+    checkAndResetCount(3)
+
+    Stream(1,2,6,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
+    checkAndResetCount(3)
+
+    Vector(1,2,6,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     NonEmptyList.of(1,2,6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))

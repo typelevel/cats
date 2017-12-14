@@ -23,6 +23,7 @@ import simulacrum.typeclass
    * res0: String = false is a boolean
    * }}}
    */
+  @simulacrum.op("|||", alias = true)
   def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]
 
   /**

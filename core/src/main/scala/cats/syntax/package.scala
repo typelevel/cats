@@ -7,12 +7,14 @@ package object syntax {
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
   object arrow extends ArrowSyntax
+  object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
   object coflatMap extends CoflatMapSyntax
+  object distributive extends DistributiveSyntax
   object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
