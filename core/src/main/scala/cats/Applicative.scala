@@ -19,18 +19,17 @@ import simulacrum.typeclass
 
 
   /**
-    * `pure` lifts any value into the Applicative Functor.
-    *
-    * Example:
-    * {{{
-    * scala> import cats.implicits._
-    *
-    * scala> Applicative[Option].pure(10)
-    * res0: Option[Int] = Some(10)
-    * }}}
-    */
+   * `pure` lifts any value into the Applicative Functor.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Applicative[Option].pure(10)
+   * res0: Option[Int] = Some(10)
+   * }}}
+   */
   def pure[A](x: A): F[A]
-
 
   /**
    * Returns an `F[Unit]` value, equivalent with `pure(())`.
