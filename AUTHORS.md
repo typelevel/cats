@@ -71,6 +71,7 @@ possible:
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
+ * Eugene Platonov
  * Eugene Yokota
  * Fabian Gutierrez
  * Fabian Schmitthenner

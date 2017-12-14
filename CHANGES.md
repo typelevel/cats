@@ -27,6 +27,13 @@
 * [#2072](https://github.com/typelevel/cats/pull/2072) added a default id for Arrow by @kailuowang
 * [#2063](https://github.com/typelevel/cats/pull/2063) Added `merge` (product) to `Arrow` for arrows composition by @marcobattaglia
 * [#2060](https://github.com/typelevel/cats/pull/2060) Add parallel instance for IorT by @andyscott
+* [#2046](https://github.com/typelevel/cats/pull/2046) Add distributive typeclass and some instances by @coltfred
+* [#2099](https://github.com/typelevel/cats/pull/2099) CommutativeMonad and CommutativeFlatMap instances for Tuple2 by @ceedubs
+* [#2096](https://github.com/typelevel/cats/pull/2096) Add Arrow Choice by @stephen-lazaro
+* [#2098](https://github.com/typelevel/cats/pull/2098) Add a CommutativeMonoid for Map by @ceedubs
+* [#2101](https://github.com/typelevel/cats/pull/2101) Add Semigroup.instance method by @jozic
+* [#2103](https://github.com/typelevel/cats/pull/2103) CommutativeMonad for Eval by @ceedubs
+* [#2104](https://github.com/typelevel/cats/pull/2104) Add Commutative{Monad, FlatMap} instances for IdT by @ceedubs
 
 
 
@@ -59,6 +66,7 @@
 * [#2073](https://github.com/typelevel/cats/pull/2073) Add doctests for `Ior.fromOptions` by @markus1189
 * [#2077](https://github.com/typelevel/cats/pull/2077) Add some doctest examples for SemigroupK/MonoidK by @ceedubs
 * [#2079](https://github.com/typelevel/cats/pull/2079) Add doctest examples for Applicative by @ceedubs
+* [#2095](https://github.com/typelevel/cats/pull/2095) Update guidelines.md by @kailuowang
 
 
 ### Build improvements/dependency updates
@@ -72,6 +80,7 @@
 * [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori
 * [#2053](https://github.com/typelevel/cats/pull/2053) Fix #2051, Remove superfluous implicit by @rsoeldner
 * [#2081](https://github.com/typelevel/cats/pull/2081) Reduce redundancy in Semigroup and Eq test names by @ceedubs
+* [#2097](https://github.com/typelevel/cats/pull/2097) added distributeIdentityLaw by @kailuowang
 
 
 
