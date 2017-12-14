@@ -211,6 +211,7 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
+
 | Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
 | -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
 | `fa *> fb`                       | ap right              |                  | `Apply[F[_]]`           | `apR(fa: F[A])(fb: F[B]): F[B]`                              |

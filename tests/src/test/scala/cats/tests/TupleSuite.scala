@@ -5,6 +5,7 @@ import data.NonEmptyList
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import Helpers.CSemi
 
 class TupleSuite extends CatsSuite {
 
@@ -26,6 +27,12 @@ class TupleSuite extends CatsSuite {
 
   checkAll("Monad[(String, ?)]", MonadTests[(String, ?)].monad[Int, Int, String])
   checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
+
+  checkAll("CommutativeFlatMap[(CSemi, ?)]", CommutativeFlatMapTests[(CSemi, ?)].commutativeFlatMap[CSemi, CSemi, CSemi])
+  checkAll("CommutativeFlatMap[(CSemi, ?)] serializable", SerializableTests.serializable(CommutativeFlatMap[(CSemi, ?)]))
+
+  checkAll("CommutativeMonad[(Int, ?)]", CommutativeMonadTests[(Int, ?)].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[(Int, ?)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, ?)]))
 
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, ?)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, ?)]", SerializableTests.serializable(Reducible[(String, ?)]))

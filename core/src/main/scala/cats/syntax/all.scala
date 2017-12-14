@@ -7,6 +7,7 @@ trait AllSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
     with ArrowSyntax
+    with ArrowChoiceSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax

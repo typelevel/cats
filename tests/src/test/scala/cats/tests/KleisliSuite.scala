@@ -40,9 +40,15 @@ class KleisliSuite extends CatsSuite {
   checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))
 
   {
-    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowForKleisli[List]
+    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
     checkAll("Kleisli[List, Int, Int]", ArrowTests[Kleisli[List, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
     checkAll("Arrow[Kleisli[List, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[List, ?, ?]]))
+  }
+
+  {
+    implicit val catsDataArrowChoiceForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
+    checkAll("Kleisli[List, Int, Int]", ArrowChoiceTests[Kleisli[List, ?, ?]].arrowChoice[Int, Int, Int, Int, Int, Int])
+    checkAll("ArrowChoice[Kleisli[List, ?, ?]]", SerializableTests.serializable(ArrowChoice[Kleisli[List, ?, ?]]))
   }
 
   {
