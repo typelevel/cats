@@ -14,7 +14,7 @@ The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.ht
 import cats.Contravariant
 
 trait ContravariantMonoidal[F[_]] extends Contravariant[F] {
-  def unit[A]: F[A]
+  def unit: F[Unit]
 
   def product[A, B](fa: F[A], fc: F[B]): F[(A, B)]
 
@@ -52,7 +52,7 @@ Then, we can exhibit a `ContravariantMonoidal` for `Predicate` by basing it on t
 ```tut:book:silent
 implicit val contravariantMonoidalPredicate: ContravariantMonoidal[Predicate] =
   new ContravariantMonoidal [Predicate] {
-    def unit[A]: Predicate[A] = Predicate[A](Function.const(true))
+    def unit: Predicate[Unit] = Predicate[Unit](Function.const(true))
 
     def product[A, B](fa: Predicate[A], fb: Predicate[B]): Predicate[(A, B)] =
       Predicate(x => fa.run(x._1) && fb.run(x._2))
