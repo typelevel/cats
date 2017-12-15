@@ -209,6 +209,20 @@ object Applicative {
     new ArrowApplicative[F, A](F)
 
 
+  /**
+   * Creates a CoflatMap for an Applicative `F`.
+   * Cannot be implicit in 1.0 for Binary Compatibility Reasons
+   *
+   * Example:
+   * {{{
+   * scala> import cats._
+   * scala> import cats.implicits._
+   * scala> val fa = Some(3)
+   * fa: Option[Int] = Some(3)
+   * scala> Applicative.coflatMap[Option].coflatten(fa)
+   * res0: Option[Option[Int]] = Some(Some(3))
+   * }}}
+   */
   def coflatMap[F[_]](implicit F: Applicative[F]): CoflatMap[F] =
     new CoflatMap[F] {
       def coflatMap[A, B](fa: F[A])(f: F[A] => B): F[B] = F.pure(f(fa))
