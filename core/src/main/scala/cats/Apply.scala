@@ -26,7 +26,7 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
     map2(fa, fb)((a, _) => a)
 
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
-    map2(fa, fb)((_, _))
+    ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
   /** Alias for [[ap]]. */
   @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
@@ -62,7 +62,7 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * map2 can be seen as a binary version of [[cats.Functor]]#map.
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
-    ap(map(fa)(a => (b: B) => f(a, b)))(fb)
+    map(product(fa, fb))(f.tupled)
 
   /**
    * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
