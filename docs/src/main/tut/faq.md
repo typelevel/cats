@@ -214,8 +214,8 @@ All other symbols can be imported with `import cats.implicits._`
 
 | Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
 | -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
-| `fa *> fb`                       | ap right              |                  | `Apply[F[_]]`           | `apR(fa: F[A])(fb: F[B]): F[B]`                              |
-| `fa <* fb`                       | ap left               |                  | `Apply[F[_]]`           | `apL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
+| `fa <* fb`                       | product left               |                  | `Apply[F[_]]`           | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
 | `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
 | `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
 | `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
@@ -234,11 +234,11 @@ All other symbols can be imported with `import cats.implicits._`
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
-| `fa &> fb`                       | parallel ap right     |                  | `Parallel[M[_], F[_]]`  | `parApR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
-| `fa <& fb`                       | parallel ap left      |                  | `Parallel[M[_], F[_]]`  | `parApL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
 | `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
 | `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
-| `fa << fb` (Deprecated)          | ap left               |                  | `FlatMap[F[_]]`         | `apL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
 
 ## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
 
