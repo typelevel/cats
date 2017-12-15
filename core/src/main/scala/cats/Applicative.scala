@@ -207,6 +207,14 @@ object Applicative {
    */
   implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, ?]] =
     new ArrowApplicative[F, A](F)
+
+
+  def coflatMap[F[_]](implicit F: Applicative[F]): CoflatMap[F] =
+    new CoflatMap[F] {
+      def coflatMap[A, B](fa: F[A])(f: F[A] => B): F[B] = F.pure(f(fa))
+      def map[A, B](fa: F[A])(f: A => B): F[B] = F.map(fa)(f)
+    }
+
 }
 
 private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
