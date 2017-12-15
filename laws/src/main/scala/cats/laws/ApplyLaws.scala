@@ -22,10 +22,10 @@ trait ApplyLaws[F[_]] extends FunctorLaws[F] with SemigroupalLaws[F] {
     F.map2(fa, fb)(f) <-> F.map2Eval(fa, Eval.now(fb))(f).value
 
   def apRConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[B]] =
-    F.apR(fa)(fb) <-> F.map2(fa, fb)((_, b) => b)
+    F.productR(fa)(fb) <-> F.map2(fa, fb)((_, b) => b)
 
   def apLConsistency[A, B](fa: F[A], fb: F[B]): IsEq[F[A]] =
-    F.apL(fa)(fb) <-> F.map2(fa, fb)((a, _) => a)
+    F.productL(fa)(fb) <-> F.map2(fa, fb)((a, _) => a)
 }
 
 object ApplyLaws {

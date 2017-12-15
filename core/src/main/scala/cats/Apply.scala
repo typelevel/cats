@@ -18,42 +18,43 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
   /** Compose two actions, discarding any value produced by the first. */
-  def apR[A, B](fa: F[A])(fb: F[B]): F[B] =
+  def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     map2(fa, fb)((_, b) => b)
 
   /** Compose two actions, discarding any value produced by the second. */
-  def apL[A, B](fa: F[A])(fb: F[B]): F[A] =
+  def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
     map2(fa, fb)((a, _) => a)
 
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
-    ap(map(fa)(a => (b: B) => (a, b)))(fb)
+    map2(fa, fb)((_, _))
 
   /** Alias for [[ap]]. */
   @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     ap(ff)(fa)
 
-  /** Alias for [[apR]]. */
+  /** Alias for [[productR]]. */
   @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
-    apR(fa)(fb)
+    productR(fa)(fb)
 
-  /** Alias for [[apL]]. */
+  /** Alias for [[productL]]. */
   @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
-    apL(fa)(fb)
+    productL(fa)(fb)
 
-  /** Alias for [[apR]]. */
-  @deprecated("Use *> or apR instead.", "1.0.0")
+  /** Alias for [[productR]]. */
+  @deprecated("Use *> or apR instead.", "1.0.0-RC2")
   @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
-    apR(fa)(fb)
+    productR(fa)(fb)
 
-  /** Alias for [[apL]]. */
-  @deprecated("Use <* or apL instead.", "1.0.0")
+  /** Alias for [[productL]]. */
+  @deprecated("Use <* or apL instead.", "1.0.0-RC2")
   @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
-    apL(fa)(fb)
+    productL(fa)(fb)
 
   /**
    * ap2 is a binary version of ap, defined in terms of ap.
    */
   def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
+
     map(product(fa, product(fb, ff))) { case (a, (b, f)) => f(a, b) }
 
   /**
@@ -62,7 +63,7 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * map2 can be seen as a binary version of [[cats.Functor]]#map.
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
-    map(product(fa, fb)) { case (a, b) => f(a, b) }
+    ap(map(fa)(a => (b: B) => f(a, b)))(fb)
 
   /**
    * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`

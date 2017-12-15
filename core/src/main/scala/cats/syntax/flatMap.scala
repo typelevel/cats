@@ -33,16 +33,16 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
   def >>[B](fb: => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(_ => fb)
 
   @deprecated("Use <* instead", "1.0.0-RC1")
-  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.apL(fa)(fb)
+  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
 
 
-  @deprecated("Use apREval instead.", "1.0.0")
+  @deprecated("Use productREval instead.", "1.0.0-RC2")
   def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
-    F.apREval(fa)(fb)
+    F.productREval(fa)(fb)
 
-  @deprecated("Use apLEval instead.", "1.0.0")
+  @deprecated("Use productLEval instead.", "1.0.0-RC2")
   def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
-    F.apLEval(fa)(fb)
+    F.productLEval(fa)(fb)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
