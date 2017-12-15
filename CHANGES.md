@@ -1,4 +1,4 @@
-## Version 1.0.0
+## Version 1.0.0-RC2
 
 > 2017 Nov 25
 
@@ -6,6 +6,7 @@
 
 * [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
 * [#2033](https://github.com/typelevel/cats/pull/2033) standardise on `liftF` and add `liftK` to transformers by @SystemFw
+* [#2083](https://github.com/typelevel/cats/pull/2083) Change forEffect/followedBy to productL/productR by @Jacoby6000
 
 ### New features / enhancements (API, instances, data types, etc.):
 
@@ -34,7 +35,8 @@
 * [#2101](https://github.com/typelevel/cats/pull/2101) Add Semigroup.instance method by @jozic
 * [#2103](https://github.com/typelevel/cats/pull/2103) CommutativeMonad for Eval by @ceedubs
 * [#2104](https://github.com/typelevel/cats/pull/2104) Add Commutative{Monad, FlatMap} instances for IdT by @ceedubs
-
+* [#2105](https://github.com/typelevel/cats/pull/2105) Some Kleisli instance cleanup by @ceedubs
+* [#2110](https://github.com/typelevel/cats/pull/2110) add `Comparison` to `cats` package by @kailuowang
 
 
 ### Bug fixes:
@@ -67,6 +69,7 @@
 * [#2077](https://github.com/typelevel/cats/pull/2077) Add some doctest examples for SemigroupK/MonoidK by @ceedubs
 * [#2079](https://github.com/typelevel/cats/pull/2079) Add doctest examples for Applicative by @ceedubs
 * [#2095](https://github.com/typelevel/cats/pull/2095) Update guidelines.md by @kailuowang
+* [#2108](https://github.com/typelevel/cats/pull/2108) Update version of deprecation to 1.0.0-RC2 by @rossabaker
 
 
 ### Build improvements/dependency updates

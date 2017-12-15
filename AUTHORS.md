@@ -90,6 +90,7 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Jacob Barber
  * Jakub Kozłowski
  * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
@@ -113,7 +114,7 @@ possible:
  * Long Cao
  * Luis Angel Vicente Sanchez
  * Luis Sanchez
- * LukaJCB
+ * Luka Jacobowitz
  * Luke Wyman
  * Madder
  * Marc Siegel
