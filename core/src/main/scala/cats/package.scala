@@ -81,6 +81,7 @@ package object cats {
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
+  type Comparison = cats.kernel.Comparison
   type Order[A] = cats.kernel.Order[A]
   type Hash[A] = cats.kernel.Hash[A]
   type Semigroup[A] = cats.kernel.Semigroup[A]
