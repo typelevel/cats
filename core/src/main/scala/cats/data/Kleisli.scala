@@ -54,7 +54,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
     Kleisli(f.andThen(run))
 
-  @deprecated("Use mapK", "1.0.0")
+  @deprecated("Use mapK", "1.0.0-RC2")
   def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
     mapK(f)
 
@@ -100,7 +100,7 @@ private[data] sealed trait KleisliFunctions {
   def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
     λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
 
-  @deprecated("Use liftF instead", "1.0.0")
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
