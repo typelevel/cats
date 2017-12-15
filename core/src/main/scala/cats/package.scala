@@ -90,6 +90,7 @@ package object cats {
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
   val Order = cats.kernel.Order
+  val Comparison = cats.kernel.Comparison
   val Hash = cats.kernel.Hash
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
