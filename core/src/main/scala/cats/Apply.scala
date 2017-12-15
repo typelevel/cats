@@ -80,13 +80,11 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       val G = Apply[G]
     }
 
-  override def semigroup[A](implicit A: Semigroup[A]): Semigroup[F[A]] =
-    new ApplySemigroup[F, A](this, A)
 }
 
 object Apply {
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
-    f.semigroup
+    new ApplySemigroup[F, A](f, sg)
 }
 
 private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {

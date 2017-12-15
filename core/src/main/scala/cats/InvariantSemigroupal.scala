@@ -14,15 +14,15 @@ import simulacrum.typeclass
        def G = Apply[G]
      }
 
+}
+
+object InvariantSemigroupal extends SemigroupalArityFunctions {
   /**
     * Gives a `Semigroup` instance if A itself has a `Semigroup` instance.
     */
-  def semigroup[A](implicit A: Semigroup[A]): Semigroup[F[A]] =
-    new InvariantSemigroupalSemigroup[F, A](this, A)
-
+  def semigroup[F[_], A](implicit F: InvariantSemigroupal[F], A: Semigroup[A]): Semigroup[F[A]] =
+    new InvariantSemigroupalSemigroup[F, A](F, A)
 }
-
-object InvariantSemigroupal extends SemigroupalArityFunctions
 
 private[cats] class InvariantSemigroupalSemigroup[F[_], A](f: InvariantSemigroupal[F], sg: Semigroup[A]) extends Semigroup[F[A]] {
   def combine(a: F[A], b: F[A]): F[A] =

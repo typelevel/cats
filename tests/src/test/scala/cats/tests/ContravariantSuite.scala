@@ -43,11 +43,11 @@ class ContravariantSuite extends CatsSuite {
   checkAll("ContravariantMonoidal[Predicate]", ContravariantMonoidalTests[Predicate].contravariantMonoidal[Int, Int, Int])
 
   {
-    implicit val predicateMonoid = ContravariantMonoidal[Predicate].monoid[Int]
+    implicit val predicateMonoid = ContravariantMonoidal.monoid[Predicate, Int]
     checkAll("ContravariantMonoidal[Predicate].monoid", MonoidTests[Predicate[Int]].monoid)
   }
   {
-    implicit val predicateSemigroup = ContravariantSemigroupal[Predicate].semigroup[Int]
+    implicit val predicateSemigroup = ContravariantSemigroupal.semigroup[Predicate, Int]
     checkAll("ContravariantSemigroupal[Predicate].semigroup", SemigroupTests[Predicate[Int]].semigroup)
   }
 

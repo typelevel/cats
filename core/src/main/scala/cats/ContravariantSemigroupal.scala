@@ -13,8 +13,6 @@ import simulacrum.typeclass
       def G = Functor[G]
     }
 
-  override def semigroup[A](implicit A: Semigroup[A]): Semigroup[F[A]] =
-    ContravariantSemigroupal.semigroup(this)
 }
 
 object ContravariantSemigroupal extends SemigroupalArityFunctions {

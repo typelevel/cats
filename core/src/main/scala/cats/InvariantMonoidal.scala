@@ -23,12 +23,15 @@ import simulacrum.typeclass
 
   def unit: F[Unit]
 
+
+}
+
+object InvariantMonoidal {
   /**
     * Gives a `Monoid` instance if A itself has a `Monoid` instance.
     */
-  def monoid[A](implicit A: Monoid[A]): Monoid[F[A]] =
-    new InvariantMonoidalMonoid[F, A](this, A)
-
+  def monoid[F[_], A](implicit F: InvariantMonoidal[F], A: Monoid[A]): Monoid[F[A]] =
+    new InvariantMonoidalMonoid[F, A](F, A)
 }
 
 
