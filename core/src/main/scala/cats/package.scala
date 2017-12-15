@@ -86,6 +86,7 @@ package object cats {
   type Semigroup[A] = cats.kernel.Semigroup[A]
   type Monoid[A] = cats.kernel.Monoid[A]
   type Group[A] = cats.kernel.Group[A]
+  type Comparison = cats.kernel.Comparison
 
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
@@ -94,6 +95,7 @@ package object cats {
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
+  val Comparison = cats.kernel.Comparison
 
   @deprecated("renamed to Semigroupal", "1.0.0-RC1")
   type Cartesian[F[_]] = Semigroupal[F]
