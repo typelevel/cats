@@ -54,7 +54,6 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * ap2 is a binary version of ap, defined in terms of ap.
    */
   def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
-
     map(product(fa, product(fb, ff))) { case (a, (b, f)) => f(a, b) }
 
   /**
