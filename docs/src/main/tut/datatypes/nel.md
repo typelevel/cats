@@ -9,6 +9,8 @@ scaladoc: "#cats.data.NonEmptyList"
 
 ## Motivation
 
+We start with two examples of `NonEmptyList`s
+
 ### Usage in `Validated` and `Ior`
 
 If you have had the opportunity of taking a look to
@@ -17,17 +19,16 @@ common case is to use `NonEmptyList` with one of these data
 structures.
 
 Why? Because it fits nicely in the error reporting cases. As stated by
-its name, `NonEmptyList` is a _specialized_ data type that will have,
-at least, one element. You'll find that its behavior is like a list,
-with the aforementioned constraint. Think of it as a `List` wrapper.
+its name, `NonEmptyList` is a _specialized_ data type that has at
+least *one* element.  Otherwise it behaves like a normal `List`.  For
+sum types like `Validated` (and `Ior`), it does not make sense to have
+a `Invalid` with no errors: no errors means it is a `Valid`!  By using
+`NonEmptyList`, we explicitly say in the type that:
 
-For sum types like `Validated` and `Ior`, it would not make sense to
-have a `Invalid` with no errors:  no errors means it is a `Valid`!  By
-using `NonEmptyList`, we explicitly say in the type that:
+*If* it is a `Invalid`, *then* there is at least one error.
 
-*If* it is a `Invalid`, *then* there is at least one error.  This is
-much more precise and we don't have to wonder whether the list of
-errors might be empty when reporting them later on.
+This is much more precise and we don't have to wonder whether the list
+of errors might be empty when reporting them later on.
 
 ### Avoiding `Option` by demanding more specific arguments
 
@@ -88,27 +89,22 @@ your system.
 
 ```scala
 final case class NonEmptyList[+A](head: A, tail: List[A]) {
-	// Implementation elided
+  // Implementation elided
 }
 ```
 
 The `head` of the `NonEmptyList` will be _non-empty_. Meanwhile, the
-`tail` can have zero or more elements.
+`tail` can have zero or more elements contained in a `List`.
 
 ## Defined for all its elements
 
-An important trait of `NonEmptyList` is the totality. Consider the
-latter example in which we had an empty `List` and we performed a
-retrieval of its head and tail, both operations failing because there
-are no elements present in that `List`.  You can see this case as an
-example of partial functions. Specifically, both `head` and `tail`
-are partial because they are functions defined for a `List` that has
-at least one element.
+An important trait of `NonEmptyList` is the totality. For `List` specifically,
+both `head` and `tail` are partial: they are only well-defined if it
+has at least one element.
 
-`NonEmptyList` guarantees you that operations like `head` and `tail`
-are defined because of the invariant about its size
-(at least one element).  That means you can call them without worrying
-about the empty case.
+`NonEmptyList` on the other hand, _guarantees_ you that operations like
+`head` and `tail` are defined, because constructing an empty
+`NonEmptyList` is simply not possible!
 
 ## Constructing a NonEmptyList
 
