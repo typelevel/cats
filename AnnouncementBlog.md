@@ -13,6 +13,6 @@ After 1.0.0 release, we'll use the *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.
 We will also consider using organization and package name for *MAJOR* versioning with binary breaking changes in the future. But that decision is yet to be made.
 
 ## Community
-Cats is built for the FP Scala community by the FP Scala community. We can't thank enough to our [186 (and growing) contributors](https://github.com/typelevel/cats/graphs/contributors) and our users who provided feedbacks and suggestions.  
+Cats is built for the FP Scala community by the FP Scala community. We can't thank enough to our [187 (and growing) contributors](https://github.com/typelevel/cats/graphs/contributors) and our users who provided feedbacks and suggestions.  
 Congratulations to all of us. Let's celebrate this exciting milestone together. 
   
