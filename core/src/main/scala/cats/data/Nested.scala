@@ -139,6 +139,11 @@ private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
     new NestedApply[F, G] {
       val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
     }
+
+  implicit def catsDataDistributiveForNested[F[_]: Distributive, G[_]: Distributive]: Distributive[Nested[F, G, ?]] =
+    new NestedDistributive[F, G] {
+      val FG: Distributive[λ[α => F[G[α]]]] = Distributive[F].compose[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
@@ -250,6 +255,13 @@ private[data] trait NestedTraverse[F[_], G[_]] extends Traverse[Nested[F, G, ?]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
+}
+
+private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, ?]] with NestedFunctor[F, G] {
+  def FG: Distributive[λ[α => F[G[α]]]]
+
+  def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Nested[F, G, B]): Nested[F, G, H[B]] =
+    Nested(FG.distribute(ha) { a => f(a).value })
 }
 
 private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?]] with NestedFoldable[F, G] {

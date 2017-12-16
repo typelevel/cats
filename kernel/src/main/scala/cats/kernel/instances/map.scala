@@ -8,6 +8,9 @@ package object map extends MapInstances
 trait MapInstances extends MapInstances1 {
   implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     new MapHash[K, V]
+
+  implicit def catsKernelStdCommutativeMonoidForMap[K, V: CommutativeSemigroup]: CommutativeMonoid[Map[K, V]] =
+    new MapMonoid[K, V] with CommutativeMonoid[Map[K, V]]
 }
 
 trait MapInstances1 {

@@ -135,7 +135,17 @@ private[data] sealed trait IdTNonEmptyTraverse[F[_]] extends IdTTraverse[F] with
     fa.reduceRightTo(f)(g)
 }
 
-private[data] sealed abstract class IdTInstances6 {
+private[data] sealed abstract class IdTInstances8 {
+  implicit def catsDataCommutativeFlatMapForIdT[F[_]](implicit F: CommutativeFlatMap[F]): CommutativeFlatMap[IdT[F, ?]] =
+    new IdTFlatMap[F] with CommutativeFlatMap[IdT[F, ?]] { implicit val F0: CommutativeFlatMap[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances7 extends IdTInstances8{
+  implicit def catsDataCommutativeMonadForIdT[F[_]](implicit F: CommutativeMonad[F]): CommutativeMonad[IdT[F, ?]] =
+    new IdTMonad[F] with CommutativeMonad[IdT[F, ?]] { implicit val F0: CommutativeMonad[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances6 extends IdTInstances7 {
   implicit def catsDataContravariantMonoidalForIdT[F[_]](implicit F: ContravariantMonoidal[F]): ContravariantMonoidal[IdT[F, ?]] =
     new IdTContravariantMonoidal[F] { implicit val F0: ContravariantMonoidal[F] = F }
 }

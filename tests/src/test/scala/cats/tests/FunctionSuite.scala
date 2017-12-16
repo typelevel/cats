@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.arrow.{Choice, CommutativeArrow}
+import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
 import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{
   BandTests,
@@ -48,11 +48,18 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[Int, Int]", ChoiceTests[Function1].choice[Int, Int, Int, Int])
   checkAll("Choice[Function1]", SerializableTests.serializable(Choice[Function1]))
 
+  checkAll("Function1[Int, Int]", ArrowChoiceTests[Function1].arrowChoice[Int, Int, Int, Int, Int, Int])
+  checkAll("ArrowChoice[Function1]", SerializableTests.serializable(ArrowChoice[Function1]))
+
   checkAll("Function1[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
   checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
 
   checkAll("Function1[Int, Int]", MonoidKTests[λ[α => α => α]].monoidK[Int])
   checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(catsStdMonoidKForFunction1))
+
+  checkAll("Function1[Int, Int]", DistributiveTests[Int => ?].distributive[Int, Int, Int, Id, Function1[Int, ?]])
+  checkAll("Distributive[Int => ?]", SerializableTests.serializable(Distributive[Int => ?]))
+
 
 
   // law checks for the various Function0-related instances
@@ -68,6 +75,8 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[CMono]", CommutativeMonoidTests[Function0[CMono]].commutativeMonoid)
   checkAll("Function0[Grp]", GroupTests[Function0[Grp]].group)
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
+  checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
+
 
   test("Function0[Hsh]") {
     forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
@@ -93,6 +102,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[() => CMono]", SerializableTests.serializable(CommutativeMonoid[() => CMono]))
   checkAll("Group[() => Grp]", SerializableTests.serializable(Group[() => Grp]))
   checkAll("CommutativeGroup[() => CGrp]", SerializableTests.serializable(CommutativeGroup[() => CGrp]))
+  checkAll("Function0", SerializableTests.serializable(Distributive[Function0]))
 
   // law checks for the various Function1-related instances
   checkAll("Function1[String, Semi]", SemigroupTests[Function1[String, Semi]].semigroup)

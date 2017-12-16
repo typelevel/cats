@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
@@ -78,13 +79,25 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
 }
 
 sealed trait Tuple2Instances1 extends Tuple2Instances2 {
+  implicit def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, ?)] =
+    new FlatMapTuple2[X](MX) with CommutativeMonad[(X, ?)] {
+      def pure[A](a: A): (X, A) = (MX.empty, a)
+    }
+}
+
+sealed trait Tuple2Instances2 extends Tuple2Instances3 {
+  implicit def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, ?)] =
+    new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, ?)]
+}
+
+sealed trait Tuple2Instances3 extends Tuple2Instances4 {
   implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] =
     new FlatMapTuple2[X](MX) with Monad[(X, ?)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances2 {
+sealed trait Tuple2Instances4 {
   implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] =
     new FlatMapTuple2[X](SX)
 }
@@ -110,10 +123,10 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     (x, xb._2)
   }
 
-  override def followedBy[A, B](a: (X, A))(b: (X, B)): (X, B) =
+  override def productR[A, B](a: (X, A))(b: (X, B)): (X, B) =
     (s.combine(a._1, b._1), b._2)
 
-  override def forEffect[A, B](a: (X, A))(b: (X, B)): (X, A) =
+  override def productL[A, B](a: (X, A))(b: (X, B)): (X, A) =
     (s.combine(a._1, b._1), a._2)
 
   override def mproduct[A, B](fa: (X, A))(f: A => (X, B)): (X, (A, B)) = {

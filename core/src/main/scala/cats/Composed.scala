@@ -1,6 +1,14 @@
 package cats
 
 
+private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
+  def F: Distributive[F]
+  def G: Distributive[G]
+
+  override def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => F[G[B]]): F[G[H[B]]] =
+    F.map(F.distribute(ha)(f))(G.cosequence(_))
+}
+
 private[cats] trait ComposedInvariant[F[_], G[_]] extends Invariant[λ[α => F[G[α]]]] { outer =>
   def F: Invariant[F]
   def G: Invariant[G]
