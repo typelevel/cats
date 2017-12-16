@@ -77,6 +77,7 @@
 
 * [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
 * [#2065](https://github.com/typelevel/cats/pull/2065) improve build by not displaying each success test by @kailuowang
+* [#2106](https://github.com/typelevel/cats/pull/2106) Update to latest patch versions of scala by @ceedubs
 
 ### Testing improvements
 
