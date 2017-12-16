@@ -60,13 +60,15 @@ object ListWrapper {
 
   val functor: Functor[ListWrapper] = traverse
 
-  val invariant: InvariantSemigroupal[ListWrapper] = new InvariantSemigroupal[ListWrapper] {
+  val invariantSemigroupal: InvariantSemigroupal[ListWrapper] = new InvariantSemigroupal[ListWrapper] {
     def product[A, B](fa: ListWrapper[A], fb: ListWrapper[B]): ListWrapper[(A, B)] =
       ListWrapper(fa.list.flatMap(a => fb.list.map(b => (a, b))))
 
     def imap[A, B](fa: ListWrapper[A])(f: A => B)(g: B => A) =
       ListWrapper(fa.list.map(f))
   }
+
+  val invariant: Invariant[ListWrapper] = invariantSemigroupal
 
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {

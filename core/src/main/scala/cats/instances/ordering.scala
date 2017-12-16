@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.kernel.instances.unit._
+
 trait OrderingInstances {
   implicit val catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
     new ContravariantMonoidal[Ordering] {
@@ -8,9 +10,7 @@ trait OrderingInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
 
-      def unit: Ordering[Unit] = new Ordering[Unit] {
-        def compare(l: Unit, r: Unit): Int = 0
-      }
+      def unit: Ordering[Unit] = Order[Unit].toOrdering
 
       def contramap[A, B](fa: Ordering[A])(f: B => A): Ordering[B] = fa.on(f)
 

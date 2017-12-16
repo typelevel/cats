@@ -1,6 +1,7 @@
 package cats.instances
 
 import cats.kernel._
+import cats.kernel.instances.unit._
 import cats.{InvariantMonoidal, Monoid, InvariantSemigroupal}
 
 trait InvariantMonoidalInstances {
@@ -27,9 +28,7 @@ trait InvariantMonoidalInstances {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
     }
 
-    def unit: Semigroup[Unit] = new Semigroup[Unit] {
-      def combine(x: Unit, y: Unit): Unit = ()
-    }
+    def unit: Semigroup[Unit] = implicitly
   }
 
   implicit val catsInvariantMonoidalCommutativeSemigroup: InvariantMonoidal[CommutativeSemigroup] = new InvariantMonoidal[CommutativeSemigroup] {
@@ -41,9 +40,7 @@ trait InvariantMonoidalInstances {
       def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
     }
 
-    def unit: CommutativeSemigroup[Unit] = new CommutativeSemigroup[Unit] {
-      def combine(x: Unit, y: Unit): Unit = ()
-    }
+    def unit: CommutativeSemigroup[Unit] = implicitly
   }
 
 }
