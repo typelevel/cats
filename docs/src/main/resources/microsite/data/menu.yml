@@ -161,7 +161,7 @@ options:
     menu_type: data
 
   - title: NonEmptyList
-    url: datatypes/nonemptylist.html
+    url: datatypes/nel.html
     menu_type: data
 
   - title: OneAnd
