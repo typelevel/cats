@@ -103,6 +103,9 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
 
   def max[@sp A](x: A, y: A)(implicit ev: O[A]): A =
     ev.max(x, y)
+
+  def comparison[@sp A](x: A, y: A)(implicit ev: O[A]): Comparison =
+    ev.comparison(x, y)
 }
 
 trait OrderToOrderingConversion {
