@@ -123,7 +123,7 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
     ev.gt(x, y)
 }
 
-object PartialOrder extends PartialOrderFunctions[PartialOrder] {
+object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrderToPartialOrderingConversion {
   /**
    * Access an implicit `PartialOrder[A]`.
    */
@@ -154,10 +154,10 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] {
       def partialCompare(x: A, y: A) = f(x, y)
     }
 
-  /**
-   * Implicitly convert a `PartialOrder[A]` to a
-   * `scala.math.PartialOrdering[A]` instance.
-   */
+}
+
+
+trait PartialOrderToPartialOrderingConversion {
   implicit def catsKernelPartialOrderingForPartialOrder[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
     new PartialOrdering[A] {
       def tryCompare(x: A, y: A): Option[Int] = ev.tryCompare(x, y)
