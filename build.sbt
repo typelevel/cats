@@ -394,7 +394,8 @@ def mimaSettings(moduleName: String) = Seq(
       exclude[IncompatibleResultTypeProblem]("cats.data.KleisliInstances0.catsDataMonadForKleisliId"),
       exclude[InheritedNewAbstractMethodProblem]("cats.kernel.PartialOrderToPartialOrderingConversion.catsKernelPartialOrderingForPartialOrder"),
       exclude[InheritedNewAbstractMethodProblem]("cats.kernel.EqToEquivConversion.catsKernelEquivForEq"),
-      exclude[InheritedNewAbstractMethodProblem]("cats.kernel.OrderToOrderingConversion.catsKernelOrderingForOrder")
+      exclude[InheritedNewAbstractMethodProblem]("cats.kernel.OrderToOrderingConversion.catsKernelOrderingForOrder"),
+      exclude[InheritedNewAbstractMethodProblem]("cats.kernel.HashToHashingConversion.catsKernelHashToHashing")
     )
   }
 )

@@ -16,6 +16,7 @@ trait AllInstances
     with DurationInstances
     with FloatInstances
     with FunctionInstances
+    with HashInstances
     with IntInstances
     with ListInstances
     with LongInstances
