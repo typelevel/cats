@@ -30,8 +30,8 @@ trait ApplyTests[F[_]] extends FunctorTests[F] with SemigroupalTests[F] {
       "apply composition" -> forAll(laws.applyComposition[A, B, C] _),
       "map2/product-map consistency" -> forAll(laws.map2ProductConsistency[A, B, C] _),
       "map2/map2Eval consistency" -> forAll(laws.map2EvalConsistency[A, B, C] _),
-      "apR consistent map2" -> forAll(laws.apRConsistency[A, C] _),
-      "apL consistent map2" -> forAll(laws.apLConsistency[A, C] _))
+      "productR consistent map2" -> forAll(laws.productRConsistency[A, C] _),
+      "productL consistent map2" -> forAll(laws.productLConsistency[A, C] _))
   }
 }
 
