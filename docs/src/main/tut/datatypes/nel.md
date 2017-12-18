@@ -14,7 +14,7 @@ We start with two examples of `NonEmptyList`s
 ### Usage in `Validated` and `Ior`
 
 If you have had the opportunity of taking a look to
-[Validated](validated.html) or [IOR](ior.html), you'll find that a
+[Validated](validated.html) or [Ior](ior.html), you'll find that a
 common case is to use `NonEmptyList` with one of these data
 structures.
 
@@ -115,7 +115,7 @@ To construct a `NonEmptyList` you have different possibilities.
 If you want to construct a collection with only one argument, use
 `NonEmptyList.one`:
 
-```tut
+```tut:book
 NonEmptyList.one(42)
 ```
 
@@ -130,7 +130,7 @@ def of[A](head: A, tail: A*): NonEmptyList[A]
 It accepts an argument list with at least one `A` followed by a
 *varargs* argument for the `tail`.  Call it like this:
 
-```tut
+```tut:book
 NonEmptyList.of(1)
 NonEmptyList.of(1, 2)
 NonEmptyList.of(1, 2, 3, 4)
@@ -139,7 +139,7 @@ NonEmptyList.of(1, 2, 3, 4)
 There also is `ofInitLast` which takes a normal `List[A]` for the
 prefix and a last element:
 
-```tut
+```tut:book
 NonEmptyList.ofInitLast(List(), 4)
 NonEmptyList.ofInitLast(List(1,2,3), 4)
 ```
@@ -149,9 +149,17 @@ NonEmptyList.ofInitLast(List(1,2,3), 4)
 There is also `NonEmptyList.fromList` which returns an
 `Option[NonEmptyList[A]]`:
 
-```tut
+```tut:book
 NonEmptyList.fromList(List())
 NonEmptyList.fromList(List(1,2,3))
+```
+
+Last but not least, there is `.toNel` if you import the syntax for
+`list`:
+
+```tut:book
+import cats.syntax.list._
+List(1,2,3).toNel
 ```
 
 ### Using `fromFoldable` and `fromReducible`
@@ -163,7 +171,7 @@ is only available for non-empty datastructures.
 
 Here are some examples:
 
-```tut
+```tut:book
 import cats.implicits._
 
 NonEmptyList.fromFoldable(List())
