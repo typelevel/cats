@@ -2,7 +2,7 @@ package cats
 package instances
 
 
-trait HashInstances extends kernel.HashToHashingConversion {
+trait HashInstances {
 
   implicit val catsContravariantForHash: Contravariant[Hash] =
     new Contravariant[Hash] {

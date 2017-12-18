@@ -11,6 +11,7 @@ trait AllInstances
     with ByteInstances
     with CharInstances
     with DoubleInstances
+    with EqInstances
     with EitherInstances
     with DurationInstances
     with FloatInstances
@@ -20,6 +21,8 @@ trait AllInstances
     with LongInstances
     with MapInstances
     with OptionInstances
+    with OrderInstances
+    with PartialOrderInstances
     with QueueInstances
     with SetInstances
     with ShortInstances

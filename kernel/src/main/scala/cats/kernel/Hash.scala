@@ -54,9 +54,3 @@ object Hash extends HashFunctions[Hash] {
     }
 
 }
-
-trait HashToHashingConversion {
-  implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] = new Hashing[A] {
-    override def hash(x: A): Int = ev.hash(x)
-  }
-}

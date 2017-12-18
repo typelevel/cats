@@ -1,7 +1,7 @@
 package cats
 package instances
 
-trait PartialOrderInstances {
+trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
   implicit val catsContravariantSemigroupalForPartialOrder: ContravariantSemigroupal[PartialOrder] =
     new ContravariantSemigroupal[PartialOrder] {
       /** Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.
