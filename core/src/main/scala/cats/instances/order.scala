@@ -3,7 +3,8 @@ package instances
 
 import cats.kernel.instances.unit._
 
-trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
+trait OrderInstances extends kernel.instances.OrderInstances {
+
   implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
     new ContravariantMonoidal[Order] {
       /**

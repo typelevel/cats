@@ -2,7 +2,8 @@ package cats
 package instances
 import cats.kernel.instances.unit._
 
-trait PartialOrderInstances {
+
+trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
   implicit val catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
     new ContravariantMonoidal[PartialOrder] {
       /** Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.

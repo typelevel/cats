@@ -1,7 +1,7 @@
 package cats
 package instances
 
-trait EqInstances {
+trait EqInstances extends kernel.instances.EqInstances {
   implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     new ContravariantMonoidal[Eq] {
       /**

@@ -243,6 +243,21 @@ class Tests extends FunSuite with Discipline {
 
   checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
 
+  {
+    implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] = new PartialOrdering[Set[A]] {
+
+      override def tryCompare(x: Set[A], y: Set[A]): Option[Int] = {
+        if (x == y) Some(0)
+        else if (x subsetOf y) Some(-1)
+        else if (y subsetOf x) Some(1)
+        else None
+      }
+
+      override def lteq(x: Set[A], y: Set[A]): Boolean = (x subsetOf y) || (x == y)
+    }
+    checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
+  }
+
   implicit val arbitraryComparison: Arbitrary[Comparison] =
     Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))
 
