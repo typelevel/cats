@@ -211,7 +211,6 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
-
 | Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
 | -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
 | `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
@@ -219,7 +218,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
 | `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
 | `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
-| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: => F[B]): F[B]`                              |
+| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                              |
 | <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                             |
 | `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                           |
 | `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                         |
@@ -239,6 +238,7 @@ All other symbols can be imported with `import cats.implicits._`
 | `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
 | `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
 | `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+
 
 ## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
 
