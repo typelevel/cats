@@ -247,10 +247,6 @@ private[data] sealed abstract class IndexedStateTInstances extends IndexedStateT
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
     FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
-
-  implicit def catsDataContravariantMonoidalForIndexedStateT[F[_], S](implicit FD: ContravariantMonoidal[F],
-    FA: Applicative[F]): ContravariantMonoidal[IndexedStateT[F, S, S, ?]] =
-    new IndexedStateTContravariantMonoidal[F, S] { implicit def F = FD; implicit def G = FA }
 }
 
 private[data] sealed abstract class IndexedStateTInstances1 extends IndexedStateTInstances2 {
