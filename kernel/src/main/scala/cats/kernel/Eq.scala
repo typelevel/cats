@@ -32,7 +32,17 @@ abstract class EqFunctions[E[T] <: Eq[T]] {
 
 }
 
-object Eq extends EqFunctions[Eq] {
+trait EqToEquivConversion {
+  /**
+   * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
+   * instance.
+   */
+  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] = new Equiv[A] {
+    def equiv(a: A, b: A) = ev.eqv(a, b)
+  }
+}
+
+object Eq extends EqFunctions[Eq] with EqToEquivConversion {
 
   /**
    * Access an implicit `Eq[A]`.
@@ -66,13 +76,6 @@ object Eq extends EqFunctions[Eq] {
       def eqv(x: A, y: A) = eq1.eqv(x, y) || eq2.eqv(x, y)
     }
 
-  /**
-   * This gives compatibility with scala's Equiv trait
-   */
-  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
-    new Equiv[A] {
-      def equiv(a: A, b: A) = ev.eqv(a, b)
-    }
 
   /**
    * Create an `Eq` instance from an `eqv` implementation.
