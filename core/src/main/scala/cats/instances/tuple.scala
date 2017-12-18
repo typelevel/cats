@@ -123,10 +123,10 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     (x, xb._2)
   }
 
-  override def followedBy[A, B](a: (X, A))(b: (X, B)): (X, B) =
+  override def productR[A, B](a: (X, A))(b: (X, B)): (X, B) =
     (s.combine(a._1, b._1), b._2)
 
-  override def forEffect[A, B](a: (X, A))(b: (X, B)): (X, A) =
+  override def productL[A, B](a: (X, A))(b: (X, B)): (X, A) =
     (s.combine(a._1, b._1), a._2)
 
   override def mproduct[A, B](fa: (X, A))(f: A => (X, B)): (X, (A, B)) = {

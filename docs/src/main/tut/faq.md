@@ -211,35 +211,34 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
-| Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                                    |
-| -------------------------------- | -------------------------| ---------------- | ----------------------- | -----------------------------------------------------------------------------|
-| `fa *> fb`                       | followed by              |                  | `Apply[F[_]]`           | `followedBy(fa: F[A])(fb: F[B]): F[B]`                                       |
-| `fa <* fb`                       | for effect               |                  | `Apply[F[_]]`           | `forEffect(fa: F[A])(fb: F[B]): F[A]`                                        |
-| `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                                   |
-| `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                                  |
-| `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                                      |
-| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                                       |
-| <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                                      |
-| `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                                    |
-| `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                                  |
-| `x < y`                          | less than                |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                                    |
-| `x <= y`                         | less than or equal       |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                                                  |
-| <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                                     |
-| `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                           |
-| `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                                   |
-| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                                   |
-| `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`                       |
-| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`            | 
-| `f +++ g`                        | ArrowChoice choose       |                  | `ArrowChoice[F[_, _]]`  | `choose[A, B, C, D](f: F[A, C])(g: F[B, D]): F[Either [A, B], Either[C, D]]` |
-| `f ||| g`                        | Choice choice            |                  | `Choice[F[_, _]]`       | `choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]`            |
-| `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                            |
-| `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                              |
-| `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                              |
-| `fa &> fb`                       | parallel followed by     |                  | `Parallel[M[_], F[_]]`  | `parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B]`                              |
-| `fa <& fb`                       | parallel for effect      |                  | `Parallel[M[_], F[_]]`  | `parForEffect[A, B](ma: M[A])(mb: M[B]): M[A]`                               |
-| `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                                    |
-| `⊤`                              | top                      |                  | N/A                     | `Any`                                                                        |
-| `fa << fb` (Deprecated)          | for effect               |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                                        |
+| Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
+| -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
+| `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
+| `fa <* fb`                       | product left               |                  | `Apply[F[_]]`           | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
+| `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
+| `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
+| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                              |
+| <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                             |
+| `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                           |
+| `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                         |
+| `x < y`                          | less than                |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                           |
+| `x <= y`                         | less than or equal       |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                                         |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                            |
+| `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                  |
+| `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
+| `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
+| `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
+| `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+
 
 ## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
 
