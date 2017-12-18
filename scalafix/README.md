@@ -36,7 +36,7 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
 
-- [x] Apply methods forEffect and followedBy were renamed to apL and apR respectively.  This also effects forEffectEval, followedByEval, forEffectPar, and followedByPar.
+- [x] Apply methods forEffect and followedBy were renamed to productL and productR respectively.  This also effects forEffectEval, followedByEval, forEffectPar, and followedByPar.
 
 - [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
 
