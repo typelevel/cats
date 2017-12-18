@@ -27,8 +27,8 @@ trait InvariantMonoidalTests[F[_]] extends InvariantSemigroupalTests[F] {
       val parents = Seq(invariant[A, B, C], semigroupal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
-        "invariant monoidal left identity" -> forAll((fa: F[A], b: B) => laws.invariantMonoidalLeftIdentity(fa, b)),
-        "invariant monoidal right identity" -> forAll((fa: F[A], b: B) => laws.invariantMonoidalRightIdentity(fa, b)),
+        "invariant monoidal left identity" -> forAll((fa: F[A]) => laws.invariantMonoidalLeftIdentity(fa)),
+        "invariant monoidal right identity" -> forAll((fa: F[A]) => laws.invariantMonoidalRightIdentity(fa)),
         "invariant monoidal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) => laws.invariantMonoidalAssociativity(fa, fb, fc))
       )
     }
