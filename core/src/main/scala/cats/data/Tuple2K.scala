@@ -145,7 +145,7 @@ private[data] sealed trait Tuple2KContravariant[F[_], G[_]] extends Contravarian
 private[data] sealed trait Tuple2KContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] {
   def F: ContravariantMonoidal[F]
   def G: ContravariantMonoidal[G]
-  def unit[A]: Tuple2K[F, G, A] = Tuple2K(F.unit, G.unit)
+  def unit: Tuple2K[F, G, Unit] = Tuple2K(F.unit, G.unit)
   def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
     Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
   def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] =

@@ -14,7 +14,9 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
-@typeclass trait Applicative[F[_]] extends Apply[F] { self =>
+@typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
+
+
 
   /**
    * `pure` lifts any value into the Applicative Functor.
@@ -184,6 +186,7 @@ import simulacrum.typeclass
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
     if (cond) void(f) else pure(())
+
 }
 
 object Applicative {

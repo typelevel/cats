@@ -125,7 +125,7 @@ private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]] extends
   def F: Applicative[F]
   def G: ContravariantMonoidal[G]
 
-  override def unit[A]: F[G[A]] = F.pure(G.unit)
+  override def unit: F[G[Unit]] = F.pure(G.unit)
 
   override def contramap[A, B](fa: F[G[A]])(f: B => A): F[G[B]] =
     F.map(fa)(G.contramap(_)(f))
@@ -140,6 +140,18 @@ private[cats] trait ComposedSemigroupal[F[_], G[_]] extends ContravariantSemigro
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
     F.contramap(F.product(fa, fb)) { g: G[(A, B)] =>
+      (G.map(g)(_._1), G.map(g)(_._2))
+    }
+}
+
+private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]] extends InvariantSemigroupal[λ[α => F[G[α]]]] with ComposedInvariantCovariant[F, G] { outer =>
+  def F: InvariantSemigroupal[F]
+  def G: Apply[G]
+
+  def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
+    F.imap(F.product(fa, fb)) { case (ga, gb) =>
+      G.map2(ga, gb)(_ -> _)
+    } { g: G[(A, B)] =>
       (G.map(g)(_._1), G.map(g)(_._2))
     }
 }

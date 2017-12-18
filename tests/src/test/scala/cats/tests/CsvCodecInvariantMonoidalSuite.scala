@@ -6,6 +6,7 @@ import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
 import cats.instances.all._
 import cats.syntax.apply._
 import cats.Eq
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
 
 object CsvCodecInvariantMonoidalSuite {
@@ -30,9 +31,9 @@ object CsvCodecInvariantMonoidalSuite {
     // In tut/invariantmonoidal.md pure, product and imap are defined in
     // their own trait to be introduced one by one,
     trait CCPure {
-      def pure[A](a: A): CsvCodec[A] = new CsvCodec[A] {
-        def read(s: CSV): (Option[A], CSV) = (Some(a), s)
-        def write(a: A): CSV = List.empty
+      def unit: CsvCodec[Unit] = new CsvCodec[Unit] {
+        def read(s: CSV): (Option[Unit], CSV) = (Some(()), s)
+        def write(a: Unit): CSV = List.empty
       }
     }
 
@@ -92,4 +93,14 @@ class CsvCodecInvariantMonoidalSuite extends CatsSuite {
 
   checkAll("InvariantMonoidal[CsvCodec]", InvariantMonoidalTests[CsvCodec].invariantMonoidal[Int, Int, Int])
   checkAll("InvariantMonoidal[CsvCodec]", SerializableTests.serializable(InvariantMonoidal[CsvCodec]))
+
+  {
+    implicit val csvMonoid = InvariantMonoidal.monoid[CsvCodec, Int]
+    checkAll("InvariantMonoidal[CsvCodec].monoid", MonoidTests[CsvCodec[Int]].monoid)
+  }
+
+  {
+    implicit val csvSemigroup = InvariantSemigroupal.semigroup[CsvCodec, Int]
+    checkAll("InvariantSemigroupal[CsvCodec].semigroup", SemigroupTests[CsvCodec[Int]].semigroup)
+  }
 }

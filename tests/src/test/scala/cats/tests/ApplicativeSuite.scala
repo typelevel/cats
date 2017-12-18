@@ -2,9 +2,11 @@ package cats
 package tests
 
 import cats.Applicative
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.data.{Validated, Const}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.CoflatMapTests
+
 
 
 class ApplicativeSuite extends CatsSuite {
@@ -39,14 +41,27 @@ class ApplicativeSuite extends CatsSuite {
     }
   }
 
-  implicit val listwrapperApplicative = ListWrapper.applicative
-  implicit val listwrapperCoflatMap = Applicative.coflatMap[ListWrapper]
-  checkAll("Applicative[ListWrapper].coflatMap", CoflatMapTests[ListWrapper].coflatMap[String, String, String])
+  {
+    implicit val listwrapperApplicative = ListWrapper.applicative
+    implicit val listwrapperMonoid = Applicative.monoid[ListWrapper, Int]
+    checkAll("Applicative[ListWrapper].monoid", MonoidTests[ListWrapper[Int]].monoid)
+  }
 
-  implicit val validatedCoflatMap = Applicative.coflatMap[Validated[String, ?]]
-  checkAll("Applicative[Validated].coflatMap", CoflatMapTests[Validated[String, ?]].coflatMap[String, String, String])
+  {
+    implicit val listwrapperApply = ListWrapper.applyInstance
+    implicit val listwrapperSemigroup = Apply.semigroup[ListWrapper, Int]
+    checkAll("Apply[ListWrapper].semigroup", SemigroupTests[ListWrapper[Int]].semigroup)
+  }
+  {
+    implicit val listwrapperApplicative = ListWrapper.applicative
+    implicit val listwrapperCoflatMap = Applicative.coflatMap[ListWrapper]
+    checkAll("Applicative[ListWrapper].coflatMap", CoflatMapTests[ListWrapper].coflatMap[String, String, String])
 
-  implicit val constCoflatMap = Applicative.coflatMap[Const[String, ?]]
-  checkAll("Applicative[Const].coflatMap", CoflatMapTests[Const[String, ?]].coflatMap[String, String, String])
+    implicit val validatedCoflatMap = Applicative.coflatMap[Validated[String, ?]]
+    checkAll("Applicative[Validated].coflatMap", CoflatMapTests[Validated[String, ?]].coflatMap[String, String, String])
+
+    implicit val constCoflatMap = Applicative.coflatMap[Const[String, ?]]
+    checkAll("Applicative[Const].coflatMap", CoflatMapTests[Const[String, ?]].coflatMap[String, String, String])
+  }
 
 }

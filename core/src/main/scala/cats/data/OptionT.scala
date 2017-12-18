@@ -300,7 +300,7 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {
   def F: ContravariantMonoidal[F]
 
-  override def unit[A]: OptionT[F, A] = OptionT (F.unit)
+  override def unit: OptionT[F, Unit] = OptionT(F.trivial)
 
   override def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
     OptionT(F.contramap(fa.value)(_ map f))

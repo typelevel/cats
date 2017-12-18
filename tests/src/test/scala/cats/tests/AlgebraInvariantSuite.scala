@@ -4,7 +4,7 @@ package tests
 import cats.Invariant
 import cats.kernel._
 import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
-import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests, SemigroupalTests}
+import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests, InvariantSemigroupalTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -61,10 +61,10 @@ class AlgebraInvariantSuite extends CatsSuite {
 
 
 
-  checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].pure(0)).semigroup)
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].pure(0)).commutativeSemigroup)
+  checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
+  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
 
-  checkAll("Semigroupal[Monoid]", SemigroupalTests[Monoid].semigroupal[Int, Int, Int])
+  checkAll("InvariantSemigroupal[Monoid]", InvariantSemigroupalTests[Monoid].invariantSemigroupal[Int, Int, Int])
 
 
   {

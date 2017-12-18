@@ -46,7 +46,7 @@ private[instances] sealed trait Function0Instances0 {
 private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
     new ContravariantMonoidal[? => R] {
-      def unit[A]: A => R = Function.const(Monoid[R].empty)
+      def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
         fa compose f
       def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
