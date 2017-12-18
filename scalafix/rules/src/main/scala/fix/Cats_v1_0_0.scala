@@ -242,6 +242,23 @@ case class RenameTransformersLift(index: SemanticdbIndex)
 
 }
 
+case class RenameApplyApConst(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameApplyApConst") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.Apply.forEffect." -> "productL",
+      "_root_.cats.Apply.followedBy." -> "productR",
+      "_root_.cats.Apply.Ops.forEffect." -> "productL",
+      "_root_.cats.Apply.Ops.followedBy." -> "productR",
+      "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
+      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
+      "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
+      "_root_.cats.FlatMap.followedByEval." -> "productREval",
+    )
+
+}
+
 
 // ref: https://github.com/typelevel/cats/pull/1961
 case class RenameCartesian(index: SemanticdbIndex)

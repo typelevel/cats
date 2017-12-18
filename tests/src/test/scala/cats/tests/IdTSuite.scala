@@ -5,10 +5,17 @@ import cats.data.{Const, IdT, NonEmptyList}
 import cats.kernel.laws.discipline.{OrderTests, EqTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import Helpers.CSemi
 
 class IdTSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
+
+  checkAll("IdT[(CSemi, ?), Int]", CommutativeFlatMapTests[IdT[(CSemi, ?), ?]].commutativeFlatMap[Int, Int, Int])
+  checkAll("CommutativeFlatMap[IdT[(CSemi, ?), ?]]", SerializableTests.serializable(CommutativeFlatMap[IdT[(CSemi, ?), ?]]))
+
+  checkAll("IdT[Option, Int]", CommutativeMonadTests[IdT[Option, ?]].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[IdT[Option, ?]]", SerializableTests.serializable(CommutativeMonad[IdT[Option, ?]]))
 
   {
     implicit val F = ListWrapper.eqv[Option[Int]]

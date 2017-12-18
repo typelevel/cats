@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import simulacrum.noop
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
@@ -38,13 +39,10 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    */
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
-  override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
-    ap(map(fa)(a => (b: B) => (a, b)))(fb)
-
   /**
    * Compose two actions, discarding any value produced by the first.
    *
-   * @see [[forEffect]] to discard the value of the second instead.
+   * @see [[productL]] to discard the value of the second instead.
    *
    * Example:
    * {{{
@@ -59,31 +57,27 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * scala> val invalidInt: ErrOr[Int] = Invalid("Invalid int.")
    * scala> val invalidBool: ErrOr[Boolean] = Invalid("Invalid boolean.")
    *
-   * scala> Apply[ErrOr].followedBy(validInt)(validBool)
+   * scala> Apply[ErrOr].productR(validInt)(validBool)
    * res0: ErrOr[Boolean] = Valid(true)
    *
-   * scala> Apply[ErrOr].followedBy(invalidInt)(validBool)
+   * scala> Apply[ErrOr].productR(invalidInt)(validBool)
    * res1: ErrOr[Boolean] = Invalid(Invalid int.)
    *
-   * scala> Apply[ErrOr].followedBy(validInt)(invalidBool)
+   * scala> Apply[ErrOr].productR(validInt)(invalidBool)
    * res2: ErrOr[Boolean] = Invalid(Invalid boolean.)
    *
-   * scala> Apply[ErrOr].followedBy(invalidInt)(invalidBool)
+   * scala> Apply[ErrOr].productR(invalidInt)(invalidBool)
    * res3: ErrOr[Boolean] = Invalid(Invalid int.Invalid boolean.)
    * }}}
    *
    */
-  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+  def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     map2(fa, fb)((_, b) => b)
-
-  /** Alias for [[followedBy]]. */
-  @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
-    followedBy(fa)(fb)
 
   /**
    * Compose two actions, discarding any value produced by the second.
    *
-   * @see [[followedBy]] to discard the value of the first instead.
+   * @see [[productR]] to discard the value of the first instead.
    *
    * Example:
    * {{{
@@ -98,25 +92,46 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * scala> val invalidInt: ErrOr[Int] = Invalid("Invalid int.")
    * scala> val invalidBool: ErrOr[Boolean] = Invalid("Invalid boolean.")
    *
-   * scala> Apply[ErrOr].forEffect(validInt)(validBool)
+   * scala> Apply[ErrOr].productL(validInt)(validBool)
    * res0: ErrOr[Int] = Valid(3)
    *
-   * scala> Apply[ErrOr].forEffect(invalidInt)(validBool)
+   * scala> Apply[ErrOr].productL(invalidInt)(validBool)
    * res1: ErrOr[Int] = Invalid(Invalid int.)
    *
-   * scala> Apply[ErrOr].forEffect(validInt)(invalidBool)
+   * scala> Apply[ErrOr].productL(validInt)(invalidBool)
    * res2: ErrOr[Int] = Invalid(Invalid boolean.)
    *
-   * scala> Apply[ErrOr].forEffect(invalidInt)(invalidBool)
+   * scala> Apply[ErrOr].productL(invalidInt)(invalidBool)
    * res3: ErrOr[Int] = Invalid(Invalid int.Invalid boolean.)
    * }}}
    */
-  def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+  def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
     map2(fa, fb)((a, _) => a)
 
-  /** Alias for [[forEffect]]. */
+  override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
+    ap(map(fa)(a => (b: B) => (a, b)))(fb)
+
+  /** Alias for [[ap]]. */
+  @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
+    ap(ff)(fa)
+
+  /** Alias for [[productR]]. */
+  @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
+    productR(fa)(fb)
+
+  /** Alias for [[productL]]. */
   @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
-    forEffect(fa)(fb)
+    productL(fa)(fb)
+
+  /** Alias for [[productR]]. */
+  @deprecated("Use *> or apR instead.", "1.0.0-RC2")
+  @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+    productR(fa)(fb)
+
+  /** Alias for [[productL]]. */
+  @deprecated("Use <* or apL instead.", "1.0.0-RC2")
+  @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+    productL(fa)(fb)
 
   /**
    * ap2 is a binary version of ap, defined in terms of ap.
@@ -152,7 +167,7 @@ trait Apply[F[_]] extends Functor[F] with Semigroupal[F] with ApplyArityFunction
    * }}}
    */
   def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
-    map(product(fa, fb)) { case (a, b) => f(a, b) }
+    map(product(fa, fb))(f.tupled)
 
   /**
    * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
