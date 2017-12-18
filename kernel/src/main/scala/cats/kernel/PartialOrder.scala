@@ -154,8 +154,9 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
       def partialCompare(x: A, y: A) = f(x, y)
     }
 
-  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] = from[A] { (a, b) =>
-    ev.tryCompare(a, b).fold(Double.NaN)(_.toDouble)
+  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] = new PartialOrder[A] {
+    def partialCompare(x: A, y: A): Double =
+      ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
   }
 }
 
