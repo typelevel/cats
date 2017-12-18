@@ -247,14 +247,14 @@ case class RenameApplyApConst(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
-      "_root_.cats.Apply.forEffect." -> "apL",
-      "_root_.cats.Apply.followedBy." -> "apR",
-      "_root_.cats.Apply.Ops.forEffect." -> "apL",
-      "_root_.cats.Apply.Ops.followedBy." -> "apR",
-      "_root_.cats.NonEmptyParallel.parForEffect." -> "parApL",
-      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parApR",
-      "_root_.cats.FlatMap.forEffectEval." -> "apLEval",
-      "_root_.cats.FlatMap.followedByEval." -> "apREval",
+      "_root_.cats.Apply.forEffect." -> "productL",
+      "_root_.cats.Apply.followedBy." -> "productR",
+      "_root_.cats.Apply.Ops.forEffect." -> "productL",
+      "_root_.cats.Apply.Ops.followedBy." -> "productR",
+      "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
+      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
+      "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
+      "_root_.cats.FlatMap.followedByEval." -> "productREval",
     )
 
 }
