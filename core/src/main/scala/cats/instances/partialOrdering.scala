@@ -2,8 +2,8 @@ package cats
 package instances
 
 trait PartialOrderingInstances {
-  implicit val catsContravariantSemigroupalForPartialOrdering: ContravariantSemigroupal[PartialOrdering] =
-    new ContravariantSemigroupal[PartialOrdering] {
+  implicit val catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
+    new ContravariantMonoidal[PartialOrdering] {
       /** Derive a `PartialOrdering` for `B` given a `PartialOrdering[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
@@ -24,5 +24,7 @@ trait PartialOrderingInstances {
               case option => option
             }
         }
+
+      def unit: PartialOrdering[Unit] = cats.instances.unit.catsKernelStdOrderForUnit.toOrdering
     }
 }

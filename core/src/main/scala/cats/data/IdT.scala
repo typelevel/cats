@@ -76,7 +76,7 @@ private[data] sealed trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] w
 private[data] sealed trait IdTContravariantMonoidal[F[_]] extends ContravariantMonoidal[IdT[F, ?]] {
   implicit val F0: ContravariantMonoidal[F]
 
-  override def unit[A]: IdT[F, A] = IdT(F0.unit[A])
+  override def unit: IdT[F, Unit] = IdT(F0.unit)
 
   override def contramap[A, B](fa: IdT[F, A])(f: B => A): IdT[F, B] =
     IdT(F0.contramap(fa.value)(f))

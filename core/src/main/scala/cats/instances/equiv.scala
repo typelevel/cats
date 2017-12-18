@@ -8,8 +8,8 @@ trait EquivInstances {
        * Defaults to trivially contracting the type
        * to a point
        */
-      def unit[A]: Equiv[A] = new Equiv[A] {
-        def equiv(x: A, y: A): Boolean = true
+      def unit: Equiv[Unit] = new Equiv[Unit] {
+        def equiv(x: Unit, y: Unit): Boolean = true
       }
 
       /** Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.

@@ -66,7 +66,7 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
   }
 
   implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, ?]] = new ContravariantMonoidal[Const[D, ?]] {
-    override def unit[A] = Const.empty[D, A]
+    override def unit = Const.empty[D, Unit]
     override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
       fa.retag[B]
     override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
@@ -135,16 +135,6 @@ private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
 }
 
 private[data] sealed abstract class ConstInstances1 {
-  implicit def catsConstInvariantMonoidal[C: Monoid]: InvariantMonoidal[Const[C, ?]] = new InvariantMonoidal[Const[C, ?]] {
-    def pure[A](a: A): Const[C, A] =
-      Const.empty
-
-    def imap[A, B](fa: Const[C, A])(f: A => B)(g: B => A): Const[C, B] =
-      fa.retag[B]
-
-    def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
-      fa.retag[(A, B)] combine fb.retag[(A, B)]
-  }
 
   implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
     def eqv(x: Const[A, B], y: Const[A, B]): Boolean =

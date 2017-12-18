@@ -31,7 +31,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
   test("FreeInvariantMonoidal#fold") {
     val n = 2
     val i1 = numericSystemCodec(8)
-    val i2 = InvariantMonoidal[CsvCodec].pure(n)
+    val i2 = InvariantMonoidal[CsvCodec].point(n)
     val iExpr = i1.product(i2.imap(_ * 2)(_ / 2))
 
     val f1 = FreeInvariantMonoidal.lift[CsvCodec, Int](i1)
@@ -44,7 +44,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
   implicit val idIsInvariantMonoidal: InvariantMonoidal[Id] = new InvariantMonoidal[Id] {
     def product[A, B](fa: Id[A], fb: Id[B]): Id[(A, B)] = fa -> fb
     def imap[A, B](fa: Id[A])(f: A => B)(g: B => A): Id[B] = f(fa)
-    def pure[A](a: A): Id[A] = a
+    def unit: Id[Unit] = ()
   }
 
   test("FreeInvariantMonoidal#compile") {

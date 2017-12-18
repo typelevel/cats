@@ -8,7 +8,7 @@ trait EqInstances extends kernel.instances.EqInstances {
        * Defaults to the trivial equivalence relation
        * contracting the type to a point
        */
-      def unit[A]: Eq[A] = Eq.allEqual
+      def unit: Eq[Unit] = Eq.allEqual
 
       /** Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
        *

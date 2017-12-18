@@ -2,7 +2,10 @@ package cats
 package tests
 
 import Helpers.Ord
-import cats.kernel.laws.discipline.OrderTests
+import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
+import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 
 class OrderSuite extends CatsSuite {
   {
@@ -15,6 +18,9 @@ class OrderSuite extends CatsSuite {
   checkAll("Double", OrderTests[Double].order)
   checkAll("Float", OrderTests[Float].order)
   checkAll("Long", OrderTests[Long].order)
+
+  checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
 
   test("order ops syntax"){
     forAll { (i: Ord, j: Ord) =>

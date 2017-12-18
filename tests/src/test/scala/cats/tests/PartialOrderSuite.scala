@@ -2,7 +2,11 @@ package cats
 package tests
 
 import Helpers.POrd
+import cats.kernel.laws.discipline.SerializableTests
+import cats.laws.discipline.ContravariantMonoidalTests
 import org.scalatest.Assertion
+import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 
 class PartialOrderSuite extends CatsSuite {
 
@@ -18,6 +22,9 @@ class PartialOrderSuite extends CatsSuite {
     Invariant[PartialOrder]
     Contravariant[PartialOrder]
   }
+
+  checkAll("PartialOrder[Int]", ContravariantMonoidalTests[PartialOrder].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[PartialOrder]", SerializableTests.serializable(ContravariantMonoidal[PartialOrder]))
 
   test("companion object syntax") {
     forAll { (i: Int, j: Int) =>
