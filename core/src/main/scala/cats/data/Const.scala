@@ -135,16 +135,6 @@ private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
 }
 
 private[data] sealed abstract class ConstInstances1 {
-  implicit def catsConstInvariantMonoidal[C: Monoid]: InvariantMonoidal[Const[C, ?]] = new InvariantMonoidal[Const[C, ?]] {
-    def unit: Const[C, Unit] =
-      Const.empty
-
-    def imap[A, B](fa: Const[C, A])(f: A => B)(g: B => A): Const[C, B] =
-      fa.retag[B]
-
-    def product[A, B](fa: Const[C, A], fb: Const[C, B]): Const[C, (A, B)] =
-      fa.retag[(A, B)] combine fb.retag[(A, B)]
-  }
 
   implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
     def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
