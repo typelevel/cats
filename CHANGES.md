@@ -7,6 +7,7 @@
 * [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
 * [#2033](https://github.com/typelevel/cats/pull/2033) standardise on `liftF` and add `liftK` to transformers by @SystemFw
 * [#2083](https://github.com/typelevel/cats/pull/2083) Change forEffect/followedBy to productL/productR by @Jacoby6000
+* [#2088](https://github.com/typelevel/cats/pull/2088) Add `InvariantSemigroupal` and `ability` to turn `Monoidal`s to `Monoid`s by @LukaJCB
 
 ### New features / enhancements (API, instances, data types, etc.):
 
@@ -38,6 +39,8 @@
 * [#2105](https://github.com/typelevel/cats/pull/2105) Some Kleisli instance cleanup by @ceedubs
 * [#2110](https://github.com/typelevel/cats/pull/2110) add `Comparison` to `cats` package by @kailuowang
 * [#2112](https://github.com/typelevel/cats/pull/2112) CoflatMap Instance for Applicative by @ChristopherDavenport
+* [#2116](https://github.com/typelevel/cats/pull/2116) conversion `PartialOrder` to `PartialOrdering` and `Hash` to `Hashing`  by @kailuowang
+* [#2100](https://github.com/typelevel/cats/pull/2100) Add `comparison` method in `Order` companion object by @ceedubs
 
 
 ### Bug fixes:
@@ -78,6 +81,7 @@
 * [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
 * [#2065](https://github.com/typelevel/cats/pull/2065) improve build by not displaying each success test by @kailuowang
 * [#2106](https://github.com/typelevel/cats/pull/2106) Update to latest patch versions of scala by @ceedubs
+* [#2114](https://github.com/typelevel/cats/pull/2114) sbt-coursier 1.0.0 by @sullis
 
 ### Testing improvements
 
