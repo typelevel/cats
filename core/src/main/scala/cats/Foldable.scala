@@ -578,6 +578,15 @@ import Foldable.sentinel
 
   override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
     foldMap(fa)(f)
+
+  def contains[A](fa: F[A])(v: A)(implicit ev: Eq[A]): Boolean =
+    exists(fa)(ev.eqv(_, v))
+
+  def foldSmash[A](fa: F[A])(prefix: A, delim: A, suffix: A)(implicit M: Monoid[A]): A =
+    M.combine(prefix, M.combine(intercalate(fa, delim), suffix))
+
+  def mkString[A: Monoid](fa: F[A])(prefix: String, delim: String, suffix: String)(implicit F: Functor[F], S: Show[A], ev1: Monoid[String]): String =
+    foldSmash(F.map(fa)(S.show))(prefix, delim, suffix)
 }
 
 object Foldable {

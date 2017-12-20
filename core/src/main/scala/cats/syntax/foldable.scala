@@ -33,4 +33,14 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   def foldr[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(fa, b)(f)
+
+  def contains(v: A)(implicit F: Foldable[F], ev: Eq[A]): Boolean =
+    F.contains(fa)(v)
+
+  def foldSmash(prefix: A, delim: A, suffix: A)(implicit F: Foldable[F], ev: Monoid[A]): A =
+    F.foldSmash(fa)(prefix, delim, suffix)
+
+  def mkString(prefix: String, delim: String, suffix: String)
+              (implicit F: Foldable[F], ev1: Functor[F], ev2: Show[A], ev3: Monoid[A], ev4: Monoid[String]): String =
+    F.mkString(fa)(prefix, delim, suffix)
 }
