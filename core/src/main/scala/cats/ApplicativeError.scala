@@ -20,7 +20,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * // integer-rounded division
    * scala> def divide[F[_]](dividend: Int, divisor: Int)(implicit F: ApplicativeError[F, String]): F[Int] =
-   *      | if (divisor === 0) F.raiseError(s"division by zero: $dividend / 0")
+   *      | if (divisor === 0) F.raiseError("division by zero")
    *      | else F.pure(dividend / divisor)
    *
    * scala> type ErrorOr[A] = Either[String, A]
@@ -29,7 +29,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * res0: ErrorOr[Int] = Right(2)
    *
    * scala> divide[ErrorOr](6, 0)
-   * res1: ErrorOr[Int] = Left(division by zero: 6 / 0)
+   * res1: ErrorOr[Int] = Left(division by zero)
    * }}}
    */
   def raiseError[A](e: E): F[A]
