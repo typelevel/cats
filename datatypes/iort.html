@@ -1,0 +1,285 @@
+<html><head><title>Cats</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/kazari-style.css" /><link rel="stylesheet" href="/cats/css/monokai.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>               <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class=" active ">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="iort">IorT</h1>
+
+<p><code class="highlighter-rouge">IorT[F[_], A, B]</code> is a light wrapper on an <code class="highlighter-rouge">F[Ior[A, B]]</code>. Similar to
+<code class="highlighter-rouge">OptionT[F[_], A]</code> and <code class="highlighter-rouge">EitherT[F[_], A, B]</code>, it is a monad transformer for
+<code class="highlighter-rouge">Ior</code>, that can be more convenient to work with than using <code class="highlighter-rouge">F[Ior[A, B]]</code>
+directly.</p>
+
+<h2 id="the-boilerplate">The boilerplate</h2>
+
+<p>Consider the following program that uses <code class="highlighter-rouge">Ior</code> to propagate log messages when
+validating an address:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Ior</span>
+<span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span> <span class="nc">NonEmptyList</span> <span class="k">=&gt;</span> <span class="nc">Nel</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">}</span>
+
+<span class="k">type</span> <span class="kt">Logs</span> <span class="o">=</span> <span class="nc">Nel</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
+
+<span class="k">def</span> <span class="n">parseNumber</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">Try</span><span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="n">trim</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">number</span><span class="o">)</span> <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">number</span><span class="o">))</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is non-positive number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+  <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">parseStreet</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="n">trim</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span>
+    <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a street"</span><span class="o">))</span>
+  <span class="k">else</span>
+    <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">input</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="n">numberToString</span><span class="o">(</span><span class="n">number</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="n">number</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="n">toString</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"used default address number"</span><span class="o">),</span> <span class="s">"n/a"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">addressProgram</span><span class="o">(</span><span class="n">numberInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">number</span> <span class="k">&lt;-</span> <span class="n">parseNumber</span><span class="o">(</span><span class="n">numberInput</span><span class="o">)</span>
+    <span class="n">street</span> <span class="k">&lt;-</span> <span class="n">parseStreet</span><span class="o">(</span><span class="n">streetInput</span><span class="o">)</span>
+    <span class="n">sNumber</span> <span class="k">&lt;-</span> <span class="n">numberToString</span><span class="o">(</span><span class="n">number</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">s</span><span class="s">"$sNumber, $street"</span>
+</code></pre>
+</div>
+
+<p>Due to the monadic nature of <code class="highlighter-rouge">Ior</code> combining the results of <code class="highlighter-rouge">parseNumber</code>,
+<code class="highlighter-rouge">parseStreet</code>, and <code class="highlighter-rouge">numberToString</code> can be as concise as a for-comprehension.
+As the following examples demonstrate, log messages of the different processing
+steps are combined when using <code class="highlighter-rouge">flatMap</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">addressProgram</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
+<span class="c1">// res5: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
+</span>
+<span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
+<span class="c1">// res6: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+</span>
+<span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+<span class="c1">// res7: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+</span></code></pre>
+</div>
+
+<p>Suppose <code class="highlighter-rouge">parseNumber</code>, <code class="highlighter-rouge">parseStreet</code>, and <code class="highlighter-rouge">numberToString</code> are rewritten to be
+asynchronous and return <code class="highlighter-rouge">Future[Ior[Logs, ?]]</code> instead. The for-comprehension
+can no longer be used since <code class="highlighter-rouge">addressProgram</code> must now compose <code class="highlighter-rouge">Future</code> and
+<code class="highlighter-rouge">Ior</code> together, which means that the error handling must be performed
+explicitly to ensure that the proper types are returned:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+
+<span class="k">def</span> <span class="n">parseNumberAsync</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]]</span> <span class="k">=</span>
+  <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">parseNumber</span><span class="o">(</span><span class="n">input</span><span class="o">))</span>
+
+<span class="k">def</span> <span class="n">parseStreetAsync</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">parseStreet</span><span class="o">(</span><span class="n">input</span><span class="o">))</span>
+
+<span class="k">def</span> <span class="n">numberToStringAsync</span><span class="o">(</span><span class="n">number</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">numberToString</span><span class="o">(</span><span class="n">number</span><span class="o">))</span>
+
+<span class="k">def</span> <span class="n">programHelper</span><span class="o">(</span><span class="n">number</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="n">parseStreetAsync</span><span class="o">(</span><span class="n">streetInput</span><span class="o">).</span><span class="n">flatMap</span> <span class="o">{</span> <span class="n">streetIor</span> <span class="k">=&gt;</span>
+    <span class="n">numberToStringAsync</span><span class="o">(</span><span class="n">number</span><span class="o">).</span><span class="n">map</span> <span class="o">{</span> <span class="n">sNumberIor</span> <span class="k">=&gt;</span>
+      <span class="k">for</span> <span class="o">{</span>
+        <span class="n">street</span> <span class="k">&lt;-</span> <span class="n">streetIor</span>
+        <span class="n">sNumber</span> <span class="k">&lt;-</span> <span class="n">sNumberIor</span>
+      <span class="o">}</span> <span class="k">yield</span> <span class="n">s</span><span class="s">"$sNumber, $street"</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">addressProgramAsync</span><span class="o">(</span><span class="n">numberInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="n">parseNumberAsync</span><span class="o">(</span><span class="n">numberInput</span><span class="o">).</span><span class="n">flatMap</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="n">logs</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="n">logs</span><span class="o">))</span>
+    <span class="k">case</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">number</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">programHelper</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="n">streetInput</span><span class="o">)</span>
+    <span class="k">case</span> <span class="n">b</span> <span class="k">@</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="n">number</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">programHelper</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="n">streetInput</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">s</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="o">))</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>To keep some readability the program was split in two parts, otherwise code
+would be repeated. Note that when <code class="highlighter-rouge">parseNumberAsync</code> returns an <code class="highlighter-rouge">Ior.Both</code> it
+is necessary to combine it with the result of <code class="highlighter-rouge">programHelper</code>, otherwise some
+log messages would be lost.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
+<span class="c1">// import scala.concurrent.Await
+</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
+<span class="c1">// import scala.concurrent.duration._
+</span>
+<span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res13: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
+</span>
+<span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res14: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+</span>
+<span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res15: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+</span></code></pre>
+</div>
+
+<h2 id="iort-to-the-rescue">IorT to the rescue</h2>
+
+<p>The program of the previous section can be re-written using <code class="highlighter-rouge">IorT</code> as follows:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.IorT</span>
+
+<span class="k">def</span> <span class="n">addressProgramAsync</span><span class="o">(</span><span class="n">numberInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">number</span> <span class="k">&lt;-</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">parseNumberAsync</span><span class="o">(</span><span class="n">numberInput</span><span class="o">))</span>
+    <span class="n">street</span> <span class="k">&lt;-</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">parseStreetAsync</span><span class="o">(</span><span class="n">streetInput</span><span class="o">))</span>
+    <span class="n">sNumber</span> <span class="k">&lt;-</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">numberToStringAsync</span><span class="o">(</span><span class="n">number</span><span class="o">))</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">s</span><span class="s">"$sNumber, $street"</span>
+</code></pre>
+</div>
+
+<p>This version of <code class="highlighter-rouge">addressProgramAsync</code> is almost as concise as the
+non-asynchronous version. Note that when <code class="highlighter-rouge">F</code> is a monad, then <code class="highlighter-rouge">IorT</code> will also
+form a monad, allowing monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be used in
+composing <code class="highlighter-rouge">IorT</code> values.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res17: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
+</span>
+<span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res18: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+</span>
+<span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<span class="c1">// res19: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+</span></code></pre>
+</div>
+
+<p>Looking back at the implementation of <code class="highlighter-rouge">parseStreet</code> the return type could be
+<code class="highlighter-rouge">Either[Logs, String]</code> instead. Thinking of situations like this, where not all
+the types match, <code class="highlighter-rouge">IorT</code> provides factory methods of <code class="highlighter-rouge">IorT[F, A, B]</code> from:</p>
+<ul>
+  <li><code class="highlighter-rouge">A</code>, <code class="highlighter-rouge">B</code> or both</li>
+  <li><code class="highlighter-rouge">F[A]</code>, <code class="highlighter-rouge">F[B]</code> or both</li>
+  <li><code class="highlighter-rouge">Ior[A, B]</code> or <code class="highlighter-rouge">F[Ior[A, B]]</code></li>
+  <li><code class="highlighter-rouge">Either[A, B]</code> or <code class="highlighter-rouge">F[Either[A, B]]</code></li>
+  <li><code class="highlighter-rouge">Option[B]</code> or <code class="highlighter-rouge">F[Option[B]]</code></li>
+  <li>A <code class="highlighter-rouge">Boolean</code> test</li>
+</ul>
+
+<h2 id="from-a-andor-b-to-iortf-a-b">From <code class="highlighter-rouge">A</code> and/or <code class="highlighter-rouge">B</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>To obtain a left version of <code class="highlighter-rouge">IorT</code> when given an <code class="highlighter-rouge">A</code> use <code class="highlighter-rouge">IorT.leftT</code>. When
+given a <code class="highlighter-rouge">B</code> a right version of <code class="highlighter-rouge">IorT</code> can be obtained with <code class="highlighter-rouge">IorT.rightT</code> (which
+is an alias for <code class="highlighter-rouge">IorT.pure</code>). Given both an <code class="highlighter-rouge">A</code> and a <code class="highlighter-rouge">B</code> use <code class="highlighter-rouge">IorT.bothT</code>.</p>
+
+<p>Note the two styles for providing the <code class="highlighter-rouge">IorT</code> missing type parameters. The first
+three expressions only specify not inferable types, while the last expression
+specifies all types.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">number</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">rightT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span><span class="o">](</span><span class="mi">5</span><span class="o">)</span>
+<span class="c1">// number: cats.data.IorT[Option,String,Int] = IorT(Some(Right(5)))
+</span>
+<span class="k">val</span> <span class="n">error</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">leftT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"Not a number"</span><span class="o">)</span>
+<span class="c1">// error: cats.data.IorT[Option,String,Int] = IorT(Some(Left(Not a number)))
+</span>
+<span class="k">val</span> <span class="n">weirdNumber</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">bothT</span><span class="o">[</span><span class="kt">Option</span><span class="o">](</span><span class="s">"Not positive"</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+<span class="c1">// weirdNumber: cats.data.IorT[Option,String,Int] = IorT(Some(Both(Not positive,-1)))
+</span>
+<span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="c1">// number: cats.data.IorT[Option,String,Int] = IorT(Some(Right(5)))
+</span></code></pre>
+</div>
+
+<h2 id="from-fa-andor-fb-to-iortf-a-b">From <code class="highlighter-rouge">F[A]</code> and/or <code class="highlighter-rouge">F[B]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>Similarly, use <code class="highlighter-rouge">IorT.left</code>, <code class="highlighter-rouge">IorT.right</code>, <code class="highlighter-rouge">IorT.both</code> to convert an <code class="highlighter-rouge">F[A]</code>
+and/or <code class="highlighter-rouge">F[B]</code> into an <code class="highlighter-rouge">IorT</code>. It is also possible to use <code class="highlighter-rouge">IorT.liftF</code> as an
+alias for <code class="highlighter-rouge">IorT.right</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">errorF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">warningF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not positive"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">weirdNumberF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(-</span><span class="mi">1</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">numberF</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="n">errorF</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">weirdNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="n">warningF</span><span class="o">,</span> <span class="n">weirdNumberF</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h2 id="from-iora-b-or-fiora-b-to-iortf-a-b">From <code class="highlighter-rouge">Ior[A, B]</code> or <code class="highlighter-rouge">F[Ior[A, B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>Use <code class="highlighter-rouge">IorT.fromIor</code> to a lift a value of <code class="highlighter-rouge">Ior[A, B]</code> into <code class="highlighter-rouge">IorT[F, A, B]</code>. An
+<code class="highlighter-rouge">F[Ior[A, B]]</code> can be converted into <code class="highlighter-rouge">IorT</code> using the <code class="highlighter-rouge">IorT</code> constructor.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">errorIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">weirdNumberIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="s">"Not positive"</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">numberFIor</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromIor</span><span class="o">(</span><span class="n">numberIor</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromIor</span><span class="o">(</span><span class="n">errorIor</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">weirdNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromIor</span><span class="o">(</span><span class="n">weirdNumberIor</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">numberFIor</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h2 id="from-eithera-b-or-feithera-b-to-iortf-a-b">From <code class="highlighter-rouge">Either[A, B]</code> or <code class="highlighter-rouge">F[Either[A, B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>Use <code class="highlighter-rouge">IorT.fromEither</code> or <code class="highlighter-rouge">IorT.fromEitherF</code> to create a value of
+<code class="highlighter-rouge">IorT[F, A, B]</code> from an <code class="highlighter-rouge">Either[A, B]</code> or a <code class="highlighter-rouge">F[Either[A, B]]</code>, respectively.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberEither</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">errorEither</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">numberFEither</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">numberEither</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">errorEither</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEitherF</span><span class="o">(</span><span class="n">numberFEither</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h2 id="from-optionb-or-foptionb-to-iortf-a-b">From <code class="highlighter-rouge">Option[B]</code> or <code class="highlighter-rouge">F[Option[B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>An <code class="highlighter-rouge">Option[B]</code> or an <code class="highlighter-rouge">F[Option[B]]</code>, along with a default value, can be passed
+to <code class="highlighter-rouge">IorT.fromOption</code> and <code class="highlighter-rouge">IorT.fromOptionF</code>, respectively, to produce an
+<code class="highlighter-rouge">IorT</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+<span class="k">val</span> <span class="n">numberFOption</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">number</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromOption</span><span class="o">[</span><span class="kt">List</span><span class="o">](</span><span class="n">numberOption</span><span class="o">,</span> <span class="s">"Not defined"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">numberF</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromOptionF</span><span class="o">(</span><span class="n">numberFOption</span><span class="o">,</span> <span class="s">"Not defined"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h2 id="creating-an-iortf-a-b-from-a-boolean-test">Creating an <code class="highlighter-rouge">IorT[F, A, B]</code> from a <code class="highlighter-rouge">Boolean</code> test</h2>
+
+<p><code class="highlighter-rouge">IorT.cond</code> allows concise creation of an <code class="highlighter-rouge">IorT[F, A, B]</code> based on a <code class="highlighter-rouge">Boolean</code>
+test, an <code class="highlighter-rouge">A</code> and a <code class="highlighter-rouge">B</code>. Similarly, <code class="highlighter-rouge">IorT.condF</code> uses <code class="highlighter-rouge">F[A]</code> and <code class="highlighter-rouge">F[B]</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">val</span> <span class="n">informedNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span><span class="n">number</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">number</span><span class="o">,</span> <span class="s">"Number is multiple of 10"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">uninformedNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">condF</span><span class="o">(</span><span class="n">number</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">number</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h2 id="extracting-an-fiora-b-from-an-iortf-a-b">Extracting an <code class="highlighter-rouge">F[Ior[A, B]]</code> from an <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
+
+<p>Use the <code class="highlighter-rouge">value</code> method defined on <code class="highlighter-rouge">IorT</code> to retrieve the underlying
+<code class="highlighter-rouge">F[Ior[A, B]]</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">errorT</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">errorT</span><span class="o">.</span><span class="n">value</span>
+</code></pre>
+</div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script><script src="/cats/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
