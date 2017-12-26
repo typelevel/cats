@@ -1,6 +1,16 @@
+## Version 1.0.0
+
+> 2017 Dec 18
+
+### documentations
+[#2121](https://github.com/typelevel/cats/pull/2121) Update deprecations to `product{L,R}` instead of `ap{L,R}`  by @rossabaker
+[#2086](https://github.com/typelevel/cats/pull/2086) Add doctest examples for `Apply` by @ceedubs
+[#2080](https://github.com/typelevel/cats/pull/2080) Add grouping to scaladoc for arity methods by @ceedubs  
+
+
 ## Version 1.0.0-RC2
 
-> 2017 Nov 25
+> 2017 Dec 18
 
 ### Breaking changes and migration
 
