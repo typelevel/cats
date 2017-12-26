@@ -2,7 +2,7 @@
 
 > 2017 Dec 25
 
-### documentations
+### Documentation Improvements/Additions:
 
 * [#2121](https://github.com/typelevel/cats/pull/2121) Update deprecations to `product{L,R}` instead of `ap{L,R}`  by @rossabaker
 * [#2086](https://github.com/typelevel/cats/pull/2086) Add doctest examples for `Apply` by @ceedubs
