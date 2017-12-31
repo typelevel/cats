@@ -1,3 +1,11 @@
+## Version 1.0.1
+
+> 2017 Dec 31
+
+There is zero code change since 1.0.0. This is a release to fix the 1.0.0-MF issue that on Maven 1.0.0-MF is deemed later than 1.0.0. 
+For details see [#2131](https://github.com/typelevel/cats/issues/2131)
+
+
 ## Version 1.0.0
 
 > 2017 Dec 25
