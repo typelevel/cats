@@ -40,7 +40,7 @@ We can now write the functions above against this interface.
 ```tut:book:silent
 def combineAll[A](list: List[A], ma: Monoid[A]): A = list.foldRight(ma.empty)(ma.combine)
 ```
-(And you would invoke this as `val sum = combineAll[Int](mylist, intAdditionMonoid)`.)
+(And you would invoke this as `val sum: Int = combineAll(mylist, intAdditionMonoid)` - given `val mylist: List[Int] = List(1, 2, 3)`, for example.)
 
 ## Hypothetical exercise with subtyping
 The previous definition takes an actual monoid argument instead of doing the usual object-oriented practice of using
@@ -182,8 +182,8 @@ def implicitly[T](implicit e: T): T = e
 def combineAll[A : Monoid](list: List[A]): A =
   list.foldRight(implicitly[Monoid[A]].empty)(implicitly[Monoid[A]].combine)
 ```
-What is happening is that there is implicit `Monoid[A]` bound to combineAll method, and we get the instance calling `implicitly[Monoid[A]]()`.
-Where did the instance come from? Well, compiler either finds the `stringMonoid` instance, or `intAdditionMonoid` instance as appropriate, or auto-generates one on demand, by invoking `Pair.monoidInstance(...)` method because the method is marked *implicit* and will produce a `Monoid[Pair[Int, String]]` when compiler asks.
+What is happening is that there is implicit `Monoid[A]` bound to combineAll method, and we get the instance by calling `implicitly[Monoid[A]]()`.
+Where did the instance come from? Well, compiler either finds the `stringMonoid` instance, or `intAdditionMonoid` instance, as appropriate, or auto-generates one on demand, by invoking `Pair.monoidInstance(...)` method because it's marked *implicit* and will produce a `Monoid[Pair[Int, String]]` when compiler asks.
 
 
 Many libraries that provide type classes often add an utility `apply` method on the companion object of the type
@@ -197,7 +197,12 @@ object Monoid {
 def combineAll[A : Monoid](list: List[A]): A =
   list.foldRight(Monoid[A].empty)(Monoid[A].combine)
 ```
-(For what it's worth - the above syntax is equivalent to fully writing out `def combineAll[A : Monoid](list: List[A]): A = list.foldRight(Monoid.apply[Monoid[A]]().empty)(Monoid.apply[Monoid[A]]().combine`.)
+
+For what it's worth - the above syntax is equivalent to fully writing out:
+```tut:book:silent
+def combineAll[A](list: List[A])(implicit eva: Monoid[A]): A = // 'eva' stands for "evidence of Monoid[A]"
+  list.foldRight(Monoid.apply(eva).empty)(Monoid.apply(eva).combine)
+```
 
 Cats uses [simulacrum][simulacrum] for defining type classes which will auto-generate such an `apply` method.
 
