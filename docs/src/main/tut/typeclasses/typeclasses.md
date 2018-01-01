@@ -203,8 +203,10 @@ For what it's worth - the above syntax is equivalent to fully writing out:
 def combineAll[A](list: List[A])(implicit eva: Monoid[A]): A = // 'eva' stands for "evidence of Monoid[A]"
   list.foldRight(Monoid.apply(eva).empty)(Monoid.apply(eva).combine)
 ```
+(From compiler standpoint `Monoid[A].empty` (having synthetic implicit in scope courtesy of *context bound*) is completely equivalent to `Monoid.apply(eva).empty` - where "eva" was declared manually by us.)
 
 Cats uses [simulacrum][simulacrum] for defining type classes which will auto-generate such an `apply` method.
+As result, you get the `Monoid[A].*method*` syntax everywhere for free!
 
 # Laws
 
