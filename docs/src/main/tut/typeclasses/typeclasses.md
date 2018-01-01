@@ -42,20 +42,26 @@ def combineAll[A](list: List[A], ma: Monoid[A]): A = list.foldRight(ma.empty)(ma
 ```
 (And you would invoke this as `val sum = combineAll[Int](mylist, intAdditionMonoid)`.)
 
-## Type classes vs. subtyping
-The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
+## Hypothetical exercise with subtyping
+The previous definition takes an actual monoid argument instead of doing the usual object-oriented practice of using
 subtype constraints. Let's explore a hypothetical for a bit: could we somehow tell our method how to figure out which monoid instance it should use?
 
 ```tut:book:silent
-// Subtyping
+// require that A mixes in Monoid trait
 def combineAll[A <: Monoid[A]](list: List[A]): A = ???
 ```
 
-Here MA is a subtype constraint: it means when using type `A` elements, we also want make sure there exists Monoid[A] type to go with them.
-But this definition does not meet the mark. In ordßer to seed the `foldRight` with the empty value,
-we need to get a hold of one, but we are given only the type `A`. In previous example, taking `Monoid[A]` as an argument gives us this by calling the
-appropriate `empty` method on it. In this example, with the subtype, the `empty` method should be on a **value** of type
-`Monoid[A]`.
+Here we ask that given `A` should be constrained by uppper type bound: must be subtype of `Monoid[A]`. (A compliant `A` type will mix in the `Monoid` trait).
+
+This definition does not meet the mark.  (Clearly you could not sum up `Int`s together like this.)
+
+But even if we pretend this was OK for a moment, in order to seed the `foldRight` with the appropriate *empty* value,
+we need to get a hold of one.
+
+In previous example, taking `Monoid[A]` as an argument gives us this by calling the
+corresponding `empty` method on it.
+
+In this type upper bound exercise, we can call the corresponding `empty` method on a list element (because `A` is subclass of `Monoid[A]`). But if list is empty we have no values to work with and therefore can’t get the *empty* value. Not to mention the oddity of getting a constant value from a non-static object.
 
 OK, let's go for something else.
 ---
