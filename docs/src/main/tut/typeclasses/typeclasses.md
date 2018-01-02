@@ -43,27 +43,42 @@ def combineAll[A](list: List[A], ma: Monoid[A]): A = list.foldRight(ma.empty)(ma
 (And you would invoke this as `val sum: Int = combineAll(mylist, intAdditionMonoid)` - given `val mylist: List[Int] = List(1, 2, 3)`, for example.)
 
 ## Hypothetical exercise with subtyping
-The previous definition takes an actual monoid argument instead of doing the usual object-oriented practice of using
-subtype constraints. Let's explore a hypothetical for a bit: could we somehow tell our method how to figure out which monoid instance it should use?
+
+The previous definition takes an actual monoid argument instead of doing the usual object-oriented practice of using subtype constraints.
+Let's explore an OO-hypothetical for a bit: could we somehow tell our method how to figure out which monoid instance it should use?
+
+Before we start, let's pretend we have `MyInt` which mixes in the `Monoid` trait but works same as `Int` in all other aspects:
 
 ```tut:book:silent
-// require that A mixes in Monoid trait
+class MyInt extends Monoid[MyInt] {
+  def empty: MyInt = 0
+  def combine(another: MyInt): MyInt = this + another
+
+  // ... (pretend this acts as a regular Int)
+}
+```
+
+Now, having mentioned a type that implements `Monoid` trait, what about `combineAll` signature?
+
+```tut:book:silent
+// require that type A must mix in Monoid trait
 def combineAll[A <: Monoid[A]](list: List[A]): A = ???
 ```
 
-Here we ask that given `A` should be constrained by uppper type bound: must be subtype of `Monoid[A]`. (A compliant `A` type will mix in the `Monoid` trait).
+Here we ask that given `A` should be constrained by uppper type bound: must be subtype of `Monoid[A]`.
+(A compliant `A` type will mix in the `Monoid` trait).
 
-This definition does not meet the mark.  (Clearly you could not sum up `Int`s together like this.)
+This definition does not meet the mark.
 
-But even if we pretend this was OK for a moment, in order to seed the `foldRight` with the appropriate *empty* value,
+Even if we pretend this was OK for a moment, in order to seed the `foldRight` with the appropriate *empty* value,
 we need to get a hold of one.
 
-In previous example, taking `Monoid[A]` as an argument gives us this by calling the
+In the previous `combineAll` example, taking `Monoid[A]` as an argument gives us this by calling the
 corresponding `empty` method on it.
 
-In this type upper bound exercise, we can call the corresponding `empty` method on a list element (because `A` is subclass of `Monoid[A]`). But if list is empty we have no values to work with and therefore can’t get the *empty* value. Not to mention the oddity of getting a constant value from a non-static object.
+But in this type upper bound exercise, we could call the corresponding `empty` method on a list element (because `A` is subclass of `Monoid[A]`). However if list is empty we have no values to work with and therefore can’t get the *empty* value. Not to mention the oddity of getting a constant value from a non-static object.
 
-OK, let's go for something else.
+OK, let's go for something else (and forget the MyInt dead-end idea).
 ---
 
 For another motivating difference, consider the simple pair type.
