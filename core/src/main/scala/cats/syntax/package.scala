@@ -1,7 +1,7 @@
 package cats
 
 package object syntax {
-  object all extends AllSyntax
+  object all extends AllSyntax with TrySyntax
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
@@ -45,6 +45,7 @@ package object syntax {
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
+  object trySyntax extends TrySyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object validated extends ValidatedSyntax
   object vector extends VectorSyntax
