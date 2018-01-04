@@ -1,7 +1,7 @@
 package cats
 
 import simulacrum.typeclass
-import syntax.either._
+
 /**
  * Monad.
  *
@@ -30,7 +30,7 @@ import syntax.either._
           Left(G.combineK(xs, G.pure(bv)))
         }
       },
-      ifFalse = pure(xs.asRight[G[A]])
+      ifFalse = pure(Right(xs))
     ))
   }
 
@@ -76,28 +76,37 @@ import syntax.either._
    * Execute an action repeatedly until its result fails to satisfy the given predicate
    * and return that result, discarding all others.
    */
-  def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] = {
+  def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
-      tailRecM(i) { a =>
-        if (p(a))
-          map(f)(_.asLeft[A])
-        else pure(a.asRight[A])
-      }
+      iterateWhileM(i)(_ => f)(p)
     }
-  }
 
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
    */
-  def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] = {
+  def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
-      tailRecM(i) { a =>
-        if (p(a))
-          pure(a.asRight[A])
-        else map(f)(_.asLeft[A])
-      }
+      iterateUntilM(i)(_ => f)(p)
     }
-  }
+
+  /**
+    * Apply a monadic function iteratively until its result fails
+    * to satisfy the given predicate and return that result.
+    */
+  def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
+    tailRecM(init) { a =>
+      if (p(a))
+        map(f(a))(Left(_))
+      else
+        pure(Right(a))
+    }
+
+  /**
+    * Apply a monadic function iteratively until its result satisfies
+    * the given predicate and return that result.
+    */
+  def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
+    iterateWhileM(init)(f)(!p(_))
 
 }

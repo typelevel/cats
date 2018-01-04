@@ -46,7 +46,7 @@ of a for-comprehension. We can however still use `Applicative` syntax provided b
 ```tut:silent
 import cats.implicits._
 
-val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
+val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && r}
 ```
 
 As it stands, our program is just an instance of a data structure - nothing has happened
@@ -139,7 +139,7 @@ def logValidation[A](validation: Validation[A]): List[String] =
 ```tut:book
 logValidation(prog)
 logValidation(size(5) *> hasNumber *> size(10))
-logValidation((hasNumber |@| size(3)).map(_ || _))
+logValidation((hasNumber, size(3)).mapN(_ || _))
 ```
 
 ### Why not both?
@@ -163,6 +163,105 @@ val prodCompiler: FunctionK[ValidationOp, ValidateAndLog] = parCompiler and logC
 
 val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ```
+
+### The way FreeApplicative#foldMap works
+Despite being an imperative loop, there is a functional intuition behind `FreeApplicative#foldMap`.
+
+The new `FreeApplicative`'s `foldMap` is a sort of mutually-recursive function that operates on an argument stack and a 
+function stack, where the argument stack has type `List[FreeApplicative[F, _]]` and the functions have type `List[Fn[G, _, _]]`.
+`Fn[G[_, _]]` contains a function to be `Ap`'d that has already been translated to the target `Applicative`,
+as well as the number of functions that were `Ap`'d immediately subsequently to it.
+
+#### Main re-association loop
+Pull an argument out of the stack, eagerly remove right-associated `Ap` nodes, by looping on the right and 
+adding the `Ap` nodes' arguments on the left to the argument stack; at the end, pushes a single function to the 
+function stack of the applied functions, the rest of which will be pushed in this loop in later iterations. 
+Once all of the `Ap` nodes on the right are removed, the loop resets to deal with the ones on the left.
+
+Here's an example `FreeApplicative` value to demonstrate the loop's function, at the end of every iteration.
+Every node in the tree is annotated with an identifying number and the concrete type of the node
+(A -> `Ap`, L -> `Lift`, P -> `Pure`), and an apostrophe to denote where `argF` (the current argument) currently
+points; as well the argument and function branches off `Ap` nodes are explicitly denoted.
+
+```
+==> begin.
+           '1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A        3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L     7L
+
+args: Nil
+functions: Nil
+==> loop.
+
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A        '3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L    7L
+
+args: 2A :: Nil
+functions: Nil
+==> loop.
+
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A         3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L   '7L
+
+args: 6L :: 2A :: Nil
+functions: Fn(gab = foldArg(7L), argc = 2) :: Nil
+==> finished.
+```
+
+At the end of the loop the entire right branch of `Ap`s under `argF` has been peeled off into a single curried function,
+all of the arguments to that function are on the argument stack and that function itself is on the function stack,
+annotated with the amount of arguments it takes.
+
+#### Function application loop
+Once `argF` isn't an `Ap` node, a loop runs which pulls functions from the stack until it reaches a curried function,
+in which case it applies the function to `argF` transformed into a `G[Any]` value, and pushes the resulting function
+back to the function stack, before returning to the main loop.
+
+I'll continue the example from before here:
+```
+==> loop.
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A         3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P  '6L    7L
+
+args: 2A :: Nil
+functions: Fn(gab = foldArg(7L) ap foldArg(6L), argc = 1) :: Nil
+==> finished.
+```
+
+At the end of this loop every function on the top of the function stack with `length == 1` (not curried)
+has been applied to a single argument from the argument stack, and the first curried function (`length != 1`)
+on the stack has been applied to a single argument from the argument stack.
+The reason we can't keep applying the curried function to arguments is that the node on top of the argument
+stack *must* be an `Ap` node if the function is curried, so we can't translate it directly to `G[_]`.
+
+Once the last function has been applied to the last argument, the fold has finished and the result is returned.
 
 ## References
 Deeper explanations can be found in this paper [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf)

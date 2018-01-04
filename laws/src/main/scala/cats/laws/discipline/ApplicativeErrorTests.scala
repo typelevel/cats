@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.data.EitherT
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
@@ -15,6 +15,7 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
+    ArbFU: Arbitrary[F[Unit]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbE: Arbitrary[E],
@@ -47,7 +48,9 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
         "applicativeError handleError consistent with recover" -> forAll(laws.handleErrorConsistentWithRecover[A] _),
         "applicativeError recover consistent with recoverWith" -> forAll(laws.recoverConsistentWithRecoverWith[A] _),
         "applicativeError attempt consistent with attemptT" -> forAll(laws.attemptConsistentWithAttemptT[A] _),
-        "applicativeError attempt fromEither consistent with pure" -> forAll(laws.attemptFromEitherConsistentWithPure[A] _)
+        "applicativeError attempt fromEither consistent with pure" -> forAll(laws.attemptFromEitherConsistentWithPure[A] _),
+        "applicativeError onError pure" -> forAll(laws.onErrorPure[A] _),
+        "applicativeError onError raise" -> forAll(laws.onErrorRaise[A] _)
       )
     }
   }

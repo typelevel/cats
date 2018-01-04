@@ -2,7 +2,7 @@ package cats
 package laws
 package discipline
 
-import cats.functor.Contravariant
+import cats.Contravariant
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 

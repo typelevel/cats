@@ -3,19 +3,24 @@ package instances
 
 package object option extends OptionInstances
 
-trait OptionInstances extends OptionInstances1 {
+trait OptionInstances extends OptionInstances0 {
   implicit def catsKernelStdOrderForOption[A: Order]: Order[Option[A]] =
     new OptionOrder[A]
   implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     new OptionMonoid[A]
 }
 
-trait OptionInstances1 extends OptionInstances0 {
+trait OptionInstances0 extends OptionInstances1 {
   implicit def catsKernelStdPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     new OptionPartialOrder[A]
 }
 
-trait OptionInstances0 {
+trait OptionInstances1 extends OptionInstances2 {
+  implicit def catsKernelStdHashForOption[A: Hash]: Hash[Option[A]] =
+    new OptionHash[A]
+}
+
+trait OptionInstances2 {
   implicit def catsKernelStdEqForOption[A: Eq]: Eq[Option[A]] =
     new OptionEq[A]
 }
@@ -44,6 +49,13 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
           case Some(b) => A.partialCompare(a, b)
         }
     }
+}
+
+class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Option[A]] {
+  def hash(x: Option[A]): Int = x match {
+    case None => None.hashCode()
+    case Some(xx) => StaticMethods.product1Hash(A.hash(xx))
+  }
 }
 
 class OptionEq[A](implicit A: Eq[A]) extends Eq[Option[A]] {

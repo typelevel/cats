@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.data.EitherT
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
@@ -14,6 +14,7 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
+    ArbFU: Arbitrary[F[Unit]],
     ArbFAtoB: Arbitrary[F[A => B]],
     ArbFBtoC: Arbitrary[F[B => C]],
     ArbE: Arbitrary[E],
@@ -39,7 +40,10 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
       def props: Seq[(String, Prop)] = Seq(
         "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
         "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
-        "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _)
+        "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _),
+        "monadError adaptError pure" -> forAll(laws.adaptErrorPure[A] _),
+        "monadError adaptError raise" -> forAll(laws.adaptErrorRaise[A] _),
+        "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _)
       )
     }
   }

@@ -5,8 +5,8 @@ import scala.annotation.tailrec
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
-  implicit val catsStdInstancesForOption: TraverseFilter[Option] with MonadError[Option, Unit] with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] =
-    new TraverseFilter[Option] with MonadError[Option, Unit]  with MonadCombine[Option] with Monad[Option] with CoflatMap[Option] with Alternative[Option] {
+  implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] =
+    new Traverse[Option] with MonadError[Option, Unit]  with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -56,20 +56,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa orElse f(())
 
-      def traverseFilter[G[_], A, B](fa: Option[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
-        fa match {
-          case None => G.pure(None)
-          case Some(a) => f(a)
-        }
-
-      override def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
+      def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
         fa match {
           case None => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
-
-      override def filter[A](fa: Option[A])(p: A => Boolean): Option[A] =
-        fa.filter(p)
 
       override def reduceLeftToOption[A, B](fa: Option[A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f)
@@ -116,6 +107,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def isEmpty[A](fa: Option[A]): Boolean =
         fa.isEmpty
+
+      override def collectFirst[A, B](fa: Option[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
     }
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =

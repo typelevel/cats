@@ -1,10 +1,3 @@
----
-layout: page
-title:  "Contributing"
-section: "contributing"
-position: 5
----
-
 # Contributor guide
 
 ## About this document
@@ -184,7 +177,7 @@ run `sbt docs/makeMicrosite`
 
     yum install jekyll
 
-    apt-get install jekyll
+    apt-get install ruby-full; gem install jekyll
 
     gem install jekyll
 

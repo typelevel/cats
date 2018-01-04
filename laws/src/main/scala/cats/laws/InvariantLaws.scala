@@ -1,11 +1,11 @@
 package cats
 package laws
 
-import cats.functor.Invariant
+import cats.Invariant
 import cats.syntax.invariant._
 
 /**
- * Laws that must be obeyed by any `cats.functor.Invariant`.
+ * Laws that must be obeyed by any `cats.Invariant`.
  */
 trait InvariantLaws[F[_]] {
   implicit def F: Invariant[F]

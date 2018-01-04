@@ -79,4 +79,51 @@ object StaticMethods {
     xs.foreach(b ++= _)
     b.result
   }
+
+  // Adapted from scala.util.hashing.MurmurHash#productHash.
+  def product1Hash(_1Hash: Int): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var h = productSeed
+    h = mix(h, _1Hash)
+    finalizeHash(h, 1)
+  }
+
+  // Adapted from scala.util.hashing.MurmurHash#productHash.
+  def product2Hash(_1Hash: Int, _2Hash: Int): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var h = productSeed
+    h = mix(h, _1Hash)
+    h = mix(h, _2Hash)
+    finalizeHash(h, 2)
+  }
+
+  // adapted from [[scala.util.hashing.MurmurHash3]],
+  // but modified standard `Any#hashCode` to `ev.hash`.
+  def listHash[A](x: List[A])(implicit A: Hash[A]): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var n = 0
+    var h = seqSeed
+    var elems = x
+    while (!elems.isEmpty) {
+      val head = elems.head
+      val tail = elems.tail
+      h = mix(h, A.hash(head))
+      n += 1
+      elems = tail
+    }
+    finalizeHash(h, n)
+  }
+
+  // adapted from scala.util.hashing.MurmurHash3
+  def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var n = 0
+    var h = seqSeed
+    xs foreach { x =>
+      h = mix(h, A.hash(x))
+      n += 1
+    }
+    finalizeHash(h, n)
+  }
+
 }

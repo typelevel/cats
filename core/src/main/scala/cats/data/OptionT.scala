@@ -28,6 +28,11 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(value))
+
   def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMap(a => OptionT.liftF(f(a)))
 
@@ -102,9 +107,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def ===(that: OptionT[F, A])(implicit eq: Eq[F[Option[A]]]): Boolean =
     eq.eqv(value, that.value)
-
-  def traverseFilter[G[_], B](f: A => G[Option[B]])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
-    G.map(F.composeFilter(optionInstance).traverseFilter(value)(f))(OptionT.apply)
 
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
     G.map(F.compose(optionInstance).traverse(value)(f))(OptionT.apply)
@@ -196,9 +198,22 @@ object OptionT extends OptionTInstances {
    * Lifts the `F[A]` Functor into an `OptionT[F, A]`.
    */
   def liftF[F[_], A](fa: F[A])(implicit F: Functor[F]): OptionT[F, A] = OptionT(F.map(fa)(Some(_)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._,  implicits._
+   * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, ?]]
+   * scala> val b: EitherT[OptionT[Eval, ?], String, Int] = a.mapK(OptionT.liftK)
+   * scala> b.value.value.value
+   * res0: Option[Either[String,Int]] = Some(Right(1))
+   * }}}
+   */
+  def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, ?] =
+    λ[F ~> OptionT[F, ?]](OptionT.liftF(_))
 }
 
-private[data] sealed trait OptionTInstances extends OptionTInstances0 {
+private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 
@@ -212,12 +227,15 @@ private[data] sealed trait OptionTInstances extends OptionTInstances0 {
     new OptionTOrder[F, A] { implicit val F = F0 }
 
   implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
-    functor.Contravariant[Show].contramap(F)(_.value)
+    Contravariant[Show].contramap(F)(_.value)
 }
 
-private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
+private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
+
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
+    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
   implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
     new OptionTSemigroupK[F] { implicit val F = F0 }
@@ -229,12 +247,7 @@ private[data] sealed trait OptionTInstances0 extends OptionTInstances1 {
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
-  // do NOT change this to val! I know it looks like it should work, and really I agree, but it doesn't (for... reasons)
-  implicit def catsDataMonadTransForOptionT: MonadTrans[OptionT] =
-    new MonadTrans[OptionT] {
-      def liftT[M[_]: Monad, A](ma: M[A]): OptionT[M, A] = OptionT.liftF(ma)
-    }
+private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 {
 
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
@@ -243,23 +256,20 @@ private[data] sealed trait OptionTInstances1 extends OptionTInstances2 {
     new OptionTEq[F, A] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances2 extends OptionTInstances3 {
-  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, ?]] =
-    new OptionTTraverseFilter[F] { implicit val F = F0 }
+private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
+  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
+    new OptionTTraverse[F] { implicit val F = F0 }
 }
 
-private[data] sealed trait OptionTInstances3 {
-  implicit def catsDataFunctorFilterForOptionT[F[_]](implicit F0: Functor[F]): FunctorFilter[OptionT[F, ?]] =
+private[data] sealed abstract class OptionTInstances3 {
+  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
     new OptionTFunctor[F] { implicit val F = F0 }
 }
 
-private[data] trait OptionTFunctor[F[_]] extends FunctorFilter[OptionT[F, ?]] {
+private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
-
-  override def mapFilter[A, B](fa: OptionT[F, A])(f: A => Option[B]): OptionT[F, B] =
-    fa.mapFilter(f)
 }
 
 private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
@@ -287,6 +297,23 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
 }
 
+private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {
+  def F: ContravariantMonoidal[F]
+
+  override def unit: OptionT[F, Unit] = OptionT(F.trivial)
+
+  override def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
+    OptionT(F.contramap(fa.value)(_ map f))
+
+  override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
+    OptionT(F.contramap(F.product(fa.value, fb.value))(
+        (t: Option[(A, B)]) => t match {
+          case Some((x, y)) => (Some(x), Some(y))
+          case None => (None, None)
+        }
+      ))
+}
+
 private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {
   implicit def F: Foldable[F]
 
@@ -297,13 +324,10 @@ private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {
     fa.foldRight(lb)(f)
 }
 
-private[data] sealed trait OptionTTraverseFilter[F[_]] extends TraverseFilter[OptionT[F, ?]] with OptionTFoldable[F] {
+private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]] with OptionTFoldable[F] {
   implicit def F: Traverse[F]
 
-  def traverseFilter[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[Option[B]]): G[OptionT[F, B]] =
-    fa traverseFilter f
-
-  override def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
+  def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
     fa traverse f
 }
 

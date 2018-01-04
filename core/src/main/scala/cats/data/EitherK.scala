@@ -1,13 +1,13 @@
 package cats
 package data
 
+import cats.Contravariant
 import cats.arrow.FunctionK
-import cats.functor.Contravariant
 import cats.syntax.either._
 
-/** `F` on the left and `G` on the right of [[scala.util.Either]].
+/** `F` on the left and `G` on the right of `scala.util.Either`.
  *
- * @param run The underlying [[scala.util.Either]].
+ * @param run The underlying `scala.util.Either`.
  */
 final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 
@@ -15,6 +15,12 @@ final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 
   def map[B](f: A => B)(implicit F: Functor[F], G: Functor[G]): EitherK[F, G, B] =
     EitherK(run.bimap(F.lift(f), G.lift(f)))
+
+  /**
+   * Modify the right side context `G` using transformation `f`.
+   */
+  def mapK[H[_]](f: G ~> H): EitherK[F, H, A] =
+    EitherK(run.map(f.apply))
 
   def coflatMap[B](f: EitherK[F, G, A] => B)(implicit F: CoflatMap[F], G: CoflatMap[G]): EitherK[F, G, B] =
     EitherK(
@@ -234,4 +240,3 @@ private[data] trait EitherKComonad[F[_], G[_]] extends Comonad[EitherK[F, G, ?]]
   def extract[A](p: EitherK[F, G, A]): A =
     p.extract
 }
-

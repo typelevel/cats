@@ -4,7 +4,7 @@ package discipline
 
 import cats.instances.option._
 import cats.instances.long._
-
+import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
 
@@ -21,8 +21,10 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
     EqG: Eq[G[Unit]],
     EqA: Eq[A],
     EqB: Eq[B],
+    EqFA: Eq[F[A]],
     EqOptionA: Eq[Option[A]],
-    MonoidB: Monoid[B]
+    MonoidA: CommutativeMonoid[A],
+    MonoidB: CommutativeMonoid[B]
   ): RuleSet =
     new DefaultRuleSet(
       name = "reducible",
@@ -35,8 +37,8 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
         forAll(laws.reduceRightConsistentWithReduceRightOption[A] _),
       "reduce consistent with reduceLeft" ->
         forAll(laws.reduceReduceLeftConsistent[B] _),
-      "traverse1_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A, B] _),
-      "sequence1_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G, A] _),
+      "nonEmptyTraverse_ consistent with traverse_" -> forAll(laws.traverseConsistent[G, A, B] _),
+      "nonEmptySequence_ consistent with sequence_" -> forAll(laws.sequenceConsistent[G, A] _),
       "size consistent with reduceMap" -> forAll(laws.sizeConsistent[A] _)
     )
 }

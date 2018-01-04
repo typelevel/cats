@@ -4,11 +4,24 @@ import cats.arrow.FunctionK
 import cats.data.EitherK
 
 /**
- * The injection type class as described in "Data types a la carte"
- * (Swierstra 2008).
- *
- * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
- */
+  * InjectK is a type class providing an injection from type
+  * constructor `F` into type constructor `G`. An injection is a
+  * functor transformation `inj` which does not destroy any
+  * information: for every `ga: G[A]` there is at most one `fa: F[A]`
+  * such that `inj(fa) = ga`.
+  *
+  * Because of this all injections admit partial inverses `prj` which
+  * pair a value `ga: G[A]` back with a single value `fa: F[A]`.
+  *
+  * The behavior of the default instances for the InjectK type class
+  * are described thoroughly in "Data types a la carte" (Swierstra
+  * 2008).
+  *
+  * @note Prior to cats 1.0, InjectK was known as [[Inject]].
+  *
+  * @see [[http://www.staff.science.uu.nl/~swier004/publications/2008-jfp.pdf]]
+  * @see [[Inject]] for injection for `Either`
+  */
 abstract class InjectK[F[_], G[_]] {
   def inj: FunctionK[F, G]
 

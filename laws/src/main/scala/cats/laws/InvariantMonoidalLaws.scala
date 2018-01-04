@@ -4,16 +4,16 @@ package laws
 /**
  * Laws that must be obeyed by any `cats.InvariantMonoidal`.
  */
-trait InvariantMonoidalLaws[F[_]] extends InvariantLaws[F] with CartesianLaws[F] {
+trait InvariantMonoidalLaws[F[_]] extends InvariantSemigroupalLaws[F] {
   override implicit def F: InvariantMonoidal[F]
-  import cats.syntax.cartesian._
+  import cats.syntax.semigroupal._
   import cats.syntax.invariant._
 
-  def invariantMonoidalLeftIdentity[A, B](fa: F[A], b: B): IsEq[F[A]] =
-    F.pure(b).product(fa).imap(_._2)(a => (b, a)) <-> fa
+  def invariantMonoidalLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
+    F.unit.product(fa).imap(_._2)(a => ((), a)) <-> fa
 
-  def invariantMonoidalRightIdentity[A, B](fa: F[A], b: B): IsEq[F[A]] =
-    fa.product(F.pure(b)).imap(_._1)(a => (a, b)) <-> fa
+  def invariantMonoidalRightIdentity[A, B](fa: F[A]): IsEq[F[A]] =
+    fa.product(F.unit).imap(_._1)(a => (a, ())) <-> fa
 
   def invariantMonoidalAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]):
     IsEq[F[(A, (B, C))]] =

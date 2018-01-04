@@ -19,6 +19,48 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
   def ensureOr[A](fa: F[A])(error: A => E)(predicate: A => Boolean): F[A] =
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error(a)))
 
+  /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> "error".asLeft[Int].adaptError(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> "err".asLeft[Int].adaptError(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> 1.asRight[String].adaptError(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   */
+  def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
+    flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
+
+  /**
+   * Inverse of `attempt`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Try, Success}
+   *
+   * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new java.lang.Exception))
+   * scala> a.rethrow
+   * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
+   *
+   * scala> val b: Try[Either[Throwable, Int]] = Success(Right(1))
+   * scala> b.rethrow
+   * res1: scala.util.Try[Int] = Success(1)
+   * }}}
+   */
+  def rethrow[A](fa: F[Either[E, A]]): F[A] =
+    flatMap(fa)(_.fold(raiseError, pure))
 }
 
 object MonadError {

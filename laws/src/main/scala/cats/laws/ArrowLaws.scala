@@ -3,14 +3,14 @@ package laws
 
 import cats.arrow.Arrow
 import cats.instances.function._
+import cats.syntax.arrow._
 import cats.syntax.compose._
-import cats.syntax.split._
 import cats.syntax.strong._
 
 /**
  * Laws that must be obeyed by any `cats.arrow.Arrow`.
  */
-trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with SplitLaws[F] with StrongLaws[F] {
+trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with StrongLaws[F] {
   implicit override def F: Arrow[F]
 
   def arrowIdentity[A]: IsEq[F[A, A]] =
@@ -33,6 +33,12 @@ trait ArrowLaws[F[_, _]] extends CategoryLaws[F] with SplitLaws[F] with StrongLa
 
   def arrowAssociation[A, B, C, D](f: F[A, B]): IsEq[F[((A, C), D), (B, (C, D))]] =
     (f.first[C].first[D] andThen F.lift(assoc[B, C, D])) <-> (F.lift(assoc[A, C, D]) andThen f.first[(C, D)])
+
+  def splitConsistentWithAndThen[A, B, C, D](f: F[A, B], g: F[C, D]): IsEq[F[(A, C), (B, D)]] =
+    F.split(f, g) <-> (f.first andThen g.second)
+
+  def mergeConsistentWithAndThen[A, B, C](f: F[A, B], g: F[A, C]): IsEq[F[A, (B, C)]] =
+    F.merge(f, g) <-> ((F.lift((x: A) => (x, x))) andThen F.split(f, g))
 
   private def fst[A, B](p: (A, B)): A = p._1
 

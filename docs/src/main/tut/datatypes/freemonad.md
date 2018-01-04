@@ -520,29 +520,23 @@ final case class ReadLine(prompt : String) extends Teletype[String]
 type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
-/** Smart constructors, notice we are abstracting over any MonadState instance
- *  to potentially support other types beside State
- */
-class TeletypeOps[M[_]](implicit MS : MonadState[M, Log]) {
-  def writeLine(line : String) : TeletypeT[M, Unit] =
-	FreeT.liftF[Teletype, M, Unit](WriteLine(line))
-  def readLine(prompt : String) : TeletypeT[M, String] =
-	FreeT.liftF[Teletype, M, String](ReadLine(prompt))
-  def log(s : String) : TeletypeT[M, Unit] =
-	FreeT.liftT[Teletype, M, Unit](MS.modify(s :: _))
-}
-
-object TeletypeOps {
-  implicit def teleTypeOpsInstance[M[_]](implicit MS : MonadState[M, Log]) : TeletypeOps[M] = new TeletypeOps
-}
-
 type TeletypeState[A] = State[List[String], A]
 
-def program(implicit TO : TeletypeOps[TeletypeState]) : TeletypeT[TeletypeState, Unit] = {
+/** Teletype smart constructors */
+object TeletypeOps {
+  def writeLine(line : String) : TeletypeT[TeletypeState, Unit] =
+	FreeT.liftF[Teletype, TeletypeState, Unit](WriteLine(line))
+  def readLine(prompt : String) : TeletypeT[TeletypeState, String] =
+	FreeT.liftF[Teletype, TeletypeState, String](ReadLine(prompt))
+  def log(s : String) : TeletypeT[TeletypeState, Unit] =
+	FreeT.liftT[Teletype, TeletypeState, Unit](State.modify(s :: _))
+}
+
+def program : TeletypeT[TeletypeState, Unit] = {
   for {
-	userSaid <- TO.readLine("what's up?!")
-	_ <- TO.log(s"user said : $userSaid")
-	_ <- TO.writeLine("thanks, see you soon!")
+	userSaid <- TeletypeOps.readLine("what's up?!")
+	_ <- TeletypeOps.log(s"user said : $userSaid")
+	_ <- TeletypeOps.writeLine("thanks, see you soon!")
   } yield ()
 }
 

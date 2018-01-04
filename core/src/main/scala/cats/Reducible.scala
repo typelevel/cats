@@ -1,7 +1,6 @@
 package cats
 
-import cats.data.NonEmptyList
-
+import cats.data.{Ior, NonEmptyList}
 import simulacrum.typeclass
 
 /**
@@ -127,7 +126,7 @@ import simulacrum.typeclass
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def traverse1_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
 
   /**
@@ -135,9 +134,9 @@ import simulacrum.typeclass
    *
    * This method is similar to [[Foldable.sequence_]] but requires only
    * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
-   * [[traverse1_]] documentation for a description of the differences.
+   * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
-  def sequence1_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
+  def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
@@ -164,18 +163,46 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of("a", "b", "c")
-   * scala> Reducible[NonEmptyList].intercalate1(nel, "-")
+   * scala> Reducible[NonEmptyList].nonEmptyIntercalate(nel, "-")
    * res0: String = a-b-c
-   * scala> Reducible[NonEmptyList].intercalate1(NonEmptyList.of("a"), "-")
+   * scala> Reducible[NonEmptyList].nonEmptyIntercalate(NonEmptyList.of("a"), "-")
    * res1: String = a
    * }}}
    */
-  def intercalate1[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
+  def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
     toNonEmptyList(fa) match {
       case NonEmptyList(hd, Nil) => hd
       case NonEmptyList(hd, tl) =>
         Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
     }
+
+  /**
+    * Partition this Reducible by a separating function `A => Either[B, C]`
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1,2,3,4)
+    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+    * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
+    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
+    * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
+    * }}}
+    */
+  def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+    import cats.syntax.either._
+
+    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] = {
+      eval.map(ior =>
+      (f(a), ior) match {
+        case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+        case (Right(c), _) => ior.map(c :: _)
+        case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+        case (Left(b), _) => ior.leftMap(b :: _)
+      })
+    }
+
+    reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
+  }
 
   override def isEmpty[A](fa: F[A]): Boolean = false
 

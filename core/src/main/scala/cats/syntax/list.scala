@@ -1,6 +1,7 @@
 package cats
 package syntax
 
+import scala.collection.immutable.SortedMap
 import cats.data.NonEmptyList
 
 trait ListSyntax {
@@ -27,6 +28,8 @@ final class ListOps[A](val la: List[A]) extends AnyVal {
     * }}}
     */
   def toNel: Option[NonEmptyList[A]] = NonEmptyList.fromList(la)
-  def groupByNel[B](f: A => B): Map[B, NonEmptyList[A]] =
-    toNel.fold(Map.empty[B, NonEmptyList[A]])(_.groupBy(f))
+  def groupByNel[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
+    implicit val ordering = B.toOrdering
+    toNel.fold(SortedMap.empty[B, NonEmptyList[A]])(_.groupBy(f))
+  }
 }

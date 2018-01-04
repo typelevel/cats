@@ -251,29 +251,26 @@ pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has 
 ## Syntax
 
 Syntax for `Applicative` (or `Apply`) is available under the `cats.implicits._` import. The most
-interesting syntax is focused on composing independent effects - there are two options for this.
+interesting syntax is focused on composing independent effects: it works just like the methods
+for composition we saw above (`map3`, `tuple3`, etc.), but achieves a slightly friendlier syntax
+by enriching Scala's standard tuple types.
 
-The first is the builder syntax which incrementally builds up a collection of effects until a
-function is applied to compose them.
 
-```tut:book:silent
+For example, we've already seen this code for mapping over three options together:
+
+```tut:book
+Applicative[Option].map3(username, password, url)(attemptConnect)
+```
+With the applicative syntax, we can change this to the slightly shorter:
+
+```tut:book
 import cats.implicits._
 
-val o1: Option[Int] = Some(42)
-val o2: Option[String] = Some("hello")
+(username, password, url).mapN(attemptConnect)
 ```
 
-```tut:book
-(o1 |@| o2).map((i: Int, s: String) => i.toString ++ s)
-(o1 |@| o2).tupled
-```
-
-The second expects the effects in a tuple and works by enriching syntax on top of the existing
-`TupleN` types.
-
-```tut:book
-(o1, o2).map2((i: Int, s: String) => i.toString ++ s)
-```
+We don't have to mention the type or specify the number of values we're composing
+together, so there's a little less boilerplate here.
 
 ## Further Reading
 

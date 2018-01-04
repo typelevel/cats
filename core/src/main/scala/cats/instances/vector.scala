@@ -5,10 +5,11 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
+import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] =
-    new TraverseFilter[Vector] with MonadCombine[Vector] with CoflatMap[Vector] {
+  implicit val catsStdInstancesForVector: Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
+    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -21,9 +22,6 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)
-
-      override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
         @tailrec def loop(builder: VectorBuilder[B], as: Vector[A]): Vector[B] =
@@ -43,10 +41,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         Eval.defer(loop(0))
       }
 
-      def traverseFilter[G[_], A, B](fa: Vector[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
-          G.map2Eval(f(a), lgvb)((ob, v) => ob.fold(v)(_ +: v))
-        }.value
+      override def foldMap[A, B](fa: Vector[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
 
       def tailRecM[A, B](a: A)(fn: A => Vector[Either[A, B]]): Vector[B] = {
         val buf = Vector.newBuilder[B]
@@ -81,17 +77,19 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
           G.map2Eval(f(a), lgvb)(_ +: _)
         }.value
 
+      override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
+        fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toVector
+
+      override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
+        fa.zipWithIndex
+
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
 
-      override def filter[A](fa: Vector[A])(f: A => Boolean): Vector[A] = fa.filter(f)
-
-      override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
-
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable.iteratorFoldM(fa.toIterator, z)(f)
+        Foldable[List].foldM(fa.toList, z)(f)
 
       override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
@@ -103,6 +101,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
+
+      override def collectFirst[A, B](fa: Vector[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =

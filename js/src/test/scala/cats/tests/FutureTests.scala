@@ -2,7 +2,7 @@ package cats
 package js
 package tests
 
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
@@ -37,8 +37,9 @@ class FutureTests extends CatsSuite {
       }
     }
 
+
   implicit val throwableEq: Eq[Throwable] =
-    Eq[String].on(_.toString)
+    Eq.by[Throwable, String](_.toString)
 
   implicit val comonad: Comonad[Future] = futureComonad(timeout)
 
@@ -58,8 +59,8 @@ class FutureTests extends CatsSuite {
 
   {
     implicit val F = ListWrapper.semigroup[Int]
-    checkAll("Future[ListWrapper[Int]]", GroupLaws[Future[ListWrapper[Int]]].semigroup)
+    checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
   }
 
-  checkAll("Future[Int]", GroupLaws[Future[Int]].monoid)
+  checkAll("Future[Int]", MonoidLawTests[Future[Int]].monoid)
 }

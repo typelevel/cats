@@ -10,8 +10,27 @@ import scala.util.control.NonFatal
  * This type class allows one to abstract over error-handling applicatives.
  */
 trait ApplicativeError[F[_], E] extends Applicative[F] {
+
   /**
    * Lift an error into the `F` context.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * // integer-rounded division
+   * scala> def divide[F[_]](dividend: Int, divisor: Int)(implicit F: ApplicativeError[F, String]): F[Int] =
+   *      | if (divisor === 0) F.raiseError("division by zero")
+   *      | else F.pure(dividend / divisor)
+   *
+   * scala> type ErrorOr[A] = Either[String, A]
+   *
+   * scala> divide[ErrorOr](6, 3)
+   * res0: ErrorOr[Int] = Right(2)
+   *
+   * scala> divide[ErrorOr](6, 0)
+   * res1: ErrorOr[Int] = Left(division by zero)
+   * }}}
    */
   def raiseError[A](e: E): F[A]
 
@@ -76,6 +95,41 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e =>
       pf applyOrElse(e, raiseError))
+
+  /**
+   * Execute a callback on certain errors, then rethrow them.
+   * Any non matching error is rethrown as well.
+   *
+   * In the following example, only one of the errors is logged,
+   * but they are both rethrown, to be possibly handled by another
+   * layer of the program:
+   *
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> case class Err(msg: String)
+   *
+   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   *
+   * scala> val action: PartialFunction[Err, F[Unit]] = {
+   *      |   case Err("one") => EitherT.liftF(State.set("one"))
+   *      | }
+   *
+   * scala> val prog1: F[Int] = (Err("one")).raiseError[F, Int]
+   * scala> val prog2: F[Int] = (Err("two")).raiseError[F, Int]
+   *
+   * scala> prog1.onError(action).value.run("").value
+
+   * res0: (String, Either[Err,Int]) = (one,Left(Err(one)))
+   *
+   * scala> prog2.onError(action).value.run("").value
+   * res1: (String, Either[Err,Int]) = ("",Left(Err(two)))
+   * }}}
+   */
+  def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
+    handleErrorWith(fa)(e =>
+      (pf andThen (map2(_, raiseError[A](e))((_, b) => b))) applyOrElse(e, raiseError))
+
   /**
    * Often E is Throwable. Here we try to call pure or catch
    * and raise.

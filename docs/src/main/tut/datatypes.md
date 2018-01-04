@@ -2,7 +2,7 @@
 layout: docs
 title:  "Data Types"
 section: "data"
-position: 2
+position: 20
 ---
 # Data Types
 

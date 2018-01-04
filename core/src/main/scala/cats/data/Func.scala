@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.functor.Contravariant
+import cats.Contravariant
 
 /**
  * [[Func]] is a function `A => F[B]`.
@@ -12,6 +12,12 @@ sealed abstract class Func[F[_], A, B] { self =>
   def run: A => F[B]
   def map[C](f: B => C)(implicit FF: Functor[F]): Func[F, A, C] =
     Func.func(a => FF.map(self.run(a))(f))
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): Func[G, A, B] =
+    Func.func(run andThen f.apply)
 }
 
 object Func extends FuncInstances {

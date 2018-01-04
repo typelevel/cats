@@ -1,11 +1,13 @@
 package cats
 package laws
 
-import cats.kernel.laws._
-
 import org.scalacheck.Prop
+import org.scalacheck.util.Pretty
 
 package object discipline {
-  implicit def catsLawsIsEqToProp[A: Eq](isEq: IsEq[A]): Prop =
-    isEq.lhs ?== isEq.rhs
+
+  val SerializableTests = cats.kernel.laws.discipline.SerializableTests
+
+  implicit def catsLawsIsEqToProp[A: Eq](isEq: IsEq[A])(implicit pp: A => Pretty): Prop =
+    cats.kernel.laws.discipline.catsLawsIsEqToProp[A](isEq)
 }
