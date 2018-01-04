@@ -254,7 +254,7 @@ case class RenameApplyApConst(index: SemanticdbIndex)
       "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
       "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
       "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
-      "_root_.cats.FlatMap.followedByEval." -> "productREval",
+      "_root_.cats.FlatMap.followedByEval." -> "productREval"
     )
 
 }
