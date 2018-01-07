@@ -51,8 +51,8 @@ Before we start, let's pretend we have `MyInt` which mixes in the `Monoid` trait
 
 ```tut:book:silent
 class MyInt extends Monoid[MyInt] {
-  def empty: MyInt = 0
-  def combine(another: MyInt): MyInt = this + another
+  def empty: MyInt = MyInt.ZERO
+  def combine(x: MyInt, y: MyInt): MyInt = x + y
 
   // ... (pretend this acts as a regular Int)
 }
