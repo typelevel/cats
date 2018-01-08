@@ -20,7 +20,7 @@ package tests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data.NonEmptySet
-import cats.kernel.laws.discipline.{BandTests, EqTests}
+import cats.kernel.laws.discipline.{SemilatticeTests, EqTests}
 
 import scala.collection.immutable.SortedSet
 
@@ -28,9 +28,15 @@ class NonEmptySetSuite extends CatsSuite {
 
   checkAll("NonEmptySet[Int]", SemigroupKTests[NonEmptySet].semigroupK[Int])
   checkAll("NonEmptySet[Int]", ReducibleTests[NonEmptySet].reducible[Option, Int, Int])
-  checkAll("NonEmptySet[String]", BandTests[NonEmptySet[String]].band)
+  checkAll("NonEmptySet[String]", SemilatticeTests[NonEmptySet[String]].band)
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
 
+  test("First element is always the smallest") {
+    forAll { (nes: NonEmptySet[Int]) =>
+      nes.forall { v => Order[Int].lteqv(nes.head, v) } should === (true)
+
+    }
+  }
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nes: NonEmptySet[Int]) =>

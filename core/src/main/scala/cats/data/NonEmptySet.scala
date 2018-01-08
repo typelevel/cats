@@ -47,7 +47,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
   def contains(a: A): Boolean = set.contains(a)
 
 
-  def union(as: NonEmptySet[A]): NonEmptySet[Ag] = new NonEmptySet(set.union(as.toSet))
+  def union(as: NonEmptySet[A]): NonEmptySet[A] = new NonEmptySet(set.union(as.toSet))
   def size: Int = set.size
   def forall(p: A ⇒ Boolean): Boolean = set.forall(p)
   def exists(f: A ⇒ Boolean): Boolean = set.exists(f)
@@ -197,7 +197,7 @@ private[data] sealed abstract class NonEmptySetInstances {
   implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
     Show.show[NonEmptySet[A]](_.show)
 
-  implicit def catsDataBandForNonEmptySet[A]: Band[NonEmptySet[A]] = new Band[NonEmptySet[A]] {
+  implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] = new Semilattice[NonEmptySet[A]] {
     def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x ++ y
   }
 }
