@@ -73,6 +73,16 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForZipNonEmptyList[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyList[A]] =
     Arbitrary(implicitly[Arbitrary[NonEmptyList[A]]].arbitrary.map(nel => new ZipNonEmptyList(nel)))
 
+  implicit def arbNonEmptyMap[K: Order, A](implicit A: Arbitrary[A], K: Arbitrary[K]): Arbitrary[NonEmptyMap[K, A]] =
+    Arbitrary(for {
+      fa <- implicitly[Arbitrary[SortedMap[K, A]]].arbitrary
+      k <- K.arbitrary
+      a <- A.arbitrary
+    } yield NonEmptyMap((k, a), fa))
+
+  implicit def cogenNonEmptyMap[K: Order : Cogen, A: Order : Cogen]: Cogen[NonEmptyMap[K, A]] =
+    Cogen[SortedMap[K, A]].contramap(_.toMap)
+
   implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit F: Arbitrary[F[Either[A, B]]]): Arbitrary[EitherT[F, A, B]] =
     Arbitrary(F.arbitrary.map(EitherT(_)))
 
