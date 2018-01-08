@@ -124,15 +124,18 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
 
   def length: Int = size
 
+  override def toString: String = s"NonEmpty${set.toString}"
+
   /**
     * Zips this `NonEmptySet` with another `NonEmptySet` and applies a function for each pair of elements.
     *
     * {{{
     * scala> import cats.data.NonEmptySet
+    * scala> import cats.implicits._
     * scala> val as = NonEmptySet.of(1, 2, 3)
     * scala> val bs = NonEmptySet.of("A", "B", "C")
     * scala> as.zipWith(bs)(_ + _)
-    * res0: cats.data.NonEmptySet[String] = NonEmptySet(1A, 2B, 3C)
+    * res0: cats.data.NonEmptySet[String] = NonEmptyTreeSet(1A, 2B, 3C)
     * }}}
     */
   def zipWith[B, C: Order](b: NonEmptySet[B])(f: (A, B) => C): NonEmptySet[C] =
