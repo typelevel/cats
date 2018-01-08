@@ -23,15 +23,18 @@ import cats.{Always, Eq, Eval, Foldable, Later, Now, Reducible, SemigroupK, Show
 
 import scala.collection.immutable._
 
-final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
+final class NonEmptySet[A] private (val set: SortedSet[A]) {
 
   private implicit def ordering: Ordering[A] = set.ordering
   private implicit def order: Order[A] = Order.fromOrdering
 
   def +(a: A): NonEmptySet[A] = new NonEmptySet(set + a)
-  def ++(as: NonEmptySet[A]): NonEmptySet[A] = concat(as)
+  def ++(as: NonEmptySet[A]): NonEmptySet[A] = union(as)
+  def | (as: NonEmptySet[A]): NonEmptySet[A] = union(as)
+  def --(as: NonEmptySet[A]): SortedSet[A] = diff(as)
+  def &~(as: NonEmptySet[A]): SortedSet[A] = diff(as)
+  def &(as: NonEmptySet[A]): SortedSet[A] = intersect(as)
 
-  def concat(as: NonEmptySet[A]): NonEmptySet[A] = new NonEmptySet(set ++ as.set)
 
   def -(a: A): SortedSet[A] = set - a
   def map[B: Order](f: A ⇒ B): NonEmptySet[B] =
@@ -46,8 +49,9 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
   def apply(a: A): Boolean = set(a)
   def contains(a: A): Boolean = set.contains(a)
 
-
-  def union(as: NonEmptySet[A]): NonEmptySet[A] = new NonEmptySet(set.union(as.toSet))
+  def diff(as: NonEmptySet[A]): SortedSet[A] = set -- as.set
+  def union(as: NonEmptySet[A]): NonEmptySet[A] = new NonEmptySet(set ++ as.set)
+  def intersect(as: NonEmptySet[A]): SortedSet[A] = set.filter(as.apply)
   def size: Int = set.size
   def forall(p: A ⇒ Boolean): Boolean = set.forall(p)
   def exists(f: A ⇒ Boolean): Boolean = set.exists(f)
@@ -99,7 +103,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
   def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
     S.combineAllOption(set).get
 
-  def toSet: SortedSet[A] = set
+  def toSortedSet: SortedSet[A] = set
 
   /**
     * Typesafe stringification method.
@@ -120,7 +124,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
     * universal equality provided by .equals.
     */
   def ===(that: NonEmptySet[A]): Boolean =
-    Eq[SortedSet[A]].eqv(set, that.toSet)
+    Eq[SortedSet[A]].eqv(set, that.toSortedSet)
 
   def length: Int = size
 
@@ -139,7 +143,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) extends AnyVal {
     * }}}
     */
   def zipWith[B, C: Order](b: NonEmptySet[B])(f: (A, B) => C): NonEmptySet[C] =
-    new NonEmptySet(SortedSet((set, b.toSet).zipped.map(f).to: _*)(Order[C].toOrdering))
+    new NonEmptySet(SortedSet((set, b.toSortedSet).zipped.map(f).to: _*)(Order[C].toOrdering))
 
   def zipWithIndex: NonEmptySet[(A, Int)] =
     new NonEmptySet(set.zipWithIndex)
@@ -150,7 +154,7 @@ private[data] sealed abstract class NonEmptySetInstances {
     new SemigroupK[NonEmptySet] with Reducible[NonEmptySet] {
 
       def combineK[A](a: NonEmptySet[A], b: NonEmptySet[A]): NonEmptySet[A] =
-        a ++ b
+        a | b
 
       override def size[A](fa: NonEmptySet[A]): Long = fa.length.toLong
 
@@ -172,7 +176,7 @@ private[data] sealed abstract class NonEmptySetInstances {
         fa.foldRight(lb)(f)
 
       override def foldMap[A, B](fa: NonEmptySet[A])(f: A => B)(implicit B: Monoid[B]): B =
-        B.combineAll(fa.toSet.iterator.map(f))
+        B.combineAll(fa.toSortedSet.iterator.map(f))
 
       override def fold[A](fa: NonEmptySet[A])(implicit A: Monoid[A]): A =
         fa.reduce
@@ -186,7 +190,7 @@ private[data] sealed abstract class NonEmptySetInstances {
       override def exists[A](fa: NonEmptySet[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
-      override def toList[A](fa: NonEmptySet[A]): List[A] = fa.toSet.toList
+      override def toList[A](fa: NonEmptySet[A]): List[A] = fa.toSortedSet.toList
 
       override def toNonEmptyList[A](fa: NonEmptySet[A]): NonEmptyList[A] =
         NonEmptyList(fa.head, fa.tail.toList)
@@ -201,7 +205,7 @@ private[data] sealed abstract class NonEmptySetInstances {
     Show.show[NonEmptySet[A]](_.show)
 
   implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] = new Semilattice[NonEmptySet[A]] {
-    def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x ++ y
+    def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x | y
   }
 }
 

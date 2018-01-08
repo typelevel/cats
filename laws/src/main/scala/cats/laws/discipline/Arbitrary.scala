@@ -56,7 +56,7 @@ object arbitrary extends ArbitraryInstances0 {
       A.arbitrary.map(a => NonEmptySet(a, fa))))
 
   implicit def catsLawsCogenForNonEmptySet[A: Order: Cogen]: Cogen[NonEmptySet[A]] =
-    Cogen[SortedSet[A]].contramap(_.toSet)
+    Cogen[SortedSet[A]].contramap(_.toSortedSet)
 
   implicit def catsLawsArbitraryForZipVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.map(v => new ZipVector(v)))
