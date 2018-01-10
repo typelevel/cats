@@ -336,7 +336,7 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
    * For example:
    * {{{
    * scala> import cats.implicits._, cats.data.NonEmptyList
-   * scala> "Err".leftNel[Int] 
+   * scala> "Err".leftNel[Int]
    * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
    * }}}
    */
@@ -348,7 +348,7 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
    * For example:
    * {{{
    * scala> import cats.implicits._, cats.data.NonEmptyList
-   * scala> 1.rightNel[String] 
+   * scala> 1.rightNel[String]
    * res0: Either[NonEmptyList[String], Int] = Right(1)
    * }}}
    */
