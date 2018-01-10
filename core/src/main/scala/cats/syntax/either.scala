@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{EitherT, Ior, Validated, ValidatedNel}
+import cats.data.{EitherT, Ior, NonEmptyList, Validated, ValidatedNel}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import EitherSyntax._
@@ -329,6 +329,31 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
 
   /** Wrap a value in `Right`. */
   def asRight[B]: Either[B, A] = Right(obj)
+
+  /**
+   * Wrap a value to a left EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> "Err".leftNel[Int] 
+   * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
+   * }}}
+   */
+  def leftNel[B]: Either[NonEmptyList[A], B] = Left(NonEmptyList.of(obj))
+
+  /**
+   * Wrap a value to a right EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> 1.rightNel[String] 
+   * res0: Either[NonEmptyList[String], Int] = Right(1)
+   * }}}
+   */
+  def rightNel[B]: Either[NonEmptyList[B], A] = Right(obj)
+
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
