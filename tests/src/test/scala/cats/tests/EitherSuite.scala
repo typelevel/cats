@@ -282,4 +282,16 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("leftFlatMap consistent with leftMap") {
+    forAll { (either: Either[String, Int], f: String => String) =>
+      either.leftFlatMap(v => Left(f(v))) should === (either.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with swap and then flatMap") {
+    forAll { (either: Either[String, Int], f: String => Either[String, Int]) =>
+      either.leftFlatMap(f) should === (either.swap.flatMap(a => f(a).swap).swap)
+    }
+  }
+
 }
