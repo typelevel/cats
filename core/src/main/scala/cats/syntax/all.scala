@@ -1,6 +1,10 @@
 package cats
 package syntax
 
+abstract class AllSyntaxBinCompat
+    extends AllSyntax
+    with AllSyntaxBinCompat0
+
 trait AllSyntax
     extends AlternativeSyntax
     with ApplicativeSyntax
@@ -48,3 +52,6 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+
+trait AllSyntaxBinCompat0
+    extends UnorderedTraverseSyntax
