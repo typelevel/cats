@@ -2,10 +2,10 @@ package cats
 package laws
 package discipline
 
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 
-trait CommutativeMonadTests[F[_]] extends MonadTests[F] with CommutativeFlatMapTests[F] {
+trait CommutativeMonadTests[F[_]] extends MonadTests[F] with CommutativeFlatMapTests[F] with CommutativeApplicativeTests[F] {
   def laws: CommutativeMonadLaws[F]
 
   def commutativeMonad[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
@@ -27,7 +27,7 @@ trait CommutativeMonadTests[F[_]] extends MonadTests[F] with CommutativeFlatMapT
     new RuleSet {
       def name: String = "commutative monad"
       def bases: Seq[(String, RuleSet)] = Nil
-      def parents: Seq[RuleSet] = Seq(monad[A, B, C], commutativeFlatMap[A, B, C])
+      def parents: Seq[RuleSet] = Seq(monad[A, B, C], commutativeFlatMap[A, B, C], commutativeApplicative[A, B, C])
       def props: Seq[(String, Prop)] = Nil
     }
   }

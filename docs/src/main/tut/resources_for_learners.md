@@ -2,7 +2,7 @@
 layout: page
 title:  "Resources for Learners"
 section: "resources_for_learners"
-position: 3
+position: 30
 ---
 # Books
  * [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)

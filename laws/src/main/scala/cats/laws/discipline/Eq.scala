@@ -6,6 +6,7 @@ import catalysts.Platform
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
+import cats.kernel._
 import cats.syntax.eq._
 import org.scalacheck.Arbitrary
 
@@ -83,17 +84,78 @@ object eq {
     sampledEq[Ordering[A], (A, A), Int](100) { case (p, (l, r)) => p.compare(l, r) }
 
   /**
+   * Creates an approximation of Eq[Hash[A]] by generating 100 values for A
+   * and comparing the application of the two hash functions.
+   */
+  implicit def catsLawsEqForHash[A](implicit arbA: Arbitrary[A]): Eq[Hash[A]] = new Eq[Hash[A]] {
+    def eqv(f: Hash[A], g: Hash[A]): Boolean = {
+      val samples = List.fill(100)(arbA.arbitrary.sample).collect {
+        case Some(a) => a
+        case None => sys.error("Could not generate arbitrary values to compare two Hash[A]")
+      }
+      samples.forall { x => f.hash(x) == g.hash(x) }
+    }
+  }
+
+  /**
    * Create an approximation of Eq[Semigroup[A]] by generating values for A
    * and comparing the application of the two combine functions.
    */
-  implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] =
-    catsLawsEqForFn1[(A, A), A].on(f =>
-      Function.tupled((x, y) => f.combine(x, y))
-    )
+  implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] = {
+    val instance: Eq[((A, A)) => A] = catsLawsEqForFn1[(A, A), A]
+    Eq.by[Semigroup[A], ((A, A)) => A]( f => Function.tupled((x, y) => f.combine(x, y)))(instance)
+  }
+
+  implicit def catsLawsEqForCommutativeSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[CommutativeSemigroup[A]] = {
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
+      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    }
+
+    Eq.by[CommutativeSemigroup[A], ((A, A)) => (A, Boolean)](f =>
+      Function.tupled((x, y) => (f.combine(x, y), f.combine(x, y) === f.combine(y, x)))
+    )(catsLawsEqForFn1[(A, A), (A, Boolean)])
+  }
+
+  implicit def catsLawsEqForBand[A](implicit arbAA: Arbitrary[(A, A)], eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Band[A]] = {
+    Eq.by[Band[A], ((A, A)) => Boolean](f =>
+      Function.tupled((x, y) => f.combine(x, y) === f.combine(f.combine(x, y), y))
+    )(catsLawsEqForFn1[(A, A), Boolean])
+  }
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
     def eqv(f: Monoid[A], g: Monoid[A]): Boolean = {
       eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
     }
   }
+
+  implicit def catsLawsEqForSemilattice[A](implicit eqBA: Eq[Band[A]], eqCA: Eq[CommutativeSemigroup[A]], eqA: Eq[A]): Eq[Semilattice[A]] =
+    Eq.instance((f, g) => eqBA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForCommutativeMonoid[A](implicit eqSA: Eq[CommutativeSemigroup[A]], eqMA: Eq[Monoid[A]], eqA: Eq[A]): Eq[CommutativeMonoid[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqMA.eqv(f, g))
+
+  implicit def catsLawsEqForBoundedSemilattice[A](implicit eqSA: Eq[Semilattice[A]], eqCA: Eq[CommutativeMonoid[A]], eqA: Eq[A]): Eq[BoundedSemilattice[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForGroup[A](implicit arbAA: Arbitrary[(A, A)], eqMA: Eq[Monoid[A]], eqA: Eq[A]): Eq[Group[A]] = {
+    implicit val eqABool: Eq[(A, Boolean)] = Eq.instance {
+      case ((x, boolX), (y, boolY)) => x === y && boolX === boolY
+    }
+
+    val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>
+      Function.tupled((x, y) => (
+        f.combine(x, y),
+        f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
+          f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
+          f.inverse(f.empty) == f.empty
+      )
+    ))(catsLawsEqForFn1[(A, A), (A, Boolean)])
+
+    Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))
+  }
+
+  implicit def catsLawsEqForCommutativeGroup[A](implicit eqMA: Eq[CommutativeMonoid[A]], eqGA: Eq[Group[A]], eqA: Eq[A]): Eq[CommutativeGroup[A]] =
+    Eq.instance((f, g) => eqMA.eqv(f, g) && eqGA.eqv(f, g))
+
+
 }

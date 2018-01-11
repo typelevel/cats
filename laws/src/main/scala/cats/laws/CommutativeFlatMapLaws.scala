@@ -4,7 +4,7 @@ package laws
 /**
  * Laws that must be obeyed by any `CommutativeFlatMap`.
  */
-trait CommutativeFlatMapLaws[F[_]] extends FlatMapLaws[F] {
+trait CommutativeFlatMapLaws[F[_]] extends CommutativeApplyLaws[F] with FlatMapLaws[F] {
   implicit override def F: CommutativeFlatMap[F]
 
   def flatmapCommutative[A, B, C](fa: F[A], fb: F[B], g: (A, B) => F[C]): IsEq[F[C]] =

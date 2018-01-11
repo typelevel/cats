@@ -41,6 +41,26 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
+
+  /**
+   * Inverse of `attempt`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.util.{Try, Success}
+   *
+   * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new java.lang.Exception))
+   * scala> a.rethrow
+   * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
+   *
+   * scala> val b: Try[Either[Throwable, Int]] = Success(Right(1))
+   * scala> b.rethrow
+   * res1: scala.util.Try[Int] = Success(1)
+   * }}}
+   */
+  def rethrow[A](fa: F[Either[E, A]]): F[A] =
+    flatMap(fa)(_.fold(raiseError, pure))
 }
 
 object MonadError {

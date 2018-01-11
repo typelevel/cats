@@ -1,4 +1,5 @@
 ## Cats
+![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 [![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
 [![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
@@ -9,28 +10,37 @@
 
 ### Overview
 
-Cats is a library which provides abstractions for functional programming in Scala.
-
+Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
 The name is a playful shortening of the word *category*.
 
-![cats image](http://plastic-idolatry.com/erik/cats2.png)
-
-#### Why?
-
 Scala supports both object-oriented and functional programming, and this is reflected in the hybrid approach of the
-standard library. Cats augments the standard library with tools that further enable functional programming such as
-`Validated`, `Monad`, and `Traverse`. A broader goal of Cats is to provide a foundation for an
-[ecosystem of pure, typeful libraries](https://github.com/typelevel/cats#the-cats-ecosystem).
+standard library. Cats strives to provide functional programming abstractions that are core, [binary compatible](http://typelevel.org/cats/#binary-compatibility-and-versioning), [modular](http://typelevel.org/cats/motivations#modularity), [approachable](http://typelevel.org/cats/motivations#approachability) and [efficient](http://typelevel.org//cats/motivations#efficiency). A broader goal of Cats is to provide a foundation for an [ecosystem of pure, typeful libraries](https://typelevel.org/cats/#ecosystem) to support functional programming in Scala applications.
+
+For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
+
+You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
 
 ### Getting Started
 
 Cats is currently available for Scala 2.10, 2.11 and 2.12, and [Scala.js](http://www.scala-js.org/).
 
-To get started with SBT, simply add the following to your `build.sbt`
-file:
+
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
+scalacOptions += "-Ypartial-unification"
+```
+
+**Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
+
+```scala
+addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
+```
+
+And then create the cats dependency, by adding the following to your `build.sbt`:
+
+```scala
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -43,85 +53,70 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
+ * `alleycats-core`: cats instances and classes which are not lawful. 
  
  There are several other cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
- * [`alleycats`](https://github.com/non/alleycats): cats instances and classes which are not lawful.
- * [`mouse`](https://github.com/benhutchison/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
- 
+ * [`mouse`](https://github.com/typelevel/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
 
-Release notes for Cats are available in [CHANGES.md](CHANGES.md).
+
+Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
 *Cats is still under active development. While we don't anticipate any
  major redesigns, changes that are neither source nor binary
- compatible are to be expected in upcoming cats releases. We will
- update the minor version of cats accordingly for such changes. Once
- cats 1.0 is released (ETA: Q4 2017), there will be an increased focus
- on making changes in compatible ways.*
+ compatible are to be expected in upcoming RC1 and 1.0 releases.*
 
-#### Enhancing type inference
 
-To use cats you'll need sometimes support for improved type inference. To enable it for any supported Scalac version, use this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification).
+### <a name="ecosystem" href="#ecosystem"></a>The cats ecosystem
 
-### Documentation
-
-Cats information and documentation is available on the
-[website](http://typelevel.org/cats).
-
-We also have a Scaladoc [index](http://typelevel.org/cats/api/#package).
-
-Finally, we have a list of
-[frequently-asked questions](docs/src/main/tut/faq.md).
-
-Our goal is to have clear and comprehensive documentation. If you
-notice problems, omissions, or errors, please
-[let us know](CONTRIBUTING.md).
-
-### The cats ecosystem
-
-Many projects integrate with cats. By sharing the same set of
-type classes, instances and data types, projects can speak the same "cats
-language", and integrate with each other with ease.
+By sharing the same set of type classes, instances and data types provided by cats, projects can speak the same "cats language", and integrate with each other with ease.
 
 #### General purpose libraries to support pure functional programming
 
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures.
- * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
- * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers).
- * [Freestyle](https://github.com/47deg/freestyle): pure functional framework for Free and Tagless Final apps & libs.
- * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
+ * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
+ * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
+ * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
+ * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
+ * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
+ * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes
  * [origami](https://github.com/atnos-org/origami): monadic folds
- * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes. 
- 
+ * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
+
 #### Libraries with more specific uses
 
- * [Circe](https://github.com/circe/circe): pure functional JSON library.
- * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources.
- * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark.
- * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
- * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
- * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs.
- * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
- * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+ * [circe](https://github.com/circe/circe): pure functional JSON library
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
- * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
+ * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
+ * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
+ * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
- * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services 
+ * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
+ * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
+ * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
+ * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
+ * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
- 
-
+ * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
+ * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
+ * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
+  
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
+*The full-size [cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
 ### How can I contribute to Cats?
 
 We welcome contributions to Cats and would love for you to help build
-Cats. See our [contributor guide](CONTRIBUTING.md) for more
+Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
 information about how you can get involved.
 
 ### Community
@@ -163,7 +158,7 @@ going forward, which is different from the *EPOCH.MAJOR.MINOR* scheme common amo
 Java and Scala libraries (including the Scala lang). 
 
 Cats strives to provide a solid and stable foundation for an ecosystem of
-FP libraries. Thus, we treat backward binary compatibility maintainence with a high priority. 
+FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
 For example, when we release cats `1.1.0`, it will be backward binary compatible 
@@ -191,8 +186,8 @@ The current maintainers (people who can merge pull requests) are:
  * [johnynek](https://github.com/johnynek) P. Oscar Boykin
  * [travisbrown](https://github.com/travisbrown) Travis Brown
  * [adelbertc](https://github.com/adelbertc) Adelbert Chang
+ * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
- * [edmundnoble](https://github.com/edmundnoble) Edmund Noble
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
@@ -216,4 +211,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2016.
+Copyright the maintainers, 2015-2017.

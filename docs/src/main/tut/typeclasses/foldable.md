@@ -10,7 +10,7 @@ scaladoc: "#cats.Foldable"
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
-In the case of a collection (such as `List` or `Set`), these methods will fold 
+In the case of a collection (such as `List` or `Vector`), these methods will fold
 together (combine) the values contained in the collection to produce a single 
 result. Most collection types have `foldLeft` methods, which will usually be 
 used by the associated `Foldable[_]` instance.
@@ -40,10 +40,10 @@ Foldable[List].reduceLeftToOption(List[Int]())(_.toString)((s,i) => s + i)
 Foldable[List].reduceLeftToOption(List(1,2,3,4))(_.toString)((s,i) => s + i)
 Foldable[List].reduceRightToOption(List(1,2,3,4))(_.toString)((i,s) => Later(s.value + i)).value
 Foldable[List].reduceRightToOption(List[Int]())(_.toString)((i,s) => Later(s.value + i)).value
-Foldable[Set].find(Set(1,2,3))(_ > 2)
-Foldable[Set].exists(Set(1,2,3))(_ > 2)
-Foldable[Set].forall(Set(1,2,3))(_ > 2)
-Foldable[Set].forall(Set(1,2,3))(_ < 4)
+Foldable[List].find(List(1,2,3))(_ > 2)
+Foldable[List].exists(List(1,2,3))(_ > 2)
+Foldable[List].forall(List(1,2,3))(_ > 2)
+Foldable[List].forall(List(1,2,3))(_ < 4)
 Foldable[Vector].filter_(Vector(1,2,3))(_ < 3)
 Foldable[List].isEmpty(List(1,2))
 Foldable[Option].isEmpty(None)

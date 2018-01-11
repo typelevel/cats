@@ -2,17 +2,21 @@ package cats
 
 import scala.collection.mutable
 import cats.instances.either._
-import cats.instances.long._
+import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
+import Foldable.sentinel
 
 /**
  * Data structures that can be folded to a summary value.
  *
- * In the case of a collection (such as `List` or `Set`), these
+ * In the case of a collection (such as `List` or `Vector`), these
  * methods will fold together (combine) the values contained in the
  * collection to produce a single result. Most collection types have
  * `foldLeft` methods, which will usually be used by the associated
  * `Foldable[_]` instance.
+ *
+ * Instances of Foldable should be ordered collections to allow for consistent folding.
+ * Use the `UnorderedFoldable` type class if you want to fold over unordered collections.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
@@ -24,12 +28,34 @@ import simulacrum.typeclass
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Foldable, cats.implicits._
+   * scala> val fa = Option(1)
+   *
+   * Folding by addition to zero:
+   * scala> Foldable[Option].foldLeft(fa, Option(0))((a, n) => a.map(_ + n))
+   * res0: Option[Int] = Some(1)
+   * }}}
+   *
+   * With syntax extensions, `foldLeft` can be used like:
+   * {{{
+   * Folding `Option` with addition from zero:
+   * scala> fa.foldLeft(Option(0))((a, n) => a.map(_ + n))
+   * res1: Option[Int] = Some(1)
+   *
+   * There's also an alias `foldl` which is equivalent:
+   * scala> fa.foldl(Option(0))((a, n) => a.map(_ + n))
+   * res2: Option[Int] = Some(1)
+   * }}}
    */
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
+
 
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
@@ -41,6 +67,32 @@ import simulacrum.typeclass
    *
    * For more detailed information about how this method works see the
    * documentation for `Eval[_]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Foldable, cats.Eval, cats.implicits._
+   * scala> val fa = Option(1)
+   *
+   * Folding by addition to zero:
+   * scala> val folded1 = Foldable[Option].foldRight(fa, Eval.now(0))((n, a) => a.map(_ + n))
+   * Since `foldRight` yields a lazy computation, we need to force it to inspect the result:
+   * scala> folded1.value
+   * res0: Int = 1
+   *
+   * With syntax extensions, we can write the same thing like this:
+   * scala> val folded2 = fa.foldRight(Eval.now(0))((n, a) => a.map(_ + n))
+   * scala> folded2.value
+   * res1: Int = 1
+   *
+   * Unfortunately, since `foldRight` is defined on many collections - this
+   * extension clashes with the operation defined in `Foldable`.
+   *
+   * To get past this and make sure you're getting the lazy `foldRight` defined
+   * in `Foldable`, there's an alias `foldr`:
+   * scala> val folded3 = fa.foldr(Eval.now(0))((n, a) => a.map(_ + n))
+   * scala> folded3.value
+   * res1: Int = 1
+   * }}}
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
@@ -143,16 +195,6 @@ import simulacrum.typeclass
     reduceLeftOption(fa)(A.max)
 
   /**
-   * The size of this Foldable.
-   *
-   * This is overriden in structures that have more efficient size implementations
-   * (e.g. Vector, Set, Map).
-   *
-   * Note: will not terminate for infinite-sized collections.
-   */
-  def size[A](fa: F[A]): Long = foldMap(fa)(_ => 1)
-
-  /**
     * Get the element at the index of the `Foldable`.
     */
   def get[A](fa: F[A])(idx: Long): Option[A] =
@@ -164,6 +206,35 @@ import simulacrum.typeclass
         case Left(a) => Some(a)
         case Right(_) => None
       }
+
+  def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      // trick from TravsersableOnce
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
+      else lb
+    }.value
+
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val keys = List(1, 2, 4, 5)
+   * scala> val map = Map(4 -> "Four", 5 -> "Five")
+   * scala> keys.collectFirstSome(map.get)
+   * res0: Option[String] = Some(Four)
+   * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+   * scala> keys.collectFirstSome(map2.get)
+   * res1: Option[String] = None
+   * }}}
+   */
+  def collectFirstSome[A, B](fa: F[A])(f: A => Option[B]): Option[B] =
+    foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
+      val ob = f(a)
+      if (ob.isDefined) Eval.now(ob) else lb
+    }.value
 
   /**
    * Fold implemented using the given Monoid[A] instance.
@@ -311,7 +382,7 @@ import simulacrum.typeclass
    *
    * If there are no elements, the result is `false`.
    */
-  def exists[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.False) { (a, lb) =>
       if (p(a)) Eval.True else lb
     }.value
@@ -321,7 +392,7 @@ import simulacrum.typeclass
    *
    * If there are no elements, the result is `true`.
    */
-  def forall[A](fa: F[A])(p: A => Boolean): Boolean =
+  override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
     foldRight(fa, Eval.True) { (a, lb) =>
       if (p(a)) lb else Eval.False
     }.value
@@ -460,10 +531,10 @@ import simulacrum.typeclass
   /**
    * Returns true if there are no elements. Otherwise false.
    */
-  def isEmpty[A](fa: F[A]): Boolean =
+  override def isEmpty[A](fa: F[A]): Boolean =
     foldRight(fa, Eval.True)((_, _) => Eval.False).value
 
-  def nonEmpty[A](fa: F[A]): Boolean =
+  override def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
 
   /**
@@ -502,13 +573,21 @@ import simulacrum.typeclass
       val F = self
       val G = Foldable[G]
     }
+
+  override def unorderedFold[A: CommutativeMonoid](fa: F[A]): A = fold(fa)
+
+  override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
+    foldMap(fa)(f)
 }
 
 object Foldable {
-  def iterateRight[A, B](it: Iterator[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
-    def loop(): Eval[B] =
-      Eval.defer(if (it.hasNext) f(it.next, loop()) else lb)
-    loop()
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+
+  def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(it: Iterator[A]): Eval[B] =
+      Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
+
+    Eval.always(iterable.iterator).flatMap(loop)
   }
 
 

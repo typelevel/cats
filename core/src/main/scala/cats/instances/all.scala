@@ -11,17 +11,20 @@ trait AllInstances
   with    EquivInstances
   with    FunctionInstances
   with    FutureInstances
+  with    HashInstances
+  with    InvariantMonoidalInstances
   with    ListInstances
   with    MapInstances
-  with    MonoidInstances
   with    OptionInstances
   with    OrderInstances
   with    OrderingInstances
+  with    ParallelInstances
   with    PartialOrderInstances
   with    PartialOrderingInstances
   with    QueueInstances
-  with    SemigroupInstances
   with    SetInstances
+  with    SortedMapInstances
+  with    SortedSetInstances
   with    StreamInstances
   with    StringInstances
   with    SymbolInstances

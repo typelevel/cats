@@ -19,6 +19,12 @@ trait FunctionInstances extends FunctionInstances0 {
 
 trait FunctionInstances0 extends FunctionInstances1 {
 
+  implicit def catsKernelHashForFunction0[A](implicit ev: Hash[A]): Hash[() => A] =
+    new Hash[() => A] {
+      def hash(x: () => A) = ev.hash(x())
+      def eqv(x: () => A, y: () => A) = ev.eqv(x(), y())
+    }
+
   implicit def catsKernelPartialOrderForFunction0[A](implicit ev: PartialOrder[A]): PartialOrder[() => A] =
     new PartialOrder[() => A] {
       def partialCompare(x: () => A, y: () => A): Double = ev.partialCompare(x(), y())

@@ -177,7 +177,7 @@ run `sbt docs/makeMicrosite`
 
     yum install jekyll
 
-    apt-get install jekyll
+    apt-get install ruby-full; gem install jekyll
 
     gem install jekyll
 

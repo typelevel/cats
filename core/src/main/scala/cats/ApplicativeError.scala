@@ -10,8 +10,27 @@ import scala.util.control.NonFatal
  * This type class allows one to abstract over error-handling applicatives.
  */
 trait ApplicativeError[F[_], E] extends Applicative[F] {
+
   /**
    * Lift an error into the `F` context.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * // integer-rounded division
+   * scala> def divide[F[_]](dividend: Int, divisor: Int)(implicit F: ApplicativeError[F, String]): F[Int] =
+   *      | if (divisor === 0) F.raiseError("division by zero")
+   *      | else F.pure(dividend / divisor)
+   *
+   * scala> type ErrorOr[A] = Either[String, A]
+   *
+   * scala> divide[ErrorOr](6, 3)
+   * res0: ErrorOr[Int] = Right(2)
+   *
+   * scala> divide[ErrorOr](6, 0)
+   * res1: ErrorOr[Int] = Left(division by zero)
+   * }}}
    */
   def raiseError[A](e: E): F[A]
 
@@ -93,7 +112,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * scala> type F[A] = EitherT[State[String, ?], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
-   *      |   case Err("one") => EitherT.liftT(State.set("one"))
+   *      |   case Err("one") => EitherT.liftF(State.set("one"))
    *      | }
    *
    * scala> val prog1: F[Int] = (Err("one")).raiseError[F, Int]

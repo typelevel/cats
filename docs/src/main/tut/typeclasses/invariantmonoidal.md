@@ -7,32 +7,32 @@ scaladoc: "#cats.InvariantMonoidal"
 ---
 # Invariant Monoidal
 
-`InvariantMonoidal` combines [`Invariant`](invariant.html) and [`Monoidal`](monoidal.html) with the addition of a `pure` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
+`InvariantMonoidal` combines [`Invariant`](invariant.html) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
 
 ```tut:silent
 trait InvariantMonoidal[F[_]] {
-  def pure[A](x: A): F[A]
+  def unit: F[Unit]
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 }
 ```
 
-Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Other notable examples are [`Semigroup`](semigroup.html) and [`Monoid`](monoid.html).
+Practical uses of `InvariantMonoidal` appear in the context of codecs, that is interfaces to capture both serialization and deserialization for a given format. Another notable examples is [`Semigroup`](semigroup.html).
 
 This tutorial first shows how `Semigroup` is `InvariantMonoidal`, and how this can be used create `Semigroup` instances by combining other `Semigroup` instances. Secondly, we present a complete example of `Codec` for the CSV format, and show how it is `InvariantMonoidal`. Lastly, we present an alternative definition of `InvariantMonoidal` as a generalization of `Invariant`, and show that both definitions are equivalent.
 
 # `Semigroup` is `InvariantMonoidal`
 
-As explained in the [`Invariant` tutorial](invariant.html), `Semigroup` forms an invariant functor. Indeed, given a `Semigroup[A]` and two functions `A => B` and `B => A`, one can construct a `Semigroup[B]` by transforming two values from type `B` to type `A`, combining these using the `Semigroup[A]`, and transforming the result back to type `B`. Thus to define an `InvariantMonoidal[Semigroup]` we need implementations for `pure` and `product`.
+As explained in the [`Invariant` tutorial](invariant.html), `Semigroup` forms an invariant functor. Indeed, given a `Semigroup[A]` and two functions `A => B` and `B => A`, one can construct a `Semigroup[B]` by transforming two values from type `B` to type `A`, combining these using the `Semigroup[A]`, and transforming the result back to type `B`. Thus to define an `InvariantMonoidal[Semigroup]` we need implementations for `unit` and `product`.
 
 To construct a `Semigroup` from a single value, we can define a trivial `Semigroup` with a combine that always outputs the given value. A `Semigroup[(A, B)]` can be obtained from two `Semigroup`s for type `A` and `B` by deconstructing two pairs into elements of type `A` and `B`, combining these element using their respective `Semigroup`s, and reconstructing a pair from the results:
 
 ```tut:silent
 import cats.Semigroup
 
-def pure[A](a: A): Semigroup[A] =
-  new Semigroup[A] {
-    def combine(x: A, y: A): A = a
+def unit: Semigroup[Unit] =
+  new Semigroup[Unit] {
+    def combine(x: Unit, y: Unit): Unit = ()
   }
 
 def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
@@ -43,7 +43,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
   }
 ```
 
-Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Cartesian` syntax:
+Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Semigroupal` syntax:
 
 ```tut:silent
 import cats.implicits._
@@ -88,10 +88,10 @@ forAll { (c: CsvCodec[A], a: A) => c.read(c.write(a)) == ((Some(a), List()))
 Let's now see how we could define an `InvariantMonoidal` instance for `CsvCodec`. Lifting a single value into a `CsvCodec` can be done "the trivial way" by consuming nothing from CSV and producing that value, and writing this value as the empty CSV:
 
 ```tut:silent
-trait CCPure {
-  def pure[A](a: A): CsvCodec[A] = new CsvCodec[A] {
-    def read(s: CSV): (Option[A], CSV) = (Some(a), s)
-    def write(a: A): CSV = List.empty
+trait CCUnit {
+  def unit: CsvCodec[Unit] = new CsvCodec[Unit] {
+    def read(s: CSV): (Option[Unit], CSV) = (Some(()), s)
+    def write(u: Unit): CSV = List.empty
   }
 }
 ```
@@ -137,7 +137,7 @@ Putting it all together:
 import cats.InvariantMonoidal
 
 implicit val csvCodecIsInvariantMonoidal: InvariantMonoidal[CsvCodec] =
-  new InvariantMonoidal[CsvCodec] with CCPure with CCProduct with CCImap
+  new InvariantMonoidal[CsvCodec] with CCUnit with CCProduct with CCImap
 ```
 
 We can now define a few `CsvCodec` instances and use the methods provided by `InvariantMonoidal` to define `CsvCodec` from existing `CsvCodec`s:
@@ -189,7 +189,7 @@ fooCodec.read(fooCodec.write(foo)) == ((Some(foo), List()))
 
 # `InvariantMonoidal` as a generalization of `Invariant`
 
-To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to it's definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
+To better understand the motivations behind the `InvariantMonoidal` type class, we show how one could naturally arrive to its definition by generalizing the concept of `Invariant` functor. This reflection is analogous to the one presented in [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf) to show how [`Applicative`](applicative.html) are a generalization of [`Functor`](functor.html).
 
 Given an `Invariant[F]` instance for a certain *context* `F[_]`, its `imap` method gives a way to lift two *unary* pure functions `A => B` and `B => A` into *contextualized* functions `F[A] => F[B]`. But what about functions of other arity?
 
@@ -224,7 +224,7 @@ trait MultiInvariantImap3[F[_]] extends MultiInvariant[F] {
 }
 ```
 
-We can observe that `MultiInvariant` is none other than an alternative formulation for `InvariantMonoidal`. Indeed, `imap0` and `pure` have exactly the same signature, `imap1` and `imap` only differ by the order of their argument, and `imap2` can easily be defined in terms of `imap` and `product`:
+We can observe that `MultiInvariant` is none other than an alternative formulation for `InvariantMonoidal`. Indeed, `imap1` and `imap` only differ by the order of their argument, and `imap2` can easily be defined in terms of `imap` and `product`:
 
 ```tut:silent
 trait Imap2FromImapProduct[F[_]] extends cats.InvariantMonoidal[F] {

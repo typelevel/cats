@@ -25,10 +25,12 @@ object Boilerplate {
 
 
   val templates: Seq[Template] = Seq(
-    GenCartesianBuilders,
-    GenCartesianArityFunctions,
+    GenSemigroupalBuilders,
+    GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
-    GenTupleCartesianSyntax
+    GenTupleSemigroupalSyntax,
+    GenParallelArityFunctions,
+    GenTupleParallelSyntax
   )
 
   val header = "// auto-generated boilerplate" // TODO: put something meaningful here?
@@ -95,8 +97,8 @@ object Boilerplate {
     The block otherwise behaves as a standard interpolated string with regards to variable substitution.
   */
 
-  object GenCartesianBuilders extends Template {
-    def filename(root: File) = root /  "cats" / "syntax" / "CartesianBuilder.scala"
+  object GenSemigroupalBuilders extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "SemigroupalBuilder.scala"
 
     def content(tv: TemplateVals) = {
       import tv._
@@ -105,7 +107,7 @@ object Boilerplate {
       val tpesString = synTypes mkString ", "
       val params = (synVals zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val next = if (arity + 1 <= maxArity) {
-        s"def |@|[Z](z: F[Z]) = new CartesianBuilder${arity + 1}(${`a..n`}, z)"
+        s"def |@|[Z](z: F[Z]) = new SemigroupalBuilder${arity + 1}(${`a..n`}, z)"
       } else {
         ""
       }
@@ -114,18 +116,18 @@ object Boilerplate {
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map(${`a..n`})(f)"
-        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$n(${`a..n`})(f)"
+        else s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.map$n(${`a..n`})(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap(${`a..n`})(f)"
-        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$n(${`a..n`})(f)"
+        else s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.contramap$n(${`a..n`})(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap(${`a..n`})(f)(g)"
-        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$n(${`a..n`})(f)(g)"
+        else s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.imap$n(${`a..n`})(f)(g)"
 
       val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$n(${`a..n`})"
+        s"def tupled(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[(${`A..N`})] = Semigroupal.tuple$n(${`a..n`})"
       } else {
         ""
       }
@@ -134,13 +136,13 @@ object Boilerplate {
         |package cats
         |package syntax
         |
-        |import cats.functor.{Contravariant, Invariant}
+        |
         |
         |@deprecated("replaced by apply syntax", "1.0.0-MF")
-        |private[syntax] final class CartesianBuilder[F[_]] {
-        |  def |@|[A](a: F[A]) = new CartesianBuilder1(a)
+        |private[syntax] final class SemigroupalBuilder[F[_]] {
+        |  def |@|[A](a: F[A]) = new SemigroupalBuilder1(a)
         |
-        -  private[syntax] final class CartesianBuilder$arity[${`A..N`}]($params) {
+        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) {
         -    $next
         -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
         -    $map
@@ -182,18 +184,70 @@ object Boilerplate {
 
       block"""
         |package cats
+        |
+        |/**
+        | * @groupprio Ungrouped 0
+        | *
+        | * @groupname ApArity ap arity
+        | * @groupdesc ApArity Higher-arity ap methods
+        | * @groupprio ApArity 999
+        | *
+        | * @groupname MapArity map arity
+        | * @groupdesc MapArity Higher-arity map methods
+        | * @groupprio MapArity 999
+        | *
+        | * @groupname TupleArity tuple arity
+        | * @groupdesc TupleArity Higher-arity tuple methods
+        | * @groupprio TupleArity 999
+        | */
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
-        |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Cartesian.tuple2(f1, f2)(self, self)
+        |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Semigroupal.tuple2(f1, f2)(self, self)
+        -  /** @group ApArity */
         -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
-        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Cartesian.map$arity($fparams)(f)(self, self)
-        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Cartesian.tuple$arity($fparams)(self, self)
+        -  /** @group MapArity */
+        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
+        -  /** @group TupleArity */
+        -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
         |}
       """
     }
   }
 
-  object GenCartesianArityFunctions extends Template {
-    def filename(root: File) = root / "cats" / "CartesianArityFunctions.scala"
+  object GenParallelArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val fargs = (0 until arity) map { "m" + _ }
+      val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
+      val fargsS = fargs mkString ", "
+
+      val nestedProducts = (0 until (arity - 2)).foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
+      val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
+
+      block"""
+         |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname ParMapArity parMap arity
+         | * @groupdesc ParMapArity Higher-arity parMap methods
+         | * @groupprio ParMapArity 999
+         | */
+         |trait ParallelArityFunctions {
+        -  /** @group ParMapArity */
+        -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
+        -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+         |}
+      """
+    }
+  }
+
+  object GenSemigroupalArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "SemigroupalArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
       import tv._
@@ -203,27 +257,96 @@ object Boilerplate {
       val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val fargsS = fargs mkString ", "
 
-      val nestedProducts = (0 until (arity - 2)).foldRight(s"cartesian.product(f${arity - 2}, f${arity - 1})")((i, acc) => s"cartesian.product(f$i, $acc)")
+      val nestedProducts = (0 until (arity - 2)).foldRight(s"semigroupal.product(f${arity - 2}, f${arity - 1})")((i, acc) => s"semigroupal.product(f$i, $acc)")
       val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
 
       block"""
          |package cats
-         |trait CartesianArityFunctions {
-        -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit cartesian: Cartesian[F], functor: Functor[F]): F[Z] =
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname MapArity map arity
+         | * @groupdesc MapArity Higher-arity map methods
+         | * @groupprio MapArity 999
+         | *
+         | * @groupname ContramapArity contramap arity
+         | * @groupdesc ContramapArity Higher-arity contramap methods
+         | * @groupprio ContramapArity 999
+         | *
+         | * @groupname ImapArity imap arity
+         | * @groupdesc ImapArity Higher-arity imap methods
+         | * @groupprio ImapArity 999
+         | *
+         | * @groupname TupleArity tuple arity
+         | * @groupdesc TupleArity Higher-arity tuple methods
+         | * @groupprio TupleArity 999
+         | *
+         | * @groupname TraverseArity traverse arity
+         | * @groupdesc TraverseArity Higher-arity traverse methods
+         | * @groupprio TraverseArity 999
+         | */
+         |trait SemigroupalArityFunctions {
+        -  /** @group MapArity */
+        -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit semigroupal: Semigroupal[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
-        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], contravariant: functor.Contravariant[F]):F[Z] =
+        -  /** @group ContramapArity */
+        -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], contravariant: Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
-        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[Z] =
+        -  /** @group ImapArity */
+        -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
-        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit cartesian: Cartesian[F], invariant: functor.Invariant[F]):F[(${`A..N`})] =
+        -  /** @group TupleArity */
+        -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  /** @group TraverseArity */
+        -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit semigroupal: Semigroupal[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
+        -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
       """
     }
   }
 
-  object GenTupleCartesianSyntax extends Template {
-    def filename(root: File) = root /  "cats" / "syntax" / "TupleCartesianSyntax.scala"
+  object GenTupleParallelSyntax extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "TupleParallelSyntax.scala"
+
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val tpesString = tpes mkString ", "
+
+      val tuple = s"Tuple$arity[$tpesString]"
+      val tupleTpe = s"t$arity: $tuple"
+      val tupleArgs = (1 to arity) map { case n => s"t$arity._$n" } mkString ", "
+
+      val n = if (arity == 1) { "" } else { arity.toString }
+
+      val parMap =
+        if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
+        else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
+
+
+      block"""
+         |package cats
+         |package syntax
+         |
+         |import cats.Parallel
+         |
+         |trait TupleParallelSyntax {
+         -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
+         |}
+         |
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
+         -  $parMap
+         -}
+         |
+      """
+    }
+  }
+
+  object GenTupleSemigroupalSyntax extends Template {
+    def filename(root: File) = root /  "cats" / "syntax" / "TupleSemigroupalSyntax.scala"
 
     def content(tv: TemplateVals) = {
       import tv._
@@ -239,37 +362,43 @@ object Boilerplate {
 
       val map =
         if (arity == 1) s"def map[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F]): F[Z] = functor.map($tupleArgs)(f)"
-        else s"def mapN[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], cartesian: Cartesian[F]): F[Z] = Cartesian.map$arity($tupleArgs)(f)"
+        else s"def mapN[Z](f: (${`A..N`}) => Z)(implicit functor: Functor[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.map$arity($tupleArgs)(f)"
 
       val contramap =
         if (arity == 1) s"def contramap[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F]): F[Z] = contravariant.contramap($tupleArgs)(f)"
-        else s"def contramapN[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.contramap$arity($tupleArgs)(f)"
+        else s"def contramapN[Z](f: Z => (${`A..N`}))(implicit contravariant: Contravariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.contramap$arity($tupleArgs)(f)"
 
       val imap =
         if (arity == 1) s"def imap[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F]): F[Z] = invariant.imap($tupleArgs)(f)(g)"
-        else s"def imapN[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[Z] = Cartesian.imap$arity($tupleArgs)(f)(g)"
+        else s"def imapN[Z](f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[Z] = Semigroupal.imap$arity($tupleArgs)(f)(g)"
 
       val tupled = if (arity != 1) {
-        s"def tupled(implicit invariant: Invariant[F], cartesian: Cartesian[F]): F[(${`A..N`})] = Cartesian.tuple$n($tupleArgs)"
+        s"def tupled(implicit invariant: Invariant[F], semigroupal: Semigroupal[F]): F[(${`A..N`})] = Semigroupal.tuple$n($tupleArgs)"
       } else {
         ""
       }
+
+      val traverse =
+        if (arity == 1) s"def traverse[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F]): G[F[Z]] = traverse.traverse($tupleArgs)(f)"
+        else s"def traverseN[G[_]: Applicative, Z](f: (${`A..N`}) => G[Z])(implicit traverse: Traverse[F], semigroupal: Semigroupal[F]): G[F[Z]] = Semigroupal.traverse$arity($tupleArgs)(f)"
+
 
       block"""
         |package cats
         |package syntax
         |
-        |import cats.functor.{Contravariant, Invariant}
         |
-        |trait TupleCartesianSyntax {
-        -  implicit def catsSyntaxTuple${arity}Cartesian[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}CartesianOps[F, ${`A..N`}] = new Tuple${arity}CartesianOps(t$arity)
+        |
+        |trait TupleSemigroupalSyntax {
+        -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
         |}
         |
-        -private[syntax] final class Tuple${arity}CartesianOps[F[_], ${`A..N`}]($tupleTpe) {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}]($tupleTpe) {
         -  $map
         -  $contramap
         -  $imap
         -  $tupled
+        -  $traverse
         -  def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)($tupleArgs)
         -}
         |

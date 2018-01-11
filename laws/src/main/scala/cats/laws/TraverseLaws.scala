@@ -6,7 +6,7 @@ import cats.data.{Const, Nested, State, StateT}
 import cats.syntax.traverse._
 import cats.syntax.foldable._
 
-trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
+trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with UnorderedTraverseLaws[F] {
   implicit override def F: Traverse[F]
 
   def traverseIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
@@ -67,6 +67,24 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     lhs <-> rhs
   }
 
+  def traverseOrderConsistent[A](fa: F[A]): IsEq[Option[A]] = {
+    class FirstOption[T](val o: Option[T])
+
+    implicit val firstOptionMonoid = new Monoid[FirstOption[A]] {
+      def empty = new FirstOption(None)
+      def combine(x: FirstOption[A], y: FirstOption[A]) = new FirstOption(x.o.orElse(y.o))
+    }
+
+    def liftId[T](a: T): Id[T] = a
+    def store[T](a: T): Const[FirstOption[T], T] = Const(new FirstOption(Some(a)))
+
+    val first = F.traverse[Const[FirstOption[A], ?], A, A](fa)(store).getConst.o
+    val traverseFirst = F.traverse[Const[FirstOption[A], ?], A, A](
+      F.traverse(fa)(liftId)
+    )(store).getConst.o
+
+    first <-> traverseFirst
+  }
   def mapWithIndexRef[A, B](fa: F[A], f: (A, Int) => B): IsEq[F[B]] = {
     val lhs = F.mapWithIndex(fa)(f)
     val rhs = F.traverse(fa)(a =>

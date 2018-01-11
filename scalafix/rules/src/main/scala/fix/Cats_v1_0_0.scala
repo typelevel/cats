@@ -2,6 +2,7 @@ package fix
 package v1_0_0
 
 import scalafix._
+import scalafix.syntax._
 import scalafix.util.SymbolMatcher
 import scala.meta._
 import scala.meta.contrib._
@@ -70,6 +71,23 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
           ctx.replaceTree(t, "import cats.syntax.apply._")
         }
     }.asPatch + ctx.replaceSymbols(renames.toSeq: _*)
+  }
+}
+
+// ref: https://github.com/typelevel/cats/issues/1850
+case class ContraMapToLMap(index: SemanticdbIndex)
+  extends SemanticRule(index, "UseLMapInsteadOfContraMap") {
+
+  override def fix(ctx: RuleCtx): Patch = {
+
+    val contraMatcher = SymbolMatcher.normalized(Symbol("_root_.cats.functor.Contravariant.Ops.`contramap`."))
+
+    val unApplyName = "catsUnapply2left"
+
+    ctx.tree.collect {
+      case Term.Apply(Term.Select(f, contraMatcher(contramap)), _) if f.denotation.exists(_.name == unApplyName) =>
+        ctx.replaceTree(contramap, "lmap")
+    }.asPatch
   }
 }
 
@@ -193,6 +211,65 @@ case class RemoveSplit(index: SemanticdbIndex)
     ) + ctx.tree.collect {
       case t @ q"import cats.syntax.split._" =>
         ctx.replaceTree(t, "import cats.syntax.arrow._")
+    }.asPatch
+  }
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/1947
+case class RenameEitherTLiftT(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameEitherTLiftT") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.EitherTFunctions.liftT." -> "liftF"
+    )
+
+}
+
+// ref: https://github.com/typelevel/cats/pull/2033
+case class RenameTransformersLift(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameTransformersLift") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.WriterT.lift." -> "liftF",
+      "_root_.cats.data.StateT.lift." -> "liftF",
+      "_root_.cats.data.CommonStateTConstructors.lift." -> "liftF",
+      "_root_.cats.data.CommonIRWSTConstructors.lift." -> "liftF",
+      "_root_.cats.data.KleisliFunctions.lift." -> "liftF"
+    )
+
+}
+
+case class RenameApplyApConst(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameApplyApConst") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.Apply.forEffect." -> "productL",
+      "_root_.cats.Apply.followedBy." -> "productR",
+      "_root_.cats.Apply.Ops.forEffect." -> "productL",
+      "_root_.cats.Apply.Ops.followedBy." -> "productR",
+      "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
+      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
+      "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
+      "_root_.cats.FlatMap.followedByEval." -> "productREval"
+    )
+
+}
+
+
+// ref: https://github.com/typelevel/cats/pull/1961
+case class RenameCartesian(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameCartesian") {
+
+  override def fix(ctx: RuleCtx): Patch = {
+    ctx.replaceSymbols(
+      "_root_.cats.Cartesian." -> "_root_.cats.Semigroupal."
+    )+ ctx.tree.collect {
+      case t @ q"import cats.syntax.cartesian._" =>
+        ctx.replaceTree(t, "import cats.syntax.semigroupal._")
     }.asPatch
   }
 

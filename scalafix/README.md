@@ -2,13 +2,15 @@
 
 ## Try this!
 
-Install the scalafix sbt plugin (globally or in a specific project):
+[Install the scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
-```scala
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.0-RC2")
+To run all rules that apply to version `1.0.0-RC1` run
+
+```sh
+sbt scalafix github:typelevel/cats/v1.0.0?sha=v1.0.0-RC1
 ```
 
-run
+to run all rules that apply to the current `1.0.0-SNAPSHOT` run
 
 ```sh
 sbt scalafix github:typelevel/cats/v1.0.0
@@ -20,6 +22,10 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] The creation methods (left, right, apply, pure, etc.) in EitherT were improved to take less type arguments.
 
+- [x] EitherT.liftT was renamed to EitherT.liftF
+
+- [x] the lift method on WriterT, StateT, RWST and Kleisli was renamed to liftF
+
 - [x] CartesianBuilder (i.e. |@|) syntax is deprecated, use the apply syntax on tuples instead. E.g. (x |@| y |@| z).map(...) should be replaced by (x, y, z).mapN(...)
 
 - [x] Free.suspend is renamed to Free.defer for consistency.
@@ -30,7 +36,10 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
 
+- [x] Apply methods forEffect and followedBy were renamed to productL and productR respectively.  This also effects forEffectEval, followedByEval, forEffectPar, and followedByPar.
+
 - [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
+
 # WIP
 
 - [ ] cats no longer publishes the all-inclusive bundle package "org.typelevel" % "cats", use cats-core, cats-free, or cats-law accordingly instead. If you need cats.free, use "org.typelevel" % "cats-free", if you need cats-laws use "org.typelevel" % "cats-laws", if neither, use "org.typelevel" % "cats-core".
@@ -42,3 +51,12 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [ ] foldLeftM is removed from Free, use foldM on Foldable instead, see #1117 for detail.
 
 - [ ] iteratorFoldM was removed from Foldable due to #1716
+
+
+## To test scala fix
+
+```bash
+sbt coreJVM/publishLocal freeJVM/publishLocal
+cd scalafix
+sbt test
+```

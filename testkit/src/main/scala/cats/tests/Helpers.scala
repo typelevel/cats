@@ -59,6 +59,14 @@ object Helpers {
     }
   }
 
+  case class Hsh(n: Int) extends N
+  object Hsh extends Arb(new Hsh(_)) {
+    implicit object O extends Hash[Hsh] {
+      def hash(x: Hsh): Int = x.hashCode()
+      def eqv(x: Hsh, y: Hsh): Boolean = x.n == y.n
+    }
+  }
+
   // Band
   case class Bnd(n: Int) extends N
   object Bnd extends Companion(new Bnd(_)) {

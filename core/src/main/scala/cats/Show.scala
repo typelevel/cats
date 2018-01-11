@@ -1,7 +1,5 @@
 package cats
 
-import cats.functor.Contravariant
-
 /**
  * A type class to provide textual representation. It is meant to be a
  * better "toString". Whereas toString exists for any Object,

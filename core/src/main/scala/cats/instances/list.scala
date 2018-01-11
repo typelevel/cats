@@ -65,6 +65,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         Eval.defer(loop(fa))
       }
 
+      override def foldMap[A, B](fa: List[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
+
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))){ (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
@@ -127,6 +130,11 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def dropWhile_[A](fa: List[A])(p: A => Boolean): List[A] = fa.dropWhile(p)
 
       override def algebra[A]: Monoid[List[A]] = new kernel.instances.ListMonoid[A]
+
+      override def collectFirst[A, B](fa: List[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
+
     }
 
   implicit def catsStdShowForList[A:Show]: Show[List[A]] =

@@ -83,7 +83,10 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+  testOptions in Test += {
+    val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
+    Tests.Argument(TestFrameworks.ScalaTest, flag)
+  }
 )
 
 lazy val includeGeneratedSrc: Setting[_] = {
@@ -137,17 +140,27 @@ lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site t
 lazy val docSettings = Seq(
   micrositeName := "Cats",
   micrositeDescription := "Lightweight, modular, and extensible library for functional programming",
-  micrositeAuthor := "Typelevel contributors",
+  micrositeAuthor := "Cats contributors",
+  micrositeFooterText := Some(
+    """
+      |<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+      |""".stripMargin),
   micrositeHighlightTheme := "atom-one-light",
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "api/",
+  micrositeDocumentationUrl := "api/cats/index.html",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
       "contributing.md",
       "home",
-       Map("title" -> "Contributing", "section" -> "contributing", "position" -> "5")
+       Map("title" -> "Contributing", "section" -> "contributing", "position" -> "50")
+    ),
+    file("README.md") -> ExtraMdFileConfig(
+      "index.md",
+      "home",
+      Map("title" -> "Home", "section" -> "home", "position" -> "0")
     )
   ),
   micrositeGithubRepo := "cats",
@@ -170,6 +183,7 @@ lazy val docSettings = Seq(
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
+    "-groups",
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
@@ -178,6 +192,12 @@ lazy val docSettings = Seq(
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value
+)
+
+lazy val binaryCompatibleVersion = "1.0.0"
+
+def mimaSettings(moduleName: String) = Seq(
+  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion)
 )
 
 lazy val docs = project
@@ -202,16 +222,16 @@ lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, js)
-  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", js)
+  .aggregate(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS, alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS, js)
+  .dependsOn(macrosJS, kernelJS, kernelLawsJS, coreJS, lawsJS, freeJS, testkitJS, testsJS % "test-internal -> test", alleycatsCoreJS, alleycatsLawsJS, alleycatsTestsJS % "test-internal -> test", js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -226,7 +246,6 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
-val binaryCompatibleVersion = "0.8.0"
 
 lazy val kernel = crossProject.crossType(CrossType.Pure)
   .in(file("kernel"))
@@ -237,13 +256,8 @@ lazy val kernel = crossProject.crossType(CrossType.Pure)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
-  .jvmSettings((commonJvmSettings ++
-    (mimaPreviousArtifacts := {
-      if (scalaVersion.value startsWith "2.12")
-        Set()
-      else
-        Set("org.typelevel" %% "cats-kernel" % binaryCompatibleVersion)
-    })))
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
+
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -274,7 +288,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core") )
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -298,7 +312,7 @@ lazy val free = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
 lazy val freeJVM = free.jvm
 lazy val freeJS = free.js
@@ -327,6 +341,55 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
 
 lazy val testkitJVM = testkit.jvm
 lazy val testkitJS = testkit.js
+
+lazy val alleycatsCore = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-core"))
+  .dependsOn(core)
+  .settings(moduleName := "alleycats-core", name := "Alleycats core")
+  .settings(libraryDependencies ++= Seq(
+    "org.typelevel" %% "export-hook" % "1.2.0"
+  ))
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(includeGeneratedSrc)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions ~= {_.filterNot("-Ywarn-unused-import" == _)}) //export-hook triggers unused import
+
+
+lazy val alleycatsCoreJVM = alleycatsCore.jvm
+lazy val alleycatsCoreJS = alleycatsCore.js
+
+lazy val alleycatsLaws = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-laws"))
+  .dependsOn(alleycatsCore, laws)
+  .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
+  .settings(catsSettings)
+  .settings(publishSettings)
+  .settings(scoverageSettings)
+  .settings(disciplineDependencies)
+  .settings(testingDependencies)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+  .jsSettings(coverageEnabled := false)
+  .dependsOn(alleycatsCore)
+
+lazy val alleycatsLawsJVM = alleycatsLaws.jvm
+lazy val alleycatsLawsJS = alleycatsLaws.js
+
+lazy val alleycatsTests = crossProject.crossType(CrossType.Pure)
+  .in(file("alleycats-tests"))
+  .dependsOn(alleycatsLaws, testkit % "test")
+  .settings(moduleName := "alleycats-tests")
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .jsSettings(commonJsSettings)
+  .jvmSettings(commonJvmSettings)
+
+lazy val alleycatsTestsJVM = alleycatsTests.jvm
+lazy val alleycatsTestsJS = alleycatsTests.js
+
 
 // bench is currently JVM-only
 
@@ -396,11 +459,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/peterneyens/</url>
       </developer>
       <developer>
-        <id>edmundnoble</id>
-        <name>Edmund Noble</name>
-        <url>https://github.com/edmundnoble/</url>
-      </developer>
-      <developer>
         <id>tpolecat</id>
         <name>Rob Norris</name>
         <url>https://github.com/tpolecat/</url>
@@ -414,6 +472,11 @@ lazy val publishSettings = Seq(
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>LukaJCB</id>
+        <name>LukaJCB</name>
+        <url>https://github.com/LukaJCB/</url>
       </developer>
       <developer>
         <id>mpilquist</id>

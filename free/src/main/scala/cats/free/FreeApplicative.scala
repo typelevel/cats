@@ -32,6 +32,16 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
   }
 
+  final def map2[B, C](fb: FA[F, B])(f: (A, B) => C): FA[F, C] =
+    this match {
+      case Pure(a) => fb.map(f(a, _))
+      case _ =>
+        fb match {
+          case Pure(b) => Ap(Pure(f((_: A), b)), this)
+          case _ => Ap(Ap(Pure((a: A) => (b: B) => f(a, b)), this), fb)
+        }
+    }
+
   /** Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
     * Tail recursive.
     */
@@ -193,16 +203,19 @@ object FreeApplicative {
   final def lift[F[_], A](fa: F[A]): FA[F, A] =
     Lift(fa)
 
-  implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] = {
+  implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] =
     new Applicative[FA[S, ?]] {
-      override def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] = ap(fa.map((a: A) => (b: B) => (a, b)))(fb)
+      override def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] =
+        map2(fa, fb)((_, _))
 
       override def map[A, B](fa: FA[S, A])(f: A => B): FA[S, B] = fa.map(f)
 
       override def ap[A, B](f: FA[S, A => B])(fa: FA[S, A]): FA[S, B] = fa.ap(f)
 
       def pure[A](a: A): FA[S, A] = Pure(a)
+
+      override def map2[A, B, Z](fa: FA[S, A], fb: FA[S, B])(f: (A, B) => Z): FA[S, Z] =
+        fa.map2(fb)(f)
     }
-  }
 
 }

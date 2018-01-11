@@ -1,3 +1,9 @@
+---
+layout: docs
+title:  "Law Testing"
+section: "typeclasses"
+---
+
 # Law testing
 
 [Laws](https://typelevel.org/cats/typeclasses.html#laws) are an important part of cats.
@@ -12,9 +18,9 @@ To make things easier, we'll also include the `scalacheck-shapeless` library in 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "1.0.0-MF" % Test,
-  "org.typelevel" %% "cats-testkit" % "1.0.0-MF"% Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.5" % Test
+  "org.typelevel" %% "cats-laws" % "1.0.1" % Test,
+  "org.typelevel" %% "cats-testkit" % "1.0.1"% Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.6" % Test
 )
 ```
 
@@ -62,7 +68,7 @@ Cats has defined rulesets for all type class laws in `cats.laws.discipline.*`.
 So for our example we will want to import `cats.laws.discipline.FunctorTests` and call `checkAll` with it.
 Before we do so, however,
 we will have to bring our instances into scope as well as the derived `Arbitrary` instances from `scalacheck-shapeless`
-(We have defined an Arbitrary instance for `Tree` here, but you won't need it if you import `org.scalacheck.Shapeless._`).
+(We have defined an Arbitrary instance for `Tree` here, but you won't need it if you import `org.scalacheck.ScalacheckShapeless._`).
 
 
 
@@ -111,10 +117,8 @@ And voila, you've successfully proven that your data type upholds the Functor la
 ### Testing cats.kernel instances
 
 For most of the type classes included in cats, the above will work great.
-However, the law tests for the type classes inside `cats.kernel` are structured a bit differently.
-These include `Semigroup`, `Monoid`, `Group` and `Semilattice`.
-Instead of importing the laws from `cats.laws.discipline.*`, we have to import `cats.kernel.laws.GroupLaws`
-and then call the corresponding method, e.g. `GroupLaws[Foo].monoid`, or `GroupLaws[Foo].semigroup`.
+However, the law tests for the type classes inside `cats.kernel` are located in `cats.kernel.laws.discipline.*` instead.
+So we have to import from there to test type classes like `Semigroup`, `Monoid`, `Group` or `Semilattice`.
 
 Let's test it out, by defining a `Semigroup` instance for our `Tree` type.
 
@@ -135,10 +139,10 @@ Then we can again test the instance inside our class extending `CatsSuite`:
 
 ```tut:book
 import cats.laws.discipline.FunctorTests
-import cats.kernel.laws.GroupLaws
+import cats.kernel.laws.discipline.SemigroupTests
 
 class TreeLawTests extends CatsSuite {
-  checkAll("Tree[Int].MonoidLaws", GroupLaws[Tree[Int]].semigroup)
+  checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
 }
 ```

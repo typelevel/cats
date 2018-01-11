@@ -8,6 +8,9 @@ trait AlternativeSyntax {
 
   implicit final def catsSyntaxAlternativeSeparate[F[_], G[_, _], A, B](fgab: F[G[A, B]]): SeparateOps[F, G, A, B] =
     new SeparateOps[F, G, A, B](fgab)
+
+  implicit final def catsSyntaxAlternativeGuard(b: Boolean): GuardOps =
+    new GuardOps(b)
 }
 
 final class UniteOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
@@ -46,4 +49,22 @@ final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVa
                F: Monad[F],
                A: Alternative[F],
                G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
+}
+
+final class GuardOps(val condition: Boolean) extends AnyVal {
+
+  /**
+   * @see [[Alternative.guard]]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> def even(i: Int): Option[String] = (i % 2 == 0).guard[Option].as("even")
+   * scala> even(2)
+   * res0: Option[String] = Some(even)
+   * scala> even(3)
+   * res1: Option[String] = None
+   * }}}
+   */
+  def guard[F[_]](implicit F: Alternative[F]): F[Unit] = F.guard(condition)
 }

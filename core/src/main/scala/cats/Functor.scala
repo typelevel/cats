@@ -1,7 +1,5 @@
 package cats
 
-import cats.functor.Contravariant
-
 import simulacrum.typeclass
 
 /**
@@ -11,12 +9,28 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.FunctorLaws.
  */
-@typeclass trait Functor[F[_]] extends functor.Invariant[F] { self =>
+@typeclass trait Functor[F[_]] extends Invariant[F] { self =>
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
-  def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = map(fa)(f)
+  override def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B] = map(fa)(f)
 
   // derived methods
+
+  /**
+    * Alias for [[map]], since [[map]] can't be injected as syntax if
+    * the implementing type already had a built-in `.map` method.
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    *
+    * scala> val m: Map[Int, String] = Map(1 -> "hi", 2 -> "there", 3 -> "you")
+    *
+    * scala> m.fmap(_ ++ "!")
+    * res0: Map[Int,String] = Map(1 -> hi!, 2 -> there!, 3 -> you!)
+    * }}}
+    */
+  final def fmap[A, B](fa: F[A])(f: A => B): F[B] = map(fa)(f)
 
   /**
    * Lifts natural subtyping covariance of covariant Functors.

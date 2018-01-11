@@ -1,14 +1,16 @@
 package cats
 package instances
+import cats.kernel.instances.unit._
 
-trait PartialOrderInstances {
-  implicit val catsContravariantCartesianForPartialOrder: ContravariantCartesian[PartialOrder] =
-    new ContravariantCartesian[PartialOrder] {
+
+trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
+  implicit val catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
+    new ContravariantMonoidal[PartialOrder] {
       /** Derive a `PartialOrder` for `B` given a `PartialOrder[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap[A, B](fa: PartialOrder[A])(f: B => A): PartialOrder[B] = fa.on(f)
+      def contramap[A, B](fa: PartialOrder[A])(f: B => A): PartialOrder[B] = PartialOrder.by[B, A](f)(fa)
 
       def product[A, B](fa: PartialOrder[A], fb: PartialOrder[B]): PartialOrder[(A, B)] =
         new PartialOrder[(A, B)] {
@@ -17,5 +19,7 @@ trait PartialOrderInstances {
             if (z == 0.0) fb.partialCompare(x._2, y._2) else z
           }
         }
+
+      def unit: PartialOrder[Unit] = Order[Unit]
     }
 }

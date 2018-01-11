@@ -3,7 +3,7 @@ package laws
 package discipline
 
 import cats.data.EitherT
-import cats.laws.discipline.CartesianTests.Isomorphisms
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 
@@ -42,7 +42,8 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
         "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
         "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _),
         "monadError adaptError pure" -> forAll(laws.adaptErrorPure[A] _),
-        "monadError adaptError raise" -> forAll(laws.adaptErrorRaise[A] _)
+        "monadError adaptError raise" -> forAll(laws.adaptErrorRaise[A] _),
+        "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _)
       )
     }
   }

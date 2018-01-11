@@ -46,8 +46,15 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   final def map[B](f: A => B): Aux[F, B, Pivot] =
     unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
 
-  final def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
+  /**
+    * Modify the context `F` using transformation `f`.
+    */
+  final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
     unsafeApply(f(fi))(ks)
+
+  @deprecated("Use mapK", "1.0.0-RC2")
+  final def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
+    mapK(f)
 
 }
 

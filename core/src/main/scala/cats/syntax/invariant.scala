@@ -1,6 +1,6 @@
 package cats
 package syntax
 
-import cats.functor.Invariant
+import cats.Invariant
 
 trait InvariantSyntax extends Invariant.ToInvariantOps

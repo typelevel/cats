@@ -7,14 +7,18 @@ trait AllSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
     with ArrowSyntax
+    with ArrowChoiceSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax
-    with CartesianSyntax
+    with SemigroupalSyntax
     with CoflatMapSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with DistributiveSyntax
+    with ContravariantMonoidalSyntax
+    with ContravariantSemigroupalSyntax
     with EitherKSyntax
     with EitherSyntax
     with EqSyntax
@@ -22,6 +26,7 @@ trait AllSyntax
     with FoldableSyntax
     with FunctorSyntax
     with GroupSyntax
+    with HashSyntax
     with InvariantSyntax
     with IorSyntax
     with ListSyntax
@@ -30,6 +35,7 @@ trait AllSyntax
     with MonoidSyntax
     with OptionSyntax
     with OrderSyntax
+    with ParallelSyntax
     with PartialOrderSyntax
     with ProfunctorSyntax
     with ReducibleSyntax

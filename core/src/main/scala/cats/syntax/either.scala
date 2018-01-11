@@ -85,10 +85,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => if (f(b)) eab else Left(onFailure(b))
   }
 
-  def toIor: A Ior B = eab match {
-    case Left(a)  => Ior.left(a)
-    case Right(b) => Ior.right(b)
-  }
+  def toIor: A Ior B = Ior.fromEither(eab)
 
   def toOption: Option[B] = eab match {
     case Left(_)  => None
@@ -263,6 +260,10 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    * }}}
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
+
+  def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
+    ev.fromEither(eab)
+
 }
 
 final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token

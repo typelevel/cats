@@ -12,7 +12,329 @@ Response comes back saying your username can't have dashes in it, so you make so
 have special characters either. Change, resubmit. Passwords need to have at least one capital letter. Change,
 resubmit. Password needs to have at least one number.
 
-Or perhaps you're reading from a configuration file. One could imagine the configuration library you're using returns
+It would be nice to have all of these errors be reported simultaneously. That the username can't have dashes can
+be validated separately from it not having special characters, as well as from the password needing to have certain
+requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
+well-formed.
+
+Enter `Validated`.
+
+## A first approach
+
+You'll note firsthand that `Validated` is very similar to `Either` because it also has two possible values: errors on the left side or successful computations on the right side.
+
+Signature of the structure is as follows:
+
+```scala
+sealed abstract class Validated[+E, +A] extends Product with Serializable {
+  // Implementation elided
+}
+```
+
+And its _projections_:
+
+```scala
+final case class Valid[+A](a: A) extends Validated[Nothing, A]
+final case class Invalid[+E](e: E) extends Validated[E, Nothing]
+```
+
+Before diving into `Validated`, let's take a look at an `Either` based first approach to address our validation necessity.
+
+Our data will be represented this way:
+
+```tut:silent
+final case class RegistrationData(username: String, password: String, firstName: String, lastName: String, age: Int)
+```
+
+And our error model:
+
+```tut:silent
+sealed trait DomainValidation {
+  def errorMessage: String
+}
+
+case object UsernameHasSpecialCharacters extends DomainValidation {
+  def errorMessage: String = "Username cannot contain special characters."
+}
+
+case object PasswordDoesNotMeetCriteria extends DomainValidation {
+  def errorMessage: String =  "Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."
+}
+
+case object FirstNameHasSpecialCharacters extends DomainValidation {
+  def errorMessage: String =  "First name cannot contain spaces, numbers or special characters."
+}
+
+case object LastNameHasSpecialCharacters extends DomainValidation {
+  def errorMessage: String =  "Last name cannot contain spaces, numbers or special characters."
+}
+
+case object AgeIsInvalid extends DomainValidation {
+  def errorMessage: String =  "You must be aged 18 and not older than 75 to use our services."
+}
+```
+
+We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using for displaying the possible errors of every field. Now, let's explore the proposed implementation:
+
+```tut:silent
+import cats.syntax.either._
+
+sealed trait FormValidator{
+ def validateUserName(userName: String): Either[DomainValidation, String] =
+    Either.cond(
+      userName.matches("^[a-zA-Z0-9]+$"), 
+      userName, 
+      UsernameHasSpecialCharacters
+    )
+
+ def validatePassword(password: String): Either[DomainValidation, String] =
+    Either.cond(
+      password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"),
+      password,
+      PasswordDoesNotMeetCriteria
+    )
+
+ def validateFirstName(firstName: String): Either[DomainValidation, String] =
+    Either.cond(
+      firstName.matches("^[a-zA-Z]+$"),
+      firstName,
+      FirstNameHasSpecialCharacters
+    )
+
+ def validateLastName(lastName: String): Either[DomainValidation, String] =
+    Either.cond(
+      lastName.matches("^[a-zA-Z]+$"),
+      lastName,
+      LastNameHasSpecialCharacters
+    )
+
+ def validateAge(age: Int): Either[DomainValidation, Int] =
+    Either.cond(
+      age >= 18 && age <= 75,
+      age,
+      AgeIsInvalid
+    )
+
+  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Either[DomainValidation, RegistrationData] = {
+
+    for {
+      validatedUserName <- validateUserName(username)
+      validatedPassword <- validatePassword(password)
+      validatedFirstName <- validateFirstName(firstName)
+      validatedLastName <- validateLastName(lastName)
+      validatedAge <- validateAge(age)
+    }
+      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+  }
+
+}
+
+object FormValidator extends FormValidator
+
+```
+
+The logic of the validation process is as follows: **check every individual field based on the established rules for each one of them. If the validation is successful, then return the field wrapped in a `Right` instance; If not, then return a `DomainValidation` with the respective message, wrapped in a `Left` instance**.
+Note that we took advantage of the `.cond` method of `Either`, that is equivalent to do `if (cond) Right(value) else Left(error)`.
+
+Our service has the `validateForm` method for checking all the fields and, if the process succeeds it will create an instance of `RegistrationData`, right?
+
+Well, yes, but the error reporting part will have the downside of showing only the first error.
+
+Let's look this in detail:
+
+```tut:silent:fail
+for {
+  validatedUserName <- validateUserName(username)
+  validatedPassword <- validatePassword(password)
+  validatedFirstName <- validateFirstName(firstName)
+  validatedLastName <- validateLastName(lastName)
+  validatedAge <- validateAge(age)
+}
+  yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+```
+
+A for-comprehension is _fail-fast_. If some of the evaluations in the `for` block fails for some reason, the `yield` statement will not complete. In our case, if that happens we won't be getting the accumulated list of errors.
+
+If we run our code:
+
+```tut:book
+FormValidator.validateForm(
+  username = "fakeUs3rname", 
+  password = "password", 
+  firstName = "John", 
+  lastName = "Doe",
+  age = 15
+)
+```
+
+We should have gotten another `DomainValidation` object denoting the invalid age.
+
+### An iteration with `Validated`
+
+Time to do some refactoring! We're going to try a `Validated` approach:
+
+```tut:silent
+import cats.data._
+import cats.data.Validated._
+import cats.implicits._
+
+def validateUserName(userName: String): Validated[DomainValidation, String] = FormValidator.validateUserName(userName).toValidated
+
+def validatePassword(password: String): Validated[DomainValidation, String] = FormValidator.validatePassword(password).toValidated
+
+def validateFirstName(firstName: String): Validated[DomainValidation, String] = FormValidator.validateFirstName(firstName).toValidated
+
+def validateLastName(lastName: String): Validated[DomainValidation, String] = FormValidator.validateLastName(lastName).toValidated
+
+def validateAge(age: Int): Validated[DomainValidation, Int] = FormValidator.validateAge(age).toValidated
+```
+```tut:book:fail
+def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
+  for {
+    validatedUserName <- validateUserName(username)
+    validatedPassword <- validatePassword(password)
+    validatedFirstName <- validateFirstName(firstName)
+    validatedLastName <- validateLastName(lastName)
+    validatedAge <- validateAge(age)
+  }
+    yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+}
+```
+
+What we've done here was to reuse the previously created validation functions and convert their output to a `Validated` instance with the `.toValidated` combinator. This one takes an `Either` and converts it to its equivalent `Validated`.
+This datatype, as with `Either` has two projections: `Valid` and `Invalid`, analogous to `Right` and `Left`, respectively.
+
+Remember that our goal is to get all the validation errors for displaying it to the user, but you'll find that this approach won't compile, as you can see in the previous snippet. Why?
+
+Without diving into details about monads, a for-comprehension uses the `flatMap` method for composition. Monads like `Either` can be composed in that way, but the thing with `Validated` is that it isn't a monad, but an [_Applicative Functor_](../typeclasses/applicativetraverse.html).
+That's why you see the message: `error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]`.
+
+So, how do we do here?
+
+### Meeting applicative
+
+We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.
+
+```tut:silent
+sealed trait FormValidatorNel {
+
+  type ValidationResult[A] = ValidatedNel[DomainValidation, A]
+
+  private def validateUserName(userName: String): ValidationResult[String] =
+    if (userName.matches("^[a-zA-Z0-9]+$")) userName.validNel else UsernameHasSpecialCharacters.invalidNel
+
+  private def validatePassword(password: String): ValidationResult[String] =
+    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) password.validNel
+    else PasswordDoesNotMeetCriteria.invalidNel
+
+  private def validateFirstName(firstName: String): ValidationResult[String] =
+    if (firstName.matches("^[a-zA-Z]+$")) firstName.validNel else FirstNameHasSpecialCharacters.invalidNel
+
+  private def validateLastName(lastName: String): ValidationResult[String] =
+    if (lastName.matches("^[a-zA-Z]+$")) lastName.validNel else LastNameHasSpecialCharacters.invalidNel
+
+  private def validateAge(age: Int): ValidationResult[Int] =
+    if (age >= 18 && age <= 75) age.validNel else AgeIsInvalid.invalidNel
+
+  def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): ValidationResult[RegistrationData] = {
+    (validateUserName(username),
+    validatePassword(password),
+    validateFirstName(firstName),
+    validateLastName(lastName),
+    validateAge(age)).mapN(RegistrationData)
+  }
+
+}
+
+object FormValidatorNel extends FormValidatorNel
+```
+
+Let's see what changed here:
+
+1. In this new implementation, we're using a [NonEmptyList](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyList.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
+2. `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. When you use `ValidatedNel` you're stating that your accumulative structure will be a `NonEmptyList`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
+3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
+4. `.validNel` and `.invalidNel` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
+5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
+
+**Deprecation notice:** since cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
+
+Note that, at the end, we expect to lift the result of the validation functions in a `RegistrationData` instance. If the process fails, we'll get our `NonEmptyList` detailing what went wrong.
+
+For example:
+
+```tut:book
+FormValidatorNel.validateForm(
+  username = "Joe",
+  password = "Passw0r$1234",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+)
+
+FormValidatorNel.validateForm(
+  username = "Joe%%%",
+  password = "password",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+)
+```
+
+Sweet success! Now you can take your validation process to the next level!
+
+### A short detour
+
+As previously stated, `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
+
+For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
+
+#### Accumulative Structures
+
+Let's take a look about how a `Semigroup` works in a `NonEmptyList`:
+
+```tut:book
+NonEmptyList.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyList[DomainValidation](FirstNameHasSpecialCharacters, List(LastNameHasSpecialCharacters))
+```
+
+We're combining a couple of `NonEmptyList`'s. The first one has its mandatory element (note that we've built an instance of it with `.one`) and the second has a couple of elements. As you can see, the output of the combination, expressed by the `|+|` operator is another `NonEmptyList` with the three elements.
+
+But, what about if we want _another_ way of combining? We can provide our custom `Semigroup` instance with the desired combining logic and pass it implicitly to your scope.
+
+### Going back and forth
+
+cats offers you a nice set of combinators for transforming your `Validated` based approach to an `Either` one and vice-versa.
+We've used `.toValidated` in our second example, now let's see how to use `.toEither`.
+
+#### From `Validated` to `Either`
+
+To do this, simply use `.toEither` combinator:
+
+```tut:book
+// Successful case
+FormValidatorNel.validateForm(
+  username = "Joe",
+  password = "Passw0r$1234",
+  firstName = "John",
+  lastName = "Doe",
+  age = 21
+).toEither
+
+// Invalid case
+FormValidatorNel.validateForm(
+  username = "Joe123#",
+  password = "password",
+  firstName = "John",
+  lastName = "Doe",
+  age = 5
+).toEither
+```
+
+With this conversion, as you can see, we got an `Either` with a `NonEmptyList` detailing the possible validation errors or our `RegistrationData` object.
+
+## Another case
+
+Perhaps you're reading from a configuration file. One could imagine the configuration library you're using returns
 a `scala.util.Try`, or maybe a `scala.util.Either`. Your parsing may look something like:
 
 ```scala
@@ -25,12 +347,7 @@ for {
 You run your program and it says key "url" not found, turns out the key was "endpoint". So you change your code
 and re-run. Now it says the "port" key was not a well-formed integer.
 
-It would be nice to have all of these errors be reported simultaneously. That the username can't have dashes can
-be validated separately from it not having special characters, as well as from the password needing to have certain
-requirements. A misspelled (or missing) field in a config can be validated separately from another field not being
-well-formed.
 
-Enter `Validated`.
 
 ## Parallel validation
 Our goal is to report any and all errors across independent bits of data. For instance, when we ask for several
@@ -205,7 +522,7 @@ implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
 ```
 
 Awesome! And now we also get access to all the goodness of `Applicative`, which includes `map{2-22}`, as well as the
-`Cartesian` tuple syntax.
+`Semigroupal` tuple syntax.
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
 

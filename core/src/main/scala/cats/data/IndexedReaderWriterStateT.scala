@@ -1,7 +1,8 @@
 package cats
 package data
 
-import cats.functor.{ Bifunctor, Contravariant, Profunctor, Strong }
+import cats.arrow.{Profunctor, Strong}
+
 import cats.syntax.either._
 
 /**
@@ -50,6 +51,13 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    */
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     transform { (l, s, a) => (l, s, f(a)) }
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G)(implicit F: Functor[F]): IndexedReaderWriterStateT[G, E, L, SA, SB, A] =
+    IndexedReaderWriterStateT.applyF(
+      f(F.map(runF)(rwsa => (e, sa) => f(rwsa(e, sa)))))
 
   /**
    * Modify the resulting state using `f` and the resulting value using `g`.
@@ -258,6 +266,23 @@ private[data] sealed trait CommonIRWSTConstructors {
   /**
    * Return an effectful `a` and an empty log without modifying the input state.
    */
+  def liftF[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[RWST[Eval, Boolean, List[String], String, ?], Int] = a.mapK(RWST.liftK)
+   * scala> b.value.runEmpty(true).value
+   * res0: (List[String], String, Option[Int]) = (List(),"",Some(1))
+   * }}}
+   */
+  def liftK[F[_], E, L, S](implicit F: Applicative[F], L: Monoid[L]): F ~> IndexedReaderWriterStateT[F, E, L, S, S, ?] =
+    λ[F ~> IndexedReaderWriterStateT[F, E, L, S, S, ?]](IndexedReaderWriterStateT.liftF(_))
+
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], E, L, S, A](fa: F[A])(implicit F: Applicative[F], L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
     IndexedReaderWriterStateT((_, s) => F.map(fa)((L.empty, s, _)))
 
@@ -562,7 +587,7 @@ private[data] sealed abstract class RWSTAlternative[F[_], E, L, S]
       G.combineK(x.run(e, sa), y.run(e, sa))
     }
 
-  def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.lift(G.empty[A])
+  def empty[A]: ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.liftF(G.empty[A])
 
   def pure[A](a: A): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.pure[F, E, L, S, A](a)
 
@@ -576,7 +601,7 @@ private[data] sealed abstract class RWSTMonadError[F[_], E, L, S, R]
 
   implicit def F: MonadError[F, R]
 
-  def raiseError[A](r: R): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.lift(F.raiseError(r))
+  def raiseError[A](r: R): ReaderWriterStateT[F, E, L, S, A] = ReaderWriterStateT.liftF(F.raiseError(r))
 
   def handleErrorWith[A](fa: ReaderWriterStateT[F, E, L, S, A])(f: R => ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, A] =
     ReaderWriterStateT { (e, s) =>

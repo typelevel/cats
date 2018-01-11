@@ -77,6 +77,12 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     OneAnd(f(head), F.map(tail)(f))
 
   /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): OneAnd[G, A] =
+    OneAnd(head, f(tail))
+
+  /**
    * Typesafe equality operator.
    *
    * This method is similar to == except that it only allows two
@@ -98,7 +104,23 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] sealed abstract class OneAndInstances extends OneAndLowPriority3 {
+
+private[data] sealed abstract class OneAndInstances extends OneAndLowPriority0 {
+
+  implicit def catsDataParallelForOneAnd[A, M[_] : Alternative, F[_] : Alternative]
+  (implicit P: Parallel[M, F]): Parallel[OneAnd[M, ?], OneAnd[F, ?]] =
+    new Parallel[OneAnd[M, ?], OneAnd[F, ?]] {
+      def monad: Monad[OneAnd[M, ?]] = catsDataMonadForOneAnd(P.monad, Alternative[M])
+
+      def applicative: Applicative[OneAnd[F, ?]] = catsDataApplicativeForOneAnd(Alternative[F])
+
+      def sequential: OneAnd[F, ?] ~> OneAnd[M, ?] =
+        λ[OneAnd[F, ?] ~> OneAnd[M, ?]](ofa => OneAnd(ofa.head, P.sequential(ofa.tail)))
+
+      def parallel: OneAnd[M, ?] ~> OneAnd[F, ?] =
+        λ[OneAnd[M, ?] ~> OneAnd[F, ?]](ofa => OneAnd(ofa.head, P.parallel(ofa.tail)))
+
+    }
 
   implicit def catsDataEqForOneAnd[A, F[_]](implicit A: Eq[A], FA: Eq[F[A]]): Eq[OneAnd[F, A]] =
     new Eq[OneAnd[F, A]]{
@@ -178,7 +200,7 @@ private[data] sealed abstract class OneAndInstances extends OneAndLowPriority3 {
     }
 }
 
-private[data] sealed abstract class OneAndLowPriority0 {
+private[data] sealed abstract class OneAndLowPriority4 {
   implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, ?]] =
     new Comonad[OneAnd[Stream, ?]] {
       def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
@@ -199,7 +221,8 @@ private[data] sealed abstract class OneAndLowPriority0 {
     }
 }
 
-private[data] sealed abstract class OneAndLowPriority1 extends OneAndLowPriority0 {
+private[data] sealed abstract class OneAndLowPriority3 extends OneAndLowPriority4 {
+
   implicit def catsDataFunctorForOneAnd[F[_]](implicit F: Functor[F]): Functor[OneAnd[F, ?]] =
     new Functor[OneAnd[F, ?]] {
       def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
@@ -208,7 +231,28 @@ private[data] sealed abstract class OneAndLowPriority1 extends OneAndLowPriority
 
 }
 
-private[data] sealed abstract class OneAndLowPriority2 extends OneAndLowPriority1 {
+private[data] sealed abstract class OneAndLowPriority2 extends OneAndLowPriority3 {
+
+  implicit def catsDataApplicativeForOneAnd[F[_]](implicit F: Alternative[F]): Applicative[OneAnd[F, ?]] =
+    new Applicative[OneAnd[F, ?]] {
+      override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
+        fa.map(f)
+
+      def pure[A](x: A): OneAnd[F, A] =
+        OneAnd(x, F.empty)
+
+      override def ap[A, B](ff: OneAnd[F, A => B])(fa: OneAnd[F, A]): OneAnd[F, B] = {
+        val (f, tf) = (ff.head, ff.tail)
+        val (a, ta) = (fa.head, fa.tail)
+        val fb = F.ap(tf)(F.combineK(F.pure(a), ta))
+        OneAnd(f(a), F.combineK(F.map(ta)(f), fb))
+      }
+    }
+
+}
+
+private[data] sealed abstract class OneAndLowPriority1 extends OneAndLowPriority2 {
+
   implicit def catsDataTraverseForOneAnd[F[_]](implicit F: Traverse[F]): Traverse[OneAnd[F, ?]] =
     new Traverse[OneAnd[F, ?]] {
       def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] = {
@@ -225,7 +269,9 @@ private[data] sealed abstract class OneAndLowPriority2 extends OneAndLowPriority
     }
 }
 
-private[data] sealed abstract class OneAndLowPriority3 extends OneAndLowPriority2 {
+
+private[data] sealed abstract class OneAndLowPriority0 extends OneAndLowPriority1 {
+
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F, ?], F] with NonEmptyTraverse[OneAnd[F, ?]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {

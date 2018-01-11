@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.functor.Contravariant
+import cats.Contravariant
 
 trait ContravariantSyntax extends Contravariant.ToContravariantOps
 

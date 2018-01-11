@@ -2,14 +2,14 @@
 layout: page
 title:  "FAQ"
 section: "faq"
-position: 4
+position: 40
 ---
 
 # Frequently Asked Questions
 
 ## Questions
  * [What imports do I need?](#what-imports)
- * [What is the difference between cats and scalaz](#diff-scalaz) 
+ * [What is the difference between Cats and Scalaz?](#diff-scalaz) 
  * [Where is right-biased `Either`?](#either)
  * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
@@ -22,7 +22,9 @@ position: 4
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
  * [What does this symbol mean?](#symbol)
+ * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
+ * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
@@ -38,10 +40,9 @@ This should be all that you need, but if you'd like to learn more about the deta
 
 ## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz? 
 
-Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: facilitate pure functional programming in Scala applications; the underlying core strategy is different. Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation. These libaries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs. 
+Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
-Based on this core strategy, Cats took a [modular](/cats/#modularity) approach and focuses on providing core, [binary compatible](/cats/#a-namebinary-compatibility-and-versioning), [approachable](/cats/#approachability) and [efficient](/cats/#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed 
-by the [typelevel code of conduct](https://typelevel.org/conduct). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation). 
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [typelevel code of conduct](https://typelevel.org/conduct). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
                        
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
@@ -111,6 +112,7 @@ We can even perform more complicated operations, such as a `traverse` of the nes
 import cats.data.ValidatedNel
 type ErrorsOr[A] = ValidatedNel[String, A]
 def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+```
 
 ```tut:book
 nl.traverse(even)
@@ -209,29 +211,38 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
-| Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
-| -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
-| `fa *> fb`                       | right apply            |                  | `Cartesian[F[_]]`       | `*>(fa: F[A])(fb: F[B]): F[B]`                            |
-| `fa <* fb`                       | left apply             |                  | `Cartesian[F[_]]`       | `<*(fa: F[A])(fb: F[B]): F[A]`                            |
-| `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |
-| `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
-| `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
-| `fa >> fb`                       | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
-| `fa << fb`                       | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
-| <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
-| `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
-| `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
-| `x < y`                          | less than              |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                 |
-| `x <= y`                         | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                               |
-| <code>x &#124;+&#124; y</code>   | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                  |
-| `x <+> y`                        | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                        |
-| `f <<< g`                        | Arrow compose          |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                |
-| `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
-| `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
-| `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
-| `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
-| `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
-| `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
+| Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
+| -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
+| `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
+| `fa <* fb`                       | product left               |                  | `Apply[F[_]]`           | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
+| `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
+| `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
+| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                              |
+| <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                             |
+| `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                           |
+| `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                         |
+| `x < y`                          | less than                |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                           |
+| `x <= y`                         | less than or equal       |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                                         |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                            |
+| `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                  |
+| `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
+| `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
+| `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
+| `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+
+
+## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
+
+You can find more information [here](typeclasses/lawtesting.html).
 
 ## <a id="contributing" href="#contributing"></a>How can I help?
 
@@ -242,3 +253,8 @@ The cats community welcomes and encourages contributions, even if you are comple
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
+
+## <a id="sbt-catalysts" href="#sbt-catalysts"></a>Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?
+
+Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is created particularly for this purpose. It also provides a g8 template so that you can run `sbt new typelevel/sbt-catalysts.g8` to quickly set up a project using Cats ecosystem libraries through this plugin. For more details, go to [sbt-catalysts](https://github.com/typelevel/sbt-catalysts). 
+

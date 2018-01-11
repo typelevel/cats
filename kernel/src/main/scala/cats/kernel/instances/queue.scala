@@ -15,6 +15,9 @@ trait QueueInstances extends QueueInstances1 {
 trait QueueInstances1 extends QueueInstances2 {
   implicit def catsKernelStdPartialOrderForQueue[A: PartialOrder]: PartialOrder[Queue[A]] =
     new QueuePartialOrder[A]
+
+  implicit def catsKernelStdHashForQueue[A: Hash]: Hash[Queue[A]] =
+    new QueueHash[A]
 }
 
 trait QueueInstances2 {
@@ -26,6 +29,10 @@ class QueueOrder[A](implicit ev: Order[A]) extends Order[Queue[A]] {
   def compare(xs: Queue[A], ys: Queue[A]): Int =
     if (xs eq ys) 0
     else StaticMethods.iteratorCompare(xs.iterator, ys.iterator)
+}
+
+class QueueHash[A](implicit ev: Hash[A]) extends QueueEq[A] with Hash[Queue[A]] {
+  def hash(x: Queue[A]): Int = StaticMethods.orderedHash(x)
 }
 
 class QueuePartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Queue[A]] {
