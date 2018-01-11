@@ -64,9 +64,10 @@ lazy val tagName = Def.setting{
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
+    val tv = tagName.value
     val tagOrHash =
-      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
-      else tagName.value
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      else tv
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
@@ -127,8 +128,12 @@ def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
   }
 
 lazy val javadocSettings = Seq(
-  sources in (Compile, doc) := (if (docsSourcesAndProjects(scalaVersion.value)._1) (sources in (Compile, doc)).value else Nil)
+  sources in (Compile, doc) := {
+    val docSource = (sources in (Compile, doc)).value
+    if (docsSourcesAndProjects(scalaVersion.value)._1) docSource else Nil
+  }
 )
+
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -606,7 +611,7 @@ lazy val sharedReleaseProcess = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+    releaseStepCommand("sonatypeReleaseAll"),
     pushChanges)
 )
 
