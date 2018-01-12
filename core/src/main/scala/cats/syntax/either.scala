@@ -148,6 +148,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b)    => f(b)
   }
 
+  def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] = eab match {
+    case Left(a)      => f(a)
+    case r @ Right(_) => EitherUtil.leftCast(r)
+  }
+
   def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int = eab match {
     case Left(a1)  =>
       that match {
