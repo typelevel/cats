@@ -27,7 +27,7 @@ class ContravariantCoyonedaSuite extends CatsSuite {
   // This instance cannot be summoned implicitly. This is not specific to contravariant coyoneda;
   // it doesn't work for Functor[Coyoneda[? => String, ?]] either.
   implicit val contravariantContravariantCoyonedaToString: Contravariant[ContravariantCoyoneda[? => String, ?]] =
-    ContravariantCoyoneda.catsFreeCovariantFunctorForCovariantCoyoneda[? => String]
+    ContravariantCoyoneda.catsFreeContravariantFunctorForContravariantCoyoneda[? => String]
 
   checkAll("ContravariantCoyoneda[? => String, Int]", ContravariantTests[ContravariantCoyoneda[? => String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[ContravariantCoyoneda[Option, ?]]", SerializableTests.serializable(Contravariant[ContravariantCoyoneda[Option, ?]]))
