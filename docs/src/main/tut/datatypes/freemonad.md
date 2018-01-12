@@ -520,7 +520,7 @@ final case class ReadLine(prompt : String) extends Teletype[String]
 type TeletypeT[M[_], A] = FreeT[Teletype, M, A]
 type Log = List[String]
 
-type TeletypeState[A] = State[List[String], A]
+type TeletypeState[A] = State[Log, A]
 
 /** Teletype smart constructors */
 object TeletypeOps {
@@ -546,9 +546,9 @@ def interpreter = new (Teletype ~> TeletypeState) {
 	  case ReadLine(prompt) =>
 		println(prompt)
 		val userInput = "hanging in here" //scala.io.StdIn.readLine()
-		StateT.pure[Eval, List[String], A](userInput)
+		StateT.pure[Eval, Log, A](userInput)
 	  case WriteLine(line) =>
-		StateT.pure[Eval, List[String], A](println(line))
+		StateT.pure[Eval, Log, A](println(line))
 	}
   }
 }
