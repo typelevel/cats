@@ -340,7 +340,7 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
    * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
    * }}}
    */
-  def leftNel[B]: Either[NonEmptyList[A], B] = Left(NonEmptyList.of(obj))
+  def leftNel[B]: Either[NonEmptyList[A], B] = Left(NonEmptyList.one(obj))
 
   /**
    * Wrap a value to a right EitherNel
