@@ -25,6 +25,7 @@ position: 40
  * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
  * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
+ * [How to try cats in a REPL?](#ammonite)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
@@ -257,4 +258,14 @@ See the [contributing guide]({{ site.baseurl }}/contributing.html) for more info
 ## <a id="sbt-catalysts" href="#sbt-catalysts"></a>Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?
 
 Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is created particularly for this purpose. It also provides a g8 template so that you can run `sbt new typelevel/sbt-catalysts.g8` to quickly set up a project using Cats ecosystem libraries through this plugin. For more details, go to [sbt-catalysts](https://github.com/typelevel/sbt-catalysts). 
+
+## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
+
+The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
+```scala
+interp.configureCompiler(_.settings.YpartialUnification.value = true)
+import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
+```
+Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
+
 
