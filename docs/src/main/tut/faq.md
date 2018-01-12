@@ -264,7 +264,7 @@ Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is create
 The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
 ```scala
 interp.configureCompiler(_.settings.YpartialUnification.value = true)
-import $ivy.`org.typelevel::cats:1.0.1`, cats.implicits._
+import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
 ```
 Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
 
