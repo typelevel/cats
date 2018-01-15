@@ -28,32 +28,128 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
   private implicit def ordering: Ordering[K] = value.ordering
   private implicit def order: Order[K] = Order.fromOrdering
 
+  /**
+    * Alias for [[concat]]
+    */
   def ++(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = concat(as)
+  /**
+    * Appends this NEM to another NEM, producing a new `NonEmptyMap`.
+    */
   def concat(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = new NonEmptyMap(value ++ as.value)
+
+  /**
+    * Removes a key from this map, returning a new SortedMap.
+    */
   def -(key: K): SortedMap[K, A] = value - key
+
+  /**
+    * Adds a key-value pair to this map, returning a new `NonEmptyMap`.
+    * */
   def +(ka: (K, A)): NonEmptyMap[K, A] = new NonEmptyMap(value + ka)
 
+  /**
+    * Applies f to all the elements
+    */
   def map[B](f: A ⇒ B): NonEmptyMap[K, B] =
     new NonEmptyMap(Functor[SortedMap[K, ?]].map(value)(f))
 
+  /**
+    * Optionally returns the value associated with the given key.
+    * {{{
+    * scala> import cats.data.NonEmptyMap
+    * scala> import cats.implicits._
+    * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
+    * scala> nem.get("B")
+    * res0: Option[Int] = Some(2)
+    * }}}
+    */
   def get(k: K): Option[A] = value.get(k)
 
+  /**
+    * Returns a `SortedSet` containing all the keys of this map.
+    * {{{
+    * scala> import cats.data.NonEmptyMap
+    * scala> import cats.implicits._
+    * scala> val nem = NonEmptyMap.of(1 -> "A", 2 -> "B")
+    * scala> nem.keys
+    * res0: scala.collection.immutable.SortedSet[Int] = Set(1, 2)
+    * }}}
+    */
   def keys: SortedSet[K] = value.keySet
 
+  /**
+    * Converts this map to a `NonEmptyList` of key-value pairs.
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyMap
+    * scala> import cats.implicits._
+    * scala> val nem = NonEmptyMap.of(1 -> "A", 2 -> "B")
+    * scala> nem.toNonEmptyList
+    * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B))
+    * }}}
+    */
   def toNonEmptyList: NonEmptyList[(K, A)] = NonEmptyList.fromListUnsafe(value.toList)
 
+  /**
+    * Returns the first key-value pair of this map.
+    */
   def head: (K, A) = value.head
+  /**
+    * Returns the first key-value pair of this map.
+    */
   def last: (K, A) = value.last
+
+  /**
+    * Returns all the key-value pairs, except for the first.
+    */
   def tail: SortedMap[K, A] = value.tail
 
+  /**
+    * Alias for [[get]]
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyMap
+    * scala> import cats.implicits._
+    * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
+    * scala> nem("A")
+    * res0: Option[Int] = Some(1)
+    * }}}
+    */
   def apply(key: K): Option[A] = get(key)
+
+  /**
+    * Checks whether this map contains a binding for the given key.
+    */
   def contains(key: K): Boolean = value.contains(key)
 
+  /**
+    * Returns the amount of key-value pars in this map.
+    */
   def size: Int = value.size
+
+  /**
+    * Tests whether a predicate holds for all elements of this map.
+    */
   def forall(p: A ⇒ Boolean): Boolean = value.forall { case (_, a) => p(a) }
+
+  /**
+    * Tests whether a predicate holds for at least one element of this map.
+    */
   def exists(f: A ⇒ Boolean): Boolean = value.exists { case (_, a) => f(a) }
+
+  /**
+    * Returns the first value along with its key, that matches the given predicate.
+    */
   def find(f: A ⇒ Boolean): Option[(K, A)] = value.find { case (_, a) => f(a) }
+
+  /**
+    * Filters all elements of this map that do not satisfy the given predicate.
+    */
   def filter(p: A ⇒ Boolean): SortedMap[K, A] = value.filter  { case (_, a) => p(a) }
+
+  /**
+    * Filters all elements of this map that satisfy the given predicate.
+    */
   def filterNot(p: A ⇒ Boolean): SortedMap[K, A] = filter(t => !p(t))
 
 
@@ -75,6 +171,11 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
   def reduceLeft(f: (A, A) => A): A =
     reduceLeftTo(identity)(f)
 
+
+  /**
+    * Apply `f` to the "initial element" of this map and lazily combine it
+    * with every other value using the given function `g`.
+    */
   def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
     tail.foldLeft(f(head._2))((b, a) => g(b, a._2))
 
@@ -84,6 +185,10 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
   def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] =
     reduceRightTo(identity)(f)
 
+  /**
+    * Apply `f` to the "initial element" of this map and lazily combine it
+    * with every other value using the given function `g`.
+    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     Always((head, tail)).flatMap { case ((_, a), ga) =>
       Foldable[SortedMap[K, ?]].reduceRightToOption(ga)(f)(g).flatMap {
@@ -107,6 +212,11 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
       }
     }
 
+  /**
+    * Given a function which returns a G effect, thread this effect
+    * through the running of this function on all the values in this map,
+    * returning an NonEmptyMap[K, B] in a G context.
+    */
   def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] =
     reduceRightToOptionWithKey[A, G[SortedMap[K, B]]](tail)({ case (k, a) =>
       G.map(f(a))(b => SortedMap.empty[K, B] + ((k, b)))
@@ -117,7 +227,10 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
       case Some(gtail) => G.map2(f(head._2), gtail)((a, bs) => NonEmptyMap((head._1, a), bs))
     }.value
 
-  def toMap: SortedMap[K, A] = value
+  /**
+    * Converts this map to a `SortedMap`.
+    */
+  def toSortedMap: SortedMap[K, A] = value
 
   /**
     * Typesafe stringification method.
@@ -129,6 +242,8 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
   def show(implicit A: Show[A], K: Show[K]): String =
     s"NonEmpty${Show[SortedMap[K, A]].show(value)}"
 
+  override def toString: String = s"NonEmpty${toSortedMap.toString}"
+
   /**
     * Typesafe equality operator.
     *
@@ -138,8 +253,11 @@ final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal
     * universal equality provided by .equals.
     */
   def ===(that: NonEmptyMap[K, A])(implicit A: Eq[A]): Boolean =
-    Eq[SortedMap[K, A]].eqv(value, that.toMap)
+    Eq[SortedMap[K, A]].eqv(value, that.toSortedMap)
 
+  /**
+    * Alias for [[size]]
+    */
   def length: Int = size
 
 }

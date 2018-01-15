@@ -48,43 +48,43 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("NonEmptyMap#filter is consistent with Map#filter") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
-      val map = nem.toMap
+      val map = nem.toSortedMap
       nem.filter(p) should ===(map.filter(t => p(t._2)))
     }
   }
 
   test("NonEmptyMap#filterNot is consistent with Map#filterNot") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
-      val map = nem.toMap
+      val map = nem.toSortedMap
       nem.filterNot(p) should ===(map.filterNot(t => p(t._2)))
     }
   }
 
   test("NonEmptyMap#find is consistent with Map#find") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
-      val map = nem.toMap
+      val map = nem.toSortedMap
       nem.find(p).map(_._2) should ===(map.find(p))
     }
   }
 
   test("NonEmptyMap#exists is consistent with Map#exists") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
-      val map = nem.toMap
+      val map = nem.toSortedMap
       nem.exists(p) should ===(map.exists(p))
     }
   }
 
   test("NonEmptyMap#forall is consistent with Map#forall") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
-      val map = nem.toMap
+      val map = nem.toSortedMap
       nem.forall(p) should ===(map.forall(p))
     }
   }
 
   test("NonEmptyMap#map is consistent with Map#map") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => String) =>
-      val map = nem.toMap
-      nem.map(p).toMap should ===(map.fmap(p))
+      val map = nem.toSortedMap
+      nem.map(p).toSortedMap should ===(map.fmap(p))
     }
   }
 
@@ -157,17 +157,17 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("fromMap round trip") {
     forAll { l: SortedMap[String, Int] =>
-      NonEmptyMap.fromMap(l).map(_.toMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
+      NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
     }
 
     forAll { nem: NonEmptyMap[String, Int] =>
-      NonEmptyMap.fromMap(nem.toMap) should ===(Some(nem))
+      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
     }
   }
 
   test("fromMapUnsafe/fromMap consistency") {
     forAll { nem: NonEmptyMap[String, Int] =>
-      NonEmptyMap.fromMap(nem.toMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toMap)))
+      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap)))
     }
   }
 
@@ -179,14 +179,14 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("+ consistent with Map") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      (nem + i).toMap should ===(nem.toMap + i)
+      (nem + i).toSortedMap should ===(nem.toSortedMap + i)
     }
   }
 
   test("NonEmptyMap#size and length is consistent with Map#size") {
     forAll { nem: NonEmptyMap[String, Int] =>
-      nem.size should ===(nem.toMap.size)
-      nem.length should ===(nem.toMap.size)
+      nem.size should ===(nem.toSortedMap.size)
+      nem.length should ===(nem.toSortedMap.size)
     }
   }
 }
