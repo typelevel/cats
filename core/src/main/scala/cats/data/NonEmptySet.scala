@@ -263,6 +263,22 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     S.combineAllOption(set).get
 
   /**
+    * Map a function over all the elements of this set and concatenate the resulting sets into one.
+    * {{{
+    * scala> import cats.data.NonEmptySet
+    * scala> import cats.implicits._
+    * scala> val nes = NonEmptySet.of(1, 2, 3)
+    * scala> nes.concatMap(n => NonEmptySet.of(n, n * 4, n * 5))
+    * res0: cats.data.NonEmptySet[Int] = NonEmptyTreeSet(1, 2, 3, 4, 5, 8, 10, 12, 15)
+    * }}}
+    */
+  def concatMap[B: Order](f: A => NonEmptySet[B]): NonEmptySet[B] = {
+    implicit val ordering = Order[B].toOrdering
+    new NonEmptySet(set.flatMap(f andThen (_.set)))
+  }
+
+
+  /**
     * Converts this set to a `SortedSet`
     */
   def toSortedSet: SortedSet[A] = set
