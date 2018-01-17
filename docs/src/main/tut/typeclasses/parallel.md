@@ -72,7 +72,7 @@ trait Parallel[M[_], F[_]] {
 ```
 Where `M[_]` has to have an instance of `Monad` and `F[_]` an instance of `Applicative`.
 
-Recall that `~>` is just an alias for [`FunctionK`](datatypes/functionk.html).
+Recall that `~>` is just an alias for [`FunctionK`](../datatypes/functionk.html).
 This allows us to get rid of most of our boilerplate from earlier:
 
 ```tut:book
