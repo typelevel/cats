@@ -145,6 +145,23 @@ object Ior extends IorInstances with IorFunctions {
 }
 
 private[data] sealed abstract class IorInstances extends IorInstances0 {
+
+  implicit val catsBitraverseForIor: Bitraverse[Ior] = new Bitraverse[Ior] {
+
+    def bitraverse[G[_], A, B, C, D](fab: Ior[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Ior[C, D]] =
+      fab.fold(
+        a => G.map(f(a))(Ior.Left(_)),
+        b => G.map(g(b))(Ior.Right(_)),
+        (a, b) => G.map2(f(a), g(b))(Ior.Both(_, _))
+      )
+
+    def bifoldLeft[A, B, C](fab: Ior[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
+      fab.fold(f(c, _), g(c, _), (a, b) => g(f(c, a), b))
+
+    def bifoldRight[A, B, C](fab: Ior[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      fab.fold(f(_, c), g(_, c), (a, b) => g(b, f(a, c)))
+  }
+
   implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = new Eq[A Ior B] {
     def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
   }
