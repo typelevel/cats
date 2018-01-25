@@ -17,6 +17,7 @@ scala:
 jdk:
   - oraclejdk7
   - oraclejdk8
+  - oraclejdk9
 
 matrix:
   exclude:
@@ -24,8 +25,12 @@ matrix:
     jdk: oraclejdk7
   - scala: 2.10.7
     jdk: oraclejdk8
+  - scala: 2.10.7
+    jdk: oraclejdk9
   - scala: 2.11.12
     jdk: oraclejdk8
+  - scala: 2.11.12
+    jdk: oraclejdk9
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
