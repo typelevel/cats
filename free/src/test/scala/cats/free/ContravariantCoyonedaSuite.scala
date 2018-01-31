@@ -1,6 +1,7 @@
 package cats
 package free
 
+import cats.arrow.FunctionK
 import cats.tests.CatsSuite
 import cats.laws.discipline.{ ContravariantTests, SerializableTests }
 
@@ -54,6 +55,19 @@ class ContravariantCoyonedaSuite extends CatsSuite {
       if (n <= 0) acc
       else loop(n - 1, acc.contramap((_: Int) + 1))
     loop(20000, ContravariantCoyoneda.lift[? => Int, Int](a => a)).run.apply(10)
+  }
+
+  test("run, foldMap consistent") {
+    forAll { (
+      c: ContravariantCoyoneda[? => Int, String],
+      f: Byte => String,
+      g: Float => Byte,
+      s: Float
+    ) =>
+      val cʹ = c.contramap(f).contramap(g) // just to ensure there's some structure
+      val h  = cʹ.foldMap[? => Int](FunctionK.id[? => Int])
+      cʹ.run.apply(s) === h(s)
+    }
   }
 
 }
