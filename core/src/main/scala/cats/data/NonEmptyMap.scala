@@ -92,11 +92,11 @@ object NonEmptyMap extends NonEmptyMapInstances {
       * scala> import cats.data.NonEmptyMap
       * scala> import cats.implicits._
       * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
-      * scala> nem.get("B")
+      * scala> nem.lookup("B")
       * res0: Option[Int] = Some(2)
       * }}}
       */
-    def get(k: K): Option[A] = toSortedMap.get(k)
+    def lookup(k: K): Option[A] = toSortedMap.get(k)
 
     /**
       * Returns a `SortedSet` containing all the keys of this map.
@@ -125,7 +125,7 @@ object NonEmptyMap extends NonEmptyMapInstances {
     def tail: SortedMap[K, A] = toSortedMap.tail
 
     /**
-      * Alias for [[get]]
+      * Alias for [[lookup]]
       *
       * {{{
       * scala> import cats.data.NonEmptyMap
@@ -135,7 +135,7 @@ object NonEmptyMap extends NonEmptyMapInstances {
       * res0: Option[Int] = Some(1)
       * }}}
       */
-    def apply(key: K): Option[A] = get(key)
+    def apply(key: K): Option[A] = lookup(key)
 
     /**
       * Checks whether this map contains a binding for the given key.
