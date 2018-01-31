@@ -63,7 +63,7 @@ class NonEmptyMapSuite extends CatsSuite {
   test("NonEmptyMap#find is consistent with Map#find") {
     forAll { (nem: NonEmptyMap[String, Int], p: Int => Boolean) =>
       val map = nem.toSortedMap
-      nem.find(p).map(_._2) should ===(map.find(p))
+      nem.find(p) should ===(map.find(p))
     }
   }
 
@@ -179,13 +179,13 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("+ consistent with Map") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      (nem + i).toSortedMap should ===(nem.toSortedMap + i)
+      (nem add i).toSortedMap should ===(nem.toSortedMap + i)
     }
   }
 
   test("NonEmptyMap#size and length is consistent with Map#size") {
     forAll { nem: NonEmptyMap[String, Int] =>
-      nem.size should ===(nem.toSortedMap.size)
+      nem.size should ===(nem.toSortedMap.size.toLong)
       nem.length should ===(nem.toSortedMap.size)
     }
   }

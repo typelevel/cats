@@ -23,246 +23,261 @@ import cats.{Always, Apply, Eval, Foldable, Functor, Later, NonEmptyTraverse, No
 
 import scala.collection.immutable._
 
-final class NonEmptyMap[K, A] private(val value: SortedMap[K, A]) extends AnyVal {
 
-  private implicit def ordering: Ordering[K] = value.ordering
-  private implicit def order: Order[K] = Order.fromOrdering
+object NonEmptyMap extends NonEmptyMapInstances {
 
-  /**
-    * Alias for [[concat]]
-    */
-  def ++(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = concat(as)
-  /**
-    * Appends this NEM to another NEM, producing a new `NonEmptyMap`.
-    */
-  def concat(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = new NonEmptyMap(value ++ as.value)
+  type Base
+  trait Tag extends Any
+  type Type[A, B] <: Base with Tag
 
-  /**
-    * Removes a key from this map, returning a new SortedMap.
-    */
-  def -(key: K): SortedMap[K, A] = value - key
+  private[data] def create[K, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
+    m.asInstanceOf[NonEmptyMap[K, A]]
 
-  /**
-    * Adds a key-value pair to this map, returning a new `NonEmptyMap`.
-    * */
-  def +(ka: (K, A)): NonEmptyMap[K, A] = new NonEmptyMap(value + ka)
+  def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
+    if (as.nonEmpty) Option(NonEmptyMap.create(as)) else None
 
-  /**
-    * Applies f to all the elements
-    */
-  def map[B](f: A ⇒ B): NonEmptyMap[K, B] =
-    new NonEmptyMap(Functor[SortedMap[K, ?]].map(value)(f))
+  def fromMapUnsafe[K: Order, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
+    if (m.nonEmpty) NonEmptyMap.create(m)
+    else throw new IllegalArgumentException("Cannot create NonEmptyMap from empty map")
 
-  /**
-    * Optionally returns the value associated with the given key.
-    * {{{
-    * scala> import cats.data.NonEmptyMap
-    * scala> import cats.implicits._
-    * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
-    * scala> nem.get("B")
-    * res0: Option[Int] = Some(2)
-    * }}}
-    */
-  def get(k: K): Option[A] = value.get(k)
-
-  /**
-    * Returns a `SortedSet` containing all the keys of this map.
-    * {{{
-    * scala> import cats.data.NonEmptyMap
-    * scala> import cats.implicits._
-    * scala> val nem = NonEmptyMap.of(1 -> "A", 2 -> "B")
-    * scala> nem.keys
-    * res0: scala.collection.immutable.SortedSet[Int] = Set(1, 2)
-    * }}}
-    */
-  def keys: SortedSet[K] = value.keySet
-
-  /**
-    * Converts this map to a `NonEmptyList` of key-value pairs.
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyMap
-    * scala> import cats.implicits._
-    * scala> val nem = NonEmptyMap.of(1 -> "A", 2 -> "B")
-    * scala> nem.toNonEmptyList
-    * res0: cats.data.NonEmptyList[(Int, String)] = NonEmptyList((1,A), (2,B))
-    * }}}
-    */
-  def toNonEmptyList: NonEmptyList[(K, A)] = NonEmptyList.fromListUnsafe(value.toList)
-
-  /**
-    * Returns the first key-value pair of this map.
-    */
-  def head: (K, A) = value.head
-  /**
-    * Returns the first key-value pair of this map.
-    */
-  def last: (K, A) = value.last
-
-  /**
-    * Returns all the key-value pairs, except for the first.
-    */
-  def tail: SortedMap[K, A] = value.tail
-
-  /**
-    * Alias for [[get]]
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyMap
-    * scala> import cats.implicits._
-    * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
-    * scala> nem("A")
-    * res0: Option[Int] = Some(1)
-    * }}}
-    */
-  def apply(key: K): Option[A] = get(key)
-
-  /**
-    * Checks whether this map contains a binding for the given key.
-    */
-  def contains(key: K): Boolean = value.contains(key)
-
-  /**
-    * Returns the amount of key-value pars in this map.
-    */
-  def size: Int = value.size
-
-  /**
-    * Tests whether a predicate holds for all elements of this map.
-    */
-  def forall(p: A ⇒ Boolean): Boolean = value.forall { case (_, a) => p(a) }
-
-  /**
-    * Tests whether a predicate holds for at least one element of this map.
-    */
-  def exists(f: A ⇒ Boolean): Boolean = value.exists { case (_, a) => f(a) }
-
-  /**
-    * Returns the first value along with its key, that matches the given predicate.
-    */
-  def find(f: A ⇒ Boolean): Option[(K, A)] = value.find { case (_, a) => f(a) }
-
-  /**
-    * Filters all elements of this map that do not satisfy the given predicate.
-    */
-  def filter(p: A ⇒ Boolean): SortedMap[K, A] = value.filter  { case (_, a) => p(a) }
-
-  /**
-    * Filters all elements of this map that satisfy the given predicate.
-    */
-  def filterNot(p: A ⇒ Boolean): SortedMap[K, A] = filter(t => !p(t))
+  def apply[K: Order, A](head: (K, A), tail: SortedMap[K, A]): NonEmptyMap[K, A] =
+    NonEmptyMap.create(SortedMap(head)(Order[K].toOrdering) ++ tail)
 
 
-  /**
-    * Left-associative fold using f.
-    */
-  def foldLeft[B](b: B)(f: (B, A) => B): B =
-    value.foldLeft(b)((b, t) => f(b, t._2))
+  def of[K: Order, A](a: (K, A), as: (K, A)*): NonEmptyMap[K, A] =
+    NonEmptyMap.create(SortedMap(as: _*)(Order[K].toOrdering) + a)
 
-  /**
-    * Right-associative fold using f.
-    */
-  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable[SortedMap[K, ?]].foldRight(value, lb)(f)
+  def one[K: Order, A](k: K, a: A): NonEmptyMap[K, A] =
+    NonEmptyMap.create(SortedMap((k, a))(Order[K].toOrdering))
 
-  /**
-    * Left-associative reduce using f.
-    */
-  def reduceLeft(f: (A, A) => A): A =
-    reduceLeftTo(identity)(f)
+  implicit class NonEmptyMapOps[K, A](val value: NonEmptyMap.Type[K, A]) extends AnyVal {
+
+    /**
+      * Converts this map to a `SortedMap`.
+      */
+    def toSortedMap: SortedMap[K, A] = value.asInstanceOf[SortedMap[K, A]]
+
+    private implicit def ordering: Ordering[K] = toSortedMap.ordering
+    private implicit def order: Order[K] = Order.fromOrdering
+
+    /**
+      * Alias for [[concat]]
+      */
+    def ++(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = concat(as)
+    /**
+      * Appends this NEM to another NEM, producing a new `NonEmptyMap`.
+      */
+    def concat(as: NonEmptyMap[K, A]): NonEmptyMap[K, A] = NonEmptyMap.create(toSortedMap ++ as.toSortedMap)
+
+    /**
+      * Removes a key from this map, returning a new SortedMap.
+      */
+    def -(key: K): SortedMap[K, A] = toSortedMap - key
 
 
-  /**
-    * Apply `f` to the "initial element" of this map and lazily combine it
-    * with every other value using the given function `g`.
-    */
-  def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
-    tail.foldLeft(f(head._2))((b, a) => g(b, a._2))
+    /**
+      * Adds a key-value pair to this map, returning a new `NonEmptyMap`.
+      * */
+    def add(ka: (K, A)): NonEmptyMap[K, A] = NonEmptyMap.create(toSortedMap + ka)
 
-  /**
-    * Right-associative reduce using f.
-    */
-  def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] =
-    reduceRightTo(identity)(f)
+    /**
+      * Applies f to all the elements
+      */
+    def map[B](f: A ⇒ B): NonEmptyMap[K, B] =
+      NonEmptyMap.create(Functor[SortedMap[K, ?]].map(toSortedMap)(f))
 
-  /**
-    * Apply `f` to the "initial element" of this map and lazily combine it
-    * with every other value using the given function `g`.
-    */
-  def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always((head, tail)).flatMap { case ((_, a), ga) =>
-      Foldable[SortedMap[K, ?]].reduceRightToOption(ga)(f)(g).flatMap {
-        case Some(b) => g(a, Now(b))
-        case None => Later(f(a))
+    /**
+      * Optionally returns the value associated with the given key.
+      * {{{
+      * scala> import cats.data.NonEmptyMap
+      * scala> import cats.implicits._
+      * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
+      * scala> nem.get("B")
+      * res0: Option[Int] = Some(2)
+      * }}}
+      */
+    def get(k: K): Option[A] = toSortedMap.get(k)
+
+    /**
+      * Returns a `SortedSet` containing all the keys of this map.
+      * {{{
+      * scala> import cats.data.NonEmptyMap
+      * scala> import cats.implicits._
+      * scala> val nem = NonEmptyMap.of(1 -> "A", 2 -> "B")
+      * scala> nem.keys
+      * res0: scala.collection.immutable.SortedSet[Int] = Set(1, 2)
+      * }}}
+      */
+    def keys: SortedSet[K] = toSortedMap.keySet
+
+    /**
+      * Returns the first key-value pair of this map.
+      */
+    def head: (K, A) = toSortedMap.head
+    /**
+      * Returns the first key-value pair of this map.
+      */
+    def last: (K, A) = toSortedMap.last
+
+    /**
+      * Returns all the key-value pairs, except for the first.
+      */
+    def tail: SortedMap[K, A] = toSortedMap.tail
+
+    /**
+      * Alias for [[get]]
+      *
+      * {{{
+      * scala> import cats.data.NonEmptyMap
+      * scala> import cats.implicits._
+      * scala> val nem = NonEmptyMap.of("A" -> 1, "B" -> 2)
+      * scala> nem("A")
+      * res0: Option[Int] = Some(1)
+      * }}}
+      */
+    def apply(key: K): Option[A] = get(key)
+
+    /**
+      * Checks whether this map contains a binding for the given key.
+      */
+    def contains(key: K): Boolean = toSortedMap.contains(key)
+
+
+    /**
+      * Tests whether a predicate holds for all elements of this map.
+      */
+    def forall(p: A ⇒ Boolean): Boolean = toSortedMap.forall { case (_, a) => p(a) }
+
+    /**
+      * Tests whether a predicate holds for at least one element of this map.
+      */
+    def exists(f: A ⇒ Boolean): Boolean = toSortedMap.exists { case (_, a) => f(a) }
+
+    /**
+      * Returns the first value along with its key, that matches the given predicate.
+      */
+    def find(f: A ⇒ Boolean): Option[(K, A)] = toSortedMap.find { case (_, a) => f(a) }
+
+    /**
+      * Filters all elements of this map that do not satisfy the given predicate.
+      */
+    def filter(p: A ⇒ Boolean): SortedMap[K, A] = toSortedMap.filter  { case (_, a) => p(a) }
+
+    /**
+      * Filters all elements of this map that satisfy the given predicate.
+      */
+    def filterNot(p: A ⇒ Boolean): SortedMap[K, A] = filter(t => !p(t))
+
+
+    /**
+      * Left-associative fold using f.
+      */
+    def foldLeft[B](b: B)(f: (B, A) => B): B =
+      toSortedMap.foldLeft(b)((b, t) => f(b, t._2))
+
+    /**
+      * Right-associative fold using f.
+      */
+    def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      Foldable[SortedMap[K, ?]].foldRight(toSortedMap, lb)(f)
+
+    /**
+      * Left-associative reduce using f.
+      */
+    def reduceLeft(f: (A, A) => A): A =
+      reduceLeftTo(identity)(f)
+
+
+    /**
+      * Apply `f` to the "initial element" of this map and lazily combine it
+      * with every other value using the given function `g`.
+      */
+    def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
+      tail.foldLeft(f(head._2))((b, a) => g(b, a._2))
+
+    /**
+      * Right-associative reduce using f.
+      */
+    def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+      reduceRightTo(identity)(f)
+
+    /**
+      * Apply `f` to the "initial element" of this map and lazily combine it
+      * with every other value using the given function `g`.
+      */
+    def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+      Always((head, tail)).flatMap { case ((_, a), ga) =>
+        Foldable[SortedMap[K, ?]].reduceRightToOption(ga)(f)(g).flatMap {
+          case Some(b) => g(a, Now(b))
+          case None => Later(f(a))
+        }
       }
-    }
 
 
-  /**
-    * Reduce using the Semigroup of A
-    */
-  def reduce(implicit S: Semigroup[A]): A =
-    reduceLeft(S.combine)
+    /**
+      * Reduce using the Semigroup of A
+      */
+    def reduce(implicit S: Semigroup[A]): A =
+      reduceLeft(S.combine)
 
-  private def reduceRightToOptionWithKey[V, B](fa: SortedMap[K, V])(f: (K, V) => B)(g: ((K, V), Eval[B]) => Eval[B]): Eval[Option[B]] =
-    Foldable.iterateRight(fa.toIterable, Now(Option.empty[B])) { (a, lb) =>
-      lb.flatMap {
-        case Some(b) => g(a, Now(b)).map(Some(_))
-        case None => Later(Some(f.tupled(a)))
+    private def reduceRightToOptionWithKey[V, B](fa: SortedMap[K, V])(f: (K, V) => B)(g: ((K, V), Eval[B]) => Eval[B]): Eval[Option[B]] =
+      Foldable.iterateRight(fa.toIterable, Now(Option.empty[B])) { (a, lb) =>
+        lb.flatMap {
+          case Some(b) => g(a, Now(b)).map(Some(_))
+          case None => Later(Some(f.tupled(a)))
+        }
       }
-    }
 
-  /**
-    * Given a function which returns a G effect, thread this effect
-    * through the running of this function on all the values in this map,
-    * returning an NonEmptyMap[K, B] in a G context.
-    */
-  def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] =
-    reduceRightToOptionWithKey[A, G[SortedMap[K, B]]](tail)({ case (k, a) =>
-      G.map(f(a))(b => SortedMap.empty[K, B] + ((k, b)))
-    }) { (t, lglb) =>
-      G.map2Eval(f(t._2), lglb)((b, bs) => bs + ((t._1, b)))
-    }.map {
-      case None => G.map(f(head._2))(a => NonEmptyMap.one(head._1, a))
-      case Some(gtail) => G.map2(f(head._2), gtail)((a, bs) => NonEmptyMap((head._1, a), bs))
-    }.value
+    /**
+      * Given a function which returns a G effect, thread this effect
+      * through the running of this function on all the values in this map,
+      * returning an NonEmptyMap[K, B] in a G context.
+      */
+    def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] =
+      reduceRightToOptionWithKey[A, G[SortedMap[K, B]]](tail)({ case (k, a) =>
+        G.map(f(a))(b => SortedMap.empty[K, B] + ((k, b)))
+      }) { (t, lglb) =>
+        G.map2Eval(f(t._2), lglb)((b, bs) => bs + ((t._1, b)))
+      }.map {
+        case None => G.map(f(head._2))(a => NonEmptyMap.one(head._1, a))
+        case Some(gtail) => G.map2(f(head._2), gtail)((a, bs) => NonEmptyMap((head._1, a), bs))
+      }.value
 
-  /**
-    * Converts this map to a `SortedMap`.
-    */
-  def toSortedMap: SortedMap[K, A] = value
+    /**
+      * Typesafe stringification method.
+      *
+      * This method is similar to .toString except that it stringifies
+      * values according to Show[_] instances, rather than using the
+      * universal .toString method.
+      */
+    def show(implicit A: Show[A], K: Show[K]): String =
+      s"NonEmpty${Show[SortedMap[K, A]].show(toSortedMap)}"
 
-  /**
-    * Typesafe stringification method.
-    *
-    * This method is similar to .toString except that it stringifies
-    * values according to Show[_] instances, rather than using the
-    * universal .toString method.
-    */
-  def show(implicit A: Show[A], K: Show[K]): String =
-    s"NonEmpty${Show[SortedMap[K, A]].show(value)}"
+    override def toString: String = s"NonEmpty${toSortedMap.toString}"
 
-  override def toString: String = s"NonEmpty${toSortedMap.toString}"
+    /**
+      * Typesafe equality operator.
+      *
+      * This method is similar to == except that it only allows two
+      * NonEmptySet[A] values to be compared to each other, and uses
+      * equality provided by Eq[_] instances, rather than using the
+      * universal equality provided by .equals.
+      */
+    def ===(that: NonEmptyMap[K, A])(implicit A: Eq[A]): Boolean =
+      Eq[SortedMap[K, A]].eqv(toSortedMap, that.toSortedMap)
 
-  /**
-    * Typesafe equality operator.
-    *
-    * This method is similar to == except that it only allows two
-    * NonEmptySet[A] values to be compared to each other, and uses
-    * equality provided by Eq[_] instances, rather than using the
-    * universal equality provided by .equals.
-    */
-  def ===(that: NonEmptyMap[K, A])(implicit A: Eq[A]): Boolean =
-    Eq[SortedMap[K, A]].eqv(value, that.toSortedMap)
+    /**
+      * Returns the amount of key-value pars in this map.
+      */
+    def length: Int = toSortedMap.size
+  }
 
-  /**
-    * Alias for [[size]]
-    */
-  def length: Int = size
 
 }
 
 private[data] sealed abstract class NonEmptyMapInstances {
+
+
   implicit def catsDataInstancesForNonEmptyMap[K: Order]: SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] =
     new SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] {
 
@@ -323,21 +338,3 @@ private[data] sealed abstract class NonEmptyMapInstances {
   }
 }
 
-object NonEmptyMap extends NonEmptyMapInstances {
-  def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
-    if (as.nonEmpty) Option(new NonEmptyMap(as)) else None
-
-  def fromMapUnsafe[K: Order, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
-    if (m.nonEmpty) new NonEmptyMap(m)
-    else throw new IllegalArgumentException("Cannot create NonEmptyMap from empty map")
-
-  def apply[K: Order, A](head: (K, A), tail: SortedMap[K, A]): NonEmptyMap[K, A] =
-    new NonEmptyMap(SortedMap(head)(Order[K].toOrdering) ++ tail)
-
-
-  def of[K: Order, A](a: (K, A), as: (K, A)*): NonEmptyMap[K, A] =
-    new NonEmptyMap(SortedMap(as: _*)(Order[K].toOrdering) + a)
-
-  def one[K: Order, A](k: K, a: A): NonEmptyMap[K, A] =
-    new NonEmptyMap(SortedMap((k, a))(Order[K].toOrdering))
-}

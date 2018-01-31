@@ -11,6 +11,8 @@ package object data {
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
 
+  type NonEmptyMap[K, A] = NonEmptyMap.Type[K, A]
+
   type ReaderT[F[_], A, B] = Kleisli[F, A, B]
   val ReaderT = Kleisli
 
