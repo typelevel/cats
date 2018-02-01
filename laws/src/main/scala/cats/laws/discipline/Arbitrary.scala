@@ -80,7 +80,7 @@ object arbitrary extends ArbitraryInstances0 {
       a <- A.arbitrary
     } yield NonEmptyMap((k, a), fa))
 
-  implicit def cogenNonEmptyMap[K: Order : Cogen, A: Order : Cogen]: Cogen[NonEmptyMap[K, A]] =
+  implicit def cogenNonEmptyMap[K: Order : Cogen, A: Order : Cogen]: Cogen[NonEmptyMap.Type[K, A]] =
     Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
 
   implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit F: Arbitrary[F[Either[A, B]]]): Arbitrary[EitherT[F, A, B]] =

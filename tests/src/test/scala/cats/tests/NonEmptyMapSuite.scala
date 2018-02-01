@@ -42,7 +42,7 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("Show is formatted correctly") {
-    val nonEmptyMap = NonEmptyMap("Key" -> "Test", SortedMap.empty[String, String])
+    val nonEmptyMap = NonEmptyMapImpl("Key" -> "Test", SortedMap.empty[String, String])
     nonEmptyMap.show should ===("NonEmptySortedMap(Key -> Test)")
   }
 
@@ -157,23 +157,23 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("fromMap round trip") {
     forAll { l: SortedMap[String, Int] =>
-      NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
+      NonEmptyMapImpl.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
     }
 
     forAll { nem: NonEmptyMap[String, Int] =>
-      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
+      NonEmptyMapImpl.fromMap(nem.toSortedMap) should ===(Some(nem))
     }
   }
 
   test("fromMapUnsafe/fromMap consistency") {
     forAll { nem: NonEmptyMap[String, Int] =>
-      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap)))
+      NonEmptyMapImpl.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMapImpl.fromMapUnsafe(nem.toSortedMap)))
     }
   }
 
   test("fromMapUnsafe empty map") {
     val _ = intercept[IllegalArgumentException] {
-      NonEmptyMap.fromMapUnsafe(SortedMap.empty[String, Int])
+      NonEmptyMapImpl.fromMapUnsafe(SortedMap.empty[String, Int])
     }
   }
 
