@@ -23,12 +23,14 @@ import cats.{Always, Apply, Eval, Foldable, Functor, Later, NonEmptyTraverse, No
 
 import scala.collection.immutable._
 
-
-object NonEmptyMapImpl extends NonEmptyMapInstances {
-
+private[data] trait Newtype2 { self =>
   type Base
   trait Tag extends Any
   type Type[A, B] <: Base with Tag
+}
+
+
+object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
   private[cats] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
     m.asInstanceOf[Type[K, A]]
@@ -265,6 +267,9 @@ private[data] sealed abstract class NonEmptyMapInstances {
   implicit def catsDataInstancesForNonEmptyMap[K: Order]: SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] =
     new SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] {
 
+      override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
+        fa.map(f)
+
       def combineK[A](a: NonEmptyMap[K, A], b: NonEmptyMap[K, A]): NonEmptyMap[K, A] =
         a ++ b
 
@@ -317,7 +322,7 @@ private[data] sealed abstract class NonEmptyMapInstances {
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
 
-  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] = new Band[NonEmptyMap[K, A]] {
+  implicit def catsDataSemilatticeForNonEmptyMap[K, A]: Semilattice[NonEmptyMap[K, A]] = new Semilattice[NonEmptyMap[K, A]] {
     def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
   }
 }
