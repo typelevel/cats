@@ -51,10 +51,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     transform(_.flatMap(f))
 
-  def getOrElse(default: => A)(implicit F: Functor[F]): F[A] =
+  def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.getOrElse(default))
 
-  def getOrElseF(default: => F[A])(implicit F: Monad[F]): F[A] =
+  def getOrElseF[B >: A](default: => F[B])(implicit F: Monad[F]): F[B] =
     F.flatMap(value)(_.fold(default)(F.pure))
 
   def collect[B](f: PartialFunction[A, B])(implicit F: Functor[F]): OptionT[F, B] =

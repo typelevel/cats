@@ -1,6 +1,27 @@
+## Version 1.0.1
+
+> 2017 Dec 31
+
+There is zero code change since 1.0.0. This is a release to fix the 1.0.0-MF issue that on Maven 1.0.0-MF is deemed later than 1.0.0. 
+For details see [#2131](https://github.com/typelevel/cats/issues/2131)
+
+
+## Version 1.0.0
+
+> 2017 Dec 25
+
+### Documentation Improvements/Additions:
+
+* [#2121](https://github.com/typelevel/cats/pull/2121) Update deprecations to `product{L,R}` instead of `ap{L,R}`  by @rossabaker
+* [#2086](https://github.com/typelevel/cats/pull/2086) Add doctest examples for `Apply` by @ceedubs
+* [#2080](https://github.com/typelevel/cats/pull/2080) Add grouping to scaladoc for arity methods by @ceedubs  
+
+
+
 ## Version 1.0.0-RC2
 
-> 2017 Nov 25
+> 2017 Dec 18
+
 
 ### Breaking changes and migration
 

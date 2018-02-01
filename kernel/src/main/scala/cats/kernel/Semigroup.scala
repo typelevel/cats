@@ -9,7 +9,7 @@ import scala.annotation.tailrec
 trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
-   * Associative operation taking which combines two values.
+   * Associative operation which combines two values.
    */
   def combine(x: A, y: A): A
 

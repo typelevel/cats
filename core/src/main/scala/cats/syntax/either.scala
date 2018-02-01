@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{EitherT, Ior, Validated, ValidatedNel}
+import cats.data.{EitherT, Ior, NonEmptyList, Validated, ValidatedNel}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import EitherSyntax._
@@ -146,6 +146,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => f(b)
+  }
+
+  def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] = eab match {
+    case Left(a)      => f(a)
+    case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
   def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int = eab match {
@@ -329,6 +334,31 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
 
   /** Wrap a value in `Right`. */
   def asRight[B]: Either[B, A] = Right(obj)
+
+  /**
+   * Wrap a value to a left EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> "Err".leftNel[Int]
+   * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
+   * }}}
+   */
+  def leftNel[B]: Either[NonEmptyList[A], B] = Left(NonEmptyList.one(obj))
+
+  /**
+   * Wrap a value to a right EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> 1.rightNel[String]
+   * res0: Either[NonEmptyList[String], Int] = Right(1)
+   * }}}
+   */
+  def rightNel[B]: Either[NonEmptyList[B], A] = Right(obj)
+
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */

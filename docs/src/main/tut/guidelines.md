@@ -111,5 +111,11 @@ abstract class KleisliInstance1 {
 }
 ```
 
+### Type classes that ONLY define laws.
+
+We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and 
+`CommutativeArrow`.
+
 #### TODO:
+
 Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
