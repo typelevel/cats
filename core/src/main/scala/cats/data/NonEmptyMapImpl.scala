@@ -322,7 +322,7 @@ private[data] sealed abstract class NonEmptyMapInstances {
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
 
-  implicit def catsDataSemilatticeForNonEmptyMap[K, A]: Semilattice[NonEmptyMap[K, A]] = new Semilattice[NonEmptyMap[K, A]] {
+  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] = new Band[NonEmptyMap[K, A]] {
     def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
   }
 }
