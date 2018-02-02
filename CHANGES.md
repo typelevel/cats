@@ -22,6 +22,7 @@ For details see [#2131](https://github.com/typelevel/cats/issues/2131)
 
 > 2017 Dec 18
 
+
 ### Breaking changes and migration
 
 * [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
