@@ -88,6 +88,18 @@ class NonEmptyMapSuite extends CatsSuite {
     }
   }
 
+  test("lookup is consistent with contains") {
+    forAll { (nem: NonEmptyMap[String, Int], key: String) =>
+      nem(key).isDefined should === (nem.contains(key))
+    }
+  }
+
+  test("keys.contains is consistent with contains") {
+    forAll { (nem: NonEmptyMap[String, Int], key: String) =>
+      nem(key).isDefined should === (nem.keys.contains(key))
+    }
+  }
+
   test("reduceLeft consistent with foldLeft") {
     forAll { (nem: NonEmptyMap[String, Int], f: (Int, Int) => Int) =>
       nem.reduceLeft(f) should ===(Foldable[SortedMap[String, ?]].foldLeft(nem.tail, nem.head._2)(f))
