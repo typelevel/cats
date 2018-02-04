@@ -26,7 +26,7 @@ import scala.collection.immutable._
 private[data] trait Newtype2 { self =>
   type Base
   trait Tag extends Any
-  type Type[A, B] <: Base with Tag
+  type Type[A, +B] <: Base with Tag
 }
 
 
