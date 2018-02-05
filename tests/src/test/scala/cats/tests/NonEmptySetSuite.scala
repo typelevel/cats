@@ -199,7 +199,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("+ consistent with Set") {
     forAll { (nes: NonEmptySet[Int], i: Int) =>
-      (nes + i).toSortedSet should === (nes.toSortedSet + i)
+      (nes add i).toSortedSet should === (nes.toSortedSet + i)
     }
   }
 
@@ -209,9 +209,8 @@ class NonEmptySetSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptySet#size and length is consistent with Set#size") {
+  test("NonEmptySet#length is consistent with Set#size") {
     forAll { nes: NonEmptySet[Int] =>
-      nes.size should === (nes.toSortedSet.size)
       nes.length should === (nes.toSortedSet.size)
     }
   }

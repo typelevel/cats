@@ -23,22 +23,54 @@ import cats.{Always, Eq, Eval, Foldable, Later, Now, Reducible, SemigroupK, Show
 
 import scala.collection.immutable._
 
-final class NonEmptySet[A] private (val set: SortedSet[A]) {
+trait Newtype { self =>
+  private[data] type Base
+  private[data] trait Tag extends Any
+  private[cats] type Type[A] <: Base with Tag
+}
 
-  private implicit def ordering: Ordering[A] = set.ordering
-  private implicit def order: Order[A] = Order.fromOrdering
+private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
+
+  private[cats] def create[A](s: SortedSet[A]): Type[A] =
+    s.asInstanceOf[Type[A]]
+
+  private[cats] def unwrap[A](s: Type[A]): SortedSet[A] =
+    s.asInstanceOf[SortedSet[A]]
+
+
+  def fromSet[A: Order](as: SortedSet[A]): Option[NonEmptySet[A]] =
+    if (as.nonEmpty) Option(create(as)) else None
+
+  def fromSetUnsafe[A: Order](set: SortedSet[A]): NonEmptySet[A] =
+    if (set.nonEmpty) create(set)
+    else throw new IllegalArgumentException("Cannot create NonEmptySet from empty set")
+
+
+  def of[A: Order](a: A, as: A*): NonEmptySet[A] =
+    create(SortedSet(a)(Order[A].toOrdering) ++ SortedSet(as: _*)(Order[A].toOrdering) + a)
+  def apply[A: Order](head: A, tail: SortedSet[A]): NonEmptySet[A] = create(SortedSet(head)(Order[A].toOrdering) ++ tail)
+  def one[A: Order](a: A): NonEmptySet[A] = create(SortedSet(a)(Order[A].toOrdering))
+
+  implicit def catsNonEmptySetOps[A](value: NonEmptySet[A]): NonEmptySetOps[A] =
+    new NonEmptySetOps(value)
+}
+
+
+private[data] sealed class NonEmptySetOps[A](val value: NonEmptySetImpl.Type[A]) {
+
+  private implicit val ordering: Ordering[A] = toSortedSet.ordering
+  private implicit val order: Order[A] = Order.fromOrdering
+
+  /**
+    * Converts this set to a `SortedSet`
+    */
+  def toSortedSet: SortedSet[A] = NonEmptySetImpl.unwrap(value)
+
 
   /**
     * Adds an element to this set, returning a new `NonEmptySet`
-    * {{{
-    * scala> import cats.data.NonEmptySet
-    * scala> import cats.implicits._
-    * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
-    * scala> nes + 3
-    * res0: cats.data.NonEmptySet[Int] = NonEmptyTreeSet(1, 2, 3, 4, 5)
-    * }}}
     */
-  def +(a: A): NonEmptySet[A] = new NonEmptySet(set + a)
+  def add(a: A): NonEmptySet[A] = NonEmptySet.create(toSortedSet + a)
 
   /**
     * Alias for [[union]]
@@ -47,7 +79,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * scala> import cats.implicits._
     * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
     * scala> nes ++ NonEmptySet.of(1, 2, 7)
-    * res0: cats.data.NonEmptySet[Int] = NonEmptyTreeSet(1, 2, 4, 5, 7)
+    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 4, 5, 7)
     * }}}
     */
   def ++(as: NonEmptySet[A]): NonEmptySet[A] = union(as)
@@ -59,7 +91,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * scala> import cats.implicits._
     * scala> val nes = NonEmptySet.of(1, 2, 4, 5)
     * scala> nes | NonEmptySet.of(1, 2, 7)
-    * res0: cats.data.NonEmptySet[Int] = NonEmptyTreeSet(1, 2, 4, 5, 7)
+    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 4, 5, 7)
     * }}}
     */
   def | (as: NonEmptySet[A]): NonEmptySet[A] = union(as)
@@ -104,13 +136,13 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
   /**
     * Removes a key from this set, returning a new `SortedSet`.
     */
-  def -(a: A): SortedSet[A] = set - a
+  def -(a: A): SortedSet[A] = toSortedSet - a
 
   /**
     * Applies f to all the elements
     */
   def map[B: Order](f: A ⇒ B): NonEmptySet[B] =
-    new NonEmptySet(SortedSet(set.map(f).to: _*)(Order[B].toOrdering))
+    NonEmptySetImpl.create(SortedSet(toSortedSet.map(f).to: _*)(Order[B].toOrdering))
 
   /**
     * Converts this set to a `NonEmptyList`.
@@ -122,22 +154,22 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
     * }}}
     */
-  def toNonEmptyList: NonEmptyList[A] = NonEmptyList.fromListUnsafe(set.toList)
+  def toNonEmptyList: NonEmptyList[A] = NonEmptyList.fromListUnsafe(toSortedSet.toList)
 
   /**
     * Returns the first element of this set.
     */
-  def head: A = set.head
+  def head: A = toSortedSet.head
 
   /**
     * Returns all but the first element of this set.
     */
-  def tail: SortedSet[A] = set.tail
+  def tail: SortedSet[A] = toSortedSet.tail
 
   /**
     * Returns the last element of this set.
     */
-  def last: A = set.last
+  def last: A = toSortedSet.last
 
   /**
     * Alias for [[contains]]
@@ -156,55 +188,50 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
   /**
     * Tests if some element is contained in this set.
     */
-  def contains(a: A): Boolean = set(a)
+  def contains(a: A): Boolean = toSortedSet(a)
 
   /**
     * Computes the difference of this set and another set.
     */
-  def diff(as: NonEmptySet[A]): SortedSet[A] = set -- as.set
+  def diff(as: NonEmptySet[A]): SortedSet[A] = toSortedSet -- as.toSortedSet
 
   /**
     * Computes the union between this NES and another NES.
     */
-  def union(as: NonEmptySet[A]): NonEmptySet[A] = new NonEmptySet(set ++ as.set)
+  def union(as: NonEmptySet[A]): NonEmptySet[A] = NonEmptySetImpl.create(toSortedSet ++ as.toSortedSet)
 
   /**
     * Computes the intersection between this set and another set.
     */
-  def intersect(as: NonEmptySet[A]): SortedSet[A] = set.filter(as.apply)
-
-  /**
-    * Returns the number of elements in this set.
-    */
-  def size: Int = set.size
+  def intersect(as: NonEmptySet[A]): SortedSet[A] = toSortedSet.filter(as.apply)
 
   /**
     * Tests whether a predicate holds for all elements of this set.
     */
-  def forall(p: A ⇒ Boolean): Boolean = set.forall(p)
+  def forall(p: A ⇒ Boolean): Boolean = toSortedSet.forall(p)
 
   /**
     * Tests whether a predicate holds for at least one element of this set.
     */
-  def exists(f: A ⇒ Boolean): Boolean = set.exists(f)
+  def exists(f: A ⇒ Boolean): Boolean = toSortedSet.exists(f)
 
   /**
     * Returns the first value that matches the given predicate.
     */
-  def find(f: A ⇒ Boolean): Option[A] = set.find(f)
+  def find(f: A ⇒ Boolean): Option[A] = toSortedSet.find(f)
 
   /**
     * Returns a new `SortedSet` containing all elements where the result of `pf` is defined.
     */
   def collect[B: Order](pf: PartialFunction[A, B]): SortedSet[B] = {
     implicit val ordering = Order[B].toOrdering
-    set.collect(pf)
+    toSortedSet.collect(pf)
   }
 
   /**
     * Filters all elements of this set that do not satisfy the given predicate.
     */
-  def filter(p: A ⇒ Boolean): SortedSet[A] = set.filter(p)
+  def filter(p: A ⇒ Boolean): SortedSet[A] = toSortedSet.filter(p)
 
   /**
     * Filters all elements of this set that satisfy the given predicate.
@@ -216,19 +243,19 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * Left-associative fold using f.
     */
   def foldLeft[B](b: B)(f: (B, A) => B): B =
-    set.foldLeft(b)(f)
+    toSortedSet.foldLeft(b)(f)
 
   /**
     * Right-associative fold using f.
     */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable[SortedSet].foldRight(set, lb)(f)
+    Foldable[SortedSet].foldRight(toSortedSet, lb)(f)
 
   /**
     * Left-associative reduce using f.
     */
   def reduceLeft(f: (A, A) => A): A =
-    set.reduceLeft(f)
+    toSortedSet.reduceLeft(f)
 
   /**
    * Apply `f` to the "initial element" of this set and lazily combine it
@@ -260,7 +287,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * Reduce using the Semigroup of A
     */
   def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
-    S.combineAllOption(set).get
+    S.combineAllOption(toSortedSet).get
 
   /**
     * Map a function over all the elements of this set and concatenate the resulting sets into one.
@@ -269,19 +296,14 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * scala> import cats.implicits._
     * scala> val nes = NonEmptySet.of(1, 2, 3)
     * scala> nes.concatMap(n => NonEmptySet.of(n, n * 4, n * 5))
-    * res0: cats.data.NonEmptySet[Int] = NonEmptyTreeSet(1, 2, 3, 4, 5, 8, 10, 12, 15)
+    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4, 5, 8, 10, 12, 15)
     * }}}
     */
   def concatMap[B: Order](f: A => NonEmptySet[B]): NonEmptySet[B] = {
     implicit val ordering = Order[B].toOrdering
-    new NonEmptySet(set.flatMap(f andThen (_.set)))
+    NonEmptySetImpl.create(toSortedSet.flatMap(f andThen (_.toSortedSet)))
   }
 
-
-  /**
-    * Converts this set to a `SortedSet`
-    */
-  def toSortedSet: SortedSet[A] = set
 
   /**
     * Typesafe stringification method.
@@ -291,7 +313,7 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * universal .toString method.
     */
   def show(implicit A: Show[A]): String =
-    s"NonEmpty${Show[SortedSet[A]].show(set)}"
+    s"NonEmpty${Show[SortedSet[A]].show(toSortedSet)}"
 
   /**
     * Typesafe equality operator.
@@ -302,14 +324,12 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * universal equality provided by .equals.
     */
   def ===(that: NonEmptySet[A]): Boolean =
-    Eq[SortedSet[A]].eqv(set, that.toSortedSet)
+    Eq[SortedSet[A]].eqv(toSortedSet, that.toSortedSet)
 
   /**
-    * Alias for [[size]]
+    * Returns the number of elements in this set.
     */
-  def length: Int = size
-
-  override def toString: String = s"NonEmpty${set.toString}"
+  def length: Int = toSortedSet.size
 
   /**
     * Zips this `NonEmptySet` with another `NonEmptySet` and applies a function for each pair of elements.
@@ -320,17 +340,17 @@ final class NonEmptySet[A] private (val set: SortedSet[A]) {
     * scala> val as = NonEmptySet.of(1, 2, 3)
     * scala> val bs = NonEmptySet.of("A", "B", "C")
     * scala> as.zipWith(bs)(_ + _)
-    * res0: cats.data.NonEmptySet[String] = NonEmptyTreeSet(1A, 2B, 3C)
+    * res0: cats.data.NonEmptySet[String] = TreeSet(1A, 2B, 3C)
     * }}}
     */
   def zipWith[B, C: Order](b: NonEmptySet[B])(f: (A, B) => C): NonEmptySet[C] =
-    new NonEmptySet(SortedSet((set, b.toSortedSet).zipped.map(f).to: _*)(Order[C].toOrdering))
+    NonEmptySetImpl.create(SortedSet((toSortedSet, b.toSortedSet).zipped.map(f).to: _*)(Order[C].toOrdering))
 
   /**
     * Zips this `NonEmptySet` with its index.
     */
   def zipWithIndex: NonEmptySet[(A, Int)] =
-    new NonEmptySet(set.zipWithIndex)
+    NonEmptySetImpl.create(toSortedSet.zipWithIndex)
 }
 
 private[data] sealed abstract class NonEmptySetInstances {
@@ -393,17 +413,3 @@ private[data] sealed abstract class NonEmptySetInstances {
   }
 }
 
-object NonEmptySet extends NonEmptySetInstances {
-  def fromSet[A: Order](as: SortedSet[A]): Option[NonEmptySet[A]] =
-    if (as.nonEmpty) Option(new NonEmptySet(as)) else None
-
-  def fromSetUnsafe[A: Order](set: SortedSet[A]): NonEmptySet[A] =
-    if (set.nonEmpty) new NonEmptySet(set)
-    else throw new IllegalArgumentException("Cannot create NonEmptySet from empty set")
-
-
-  def of[A: Order](a: A, as: A*): NonEmptySet[A] =
-    new NonEmptySet(SortedSet(a)(Order[A].toOrdering) ++ SortedSet(as: _*)(Order[A].toOrdering) + a)
-  def apply[A: Order](head: A, tail: SortedSet[A]): NonEmptySet[A] = new NonEmptySet(SortedSet(head)(Order[A].toOrdering) ++ tail)
-  def one[A: Order](a: A): NonEmptySet[A] = new NonEmptySet(SortedSet(a)(Order[A].toOrdering))
-}
