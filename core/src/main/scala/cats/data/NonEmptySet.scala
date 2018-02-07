@@ -23,11 +23,6 @@ import cats.{Always, Eq, Eval, Foldable, Later, Now, Reducible, SemigroupK, Show
 
 import scala.collection.immutable._
 
-trait Newtype { self =>
-  private[data] type Base
-  private[data] trait Tag extends Any
-  private[cats] type Type[A] <: Base with Tag
-}
 
 private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
@@ -56,7 +51,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 }
 
 
-private[data] sealed class NonEmptySetOps[A](val value: NonEmptySetImpl.Type[A]) {
+sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
 
   private implicit val ordering: Ordering[A] = toSortedSet.ordering
   private implicit val order: Order[A] = Order.fromOrdering
