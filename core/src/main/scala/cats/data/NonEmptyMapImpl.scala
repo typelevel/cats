@@ -23,13 +23,6 @@ import cats.{Always, Apply, Eval, Foldable, Functor, Later, NonEmptyTraverse, No
 
 import scala.collection.immutable._
 
-trait Newtype2 { self =>
-  private[data] type Base
-  private[data] trait Tag extends Any
-  private[cats] type Type[A, +B] <: Base with Tag
-}
-
-
 private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
   private[cats] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
