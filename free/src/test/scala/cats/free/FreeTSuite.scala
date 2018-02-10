@@ -116,6 +116,68 @@ class FreeTSuite extends CatsSuite {
     }
   }
 
+  sealed trait Test1Algebra[A]
+
+  case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
+
+  object Test1Algebra {
+    implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
+      new Functor[Test1Algebra] {
+        def map[A, B](a: Test1Algebra[A])(f: A => B): Test1Algebra[B] = a match {
+          case Test1(k, h) => Test1(k, x => f(h(x)))
+        }
+      }
+
+    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
+      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test1(s, f))
+  }
+
+  sealed trait Test2Algebra[A]
+
+  case class Test2[A](value : Int, f: Int => A) extends Test2Algebra[A]
+
+  object Test2Algebra {
+    implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
+      new Functor[Test2Algebra] {
+        def map[A, B](a: Test2Algebra[A])(f: A => B): Test2Algebra[B] = a match {
+          case Test2(k, h) => Test2(k, x => f(h(x)))
+        }
+      }
+
+    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
+      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
+  }
+
+  type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
+
+  object Test1Interpreter extends FunctionK[Test1Algebra,Id] {
+    override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
+      case Test1(k, h) => h(k)
+    }
+  }
+
+  object Test2Interpreter extends FunctionK[Test2Algebra,Id] {
+    override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
+      case Test2(k, h) => h(k)
+    }
+  }
+
+  val eitherKInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
+
+  test(".inject") {
+    forAll { (x: Int, y: Int) =>
+      def res[F[_]]
+      (implicit I0: Test1Algebra :<: F,
+       I1: Test2Algebra :<: F): FreeT[F, Id, Int] = {
+        for {
+          a <- FreeT.inject[Test1Algebra, Id, F](Test1(x, identity))
+          b <- FreeT.inject[Test2Algebra, Id, F](Test2(y, identity))
+        } yield a + b
+      }
+      (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
+    }
+  }
+
   test("== should not return true for unequal instances") {
     val a = FreeT.pure[List, Option, Int](1).flatMap(x => FreeT.pure(2))
     val b = FreeT.pure[List, Option, Int](3).flatMap(x => FreeT.pure(4))

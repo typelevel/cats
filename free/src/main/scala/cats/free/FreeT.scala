@@ -186,6 +186,25 @@ object FreeT extends FreeTInstances {
 
   def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
     λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
+
+  /**
+    * This method is used to defer the application of an InjectK[F, G]
+    * instance. The actual work happens in
+    * `FreeTInjectKPartiallyApplied#apply`.
+    *
+    * This method exists to allow the `F`, `M` and `G` parameters to be
+    * bound independently of the `A` parameter below.
+    */
+  def inject[F[_], M[_], G[_]]: FreeTInjectKPartiallyApplied[F, M, G] =
+    new FreeTInjectKPartiallyApplied
+
+  /**
+    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+    */
+  private[free] final class FreeTInjectKPartiallyApplied[F[_], M[_], G[_]](val dummy: Boolean = true ) extends AnyVal {
+    def apply[A](fa: F[A])(implicit I: InjectK[F, G], m: Applicative[M]): FreeT[G, M, A] =
+      FreeT.liftF[G, M, A](I.inj(fa))
+  }
 }
 
 private[free] sealed abstract class FreeTInstances extends FreeTInstances0 {
