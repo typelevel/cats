@@ -54,7 +54,7 @@ private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 
 
 }
 
-private[data] sealed class NonEmptyMapOps[K, A](val value: NonEmptyMapImpl.Type[K, A]) {
+sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
     * Converts this map to a `SortedMap`.
     */
@@ -104,7 +104,7 @@ private[data] sealed class NonEmptyMapOps[K, A](val value: NonEmptyMapImpl.Type[
     */
   def head: (K, A) = toSortedMap.head
   /**
-    * Returns the first key-value pair of this map.
+    * Returns the last key-value pair of this map.
     */
   def last: (K, A) = toSortedMap.last
 
@@ -170,8 +170,8 @@ private[data] sealed class NonEmptyMapOps[K, A](val value: NonEmptyMapImpl.Type[
 
 
   /**
-    * Apply `f` to the "initial element" of this map and lazily combine it
-    * with every other value using the given function `g`.
+    * Apply `f` to the "initial element" of `fa` and combine it with
+    * every other value using the given function `g`.
     */
   def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
     tail.foldLeft(f(head._2))((b, a) => g(b, a._2))
