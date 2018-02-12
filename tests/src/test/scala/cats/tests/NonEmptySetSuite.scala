@@ -227,4 +227,10 @@ class NonEmptySetSuite extends CatsSuite {
     }
   }
 
+  test("NonEmptySet.of is consistent with removal") {
+    forAll { (is: SortedSet[Int], i: Int) =>
+      NonEmptySet.of(i, is.toList: _*) - i should ===(is - i)
+    }
+  }
+
 }
