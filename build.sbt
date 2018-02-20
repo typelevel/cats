@@ -38,10 +38,10 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % CompileTime,
-    "org.typelevel" %%% "machinist" % "0.6.2",
+    "com.github.mpilquist" %%% "simulacrum" % "0.12.0" % CompileTime,
+    "org.typelevel" %%% "machinist" % "0.6.4",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
   ),
   fork in test := true,
   parallelExecution in Test := false,
@@ -101,7 +101,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.3"
+lazy val scalaTestVersion = "3.0.5"
 lazy val disciplineVersion = "0.8"
 lazy val catalystsVersion = "0.0.5"
 
