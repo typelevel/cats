@@ -1,6 +1,7 @@
 package cats
 package tests
 
+import cats.kernel.laws.discipline.MonoidTests
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{BifunctorTests, BitraverseTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
 import cats.data.{Ior, NonEmptyList, EitherT}
@@ -26,6 +27,7 @@ class IorSuite extends CatsSuite {
   checkAll("Ior[?, ?]", BitraverseTests[Ior].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Ior]", SerializableTests.serializable(Bitraverse[Ior]))
 
+  checkAll("Monoid[Ior[A: Semigroup, B: Monoid]]", MonoidTests[Ior[List[Int], List[Int]]].monoid)
   checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupTests[Ior[List[Int], List[Int]]].semigroup)
   checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]", SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
 

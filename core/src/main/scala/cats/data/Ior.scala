@@ -178,9 +178,14 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
     def show(f: A Ior B): String = f.show
   }
 
-  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
-    def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
-  }
+  implicit def catsDataMonoidForIor[A: Semigroup, B: Monoid]: Monoid[Ior[A, B]] =
+    new Monoid[Ior[A, B]] {
+      lazy val empty: Ior[A, B] = Ior.right(Monoid[B].empty)
+      def combine(x: Ior[A, B], y: Ior[A, B]) =
+        if (x == empty) y
+        else if (y == empty) x
+        else x.combine(y)
+    }
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, ?], A] =
     new MonadError[Ior[A, ?], A] {
@@ -289,6 +294,10 @@ private[data] sealed abstract class IorInstances0 {
 
     override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
       fa.map(f)
+  }
+
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
+    def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
   }
 }
 
