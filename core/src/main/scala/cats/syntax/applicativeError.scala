@@ -11,6 +11,39 @@ trait ApplicativeErrorSyntax {
     new ApplicativeErrorOps[F, E, A](fa)
 }
 
+/**
+  * Extension to ApplicativeError in a binary compat way
+  */
+trait ApplicativeErrorExtension {
+  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](F: ApplicativeError[F, E]):
+    ApplicativeErrorExtensionOps[F, E] =
+      new ApplicativeErrorExtensionOps(F)
+}
+
+final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
+
+
+  /**
+    * Convert from scala.Option
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.ApplicativeError
+    * scala> val F = ApplicativeError[Either[String, ?], String]
+    *
+    * scala> F.fromOption(Some(1), "Empty")
+    * res0: scala.Either[String, Int] = Right(1)
+    *
+    * scala> F.fromOption(Option.empty[Int], "Empty")
+    * res1: scala.Either[String, Int] = Left(Empty)
+    * }}}
+    */
+  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
+    ApplicativeError.liftFromOption(oa, ifEmpty)(F)
+
+}
+
 final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
   def raiseError[F[_], A](implicit F: ApplicativeError[F, E]): F[A] =
     F.raiseError(e)

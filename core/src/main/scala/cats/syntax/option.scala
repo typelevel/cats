@@ -2,6 +2,7 @@ package cats
 package syntax
 
 import cats.data.{Ior, Validated, ValidatedNel}
+import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
@@ -170,4 +171,28 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * }}}
    */
   def orEmpty(implicit A: Monoid[A]): A = oa.getOrElse(A.empty)
+
+  /**
+    * Lift to a F[A] as long as it has an ApplicativeError[F] instance
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    *
+    * scala> Some(1).liftTo[Either[String, ?]]("Empty")
+    * res0: scala.Either[String, Int] = Right(1)
+    *
+    * scala> Option.empty[Int].liftTo[Either[String, ?]]("Empty")
+    * res1: scala.Either[String, Int] = Left(Empty)
+    * }}}
+    */
+  def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
+
+}
+
+object OptionOps {
+  private[syntax] final class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
+    def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+      ApplicativeError.liftFromOption(oa, ifEmpty)
+  }
 }

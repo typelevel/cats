@@ -269,7 +269,20 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
+  /**
+    * lift the `Either` into a `F[_]` with `ApplicativeError[F, A]` instance
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.data.EitherT
+    * scala> val e: Either[String, Int] = Right(3)
+    * scala> e.liftTo[EitherT[Option, String, ?]]
+    * res0: cats.data.EitherT[Option, String, Int] = EitherT(Some(Right(3)))
+    * }}}
+    */
+  def liftTo[F[_]](implicit F: ApplicativeError[F, A]): F[B] = F.fromEither(eab)
 }
+
 
 final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
   def left[A, B](a: A): Either[A, B] = Left(a)
