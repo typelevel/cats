@@ -55,3 +55,5 @@ trait AllSyntax
 
 trait AllSyntaxBinCompat0
     extends UnorderedTraverseSyntax
+    with ApplicativeErrorExtension
+    with TrySyntax
