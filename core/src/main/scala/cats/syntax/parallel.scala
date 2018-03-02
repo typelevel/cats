@@ -16,7 +16,7 @@ trait ParallelSyntax extends TupleParallelSyntax {
 
 final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
 
-  def parTraverse[M[_]: Monad, F[_], B]
+  def parTraverse[M[_], F[_], B]
   (f: A => M[B])(implicit T: Traverse[T], P: Parallel[M, F]): M[T[B]] =
     Parallel.parTraverse(ta)(f)
 
@@ -24,7 +24,7 @@ final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
 
 final class ParallelSequenceOps[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal {
   def parSequence[F[_]]
-  (implicit M: Monad[M], T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
+  (implicit T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
     Parallel.parSequence(tma)
 
 }
