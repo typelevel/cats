@@ -482,7 +482,15 @@ private[data] abstract class IorTInstances2 extends IorTInstances3 {
     new IorTEq[F, A, B] { val F0: Eq[F[Ior[A, B]]] = F }
 }
 
-private[data] abstract class IorTInstances3 {
+private[data] abstract class IorTInstances3 extends IorTInstances4 {
+  implicit def catsDataApplicativeForIorT[F[_], A](implicit F: Applicative[F], A: Semigroup[A]): Applicative[IorT[F, A, ?]] =
+    new IorTApplicative[F, A] {
+      val F0: Applicative[F] = F
+      val A0: Semigroup[A] = A
+    }
+}
+
+private[data] abstract class IorTInstances4 {
   implicit def catsDataFunctorForIorT[F[_], A](implicit F: Functor[F]): Functor[IorT[F, A, ?]] =
     new IorTFunctor[F, A] { val F0: Functor[F] = F }
 }
@@ -491,6 +499,19 @@ private[data] sealed trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
   implicit def F0: Functor[F]
 
   override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
+}
+
+private[data] sealed trait IorTApplicative[F[_], A] extends Applicative[IorT[F, A, ?]] {
+  implicit def F0: Applicative[F]
+  implicit def A0: Semigroup[A]
+
+  override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
+
+  override def ap[B, C](ff: IorT[F, A, B => C])(fa: IorT[F, A, B]): IorT[F, A, C] =
+    IorT(F0.compose[Ior[A, ?]].ap(ff.value)(fa.value))
+
+  override def pure[B](x: B): IorT[F, A, B] =
+    IorT(F0.pure(Ior.Right(x)))
 }
 
 private[data] sealed trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {
