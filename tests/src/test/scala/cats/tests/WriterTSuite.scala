@@ -370,6 +370,15 @@ class WriterTSuite extends CatsSuite {
     checkAll("ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]))
   }
 
+  {
+    // F has a Foldable and L has a Monoid
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    Foldable[WriterT[Const[String, ?], Int, ?]]
+
+    checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", FoldableTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].foldable[Int, Int])
+    checkAll("Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
+  }
+
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[WriterT[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[WriterT[Option, Int, ?]]))
 }
