@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Foldable
 import cats.kernel.instances.tuple._
-
 import cats.kernel.CommutativeMonoid
 import cats.syntax.semigroup._
 
@@ -63,6 +63,12 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     mapWritten(_ => monoidL.empty)
 
   def show(implicit F: Show[F[(L, V)]]): String = F.show(run)
+
+  def foldLeft[C](c: C)(f: (C, V) => C)(implicit F: Foldable[F]): C =
+    F.foldLeft(run, c)((z, v) => f(z, v._2))
+
+  def foldRight[C](lc: Eval[C])(f: (V, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
+    F.foldRight(run, lc)((v, z) => f(v._2, z))
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions {
@@ -134,6 +140,11 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
 
   implicit def catsDataMonoidForWriterTId[L:Monoid, V:Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]
+
+  implicit def catsDataFoldableForWriterT[F[_], L, V](implicit F: Foldable[F]): Foldable[WriterT[F, L, ?]] =
+    new WriterTFoldable[F, L]{
+      val F0: Foldable[F] = F
+    }
 }
 
 private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
@@ -410,6 +421,13 @@ private[data] sealed trait WriterTCoflatMap[F[_], L] extends CoflatMap[WriterT[F
   def coflatMap[A, B](fa: WriterT[F, L, A])(f: WriterT[F, L, A] => B): WriterT[F, L, B] = fa.map(_ => f(fa))
 }
 
+private[data] sealed trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, L, ?]] {
+
+  implicit def F0: Foldable[F]
+
+  def foldLeft[A, B](fa: WriterT[F, L, A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
+  def foldRight[A, B](fa: WriterT[F, L, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = fa.foldRight(lb)(f)
+}
 
 private[data] trait WriterTFunctions {
   def putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =
