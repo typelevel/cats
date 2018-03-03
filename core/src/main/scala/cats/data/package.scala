@@ -11,6 +11,12 @@ package object data {
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
 
+  type Env[E, A] = EnvT[Id, E, A]
+
+  object Env {
+    def apply[E, A](ask: E, extract: A): Env[E, A] = EnvT[Id, E, A](ask, extract)
+  }
+
   type ReaderT[F[_], A, B] = Kleisli[F, A, B]
   val ReaderT = Kleisli
 
@@ -18,6 +24,12 @@ package object data {
 
   object Reader {
     def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
+  }
+
+  type Coreader[A, B] = Env[A, B]
+
+  object Coreader {
+    def apply[A, B](ask: A, extract: B): Coreader[A, B] = EnvT[Id, A, B](ask, extract)
   }
 
   type Writer[L, V] = WriterT[Id, L, V]
