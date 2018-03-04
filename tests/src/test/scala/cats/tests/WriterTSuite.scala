@@ -373,10 +373,19 @@ class WriterTSuite extends CatsSuite {
   {
     // F has a Foldable and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    Foldable[WriterT[Const[String, ?], Int, ?]]
+    Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]
 
     checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", FoldableTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].foldable[Int, Int])
     checkAll("Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
+  }
+
+  {
+    // F has a Traverse and L has a Monoid
+    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]
+
+    checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", TraverseTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
