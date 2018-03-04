@@ -70,7 +70,10 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def foldRight[C](lc: Eval[C])(f: (V, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
     F.foldRight(run, lc)((v, z) => f(v._2, z))
 
-  def traverse[G[_], V1](f: V => G[V1])(implicit F: Traverse[F], G: Applicative[G]): G[WriterT[F, L, V1]] = ???
+  def traverse[G[_], V1](f: V => G[V1])(implicit F: Traverse[F], G: Applicative[G]): G[WriterT[F, L, V1]] =
+    G.map(
+      F.traverse(run)(lv => G.product(G.pure(lv._1), f(lv._2)))
+    )(WriterT.apply)
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions {
