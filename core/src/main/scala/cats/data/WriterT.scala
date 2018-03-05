@@ -65,10 +65,10 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def show(implicit F: Show[F[(L, V)]]): String = F.show(run)
 
   def foldLeft[C](c: C)(f: (C, V) => C)(implicit F: Foldable[F]): C =
-    F.foldLeft(run, c)((z, v) => f(z, v._2))
+    F.foldLeft(run, c)((z, lv) => f(z, lv._2))
 
   def foldRight[C](lc: Eval[C])(f: (V, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
-    F.foldRight(run, lc)((v, z) => f(v._2, z))
+    F.foldRight(run, lc)((lv, z) => f(lv._2, z))
 
   def traverse[G[_], V1](f: V => G[V1])(implicit F: Traverse[F], G: Applicative[G]): G[WriterT[F, L, V1]] =
     G.map(
