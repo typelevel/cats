@@ -33,10 +33,10 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
     s.asInstanceOf[SortedSet[A]]
 
 
-  def fromSet[A: Order](as: SortedSet[A]): Option[NonEmptySet[A]] =
+  def fromSet[A](as: SortedSet[A]): Option[NonEmptySet[A]] =
     if (as.nonEmpty) Option(create(as)) else None
 
-  def fromSetUnsafe[A: Order](set: SortedSet[A]): NonEmptySet[A] =
+  def fromSetUnsafe[A](set: SortedSet[A]): NonEmptySet[A] =
     if (set.nonEmpty) create(set)
     else throw new IllegalArgumentException("Cannot create NonEmptySet from empty set")
 
