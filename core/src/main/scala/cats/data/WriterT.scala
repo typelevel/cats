@@ -106,11 +106,6 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       implicit val F0: Monad[F] = F
       implicit val L0: Monoid[L] = L
     }
-
-  implicit def catsDataFoldableForWriterT[F[_], L, V](implicit F: Foldable[F]): Foldable[WriterT[F, L, ?]] =
-    new WriterTFoldable[F, L]{
-      val F0: Foldable[F] = F
-    }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
@@ -157,6 +152,11 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataMonoidForWriterTId[L:Monoid, V:Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]
+
+  implicit def catsDataFoldableForWriterT[F[_], L, V](implicit F: Foldable[F]): Foldable[WriterT[F, L, ?]] =
+    new WriterTFoldable[F, L]{
+      val F0: Foldable[F] = F
+    }
 }
 
 private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
