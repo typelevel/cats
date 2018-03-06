@@ -29,7 +29,8 @@ object Boilerplate {
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
     GenTupleSemigroupalSyntax,
-    GenParallelArityFunctions,
+    GenParMapArityFunctions,
+    GenParTupledArityFunctions,
     GenTupleParallelSyntax
   )
 
@@ -213,7 +214,7 @@ object Boilerplate {
     }
   }
 
-  object GenParallelArityFunctions extends Template {
+  object GenParMapArityFunctions extends Template {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
@@ -241,6 +242,39 @@ object Boilerplate {
         -  /** @group ParMapArity */
         -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
         -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+         |}
+      """
+    }
+  }
+
+  object GenParTupledArityFunctions extends Template {
+    def filename(root: File) = root / "cats" / "ParTupledArityFunctions.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val fargs = (0 until arity) map { "m" + _ }
+      val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
+      val fargsS = fargs mkString ", "
+
+      val nestedProducts = (0 until (arity - 2)).foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
+      val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
+
+      block"""
+         |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname ParTupledArity parTupled arity
+         | * @groupdesc ParTupledArity Higher-arity parTupled methods
+         | * @groupprio ParTupledArity 999
+         | */
+         |trait ParTupledArityFunctions {
+        -  /** @group ParTupledArity */
+        -  def parTupled$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
+        -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => (${`a..n`}) }
          |}
       """
     }
@@ -326,6 +360,10 @@ object Boilerplate {
         if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
         else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
+      val parTupled =
+        if (arity == 1) ""
+        else s"def parTupledN[F[_]](implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] = Parallel.parTupled$arity($tupleArgs)"
+
 
       block"""
          |package cats
@@ -339,6 +377,7 @@ object Boilerplate {
          |
          -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
          -  $parMap
+         -  $parTupled
          -}
          |
       """
