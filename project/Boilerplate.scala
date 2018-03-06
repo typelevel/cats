@@ -29,8 +29,8 @@ object Boilerplate {
     GenSemigroupalArityFunctions,
     GenApplyArityFunctions,
     GenTupleSemigroupalSyntax,
-    GenParMapArityFunctions,
-    GenParTupledArityFunctions,
+    GenParallelArityFunctions,
+    GenParallelArityFunctions2,
     GenTupleParallelSyntax
   )
 
@@ -214,7 +214,7 @@ object Boilerplate {
     }
   }
 
-  object GenParMapArityFunctions extends Template {
+  object GenParallelArityFunctions extends Template {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
@@ -247,8 +247,8 @@ object Boilerplate {
     }
   }
 
-  object GenParTupledArityFunctions extends Template {
-    def filename(root: File) = root / "cats" / "ParTupledArityFunctions.scala"
+  object GenParallelArityFunctions2 extends Template {
+    def filename(root: File) = root / "cats" / "ParallelArityFunctions2.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
       import tv._
@@ -271,7 +271,7 @@ object Boilerplate {
          | * @groupdesc ParTupledArity Higher-arity parTupled methods
          | * @groupprio ParTupledArity 999
          | */
-         |trait ParTupledArityFunctions {
+         |trait ParallelArityFunctions2 {
         -  /** @group ParTupledArity */
         -  def parTupled$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
         -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => (${`a..n`}) }

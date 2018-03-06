@@ -109,7 +109,7 @@ object NonEmptyParallel {
   def apply[M[_], F[_]](implicit P: NonEmptyParallel[M, F]): NonEmptyParallel[M, F] = P
 }
 
-object Parallel extends ParallelArityFunctions with ParTupledArityFunctions {
+object Parallel extends ParallelArityFunctions with ParallelArityFunctions2 {
 
   def apply[M[_], F[_]](implicit P: Parallel[M, F]): Parallel[M, F] = P
 
