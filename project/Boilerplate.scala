@@ -272,7 +272,7 @@ object Boilerplate {
          | * @groupdesc ParTupleArity Higher-arity parTuple methods
          | * @groupprio ParTupleArity 999
          | */
-         |trait ParallelArityFunctions2 {
+         |abstract class ParallelArityFunctions2 extends ParallelArityFunctions {
         -  /** @group ParTupleArity */
         -  def parTuple$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => (${`a..n`}) }
