@@ -120,6 +120,8 @@ class FreeTSuite extends CatsSuite {
 
   case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
 
+  def test1[A](value: Int, f: Int => A): Test1Algebra[A] = Test1(value, f)
+
   object Test1Algebra {
     implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
       new Functor[Test1Algebra] {
@@ -135,6 +137,8 @@ class FreeTSuite extends CatsSuite {
   sealed trait Test2Algebra[A]
 
   case class Test2[A](value : Int, f: Int => A) extends Test2Algebra[A]
+
+  def test2[A](value: Int, f: Int => A): Test2Algebra[A] = Test2(value, f)
 
   object Test2Algebra {
     implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
@@ -164,14 +168,14 @@ class FreeTSuite extends CatsSuite {
 
   val eitherKInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
 
-  test(".inject") {
+  test(".liftInject") {
     forAll { (x: Int, y: Int) =>
       def res[F[_]]
       (implicit I0: Test1Algebra :<: F,
        I1: Test2Algebra :<: F): FreeT[F, Id, Int] = {
         for {
-          a <- FreeT.inject[Test1Algebra, Id, F](Test1(x, identity))
-          b <- FreeT.inject[Test2Algebra, Id, F](Test2(y, identity))
+          a <- FreeT.liftInject[Id, F](test1(x, identity))
+          b <- FreeT.liftInject[Id, F](test2(y, identity))
         } yield a + b
       }
       (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
