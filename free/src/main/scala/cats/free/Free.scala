@@ -255,6 +255,7 @@ object Free extends FreeInstances {
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
+  // TODO to be deprecated / removed in cats 2.0
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
@@ -263,6 +264,25 @@ object Free extends FreeInstances {
    */
   private[free] final class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean = true ) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
+      Free.liftF(I.inj(fa))
+  }
+
+  /**
+    * This method is used to defer the application of an InjectK[F, G]
+    * instance. The actual work happens in
+    * `FreeLiftInjectKPartiallyApplied#apply`.
+    *
+    * This method exists to allow the `G` parameter to be
+    * bound independently of the `F` and `A` parameters below.
+    */
+  def liftInject[G[_]]: FreeLiftInjectKPartiallyApplied[G] =
+    new FreeLiftInjectKPartiallyApplied
+
+  /**
+    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+    */
+  private[free] final class FreeLiftInjectKPartiallyApplied[G[_]](val dummy: Boolean = true ) extends AnyVal {
+    def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
 

@@ -115,6 +115,8 @@ class FreeSuite extends CatsSuite {
 
   case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
 
+  def test1[A](value: Int, f: Int => A): Test1Algebra[A] = Test1(value, f)
+
   object Test1Algebra {
     implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
       new Functor[Test1Algebra] {
@@ -130,6 +132,8 @@ class FreeSuite extends CatsSuite {
   sealed trait Test2Algebra[A]
 
   case class Test2[A](value : Int, f: Int => A) extends Test2Algebra[A]
+
+  def test2[A](value: Int, f: Int => A): Test2Algebra[A] = Test2(value, f)
 
   object Test2Algebra {
     implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
@@ -165,10 +169,24 @@ class FreeSuite extends CatsSuite {
             (implicit I0: Test1Algebra :<: F,
             I1: Test2Algebra :<: F): Free[F, Int] = {
           for {
-            a <- Free.inject[Test1Algebra, F](Test1(x, identity))
-            b <- Free.inject[Test2Algebra, F](Test2(y, identity))
+            a <- Free.inject[Test1Algebra, F](test1(x, identity))
+            b <- Free.inject[Test2Algebra, F](test2(y, identity))
           } yield a + b
         }
+      (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
+    }
+  }
+
+  test(".liftInject") {
+    forAll { (x: Int, y: Int) =>
+      def res[F[_]]
+      (implicit I0: Test1Algebra :<: F,
+       I1: Test2Algebra :<: F): Free[F, Int] = {
+        for {
+          a <- Free.liftInject[F](test1(x, identity))
+          b <- Free.liftInject[F](test2(y, identity))
+        } yield a + b
+      }
       (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
     }
   }
