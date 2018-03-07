@@ -134,7 +134,7 @@ private[data] sealed abstract class ConstInstances0 extends ConstInstances1 {
   }
 }
 
-private[data] sealed abstract class ConstInstances1 extends ConstInstances2 {
+private[data] sealed abstract class ConstInstances1 {
 
   implicit def catsDataEqForConst[A: Eq, B]: Eq[Const[A, B]] = new Eq[Const[A, B]] {
     def eqv(x: Const[A, B], y: Const[A, B]): Boolean =
@@ -151,14 +151,4 @@ private[data] sealed abstract class ConstInstances1 extends ConstInstances2 {
     def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
       fa.retag[B]
   }
-}
-
-private[data] sealed abstract class ConstInstances2 {
-
-  implicit def catsDataComonadForConst[C]: Comonad[Const[C, ?]] =
-    new Comonad[Const[C, ?]] {
-      def coflatMap[A, B](fa: Const[C,A])(f: Const[C,A] => B): Const[C,B] = ???
-      def extract[A](x: Const[C,A]): A = ???
-      def map[A, B](fa: Const[C,A])(f: A => B): Const[C,B] = ???
-    }
 }

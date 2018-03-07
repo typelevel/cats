@@ -391,10 +391,10 @@ class WriterTSuite extends CatsSuite {
   {
     // F has a Comonad and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    Comonad[WriterT[Const[String, ?], ListWrapper[Int], ?]]
+    Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]
 
-    checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", ComonadTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].comonad[Int, Int, Int])
-    checkAll("Comonad[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Comonad[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
+    checkAll("WriterT[(String, ?), ListWrapper[Int], ?]", ComonadTests[WriterT[(String, ?), ListWrapper[Int], ?]].comonad[Int, Int, Int])
+    checkAll("Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]", SerializableTests.serializable(Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]))
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
