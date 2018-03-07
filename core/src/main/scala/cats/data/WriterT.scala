@@ -439,13 +439,6 @@ private[data] sealed trait WriterTCoflatMap[F[_], L] extends CoflatMap[WriterT[F
   def coflatMap[A, B](fa: WriterT[F, L, A])(f: WriterT[F, L, A] => B): WriterT[F, L, B] = fa.map(_ => f(fa))
 }
 
-private[data] sealed trait WriterTComonad[F[_], L] extends Comonad[WriterT[F, L, ?]] with WriterTCoflatMap[F, L] {
-
-  override implicit def F0: Comonad[F]
-
-  def extract[A](fa: WriterT[F, L, A]): A = F0.extract(fa.value)
-}
-
 private[data] sealed trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, L, ?]] {
 
   implicit def F0: Foldable[F]
@@ -459,6 +452,13 @@ private[data] sealed trait WriterTTraverse[F[_], L] extends Traverse[WriterT[F, 
   override implicit def F0: Traverse[F]
 
   def traverse[G[_]: Applicative, A, B](fa: WriterT[F, L, A])(f: A => G[B]): G[WriterT[F, L, B]] = fa.traverse(f)
+}
+
+private[data] sealed trait WriterTComonad[F[_], L] extends Comonad[WriterT[F, L, ?]] with WriterTCoflatMap[F, L] {
+
+  override implicit def F0: Comonad[F]
+
+  def extract[A](fa: WriterT[F, L, A]): A = F0.extract(F0.map(fa.run)(_._2))
 }
 
 private[data] trait WriterTFunctions {
