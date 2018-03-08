@@ -34,12 +34,53 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
   def foldr[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(fa, b)(f)
   
-  def contains[A](v: A)(implicit ev: Eq[A], F: Foldable[F] ): Boolean =
+   /**
+   * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> l.contains_(1)
+   * res0: Boolean = true
+   * scala> l.contains_(5)
+   * res1: Boolean = false
+   * }}}
+   */
+  def contains_[A](v: A)(implicit ev: Eq[A], F: Foldable[F]): Boolean =
     F.exists(fa)(ev.eqv(_, v))
 
+  
+   /**
+   * Intercalate with a prefix and a suffix
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List("1", "2", "3")
+   * scala> l.foldSmash("List(", ",", ")")
+   * res0: String = List(1,2,3)
+   * }}}
+   */
   def foldSmash[A](prefix: A, delim: A, suffix: A)(implicit A: Monoid[A], F: Foldable[F]): A =
     A.combine(prefix, A.combine(F.intercalate(fa, delim), suffix))
 
-  def mkString[A: Monoid](prefix: String, delim: String, suffix: String)(implicit F: Functor[F], S: Show[A], ev1: Monoid[String], ev2: Foldable[F]): String =
+  
+  
+   /**
+   * Make a string using `Show`, named as `mkString_` to avoid conflict
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3)
+   * scala> l.mkString_("List(", ",", ")")
+   * res0: String = List(1,2,3)
+   * }}}
+   */
+  def mkString_[A: Monoid](prefix: String, delim: String, suffix: String)(implicit F: Functor[F], S: Show[A], ev1: Monoid[String], ev2: Foldable[F]): String =
     foldSmash(F.map(fa)(S.show))(prefix, delim, suffix)
 }
