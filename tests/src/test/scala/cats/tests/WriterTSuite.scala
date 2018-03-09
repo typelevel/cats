@@ -373,28 +373,43 @@ class WriterTSuite extends CatsSuite {
   {
     // F has a Foldable and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    Foldable[Const[String, ?]]
     Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]
 
     checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", FoldableTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].foldable[Int, Int])
     checkAll("Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Foldable[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
+
+    Foldable[Id]
+    Foldable[WriterT[Id, ListWrapper[Int], ?]]
+    Foldable[Writer[ListWrapper[Int], ?]]
   }
 
   {
     // F has a Traverse and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    Traverse[Const[String, ?]]
     Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]
 
     checkAll("WriterT[Const[String, ?], ListWrapper[Int], ?]", TraverseTests[WriterT[Const[String, ?], ListWrapper[Int], ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]", SerializableTests.serializable(Traverse[WriterT[Const[String, ?], ListWrapper[Int], ?]]))
+
+    Traverse[Id]
+    Traverse[WriterT[Id, ListWrapper[Int], ?]]
+    Traverse[Writer[ListWrapper[Int], ?]]
   }
 
   {
     // F has a Comonad and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
+    Comonad[(String, ?)]
     Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]
 
     checkAll("WriterT[(String, ?), ListWrapper[Int], ?]", ComonadTests[WriterT[(String, ?), ListWrapper[Int], ?]].comonad[Int, Int, Int])
     checkAll("Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]", SerializableTests.serializable(Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]))
+
+    Comonad[Id]
+    Comonad[WriterT[Id, ListWrapper[Int], ?]]
+    Comonad[Writer[ListWrapper[Int], ?]]
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
