@@ -384,7 +384,6 @@ class WriterTSuite extends CatsSuite {
     Foldable[Writer[ListWrapper[Int], ?]]
 
     checkAll("WriterT[Id, ListWrapper[Int], ?]", FoldableTests[WriterT[Id, ListWrapper[Int], ?]].foldable[Int, Int])
-    checkAll("Foldable[WriterT[Id, ListWrapper[Int], ?]]", SerializableTests.serializable(Foldable[WriterT[Id, ListWrapper[Int], ?]]))
   }
 
   {
@@ -401,7 +400,6 @@ class WriterTSuite extends CatsSuite {
     Traverse[Writer[ListWrapper[Int], ?]]
 
     checkAll("WriterT[Id, ListWrapper[Int], ?]", TraverseTests[WriterT[Id, ListWrapper[Int], ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[WriterT[Id, ListWrapper[Int], ?]]", SerializableTests.serializable(Traverse[WriterT[Id, ListWrapper[Int], ?]]))
   }
 
   {
@@ -418,7 +416,6 @@ class WriterTSuite extends CatsSuite {
     Comonad[Writer[ListWrapper[Int], ?]]
 
     checkAll("WriterT[Id, ListWrapper[Int], ?]", ComonadTests[WriterT[Id, ListWrapper[Int], ?]].comonad[Int, Int, Int])
-    checkAll("Comonad[WriterT[Id, ListWrapper[Int], ?]]", SerializableTests.serializable(Comonad[WriterT[Id, ListWrapper[Int], ?]]))
   }
 
   checkAll("WriterT[Option, Int, ?]", CommutativeMonadTests[WriterT[Option, Int, ?]].commutativeMonad[Int, Int, Int])
