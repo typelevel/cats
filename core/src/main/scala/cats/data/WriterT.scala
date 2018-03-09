@@ -108,7 +108,7 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
     }
 
   implicit def catsDataTraverseForWriterTId[L](implicit F: Traverse[Id]): Traverse[WriterT[Id, L, ?]] =
-    catsDataTraverseForWriterT[Id, L]
+    catsDataTraverseForWriterT[Id, L](F)
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
@@ -119,7 +119,7 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
     }
 
   implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, ?]] =
-    catsDataFoldableForWriterT[Id, L]
+    catsDataFoldableForWriterT[Id, L](F)
 }
 
 private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
@@ -177,7 +177,7 @@ private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 
     catsDataSemigroupForWriterT[Id, L, V]
 
   implicit def catsDataComonadForWriterTId[L](implicit F: Comonad[Id]): Comonad[WriterT[Id, L, ?]] =
-    catsDataComonadForWriterT[Id, L]
+    catsDataComonadForWriterT[Id, L](F)
 }
 
 private[data] sealed abstract class WriterTInstances3 extends WriterTInstances4 {
