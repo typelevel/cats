@@ -110,7 +110,7 @@ private[cats] object AndThen {
     }
 
   /** Alias for `apply` that returns a `Function1` type. */
-  def wrap[A, B](f: A => B): (A => B) =
+  def of[A, B](f: A => B): (A => B) =
     apply(f)
 
   private final case class Single[-A, +B](f: A => B, index: Int)
