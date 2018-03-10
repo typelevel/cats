@@ -256,6 +256,14 @@ class KleisliSuite extends CatsSuite {
     kconfig1.run(config) should === (kconfig2.run(config))
   }
 
+  test("flatMap is stack safe for left associative binds when F is") {
+    val unit = Kleisli.pure[Eval, Unit, Unit](())
+    val result = (0 until 10000).foldLeft(unit) { (acc, _) =>
+      acc.flatMap(_ => unit)
+    }
+    result.run(()).value should === ()
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
