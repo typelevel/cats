@@ -29,11 +29,27 @@ private[cats] sealed abstract class AndThen[-T, +R]
   final def apply(a: T): R =
     runLoop(a)
 
-  override def compose[A](g: A => T): A => R =
-    composeF(AndThen(g))
+  override def andThen[A](g: R => A): T => A = {
+    // Fusing calls up to a certain threshold, using the fusion
+    // technique implemented for `cats.effect.IO#map`
+    this match {
+      case Single(f, index) if index != 127 =>
+        Single(f.andThen(g), index + 1)
+      case _ =>
+        andThenF(Single(g, 0))
+    }
+  }
 
-  override def andThen[A](g: R => A): T => A =
-    andThenF(AndThen(g))
+  override def compose[A](g: A => T): A => R = {
+    // Fusing calls up to a certain threshold, using the fusion
+    // technique implemented for `cats.effect.IO#map`
+    this match {
+      case Single(f, index) if index != 127 =>
+        Single(f.compose(g), index + 1)
+      case _ =>
+        composeF(Single(g, 0))
+    }
+  }
 
   private def runLoop(start: T): R = {
     var self: AndThen[Any, Any] = this.asInstanceOf[AndThen[Any, Any]]
@@ -42,11 +58,11 @@ private[cats] sealed abstract class AndThen[-T, +R]
 
     while (continue) {
       self match {
-        case Single(f) =>
+        case Single(f, _) =>
           current = f(current)
           continue = false
 
-        case Concat(Single(f), right) =>
+        case Concat(Single(f, _), right) =>
           current = f(current)
           self = right.asInstanceOf[AndThen[Any, Any]]
 
@@ -57,9 +73,9 @@ private[cats] sealed abstract class AndThen[-T, +R]
     current.asInstanceOf[R]
   }
 
-  final def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
+  private final def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
     Concat(this, right)
-  final def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
+  private final def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
     Concat(right, this)
 
   // converts left-leaning to right-leaning
@@ -87,14 +103,14 @@ private[cats] sealed abstract class AndThen[-T, +R]
 
 private[cats] object AndThen {
   /** Builds simple [[AndThen]] reference by wrapping a function. */
-  def apply[A, B](f: A => B): AndThen[A, B] =
+  def apply[A, B](f: A => B): (A => B) =
     f match {
       case ref: AndThen[A, B] @unchecked => ref
-      case _ => Single(f)
+      case _ => Single(f, 0)
     }
 
-  final case class Single[-A, +B](f: A => B)
+  private final case class Single[-A, +B](f: A => B, index: Int)
     extends AndThen[A, B]
-  final case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B])
+  private final case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B])
     extends AndThen[A, B]
 }
