@@ -19,12 +19,11 @@ import cats.syntax.either._
  * Given `IndexedStateT[F, S, S, A]`, this yields the `StateT[F, S, A]` monad.
  */
 final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extends Serializable {
-  import IndexedStateT.shift
 
   def flatMap[B, SC](fas: A => IndexedStateT[F, SB, SC, B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SC, B] =
     IndexedStateT.applyF(F.map(runF) { safsba =>
-      shift { sa =>
-        F.flatMap(safsba(sa)) { case (sb, a) =>
+      AndThen(safsba).andThen { fsba =>
+        F.flatMap(fsba) { case (sb, a) =>
           fas(a).run(sb)
         }
       }
@@ -32,8 +31,8 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SB, B] =
     IndexedStateT.applyF(F.map(runF) { sfsa =>
-      shift { sa =>
-        F.flatMap(sfsa(sa)) { case (s, a) => F.map(faf(a))((s, _)) }
+      AndThen(sfsa).andThen { fsa =>
+        F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) }
       }
     })
 
@@ -222,35 +221,6 @@ object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructor
 
   def setF[F[_], SA, SB](fsb: F[SB])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, Unit] =
     IndexedStateT(_ => F.map(fsb)(s => (s, ())))
-
-  /**
-   * Internal API — shifts the execution of `f` in the `F` context.
-   *
-   * Used to build `IndexedStateT` values for `F[_]` data types that
-   * implement `Monad`, in which case it is safer to trigger the `F[_]`
-   * context earlier.
-   *
-   * The requirement is for `FlatMap` as this will get used in operations
-   * that invoke `F.flatMap` (e.g. in `IndexedStateT#flatMap`). However we are
-   * doing discrimination based on inheritance and if we detect an
-   * `Applicative`, then we use it to trigger the `F[_]` context earlier.
-   *
-   * Triggering the `F[_]` context earlier is important to avoid stack
-   * safety issues for `F` monads that have a stack safe `flatMap`
-   * implementation. For example `Eval` or `IO`. Without this the `Monad`
-   * instance is stack unsafe, even if the underlying `F` is stack safe
-   * in `flatMap`.
-   */
-  private def shift[F[_], SA, SB, A](f: SA => F[(SB, A)])
-    (implicit F: FlatMap[F]): (SA => F[(SB, A)]) = {
-
-    F match {
-      case ap: Applicative[F] @unchecked =>
-        sa => F.flatMap(ap.pure(sa))(f)
-      case _ =>
-        f
-    }
-  }
 }
 
 private[data] abstract class StateTFunctions extends CommonStateTConstructors {
