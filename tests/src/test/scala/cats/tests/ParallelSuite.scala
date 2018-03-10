@@ -199,6 +199,24 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParTupled of List should be consistent with zip") {
+    forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
+      (fa, fb, fc, fd).parTupled should === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+    }
+  }
+
+  test("ParTupled of Vector should be consistent with zip") {
+    forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
+      (fa, fb, fc, fd).parTupled should === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+    }
+  }
+
+  test("ParTupled of Stream should be consistent with zip") {
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
+      (fa, fb, fc, fd).parTupled should === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+    }
+  }
+  
   test("IorT leverages parallel effect instances when it exists") {
     case class Marker(value: String) extends Exception("marker") {
       override def fillInStackTrace: Throwable = null
