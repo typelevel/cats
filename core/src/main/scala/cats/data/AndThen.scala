@@ -97,7 +97,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
     self.asInstanceOf[AndThen[T, E]]
   }
 
-  override def toString =
+  override def toString: String =
     "AndThen$" + System.identityHashCode(this)
 }
 
