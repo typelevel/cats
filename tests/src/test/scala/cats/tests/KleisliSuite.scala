@@ -9,8 +9,9 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
+import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
 import Helpers.CSemi
+import catalysts.Platform
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -258,7 +259,8 @@ class KleisliSuite extends CatsSuite {
 
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
-    val result = (0 until 10000).foldLeft(unit) { (acc, _) =>
+    val count = if (Platform.isJvm) 10000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
       acc.flatMap(_ => unit)
     }
     result.run(()).value
@@ -266,7 +268,8 @@ class KleisliSuite extends CatsSuite {
 
   test("flatMap is stack safe on repeated right binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
-    val result = (0 until 10000).foldLeft(unit) { (acc, _) =>
+    val count = if (Platform.isJvm) 10000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
       unit.flatMap(_ => acc)
     }
     result.run(()).value
