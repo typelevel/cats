@@ -36,7 +36,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
       case Single(f, index) if index != 127 =>
         Single(f.andThen(g), index + 1)
       case _ =>
-        andThenF(Single(g, 0))
+        andThenF(AndThen(g))
     }
   }
 
@@ -47,7 +47,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
       case Single(f, index) if index != 127 =>
         Single(f.compose(g), index + 1)
       case _ =>
-        composeF(Single(g, 0))
+        composeF(AndThen(g))
     }
   }
 
@@ -103,11 +103,15 @@ private[cats] sealed abstract class AndThen[-T, +R]
 
 private[cats] object AndThen {
   /** Builds simple [[AndThen]] reference by wrapping a function. */
-  def apply[A, B](f: A => B): (A => B) =
+  def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
       case ref: AndThen[A, B] @unchecked => ref
       case _ => Single(f, 0)
     }
+
+  /** Alias for `apply` that returns a `Function1` type. */
+  def wrap[A, B](f: A => B): (A => B) =
+    apply(f)
 
   private final case class Single[-A, +B](f: A => B, index: Int)
     extends AndThen[A, B]
