@@ -256,12 +256,20 @@ class KleisliSuite extends CatsSuite {
     kconfig1.run(config) should === (kconfig2.run(config))
   }
 
-  test("flatMap is stack safe for left associative binds when F is") {
+  test("flatMap is stack safe on repeated left binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
     val result = (0 until 10000).foldLeft(unit) { (acc, _) =>
       acc.flatMap(_ => unit)
     }
-    result.run(()).value should === ()
+    result.run(()).value
+  }
+
+  test("flatMap is stack safe on repeated right binds when F is") {
+    val unit = Kleisli.pure[Eval, Unit, Unit](())
+    val result = (0 until 10000).foldLeft(unit) { (acc, _) =>
+      unit.flatMap(_ => acc)
+    }
+    result.run(()).value
   }
 
   /**
