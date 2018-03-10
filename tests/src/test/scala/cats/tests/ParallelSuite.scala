@@ -169,6 +169,36 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParTupled of NonEmptyList should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: NonEmptyList[Int], fb: NonEmptyList[Int], fc: NonEmptyList[Int], fd: NonEmptyList[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
+  test("ParTupled of NonEmptyVector should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: NonEmptyVector[Int], fb: NonEmptyVector[Int], fc: NonEmptyVector[Int], fd: NonEmptyVector[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
+  test("ParTupled of List should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
+  test("ParTupled of Vector should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
+  test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
+      (fa, fb, fc, fd).parTupled should === ((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
   test("IorT leverages parallel effect instances when it exists") {
     case class Marker(value: String) extends Exception("marker") {
       override def fillInStackTrace: Throwable = null
