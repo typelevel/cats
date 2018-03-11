@@ -25,6 +25,7 @@ lazy val kernelSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
+  fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
@@ -512,8 +513,9 @@ lazy val publishSettings = Seq(
   )
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
+
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", "catsJVM/test")
+addCommandAlias("buildJVM", ";macrosJVM/test;kernelJVM/test;kernelLawsJVM/test;lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test;coreJVM/test;freeJVM/test;alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
 
