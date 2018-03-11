@@ -38,15 +38,15 @@ private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 
     if (m.nonEmpty) create(m)
     else throw new IllegalArgumentException("Cannot create NonEmptyMap from empty map")
 
-  def apply[K: Order, A](head: (K, A), tail: SortedMap[K, A]): NonEmptyMap[K, A] =
-    create(SortedMap(head)(Order[K].toOrdering) ++ tail)
+  def apply[K, A](head: (K, A), tail: SortedMap[K, A])(implicit K: Order[K]): NonEmptyMap[K, A] =
+    create(SortedMap(head)(K.toOrdering) ++ tail)
 
 
-  def of[K: Order, A](a: (K, A), as: (K, A)*): NonEmptyMap[K, A] =
-    create(SortedMap(as: _*)(Order[K].toOrdering) + a)
+  def of[K, A](a: (K, A), as: (K, A)*)(implicit K: Order[K]): NonEmptyMap[K, A] =
+    create(SortedMap(as: _*)(K.toOrdering) + a)
 
-  def one[K: Order, A](k: K, a: A): NonEmptyMap[K, A] =
-    create(SortedMap((k, a))(Order[K].toOrdering))
+  def one[K, A](k: K, a: A)(implicit K: Order[K]): NonEmptyMap[K, A] =
+    create(SortedMap((k, a))(K.toOrdering))
 
   implicit def catsNonEmptyMapOps[K, A](value: Type[K, A]): NonEmptyMapOps[K, A] =
     new NonEmptyMapOps(value)
