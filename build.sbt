@@ -515,7 +515,11 @@ lazy val publishSettings = Seq(
 
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", ";macrosJVM/test;kernelJVM/test;kernelLawsJVM/test;lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test;coreJVM/test;freeJVM/test;alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
+addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
+
+addCommandAlias("buildTestingJVM", ";kernelLawsJVM/test;lawsJVM/test;testkitJVM/test;testsJVM/test")
+
+addCommandAlias("buildJVM", ";macrosJVM/test;kernelJVM/test;buildTestingJVM;jvm/test;coreJVM/test;freeJVM/test;buildAlleycatsJVM")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
 
