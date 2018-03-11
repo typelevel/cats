@@ -19,7 +19,6 @@ package data
 
 import cats.instances.sortedSet._
 import cats.kernel._
-import cats.{Always, Eq, Eval, Foldable, Later, Now, Reducible, SemigroupK, Show}
 
 import scala.collection.immutable._
 
@@ -41,11 +40,11 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
     else throw new IllegalArgumentException("Cannot create NonEmptySet from empty set")
 
 
-  def of[A: Order](a: A, as: A*): NonEmptySet[A] =
-    create(SortedSet((a +: as): _*)(Order[A].toOrdering))
-  def apply[A: Order](head: A, tail: SortedSet[A]): NonEmptySet[A] =
-    create(SortedSet(head)(Order[A].toOrdering) ++ tail)
-  def one[A: Order](a: A): NonEmptySet[A] = create(SortedSet(a)(Order[A].toOrdering))
+  def of[A](a: A, as: A*)(implicit A: Order[A]): NonEmptySet[A] =
+    create(SortedSet(a +: as: _*)(A.toOrdering))
+  def apply[A](head: A, tail: SortedSet[A])(implicit A: Order[A]): NonEmptySet[A] =
+    create(SortedSet(head)(A.toOrdering) ++ tail)
+  def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(A.toOrdering))
 
   implicit def catsNonEmptySetOps[A](value: NonEmptySet[A]): NonEmptySetOps[A] =
     new NonEmptySetOps(value)
@@ -137,8 +136,8 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
     * Applies f to all the elements
     */
-  def map[B: Order](f: A ⇒ B): NonEmptySet[B] =
-    NonEmptySetImpl.create(SortedSet(toSortedSet.map(f).to: _*)(Order[B].toOrdering))
+  def map[B](f: A => B)(implicit B: Order[B]): NonEmptySet[B] =
+    NonEmptySetImpl.create(SortedSet(toSortedSet.map(f).to: _*)(B.toOrdering))
 
   /**
     * Converts this set to a `NonEmptyList`.
@@ -219,8 +218,8 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
     * Returns a new `SortedSet` containing all elements where the result of `pf` is defined.
     */
-  def collect[B: Order](pf: PartialFunction[A, B]): SortedSet[B] = {
-    implicit val ordering = Order[B].toOrdering
+  def collect[B](pf: PartialFunction[A, B])(implicit B: Order[B]): SortedSet[B] = {
+    implicit val ordering = B.toOrdering
     toSortedSet.collect(pf)
   }
 
@@ -295,8 +294,8 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4, 5, 8, 10, 12, 15)
     * }}}
     */
-  def concatMap[B: Order](f: A => NonEmptySet[B]): NonEmptySet[B] = {
-    implicit val ordering = Order[B].toOrdering
+  def concatMap[B](f: A => NonEmptySet[B])(implicit B: Order[B]): NonEmptySet[B] = {
+    implicit val ordering = B.toOrdering
     NonEmptySetImpl.create(toSortedSet.flatMap(f andThen (_.toSortedSet)))
   }
 
@@ -339,8 +338,8 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     * res0: cats.data.NonEmptySet[String] = TreeSet(1A, 2B, 3C)
     * }}}
     */
-  def zipWith[B, C: Order](b: NonEmptySet[B])(f: (A, B) => C): NonEmptySet[C] =
-    NonEmptySetImpl.create(SortedSet((toSortedSet, b.toSortedSet).zipped.map(f).to: _*)(Order[C].toOrdering))
+  def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] =
+    NonEmptySetImpl.create(SortedSet((toSortedSet, b.toSortedSet).zipped.map(f).to: _*)(C.toOrdering))
 
   /**
     * Zips this `NonEmptySet` with its index.
