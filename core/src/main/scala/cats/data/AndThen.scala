@@ -3,20 +3,16 @@ package cats.data
 import java.io.Serializable
 
 /**
- * Internal API (Cats) — A type-aligned seq for representing
- * function composition in constant stack space with amortized
+ * A function type of a single input that can do function composition
+ * (via `andThen` and `compose`) in constant stack space with amortized
  * linear time application (in the number of constituent functions).
- *
- * A variation of this implementation was first introduced in the
- * `cats-effect` project. Implementation is enormously uglier than
- * it should be since `@tailrec` doesn't work properly on functions
- * with existential types.
  *
  * Example:
  *
  * {{{
  *   val seed = AndThen((x: Int) => x + 1))
  *   val f = (0 until 10000).foldLeft(seed)((acc, _) => acc.andThen(_ + 1))
+ *
  *   // This should not trigger stack overflow ;-)
  *   f(0)
  * }}}
@@ -29,7 +25,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
   final def apply(a: T): R =
     runLoop(a)
 
-  override def andThen[A](g: R => A): T => A = {
+  override def andThen[A](g: R => A): AndThen[T, A] = {
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
@@ -40,7 +36,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
     }
   }
 
-  override def compose[A](g: A => T): A => R = {
+  override def compose[A](g: A => T): AndThen[A, R] = {
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
@@ -102,16 +98,12 @@ private[cats] sealed abstract class AndThen[-T, +R]
 }
 
 private[cats] object AndThen {
-  /** Builds simple [[AndThen]] reference by wrapping a function. */
+  /** Builds an [[AndThen]] reference by wrapping a plain function. */
   def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
       case ref: AndThen[A, B] @unchecked => ref
       case _ => Single(f, 0)
     }
-
-  /** Alias for `apply` that returns a `Function1` type. */
-  def of[A, B](f: A => B): (A => B) =
-    apply(f)
 
   private final case class Single[-A, +B](f: A => B, index: Int)
     extends AndThen[A, B]
