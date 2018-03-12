@@ -72,7 +72,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def traverse[G[_], V1](f: V => G[V1])(implicit F: Traverse[F], G: Applicative[G]): G[WriterT[F, L, V1]] =
     G.map(
-      F.traverse(run)(lv => G.product(G.pure(lv._1), f(lv._2)))
+      F.traverse(run)(lv => G.tupleLeft(f(lv._2), lv._1))
     )(WriterT.apply)
 }
 
@@ -457,10 +457,11 @@ private[data] sealed trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, 
   def foldRight[A, B](fa: WriterT[F, L, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = fa.foldRight(lb)(f)
 }
 
-private[data] sealed trait WriterTTraverse[F[_], L] extends Traverse[WriterT[F, L, ?]] with WriterTFoldable[F, L] {
+private[data] sealed trait WriterTTraverse[F[_], L] extends Traverse[WriterT[F, L, ?]] with WriterTFoldable[F, L] with WriterTFunctor[F, L] {
 
   override implicit def F0: Traverse[F]
 
+  override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] = super[WriterTFunctor].map(fa)(f)
   def traverse[G[_]: Applicative, A, B](fa: WriterT[F, L, A])(f: A => G[B]): G[WriterT[F, L, B]] = fa.traverse(f)
 }
 
