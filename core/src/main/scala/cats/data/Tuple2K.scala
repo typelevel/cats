@@ -218,7 +218,7 @@ private[data] sealed trait Tuple2KFoldable[F[_], G[_]] extends Foldable[λ[α =>
     F.foldRight(fa.first, G.foldRight(fa.second, lb)(f))(f)
 }
 
-private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α => Tuple2K[F, G, α]]] with Tuple2KFoldable[F, G] {
+private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α => Tuple2K[F, G, α]]] with Tuple2KFoldable[F, G] with Tuple2KFunctor[F, G] {
   def F: Traverse[F]
   def G: Traverse[G]
 
