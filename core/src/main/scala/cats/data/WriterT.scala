@@ -290,7 +290,7 @@ private[data] sealed abstract class WriterTInstances12 {
 private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L, ?]] {
   implicit def F0: Functor[F]
 
-  def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
+  override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
     fa.map(f)
 }
 
@@ -461,7 +461,6 @@ private[data] sealed trait WriterTTraverse[F[_], L] extends Traverse[WriterT[F, 
 
   override implicit def F0: Traverse[F]
 
-  override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] = super[WriterTFunctor].map(fa)(f)
   def traverse[G[_]: Applicative, A, B](fa: WriterT[F, L, A])(f: A => G[B]): G[WriterT[F, L, B]] = fa.traverse(f)
 }
 
