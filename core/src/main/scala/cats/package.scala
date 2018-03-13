@@ -84,6 +84,7 @@ package object cats {
   type Comparison = cats.kernel.Comparison
   type Order[A] = cats.kernel.Order[A]
   type Hash[A] = cats.kernel.Hash[A]
+  type Magma[A] = cats.kernel.Magma[A]
   type Semigroup[A] = cats.kernel.Semigroup[A]
   type Monoid[A] = cats.kernel.Monoid[A]
   type Group[A] = cats.kernel.Group[A]
@@ -93,6 +94,7 @@ package object cats {
   val Order = cats.kernel.Order
   val Comparison = cats.kernel.Comparison
   val Hash = cats.kernel.Hash
+  val Magma = cats.kernel.Magma
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
