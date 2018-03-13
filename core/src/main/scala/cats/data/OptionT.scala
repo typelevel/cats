@@ -258,7 +258,7 @@ private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 
 
 private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] { implicit val F = F0 }
+    new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances3 {
@@ -324,7 +324,7 @@ private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, ?]] {
     fa.foldRight(lb)(f)
 }
 
-private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]] with OptionTFoldable[F] with OptionTFunctor[F] {
+private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]] with OptionTFoldable[F] {
   implicit def F: Traverse[F]
 
   def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =

@@ -37,10 +37,11 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
 }
 
 private[data] sealed abstract class Tuple2KInstances0 extends Tuple2KInstances1 {
-  implicit def catsDataTraverseForTuple2K[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Tuple2K[F, G, α]]] = new Tuple2KTraverse[F, G] {
-    def F: Traverse[F] = FF
-    def G: Traverse[G] = GF
-  }
+  implicit def catsDataTraverseForTuple2K[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KTraverse[F, G] with Tuple2KFunctor[F, G] {
+      def F: Traverse[F] = FF
+      def G: Traverse[G] = GF
+    }
   implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Tuple2K[F, G, α]]] = new Tuple2KContravariant[F, G] {
     def F: Contravariant[F] = FC
     def G: Contravariant[G] = GC
@@ -218,7 +219,7 @@ private[data] sealed trait Tuple2KFoldable[F[_], G[_]] extends Foldable[λ[α =>
     F.foldRight(fa.first, G.foldRight(fa.second, lb)(f))(f)
 }
 
-private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α => Tuple2K[F, G, α]]] with Tuple2KFoldable[F, G] with Tuple2KFunctor[F, G] {
+private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α => Tuple2K[F, G, α]]] with Tuple2KFoldable[F, G] {
   def F: Traverse[F]
   def G: Traverse[G]
 
