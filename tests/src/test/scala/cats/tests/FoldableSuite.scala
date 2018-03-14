@@ -143,7 +143,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
   
   test(s"Foldable[$name] mkString_") {
     forAll { (fa: F[Int]) =>
-      fa.mkString_("L[", ";", "]") should === fa.mkString("L[", ";", "]")
+      fa.mkString_("L[", ";", "]") should === fa.toList.mkString("L[", ";", "]")
     }
   }
 }
