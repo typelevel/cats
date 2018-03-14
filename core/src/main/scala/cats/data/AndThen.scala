@@ -29,7 +29,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
-      case Single(f, index) if index != 127 =>
+      case Single(f, index) if index != fusionMaxStackDepth =>
         Single(f.andThen(g), index + 1)
       case _ =>
         andThenF(AndThen(g))
@@ -40,7 +40,7 @@ private[cats] sealed abstract class AndThen[-T, +R]
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
-      case Single(f, index) if index != 127 =>
+      case Single(f, index) if index != fusionMaxStackDepth =>
         Single(f.compose(g), index + 1)
       case _ =>
         composeF(AndThen(g))
@@ -109,4 +109,18 @@ private[cats] object AndThen {
     extends AndThen[A, B]
   private final case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B])
     extends AndThen[A, B]
+
+  /** 
+   * Establishes the maximum stack depth when fusing `andThen` or 
+   * `compose` calls.
+   *
+   * The default is `128`, from which we substract one as an optimization,
+   * a "!=" comparisson being slightly more efficient than a "<".
+   *
+   * This value was reached by taking into account the default stack 
+   * size as set on 32 bits or 64 bits, Linux or Windows systems,
+   * being enough to notice performance gains, but not big enough
+   * to be in danger of triggering a stack-overflow error.
+   */
+  private final val fusionMaxStackDepth = 127
 }
