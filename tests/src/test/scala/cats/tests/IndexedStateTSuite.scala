@@ -1,9 +1,9 @@
 package cats
 package tests
 
+import catalysts.Platform
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
@@ -251,6 +251,23 @@ class IndexedStateTSuite extends CatsSuite {
     got should === (expected)
   }
 
+  test("flatMap is stack safe on repeated left binds when F is") {
+    val unit = StateT.pure[Eval, Unit, Unit](())
+    val count = if (Platform.isJvm) 100000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      acc.flatMap(_ => unit)
+    }
+    result.run(()).value should === (((), ()))
+  }
+
+  test("flatMap is stack safe on repeated right binds when F is") {
+    val unit = StateT.pure[Eval, Unit, Unit](())
+    val count = if (Platform.isJvm) 100000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      unit.flatMap(_ => acc)
+    }
+    result.run(()).value should === (((), ()))
+  }
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad))
 
