@@ -16,6 +16,9 @@ final class MonadErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
   def ensureOr(error: A => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensureOr(fa)(error)(predicate)
 
+  def ensureP(pf: PartialFunction[A, E])(implicit F: MonadError[F, E]): F[A] =
+    F.ensureP(fa)(pf)
+
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
 }
