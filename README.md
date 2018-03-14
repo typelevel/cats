@@ -77,6 +77,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 #### General purpose libraries to support pure functional programming
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
@@ -91,6 +92,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [circe](https://github.com/circe/circe): pure functional JSON library
+ * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources

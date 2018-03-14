@@ -87,9 +87,13 @@ class Tests extends FunSuite with Discipline {
   // The scalacheck defaults (100,100) are too high for scala-js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+  final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+    PropertyCheckConfiguration(
+      minSuccessful = PropMinSuccessful,
+      sizeRange = PropMaxSize,
+      workers = PropWorkers)
 
 
   {
