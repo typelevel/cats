@@ -76,15 +76,20 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
    * scala> val l: List[Int] = List(1, 2, 3)
    * scala> l.mkString_("L[", ";", "]")
    * res0: String = L[1;2;3]
+   * scala> val el: List[Int] = List()
+   * scala> el.mkString_("L[", ";", "]")
+   * res1: String = L[]
    * }}}
    */
   def mkString_(prefix: String, delim: String, suffix: String)(implicit A: Show[A], F: Foldable[F]): String = {
     val b = F.foldLeft(fa, new StringBuilder){ (builder, a) =>
       builder append A.show(a) append delim
     }
-    if (b.isEmpty)
-      ""
-    else
-      prefix + b.toString.dropRight(delim.length) + suffix
+    prefix + {
+      if (b.isEmpty)
+        ""
+      else
+        b.toString.dropRight(delim.length)
+    } + suffix
   }
 }
