@@ -28,19 +28,19 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
     Kleisli[G, A, B](run andThen f.apply)
 
   def flatMap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli((r: A) => F.flatMap[B, C](run(r))((b: B) => f(b).run(r)))
+    Kleisli.shift(a => F.flatMap[B, C](run(a))((b: B) => f(b).run(a)))
 
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli(a => F.flatMap(run(a))(f))
+    Kleisli.shift(a => F.flatMap(run(a))(f))
 
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    Kleisli((a: A) => F.flatMap(run(a))(f))
+    Kleisli.shift(a => F.flatMap(run(a))(f))
 
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     this andThen k.run
 
   def compose[Z](f: Z => F[A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-    Kleisli((z: Z) => F.flatMap(f(z))(run))
+    Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
 
   def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     this compose k.run
@@ -80,7 +80,35 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def apply(a: A): F[B] = run(a)
 }
 
-object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplicitInstances
+object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplicitInstances {
+  /**
+   * Internal API — shifts the execution of `run` in the `F` context.
+   *
+   * Used to build Kleisli values for `F[_]` data types that implement `Monad`,
+   * in which case it is safer to trigger the `F[_]` context earlier.
+   *
+   * The requirement is for `FlatMap` as this will get used in operations
+   * that invoke `F.flatMap` (e.g. in `Kleisli#flatMap`). However we are
+   * doing discrimination based on inheritance and if we detect an
+   * `Applicative`, then we use it to trigger the `F[_]` context earlier.
+   *
+   * Triggering the `F[_]` context earlier is important to avoid stack
+   * safety issues for `F` monads that have a stack safe `flatMap`
+   * implementation. For example `Eval` or `IO`. Without this the `Monad`
+   * instance is stack unsafe, even if the underlying `F` is stack safe
+   * in `flatMap`.
+   */
+  private[data] def shift[F[_], A, B](run: A => F[B])
+    (implicit F: FlatMap[F]): Kleisli[F, A, B] = {
+
+    F match {
+      case ap: Applicative[F] @unchecked =>
+        Kleisli(r => F.flatMap(ap.pure(r))(run))
+      case _ =>
+        Kleisli(run)
+    }
+  }
+}
 
 private[data] sealed trait KleisliFunctions {
 
