@@ -97,7 +97,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
     * Returns a `SortedSet` containing all the keys of this map.
     */
-  def keys: SortedSet[K] = toSortedMap.keySet
+  def keys: NonEmptySet[K] = NonEmptySet.fromSetUnsafe(toSortedMap.keySet)
 
   /**
     * Returns the first key-value pair of this map.
