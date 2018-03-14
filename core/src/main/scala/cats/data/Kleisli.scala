@@ -238,7 +238,7 @@ private[data] sealed abstract class KleisliInstances6 extends KleisliInstances7 
 
 private[data] sealed abstract class KleisliInstances7 extends KleisliInstances8 {
   implicit def catsDataDistributiveForKleisli[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
-    new KleisliDistributive[F, R] { implicit def F: Distributive[F] = F0 }
+    new KleisliDistributive[F, R] with KleisliFunctor[F, R] { implicit def F: Distributive[F] = F0 }
 }
 
 private[data] sealed abstract class KleisliInstances8 {

@@ -410,7 +410,7 @@ private[data] abstract class IorTInstances extends IorTInstances1 {
     }
 
   implicit def catsDataTraverseForIorT[F[_], A](implicit F: Traverse[F]): Traverse[IorT[F, A, ?]] =
-    new IorTTraverse[F, A] { val F0: Traverse[F] = F }
+    new IorTTraverse[F, A] with IorTFunctor[F, A] { val F0: Traverse[F] = F }
 
   implicit def catsDataMonoidForIorT[F[_], A, B](implicit F: Monoid[F[Ior[A, B]]]): Monoid[IorT[F, A, B]] =
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }

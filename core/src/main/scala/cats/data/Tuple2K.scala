@@ -30,7 +30,7 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
     def G: Show[G[A]] = GF
   }
   implicit def catsDataContravariantMonoidalForTuple2k[F[_], G[_]](implicit FD: ContravariantMonoidal[F], GD: ContravariantMonoidal[G]): ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] =
-    new Tuple2KContravariantMonoidal[F, G] {
+    new Tuple2KContravariantMonoidal[F, G] with Tuple2KContravariant[F, G] {
       def F: ContravariantMonoidal[F] = FD
       def G: ContravariantMonoidal[G] = GD
     }
@@ -110,10 +110,11 @@ private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 
 }
 
 private[data] sealed abstract class Tuple2KInstances7 extends Tuple2KInstances8 {
-  implicit def catsDataDistributiveForTuple2K[F[_], G[_]](implicit FF: Distributive[F], GG: Distributive[G]): Distributive[λ[α => Tuple2K[F, G, α]]] = new Tuple2KDistributive[F, G] {
-    def F: Distributive[F] = FF
-    def G: Distributive[G] = GG
-  }
+  implicit def catsDataDistributiveForTuple2K[F[_], G[_]](implicit FF: Distributive[F], GG: Distributive[G]): Distributive[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KDistributive[F, G] with Tuple2KFunctor[F, G] {
+      def F: Distributive[F] = FF
+      def G: Distributive[G] = GG
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances8 {
@@ -133,14 +134,19 @@ private[data] sealed trait Tuple2KFunctor[F[_], G[_]] extends Functor[λ[α => T
 private[data] sealed trait Tuple2KDistributive[F[_], G[_]] extends Distributive[λ[α => Tuple2K[F, G, α]]] {
   def F: Distributive[F]
   def G: Distributive[G]
-  override def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Tuple2K[F, G, B]): Tuple2K[F, G, H[B]] = Tuple2K(F.distribute(ha){a => f(a).first}, G.distribute(ha){a => f(a).second})
-  override def map[A, B](fa: Tuple2K[F, G, A])(f: A => B): Tuple2K[F, G, B] = Tuple2K(F.map(fa.first)(f), G.map(fa.second)(f))
+
+  override def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Tuple2K[F, G, B]): Tuple2K[F, G, H[B]] =
+    Tuple2K(F.distribute(ha){a => f(a).first}, G.distribute(ha){a => f(a).second})
+
+  override def map[A, B](fa: Tuple2K[F, G, A])(f: A => B): Tuple2K[F, G, B] =
+    Tuple2K(F.map(fa.first)(f), G.map(fa.second)(f))
 }
 
 private[data] sealed trait Tuple2KContravariant[F[_], G[_]] extends Contravariant[λ[α => Tuple2K[F, G, α]]] {
   def F: Contravariant[F]
   def G: Contravariant[G]
-  def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] = Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
+  override def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] =
+    Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
 private[data] sealed trait Tuple2KContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] {
