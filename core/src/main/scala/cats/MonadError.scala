@@ -20,12 +20,6 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error(a)))
 
   /**
-    * Turns a successful value into an error specified by the partial function if it is defined for the value.
-    */
-  def ensureP[A](fa: F[A])(pf: PartialFunction[A, E]): F[A] =
-    flatMap(fa)(a => if (pf.isDefinedAt(a)) raiseError(pf(a)) else pure(a))
-
-  /**
    * Transform certain errors using `pf` and rethrow them.
    * Non matching errors and successful values are not affected by this function.
    *

@@ -5,6 +5,8 @@ import scala.util.{Failure, Success, Try}
 
 class MonadErrorSuite extends CatsSuite {
 
+  implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+
   val successful: Try[Int] = Success(42)
   val failedValue: Throwable = new IllegalArgumentException("default failure")
   val otherValue: Throwable = new IllegalStateException("other failure")
@@ -37,19 +39,19 @@ class MonadErrorSuite extends CatsSuite {
   }
 
   test("ensureP returns the successful value if the partial function is not defined") {
-    successful.ensureP {
+    successful.reject {
       case i if i < 0 => failedValue
     } should === (successful)
   }
 
   test("ensureP returns the original failure, when applied to a failure") {
-    failed.ensureP {
+    failed.reject {
       case i if i < 0 => otherValue
     } should === (failed)
   }
 
   test("ensureP raises an error if the partial function is defined") {
-    successful.ensureP {
+    successful.reject {
       case i if i > 0 => failedValue
     } should === (failed)
   }
