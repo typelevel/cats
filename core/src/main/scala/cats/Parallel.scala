@@ -35,7 +35,7 @@ trait NonEmptyParallel[M[_], F[_]] extends Serializable {
   def parProductR[A, B](ma: M[A])(mb: M[B]): M[B] =
     Parallel.parMap2(ma, mb)((_, b) => b)(this)
 
-  @deprecated("Use parApR instead.", "1.0.0-RC2")
+  @deprecated("Use parProductR instead.", "1.0.0-RC2")
   @inline def parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B] = parProductR(ma)(mb)
 
 
@@ -46,7 +46,7 @@ trait NonEmptyParallel[M[_], F[_]] extends Serializable {
   def parProductL[A, B](ma: M[A])(mb: M[B]): M[A] =
     Parallel.parMap2(ma, mb)((a, _) => a)(this)
 
-  @deprecated("Use parApR instead.", "1.0.0-RC2")
+  @deprecated("Use parProductL instead.", "1.0.0-RC2")
   @inline def parForEffect[A, B](ma: M[A])(mb: M[B]): M[A] = parProductL(ma)(mb)
 
 }
@@ -109,7 +109,7 @@ object NonEmptyParallel {
   def apply[M[_], F[_]](implicit P: NonEmptyParallel[M, F]): NonEmptyParallel[M, F] = P
 }
 
-object Parallel extends ParallelArityFunctions {
+object Parallel extends ParallelArityFunctions2 {
 
   def apply[M[_], F[_]](implicit P: Parallel[M, F]): Parallel[M, F] = P
 

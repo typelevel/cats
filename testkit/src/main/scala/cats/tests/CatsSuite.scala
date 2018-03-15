@@ -4,7 +4,7 @@ package tests
 import catalysts.Platform
 
 import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, EqOps}
+import cats.syntax.{AllSyntax, AllSyntaxBinCompat0, EqOps}
 
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.{FunSuite, FunSuiteLike, Matchers}
@@ -36,7 +36,7 @@ trait CatsSuite extends FunSuite
     with Discipline
     with TestSettings
     with AllInstances
-    with AllSyntax
+    with AllSyntax with AllSyntaxBinCompat0
     with StrictCatsEquality { self: FunSuiteLike =>
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =

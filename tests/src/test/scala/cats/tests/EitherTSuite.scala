@@ -282,6 +282,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("valueOrF with Id consistent with Either valueOr") {
+    forAll{ (eithert: EitherT[Id, String, Int], f: String => Int) =>
+      eithert.valueOrF(f) should === (eithert.value.valueOr(f))
+    }
+  }
+
   test("getOrElse with Id consistent with Either getOrElse") {
     forAll { (eithert: EitherT[Id, String, Int], i: Int) =>
       eithert.getOrElse(i) should === (eithert.value.getOrElse(i))

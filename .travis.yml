@@ -15,17 +15,7 @@ scala:
   - 2.12.4
 
 jdk:
-  - oraclejdk7
   - oraclejdk8
-
-matrix:
-  exclude:
-  - scala: 2.12.4
-    jdk: oraclejdk7
-  - scala: 2.10.7
-    jdk: oraclejdk8
-  - scala: 2.11.12
-    jdk: oraclejdk8
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
@@ -58,14 +48,10 @@ env:
 
 cache:
   directories:
-  - $HOME/.sbt/0.13/dependency
-  - $HOME/.sbt/boot/scala*
-  - $HOME/.sbt/launchers
-  - $HOME/.ivy2/cache
-  - $HOME/.nvm
-
-before_cache:
-  - du -h -d 1 $HOME/.ivy2/cache
-  - du -h -d 2 $HOME/.sbt/
-  - find $HOME/.sbt -name "*.lock" -type f -delete
-  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -type f -delete
+    - $HOME/.m2
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt
+    - $HOME/.coursier
+    # Pants cache
+    - $HOME/.cache
+    

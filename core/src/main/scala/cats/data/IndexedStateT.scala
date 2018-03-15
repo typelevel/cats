@@ -22,7 +22,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   def flatMap[B, SC](fas: A => IndexedStateT[F, SB, SC, B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SC, B] =
     IndexedStateT.applyF(F.map(runF) { safsba =>
-      safsba.andThen { fsba =>
+      AndThen(safsba).andThen { fsba =>
         F.flatMap(fsba) { case (sb, a) =>
           fas(a).run(sb)
         }
@@ -31,7 +31,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SB, B] =
     IndexedStateT.applyF(F.map(runF) { sfsa =>
-      sfsa.andThen { fsa =>
+      AndThen(sfsa).andThen { fsa =>
         F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) }
       }
     })

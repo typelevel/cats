@@ -180,4 +180,30 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
 
 object ApplicativeError {
   def apply[F[_], E](implicit F: ApplicativeError[F, E]): ApplicativeError[F, E] = F
+
+  private[cats] final class LiftFromOptionPartially[F[_]](val dummy: Boolean = true) extends AnyVal {
+    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+      oa match {
+        case Some(a) => F.pure(a)
+        case None => F.raiseError(ifEmpty)
+      }
+  }
+
+
+  /**
+    * lift from scala.Option[A] to a F[A]
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.ApplicativeError
+    *
+    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
+    * res0: scala.Either[String, Int] = Right(1)
+    *
+    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
+    * res1: scala.Either[String, Int] = Left(Empty)
+    * }}}
+    */
+  def liftFromOption[F[_]]: LiftFromOptionPartially[F] = new LiftFromOptionPartially[F]
 }

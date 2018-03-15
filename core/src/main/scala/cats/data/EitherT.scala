@@ -48,6 +48,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
+  def valueOrF[BB >: B](f: A => F[BB])(implicit F: Monad[F]): F[BB] = {
+      F.flatMap(value){
+        case Left(a) => f(a)
+        case Right(b) => F.pure(b)
+      }
+  }
+
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
