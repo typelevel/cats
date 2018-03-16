@@ -172,7 +172,6 @@ possible:
  * rsoeldner
  * Rüdiger Klaehn
  * Ryan Case
- * rsoeldner
  * Sam Ritchie
  * Sarunas Valaskevicius
  * Sho Kohara
