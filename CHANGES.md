@@ -12,7 +12,7 @@ Cats 1.1.0 is binary compatible with 1.0.1, i.e. its jar is a drop-in replacemen
 * [#2182](https://github.com/typelevel/cats/pull/2182) Add `Foldable`, `Traverse` and `Comonad` instances to `WriterT`  by @barambani
 * [#2179](https://github.com/typelevel/cats/pull/2179) added `liftTo` to `Try`, `Either` and `Option`  by @kailuowang
 * [#2169](https://github.com/typelevel/cats/pull/2169) Add FreeT.inject helper function (#1534)  by @valydia
-* [#2159](https://github.com/typelevel/cats/pull/2159) Added Bitraverse for Ior (#2144)  by @V
+* [#2159](https://github.com/typelevel/cats/pull/2159) Added Bitraverse for Ior (#2144)  by @V-Lamp
 * [#2150](https://github.com/typelevel/cats/pull/2150) contravariant coyoneda  by @tpolecat
 * [#2149](https://github.com/typelevel/cats/pull/2149) Add leftFlatMap to Either  by @rohanshah
 * [#2146](https://github.com/typelevel/cats/pull/2146) added `leftNel` and `rightNel` syntax  by @kailuowang
