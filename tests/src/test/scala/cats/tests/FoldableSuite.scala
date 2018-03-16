@@ -140,6 +140,12 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
       fa.toList should === (iterator(fa).toList)
     }
   }
+  
+  test(s"Foldable[$name] mkString_") {
+    forAll { (fa: F[Int]) =>
+      fa.mkString_("L[", ";", "]") should === (fa.toList.mkString("L[", ";", "]"))
+    }
+  }
 }
 
 class FoldableSuiteAdditional extends CatsSuite {

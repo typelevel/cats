@@ -33,4 +33,63 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   def foldr[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(fa, b)(f)
+
+   /**
+   * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3, 4)
+   * scala> l.contains_(1)
+   * res0: Boolean = true
+   * scala> l.contains_(5)
+   * res1: Boolean = false
+   * }}}
+   */
+  def contains_(v: A)(implicit ev: Eq[A], F: Foldable[F]): Boolean =
+    F.exists(fa)(ev.eqv(_, v))
+
+   /**
+   * Intercalate with a prefix and a suffix
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[String] = List("1", "2", "3")
+   * scala> l.foldSmash("List(", ",", ")")
+   * res0: String = List(1,2,3)
+   * }}}
+   */
+  def foldSmash(prefix: A, delim: A, suffix: A)(implicit A: Monoid[A], F: Foldable[F]): A =
+    A.combine(prefix, A.combine(F.intercalate(fa, delim), suffix))
+
+   /**
+   * Make a string using `Show`, named as `mkString_` to avoid conflict
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3)
+   * scala> l.mkString_("L[", ";", "]")
+   * res0: String = L[1;2;3]
+   * scala> val el: List[Int] = List()
+   * scala> el.mkString_("L[", ";", "]")
+   * res1: String = L[]
+   * }}}
+   */
+  def mkString_(prefix: String, delim: String, suffix: String)(implicit A: Show[A], F: Foldable[F]): String = {
+    val b = F.foldLeft(fa, new StringBuilder){ (builder, a) =>
+      builder append A.show(a) append delim
+    }
+    prefix + {
+      if (b.isEmpty)
+        ""
+      else
+        b.toString.dropRight(delim.length)
+    } + suffix
+  }
 }
