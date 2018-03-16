@@ -11,6 +11,10 @@ package object data {
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
 
+
+  type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
+  val NonEmptyMap = NonEmptyMapImpl
+
   type NonEmptySet[A] = NonEmptySetImpl.Type[A]
   val NonEmptySet = NonEmptySetImpl
 

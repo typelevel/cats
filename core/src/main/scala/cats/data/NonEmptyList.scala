@@ -375,6 +375,21 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result))
     } : TreeMap[B, NonEmptyList[A]]
   }
+
+  /**
+    * Groups elements inside this `NonEmptyList` according to the `Order`
+    * of the keys produced by the given mapping function.
+    *
+    * {{{
+    * scala> import cats.data._
+    * scala> import cats.instances.boolean._
+    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+    * scala> nel.groupByNem(_ >= 0)
+    * res0: NonEmptyMap[Boolean, NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+    * }}}
+    */
+  def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(f))
 }
 
 object NonEmptyList extends NonEmptyListInstances {
