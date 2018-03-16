@@ -108,8 +108,24 @@
                         <a href="AllSyntax.html" title="">AllSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="AllSyntaxBinCompat.html" title=""></a>
+                        <a href="AllSyntaxBinCompat.html" title="">AllSyntaxBinCompat</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat0.html" title=""></a>
+                        <a href="AllSyntaxBinCompat0.html" title="">AllSyntaxBinCompat0</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
                         <a href="AlternativeSyntax.html" title="">AlternativeSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way"></a>
+                        <a href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way">ApplicativeErrorExtension</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeErrorExtensionOps.html" title=""></a>
+                        <a href="ApplicativeErrorExtensionOps.html" title="">ApplicativeErrorExtensionOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ApplicativeErrorIdOps.html" title=""></a>
@@ -363,7 +379,7 @@
                         <a class="class" href="OptionIdOps.html" title=""></a>
                         <a href="OptionIdOps.html" title="">OptionIdOps</a>
                       </li><li class="current-entities indented2">
-                        <span class="separator"></span>
+                        <a class="object" href="OptionOps$.html" title=""></a>
                         <a class="class" href="OptionOps.html" title=""></a>
                         <a href="OptionOps.html" title="">OptionOps</a>
                       </li><li class="current-entities indented2">
@@ -452,6 +468,14 @@
                         <a href="TraverseSyntax.html" title="">TraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="TryOps.html" title=""></a>
+                        <a href="TryOps.html" title="">TryOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TrySyntax.html" title=""></a>
+                        <a href="TrySyntax.html" title="">TrySyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="TupleParallelSyntax.html" title=""></a>
                         <a href="TupleParallelSyntax.html" title="">TupleParallelSyntax</a>
                       </li><li class="current-entities indented2">
@@ -462,6 +486,10 @@
                         <span class="separator"></span>
                         <a class="class" href="UniteOps.html" title=""></a>
                         <a href="UniteOps.html" title="">UniteOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnorderedTraverseSyntax.html" title=""></a>
+                        <a href="UnorderedTraverseSyntax.html" title="">UnorderedTraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ValidatedIdSyntax.html" title=""></a>
@@ -662,6 +690,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$traverse$.html" title=""></a>
                         <a href="package$$traverse$.html" title="">traverse</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$unorderedTraverse$.html" title=""></a>
+                        <a href="package$$unorderedTraverse$.html" title="">unorderedTraverse</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$validated$.html" title=""></a>
@@ -906,6 +938,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.EitherIdOps#leftNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftNel[B]:Either[cats.data.NonEmptyList[A],B]"></a><a id="leftNel[B]:Either[NonEmptyList[A],B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/EitherIdOps.html#leftNel[B]:Either[cats.data.NonEmptyList[A],B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.syntax.EitherIdOps.A">A</span>], <span class="extype" name="cats.syntax.EitherIdOps.leftNel.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Wrap a value to a left EitherNel</p><div class="fullcomment"><div class="comment cmt"><p>Wrap a value to a left EitherNel</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._, cats.data.NonEmptyList
+scala&gt; <span class="lit">"Err"</span>.leftNel[<span class="std">Int</span>]
+res0: Either[NonEmptyList[<span class="std">String</span>], <span class="std">Int</span>] = Left(NonEmptyList(Err))</pre></div></div>
     </li><li name="cats.syntax.EitherIdOps#obj" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="obj:A"></a>
       <span class="permalink">
@@ -922,6 +972,24 @@
       </span>
       
       
+    </li><li name="cats.syntax.EitherIdOps#rightNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rightNel[B]:Either[cats.data.NonEmptyList[B],A]"></a><a id="rightNel[B]:Either[NonEmptyList[B],A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/EitherIdOps.html#rightNel[B]:Either[cats.data.NonEmptyList[B],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightNel</span><span class="tparams">[<span name="B">B</span>]</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="../data/NonEmptyList.html" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.syntax.EitherIdOps.rightNel.B">B</span>], <span class="extype" name="cats.syntax.EitherIdOps.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Wrap a value to a right EitherNel</p><div class="fullcomment"><div class="comment cmt"><p>Wrap a value to a right EitherNel</p><p>For example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._, cats.data.NonEmptyList
+scala&gt; <span class="num">1.</span>rightNel[<span class="std">String</span>]
+res0: Either[NonEmptyList[<span class="std">String</span>], <span class="std">Int</span>] = Right(<span class="num">1</span>)</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

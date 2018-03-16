@@ -371,6 +371,10 @@
                         <a class="trait" href="ParallelArityFunctions.html" title=""></a>
                         <a href="ParallelArityFunctions.html" title="">ParallelArityFunctions</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelArityFunctions2.html" title=""></a>
+                        <a href="ParallelArityFunctions2.html" title="">ParallelArityFunctions2</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Reducible$.html" title=""></a>
                         <a class="trait" href="Reducible.html" title="Data structures that can be reduced to a summary value."></a>
                         <a href="Reducible.html" title="Data structures that can be reduced to a summary value.">Reducible</a>
@@ -709,6 +713,29 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.ApplicativeError#liftFromOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftFromOption[F[_]]:cats.ApplicativeError.LiftFromOptionPartially[F]"></a><a id="liftFromOption[F[_]]:LiftFromOptionPartially[F]"></a>
+      <span class="permalink">
+      <a href="../cats/ApplicativeError$.html#liftFromOption[F[_]]:cats.ApplicativeError.LiftFromOptionPartially[F]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftFromOption</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.ApplicativeError.LiftFromOptionPartially">LiftFromOptionPartially</span>[<span class="extype" name="cats.ApplicativeError.liftFromOption.F">F</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">lift from scala.Option[A] to a F[A]</p><div class="fullcomment"><div class="comment cmt"><p>lift from scala.Option[A] to a F[A]</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.ApplicativeError
+
+scala&gt; ApplicativeError.liftFromOption[Either[<span class="std">String</span>, ?]](<span class="std">Some</span>(<span class="num">1</span>), <span class="lit">"Empty"</span>)
+res0: scala.Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">1</span>)
+
+scala&gt; ApplicativeError.liftFromOption[Either[<span class="std">String</span>, ?]](<span class="std">Option</span>.empty[<span class="std">Int</span>], <span class="lit">"Empty"</span>)
+res1: scala.Either[<span class="std">String</span>, <span class="std">Int</span>] = Left(Empty)</pre></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

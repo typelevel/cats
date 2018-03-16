@@ -159,6 +159,14 @@
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyMapOps.html" title=""></a>
+                        <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptySetOps.html" title=""></a>
+                        <a href="NonEmptySetOps.html" title="">NonEmptySetOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyVector$.html" title=""></a>
                         <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
                         <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">NonEmptyVector</a>
@@ -683,9 +691,9 @@ contexts.
               
         </dd></dl></div>
     </li><li name="cats.data.OptionT#getOrElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getOrElse(default:=&gt;A)(implicitF:cats.Functor[F]):F[A]"></a><a id="getOrElse(⇒A)(Functor[F]):F[A]"></a>
+      <a id="getOrElse[B&gt;:A](default:=&gt;B)(implicitF:cats.Functor[F]):F[B]"></a><a id="getOrElse[B&gt;:A](⇒B)(Functor[F]):F[B]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OptionT.html#getOrElse(default:=&gt;A)(implicitF:cats.Functor[F]):F[A]" title="Permalink">
+      <a href="../../cats/data/OptionT.html#getOrElse[B&gt;:A](default:=&gt;B)(implicitF:cats.Functor[F]):F[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -694,14 +702,14 @@ contexts.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getOrElse</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.OptionT.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.A">A</span>]</span>
+        <span class="name">getOrElse</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.data.OptionT.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.OptionT.getOrElse.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.getOrElse.B">B</span>]</span>
       </span>
       
       
     </li><li name="cats.data.OptionT#getOrElseF" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getOrElseF(default:=&gt;F[A])(implicitF:cats.Monad[F]):F[A]"></a><a id="getOrElseF(⇒F[A])(Monad[F]):F[A]"></a>
+      <a id="getOrElseF[B&gt;:A](default:=&gt;F[B])(implicitF:cats.Monad[F]):F[B]"></a><a id="getOrElseF[B&gt;:A](⇒F[B])(Monad[F]):F[B]"></a>
       <span class="permalink">
-      <a href="../../cats/data/OptionT.html#getOrElseF(default:=&gt;F[A])(implicitF:cats.Monad[F]):F[A]" title="Permalink">
+      <a href="../../cats/data/OptionT.html#getOrElseF[B&gt;:A](default:=&gt;F[B])(implicitF:cats.Monad[F]):F[B]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -710,7 +718,7 @@ contexts.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getOrElseF</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.A">A</span>]</span>
+        <span class="name">getOrElseF</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="cats.data.OptionT.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.getOrElseF.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.OptionT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.OptionT.F">F</span>[<span class="extype" name="cats.data.OptionT.getOrElseF.B">B</span>]</span>
       </span>
       
       

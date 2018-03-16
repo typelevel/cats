@@ -371,6 +371,10 @@
                         <a class="trait" href="ParallelArityFunctions.html" title=""></a>
                         <a href="ParallelArityFunctions.html" title="">ParallelArityFunctions</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelArityFunctions2.html" title=""></a>
+                        <a href="ParallelArityFunctions2.html" title="">ParallelArityFunctions2</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Reducible$.html" title=""></a>
                         <a class="trait" href="Reducible.html" title="Data structures that can be reduced to a summary value."></a>
                         <a href="Reducible.html" title="Data structures that can be reduced to a summary value.">Reducible</a>
@@ -2583,7 +2587,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use *&gt; or apR instead.">followedBy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use *&gt; or productR instead.">followedBy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
@@ -2593,7 +2597,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
               
                 <span class="name">@inline</span><span class="args">()</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use *&gt; or apR instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use *&gt; or productR instead.</p></dd></dl></div>
     </li><li name="cats.FlatMap#followedByEval" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="followedByEval[A,B](fa:F[A])(fb:cats.Eval[F[B]]):F[B]"></a><a id="followedByEval[A,B](F[A])(Eval[F[B]]):F[B]"></a>
       <span class="permalink">
@@ -2606,13 +2610,13 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use apREval instead.">followedByEval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.B">B</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use productREval instead.">followedByEval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.followedByEval.B">B</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use apREval instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use productREval instead.</p></dd></dl></div>
     </li><li name="cats.Apply#forEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forEffect[A,B](fa:F[A])(fb:F[B]):F[A]"></a><a id="forEffect[A,B](F[A])(F[B]):F[A]"></a>
       <span class="permalink">
@@ -2625,7 +2629,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use &lt;* or apL instead.">forEffect</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use &lt;* or productL instead.">forEffect</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
@@ -2635,7 +2639,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
               
                 <span class="name">@inline</span><span class="args">()</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use &lt;* or apL instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use &lt;* or productL instead.</p></dd></dl></div>
     </li><li name="cats.FlatMap#forEffectEval" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forEffectEval[A,B](fa:F[A])(fb:cats.Eval[F[B]]):F[A]"></a><a id="forEffectEval[A,B](F[A])(Eval[F[B]]):F[A]"></a>
       <span class="permalink">
@@ -2648,13 +2652,13 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use apLEval instead.">forEffectEval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use productLEval instead.">forEffectEval</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <a href="Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.B">B</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.FlatMap.F">F</span>[<span class="extype" name="cats.FlatMap.forEffectEval.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use apLEval instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use productLEval instead.</p></dd></dl></div>
     </li></ol>
             </div>
         </div>

@@ -159,6 +159,14 @@
                         <a class="class" href="" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyMapOps.html" title=""></a>
+                        <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptySetOps.html" title=""></a>
+                        <a href="NonEmptySetOps.html" title="">NonEmptySetOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyVector$.html" title=""></a>
                         <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
                         <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">NonEmptyVector</a>
@@ -405,7 +413,7 @@ single element (head) and optional structure (tail).
         <span title="gt4s: $colon$colon$colon" class="name">:::</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="other">other: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.:::.AA">AA</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.:::.AA">AA</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Alias for concat</p><div class="fullcomment"><div class="comment cmt"><p>Alias for concat</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+      <p class="shortcomment cmt">Alias for concatNel</p><div class="fullcomment"><div class="comment cmt"><p>Alias for concatNel</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
 scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
 scala&gt; nel ::: NonEmptyList.of(<span class="num">4</span>, <span class="num">5</span>)
 res0: cats.data.NonEmptyList[<span class="std">Int</span>] = NonEmptyList(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>)</pre></div></div>
@@ -790,6 +798,28 @@ scala&gt; <span class="kw">import</span> cats.instances.boolean._
 scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
 scala&gt; nel.groupBy(_ &gt;= <span class="num">0</span>)
 res0: SortedMap[<span class="std">Boolean</span>, cats.data.NonEmptyList[<span class="std">Int</span>]] = <span class="std">Map</span>(<span class="kw">false</span> -&gt; NonEmptyList(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyList(<span class="num">12</span>, <span class="num">3</span>))</pre></div></div>
+    </li><li name="cats.data.NonEmptyList#groupByNem" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupByNem[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyList[A]]"></a><a id="groupByNem[B]((A)⇒B)(Order[B]):NonEmptyMap[B,NonEmptyList[A]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#groupByNem[B](f:A=&gt;B)(implicitB:cats.Order[B]):cats.data.NonEmptyMap[B,cats.data.NonEmptyList[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupByNem</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.NonEmptyList.A">A</span>) ⇒ <span class="extype" name="cats.data.NonEmptyList.groupByNem.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.NonEmptyList.groupByNem.B">B</span>]</span>)</span><span class="result">: <a href="index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" class="extmbr" name="cats.data.NonEmptyMap">NonEmptyMap</a>[<span class="extype" name="cats.data.NonEmptyList.groupByNem.B">B</span>, <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.A">A</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Groups elements inside this <code>NonEmptyList</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><div class="fullcomment"><div class="comment cmt"><p>Groups elements inside this <code>NonEmptyList</code> according to the <code>Order</code>
+of the keys produced by the given mapping function.</p><pre>scala&gt; <span class="kw">import</span> cats.data._
+scala&gt; <span class="kw">import</span> cats.instances.boolean._
+scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">12</span>, -<span class="num">2</span>, <span class="num">3</span>, -<span class="num">5</span>)
+scala&gt; nel.groupByNem(_ &gt;= <span class="num">0</span>)
+res0: NonEmptyMap[<span class="std">Boolean</span>, NonEmptyList[<span class="std">Int</span>]] = <span class="std">Map</span>(<span class="kw">false</span> -&gt; NonEmptyList(-<span class="num">2</span>, -<span class="num">5</span>), <span class="kw">true</span> -&gt; NonEmptyList(<span class="num">12</span>, <span class="num">3</span>))</pre></div></div>
     </li><li name="cats.data.NonEmptyList#head" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="head:A"></a>
       <span class="permalink">

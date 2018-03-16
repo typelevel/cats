@@ -5960,6 +5960,17 @@ table th, table td {
       #page-content-wrapper section pre .hljs {
         padding: 25px;
         background: none; }
+  #page-content-wrapper .header-link {
+    float: left;
+    font-size: 20px;
+    line-height: 1;
+    margin-left: -20px;
+    margin-top: 4px;
+    opacity: 0;
+    padding-right: 0;
+    transition: opacity 0.2s ease, color 0.2s ease; }
+  #page-content-wrapper h1:hover .header-link, #page-content-wrapper h2:hover .header-link, #page-content-wrapper h3:hover .header-link, #page-content-wrapper h4:hover .header-link, #page-content-wrapper h5:hover .header-link, #page-content-wrapper h6:hover .header-link {
+    opacity: 1; }
 
 #wrapper.toggled #page-content-wrapper {
   position: absolute;

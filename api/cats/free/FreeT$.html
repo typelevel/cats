@@ -107,6 +107,10 @@
                         <a class="class" href="Cofree.html" title="A free comonad for some branching functor S."></a>
                         <a href="Cofree.html" title="A free comonad for some branching functor S.">Cofree</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ContravariantCoyoneda$.html" title=""></a>
+                        <a class="class" href="ContravariantCoyoneda.html" title="The free contravariant functor on F."></a>
+                        <a href="ContravariantCoyoneda.html" title="The free contravariant functor on F.">ContravariantCoyoneda</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Coyoneda$.html" title=""></a>
                         <a class="class" href="Coyoneda.html" title="The dual view of the Yoneda lemma."></a>
                         <a href="Coyoneda.html" title="The dual view of the Yoneda lemma.">Coyoneda</a>
@@ -561,6 +565,27 @@
       </span>
       
       <p class="shortcomment cmt">Suspends a value within a functor in a single step.</p><div class="fullcomment"><div class="comment cmt"><p>Suspends a value within a functor in a single step. Monadic unit for a higher-order monad.</p></div></div>
+    </li><li name="cats.free.FreeT#liftInject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftInject[M[_],G[_]]:cats.free.FreeT.FreeTLiftInjectKPartiallyApplied[M,G]"></a><a id="liftInject[M[_],G[_]]:FreeTLiftInjectKPartiallyApplied[M,G]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/FreeT$.html#liftInject[M[_],G[_]]:cats.free.FreeT.FreeTLiftInjectKPartiallyApplied[M,G]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftInject</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.free.FreeT.FreeTLiftInjectKPartiallyApplied">FreeTLiftInjectKPartiallyApplied</span>[<span class="extype" name="cats.free.FreeT.liftInject.M">M</span>, <span class="extype" name="cats.free.FreeT.liftInject.G">G</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This method is used to defer the application of an InjectK[F, G]
+instance.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to defer the application of an InjectK[F, G]
+instance. The actual work happens in
+<code>FreeTLiftInjectKPartiallyApplied#apply</code>.</p><p>This method exists to allow the <code>M</code> and <code>G</code> parameters to be
+bound independently of the <code>F</code> and <code>A</code> parameters below.
+</p></div></div>
     </li><li name="cats.free.FreeT#liftT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="liftT[S[_],M[_],A](value:M[A])(implicitM:cats.Functor[M]):cats.free.FreeT[S,M,A]"></a><a id="liftT[S[_],M[_],A](M[A])(Functor[M]):FreeT[S,M,A]"></a>
       <span class="permalink">

@@ -175,6 +175,14 @@
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyMapOps.html" title=""></a>
+                        <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptySetOps.html" title=""></a>
+                        <a href="NonEmptySetOps.html" title="">NonEmptySetOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyVector$.html" title=""></a>
                         <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
                         <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">NonEmptyVector</a>
@@ -704,6 +712,70 @@ res1: <span class="std">List</span>[<span class="std">Option</span>[<span class=
       
       <p class="shortcomment cmt">A data type which represents a non empty list of A, with
 single element (head) and optional structure (tail).</p>
+    </li><li name="cats.data.NonEmptyMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]"></a><a id="NonEmptyMap[K,+A]:NonEmptyMap[K,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyMap[K,+A]=cats.data.NonEmptyMapImpl.Type[K,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptyMap</span><span class="tparams">[<span name="K">K</span>, <span name="A">+A</span>]</span><span class="result alias"> = <span class="extype" name="cats.data.Newtype2.Type">data.NonEmptyMapImpl.Type</span>[<span class="extype" name="cats.data.NonEmptyMap.K">K</span>, <span class="extype" name="cats.data.NonEmptyMap.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptyMapOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyMapOps[K,A]extendsAnyRef"></a><a id="NonEmptyMapOps[K,A]:NonEmptyMapOps[K,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyMapOps[K,A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="NonEmptyMapOps.html"><span class="name">NonEmptyMapOps</span></a><span class="tparams">[<span name="K">K</span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptySet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptySet[A]=cats.data.NonEmptySetImpl.Type[A]"></a><a id="NonEmptySet[A]:NonEmptySet[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptySet[A]=cats.data.NonEmptySetImpl.Type[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptySet</span><span class="tparams">[<span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.data.Newtype.Type">data.NonEmptySetImpl.Type</span>[<span class="extype" name="cats.data.NonEmptySet.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptySetOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptySetOps[A]extendsAnyRef"></a><a id="NonEmptySetOps[A]:NonEmptySetOps[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptySetOps[A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="NonEmptySetOps.html"><span class="name">NonEmptySetOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyStream" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NonEmptyStream[A]=cats.data.OneAnd[Stream,A]"></a><a id="NonEmptyStream[A]:NonEmptyStream[A]"></a>
       <span class="permalink">
@@ -1063,6 +1135,38 @@ context along with the <code>A</code> value.
       </span>
       <span class="symbol">
         <span class="name">IRWST</span><span class="result">: <a href="IndexedReaderWriterStateT$.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>.type</span>
+      </span>
+      
+      
+    </li><li name="cats.data#NonEmptyMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyMap:cats.data.NonEmptyMapImpl.type"></a><a id="NonEmptyMap:NonEmptyMapImpl.type"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyMap:cats.data.NonEmptyMapImpl.type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptyMap</span><span class="result">: <span class="extype" name="cats.data.NonEmptyMapImpl">NonEmptyMapImpl</span>.type</span>
+      </span>
+      
+      
+    </li><li name="cats.data#NonEmptySet" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptySet:cats.data.NonEmptySetImpl.type"></a><a id="NonEmptySet:NonEmptySetImpl.type"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptySet:cats.data.NonEmptySetImpl.type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptySet</span><span class="result">: <span class="extype" name="cats.data.NonEmptySetImpl">NonEmptySetImpl</span>.type</span>
       </span>
       
       

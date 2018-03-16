@@ -371,6 +371,10 @@
                         <a class="trait" href="ParallelArityFunctions.html" title=""></a>
                         <a href="ParallelArityFunctions.html" title="">ParallelArityFunctions</a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelArityFunctions2.html" title=""></a>
+                        <a href="ParallelArityFunctions2.html" title="">ParallelArityFunctions2</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Reducible$.html" title=""></a>
                         <a class="trait" href="Reducible.html" title="Data structures that can be reduced to a summary value."></a>
                         <a href="Reducible.html" title="Data structures that can be reduced to a summary value.">Reducible</a>
@@ -2629,7 +2633,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use *&gt; or apR instead.">followedBy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use *&gt; or productR instead.">followedBy</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.followedBy.B">B</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productR[A,B](fa:F[A])(fb:F[B]):F[B]" class="extmbr" name="cats.Apply#productR">productR</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
@@ -2639,7 +2643,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
               
                 <span class="name">@inline</span><span class="args">()</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use *&gt; or apR instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use *&gt; or productR instead.</p></dd></dl></div>
     </li><li name="cats.Apply#forEffect" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forEffect[A,B](fa:F[A])(fb:F[B]):F[A]"></a><a id="forEffect[A,B](F[A])(F[B]):F[A]"></a>
       <span class="permalink">
@@ -2652,7 +2656,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use &lt;* or apL instead.">forEffect</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.0.0-RC2) Use &lt;* or productL instead.">forEffect</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.CommutativeApplicative.F">F</span>[<span class="extype" name="cats.Apply.forEffect.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Alias for <a href="Apply.html#productL[A,B](fa:F[A])(fb:F[B]):F[A]" class="extmbr" name="cats.Apply#productL">productL</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Apply.html" class="extype" name="cats.Apply">Apply</a></dd><dt>Annotations</dt><dd>
@@ -2662,7 +2666,7 @@ of <code>widen</code> creating a <code>ClassCastException</code>.
               
                 <span class="name">@inline</span><span class="args">()</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use &lt;* or apL instead.</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.0.0-RC2)</i> Use &lt;* or productL instead.</p></dd></dl></div>
     </li></ol>
             </div>
         </div>

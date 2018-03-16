@@ -2,6 +2,7 @@ jQuery(document).ready(function() {
   hljs.initHighlightingOnLoad();
   activeToggle();
   loadGitHubStats();
+  linkifyAllLevels(".docs .content-wrapper");
 });
 
 
@@ -12,6 +13,34 @@ function activeToggle() {
   });
 }
 
+var anchorForId = function (id) {
+  var anchor = document.createElement("a");
+  anchor.className = "header-link";
+  anchor.href      = "#" + id;
+  anchor.innerHTML = "<i class=\"fa fa-link\"></i>";
+  return anchor;
+};
+
+var linkifyAnchors = function (level, containingElement) {
+  var headers = containingElement.getElementsByTagName("h" + level);
+  for (var h = 0; h < headers.length; h++) {
+    var header = headers[h];
+
+    if (typeof header.id !== "undefined" && header.id !== "") {
+      header.appendChild(anchorForId(header.id));
+    }
+  }
+};
+
+var linkifyAllLevels = function (blockSelector) {
+  var contentBlock = document.querySelector(blockSelector);
+  if (!contentBlock) {
+    return;
+  }
+  for (var level = 1; level <= 6; level++) {
+    linkifyAnchors(level, contentBlock);
+  }
+};
 
 var baseURL = window.location.href;
 

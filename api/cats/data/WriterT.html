@@ -159,6 +159,14 @@
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyMapOps.html" title=""></a>
+                        <a href="NonEmptyMapOps.html" title="">NonEmptyMapOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptySetOps.html" title=""></a>
+                        <a href="NonEmptySetOps.html" title="">NonEmptySetOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyVector$.html" title=""></a>
                         <a class="class" href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element."></a>
                         <a href="NonEmptyVector.html" title="A data type which represents a Vector guaranteed to contain at least one element.">NonEmptyVector</a>
@@ -514,6 +522,38 @@
       </span>
       
       
+    </li><li name="cats.data.WriterT#foldLeft" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldLeft[C](c:C)(f:(C,V)=&gt;C)(implicitF:cats.Foldable[F]):C"></a><a id="foldLeft[C](C)((C,V)⇒C)(Foldable[F]):C"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT.html#foldLeft[C](c:C)(f:(C,V)=&gt;C)(implicitF:cats.Foldable[F]):C" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldLeft</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="c">c: <span class="extype" name="cats.data.WriterT.foldLeft.C">C</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.WriterT.foldLeft.C">C</span>, <span class="extype" name="cats.data.WriterT.V">V</span>) ⇒ <span class="extype" name="cats.data.WriterT.foldLeft.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.WriterT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.WriterT.foldLeft.C">C</span></span>
+      </span>
+      
+      
+    </li><li name="cats.data.WriterT#foldRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foldRight[C](lc:cats.Eval[C])(f:(V,cats.Eval[C])=&gt;cats.Eval[C])(implicitF:cats.Foldable[F]):cats.Eval[C]"></a><a id="foldRight[C](Eval[C])((V,Eval[C])⇒Eval[C])(Foldable[F]):Eval[C]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT.html#foldRight[C](lc:cats.Eval[C])(f:(V,cats.Eval[C])=&gt;cats.Eval[C])(implicitF:cats.Foldable[F]):cats.Eval[C]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldRight</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="lc">lc: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.WriterT.foldRight.C">C</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.WriterT.V">V</span>, <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.WriterT.foldRight.C">C</span>]) ⇒ <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.WriterT.foldRight.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.data.WriterT.F">F</span>]</span>)</span><span class="result">: <a href="../Eval.html" class="extype" name="cats.Eval">Eval</a>[<span class="extype" name="cats.data.WriterT.foldRight.C">C</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -760,6 +800,22 @@
       </span>
       <span class="symbol">
         <span class="name">tell</span><span class="params">(<span name="l">l: <span class="extype" name="cats.data.WriterT.L">L</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="functorF">functorF: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.WriterT.F">F</span>]</span>, <span name="semigroupL">semigroupL: <a href="../index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.data.WriterT.L">L</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterT.F">F</span>, <span class="extype" name="cats.data.WriterT.L">L</span>, <span class="extype" name="cats.data.WriterT.V">V</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.WriterT#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[G[_],V1](f:V=&gt;G[V1])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.WriterT[F,L,V1]]"></a><a id="traverse[G[_],V1]((V)⇒G[V1])(Traverse[F],Applicative[G]):G[WriterT[F,L,V1]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/WriterT.html#traverse[G[_],V1](f:V=&gt;G[V1])(implicitF:cats.Traverse[F],implicitG:cats.Applicative[G]):G[cats.data.WriterT[F,L,V1]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="V1">V1</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.WriterT.V">V</span>) ⇒ <span class="extype" name="cats.data.WriterT.traverse.G">G</span>[<span class="extype" name="cats.data.WriterT.traverse.V1">V1</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Traverse.html" class="extype" name="cats.Traverse">Traverse</a>[<span class="extype" name="cats.data.WriterT.F">F</span>]</span>, <span name="G">G: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.WriterT.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.WriterT.traverse.G">G</span>[<a href="" class="extype" name="cats.data.WriterT">WriterT</a>[<span class="extype" name="cats.data.WriterT.F">F</span>, <span class="extype" name="cats.data.WriterT.L">L</span>, <span class="extype" name="cats.data.WriterT.traverse.V1">V1</span>]]</span>
       </span>
       
       

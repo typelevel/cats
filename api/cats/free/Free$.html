@@ -107,6 +107,10 @@
                         <a class="class" href="Cofree.html" title="A free comonad for some branching functor S."></a>
                         <a href="Cofree.html" title="A free comonad for some branching functor S.">Cofree</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ContravariantCoyoneda$.html" title=""></a>
+                        <a class="class" href="ContravariantCoyoneda.html" title="The free contravariant functor on F."></a>
+                        <a href="ContravariantCoyoneda.html" title="The free contravariant functor on F.">ContravariantCoyoneda</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Coyoneda$.html" title=""></a>
                         <a class="class" href="Coyoneda.html" title="The dual view of the Yoneda lemma."></a>
                         <a href="Coyoneda.html" title="The dual view of the Yoneda lemma.">Coyoneda</a>
@@ -568,6 +572,27 @@ bound independently of the <code>A</code> parameter below.
       </span>
       
       <p class="shortcomment cmt">Lift an <code>F[A]</code> value into the free monad.</p>
+    </li><li name="cats.free.Free#liftInject" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftInject[G[_]]:cats.free.Free.FreeLiftInjectKPartiallyApplied[G]"></a><a id="liftInject[G[_]]:FreeLiftInjectKPartiallyApplied[G]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/Free$.html#liftInject[G[_]]:cats.free.Free.FreeLiftInjectKPartiallyApplied[G]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftInject</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.free.Free.FreeLiftInjectKPartiallyApplied">FreeLiftInjectKPartiallyApplied</span>[<span class="extype" name="cats.free.Free.liftInject.G">G</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This method is used to defer the application of an InjectK[F, G]
+instance.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to defer the application of an InjectK[F, G]
+instance. The actual work happens in
+<code>FreeLiftInjectKPartiallyApplied#apply</code>.</p><p>This method exists to allow the <code>G</code> parameter to be
+bound independently of the <code>F</code> and <code>A</code> parameters below.
+</p></div></div>
     </li><li name="cats.free.Free#mapK" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mapK[F[_],G[_]](fk:cats.arrow.FunctionK[F,G]):cats.arrow.FunctionK[[β$4$]cats.free.Free[F,β$4$],[β$5$]cats.free.Free[G,β$5$]]"></a><a id="mapK[F[_],G[_]](FunctionK[F,G]):FunctionK[[β$4$]Free[F,β$4$],[β$5$]Free[G,β$5$]]"></a>
       <span class="permalink">

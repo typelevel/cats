@@ -108,8 +108,24 @@
                         <a href="AllSyntax.html" title="">AllSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="AllSyntaxBinCompat.html" title=""></a>
+                        <a href="AllSyntaxBinCompat.html" title="">AllSyntaxBinCompat</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat0.html" title=""></a>
+                        <a href="AllSyntaxBinCompat0.html" title="">AllSyntaxBinCompat0</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
                         <a href="AlternativeSyntax.html" title="">AlternativeSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way"></a>
+                        <a href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way">ApplicativeErrorExtension</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeErrorExtensionOps.html" title=""></a>
+                        <a href="ApplicativeErrorExtensionOps.html" title="">ApplicativeErrorExtensionOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ApplicativeErrorIdOps.html" title=""></a>
@@ -363,7 +379,7 @@
                         <a class="class" href="OptionIdOps.html" title=""></a>
                         <a href="OptionIdOps.html" title="">OptionIdOps</a>
                       </li><li class="current-entities indented2">
-                        <span class="separator"></span>
+                        <a class="object" href="OptionOps$.html" title=""></a>
                         <a class="class" href="OptionOps.html" title=""></a>
                         <a href="OptionOps.html" title="">OptionOps</a>
                       </li><li class="current-entities indented2">
@@ -452,6 +468,14 @@
                         <a href="TraverseSyntax.html" title="">TraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="TryOps.html" title=""></a>
+                        <a href="TryOps.html" title="">TryOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TrySyntax.html" title=""></a>
+                        <a href="TrySyntax.html" title="">TrySyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="TupleParallelSyntax.html" title=""></a>
                         <a href="TupleParallelSyntax.html" title="">TupleParallelSyntax</a>
                       </li><li class="current-entities indented2">
@@ -462,6 +486,10 @@
                         <span class="separator"></span>
                         <a class="class" href="UniteOps.html" title=""></a>
                         <a href="UniteOps.html" title="">UniteOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnorderedTraverseSyntax.html" title=""></a>
+                        <a href="UnorderedTraverseSyntax.html" title="">UnorderedTraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ValidatedIdSyntax.html" title=""></a>
@@ -662,6 +690,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$traverse$.html" title=""></a>
                         <a href="package$$traverse$.html" title="">traverse</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$unorderedTraverse$.html" title=""></a>
+                        <a href="package$$unorderedTraverse$.html" title="">unorderedTraverse</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$validated$.html" title=""></a>
@@ -938,6 +970,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.MonadErrorOps#reject" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reject(pf:PartialFunction[A,E])(implicitF:cats.MonadError[F,E]):F[A]"></a><a id="reject(PartialFunction[A,E])(MonadError[F,E]):F[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/MonadErrorOps.html#reject(pf:PartialFunction[A,E])(implicitF:cats.MonadError[F,E]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reject</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.12.4/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.syntax.MonadErrorOps.A">A</span>, <span class="extype" name="cats.syntax.MonadErrorOps.E">E</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.syntax.MonadErrorOps.F">F</span>, <span class="extype" name="cats.syntax.MonadErrorOps.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.MonadErrorOps.F">F</span>[<span class="extype" name="cats.syntax.MonadErrorOps.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

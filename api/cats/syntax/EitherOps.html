@@ -108,8 +108,24 @@
                         <a href="AllSyntax.html" title="">AllSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="AllSyntaxBinCompat.html" title=""></a>
+                        <a href="AllSyntaxBinCompat.html" title="">AllSyntaxBinCompat</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat0.html" title=""></a>
+                        <a href="AllSyntaxBinCompat0.html" title="">AllSyntaxBinCompat0</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
                         <a href="AlternativeSyntax.html" title="">AlternativeSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way"></a>
+                        <a href="ApplicativeErrorExtension.html" title="Extension to ApplicativeError in a binary compat way">ApplicativeErrorExtension</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ApplicativeErrorExtensionOps.html" title=""></a>
+                        <a href="ApplicativeErrorExtensionOps.html" title="">ApplicativeErrorExtensionOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ApplicativeErrorIdOps.html" title=""></a>
@@ -363,7 +379,7 @@
                         <a class="class" href="OptionIdOps.html" title=""></a>
                         <a href="OptionIdOps.html" title="">OptionIdOps</a>
                       </li><li class="current-entities indented2">
-                        <span class="separator"></span>
+                        <a class="object" href="OptionOps$.html" title=""></a>
                         <a class="class" href="OptionOps.html" title=""></a>
                         <a href="OptionOps.html" title="">OptionOps</a>
                       </li><li class="current-entities indented2">
@@ -452,6 +468,14 @@
                         <a href="TraverseSyntax.html" title="">TraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="TryOps.html" title=""></a>
+                        <a href="TryOps.html" title="">TryOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="TrySyntax.html" title=""></a>
+                        <a href="TrySyntax.html" title="">TrySyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="TupleParallelSyntax.html" title=""></a>
                         <a href="TupleParallelSyntax.html" title="">TupleParallelSyntax</a>
                       </li><li class="current-entities indented2">
@@ -462,6 +486,10 @@
                         <span class="separator"></span>
                         <a class="class" href="UniteOps.html" title=""></a>
                         <a href="UniteOps.html" title="">UniteOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnorderedTraverseSyntax.html" title=""></a>
+                        <a href="UnorderedTraverseSyntax.html" title="">UnorderedTraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ValidatedIdSyntax.html" title=""></a>
@@ -662,6 +690,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$traverse$.html" title=""></a>
                         <a href="package$$traverse$.html" title="">traverse</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$unorderedTraverse$.html" title=""></a>
+                        <a href="package$$unorderedTraverse$.html" title="">unorderedTraverse</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$validated$.html" title=""></a>
@@ -1136,6 +1168,22 @@ res3: Either[<span class="std">String</span>, <span class="std">Int</span>] = Ri
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.EitherOps#leftFlatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="leftFlatMap[C,BB&gt;:B](f:A=&gt;Either[C,BB]):Either[C,BB]"></a><a id="leftFlatMap[C,BB&gt;:B]((A)⇒Either[C,BB]):Either[C,BB]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/EitherOps.html#leftFlatMap[C,BB&gt;:B](f:A=&gt;Either[C,BB]):Either[C,BB]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftFlatMap</span><span class="tparams">[<span name="C">C</span>, <span name="BB">BB &gt;: <span class="extype" name="cats.syntax.EitherOps.B">B</span></span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.EitherOps.A">A</span>) ⇒ <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.syntax.EitherOps.leftFlatMap.C">C</span>, <span class="extype" name="cats.syntax.EitherOps.leftFlatMap.BB">BB</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.syntax.EitherOps.leftFlatMap.C">C</span>, <span class="extype" name="cats.syntax.EitherOps.leftFlatMap.BB">BB</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.syntax.EitherOps#leftMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="leftMap[C](f:A=&gt;C):Either[C,B]"></a><a id="leftMap[C]((A)⇒C):Either[C,B]"></a>
       <span class="permalink">
@@ -1152,6 +1200,26 @@ res3: Either[<span class="std">String</span>, <span class="std">Int</span>] = Ri
       </span>
       
       
+    </li><li name="cats.syntax.EitherOps#liftTo" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="liftTo[F[_]](implicitF:cats.ApplicativeError[F,A]):F[B]"></a><a id="liftTo[F[_]](ApplicativeError[F,A]):F[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/EitherOps.html#liftTo[F[_]](implicitF:cats.ApplicativeError[F,A]):F[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">liftTo</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.syntax.EitherOps.liftTo.F">F</span>, <span class="extype" name="cats.syntax.EitherOps.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.EitherOps.liftTo.F">F</span>[<span class="extype" name="cats.syntax.EitherOps.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">lift the <code>Either</code> into a <code>F[_]</code> with <code>ApplicativeError[F, A]</code> instance</p><div class="fullcomment"><div class="comment cmt"><p>lift the <code>Either</code> into a <code>F[_]</code> with <code>ApplicativeError[F, A]</code> instance</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">import</span> cats.data.EitherT
+scala&gt; <span class="kw">val</span> e: Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">3</span>)
+scala&gt; e.liftTo[EitherT[<span class="std">Option</span>, <span class="std">String</span>, ?]]
+res0: cats.data.EitherT[<span class="std">Option</span>, <span class="std">String</span>, <span class="std">Int</span>] = EitherT(<span class="std">Some</span>(Right(<span class="num">3</span>)))</pre></div></div>
     </li><li name="cats.syntax.EitherOps#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="map[C](f:B=&gt;C):Either[A,C]"></a><a id="map[C]((B)⇒C):Either[A,C]"></a>
       <span class="permalink">

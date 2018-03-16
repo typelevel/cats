@@ -155,6 +155,10 @@
                         <a class="class" href="Cofree.html" title="A free comonad for some branching functor S."></a>
                         <a href="Cofree.html" title="A free comonad for some branching functor S.">Cofree</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="ContravariantCoyoneda$.html" title=""></a>
+                        <a class="class" href="ContravariantCoyoneda.html" title="The free contravariant functor on F."></a>
+                        <a href="ContravariantCoyoneda.html" title="The free contravariant functor on F.">ContravariantCoyoneda</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Coyoneda$.html" title=""></a>
                         <a class="class" href="Coyoneda.html" title="The dual view of the Yoneda lemma."></a>
                         <a href="Coyoneda.html" title="The dual view of the Yoneda lemma.">Coyoneda</a>
@@ -332,6 +336,25 @@ functor made into a tree of the possible worlds reachable using the instruction 
 <a href="https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Cofree.scala" target="_blank">Scalaz's Cofree</a>,
 originally written by Rúnar Bjarnason.
 </p></div></div>
+    </li><li name="cats.free.ContravariantCoyoneda" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ContravariantCoyoneda[F[_],A]extendsSerializable"></a><a id="ContravariantCoyoneda[F[_],A]:ContravariantCoyoneda[F,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html#ContravariantCoyoneda[F[_],A]extendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="The free contravariant functor on F." href="ContravariantCoyoneda.html"><span class="name">ContravariantCoyoneda</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">The free contravariant functor on <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The free contravariant functor on <code>F</code>. This is isomorphic to <code>F</code> as long as <code>F</code> itself is a
+contravariant functor. The function from <code>F[A]</code> to <code>ContravariantCoyoneda[F,A]</code> exists even when
+<code>F</code> is not a contravariant functor. Implemented using a List of functions for stack-safety.
+</p></div></div>
     </li><li name="cats.free.Coyoneda" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Coyoneda[F[_],A]extendsSerializable"></a><a id="Coyoneda[F[_],A]:Coyoneda[F,A]"></a>
       <span class="permalink">
@@ -485,6 +508,22 @@ Can be seen as a partially applied <code>map</code> for the functor <code>F</cod
       </span>
       <span class="symbol">
         <a title="" href="Cofree$.html"><span class="name">Cofree</span></a><span class="result"> extends <span class="extype" name="cats.free.CofreeInstances">CofreeInstances</span> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.free.ContravariantCoyoneda" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContravariantCoyoneda"></a><a id="ContravariantCoyoneda:ContravariantCoyoneda"></a>
+      <span class="permalink">
+      <a href="../../cats/free/index.html#ContravariantCoyoneda" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ContravariantCoyoneda$.html"><span class="name">ContravariantCoyoneda</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
