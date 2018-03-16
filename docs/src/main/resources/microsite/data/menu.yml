@@ -116,6 +116,10 @@ options:
     url: typeclasses/arrow.html
     menu_type: typeclasses
 
+  - title: Law Testing
+    url: typeclasses/lawtesting.html
+    menu_type: typeclasses
+
   ###########################
   # Data Types Menu Options #
   ###########################
