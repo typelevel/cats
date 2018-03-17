@@ -237,6 +237,12 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawArbitraryForCokleisliId[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Cokleisli[Id, A, B]] =
     catsLawsArbitraryForCokleisli[Id, A, B]
 
+  implicit def catsLawsArbitraryForOp[Arr[_, _], A, B](implicit Arr: Arbitrary[Arr[B, A]]): Arbitrary[Op[Arr, A, B]] =
+    Arbitrary(Arr.arbitrary.map(Op(_)))
+
+  implicit def catsLawsCogenForOp[Arr[_, _], A, B](implicit Arr: Cogen[Arr[B, A]]): Cogen[Op[Arr, A, B]] =
+    Arr.contramap(_.run)
+
   implicit def catsLawsArbitraryForIRWST[F[_]: Applicative, E, L, SA, SB, A](implicit
     F: Arbitrary[(E, SA) => F[(L, SB, A)]]): Arbitrary[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Arbitrary(F.arbitrary.map(IndexedReaderWriterStateT(_)))
