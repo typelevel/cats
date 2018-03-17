@@ -12,7 +12,7 @@ If you're using the constructs like [`Future`](http://www.scala-lang.org/api/cur
 it's very likely that Cats can simplify and improve the readability of your code.
 
 Please refer to the [Cats wiki on GitHub](https://github.com/typelevel/cats) for guidelines on how to add the library to your project dependencies.
-We are sticking to [version 0.9.0](https://github.com/typelevel/cats/releases/tag/v0.9.0) in the entire post.
+We are sticking to [version 1.0.1](https://github.com/typelevel/cats/releases/tag/v1.0.1) in the entire post.
 
 Let's go through the library package-wise, looking at the syntax available in each package.
 
@@ -72,7 +72,8 @@ If the provided `option` is `Some(x)`, it becomes `Right(x)`.
 Otherwise it becomes `Left` with the provided `ifNone` value inside.
 
 
-# `instances` packages and `cartesian` syntax
+
+# `instances` packages and `apply` syntax
 
 ## `import cats.instances.<F>._`
 
@@ -92,9 +93,9 @@ As a side note, if you have trouble finding the necessary `instances` or `syntax
 This is not a preferred solution, though, as it can significantly increase compile times — especially if used in many files across the project.
 It is generally considered good practice to use narrow imports to take some of the implicit resolution burden off the compiler.
 
-## `import cats.syntax.cartesian._`
+## `import cats.syntax.apply._`
 
-The `cartesian` package provides `|@|` syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).
+The `apply` package provides `(..., ..., ...).mapN` syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).
 
 Let's say we have 3 futures, one of type `Int`, one of type `String`, one of type `User` and a method accepting three parameters — `Int`, `String` and `User`.
 
@@ -107,25 +108,26 @@ def process(value: Int, contents: String, user: User): ProcessingResult = { /* d
 ```
 
 Our goal is to apply the function to the values computed by those 3 futures.
-With `cartesian` syntax this becomes very easy and concise:
+With `apply` syntax this becomes very easy and concise:
 
 ```scala
 import cats.instances.future._
-import cats.syntax.cartesian._
+import cats.syntax.apply._
 
-(intFuture |@| stringFuture |@| userFuture).map {
+(intFuture, stringFuture, userFuture).mapN {
   (value, contents, user) =>
     process(value, contents, user)
 }
 ```
 
-As pointed out before, to provide the implicit instance (namely, [`Cartesian[Future]`](http://typelevel.org/cats/api/cats/Cartesian.html)) required for `|@|` to work properly,
+As pointed out before, to provide the implicit instances (namely, [`Functor[Future]`](http://typelevel.org/cats/api/cats/Functor.html) and
+[`Semigroupal[Future]`](https://typelevel.org/cats/api/cats/Semigroupal.html)) required for `mapN` to work properly,
 you should import `cats.instances.future._`.
 
 This above idea can be expressed even shorter, just:
 
 ```scala
-(intFuture |@| stringFuture |@| userFuture).map(process)
+(intFuture, stringFuture, userFuture).mapN(process)
 ```
 
 The result of the above expression will be of type `Future[ProcessingResult]`.
@@ -143,7 +145,7 @@ for {
 
 In the above snippet (which under the hood translates to `flatMap` and `map` calls), `stringFuture` will not run until `intFuture` is successfully completed,
 and in the same way `userFuture` will be run only after `stringFuture` completes.
-But since the computations are independent of one another, it's perfectly viable to run them in parallel with `|@|` instead.
+But since the computations are independent of one another, it's perfectly viable to run them in parallel with `mapN` instead.
 
 
 
@@ -322,7 +324,7 @@ Let's have a quick look at how to create an `EitherT` instance:
 | :---: | :---: | :---: |
 | `EitherT.apply` or `EitherT(...)` | `F[Either[A, B]]` | `EitherT[F, A, B]` |
 | `EitherT.fromEither` | `Either[A, B]` | `EitherT[F, A, B]` (wraps the provided `Either` value into `F`) |
-| `EitherT.right` or `EitherT.liftT` | `F[B]` | `EitherT[F, A, B]` (wraps value inside `F[B]` into `Right`) |
+| `EitherT.right` or `EitherT.liftF` | `F[B]` | `EitherT[F, A, B]` (wraps value inside `F[B]` into `Right`) |
 | `EitherT.left` | `F[A]` | `EitherT[F, A, B]` (wraps value inside `F[B]` into `Left`) |
 | `EitherT.pure` | `A` | `EitherT[F, A, B]` (wraps value inside `Right` and then into `F`) |
 
@@ -390,8 +392,8 @@ def buyItem(userId: Int, itemId: Int, count: Int): EitherT[Future, BaseException
     user <- ensureUserExists(userId)
     item <- ensureItemExists(itemId)
     _ <- ensureItemStateIs(item.state, AVAILABLE_IN_STOCK)
-    // EitherT.liftT is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
-    placedOrder <- EitherT.liftT(placeOrderForItem(userId, itemId, count))
+    // EitherT.liftF is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
+    placedOrder <- EitherT.liftF(placeOrderForItem(userId, itemId, count))
   } yield placedOrder
 }
 ```
@@ -411,11 +413,6 @@ If anything doesn't compile as expected, first make sure all the required Cats i
 As mentioned before, though, it's better to use narrow imports, but if the code doesn't compile it's sometimes worth just importing the entire library to check if it solves the problem.
 
 If you're using `Futures`, make sure to provide an implicit `ExecutionContext` in the scope, otherwise Cats won't be able to infer implicit instances for `Future`'s type classes.
-
-The compiler might quite often have problems with inferring type parameters for `traverse` and `sequence` methods.
-An obvious workaround is to specify those types directly, like `list.traverse[Future, Unit](fun)`.
-This might become quite verbose in certain cases, though, and the better way is to try the equivalent methods `traverseU` and `sequenceU`, like `list.traverseU(fun)`.
-They do some type-level trickery (with [`cats.Unapply`](http://typelevel.org/cats/api/cats/Unapply.html), hence the `U`) to help the compiler infer the type parameters.
 
 IntelliJ sometimes reports errors in Cats-loaded code even though the source passes under scalac.
 One such example are invocations of the methods of `cats.data.Nested` class, which compile correctly under scalac, but don't type check under IntelliJ's presentation compiler.
