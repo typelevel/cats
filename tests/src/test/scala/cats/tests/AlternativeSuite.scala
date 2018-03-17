@@ -10,6 +10,22 @@ class AlternativeSuite extends CatsSuite {
     }
   }
 
+  test("lefts") {
+    forAll { (list: List[Either[Int, String]]) =>
+      val expected = list.collect { case Left(i) => i }
+
+      list.lefts should === (expected)
+    }
+  }
+
+  test("rights") {
+    forAll { (list: List[Either[Int, String]]) =>
+      val expected = list.collect { case Right(s) => s }
+
+      list.rights should === (expected)
+    }
+  }
+
   test("separate") {
     forAll { (list: List[Either[Int, String]]) =>
       val ints = list.collect { case Left(i) => i }
