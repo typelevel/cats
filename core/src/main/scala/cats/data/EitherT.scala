@@ -456,6 +456,34 @@ object EitherT extends EitherTInstances {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))
   }
+
+  def sequence[F[_], M[_]: Functor, A, B](
+        fs: F[EitherT[M, A, B]]
+    )(implicit F: Foldable[F], M: Monoid[EitherT[M, A, F[B]]], A: Applicative[F]): EitherT[M, A, F[B]] = {
+      F.foldLeft[EitherT[M, A, B], EitherT[M, A, F[B]]](fs, M.empty) { (acc, curr) =>
+        M.combine(acc, curr.map(A.pure))
+      }
+    }
+
+    def sequenceRight[F[_], M[_], A, B](
+        fs: F[EitherT[M, A, B]]
+    )(
+        implicit F: Foldable[F],
+        A: Applicative[F],
+        MkF: MonoidK[F],
+        M: Monoid[EitherT[M, A, F[B]]],
+        FuncM: Functor[M]
+    ): EitherT[M, A, F[B]] = {
+      F.foldLeft[EitherT[M, A, B], EitherT[M, A, F[B]]](fs, M.empty) { (acc, curr) =>
+        val righted = EitherT {
+          FuncM.map(curr.value) {
+            case Right(b) => A.pure(b).asRight[A]
+            case Left(_)  => MkF.algebra[B].empty.asRight[A]
+          }
+        }
+        M.combine(acc, righted)
+      }
+    }
 }
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
