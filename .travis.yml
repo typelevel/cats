@@ -15,6 +15,10 @@ scala:
   - 2.13.0-M3
   - 2.12.5
 
+matrix:
+  allow_failures:
+  - scala: 2.13.0-M3
+
 jdk:
   - oraclejdk8
 
