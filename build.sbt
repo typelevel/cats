@@ -39,10 +39,10 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.11.0" % CompileTime,
-    "org.typelevel" %%% "machinist" % "0.6.2",
+    "com.github.mpilquist" %%% "simulacrum" % "0.12.0" % CompileTime,
+    "org.typelevel" %%% "machinist" % "0.6.4",
     compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
   ),
   fork in test := true,
   parallelExecution in Test := false,
@@ -102,9 +102,12 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.3"
-lazy val disciplineVersion = "0.8"
-lazy val catalystsVersion = "0.0.5"
+lazy val scalaTestVersion = "3.0.5"
+lazy val disciplineVersion = "0.9.0"
+lazy val catalystsVersion = "0.6"
+
+// 2.13.0-M3 workaround
+val scalatest_2_13 = "3.0.5-M1"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
@@ -113,8 +116,16 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
-
+  // 2.13.0-M3 workaround
+  // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
+  libraryDependencies += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) =>
+        "org.scalatest" %%% "scalatest" % scalatest_2_13 % "test"
+      case _ =>
+       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+    }}
+    )
 
 /**
   * Remove 2.10 projects from doc generation, as the macros used in the projects
@@ -335,8 +346,16 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
+  // 2.13.0-M3 workaround
+  //.settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
+  .settings(libraryDependencies += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) =>
+        "org.scalatest" %%% "scalatest" % scalatest_2_13
+      case _ =>
+       "org.scalatest" %%% "scalatest" % scalaTestVersion
+    }}
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
 
@@ -401,7 +420,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.15"))
+    "org.scalaz" %% "scalaz-core" % "7.2.19"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
@@ -683,7 +702,7 @@ def disableScoverage210Jvm(crossProject: CrossProject) =
 lazy val update2_12 = Seq(
   scalacOptions -= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => "-Yinline-warnings"
+      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Yinline-warnings"
       case _ => ""
     }
   }
@@ -692,7 +711,7 @@ lazy val update2_12 = Seq(
 lazy val xlint = Seq(
   scalacOptions += {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => "-Xlint:-unused,_"
+      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Xlint:-unused,_"
       case _ => "-Xlint"
     }
   }
