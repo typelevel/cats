@@ -89,6 +89,8 @@ class NestedSuite extends CatsSuite {
 
   {
     // CommutativeApply composition
+    implicit val optionApply = Apply[Option]
+    implicit val validatedApply = Apply[Validated[Int, ?]]
     checkAll("Nested[Option, Validated[Int, ?], ?]", CommutativeApplyTests[Nested[Option, Validated[Int, ?], ?]].commutativeApply[Int, Int, Int])
     checkAll("CommutativeApply[Nested[List, ListWrapper, ?]]", SerializableTests.serializable(CommutativeApply[Nested[Option, Validated[Int, ?], ?]]))
   }
