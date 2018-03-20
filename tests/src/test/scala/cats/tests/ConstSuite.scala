@@ -2,9 +2,10 @@ package cats
 package tests
 
 
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
@@ -66,6 +67,27 @@ class ConstSuite extends CatsSuite {
     }
   }
 
+  checkAll("Const[String, Int]", FunctorTests[Const[String, ?]].functor[Int, Int, Int])
+  checkAll("Functor[Const[String, ?]]", SerializableTests.serializable(Functor[Const[String, ?]]))
 
+  {
+    implicit val setMonoid: CommutativeMonoid[Int] =
+      new CommutativeMonoid[Int] {
+        def empty: Int = 0
+        def combine(x: Int, y: Int): Int = x + y
+      }
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[Int, ?]](Const.catsDataContravariantForConst)
+    checkAll("Const[Int, Int]", CommutativeApplicativeTests[Const[Int, ?]].commutativeApplicative[Int, Int, Int])
+    checkAll("CommutativeApplicative[Const[Int, ?]]", SerializableTests.serializable(CommutativeApplicative[Const[Int, ?]]))
+  }
 
+  {
+    implicit val setMonoid: CommutativeSemigroup[Int] =
+      new CommutativeSemigroup[Int] {
+        def combine(x: Int, y: Int): Int = x + y
+      }
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[Int, ?]](Const.catsDataContravariantForConst)
+    checkAll("Const[Int, Int]", CommutativeApplyTests[Const[Int, ?]].commutativeApply[Int, Int, Int])
+    checkAll("CommutativeApply[Const[Int, ?]]", SerializableTests.serializable(CommutativeApply[Const[Int, ?]]))
+  }
 }
