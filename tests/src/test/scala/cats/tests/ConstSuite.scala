@@ -71,7 +71,7 @@ class ConstSuite extends CatsSuite {
   checkAll("Functor[Const[String, ?]]", SerializableTests.serializable(Functor[Const[String, ?]]))
 
   {
-    implicit val setMonoid: CommutativeMonoid[Int] =
+    implicit val intCommutativeMonoid: CommutativeMonoid[Int] =
       new CommutativeMonoid[Int] {
         def empty: Int = 0
         def combine(x: Int, y: Int): Int = x + y
@@ -82,7 +82,7 @@ class ConstSuite extends CatsSuite {
   }
 
   {
-    implicit val setMonoid: CommutativeSemigroup[Int] =
+    implicit val intCommutativeSemigroup: CommutativeSemigroup[Int] =
       new CommutativeSemigroup[Int] {
         def combine(x: Int, y: Int): Int = x + y
       }
