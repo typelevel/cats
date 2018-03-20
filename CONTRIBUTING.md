@@ -33,11 +33,10 @@ skip these steps and jump straight to submitting a pull request.
 
 ### Find something that belongs in cats
 
-Looking for a way that you can help out? Check out our
-[Waffle.io page](https://waffle.io/typelevel/cats). Choose a card from the
-"Ready" column. Before you start working on it, make sure that it's
-not already assigned to someone and that nobody has left a comment
-saying that they are working on it!
+Looking for a way that you can help out? Check out the [open issues]
+(https://github.com/typelevel/cats/issues). Look for issues tagged as _**help wanted**_ oe _**low-hanging fruit**_. These ones are the easiest way to start contributing, but if you find other issues that catch your eye, you're most welcome to tackle them!
+
+Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
 (Of course, you can also comment on an issue someone is already
 working on and offer to collaborate.)
@@ -115,15 +114,13 @@ builds:
 
 ### Write code
 
-TODO
+Here are some suggestions for you while implementing your feature:
 
-*Should this just link to a separate doc? This might get large.*
+* Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
 
-Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
+* Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
 
-Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
-
-Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
+* Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
 
 ### Attributions
 
@@ -154,10 +151,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
-
-TODO
-
-Write about checking laws
+- For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
 
 ## Contributing documentation
 
@@ -195,13 +189,6 @@ We use [tut](https://github.com/tpolecat/tut) to compile source code
 which appears in the documentation, this ensures us that our examples
 should always compile, and our documentation has a better chance of
 staying up-to-date.
-
-### Publishing the site to github.
-
-The `git.remoteRepo` variable in `docs/build.sbt` controls which
-repository you will push to. Ensure that this variable points to a
-repo you wish to push to, and that it is one for which you have push
-access, then run `sbt ghpagesPushSite`
 
 ### Write examples
 
