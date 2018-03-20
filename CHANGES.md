@@ -1,3 +1,62 @@
+## Version 1.1.0
+
+Cats 1.1.0 is binary compatible with 1.0.1, i.e. its jar is a drop-in replacement for the 1.0.1 jar.
+
+1.1.0 brought you:
+
+### 15 API Enhancements
+
+* [#2194](https://github.com/typelevel/cats/pull/2194) Add `reject` (partial function) method to MonadError  by @Wogan
+* [#2192](https://github.com/typelevel/cats/pull/2192) Add valueOrF to EitherT  by @denisrosca
+* [#2183](https://github.com/typelevel/cats/pull/2183) Add parTuple  by @barambani
+* [#2182](https://github.com/typelevel/cats/pull/2182) Add `Foldable`, `Traverse` and `Comonad` instances to `WriterT`  by @barambani
+* [#2179](https://github.com/typelevel/cats/pull/2179) added `liftTo` to `Try`, `Either` and `Option`  by @kailuowang
+* [#2169](https://github.com/typelevel/cats/pull/2169) Add FreeT.inject helper function (#1534)  by @valydia
+* [#2159](https://github.com/typelevel/cats/pull/2159) Added Bitraverse for Ior (#2144)  by @V-Lamp
+* [#2150](https://github.com/typelevel/cats/pull/2150) contravariant coyoneda  by @tpolecat
+* [#2149](https://github.com/typelevel/cats/pull/2149) Add leftFlatMap to Either  by @rohanshah
+* [#2146](https://github.com/typelevel/cats/pull/2146) added `leftNel` and `rightNel` syntax  by @kailuowang
+* [#2143](https://github.com/typelevel/cats/pull/2143) Add NonEmptySet  by @LukaJCB
+* [#2141](https://github.com/typelevel/cats/pull/2141) Add NonEmptyMap  by @LukaJCB
+* [#2123](https://github.com/typelevel/cats/pull/2123) Add `contains_`, `foldSmash` and `mkString_` to `FoldableOps`  by @rsoeldner
+* [#2119](https://github.com/typelevel/cats/pull/2119) Fixes type params for OptionT.getOrElse(F)  by @fcanedo
+* [#2076](https://github.com/typelevel/cats/pull/2076) Add `Endo` type alias for (`A =>A`)  by @kailuowang
+
+### 4 Bug Fixes
+
+* [#2188](https://github.com/typelevel/cats/pull/2188) Remove calls to PartialFunction.apply, deprecated in 2.12.5  by @BennyHill
+* [#2187](https://github.com/typelevel/cats/pull/2187) Fix #2186: make IndexedStateT stack safe  by @alexandru
+* [#2185](https://github.com/typelevel/cats/pull/2185) Fix #1733: make Kleisli.flatMap stack safe  by @alexandru
+* [#2148](https://github.com/typelevel/cats/pull/2148) Add missing UnorderedTraverse syntax  by @andyscott
+
+### 16 Documentation Additions/Fixes
+
+* [#2196](https://github.com/typelevel/cats/pull/2196) Add "Law Testing" to side menu to increase visiblity.  by @wjlow
+* [#2190](https://github.com/typelevel/cats/pull/2190) Add Ciris to list of projects in readme  by @vlovgr
+* [#2184](https://github.com/typelevel/cats/pull/2184) Add Dsl.scala in the cats ecosystem  by @Atry
+* [#2177](https://github.com/typelevel/cats/pull/2177) Docs: Updated typeclass instances table  by @battermann
+* [#2171](https://github.com/typelevel/cats/pull/2171) adding validation video  by @Andrea
+* [#2165](https://github.com/typelevel/cats/pull/2165) Add types in the Kleisli code sample for composition  by @jcranky
+* [#2156](https://github.com/typelevel/cats/pull/2156) Fix Spooky scaladoc typo  by @jcranky
+* [#2155](https://github.com/typelevel/cats/pull/2155) Fix broken link in parallel documentation  by @allantl
+* [#2154](https://github.com/typelevel/cats/pull/2154) contravariant.md [reversing roles of A and B in commentary to match the code] by @phderome
+* [#2153](https://github.com/typelevel/cats/pull/2153) added ammonite instructions to faq  by @kailuowang
+* [#2145](https://github.com/typelevel/cats/pull/2145) Update version in lawtesting docs  by @LukaJCB
+* [#2140](https://github.com/typelevel/cats/pull/2140) Set micrositeDocumentationUrl as root-relative  by @calvellido
+* [#2134](https://github.com/typelevel/cats/pull/2134) Minor scaladoc fix for :::  by @jcranky
+* [#2125](https://github.com/typelevel/cats/pull/2125) Wrong link in Eval doc  by @gruggiero
+* [#2122](https://github.com/typelevel/cats/pull/2122) Add doctest example for ApplicativeError.raiseError  by @ceedubs
+* [#1720](https://github.com/typelevel/cats/pull/1720) type classes with only defined laws to guideline  by @kailuowang
+
+
+### 4 Build Improvements:
+
+* [#2189](https://github.com/typelevel/cats/pull/2189) split build jvm,add workers to kernel  by @BennyHill
+* [#2164](https://github.com/typelevel/cats/pull/2164) remove java 7 build  by @xuwe
+* [#2158](https://github.com/typelevel/cats/pull/2158) update travis cache settings  by @kailuowang
+* [#1919](https://github.com/typelevel/cats/pull/1919) update to sbt 1.0  by @kailuowang
+
+
 ## Version 1.0.1
 
 > 2017 Dec 31
