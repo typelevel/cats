@@ -10,8 +10,27 @@ import scala.util.control.NonFatal
  * This type class allows one to abstract over error-handling applicatives.
  */
 trait ApplicativeError[F[_], E] extends Applicative[F] {
+
   /**
    * Lift an error into the `F` context.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * // integer-rounded division
+   * scala> def divide[F[_]](dividend: Int, divisor: Int)(implicit F: ApplicativeError[F, String]): F[Int] =
+   *      | if (divisor === 0) F.raiseError("division by zero")
+   *      | else F.pure(dividend / divisor)
+   *
+   * scala> type ErrorOr[A] = Either[String, A]
+   *
+   * scala> divide[ErrorOr](6, 3)
+   * res0: ErrorOr[Int] = Right(2)
+   *
+   * scala> divide[ErrorOr](6, 0)
+   * res1: ErrorOr[Int] = Left(division by zero)
+   * }}}
    */
   def raiseError[A](e: E): F[A]
 
@@ -161,4 +180,30 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
 
 object ApplicativeError {
   def apply[F[_], E](implicit F: ApplicativeError[F, E]): ApplicativeError[F, E] = F
+
+  private[cats] final class LiftFromOptionPartially[F[_]](val dummy: Boolean = true) extends AnyVal {
+    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+      oa match {
+        case Some(a) => F.pure(a)
+        case None => F.raiseError(ifEmpty)
+      }
+  }
+
+
+  /**
+    * lift from scala.Option[A] to a F[A]
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> import cats.ApplicativeError
+    *
+    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
+    * res0: scala.Either[String, Int] = Right(1)
+    *
+    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
+    * res1: scala.Either[String, Int] = Left(Empty)
+    * }}}
+    */
+  def liftFromOption[F[_]]: LiftFromOptionPartially[F] = new LiftFromOptionPartially[F]
 }

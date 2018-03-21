@@ -25,6 +25,7 @@ lazy val kernelSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
+  fork in test := true,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
@@ -64,9 +65,10 @@ lazy val tagName = Def.setting{
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
+    val tv = tagName.value
     val tagOrHash =
-      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
-      else tagName.value
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      else tv
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
@@ -82,7 +84,10 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+  testOptions in Test += {
+    val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
+    Tests.Argument(TestFrameworks.ScalaTest, flag)
+  }
 )
 
 lazy val includeGeneratedSrc: Setting[_] = {
@@ -124,8 +129,12 @@ def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
   }
 
 lazy val javadocSettings = Seq(
-  sources in (Compile, doc) := (if (docsSourcesAndProjects(scalaVersion.value)._1) (sources in (Compile, doc)).value else Nil)
+  sources in (Compile, doc) := {
+    val docSource = (sources in (Compile, doc)).value
+    if (docsSourcesAndProjects(scalaVersion.value)._1) docSource else Nil
+  }
 )
+
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -141,7 +150,7 @@ lazy val docSettings = Seq(
   micrositeHighlightTheme := "atom-one-light",
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
-  micrositeDocumentationUrl := "api/",
+  micrositeDocumentationUrl := "/cats/api/cats/index.html",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(
@@ -175,6 +184,7 @@ lazy val docSettings = Seq(
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-Xfatal-warnings",
+    "-groups",
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
@@ -185,10 +195,11 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-lazy val binaryCompatibleVersion = "1.0.0-RC1"
+lazy val binaryCompatibleVersion = "1.0.0"
 
 def mimaSettings(moduleName: String) = Seq(
-    mimaPreviousArtifacts :=  Set("org.typelevel" %% moduleName % binaryCompatibleVersion))
+  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion)
+)
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -503,7 +514,18 @@ lazy val publishSettings = Seq(
 ) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildJVM", "catsJVM/test")
+
+addCommandAlias("buildKernelJVM", ";kernelJVM/test;kernelLawsJVM/test")
+
+addCommandAlias("buildCoreJVM", ";macrosJVM/test;coreJVM/test")
+
+addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
+
+addCommandAlias("buildFreeJVM", ";freeJVM/test")
+
+addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
+
+addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
 
@@ -601,7 +623,7 @@ lazy val sharedReleaseProcess = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+    releaseStepCommand("sonatypeReleaseAll"),
     pushChanges)
 )
 

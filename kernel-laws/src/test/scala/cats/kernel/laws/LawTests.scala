@@ -87,9 +87,13 @@ class Tests extends FunSuite with Discipline {
   // The scalacheck defaults (100,100) are too high for scala-js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
+  final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize)
+    PropertyCheckConfiguration(
+      minSuccessful = PropMinSuccessful,
+      sizeRange = PropMaxSize,
+      workers = PropWorkers)
 
 
   {
@@ -153,10 +157,13 @@ class Tests extends FunSuite with Discipline {
   checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
   checkAll("Monoid[List[String]]", MonoidTests[List[String]].monoid)
   checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
-  checkAll("Monoid[Map[String, Int]]", MonoidTests[Map[String, Int]].monoid)
-  checkAll("Monoid[Map[String, Int]]", SerializableTests.serializable(Monoid[Map[String, Int]]))
+  checkAll("Monoid[Map[String, String]]", MonoidTests[Map[String, String]].monoid)
+  checkAll("Monoid[Map[String, String]]", SerializableTests.serializable(Monoid[Map[String, String]]))
   checkAll("Monoid[Queue[Int]]", MonoidTests[Queue[Int]].monoid)
   checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
+
+  checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
   checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
@@ -239,6 +246,21 @@ class Tests extends FunSuite with Discipline {
   }
 
   checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
+
+  {
+    implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] = new PartialOrdering[Set[A]] {
+
+      override def tryCompare(x: Set[A], y: Set[A]): Option[Int] = {
+        if (x == y) Some(0)
+        else if (x subsetOf y) Some(-1)
+        else if (y subsetOf x) Some(1)
+        else None
+      }
+
+      override def lteq(x: Set[A], y: Set[A]): Boolean = (x subsetOf y) || (x == y)
+    }
+    checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
+  }
 
   implicit val arbitraryComparison: Arbitrary[Comparison] =
     Arbitrary(Gen.oneOf(Comparison.GreaterThan, Comparison.EqualTo, Comparison.LessThan))

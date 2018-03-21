@@ -138,11 +138,11 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
-  test("ReaderWriterState.pure, ReaderWriterStateT.lift and IndexedReaderWriterStateT.lift are consistent") {
+  test("ReaderWriterState.pure, ReaderWriterStateT.liftF and IndexedReaderWriterStateT.liftF are consistent") {
     forAll { (value: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterState.pure(value)
-      val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.lift(Eval.now(value))
-      val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.lift(Eval.now(value))
+      val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.liftF(Eval.now(value))
+      val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.liftF(Eval.now(value))
 
       rws should === (rwst)
       rwst should === (irwst)

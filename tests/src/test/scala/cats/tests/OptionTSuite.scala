@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.OptionT
+import cats.data.{Const, OptionT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -41,6 +41,14 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", FunctorTests[OptionT[ListWrapper, ?]].functor[Int, Int, Int])
     checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
+  }
+
+  
+  {
+    // F has a ContravariantMonoidal 
+    checkAll("OptionT[Const[String, ?], Int]", ContravariantMonoidalTests[OptionT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[OptionT[Const[String, ?], Int]]",
+      SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]])) 
   }
 
   {
@@ -140,12 +148,23 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("OptionT[Id, A].getOrElse consistent with Option.getOrElse, with respect to types") {
+    forAll { (o: Option[Int]) =>
+      o.map(Right.apply).getOrElse(Left("error")) should === (OptionT[Id, Int](o).map(Right.apply).getOrElse("error".asLeft[Int]))
+    }
+  }
+
   test("OptionT[Id, A].getOrElseF consistent with Option.getOrElse") {
     forAll { (o: Option[Int], i: Int) =>
       o.getOrElse(i) should === (OptionT[Id, Int](o).getOrElseF(i))
     }
   }
 
+  test("OptionT[Id, A].getOrElseF consistent with Option.getOrElse, with respect to types") {
+    forAll { (o: Option[Int]) =>
+      o.map(Right.apply).getOrElse(Left("error")) should === (OptionT[Id, Int](o).map(Right.apply).getOrElseF("error".asLeft[Int]))
+    }
+  }
   test("OptionT[Id, A].collect consistent with Option.collect") {
     forAll { (o: Option[Int], f: Int => Option[String]) =>
       val p = Function.unlift(f)

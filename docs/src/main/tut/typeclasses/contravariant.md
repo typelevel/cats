@@ -2,7 +2,7 @@
 layout: docs
 title:  "Contravariant"
 section: "typeclasses"
-source: "core/src/main/scala/cats/functor/Contravariant.scala"
+source: "core/src/main/scala/cats/Contravariant.scala"
 scaladoc: "#cats.Contravariant"
 ---
 # Contravariant
@@ -93,4 +93,4 @@ val showB3: Show[B] = Contravariant[Show].narrow[A, B](showA)
 ```
 
 Subtyping relationships are "lifted backwards" by contravariant functors, such that if `F` is a
-lawful contravariant functor and `A <: B` then `F[B] <: F[A]`, which is expressed by `Contravariant.narrow`.
+lawful contravariant functor and `B <: A` then `F[A] <: F[B]`, which is expressed by `Contravariant.narrow`.

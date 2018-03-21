@@ -43,7 +43,7 @@ object FreeInvariantMonoidal {
 
   private final case class Pure[F[_], A](a: A) extends FA[F, A] {
     def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[A] =
-      im.pure(a)
+      im.point(a)
   }
 
   private final case class Suspend[F[_], A](fa: F[A]) extends FA[F, A] {
@@ -70,7 +70,7 @@ object FreeInvariantMonoidal {
   /** `FreeInvariantMonoidal[S, ?]` has a FreeInvariantMonoidal for any type constructor `S[_]`. */
   implicit def catsFreeInvariantMonoidal[S[_]]: InvariantMonoidal[FA[S, ?]] =
     new InvariantMonoidal[FA[S, ?]] {
-      def pure[A](a: A): FA[S, A] = FreeInvariantMonoidal.pure(a)
+      def unit: FA[S, Unit] = FreeInvariantMonoidal.pure(())
       def imap[A, B](fa: FA[S, A])(f: A => B)(g: B => A): FA[S, B] = fa.imap(f)(g)
       def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] = fa.product(fb)
     }

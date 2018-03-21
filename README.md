@@ -18,6 +18,7 @@ standard library. Cats strives to provide functional programming abstractions th
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
 
+You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
 
 ### Getting Started
 
@@ -39,7 +40,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 And then create the cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-RC1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.1.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -76,6 +77,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 #### General purpose libraries to support pure functional programming
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
@@ -90,6 +92,7 @@ By sharing the same set of type classes, instances and data types provided by ca
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [circe](https://github.com/circe/circe): pure functional JSON library
+ * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources

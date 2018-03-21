@@ -73,6 +73,18 @@ private[data] sealed trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] w
   def pure[A](a: A): IdT[F, A] = IdT.pure(a)
 }
 
+private[data] sealed trait IdTContravariantMonoidal[F[_]] extends ContravariantMonoidal[IdT[F, ?]] {
+  implicit val F0: ContravariantMonoidal[F]
+
+  override def unit: IdT[F, Unit] = IdT(F0.unit)
+
+  override def contramap[A, B](fa: IdT[F, A])(f: B => A): IdT[F, B] =
+    IdT(F0.contramap(fa.value)(f))
+
+  override def product[A, B](fa: IdT[F, A], fb: IdT[F, B]): IdT[F, (A, B)] =
+    IdT(F0.product(fa.value, fb.value))
+}
+
 private[data] sealed trait IdTFlatMap[F[_]] extends FlatMap[IdT[F, ?]] with IdTApply[F] {
   implicit val F0: FlatMap[F]
 
@@ -123,7 +135,22 @@ private[data] sealed trait IdTNonEmptyTraverse[F[_]] extends IdTTraverse[F] with
     fa.reduceRightTo(f)(g)
 }
 
-private[data] sealed abstract class IdTInstances5 {
+private[data] sealed abstract class IdTInstances8 {
+  implicit def catsDataCommutativeFlatMapForIdT[F[_]](implicit F: CommutativeFlatMap[F]): CommutativeFlatMap[IdT[F, ?]] =
+    new IdTFlatMap[F] with CommutativeFlatMap[IdT[F, ?]] { implicit val F0: CommutativeFlatMap[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances7 extends IdTInstances8{
+  implicit def catsDataCommutativeMonadForIdT[F[_]](implicit F: CommutativeMonad[F]): CommutativeMonad[IdT[F, ?]] =
+    new IdTMonad[F] with CommutativeMonad[IdT[F, ?]] { implicit val F0: CommutativeMonad[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances6 extends IdTInstances7 {
+  implicit def catsDataContravariantMonoidalForIdT[F[_]](implicit F: ContravariantMonoidal[F]): ContravariantMonoidal[IdT[F, ?]] =
+    new IdTContravariantMonoidal[F] { implicit val F0: ContravariantMonoidal[F] = F }
+}
+
+private[data] sealed abstract class IdTInstances5 extends IdTInstances6 {
   implicit def catsDataFunctorForIdT[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
     new IdTFunctor[F] { implicit val F0: Functor[F] = F }
 }

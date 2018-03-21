@@ -18,11 +18,31 @@ trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
 final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
 
-  @deprecated("Use *> instead", "1.0.0-RC1")
-  def >>[B](fb: F[B])(implicit F: FlatMap[F]): F[B] = F.followedBy(fa)(fb)
+  /**
+   * Alias for [[flatMap]].
+   */
+  def >>=[B](f: A => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(f)
+
+  /**
+   * Alias for `fa.flatMap(_ => fb)`.
+   *
+   * Unlike `*>`, `fb` is defined as a by-name parameter, allowing this
+   * method to be used in cases where computing `fb` is not stack safe
+   * unless suspended in a `flatMap`.
+   */
+  def >>[B](fb: => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(_ => fb)
 
   @deprecated("Use <* instead", "1.0.0-RC1")
-  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.forEffect(fa)(fb)
+  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
+
+
+  @deprecated("Use productREval instead.", "1.0.0-RC2")
+  def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
+    F.productREval(fa)(fb)
+
+  @deprecated("Use productLEval instead.", "1.0.0-RC2")
+  def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
+    F.productLEval(fa)(fb)
 }
 
 final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {

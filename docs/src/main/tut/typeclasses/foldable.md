@@ -10,7 +10,7 @@ scaladoc: "#cats.Foldable"
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
-In the case of a collection (such as `List` or `Set`), these methods will fold 
+In the case of a collection (such as `List` or `Vector`), these methods will fold
 together (combine) the values contained in the collection to produce a single 
 result. Most collection types have `foldLeft` methods, which will usually be 
 used by the associated `Foldable[_]` instance.

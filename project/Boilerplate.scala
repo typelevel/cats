@@ -30,6 +30,7 @@ object Boilerplate {
     GenApplyArityFunctions,
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
+    GenParallelArityFunctions2,
     GenTupleParallelSyntax
   )
 
@@ -184,14 +185,38 @@ object Boilerplate {
 
       block"""
         |package cats
+        |
+        |/**
+        | * @groupprio Ungrouped 0
+        | *
+        | * @groupname ApArity ap arity
+        | * @groupdesc ApArity Higher-arity ap methods
+        | * @groupprio ApArity 999
+        | *
+        | * @groupname MapArity map arity
+        | * @groupdesc MapArity Higher-arity map methods
+        | * @groupprio MapArity 999
+        | *
+        | * @groupname TupleArity tuple arity
+        | * @groupdesc TupleArity Higher-arity tuple methods
+        | * @groupprio TupleArity 999
+        | */
         |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
         |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Semigroupal.tuple2(f1, f2)(self, self)
+        -  /** @group ApArity */
         -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
+        -  /** @group MapArity */
         -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
+        -  /** @group TupleArity */
         -  def tuple$arity[${`A..N`}, Z]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
         |}
       """
     }
+  }
+
+  final case class ParallelNestedExpansions(arity: Int) {
+    val products = (0 until (arity - 2)).foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
+    val `(a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
   }
 
   object GenParallelArityFunctions extends Template {
@@ -204,15 +229,53 @@ object Boilerplate {
       val fargs = (0 until arity) map { "m" + _ }
       val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
       val fargsS = fargs mkString ", "
-
-      val nestedProducts = (0 until (arity - 2)).foldRight(s"Parallel.parProduct(m${arity - 2}, m${arity - 1})")((i, acc) => s"Parallel.parProduct(m$i, $acc)")
-      val `nested (a..n)` = (0 until (arity - 2)).foldRight(s"(a${arity - 2}, a${arity - 1})")((i, acc) => s"(a$i, $acc)")
+      val nestedExpansion = ParallelNestedExpansions(arity)
 
       block"""
          |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname ParMapArity parMap arity
+         | * @groupdesc ParMapArity Higher-arity parMap methods
+         | * @groupprio ParMapArity 999
+         | */
          |trait ParallelArityFunctions {
+        -  /** @group ParMapArity */
         -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
-        -    p.flatMap.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+        -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) }
+         |}
+      """
+    }
+  }
+
+  object GenParallelArityFunctions2 extends Template {
+    def filename(root: File) = root / "cats" / "ParallelArityFunctions2.scala"
+    override def range = 2 to maxArity
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val tpes = synTypes map { tpe => s"M[$tpe]" }
+      val fargs = (0 until arity) map { "m" + _ }
+      val fparams = (fargs zip tpes) map { case (v,t) => s"$v:$t"} mkString ", "
+      val fargsS = fargs mkString ", "
+      val nestedExpansion = ParallelNestedExpansions(arity)
+
+      block"""
+         |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname ParTupleArity parTuple arity
+         | * @groupdesc ParTupleArity Higher-arity parTuple methods
+         | * @groupprio ParTupleArity 999
+         | */
+         |abstract class ParallelArityFunctions2 extends ParallelArityFunctions {
+        -  /** @group ParTupleArity */
+        -  def parTuple$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
+        -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => (${`a..n`}) }
          |}
       """
     }
@@ -234,15 +297,44 @@ object Boilerplate {
 
       block"""
          |package cats
+         |
+         |/**
+         | * @groupprio Ungrouped 0
+         | *
+         | * @groupname MapArity map arity
+         | * @groupdesc MapArity Higher-arity map methods
+         | * @groupprio MapArity 999
+         | *
+         | * @groupname ContramapArity contramap arity
+         | * @groupdesc ContramapArity Higher-arity contramap methods
+         | * @groupprio ContramapArity 999
+         | *
+         | * @groupname ImapArity imap arity
+         | * @groupdesc ImapArity Higher-arity imap methods
+         | * @groupprio ImapArity 999
+         | *
+         | * @groupname TupleArity tuple arity
+         | * @groupdesc TupleArity Higher-arity tuple methods
+         | * @groupprio TupleArity 999
+         | *
+         | * @groupname TraverseArity traverse arity
+         | * @groupdesc TraverseArity Higher-arity traverse methods
+         | * @groupprio TraverseArity 999
+         | */
          |trait SemigroupalArityFunctions {
+        -  /** @group MapArity */
         -  def map$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit semigroupal: Semigroupal[F], functor: Functor[F]): F[Z] =
         -    functor.map($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
+        -  /** @group ContramapArity */
         -  def contramap$arity[F[_], ${`A..N`}, Z]($fparams)(f: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], contravariant: Contravariant[F]):F[Z] =
         -    contravariant.contramap($nestedProducts) { z => val ${`(a..n)`} = f(z); ${`nested (a..n)`} }
+        -  /** @group ImapArity */
         -  def imap$arity[F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(g: Z => (${`A..N`}))(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[Z] =
         -    invariant.imap($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) } { z => val ${`(a..n)`} = g(z); ${`nested (a..n)`} }
+        -  /** @group TupleArity */
         -  def tuple$arity[F[_], ${`A..N`}]($fparams)(implicit semigroupal: Semigroupal[F], invariant: Invariant[F]):F[(${`A..N`})] =
         -    imap$arity($fargsS)((${`_.._`}))(identity)
+        -  /** @group TraverseArity */
         -  def traverse$arity[F[_], G[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => G[Z])(implicit semigroupal: Semigroupal[F], traverse: Traverse[F], applicative: Applicative[G]): G[F[Z]] =
         -    traverse.traverse($nestedProducts) { case ${`nested (a..n)`} => f(${`a..n`}) }
          |}
@@ -269,6 +361,9 @@ object Boilerplate {
         if (arity == 1) s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
         else s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
+      val parTupled =
+        if (arity == 1) ""
+        else s"def parTupled[F[_]](implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] = Parallel.parTuple$arity($tupleArgs)"
 
       block"""
          |package cats
@@ -282,6 +377,7 @@ object Boilerplate {
          |
          -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
          -  $parMap
+         -  $parTupled
          -}
          |
       """

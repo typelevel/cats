@@ -252,7 +252,7 @@ object FormValidatorNel extends FormValidatorNel
 Let's see what changed here:
 
 1. In this new implementation, we're using a [NonEmptyList](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyList.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
-2. `ValidatedNel[DomainValidation, A]` is an alias for `Validation[NonEmptyList[DomainValidation], A]`. When you use `ValidatedNel` you're stating that your accumulative structure will be a `NonEmptyList`. With `Validation`, you have the choice about which data structure you want for reporting the errors (more on that soon).
+2. `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. When you use `ValidatedNel` you're stating that your accumulative structure will be a `NonEmptyList`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
 3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
 4. `.validNel` and `.invalidNel` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
 5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
@@ -285,7 +285,7 @@ Sweet success! Now you can take your validation process to the next level!
 
 ### A short detour
 
-As previously stated, `ValidatedNel[DomainValidation, A]` is an alias for `Validation[NonEmptyList[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
+As previously stated, `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
 
 For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
 

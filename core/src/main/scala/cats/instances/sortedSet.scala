@@ -19,6 +19,9 @@ trait SortedSetInstances extends SortedSetInstances1 {
       def foldRight[A, B](fa: SortedSet[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable.iterateRight(fa, lb)(f)
 
+      override def foldMap[A, B](fa: SortedSet[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
+
       override def get[A](fa: SortedSet[A])(idx: Long): Option[A] = {
         @tailrec
         def go(idx: Int, it: Iterator[A]): Option[A] = {
@@ -50,6 +53,12 @@ trait SortedSetInstances extends SortedSetInstances1 {
         fa.reduceLeftOption(f)
 
       override def find[A](fa: SortedSet[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      override def collectFirst[A, B](fa: SortedSet[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: SortedSet[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {

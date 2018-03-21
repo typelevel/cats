@@ -25,8 +25,11 @@ possible:
  * Alexey Levan
  * Alissa Pajer
  * Alistair Johnson
+ * Allan Timothy Leong
+ * Alonso Dominguez
  * Amir Mohammad Saied
  * Andrea Fiore
+ * Andrea McAts
  * Andrew Jones
  * Andy Scott
  * Angelo Genovese
@@ -36,6 +39,7 @@ possible:
  * Aλ
  * Ben Fradet
  * Ben Hutchison
+ * Ben Kirwin
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -43,8 +47,11 @@ possible:
  * Brendan McAdams
  * Brian McKenna
  * Bryan Tan
+ * Cary Robbins
  * Chris Birchall
+ * Christopher Davenport
  * Cody Allen
+ * Colin Woodbury
  * Colt Frederickson
  * Connie Chen
  * Csongor Kiss
@@ -58,6 +65,7 @@ possible:
  * David Gregory
  * David R. Bild
  * Denis Mikhaylov
+ * Denis Rosca
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
@@ -67,12 +75,18 @@ possible:
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
+ * Eugene Platonov
  * Eugene Yokota
+ * Fabian Gutierrez
  * Fabian Schmitthenner
  * Fabio Labella
  * Feynman Liang
+ * Filipe Oliveira
+ * Filippo Mariotti
+ * Francisco Canedo
  * Frank S. Thomas
  * Gabriele Petronella
+ * Giovanni Ruggiero
  * Giulio De Luise
  * Greg Pfeil
  * Guillaume Massé
@@ -83,6 +97,9 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Jack Low
+ * Jacob Barber
+ * Jakub Kozłowski
  * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
  * Jens
@@ -94,21 +111,25 @@ possible:
  * Joseph Abrahamson
  * Josh Marcus
  * Juan Pedro Moreno
+ * Juan Valencia
  * Julien Richard-Foy
  * Julien Truffaut
  * Jun Tomioka
  * Kailuo Wang
+ * kellen
  * Kenji Yoshida
- * Leandro Bolivar
  * Lars Hupel
+ * Leandro Bolivar
+ * Leif Battermann
  * Long Cao
  * Luis Angel Vicente Sanchez
  * Luis Sanchez
- * LukaJCB
+ * Luka Jacobowitz
  * Luke Wyman
  * Madder
  * Marc Siegel
  * Marcin Rzeźnicki
+ * Marco Battaglia
  * Mark de Jong
  * Markus Hauck
  * mathhun
@@ -120,6 +141,7 @@ possible:
  * Michael Pilquist
  * Mike Curry
  * Miles Sabin
+ * nigredo-tori
  * n4to4
  * Olivier Blanvillain
  * Olli Helenius
@@ -128,11 +150,13 @@ possible:
  * Paolo G. Giarrusso
  * Pascal Voitot
  * Paul Phillips
+ * Paulo "JCranky" Siqueira
  * Pavkin Vladimir
  * Pepe García
  * Pere Villega
  * Peter Neyens
  * Peter Perhac
+ * phderome
  * Philip Wills
  * Rafa Paradela
  * Raúl Raja Martínez
@@ -142,8 +166,10 @@ possible:
  * Richard Miller
  * Rintcius Blok
  * Rob Norris
+ * Rohan Shah
  * Romain Ruetschi
  * Ross A. Baker
+ * rsoeldner
  * Rüdiger Klaehn
  * Ryan Case
  * Sam Ritchie
@@ -155,8 +181,10 @@ possible:
  * Sinisa Louc
  * Stephen Carman
  * Stephen Judkins
+ * Stephen Lazaro
  * Stew O'Connor
  * Suhas Gaddam
+ * sullis
  * Sumedh Mungee
  * Takayuki Sakai
  * Taylor Brown
@@ -166,10 +194,16 @@ possible:
  * Travis Brown
  * Trond Bjerkestrand
  * Tya
+ * Valy Diarrassouba
+ * Vasileios Lampridis
  * ven
+ * Viktor Lövgren
  * Vladimir Samoylov
  * Wedens
+ * Wogan
  * Xavier Fernández Salas
+ * XUWE
+ * 杨博 (Yang Bo)
  * Yosef Fertel
  * Yilin Wei
  * Zach Abbott

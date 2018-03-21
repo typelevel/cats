@@ -7,13 +7,13 @@ import cats.kernel.instances.StaticMethods
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
 
-trait SortedMapInstances extends SortedMapInstances1 {
+trait SortedMapInstances extends SortedMapInstances2 {
 
   implicit def catsStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
     new SortedMapHash[K, V]
 
-  implicit def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
-    new SortedMapMonoid[K, V]
+  implicit def catsStdCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup]: CommutativeMonoid[SortedMap[K, V]] =
+    new SortedMapCommutativeMonoid[K, V]
 
   implicit def catsStdShowForSortedMap[A: Order, B](implicit showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
     new Show[SortedMap[A, B]] {
@@ -93,6 +93,13 @@ trait SortedMapInstances extends SortedMapInstances1 {
         A.combineAll(fa.values)
 
       override def toList[A](fa: SortedMap[K, A]): List[A] = fa.values.toList
+
+      override def collectFirst[A, B](fa: SortedMap[K, A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(new PartialFunction[(K, A), B] {
+        override def isDefinedAt(x: (K, A)) = pf.isDefinedAt(x._2)
+        override def apply(v1: (K, A)) = pf(v1._2)
+      })
+
+      override def collectFirstSome[A, B](fa: SortedMap[K, A])(f: A => Option[B]): Option[B] = collectFirst(fa)(Function.unlift(f))
     }
 
 }
@@ -100,6 +107,11 @@ trait SortedMapInstances extends SortedMapInstances1 {
 trait SortedMapInstances1 {
   implicit def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
+}
+
+trait SortedMapInstances2 extends SortedMapInstances1 {
+  implicit def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
+    new SortedMapMonoid[K, V]
 }
 
 class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K]) extends SortedMapEq[K, V]()(V, O) with Hash[SortedMap[K, V]] {
@@ -134,6 +146,9 @@ class SortedMapEq[K, V](implicit V: Eq[V], O: Order[K]) extends Eq[SortedMap[K, 
       }
     }
 }
+
+class SortedMapCommutativeMonoid[K, V](implicit V: CommutativeSemigroup[V], O: Order[K])
+  extends SortedMapMonoid[K, V] with CommutativeMonoid[SortedMap[K, V]]
 
 class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends Monoid[SortedMap[K, V]]  {
 

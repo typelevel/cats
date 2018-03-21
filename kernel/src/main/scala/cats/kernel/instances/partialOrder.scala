@@ -1,0 +1,6 @@
+package cats.kernel
+package instances
+
+trait PartialOrderInstances extends PartialOrderToPartialOrderingConversion
+
+object partialOrder extends PartialOrderInstances

@@ -1,22 +1,26 @@
 package cats
 
 package object syntax {
-  object all extends AllSyntax
+  object all extends AllSyntaxBinCompat
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax
   object arrow extends ArrowSyntax
+  object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object bitraverse extends BitraverseSyntax
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
   object coflatMap extends CoflatMapSyntax
+  object distributive extends DistributiveSyntax
   object eitherK extends EitherKSyntax
   object comonad extends ComonadSyntax
   object compose extends ComposeSyntax
   object contravariant extends ContravariantSyntax
+  object contravariantSemigroupal extends ContravariantSemigroupalSyntax
+  object contravariantMonoidal extends ContravariantMonoidalSyntax
   object either extends EitherSyntax
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
@@ -42,6 +46,7 @@ package object syntax {
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
+  object unorderedTraverse extends UnorderedTraverseSyntax
   object validated extends ValidatedSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax

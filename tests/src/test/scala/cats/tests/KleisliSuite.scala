@@ -3,13 +3,15 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.{SemigroupKTests, MonoidKTests}
+import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
+import Helpers.CSemi
+import catalysts.Platform
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
@@ -36,13 +38,25 @@ class KleisliSuite extends CatsSuite {
   checkAll("Kleisli[Option, Int, Int]", SemigroupalTests[Kleisli[Option, Int, ?]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Semigroupal[Kleisli[Option, Int, ?]]))
 
+  checkAll("Kleisli[(CSemi, ?), Int, ?]", CommutativeFlatMapTests[Kleisli[(CSemi, ?), Int, ?]].commutativeFlatMap[Int, Int, Int])
+  checkAll("CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]",SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]))
+
   checkAll("Kleisli[Option, Int, ?]", CommutativeMonadTests[Kleisli[Option, Int, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))
 
+  checkAll("Kleisli[Id, Int, ?]", CommutativeMonadTests[Kleisli[Id, Int, ?]].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[Kleisli[Id, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, ?]]))
+
   {
-    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowForKleisli[List]
+    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
     checkAll("Kleisli[List, Int, Int]", ArrowTests[Kleisli[List, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
     checkAll("Arrow[Kleisli[List, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[List, ?, ?]]))
+  }
+
+  {
+    implicit val catsDataArrowChoiceForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
+    checkAll("Kleisli[List, Int, Int]", ArrowChoiceTests[Kleisli[List, ?, ?]].arrowChoice[Int, Int, Int, Int, Int, Int])
+    checkAll("ArrowChoice[Kleisli[List, ?, ?]]", SerializableTests.serializable(ArrowChoice[Kleisli[List, ?, ?]]))
   }
 
   {
@@ -88,6 +102,14 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
+    implicit val catsDataContravariantMonoidalForKleisli = Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, ?], Int]
+    checkAll("Kleisli[Const[String, ?], Int, Int]",
+      ContravariantMonoidalTests[Kleisli[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
+      SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
+  }
+
+  {
     implicit val catsDataApplicativeForKleisli = Kleisli.catsDataApplicativeForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", ApplicativeTests[Kleisli[Option, Int, ?]].applicative[Int, Int, Int])
     checkAll("Applicative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, ?]]))
@@ -103,6 +125,11 @@ class KleisliSuite extends CatsSuite {
     implicit val catsDataFunctorForKleisli = Kleisli.catsDataFunctorForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", FunctorTests[Kleisli[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
+  }
+
+  {
+    checkAll("Kleisli[Function0, Int, ?]", DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
+    checkAll("Distributive[Kleisli[Function0, Int, ?]]", SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
   }
 
   {
@@ -230,6 +257,24 @@ class KleisliSuite extends CatsSuite {
     kconfig1.run(config) should === (kconfig2.run(config))
   }
 
+  test("flatMap is stack safe on repeated left binds when F is") {
+    val unit = Kleisli.pure[Eval, Unit, Unit](())
+    val count = if (Platform.isJvm) 10000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      acc.flatMap(_ => unit)
+    }
+    result.run(()).value
+  }
+
+  test("flatMap is stack safe on repeated right binds when F is") {
+    val unit = Kleisli.pure[Eval, Unit, Unit](())
+    val count = if (Platform.isJvm) 10000 else 100
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      unit.flatMap(_ => acc)
+    }
+    result.run(()).value
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
@@ -254,12 +299,13 @@ class KleisliSuite extends CatsSuite {
     Apply[Kleisli[Id, Int, ?]]
     Applicative[Kleisli[Id, Int, ?]]
     Monad[Kleisli[Id, Int, ?]]
+    CommutativeMonad[Kleisli[Id, Int, ?]]
     Monoid[Kleisli[Id, Int, String]]
     Arrow[Kleisli[Id, ?, ?]]
     CommutativeArrow[Kleisli[Id, ?, ?]]
     Choice[Kleisli[Id, ?, ?]]
     Strong[Kleisli[Id, ?, ?]]
-    FlatMap[Kleisli[Id, Int, ?]]
+    CommutativeFlatMap[Kleisli[Id, Int, ?]]
     Semigroup[Kleisli[Id, Int, String]]
 
     // using Reader alias instead of Kleisli with Id as F
@@ -267,12 +313,13 @@ class KleisliSuite extends CatsSuite {
     Apply[Reader[Int, ?]]
     Applicative[Reader[Int, ?]]
     Monad[Reader[Int, ?]]
+    CommutativeMonad[Reader[Int, ?]]
     Monoid[Reader[Int, String]]
     Arrow[Reader[?, ?]]
     CommutativeArrow[Reader[?, ?]]
     Choice[Reader[?, ?]]
     Strong[Reader[?, ?]]
-    FlatMap[Reader[Int, ?]]
+    CommutativeFlatMap[Reader[Int, ?]]
     Semigroup[Reader[Int, String]]
 
     // using IntReader alias instead of Kleisli with Id as F and A as Int
@@ -281,12 +328,16 @@ class KleisliSuite extends CatsSuite {
     Apply[IntReader]
     Applicative[IntReader]
     Monad[IntReader]
+    CommutativeMonad[IntReader]
     Monoid[IntReader[String]]
     FlatMap[IntReader]
+    CommutativeFlatMap[IntReader]
     Semigroup[IntReader[String]]
 
     ApplicativeError[Kleisli[cats.data.Validated[Unit, ?], Int, ?], Unit]
     ApplicativeError[Kleisli[Option, Int, ?], Unit]
     MonadError[Kleisli[Option, Int, ?], Unit]
+
+    Distributive[Kleisli[Function0, Int, ?]]
   }
 }

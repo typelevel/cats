@@ -69,6 +69,9 @@ options:
      - title: Contravariant
        url: typeclasses/contravariant.html
        menu_section: variance
+     - title: ContravariantMonoidal
+       url: typeclasses/contravariantmonoidal.html
+       menu_type: typeclasses
      - title: Invariant
        url: typeclasses/invariant.html
        menu_section: variance
@@ -76,12 +79,17 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+
   - title: Eq
     url: typeclasses/eq.html
     menu_type: typeclasses
 
   - title: Foldable
     url: typeclasses/foldable.html
+    menu_type: typeclasses
+
+  - title: Parallel
+    url: typeclasses/parallel.html
     menu_type: typeclasses
 
   - title: MonoidK
@@ -106,6 +114,10 @@ options:
 
   - title: Arrow
     url: typeclasses/arrow.html
+    menu_type: typeclasses
+
+  - title: Law Testing
+    url: typeclasses/lawtesting.html
     menu_type: typeclasses
 
   ###########################
@@ -152,6 +164,10 @@ options:
     url: datatypes/kleisli.html
     menu_type: data
 
+  - title: NonEmptyList
+    url: datatypes/nel.html
+    menu_type: data
+
   - title: OneAnd
     url: datatypes/oneand.html
     menu_type: data
@@ -162,6 +178,10 @@ options:
 
   - title: EitherT
     url: datatypes/eithert.html
+    menu_type: data
+
+  - title: IorT
+    url: datatypes/iort.html
     menu_type: data
 
   - title: State

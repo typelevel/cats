@@ -2,7 +2,6 @@ package cats
 package tests
 
 import org.scalacheck.Arbitrary
-
 import cats.data.NonEmptyList
 
 class ReducibleSuiteAdditional extends CatsSuite {
@@ -71,7 +70,10 @@ class ReducibleSuiteAdditional extends CatsSuite {
 
 }
 
-abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]], ArbFString: Arbitrary[F[String]]) extends FoldableSuite[F](name) {
+abstract class ReducibleSuite[F[_]: Reducible](name: String)(
+  implicit ArbFInt: Arbitrary[F[Int]],
+    ArbFString: Arbitrary[F[String]]) extends FoldableSuite[F](name) {
+
   def range(start: Long, endInclusive: Long): F[Long]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {

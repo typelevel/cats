@@ -107,6 +107,10 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def isEmpty[A](fa: Option[A]): Boolean =
         fa.isEmpty
+
+      override def collectFirst[A, B](fa: Option[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
     }
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =

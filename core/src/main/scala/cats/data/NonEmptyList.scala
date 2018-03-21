@@ -1,6 +1,7 @@
 package cats
 package data
 
+import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
 import scala.annotation.tailrec
@@ -100,7 +101,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(a, head :: tail)
 
   /**
-    * Alias for concat
+    * Alias for concatNel
     *
     * {{{
     * scala> import cats.data.NonEmptyList
@@ -374,6 +375,21 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
       case (k, v) => (k, NonEmptyList.fromListUnsafe(v.result))
     } : TreeMap[B, NonEmptyList[A]]
   }
+
+  /**
+    * Groups elements inside this `NonEmptyList` according to the `Order`
+    * of the keys produced by the given mapping function.
+    *
+    * {{{
+    * scala> import cats.data._
+    * scala> import cats.instances.boolean._
+    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
+    * scala> nel.groupByNem(_ >= 0)
+    * res0: NonEmptyMap[Boolean, NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+    * }}}
+    */
+  def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(f))
 }
 
 object NonEmptyList extends NonEmptyListInstances {
@@ -421,6 +437,27 @@ object NonEmptyList extends NonEmptyListInstances {
   def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyList[A] =
     F.toNonEmptyList(fa)
 
+  class ZipNonEmptyList[A](val value: NonEmptyList[A]) extends AnyVal
+
+  object ZipNonEmptyList {
+
+    def apply[A](nev: NonEmptyList[A]): ZipNonEmptyList[A] =
+      new ZipNonEmptyList(nev)
+
+    implicit val catsDataCommutativeApplyForZipNonEmptyList: CommutativeApply[ZipNonEmptyList] =
+      new CommutativeApply[ZipNonEmptyList] {
+        def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
+          ZipNonEmptyList(ff.value.zipWith(fa.value)(_ apply _))
+
+        override def map[A, B](fa: ZipNonEmptyList[A])(f: (A) => B): ZipNonEmptyList[B] =
+          ZipNonEmptyList(fa.value.map(f))
+
+        override def product[A, B](fa: ZipNonEmptyList[A], fb: ZipNonEmptyList[B]): ZipNonEmptyList[(A, B)] =
+          ZipNonEmptyList(fa.value.zipWith(fb.value){ case (a, b) => (a, b) })
+      }
+
+    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+  }
 }
 
 private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListInstances0 {
@@ -471,6 +508,9 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
 
       override def foldRight[A, B](fa: NonEmptyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa.foldRight(lb)(f)
+
+      override def foldMap[A, B](fa: NonEmptyList[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.toList.iterator.map(f))
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] = {
         val buf = new ListBuffer[B]
@@ -533,6 +573,20 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
   implicit def catsDataOrderForNonEmptyList[A](implicit A: Order[A]): Order[NonEmptyList[A]] =
     new NonEmptyListOrder[A] {
       val A0 = A
+    }
+
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
+
+      def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
+
+      def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
+
+      def sequential: ZipNonEmptyList ~> NonEmptyList =
+        λ[ZipNonEmptyList ~> NonEmptyList](_.value)
+
+      def parallel: NonEmptyList ~> ZipNonEmptyList =
+        λ[NonEmptyList ~> ZipNonEmptyList](nel => new ZipNonEmptyList(nel))
     }
 }
 

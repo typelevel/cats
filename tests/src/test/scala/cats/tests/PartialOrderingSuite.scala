@@ -16,4 +16,7 @@ class PartialOrderingSuite extends CatsSuite {
   checkAll("Contravariant[PartialOrdering]", ContravariantTests[PartialOrdering].contravariant[Int, Int, Int])
   checkAll("Semigroupal[PartialOrdering]", SemigroupalTests[PartialOrdering].semigroupal[Int, Int, Int])
   checkAll("Contravariant[PartialOrdering]", SerializableTests.serializable(Contravariant[PartialOrdering]))
+
+  checkAll("PartialOrdering[Int]", ContravariantMonoidalTests[PartialOrdering].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[PartialOrdering]", SerializableTests.serializable(ContravariantMonoidal[PartialOrdering]))
 }

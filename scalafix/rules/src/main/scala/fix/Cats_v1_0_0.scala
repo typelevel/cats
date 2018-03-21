@@ -227,6 +227,39 @@ case class RenameEitherTLiftT(index: SemanticdbIndex)
 
 }
 
+// ref: https://github.com/typelevel/cats/pull/2033
+case class RenameTransformersLift(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameTransformersLift") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.data.WriterT.lift." -> "liftF",
+      "_root_.cats.data.StateT.lift." -> "liftF",
+      "_root_.cats.data.CommonStateTConstructors.lift." -> "liftF",
+      "_root_.cats.data.CommonIRWSTConstructors.lift." -> "liftF",
+      "_root_.cats.data.KleisliFunctions.lift." -> "liftF"
+    )
+
+}
+
+case class RenameApplyApConst(index: SemanticdbIndex)
+  extends SemanticRule(index, "RenameApplyApConst") {
+
+  override def fix(ctx: RuleCtx): Patch =
+    ctx.replaceSymbols(
+      "_root_.cats.Apply.forEffect." -> "productL",
+      "_root_.cats.Apply.followedBy." -> "productR",
+      "_root_.cats.Apply.Ops.forEffect." -> "productL",
+      "_root_.cats.Apply.Ops.followedBy." -> "productR",
+      "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
+      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
+      "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
+      "_root_.cats.FlatMap.followedByEval." -> "productREval"
+    )
+
+}
+
+
 // ref: https://github.com/typelevel/cats/pull/1961
 case class RenameCartesian(index: SemanticdbIndex)
   extends SemanticRule(index, "RenameCartesian") {

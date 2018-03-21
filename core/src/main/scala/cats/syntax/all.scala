@@ -1,12 +1,17 @@
 package cats
 package syntax
 
+abstract class AllSyntaxBinCompat
+    extends AllSyntax
+    with AllSyntaxBinCompat0
+
 trait AllSyntax
     extends AlternativeSyntax
     with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
     with ArrowSyntax
+    with ArrowChoiceSyntax
     with BifunctorSyntax
     with BifoldableSyntax
     with BitraverseSyntax
@@ -15,6 +20,9 @@ trait AllSyntax
     with ComonadSyntax
     with ComposeSyntax
     with ContravariantSyntax
+    with DistributiveSyntax
+    with ContravariantMonoidalSyntax
+    with ContravariantSemigroupalSyntax
     with EitherKSyntax
     with EitherSyntax
     with EqSyntax
@@ -44,3 +52,8 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+
+trait AllSyntaxBinCompat0
+    extends UnorderedTraverseSyntax
+    with ApplicativeErrorExtension
+    with TrySyntax

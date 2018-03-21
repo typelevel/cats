@@ -24,6 +24,8 @@ sbt scalafix github:typelevel/cats/v1.0.0
 
 - [x] EitherT.liftT was renamed to EitherT.liftF
 
+- [x] the lift method on WriterT, StateT, RWST and Kleisli was renamed to liftF
+
 - [x] CartesianBuilder (i.e. |@|) syntax is deprecated, use the apply syntax on tuples instead. E.g. (x |@| y |@| z).map(...) should be replaced by (x, y, z).mapN(...)
 
 - [x] Free.suspend is renamed to Free.defer for consistency.
@@ -33,6 +35,8 @@ sbt scalafix github:typelevel/cats/v1.0.0
 - [x] cats.free.Inject is moved from cats-free to cats-core and renamed to cats.InjectK; cats.data.Prod is renamed to cats.data.Tuple2K; cats.data.Coproduct is renamed to cats.data.EitherK
 
 - [x] Apply syntax on tuple (e.g. (x, y, z).map3(...)) was moved from cats.syntax.tuple._ to cats.syntax.apply._ and renamed to mapN, contramapN and imapN respectively.
+
+- [x] Apply methods forEffect and followedBy were renamed to productL and productR respectively.  This also effects forEffectEval, followedByEval, forEffectPar, and followedByPar.
 
 - [x] Split is removed, and the method split is moved to Arrow. Note that only under CommutativeArrow does it guarantee the non-interference between the effects. see #1567
 
@@ -52,8 +56,7 @@ sbt scalafix github:typelevel/cats/v1.0.0
 ## To test scala fix
 
 ```bash
-sbt ;coreJVM/publishLocal;coreFree/publishLocal
+sbt coreJVM/publishLocal freeJVM/publishLocal
 cd scalafix
 sbt test
-
 ```

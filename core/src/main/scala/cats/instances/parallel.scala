@@ -3,7 +3,8 @@ package cats.instances
 import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
-import cats.{Applicative, Functor, Monad, Parallel, ~>}
+import cats.{Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel, ~>}
+
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, ?], Validated[E, ?]] = new Parallel[Either[E, ?], Validated[E, ?]] {
@@ -35,6 +36,45 @@ trait ParallelInstances extends ParallelInstances1 {
     def parallel: OptionT[M, ?]~> Nested[F, Option, ?] =
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel(optT.value)))
   }
+
+  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel[List, ZipList] =
+    new NonEmptyParallel[List, ZipList] {
+
+      def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
+      def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
+
+      def sequential: ZipList ~> List =
+        λ[ZipList ~> List](_.value)
+
+      def parallel: List ~> ZipList =
+        λ[List ~> ZipList](v => new ZipList(v))
+    }
+
+  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel[Vector, ZipVector] =
+    new NonEmptyParallel[Vector, ZipVector] {
+
+      def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
+      def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
+
+      def sequential: ZipVector ~> Vector =
+        λ[ZipVector ~> Vector](_.value)
+
+      def parallel: Vector ~> ZipVector =
+        λ[Vector ~> ZipVector](v => new ZipVector(v))
+    }
+
+  implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
+    new Parallel[Stream, ZipStream] {
+
+      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
+
+      def sequential: ZipStream ~> Stream =
+        λ[ZipStream ~> Stream](_.value)
+
+      def parallel: Stream ~> ZipStream =
+        λ[Stream ~> ZipStream](v => new ZipStream(v))
+    }
 
 
   implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_], E: Semigroup]

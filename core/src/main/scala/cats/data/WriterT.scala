@@ -1,8 +1,8 @@
 package cats
 package data
 
+import cats.Foldable
 import cats.kernel.instances.tuple._
-
 import cats.kernel.CommutativeMonoid
 import cats.syntax.semigroup._
 
@@ -63,10 +63,38 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     mapWritten(_ => monoidL.empty)
 
   def show(implicit F: Show[F[(L, V)]]): String = F.show(run)
+
+  def foldLeft[C](c: C)(f: (C, V) => C)(implicit F: Foldable[F]): C =
+    F.foldLeft(run, c)((z, lv) => f(z, lv._2))
+
+  def foldRight[C](lc: Eval[C])(f: (V, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
+    F.foldRight(run, lc)((lv, z) => f(lv._2, z))
+
+  def traverse[G[_], V1](f: V => G[V1])(implicit F: Traverse[F], G: Applicative[G]): G[WriterT[F, L, V1]] =
+    G.map(
+      F.traverse(run)(lv => G.tupleLeft(f(lv._2), lv._1))
+    )(WriterT.apply)
 }
 
 object WriterT extends WriterTInstances with WriterTFunctions {
 
+  def liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
+    WriterT(F.map(fv)(v => (monoidL.empty, v)))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[WriterT[Eval, String, ?], Int] = a.mapK(WriterT.liftK)
+   * scala> b.value.run.value
+   * res0: (String, Option[Int]) = ("",Some(1))
+   * }}}
+   */
+  def liftK[F[_], L](implicit monoidL: Monoid[L], F: Applicative[F]): F ~> WriterT[F, L, ?] =
+    λ[F ~> WriterT[F, L, ?]](WriterT.liftF(_))
+
+  @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))
 
@@ -78,9 +106,23 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       implicit val F0: Monad[F] = F
       implicit val L0: Monoid[L] = L
     }
+
+  implicit def catsDataTraverseForWriterTId[L](implicit F: Traverse[Id]): Traverse[WriterT[Id, L, ?]] =
+    catsDataTraverseForWriterT[Id, L](F)
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {
+
+  implicit def catsDataTraverseForWriterT[F[_], L](implicit F: Traverse[F]): Traverse[WriterT[F, L, ?]] =
+    new WriterTTraverse[F, L] {
+      val F0: Traverse[F] = F
+    }
+
+  implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, ?]] =
+    catsDataFoldableForWriterT[Id, L](F)
+}
+
+private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
   implicit def catsDataMonadErrorForWriterT[F[_], L, E](implicit F: MonadError[F, E], L: Monoid[L]): MonadError[WriterT[F, L, ?], E] =
     new WriterTMonadError[F, L, E] {
       implicit val F0: MonadError[F, E] = F
@@ -117,9 +159,14 @@ private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 
 
   implicit def catsDataMonoidForWriterTId[L:Monoid, V:Monoid]: Monoid[WriterT[Id, L, V]] =
     catsDataMonoidForWriterT[Id, L, V]
+
+  implicit def catsDataFoldableForWriterT[F[_], L](implicit F: Foldable[F]): Foldable[WriterT[F, L, ?]] =
+    new WriterTFoldable[F, L]{
+      val F0: Foldable[F] = F
+    }
 }
 
-private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 {
+private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
   implicit def catsDataMonadForWriterTId[L:Monoid]: Monad[WriterT[Id, L, ?]] =
     catsDataMonadForWriterT[Id, L]
 
@@ -128,9 +175,12 @@ private[data] sealed abstract class WriterTInstances1 extends WriterTInstances2 
 
   implicit def catsDataSemigroupForWriterTId[L:Semigroup, V:Semigroup]: Semigroup[WriterT[Id, L, V]] =
     catsDataSemigroupForWriterT[Id, L, V]
+
+  implicit def catsDataComonadForWriterTId[L](implicit F: Comonad[Id]): Comonad[WriterT[Id, L, ?]] =
+    catsDataComonadForWriterT[Id, L](F)
 }
 
-private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 {
+private[data] sealed abstract class WriterTInstances3 extends WriterTInstances4 {
   implicit def catsDataMonadForWriterT[F[_], L](implicit F: Monad[F], L: Monoid[L]): Monad[WriterT[F, L, ?]] =
     new WriterTMonad[F, L] {
       implicit val F0: Monad[F] = F
@@ -146,12 +196,12 @@ private[data] sealed abstract class WriterTInstances2 extends WriterTInstances3 
     catsDataCoflatMapForWriterT[Id, L]
 }
 
-private[data] sealed abstract class WriterTInstances3 extends WriterTInstances4 {
+private[data] sealed abstract class WriterTInstances4 extends WriterTInstances5 {
   implicit def catsDataFlatMapForWriterTId[L:Semigroup]: FlatMap[WriterT[Id, L, ?]] =
     catsDataFlatMapForWriterT2[Id, L]
 }
 
-private[data] sealed abstract class WriterTInstances4 extends WriterTInstances5 {
+private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 {
   implicit def catsDataFlatMapForWriterT1[F[_], L](implicit F: FlatMap[F], L: Monoid[L]): FlatMap[WriterT[F, L, ?]] =
     new WriterTFlatMap1[F, L] {
       implicit val F0: FlatMap[F] = F
@@ -164,7 +214,7 @@ private[data] sealed abstract class WriterTInstances4 extends WriterTInstances5 
     }
 }
 
-private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 {
+private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 {
   implicit def catsDataApplicativeErrorForWriterT[F[_], L, E](implicit F: ApplicativeError[F, E], L: Monoid[L]): ApplicativeError[WriterT[F, L, ?], E] =
     new WriterTApplicativeError[F, L, E] {
       implicit val F0: ApplicativeError[F, E] = F
@@ -172,15 +222,20 @@ private[data] sealed abstract class WriterTInstances5 extends WriterTInstances6 
     }
 }
 
-private[data] sealed abstract class WriterTInstances6 extends WriterTInstances7 {
+private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 {
   implicit def catsDataAlternativeForWriterT[F[_], L](implicit F: Alternative[F], L: Monoid[L]): Alternative[WriterT[F, L, ?]] =
     new WriterTAlternative[F, L] {
       implicit val F0: Alternative[F] = F
       implicit val L0: Monoid[L] = L
     }
+
+  implicit def catsDataContravariantMonoidalForWriterT[F[_], L](implicit F: ContravariantMonoidal[F]): ContravariantMonoidal[WriterT[F, L, ?]] =
+    new WriterTContravariantMonoidal[F, L] {
+      implicit val F0: ContravariantMonoidal[F] = F
+    }
 }
 
-private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 {
+private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 {
   implicit def catsDataMonoidKForWriterT[F[_], L](implicit F: MonoidK[F]): MonoidK[WriterT[F, L, ?]] =
     new WriterTMonoidK[F, L] {
       implicit val F0: MonoidK[F] = F
@@ -197,7 +252,7 @@ private[data] sealed abstract class WriterTInstances7 extends WriterTInstances8 
   }
 }
 
-private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 {
+private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10 {
   implicit def catsDataSemigroupKForWriterT[F[_], L](implicit F: SemigroupK[F]): SemigroupK[WriterT[F, L, ?]] =
     new WriterTSemigroupK[F, L] {
       implicit val F0: SemigroupK[F] = F
@@ -208,10 +263,9 @@ private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 
       implicit val F0: Applicative[F] = F
       implicit val L0: Monoid[L] = L
     }
-
 }
 
-private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10 {
+private[data] sealed abstract class WriterTInstances10 extends WriterTInstances11 {
   implicit def catsDataApplyForWriterT[F[_], L](implicit F: Apply[F], L: Semigroup[L]): Apply[WriterT[F, L, ?]] =
     new WriterTApply[F, L] {
       implicit val F0: Apply[F] = F
@@ -219,7 +273,14 @@ private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10
     }
 }
 
-private[data] sealed abstract class WriterTInstances10 {
+private[data] sealed abstract class WriterTInstances11 extends WriterTInstances12 {
+  implicit def catsDataComonadForWriterT[F[_], L](implicit F: Comonad[F]): Comonad[WriterT[F, L, ?]] =
+    new WriterTComonad[F, L] {
+      implicit val F0: Comonad[F] = F
+    }
+}
+
+private[data] sealed abstract class WriterTInstances12 {
   implicit def catsDataCoflatMapForWriterT[F[_], L](implicit F: Functor[F]): CoflatMap[WriterT[F, L, ?]] =
     new WriterTCoflatMap[F, L] {
       implicit val F0: Functor[F] = F
@@ -229,7 +290,7 @@ private[data] sealed abstract class WriterTInstances10 {
 private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L, ?]] {
   implicit def F0: Functor[F]
 
-  def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
+  override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
     fa.map(f)
 }
 
@@ -353,6 +414,23 @@ private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[Write
   override implicit def F0: Alternative[F]
 }
 
+private[data] sealed trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, ?]] {
+  implicit def F0: ContravariantMonoidal[F]
+
+  override def unit: WriterT[F, L, Unit] = WriterT(F0.trivial[(L, Unit)])
+
+  override def contramap[A, B](fa: WriterT[F, L, A])(f: B => A): WriterT[F, L, B] =
+    WriterT(F0.contramap(fa.run)((d: (L, B)) => (d._1, f(d._2))))
+
+  override def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
+    WriterT(
+      F0.contramap(
+        F0.product(fa.run, fb.run))(
+          (t: (L, (A, B))) => t match {
+            case (l, (a, b)) => ((l, a), (l, b))
+      }))
+}
+
 private[data] sealed trait WriterTSemigroup[F[_], L, A] extends Semigroup[WriterT[F, L, A]] {
   implicit def F0: Semigroup[F[(L, A)]]
 
@@ -371,6 +449,27 @@ private[data] sealed trait WriterTCoflatMap[F[_], L] extends CoflatMap[WriterT[F
   def coflatMap[A, B](fa: WriterT[F, L, A])(f: WriterT[F, L, A] => B): WriterT[F, L, B] = fa.map(_ => f(fa))
 }
 
+private[data] sealed trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, L, ?]] {
+
+  implicit def F0: Foldable[F]
+
+  def foldLeft[A, B](fa: WriterT[F, L, A], b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
+  def foldRight[A, B](fa: WriterT[F, L, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = fa.foldRight(lb)(f)
+}
+
+private[data] sealed trait WriterTTraverse[F[_], L] extends Traverse[WriterT[F, L, ?]] with WriterTFoldable[F, L] with WriterTFunctor[F, L] {
+
+  override implicit def F0: Traverse[F]
+
+  def traverse[G[_]: Applicative, A, B](fa: WriterT[F, L, A])(f: A => G[B]): G[WriterT[F, L, B]] = fa.traverse(f)
+}
+
+private[data] sealed trait WriterTComonad[F[_], L] extends Comonad[WriterT[F, L, ?]] with WriterTCoflatMap[F, L] {
+
+  override implicit def F0: Comonad[F]
+
+  def extract[A](fa: WriterT[F, L, A]): A = F0.extract(F0.map(fa.run)(_._2))
+}
 
 private[data] trait WriterTFunctions {
   def putT[F[_], L, V](vf: F[V])(l: L)(implicit functorF: Functor[F]): WriterT[F, L, V] =

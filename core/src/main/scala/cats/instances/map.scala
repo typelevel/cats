@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.kernel.CommutativeMonoid
+
 import scala.annotation.tailrec
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
@@ -14,8 +16,16 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForMap[K]: FlatMap[Map[K, ?]] =
-    new FlatMap[Map[K, ?]] {
+  implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
+    new UnorderedTraverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
+
+      def unorderedTraverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: CommutativeApplicative[G]): G[Map[K, B]] = {
+        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
+        val gbb = Foldable.iterateRight(fa, gba){ (kv, lbuf) =>
+          G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
+        }.value
+        G.map(gbb)(_.toMap)
+      }
 
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
@@ -39,6 +49,9 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       def flatMap[A, B](fa: Map[K, A])(f: (A) => Map[K, B]): Map[K, B] =
         fa.flatMap { case (k, a) => f(a).get(k).map((k, _)) }
 
+      def unorderedFoldMap[A, B: CommutativeMonoid](fa: Map[K, A])(f: (A) => B) =
+        fa.foldLeft(Monoid[B].empty){ case (b, (k, a)) => Monoid[B].combine(b, f(a)) }
+
       def tailRecM[A, B](a: A)(f: A => Map[K, Either[A, B]]): Map[K, B] = {
         val bldr = Map.newBuilder[K, B]
 
@@ -57,6 +70,13 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         f(a).foreach { case (k, a) => descend(k, a) }
         bldr.result
       }
+
+
+      override def isEmpty[A](fa: Map[K, A]): Boolean = fa.isEmpty
+
+      override def unorderedFold[A](fa: Map[K, A])(implicit A: CommutativeMonoid[A]): A =
+        A.combineAll(fa.values)
+
     }
   // scalastyle:on method.length
 }

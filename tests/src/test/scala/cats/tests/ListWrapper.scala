@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.Invariant
 import cats.instances.list._
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
@@ -61,7 +60,15 @@ object ListWrapper {
 
   val functor: Functor[ListWrapper] = traverse
 
-  val invariant: Invariant[ListWrapper] = functor
+  val invariantSemigroupal: InvariantSemigroupal[ListWrapper] = new InvariantSemigroupal[ListWrapper] {
+    def product[A, B](fa: ListWrapper[A], fb: ListWrapper[B]): ListWrapper[(A, B)] =
+      ListWrapper(fa.list.flatMap(a => fb.list.map(b => (a, b))))
+
+    def imap[A, B](fa: ListWrapper[A])(f: A => B)(g: B => A) =
+      ListWrapper(fa.list.map(f))
+  }
+
+  val invariant: Invariant[ListWrapper] = invariantSemigroupal
 
   val semigroupK: SemigroupK[ListWrapper] =
     new SemigroupK[ListWrapper] {

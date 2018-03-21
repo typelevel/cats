@@ -29,16 +29,21 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
     def F: Show[F[A]] = FF
     def G: Show[G[A]] = GF
   }
-  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Tuple2K[F, G, α]]] = new Tuple2KContravariant[F, G] {
-    def F: Contravariant[F] = FC
-    def G: Contravariant[G] = GC
-  }
+  implicit def catsDataContravariantMonoidalForTuple2k[F[_], G[_]](implicit FD: ContravariantMonoidal[F], GD: ContravariantMonoidal[G]): ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KContravariantMonoidal[F, G] {
+      def F: ContravariantMonoidal[F] = FD
+      def G: ContravariantMonoidal[G] = GD
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances0 extends Tuple2KInstances1 {
   implicit def catsDataTraverseForTuple2K[F[_], G[_]](implicit FF: Traverse[F], GF: Traverse[G]): Traverse[λ[α => Tuple2K[F, G, α]]] = new Tuple2KTraverse[F, G] {
     def F: Traverse[F] = FF
     def G: Traverse[G] = GF
+  }
+  implicit def catsDataContravariantForTuple2K[F[_], G[_]](implicit FC: Contravariant[F], GC: Contravariant[G]): Contravariant[λ[α => Tuple2K[F, G, α]]] = new Tuple2KContravariant[F, G] {
+    def F: Contravariant[F] = FC
+    def G: Contravariant[G] = GC
   }
   implicit def catsDataEqForTuple2K[F[_], G[_], A](implicit FF: Eq[F[A]], GG: Eq[G[A]]): Eq[Tuple2K[F, G, A]] = new Eq[Tuple2K[F, G, A]] {
     def eqv(x: Tuple2K[F, G, A], y: Tuple2K[F, G, A]): Boolean =
@@ -103,8 +108,14 @@ private[data] sealed abstract class Tuple2KInstances6 extends Tuple2KInstances7 
   }
 }
 
-private[data] sealed abstract class Tuple2KInstances7 {
+private[data] sealed abstract class Tuple2KInstances7 extends Tuple2KInstances8 {
+  implicit def catsDataDistributiveForTuple2K[F[_], G[_]](implicit FF: Distributive[F], GG: Distributive[G]): Distributive[λ[α => Tuple2K[F, G, α]]] = new Tuple2KDistributive[F, G] {
+    def F: Distributive[F] = FF
+    def G: Distributive[G] = GG
+  }
+}
 
+private[data] sealed abstract class Tuple2KInstances8 {
   implicit def catsDataFunctorForTuple2K[F[_], G[_]](implicit FF: Functor[F], GG: Functor[G]): Functor[λ[α => Tuple2K[F, G, α]]] = new Tuple2KFunctor[F, G] {
     def F: Functor[F] = FF
     def G: Functor[G] = GG
@@ -117,10 +128,28 @@ private[data] sealed trait Tuple2KFunctor[F[_], G[_]] extends Functor[λ[α => T
   override def map[A, B](fa: Tuple2K[F, G, A])(f: A => B): Tuple2K[F, G, B] = Tuple2K(F.map(fa.first)(f), G.map(fa.second)(f))
 }
 
+
+private[data] sealed trait Tuple2KDistributive[F[_], G[_]] extends Distributive[λ[α => Tuple2K[F, G, α]]] {
+  def F: Distributive[F]
+  def G: Distributive[G]
+  override def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Tuple2K[F, G, B]): Tuple2K[F, G, H[B]] = Tuple2K(F.distribute(ha){a => f(a).first}, G.distribute(ha){a => f(a).second})
+  override def map[A, B](fa: Tuple2K[F, G, A])(f: A => B): Tuple2K[F, G, B] = Tuple2K(F.map(fa.first)(f), G.map(fa.second)(f))
+}
+
 private[data] sealed trait Tuple2KContravariant[F[_], G[_]] extends Contravariant[λ[α => Tuple2K[F, G, α]]] {
   def F: Contravariant[F]
   def G: Contravariant[G]
   def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] = Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
+}
+
+private[data] sealed trait Tuple2KContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[λ[α => Tuple2K[F, G, α]]] {
+  def F: ContravariantMonoidal[F]
+  def G: ContravariantMonoidal[G]
+  def unit: Tuple2K[F, G, Unit] = Tuple2K(F.unit, G.unit)
+  def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
+    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
+  def contramap[A, B](fa: Tuple2K[F, G, A])(f: B => A): Tuple2K[F, G, B] =
+    Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
 private[data] sealed trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple2K[F, G, α]]] with Tuple2KFunctor[F, G] {

@@ -24,6 +24,8 @@ position: 40
  * [What does this symbol mean?](#symbol)
  * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
+ * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
+ * [How to try cats in a REPL?](#ammonite)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
@@ -111,6 +113,7 @@ We can even perform more complicated operations, such as a `traverse` of the nes
 import cats.data.ValidatedNel
 type ErrorsOr[A] = ValidatedNel[String, A]
 def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+```
 
 ```tut:book
 nl.traverse(even)
@@ -209,29 +212,34 @@ The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import c
 
 All other symbols can be imported with `import cats.implicits._`
 
-| Symbol                           | Name                   | Nickname         | Type Class              | Signature                                                 |
-| -------------------------------- | ---------------------- | ---------------- | ----------------------- | --------------------------------------------------------- |
-| `fa *> fb`                       | followed by            |                  | `Apply[F[_]]`           | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
-| `fa <* fb`                       | for effect             |                  | `Apply[F[_]]`           | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
-| `x === y`                        | equals                 |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                |
-| `x =!= y`                        | not equals             |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                               |
-| `fa >>= f`                       | flatMap                |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                   |
-| <code>x &#124;-&#124; y</code>   | remove                 |                  | `Group[A]`              | `remove(x: A, y: A): A`                                   |
-| `x > y`                          | greater than           |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                 |
-| `x >= y`                         | greater than or equal  |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                               |
-| `x < y`                          | less than              |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                 |
-| `x <= y`                         | less than or equal     |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                               |
-| <code>x &#124;+&#124; y</code>   | Semigroup combine      |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                  |
-| `x <+> y`                        | SemigroupK combine     |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                        |
-| `f <<< g`                        | Arrow compose          |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                |
-| `f >>> g`                        | Arrow andThen          |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                |
-| `F ~> G`                         | natural transformation |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                         |
-| `F :<: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
-| `F :≺: G`                        | injectK                |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                           |
-| `⊥`                              | bottom                 |                  | N/A                     | `Nothing`                                                 |
-| `⊤`                              | top                    |                  | N/A                     | `Any`                                                     |
-| `fa >> fb` (Deprecated)          | followed by            |                  | `FlatMap[F[_]]`         | `followedBy(fa: F[A])(fb: F[B]): F[B]`                    |
-| `fa << fb` (Deprecated)          | for effect             |                  | `FlatMap[F[_]]`         | `forEffect(fa: F[A])(fb: F[B]): F[A]`                     |
+| Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
+| -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
+| `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
+| `fa <* fb`                       | product left               |                  | `Apply[F[_]]`           | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
+| `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
+| `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
+| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                              |
+| <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                             |
+| `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                           |
+| `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                         |
+| `x < y`                          | less than                |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                           |
+| `x <= y`                         | less than or equal       |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                                         |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                            |
+| `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                  |
+| `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
+| `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
+| `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
+| `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+
 
 ## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
 
@@ -246,3 +254,18 @@ The cats community welcomes and encourages contributions, even if you are comple
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
+
+## <a id="sbt-catalysts" href="#sbt-catalysts"></a>Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?
+
+Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is created particularly for this purpose. It also provides a g8 template so that you can run `sbt new typelevel/sbt-catalysts.g8` to quickly set up a project using Cats ecosystem libraries through this plugin. For more details, go to [sbt-catalysts](https://github.com/typelevel/sbt-catalysts). 
+
+## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
+
+The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
+```scala
+interp.configureCompiler(_.settings.YpartialUnification.value = true)
+import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
+```
+Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
+
+

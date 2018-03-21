@@ -43,6 +43,11 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
     new NestedNonEmptyTraverse[F, G] {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]: ContravariantMonoidal[Nested[F, G, ?]] =
+    new NestedContravariantMonoidal[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -134,30 +139,42 @@ private[data] sealed abstract class NestedInstances8 extends NestedInstances9 {
     new NestedApply[F, G] {
       val FG: Apply[λ[α => F[G[α]]]] = Apply[F].compose[G]
     }
+
+  implicit def catsDataDistributiveForNested[F[_]: Distributive, G[_]: Distributive]: Distributive[Nested[F, G, ?]] =
+    new NestedDistributive[F, G] {
+      val FG: Distributive[λ[α => F[G[α]]]] = Distributive[F].compose[G]
+    }
 }
 
 private[data] sealed abstract class NestedInstances9 extends NestedInstances10 {
+  implicit def catsDataInvariantSemigroupalApplyForNested[F[_]: InvariantSemigroupal, G[_]: Apply]: InvariantSemigroupal[Nested[F, G, ?]] =
+    new NestedInvariantSemigroupalApply[F, G] {
+      val FG: InvariantSemigroupal[λ[α => F[G[α]]]] = InvariantSemigroupal[F].composeApply[G]
+    }
+}
+
+private[data] sealed abstract class NestedInstances10 extends NestedInstances11 {
   implicit def catsDataFunctorForNested[F[_]: Functor, G[_]: Functor]: Functor[Nested[F, G, ?]] =
     new NestedFunctor[F, G] {
       val FG: Functor[λ[α => F[G[α]]]] = Functor[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances10 extends NestedInstances11 {
+private[data] sealed abstract class NestedInstances11 extends NestedInstances12 {
   implicit def catsDataInvariantForNested[F[_]: Invariant, G[_]: Invariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].compose[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances11 extends NestedInstances12 {
+private[data] sealed abstract class NestedInstances12 extends NestedInstances13 {
   implicit def catsDataInvariantForCovariantNested[F[_]: Invariant, G[_]: Functor]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeFunctor[G]
     }
 }
 
-private[data] sealed abstract class NestedInstances12 {
+private[data] sealed abstract class NestedInstances13 {
   implicit def catsDataInvariantForNestedContravariant[F[_]: Invariant, G[_]: Contravariant]: Invariant[Nested[F, G, ?]] =
     new NestedInvariant[F, G] {
       val FG: Invariant[λ[α => F[G[α]]]] = Invariant[F].composeContravariant[G]
@@ -240,6 +257,13 @@ private[data] trait NestedTraverse[F[_], G[_]] extends Traverse[Nested[F, G, ?]]
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
 }
 
+private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, ?]] with NestedFunctor[F, G] {
+  def FG: Distributive[λ[α => F[G[α]]]]
+
+  def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Nested[F, G, B]): Nested[F, G, H[B]] =
+    Nested(FG.distribute(ha) { a => f(a).value })
+}
+
 private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, ?]] with NestedFoldable[F, G] {
   def FG: Reducible[λ[α => F[G[α]]]]
 
@@ -262,4 +286,26 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
 
   def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
     Nested(FG.contramap(fga.value)(f))
+}
+
+private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, ?]] {
+  def FG: ContravariantMonoidal[λ[α => F[G[α]]]]
+
+  def unit: Nested[F, G, Unit] = Nested(FG.unit)
+
+  def contramap[A, B](fa: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
+    Nested(FG.contramap(fa.value)(f))
+
+  def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+    Nested(FG.product(fa.value, fb.value))
+}
+
+private[data] trait NestedInvariantSemigroupalApply[F[_], G[_]] extends InvariantSemigroupal[Nested[F, G, ?]] {
+  def FG: InvariantSemigroupal[λ[α => F[G[α]]]]
+
+  def imap[A, B](fa: Nested[F, G, A])(f: A => B)(g: B => A): Nested[F, G, B] =
+    Nested(FG.imap(fa.value)(f)(g))
+
+  def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
+    Nested(FG.product(fa.value, fb.value))
 }

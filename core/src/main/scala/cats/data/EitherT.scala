@@ -48,6 +48,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
+  def valueOrF[BB >: B](f: A => F[BB])(implicit F: Monad[F]): F[BB] = {
+      F.flatMap(value){
+        case Left(a) => f(a)
+        case Right(b) => F.pure(b)
+      }
+  }
+
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
@@ -352,6 +359,19 @@ object EitherT extends EitherTInstances {
    */
   final def liftF[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[EitherT[Eval, String, ?], Int] = a.mapK(EitherT.liftK)
+   * scala> b.value.value.value
+   * res0: Either[String,Option[Int]] = Right(Some(1))
+   * }}}
+   */
+  final def liftK[F[_], A](implicit F: Functor[F]): F ~> EitherT[F, A, ?] =
+    λ[F ~> EitherT[F, A, ?]](right(_))
+
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
@@ -483,26 +503,6 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
       val F0: Traverse[F] = F
     }
 
-  /**  Monad error instance for recovering errors in F instead of
-    *  the underlying Either.
-    *
-    * {{{
-    * scala> import cats.data.EitherT
-    * scala> import cats.MonadError
-    * scala> import cats.instances.option._
-    * scala> val noInt: Option[Either[String, Int]] = None
-    * scala> val et = EitherT[Option, String, Int](noInt)
-    * scala> val me = MonadError[EitherT[Option, String, ?], Unit]
-    * scala> me.recover(et) { case () => 1 }
-    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
-    * }}}
-    */
-  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
-    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
-}
-
-private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
-
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
     new EitherTMonadError[F, L] {
       implicit val F = F0
@@ -512,6 +512,26 @@ private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
       override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
         fa.ensureOr(error)(predicate)(F)
     }
+}
+
+private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
+  /**  Monad error instance for recovering errors in F instead of
+   *  the underlying Either.
+   *
+   * {{{
+   * scala> import cats.data.EitherT
+   * scala> import cats.MonadError
+   * scala> import cats.instances.option._
+   * scala> val noInt: Option[Either[String, Int]] = None
+   * scala> val et = EitherT[Option, String, Int](noInt)
+   * scala> val me = MonadError[EitherT[Option, String, ?], Unit]
+   * scala> me.recover(et) { case () => 1 }
+   * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
+   * }}}
+   */
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
+    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
+
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
     new EitherTSemigroupK[F, L] { implicit val F = F0 }

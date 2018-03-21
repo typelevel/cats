@@ -103,6 +103,9 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
 
   def max[@sp A](x: A, y: A)(implicit ev: O[A]): A =
     ev.max(x, y)
+
+  def comparison[@sp A](x: A, y: A)(implicit ev: O[A]): Comparison =
+    ev.comparison(x, y)
 }
 
 trait OrderToOrderingConversion {
@@ -112,9 +115,10 @@ trait OrderToOrderingConversion {
    */
   implicit def catsKernelOrderingForOrder[A](implicit ev: Order[A]): Ordering[A] =
     ev.toOrdering
+
 }
 
-object Order extends OrderFunctions[Order] {
+object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
   /**
    * Access an implicit `Order[A]`.
    */
@@ -160,13 +164,6 @@ object Order extends OrderFunctions[Order] {
     new Order[A] {
       def compare(x: A, y: A) = f(x, y)
     }
-
-  /**
-   * Implicitly convert a `Order[A]` to a `scala.math.Ordering[A]`
-   * instance.
-   */
-  implicit def catsKernelOrderingForOrder[A](implicit ev: Order[A]): Ordering[A] =
-    ev.toOrdering
 
   /**
    * An `Order` instance that considers all `A` instances to be equal.
