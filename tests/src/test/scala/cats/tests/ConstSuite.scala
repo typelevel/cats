@@ -1,13 +1,12 @@
 package cats
 package tests
 
-
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
-import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.tests.Helpers.{CMono, CSemi}
 
 class ConstSuite extends CatsSuite {
 
@@ -71,23 +70,14 @@ class ConstSuite extends CatsSuite {
   checkAll("Functor[Const[String, ?]]", SerializableTests.serializable(Functor[Const[String, ?]]))
 
   {
-    implicit val intCommutativeMonoid: CommutativeMonoid[Int] =
-      new CommutativeMonoid[Int] {
-        def empty: Int = 0
-        def combine(x: Int, y: Int): Int = x + y
-      }
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[Int, ?]](Const.catsDataContravariantForConst)
-    checkAll("Const[Int, Int]", CommutativeApplicativeTests[Const[Int, ?]].commutativeApplicative[Int, Int, Int])
-    checkAll("CommutativeApplicative[Const[Int, ?]]", SerializableTests.serializable(CommutativeApplicative[Const[Int, ?]]))
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CMono, ?]](Const.catsDataFunctorForConst)
+    checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, ?]].commutativeApplicative[Int, Int, Int])
+    checkAll("CommutativeApplicative[Const[CMono, ?]]", SerializableTests.serializable(CommutativeApplicative[Const[CMono, ?]]))
   }
 
   {
-    implicit val intCommutativeSemigroup: CommutativeSemigroup[Int] =
-      new CommutativeSemigroup[Int] {
-        def combine(x: Int, y: Int): Int = x + y
-      }
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[Int, ?]](Const.catsDataContravariantForConst)
-    checkAll("Const[Int, Int]", CommutativeApplyTests[Const[Int, ?]].commutativeApply[Int, Int, Int])
-    checkAll("CommutativeApply[Const[Int, ?]]", SerializableTests.serializable(CommutativeApply[Const[Int, ?]]))
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CSemi, ?]](Const.catsDataFunctorForConst)
+    checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, ?]].commutativeApply[Int, Int, Int])
+    checkAll("CommutativeApply[Const[CSemi, ?]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, ?]]))
   }
 }
