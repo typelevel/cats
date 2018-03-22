@@ -478,12 +478,4 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
-  test("sequence in a list the eithert.right of a list") {
-    forAll { (ls: List[EitherT[Id, String, Int]]) =>
-      val rights = ls.filter(e => e.isRight)
-      val t = Traverse[List]
-      EitherT.sequenceRight(ls) shouldBe t.sequence(rights)
-    }
-  }
-
 }
