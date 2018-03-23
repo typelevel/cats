@@ -75,9 +75,6 @@ class ConstSuite extends CatsSuite {
     checkAll("CommutativeApplicative[Const[CMono, ?]]", SerializableTests.serializable(CommutativeApplicative[Const[CMono, ?]]))
   }
 
-  {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CSemi, ?]](Const.catsDataFunctorForConst)
-    checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, ?]].commutativeApply[Int, Int, Int])
-    checkAll("CommutativeApply[Const[CSemi, ?]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, ?]]))
-  }
+  checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, ?]].commutativeApply[Int, Int, Int])
+  checkAll("CommutativeApply[Const[CSemi, ?]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, ?]]))
 }
