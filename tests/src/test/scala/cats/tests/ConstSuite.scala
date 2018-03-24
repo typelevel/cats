@@ -1,12 +1,12 @@
 package cats
 package tests
 
-
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.Contravariant
 import cats.data.{Const, NonEmptyList}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.tests.Helpers.{CMono, CSemi}
 
 class ConstSuite extends CatsSuite {
 
@@ -66,6 +66,15 @@ class ConstSuite extends CatsSuite {
     }
   }
 
+  checkAll("Const[String, Int]", FunctorTests[Const[String, ?]].functor[Int, Int, Int])
+  checkAll("Functor[Const[String, ?]]", SerializableTests.serializable(Functor[Const[String, ?]]))
 
+  {
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CMono, ?]](Const.catsDataFunctorForConst)
+    checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, ?]].commutativeApplicative[Int, Int, Int])
+    checkAll("CommutativeApplicative[Const[CMono, ?]]", SerializableTests.serializable(CommutativeApplicative[Const[CMono, ?]]))
+  }
 
+  checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, ?]].commutativeApply[Int, Int, Int])
+  checkAll("CommutativeApply[Const[CSemi, ?]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, ?]]))
 }
