@@ -46,7 +46,7 @@ final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVa
     * }}}
     */
   def lefts(implicit
-            F: Monad[F],
+            F: FlatMap[F],
             A: Alternative[F],
             G: Bifoldable[G]): F[A] = F.flatMap(fgab)(gab => G.bifoldMap(gab)(A.pure, _ => A.empty[A])(A.algebra[A]))
 
@@ -62,7 +62,7 @@ final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVa
     * }}}
     */
   def rights(implicit
-             F: Monad[F],
+             F: FlatMap[F],
              A: Alternative[F],
              G: Bifoldable[G]): F[B] = F.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => A.empty[B], A.pure)(A.algebra[B]))
 
