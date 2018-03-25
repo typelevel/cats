@@ -151,20 +151,12 @@ sealed trait CofreeSuiteInstances {
     }
   }
 
-  val nelToCofNel = new (NonEmptyList ~> CofreeNel) {
-    override def apply[A](fa: NonEmptyList[A]): CofreeNel[A] =
-      Cofree[Option, A](fa.head, Eval.later(fa.tail.toNel.map(apply)))
-  }
+  val nelToCofNel = λ[NonEmptyList ~> CofreeNel](fa =>
+    Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply))))
 
-  val cofNelToNel = new (CofreeNel ~> NonEmptyList) {
-    override def apply[A](fa: CofreeNel[A]): NonEmptyList[A] =
-      NonEmptyList[A](fa.head, fa.tailForced.fold[List[A]](Nil)(apply(_).toList))
-  }
+  val cofNelToNel = λ[CofreeNel ~> NonEmptyList](fa =>
+    NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil)))
 
-  val cofRoseTreeToNel = new (CofreeRoseTree ~> NonEmptyList) {
-    override def apply[A](fa: CofreeRoseTree[A]): NonEmptyList[A] =
-      NonEmptyList[A](fa.head, fa.tailForced.flatMap(apply(_).toList))
-  }
-
-
+  val cofRoseTreeToNel = λ[CofreeRoseTree ~> NonEmptyList](fa =>
+      NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList)))
 }
