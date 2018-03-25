@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{NonEmptyVector, ZipVector}
-import cats.laws.discipline.{CommutativeApplyTests, AlternativeTests, CoflatMapTests, SerializableTests, TraverseTests, SemigroupalTests}
+import cats.laws.discipline.{CommutativeApplyTests, AlternativeTests, CoflatMapTests, MonadTests, SerializableTests, TraverseTests, SemigroupalTests}
 import cats.laws.discipline.arbitrary._
 
 class VectorSuite extends CatsSuite {
@@ -17,6 +17,9 @@ class VectorSuite extends CatsSuite {
 
   checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
+
+  checkAll("Vector[Int]", MonadTests[Vector].monad[Int, Int, Int])
+  checkAll("Monad[Vector]", SerializableTests.serializable(Monad[Vector]))
 
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 
