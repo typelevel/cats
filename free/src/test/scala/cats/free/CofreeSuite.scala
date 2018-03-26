@@ -74,9 +74,7 @@ class CofreeSuite extends CatsSuite {
 
   val unfoldedHundred: Cofree[Option, Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
   test("Cofree.mapBranchingS/T") {
-    val toList = new (Option ~> List) {
-      override def apply[A](lst: Option[A]): List[A] = lst.fold[List[A]](Nil)(_ :: Nil)
-    }
+    val toList = λ[Option ~> List](_.toList)
     val toNelS = unfoldedHundred.mapBranchingS(toList)
     val toNelT = unfoldedHundred.mapBranchingT(toList)
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
@@ -100,9 +98,7 @@ class CofreeSuite extends CatsSuite {
 
     val folder: (Int, Option[NonEmptyList[Int]]) => EvalOption[NonEmptyList[Int]] =
       (i, lb) => if (i > 100) OptionT.none else OptionT.some(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
-    val inclusion = new (Eval ~> EvalOption) {
-      override def apply[A](fa: Eval[A]): EvalOption[A] = OptionT.liftF(fa)
-    }
+    val inclusion = OptionT.liftK[Eval]
 
     val cataHundred =
       Cofree.cataM[Option, EvalOption, Int, NonEmptyList[Int]](unfoldedHundred)(folder)(inclusion).value.value
