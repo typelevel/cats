@@ -50,9 +50,8 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#flatCompile") {
     forAll { (x: FreeApplicative[Option, Int]) =>
-      val nt: Option ~> FreeApplicative[Option, ?]  = new FunctionK[Option, FreeApplicative[Option, ?]] {
-        def apply[A](a: Option[A]): FreeApplicative[Option, A] = FreeApplicative.lift(a)
-      }
+      val nt = λ[FunctionK[Option, FreeApplicative[Option, ?]]](FreeApplicative.lift(_))
+
       x.foldMap[FreeApplicative[Option, ?]](nt).fold should === (x.flatCompile[Option](nt).fold)
     }
   }

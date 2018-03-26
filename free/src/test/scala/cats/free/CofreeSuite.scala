@@ -74,9 +74,7 @@ class CofreeSuite extends CatsSuite {
 
   val unfoldedHundred: Cofree[Option, Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
   test("Cofree.mapBranchingS/T") {
-    val toList = new (Option ~> List) {
-      override def apply[A](lst: Option[A]): List[A] = lst.fold[List[A]](Nil)(_ :: Nil)
-    }
+    val toList = λ[Option ~> List](_.toList)
     val toNelS = unfoldedHundred.mapBranchingS(toList)
     val toNelT = unfoldedHundred.mapBranchingT(toList)
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
@@ -100,9 +98,7 @@ class CofreeSuite extends CatsSuite {
 
     val folder: (Int, Option[NonEmptyList[Int]]) => EvalOption[NonEmptyList[Int]] =
       (i, lb) => if (i > 100) OptionT.none else OptionT.some(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
-    val inclusion = new (Eval ~> EvalOption) {
-      override def apply[A](fa: Eval[A]): EvalOption[A] = OptionT.liftF(fa)
-    }
+    val inclusion = OptionT.liftK[Eval]
 
     val cataHundred =
       Cofree.cataM[Option, EvalOption, Int, NonEmptyList[Int]](unfoldedHundred)(folder)(inclusion).value.value
@@ -151,20 +147,12 @@ sealed trait CofreeSuiteInstances {
     }
   }
 
-  val nelToCofNel = new (NonEmptyList ~> CofreeNel) {
-    override def apply[A](fa: NonEmptyList[A]): CofreeNel[A] =
-      Cofree[Option, A](fa.head, Eval.later(fa.tail.toNel.map(apply)))
-  }
+  val nelToCofNel = λ[NonEmptyList ~> CofreeNel](fa =>
+    Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply))))
 
-  val cofNelToNel = new (CofreeNel ~> NonEmptyList) {
-    override def apply[A](fa: CofreeNel[A]): NonEmptyList[A] =
-      NonEmptyList[A](fa.head, fa.tailForced.fold[List[A]](Nil)(apply(_).toList))
-  }
+  val cofNelToNel = λ[CofreeNel ~> NonEmptyList](fa =>
+    NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil)))
 
-  val cofRoseTreeToNel = new (CofreeRoseTree ~> NonEmptyList) {
-    override def apply[A](fa: CofreeRoseTree[A]): NonEmptyList[A] =
-      NonEmptyList[A](fa.head, fa.tailForced.flatMap(apply(_).toList))
-  }
-
-
+  val cofRoseTreeToNel = λ[CofreeRoseTree ~> NonEmptyList](fa =>
+      NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList)))
 }
