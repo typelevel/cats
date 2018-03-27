@@ -404,8 +404,6 @@ class WriterTSuite extends CatsSuite {
 
   {
     // F has a Comonad and L has a Monoid
-    implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    Comonad[(String, ?)]
     Comonad[WriterT[(String, ?), ListWrapper[Int], ?]]
 
     checkAll("WriterT[(String, ?), ListWrapper[Int], ?]", ComonadTests[WriterT[(String, ?), ListWrapper[Int], ?]].comonad[Int, Int, Int])
