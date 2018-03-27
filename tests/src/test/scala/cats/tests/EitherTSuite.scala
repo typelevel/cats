@@ -471,4 +471,11 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("sequence a list of eitherT") {
+    forAll { (ls: List[EitherT[Id, String, Int]]) =>
+      val t = Traverse[List]
+      EitherT.sequence(ls) shouldBe t.sequence(ls)
+    }
+  }
+
 }

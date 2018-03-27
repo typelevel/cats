@@ -456,6 +456,28 @@ object EitherT extends EitherTInstances {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))
   }
+
+  /**  Given a Foldable `F` of EitherT[`M`, `A` , `B`]
+    *  returns an EitherT[`M`, A, `F[B]`
+    *  also preserves the fail-fast nature of EitherT
+    *
+    * {{{
+    * scala> import cats.Id
+    * scala> import cats.data.EitherT
+    * scala> import cats.implicits._
+    * scala> val l = List(EitherT[Id,String, Int](Right(3)), EitherT[Id, String, Int](Right(2)))
+    * scala> EitherT.sequence(l)
+    * res0: cats.data.EitherT[cats.Id,String,List[Int]] = EitherT(Right(List(3, 2)))
+    * scala> val l2 = List(EitherT[Id,String, Int](Right(3)), EitherT[Id, String, Int](Left("error")), EitherT[Id, String, Int](Right(2)))
+    * res1: cats.data.EitherT[cats.Id,String,List[Int]] = EitherT(Left(error))
+    * }}}
+    */
+  def sequence[F[_], M[_]: Functor, A, B](fs: F[EitherT[M, A, B]])
+                                         (implicit F: Foldable[F], MonET: Monoid[EitherT[M, A, F[B]]], A: Applicative[F]): EitherT[M, A, F[B]] = {
+      F.foldLeft[EitherT[M, A, B], EitherT[M, A, F[B]]](fs, MonET.empty) { (acc, curr) =>
+        MonET.combine(acc, curr.map(A.pure))
+      }
+    }
 }
 
 private[data] abstract class EitherTInstances extends EitherTInstances1 {
