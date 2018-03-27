@@ -118,7 +118,7 @@ val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 
 ## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
 
-Use `EitherT.fromEither` to a lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
+Use `EitherT.fromEither` to lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
 An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
 ```tut:silent
