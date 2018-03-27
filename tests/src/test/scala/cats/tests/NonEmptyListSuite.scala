@@ -6,7 +6,7 @@ import cats.kernel.laws.discipline.{SemigroupTests, OrderTests, PartialOrderTest
 import cats.data.{NonEmptyList, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{CommutativeApplyTests, ComonadTests, NonEmptyTraverseTests, MonadTests, ReducibleTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{CommutativeApplyTests, BimonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests}
 
 class NonEmptyListSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -21,17 +21,14 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyList]", SerializableTests.serializable(Reducible[NonEmptyList]))
 
-  checkAll("NonEmptyList[Int]", MonadTests[NonEmptyList].monad[Int, Int, Int])
-  checkAll("Monad[NonEmptyList[A]]", SerializableTests.serializable(Monad[NonEmptyList]))
-
   checkAll("NonEmptyList[Int]", SemigroupKTests[NonEmptyList].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyList[A]]", SerializableTests.serializable(SemigroupK[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", SemigroupTests[NonEmptyList[Int]].semigroup)
   checkAll("Semigroup[NonEmptyList[Int]]", SerializableTests.serializable(Semigroup[NonEmptyList[Int]]))
 
-  checkAll("NonEmptyList[Int]", ComonadTests[NonEmptyList].comonad[Int, Int, Int])
-  checkAll("Comonad[NonEmptyList]", SerializableTests.serializable(Comonad[NonEmptyList]))
+  checkAll("NonEmptyList[Int]", BimonadTests[NonEmptyList].bimonad[Int, Int, Int])
+  checkAll("Bimonad[NonEmptyList]", SerializableTests.serializable(Bimonad[NonEmptyList]))
 
   checkAll("NonEmptyList[ListWrapper[Int]]", EqTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))

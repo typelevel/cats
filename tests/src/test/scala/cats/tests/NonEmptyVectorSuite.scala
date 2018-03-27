@@ -8,7 +8,7 @@ import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{CommutativeApplyTests, ComonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests, MonadTests}
+import cats.laws.discipline.{CommutativeApplyTests, BimonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.util.Properties
@@ -47,15 +47,12 @@ class NonEmptyVectorSuite extends CatsSuite {
   implicitly[Functor[NonEmptyVector]]
   implicitly[Monad[NonEmptyVector]]
   implicitly[Comonad[NonEmptyVector]]
+  implicitly[Bimonad[NonEmptyVector]]
 
 
 
-  checkAll("NonEmptyVector[Int]", ComonadTests[NonEmptyVector].comonad[Int, Int, Int])
-  checkAll("Comonad[NonEmptyVector]", SerializableTests.serializable(Comonad[NonEmptyVector]))
-
-
-  checkAll("NonEmptyVector[Int]", MonadTests[NonEmptyVector].monad[Int, Int, Int])
-  checkAll("Monad[NonEmptyVector]", SerializableTests.serializable(Monad[NonEmptyVector]))
+  checkAll("NonEmptyVector[Int]", BimonadTests[NonEmptyVector].bimonad[Int, Int, Int])
+  checkAll("Bimonad[NonEmptyVector]", SerializableTests.serializable(Bimonad[NonEmptyVector]))
 
 
   test("size is consistent with toList.size") {
