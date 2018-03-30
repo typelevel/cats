@@ -102,12 +102,17 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.5"
+// 2.13.0-M3 workaround
+//lazy val scalaTestVersion = "3.0.5"
 lazy val disciplineVersion = "0.9.0"
 lazy val catalystsVersion = "0.6"
 
 // 2.13.0-M3 workaround
-val scalatest_2_13 = "3.0.5-M1"
+def scalatestVersion(scalaVersion: String): String =
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, 13)) =>  "3.0.5-M1"
+    case _ => "3.0.5"
+  }
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
@@ -118,14 +123,7 @@ lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   // 2.13.0-M3 workaround
   // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
-  libraryDependencies += {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 13)) =>
-        "org.scalatest" %%% "scalatest" % scalatest_2_13 % "test"
-      case _ =>
-       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
-    }}
-    )
+  libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test")
 
 /**
   * Remove 2.10 projects from doc generation, as the macros used in the projects
@@ -348,14 +346,7 @@ lazy val testkit = crossProject.crossType(CrossType.Pure)
   .settings(disciplineDependencies)
   // 2.13.0-M3 workaround
   //.settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
-  .settings(libraryDependencies += {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 13)) =>
-        "org.scalatest" %%% "scalatest" % scalatest_2_13
-      case _ =>
-       "org.scalatest" %%% "scalatest" % scalaTestVersion
-    }}
-  )
+  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
 
@@ -420,7 +411,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.19"))
+    "org.scalaz" %% "scalaz-core" % "7.2.20"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
