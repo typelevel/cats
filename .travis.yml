@@ -12,7 +12,14 @@ git:
 scala:
   - 2.10.7
   - 2.11.12
+  - 2.13.0-M3
   - 2.12.5
+
+matrix:
+  allow_failures:
+  # There are known issues in this scala milestone release that prevent the tests to compile.
+  # But we want to enable the build to facilitate debuging, esp on the community build.
+  - scala: 2.13.0-M3
 
 jdk:
   - oraclejdk8
