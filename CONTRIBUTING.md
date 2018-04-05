@@ -33,8 +33,8 @@ skip these steps and jump straight to submitting a pull request.
 
 ### Find something that belongs in cats
 
-Looking for a way that you can help out? Check out the [open issues]
-(https://github.com/typelevel/cats/issues). Look for issues tagged as _**help wanted**_ oe _**low-hanging fruit**_. These ones are the easiest way to start contributing, but if you find other issues that catch your eye, you're most welcome to tackle them!
+Looking for a way that you can help out? Check the [open issues]
+(https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
 
 Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
@@ -70,6 +70,15 @@ Cats (and especially `cats-core`) is intended to be lean and modular.
 Some great ideas are not a great fit, either due to their size or
 their complexity. In these cases, creating your own library that
 depends on Cats is probably the best plan.
+
+#### Cats subprojects
+
+Cats has other _companion_ projects, described next:
+
+* [cats-effect](https://github.com/typelevel/cats-effect): a project aimed to provide a standard IO type for the Cats ecosystem, as well as a set of typeclasses (and associated laws) which characterize general effect types.
+* [cats-mtl](https://github.com/typelevel/cats-mtl): provides transformer typeclasses for cats' Monads, Applicatives and Functors.
+* [mouse](https://github.com/typelevel/mouse): a small companion to the Cats functional programming library for Scala. It includes convenience extension methods for Scala standard library classes, including some found in scalaz that are not in Cats.
+
 
 ### Let us know you are working on it
 
@@ -114,13 +123,26 @@ builds:
 
 ### Write code
 
-Here are some suggestions for you while implementing your feature:
+Here are some suggestions for you while implementing your feature...
 
-* Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
+#### Typeclass instances
 
-* Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
+If your feature implements a typeclass, pass the instance as follows
 
-* Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
+```tut:silent
+implicit def OrShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[A Or B] =
+  // implementation elided.
+``` 
+
+This guarantees the convention defined for the project. You can find more information about this [here](https://github.com/typelevel/cats/issues/27).
+
+#### Typeclass methods
+
+If you are writing a typeclass and need to provide its methods implementations, please write the code in the typeclass itself. The idea is to maintain the concrete implementations encapsuled inside the data structure rather than including the code in a common package. You can find more information about this [here](https://github.com/typelevel/cats/issues/25).
+
+#### Usage of `Show.show`
+
+It is better to use `new Show[...]{...}` instead of `Show.show[...](...)` because, while both create an instance of `Show`, the latter also creates an instance of `Function1`, adding overhead. You can find more information about this [here](https://github.com/typelevel/cats/pull/36#issuecomment-72892359).
 
 ### Attributions
 
@@ -152,6 +174,22 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
 - For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
+
+### Binary compatibility
+
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then compile the project.
+
+A summary of these steps is as follows:
+
+```
+$ sbt
+> +2.11.12
+> compile
+```
+If you see errors in the compilation process related to the Scala version, you can execute the command `mimaReportBinaryIssues` to see what happened.
+
+As a side note, the latter command use [sbt-mima](https://github.com/lightbend/migration-manager) (shorthand for "Migration Manager") for reporting all the possible [binary](https://github.com/lightbend/migration-manager/wiki#what-is-the-migration-manager) (not source) incompatibilities that the code would have.
+
 
 ## Contributing documentation
 
