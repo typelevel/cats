@@ -1,17 +1,19 @@
+---
+layout: page
+title:  "Jump Start Guide"
+section: "jump_start_guide"
+position: 35
+---
+
 # Introduction
 
-[Cats](http://typelevel.org/cats/) is a library providing abstractions for functional programming in Scala.
-
-There are a couple of great posts and courses on Cats out there on the web (like [Herding cats](http://eed3si9n.com/herding-cats/) and a [tutorial on Scala Exercises](https://www.scala-exercises.org/cats/semigroup)),
-but they tend to explore the categories/type classes implemented in the library rather than to give practical ready-to-use examples of how to use Cats in existing codebases.
-
-This blog post barely scratches the surface of what Cats can do, but instead provides a concise hands-on introduction to the patterns you're most likely to take advantage of in your Scala project.
+This jump start guide barely scratches the surface of what Cats can do, but instead provides a concise hands-on introduction to the patterns you're most likely to take advantage of in your Scala project.
 If you're using the constructs like [`Future`](http://www.scala-lang.org/api/current/scala/concurrent/Future.html),
 [`Option`](http://www.scala-lang.org/api/current/scala/Option.html) or
 [`Either`](http://www.scala-lang.org/api/current/scala/util/Either.html) on a daily basis,
 it's very likely that Cats can simplify and improve the readability of your code.
 
-Please refer to the [Cats wiki on GitHub](https://github.com/typelevel/cats) for guidelines on how to add the library to your project dependencies.
+Please refer to the [wiki on GitHub](https://github.com/typelevel/cats) for guidelines on how to add the library to your project dependencies.
 We are sticking to [version 1.0.1](https://github.com/typelevel/cats/releases/tag/v1.0.1) in the entire post.
 
 Let's go through the library package-wise, looking at the syntax available in each package.
@@ -25,24 +27,38 @@ Importing this package enables `obj.some` syntax — equivalent to `Some(obj)`.
 The only real difference is that the value is already upcast to `Option[T]` from `Some[T]`.
 
 Using `obj.some` instead of `Some(obj)` can sometimes improve the readability of unit tests.
-For example, if you add the following implicit class to your `BaseSpec`, `TestHelper` or whatever your base class for tests is called:
+For example, if you put the following implicit class into the scope:
 
-```scala
+```tut:silent
+import scala.concurrent.Future
+
 implicit class ToFutureSuccessful[T](obj: T) {
   def asFuture: Future[T] = Future.successful(obj)
 }
 ```
 
-then you can use the chained syntax shown below (assuming your unit tests are based on scalamock; also see a [post by Bartosz Kowalik](http://virtuslab.com/blog/scalamock-macros-strike-back/)):
+then you can use the chained syntax shown below (assuming your unit tests are based on [scalamock](https://scalamock.org/):
 
-```scala
+```tut:silent
 import cats.syntax.option._
+import org.scalatest.FlatSpec
+import org.scalamock.scalatest.MockFactory
 
-// In UserService we have a method defined as:
-// def getUserById(id: Int): Future[Option[User]]
-// that we want to mock.
+class Account { /* ... */ }
 
-userService.getUserById _ expects userId returning user.some.asFuture
+trait AccountService {
+  def getAccountById(id: Int): Future[Option[Account]]
+}
+
+class AccountServiceSpec extends FlatSpec with MockFactory {
+
+  val account = mock[Account]
+  val accountService = mock[AccountService]
+
+  /* ... */
+  accountService.getAccountById _ expects (*) returning account.some.asFuture
+  /* ... */
+}
 ```
 
 That's more readable than `Future.successful(Some(user))`, especially if this pattern repeats frequently in the test suite.
@@ -58,13 +74,24 @@ Providing a more specialized type sometimes helps the Scala compiler properly in
 In both cases the type of returned value is widened from `Right` or `Left` to `Either`.
 Just as was the case with `.some`, these helpers are handy to combine with `.asFuture` to improve the readability of unit tests:
 
-```scala
+```tut:silent
 import cats.syntax.either._
 
-// Mocking return value of service method:
-// def ensureUserExists(id: Int): Future[Either[Exception, User]]
+case class User(accountId: Long) { /* ... */ }
 
-userService.ensureUserExists _ expects userId returning user.asRight.asFuture // instead of Future.successful(Right(user))
+trait UserService {
+  def ensureUserExists(id: Int): Future[Either[Exception, User]]
+}
+
+class UserServiceSpec extends FlatSpec with MockFactory {
+
+  val user = mock[User]
+  val userService = mock[UserService]
+
+  /* ... */
+  userService.ensureUserExists _ expects (*) returning user.asRight.asFuture // instead of Future.successful(Right(user))
+  /* ... */
+}
 ```
 
 `Either.fromOption(option: Option[A], ifNone: => E)`, in turn, is a useful helper for converting an `Option` to an `Either`.
@@ -99,24 +126,30 @@ The `apply` package provides `(..., ..., ...).mapN` syntax, which allows for an 
 
 Let's say we have 3 futures, one of type `Int`, one of type `String`, one of type `User` and a method accepting three parameters — `Int`, `String` and `User`.
 
-```scala
-def intFuture: Future[Int] = { /* ... */ }
-def stringFuture: Future[String] = { /* ... */ }
-def userFuture: Future[User] = { /* ... */ }
+```tut:silent
+import scala.concurrent.ExecutionContext.Implicits.global
 
-def process(value: Int, contents: String, user: User): ProcessingResult = { /* do some stuff */ }
+class ProcessingResult { /* ... */ }
+
+def intFuture: Future[Int] = { /* ... */ ??? }
+def stringFuture: Future[String] = { /* ... */ ??? }
+def userFuture: Future[User] = { /* ... */ ??? }
+
+def process(value: Int, contents: String, user: User): ProcessingResult = { /* ... */ ??? }
 ```
 
 Our goal is to apply the function to the values computed by those 3 futures.
 With `apply` syntax this becomes very easy and concise:
 
-```scala
+```tut:silent
 import cats.instances.future._
 import cats.syntax.apply._
 
-(intFuture, stringFuture, userFuture).mapN {
-  (value, contents, user) =>
-    process(value, contents, user)
+def processAsync: Future[ProcessingResult] = {
+  (intFuture, stringFuture, userFuture).mapN {
+    (value, contents, user) =>
+      process(value, contents, user)
+  }
 }
 ```
 
@@ -126,21 +159,22 @@ you should import `cats.instances.future._`.
 
 This above idea can be expressed even shorter, just:
 
-```scala
-(intFuture, stringFuture, userFuture).mapN(process)
+```tut:silent
+def processAsync2: Future[ProcessingResult] = (intFuture, stringFuture, userFuture).mapN(process)
 ```
 
-The result of the above expression will be of type `Future[ProcessingResult]`.
 If any of the chained futures fails, the resulting future will also fail with the same exception as the first failing future in the chain (this is fail-fast behavior).
 
 What's important, all futures will run in parallel, as opposed to what would happen in a `for` comprehension:
 
-```scala
-for {
-  value <- intFuture
-  contents <- stringFuture
-  user <- userFuture
-} yield process(value, contents, user)
+```tut:silent
+def processAsync3: Future[ProcessingResult] = {
+  for {
+    value <- intFuture
+    contents <- stringFuture
+    user <- userFuture
+  } yield process(value, contents, user)
+}
 ```
 
 In the above snippet (which under the hood translates to `flatMap` and `map` calls), `stringFuture` will not run until `intFuture` is successfully completed,
@@ -161,14 +195,12 @@ In many common real-life cases, like when `F` is `Option` and `G` is `Future`, y
 `traverse` comes as a solution here.
 If you call `traverse` instead of `map`, like `obj.traverse(fun)`, you'll get `G[F[A]]`, which will be `Future[Option[B]]` in our case; this is much more useful and easier to process than `Option[Future[B]]`.
 
-```scala
+```tut:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.list._
 
-def updateUser(user: User): Future[User] = {
-  /* call some external service etc. */
-}
+def updateUser(user: User): Future[User] = { /* ... */ ??? }
 
 def updateUsers(users: List[User]): Future[List[User]] = {
   users.traverse(updateUser)
@@ -182,7 +214,7 @@ but the Cats version is far more readable and can easily work on any structure f
 
 `sequence` represents an even simpler concept: it can be thought of as simply swapping the types from `F[G[A]]` to `G[F[A]]` without even mapping the enclosed value like `traverse` does.
 
-```scala
+```tut:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.list._
@@ -202,25 +234,25 @@ If you have an `obj` of type `F[A]` and a function `fun` of type `A => G[F[B]]`,
 Traversing the `obj` instead of mapping helps a little — you'll get `G[F[F[B]]` instead.
 Since `G` is usually something like `Future` and `F` is `List` or `Option`, you would end up with `Future[Option[Option[A]]` or `Future[List[List[A]]]` — a bit awkward to process.
 
-```scala
+```tut:silent
 import cats.syntax.traverse._
 import cats.instances.future._
 import cats.instances.option._
 
-val valueOpt: Option[Int] = /* ... */
-def compute(value: Int): Future[Option[Int]] = { /* ... */ }
-valueOpt.traverse(compute) // has type Future[Option[Option[Int]], not good
+lazy val valueOpt: Option[Int] = { /* ... */ ??? }
+def compute(value: Int): Future[Option[Int]] = { /* ... */ ??? }
+def computeOverValue: Future[Option[Option[Int]]] = valueOpt.traverse(compute) // has type Future[Option[Option[Int]]], not good
 ```
 
 The solution could be to map the result with a ```_.flatten``` call like:
-```scala
-valueOpt.traverse(compute).map(_.flatten) // has type Future[Option[Int]]
+```tut:silent
+def computeOverValue2: Future[Option[Int]] = valueOpt.traverse(compute).map(_.flatten)
 ```
 and this way you'll get the desired type `G[F[B]]` at the end.
 
 However, there is a neat shortcut for this called `flatTraverse`:
-```scala
-valueOpt.flatTraverse(compute) // also Future[Option[Int]]!
+```tut:silent
+def computeOverValue3: Future[Option[Int]] = valueOpt.flatTraverse(compute)
 ```
 and that solves our problem for good.
 
@@ -237,23 +269,26 @@ Wrappers such as `OptionT` are generally known as _monad transformers_.
 
 A quite common pattern is mapping the inner value stored inside an instance of `F[Option[A]]` to an instance of `F[Option[B]]` with a function of type `A => B`.
 This can be done with rather verbose syntax like:
-```scala
-val resultFuture: Future[Option[Int]] = /* ... */
-val mappedResultFuture: Future[Option[String]] = resultFuture.map { maybeValue =>
+```tut:silent
+lazy val resultFuture: Future[Option[Int]] = ???
+
+def mappedResultFuture: Future[Option[String]] = resultFuture.map { maybeValue =>
   maybeValue.map { value =>
     // Do something with the value and return String
+    ???
   }
 }
 ```
 
 With the use of `OptionT`, this can be simplified as follows:
 
-```scala
+```tut:silent
 import cats.data.OptionT
 import cats.instances.future._
 
-val mappedResultFuture: OptionT[Future, String] = OptionT(resultFuture).map { value =>
+def mappedResultFuture2: OptionT[Future, String] = OptionT(resultFuture).map { value =>
   // Do something with the value and return String
+  ???
 }
 ```
 
@@ -291,15 +326,17 @@ In practice, you're most likely to use `map` and `semiflatMap`.
 
 As is always the case with `flatMap` and `map`, you can use it not only explicitly, but also under the hood in `for` comprehensions, as in the example below:
 
-```scala
+```tut:silent
 import cats.data.OptionT
 import cats.instances.future._
 
-def findUserById(userId: Long): OptionT[Future, User] = { /* ... */ }
+class Money { /* ... */ }
 
-def findAccountById(accountId: Long): OptionT[Future, Account] = { /* ... */ }
+def findUserById(userId: Long): OptionT[Future, User] = { /* ... */ ??? }
 
-def getReservedFundsForAccount(account: Account): OptionT[Future, Money] = { /* ... */ }
+def findAccountById(accountId: Long): OptionT[Future, Account] = { /* ... */ ??? }
+
+def getReservedFundsForAccount(account: Account): OptionT[Future, Money] = { /* ... */ ??? }
 
 def getReservedFundsForUser(userId: Long): OptionT[Future, Money] = for {
   user <- findUserById(userId)
@@ -326,12 +363,18 @@ Let's have a quick look at how to create an `EitherT` instance:
 | `EitherT.fromEither` | `Either[A, B]` | `EitherT[F, A, B]` (wraps the provided `Either` value into `F`) |
 | `EitherT.right` or `EitherT.liftF` | `F[B]` | `EitherT[F, A, B]` (wraps value inside `F[B]` into `Right`) |
 | `EitherT.left` | `F[A]` | `EitherT[F, A, B]` (wraps value inside `F[B]` into `Left`) |
-| `EitherT.pure` | `A` | `EitherT[F, A, B]` (wraps value inside `Right` and then into `F`) |
+| `EitherT.pure` | `A` | `EitherT[F, A, B]` (wraps value into `Right` and then into `F`) |
 
 Another useful way to construct an `EitherT` instance is to use `OptionT`'s methods `toLeft` and `toRight`:
 
-```scala
-def getUserById(userId: Int): Future[Option[User]] = /* ... */
+```tut:silent
+import cats.data.EitherT
+
+abstract class BaseException(message: String) extends Exception(message)
+
+case class UserNotFoundException(message: String) extends BaseException(message)
+
+def getUserById(userId: Int): Future[Option[User]] = { /* ... */ ??? }
 
 def ensureUserExists(userId: Int): EitherT[Future, BaseException, User] = {
   OptionT(getUserById(userId))
@@ -369,8 +412,15 @@ As a side note, there are also certain methods in `EitherT` (that you're likely 
 
 `EitherT` is very useful for fail-fast chained verifications:
 
-```scala
-def getItemById(itemId: Int): Future[Option[Item]] = /* ... */
+```tut:silent
+
+case class Item(state: String)
+class ItemOrder  { /* ... */ }
+
+case class ItemNotFoundException(message: String) extends BaseException(message)
+case class InvalidItemStateException(message: String) extends BaseException(message)
+
+def getItemById(itemId: Int): Future[Option[Item]] = { /* .. */ ??? }
 
 def ensureItemExists(itemId: Int): EitherT[Future, BaseException, Item] = {
   OptionT(getItemById(itemId))
@@ -383,15 +433,13 @@ def ensureItemStateIs(actual: String, expected: String): EitherT[Future, BaseExc
   EitherT.cond(actual == expected, (), InvalidItemStateException(s"actual=$actual, expected=$expected"))
 }
 
-def placeOrderForItem(userId: Int, itemId: Int, count: Int): Future[ItemOrder] = {
-  /* ... */
-}
+def placeOrderForItem(userId: Int, itemId: Int, count: Int): Future[ItemOrder] = { /* ... */ ??? }
 
 def buyItem(userId: Int, itemId: Int, count: Int): EitherT[Future, BaseException, ItemOrder] = {
   for {
     user <- ensureUserExists(userId)
     item <- ensureItemExists(itemId)
-    _ <- ensureItemStateIs(item.state, AVAILABLE_IN_STOCK)
+    _ <- ensureItemStateIs(item.state, "AVAILABLE_IN_STOCK")
     // EitherT.liftF is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
     placedOrder <- EitherT.liftF(placeOrderForItem(userId, itemId, count))
   } yield placedOrder
@@ -421,4 +469,3 @@ It should work without trouble under [Scala IDE](http://scala-ide.org/), though.
 As an advice for your future learning: the `Applicative` type class, despite it's key significance in functional programming, comes slightly difficult to understand.
 In my opinion it's much less intuitive than `Functor` or `Monad`, even though it actually stands right between `Functor` and `Monad` in the inheritance hierarchy.
 The best approach to grasp `Applicative` is to first understand how `product` (which transforms an `F[A]` and `F[B]` to an `F[(A, B)]`) works rather than focus on the somewhat exotic `ap` operation itself.
-
