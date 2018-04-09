@@ -33,11 +33,9 @@ skip these steps and jump straight to submitting a pull request.
 
 ### Find something that belongs in cats
 
-Looking for a way that you can help out? Check out our
-[Waffle.io page](https://waffle.io/typelevel/cats). Choose a card from the
-"Ready" column. Before you start working on it, make sure that it's
-not already assigned to someone and that nobody has left a comment
-saying that they are working on it!
+Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
+
+Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
 (Of course, you can also comment on an issue someone is already
 working on and offer to collaborate.)
@@ -71,6 +69,15 @@ Cats (and especially `cats-core`) is intended to be lean and modular.
 Some great ideas are not a great fit, either due to their size or
 their complexity. In these cases, creating your own library that
 depends on Cats is probably the best plan.
+
+#### Cats subprojects
+
+Cats has other _companion_ projects, described next:
+
+* [cats-effect](https://github.com/typelevel/cats-effect): a project aimed to provide a standard IO type for the Cats ecosystem, as well as a set of typeclasses (and associated laws) which characterize general effect types.
+* [cats-mtl](https://github.com/typelevel/cats-mtl): provides transformer typeclasses for cats' Monads, Applicatives and Functors.
+* [mouse](https://github.com/typelevel/mouse): a small companion to the Cats functional programming library for Scala. It includes convenience extension methods for Scala standard library classes, including some found in scalaz that are not in Cats.
+
 
 ### Let us know you are working on it
 
@@ -115,15 +122,7 @@ builds:
 
 ### Write code
 
-TODO
-
-*Should this just link to a separate doc? This might get large.*
-
-Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
-
-Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
-
-Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
+[See guidelines](/cats/guidelines.html).
 
 ### Attributions
 
@@ -154,10 +153,23 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
  rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
+- For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
 
-TODO
+### Binary compatibility
 
-Write about checking laws
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
+
+A summary of these steps is as follows:
+
+```
+$ sbt
+> +2.11.12
+> mimaReportBinaryIssues
+```
+This procedure will report if there are any binary compatibility issues that should be fixed.
+
+As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/migration-manager) (shorthand for "Migration Manager") plugin and you can find more information about it [here](https://github.com/lightbend/migration-manager/wiki).
+
 
 ## Contributing documentation
 
@@ -196,16 +208,9 @@ which appears in the documentation, this ensures us that our examples
 should always compile, and our documentation has a better chance of
 staying up-to-date.
 
-### Publishing the site to github.
-
-The `git.remoteRepo` variable in `docs/build.sbt` controls which
-repository you will push to. Ensure that this variable points to a
-repo you wish to push to, and that it is one for which you have push
-access, then run `sbt ghpagesPushSite`
-
 ### Write examples
 
-TODO
+One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
 
 ### Submit a pull request
 
