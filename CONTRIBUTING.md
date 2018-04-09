@@ -33,8 +33,7 @@ skip these steps and jump straight to submitting a pull request.
 
 ### Find something that belongs in cats
 
-Looking for a way that you can help out? Check the [open issues]
-(https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
+Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
 
 Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
@@ -123,26 +122,7 @@ builds:
 
 ### Write code
 
-Here are some suggestions for you while implementing your feature...
-
-#### Typeclass instances
-
-If your feature implements a typeclass, pass the instance as follows
-
-```tut:silent
-implicit def OrShow[A, B](implicit showA: Show[A], showB: Show[B]): Show[A Or B] =
-  // implementation elided.
-``` 
-
-This guarantees the convention defined for the project. You can find more information about this [here](https://github.com/typelevel/cats/issues/27).
-
-#### Typeclass methods
-
-If you are writing a typeclass and need to provide its methods implementations, please write the code in the typeclass itself. The idea is to maintain the concrete implementations encapsuled inside the data structure rather than including the code in a common package. You can find more information about this [here](https://github.com/typelevel/cats/issues/25).
-
-#### Usage of `Show.show`
-
-It is better to use `new Show[...]{...}` instead of `Show.show[...](...)` because, while both create an instance of `Show`, the latter also creates an instance of `Function1`, adding overhead. You can find more information about this [here](https://github.com/typelevel/cats/pull/36#issuecomment-72892359).
+[See guidelines](/cats/guidelines.html).
 
 ### Attributions
 
@@ -177,18 +157,18 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
 
 ### Binary compatibility
 
-It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then compile the project.
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
 
 A summary of these steps is as follows:
 
 ```
 $ sbt
 > +2.11.12
-> compile
+> mimaReportBinaryIssues
 ```
-If you see errors in the compilation process related to the Scala version, you can execute the command `mimaReportBinaryIssues` to see what happened.
+This procedure will report if there are any binary compatibility issues that should be fixed.
 
-As a side note, the latter command use [sbt-mima](https://github.com/lightbend/migration-manager) (shorthand for "Migration Manager") for reporting all the possible [binary](https://github.com/lightbend/migration-manager/wiki#what-is-the-migration-manager) (not source) incompatibilities that the code would have.
+As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/migration-manager) (shorthand for "Migration Manager") plugin and you can find more information about it [here](https://github.com/lightbend/migration-manager/wiki).
 
 
 ## Contributing documentation
@@ -230,7 +210,7 @@ staying up-to-date.
 
 ### Write examples
 
-TODO
+One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
 
 ### Submit a pull request
 
