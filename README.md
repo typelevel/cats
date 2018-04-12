@@ -37,7 +37,7 @@ scalacOptions += "-Ypartial-unification"
 addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
 ```
 
-And then create the cats dependency, by adding the following to your `build.sbt`:
+And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
 libraryDependencies += "org.typelevel" %% "cats-core" % "1.1.0"
@@ -53,14 +53,14 @@ functionality, you can pick-and-choose from amongst these modules
  * `cats-laws`: Laws for testing type class instances.
  * `cats-free`: Free structures such as the free monad, and supporting type classes.
  * `cats-testkit`: lib for writing tests for type class instances using laws.
- * `alleycats-core`: cats instances and classes which are not lawful. 
+ * `alleycats-core`: Cats instances and classes which are not lawful. 
  
- There are several other cats modules that are in separate repos so that they can 
+ There are several other Cats modules that are in separate repos so that they can 
  maintain independent release cycles. 
  
  * [`cats-effect`](https://github.com/typelevel/cats-effect): standard `IO` type together with `Sync`, `Async` and `Effect` type classes 
- * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for cats' Monads, Applicatives and Functors.
- * [`mouse`](https://github.com/typelevel/mouse): a small companion to cats that provides convenient syntax (aka extension methods) 
+ * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for Cats' Monads, Applicatives and Functors.
+ * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods) 
 
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
@@ -70,9 +70,9 @@ Release notes for Cats are available in [CHANGES.md](https://github.com/typeleve
  compatible are to be expected in upcoming RC1 and 1.0 releases.*
 
 
-### <a name="ecosystem" href="#ecosystem"></a>The cats ecosystem
+### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
 
-By sharing the same set of type classes, instances and data types provided by cats, projects can speak the same "cats language", and integrate with each other with ease.
+By sharing the same set of type classes, instances and data types provided by Cats, projects can speak the same "Cats language", and integrate with each other with ease.
 
 #### General purpose libraries to support pure functional programming
 
@@ -84,7 +84,7 @@ By sharing the same set of type classes, instances and data types provided by ca
  * [Kittens](https://github.com/milessabin/kittens): automatic type class derivation for Cats and generic utility functions
  * [mainecoon](https://github.com/kailuowang/mainecoon): Transform and compose tagless final encoded algebras
  * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
- * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with cats type classes
+ * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
  * [origami](https://github.com/atnos-org/origami): monadic folds
  * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
 
@@ -113,7 +113,7 @@ By sharing the same set of type classes, instances and data types provided by ca
   
 *Feel free to submit a PR if you want a project you maintain to be added to this list.*
 
-*The full-size [cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
+*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
 ### How can I contribute to Cats?
 
@@ -130,8 +130,8 @@ as well as in two Gitter channels:
 questions and discussions, and 
 
 [Gitter channel cats-dev](https://gitter.im/typelevel/cats-dev)
-is dedicated for cats development related discussions. For people who wants to 
-follow closely and/or to participate in the decisions in cats development, 
+is dedicated for Cats development related discussions. For people who wants to 
+follow closely and/or to participate in the decisions in Cats development, 
 this is the room to join. 
 
 You can get an overview of who is working on what
@@ -163,7 +163,7 @@ Cats strives to provide a solid and stable foundation for an ecosystem of
 FP libraries. Thus, we treat backward binary compatibility maintenance with a high priority. 
 In semantic versioning, backward breaking change is **ONLY** allowed between *MAJOR* versions.
 We will maintain backward binary compatibility between *PATCH* AND *MINOR* versions.
-For example, when we release cats `1.1.0`, it will be backward binary compatible 
+For example, when we release Cats `1.1.0`, it will be backward binary compatible 
 with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replacement for 
 the old one. This is critical when your application has a diamond
 dependency on Cats - depending on two or more libraries that all depend on Cats. 
