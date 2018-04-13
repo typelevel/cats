@@ -196,7 +196,7 @@ This may seem surprising, but keep in mind that `b` isn't simply a `Boolean`. It
 ## Interleaving effects
 
 Let's expand on the above example; assume that our random number generator works asynchronously by fetching results from a remote server:
-```tut:book
+```tut:silent
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -228,7 +228,7 @@ The `seed` that `State.apply` passes in is now a `Future`, so we must map it. Bu
 Luckily, `State[S, A]` is an alias for `StateT[Eval, S, A]` - a monad transformer defined as `StateT[F[_], S, A]`. This data type represents computations of the form `S => F[(S, A)]`. 
 
 If we plug in our concrete types, we get `AsyncSeed => Future[(AsyncSeed, A)]`, which is something we can work with:
-```tut:book
+```tut:silent
 import cats.data.StateT
 import cats.instances.future._
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -250,7 +250,7 @@ It should be noted that different combinators on `StateT` impose different const
 ## Changing States
 
 More complex, stateful computations cannot be easily modeled by a single type. For example, let's try to model a door's state:
-```tut:book
+```tut:silent
 sealed trait DoorState
 case object Open extends DoorState
 case object Closed extends DoorState
@@ -262,8 +262,8 @@ def close: State[DoorState, Unit] = ???
 ```
 
 We would naturally expect that `open` would only operate on doors that are `Closed`, and vice-versa. However, to implement these methods currently, we have to pattern-match on the state:
-```tut:book
-def open: State[DoorState, Unit] = State { doorState =>
+```tut:silent
+val open: State[DoorState, Unit] = State { doorState =>
   doorState match {
     case Closed => (Open, ())
     case Open   => ??? // What now?
@@ -278,7 +278,7 @@ The most elegant solution would be to model this requirement statically using ty
 This data type models a stateful computation of the form `SA => F[(SB, A)]`; that's a function that receives an initial state of type `SA` and results in a state of type `SB` and a result of type `A`, using an effect of `F`.
 
 So, let's model our typed door:
-```tut:book
+```tut:silent
 import cats.Eval
 import cats.data.IndexedStateT
 
