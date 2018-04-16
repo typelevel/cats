@@ -55,12 +55,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
     compare(x, y) == 0
 
   /**
-   * Returns true if `x` != `y`, false otherwise.
-   */
-  override def neqv(x: A, y: A): Boolean =
-    compare(x, y) != 0
-
-  /**
    * Returns true if `x` <= `y`, false otherwise.
    */
   override def lteqv(x: A, y: A): Boolean =
