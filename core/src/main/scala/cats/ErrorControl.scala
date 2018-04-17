@@ -4,7 +4,7 @@ import cats.data.EitherT
 
 trait ErrorControl[F[_], G[_], E] extends Serializable {
   val monadErrorF: MonadError[F, E]
-  val applicativeG: Applicative[G]
+  val monadG: Monad[G]
 
   def controlError[A](fa: F[A])(f: E => G[A]): G[A]
 
@@ -17,7 +17,7 @@ trait ErrorControl[F[_], G[_], E] extends Serializable {
     EitherT(trial(fa))
 
   def intercept[A](fa: F[A])(f: E => A): G[A] =
-    controlError(fa)(f andThen applicativeG.pure)
+    controlError(fa)(f andThen monadG.pure)
 
   def absolve[A](gea: G[Either[E, A]]): F[A] =
     monadErrorF.flatMap(accept(gea))(_.fold(monadErrorF.raiseError, monadErrorF.pure))

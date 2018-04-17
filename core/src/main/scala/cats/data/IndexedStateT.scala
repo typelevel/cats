@@ -251,10 +251,9 @@ private[data] sealed abstract class IndexedStateTInstances extends IndexedStateT
   (implicit E: ErrorControl[F, G, E], M: Monad[G]): ErrorControl[StateT[F, S, ?], StateT[G, S, ?], E] =
     new ErrorControl[StateT[F, S, ?], StateT[G, S, ?], E] {
       implicit val F: MonadError[F, E] = E.monadErrorF
-      implicit val G: Applicative[G] = E.applicativeG
 
       val monadErrorF: MonadError[StateT[F, S, ?], E] = IndexedStateT.catsDataMonadErrorForIndexedStateT
-      val applicativeG: Applicative[StateT[G, S, ?]] = IndexedStateT.catsDataMonadForIndexedStateT(M)
+      val monadG: Monad[StateT[G, S, ?]] = IndexedStateT.catsDataMonadForIndexedStateT(M)
 
       def accept[A](ga: StateT[G, S, A]): StateT[F, S, A] = ga.mapK(new (G ~> F) {
         def apply[T](ga: G[T]): F[T] = E.accept(ga)

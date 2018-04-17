@@ -220,11 +220,11 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsEndeavorForOptionT[F[_]: Monad, E]: ErrorControl[OptionT[F, ?], F, Unit] =
     new ErrorControl[OptionT[F, ?], F, Unit] {
       val monadErrorF: MonadError[OptionT[F, ?], Unit] = catsDataMonadErrorUnitForOptionT
-      val applicativeG: Applicative[F] = Applicative[F]
+      val monadG: Monad[F] = Monad[F]
 
       def controlError[A](fa: OptionT[F, A])(f: Unit => F[A]): F[A] =
         Monad[F].flatMap(fa.value) {
-          case Some(a) => applicativeG.pure(a)
+          case Some(a) => monadG.pure(a)
           case None => f(())
         }
 

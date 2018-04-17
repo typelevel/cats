@@ -111,10 +111,10 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
   (implicit M: ErrorControl[F, G, E]): ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] =
     new ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] {
       implicit val F: MonadError[F, E] = M.monadErrorF
-      implicit val G: Applicative[G] = M.applicativeG
+      implicit val G: Monad[G] = M.monadG
 
       val monadErrorF: MonadError[WriterT[F, L, ?], E] = WriterT.catsDataMonadErrorForWriterT
-      val applicativeG: Applicative[WriterT[G, L, ?]] = WriterT.catsDataApplicativeForWriterT
+      val monadG: Monad[WriterT[G, L, ?]] = WriterT.catsDataMonadForWriterT
 
       def accept[A](ga: WriterT[G, L, A]): WriterT[F, L, A] = ga.mapK(new (G ~> F) {
         def apply[T](ga: G[T]): F[T] = M.accept(ga)

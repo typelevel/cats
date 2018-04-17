@@ -468,12 +468,12 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
   implicit def catsErrorControlForEitherT[F[_]: Monad, E]: ErrorControl[EitherT[F, E, ?], F, E] =
     new ErrorControl[EitherT[F, E, ?], F, E] {
       val monadErrorF: MonadError[EitherT[F, E, ?], E] = EitherT.catsDataMonadErrorForEitherT
-      val applicativeG: Applicative[F] = Applicative[F]
+      val monadG: Monad[F] = Monad[F]
 
       def controlError[A](fa: EitherT[F, E, A])(f: E => F[A]): F[A] =
         Monad[F].flatMap(fa.value) {
           case Left(e) => f(e)
-          case Right(a) => applicativeG.pure(a)
+          case Right(a) => monadG.pure(a)
         }
 
       def accept[A](ga: F[A]): EitherT[F, E, A] =

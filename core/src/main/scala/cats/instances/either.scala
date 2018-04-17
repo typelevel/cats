@@ -142,7 +142,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
   implicit def catsErrorControlForEither[E]: ErrorControl[Either[E, ?], Id, E] =
     new ErrorControl[Either[E, ?], Id, E] {
       val monadErrorF: MonadError[Either[E, ?], E] = catsStdInstancesForEither
-      val applicativeG: Applicative[Id] = cats.catsInstancesForId
+      val monadG: Monad[Id] = cats.catsInstancesForId
 
       def controlError[A](fa: Either[E, A])(f: E => A): A = fa match {
         case Left(e) => f(e)

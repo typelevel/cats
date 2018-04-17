@@ -116,7 +116,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
   implicit val catsStdErrorControlForOption: ErrorControl[Option, Id, Unit] =
     new ErrorControl[Option, Id, Unit] {
       val monadErrorF: MonadError[Option, Unit] = catsStdInstancesForOption
-      val applicativeG: Applicative[Id] = cats.catsInstancesForId
+      val monadG: Monad[Id] = cats.catsInstancesForId
 
       def controlError[A](fa: Option[A])(f: Unit => A): A = fa match {
         case Some(a) => a
