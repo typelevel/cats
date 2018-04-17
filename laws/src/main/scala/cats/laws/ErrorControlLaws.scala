@@ -11,17 +11,14 @@ trait ErrorControlLaws[F[_], G[_], E] {
   implicit val F: MonadError[F, E] = E.monadErrorF
   implicit val G: Monad[G] = E.monadG
 
-  def deriveHandleError[A](fa: F[A])
-                       (f: E => A): IsEq[F[A]] =
+  def deriveHandleError[A](fa: F[A], f: E => A): IsEq[F[A]] =
     E.accept(E.intercept(fa)(f)) <-> F.handleError(fa)(f)
 
   def deriveAttempt[A](fa: F[A]): IsEq[F[Either[E, A]]]=
     E.accept(E.trial(fa)) <-> F.attempt(fa)
 
-  def deriveEnsureOr[A](ga: G[A])
-                    (error: A => E)
-                    (predicate: A => Boolean): IsEq[F[A]] =
-    F.ensureOr(E.accept(ga))(error)(predicate) <-> E.assureOr(ga)(error)(predicate)
+  def deriveEnsureOr[A](ga: G[A], e: A => E, p: A => Boolean): IsEq[F[A]] =
+    F.ensureOr(E.accept(ga))(e)(p) <-> E.assureOr(ga)(e)(p)
 
   def gNeverHasErrors[A](ga: G[A], f: E => A): IsEq[G[A]] =
     E.intercept(E.accept(ga))(f) <-> ga

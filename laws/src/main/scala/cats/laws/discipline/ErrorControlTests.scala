@@ -19,10 +19,11 @@ trait ErrorControlTests[F[_], G[_], E] extends Laws {
    Arbf2: Arbitrary[A => E],
    Arbp: Arbitrary[A => Boolean],
    ArbfG: Arbitrary[E => G[A]],
+   ArbfGa: Arbitrary[A => G[A]],
    EqFa: Eq[F[A]],
    EqGa: Eq[G[A]],
    EqFea: Eq[F[Either[E, A]]],
-   EqGea: Eq[G[Either[E, A]]],
+   EqGea: Eq[G[Either[E, A]]]
   ): RuleSet =
     new DefaultRuleSet(
       "errorControl",
@@ -34,10 +35,10 @@ trait ErrorControlTests[F[_], G[_], E] extends Laws {
       "raiseError trial" -> forAll(laws.raiseErrorTrial[A] _),
       "trial absolve cancel each oter" -> forAll(laws.trialAbsolve[A] _),
       "derive attempt" -> forAll(laws.deriveAttempt[A] _),
-      "derive ensureOr" -> forAll((ga: G[A], e: A => E, p: A => Boolean) =>
-        laws.deriveEnsureOr[A](ga)(e)(p)),
-      "derive HandleError" -> forAll((fa: F[A], f: E => A) =>
-        laws.deriveHandleError[A](fa)(f))
+      "derive ensureOr" -> forAll(laws.deriveEnsureOr[A] _),
+      "derive HandleError" -> forAll(laws.deriveHandleError[A] _),
+      "monad homomorphism flatMap" -> forAll(laws.monadHomomorphismFlatMap[A] _),
+      "monad homomorphism pure" -> forAll(laws.monadHomomorphismPure[A] _)
     )
 }
 
