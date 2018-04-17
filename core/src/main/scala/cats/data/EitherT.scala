@@ -465,6 +465,22 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
       val F0: Order[F[Either[L, R]]] = F
     }
 
+  implicit def catsErrorControlForEitherT[F[_]: Monad, E]: ErrorControl[EitherT[F, E, ?], F, E] =
+    new ErrorControl[EitherT[F, E, ?], F, E] {
+      val monadErrorF: MonadError[EitherT[F, E, ?], E] = EitherT.catsDataMonadErrorForEitherT
+      val applicativeG: Applicative[F] = Applicative[F]
+
+      def controlError[A](fa: EitherT[F, E, A])(f: E => F[A]): F[A] =
+        Monad[F].flatMap(fa.value) {
+          case Left(e) => f(e)
+          case Right(a) => applicativeG.pure(a)
+        }
+
+      def accept[A](ga: F[A]): EitherT[F, E, A] =
+        EitherT.liftF(ga)
+
+    }
+
   implicit def catsDataShowForEitherT[F[_], L, R](implicit sh: Show[F[Either[L, R]]]): Show[EitherT[F, L, R]] =
     Contravariant[Show].contramap(sh)(_.value)
 

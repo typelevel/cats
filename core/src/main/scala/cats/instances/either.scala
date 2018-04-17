@@ -3,6 +3,7 @@ package instances
 
 import cats.syntax.EitherUtil
 import cats.syntax.either._
+
 import scala.annotation.tailrec
 
 trait EitherInstances extends cats.kernel.instances.EitherInstances {
@@ -137,6 +138,19 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         fab.isLeft
     }
   // scalastyle:on method.length
+
+  implicit def catsErrorControlForEither[E]: ErrorControl[Either[E, ?], Id, E] =
+    new ErrorControl[Either[E, ?], Id, E] {
+      val monadErrorF: MonadError[Either[E, ?], E] = catsStdInstancesForEither
+      val applicativeG: Applicative[Id] = cats.catsInstancesForId
+
+      def controlError[A](fa: Either[E, A])(f: E => A): A = fa match {
+        case Left(e) => f(e)
+        case Right(a) => a
+      }
+
+      def accept[A](ga: A): Either[E, A] = Right(ga)
+    }
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
     new SemigroupK[Either[L, ?]] {

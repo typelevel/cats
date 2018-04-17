@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.arrow.{Profunctor, Strong}
-
 import cats.syntax.either._
 
 /**
@@ -247,6 +246,24 @@ private[data] sealed abstract class IndexedStateTInstances extends IndexedStateT
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit FM: Monad[F],
     FA: Alternative[F]): Alternative[IndexedStateT[F, S, S, ?]] with Monad[IndexedStateT[F, S, S, ?]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
+
+  implicit def catsErrorControlForStateT[F[_], G[_]: Monad, S, E]
+  (implicit M: ErrorControl[F, G, E]): ErrorControl[StateT[F, S, ?], StateT[G, S, ?], E] =
+    new ErrorControl[StateT[F, S, ?], StateT[G, S, ?], E] {
+      implicit val F: MonadError[F, E] = M.monadErrorF
+      implicit val G: Applicative[G] = M.applicativeG
+
+      val monadErrorF: MonadError[StateT[F, S, ?], E] = IndexedStateT.catsDataMonadErrorForIndexedStateT
+      val applicativeG: Applicative[StateT[G, S, ?]] = IndexedStateT.catsDataMonadForIndexedStateT
+
+      def accept[A](ga: StateT[G, S, A]): StateT[F, S, A] = ga.mapK(new (G ~> F) {
+        def apply[T](ga: G[T]): F[T] = M.accept(ga)
+      })
+
+      def controlError[A](fa: StateT[F, S, A])(f: E => StateT[G, S, A]): StateT[G, S, A] =
+        IndexedStateT(s => M.controlError(fa.run(s))(e => f(e).run(s)))
+
+    }
 }
 
 private[data] sealed abstract class IndexedStateTInstances1 extends IndexedStateTInstances2 {

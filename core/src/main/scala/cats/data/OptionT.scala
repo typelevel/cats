@@ -217,6 +217,22 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 
+  implicit def catsEndeavorForOptionT[F[_]: Monad, E]: ErrorControl[OptionT[F, ?], F, Unit] =
+    new ErrorControl[OptionT[F, ?], F, Unit] {
+      val monadErrorF: MonadError[OptionT[F, ?], Unit] = catsDataMonadErrorUnitForOptionT
+      val applicativeG: Applicative[F] = Applicative[F]
+
+      def controlError[A](fa: OptionT[F, A])(f: Unit => F[A]): F[A] =
+        Monad[F].flatMap(fa.value) {
+          case Some(a) => applicativeG.pure(a)
+          case None => f(())
+        }
+
+      def accept[A](ga: F[A]): OptionT[F, A] =
+        OptionT.liftF(ga)
+
+    }
+
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
     new OptionTFoldable[F] { implicit val F = F0 }
 
@@ -248,6 +264,9 @@ private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 
 }
 
 private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 {
+
+  implicit def catsDataMonadErrorUnitForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
+    new OptionTMonadErrorUnit[F] { implicit val F = F0 }
 
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
@@ -295,6 +314,18 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
 
   override def handleErrorWith[A](fa: OptionT[F, A])(f: E => OptionT[F, A]): OptionT[F, A] =
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
+}
+
+private trait OptionTMonadErrorUnit[F[_]] extends MonadError[OptionT[F, ?], Unit] with OptionTMonad[F] {
+  implicit def F: Monad[F]
+
+  def raiseError[A](e: Unit): OptionT[F, A] = OptionT.none
+
+  def handleErrorWith[A](fa: OptionT[F, A])(f: Unit => OptionT[F, A]): OptionT[F, A] =
+    OptionT(F.flatMap(fa.value) {
+      case s @ Some(_) => F.pure(s)
+      case None => f(()).value
+    })
 }
 
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {

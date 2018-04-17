@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
   implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] =
-    new Traverse[Option] with MonadError[Option, Unit]  with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] {
+    new Traverse[Option] with MonadError[Option, Unit]  with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] with ErrorControl[Option, Id, Unit] {
 
       def empty[A]: Option[A] = None
 
@@ -55,6 +55,16 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       def raiseError[A](e: Unit): Option[A] = None
 
       def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa orElse f(())
+
+      val monadErrorF: MonadError[Option, Unit] = catsStdInstancesForOption
+      val applicativeG: Applicative[Id] = cats.catsInstancesForId
+
+      def controlError[A](fa: Option[A])(f: Unit => A): A = fa match {
+        case Some(a) => a
+        case None => f(())
+      }
+
+      def accept[A](ga: A): Option[A] = Some(ga)
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
         fa match {
