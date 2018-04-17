@@ -51,7 +51,7 @@ final class ErrorControlGOps[G[_], A](val ga: G[A]) extends AnyVal {
     E.accept(ga)
 }
 
-final class ErrorControlEitherOps[G[_], E,  A](val gea: G[Either[E, A]]) extends AnyVal {
+final class ErrorControlEitherOps[G[_], E, A](val gea: G[Either[E, A]]) extends AnyVal {
   def absolve[F[_]](implicit E: ErrorControl[F, G, E]): F[A] =
     E.absolve(gea)
 }

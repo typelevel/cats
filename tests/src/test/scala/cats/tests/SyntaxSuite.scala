@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.Compose
 import cats.instances.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.AllSyntaxBinCompat
 
 
 /**
@@ -24,7 +24,7 @@ import cats.syntax.AllSyntax
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax {
+object SyntaxSuite extends AllInstances with AllSyntaxBinCompat {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -162,6 +162,28 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
+  def testErrorControl[F[_], G[_]: Applicative, E, A](implicit E: ErrorControl[F, G, E], M: MonadError[F, E]): Unit = {
+    val fa = mock[F[A]]
+    val f = mock[E => G[A]]
+    val ga = fa.controlError(f)
+
+    val f2 = mock[E => A]
+    val ga2 = fa.intercept(f2)
+
+    val gea = fa.trial
+    val et = fa.trialT
+
+    val fa2 = gea.absolve[F]
+
+    val e = mock[E]
+    val pred = mock[A => Boolean]
+    val fa3 = ga.assure[F, E](e)(pred)
+
+    val f3 = mock[A => E]
+    val fa4 = ga.assureOr[F, E](f3)(pred)
+
+    val fa5 = ga.accept[F, E]
+  }
 
 
   def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
