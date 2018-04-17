@@ -36,22 +36,33 @@ final class ErrorControlFOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 }
 
 final class ErrorControlGOps[G[_], A](val ga: G[A]) extends AnyVal {
+  def assure[F[_]]: AssurePartiallyApplied[F, G, A] = new AssurePartiallyApplied[F, G, A](ga)
 
-  def assure[F[_], E](error: => E)
-                     (predicate: A => Boolean)
-                     (implicit E: ErrorControl[F, G, E]): F[A] =
-    E.assure(ga)(error)(predicate)
+  def assureOr[F[_]]: AssureOrPartiallyApplied[F, G, A] = new AssureOrPartiallyApplied[F, G, A](ga)
 
-  def assureOr[F[_], E](error: A => E)
-                       (predicate: A => Boolean)
-                       (implicit E: ErrorControl[F, G, E]): F[A] =
-    E.assureOr(ga)(error)(predicate)
-
-  def accept[F[_], E](implicit E: ErrorControl[F, G, E]): F[A] =
-    E.accept(ga)
+  def accept[F[_]]: AcceptPartiallyApplied[F, G, A] = new AcceptPartiallyApplied[F, G, A](ga)
 }
 
 final class ErrorControlEitherOps[G[_], E, A](val gea: G[Either[E, A]]) extends AnyVal {
   def absolve[F[_]](implicit E: ErrorControl[F, G, E]): F[A] =
     E.absolve(gea)
+}
+
+private[syntax] final class AssurePartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
+  def apply[E](error: => E)
+              (predicate: A => Boolean)
+              (implicit E: ErrorControl[F, G, E]): F[A] =
+    E.assure(ga)(error)(predicate)
+}
+
+private[syntax] final class AssureOrPartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
+  def apply[E](error: A => E)
+              (predicate: A => Boolean)
+              (implicit E: ErrorControl[F, G, E]): F[A] =
+    E.assureOr(ga)(error)(predicate)
+}
+
+private[syntax] final class AcceptPartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
+  def apply[E](implicit E: ErrorControl[F, G, E]): F[A] =
+    E.accept(ga)
 }
