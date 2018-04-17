@@ -56,9 +56,13 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
 
   /**
    * Returns true if `x` != `y`, false otherwise.
+   *
+   * Note: this default implementation provided by [[Order]] is the same as the
+   * one defined in [[Eq]], but for purposes of binary compatibility, the
+   * override in [[Order]] has not yet been removed.
+   * See [[https://github.com/typelevel/cats/pull/2230#issuecomment-381818633 this discussion]].
    */
-  override def neqv(x: A, y: A): Boolean =
-    compare(x, y) != 0
+  override def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
   /**
    * Returns true if `x` <= `y`, false otherwise.
