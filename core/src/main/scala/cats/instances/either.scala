@@ -139,19 +139,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
   // scalastyle:on method.length
 
-  implicit def catsErrorControlForEither[E]: ErrorControl[Either[E, ?], Id, E] =
-    new ErrorControl[Either[E, ?], Id, E] {
-      val monadErrorF: MonadError[Either[E, ?], E] = catsStdInstancesForEither
-      val monadG: Monad[Id] = cats.catsInstancesForId
-
-      def controlError[A](fa: Either[E, A])(f: E => A): A = fa match {
-        case Left(e) => f(e)
-        case Right(a) => a
-      }
-
-      def accept[A](ga: A): Either[E, A] = Right(ga)
-    }
-
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
     new SemigroupK[Either[L, ?]] {
       def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
@@ -167,5 +154,23 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Left(a) => "Left(" + A.show(a) + ")"
           case Right(b) => "Right(" + B.show(b) + ")"
         }
+    }
+}
+
+/**
+  * Extension to Either instances in a binary compat way
+  */
+trait EitherInstancesExtension {
+  implicit def catsErrorControlForEither[E]: ErrorControl[Either[E, ?], Id, E] =
+    new ErrorControl[Either[E, ?], Id, E] {
+      val monadErrorF: MonadError[Either[E, ?], E] = cats.instances.either.catsStdInstancesForEither
+      val monadG: Monad[Id] = cats.catsInstancesForId
+
+      def controlError[A](fa: Either[E, A])(f: E => A): A = fa match {
+        case Left(e) => f(e)
+        case Right(a) => a
+      }
+
+      def accept[A](ga: A): Either[E, A] = Right(ga)
     }
 }

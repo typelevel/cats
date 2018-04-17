@@ -113,9 +113,22 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       override def collectFirstSome[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
     }
 
+  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
+    new Show[Option[A]] {
+      def show(fa: Option[A]): String = fa match {
+        case Some(a) => s"Some(${A.show(a)})"
+        case None => "None"
+      }
+    }
+}
+
+/**
+  * Extension to Option instances in a binary compat way
+  */
+trait OptionInstancesExtension {
   implicit val catsStdErrorControlForOption: ErrorControl[Option, Id, Unit] =
     new ErrorControl[Option, Id, Unit] {
-      val monadErrorF: MonadError[Option, Unit] = catsStdInstancesForOption
+      val monadErrorF: MonadError[Option, Unit] = cats.instances.option.catsStdInstancesForOption
       val monadG: Monad[Id] = cats.catsInstancesForId
 
       def controlError[A](fa: Option[A])(f: Unit => A): A = fa match {
@@ -124,13 +137,5 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       }
 
       def accept[A](ga: A): Option[A] = Some(ga)
-    }
-
-  implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
-    new Show[Option[A]] {
-      def show(fa: Option[A]): String = fa match {
-        case Some(a) => s"Some(${A.show(a)})"
-        case None => "None"
-      }
     }
 }

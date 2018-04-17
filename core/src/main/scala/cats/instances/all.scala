@@ -1,6 +1,10 @@
 package cats
 package instances
 
+abstract class AllInstancesBinCompat
+  extends AllInstances
+  with AllInstancesBinCompat0
+
 trait AllInstances
   extends AnyValInstances
   with    BigIntInstances
@@ -32,3 +36,7 @@ trait AllInstances
   with    TupleInstances
   with    UUIDInstances
   with    VectorInstances
+
+trait AllInstancesBinCompat0
+  extends OptionInstancesExtension
+  with EitherInstancesExtension
