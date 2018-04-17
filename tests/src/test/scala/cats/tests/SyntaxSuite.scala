@@ -24,7 +24,7 @@ import cats.syntax.AllSyntaxBinCompat
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntaxBinCompat {
+object SyntaxSuite extends AllSyntaxBinCompat with AllInstances {
 
   // pretend we have a value of type A
   def mock[A]: A = ???

@@ -2,7 +2,7 @@ package cats
 
 import cats.data.EitherT
 
-trait ErrorControl[F[_], G[_], E] {
+trait ErrorControl[F[_], G[_], E] extends Serializable {
   val monadErrorF: MonadError[F, E]
   val applicativeG: Applicative[G]
 

@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{Const, OptionT}
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 
@@ -65,6 +65,13 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", MonoidKTests[OptionT[ListWrapper, ?]].monoidK[Int])
     checkAll("MonoidK[OptionT[ListWrapper, ?]]", SerializableTests.serializable(MonoidK[OptionT[ListWrapper, ?]]))
+
+    checkAll("OptionT[ListWrapper, Int]", MonadErrorTests[OptionT[ListWrapper, ?], Unit].monadError[Int, Int, Int])
+    checkAll("MonadError[OptionT[List, ?]]", SerializableTests.serializable(MonadError[OptionT[ListWrapper, ?], Unit]))
+
+    checkAll("OptionT[ListWrapper, Int]", ErrorControlTests[OptionT[ListWrapper, ?], ListWrapper, Unit].errorControl[Int])
+    checkAll("ErrorControl[OptionT[ListWrapper, ?], ListWrapper, Unit]",
+      SerializableTests.serializable(ErrorControl[OptionT[ListWrapper, ?], ListWrapper, Unit]))
 
     Monad[OptionT[ListWrapper, ?]]
     FlatMap[OptionT[ListWrapper, ?]]

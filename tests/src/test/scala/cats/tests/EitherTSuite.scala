@@ -59,6 +59,9 @@ class EitherTSuite extends CatsSuite {
     checkAll("EitherT[ListWrapper, String, Int]", MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
     checkAll("MonadError[EitherT[List, ?, ?]]", SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
 
+    checkAll("EitherT[ListWrapper, String, Int]", ErrorControlTests[EitherT[ListWrapper, String, ?], ListWrapper, String].errorControl[Int])
+    checkAll("ErrorControl[EitherT[ListWrapper, String, ?], ListWrapper, String]",
+      SerializableTests.serializable(ErrorControl[EitherT[ListWrapper, String, ?], ListWrapper, String]))
   }
 
   {

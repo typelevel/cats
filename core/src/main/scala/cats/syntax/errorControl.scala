@@ -6,7 +6,7 @@ import cats.data.EitherT
 
 trait ErrorControlSyntax {
   implicit final def catsSyntaxErrorControlF[F[_], E, A]
-  (fa: F[A])(implicit F: MonadError[F, E]): ErrorControlFOps[F, E,  A] =
+  (fa: F[A])(implicit F: MonadError[F, E]): ErrorControlFOps[F, E, A] =
     new ErrorControlFOps[F, E, A](fa)
 
   implicit final def catsSyntaxErrorControlG[G[_], A]

@@ -32,6 +32,9 @@ class EitherSuite extends CatsSuite {
   checkAll("Either[ListWrapper[String], Int]", SemigroupTests[Either[ListWrapper[String], Int]].semigroup)
   checkAll("Semigroup[Either[ListWrapper[String], Int]]", SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
+  checkAll("Either[String, Int]", ErrorControlTests[Either[String, ?], Id, String].errorControl[Int])
+  checkAll("ErrorControl[Either[String, ?], Id, String]", SerializableTests.serializable(ErrorControl[Either[String, ?], Id, String]))
+
   val partialOrder = catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
   val monad = implicitly[Monad[Either[Int, ?]]]
