@@ -107,7 +107,7 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       implicit val L0: Monoid[L] = L
     }
 
-  implicit def catsEndeavorForWriterT[F[_], G[_], L: Monoid, E]
+  implicit def catsErrorControlForWriterT[F[_], G[_], L: Monoid, E]
   (implicit M: ErrorControl[F, G, E]): ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] =
     new ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] {
       implicit val F: MonadError[F, E] = M.monadErrorF

@@ -164,20 +164,20 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     }
 
   implicit def catsErrorControlForKleisli[F[_], G[_], R, E]
-  (implicit M: ErrorControl[F, G, E]): ErrorControl[Kleisli[F, R, ?], Kleisli[G, R, ?], E] =
+  (implicit M: MonadError[F, E], E: ErrorControl[F, G, E]): ErrorControl[Kleisli[F, R, ?], Kleisli[G, R, ?], E] =
     new ErrorControl[Kleisli[F, R, ?], Kleisli[G, R, ?], E] {
-      implicit val F: MonadError[F, E] = M.monadErrorF
-      implicit val G: Applicative[G] = M.applicativeG
+      implicit val F: MonadError[F, E] = M
+      implicit val G: Applicative[G] = E.applicativeG
 
-      val monadErrorF: MonadError[Kleisli[F, R, ?], E] = Kleisli.catsDataMonadErrorForKleisli
+      val monadErrorF: MonadError[Kleisli[F, R, ?], E] = Kleisli.catsDataMonadErrorForKleisli(M)
       val applicativeG: Applicative[Kleisli[G, R, ?]] = Kleisli.catsDataApplicativeForKleisli
 
       def accept[A](ga: Kleisli[G, R, A]): Kleisli[F, R, A] = ga.mapK(new (G ~> F) {
-        def apply[T](ga: G[T]): F[T] = M.accept(ga)
+        def apply[T](ga: G[T]): F[T] = E.accept(ga)
       })
 
       def controlError[A](fa: Kleisli[F, R, A])(f: E => Kleisli[G, R, A]): Kleisli[G, R, A] =
-        Kleisli(r => M.controlError(fa.run(r))(e => f(e).run(r)))
+        Kleisli(r => E.controlError(fa.run(r))(e => f(e).run(r)))
 
     }
 }

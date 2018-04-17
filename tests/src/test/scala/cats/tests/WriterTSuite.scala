@@ -24,6 +24,19 @@ class WriterTSuite extends CatsSuite {
   checkAll("WriterT[Show, Int, Int]", ContravariantTests[WriterT[Show, Int, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[WriterT[Show, Int, Int]]", SerializableTests.serializable(Contravariant[WriterT[Show, Int, ?]]))
 
+  //TODO: Why can't type inference figure this out?
+  implicit val x: ErrorControl[WriterT[Option, Int, ?], WriterT[Id, Int, ?], Unit] =
+    WriterT.catsErrorControlForWriterT[Option, Id, Int, Unit]
+
+  checkAll("WriterT[Option, Int, ?]", ErrorControlTests[WriterT[Option, Int, ?], WriterT[Id, Int, ?], Unit].errorControl[Int])
+  checkAll("ErrorControl[WriterT[Option, Int, ?], WriterT[Id, Int, ?], Unit]",
+    SerializableTests.serializable(ErrorControl[WriterT[Option, Int, ?], WriterT[Id, Int, ?], Unit]))
+
+  checkAll("WriterT[EitherT[Option, String, ?], Int, ?]",
+    ErrorControlTests[WriterT[EitherT[Option, String, ?], Int, ?], WriterT[Option, Int, ?], String].errorControl[Int])
+  checkAll("ErrorControl[WriterT[EitherT[Option, String, ?], Int, ?], WriterT[Option, Int, ?], String]",
+    SerializableTests.serializable(ErrorControl[WriterT[EitherT[Option, String, ?], Int, ?], WriterT[Option, Int, ?], String]))
+
   // check that this resolves
   Eq[Writer[Int, Int]]
 

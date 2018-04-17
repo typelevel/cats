@@ -39,13 +39,26 @@ class KleisliSuite extends CatsSuite {
   checkAll("Semigroupal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Semigroupal[Kleisli[Option, Int, ?]]))
 
   checkAll("Kleisli[(CSemi, ?), Int, ?]", CommutativeFlatMapTests[Kleisli[(CSemi, ?), Int, ?]].commutativeFlatMap[Int, Int, Int])
-  checkAll("CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]",SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]))
+  checkAll("CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]", SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]))
 
   checkAll("Kleisli[Option, Int, ?]", CommutativeMonadTests[Kleisli[Option, Int, ?]].commutativeMonad[Int, Int, Int])
-  checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))
+  checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]", SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))
 
   checkAll("Kleisli[Id, Int, ?]", CommutativeMonadTests[Kleisli[Id, Int, ?]].commutativeMonad[Int, Int, Int])
-  checkAll("CommutativeMonad[Kleisli[Id, Int, ?]]",SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, ?]]))
+  checkAll("CommutativeMonad[Kleisli[Id, Int, ?]]", SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, ?]]))
+
+  //TODO: Why can't type inference figure this out?
+  implicit val x: ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit] =
+    Kleisli.catsErrorControlForKleisli[Option, Id, Int, Unit]
+
+  checkAll("Kleisli[Option, Int, ?]", ErrorControlTests[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit].errorControl[Int])
+  checkAll("ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit]",
+    SerializableTests.serializable(ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit]))
+
+  checkAll("Kleisli[EitherT[Option, String, ?], Int, ?]",
+    ErrorControlTests[Kleisli[EitherT[Option, String, ?], Int, ?], Kleisli[Option, Int, ?], String].errorControl[Int])
+  checkAll("ErrorControl[Kleisli[EitherT[Option, String, ?], Int, ?], Kleisli[Option, Int, ?], String]",
+    SerializableTests.serializable(ErrorControl[Kleisli[EitherT[Option, String, ?], Int, ?], Kleisli[Option, Int, ?], String]))
 
   {
     implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]

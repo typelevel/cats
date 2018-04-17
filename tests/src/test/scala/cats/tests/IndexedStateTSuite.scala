@@ -403,6 +403,16 @@ class IndexedStateTSuite extends CatsSuite {
 
     checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int, ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[StateT[Option, Int, ?], Unit]", SerializableTests.serializable(MonadError[StateT[Option, Int , ?], Unit]))
+
+    //TODO: Why can't type inference figure this out?
+    implicit val x: ErrorControl[StateT[Option, Int, ?], StateT[Id, Int, ?], Unit] =
+      IndexedStateT.catsErrorControlForStateT[Option, Id, Int, Unit]
+
+    checkAll("StateT[EitherT[Option, String, ?], Int, ?]",
+      ErrorControlTests[StateT[EitherT[Option, String, ?], Int, ?], StateT[Option, Int, ?], String].errorControl[Int])
+    checkAll("ErrorControl[StateT[EitherT[Option, String, ?], Int, ?], StateT[Option, Int, ?], String]",
+      SerializableTests.serializable(ErrorControl[StateT[EitherT[Option, String, ?], Int, ?], StateT[Option, Int, ?], String]))
+
   }
 
 }
