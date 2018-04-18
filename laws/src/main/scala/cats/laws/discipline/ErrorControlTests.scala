@@ -37,8 +37,9 @@ trait ErrorControlTests[F[_], G[_], E] extends Laws {
       "derive attempt" -> forAll(laws.deriveAttempt[A] _),
       "derive ensureOr" -> forAll(laws.deriveEnsureOr[A] _),
       "derive HandleError" -> forAll(laws.deriveHandleError[A] _),
-      "monad homomorphism flatMap" -> forAll(laws.monadHomomorphismFlatMap[A] _),
-      "monad homomorphism pure" -> forAll(laws.monadHomomorphismPure[A] _)
+      "applicative homomorphism pure" -> forAll(laws.pureHomomorphism[A] _),
+      "applicative homomorphism ap" -> forAll(laws.applicativeHomomorphism[A] _),
+      "monad homomorphism flatMap" -> forAll(laws.flatMapHomomorphism[A] _)
     )
 }
 

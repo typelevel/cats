@@ -2,6 +2,7 @@ package cats
 package laws
 
 import syntax.flatMap._
+import syntax.apply._
 
 /**
   * Laws that must be obeyed by any `cats.ErrorControl`.
@@ -38,11 +39,14 @@ trait ErrorControlLaws[F[_], G[_], E] {
   def trialAbsolve[A](fa: F[A]): IsEq[F[A]] =
     E.absolve(E.trial(fa)) <-> fa
 
-  def monadHomomorphismFlatMap[A](ga: G[A], f: A => G[A]): IsEq[F[A]] =
-    E.accept(ga.flatMap(f)) <-> E.accept(ga).flatMap(a => E.accept(f(a)))
+  def applicativeHomomorphism[A](x: G[A], y: G[A]): IsEq[F[A]] =
+    E.accept(x *> y) <-> E.accept(x) *> E.accept(y)
 
-  def monadHomomorphismPure[A](a: A): IsEq[F[A]] =
+  def pureHomomorphism[A](a: A): IsEq[F[A]] =
     E.accept(G.pure(a)) <-> F.pure(a)
+
+  def flatMapHomomorphism[A](ga: G[A], f: A => G[A]): IsEq[F[A]] =
+    E.accept(ga.flatMap(f)) <-> E.accept(ga).flatMap(a => E.accept(f(a)))
 }
 
 object ErrorControlLaws {
