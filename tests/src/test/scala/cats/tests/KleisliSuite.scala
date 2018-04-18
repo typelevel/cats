@@ -47,14 +47,6 @@ class KleisliSuite extends CatsSuite {
   checkAll("Kleisli[Id, Int, ?]", CommutativeMonadTests[Kleisli[Id, Int, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Id, Int, ?]]", SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, ?]]))
 
-  //TODO: Why can't type inference figure this out?
-  implicit val x: ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit] =
-    Kleisli.catsErrorControlForKleisli[Option, Id, Int, Unit]
-
-  checkAll("Kleisli[Option, Int, ?]", ErrorControlTests[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit].errorControl[Int])
-  checkAll("ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit]",
-    SerializableTests.serializable(ErrorControl[Kleisli[Option, Int, ?], Kleisli[Id, Int, ?], Unit]))
-
   checkAll("Kleisli[EitherT[Option, String, ?], Int, ?]",
     ErrorControlTests[Kleisli[EitherT[Option, String, ?], Int, ?], Kleisli[Option, Int, ?], String].errorControl[Int])
   checkAll("ErrorControl[Kleisli[EitherT[Option, String, ?], Int, ?], Kleisli[Option, Int, ?], String]",

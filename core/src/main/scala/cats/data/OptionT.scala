@@ -217,7 +217,7 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
     new OptionTMonad[F] { implicit val F = F0 }
 
-  implicit def catsEndeavorForOptionT[F[_]: Monad, E]: ErrorControl[OptionT[F, ?], F, Unit] =
+  implicit def catsErrorControlForOptionT[F[_]: Monad, E]: ErrorControl[OptionT[F, ?], F, Unit] =
     new ErrorControl[OptionT[F, ?], F, Unit] {
       val monadErrorF: MonadError[OptionT[F, ?], Unit] = catsDataMonadErrorUnitForOptionT
       val monadG: Monad[F] = Monad[F]

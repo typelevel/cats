@@ -107,24 +107,6 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
       implicit val L0: Monoid[L] = L
     }
 
-  implicit def catsErrorControlForWriterT[F[_], G[_], L: Monoid, E]
-  (implicit M: ErrorControl[F, G, E]): ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] =
-    new ErrorControl[WriterT[F, L, ?], WriterT[G, L, ?], E] {
-      implicit val F: MonadError[F, E] = M.monadErrorF
-      implicit val G: Monad[G] = M.monadG
-
-      val monadErrorF: MonadError[WriterT[F, L, ?], E] = WriterT.catsDataMonadErrorForWriterT
-      val monadG: Monad[WriterT[G, L, ?]] = WriterT.catsDataMonadForWriterT
-
-      def accept[A](ga: WriterT[G, L, A]): WriterT[F, L, A] = ga.mapK(new (G ~> F) {
-        def apply[T](ga: G[T]): F[T] = M.accept(ga)
-      })
-
-      def controlError[A](fa: WriterT[F, L, A])(f: E => WriterT[G, L, A]): WriterT[G, L, A] =
-        WriterT(M.controlError(fa.run)(e => f(e).run))
-
-    }
-
   implicit def catsDataTraverseForWriterTId[L](implicit F: Traverse[Id]): Traverse[WriterT[Id, L, ?]] =
     catsDataTraverseForWriterT[Id, L](F)
 }
