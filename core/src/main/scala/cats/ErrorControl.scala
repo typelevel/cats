@@ -25,12 +25,12 @@ trait ErrorControl[F[_], G[_], E] extends Serializable {
   def absolve[A](gea: G[Either[E, A]]): F[A] =
     monadErrorF.flatMap(accept(gea))(_.fold(monadErrorF.raiseError, monadErrorF.pure))
 
-  def assure[A](ga: G[A])(error: => E)(predicate: A => Boolean): F[A] =
-    assureOr(ga)(_ => error)(predicate)
-
-  def assureOr[A](ga: G[A])(error: A => E)(predicate: A => Boolean): F[A] =
+  def assure[A](ga: G[A])(error: A => Option[E])(predicate: A => Boolean): F[A] =
     monadErrorF.flatMap(accept(ga))(a =>
-      if (predicate(a)) monadErrorF.pure(a) else monadErrorF.raiseError(error(a)))
+      if (predicate(a)) monadErrorF.pure(a) else error(a) match {
+        case Some(e) => monadErrorF.raiseError(e)
+        case None => monadErrorF.pure(a)
+      })
 
 }
 

@@ -19,7 +19,7 @@ trait ErrorControlLaws[F[_], G[_], E] {
     E.accept(E.trial(fa)) <-> F.attempt(fa)
 
   def deriveEnsureOr[A](ga: G[A], e: A => E, p: A => Boolean): IsEq[F[A]] =
-    F.ensureOr(E.accept(ga))(e)(p) <-> E.assureOr(ga)(e)(p)
+    F.ensureOr(E.accept(ga))(e)(p) <-> E.assure(ga)(a => Option(e(a)))(p)
 
   def gNeverHasErrors[A](ga: G[A], f: E => A): IsEq[G[A]] =
     E.intercept(E.accept(ga))(f) <-> ga

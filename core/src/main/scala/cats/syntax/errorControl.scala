@@ -10,11 +10,11 @@ trait ErrorControlSyntax {
     new ErrorControlFOps[F, E, A](fa)
 
   implicit final def catsSyntaxErrorControlG[G[_], A]
-  (ga: G[A])(implicit G: Applicative[G]): ErrorControlGOps[G, A] =
+  (ga: G[A])(implicit G: Monad[G]): ErrorControlGOps[G, A] =
     new ErrorControlGOps[G, A](ga)
 
   implicit final def catsSyntaxErrorControlEither[G[_], E, A]
-  (gea: G[Either[E, A]])(implicit G: Applicative[G]): ErrorControlEitherOps[G, E, A] =
+  (gea: G[Either[E, A]])(implicit G: Monad[G]): ErrorControlEitherOps[G, E, A] =
     new ErrorControlEitherOps[G, E, A](gea)
 
 }
@@ -38,8 +38,6 @@ final class ErrorControlFOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 final class ErrorControlGOps[G[_], A](val ga: G[A]) extends AnyVal {
   def assure[F[_]]: AssurePartiallyApplied[F, G, A] = new AssurePartiallyApplied[F, G, A](ga)
 
-  def assureOr[F[_]]: AssureOrPartiallyApplied[F, G, A] = new AssureOrPartiallyApplied[F, G, A](ga)
-
   def accept[F[_]]: AcceptPartiallyApplied[F, G, A] = new AcceptPartiallyApplied[F, G, A](ga)
 }
 
@@ -49,17 +47,10 @@ final class ErrorControlEitherOps[G[_], E, A](val gea: G[Either[E, A]]) extends 
 }
 
 private[syntax] final class AssurePartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
-  def apply[E](error: => E)
+  def apply[E](error: A => Option[E])
               (predicate: A => Boolean)
               (implicit E: ErrorControl[F, G, E]): F[A] =
     E.assure(ga)(error)(predicate)
-}
-
-private[syntax] final class AssureOrPartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
-  def apply[E](error: A => E)
-              (predicate: A => Boolean)
-              (implicit E: ErrorControl[F, G, E]): F[A] =
-    E.assureOr(ga)(error)(predicate)
 }
 
 private[syntax] final class AcceptPartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {

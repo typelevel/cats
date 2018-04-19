@@ -162,7 +162,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testErrorControl[F[_], G[_]: Applicative, E, A](implicit E: ErrorControl[F, G, E], M: MonadError[F, E]): Unit = {
+  def testErrorControl[F[_], G[_]: Monad, E, A](implicit E: ErrorControl[F, G, E], M: MonadError[F, E]): Unit = {
     val fa = mock[F[A]]
     val f = mock[E => G[A]]
     val ga = fa.controlError(f)
@@ -175,14 +175,11 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances {
 
     val fa2 = gea.absolve[F]
 
-    val e = mock[E]
     val pred = mock[A => Boolean]
-    val fa3 = ga.assure[F](e)(pred)
+    val f3 = mock[A => Option[E]]
+    val fa3 = ga.assure[F](f3)(pred)
 
-    val f3 = mock[A => E]
-    val fa4 = ga.assureOr[F](f3)(pred)
-
-    val fa5 = ga.accept[F]
+    val fa4 = ga.accept[F]
   }
 
 
