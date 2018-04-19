@@ -25,6 +25,25 @@ final class OptionIdOps[A](val a: A) extends AnyVal {
    * }}}
    */
   def some: Option[A] = Some(a)
+
+  /**
+   * Wrap a value in `Option`. Returns nulls as None.
+   *
+   * `3.option` is equivalent to `Some(3)`, but the former will have an inferred
+   * return type of `Option[Int]` while the latter will have `Some[Int]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> 3.option
+   * res0: Option[Int] = Some(3)
+   * scala> val x: String = null
+   * x: String = null
+   * scala> x.option
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def option: Option[A] = Option(a)
 }
 
 final class OptionOps[A](val oa: Option[A]) extends AnyVal {
