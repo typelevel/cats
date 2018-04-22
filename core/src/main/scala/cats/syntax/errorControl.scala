@@ -22,6 +22,9 @@ trait ErrorControlSyntax {
 
 final class ErrorControlFOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 
+  def control[G[_], B](f: Either[E, A] => G[B])(implicit E: ErrorControl[F, G, E]): G[B] =
+    E.control(fa)(f)
+
   def controlError[G[_]](f: E => G[A])(implicit E: ErrorControl[F, G, E]): G[A] =
     E.controlError(fa)(f)
 
