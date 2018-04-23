@@ -414,13 +414,13 @@ private[data] sealed trait WriterTAlternative[F[_], L] extends Alternative[Write
   override implicit def F0: Alternative[F]
 }
 
-private[data] sealed trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, ?]] with WriterTContravariant[F, L] {
-  override implicit def F0: ContravariantMonoidal[F]
+private[data] sealed trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, ?]] {
+  implicit def F0: ContravariantMonoidal[F]
 
   override def unit: WriterT[F, L, Unit] = WriterT(F0.trivial[(L, Unit)])
 
   override def contramap[A, B](fa: WriterT[F, L, A])(f: B => A): WriterT[F, L, B] =
-    super[WriterTContravariant].contramap(fa)(f)
+    fa.contramap(f)
 
   override def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
     WriterT(
