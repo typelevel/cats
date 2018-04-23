@@ -4,7 +4,7 @@ package data
 import cats.Bifunctor
 import cats.arrow.FunctionK
 import cats.data.Validated.{Invalid, Valid}
-
+import cats.internals.EitherUtil.{rightBox, leftBox}
 import scala.annotation.tailrec
 
 /** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
@@ -49,7 +49,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def pad: (Option[A], Option[B]) = fold(a => (Some(a), None), b => (None, Some(b)), (a, b) => (Some(a), Some(b)))
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
-  final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
+  final def toEither: Either[A, B] = fold(leftBox, rightBox, (_, b) => Right(b))
   final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
   final def toList: List[B] = right.toList

@@ -49,6 +49,13 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   ivyConfigurations += CompileTime,
   unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name)),
+  unmanagedSourceDirectories in Compile ++= {
+    val bd = baseDirectory.value
+    if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 12))
+      CrossType.Pure.sharedSrcDir(bd, "main").toList map (f => file(f.getPath + "-2.12+"))
+    else
+      CrossType.Pure.sharedSrcDir(bd, "main").toList map (f => file(f.getPath + "-2.11-"))
+  },
   unmanagedSourceDirectories in Test ++= {
     val bd = baseDirectory.value
     if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
