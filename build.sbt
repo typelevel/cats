@@ -1,5 +1,7 @@
 import microsites._
 import ReleaseTransformations._
+import com.typesafe.tools.mima.core.{MissingClassProblem, ProblemFilters, ReversedMissingMethodProblem}
+
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import org.scalajs.sbtplugin.cross.CrossProject
 
@@ -213,9 +215,30 @@ lazy val docSettings = Seq(
 
 lazy val binaryCompatibleVersion = "1.0.0"
 
-def mimaSettings(moduleName: String) = Seq(
-  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion)
-)
+def mimaSettings(moduleName: String) =
+  Seq(
+    mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion),
+    mimaBinaryIssueFilters ++= (moduleName match {
+      case "cats-core" =>
+        Seq(
+          // Internal classes, moved due to refactoring, not a problem
+          ProblemFilters.exclude[MissingClassProblem]("cats.syntax.EitherUtil$"),
+          ProblemFilters.exclude[MissingClassProblem]("cats.syntax.EitherUtil"),
+          // Scala 2.11 only — internal classes, not a problem
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadErrorF.redeem"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadErrorF.redeemWith"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadErrorF.handleError"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadErrorF.attempt"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadError.redeem"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.data.EitherTMonadError.redeemWith"),
+          // BREAKAGE — Scala 2.11 only!
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.MonadError.redeem"),
+          ProblemFilters.exclude[ReversedMissingMethodProblem]("cats.MonadError.redeemWith")
+        )
+      case _ =>
+        Seq.empty
+    })
+  )
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -305,7 +328,7 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .configureCross(disableScoverage210Js)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core") )
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
