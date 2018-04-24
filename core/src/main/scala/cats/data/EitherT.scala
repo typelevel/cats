@@ -33,11 +33,11 @@ import cats.internals.EitherUtil.{eitherCast, rightBox, leftBox}
  *
  * Note that in this function the error type is part of the signature and
  * is more specific than the customary `Throwable` or `Exception`. You can
- * always "upcast" its error type to `Throwable` later using [[upcastL]]:
+ * always "upcast" its error type to `Throwable` later using [[leftWiden]]:
  *
  * {{{
  *   val num: EitherT[Eval, Throwable, Long] =
- *     parseNum("10210", 10).upcastL
+ *     parseNum("10210", 10).leftWiden
  * }}}
  *
  * The power of `EitherT` is that it combines `F[_]` with the `Either`
@@ -163,12 +163,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *     EitherT.rightT(10210)
    *
    *   val num2: EitherT[Eval, Throwable, Long] =
-   *     num.upcastL
+   *     num.leftWiden
    * }}}
    *
-   * @see [[upcastR]]
+   * @see [[rightWiden]]
    */
-  @inline def upcastL[AA >: A]: EitherT[F, AA, B] =
+  @inline def leftWiden[AA >: A]: EitherT[F, AA, B] =
     this.asInstanceOf[EitherT[F, AA, B]]
 
   /**
@@ -187,12 +187,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *     EitherT.rightT(List(10))
    *
    *   val iter: EitherT[Eval, String, Iterable[Int]] =
-   *     list.upcastR
+   *     list.rightWiden
    * }}}
    *
-   * @see [[upcastL]]
+   * @see [[leftWiden]]
    */
-  @inline def upcastR[BB >: B]: EitherT[F, A, BB] =
+  @inline def rightWiden[BB >: B]: EitherT[F, A, BB] =
     this.asInstanceOf[EitherT[F, A, BB]]
 
   /**
