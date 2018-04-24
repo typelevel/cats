@@ -322,14 +322,15 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    */
   def attemptF[E](implicit F: ApplicativeError[F, E]): EitherT[F, A, Either[E, B]] =
     EitherT(F.map(F.attempt(value)) {
-      case error @ Left(_) =>
-        Right(eitherCast(error))
       case Right(eitherB) =>
         eitherB match {
           case right @ Right(_) => Right(eitherCast(right))
           // N.B. pattern match does not do `case Left(_)` on purpose
           case _ => eitherCast(eitherB)
         }
+      case error =>
+        // N.B. pattern match does not do `case Left(_)` on purpose
+        Right(eitherCast(error))
     })
 
   /**
