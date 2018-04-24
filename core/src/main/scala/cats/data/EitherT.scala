@@ -33,7 +33,8 @@ import cats.internals.EitherUtil.{eitherCast, rightBox, leftBox}
  *
  * Note that in this function the error type is part of the signature and
  * is more specific than the customary `Throwable` or `Exception`. You can
- * always "upcast" its error type to `Throwable` later using [[leftWiden]]:
+ * always "upcast" its error type to `Throwable` later using
+ * [[Bifunctor.leftWiden]]:
  *
  * {{{
  *   val num: EitherT[Eval, Throwable, Long] =
@@ -144,56 +145,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    */
   def swap(implicit F: Functor[F]): EitherT[F, B, A] =
     EitherT(F.map(value)(_.swap))
-
-  /**
-   * Casts the left type parameter to a super type.
-   *
-   * Like many types described in Cats, the type parameters of `EitherT`
-   * are invariant, even if the `Either` data type is covariant in both
-   * type parameters.
-   *
-   * This operator is a shortcut for safely upcasting the left type parameter
-   * to a compatible super type, an operation that would be automatic under
-   * Scala's type system if the parameters were declared as being covariant.
-   *
-   * Example:
-   *
-   * {{{
-   *   val num: EitherT[Eval, NumberFormatException, Long] =
-   *     EitherT.rightT(10210)
-   *
-   *   val num2: EitherT[Eval, Throwable, Long] =
-   *     num.leftWiden
-   * }}}
-   *
-   * @see [[widen]]
-   */
-  @inline def leftWiden[AA >: A]: EitherT[F, AA, B] =
-    this.asInstanceOf[EitherT[F, AA, B]]
-
-  /**
-   * Casts the right type parameter to a super type.
-   *
-   * Like many types described in Cats, the type parameters of `EitherT`
-   * are invariant, even if the `Either` data type is covariant in both
-   * type parameters.
-   *
-   * This operator is a shortcut for safely upcasting the right type parameter
-   * to a compatible super type, an operation that would be automatic under
-   * Scala's type system if the parameters were declared as being covariant.
-   *
-   * {{{
-   *   val list: EitherT[Eval, String, List[Int]] =
-   *     EitherT.rightT(List(10))
-   *
-   *   val iter: EitherT[Eval, String, Iterable[Int]] =
-   *     list.widen
-   * }}}
-   *
-   * @see [[leftWiden]]
-   */
-  @inline def widen[BB >: B]: EitherT[F, A, BB] =
-    this.asInstanceOf[EitherT[F, A, BB]]
 
   /**
    * If the underlying `Either` is a `Right`, then returns its value in
