@@ -166,7 +166,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *     num.leftWiden
    * }}}
    *
-   * @see [[rightWiden]]
+   * @see [[widen]]
    */
   @inline def leftWiden[AA >: A]: EitherT[F, AA, B] =
     this.asInstanceOf[EitherT[F, AA, B]]
@@ -187,12 +187,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    *     EitherT.rightT(List(10))
    *
    *   val iter: EitherT[Eval, String, Iterable[Int]] =
-   *     list.rightWiden
+   *     list.widen
    * }}}
    *
    * @see [[leftWiden]]
    */
-  @inline def rightWiden[BB >: B]: EitherT[F, A, BB] =
+  @inline def widen[BB >: B]: EitherT[F, A, BB] =
     this.asInstanceOf[EitherT[F, A, BB]]
 
   /**
