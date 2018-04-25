@@ -178,9 +178,8 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances {
 
     val fa2 = gea.absolve[F]
 
-    val pred = mock[A => Boolean]
     val f4 = mock[A => Option[E]]
-    val fa3 = ga.assure[F](f4)(pred)
+    val fa3 = ga.assure[F](f4)
 
     val fa4 = ga.accept[F]
   }

@@ -18,8 +18,10 @@ trait ErrorControlLaws[F[_], G[_], E] {
   def deriveAttempt[A](fa: F[A]): IsEq[F[Either[E, A]]]=
     E.accept(E.trial(fa)) <-> F.attempt(fa)
 
-  def deriveEnsureOr[A](ga: G[A], e: A => E, p: A => Boolean): IsEq[F[A]] =
-    F.ensureOr(E.accept(ga))(e)(p) <-> E.assure(ga)(a => Option(e(a)))(p)
+  def deriveEnsureOr[A](ga: G[A], e: A => E, p: A => Boolean): IsEq[F[A]] = {
+    val f: A => Option[E] = a => if (p(a)) None else Some(e(a))
+    F.ensureOr(E.accept(ga))(e)(p) <-> E.assure(ga)(f)
+  }
 
   def gNeverHasErrors[A](ga: G[A], f: E => A): IsEq[G[A]] =
     E.intercept(E.accept(ga))(f) <-> ga

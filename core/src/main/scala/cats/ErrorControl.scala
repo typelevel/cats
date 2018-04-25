@@ -105,13 +105,13 @@ trait ErrorControl[F[_], G[_], E] extends Serializable {
    * {{{
    * scala> import cats._, data._, implicits._
    *
-   * scala> List(42, 23, -4).assure[EitherT[List, String, ?]](n => Some(s"Negative number: $n"))(_ > 0)
+   * scala> List(42, 23, -4).assure[EitherT[List, String, ?]](n => if (n < 0) Some("Negative number: " + n) else None)
    * res0: EitherT[List, String, Int] = EitherT(List(Right(42), Right(23), Left(Negative number: -4)))
    * }}}
    */
-  def assure[A](ga: G[A])(error: A => Option[E])(predicate: A => Boolean): F[A] =
+  def assure[A](ga: G[A])(error: A => Option[E]): F[A] =
     monadErrorF.flatMap(accept(ga))(a =>
-      if (predicate(a)) monadErrorF.pure(a) else error(a) match {
+      error(a) match {
         case Some(e) => monadErrorF.raiseError(e)
         case None => monadErrorF.pure(a)
       })

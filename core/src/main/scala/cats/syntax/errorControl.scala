@@ -50,10 +50,8 @@ final class ErrorControlEitherOps[G[_], E, A](val gea: G[Either[E, A]]) extends 
 }
 
 private[syntax] final class AssurePartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
-  def apply[E](error: A => Option[E])
-              (predicate: A => Boolean)
-              (implicit E: ErrorControl[F, G, E]): F[A] =
-    E.assure(ga)(error)(predicate)
+  def apply[E](error: A => Option[E])(implicit E: ErrorControl[F, G, E]): F[A] =
+    E.assure(ga)(error)
 }
 
 private[syntax] final class AcceptPartiallyApplied[F[_], G[_], A](val ga: G[A]) extends AnyVal {
