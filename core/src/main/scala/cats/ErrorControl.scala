@@ -28,6 +28,14 @@ trait ErrorControl[F[_], G[_], E] extends Serializable {
    * error-free `G[A]` value.
    *
    * Similar to `handleErrorWith` on `ApplicativeError`
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> EitherT(List(42.asRight, "Error!".asLeft, 7.asRight)).controlError(err => List(0, -1))
+   * res0: List[Int] = List(42, 0, -1, 7)
+   * }}}
    */
   def controlError[A](fa: F[A])(f: E => G[A]): G[A]
 
@@ -64,18 +72,42 @@ trait ErrorControl[F[_], G[_], E] extends Serializable {
    * Handle any error and recover from it, by mapping it to `A`.
    *
    * Similar to `handleError` on `ApplicativeError`
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> EitherT(List(42.asRight, "Error!".asLeft, 7.asRight, "Another error".asLeft)).intercept(_ => 0)
+   * res0: List[Int] = List(42, 0, 7, 0)
+   * }}}
    */
   def intercept[A](fa: F[A])(f: E => A): G[A] =
     controlError(fa)(f andThen monadG.pure)
 
   /**
    * The inverse of [[trial]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> List(42.asRight, "Error!".asLeft, 7.asRight).absolve[EitherT[List, String, ?]]
+   * res0: EitherT[List, String, Int] = EitherT(List(Right(42), Left(Error!), Right(7)))
+   * }}}
    */
   def absolve[A](gea: G[Either[E, A]]): F[A] =
     monadErrorF.flatMap(accept(gea))(_.fold(monadErrorF.raiseError, monadErrorF.pure))
 
   /**
    * Turns a successful value into an error specified by the `error` function if it does not satisfy a given predicate.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, data._, implicits._
+   *
+   * scala> List(42, 23, -4).assure[EitherT[List, String, ?]](n => Some(s"Negative number: $n"))(_ > 0)
+   * res0: EitherT[List, String, Int] = EitherT(List(Right(42), Right(23), Left(Negative number: -4)))
+   * }}}
    */
   def assure[A](ga: G[A])(error: A => Option[E])(predicate: A => Boolean): F[A] =
     monadErrorF.flatMap(accept(ga))(a =>
