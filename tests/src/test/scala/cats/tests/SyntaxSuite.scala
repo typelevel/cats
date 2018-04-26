@@ -180,8 +180,6 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances {
 
     val f4 = mock[A => Option[E]]
     val fa3 = ga.assure[F](f4)
-
-    val fa4 = ga.accept[F]
   }
 
 
