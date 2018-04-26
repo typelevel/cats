@@ -32,6 +32,9 @@ trait ErrorControlLaws[F[_], G[_], E] {
   def controlErrorPureIsPure[A](a: A, f: E => G[A]): IsEq[G[A]] =
     E.controlError(F.pure(a))(f) <-> G.pure(a)
 
+  def controlConsistency[A](fa: F[A], f: Either[E, A] => G[A]): IsEq[G[A]] =
+    E.trial(fa).flatMap(f) <-> E.control(fa)(f)
+
   def raiseErrorIntercept[A](e: E, f: E => A): IsEq[G[A]] =
     E.intercept(F.raiseError[A](e))(f) <-> G.pure(f(e))
 
