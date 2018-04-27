@@ -26,7 +26,7 @@ Let's go through the library package-wise, looking at the syntax available in ea
 Importing this package enables `obj.some` syntax — equivalent to `Some(obj)`.
 The only real difference is that the value is already upcast to `Option[T]` from `Some[T]`.
 
-Using `obj.some` instead of `Some(obj)` can sometimes improve the readability of unit tests.
+Using `obj.some` instead of `Some(obj)` can sometimes e.g. improve readability when you need to provide dummy implementation for service methods for the purpose of testing.
 For example, if you put the following implicit class into the scope:
 
 ```tut:silent
@@ -37,12 +37,10 @@ implicit class ToFutureSuccessful[T](obj: T) {
 }
 ```
 
-then you can use the chained syntax shown below (assuming your unit tests are based on [scalamock](https://scalamock.org/):
+then you can use the chained syntax shown below:
 
 ```tut:silent
 import cats.syntax.option._
-import org.scalatest.FlatSpec
-import org.scalamock.scalatest.MockFactory
 
 class Account { /* ... */ }
 
@@ -50,18 +48,17 @@ trait AccountService {
   def getAccountById(id: Int): Future[Option[Account]]
 }
 
-class AccountServiceSpec extends FlatSpec with MockFactory {
+class DummyAccountServiceImpl extends AccountService {
 
-  val account = mock[Account]
-  val accountService = mock[AccountService]
+  def dummyAccount: Account = ???
 
   /* ... */
-  accountService.getAccountById _ expects (*) returning account.some.asFuture
+  override def getAccountById(id: Int): Future[Option[Account]] = dummyAccount.some.asFuture
   /* ... */
 }
 ```
 
-That's more readable than `Future.successful(Some(user))`, especially if this pattern repeats frequently in the test suite.
+That's more readable than `Future.successful(Some(dummyAccount))`, especially if this pattern repeats frequently.
 Chaining `.some.asFuture` at the end rather than putting it at the front also helps focus on what's actually being returned rather than on the expected wrapper type.
 
 `none[T]`, in turn, is shorthand for `Option.empty[T]` which is just `None`, but already upcast from `None.type` to `Option[T]`.
@@ -72,7 +69,7 @@ Providing a more specialized type sometimes helps the Scala compiler properly in
 
 `obj.asRight` is `Right(obj)`, `obj.asLeft` is `Left(obj)`.
 In both cases the type of returned value is widened from `Right` or `Left` to `Either`.
-Just as was the case with `.some`, these helpers are handy to combine with `.asFuture` to improve the readability of unit tests:
+Just as was the case with `.some`, these helpers are handy to combine with `.asFuture` to improve readability:
 
 ```tut:silent
 import cats.syntax.either._
@@ -83,13 +80,12 @@ trait UserService {
   def ensureUserExists(id: Int): Future[Either[Exception, User]]
 }
 
-class UserServiceSpec extends FlatSpec with MockFactory {
+class UserServiceSpec extends UserService {
 
-  val user = mock[User]
-  val userService = mock[UserService]
+  def dummyUser: User = ???
 
   /* ... */
-  userService.ensureUserExists _ expects (*) returning user.asRight.asFuture // instead of Future.successful(Right(user))
+  override def ensureUserExists(id: Int): Future[Either[Exception, User]] = dummyUser.asRight.asFuture // instead of Future.successful(Right(dummyUser))
   /* ... */
 }
 ```
@@ -308,7 +304,7 @@ The method headers in the table below are slightly simplified: the type paramete
 | `OptionT.pure` | `A` | `OptionT[F, A]` |
 
 In production code you'll most commonly use the `OptionT(...)` syntax in order to wrap an instance of `Future[Option[A]]` into `Option[F, A]`.
-The other methods, in turn, prove useful to set up `OptionT`-typed mock values in unit tests.
+The other methods, in turn, prove useful to set up `OptionT`-typed dummy values in unit tests.
 
 We have already come across one of `OptionT`'s methods, namely `map`.
 There are several other methods available and they mostly differ by the signature of the function they accept as the parameter.

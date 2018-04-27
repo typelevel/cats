@@ -102,7 +102,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaMockVersion = "3.6.0"
 // 2.13.0-M3 workaround
 //lazy val scalaTestVersion = "3.0.5"
 lazy val disciplineVersion = "0.9.0"
@@ -184,7 +183,6 @@ lazy val docSettings = Seq(
     "gray-light" -> "#E5E5E6",
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"),
-  libraryDependencies ++= Seq("org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion),
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) :=
     inProjects(docsSourcesAndProjects(scalaVersion.value)._2:_*),
