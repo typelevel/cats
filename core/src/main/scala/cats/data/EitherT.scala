@@ -469,13 +469,14 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
     Contravariant[Show].contramap(sh)(_.value)
 
   implicit def catsDataBifunctorForEitherT[F[_]](implicit F: Functor[F]): Bifunctor[EitherT[F, ?, ?]] =
-    new Bifunctor[EitherT[F, ?, ?]] {
-      override def bimap[A, B, C, D](fab: EitherT[F, A, B])(f: A => C, g: B => D): EitherT[F, C, D] = fab.bimap(f, g)
+    new EitherTBifunctor[F] {
+      val F0: Functor[F] = F
     }
 
-  implicit def catsDataTraverseForEitherT[F[_], L](implicit F: Traverse[F]): Traverse[EitherT[F, L, ?]] =
-    new EitherTTraverse[F, L] {
-      val F0: Traverse[F] = F
+  implicit def catsDataTraverseForEitherT[F[_], L](implicit FF: Traverse[F]): Traverse[EitherT[F, L, ?]] =
+    new EitherTTraverse[F, L] with EitherTFunctor[F, L] {
+      val F0: Traverse[F] = FF
+      val F: Functor[F] = FF
     }
 
   implicit def catsMonoidForEitherT[F[_], L, A](implicit F: Monoid[F[Either[L, A]]]): Monoid[EitherT[F, L, A]] =
@@ -499,7 +500,7 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
     }
 
   implicit def catsDataBitraverseForEitherT[F[_]](implicit F: Traverse[F]): Bitraverse[EitherT[F, ?, ?]] =
-    new EitherTBitraverse[F] {
+    new EitherTBitraverse[F] with EitherTBifunctor[F] {
       val F0: Traverse[F] = F
     }
 
@@ -645,6 +646,12 @@ private[data] sealed trait EitherTBitraverse[F[_]] extends Bitraverse[EitherT[F,
 
   override def bitraverse[G[_], A, B, C, D](fab: EitherT[F, A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[EitherT[F, C, D]] =
     fab.bitraverse(f, g)
+}
+
+private[data] sealed trait EitherTBifunctor[F[_]] extends Bifunctor[EitherT[F, ?, ?]] {
+  implicit def F0: Functor[F]
+
+  override def bimap[A, B, C, D](fab: EitherT[F, A, B])(f: A => C, g: B => D): EitherT[F, C, D] = fab.bimap(f, g)
 }
 
 private[data] sealed trait EitherTEq[F[_], L, A] extends Eq[EitherT[F, L, A]] {

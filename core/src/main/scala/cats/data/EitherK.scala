@@ -140,7 +140,7 @@ private[data] sealed abstract class EitherKInstances2 extends EitherKInstances3 
 
 private[data] sealed abstract class EitherKInstances1 extends EitherKInstances2 {
   implicit def catsDataCoflatMapForEitherK[F[_], G[_]](implicit F0: CoflatMap[F], G0: CoflatMap[G]): CoflatMap[EitherK[F, G, ?]] =
-    new EitherKCoflatMap[F, G] {
+    new EitherKCoflatMap[F, G] with EitherKFunctor[F, G] {
       implicit def F: CoflatMap[F] = F0
 
       implicit def G: CoflatMap[G] = G0
@@ -149,7 +149,7 @@ private[data] sealed abstract class EitherKInstances1 extends EitherKInstances2 
 
 private[data] sealed abstract class EitherKInstances0 extends EitherKInstances1 {
   implicit def catsDataTraverseForEitherK[F[_], G[_]](implicit F0: Traverse[F], G0: Traverse[G]): Traverse[EitherK[F, G, ?]] =
-    new EitherKTraverse[F, G] {
+    new EitherKTraverse[F, G] with EitherKFunctor[F, G] {
       implicit def F: Traverse[F] = F0
 
       implicit def G: Traverse[G] = G0
@@ -159,7 +159,7 @@ private[data] sealed abstract class EitherKInstances0 extends EitherKInstances1 
 private[data] sealed abstract class EitherKInstances extends EitherKInstances0 {
 
   implicit def catsDataComonadForEitherK[F[_], G[_]](implicit F0: Comonad[F], G0: Comonad[G]): Comonad[EitherK[F, G, ?]] =
-    new EitherKComonad[F, G] {
+    new EitherKComonad[F, G] with EitherKFunctor[F, G] {
       implicit def F: Comonad[F] = F0
 
       implicit def G: Comonad[G] = G0
@@ -171,7 +171,7 @@ private[data] trait EitherKFunctor[F[_], G[_]] extends Functor[EitherK[F, G, ?]]
 
   implicit def G: Functor[G]
 
-  def map[A, B](a: EitherK[F, G, A])(f: A => B): EitherK[F, G, B] =
+  override def map[A, B](a: EitherK[F, G, A])(f: A => B): EitherK[F, G, B] =
     a map f
 }
 

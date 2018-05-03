@@ -258,7 +258,7 @@ private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 
 
 private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] { implicit val F = F0 }
+    new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances3 {

@@ -47,6 +47,8 @@ class Tuple2KSuite extends CatsSuite {
   }
 
   {
+    implicit val optionApply = Apply[Option]
+    implicit val validatedApply = Apply[Validated[Int, ?]]
     checkAll("Tuple2K[Option, Validated[Int, ?], ?]", CommutativeApplyTests[Tuple2K[Option, Validated[Int, ?], ?]].commutativeApply[Int, Int, Int])
     checkAll("Apply[Tuple2K[Option, Validated[Int, ?], ?]]", SerializableTests.serializable(CommutativeApply[Tuple2K[Option, Validated[Int, ?], ?]]))
   }
