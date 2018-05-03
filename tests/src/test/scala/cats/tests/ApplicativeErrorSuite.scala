@@ -36,10 +36,10 @@ class ApplicativeErrorSuite extends CatsSuite {
   }
 
   test("or leaves unchanged a success") {
-    failed or Some(17) should === (Some(17))
+    17.some or None should === (Some(17))
   }
 
   test("or transforms an error to the alternative") {
-    17.some or None should === (Some(17))
+    failed or Some(17) should === (Some(17))
   }
 }
