@@ -2,7 +2,6 @@
 layout: page
 title:  "Jump Start Guide"
 section: "jump_start_guide"
-position: 35
 ---
 
 # Introduction
