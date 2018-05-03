@@ -71,6 +71,6 @@ final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
   def onError(pf: PartialFunction[E, F[Unit]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.onError(fa)(pf)
 
-  def or(other: F[A])(implicit F: ApplicativeError[F, E]): F[A] =
+  def orElse(other: => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(_ => other)
 }
