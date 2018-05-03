@@ -35,5 +35,11 @@ class ApplicativeErrorSuite extends CatsSuite {
     failed.recoverWith { case _ => Some(7) } should === (Some(7))
   }
 
+  test("or leaves unchanged a success") {
+    failed or Some(17) should === (Some(17))
+  }
 
+  test("or transforms an error to the alternative") {
+    17.some or None should === (Some(17))
+  }
 }
