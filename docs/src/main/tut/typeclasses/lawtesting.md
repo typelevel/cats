@@ -15,7 +15,7 @@ If you are using `ScalaTests`, Cats also ships with `cats-testkit`, which expose
 ## Getting started
 
 First up, you will need to specify dependencies on `cats-laws` in your `build.sbt` file (or `cats-testkit` if you 
-are using `ScalaTest`(.
+are using `ScalaTest`).
 To make things easier, we'll also include the `scalacheck-shapeless` library in this tutorial, so we don't have to manually write instances for ScalaCheck's `Arbitrary`.
 
 ```scala
