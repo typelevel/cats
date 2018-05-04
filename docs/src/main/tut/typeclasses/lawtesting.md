@@ -7,22 +7,24 @@ section: "typeclasses"
 # Law testing
 
 [Laws](https://typelevel.org/cats/typeclasses.html#laws) are an important part of cats.
-Cats uses `catalysts` and `discipline` to help test instances with laws.
-To make things easier, cats ships with `cats-testkit`, which makes use of `catalysts` and `discipline` and exposes `CatsSuite` based on ScalaTest.
+Cats uses `catalysts` and [discipline](https://github.com/typelevel/discipline) to help test instances with laws. To test type class
+laws from Cats against your instances, you need to add a `cats-laws` dependency. 
+If you are using `ScalaTests`, Cats also ships with `cats-testkit`, which exposes `CatsSuite` based on ScalaTest.
 
 
 ## Getting started
 
-First up, you will need to specify dependencies on `cats-laws` and `cats-testkit` in your `build.sbt` file.
+First up, you will need to specify dependencies on `cats-laws` in your `build.sbt` file (or `cats-testkit` if you 
+are using `ScalaTest`(.
 To make things easier, we'll also include the `scalacheck-shapeless` library in this tutorial, so we don't have to manually write instances for ScalaCheck's `Arbitrary`.
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "1.0.1" % Test,
-  "org.typelevel" %% "cats-testkit" % "1.0.1"% Test,
+  "org.typelevel" %% "cats-laws" % "1.1.0" % Test, //or `cats-testkit` if you are using ScalaTest
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.6" % Test
 )
 ```
+
 
 ## Example: Testing a Functor instance
 
@@ -50,8 +52,8 @@ For simplicity we'll just use `Eq.fromUniversalEquals`:
 implicit def eqTree[A: Eq]: Eq[Tree[A]] = Eq.fromUniversalEquals
 ```
 
-Then we can begin to write our law tests. Start by creating a new class in your `test` folder and inheriting from `cats.tests.CatsSuite`.
-`CatsSuite` extends the standard ScalaTest `FunSuite` as well as `Matchers`.
+Then we can begin to write our law tests. If you are using `ScalaTest` you can inherit from `cats.tests.CatsSuite` 
+from `cats-testkit`. `CatsSuite` extends the standard ScalaTest `FunSuite` as well as `Matchers`.
 Furthermore it also pulls in all of cats instances and syntax, so there's no need to import from `cats.implicits._`.
 
 ```tut:book
@@ -62,8 +64,11 @@ class TreeLawTests extends CatsSuite {
 }
 ```
 
-The key to testing laws is the `checkAll` function, which takes a name for your test and a Discipline ruleset.
-Cats has defined rulesets for all type class laws in `cats.laws.discipline.*`.
+The key to testing laws is the `checkAll` function provided by [discipline](https://github.com/typelevel/discipline),
+which takes a name for your test and a Discipline ruleset.
+Cats has defined rulesets for all type class laws in `cats.laws.discipline.*`. As of now, [discipline](https://github.com/typelevel/discipline) provides this helper `checkAll` only for `ScalaTest` and `Spec2`, 
+but it should not be hard for you to write your own `checkAll` for your test framework of choice following this
+[example](https://github.com/typelevel/discipline/blob/master/shared/src/main/scala/scalatest/Discipline.scala). 
 
 So for our example we will want to import `cats.laws.discipline.FunctorTests` and call `checkAll` with it.
 Before we do so, however,
