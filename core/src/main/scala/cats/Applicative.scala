@@ -161,7 +161,7 @@ import simulacrum.typeclass
    * }}}
    */
   def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) pure(()) else void(f)
+    if (cond) unit else void(f)
 
   /**
    * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise,
@@ -185,7 +185,7 @@ import simulacrum.typeclass
    * }}}
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) void(f) else pure(())
+    if (cond) void(f) else unit
 
 }
 
