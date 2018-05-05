@@ -54,7 +54,7 @@ import simulacrum.typeclass
    * }}}
    */
   def guard(condition: Boolean): F[Unit] =
-    if (condition) pure(()) else empty
+    if (condition) unit else empty
 
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
