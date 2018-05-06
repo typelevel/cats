@@ -411,7 +411,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.20"))
+    "org.scalaz" %% "scalaz-core" % "7.2.21"))
   .enablePlugins(JmhPlugin)
 
 // cats-js is JS-only
