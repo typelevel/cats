@@ -3,7 +3,7 @@ package tests
 
 import catalysts.Platform
 import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IndexedStateT, State, StateT}
+import cats.data.{EitherT, IndexedStateT, OptionT, State, StateT}
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
@@ -267,6 +267,41 @@ class IndexedStateTSuite extends CatsSuite {
       unit.flatMap(_ => acc)
     }
     result.run(()).value should === (((), ()))
+  }
+
+  test("untilDefinedM works") {
+    val counter = State { i: Int =>
+      val res = if (i > 100) Some(i) else None
+      (i + 1, res)
+    }
+
+    counter.untilDefinedM.run(0).value should === ((102, 101))
+
+    OptionT(counter).untilDefined.run(0).value should === ((102, 101))
+  }
+
+  test("foreverM works") {
+    val step = StateT[Either[Int, ?], Int, Unit] { i =>
+      if (i > 1000) Left(i) else Right((i + 1, ()))
+    }
+    step.foreverM.run(0) match {
+      case Left(big) => big should === (1001)
+      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+    }
+  }
+
+  test("iterateForeverM works") {
+    val result = 0.iterateForeverM { i =>
+      StateT[Either[Int, ?], Int, Int] { j =>
+        if (j > 1000) Left(j) else Right((j + i, i + 1))
+      }
+    }
+    // should be the first value of a sum 1 + 2 + 3 ... > 1000
+    // that sum is n(n+1)/2, 44 => 990, 45 => 1035
+    result.run(0) match {
+      case Left(sum) => sum should === (1035)
+      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+    }
   }
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad))
