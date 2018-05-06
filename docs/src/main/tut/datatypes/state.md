@@ -282,8 +282,8 @@ So, let's model our typed door:
 import cats.Eval
 import cats.data.IndexedStateT
 
-def open: IndexedStateT[Eval, Open.type, Closed.type, Unit] = IndexedStateT.set(Closed)
-def close: IndexedStateT[Eval, Closed.type, Open.type, Unit] = IndexedStateT.set(Open)
+def open: IndexedStateT[Eval, Closed.type, Open.type, Unit] = IndexedStateT.set(Open)
+def close: IndexedStateT[Eval, Open.type, Closed.type, Unit] = IndexedStateT.set(Closed)
 ```
 
 We can now reject, at compile time, sequences of `open` and `close` that are invalid:
