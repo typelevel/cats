@@ -96,6 +96,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [fastparse-cats](https://github.com/johnynek/fastparse-cats): cats Monad and Alternative instances for [fastparse](https://github.com/lihaoyi/fastparse)
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
