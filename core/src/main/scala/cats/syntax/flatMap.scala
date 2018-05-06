@@ -57,8 +57,10 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
    * exponentially increasing memory and very quickly OOM.
    */
   def foreverM[B](implicit F: FlatMap[F]): F[B] = {
+    // allocate two things once for efficiency.
     val leftUnit = Left(())
-    F.tailRecM(()) { _ => F.map(fa)(_ => leftUnit) }
+    val stepResult: F[Either[Unit, B]] = F.map(fa)(_ => leftUnit)
+    F.tailRecM(())(_ => stepResult)
   }
 
 }
