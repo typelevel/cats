@@ -137,14 +137,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * }}}
    */
   def toNested: Nested[F, Option, A] = Nested(value)
-
-  /**
-   * This repeats an F until we get defined values. This can be useful
-   * for polling type operations on State (or RNG) Monads, or in effect
-   * monads.
-   */
-  def untilDefined(implicit F: FlatMap[F]): F[A] =
-    (new syntax.FlatMapOptionOps(value)).untilDefinedM
 }
 
 object OptionT extends OptionTInstances {

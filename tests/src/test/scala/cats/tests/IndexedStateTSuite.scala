@@ -3,7 +3,7 @@ package tests
 
 import catalysts.Platform
 import cats.arrow.{Profunctor, Strong}
-import cats.data.{EitherT, IndexedStateT, OptionT, State, StateT}
+import cats.data.{EitherT, IndexedStateT, State, StateT}
 import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
@@ -280,8 +280,6 @@ class IndexedStateTSuite extends CatsSuite {
     }
 
     counter.untilDefinedM.run(0).value should === ((stackSafeTestSize + 2, stackSafeTestSize + 1))
-
-    OptionT(counter).untilDefined.run(0).value should === ((stackSafeTestSize + 2, stackSafeTestSize + 1))
   }
 
   test("foreverM works") {
