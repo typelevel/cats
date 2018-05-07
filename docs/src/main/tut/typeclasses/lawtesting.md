@@ -100,7 +100,7 @@ call the `checkAll` helper with it.
 
 ```tut:book
 import Tree._
-
+import cats.tests.CatsSuite	
 import cats.laws.discipline.FunctorTests
 
 class TreeLawTests extends CatsSuite {
