@@ -251,9 +251,13 @@ class IndexedStateTSuite extends CatsSuite {
     got should === (expected)
   }
 
+
+  private val stackSafeTestSize =
+    if (Platform.isJvm) 100000 else 100
+
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
-    val count = if (Platform.isJvm) 100000 else 100
+    val count = stackSafeTestSize
     val result = (0 until count).foldLeft(unit) { (acc, _) =>
       acc.flatMap(_ => unit)
     }
@@ -262,11 +266,42 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("flatMap is stack safe on repeated right binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
-    val count = if (Platform.isJvm) 100000 else 100
+    val count = stackSafeTestSize
     val result = (0 until count).foldLeft(unit) { (acc, _) =>
       unit.flatMap(_ => acc)
     }
     result.run(()).value should === (((), ()))
+  }
+
+  test("untilDefinedM works") {
+    val counter = State { i: Int =>
+      val res = if (i > stackSafeTestSize) Some(i) else None
+      (i + 1, res)
+    }
+
+    counter.untilDefinedM.run(0).value should === ((stackSafeTestSize + 2, stackSafeTestSize + 1))
+  }
+
+  test("foreverM works") {
+    val step = StateT[Either[Int, ?], Int, Unit] { i =>
+      if (i > stackSafeTestSize) Left(i) else Right((i + 1, ()))
+    }
+    step.foreverM.run(0) match {
+      case Left(big) => big should === (stackSafeTestSize + 1)
+      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+    }
+  }
+
+  test("iterateForeverM works") {
+    val result = 0.iterateForeverM { i =>
+      StateT[Either[Int, ?], Int, Int] { j =>
+        if (j > stackSafeTestSize) Left(j) else Right((j + 1, i + 1))
+      }
+    }
+    result.run(0) match {
+      case Left(sum) => sum should === (stackSafeTestSize + 1)
+      case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
+    }
   }
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad))
