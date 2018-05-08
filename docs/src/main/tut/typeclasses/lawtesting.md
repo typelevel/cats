@@ -53,6 +53,9 @@ Cats defines all type class laws tests in `cats.laws.discipline.*`
 as `discipline`'s `RuleSet`s. Each `RuleSet` provides a `ScalaCheck` `Properties` through
 `ruleSet.all` to represent all the rules that it defines and inherits. For example, 
 the `ScalaCheck` `Properties` for `Functor` can be retrieved using
+```tut:invisible
+import Tree._ //there is no real companion object is in REPL
+```
 ```tut:book
 cats.laws.discipline.FunctorTests[Tree].functor[Int, Int, String].all
 ```
