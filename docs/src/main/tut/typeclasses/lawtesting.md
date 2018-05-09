@@ -103,7 +103,7 @@ So here is the Scalatest test for our example, basically we import `cats.laws.di
 call the `checkAll` helper with it.
 
 ```tut:book
-import Tree._
+
 import cats.tests.CatsSuite	
 import cats.laws.discipline.FunctorTests
 
