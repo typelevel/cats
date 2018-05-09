@@ -49,7 +49,7 @@ object Tree {
 }
 ```
 ```tut:invisible
-import Tree._ //there is no real companion object is in REPL
+import Tree._ //there is no real companion object in REPL
 ```
 
 Cats defines all type class laws tests in `cats.laws.discipline.*` 
