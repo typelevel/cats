@@ -17,8 +17,16 @@ used by the associated `Foldable[_]` instance.
 
 `Foldable[F]` is implemented in terms of two basic methods:
 
- - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
- - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
+ - `foldLeft(fa, b)(f)` eagerly performs a left-associative fold over `fa`.
+ - `foldRight(fa, b)(f)` lazily performs a right-associative fold over `fa`.
+
+Consider a simple list like `List(1, 2, 3)`. You could sum the numbers of this list using folds
+where `0` is the starting value (`b`) and integer addition (`+`) is the combination operation
+(`f`). Since `foldLeft` is left-associative, the execution of this fold would look something like
+`((0 + 1) + 2) + 3`. The execution of a similar `foldRight`-based solution would look something
+like `0 + (1 + (2 + 3))`. In this case, since integer addition is associative, both approaches will
+yield the same result. However, for non-associative operations, the two methods can produce
+different results.
  
 These form the basis for many other operations, see also: 
 [A tutorial on the universality and expressiveness of fold](http://www.cs.nott.ac.uk/~gmh/fold.pdf)
