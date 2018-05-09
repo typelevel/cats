@@ -11,7 +11,7 @@ Cats uses [discipline](https://github.com/typelevel/discipline) to define type c
 the [ScalaCheck](https://github.com/rickynils/scalacheck) tests based on them.
 
 To test type class laws from Cats against your instances, you need to add a `cats-laws` dependency. 
-If you are using `ScalaTests`, Cats also ships with optional `cats-testkit`, which provites a convenient
+If you are using `ScalaTest`, Cats also ships with optional `cats-testkit`, which provites a convenient
 base test class `CatsSuite`.
 
 
