@@ -6,7 +6,7 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelTraverse[T[_]: Traverse, A]
   (ta: T[A]): ParallelTraversableOps[T, A] = new ParallelTraversableOps[T, A](ta)
 
-  implicit final def catsSyntaxParallelTraverse[T[_]: Traverse: FlatMap, A]
+  implicit final def catsSyntaxParallelFlatTraverse[T[_]: Traverse: FlatMap, A]
   (ta: T[A]): ParallelFlatTraversableOps[T, A] = new ParallelFlatTraversableOps[T, A](ta)
 
   implicit final def catsSyntaxParallelSequence[T[_]: Traverse, M[_]: Monad, A]
