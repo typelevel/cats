@@ -179,6 +179,15 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val ma2: M[A] = ma <& mb
   }
 
+  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[T[B]]]
+    val mtb = ta.parFlatTraverse(f)
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta = tmta.parFlatSequence
+  }
+
   def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
     val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]

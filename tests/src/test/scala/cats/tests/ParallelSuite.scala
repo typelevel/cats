@@ -79,6 +79,20 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParFlatSequence syntax should be equivalent to Parallel.parFlatSequence") {
+    forAll { es: List[Either[String, List[Int]]] =>
+      es.parFlatSequence should === (Parallel.parFlatSequence(es))
+    }
+  }
+
+  test("ParFlatTraverse syntax should be equivalent to Parallel.parFlatTraverse") {
+    forAll { es: List[Either[String, Int]] =>
+      val f: Int => List[Int] = i => List(i, i + 1)
+      Parallel.parFlatTraverse(es)(e => e.map(f)) should
+        === (es.parFlatTraverse(e => e.map(f)))
+    }
+  }
+
   test("ParNonEmptyFlatTraverse should be equivalent to parNonEmptyTraverse map flatten") {
     forAll { es: NonEmptyList[Either[String, Int]] =>
       val f: Int => NonEmptyList[Int] = i => NonEmptyList.of(i, i + 1)
