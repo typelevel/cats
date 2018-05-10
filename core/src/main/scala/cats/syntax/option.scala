@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{Ior, Validated, ValidatedNel}
+import cats.data.{Ior, OptionT, Validated, ValidatedNel}
 import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
@@ -188,6 +188,17 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
     */
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
 
+  /**
+    * Transform the `Option` into a [[cats.data.OptionT]] while lifting it into the specified Applicative.
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val op: Option[Int] = Some(3)
+    * scala> op.toOptionT[List]
+    * res0: cats.data.OptionT[List, Int] = OptionT(List(Some(3)))
+    * }}}
+    */
+  def toOptionT[F[_]: Applicative]: OptionT[F, A] = OptionT.fromOption(oa)
 }
 
 object OptionOps {
