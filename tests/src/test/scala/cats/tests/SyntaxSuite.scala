@@ -3,7 +3,7 @@ package tests
 
 import cats.arrow.Compose
 import cats.instances.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
 
 
 /**
@@ -24,7 +24,7 @@ import cats.syntax.AllSyntax
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax {
+object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
