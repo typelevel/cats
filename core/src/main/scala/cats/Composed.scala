@@ -64,7 +64,7 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[�
   def G: Foldable[G]
 
   override def foldLeft[A, B](fga: F[G[A]], b: B)(f: (B, A) => B): B =
-    F.foldLeft(fga, b)((b, a) => G.foldLeft(a, b)(f))
+    F.foldLeft(fga, b)((b, ga) => G.foldLeft(ga, b)(f))
 
   override def foldRight[A, B](fga: F[G[A]], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
