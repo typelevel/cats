@@ -62,3 +62,4 @@ trait AllSyntaxBinCompat0
 trait AllSyntaxBinCompat1
     extends FlatMapOptionSyntax
     with NestedSyntax
+    with BinestedSyntax

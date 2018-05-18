@@ -228,6 +228,9 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
 
+  implicit def catsLawsArbitraryForBinested[F[_, _], G[_], H[_], A, B](implicit F: Arbitrary[F[G[A], H[B]]]): Arbitrary[Binested[F, G, H, A, B]] =
+    Arbitrary(F.arbitrary.map(Binested(_)))
+
   implicit def catsLawArbitraryForState[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
     catsLawArbitraryForIndexedStateT[Eval, S, S, A]
 
