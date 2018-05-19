@@ -94,4 +94,9 @@ class OptionSuite extends CatsSuite {
     val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
     none[Int].map2Eval(bomb)(_ + _).value should === (None)
   }
+
+  test("toOptionT consistency"){
+    List(false) should === (1.some.toOptionT[List].isEmpty)
+    List(true) should === (Option.empty[Int].toOptionT[List].isEmpty)
+  }
 }
