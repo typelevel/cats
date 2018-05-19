@@ -5,6 +5,7 @@ import cats.data.{EitherT, Ior, NonEmptyList, Validated, ValidatedNel}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import EitherSyntax._
+import cats.internals.EitherUtil
 
 trait EitherSyntax {
   implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
@@ -372,12 +373,4 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
    */
   def rightNel[B]: Either[NonEmptyList[B], A] = Right(obj)
 
-}
-
-/** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
-private[cats] object EitherUtil {
-  def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
-    right.asInstanceOf[Either[C, B]]
-  def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
-    left.asInstanceOf[Either[A, C]]
 }

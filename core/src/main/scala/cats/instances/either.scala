@@ -1,7 +1,7 @@
 package cats
 package instances
 
-import cats.syntax.EitherUtil
+import cats.internals.EitherUtil.{leftBox, rightBox, eitherCast}
 import cats.syntax.either._
 import scala.annotation.tailrec
 
@@ -10,8 +10,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     new Bitraverse[Either] {
       def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
         fab match {
-          case Left(a) => G.map(f(a))(Left(_))
-          case Right(b) => G.map(g(b))(Right(_))
+          case Left(a) => G.map(f(a))(leftBox)
+          case Right(b) => G.map(g(b))(rightBox)
         }
 
       def bifoldLeft[A, B, C](fab: Either[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
@@ -30,53 +30,61 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
   // scalastyle:off method.length
   implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] =
     new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] {
-      def pure[B](b: B): Either[A, B] = Right(b)
+      override def pure[B](b: B): Either[A, B] =
+        Right(b)
 
-      def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
-        fa.right.flatMap(f)
+      override def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
+        fa match {
+          case Right(b) => f(b)
+          case _ => eitherCast(fa)
+        }
 
-      def handleErrorWith[B](fea: Either[A, B])(f: A => Either[A, B]): Either[A, B] =
+      override def handleErrorWith[B](fea: Either[A, B])(f: A => Either[A, B]): Either[A, B] =
         fea match {
           case Left(e) => f(e)
           case r @ Right(_) => r
         }
 
-      def raiseError[B](e: A): Either[A, B] = Left(e)
+      override def raiseError[B](e: A): Either[A, B] =
+        Left(e)
 
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
-        fa.right.map(f)
+        fa match {
+          case Right(b) => Right(f(b))
+          case _ => eitherCast(fa)
+        }
 
       @tailrec
-      def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
+      override def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
         f(b) match {
-          case left @ Left(_) =>
-            left.rightCast[C]
           case Right(e) =>
             e match {
               case Left(b1) => tailRecM(b1)(f)
-              case right @ Right(_) => right.leftCast[A]
+              case _ => eitherCast(e)
             }
+          case left =>
+            eitherCast(left)
         }
 
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {
-          case l @ Left(_) => Now(EitherUtil.rightCast(l))
+          case l @ Left(_) => Now(eitherCast(l))
           case Right(b) => fc.map(_.right.map(f(b, _)))
         }
 
-      def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
+      override def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
         fa match {
-          case left @ Left(_) => F.pure(left.rightCast[C])
-          case Right(b)       => F.map(f(b))(Right(_))
+          case left @ Left(_) => F.pure(eitherCast(left))
+          case Right(b)       => F.map(f(b))(rightBox)
         }
 
-      def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
+      override def foldLeft[B, C](fa: Either[A, B], c: C)(f: (C, B) => C): C =
         fa match {
           case Left(_) => c
           case Right(b) => f(c, b)
         }
 
-      def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+      override def foldRight[B, C](fa: Either[A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
         fa match {
           case Left(_) => lc
           case Right(b) => f(b, lc)
@@ -90,6 +98,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
         fab recoverWith pf
+
+      override def redeem[B, R](fab: Either[A, B])(recover: A => R, map: B => R): Either[A, R] =
+        Right(fab.fold(recover, map))
+
+      override def redeemWith[B, R](fab: Either[A, B])(recover: A => Either[A, R], bind: B => Either[A, R]): Either[A, R] =
+        fab.fold(recover, bind)
 
       override def fromEither[B](fab: Either[A, B]): Either[A, B] =
         fab

@@ -131,19 +131,4 @@ class RegressionSuite extends CatsSuite {
     NonEmptyList.of(6,7,8).traverse_(validate) should === (Either.left("6 is greater than 5"))
     checkAndResetCount(1)
   }
-
-  test("#2022 EitherT syntax no long works the old way") {
-    import data._
-
-
-    EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
-
-    {
-      implicit val me = MonadError[EitherT[Option, String, ?], Unit]
-      EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
-    }
-
-
-  }
-
 }

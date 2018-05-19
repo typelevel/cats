@@ -3,6 +3,7 @@ package cats
 import cats.data.EitherT
 import scala.util.{ Failure, Success, Try }
 import scala.util.control.NonFatal
+import cats.internals.EitherUtil.rightBox
 
 /**
  * An applicative that also allows you to raise and or handle an error value.
@@ -62,9 +63,8 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * All non-fatal errors should be handled by this method.
    */
-  def attempt[A](fa: F[A]): F[Either[E, A]] = handleErrorWith(
-    map(fa)(Right(_): Either[E, A])
-  )(e => pure(Left(e)))
+  def attempt[A](fa: F[A]): F[Either[E, A]] =
+    handleErrorWith(map(fa)(rightBox[E, A]))(e => pure(Left[E, A](e)))
 
   /**
    * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for
