@@ -38,6 +38,7 @@ trait AllSyntax
     with MonadErrorSyntax
     with MonadSyntax
     with MonoidSyntax
+    with NestedSyntax
     with OptionSyntax
     with OrderSyntax
     with ParallelSyntax
