@@ -204,10 +204,10 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-lazy val binaryCompatibleVersion = "1.0.0"
+lazy val binaryCompatibleVersions = Set("1.0.0", "1.1.0")
 
 def mimaSettings(moduleName: String) = Seq(
-  mimaPreviousArtifacts := Set("org.typelevel" %% moduleName % binaryCompatibleVersion)
+  mimaPreviousArtifacts := binaryCompatibleVersions.map(v => "org.typelevel" %% moduleName % v)
 )
 
 lazy val docs = project
