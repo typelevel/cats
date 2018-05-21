@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.arrow.Compose
+import cats.data.Nested
 import cats.instances.AllInstances
 import cats.syntax.AllSyntax
 
@@ -336,6 +337,12 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
+  }
+
+  def testNested[F[_], G[_], A]: Unit = {
+    val fga: F[G[A]] = mock[F[G[A]]]
+
+    val nested: Nested[F, G, A] = fga.nested
   }
 
 }
