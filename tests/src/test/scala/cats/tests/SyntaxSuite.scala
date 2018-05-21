@@ -4,7 +4,7 @@ package tests
 import cats.arrow.Compose
 import cats.data.Nested
 import cats.instances.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.{AllSyntax, NestedSyntax}
 
 
 /**
@@ -25,7 +25,7 @@ import cats.syntax.AllSyntax
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax {
+object SyntaxSuite extends AllInstances with AllSyntax with NestedSyntax {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
