@@ -204,11 +204,35 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-lazy val binaryCompatibleVersions = Set("1.0.0", "1.1.0")
-
-def mimaSettings(moduleName: String) = Seq(
-  mimaPreviousArtifacts := binaryCompatibleVersions.map(v => "org.typelevel" %% moduleName % v)
-)
+def mimaSettings(moduleName: String) = {
+  import sbtrelease.Version
+  def mimaVersions(version: String): List[String] = {
+    def semverBinCompatVersions(major: Int, minor: Int, patch: Int): List[(Int, Int, Int)] = {
+      val majorVersions: List[Int] = List(major)
+      val minorVersions : List[Int] = 
+        if (major >= 1) Range(0, minor).inclusive.toList
+        else List(minor)
+      val patchVersions: List[Int] = 
+        if (minor == 0 || patch == 0) List.empty[Int] 
+        else Range(0, patch - 1).inclusive.toList
+        for {
+          maj <- majorVersions
+          min <- minorVersions
+          pat <- patchVersions
+        } yield (maj, min, pat)
+    }
+    Version(version) match {
+      case Some(Version(major, Seq(minor, patch), _)) =>
+        semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
+          .map{case (maj, min, pat) => s"${maj}.${min}.${pat}"}
+      case _ =>
+        List.empty[String]
+    }
+  }
+  Seq(
+    mimaPreviousArtifacts := mimaVersions(version.value).map(v => "org.typelevel" %% moduleName % v).toSet
+  )
+} 
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
