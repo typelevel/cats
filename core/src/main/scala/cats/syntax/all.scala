@@ -59,4 +59,7 @@ trait AllSyntaxBinCompat0
     with ApplicativeErrorExtension
     with TrySyntax
 
-trait AllSyntaxBinCompat1 extends FlatMapOptionSyntax with ParallelFlatSyntax
+trait AllSyntaxBinCompat1
+  extends FlatMapOptionSyntax
+    with NestedSyntax
+    with ParallelFlatSyntax
