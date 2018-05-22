@@ -2,8 +2,9 @@ package cats
 package tests
 
 import cats.arrow.Compose
+import cats.data.Nested
 import cats.instances.AllInstances
-import cats.syntax.AllSyntax
+import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
 
 
 /**
@@ -24,7 +25,7 @@ import cats.syntax.AllSyntax
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax {
+object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -336,6 +337,12 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
+  }
+
+  def testNested[F[_], G[_], A]: Unit = {
+    val fga: F[G[A]] = mock[F[G[A]]]
+
+    val nested: Nested[F, G, A] = fga.nested
   }
 
 }
