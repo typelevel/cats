@@ -231,7 +231,7 @@ def mimaSettings(moduleName: String) = {
         semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
           .map{case (maj, min, pat) => s"${maj}.${min}.${pat}"}
       case _ =>
-        List.empty[String]
+        Set.empty[String]
     }
   }
   // Safety Net For Exclusions
