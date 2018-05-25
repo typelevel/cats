@@ -112,9 +112,8 @@ Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
 working with cross-compiling builds, the first things that you will notice is that
 builds:
 
- * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
-
- JS only. And if you want the default project to be `catsJVM`, just copy the
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS`
+   for JS only. And if you want the default project to be `catsJVM`, just copy the
    file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
 
  * May run out of memory: We suggest you use
@@ -185,13 +184,13 @@ run `sbt docs/makeMicrosite`
 
 ### Previewing the site
 
-1. Install jekyll locally, depending on your platform, you might do this with:
+1. Install jekyll locally. Depending on your platform, you might do this with:
 
-    yum install jekyll
+    `yum install jekyll`
 
-    apt-get install ruby-full; gem install jekyll
+    `apt-get install ruby-full; gem install jekyll`
 
-    gem install jekyll
+    `gem install jekyll`
 
 2. In a shell, navigate to the generated site directory in `docs/target/site`
 
