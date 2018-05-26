@@ -35,6 +35,38 @@ final class UniteOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
 final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVal {
 
   /**
+    * Recovers the "lefts" values from the inner foldable values
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
+    * scala> l.lefts
+    * res0: List[String] = List(error)
+    * }}}
+    */
+  def lefts(implicit
+            F: FlatMap[F],
+            A: Alternative[F],
+            G: Bifoldable[G]): F[A] = F.flatMap(fgab)(gab => G.bifoldMap(gab)(A.pure, _ => A.empty[A])(A.algebra[A]))
+
+  /**
+    * Recovers the "rights" values from the inner foldable values
+    *
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
+    * scala> l.rights
+    * res0: List[Int] = List(1)
+    * }}}
+    */
+  def rights(implicit
+             F: FlatMap[F],
+             A: Alternative[F],
+             G: Bifoldable[G]): F[B] = F.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => A.empty[B], A.pure)(A.algebra[B]))
+
+  /**
    * @see [[Alternative.separate]]
    *
    * Example:

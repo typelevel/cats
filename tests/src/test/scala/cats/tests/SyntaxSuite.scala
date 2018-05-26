@@ -309,6 +309,8 @@ object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 
     val fa = fga.unite
 
     val fhab = mock[F[H[A, B]]]
+    val fas  = fhab.lefts
+    val fbs  = fhab.rights
     val fafb = fhab.separate
   }
 
