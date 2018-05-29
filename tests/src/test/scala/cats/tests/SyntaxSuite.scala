@@ -2,10 +2,9 @@ package cats
 package tests
 
 import cats.arrow.Compose
-import cats.data.Nested
+import cats.data.{Binested, Nested}
 import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
-
+import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
 
 /**
  * Test that our syntax implicits are working.
@@ -25,7 +24,7 @@ import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 {
+object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -354,5 +353,10 @@ object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 
     val nested: Nested[F, G, A] = fga.nested
   }
 
+  def testBinested[F[_, _], G[_], H[_], A, B]: Unit = {
+    val fgahb = mock[F[G[A], H[B]]]
+
+    val binested: Binested[F, G, H, A, B] = fgahb.binested
+  }
 }
 
