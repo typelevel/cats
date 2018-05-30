@@ -30,6 +30,13 @@ class IorTSuite extends CatsSuite {
   }
 
   {
+    implicit val F = ListWrapper.applicative
+
+    checkAll("IorT[ListWrapper, String, Int]", ApplicativeTests[IorT[ListWrapper, String, ?]].applicative[Int, Int, Int])
+    checkAll("Applicative[IorT[List, ?, ?]]", SerializableTests.serializable(Applicative[IorT[ListWrapper, String, ?]]))
+  }
+
+  {
     implicit val F = ListWrapper.monad
 
     checkAll("IorT[ListWrapper, String, Int]", MonadErrorTests[IorT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
