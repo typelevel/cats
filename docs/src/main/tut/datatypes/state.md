@@ -305,3 +305,11 @@ val valid = for {
 ```
 
 Note that the inferred type of `valid` correctly models that this computation can be executed only with an initial `Closed` state.
+
+```tut:book:fail
+valid.run(Open)
+```
+
+```tut:book
+valid.run(Closed)
+```
