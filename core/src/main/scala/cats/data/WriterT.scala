@@ -109,6 +109,12 @@ private[data] sealed abstract class WriterTInstances extends WriterTInstances0 {
 
   implicit def catsDataTraverseForWriterTId[L](implicit F: Traverse[Id]): Traverse[WriterT[Id, L, ?]] =
     catsDataTraverseForWriterT[Id, L](F)
+
+  implicit def catsDataDeferForWriterT[F[_], L](implicit F: Defer[F]): Defer[WriterT[F, L, ?]] =
+    new Defer[WriterT[F, L, ?]] {
+      def defer[A](fa: => WriterT[F, L, A]): WriterT[F, L, A] =
+        WriterT(F.defer(fa.run))
+    }
 }
 
 private[data] sealed abstract class WriterTInstances0 extends WriterTInstances1 {

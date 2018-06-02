@@ -50,6 +50,9 @@ class CokleisliSuite extends SlowCatsSuite {
     implicit def cokleisliIdEq[A, B](implicit A: Arbitrary[A], FB: Eq[B]): Eq[Cokleisli[Id, A, B]] =
       Eq.by[Cokleisli[Id, A, B], A => B](_.run)
 
+    // this shouldn't be needed, but somehow it is for me
+    implicit val d: Defer[Cokleisli[Id, Int, ?]] = Cokleisli.catsDataDeferForCokleisli[Id, Int]
+    checkAll("Cokleisli[Id, Int, ?]", DeferTests[Cokleisli[Id, Int, ?]].defer[Int])
     checkAll("Cokleisli[Id, Int, Int]", CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
     checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]", SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
   }

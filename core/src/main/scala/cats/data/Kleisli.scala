@@ -162,6 +162,14 @@ private[data] sealed abstract class KleisliInstances extends KleisliInstances0 {
     new KleisliArrowChoice[F] {
       def F: Monad[F] = M
     }
+
+  implicit def catsDataDeferForKleisli[F[_], A]: Defer[Kleisli[F, A, ?]] =
+    new Defer[Kleisli[F, A, ?]] {
+      def defer[B](fa: => Kleisli[F, A, B]): Kleisli[F, A, B] = {
+        lazy val cacheFa = fa
+        Kleisli[F, A, B] { a => cacheFa.run(a) }
+      }
+    }
 }
 
 private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 {

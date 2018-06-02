@@ -30,6 +30,8 @@ class FunctionSuite extends CatsSuite {
   import Helpers._
 
   checkAll("Function0[Int]", SemigroupalTests[Function0].semigroupal[Int, Int, Int])
+  // TODO: make an binary compatible way to do this
+  //checkAll("Function0[Int]", DeferTests[Function0].defer[Int])
   checkAll("Semigroupal[Function0]", SerializableTests.serializable(Semigroupal[Function0]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
@@ -37,6 +39,8 @@ class FunctionSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[Int, ?]]
   checkAll("Function1[Int, Int]", SemigroupalTests[Function1[Int, ?]].semigroupal[Int, Int, Int])
+  // TODO: make an binary compatible way to do this
+  //checkAll("Function1[Int => ?]", DeferTests[Function1[Int, ?]].defer[Int])
   checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])

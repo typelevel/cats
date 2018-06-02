@@ -11,6 +11,7 @@ import cats.kernel.laws.discipline.{OrderTests, PartialOrderTests, EqTests}
 
 class Tuple2KSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Tuple2K[Option, List, ?]]
+  checkAll("Tuple2K[Eval, Eval, ?]", DeferTests[Tuple2K[Eval, Eval, ?]].defer[Int])
   checkAll("Tuple2K[Option, List, Int]", SemigroupalTests[λ[α => Tuple2K[Option, List, α]]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Tuple2K[Option, List, Int]]", SerializableTests.serializable(Semigroupal[λ[α => Tuple2K[Option, List, α]]]))
 

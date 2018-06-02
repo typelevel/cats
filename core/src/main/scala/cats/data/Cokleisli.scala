@@ -88,6 +88,14 @@ private[data] sealed abstract class CokleisliInstances extends CokleisliInstance
 
   implicit def catsDataMonoidKForCokleisli[F[_]](implicit ev: Comonad[F]): MonoidK[λ[α => Cokleisli[F, α, α]]] =
     Category[Cokleisli[F, ?, ?]].algebraK
+
+  implicit def catsDataDeferForCokleisli[F[_], A]: Defer[Cokleisli[F, A, ?]] =
+    new Defer[Cokleisli[F, A, ?]] {
+      def defer[B](fb: => Cokleisli[F, A, B]): Cokleisli[F, A, B] = {
+        lazy val cacheFb = fb
+        Cokleisli { fa => cacheFb.run(fa) }
+      }
+    }
 }
 
 private[data] sealed abstract class CokleisliInstances0 extends CokleisliInstances1 {

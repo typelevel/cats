@@ -384,6 +384,12 @@ private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
     }
 
+  implicit val catsDeferForEval: Defer[Eval] =
+    new Defer[Eval] {
+      def defer[A](e: => Eval[A]): Eval[A] =
+        Eval.defer(e)
+    }
+
   implicit val catsReducibleForEval: Reducible[Eval] =
     new Reducible[Eval] {
       def foldLeft[A, B](fa: Eval[A], b: B)(f: (B, A) => B): B =

@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{BimonadTests, CommutativeMonadTests, SemigroupalTests, ReducibleTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, CommutativeMonadTests, DeferTests, SemigroupalTests, ReducibleTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -93,6 +93,7 @@ class EvalSuite extends CatsSuite {
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
   }
 
+  checkAll("Eval[Int]", DeferTests[Eval].defer[Int])
   checkAll("Eval[Int]", CommutativeMonadTests[Eval].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Eval]", SerializableTests.serializable(CommutativeMonad[Eval]))
 
