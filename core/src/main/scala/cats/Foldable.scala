@@ -209,7 +209,7 @@ import Foldable.sentinel
 
   def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      // trick from TravsersableOnce
+      // trick from TraversableOnce
       val x = pf.applyOrElse(a, sentinel)
       if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
       else lb
