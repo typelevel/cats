@@ -116,6 +116,12 @@ abstract class KleisliInstance1 {
 We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and 
 `CommutativeArrow`.
 
+### <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a>
+
+We explicitly don't provide an instance of `Applicative` for e.g. `OptionT[F, ?]` given an `Applicative[F]`.
+An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance
+for `OptionT[F, ?]`. See [#1467](https://github.com/typelevel/cats/issues/1467) for the discussion.
+
 #### TODO:
 
 Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.

@@ -17,6 +17,7 @@ position: 40
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
+ * [Where are `Applicative`s for monad transformers?(#applicative-monad-transformers)
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
@@ -123,6 +124,12 @@ def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".i
 ```tut:book
 nl.traverse(even)
 ```
+
+## <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are `Applicative`s for monad transformers?</a>
+
+An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [https://typelevel.org/cats/guidelines.html#applicative-monad-transformers](the guidelines) for a more detailed explanation.
+
+As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
 
 ## <a id="task" href="#task"></a>Where is IO/Task?
 
