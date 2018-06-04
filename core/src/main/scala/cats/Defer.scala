@@ -1,7 +1,7 @@
 package cats
 
 /**
- * Defer is a typeclass that shows the ability to defer creation
+ * Defer is a type class that shows the ability to defer creation
  * inside of the type constructor F[_].
  *
  * This comes up with F[_] types that are implemented with a trampoline
