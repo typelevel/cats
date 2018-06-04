@@ -462,7 +462,7 @@ private[data] sealed abstract class IRWSTInstances extends IRWSTInstances1 {
       implicit def L: Monoid[L] = L0
     }
 
-  implicit def catsDataDefer[F[_], E, L, SA, SB](implicit F: Defer[F]): Defer[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] =
+  implicit def catsDataDeferForIRWST[F[_], E, L, SA, SB](implicit F: Defer[F]): Defer[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] =
     new Defer[IndexedReaderWriterStateT[F, E, L, SA, SB, ?]] {
       def defer[A](fa: => IndexedReaderWriterStateT[F, E, L, SA, SB, A]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
         IndexedReaderWriterStateT.applyF(F.defer(fa.runF))

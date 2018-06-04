@@ -24,7 +24,7 @@ trait DeferLaws[F[_]] {
       if (c <= 0) F.defer(fa(()))
       else F.defer(loop(c - 1))
 
-    loop(1000000) <-> (fa(()))
+    loop(20000) <-> (fa(()))
   }
 }
 
