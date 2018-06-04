@@ -18,7 +18,8 @@ trait DeferTests[F[_]] extends Laws {
       name = "defer",
       parent = None,
       "defer Identity" -> forAll(laws.deferIdentity[A] _),
-      "defer does not evaluate" -> forAll(laws.deferDoesNotEvaluate[A] _))
+      "defer does not evaluate" -> forAll(laws.deferDoesNotEvaluate[A] _),
+      "defer is stack safe" -> forAll(laws.deferIsStackSafe[A] _))
   }
 }
 

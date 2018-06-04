@@ -18,6 +18,14 @@ trait DeferLaws[F[_]] {
     }
     evaluated <-> false
   }
+
+  def deferIsStackSafe[A](fa: Unit => F[A]): IsEq[F[A]] = {
+    def loop(c: Int): F[A] =
+      if (c <= 0) F.defer(fa(()))
+      else F.defer(loop(c - 1))
+
+    loop(1000000) <-> (fa(()))
+  }
 }
 
 object DeferLaws {
