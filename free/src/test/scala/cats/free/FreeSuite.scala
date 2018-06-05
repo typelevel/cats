@@ -15,7 +15,7 @@ class FreeSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
-  checkAll("Free[Id, ?]", DeferTests[Free[Id, ?]].defer[Int])
+  checkAll("Free[Option, ?]", DeferTests[Free[Option, ?]].defer[Int])
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
 
