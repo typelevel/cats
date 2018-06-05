@@ -119,6 +119,16 @@ builds:
  * May run out of memory: We suggest you use
    [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
 
+### Editor Setup Tips
+
+**IntelliJ**
+
+- Be warned, IntelliJ is currently not 100% accurate at reporting compilation errors, there *will* be cases that it reports errors incorrectly. If you simply don't want to see the errors, a quick an easy work around is to disable *Type-Aware Highlighting* by clicking the `[T]` icon in the bottom toolbar.
+
+- There is an open [issue](https://github.com/typelevel/cats/issues/2152) with the IntelliJ scala plugin, which prevents it from configuring similacrum correctly when importing the cats project. The work around for this issue is to set `val CompileTime = Provided` in `build.sbt`. Note: Be careful not to commit this change.
+
+- IntelliJ does have [support](https://blog.jetbrains.com/scala/2015/07/31/inline-refactoring-for-type-aliases-and-kind-projector-support/) for kind-projector. However, it is not always seamless. If you are unable to get IntelliJ to recognise the special symbols that kind-project provides, such as `?` `Lambda[X => G[F[A]]]` or `λ[X => G[F[A]]]` try upgrading to the early access preview (EAP) version of the scala plugin. This can be done under `Settings > Languages & Frameworks > Scala > Updates`
+
 ### Write code
 
 [See guidelines](/cats/guidelines.html).
