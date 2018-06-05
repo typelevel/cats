@@ -1,6 +1,7 @@
 package cats
 package laws
 
+import catalysts.Platform
 /**
  * Laws that must be obeyed by any `Defer`.
  */
@@ -24,7 +25,8 @@ trait DeferLaws[F[_]] {
       if (c <= 0) F.defer(fa(()))
       else F.defer(loop(c - 1))
 
-    loop(20000) <-> (fa(()))
+    val cnt = if (Platform.isJvm) 20000 else 2000
+    loop(cnt) <-> (fa(()))
   }
 }
 
