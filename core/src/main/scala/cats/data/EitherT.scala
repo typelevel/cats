@@ -121,7 +121,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     })
 
   def biSemiflatMap[C, D](fa: A => F[C], fb: B => F[D])(implicit F: Monad[F]): EitherT[F, C, D] =
-    leftSemiflatMap(fa).semiflatMap(fb)
+    EitherT(F.flatMap(value) {
+      case Left(a) => F.map(fa(a)) { c => Left(c) }
+      case Right(b) => F.map(fb(b)) { d => Right(d) }
+    })
 
   def compare(that: EitherT[F, A, B])(implicit o: Order[F[Either[A, B]]]): Int =
     o.compare(value, that.value)
