@@ -127,7 +127,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     * scala> import cats.implicits._
     * scala> import cats.data.EitherT
     *
-    * scala> val eitherT: EitherT[List, String, Int] = EitherT(List(Left("abc"), Right(123)))
+    * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Left("abc"), Right(123)))
     * scala> eitherT.biSemiflatMap(string => List(string.length), int => List(int.toFloat))
     * res0: cats.data.EitherT[List,Int,Float] = EitherT(List(Left(3), Right(123.0)))
     * }}}
