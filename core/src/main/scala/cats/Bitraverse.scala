@@ -13,7 +13,7 @@ import simulacrum.typeclass
   def bitraverse[G[_]: Applicative, A, B, C, D](fab: F[A, B])(f: A => G[C], g: B => G[D]): G[F[C, D]]
 
   /**
-   * Sequence each side of the structure with the given functions.
+   * Invert the structure from F[G[A], G[B]] to G[F[A, B]].
    *
    * Example:
    * {{{
