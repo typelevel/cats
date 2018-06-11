@@ -9,11 +9,26 @@ import simulacrum.typeclass
  */
 @typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
 
-  /** Traverse each side of the structure with the given functions */
+  /**
+   * Traverse each side of the structure with the given functions.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
+   *
+   * scala> ("1", "2").bitraverse(parseInt, parseInt)
+   * res0: Option[(Int, Int)] = Some((1,2))
+   *
+   * scala> ("1", "two").bitraverse(parseInt, parseInt)
+   * res1: Option[(Int, Int)] = None
+   * }}}
+   */
   def bitraverse[G[_]: Applicative, A, B, C, D](fab: F[A, B])(f: A => G[C], g: B => G[D]): G[F[C, D]]
 
   /**
-   * Sequence each side of the structure with the given functions.
+   * Invert the structure from F[G[A], G[B]] to G[F[A, B]].
    *
    * Example:
    * {{{
