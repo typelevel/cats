@@ -1,7 +1,8 @@
 package cats
 package syntax
 
-import cats.data.EitherT
+import cats.data.Validated.{Invalid, Valid}
+import cats.data.{EitherT, Validated}
 
 trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
@@ -41,6 +42,27 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
     */
   def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
     ApplicativeError.liftFromOption(oa, ifEmpty)(F)
+
+  /**
+   * Convert from cats.data.Validated
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(().invalid[Int])
+   * res1: scala.Option[Int] = None
+   * }}}
+   */
+  def fromValidated[A](x: Validated[E, A]): F[A] =
+    x match {
+      case Invalid(e) => F.raiseError(e)
+      case Valid(a) => F.pure(a)
+    }
 
 }
 

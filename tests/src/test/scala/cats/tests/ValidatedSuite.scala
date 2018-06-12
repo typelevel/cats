@@ -279,4 +279,10 @@ class ValidatedSuite extends CatsSuite {
       Validated.condNel(cond, s, i) should === (Either.cond(cond, s, i).toValidatedNel)
     }
   }
+
+  test("liftTo consistent with direct to Option") {
+    forAll { (v: Validated[Unit, Int]) =>
+      v.liftTo[Option] shouldBe v.toOption
+    }
+  }
 }

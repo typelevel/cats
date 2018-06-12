@@ -49,7 +49,7 @@ package object syntax {
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
-  object validated extends ValidatedSyntax
+  object validated extends ValidatedSyntax with ValidatedExtensionSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax
 }
