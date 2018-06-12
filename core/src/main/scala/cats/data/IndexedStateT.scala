@@ -203,7 +203,7 @@ private[data] trait CommonStateTConstructors {
     IndexedStateT(s => F.pure((s, s)))
 }
 
-object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructors {
+object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructors0 {
   def apply[F[_], SA, SB, A](f: SA => F[(SB, A)])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, A] =
     new IndexedStateT(F.pure(f))
 
@@ -221,6 +221,11 @@ object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructor
 
   def setF[F[_], SA, SB](fsb: F[SB])(implicit F: Applicative[F]): IndexedStateT[F, SA, SB, Unit] =
     IndexedStateT(_ => F.map(fsb)(s => (s, ())))
+}
+
+private[data] trait CommonStateTConstructors0 extends CommonStateTConstructors {
+  def empty[F[_], S, A](implicit A: Monoid[A], F: Applicative[F]): IndexedStateT[F, S, S, A] =
+    pure(A.empty)
 }
 
 private[data] abstract class StateTFunctions extends CommonStateTConstructors {
@@ -298,6 +303,11 @@ private[data] abstract class StateFunctions {
    * Return `a` and maintain the input state.
    */
   def pure[S, A](a: A): State[S, A] = State(s => (s, a))
+
+  /**
+    * Return `A`'s empty monoid value and maintain the input state.
+    */
+  def empty[S, A](implicit A: Monoid[A]): State[S, A] = pure(A.empty)
 
   /**
    * Modify the input state and return Unit.

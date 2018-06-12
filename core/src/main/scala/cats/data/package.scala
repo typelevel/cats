@@ -49,7 +49,7 @@ package object data {
    * context along with the `A` value.
    */
   type StateT[F[_], S, A] = IndexedStateT[F, S, S, A]
-  object StateT extends StateTFunctions
+  object StateT extends StateTFunctions with CommonStateTConstructors0
 
   type State[S, A] = StateT[Eval, S, A]
   object State extends StateFunctions
