@@ -3,6 +3,7 @@ package laws
 package discipline
 
 import catalysts.Platform
+import cats.data.RepresentableStore
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
@@ -157,5 +158,7 @@ object eq {
   implicit def catsLawsEqForCommutativeGroup[A](implicit eqMA: Eq[CommutativeMonoid[A]], eqGA: Eq[Group[A]], eqA: Eq[A]): Eq[CommutativeGroup[A]] =
     Eq.instance((f, g) => eqMA.eqv(f, g) && eqGA.eqv(f, g))
 
-
+  implicit def catsLawsEqForRepresentableStore[F[_]: Representable, S, A](implicit eqFA: Eq[F[A]], eqS: Eq[S]): Eq[RepresentableStore[F, S, A]] = {
+    Eq.instance((s1, s2) => eqFA.eqv(s1.fa, s2.fa) && eqS.eqv(s1.index, s2.index))
+  }
 }

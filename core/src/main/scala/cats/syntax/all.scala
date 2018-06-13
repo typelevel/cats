@@ -66,3 +66,4 @@ trait AllSyntaxBinCompat1
     with ParallelFlatSyntax
     with SetSyntax
     with ValidatedExtensionSyntax
+    with RepresentableSyntax

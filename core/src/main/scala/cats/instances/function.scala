@@ -10,6 +10,18 @@ import annotation.tailrec
 trait FunctionInstances extends cats.kernel.instances.FunctionInstances
     with Function0Instances with Function1Instances
 
+trait FunctionInstancesBinCompat0 {
+  /**
+   * Witness for: E => A <-> E => A
+   */
+  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => ?]): Representable.Aux[E => ?, E] = new Representable[E => ?] {
+    override type Representation = E
+    override val F: Functor[E => ?] = EF
+    override def tabulate[A](f: E => A): E => A = f
+    override def index[A](f: E => A): E => A = f
+  }
+}
+
 private[instances] sealed trait Function0Instances extends Function0Instances0 {
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
