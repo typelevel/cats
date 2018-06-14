@@ -52,4 +52,5 @@ package object syntax {
   object validated extends ValidatedSyntax with ValidatedExtensionSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax
+  object set extends SetSyntax
 }

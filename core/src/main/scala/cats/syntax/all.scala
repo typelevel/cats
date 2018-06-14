@@ -64,4 +64,5 @@ trait AllSyntaxBinCompat1
     with NestedSyntax
     with BinestedSyntax
     with ParallelFlatSyntax
+    with SetSyntax
     with ValidatedExtensionSyntax
