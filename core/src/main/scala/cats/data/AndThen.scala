@@ -29,7 +29,7 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
  *   A => F[B]
  * }}}
  *
- * As an example, if we described this data structure, the native
+ * As an example, if we described this data structure, the naive
  * solution for that `map` is stack unsafe:
  *
  * {{{
