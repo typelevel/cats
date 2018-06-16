@@ -1,9 +1,42 @@
-package cats.tests
+package cats
+package tests
 
 import catalysts.Platform
 import cats.data._
+import cats.kernel.laws.discipline.SerializableTests
+import cats.laws.discipline._
+import cats.arrow._
+import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 
 class AndThenSuite extends CatsSuite {
+  {
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[Int, ?]]
+    checkAll("AndThen[Int, Int]", SemigroupalTests[AndThen[Int, ?]].semigroupal[Int, Int, Int])
+    checkAll("Semigroupal[AndThen[Int, ?]]", SerializableTests.serializable(Semigroupal[AndThen[Int, ?]]))
+  }
+
+  {
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[?, Int]]
+    checkAll("AndThen[Int, Int]", ContravariantMonoidalTests[AndThen[?, Int]].contravariantMonoidal[Int, Int, Int])
+    checkAll("ContravariantMonoidal[AndThen[?, Int]]", SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
+  }
+
+  checkAll("AndThen[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
+  checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[AndThen[Int, ?]]))
+
+  checkAll("AndThen[Int, Int]", CommutativeArrowTests[AndThen].commutativeArrow[Int, Int, Int, Int, Int, Int])
+  checkAll("Arrow[AndThen]", SerializableTests.serializable(CommutativeArrow[AndThen]))
+
+  checkAll("AndThen[Int, Int]", ChoiceTests[AndThen].choice[Int, Int, Int, Int])
+  checkAll("Choice[AndThen]", SerializableTests.serializable(Choice[AndThen]))
+
+  checkAll("AndThen[Int, Int]", ArrowChoiceTests[AndThen].arrowChoice[Int, Int, Int, Int, Int, Int])
+  checkAll("ArrowChoice[AndThen]", SerializableTests.serializable(ArrowChoice[AndThen]))
+
+  checkAll("AndThen[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
+  checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
+
   test("compose a chain of functions with andThen") {
     check { (i: Int, fs: List[Int => Int]) =>
       val result = fs.map(AndThen(_)).reduceOption(_.andThen(_)).map(_(i))
