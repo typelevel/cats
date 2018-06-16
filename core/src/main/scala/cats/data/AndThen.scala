@@ -213,7 +213,7 @@ private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
    * [[cats.arrow.CommutativeArrow CommutativeArrow]] instances
    * for [[AndThen]].
    */
-  implicit val catsArrowInstancesForAndThen: ArrowChoice[AndThen] with CommutativeArrow[AndThen] =
+  implicit val catsArrowForAndThen: ArrowChoice[AndThen] with CommutativeArrow[AndThen] =
     new ArrowChoice[AndThen] with CommutativeArrow[AndThen] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdInstancesForFunction1
