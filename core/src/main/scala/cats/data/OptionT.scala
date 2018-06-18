@@ -290,23 +290,12 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
     )))
 }
 
-private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, ?], Unit] {
+private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, ?], Unit] with OptionTMonad[F] {
   implicit def F: Monad[F]
 
-  def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
+  override def raiseError[A](e: Unit): OptionT[F, A] = OptionT.none
 
-  def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] = fa.flatMap(f)
-
-  override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
-
-  def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
-    OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
-      _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
-    )))
-
-  def raiseError[A](e: Unit): OptionT[F, A] = OptionT.none
-
-  def handleErrorWith[A](fa: OptionT[F, A])(f: Unit => OptionT[F, A]): OptionT[F, A] =
+  override def handleErrorWith[A](fa: OptionT[F, A])(f: Unit => OptionT[F, A]): OptionT[F, A] =
     OptionT(F.flatMap(fa.value) {
       case s @ Some(_) => F.pure(s)
       case None => f(()).value
