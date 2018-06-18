@@ -234,6 +234,9 @@ private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
 
+  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
+    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
+
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
@@ -285,6 +288,29 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
     OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
       _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
     )))
+}
+
+private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, ?], Unit] {
+  implicit def F: Monad[F]
+
+  def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
+
+  def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] = fa.flatMap(f)
+
+  override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
+
+  def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
+    OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
+      _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
+    )))
+
+  def raiseError[A](e: Unit): OptionT[F, A] = OptionT.none
+
+  def handleErrorWith[A](fa: OptionT[F, A])(f: Unit => OptionT[F, A]): OptionT[F, A] =
+    OptionT(F.flatMap(fa.value) {
+      case s @ Some(_) => F.pure(s)
+      case None => f(()).value
+    })
 }
 
 private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] with OptionTMonad[F] {
