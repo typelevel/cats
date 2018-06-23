@@ -29,6 +29,16 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
 
   /**
    * Given a functorial computation on the index `S` peek at the value in that functor.
+   *
+   * {{{
+   *   import cats._, implicits._, data.Store
+   *
+   *   val initial = List("a", "b", "c")
+   *   val store = Store(idx => initial.get(idx).getOrElse(""), 0)
+   *   val adjacent = store.experiment[List] { idx => List(idx - 1, idx, idx + 1) }
+   *
+   *   require(adjacent == List("", "a", "b"))
+   * }}}
    */
   def experiment[G[_]](fn: S => G[S])(implicit G: Functor[G]): G[A] = {
     G.map(fn(index))(peek)

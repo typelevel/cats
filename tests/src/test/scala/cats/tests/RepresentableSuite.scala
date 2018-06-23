@@ -3,7 +3,7 @@ package cats.tests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.{BimonadTests, RepresentableTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, MonadTests, RepresentableTests, SerializableTests}
 import cats.{Bimonad, Eq, Id, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
@@ -12,7 +12,7 @@ class RepresentableSuite extends CatsSuite {
 
   type Pair[A] = (A, A)
 
-  checkAll("Id[Int] <-> Unit => String", RepresentableTests[Id, Unit].representable[String])
+  checkAll("Id[String] <-> Unit => String", RepresentableTests[Id, Unit].representable[String])
   checkAll("Representable[Id]", SerializableTests.serializable(Representable[Id]))
 
   checkAll("String => Int <-> String => Int", RepresentableTests[String => ?, String].representable[Int])
@@ -54,6 +54,11 @@ class RepresentableSuite extends CatsSuite {
     implicit val bimonadInstance = Representable.bimonad[Pair, Boolean]
     checkAll("Pair[Int]", BimonadTests[Pair].bimonad[Int, Int, Int])
     checkAll("Bimonad[Pair]", SerializableTests.serializable(Bimonad[Pair]))
+  }
+
+  {
+    implicit val monadInstance = Representable.monad[String => ?]
+    checkAll("String => ?", MonadTests[String => ?].monad[String, String, String])
   }
 
   // Syntax tests. If it compiles is "passes"
