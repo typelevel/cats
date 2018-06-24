@@ -10,7 +10,6 @@ git:
   depth: 9999
 
 scala:
-  - 2.10.7
   - 2.11.12
   - 2.13.0-M3
   - 2.12.6
@@ -61,4 +60,4 @@ cache:
     - $HOME/.coursier
     # Pants cache
     - $HOME/.cache
-    
+

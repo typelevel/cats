@@ -6,13 +6,7 @@ import org.scalajs.sbtplugin.cross.CrossProject
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
-  //https://github.com/scoverage/sbt-scoverage/issues/72
-  coverageHighlighting := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) => false
-      case _ => true
-    }
-  }
+  coverageHighlighting := true
 )
 
 organization in ThisBuild := "org.typelevel"
@@ -20,8 +14,7 @@ organization in ThisBuild := "org.typelevel"
 val CompileTime = config("compile-time").hide
 
 lazy val kernelSettings = Seq(
-  // don't warn on value discarding because it's broken on 2.10 with @sp(Unit)
-  scalacOptions ++= commonScalacOptions.filter(_ != "-Ywarn-value-discard"),
+  scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
@@ -48,14 +41,7 @@ lazy val commonSettings = Seq(
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   ivyConfigurations += CompileTime,
-  unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name)),
-  unmanagedSourceDirectories in Test ++= {
-    val bd = baseDirectory.value
-    if (CrossVersion.partialVersion(scalaVersion.value) exists (_._2 >= 11))
-      CrossType.Pure.sharedSrcDir(bd, "test").toList map (f => file(f.getPath + "-2.11+"))
-    else
-      Nil
-  }
+  unmanagedClasspath in Compile ++= update.value.select(configurationFilter(CompileTime.name))
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 
@@ -99,7 +85,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
+lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val scalaCheckVersion = "1.13.5"
 // 2.13.0-M3 workaround
@@ -124,26 +110,6 @@ lazy val testingDependencies = Seq(
   // 2.13.0-M3 workaround
   // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test")
-
-/**
-  * Remove 2.10 projects from doc generation, as the macros used in the projects
-  * cause problems generating the documentation on scala 2.10. As the APIs for 2.10
-  * and 2.11 are the same this has no effect on the resultant documentation, though
-  * it does mean that the scaladocs cannot be generated when the build is in 2.10 mode.
-  */
-def docsSourcesAndProjects(sv: String): (Boolean, Seq[ProjectReference]) =
-  CrossVersion.partialVersion(sv) match {
-    case Some((2, 10)) => (false, Nil)
-    case _ => (true, Seq(kernelJVM, coreJVM, freeJVM))
-  }
-
-lazy val javadocSettings = Seq(
-  sources in (Compile, doc) := {
-    val docSource = (sources in (Compile, doc)).value
-    if (docsSourcesAndProjects(scalaVersion.value)._1) docSource else Nil
-  }
-)
-
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -185,8 +151,7 @@ lazy val docSettings = Seq(
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"),
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(docsSourcesAndProjects(scalaVersion.value)._2:_*),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernelJVM, coreJVM, freeJVM),
   docsMappingsAPIDir := "api",
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   ghpagesNoJekyll := false,
@@ -210,10 +175,10 @@ def mimaSettings(moduleName: String) = {
 
   def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
     val majorVersions: List[Int] = List(major)
-    val minorVersions : List[Int] = 
+    val minorVersions : List[Int] =
       if (major >= 1) Range(0, minor).inclusive.toList
       else List(minor)
-    def patchVersions(currentMinVersion: Int): List[Int] = 
+    def patchVersions(currentMinVersion: Int): List[Int] =
       if (minor == 0 && patch == 0) List.empty[Int]
       else if (currentMinVersion != minor) List(0)
       else Range(0, patch - 1).inclusive.toList
@@ -246,7 +211,7 @@ def mimaSettings(moduleName: String) = {
       .filterNot(excludedVersions.contains(_))
       .map(v => "org.typelevel" %% moduleName % v)
   )
-} 
+}
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -607,22 +572,6 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
       }
     }
   }
-
-lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
-  libraryDependencies += scalaOrganization.value %%% "scala-reflect" % scalaVersion.value % "provided",
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      // if scala 2.11+ is used, quasiquotes are merged into scala-reflect
-      case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq()
-      // in Scala 2.10, quasiquotes are provided by macro paradise
-      case Some((2, 10)) =>
-        Seq(
-          compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-              "org.scalamacros" %% "quasiquotes" % "2.1.0" cross CrossVersion.binary
-        )
-    }
-  }
-)
 
 lazy val commonScalacOptions = Seq(
   "-deprecation",
