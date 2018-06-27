@@ -172,7 +172,7 @@ private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
   /**
    * [[cats.Monad]] instance for [[AndThen]].
    */
-  implicit def catsMonadForAndThen[T]: Monad[AndThen[T, ?]] =
+  implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, ?]] =
     new Monad[AndThen[T, ?]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdMonadForFunction1[T]
@@ -193,7 +193,7 @@ private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
   /**
    * [[cats.ContravariantMonoidal]] instance for [[AndThen]].
    */
-  implicit def catsContravariantMonoidalForAndThen[R : Monoid]: ContravariantMonoidal[AndThen[?, R]] =
+  implicit def catsDataContravariantMonoidalForAndThen[R : Monoid]: ContravariantMonoidal[AndThen[?, R]] =
     new ContravariantMonoidal[AndThen[?, R]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdContravariantMonoidalForFunction1[R]
@@ -213,7 +213,7 @@ private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
    * [[cats.arrow.CommutativeArrow CommutativeArrow]] instances
    * for [[AndThen]].
    */
-  implicit val catsArrowForAndThen: ArrowChoice[AndThen] with CommutativeArrow[AndThen] =
+  implicit val catsDataArrowForAndThen: ArrowChoice[AndThen] with CommutativeArrow[AndThen] =
     new ArrowChoice[AndThen] with CommutativeArrow[AndThen] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdInstancesForFunction1
@@ -239,7 +239,7 @@ private[data] abstract class AndThenInstances0 {
   /**
    * [[cats.Contravariant]] instance for [[AndThen]].
    */
-  implicit def catsContravariantForAndThen[R]: Contravariant[AndThen[?, R]] =
+  implicit def catsDataContravariantForAndThen[R]: Contravariant[AndThen[?, R]] =
     new Contravariant[AndThen[?, R]] {
       def contramap[T1, T0](fa: AndThen[T1, R])(f: T0 => T1): AndThen[T0, R] =
         fa.compose(f)

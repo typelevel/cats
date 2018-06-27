@@ -22,8 +22,8 @@ class AndThenSuite extends CatsSuite {
     checkAll("ContravariantMonoidal[AndThen[?, Int]]", SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
   }
 
-  checkAll("AndThen[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
-  checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[AndThen[Int, ?]]))
+  checkAll("AndThen[Int, Int]", MonadTests[AndThen[Int, ?]].monad[Int, Int, Int])
+  checkAll("Monad[AndThen[Int, ?]]", SerializableTests.serializable(Monad[AndThen[Int, ?]]))
 
   checkAll("AndThen[Int, Int]", CommutativeArrowTests[AndThen].commutativeArrow[Int, Int, Int, Int, Int, Int])
   checkAll("Arrow[AndThen]", SerializableTests.serializable(CommutativeArrow[AndThen]))
@@ -34,8 +34,8 @@ class AndThenSuite extends CatsSuite {
   checkAll("AndThen[Int, Int]", ArrowChoiceTests[AndThen].arrowChoice[Int, Int, Int, Int, Int, Int])
   checkAll("ArrowChoice[AndThen]", SerializableTests.serializable(ArrowChoice[AndThen]))
 
-  checkAll("AndThen[Int, Int]", ContravariantTests[? => Int].contravariant[Int, Int, Int])
-  checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
+  checkAll("AndThen[Int, Int]", ContravariantTests[AndThen[?, Int]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[AndThen[?, Int]]", SerializableTests.serializable(Contravariant[AndThen[?, Int]]))
 
   test("compose a chain of functions with andThen") {
     check { (i: Int, fs: List[Int => Int]) =>
