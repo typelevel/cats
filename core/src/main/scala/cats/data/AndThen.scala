@@ -140,7 +140,7 @@ sealed abstract class AndThen[-T, +R]
     "AndThen$" + System.identityHashCode(this)
 }
 
-object AndThen extends AndThenInstances1 {
+object AndThen extends AndThenInstances0 {
   /** Builds an [[AndThen]] reference by wrapping a plain function. */
   def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
