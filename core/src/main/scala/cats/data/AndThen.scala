@@ -168,7 +168,7 @@ object AndThen extends AndThenInstances1 {
   private final val fusionMaxStackDepth = 127
 }
 
-private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
+private[data] abstract class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.Monad]] instance for [[AndThen]].
    */
@@ -235,7 +235,7 @@ private[data] abstract class AndThenInstances1 extends AndThenInstances0 {
     }
 }
 
-private[data] abstract class AndThenInstances0 {
+private[data] abstract class AndThenInstances1 {
   /**
    * [[cats.Contravariant]] instance for [[AndThen]].
    */
