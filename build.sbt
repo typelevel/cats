@@ -160,6 +160,7 @@ lazy val docSettings = Seq(
   micrositeHomepage := "http://typelevel.org/cats/",
   micrositeBaseUrl := "cats",
   micrositeDocumentationUrl := "/cats/api/cats/index.html",
+  micrositeDocumentationLabelDescription := "API Documentation",
   micrositeGithubOwner := "typelevel",
   micrositeExtraMdFiles := Map(
     file("CONTRIBUTING.md") -> ExtraMdFileConfig(

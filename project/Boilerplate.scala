@@ -34,7 +34,7 @@ object Boilerplate {
     GenTupleParallelSyntax
   )
 
-  val header = "// auto-generated boilerplate" // TODO: put something meaningful here?
+  val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
 
 
   /** Returns a seq of the generated files.  As a side-effect, it actually generates them... */
