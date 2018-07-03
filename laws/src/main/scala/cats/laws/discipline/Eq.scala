@@ -3,6 +3,8 @@ package laws
 package discipline
 
 import catalysts.Platform
+import cats.Eq
+import cats.data.AndThen
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
@@ -27,6 +29,10 @@ object eq {
       samples.forall(s => B.eqv(f(s), g(s)) )
     }
   }
+
+  /** `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]]. */
+  implicit def catsLawsEqForAndThen[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[AndThen[A, B]] =
+    Eq.instance(catsLawsEqForFn1[A, B].eqv(_, _))
 
   /**
    * Create an approximation of Eq[(A, B) => C] by generating 100 values for A and B
