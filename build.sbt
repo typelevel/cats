@@ -101,7 +101,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings ++ javadocSettings
 
-lazy val scalaCheckVersion = "1.13.5"
+lazy val scalaCheckVersion = "1.14.0"
 // 2.13.0-M3 workaround
 //lazy val scalaTestVersion = "3.0.5"
 lazy val disciplineVersion = "0.9.0"
