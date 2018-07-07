@@ -21,8 +21,10 @@ trait ListInstances1 extends ListInstances2 {
 }
 
 trait ListInstances2 {
-  implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
-    new ListEq[A]
+  implicit def catsKernelStdEqForList: Delay[Eq, List] =
+    new Delay[Eq, List] {
+      override def apply[A](fa: Eq[A]): Eq[List[A]] = new ListEq[A]()(fa)
+    }
 }
 
 class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {

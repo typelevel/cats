@@ -1,6 +1,8 @@
 package cats
 package free
 
+import cats.kernel.Delay
+
 /**
   * A free comonad for some branching functor `S`. Branching is done lazily using [[Eval]].
   * A tree with data at the branches, as opposed to [[Free]] which is a tree with data at the leaves.
@@ -100,6 +102,12 @@ sealed private[free] abstract class CofreeInstances1 extends CofreeInstances2 {
 sealed private[free] abstract class CofreeInstances extends CofreeInstances1 {
   implicit def catsFreeComonadForCofree[S[_] : Functor]: Comonad[Cofree[S, ?]] = new CofreeComonad[S] {
     def F = implicitly
+  }
+
+  implicit def catsFreeEqForCofree[A : Eq, S[_]](implicit D: Delay[Eq, S]): Eq[Cofree[S, A]] = new Eq[Cofree[S, A]] {
+    override def eqv(x: Cofree[S, A], y: Cofree[S, A]): Boolean = {
+      Eq[A].eqv(x.head, y.head) && D.apply(this).eqv(x.tailForced, y.tailForced)
+    }
   }
 }
 

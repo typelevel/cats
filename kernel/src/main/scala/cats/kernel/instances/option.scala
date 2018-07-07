@@ -21,8 +21,9 @@ trait OptionInstances1 extends OptionInstances2 {
 }
 
 trait OptionInstances2 {
-  implicit def catsKernelStdEqForOption[A: Eq]: Eq[Option[A]] =
-    new OptionEq[A]
+  implicit def catsKernelStdEqForOption: Delay[Eq, Option] = new Delay[Eq, Option] {
+    override def apply[A](fa: Eq[A]): Eq[Option[A]] = new OptionEq[A]()(fa)
+  }
 }
 
 class OptionOrder[A](implicit A: Order[A]) extends Order[Option[A]] {
