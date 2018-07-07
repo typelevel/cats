@@ -17,7 +17,6 @@ trait AllSyntax
     with BifoldableSyntax
     with BitraverseSyntax
     with SemigroupalSyntax
-    with ChoiceSyntax
     with CoflatMapSyntax
     with ComonadSyntax
     with ComposeSyntax
@@ -62,6 +61,7 @@ trait AllSyntaxBinCompat0
 
 trait AllSyntaxBinCompat1
   extends FlatMapOptionSyntax
+    with ChoiceSyntax
     with NestedSyntax
     with BinestedSyntax
     with ParallelFlatSyntax
