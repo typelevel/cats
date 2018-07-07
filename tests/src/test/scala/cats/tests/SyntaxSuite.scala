@@ -1,11 +1,12 @@
 package cats
 package tests
 
+import scala.collection.immutable.SortedSet
+import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
-import cats.data.Nested
+import cats.data.{Binested, Nested, NonEmptyList, NonEmptySet}
 import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
-
+import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
 
 /**
  * Test that our syntax implicits are working.
@@ -25,7 +26,7 @@ import cats.syntax.{AllSyntax, AllSyntaxBinCompat1}
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 {
+object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -178,6 +179,15 @@ object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 
 
     val mb2: M[B] = ma &> mb
     val ma2: M[A] = ma <& mb
+  }
+
+  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[T[B]]]
+    val mtb = ta.parFlatTraverse(f)
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta = tmta.parFlatSequence
   }
 
   def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
@@ -343,6 +353,28 @@ object SyntaxSuite extends AllInstances with AllSyntax with AllSyntaxBinCompat1 
     val fga: F[G[A]] = mock[F[G[A]]]
 
     val nested: Nested[F, G, A] = fga.nested
+  }
+
+  def testBinested[F[_, _], G[_], H[_], A, B]: Unit = {
+    val fgahb = mock[F[G[A], H[B]]]
+
+    val binested: Binested[F, G, H, A, B] = fgahb.binested
+  }
+
+  def testNonEmptySet[A, B: Order] : Unit = {
+    val f = mock[A => B]
+    val set = mock[SortedSet[A]]
+
+    val nes: Option[NonEmptySet[A]] = set.toNes
+    val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
+  }
+
+  def testNonEmptyList[A, B: Order] : Unit = {
+    val f = mock[A => B]
+    val list = mock[List[A]]
+
+    val nel: Option[NonEmptyList[A]] = list.toNel
+    val grouped: SortedMap[B, NonEmptyList[A]] = list.groupByNel(f)
   }
 
 }

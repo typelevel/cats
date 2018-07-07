@@ -175,7 +175,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    */
   def fromEither[A](x: E Either A): F[A] =
-    x.fold(raiseError, pure)
+    x match {
+      case Right(a) => pure(a)
+      case Left(e)  => raiseError(e)
+    }
+
+
 }
 
 object ApplicativeError {

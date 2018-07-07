@@ -112,13 +112,22 @@ Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
 working with cross-compiling builds, the first things that you will notice is that
 builds:
 
- * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
-
- JS only. And if you want the default project to be `catsJVM`, just copy the
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS`
+   for JS only. And if you want the default project to be `catsJVM`, just copy the
    file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
 
  * May run out of memory: We suggest you use
    [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
+
+### Editor Setup Tips
+
+**IntelliJ**
+
+- Be warned, IntelliJ is currently not 100% accurate at reporting compilation errors, there *will* be cases that it reports errors incorrectly. If you simply don't want to see the errors, a quick an easy work around is to disable *Type-Aware Highlighting* by clicking the `[T]` icon in the bottom toolbar.
+
+- There is an open [issue](https://github.com/typelevel/cats/issues/2152) with the IntelliJ scala plugin, which prevents it from configuring similacrum correctly when importing the cats project. The work around for this issue is to set `val CompileTime = Provided` in `build.sbt`. Note: Be careful not to commit this change.
+
+- IntelliJ does have [support](https://blog.jetbrains.com/scala/2015/07/31/inline-refactoring-for-type-aliases-and-kind-projector-support/) for kind-projector. However, it is not always seamless. If you are unable to get IntelliJ to recognise the special symbols that kind-project provides, such as `?` `Lambda[X => G[F[A]]]` or `λ[X => G[F[A]]]` try upgrading to the early access preview (EAP) version of the scala plugin. This can be done under `Settings > Languages & Frameworks > Scala > Updates`
 
 ### Write code
 
@@ -185,13 +194,13 @@ run `sbt docs/makeMicrosite`
 
 ### Previewing the site
 
-1. Install jekyll locally, depending on your platform, you might do this with:
+1. Install jekyll locally. Depending on your platform, you might do this with:
 
-    yum install jekyll
+    `yum install jekyll`
 
-    apt-get install ruby-full; gem install jekyll
+    `apt-get install ruby-full; gem install jekyll`
 
-    gem install jekyll
+    `gem install jekyll`
 
 2. In a shell, navigate to the generated site directory in `docs/target/site`
 

@@ -233,4 +233,9 @@ class NonEmptySetSuite extends CatsSuite {
     }
   }
 
+  test("NonEmptySet#groupBy is consistent with Set#groupBy") {
+    forAll { (nes: NonEmptySet[Int], f: Int => Int) =>
+      nes.groupBy(f).map(_.toSortedSet).toSortedMap should === (nes.toSortedSet.groupBy(f))
+    }
+  }
 }

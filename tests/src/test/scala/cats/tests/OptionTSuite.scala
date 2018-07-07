@@ -130,6 +130,13 @@ class OptionTSuite extends CatsSuite {
     checkAll("Semigroup[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
   }
 
+  {
+    // MonadError instance where F has a Monad
+    implicit val F = ListWrapper.monad
+    checkAll("OptionT[ListWrapper, Int]", MonadErrorTests[OptionT[ListWrapper, ?], Unit].monadError[Int, Int, Int])
+    checkAll("MonadError[OptionT[List, ?]]", SerializableTests.serializable(MonadError[OptionT[ListWrapper, ?], Unit]))
+  }
+
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
       o.fold(s)(f) should === (o.cata(s, f))
@@ -280,6 +287,12 @@ class OptionTSuite extends CatsSuite {
   test("transform consistent with value.map") {
     forAll { (o: OptionT[List, Int], f: Option[Int] => Option[String]) =>
       o.transform(f) should === (OptionT(o.value.map(f)))
+    }
+  }
+
+  test("flatTransform consistent with value.map") {
+    forAll { (o: OptionT[List, Int], f: Option[Int] => List[Option[String]]) =>
+      o.flatTransform(f) should === (OptionT(o.value.flatMap(f)))
     }
   }
 
