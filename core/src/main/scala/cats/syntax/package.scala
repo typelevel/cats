@@ -14,6 +14,7 @@ package object syntax {
   object bitraverse extends BitraverseSyntax
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
+  object choice extends ChoiceSyntax
   object coflatMap extends CoflatMapSyntax
   object distributive extends DistributiveSyntax
   object eitherK extends EitherKSyntax

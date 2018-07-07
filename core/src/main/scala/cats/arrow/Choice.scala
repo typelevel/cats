@@ -14,7 +14,7 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val b: Boolean => String = _ + " is a boolean"
    * scala> val i: Int => String =  _ + " is an integer"
-   * scala> val f: (Either[Boolean, Int]) => String = Choice[Function1].choice(b, i)
+   * scala> val f: (Either[Boolean, Int]) => String = b ||| i
    *
    * scala> f(Right(3))
    * res0: String = 3 is an integer
