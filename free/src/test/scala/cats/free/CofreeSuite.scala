@@ -14,7 +14,7 @@ class CofreeSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
 
-  checkAll("Cofree[Option, ?]", EqTests[Cofree[List, ?]].eqv)
+  checkAll("Cofree[Option, ?]", EqTests[Cofree[Option, Int]].eqv)
   checkAll("Cofree[Option, ?]", ComonadTests[Cofree[Option, ?]].comonad[Int, Int, Int])
   locally {
     implicit val instance = Cofree.catsTraverseForCofree[Option]
