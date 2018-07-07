@@ -290,7 +290,7 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("flatTransform consistent with value.map") {
+  test("flatTransform consistent with value.flatMap") {
     forAll { (o: OptionT[List, Int], f: Option[Int] => List[Option[String]]) =>
       o.flatTransform(f) should === (OptionT(o.value.flatMap(f)))
     }
