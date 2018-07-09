@@ -32,3 +32,7 @@ trait AllInstances
   with    TupleInstances
   with    UUIDInstances
   with    VectorInstances
+
+trait AllInstancesBinCompat0
+    extends FunctionInstancesBinCompat0
+    with    Tuple2InstancesBinCompat0

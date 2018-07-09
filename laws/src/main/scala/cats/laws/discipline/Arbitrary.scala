@@ -250,11 +250,32 @@ object arbitrary extends ArbitraryInstances0 {
     F: Arbitrary[(E, SA) => F[(L, SB, A)]]): Arbitrary[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Arbitrary(F.arbitrary.map(IndexedReaderWriterStateT(_)))
 
+
+  implicit def catsLawsArbitraryForRepresentableStore[F[_], S, A](implicit
+    R: Representable.Aux[F, S],
+    ArbS: Arbitrary[S],
+    ArbFA: Arbitrary[F[A]]
+  ): Arbitrary[RepresentableStore[F, S, A]] = {
+    Arbitrary {
+      for {
+        fa <- ArbFA.arbitrary
+        s <- ArbS.arbitrary
+      } yield {
+        RepresentableStore[F, S, A](fa, s)
+      }
+    }
+  }
+
+  implicit def catsLawsCogenForRepresentableStore[F[_]: Representable, S, A](implicit CA: Cogen[A]): Cogen[RepresentableStore[F, S, A]] = {
+    CA.contramap(_.extract)
+  }
+
   implicit def catsLawsArbitraryForAndThen[A, B](implicit F: Arbitrary[A => B]): Arbitrary[AndThen[A, B]] =
     Arbitrary(F.arbitrary.map(AndThen(_)))
 
   implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
     Cogen((seed, x) => F.perturb(seed, x))
+
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {

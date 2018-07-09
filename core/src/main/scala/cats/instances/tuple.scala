@@ -2,9 +2,32 @@ package cats
 package instances
 
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
+
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
+
+trait Tuple2InstancesBinCompat0 {
+
+  /**
+   * Witness for: (A, A) <-> Boolean => A
+   */
+  implicit def catsDataRepresentableForPair(implicit PF: Functor[λ[P => (P, P)]]): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
+    override type Representation = Boolean
+    override val F: Functor[λ[P => (P, P)]] = PF
+
+    override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
+
+    override def index[A](pair: (A, A)): Boolean => A = {
+      case true => pair._1
+      case false => pair._2
+    }
+  }
+
+  implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
+    override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
+  }
+}
 
 sealed trait Tuple2Instances extends Tuple2Instances1 {
   implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =

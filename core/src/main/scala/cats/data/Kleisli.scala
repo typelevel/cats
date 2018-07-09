@@ -185,6 +185,29 @@ private[data] sealed abstract class KleisliInstances0 extends KleisliInstances1 
 
   implicit def catsDataContravariantMonoidalForKleisli[F[_], A](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[Kleisli[F, A, ?]] =
     new KleisliContravariantMonoidal[F, A] {  def F: ContravariantMonoidal[F] = F0 }
+
+  /**
+   * Witness for: Kleisli[M, E, A] <-> (E, R) => A
+   * if M is Representable
+   */
+  implicit def catsDataRepresentableForKleisli[M[_], R, E](implicit
+    R: Representable.Aux[M, R],
+    FK: Functor[Kleisli[M, E, ?]]): Representable.Aux[Kleisli[M, E, ?], (E, R)] = new Representable[Kleisli[M, E, ?]] {
+
+      override type Representation = (E, R)
+
+      override val F: Functor[Kleisli[M, E, ?]] = FK
+
+      def index[A](f: Kleisli[M, E, A]): Representation => A = {
+        case (e, r) => R.index(f.run(e))(r)
+      }
+
+      def tabulate[A](f: Representation => A): Kleisli[M, E, A] = {
+        def curry[X, Y, Z](f: (X, Y) => Z): X => Y => Z = x => y => f(x, y)
+
+        Kleisli[M, E, A](curry(Function.untupled(f)) andThen R.tabulate)
+      }
+    }
 }
 
 private[data] sealed abstract class KleisliInstances1 extends KleisliInstances2 {
