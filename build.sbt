@@ -47,7 +47,9 @@ lazy val commonSettings = Seq(
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
         case e: xml.Elem
-          if e.label == "dependency" && e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") => Nil
+          if e.label == "dependency" &&
+          e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
+          e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) => Nil
         case _ => Seq(node)
       }
     }).transform(node).head
@@ -216,10 +218,10 @@ def mimaSettings(moduleName: String) = {
 
   def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
     val majorVersions: List[Int] = List(major)
-    val minorVersions : List[Int] = 
+    val minorVersions : List[Int] =
       if (major >= 1) Range(0, minor).inclusive.toList
       else List(minor)
-    def patchVersions(currentMinVersion: Int): List[Int] = 
+    def patchVersions(currentMinVersion: Int): List[Int] =
       if (minor == 0 && patch == 0) List.empty[Int]
       else if (currentMinVersion != minor) List(0)
       else Range(0, patch - 1).inclusive.toList
@@ -252,7 +254,7 @@ def mimaSettings(moduleName: String) = {
       .filterNot(excludedVersions.contains(_))
       .map(v => "org.typelevel" %% moduleName % v)
   )
-} 
+}
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -302,7 +304,7 @@ lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
 
-lazy val kernel = crossProject(JSPlatform, JVMPlatform,NativePlatform)
+lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
