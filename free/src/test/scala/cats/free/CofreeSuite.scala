@@ -32,6 +32,12 @@ class CofreeSuite extends CatsSuite {
     cofNelToNel(unfoldedHundred) should ===(nelUnfoldedHundred)
   }
 
+  test("Cofree.ana") {
+    val unfoldedHundred: CofreeNel[String] = Cofree.ana[Option, Int, String](0)(i => if (i == 100) None else Some(i + 1), _.toString)
+    val nelUnfoldedHundred: NonEmptyList[String] = NonEmptyList.fromListUnsafe(List.tabulate(101)(_.toString))
+    cofNelToNel(unfoldedHundred) should ===(nelUnfoldedHundred)
+  }
+
   test("Cofree.tailForced") {
     val spooky = new Spooky
     val incrementor =

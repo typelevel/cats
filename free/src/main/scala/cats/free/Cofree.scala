@@ -61,7 +61,11 @@ object Cofree extends CofreeInstances {
 
   /** Cofree anamorphism, lazily evaluated. */
   def unfold[F[_], A](a: A)(f: A => F[A])(implicit F: Functor[F]): Cofree[F, A] =
-    Cofree[F, A](a, Eval.later(F.map(f(a))(unfold(_)(f))))
+    ana(a)(f, identity)
+
+  /** Cofree anamorphism with a fused map, lazily evaluated. */
+  def ana[F[_], A, B](a: A)(coalg: A => F[A], f: A => B)(implicit F: Functor[F]): Cofree[F, B] =
+    Cofree[F, B](f(a), Eval.later(F.map(coalg(a))(ana(_)(coalg, f))))
 
   /**
     * A stack-safe algebraic recursive fold out of the cofree comonad.
@@ -148,4 +152,3 @@ private trait CofreeTraverse[F[_]] extends Traverse[Cofree[F, ?]] with CofreeRed
     G.map2(f(fa.head), F.traverse(fa.tailForced)(traverse(_)(f)))((h, t) => Cofree[F, B](h, Eval.now(t)))
 
 }
-
