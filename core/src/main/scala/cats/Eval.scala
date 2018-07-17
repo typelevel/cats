@@ -416,6 +416,22 @@ private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }
+
+  implicit val catsRepresentableForEval: Representable[Eval] = new Representable[Eval] {
+    override type Representation = Unit
+
+    override def F: Functor[Eval] = Functor[Eval]
+
+    /**
+     * Create a function that "indexes" into the `F` structure using `Representation`
+     */
+    override def index[A](f: Eval[A]): Unit => A = (_: Unit) => f.value
+
+    /**
+     * Reconstructs the `F` structure using the index function
+     */
+    override def tabulate[A](f: Unit => A): Eval[A] = Eval.later(f(()))
+  }
 }
 
 private[cats] sealed abstract class EvalInstances0 extends EvalInstances1 {

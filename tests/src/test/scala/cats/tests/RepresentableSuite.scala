@@ -4,7 +4,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.{BimonadTests, MonadTests, RepresentableTests, SerializableTests}
-import cats.{Bimonad, Eq, Id, Representable}
+import cats.{Bimonad, Eq, Eval, Id, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
 
@@ -21,6 +21,8 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Pair[String, String] <-> Boolean => String", RepresentableTests[Pair, Boolean].representable[String])
   checkAll("Representable[Pair]", SerializableTests.serializable(Representable[Pair]))
 
+  checkAll("Eval[Int] <-> Unit => Int", RepresentableTests[Eval, Unit].representable[Int])
+  checkAll("Representable[Eval]", SerializableTests.serializable(Representable[Eval]))
 
   {
     implicit val representableKleisliPair = Kleisli.catsDataRepresentableForKleisli[Pair, Boolean, String]
