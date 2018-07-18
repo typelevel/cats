@@ -420,7 +420,7 @@ private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
   implicit val catsRepresentableForEval: Representable.Aux[Eval, Unit] = new Representable[Eval] {
     override type Representation = Unit
 
-    override def F: Functor[Eval] = Functor[Eval]
+    override val F: Functor[Eval] = Functor[Eval]
 
     /**
      * Create a function that "indexes" into the `F` structure using `Representation`
