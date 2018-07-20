@@ -346,6 +346,21 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     */
   def zipWithIndex: NonEmptySet[(A, Int)] =
     NonEmptySetImpl.create(toSortedSet.zipWithIndex)
+
+  /**
+    * Groups elements inside this `NonEmptySet` according to the `Order`
+    * of the keys produced by the given mapping function.
+    */
+  def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptySet[A]] = {
+     reduceLeftTo(a => NonEmptyMap.one(f(a), NonEmptySet.one(a))) { (acc, a) =>
+       val key = f(a)
+       val result = acc.lookup(key) match {
+         case Some(nes) => nes.add(a)
+         case _ => NonEmptySet.one(a)
+       }
+       acc.add((key, result))
+     }
+  }
 }
 
 private[data] sealed abstract class NonEmptySetInstances {

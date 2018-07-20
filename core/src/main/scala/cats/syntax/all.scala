@@ -4,6 +4,7 @@ package syntax
 abstract class AllSyntaxBinCompat
     extends AllSyntax
     with AllSyntaxBinCompat0
+    with AllSyntaxBinCompat1
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -57,3 +58,13 @@ trait AllSyntaxBinCompat0
     extends UnorderedTraverseSyntax
     with ApplicativeErrorExtension
     with TrySyntax
+
+trait AllSyntaxBinCompat1
+  extends FlatMapOptionSyntax
+    with ChoiceSyntax
+    with NestedSyntax
+    with BinestedSyntax
+    with ParallelFlatSyntax
+    with SetSyntax
+    with ValidatedExtensionSyntax
+    with RepresentableSyntax

@@ -9,7 +9,8 @@ position: 40
 
 ## Questions
  * [What imports do I need?](#what-imports)
- * [What is the difference between Cats and Scalaz?](#diff-scalaz) 
+ * [I am new to pure functional programming, what quick wins can I get from Cats?](#quick-wins)
+ * [What is the difference between Cats and Scalaz?](#diff-scalaz)
  * [Where is right-biased `Either`?](#either)
  * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
@@ -39,12 +40,15 @@ import cats.implicits._
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
 
-## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz? 
+## <a id="quick-wins" href="#quick-wins"></a>I am new to pure functional programming, what quick wins can I get from Cats?
+
+Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html).
+
+## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz?
 
 Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
 Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [typelevel code of conduct](https://typelevel.org/conduct). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
-                       
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with

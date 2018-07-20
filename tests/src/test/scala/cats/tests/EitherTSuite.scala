@@ -473,4 +473,22 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("biSemiflatMap consistent with leftSemiflatMap and semiFlatmap") {
+    forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int], fb: Int => List[String]) =>
+      eithert.biSemiflatMap(fa, fb) should === (eithert.leftSemiflatMap(fa).semiflatMap(fb))
+    }
+  }
+
+  test("biSemiflatMap consistent with leftSemiflatMap") {
+    forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int]) =>
+      eithert.biSemiflatMap(fa, List(_)) should ===(eithert.leftSemiflatMap(a => fa(a)))
+    }
+  }
+
+  test("biSemiflatMap consistent with semiflatMap") {
+    forAll { (eithert: EitherT[List, String, Int], fb: Int => List[String]) =>
+      eithert.biSemiflatMap(List(_), fb) should ===(eithert.semiflatMap(b => fb(b)))
+    }
+  }
+
 }

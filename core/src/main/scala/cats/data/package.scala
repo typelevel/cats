@@ -66,4 +66,11 @@ package object data {
 
   type RWS[E, L, S, A] = ReaderWriterState[E, L, S, A]
   val RWS = ReaderWriterState
+
+  type Store[S, A] = RepresentableStore[S => ?, S, A]
+  object Store {
+    import cats.instances.function._
+    def apply[S, A](f: S => A, s: S): Store[S, A] =
+      RepresentableStore[S => ?, S, A](f, s)
+  }
 }

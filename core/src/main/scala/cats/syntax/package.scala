@@ -10,9 +10,11 @@ package object syntax {
   object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
+  object binested extends BinestedSyntax
   object bitraverse extends BitraverseSyntax
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
+  object choice extends ChoiceSyntax
   object coflatMap extends CoflatMapSyntax
   object distributive extends DistributiveSyntax
   object eitherK extends EitherKSyntax
@@ -33,12 +35,14 @@ package object syntax {
   object monad extends MonadSyntax
   object monadError extends MonadErrorSyntax
   object monoid extends MonoidSyntax
+  object nested extends NestedSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
   object parallel extends ParallelSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax
+  object representable extends RepresentableSyntax
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
   object semigroupk extends SemigroupKSyntax
@@ -47,7 +51,8 @@ package object syntax {
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
-  object validated extends ValidatedSyntax
+  object validated extends ValidatedSyntax with ValidatedExtensionSyntax
   object vector extends VectorSyntax
   object writer extends WriterSyntax
+  object set extends SetSyntax
 }

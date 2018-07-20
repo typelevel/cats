@@ -96,6 +96,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [fastparse-cats](https://github.com/johnynek/fastparse-cats): cats Monad and Alternative instances for [fastparse](https://github.com/lihaoyi/fastparse)
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
@@ -107,6 +108,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
+ * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
