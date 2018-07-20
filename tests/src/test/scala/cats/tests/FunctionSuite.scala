@@ -30,35 +30,23 @@ class FunctionSuite extends CatsSuite {
   import Helpers._
 
   checkAll("Function0[Int]", SemigroupalTests[Function0].semigroupal[Int, Int, Int])
-  // TODO: make an binary compatible way to do this
-  implicit val deferFunction0: Defer[Function0] =
-    new Defer[Function0] {
-      case class Deferred[A](fa: () => Function0[A]) extends Function0[A] {
-        def apply() = {
-          @annotation.tailrec
-          def loop(f: () => Function0[A]): A =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next => next()
-            }
-          loop(fa)
-        }
-      }
-      def defer[A](fa: => Function0[A]): Function0[A] = {
-        lazy val cachedFa = fa
-        Deferred(() => cachedFa)
-      }
-    }
-  checkAll("Function0[Int]", DeferTests[Function0].defer[Int])
   checkAll("Semigroupal[Function0]", SerializableTests.serializable(Semigroupal[Function0]))
+
+  checkAll("Function0[Int]", DeferTests[Function0].defer[Int])
+  checkAll("Defer[Function0[Int]]", SerializableTests.serializable(Defer[Function0]))
+
+  checkAll("Function1[Int, Int]", DeferTests[Function1[Int, ?]].defer[Int])
+  checkAll("Defer[Function1[Int, Int]]", SerializableTests.serializable(Defer[Function1[Int, ?]]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[Int, ?]]
   checkAll("Function1[Int, Int]", SemigroupalTests[Function1[Int, ?]].semigroupal[Int, Int, Int])
+
   // TODO: make an binary compatible way to do this
   //checkAll("Function1[Int => ?]", DeferTests[Function1[Int, ?]].defer[Int])
+
   checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
 
   checkAll("Function1[Int, Int]", MonadTests[Int => ?].monad[Int, Int, Int])
