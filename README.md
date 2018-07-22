@@ -77,6 +77,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### General purpose libraries to support pure functional programming
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
