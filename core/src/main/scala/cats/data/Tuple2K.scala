@@ -34,6 +34,16 @@ private[data] sealed abstract class Tuple2KInstances extends Tuple2KInstances0 {
       def F: ContravariantMonoidal[F] = FD
       def G: ContravariantMonoidal[G] = GD
     }
+
+  implicit def catsDataDeferForTuple2K[F[_], G[_]](implicit F: Defer[F], G: Defer[G]): Defer[Tuple2K[F, G, ?]] =
+    new Defer[Tuple2K[F, G, ?]] {
+      def defer[A](fa: => Tuple2K[F, G, A]): Tuple2K[F, G, A] = {
+        // Make sure we only evaluate once on both the first and second
+        lazy val cacheFa = fa
+
+        Tuple2K(F.defer(cacheFa.first), G.defer(cacheFa.second))
+      }
+    }
 }
 
 private[data] sealed abstract class Tuple2KInstances0 extends Tuple2KInstances1 {

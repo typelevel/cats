@@ -500,6 +500,11 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
   implicit def catsMonoidForEitherT[F[_], L, A](implicit F: Monoid[F[Either[L, A]]]): Monoid[EitherT[F, L, A]] =
     new EitherTMonoid[F, L, A] { implicit val F0 = F }
 
+  implicit def catsDataDeferForEitherT[F[_], L](implicit F: Defer[F]): Defer[EitherT[F, L, ?]] =
+    new Defer[EitherT[F, L, ?]] {
+      def defer[A](fa: => EitherT[F, L, A]): EitherT[F, L, A] =
+        EitherT(F.defer(fa.value))
+    }
 }
 
 private[data] abstract class EitherTInstances1 extends EitherTInstances2 {

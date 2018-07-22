@@ -301,6 +301,12 @@ object Free extends FreeInstances {
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
     }
+
+  implicit def catsFreeDeferForFree[S[_]]: Defer[Free[S, ?]] =
+    new Defer[Free[S, ?]] {
+      def defer[A](fa: => Free[S, A]): Free[S, A] =
+        Free.defer(fa)
+    }
 }
 
 private trait FreeFoldable[F[_]] extends Foldable[Free[F, ?]] {

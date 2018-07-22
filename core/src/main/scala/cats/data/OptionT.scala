@@ -228,6 +228,12 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
 
   implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
     Contravariant[Show].contramap(F)(_.value)
+
+  implicit def catsDataDeferForOptionT[F[_]](implicit F: Defer[F]): Defer[OptionT[F, ?]] =
+    new Defer[OptionT[F, ?]] {
+      def defer[A](fa: => OptionT[F, A]): OptionT[F, A] =
+        OptionT(F.defer(fa.value))
+    }
 }
 
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {

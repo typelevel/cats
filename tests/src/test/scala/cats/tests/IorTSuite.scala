@@ -12,6 +12,8 @@ import cats.laws.discipline.arbitrary._
 
 class IorTSuite extends CatsSuite {
 
+  checkAll("IorT[Eval, String, ?]", DeferTests[IorT[Eval, String, ?]].defer[Int])
+
   {
     implicit val F = ListWrapper.functor
 

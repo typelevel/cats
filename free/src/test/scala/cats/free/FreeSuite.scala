@@ -3,7 +3,7 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{SemigroupalTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{SemigroupalTests, DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.tests.CatsSuite
 
@@ -15,6 +15,7 @@ class FreeSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
+  checkAll("Free[Option, ?]", DeferTests[Free[Option, ?]].defer[Int])
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
 

@@ -331,6 +331,8 @@ class IndexedStateTSuite extends CatsSuite {
     Profunctor[IndexedStateT[ListWrapper, ?, ?, String]]
   }
 
+  checkAll("IndexedStateT[Eval, String, String, ?]", DeferTests[IndexedStateT[Eval, String, String, ?]].defer[Int])
+
   {
     // F needs a Monad to do Eq on StateT
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
