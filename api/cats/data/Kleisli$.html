@@ -103,9 +103,33 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li class="current-entities indented2">
+                        <a class="object" href="AndThen$.html" title=""></a>
+                        <a class="class" href="AndThen.html" title="A function type of a single input that can do function composition (via andThen and compose) in constant stack space with amortized linear time application (in the number of constituent functions)."></a>
+                        <a href="AndThen.html" title="A function type of a single input that can do function composition (via andThen and compose) in constant stack space with amortized linear time application (in the number of constituent functions).">AndThen</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="AppFunc$.html" title=""></a>
                         <a class="class" href="AppFunc.html" title="An implementation of Func that's specialized to Applicative."></a>
                         <a href="AppFunc.html" title="An implementation of Func that's specialized to Applicative.">AppFunc</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Binested$.html" title=""></a>
+                        <a class="class" href="Binested.html" title="Compose a two-slot type constructor F[_, _] with two single-slot type constructors G[_] and H[_], resulting in a two-slot type constructor with respect to the inner types."></a>
+                        <a href="Binested.html" title="Compose a two-slot type constructor F[_, _] with two single-slot type constructors G[_] and H[_], resulting in a two-slot type constructor with respect to the inner types.">Binested</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="BinestedBifoldable.html" title=""></a>
+                        <a href="BinestedBifoldable.html" title="">BinestedBifoldable</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="BinestedBitraverse.html" title=""></a>
+                        <a href="BinestedBitraverse.html" title="">BinestedBitraverse</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BinestedInstances.html" title=""></a>
+                        <a href="BinestedInstances.html" title="">BinestedInstances</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="BinestedInstances0.html" title=""></a>
+                        <a href="BinestedInstances0.html" title="">BinestedInstances0</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Cokleisli$.html" title=""></a>
                         <a class="class" href="Cokleisli.html" title="Represents a function F[A] =&gt; B."></a>
@@ -175,6 +199,10 @@
                         <a class="class" href="OneAnd.html" title="A data type which represents a single element (head) and some other structure (tail)."></a>
                         <a href="OneAnd.html" title="A data type which represents a single element (head) and some other structure (tail).">OneAnd</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="Op$.html" title=""></a>
+                        <a class="class" href="Op.html" title="The dual category of some other category, Arr."></a>
+                        <a href="Op.html" title="The dual category of some other category, Arr.">Op</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="OptionT$.html" title=""></a>
                         <a class="class" href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some convenient methods for working with this nested structure."></a>
                         <a href="OptionT.html" title="OptionT[F[_], A] is a light wrapper on an F[Option[A]] with some convenient methods for working with this nested structure.">OptionT</a>
@@ -191,6 +219,10 @@
                         <a class="object" href="package$$ReaderWriterStateT$.html" title=""></a>
                         <a href="package$$ReaderWriterStateT$.html" title="">ReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="RepresentableStore$.html" title=""></a>
+                        <a class="class" href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor."></a>
+                        <a href="RepresentableStore.html" title="A generalisation of the Store comonad, for any Representable functor.">RepresentableStore</a>
+                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="object" href="package$$State$.html" title=""></a>
                         <a href="package$$State$.html" title="">State</a>
@@ -198,6 +230,10 @@
                         <span class="separator"></span>
                         <a class="object" href="package$$StateT$.html" title=""></a>
                         <a href="package$$StateT$.html" title="">StateT</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$Store$.html" title=""></a>
+                        <a href="package$$Store$.html" title="">Store</a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Tuple2K$.html" title=""></a>
                         <a class="class" href="Tuple2K.html" title="Tuple2K is a product to two independent functor values."></a>
@@ -251,7 +287,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Kleisli</span><span class="result"> extends <span class="extype" name="cats.data.KleisliInstances">KleisliInstances</span> with <span class="extype" name="cats.data.KleisliFunctions">KleisliFunctions</span> with <span class="extype" name="cats.data.KleisliExplicitInstances">KleisliExplicitInstances</span> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Kleisli</span><span class="result"> extends <span class="extype" name="cats.data.KleisliInstances">KleisliInstances</span> with <span class="extype" name="cats.data.KleisliFunctions">KleisliFunctions</span> with <span class="extype" name="cats.data.KleisliExplicitInstances">KleisliExplicitInstances</span> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -260,7 +296,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.KleisliExplicitInstances">KleisliExplicitInstances</span>, <span class="extype" name="cats.data.KleisliFunctions">KleisliFunctions</span>, <span class="extype" name="cats.data.KleisliInstances">KleisliInstances</span>, <span class="extype" name="cats.data.KleisliInstances0">KleisliInstances0</span>, <span class="extype" name="cats.data.KleisliInstances1">KleisliInstances1</span>, <span class="extype" name="cats.data.KleisliInstances2">KleisliInstances2</span>, <span class="extype" name="cats.data.KleisliInstances3">KleisliInstances3</span>, <span class="extype" name="cats.data.KleisliInstances4">KleisliInstances4</span>, <span class="extype" name="cats.data.KleisliInstances5">KleisliInstances5</span>, <span class="extype" name="cats.data.KleisliInstances6">KleisliInstances6</span>, <span class="extype" name="cats.data.KleisliInstances7">KleisliInstances7</span>, <span class="extype" name="cats.data.KleisliInstances8">KleisliInstances8</span>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="cats.data.KleisliExplicitInstances">KleisliExplicitInstances</span>, <span class="extype" name="cats.data.KleisliFunctions">KleisliFunctions</span>, <span class="extype" name="cats.data.KleisliInstances">KleisliInstances</span>, <span class="extype" name="cats.data.KleisliInstances0">KleisliInstances0</span>, <span class="extype" name="cats.data.KleisliInstances1">KleisliInstances1</span>, <span class="extype" name="cats.data.KleisliInstances2">KleisliInstances2</span>, <span class="extype" name="cats.data.KleisliInstances3">KleisliInstances3</span>, <span class="extype" name="cats.data.KleisliInstances4">KleisliInstances4</span>, <span class="extype" name="cats.data.KleisliInstances5">KleisliInstances5</span>, <span class="extype" name="cats.data.KleisliInstances6">KleisliInstances6</span>, <span class="extype" name="cats.data.KleisliInstances7">KleisliInstances7</span>, <span class="extype" name="cats.data.KleisliInstances8">KleisliInstances8</span>, <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -325,7 +361,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -341,7 +377,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -357,7 +393,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -394,9 +430,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
     </li><li name="cats.data.KleisliInstances2#catsDataAlternativeForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataAlternativeForKleisli[F[_],A](implicitF0:cats.Alternative[F]):cats.Alternative[[γ$40$]cats.data.Kleisli[F,A,γ$40$]]"></a><a id="catsDataAlternativeForKleisli[F[_],A](Alternative[F]):Alternative[[γ$40$]Kleisli[F,A,γ$40$]]"></a>
+      <a id="catsDataAlternativeForKleisli[F[_],A](implicitF0:cats.Alternative[F]):cats.Alternative[[γ$46$]cats.data.Kleisli[F,A,γ$46$]]"></a><a id="catsDataAlternativeForKleisli[F[_],A](Alternative[F]):Alternative[[γ$46$]Kleisli[F,A,γ$46$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataAlternativeForKleisli[F[_],A](implicitF0:cats.Alternative[F]):cats.Alternative[[γ$40$]cats.data.Kleisli[F,A,γ$40$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataAlternativeForKleisli[F[_],A](implicitF0:cats.Alternative[F]):cats.Alternative[[γ$46$]cats.data.Kleisli[F,A,γ$46$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -405,14 +441,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataAlternativeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[γ$40$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances2.&lt;refinement&gt;.Λ$.γ$40$">γ$40$</span>]]</span>
+        <span class="name">catsDataAlternativeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[[γ$46$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances2.catsDataAlternativeForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances2.&lt;refinement&gt;.Λ$.γ$46$">γ$46$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances2</dd></dl></div>
     </li><li name="cats.data.KleisliInstances4#catsDataApplicativeErrorForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplicativeErrorForKleisli[F[_],E,A](implicitF0:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ$52$]cats.data.Kleisli[F,A,γ$52$],E]"></a><a id="catsDataApplicativeErrorForKleisli[F[_],E,A](ApplicativeError[F,E]):ApplicativeError[[γ$52$]Kleisli[F,A,γ$52$],E]"></a>
+      <a id="catsDataApplicativeErrorForKleisli[F[_],E,A](implicitF0:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ$58$]cats.data.Kleisli[F,A,γ$58$],E]"></a><a id="catsDataApplicativeErrorForKleisli[F[_],E,A](ApplicativeError[F,E]):ApplicativeError[[γ$58$]Kleisli[F,A,γ$58$],E]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataApplicativeErrorForKleisli[F[_],E,A](implicitF0:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ$52$]cats.data.Kleisli[F,A,γ$52$],E]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataApplicativeErrorForKleisli[F[_],E,A](implicitF0:cats.ApplicativeError[F,E]):cats.ApplicativeError[[γ$58$]cats.data.Kleisli[F,A,γ$58$],E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -421,14 +457,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplicativeErrorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.E">E</span>]</span>)</span><span class="result">: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[[γ$52$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$52$">γ$52$</span>], <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.E">E</span>]</span>
+        <span class="name">catsDataApplicativeErrorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.E">E</span>]</span>)</span><span class="result">: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[[γ$58$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$58$">γ$58$</span>], <span class="extype" name="cats.data.KleisliInstances4.catsDataApplicativeErrorForKleisli.E">E</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances4</dd></dl></div>
     </li><li name="cats.data.KleisliInstances5#catsDataApplicativeForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplicativeForKleisli[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ$55$]cats.data.Kleisli[F,A,γ$55$]]"></a><a id="catsDataApplicativeForKleisli[F[_],A](Applicative[F]):Applicative[[γ$55$]Kleisli[F,A,γ$55$]]"></a>
+      <a id="catsDataApplicativeForKleisli[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ$61$]cats.data.Kleisli[F,A,γ$61$]]"></a><a id="catsDataApplicativeForKleisli[F[_],A](Applicative[F]):Applicative[[γ$61$]Kleisli[F,A,γ$61$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataApplicativeForKleisli[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ$55$]cats.data.Kleisli[F,A,γ$55$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataApplicativeForKleisli[F[_],A](implicitA:cats.Applicative[F]):cats.Applicative[[γ$61$]cats.data.Kleisli[F,A,γ$61$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -437,14 +473,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplicativeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[γ$55$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances5.&lt;refinement&gt;.Λ$.γ$55$">γ$55$</span>]]</span>
+        <span class="name">catsDataApplicativeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[[γ$61$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances5.catsDataApplicativeForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances5.&lt;refinement&gt;.Λ$.γ$61$">γ$61$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances5</dd></dl></div>
     </li><li name="cats.data.KleisliInstances6#catsDataApplyForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataApplyForKleisli[F[_],A](implicitA:cats.Apply[F]):cats.Apply[[γ$56$]cats.data.Kleisli[F,A,γ$56$]]"></a><a id="catsDataApplyForKleisli[F[_],A](Apply[F]):Apply[[γ$56$]Kleisli[F,A,γ$56$]]"></a>
+      <a id="catsDataApplyForKleisli[F[_],A](implicitA:cats.Apply[F]):cats.Apply[[γ$62$]cats.data.Kleisli[F,A,γ$62$]]"></a><a id="catsDataApplyForKleisli[F[_],A](Apply[F]):Apply[[γ$62$]Kleisli[F,A,γ$62$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataApplyForKleisli[F[_],A](implicitA:cats.Apply[F]):cats.Apply[[γ$56$]cats.data.Kleisli[F,A,γ$56$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataApplyForKleisli[F[_],A](implicitA:cats.Apply[F]):cats.Apply[[γ$62$]cats.data.Kleisli[F,A,γ$62$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -453,7 +489,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataApplyForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[γ$56$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances6.&lt;refinement&gt;.Λ$.γ$56$">γ$56$</span>]]</span>
+        <span class="name">catsDataApplyForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Apply.html" class="extype" name="cats.Apply">Apply</a>[[γ$62$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances6.catsDataApplyForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances6.&lt;refinement&gt;.Λ$.γ$62$">γ$62$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances6</dd></dl></div>
@@ -474,9 +510,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataChoiceForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataChoiceForKleisli[F[_]](implicitM:cats.Monad[F]):cats.arrow.Choice[[β$43$,γ$44$]cats.data.Kleisli[F,β$43$,γ$44$]]"></a><a id="catsDataChoiceForKleisli[F[_]](Monad[F]):Choice[[β$43$,γ$44$]Kleisli[F,β$43$,γ$44$]]"></a>
+      <a id="catsDataChoiceForKleisli[F[_]](implicitM:cats.Monad[F]):cats.arrow.Choice[[β$49$,γ$50$]cats.data.Kleisli[F,β$49$,γ$50$]]"></a><a id="catsDataChoiceForKleisli[F[_]](Monad[F]):Choice[[β$49$,γ$50$]Kleisli[F,β$49$,γ$50$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataChoiceForKleisli[F[_]](implicitM:cats.Monad[F]):cats.arrow.Choice[[β$43$,γ$44$]cats.data.Kleisli[F,β$43$,γ$44$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataChoiceForKleisli[F[_]](implicitM:cats.Monad[F]):cats.arrow.Choice[[β$49$,γ$50$]cats.data.Kleisli[F,β$49$,γ$50$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -485,14 +521,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataChoiceForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataChoiceForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[[β$43$, γ$44$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataChoiceForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$43$">β$43$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$44$">γ$44$</span>]]</span>
+        <span class="name">catsDataChoiceForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataChoiceForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[[β$49$, γ$50$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataChoiceForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$49$">β$49$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$50$">γ$50$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataChoiceForKleisliId" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataChoiceForKleisliId:cats.arrow.Choice[[β$45$,γ$46$]cats.data.Kleisli[[A]A,β$45$,γ$46$]]"></a><a id="catsDataChoiceForKleisliId:Choice[[β$45$,γ$46$]Kleisli[[A]A,β$45$,γ$46$]]"></a>
+      <a id="catsDataChoiceForKleisliId:cats.arrow.Choice[[β$51$,γ$52$]cats.data.Kleisli[[A]A,β$51$,γ$52$]]"></a><a id="catsDataChoiceForKleisliId:Choice[[β$51$,γ$52$]Kleisli[[A]A,β$51$,γ$52$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataChoiceForKleisliId:cats.arrow.Choice[[β$45$,γ$46$]cats.data.Kleisli[[A]A,β$45$,γ$46$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataChoiceForKleisliId:cats.arrow.Choice[[β$51$,γ$52$]cats.data.Kleisli[[A]A,β$51$,γ$52$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -501,14 +537,14 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataChoiceForKleisliId</span><span class="result">: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[[β$45$, γ$46$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$45$">β$45$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$46$">γ$46$</span>]]</span>
+        <span class="name">catsDataChoiceForKleisliId</span><span class="result">: <a href="../arrow/Choice.html" class="extype" name="cats.arrow.Choice">Choice</a>[[β$51$, γ$52$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$51$">β$51$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$52$">γ$52$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#catsDataCommutativeArrowForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataCommutativeArrowForKleisli[F[_]](implicitM:cats.CommutativeMonad[F]):cats.arrow.CommutativeArrow[[β$16$,γ$17$]cats.data.Kleisli[F,β$16$,γ$17$]]withcats.arrow.ArrowChoice[[β$18$,γ$19$]cats.data.Kleisli[F,β$18$,γ$19$]]"></a><a id="catsDataCommutativeArrowForKleisli[F[_]](CommutativeMonad[F]):CommutativeArrow[[β$16$,γ$17$]Kleisli[F,β$16$,γ$17$]]withArrowChoice[[β$18$,γ$19$]Kleisli[F,β$18$,γ$19$]]"></a>
+      <a id="catsDataCommutativeArrowForKleisli[F[_]](implicitM:cats.CommutativeMonad[F]):cats.arrow.CommutativeArrow[[β$22$,γ$23$]cats.data.Kleisli[F,β$22$,γ$23$]]withcats.arrow.ArrowChoice[[β$24$,γ$25$]cats.data.Kleisli[F,β$24$,γ$25$]]"></a><a id="catsDataCommutativeArrowForKleisli[F[_]](CommutativeMonad[F]):CommutativeArrow[[β$22$,γ$23$]Kleisli[F,β$22$,γ$23$]]withArrowChoice[[β$24$,γ$25$]Kleisli[F,β$24$,γ$25$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeArrowForKleisli[F[_]](implicitM:cats.CommutativeMonad[F]):cats.arrow.CommutativeArrow[[β$16$,γ$17$]cats.data.Kleisli[F,β$16$,γ$17$]]withcats.arrow.ArrowChoice[[β$18$,γ$19$]cats.data.Kleisli[F,β$18$,γ$19$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeArrowForKleisli[F[_]](implicitM:cats.CommutativeMonad[F]):cats.arrow.CommutativeArrow[[β$22$,γ$23$]cats.data.Kleisli[F,β$22$,γ$23$]]withcats.arrow.ArrowChoice[[β$24$,γ$25$]cats.data.Kleisli[F,β$24$,γ$25$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -517,14 +553,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataCommutativeArrowForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../CommutativeMonad.html" class="extype" name="cats.CommutativeMonad">CommutativeMonad</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/CommutativeArrow.html" class="extype" name="cats.arrow.CommutativeArrow">CommutativeArrow</a>[[β$16$, γ$17$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$16$">β$16$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>]] with <a href="../arrow/ArrowChoice.html" class="extype" name="cats.arrow.ArrowChoice">ArrowChoice</a>[[β$18$, γ$19$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$18$">β$18$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$19$">γ$19$</span>]]</span>
+        <span class="name">catsDataCommutativeArrowForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../CommutativeMonad.html" class="extype" name="cats.CommutativeMonad">CommutativeMonad</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/CommutativeArrow.html" class="extype" name="cats.arrow.CommutativeArrow">CommutativeArrow</a>[[β$22$, γ$23$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$22$">β$22$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$23$">γ$23$</span>]] with <a href="../arrow/ArrowChoice.html" class="extype" name="cats.arrow.ArrowChoice">ArrowChoice</a>[[β$24$, γ$25$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$24$">β$24$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$25$">γ$25$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#catsDataCommutativeArrowForKleisliId" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataCommutativeArrowForKleisliId:cats.arrow.CommutativeArrow[[β$20$,γ$21$]cats.data.Kleisli[[A]A,β$20$,γ$21$]]"></a><a id="catsDataCommutativeArrowForKleisliId:CommutativeArrow[[β$20$,γ$21$]Kleisli[[A]A,β$20$,γ$21$]]"></a>
+      <a id="catsDataCommutativeArrowForKleisliId:cats.arrow.CommutativeArrow[[β$26$,γ$27$]cats.data.Kleisli[[A]A,β$26$,γ$27$]]"></a><a id="catsDataCommutativeArrowForKleisliId:CommutativeArrow[[β$26$,γ$27$]Kleisli[[A]A,β$26$,γ$27$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeArrowForKleisliId:cats.arrow.CommutativeArrow[[β$20$,γ$21$]cats.data.Kleisli[[A]A,β$20$,γ$21$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeArrowForKleisliId:cats.arrow.CommutativeArrow[[β$26$,γ$27$]cats.data.Kleisli[[A]A,β$26$,γ$27$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -533,14 +569,14 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataCommutativeArrowForKleisliId</span><span class="result">: <a href="../arrow/CommutativeArrow.html" class="extype" name="cats.arrow.CommutativeArrow">CommutativeArrow</a>[[β$20$, γ$21$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$20$">β$20$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$21$">γ$21$</span>]]</span>
+        <span class="name">catsDataCommutativeArrowForKleisliId</span><span class="result">: <a href="../arrow/CommutativeArrow.html" class="extype" name="cats.arrow.CommutativeArrow">CommutativeArrow</a>[[β$26$, γ$27$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$26$">β$26$</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$27$">γ$27$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
     </li><li name="cats.data.KleisliInstances4#catsDataCommutativeFlatMapForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataCommutativeFlatMapForKleisli[F[_],A](implicitF0:cats.CommutativeFlatMap[F]):cats.CommutativeFlatMap[[γ$53$]cats.data.Kleisli[F,A,γ$53$]]"></a><a id="catsDataCommutativeFlatMapForKleisli[F[_],A](CommutativeFlatMap[F]):CommutativeFlatMap[[γ$53$]Kleisli[F,A,γ$53$]]"></a>
+      <a id="catsDataCommutativeFlatMapForKleisli[F[_],A](implicitF0:cats.CommutativeFlatMap[F]):cats.CommutativeFlatMap[[γ$59$]cats.data.Kleisli[F,A,γ$59$]]"></a><a id="catsDataCommutativeFlatMapForKleisli[F[_],A](CommutativeFlatMap[F]):CommutativeFlatMap[[γ$59$]Kleisli[F,A,γ$59$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeFlatMapForKleisli[F[_],A](implicitF0:cats.CommutativeFlatMap[F]):cats.CommutativeFlatMap[[γ$53$]cats.data.Kleisli[F,A,γ$53$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataCommutativeFlatMapForKleisli[F[_],A](implicitF0:cats.CommutativeFlatMap[F]):cats.CommutativeFlatMap[[γ$59$]cats.data.Kleisli[F,A,γ$59$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -549,7 +585,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataCommutativeFlatMapForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[[γ$53$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$53$">γ$53$</span>]]</span>
+        <span class="name">catsDataCommutativeFlatMapForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../CommutativeFlatMap.html" class="extype" name="cats.CommutativeFlatMap">CommutativeFlatMap</a>[[γ$59$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$59$">γ$59$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances4</dd></dl></div>
@@ -570,9 +606,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataComposeForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataComposeForKleisli[F[_]](implicitFM:cats.FlatMap[F]):cats.arrow.Compose[[β$47$,γ$48$]cats.data.Kleisli[F,β$47$,γ$48$]]"></a><a id="catsDataComposeForKleisli[F[_]](FlatMap[F]):Compose[[β$47$,γ$48$]Kleisli[F,β$47$,γ$48$]]"></a>
+      <a id="catsDataComposeForKleisli[F[_]](implicitFM:cats.FlatMap[F]):cats.arrow.Compose[[β$53$,γ$54$]cats.data.Kleisli[F,β$53$,γ$54$]]"></a><a id="catsDataComposeForKleisli[F[_]](FlatMap[F]):Compose[[β$53$,γ$54$]Kleisli[F,β$53$,γ$54$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataComposeForKleisli[F[_]](implicitFM:cats.FlatMap[F]):cats.arrow.Compose[[β$47$,γ$48$]cats.data.Kleisli[F,β$47$,γ$48$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataComposeForKleisli[F[_]](implicitFM:cats.FlatMap[F]):cats.arrow.Compose[[β$53$,γ$54$]cats.data.Kleisli[F,β$53$,γ$54$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -581,14 +617,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataComposeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataComposeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[[β$47$, γ$48$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataComposeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$47$">β$47$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$48$">γ$48$</span>]]</span>
+        <span class="name">catsDataComposeForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataComposeForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Compose.html" class="extype" name="cats.arrow.Compose">Compose</a>[[β$53$, γ$54$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataComposeForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$53$">β$53$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$54$">γ$54$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#catsDataContravariantForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataContravariantForKleisli[F[_],C]:cats.Contravariant[[β$38$]cats.data.Kleisli[F,β$38$,C]]"></a><a id="catsDataContravariantForKleisli[F[_],C]:Contravariant[[β$38$]Kleisli[F,β$38$,C]]"></a>
+      <a id="catsDataContravariantForKleisli[F[_],C]:cats.Contravariant[[β$44$]cats.data.Kleisli[F,β$44$,C]]"></a><a id="catsDataContravariantForKleisli[F[_],C]:Contravariant[[β$44$]Kleisli[F,β$44$,C]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataContravariantForKleisli[F[_],C]:cats.Contravariant[[β$38$]cats.data.Kleisli[F,β$38$,C]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataContravariantForKleisli[F[_],C]:cats.Contravariant[[β$44$]cats.data.Kleisli[F,β$44$,C]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -597,14 +633,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataContravariantForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result">: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[β$38$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataContravariantForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$38$">β$38$</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataContravariantForKleisli.C">C</span>]]</span>
+        <span class="name">catsDataContravariantForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result">: <a href="../Contravariant.html" class="extype" name="cats.Contravariant">Contravariant</a>[[β$44$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataContravariantForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.β$44$">β$44$</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataContravariantForKleisli.C">C</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
     </li><li name="cats.data.KleisliInstances0#catsDataContravariantMonoidalForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataContravariantMonoidalForKleisli[F[_],A](implicitF0:cats.ContravariantMonoidal[F]):cats.ContravariantMonoidal[[γ$14$]cats.data.Kleisli[F,A,γ$14$]]"></a><a id="catsDataContravariantMonoidalForKleisli[F[_],A](ContravariantMonoidal[F]):ContravariantMonoidal[[γ$14$]Kleisli[F,A,γ$14$]]"></a>
+      <a id="catsDataContravariantMonoidalForKleisli[F[_],A](implicitF0:cats.ContravariantMonoidal[F]):cats.ContravariantMonoidal[[γ$16$]cats.data.Kleisli[F,A,γ$16$]]"></a><a id="catsDataContravariantMonoidalForKleisli[F[_],A](ContravariantMonoidal[F]):ContravariantMonoidal[[γ$16$]Kleisli[F,A,γ$16$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataContravariantMonoidalForKleisli[F[_],A](implicitF0:cats.ContravariantMonoidal[F]):cats.ContravariantMonoidal[[γ$14$]cats.data.Kleisli[F,A,γ$14$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataContravariantMonoidalForKleisli[F[_],A](implicitF0:cats.ContravariantMonoidal[F]):cats.ContravariantMonoidal[[γ$16$]cats.data.Kleisli[F,A,γ$16$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -613,14 +649,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataContravariantMonoidalForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a>[[γ$14$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$14$">γ$14$</span>]]</span>
+        <span class="name">catsDataContravariantMonoidalForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../ContravariantMonoidal.html" class="extype" name="cats.ContravariantMonoidal">ContravariantMonoidal</a>[[γ$16$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataContravariantMonoidalForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$16$">γ$16$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
-    </li><li name="cats.data.KleisliInstances7#catsDataDistributiveForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataDistributiveForKleisli[F[_],R](implicitF0:cats.Distributive[F]):cats.Distributive[[γ$57$]cats.data.Kleisli[F,R,γ$57$]]"></a><a id="catsDataDistributiveForKleisli[F[_],R](Distributive[F]):Distributive[[γ$57$]Kleisli[F,R,γ$57$]]"></a>
+    </li><li name="cats.data.KleisliInstances#catsDataDeferForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataDeferForKleisli[F[_],A](implicitF:cats.Defer[F]):cats.Defer[[γ$11$]cats.data.Kleisli[F,A,γ$11$]]"></a><a id="catsDataDeferForKleisli[F[_],A](Defer[F]):Defer[[γ$11$]Kleisli[F,A,γ$11$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataDistributiveForKleisli[F[_],R](implicitF0:cats.Distributive[F]):cats.Distributive[[γ$57$]cats.data.Kleisli[F,R,γ$57$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataDeferForKleisli[F[_],A](implicitF:cats.Defer[F]):cats.Defer[[γ$11$]cats.data.Kleisli[F,A,γ$11$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -629,14 +665,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataDistributiveForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[<span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[[γ$57$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.R">R</span>, <span class="extype" name="cats.data.KleisliInstances7.&lt;refinement&gt;.Λ$.γ$57$">γ$57$</span>]]</span>
+        <span class="name">catsDataDeferForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[<span class="extype" name="cats.data.KleisliInstances.catsDataDeferForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Defer.html" class="extype" name="cats.Defer">Defer</a>[[γ$11$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances.catsDataDeferForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances.catsDataDeferForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances.&lt;refinement&gt;.Λ$.γ$11$">γ$11$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances</dd></dl></div>
+    </li><li name="cats.data.KleisliInstances7#catsDataDistributiveForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataDistributiveForKleisli[F[_],R](implicitF0:cats.Distributive[F]):cats.Distributive[[γ$63$]cats.data.Kleisli[F,R,γ$63$]]"></a><a id="catsDataDistributiveForKleisli[F[_],R](Distributive[F]):Distributive[[γ$63$]Kleisli[F,R,γ$63$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataDistributiveForKleisli[F[_],R](implicitF0:cats.Distributive[F]):cats.Distributive[[γ$63$]cats.data.Kleisli[F,R,γ$63$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataDistributiveForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[<span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[[γ$63$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances7.catsDataDistributiveForKleisli.R">R</span>, <span class="extype" name="cats.data.KleisliInstances7.&lt;refinement&gt;.Λ$.γ$63$">γ$63$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances7</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataFlatMapForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFlatMapForKleisli[F[_],A](implicitFM:cats.FlatMap[F]):cats.FlatMap[[γ$42$]cats.data.Kleisli[F,A,γ$42$]]"></a><a id="catsDataFlatMapForKleisli[F[_],A](FlatMap[F]):FlatMap[[γ$42$]Kleisli[F,A,γ$42$]]"></a>
+      <a id="catsDataFlatMapForKleisli[F[_],A](implicitFM:cats.FlatMap[F]):cats.FlatMap[[γ$48$]cats.data.Kleisli[F,A,γ$48$]]"></a><a id="catsDataFlatMapForKleisli[F[_],A](FlatMap[F]):FlatMap[[γ$48$]Kleisli[F,A,γ$48$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataFlatMapForKleisli[F[_],A](implicitFM:cats.FlatMap[F]):cats.FlatMap[[γ$42$]cats.data.Kleisli[F,A,γ$42$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataFlatMapForKleisli[F[_],A](implicitFM:cats.FlatMap[F]):cats.FlatMap[[γ$48$]cats.data.Kleisli[F,A,γ$48$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -645,14 +697,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFlatMapForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[[γ$42$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$42$">γ$42$</span>]]</span>
+        <span class="name">catsDataFlatMapForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="FM">FM: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[[γ$48$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.catsDataFlatMapForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$48$">γ$48$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances8#catsDataFunctorForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataFunctorForKleisli[F[_],A](implicitF0:cats.Functor[F]):cats.Functor[[γ$58$]cats.data.Kleisli[F,A,γ$58$]]"></a><a id="catsDataFunctorForKleisli[F[_],A](Functor[F]):Functor[[γ$58$]Kleisli[F,A,γ$58$]]"></a>
+      <a id="catsDataFunctorForKleisli[F[_],A](implicitF0:cats.Functor[F]):cats.Functor[[γ$64$]cats.data.Kleisli[F,A,γ$64$]]"></a><a id="catsDataFunctorForKleisli[F[_],A](Functor[F]):Functor[[γ$64$]Kleisli[F,A,γ$64$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataFunctorForKleisli[F[_],A](implicitF0:cats.Functor[F]):cats.Functor[[γ$58$]cats.data.Kleisli[F,A,γ$58$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataFunctorForKleisli[F[_],A](implicitF0:cats.Functor[F]):cats.Functor[[γ$64$]cats.data.Kleisli[F,A,γ$64$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -661,14 +713,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataFunctorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$58$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances8.&lt;refinement&gt;.Λ$.γ$58$">γ$58$</span>]]</span>
+        <span class="name">catsDataFunctorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$64$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances8.catsDataFunctorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances8.&lt;refinement&gt;.Λ$.γ$64$">γ$64$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances8</dd></dl></div>
     </li><li name="cats.data.KleisliInstances0#catsDataMonadErrorForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadErrorForKleisli[F[_],A,E](implicitME:cats.MonadError[F,E]):cats.MonadError[[γ$11$]cats.data.Kleisli[F,A,γ$11$],E]"></a><a id="catsDataMonadErrorForKleisli[F[_],A,E](MonadError[F,E]):MonadError[[γ$11$]Kleisli[F,A,γ$11$],E]"></a>
+      <a id="catsDataMonadErrorForKleisli[F[_],A,E](implicitME:cats.MonadError[F,E]):cats.MonadError[[γ$13$]cats.data.Kleisli[F,A,γ$13$],E]"></a><a id="catsDataMonadErrorForKleisli[F[_],A,E](MonadError[F,E]):MonadError[[γ$13$]Kleisli[F,A,γ$13$],E]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataMonadErrorForKleisli[F[_],A,E](implicitME:cats.MonadError[F,E]):cats.MonadError[[γ$11$]cats.data.Kleisli[F,A,γ$11$],E]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataMonadErrorForKleisli[F[_],A,E](implicitME:cats.MonadError[F,E]):cats.MonadError[[γ$13$]cats.data.Kleisli[F,A,γ$13$],E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -677,14 +729,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadErrorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ME">ME: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$11$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$11$">γ$11$</span>], <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.E">E</span>]</span>
+        <span class="name">catsDataMonadErrorForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ME">ME: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.E">E</span>]</span>)</span><span class="result">: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[[γ$13$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$13$">γ$13$</span>], <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadErrorForKleisli.E">E</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#catsDataMonadForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForKleisli[F[_],A](implicitM:cats.Monad[F]):cats.Monad[[γ$15$]cats.data.Kleisli[F,A,γ$15$]]"></a><a id="catsDataMonadForKleisli[F[_],A](Monad[F]):Monad[[γ$15$]Kleisli[F,A,γ$15$]]"></a>
+      <a id="catsDataMonadForKleisli[F[_],A](implicitM:cats.Monad[F]):cats.Monad[[γ$21$]cats.data.Kleisli[F,A,γ$21$]]"></a><a id="catsDataMonadForKleisli[F[_],A](Monad[F]):Monad[[γ$21$]Kleisli[F,A,γ$21$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataMonadForKleisli[F[_],A](implicitM:cats.Monad[F]):cats.Monad[[γ$15$]cats.data.Kleisli[F,A,γ$15$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataMonadForKleisli[F[_],A](implicitM:cats.Monad[F]):cats.Monad[[γ$21$]cats.data.Kleisli[F,A,γ$21$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -693,14 +745,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ$15$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$15$">γ$15$</span>]]</span>
+        <span class="name">catsDataMonadForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[[γ$21$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataMonadForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$21$">γ$21$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
     </li><li name="cats.data.KleisliInstances0#catsDataMonadForKleisliId" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonadForKleisliId[A]:cats.CommutativeMonad[[γ$12$]cats.data.Kleisli[[A]A,A,γ$12$]]"></a><a id="catsDataMonadForKleisliId[A]:CommutativeMonad[[γ$12$]Kleisli[[A]A,A,γ$12$]]"></a>
+      <a id="catsDataMonadForKleisliId[A]:cats.CommutativeMonad[[γ$14$]cats.data.Kleisli[[A]A,A,γ$14$]]"></a><a id="catsDataMonadForKleisliId[A]:CommutativeMonad[[γ$14$]Kleisli[[A]A,A,γ$14$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataMonadForKleisliId[A]:cats.CommutativeMonad[[γ$12$]cats.data.Kleisli[[A]A,A,γ$12$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataMonadForKleisliId[A]:cats.CommutativeMonad[[γ$14$]cats.data.Kleisli[[A]A,A,γ$14$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -709,7 +761,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonadForKleisliId</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../CommutativeMonad.html" class="extype" name="cats.CommutativeMonad">CommutativeMonad</a>[[γ$12$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadForKleisliId.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$12$">γ$12$</span>]]</span>
+        <span class="name">catsDataMonadForKleisliId</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../CommutativeMonad.html" class="extype" name="cats.CommutativeMonad">CommutativeMonad</a>[[γ$14$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[[A]<span class="extype" name="cats.Id.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataMonadForKleisliId.A">A</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$14$">γ$14$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
@@ -730,9 +782,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataMonoidKForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataMonoidKForKleisli[F[_],A](implicitF0:cats.MonoidK[F]):cats.MonoidK[[γ$41$]cats.data.Kleisli[F,A,γ$41$]]"></a><a id="catsDataMonoidKForKleisli[F[_],A](MonoidK[F]):MonoidK[[γ$41$]Kleisli[F,A,γ$41$]]"></a>
+      <a id="catsDataMonoidKForKleisli[F[_],A](implicitF0:cats.MonoidK[F]):cats.MonoidK[[γ$47$]cats.data.Kleisli[F,A,γ$47$]]"></a><a id="catsDataMonoidKForKleisli[F[_],A](MonoidK[F]):MonoidK[[γ$47$]Kleisli[F,A,γ$47$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataMonoidKForKleisli[F[_],A](implicitF0:cats.MonoidK[F]):cats.MonoidK[[γ$41$]cats.data.Kleisli[F,A,γ$41$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataMonoidKForKleisli[F[_],A](implicitF0:cats.MonoidK[F]):cats.MonoidK[[γ$47$]cats.data.Kleisli[F,A,γ$47$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -741,14 +793,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataMonoidKForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[γ$41$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$41$">γ$41$</span>]]</span>
+        <span class="name">catsDataMonoidKForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[γ$47$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.catsDataMonoidKForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$47$">γ$47$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances1#catsDataParallelForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataParallelForKleisli[F[_],M[_],A](implicitP:cats.Parallel[M,F]):cats.Parallel[[γ$22$]cats.data.Kleisli[M,A,γ$22$],[γ$23$]cats.data.Kleisli[F,A,γ$23$]]"></a><a id="catsDataParallelForKleisli[F[_],M[_],A](Parallel[M,F]):Parallel[[γ$22$]Kleisli[M,A,γ$22$],[γ$23$]Kleisli[F,A,γ$23$]]"></a>
+      <a id="catsDataParallelForKleisli[F[_],M[_],A](implicitP:cats.Parallel[M,F]):cats.Parallel[[γ$28$]cats.data.Kleisli[M,A,γ$28$],[γ$29$]cats.data.Kleisli[F,A,γ$29$]]"></a><a id="catsDataParallelForKleisli[F[_],M[_],A](Parallel[M,F]):Parallel[[γ$28$]Kleisli[M,A,γ$28$],[γ$29$]Kleisli[F,A,γ$29$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataParallelForKleisli[F[_],M[_],A](implicitP:cats.Parallel[M,F]):cats.Parallel[[γ$22$]cats.data.Kleisli[M,A,γ$22$],[γ$23$]cats.data.Kleisli[F,A,γ$23$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataParallelForKleisli[F[_],M[_],A](implicitP:cats.Parallel[M,F]):cats.Parallel[[γ$28$]cats.data.Kleisli[M,A,γ$28$],[γ$29$]cats.data.Kleisli[F,A,γ$29$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -757,10 +809,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataParallelForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[[γ$22$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$22$">γ$22$</span>], [γ$23$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$23$">γ$23$</span>]]</span>
+        <span class="name">catsDataParallelForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="P">P: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[[γ$28$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$28$">γ$28$</span>], [γ$29$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances1.catsDataParallelForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances1.&lt;refinement&gt;.Λ$.γ$29$">γ$29$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances1</dd></dl></div>
+    </li><li name="cats.data.KleisliInstances0#catsDataRepresentableForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsDataRepresentableForKleisli[M[_],R,E](implicitR:cats.Representable.Aux[M,R],implicitFK:cats.Functor[[γ$17$]cats.data.Kleisli[M,E,γ$17$]]):cats.Representable.Aux[[γ$18$]cats.data.Kleisli[M,E,γ$18$],(E,R)]"></a><a id="catsDataRepresentableForKleisli[M[_],R,E](Aux[M,R],Functor[[γ$17$]Kleisli[M,E,γ$17$]]):Aux[[γ$18$]Kleisli[M,E,γ$18$],(E,R)]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataRepresentableForKleisli[M[_],R,E](implicitR:cats.Representable.Aux[M,R],implicitFK:cats.Functor[[γ$17$]cats.data.Kleisli[M,E,γ$17$]]):cats.Representable.Aux[[γ$18$]cats.data.Kleisli[M,E,γ$18$],(E,R)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsDataRepresentableForKleisli</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="R">R</span>, <span name="E">E</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="R">R: <a href="../Representable$.html#Aux[F[_],R]=cats.Representable[F]{typeRepresentation=R}" class="extmbr" name="cats.Representable.Aux">Aux</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.R">R</span>]</span>, <span name="FK">FK: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[[γ$17$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.E">E</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$17$">γ$17$</span>]]</span>)</span><span class="result">: <a href="../Representable$.html#Aux[F[_],R]=cats.Representable[F]{typeRepresentation=R}" class="extmbr" name="cats.Representable.Aux">Aux</a>[[γ$18$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.M">M</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.E">E</span>, <span class="extype" name="cats.data.KleisliInstances0.&lt;refinement&gt;.Λ$.γ$18$">γ$18$</span>], (<span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.E">E</span>, <span class="extype" name="cats.data.KleisliInstances0.catsDataRepresentableForKleisli.R">R</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Witness for: Kleisli[M, E, A] &lt;-&gt; (E, R) =&gt; A
+if M is Representable
+</p><div class="fullcomment"><div class="comment cmt"><p>Witness for: Kleisli[M, E, A] &lt;-&gt; (E, R) =&gt; A
+if M is Representable
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances0</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataSemigroupForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataSemigroupForKleisli[F[_],A,B](implicitFB0:cats.Semigroup[F[B]]):cats.Semigroup[cats.data.Kleisli[F,A,B]]"></a><a id="catsDataSemigroupForKleisli[F[_],A,B](Semigroup[F[B]]):Semigroup[Kleisli[F,A,B]]"></a>
       <span class="permalink">
@@ -778,9 +850,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
     </li><li name="cats.data.KleisliInstances4#catsDataSemigroupKForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataSemigroupKForKleisli[F[_],A](implicitF0:cats.SemigroupK[F]):cats.SemigroupK[[γ$51$]cats.data.Kleisli[F,A,γ$51$]]"></a><a id="catsDataSemigroupKForKleisli[F[_],A](SemigroupK[F]):SemigroupK[[γ$51$]Kleisli[F,A,γ$51$]]"></a>
+      <a id="catsDataSemigroupKForKleisli[F[_],A](implicitF0:cats.SemigroupK[F]):cats.SemigroupK[[γ$57$]cats.data.Kleisli[F,A,γ$57$]]"></a><a id="catsDataSemigroupKForKleisli[F[_],A](SemigroupK[F]):SemigroupK[[γ$57$]Kleisli[F,A,γ$57$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataSemigroupKForKleisli[F[_],A](implicitF0:cats.SemigroupK[F]):cats.SemigroupK[[γ$51$]cats.data.Kleisli[F,A,γ$51$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataSemigroupKForKleisli[F[_],A](implicitF0:cats.SemigroupK[F]):cats.SemigroupK[[γ$57$]cats.data.Kleisli[F,A,γ$57$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -789,14 +861,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataSemigroupKForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ$51$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$51$">γ$51$</span>]]</span>
+        <span class="name">catsDataSemigroupKForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../SemigroupK.html" class="extype" name="cats.SemigroupK">SemigroupK</a>[[γ$57$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances4.catsDataSemigroupKForKleisli.A">A</span>, <span class="extype" name="cats.data.KleisliInstances4.&lt;refinement&gt;.Λ$.γ$57$">γ$57$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances4</dd></dl></div>
     </li><li name="cats.data.KleisliInstances3#catsDataStrongForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsDataStrongForKleisli[F[_]](implicitF0:cats.Functor[F]):cats.arrow.Strong[[β$49$,γ$50$]cats.data.Kleisli[F,β$49$,γ$50$]]"></a><a id="catsDataStrongForKleisli[F[_]](Functor[F]):Strong[[β$49$,γ$50$]Kleisli[F,β$49$,γ$50$]]"></a>
+      <a id="catsDataStrongForKleisli[F[_]](implicitF0:cats.Functor[F]):cats.arrow.Strong[[β$55$,γ$56$]cats.data.Kleisli[F,β$55$,γ$56$]]"></a><a id="catsDataStrongForKleisli[F[_]](Functor[F]):Strong[[β$55$,γ$56$]Kleisli[F,β$55$,γ$56$]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Kleisli$.html#catsDataStrongForKleisli[F[_]](implicitF0:cats.Functor[F]):cats.arrow.Strong[[β$49$,γ$50$]cats.data.Kleisli[F,β$49$,γ$50$]]" title="Permalink">
+      <a href="../../cats/data/Kleisli$.html#catsDataStrongForKleisli[F[_]](implicitF0:cats.Functor[F]):cats.arrow.Strong[[β$55$,γ$56$]cats.data.Kleisli[F,β$55$,γ$56$]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -805,7 +877,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">catsDataStrongForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataStrongForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[[β$49$, γ$50$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataStrongForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$49$">β$49$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$50$">γ$50$</span>]]</span>
+        <span class="name">catsDataStrongForKleisli</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F0">F0: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataStrongForKleisli.F">F</span>]</span>)</span><span class="result">: <a href="../arrow/Strong.html" class="extype" name="cats.arrow.Strong">Strong</a>[[β$55$, γ$56$]<a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliInstances3.catsDataStrongForKleisli.F">F</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.β$55$">β$55$</span>, <span class="extype" name="cats.data.KleisliInstances3.&lt;refinement&gt;.Λ$.γ$56$">γ$56$</span>]]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliInstances3</dd></dl></div>
@@ -821,7 +893,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -877,7 +949,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -893,7 +965,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -909,7 +981,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -950,7 +1022,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
@@ -969,7 +1041,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1037,7 +1109,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1053,7 +1125,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1072,7 +1144,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1139,7 +1211,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1161,7 +1233,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1183,7 +1255,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1228,7 +1300,7 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="cats.data.KleisliExplicitInstances">
@@ -1256,9 +1328,9 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
             </div><div class="parent" name="cats.data.KleisliInstances8">
               <h3>Inherited from <span class="extype" name="cats.data.KleisliInstances8">KleisliInstances8</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>

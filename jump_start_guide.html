@@ -1,0 +1,570 @@
+<html><head><title>Cats: Jump Start Guide</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Jump Start Guide" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Jump Start Guide" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="/cats/api/cats/index.html"><i class="fa fa-file-text"></i><span class="hidden-xs">API Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                                                   <li><a class="" href="/cats/">Home</a></li>  <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/motivations.html">Motivations</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class="" href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="introduction">Introduction</h1>
+
+<p>This jump start guide barely scratches the surface of what Cats can do, but instead provides a concise hands-on introduction to the patterns you’re most likely to take advantage of in your Scala project.
+If you’re using the constructs like <a href="http://www.scala-lang.org/api/current/scala/concurrent/Future.html"><code class="highlighter-rouge">Future</code></a>,
+<a href="http://www.scala-lang.org/api/current/scala/Option.html"><code class="highlighter-rouge">Option</code></a> or
+<a href="http://www.scala-lang.org/api/current/scala/util/Either.html"><code class="highlighter-rouge">Either</code></a> on a daily basis,
+it’s very likely that Cats can simplify and improve the readability of your code.</p>
+
+<p>Please refer to the <a href="https://github.com/typelevel/cats">wiki on GitHub</a> for guidelines on how to add the library to your project dependencies.
+We are sticking to <a href="https://github.com/typelevel/cats/releases/tag/v1.0.1">version 1.0.1</a> in the entire post.</p>
+
+<p>Let’s go through the library package-wise, looking at the syntax available in each package.</p>
+
+<h1 id="helpers-for-option-and-either">Helpers for <code class="highlighter-rouge">Option</code> and <code class="highlighter-rouge">Either</code></h1>
+
+<h2 id="import-catssyntaxoption"><code class="highlighter-rouge">import cats.syntax.option._</code></h2>
+
+<p>Importing this package enables <code class="highlighter-rouge">obj.some</code> syntax — equivalent to <code class="highlighter-rouge">Some(obj)</code>.
+The only real difference is that the value is already upcast to <code class="highlighter-rouge">Option[T]</code> from <code class="highlighter-rouge">Some[T]</code>.</p>
+
+<p>Using <code class="highlighter-rouge">obj.some</code> instead of <code class="highlighter-rouge">Some(obj)</code> can sometimes e.g. improve readability when you need to provide dummy implementation for service methods for the purpose of testing.
+For example, if you put the following implicit class into the scope:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+
+<span class="k">implicit</span> <span class="k">class</span> <span class="nc">ToFutureSuccessful</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">obj</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">asFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">obj</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>then you can use the chained syntax shown below:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.option._</span>
+
+<span class="k">class</span> <span class="nc">Account</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">}</span>
+
+<span class="k">trait</span> <span class="nc">AccountService</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">getAccountById</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Account</span><span class="o">]]</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">DummyAccountServiceImpl</span> <span class="k">extends</span> <span class="nc">AccountService</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">dummyAccount</span><span class="k">:</span> <span class="kt">Account</span> <span class="o">=</span> <span class="o">???</span>
+
+  <span class="cm">/* ... */</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">getAccountById</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Account</span><span class="o">]]</span> <span class="k">=</span> <span class="n">dummyAccount</span><span class="o">.</span><span class="n">some</span><span class="o">.</span><span class="n">asFuture</span>
+  <span class="cm">/* ... */</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>That’s more readable than <code class="highlighter-rouge">Future.successful(Some(dummyAccount))</code>, especially if this pattern repeats frequently.
+Chaining <code class="highlighter-rouge">.some.asFuture</code> at the end rather than putting it at the front also helps focus on what’s actually being returned rather than on the expected wrapper type.</p>
+
+<p><code class="highlighter-rouge">none[T]</code>, in turn, is shorthand for <code class="highlighter-rouge">Option.empty[T]</code> which is just <code class="highlighter-rouge">None</code>, but already upcast from <code class="highlighter-rouge">None.type</code> to <code class="highlighter-rouge">Option[T]</code>.
+Providing a more specialized type sometimes helps the Scala compiler properly infer the type of expressions containing <code class="highlighter-rouge">None</code>.</p>
+
+<h2 id="import-catssyntaxeither"><code class="highlighter-rouge">import cats.syntax.either._</code></h2>
+
+<p><code class="highlighter-rouge">obj.asRight</code> is <code class="highlighter-rouge">Right(obj)</code>, <code class="highlighter-rouge">obj.asLeft</code> is <code class="highlighter-rouge">Left(obj)</code>.
+In both cases the type of returned value is widened from <code class="highlighter-rouge">Right</code> or <code class="highlighter-rouge">Left</code> to <code class="highlighter-rouge">Either</code>.
+Just as was the case with <code class="highlighter-rouge">.some</code>, these helpers are handy to combine with <code class="highlighter-rouge">.asFuture</code> to improve readability:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.either._</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">accountId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">}</span>
+
+<span class="k">trait</span> <span class="nc">UserService</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">ensureUserExists</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">User</span><span class="o">]]</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">UserServiceSpec</span> <span class="k">extends</span> <span class="nc">UserService</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">dummyUser</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=</span> <span class="o">???</span>
+
+  <span class="cm">/* ... */</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">ensureUserExists</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Exception</span>, <span class="kt">User</span><span class="o">]]</span> <span class="k">=</span> <span class="n">dummyUser</span><span class="o">.</span><span class="n">asRight</span><span class="o">.</span><span class="n">asFuture</span> <span class="c1">// instead of Future.successful(Right(dummyUser))
+</span>  <span class="cm">/* ... */</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Either.fromOption(option: Option[A], ifNone: =&gt; E)</code>, in turn, is a useful helper for converting an <code class="highlighter-rouge">Option</code> to an <code class="highlighter-rouge">Either</code>.
+If the provided <code class="highlighter-rouge">option</code> is <code class="highlighter-rouge">Some(x)</code>, it becomes <code class="highlighter-rouge">Right(x)</code>.
+Otherwise it becomes <code class="highlighter-rouge">Left</code> with the provided <code class="highlighter-rouge">ifNone</code> value inside.</p>
+
+<h1 id="instances-packages-and-apply-syntax"><code class="highlighter-rouge">instances</code> packages and <code class="highlighter-rouge">apply</code> syntax</h1>
+
+<h2 id="import-catsinstancesf"><code class="highlighter-rouge">import cats.instances.&lt;F&gt;._</code></h2>
+
+<p>There are a couple of type classes that are fundamental to Cats (and generally to category-based functional programming), the most important ones being
+<a href="http://typelevel.org/cats/typeclasses/functor.html"><code class="highlighter-rouge">Functor</code></a>,
+<a href="http://typelevel.org/cats/typeclasses/applicative.html"><code class="highlighter-rouge">Applicative</code></a> and
+<a href="http://typelevel.org/cats/typeclasses/monad.html"><code class="highlighter-rouge">Monad</code></a>.
+We’re not going into much detail in this blog post (see e.g. the <a href="https://www.scala-exercises.org/cats/functor">already mentioned tutorial</a>),
+but what is important to know is that to use most Cats syntax, you also need to import the implicit type class instances for the structures you’re operating with.</p>
+
+<p>Usually, it’s just enough to import the appropriate <code class="highlighter-rouge">cats.instances</code> package.
+For example, when you’re doing the transformations on futures, you’ll need to <code class="highlighter-rouge">import cats.instances.future._</code>.
+The corresponding packages for options and lists are called <code class="highlighter-rouge">cats.instances.option._</code> and <code class="highlighter-rouge">cats.instances.list._</code>.
+They provide the implicit type class instances that Cats syntax needs to work properly.</p>
+
+<p>As a side note, if you have trouble finding the necessary <code class="highlighter-rouge">instances</code> or <code class="highlighter-rouge">syntax</code> package, the quick workaround is to just <code class="highlighter-rouge">import cats.implicits._</code>.
+This is not a preferred solution, though, as it can significantly increase compile times — especially if used in many files across the project.
+It is generally considered good practice to use narrow imports to take some of the implicit resolution burden off the compiler.</p>
+
+<h2 id="import-catssyntaxapply"><code class="highlighter-rouge">import cats.syntax.apply._</code></h2>
+
+<p>The <code class="highlighter-rouge">apply</code> package provides <code class="highlighter-rouge">(..., ..., ...).mapN</code> syntax, which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).</p>
+
+<p>Let’s say we have 3 futures, one of type <code class="highlighter-rouge">Int</code>, one of type <code class="highlighter-rouge">String</code>, one of type <code class="highlighter-rouge">User</code> and a method accepting three parameters — <code class="highlighter-rouge">Int</code>, <code class="highlighter-rouge">String</code> and <code class="highlighter-rouge">User</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+
+<span class="k">class</span> <span class="nc">ProcessingResult</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">intFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+<span class="k">def</span> <span class="n">stringFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+<span class="k">def</span> <span class="n">userFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">process</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">contents</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">user</span><span class="k">:</span> <span class="kt">User</span><span class="o">)</span><span class="k">:</span> <span class="kt">ProcessingResult</span> <span class="o">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Our goal is to apply the function to the values computed by those 3 futures.
+With <code class="highlighter-rouge">apply</code> syntax this becomes very easy and concise:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.future._</span>
+<span class="k">import</span> <span class="nn">cats.syntax.apply._</span>
+
+<span class="k">def</span> <span class="n">processAsync</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ProcessingResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="o">(</span><span class="n">intFuture</span><span class="o">,</span> <span class="n">stringFuture</span><span class="o">,</span> <span class="n">userFuture</span><span class="o">).</span><span class="n">mapN</span> <span class="o">{</span>
+    <span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">contents</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="n">process</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">contents</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>As pointed out before, to provide the implicit instances (namely, <a href="http://typelevel.org/cats/api/cats/Functor.html"><code class="highlighter-rouge">Functor[Future]</code></a> and
+<a href="https://typelevel.org/cats/api/cats/Semigroupal.html"><code class="highlighter-rouge">Semigroupal[Future]</code></a>) required for <code class="highlighter-rouge">mapN</code> to work properly,
+you should import <code class="highlighter-rouge">cats.instances.future._</code>.</p>
+
+<p>This above idea can be expressed even shorter, just:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">processAsync2</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ProcessingResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">(</span><span class="n">intFuture</span><span class="o">,</span> <span class="n">stringFuture</span><span class="o">,</span> <span class="n">userFuture</span><span class="o">).</span><span class="n">mapN</span><span class="o">(</span><span class="n">process</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>If any of the chained futures fails, the resulting future will also fail with the same exception as the first failing future in the chain (this is fail-fast behavior).</p>
+
+<p>What’s important, all futures will run in parallel, as opposed to what would happen in a <code class="highlighter-rouge">for</code> comprehension:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">processAsync3</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ProcessingResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">value</span> <span class="k">&lt;-</span> <span class="n">intFuture</span>
+    <span class="n">contents</span> <span class="k">&lt;-</span> <span class="n">stringFuture</span>
+    <span class="n">user</span> <span class="k">&lt;-</span> <span class="n">userFuture</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">process</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">contents</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>In the above snippet (which under the hood translates to <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">map</code> calls), <code class="highlighter-rouge">stringFuture</code> will not run until <code class="highlighter-rouge">intFuture</code> is successfully completed,
+and in the same way <code class="highlighter-rouge">userFuture</code> will be run only after <code class="highlighter-rouge">stringFuture</code> completes.
+But since the computations are independent of one another, it’s perfectly viable to run them in parallel with <code class="highlighter-rouge">mapN</code> instead.</p>
+
+<h1 id="traversing">Traversing</h1>
+
+<h2 id="import-catssyntaxtraverse"><code class="highlighter-rouge">import cats.syntax.traverse._</code></h2>
+
+<h3 id="traverse"><code class="highlighter-rouge">traverse</code></h3>
+
+<p>If you have an instance <code class="highlighter-rouge">obj</code> of type <code class="highlighter-rouge">F[A]</code> that can be mapped over (like <code class="highlighter-rouge">Future</code>) and a function <code class="highlighter-rouge">fun</code> of type <code class="highlighter-rouge">A =&gt; G[B]</code>, then calling <code class="highlighter-rouge">obj.map(fun)</code> would give you <code class="highlighter-rouge">F[G[B]]</code>.
+In many common real-life cases, like when <code class="highlighter-rouge">F</code> is <code class="highlighter-rouge">Option</code> and <code class="highlighter-rouge">G</code> is <code class="highlighter-rouge">Future</code>, you would get <code class="highlighter-rouge">Option[Future[B]]</code>, which most likely isn’t what you wanted.</p>
+
+<p><code class="highlighter-rouge">traverse</code> comes as a solution here.
+If you call <code class="highlighter-rouge">traverse</code> instead of <code class="highlighter-rouge">map</code>, like <code class="highlighter-rouge">obj.traverse(fun)</code>, you’ll get <code class="highlighter-rouge">G[F[A]]</code>, which will be <code class="highlighter-rouge">Future[Option[B]]</code> in our case; this is much more useful and easier to process than <code class="highlighter-rouge">Option[Future[B]]</code>.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+<span class="k">import</span> <span class="nn">cats.instances.list._</span>
+
+<span class="k">def</span> <span class="n">updateUser</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">User</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">updateUsers</span><span class="o">(</span><span class="n">users</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">User</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="n">users</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">updateUser</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>As a side note, there is also a dedicated method <code class="highlighter-rouge">Future.traverse</code> in the <a href="http://www.scala-lang.org/api/current/scala/concurrent/Future$.html"><code class="highlighter-rouge">Future</code></a> companion object,
+but the Cats version is far more readable and can easily work on any structure for which certain type classes are available.</p>
+
+<h3 id="sequence"><code class="highlighter-rouge">sequence</code></h3>
+
+<p><code class="highlighter-rouge">sequence</code> represents an even simpler concept: it can be thought of as simply swapping the types from <code class="highlighter-rouge">F[G[A]]</code> to <code class="highlighter-rouge">G[F[A]]</code> without even mapping the enclosed value like <code class="highlighter-rouge">traverse</code> does.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+<span class="k">import</span> <span class="nn">cats.instances.list._</span>
+
+<span class="k">val</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Future</span><span class="o">(</span><span class="s">"hello"</span><span class="o">),</span> <span class="nc">Future</span><span class="o">(</span><span class="s">"world"</span><span class="o">))</span>
+<span class="k">val</span> <span class="n">bar</span> <span class="k">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">sequence</span> <span class="c1">// will have Future[List[String]] type
+</span></code></pre>
+</div>
+
+<p><code class="highlighter-rouge">obj.sequence</code> is in fact implemented in Cats as <code class="highlighter-rouge">obj.traverse(identity)</code>.</p>
+
+<p>On the other hand, <code class="highlighter-rouge">obj.traverse(fun)</code> is roughly equivalent to <code class="highlighter-rouge">obj.map(fun).sequence</code>.</p>
+
+<h3 id="flattraverse"><code class="highlighter-rouge">flatTraverse</code></h3>
+
+<p>If you have an <code class="highlighter-rouge">obj</code> of type <code class="highlighter-rouge">F[A]</code> and a function <code class="highlighter-rouge">fun</code> of type <code class="highlighter-rouge">A =&gt; G[F[B]]</code>, then doing <code class="highlighter-rouge">obj.map(f)</code> yields result of type <code class="highlighter-rouge">F[G[F[B]]]</code> — very unlikely to be what you wanted.</p>
+
+<p>Traversing the <code class="highlighter-rouge">obj</code> instead of mapping helps a little — you’ll get <code class="highlighter-rouge">G[F[F[B]]</code> instead.
+Since <code class="highlighter-rouge">G</code> is usually something like <code class="highlighter-rouge">Future</code> and <code class="highlighter-rouge">F</code> is <code class="highlighter-rouge">List</code> or <code class="highlighter-rouge">Option</code>, you would end up with <code class="highlighter-rouge">Future[Option[Option[A]]</code> or <code class="highlighter-rouge">Future[List[List[A]]]</code> — a bit awkward to process.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+<span class="k">import</span> <span class="nn">cats.instances.option._</span>
+
+<span class="k">lazy</span> <span class="k">val</span> <span class="n">valueOpt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+<span class="k">def</span> <span class="n">compute</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+<span class="k">def</span> <span class="n">computeOverValue</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]]</span> <span class="k">=</span> <span class="n">valueOpt</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">compute</span><span class="o">)</span> <span class="c1">// has type Future[Option[Option[Int]]], not good
+</span></code></pre>
+</div>
+
+<p>The solution could be to map the result with a <code class="highlighter-rouge">_.flatten</code> call like:</p>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">computeOverValue2</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">valueOpt</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">compute</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">flatten</span><span class="o">)</span>
+</code></pre>
+</div>
+<p>and this way you’ll get the desired type <code class="highlighter-rouge">G[F[B]]</code> at the end.</p>
+
+<p>However, there is a neat shortcut for this called <code class="highlighter-rouge">flatTraverse</code>:</p>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">computeOverValue3</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">valueOpt</span><span class="o">.</span><span class="n">flatTraverse</span><span class="o">(</span><span class="n">compute</span><span class="o">)</span>
+</code></pre>
+</div>
+<p>and that solves our problem for good.</p>
+
+<h1 id="monad-transformers">Monad transformers</h1>
+
+<h2 id="import-catsdataoptiont"><code class="highlighter-rouge">import cats.data.OptionT</code></h2>
+
+<p>An instance of <a href="http://typelevel.org/cats/api/cats/data/EitherT.html"><code class="highlighter-rouge">OptionT[F, A]</code></a> can be thought of as a wrapper over <code class="highlighter-rouge">F[Option[A]]</code>
+which adds a couple of useful methods specific to nested types that aren’t available in <code class="highlighter-rouge">F</code> or <code class="highlighter-rouge">Option</code> itself.
+Most typically, your <code class="highlighter-rouge">F</code> will be <code class="highlighter-rouge">Future</code> (or sometimes slick’s <code class="highlighter-rouge">DBIO</code>, but this requires having an implementation of Cats type classes like <code class="highlighter-rouge">Functor</code> or <code class="highlighter-rouge">Monad</code> for <code class="highlighter-rouge">DBIO</code>).
+Wrappers such as <code class="highlighter-rouge">OptionT</code> are generally known as <em>monad transformers</em>.</p>
+
+<p>A quite common pattern is mapping the inner value stored inside an instance of <code class="highlighter-rouge">F[Option[A]]</code> to an instance of <code class="highlighter-rouge">F[Option[B]]</code> with a function of type <code class="highlighter-rouge">A =&gt; B</code>.
+This can be done with rather verbose syntax like:</p>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">lazy</span> <span class="k">val</span> <span class="n">resultFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="o">???</span>
+
+<span class="k">def</span> <span class="n">mappedResultFuture</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">resultFuture</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">maybeValue</span> <span class="k">=&gt;</span>
+  <span class="n">maybeValue</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">value</span> <span class="k">=&gt;</span>
+    <span class="c1">// Do something with the value and return String
+</span>    <span class="o">???</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>With the use of <code class="highlighter-rouge">OptionT</code>, this can be simplified as follows:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.OptionT</span>
+<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+
+<span class="k">def</span> <span class="n">mappedResultFuture2</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">(</span><span class="n">resultFuture</span><span class="o">).</span><span class="n">map</span> <span class="o">{</span> <span class="n">value</span> <span class="k">=&gt;</span>
+  <span class="c1">// Do something with the value and return String
+</span>  <span class="o">???</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>The above <code class="highlighter-rouge">map</code> will return a value of type <code class="highlighter-rouge">OptionT[Future, String]</code>.</p>
+
+<p>To get the underlying <code class="highlighter-rouge">Future[Option[String]]</code> value, simply call <code class="highlighter-rouge">.value</code> on the <code class="highlighter-rouge">OptionT</code> instance.
+It’s also a viable solution to fully switch to <code class="highlighter-rouge">OptionT[Future, A]</code> in method parameter/return types and completely (or almost completely) ditch <code class="highlighter-rouge">Future[Option[A]]</code> in type declarations.</p>
+
+<p>There are several ways to construct an <code class="highlighter-rouge">OptionT</code> instance.
+The method headers in the table below are slightly simplified: the type parameters and type classes required by each method are skipped.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Method</th>
+      <th style="text-align: center">Takes</th>
+      <th style="text-align: center">Returns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT.apply</code> or <code class="highlighter-rouge">OptionT(...)</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">F[Option[A]]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, A]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT.fromOption</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">Option[A]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, A]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT.liftF</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">F[A]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, A]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT.pure</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, A]</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In production code you’ll most commonly use the <code class="highlighter-rouge">OptionT(...)</code> syntax in order to wrap an instance of <code class="highlighter-rouge">Future[Option[A]]</code> into <code class="highlighter-rouge">Option[F, A]</code>.
+The other methods, in turn, prove useful to set up <code class="highlighter-rouge">OptionT</code>-typed dummy values in unit tests.</p>
+
+<p>We have already come across one of <code class="highlighter-rouge">OptionT</code>’s methods, namely <code class="highlighter-rouge">map</code>.
+There are several other methods available and they mostly differ by the signature of the function they accept as the parameter.
+As was the case with the previous table, the expected type classes are skipped.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Method</th>
+      <th style="text-align: center">Takes</th>
+      <th style="text-align: center">Returns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">map[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A =&gt; B</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, B]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">subflatMap[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A =&gt; Option[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, B]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">semiflatMap[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A =&gt; F[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, B]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">flatMapF[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A =&gt; F[Option[B]]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, B]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">flatMap[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A =&gt; OptionT[F, B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">OptionT[F, B]</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In practice, you’re most likely to use <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">semiflatMap</code>.</p>
+
+<p>As is always the case with <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">map</code>, you can use it not only explicitly, but also under the hood in <code class="highlighter-rouge">for</code> comprehensions, as in the example below:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.OptionT</span>
+<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+
+<span class="k">class</span> <span class="nc">Money</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">findUserById</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">findAccountById</span><span class="o">(</span><span class="n">accountId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Account</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">getReservedFundsForAccount</span><span class="o">(</span><span class="n">account</span><span class="k">:</span> <span class="kt">Account</span><span class="o">)</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">getReservedFundsForUser</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">user</span> <span class="k">&lt;-</span> <span class="n">findUserById</span><span class="o">(</span><span class="n">userId</span><span class="o">)</span>
+  <span class="n">account</span> <span class="k">&lt;-</span> <span class="n">findAccountById</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">accountId</span><span class="o">)</span>
+  <span class="n">funds</span> <span class="k">&lt;-</span> <span class="n">getReservedFundsForAccount</span><span class="o">(</span><span class="n">account</span><span class="o">)</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="n">funds</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">OptionT[Future, Money]</code> instance returned by <code class="highlighter-rouge">getReservedFundsForUser</code> will enclose a <code class="highlighter-rouge">None</code> value if any of the three composed methods returns an <code class="highlighter-rouge">OptionT</code> corresponding to <code class="highlighter-rouge">None</code>.
+Otherwise, if the result of all three calls contains <code class="highlighter-rouge">Some</code>, the final outcome will also contain <code class="highlighter-rouge">Some</code>.</p>
+
+<h2 id="import-catsdataeithert"><code class="highlighter-rouge">import cats.data.EitherT</code></h2>
+
+<p><a href="http://typelevel.org/cats/api/cats/data/EitherT.html"><code class="highlighter-rouge">EitherT[F, A, B]</code></a> is the monad transformer for <code class="highlighter-rouge">Either</code> — you can think of it as a wrapper over a <code class="highlighter-rouge">F[Either[A, B]]</code> value.</p>
+
+<p>Just as in the above section, I simplified the method headers, skipping type parameters or their context bounds and lower bounds.</p>
+
+<p>Let’s have a quick look at how to create an <code class="highlighter-rouge">EitherT</code> instance:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Method</th>
+      <th style="text-align: center">Takes</th>
+      <th style="text-align: center">Returns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT.apply</code> or <code class="highlighter-rouge">EitherT(...)</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">F[Either[A, B]]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT[F, A, B]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT.fromEither</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">Either[A, B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT[F, A, B]</code> (wraps the provided <code class="highlighter-rouge">Either</code> value into <code class="highlighter-rouge">F</code>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT.right</code> or <code class="highlighter-rouge">EitherT.liftF</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">F[B]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT[F, A, B]</code> (wraps value inside <code class="highlighter-rouge">F[B]</code> into <code class="highlighter-rouge">Right</code>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT.left</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">F[A]</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT[F, A, B]</code> (wraps value inside <code class="highlighter-rouge">F[B]</code> into <code class="highlighter-rouge">Left</code>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT.pure</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">A</code></td>
+      <td style="text-align: center"><code class="highlighter-rouge">EitherT[F, A, B]</code> (wraps value into <code class="highlighter-rouge">Right</code> and then into <code class="highlighter-rouge">F</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Another useful way to construct an <code class="highlighter-rouge">EitherT</code> instance is to use <code class="highlighter-rouge">OptionT</code>’s methods <code class="highlighter-rouge">toLeft</code> and <code class="highlighter-rouge">toRight</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherT</span>
+
+<span class="k">abstract</span> <span class="k">class</span> <span class="nc">BaseException</span><span class="o">(</span><span class="n">message</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Exception</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">UserNotFoundException</span><span class="o">(</span><span class="n">message</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">BaseException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="n">getUserById</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">User</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">ensureUserExists</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">BaseException</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nc">OptionT</span><span class="o">(</span><span class="n">getUserById</span><span class="o">(</span><span class="n">userId</span><span class="o">))</span>
+    <span class="o">.</span><span class="n">toRight</span><span class="o">(</span><span class="n">left</span> <span class="k">=</span> <span class="nc">UserNotFoundException</span><span class="o">(</span><span class="n">s</span><span class="s">"user not found, userId=$userId"</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">toRight</code> is pretty analogous to the method <code class="highlighter-rouge">Either.fromOption</code> mentioned before: just as <code class="highlighter-rouge">fromOption</code> built an <code class="highlighter-rouge">Either</code> from an <code class="highlighter-rouge">Option</code>, <code class="highlighter-rouge">toRight</code> creates an <code class="highlighter-rouge">EitherT</code> from an <code class="highlighter-rouge">OptionT</code>.
+If the original <code class="highlighter-rouge">OptionT</code> stores <code class="highlighter-rouge">Some</code> value, it will be wrapped into <code class="highlighter-rouge">Right</code>; otherwise the value provided as the <code class="highlighter-rouge">left</code> parameter will be wrapped into a <code class="highlighter-rouge">Left</code>.</p>
+
+<p><code class="highlighter-rouge">toLeft</code> is <code class="highlighter-rouge">toRight</code>’s counterpart which wraps the <code class="highlighter-rouge">Some</code> value into <code class="highlighter-rouge">Left</code> and transforms <code class="highlighter-rouge">None</code> into <code class="highlighter-rouge">Right</code> enclosing the provided <code class="highlighter-rouge">right</code> value.
+This is less commonly used in practice, but can serve e.g. for enforcing uniqueness checks in code.
+We return <code class="highlighter-rouge">Left</code> if the value has been found, and <code class="highlighter-rouge">Right</code> if it doesn’t yet exist in the system.</p>
+
+<p>The methods available in <code class="highlighter-rouge">EitherT</code> are pretty similar to those we’ve seen in <code class="highlighter-rouge">OptionT</code>, but there are some notable differences.</p>
+
+<p>You might get into some confusion at first when it comes to e.g. <code class="highlighter-rouge">map</code>.
+In the case of <code class="highlighter-rouge">OptionT</code>, it was pretty obvious what should be done: <code class="highlighter-rouge">map</code> should go over the <code class="highlighter-rouge">Option</code> enclosed within <code class="highlighter-rouge">Future</code>, and then map the enclosed <code class="highlighter-rouge">Option</code> itself.
+This is slightly less obvious in case of <code class="highlighter-rouge">EitherT</code>: should it map over both <code class="highlighter-rouge">Left</code> and <code class="highlighter-rouge">Right</code> values, or only the <code class="highlighter-rouge">Right</code> value?</p>
+
+<p>The answer is that <code class="highlighter-rouge">EitherT</code> is <em>right-biased</em>, therefore plain <code class="highlighter-rouge">map</code> actually deals with the <code class="highlighter-rouge">Right</code> value.
+This is unlike <code class="highlighter-rouge">Either</code> in the Scala standard library up to 2.11, which is in turn <em>unbiased</em>: there’s no <code class="highlighter-rouge">map</code> available in <code class="highlighter-rouge">Either</code>, only for its left and right projections.</p>
+
+<p>Having said that, let’s take a quick look at the right-biased methods that <code class="highlighter-rouge">EitherT</code> offers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Method</th>
+      <th>Takes</th>
+      <th>Returns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">map[D]</code></td>
+      <td><code class="highlighter-rouge">B =&gt; D</code></td>
+      <td><code class="highlighter-rouge">EitherT[F, A, D]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">subflatMap[D]</code></td>
+      <td><code class="highlighter-rouge">B =&gt; Either[A, D]</code></td>
+      <td><code class="highlighter-rouge">EitherT[F, A, D]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">semiflatMap[D]</code></td>
+      <td><code class="highlighter-rouge">B =&gt; F[D]</code></td>
+      <td><code class="highlighter-rouge">EitherT[F, A, D]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">flatMapF[D]</code></td>
+      <td><code class="highlighter-rouge">B =&gt; F[Either[A, D]]</code></td>
+      <td><code class="highlighter-rouge">EitherT[F, A, D]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="highlighter-rouge">flatMap[D]</code></td>
+      <td><code class="highlighter-rouge">B =&gt; EitherT[F, A, D]</code></td>
+      <td><code class="highlighter-rouge">EitherT[F, A, D]</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As a side note, there are also certain methods in <code class="highlighter-rouge">EitherT</code> (that you’re likely to need at some point) which map over the <code class="highlighter-rouge">Left</code> value, like <code class="highlighter-rouge">leftMap</code>, or over both <code class="highlighter-rouge">Left</code> and <code class="highlighter-rouge">Right</code> values, like <code class="highlighter-rouge">fold</code> or <code class="highlighter-rouge">bimap</code>.</p>
+
+<p><code class="highlighter-rouge">EitherT</code> is very useful for fail-fast chained verifications:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Item</span><span class="o">(</span><span class="n">state</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">ItemOrder</span>  <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">}</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ItemNotFoundException</span><span class="o">(</span><span class="n">message</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">BaseException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">InvalidItemStateException</span><span class="o">(</span><span class="n">message</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">BaseException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="n">getItemById</span><span class="o">(</span><span class="n">itemId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Item</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* .. */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">ensureItemExists</span><span class="o">(</span><span class="n">itemId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">BaseException</span>, <span class="kt">Item</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nc">OptionT</span><span class="o">(</span><span class="n">getItemById</span><span class="o">(</span><span class="n">itemId</span><span class="o">))</span>
+    <span class="o">.</span><span class="n">toRight</span><span class="o">(</span><span class="nc">ItemNotFoundException</span><span class="o">(</span><span class="n">s</span><span class="s">"item not found, itemId = $itemId"</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="n">ensureItemStateIs</span><span class="o">(</span><span class="n">actual</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">expected</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">BaseException</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="c1">// Returns a Unit value wrapped into Right and then into Future if condition is true,
+</span>  <span class="c1">// otherwise the provided exception wrapped into Left and then into Future.
+</span>  <span class="nc">EitherT</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span><span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span><span class="o">,</span> <span class="o">(),</span> <span class="nc">InvalidItemStateException</span><span class="o">(</span><span class="n">s</span><span class="s">"actual=$actual, expected=$expected"</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="n">placeOrderForItem</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">itemId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">count</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ItemOrder</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* ... */</span> <span class="o">???</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="n">buyItem</span><span class="o">(</span><span class="n">userId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">itemId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">count</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">BaseException</span>, <span class="kt">ItemOrder</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">user</span> <span class="k">&lt;-</span> <span class="n">ensureUserExists</span><span class="o">(</span><span class="n">userId</span><span class="o">)</span>
+    <span class="n">item</span> <span class="k">&lt;-</span> <span class="n">ensureItemExists</span><span class="o">(</span><span class="n">itemId</span><span class="o">)</span>
+    <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">ensureItemStateIs</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="n">state</span><span class="o">,</span> <span class="s">"AVAILABLE_IN_STOCK"</span><span class="o">)</span>
+    <span class="c1">// EitherT.liftF is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
+</span>    <span class="n">placedOrder</span> <span class="k">&lt;-</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">liftF</span><span class="o">(</span><span class="n">placeOrderForItem</span><span class="o">(</span><span class="n">userId</span><span class="o">,</span> <span class="n">itemId</span><span class="o">,</span> <span class="n">count</span><span class="o">))</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">placedOrder</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>In the above example, we’re running various checks against the item one by one.
+If any of the checks fails, the resulting <code class="highlighter-rouge">EitherT</code> will contain a <code class="highlighter-rouge">Left</code> value.
+Otherwise, if all of the checks yield a <code class="highlighter-rouge">Right</code> (of course we mean a <code class="highlighter-rouge">Right</code> wrapped into an <code class="highlighter-rouge">EitherT</code>), then the final outcome will also contain <code class="highlighter-rouge">Right</code>.
+This is a fail-fast behavior: we’re effectively stopping the <code class="highlighter-rouge">for</code> comprehension flow at the first <code class="highlighter-rouge">Left</code>-ish result.</p>
+
+<p>If you’re instead looking for validation that accumulates the errors (e.g. when dealing with user-provided form data), <code class="highlighter-rouge">cats.data.Validated</code> may be a good choice.</p>
+
+<h1 id="common-issues">Common issues</h1>
+
+<p>If anything doesn’t compile as expected, first make sure all the required Cats implicits are in the scope — just try importing <code class="highlighter-rouge">cats.implicits._</code> and see if the problem persists.
+As mentioned before, though, it’s better to use narrow imports, but if the code doesn’t compile it’s sometimes worth just importing the entire library to check if it solves the problem.</p>
+
+<p>If you’re using <code class="highlighter-rouge">Futures</code>, make sure to provide an implicit <code class="highlighter-rouge">ExecutionContext</code> in the scope, otherwise Cats won’t be able to infer implicit instances for <code class="highlighter-rouge">Future</code>’s type classes.</p>
+
+<p>IntelliJ sometimes reports errors in Cats-loaded code even though the source passes under scalac.
+One such example are invocations of the methods of <code class="highlighter-rouge">cats.data.Nested</code> class, which compile correctly under scalac, but don’t type check under IntelliJ’s presentation compiler.
+It should work without trouble under <a href="http://scala-ide.org/">Scala IDE</a>, though.</p>
+
+<p>As an advice for your future learning: the <code class="highlighter-rouge">Applicative</code> type class, despite it’s key significance in functional programming, comes slightly difficult to understand.
+In my opinion it’s much less intuitive than <code class="highlighter-rouge">Functor</code> or <code class="highlighter-rouge">Monad</code>, even though it actually stands right between <code class="highlighter-rouge">Functor</code> and <code class="highlighter-rouge">Monad</code> in the inheritance hierarchy.
+The best approach to grasp <code class="highlighter-rouge">Applicative</code> is to first understand how <code class="highlighter-rouge">product</code> (which transforms an <code class="highlighter-rouge">F[A]</code> and <code class="highlighter-rouge">F[B]</code> to an <code class="highlighter-rouge">F[(A, B)]</code>) works rather than focus on the somewhat exotic <code class="highlighter-rouge">ap</code> operation itself.</p>
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
+<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+</div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script></body></html>

@@ -162,7 +162,7 @@ import Demo.{Pair => Paired}
 // import Demo.{Pair=>Paired}
 
 combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
-// res7: Demo.Pair[Int,String] = Pair(6,hello world)
+// res2: Demo.Pair[Int,String] = Pair(6,hello world)
 ```
 
 ## A note on syntax
