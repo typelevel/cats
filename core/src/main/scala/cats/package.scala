@@ -77,6 +77,18 @@ package object cats {
       override def isEmpty[A](fa: Id[A]): Boolean = false
   }
 
+  /**
+   * Witness for: Id[A] <-> Unit => A
+   */
+  implicit val catsRepresentableForId: Representable.Aux[Id, Unit] = new Representable[Id] {
+    override type Representation = Unit
+    override val F: Functor[Id] = Functor[Id]
+
+    override def tabulate[A](f: Unit => A): Id[A] = f(())
+
+    override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
+  }
+
   implicit val catsParallelForId: Parallel[Id, Id] = Parallel.identity
 
   type Eq[A] = cats.kernel.Eq[A]

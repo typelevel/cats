@@ -16,6 +16,8 @@ class NestedSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
+    checkAll("Nested[Eval, List, ?]", DeferTests[Nested[Eval, List, ?]].defer[Int])
+
   {
     // Invariant composition
     implicit val instance = ListWrapper.invariant

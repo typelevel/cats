@@ -18,6 +18,7 @@ class WriterTSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration.copy(sizeRange = 5)
 
+  checkAll("WriterT[Eval, Int, ?]", DeferTests[WriterT[Eval, Int, ?]].defer[Int])
   checkAll("WriterT[List, Int, Int]", EqTests[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
 

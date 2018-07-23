@@ -9,7 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.Arbitrary
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.{MonoidKTests, SemigroupKTests}
+import cats.laws.discipline.{MonoidKTests, DeferTests, SemigroupKTests}
 import Helpers.CSemi
 import catalysts.Platform
 
@@ -32,6 +32,7 @@ class KleisliSuite extends CatsSuite {
     checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(instance))
   }
 
+  checkAll("Kleisli[Eval, Int, ?]", DeferTests[Kleisli[Eval, Int, ?]].defer[Int])
   checkAll("Kleisli[Option, Int, Int] with Unit", MonadErrorTests[Kleisli[Option, Int, ?], Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(MonadError[Kleisli[Option, Int, ?], Unit]))
 

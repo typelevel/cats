@@ -9,6 +9,8 @@ import cats.laws.discipline.arbitrary._
 class OptionTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
 
+  checkAll("OptionT[Eval, ?]", DeferTests[OptionT[Eval, ?]].defer[Int])
+
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
 
@@ -43,12 +45,12 @@ class OptionTSuite extends CatsSuite {
     checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
   }
 
-  
+
   {
-    // F has a ContravariantMonoidal 
+    // F has a ContravariantMonoidal
     checkAll("OptionT[Const[String, ?], Int]", ContravariantMonoidalTests[OptionT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
     checkAll("ContravariantMonoidal[OptionT[Const[String, ?], Int]]",
-      SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]])) 
+      SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]]))
   }
 
   {

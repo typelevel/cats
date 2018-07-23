@@ -34,13 +34,13 @@ scalacOptions += "-Ypartial-unification"
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.0")
+addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.2.0")
 ```
 
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.1.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.2.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -77,6 +77,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### General purpose libraries to support pure functional programming
 
  * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
@@ -108,6 +109,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
+ * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.

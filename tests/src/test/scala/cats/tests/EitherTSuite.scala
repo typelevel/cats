@@ -12,6 +12,8 @@ import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, Par
 class EitherTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
+  checkAll("EitherT[Eval, String, ?]", DeferTests[EitherT[Eval, String, ?]].defer[Int])
+
   {
     checkAll("EitherT[Option, ListWrapper[String], ?]", SemigroupKTests[EitherT[Option, ListWrapper[String], ?]].semigroupK[Int])
     checkAll("SemigroupK[EitherT[Option, ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], ?]]))

@@ -61,8 +61,10 @@ trait AllSyntaxBinCompat0
 
 trait AllSyntaxBinCompat1
   extends FlatMapOptionSyntax
+    with ChoiceSyntax
     with NestedSyntax
     with BinestedSyntax
     with ParallelFlatSyntax
     with SetSyntax
     with ValidatedExtensionSyntax
+    with RepresentableSyntax
