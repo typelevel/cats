@@ -38,7 +38,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def combineAllOption(as: TraversableOnce[A]): Option[A] =
-    as.reduceOption(combine)
+    as.iterator.reduceOption(combine)
 }
 
 abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {

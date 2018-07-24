@@ -12,8 +12,8 @@ object StaticMethods {
     override def size: Int = m.size
     def get(k: K): Option[V] = m.get(k)
     def iterator: Iterator[(K, V)] = m.iterator
-    def +[V2 >: V](kv: (K, V2)): Map[K, V2] = m.toMap + kv
-    def -(key: K): Map[K, V] = m.toMap - key
+    def updated[V2 >: V](key: K, value: V2): Map[K, V2] = m.toMap + ((key, value))
+    def remove(key: K): Map[K, V] = m.toMap - key
   }
 
   // scalastyle:off return

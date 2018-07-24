@@ -13,7 +13,7 @@ lazy val scoverageSettings = Seq(
 organization in ThisBuild := "org.typelevel"
 
 lazy val kernelSettings = Seq(
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions(scalaVersion.value),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
@@ -22,20 +22,27 @@ lazy val kernelSettings = Seq(
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
+
+def macroDependencies(scalaVersion: String) =
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, minor)) if minor < 13 => Seq(
+      compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch)
+    )
+    case _ => Seq()
+  }
+
 lazy val commonSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
-  scalacOptions ++= commonScalacOptions,
+  scalacOptions ++= commonScalacOptions(scalaVersion.value),
   resolvers ++= Seq(
     "bintray/non" at "http://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.12.0" % Provided,
-    "org.typelevel" %%% "machinist" % "0.6.4",
-    compilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
-  ),
+    "com.github.mpilquist" %%% "simulacrum" % "0.13.0" % Provided,
+    "org.typelevel" %%% "machinist" % "0.6.5",
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")) ++ macroDependencies(scalaVersion.value),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -95,22 +102,21 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings
 
-lazy val scalaCheckVersion = "1.13.5"
-// 2.13.0-M3 workaround
-//lazy val scalaTestVersion = "3.0.5"
-lazy val disciplineVersion = "0.9.0"
 lazy val catalystsVersion = "0.6"
 
-// 2.13.0-M3 workaround
+// 2.13.0-M4 workarounds
 def scalatestVersion(scalaVersion: String): String =
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, 13)) =>  "3.0.5-M1"
-    case _ => "3.0.5"
-  }
+  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP1"
+
+def scalaCheckVersion(scalaVersion: String): String =
+  if (priorTo2_13(scalaVersion)) "1.13.5" else "1.14.0"
+
+def disciplineVersion(scalaVersion: String): String =
+  if (priorTo2_13(scalaVersion)) "0.9.0" else "0.10.0"
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion)
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value),
+  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion(scalaVersion.value))
 
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
@@ -310,9 +316,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .configureCross(disableScoverage210Jvm)
-  .configureCross(disableScoverage210Js)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core") )
 
@@ -325,7 +329,6 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-laws", name := "Cats laws")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .configureCross(disableScoverage210Jvm)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -443,7 +446,6 @@ lazy val js = project
   .settings(moduleName := "cats-js")
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .configure(disableScoverage210Js)
   .enablePlugins(ScalaJSPlugin)
 
 
@@ -593,8 +595,8 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
     }
   }
 
-lazy val commonScalacOptions = Seq(
-  "-deprecation",
+def commonScalacOptions(scalaVersion: String) = Seq(
+//  "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
   "-language:existentials",
@@ -602,13 +604,18 @@ lazy val commonScalacOptions = Seq(
   "-language:implicitConversions",
   "-language:experimental.macros",
   "-unchecked",
-  "-Xfatal-warnings",
-  "-Yno-adapted-args",
+//  "-Xfatal-warnings",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture"
-)
+) ++ (if(priorTo2_13(scalaVersion)) Seq("-Yno-adapted-args") else Seq())
+
+def priorTo2_13(scalaVersion: String): Boolean =
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, minor)) if minor < 13 => true
+    case _ => false
+  }
 
 lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
@@ -665,37 +672,6 @@ lazy val credentialSettings = Seq(
   } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
 )
 
-def disableScoverage210Js(crossProject: CrossProject) =
-  crossProject
-  .jsSettings(
-    coverageEnabled := {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 10)) => false
-        case _ => coverageEnabled.value
-      }
-    }
-  )
-
-def disableScoverage210Js: Project ⇒ Project = p =>
-  p.settings(
-    coverageEnabled := {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 10)) => false
-        case _ => coverageEnabled.value
-      }
-    }
-  )
-
-def disableScoverage210Jvm(crossProject: CrossProject) =
-  crossProject
-  .jvmSettings(
-    coverageEnabled := {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 10)) => false
-        case _ => coverageEnabled.value
-      }
-    }
-  )
 
 lazy val update2_12 = Seq(
   scalacOptions -= {
