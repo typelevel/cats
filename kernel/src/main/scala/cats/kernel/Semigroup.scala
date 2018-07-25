@@ -2,7 +2,6 @@ package cats.kernel
 
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
-
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
@@ -38,7 +37,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def combineAllOption(as: TraversableOnce[A]): Option[A] =
-    as.iterator.reduceOption(combine)
+    cats.kernel.compat.TraversableOnce.reduceOption(as, combine)
 }
 
 abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {

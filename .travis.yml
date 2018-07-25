@@ -10,9 +10,9 @@ git:
   depth: 9999
 
 scala:
+  - 2.12.6
   - 2.11.12
   - 2.13.0-M4
-  - 2.12.6
 
 matrix:
   allow_failures:

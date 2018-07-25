@@ -214,9 +214,6 @@ object OptionT extends OptionTInstances {
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
-  implicit def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
-    new OptionTMonad[F] { implicit val F = F0 }
-
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
     new OptionTFoldable[F] { implicit val F = F0 }
 

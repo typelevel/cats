@@ -12,15 +12,30 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
-lazy val kernelSettings = Seq(
+lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
+  Compile / unmanagedSourceDirectories ++= {
+    val bd = baseDirectory.value
+    def extraDirs(suffix: String) =
+      CrossType.Pure.sharedSrcDir(bd, "main").toList map (f => file(f.getPath + suffix))
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, y)) if y <= 12 =>
+        extraDirs("-2.12-")
+      case Some((2, y)) if y >= 13 =>
+        extraDirs("-2.13+")
+      case _ => Nil
+    }
+  },
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
   fork in test := true,
+  libraryDependencies ++= Seq(
+    "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
+
 
 
 def macroDependencies(scalaVersion: String) =
@@ -31,34 +46,33 @@ def macroDependencies(scalaVersion: String) =
     case _ => Seq()
   }
 
-lazy val commonSettings = Seq(
+
+lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
-  scalacOptions ++= commonScalacOptions(scalaVersion.value),
   resolvers ++= Seq(
-    "bintray/non" at "http://dl.bintray.com/non/maven",
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
+    "bintray/non" at "http://dl.bintray.com/non/maven"
   ),
   libraryDependencies ++= Seq(
-    "com.github.mpilquist" %%% "simulacrum" % "0.13.0" % Provided,
     "org.typelevel" %%% "machinist" % "0.6.5",
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")) ++ macroDependencies(scalaVersion.value),
+
+) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
+
+
+lazy val simulacrumSettings = Seq(
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.13.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
         case e: xml.Elem
           if e.label == "dependency" &&
-          e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
-          e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) => Nil
+            e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
+            e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) => Nil
         case _ => Seq(node)
       }
     }).transform(node).head
-  },
-  fork in test := true,
-  parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
-) ++ warnUnusedImport ++ update2_12 ++ xlint
-
+  }
+)
 
 lazy val tagName = Def.setting{
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
@@ -100,7 +114,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-lazy val catsSettings = commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val catalystsVersion = "0.6"
 
@@ -279,7 +292,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
-  .settings(kernelSettings)
+  .settings(commonSettings)
   .settings(publishSettings)
   .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
@@ -296,7 +309,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
-  .settings(kernelSettings)
+  .settings(commonSettings)
   .settings(publishSettings)
   .settings(scoverageSettings)
   .settings(disciplineDependencies)
@@ -596,7 +609,6 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
   }
 
 def commonScalacOptions(scalaVersion: String) = Seq(
-//  "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
   "-language:existentials",
@@ -604,12 +616,17 @@ def commonScalacOptions(scalaVersion: String) = Seq(
   "-language:implicitConversions",
   "-language:experimental.macros",
   "-unchecked",
-//  "-Xfatal-warnings",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture"
-) ++ (if(priorTo2_13(scalaVersion)) Seq("-Yno-adapted-args") else Seq())
+) ++ (if(priorTo2_13(scalaVersion)) Seq(
+  "-Yno-adapted-args",
+  "-Xfatal-warnings", //todo: add the following two back to 2.13
+  "-deprecation"
+) else Seq(
+  "-Ymacro-annotations"
+))
 
 def priorTo2_13(scalaVersion: String): Boolean =
   CrossVersion.partialVersion(scalaVersion) match {
