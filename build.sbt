@@ -33,7 +33,11 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"),
   parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  doctestGenTests := {
+    val unchanged = doctestGenTests.value
+    if(priorTo2_13(scalaVersion.value)) unchanged else Nil
+  }
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 
