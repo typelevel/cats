@@ -214,8 +214,8 @@ object OptionT extends OptionTInstances {
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
-  implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
-    new OptionTFoldable[F] { implicit val F = F0 }
+  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
+    new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
 
   implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
     new OptionTSemigroup[F, A] { implicit val F = F0 }
@@ -263,8 +263,8 @@ private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 
 }
 
 private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
-  implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
+  implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
+    new OptionTFoldable[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances3 {

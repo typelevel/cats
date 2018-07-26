@@ -34,6 +34,7 @@ lazy val commonSettings = Seq(
     "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
+  //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if(priorTo2_13(scalaVersion.value)) unchanged else Nil
@@ -119,9 +120,11 @@ lazy val includeGeneratedSrc: Setting[_] = {
 }
 
 
-lazy val catalystsVersion = "0.6"
 
 // 2.13.0-M4 workarounds
+def catalystsVersion(scalaVersion: String): String =
+  if (priorTo2_13(scalaVersion)) "0.6" else "0.7-SNAPSHOT"
+
 def scalatestVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP1"
 
@@ -136,8 +139,8 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion(scalaVersion.value))
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
   // 2.13.0-M3 workaround
   // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test")
