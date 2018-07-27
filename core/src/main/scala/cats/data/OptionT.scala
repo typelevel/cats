@@ -217,11 +217,11 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
     new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
 
-  implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
-    new OptionTSemigroup[F, A] { implicit val F = F0 }
-
   implicit def catsDataOrderForOptionT[F[_], A](implicit F0: Order[F[Option[A]]]): Order[OptionT[F, A]] =
     new OptionTOrder[F, A] { implicit val F = F0 }
+
+  implicit def catsDataMonoidForOptionT[F[_], A](implicit F0: Monoid[F[Option[A]]]): Monoid[OptionT[F, A]] =
+    new OptionTMonoid[F, A] { implicit val F = F0 }
 
   implicit def catsDataShowForOptionT[F[_], A](implicit F: Show[F[Option[A]]]): Show[OptionT[F, A]] =
     Contravariant[Show].contramap(F)(_.value)
@@ -234,32 +234,32 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
 }
 
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
+  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
+    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
 
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
-  implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
-    new OptionTSemigroupK[F] { implicit val F = F0 }
+  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
+    new OptionTMonoidK[F] { implicit val F = F0 }
 
-  implicit def catsDataMonoidForOptionT[F[_], A](implicit F0: Monoid[F[Option[A]]]): Monoid[OptionT[F, A]] =
-    new OptionTMonoid[F, A] { implicit val F = F0 }
+  implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
+    new OptionTSemigroup[F, A] { implicit val F = F0 }
 
   implicit def catsDataPartialOrderForOptionT[F[_], A](implicit F0: PartialOrder[F[Option[A]]]): PartialOrder[OptionT[F, A]] =
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 {
-
-  implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
-    new OptionTMonoidK[F] { implicit val F = F0 }
+  implicit def catsDataSemigroupKForOptionT[F[_]](implicit F0: Monad[F]): SemigroupK[OptionT[F, ?]] =
+    new OptionTSemigroupK[F] { implicit val F = F0 }
 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
 
-  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
-    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
+    new OptionTMonadError[F, E] { implicit val F = F0 }
+
 }
 
 private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {

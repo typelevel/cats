@@ -243,7 +243,17 @@ def mimaSettings(moduleName: String) = {
   Seq(
     mimaPreviousArtifacts := (mimaVersions(version.value) ++ extraVersions)
       .filterNot(excludedVersions.contains(_))
-      .map(v => "org.typelevel" %% moduleName % v)
+      .map(v => "org.typelevel" %% moduleName % v),
+
+    mimaBinaryIssueFilters ++= {
+      import com.typesafe.tools.mima.core._
+      import com.typesafe.tools.mima.core.ProblemFilters._
+      //Only seald abstract class are allowed here.
+      Seq(
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances.catsDataMonadForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT")
+      )
+    }
   )
 }
 

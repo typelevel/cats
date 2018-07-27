@@ -441,9 +441,10 @@ private[data] abstract class RWSFunctions {
 }
 
 private[data] sealed abstract class IRWSTInstances extends IRWSTInstances1 {
-  implicit def catsDataProfunctorForIRWST[F[_], E, L, T](implicit F0: Functor[F]): Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
-    new IRWSTProfunctor[F, E, L, T] {
-      implicit def F: Functor[F] = F0
+
+  implicit def catsDataStrongForIRWST[F[_], E, L, T](implicit F0: Monad[F]): Strong[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
+    new IRWSTStrong[F, E, L, T] {
+      implicit def F: Monad[F] = F0
     }
 
   implicit def catsDataBifunctorForIRWST[F[_], E, L, SA](implicit F0: Functor[F]): Bifunctor[IndexedReaderWriterStateT[F, E, L, SA, ?, ?]] =
@@ -477,10 +478,11 @@ private[data] sealed abstract class IRWSTInstances1 extends IRWSTInstances2 {
       implicit def L: Monoid[L] = L0
     }
 
-  implicit def catsDataStrongForIRWST[F[_], E, L, T](implicit F0: Monad[F]): Strong[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
-    new IRWSTStrong[F, E, L, T] {
-      implicit def F: Monad[F] = F0
+  implicit def catsDataProfunctorForIRWST[F[_], E, L, T](implicit F0: Functor[F]): Profunctor[IndexedReaderWriterStateT[F, E, L, ?, ?, T]] =
+    new IRWSTProfunctor[F, E, L, T] {
+      implicit def F: Functor[F] = F0
     }
+
 }
 
 private[data] sealed abstract class IRWSTInstances2 extends IRWSTInstances3 {
