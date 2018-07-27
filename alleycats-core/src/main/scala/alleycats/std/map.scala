@@ -3,6 +3,8 @@ package std
 
 import cats._
 
+object map extends MapInstances
+
 trait MapInstances {
 
   // toList is inconsistent. See https://github.com/typelevel/cats/issues/1831
