@@ -10,18 +10,20 @@ package cats
  * The law is that defer(fa) is equivalent to fa, but not evaluated immediately,
  * so
  * {{{
- * import cats._
- * import cats.implicits._
+ * scala> import cats._
+ * scala> import cats.implicits._
  *
- * var evaluated = false
- * val dfa =
- *   Defer[Eval].defer {
- *     evaluated = true
- *     Eval.now(21)
- *    }
+ * scala> var evaluated = false
+ * scala> val dfa = Defer[Eval].defer {
+ *      |   evaluated = true
+ *      |   Eval.now(21)
+ *      | }
  *
- * assert(!evaluated)
- * Eq[Eval[Int]].eqv(dfa, Eval.now(21))
+ * scala> evaluated
+ * res0: Boolean = false
+ *
+ * scala> Eq[Eval[Int]].eqv(dfa, Eval.now(21))
+ * res1: Boolean = true
  * }}}
  */
 trait Defer[F[_]] extends Serializable {
