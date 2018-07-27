@@ -241,17 +241,26 @@ def mimaSettings(moduleName: String) = {
   lazy val extraVersions: Set[String] = Set()
 
   Seq(
-    mimaPreviousArtifacts := (mimaVersions(version.value) ++ extraVersions)
-      .filterNot(excludedVersions.contains(_))
-      .map(v => "org.typelevel" %% moduleName % v),
+    mimaPreviousArtifacts := { if(priorTo2_13(scalaVersion.value)) {
+      (mimaVersions(version.value) ++ extraVersions)
+        .filterNot(excludedVersions.contains(_))
+        .map(v => "org.typelevel" %% moduleName % v)
+    } else Set() },
 
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core._
       import com.typesafe.tools.mima.core.ProblemFilters._
-      //Only seald abstract class are allowed here.
+      //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances.catsDataMonadForOptionT"),
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT")
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonoidKForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances0.catsDataMonoidForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances0.catsDataMonadForKleisliId"),
+        exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli"),
+        exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
+        exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST")
       )
     }
   )
