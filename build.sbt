@@ -26,6 +26,12 @@ lazy val commonSettings = Seq(
       case _ => Nil
     }
   },
+  coverageEnabled := {
+    if(priorTo2_13(scalaVersion.value))
+      coverageEnabled.value
+    else
+      false
+  } ,
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
