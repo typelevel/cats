@@ -349,7 +349,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
     * Zips this `NonEmptySet` with its index.
     */
-  def zipWithIndex: NonEmptySet[(A, Int)] ={
+  def zipWithIndex: NonEmptySet[(A, Int)] = {
     NonEmptySetImpl.create(cats.compat.SortedSet.zipWithIndex(toSortedSet))
   }
 
