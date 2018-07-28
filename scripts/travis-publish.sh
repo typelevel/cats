@@ -36,7 +36,15 @@ kernel_js="$sbt_cmd validateKernelJS"
 free_js="$sbt_cmd validateFreeJS"
 
 js="$core_js && $free_js && $kernel_js"
+
+# Skip coverage and docs on 2.13 for now.
+if [[ $TRAVIS_SCALA_VERSION == *"2.13"* ]]; then
+jvm="$sbt_cmd buildJVM"
+else
 jvm="$sbt_cmd coverage validateJVM coverageReport && codecov"
+fi
+
+
 
 if [[ $TRAVIS_SCALA_VERSION == *"2.12"* ]]; then
 scalafix="sbt ';coreJVM/publishLocal;freeJVM/publishLocal' && cd scalafix && sbt tests/test && cd .. &&"
