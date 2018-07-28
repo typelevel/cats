@@ -129,7 +129,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 // 2.13.0-M4 workarounds
 def catalystsVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.6" else "0.7-SNAPSHOT"
+  if (priorTo2_13(scalaVersion)) "0.6" else "0.7"
 
 def scalatestVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP1"
