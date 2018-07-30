@@ -49,7 +49,7 @@ fi
 
 
 if [[ $TRAVIS_SCALA_VERSION == *"2.12"* ]]; then
-scalafix="$sbt_cmd coreJVM/publishLocal freeJVM/publishLocal && cd scalafix && $sbt_cmd tests/test && cd .. &&"
+scalafix="cd scalafix && sbt tests/test && cd .. &&"
 else
 scalafix=""
 fi
