@@ -18,6 +18,7 @@ TAGS
 *.sublime-project
 *.sublime-workspace
 tests.iml
+**/.bloop
 # Auto-copied by sbt-microsites
 docs/src/main/tut/contributing.md
 docs/src/main/tut/index.md

@@ -2,7 +2,8 @@ package cats
 package free
 
 import cats.data.{NonEmptyList, OptionT}
-import cats.laws.discipline.{SemigroupalTests, ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
+import cats.kernel.laws.discipline.EqTests
+import cats.laws.discipline.{ComonadTests, ReducibleTests, SemigroupalTests, SerializableTests, TraverseTests}
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -13,6 +14,7 @@ class CofreeSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
 
+  checkAll("Cofree[Option, ?]", EqTests[Cofree[Option, Int]].eqv)
   checkAll("Cofree[Option, ?]", ComonadTests[Cofree[Option, ?]].comonad[Int, Int, Int])
   locally {
     implicit val instance = Cofree.catsTraverseForCofree[Option]
@@ -124,19 +126,6 @@ sealed trait CofreeSuiteInstances {
 
   type CofreeNel[A] = Cofree[Option, A]
   type CofreeRoseTree[A] = Cofree[List, A]
-
-  implicit def cofNelEq[A](implicit e: Eq[A]): Eq[CofreeNel[A]] = new Eq[CofreeNel[A]] {
-    override def eqv(a: CofreeNel[A], b: CofreeNel[A]): Boolean = {
-      def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
-        (a.tailForced, b.tailForced) match {
-          case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
-          case (None, None) if e.eqv(a.head, b.head) => true
-          case _ => false
-        }
-      tr(a, b)
-    }
-  }
-
 
   implicit def CofreeOptionCogen[A: Cogen]: Cogen[CofreeNel[A]] =
     implicitly[Cogen[List[A]]].contramap[CofreeNel[A]](cofNelToNel(_).toList)

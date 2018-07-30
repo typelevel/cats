@@ -43,6 +43,7 @@ trait EqToEquivConversion {
 }
 
 object Eq extends EqFunctions[Eq] with EqToEquivConversion {
+  implicit def delayedToEq[F[_], A : Eq](implicit del: Delay[Eq, F]): Eq[F[A]] = del.apply(Eq[A])
 
   /**
    * Access an implicit `Eq[A]`.
