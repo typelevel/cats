@@ -49,10 +49,6 @@ final class ParallelSequenceOps[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal 
   def parSequence[F[_]]
   (implicit M: Monad[M], T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
     Parallel.parSequence(tma)
-
-  def parSequence_[F[_]]
-  (implicit T: Foldable[T], P: Parallel[M, F]): M[Unit] =
-    Parallel.parSequence_(tma)
 }
 
 final class ParallelSequence_Ops[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal {
