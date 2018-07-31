@@ -49,7 +49,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
     forAll { es: SortedSet[Either[String, Int]] =>
-      Parallel.parTraverse_(es)(identity) should === (Parallel.parSequence_(es))
+      es.parTraverse_(identity) should === (es.parSequence_)
     }
   }
 
