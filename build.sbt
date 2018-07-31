@@ -44,9 +44,13 @@ lazy val commonSettings = Seq(
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if(priorTo2_13(scalaVersion.value)) unchanged else Nil
+  },
+  //todo: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
+  sources in (Compile, doc) := {
+    val docSource = (sources in (Compile, doc)).value
+    if (priorTo2_13(scalaVersion.value)) docSource else Nil
   }
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
-
 
 
 def macroDependencies(scalaVersion: String) =
@@ -191,7 +195,7 @@ lazy val docSettings = Seq(
     "gray-lighter" -> "#F4F3F4",
     "white-color" -> "#FFFFFF"),
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernelJVM, coreJVM, freeJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(kernelJVM, coreJVM, freeJVM, alleycatsCoreJVM),
   docsMappingsAPIDir := "api",
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   ghpagesNoJekyll := false,
