@@ -12,11 +12,6 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps[M, A](ma)
 
-  implicit final def catsSyntaxParallelTraverse_[T[_]: Foldable, A]
-  (ta: T[A]): ParallelTraversable_Ops[T, A] = new ParallelTraversable_Ops[T, A](ta)
-
-  implicit final def catsSyntaxParallelSequence_[T[_]: Foldable, M[_], A]
-  (tma: T[M[A]]): ParallelSequence_Ops[T, M, A] = new ParallelSequence_Ops[T, M, A](tma)
 }
 
 trait ParallelFlatSyntax {
@@ -25,6 +20,14 @@ trait ParallelFlatSyntax {
 
   implicit final def catsSyntaxParallelFlatSequence[T[_]: Traverse: FlatMap, M[_]: Monad, A]
   (tmta: T[M[T[A]]]): ParallelFlatSequenceOps[T, M, A] = new ParallelFlatSequenceOps[T, M, A](tmta)
+}
+
+trait ParallelTraverseSyntax {
+  implicit final def catsSyntaxParallelTraverse_[T[_]: Foldable, A]
+  (ta: T[A]): ParallelTraversable_Ops[T, A] = new ParallelTraversable_Ops[T, A](ta)
+
+  implicit final def catsSyntaxParallelSequence_[T[_]: Foldable, M[_], A]
+  (tma: T[M[A]]): ParallelSequence_Ops[T, M, A] = new ParallelSequence_Ops[T, M, A](tma)
 }
 
 final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
