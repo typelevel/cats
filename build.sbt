@@ -203,7 +203,11 @@ lazy val docSettings = Seq(
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
-  ),
+  ) ++ (if(priorTo2_13(scalaVersion.value)) Seq(
+    "-Yno-adapted-args",
+  ) else Seq(
+    "-Ymacro-annotations"
+  )),
   scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
@@ -668,7 +672,7 @@ def priorTo2_13(scalaVersion: String): Boolean =
   }
 
 lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := true,
+  releaseCrossBuild := false,
   releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseVcsSign := true,
