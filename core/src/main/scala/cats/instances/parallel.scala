@@ -28,7 +28,7 @@ trait ParallelInstances extends ParallelInstances1 {
 
     def applicative: Applicative[Nested[F, Option, ?]] = cats.data.Nested.catsDataApplicativeForNested[F, Option]
 
-    def monad: Monad[OptionT[M, ?]] = cats.data.OptionT.catsDataMonadForOptionT[M]
+    def monad: Monad[OptionT[M, ?]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
     def sequential: Nested[F, Option, ?] ~> OptionT[M, ?] =
       λ[Nested[F, Option, ?] ~> OptionT[M, ?]](nested => OptionT(P.sequential(nested.value)))

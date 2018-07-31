@@ -275,7 +275,7 @@ class NonEmptyListSuite extends CatsSuite {
 
   test("NonEmptyList#groupBy is consistent with List#groupBy") {
     forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
-      nel.groupBy(f).mapValues(_.toList) should === (nel.toList.groupBy(f))
+      nel.groupBy(f).map{ case (k, v) => (k, v.toList) } should === (nel.toList.groupBy(f))
     }
   }
 

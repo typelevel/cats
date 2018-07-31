@@ -227,7 +227,7 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test("Foldable[SortedSet].foldM stack safety") {
-    checkFoldMStackSafety[SortedSet](_.to)
+    checkFoldMStackSafety[SortedSet](s => SortedSet(s:_*))
   }
 
   test("Foldable[SortedMap[String, ?]].foldM stack safety") {

@@ -416,25 +416,28 @@ private[data] abstract class IorTInstances extends IorTInstances1 {
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }
 
   implicit def catsDataParallelForIorTWithParallelEffect[M[_], F[_], E]
-    (implicit P: Parallel[M, F], E: Semigroup[E]): Parallel[IorT[M, E, ?], IorT[F, E, ?]] = new Parallel[IorT[M, E, ?], IorT[F, E, ?]]
-  {
-    val parallel: IorT[M, E, ?] ~> IorT[F, E, ?] = λ[IorT[M, E, ?] ~> IorT[F, E, ?]](fm => IorT(P.parallel(fm.value)))
-    val sequential: IorT[F, E, ?] ~> IorT[M, E, ?] = λ[IorT[F, E, ?] ~> IorT[M, E, ?]](ff => IorT(P.sequential(ff.value)))
+    (implicit P: Parallel[M, F], E: Semigroup[E])
+    : Parallel[IorT[M, E, ?], IorT[F, E, ?]] { type Dummy }
+    = new Parallel[IorT[M, E, ?], IorT[F, E, ?]] {
+      type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
 
-    private[this] val FA: Applicative[F] = P.applicative
-    private[this] val IorA: Applicative[Ior[E, ?]] = Parallel[Ior[E, ?], Ior[E, ?]].applicative
+      val parallel: IorT[M, E, ?] ~> IorT[F, E, ?] = λ[IorT[M, E, ?] ~> IorT[F, E, ?]](fm => IorT(P.parallel(fm.value)))
+      val sequential: IorT[F, E, ?] ~> IorT[M, E, ?] = λ[IorT[F, E, ?] ~> IorT[M, E, ?]](ff => IorT(P.sequential(ff.value)))
 
-    val applicative: Applicative[IorT[F, E, ?]] = new Applicative[IorT[F, E, ?]] {
-      def pure[A](a: A): IorT[F, E, A] = IorT.pure(a)(FA)
-      def ap[A, B](ff: IorT[F, E, A => B])(fa: IorT[F, E, A]): IorT[F, E, B] =
-        IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
+      private[this] val FA: Applicative[F] = P.applicative
+      private[this] val IorA: Applicative[Ior[E, ?]] = Parallel[Ior[E, ?], Ior[E, ?]].applicative
+
+      val applicative: Applicative[IorT[F, E, ?]] = new Applicative[IorT[F, E, ?]] {
+        def pure[A](a: A): IorT[F, E, A] = IorT.pure(a)(FA)
+        def ap[A, B](ff: IorT[F, E, A => B])(fa: IorT[F, E, A]): IorT[F, E, B] =
+          IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
+      }
+
+      lazy val monad: Monad[IorT[M, E, ?]] = {
+        implicit def underlyingMonadM: Monad[M] = P.monad
+        Monad[IorT[M, E, ?]]
+      }
     }
-
-    lazy val monad: Monad[IorT[M, E, ?]] = {
-      implicit def underlyingMonadM: Monad[M] = P.monad
-      Monad[IorT[M, E, ?]]
-    }
-  }
 
   implicit def catsDataDeferForIor[F[_], E](implicit F: Defer[F]): Defer[IorT[F, E, ?]] =
     new Defer[IorT[F, E, ?]] {
@@ -457,8 +460,7 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
     }
 
   implicit def catsDataParallelForIorTWithSequentialEffect[F[_], E]
-    (implicit F: Monad[F], E: Semigroup[E]): Parallel[IorT[F, E, ?], IorT[F, E, ?]] = new Parallel[IorT[F, E, ?], IorT[F, E, ?]]
-  {
+    (implicit F: Monad[F], E: Semigroup[E]): Parallel[IorT[F, E, ?], IorT[F, E, ?]] = new Parallel[IorT[F, E, ?], IorT[F, E, ?]] {
     private[this] val identityK: IorT[F, E, ?] ~> IorT[F, E, ?] = FunctionK.id
     private[this] val underlyingParallel: Parallel[Ior[E, ?], Ior[E, ?]] =
       Parallel[Ior[E, ?], Ior[E, ?]]

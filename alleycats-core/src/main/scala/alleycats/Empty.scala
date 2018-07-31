@@ -21,10 +21,7 @@ object Empty extends EmptyInstances0 {
     new Empty[A] { lazy val empty: A = a }
 }
 
-trait EmptyInstances0 extends EmptyInstances1 {
-  implicit def iterableIsEmpty[CC[X] <: Iterable[X], A](implicit cbf: CanBuildFrom[CC[A], A, CC[A]]): Empty[CC[A]] =
-    Empty(cbf().result)
-}
+trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1
 
 trait EmptyInstances1 extends EmptyInstances2 {
   // If Monoid extended Empty then this could be an exported subclass instance provided by Monoid
