@@ -53,6 +53,18 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
   }
 
+  test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
+    forAll { es: SortedSet[Either[String, Int]] =>
+      Parallel.parTraverse_(es)(identity) should === (es.parTraverse_(identity))
+    }
+  }
+
+  test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
+    forAll { es: SortedSet[Either[String, Int]] =>
+      Parallel.parSequence_(es) should === (es.parSequence_)
+    }
+  }
+
   test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
     forAll { es: NonEmptyVector[Either[String, Int]] =>
       Parallel.parNonEmptyTraverse(es)(identity) should === (Parallel.parNonEmptySequence(es))
