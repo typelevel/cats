@@ -18,10 +18,6 @@ class SetSuite extends CatsSuite {
   test("show"){
     Set(1, 1, 2, 3).show should === ("Set(1, 2, 3)")
     Set.empty[String].show should === ("Set()")
-
-    forAll { fs: Set[String] =>
-      fs.show should === (fs.toString)
-    }
   }
 
   test("show keeps separate entries for items that map to identical strings"){

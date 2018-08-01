@@ -136,8 +136,11 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
     * Applies f to all the elements
     */
-  def map[B](f: A => B)(implicit B: Order[B]): NonEmptySet[B] =
-    NonEmptySetImpl.create(SortedSet(toSortedSet.map(f).to: _*)(B.toOrdering))
+  def map[B](f: A => B)(implicit B: Order[B]): NonEmptySet[B] = {
+    implicit val bOrdering = B.toOrdering
+    NonEmptySetImpl.create(toSortedSet.map(f))
+  }
+
 
   /**
     * Converts this set to a `NonEmptyList`.
@@ -338,14 +341,17 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     * res0: cats.data.NonEmptySet[String] = TreeSet(1A, 2B, 3C)
     * }}}
     */
-  def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] =
-    NonEmptySetImpl.create(SortedSet((toSortedSet, b.toSortedSet).zipped.map(f).to: _*)(C.toOrdering))
+  def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
+    implicit val cOrdering = C.toOrdering
+    NonEmptySetImpl.create((toSortedSet, b.toSortedSet).zipped.map(f))
+  }
 
   /**
     * Zips this `NonEmptySet` with its index.
     */
-  def zipWithIndex: NonEmptySet[(A, Int)] =
-    NonEmptySetImpl.create(toSortedSet.zipWithIndex)
+  def zipWithIndex: NonEmptySet[(A, Int)] = {
+    NonEmptySetImpl.create(cats.compat.SortedSet.zipWithIndex(toSortedSet))
+  }
 
   /**
     * Groups elements inside this `NonEmptySet` according to the `Order`

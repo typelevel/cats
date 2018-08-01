@@ -36,7 +36,7 @@ class ListSuite extends CatsSuite {
 
   test("groupByNel should be consistent with groupBy")(
     forAll { (fa: List[Int], f: Int => Int) =>
-      fa.groupByNel(f).mapValues(_.toList) should === (fa.groupBy(f))
+      fa.groupByNel(f).map{ case (k, v) => (k, v.toList)} should === (fa.groupBy(f))
     }
   )
 

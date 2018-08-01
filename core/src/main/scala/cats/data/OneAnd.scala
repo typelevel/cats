@@ -139,15 +139,6 @@ private[data] sealed abstract class OneAndInstances extends OneAndLowPriority0 {
   implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
-  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
-    new NonEmptyReducible[OneAnd[F, ?], F] {
-      override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
-
-      override def get[A](fa: OneAnd[F, A])(idx: Long): Option[A] =
-        if (idx == 0L) Some(fa.head) else F.get(fa.tail)(idx - 1L)
-
-      override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
-    }
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit monad: Monad[F], alternative: Alternative[F]): Monad[OneAnd[F, ?]] =
     new Monad[OneAnd[F, ?]] {
@@ -269,9 +260,19 @@ private[data] sealed abstract class OneAndLowPriority1 extends OneAndLowPriority
     }
 }
 
+private[data] sealed abstract class OneAndLowPriority0_5 extends OneAndLowPriority1 {
+  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, ?]] =
+    new NonEmptyReducible[OneAnd[F, ?], F] {
+      override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
 
-private[data] sealed abstract class OneAndLowPriority0 extends OneAndLowPriority1 {
+      override def get[A](fa: OneAnd[F, A])(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa.head) else F.get(fa.tail)(idx - 1L)
 
+      override def size[A](fa: OneAnd[F, A]): Long = 1 + F.size(fa.tail)
+    }
+}
+
+private[data] sealed abstract class OneAndLowPriority0 extends OneAndLowPriority0_5 {
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F], F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, ?]] =
     new NonEmptyReducible[OneAnd[F, ?], F] with NonEmptyTraverse[OneAnd[F, ?]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
