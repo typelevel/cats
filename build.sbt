@@ -44,9 +44,13 @@ lazy val commonSettings = Seq(
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if(priorTo2_13(scalaVersion.value)) unchanged else Nil
+  },
+  //todo: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
+  sources in (Compile, doc) := {
+    val docSource = (sources in (Compile, doc)).value
+    if (priorTo2_13(scalaVersion.value)) docSource else Nil
   }
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
-
 
 
 def macroDependencies(scalaVersion: String) =
@@ -203,7 +207,11 @@ lazy val docSettings = Seq(
     "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
-  ),
+  ) ++ (if(priorTo2_13(scalaVersion.value)) Seq(
+    "-Yno-adapted-args",
+  ) else Seq(
+    "-Ymacro-annotations"
+  )),
   scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
