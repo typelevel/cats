@@ -676,7 +676,7 @@ def priorTo2_13(scalaVersion: String): Boolean =
   }
 
 lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := false,
+  releaseCrossBuild := true,
   releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseVcsSign := true,
