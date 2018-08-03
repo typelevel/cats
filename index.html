@@ -22,7 +22,7 @@ standard library. Cats strives to provide functional programming abstractions th
 
 <h3 id="getting-started">Getting Started</h3>
 
-<p>Cats is currently available for Scala 2.10, 2.11 and 2.12, and <a href="http://www.scala-js.org/">Scala.js</a>.</p>
+<p>Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-M4,  and <a href="http://www.scala-js.org/">Scala.js</a>.</p>
 
 <p>Cats relies on improved type inference via the fix for <a href="https://github.com/scala/bug/issues/2712">SI-2712</a>, which is not enabled by default. For <strong>Scala 2.11.9 or later</strong> you should add the following to your <code class="highlighter-rouge">build.sbt</code>:</p>
 
@@ -63,6 +63,7 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/typelevel/cats-effect"><code class="highlighter-rouge">cats-effect</code></a>: standard <code class="highlighter-rouge">IO</code> type together with <code class="highlighter-rouge">Sync</code>, <code class="highlighter-rouge">Async</code> and <code class="highlighter-rouge">Effect</code> type classes</li>
   <li><a href="https://github.com/typelevel/cats-mtl"><code class="highlighter-rouge">cats-mtl</code></a>: transformer typeclasses for Cats’ Monads, Applicatives and Functors.</li>
   <li><a href="https://github.com/typelevel/mouse"><code class="highlighter-rouge">mouse</code></a>: a small companion to Cats that provides convenient syntax (aka extension methods)</li>
+  <li><a href="https://github.com/typelevel/kittens"><code class="highlighter-rouge">kittens</code></a>: automatic type class instance derivation for Cats and generic utility functions</li>
 </ul>
 
 <p>Release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/master/CHANGES.md">CHANGES.md</a>.</p>

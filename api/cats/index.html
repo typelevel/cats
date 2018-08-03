@@ -905,18 +905,20 @@ and Semigroupal. It comes up enough to be useful, and composes well
 inside of the type constructor F[_].</p><div class="fullcomment"><div class="comment cmt"><p>Defer is a type class that shows the ability to defer creation
 inside of the type constructor F[_].</p><p>This comes up with F[_] types that are implemented with a trampoline
 or are based on function application.</p><p>The law is that defer(fa) is equivalent to fa, but not evaluated immediately,
-so</p><pre><span class="kw">import</span> cats._
-<span class="kw">import</span> cats.implicits._
+so</p><pre>scala&gt; <span class="kw">import</span> cats._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
-<span class="kw">var</span> evaluated = <span class="kw">false</span>
-<span class="kw">val</span> dfa =
-  Defer[Eval].defer {
-    evaluated = <span class="kw">true</span>
-    Eval.now(<span class="num">21</span>)
-   }
+scala&gt; <span class="kw">var</span> evaluated = <span class="kw">false</span>
+scala&gt; <span class="kw">val</span> dfa = Defer[Eval].defer {
+     |   evaluated = <span class="kw">true</span>
+     |   Eval.now(<span class="num">21</span>)
+     | }
 
-assert(!evaluated)
-Eq[Eval[<span class="std">Int</span>]].eqv(dfa, Eval.now(<span class="num">21</span>))</pre></div></div>
+scala&gt; evaluated
+res0: <span class="std">Boolean</span> = <span class="kw">false</span>
+
+scala&gt; Eq[Eval[<span class="std">Int</span>]].eqv(dfa, Eval.now(<span class="num">21</span>))
+res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div></div>
     </li><li name="cats.Distributive" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Distributive[F[_]]extendsFunctor[F]withSerializable"></a><a id="Distributive[F[_]]:Distributive[F]"></a>
       <span class="permalink">

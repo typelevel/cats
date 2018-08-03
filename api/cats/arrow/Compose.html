@@ -168,8 +168,14 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ComposeLaws.
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Compose.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/arrow/Compose.scala" target="_blank">Compose.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ComposeLaws.</p><p>Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ + <span class="num">1</span>)
+scala&gt; <span class="kw">val</span> g : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ * <span class="num">100</span>)
+scala&gt; (f &gt;&gt;&gt; g)(<span class="num">3</span>)
+res0: <span class="std">Int</span> = <span class="num">400</span>
+scala&gt; (f &lt;&lt;&lt; g)(<span class="num">3</span>)
+res1: <span class="std">Int</span> = <span class="num">301</span></pre></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.arrow.Compose">Compose</a>[<span class="extype" name="cats.arrow.Compose.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/arrow/Compose.scala" target="_blank">Compose.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -228,7 +234,7 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="cats.arrow.Compose#compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="cats.arrow.Compose#compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="compose[A,B,C](f:F[B,C],g:F[A,B]):F[A,C]"></a><a id="compose[A,B,C](F[B,C],F[A,B]):F[A,C]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/Compose.html#compose[A,B,C](f:F[B,C],g:F[A,B]):F[A,C]" title="Permalink">
@@ -243,24 +249,7 @@
         <span class="name">compose</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Compose.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.B">B</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Compose.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Compose.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
-Example:</p><div class="fullcomment"><div class="comment cmt"><p>Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
-Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> f : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ + <span class="num">1</span>)
-scala&gt; <span class="kw">val</span> g : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ * <span class="num">100</span>)
-scala&gt; (f &gt;&gt;&gt; g)(<span class="num">3</span>)
-res0: <span class="std">Int</span> = <span class="num">400</span>
-scala&gt; (f &lt;&lt;&lt; g)(<span class="num">3</span>)
-res1: <span class="std">Int</span> = <span class="num">301</span></pre></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@op</span><span class="args">(<span>
       
-      <span class="symbol">&quot;&lt;&lt;&lt;&quot;</span>
-    </span>, <span>
-      
-      <span class="symbol">true</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.Any#getClass" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">

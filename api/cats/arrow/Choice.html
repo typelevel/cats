@@ -280,24 +280,7 @@ res0: <span class="std">String</span> = <span class="kw">false</span> is a boole
         <span class="name">compose</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.B">B</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>, <span name="g">g: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.Choice.F">F</span>[<span class="extype" name="cats.arrow.Compose.compose.A">A</span>, <span class="extype" name="cats.arrow.Compose.compose.C">C</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
-Example:</p><div class="fullcomment"><div class="comment cmt"><p>Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
-Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
-scala&gt; <span class="kw">val</span> f : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ + <span class="num">1</span>)
-scala&gt; <span class="kw">val</span> g : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ * <span class="num">100</span>)
-scala&gt; (f &gt;&gt;&gt; g)(<span class="num">3</span>)
-res0: <span class="std">Int</span> = <span class="num">400</span>
-scala&gt; (f &lt;&lt;&lt; g)(<span class="num">3</span>)
-res1: <span class="std">Int</span> = <span class="num">301</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@op</span><span class="args">(<span>
-      
-      <span class="symbol">&quot;&lt;&lt;&lt;&quot;</span>
-    </span>, <span>
-      
-      <span class="symbol">true</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Compose.html" class="extype" name="cats.arrow.Compose">Compose</a></dd></dl></div>
     </li><li name="cats.arrow.Category#id" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id[A]:F[A,A]"></a>
       <span class="permalink">

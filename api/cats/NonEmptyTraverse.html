@@ -597,7 +597,7 @@ returning an F[B] in a G context.</p><div class="fullcomment"><div class="commen
 through the running of this function on all the values in F,
 returning an F[B] in a G context.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
 scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
-scala&gt; <span class="kw">def</span> countWords(words: <span class="std">List</span>[<span class="std">String</span>]): <span class="std">Map</span>[<span class="std">String</span>, <span class="std">Int</span>] = words.groupBy(identity).mapValues(_.length)
+scala&gt; <span class="kw">def</span> countWords(words: <span class="std">List</span>[<span class="std">String</span>]): <span class="std">Map</span>[<span class="std">String</span>, <span class="std">Int</span>] = words.groupBy(identity).map { <span class="kw">case</span> (k, v) <span class="kw">=&gt;</span> (k, v.length) }
 scala&gt; NonEmptyList.of(<span class="std">List</span>(<span class="lit">"How"</span>, <span class="lit">"do"</span>, <span class="lit">"you"</span>, <span class="lit">"fly"</span>), <span class="std">List</span>(<span class="lit">"What"</span>, <span class="lit">"do"</span>, <span class="lit">"you"</span>, <span class="lit">"do"</span>)).nonEmptyTraverse(countWords)
 res0: <span class="std">Map</span>[<span class="std">String</span>,cats.data.NonEmptyList[<span class="std">Int</span>]] = <span class="std">Map</span>(<span class="kw">do</span> -&gt; NonEmptyList(<span class="num">1</span>, <span class="num">2</span>), you -&gt; NonEmptyList(<span class="num">1</span>, <span class="num">1</span>))</pre></div></div>
     </li><li name="cats.Reducible#reduceLeftTo" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">

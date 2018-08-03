@@ -380,7 +380,7 @@
 which means that there is non-interference between the effect of the paired arrows.</p><div class="fullcomment"><div class="comment cmt"><p>In a Commutative Arrow F[_, _], the split operation (or <code>***</code>) is commutative,
 which means that there is non-interference between the effect of the paired arrows.</p><p>Must obey the laws in CommutativeArrowLaws
 </p></div></div>
-    </li><li name="cats.arrow.Compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.arrow.Compose" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Compose[F[_,_]]extendsAnywithSerializable"></a><a id="Compose[F[_,_]]:Compose[F]"></a>
       <span class="permalink">
       <a href="../../cats/arrow/index.html#Compose[F[_,_]]extendsAnywithSerializable" title="Permalink">
@@ -395,7 +395,14 @@ which means that there is non-interference between the effect of the paired arro
         <a title="Must obey the laws defined in cats.laws.ComposeLaws." href="Compose.html"><span class="name">Compose</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
-      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComposeLaws.</p>
+      <p class="shortcomment cmt">Must obey the laws defined in cats.laws.ComposeLaws.</p><div class="fullcomment"><div class="comment cmt"><p>Must obey the laws defined in cats.laws.ComposeLaws.</p><p>Here's how you can use <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code>
+Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> f : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ + <span class="num">1</span>)
+scala&gt; <span class="kw">val</span> g : <span class="std">Int</span> <span class="kw">=&gt;</span> <span class="std">Int</span> = (_ * <span class="num">100</span>)
+scala&gt; (f &gt;&gt;&gt; g)(<span class="num">3</span>)
+res0: <span class="std">Int</span> = <span class="num">400</span>
+scala&gt; (f &lt;&lt;&lt; g)(<span class="num">3</span>)
+res1: <span class="std">Int</span> = <span class="num">301</span></pre></div></div>
     </li><li name="cats.arrow.FunctionK" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FunctionK[F[_],G[_]]extendsSerializable"></a><a id="FunctionK[F[_],G[_]]:FunctionK[F,G]"></a>
       <span class="permalink">

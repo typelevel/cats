@@ -455,18 +455,20 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Defer is a type class that shows the ability to defer creation
 inside of the type constructor F[_].</p><p>This comes up with F[_] types that are implemented with a trampoline
 or are based on function application.</p><p>The law is that defer(fa) is equivalent to fa, but not evaluated immediately,
-so</p><pre><span class="kw">import</span> cats._
-<span class="kw">import</span> cats.implicits._
+so</p><pre>scala&gt; <span class="kw">import</span> cats._
+scala&gt; <span class="kw">import</span> cats.implicits._
 
-<span class="kw">var</span> evaluated = <span class="kw">false</span>
-<span class="kw">val</span> dfa =
-  Defer[Eval].defer {
-    evaluated = <span class="kw">true</span>
-    Eval.now(<span class="num">21</span>)
-   }
+scala&gt; <span class="kw">var</span> evaluated = <span class="kw">false</span>
+scala&gt; <span class="kw">val</span> dfa = Defer[Eval].defer {
+     |   evaluated = <span class="kw">true</span>
+     |   Eval.now(<span class="num">21</span>)
+     | }
 
-assert(!evaluated)
-Eq[Eval[<span class="std">Int</span>]].eqv(dfa, Eval.now(<span class="num">21</span>))</pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Defer.scala" target="_blank">Defer.scala</a></dd></dl><div class="toggleContainer block">
+scala&gt; evaluated
+res0: <span class="std">Boolean</span> = <span class="kw">false</span>
+
+scala&gt; Eq[Eval[<span class="std">Int</span>]].eqv(dfa, Eval.now(<span class="num">21</span>))
+res1: <span class="std">Boolean</span> = <span class="kw">true</span></pre></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/Defer.scala" target="_blank">Defer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
