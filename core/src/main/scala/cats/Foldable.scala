@@ -470,6 +470,18 @@ import Foldable.sentinel
   }
 
   /**
+    * Find the first element matching the effectful predicate, if one exists.
+    */
+  def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] = {
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
+      src => src.uncons match {
+        case Some((a, src)) => G.map(p(a))(bb => if (bb) Right(Some(a)) else Left(src.value))
+        case None => G.pure(Right(Option.empty[A]))
+      }
+    }
+  }
+
+  /**
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =

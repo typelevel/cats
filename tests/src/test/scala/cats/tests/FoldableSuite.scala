@@ -85,13 +85,14 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
     }
   }
 
-  test(s"Foldable[$name].find/exists/forall/existsM/forallM/filter_/dropWhile_") {
+  test(s"Foldable[$name].find/exists/forall/existsM/forallM/findM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
       fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
       fa.existsM(k => Option(k > n)) should === (Option(iterator(fa).exists(_ > n)))
       fa.forallM(k => Option(k > n)) should === (Option(iterator(fa).forall(_ > n)))
+      fa.findM(k => Option(k > n)) should === (Option(iterator(fa).find(_ > n)))
       fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
       fa.dropWhile_(_ > n) should === (iterator(fa).dropWhile(_ > n).toList)
       fa.takeWhile_(_ > n) should === (iterator(fa).takeWhile(_ > n).toList)
