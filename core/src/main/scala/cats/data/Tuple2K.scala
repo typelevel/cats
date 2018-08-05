@@ -16,6 +16,7 @@ final case class Tuple2K[F[_], G[_], A](first: F[A], second: G[A]) {
   def mapK[H[_]](f: G ~> H): Tuple2K[F, H, A] =
     Tuple2K(first, f(second))
 
+  def swap: Tuple2K[G, F, A] = Tuple2K(second, first)
 }
 
 object Tuple2K extends Tuple2KInstances
