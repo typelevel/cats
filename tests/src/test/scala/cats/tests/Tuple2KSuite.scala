@@ -114,4 +114,12 @@ class Tuple2KSuite extends CatsSuite {
     }
   }
 
+  test("double swap is identity") {
+    forAll { (l1: Option[String], l2: List[String]) =>
+      val tuple = Tuple2K(l1, l2)
+
+      tuple.swap.swap should === (tuple)
+    }
+  }
+
 }
