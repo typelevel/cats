@@ -34,7 +34,7 @@ scalacOptions += "-Ypartial-unification"
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.2.0")
+addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 ```
 
 And then create the Cats dependency, by adding the following to your `build.sbt`:
