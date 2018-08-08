@@ -183,6 +183,14 @@ Any binary breaking changes will require a *MAJOR* version bump, which we will b
 cautious about. We will also consider using `organization` and package name for major 
 versioning in the future. But that decision is yet to be made. 
 
+### Adopters
+
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [Add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
+
+- Codecentric
+- Stripe
+- Verizon
+
 ### Maintainers
 
 The current maintainers (people who can merge pull requests) are:
