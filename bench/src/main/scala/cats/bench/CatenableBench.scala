@@ -1,8 +1,6 @@
 package cats.bench
 
 import cats.data.Catenable
-import cats.implicits._
-
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Thread)
@@ -47,8 +45,4 @@ class CatenableBenchmark {
   @Benchmark def createSmallCatenable: Catenable[Int] = Catenable(1, 2, 3, 4, 5)
   @Benchmark def createSmallVector: Vector[Int] = Vector(1, 2, 3, 4, 5)
   @Benchmark def createSmallList: List[Int] = List(1, 2, 3, 4, 5)
-
-  @Benchmark def accumulateCatenable: Catenable[Int] = largeList.foldMap(Catenable.singleton)
-  @Benchmark def accumulateVector: Vector[Int] = largeList.foldMap(Vector(_))
-  @Benchmark def accumulateList: List[Int] = largeList.foldMap(List(_))
 }
