@@ -190,10 +190,10 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - Codecentric
 - DriveTribe
 - e.near
+- formation.ai
 - iHeartRadio
 - Scala Center
 - Stripe
-- Verizon
 
 ### Maintainers
 
