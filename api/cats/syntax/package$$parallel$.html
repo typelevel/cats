@@ -120,6 +120,10 @@
                         <a href="AllSyntaxBinCompat1.html" title="">AllSyntaxBinCompat1</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="AllSyntaxBinCompat2.html" title=""></a>
+                        <a href="AllSyntaxBinCompat2.html" title="">AllSyntaxBinCompat2</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AlternativeSyntax.html" title=""></a>
                         <a href="AlternativeSyntax.html" title="">AlternativeSyntax</a>
                       </li><li class="current-entities indented2">
@@ -452,12 +456,24 @@
                         <a href="ParallelSequenceOps.html" title="">ParallelSequenceOps</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="ParallelSequence_Ops.html" title=""></a>
+                        <a href="ParallelSequence_Ops.html" title="">ParallelSequence_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="ParallelSyntax.html" title=""></a>
                         <a href="ParallelSyntax.html" title="">ParallelSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="ParallelTraversableOps.html" title=""></a>
                         <a href="ParallelTraversableOps.html" title="">ParallelTraversableOps</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ParallelTraversable_Ops.html" title=""></a>
+                        <a href="ParallelTraversable_Ops.html" title="">ParallelTraversable_Ops</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParallelTraverseSyntax.html" title=""></a>
+                        <a href="ParallelTraverseSyntax.html" title="">ParallelTraverseSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="PartialOrderOps.html" title=""></a>
@@ -821,7 +837,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">parallel</span><span class="result"> extends <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></span>
+        <span class="name">parallel</span><span class="result"> extends <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a> with <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></span>
       </span>
       </h4>
 
@@ -830,7 +846,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a>, <a href="TupleParallelSyntax.html" class="extype" name="cats.syntax.TupleParallelSyntax">TupleParallelSyntax</a>, <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a>, <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a>, <a href="TupleParallelSyntax.html" class="extype" name="cats.syntax.TupleParallelSyntax">TupleParallelSyntax</a>, <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -856,7 +872,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.syntax.parallel"><span>parallel</span></li><li class="in" name="cats.syntax.ParallelSyntax"><span>ParallelSyntax</span></li><li class="in" name="cats.syntax.TupleParallelSyntax"><span>TupleParallelSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.syntax.parallel"><span>parallel</span></li><li class="in" name="cats.syntax.ParallelTraverseSyntax"><span>ParallelTraverseSyntax</span></li><li class="in" name="cats.syntax.ParallelSyntax"><span>ParallelSyntax</span></li><li class="in" name="cats.syntax.TupleParallelSyntax"><span>TupleParallelSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -979,6 +995,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></dd></dl></div>
+    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelSequence_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]"></a><a id="catsSyntaxParallelSequence_[T[_],M[_],A](T[M[A]])(Foldable[T]):ParallelSequence_Ops[T,M,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$parallel$.html#catsSyntaxParallelSequence_[T[_],M[_],A](tma:T[M[A]])(implicitevidence$11:cats.Foldable[T]):cats.syntax.ParallelSequence_Ops[T,M,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxParallelSequence_</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="tma">tma: <span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.T">T</span>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.M">M</span>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.A">A</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.T">T</span>]</span>)</span><span class="result">: <a href="ParallelSequence_Ops.html" class="extype" name="cats.syntax.ParallelSequence_Ops">ParallelSequence_Ops</a>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.T">T</span>, <span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.M">M</span>, <span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelSequence_.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.ParallelSyntax#catsSyntaxParallelTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsSyntaxParallelTraverse[T[_],A](ta:T[A])(implicitevidence$1:cats.Traverse[T]):cats.syntax.ParallelTraversableOps[T,A]"></a><a id="catsSyntaxParallelTraverse[T[_],A](T[A])(Traverse[T]):ParallelTraversableOps[T,A]"></a>
       <span class="permalink">
@@ -995,6 +1027,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></dd></dl></div>
+    </li><li name="cats.syntax.ParallelTraverseSyntax#catsSyntaxParallelTraverse_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]"></a><a id="catsSyntaxParallelTraverse_[T[_],A](T[A])(Foldable[T]):ParallelTraversable_Ops[T,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/package$$parallel$.html#catsSyntaxParallelTraverse_[T[_],A](ta:T[A])(implicitevidence$10:cats.Foldable[T]):cats.syntax.ParallelTraversable_Ops[T,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsSyntaxParallelTraverse_</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="ta">ta: <span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelTraverse_.T">T</span>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelTraverse_.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelTraverse_.T">T</span>]</span>)</span><span class="result">: <a href="ParallelTraversable_Ops.html" class="extype" name="cats.syntax.ParallelTraversable_Ops">ParallelTraversable_Ops</a>[<span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelTraverse_.T">T</span>, <span class="extype" name="cats.syntax.ParallelTraverseSyntax.catsSyntaxParallelTraverse_.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></dd></dl></div>
     </li><li name="cats.syntax.TupleParallelSyntax#catsSyntaxTuple10Parallel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsSyntaxTuple10Parallel[M[_],A0,A1,A2,A3,A4,A5,A6,A7,A8,A9](t10:(M[A0],M[A1],M[A2],M[A3],M[A4],M[A5],M[A6],M[A7],M[A8],M[A9])):cats.syntax.Tuple10ParallelOps[M,A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]"></a><a id="catsSyntaxTuple10Parallel[M[_],A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]((M[A0],M[A1],M[A2],M[A3],M[A4],M[A5],M[A6],M[A7],M[A8],M[A9])):Tuple10ParallelOps[M,A0,A1,A2,A3,A4,A5,A6,A7,A8,A9]"></a>
       <span class="permalink">
@@ -1643,7 +1691,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.syntax.ParallelSyntax">
+        <div class="parent" name="cats.syntax.ParallelTraverseSyntax">
+              <h3>Inherited from <a href="ParallelTraverseSyntax.html" class="extype" name="cats.syntax.ParallelTraverseSyntax">ParallelTraverseSyntax</a></h3>
+            </div><div class="parent" name="cats.syntax.ParallelSyntax">
               <h3>Inherited from <a href="ParallelSyntax.html" class="extype" name="cats.syntax.ParallelSyntax">ParallelSyntax</a></h3>
             </div><div class="parent" name="cats.syntax.TupleParallelSyntax">
               <h3>Inherited from <a href="TupleParallelSyntax.html" class="extype" name="cats.syntax.TupleParallelSyntax">TupleParallelSyntax</a></h3>
