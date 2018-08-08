@@ -83,12 +83,49 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Collect `B` from this for which `f` is defined */
-  final def collect[B](f: PartialFunction[A, B]): Catenable[B] = {
-    val predicate = f.lift
+  final def collect[B](pf: PartialFunction[A, B]): Catenable[B] =
     foldLeft(Catenable.empty: Catenable[B]) { (acc, a) =>
-      predicate(a).fold(acc)(b => acc :+ b)
+      // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) acc :+ x.asInstanceOf[B]
+      else acc
     }
+
+  /** Remove elements not matching the predicate */
+  final def filter(f: A => Boolean): Catenable[A] =
+    collect { case a if f(a) => a }
+
+  /** Remove elements matching the predicate */
+  final def filterNot(f: A => Boolean): Catenable[A] =
+    filter(a => !f(a))
+
+  /** Find the first element matching the predicate, if one exists */
+  final def find(f: A => Boolean): Option[A] = {
+    var result: Option[A] = Option.empty[A]
+    foreachUntil { a =>
+      val b = f(a)
+      if (b) result = Option(a)
+      b
+    }
+    result
   }
+
+  /** Check whether at least one element satisfies the predicate */
+  def exists(f: A => Boolean): Boolean = {
+    var result: Boolean = false
+    foreachUntil { a =>
+      val b = f(a)
+      if (b) result = true
+      b
+    }
+    result
+  }
+
+  /** Check whether all elements satisfy the predicate */
+  def forall(f: A => Boolean): Boolean =
+    exists(a => !f(a))
+
+
 
   /**
    * Yields to Some(a, Catenable[A]) with `a` removed where `f` holds for the first time,
@@ -109,7 +146,11 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Applies the supplied function to each element, left to right. */
-  private final def foreach(f: A => Unit): Unit = {
+  private final def foreach(f: A => Unit): Unit =
+    foreachUntil { a => f(a); false }
+
+  /** Applies the supplied function to each element, left to right, but stops when true is returned */
+  private final def foreachUntil(f: A => Boolean): Unit = {
     var c: Catenable[A] = this
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
     // scalastyle:off null
@@ -123,7 +164,8 @@ sealed abstract class Catenable[+A] {
             rights.trimEnd(1)
           }
         case Singleton(a) =>
-          f(a)
+          val b = f(a)
+          if (b) return ();
           c =
             if (rights.isEmpty) Empty
             else rights.reduceLeft((x, y) => Append(y, x))
@@ -133,6 +175,16 @@ sealed abstract class Catenable[+A] {
     }
     // scalastyle:on null
   }
+
+  /** Returns the number of elements in this structure */
+  final def length: Int = {
+    var i: Int = 0
+    foreach(_ => i += 1)
+    i
+  }
+
+  /** Alias for length */
+  final def size: Int = length
 
 
   /** Converts to a list. */
@@ -170,6 +222,9 @@ sealed abstract class Catenable[+A] {
 }
 
 object Catenable extends CatenableInstances {
+
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+
   private[data] final case object Empty extends Catenable[Nothing] {
     def isEmpty: Boolean = true
   }

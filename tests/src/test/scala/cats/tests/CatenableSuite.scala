@@ -26,4 +26,34 @@ class CatenableSuite extends CatsSuite {
       l.show should === (l.toString)
     }
   }
+
+  test("size is consistent with toList.size") {
+    forAll { (ci: Catenable[Int]) =>
+      ci.size should === (ci.toList.size)
+    }
+  }
+
+  test("filterNot and then forall should always be false") {
+    forAll { (ci: Catenable[Int], f: Int => Boolean) =>
+      ci.filterNot(f).exists(f) === false
+    }
+  }
+
+  test("exists should be consistent with find + isDefined") {
+    forAll { (ci: Catenable[Int], f: Int => Boolean) =>
+      ci.exists(f) === ci.find(f).isDefined
+    }
+  }
+
+  test("Always nonempty after cons") {
+    forAll { (ci: Catenable[Int], i: Int) =>
+      ci.cons(i).nonEmpty === true
+    }
+  }
+
+  test("fromSeq . toVector is id") {
+    forAll { (ci: Catenable[Int]) =>
+      Catenable.fromSeq(ci.toVector) === ci
+    }
+  }
 }
