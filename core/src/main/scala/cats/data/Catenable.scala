@@ -18,6 +18,7 @@ sealed abstract class Catenable[+A] {
   final def uncons: Option[(A, Catenable[A])] = {
     var c: Catenable[A] = this
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+    // scalastyle:off null
     var result: Option[(A, Catenable[A])] = null
     while (result eq null) {
       c match {
@@ -36,6 +37,7 @@ sealed abstract class Catenable[+A] {
         case Append(l, r) => c = l; rights += r
       }
     }
+    // scalastyle:on null
     result
   }
 
@@ -80,7 +82,7 @@ sealed abstract class Catenable[+A] {
     result
   }
 
-  /** collect `B` from this for which `f` is defined **/
+  /** Collect `B` from this for which `f` is defined */
   final def collect[B](f: PartialFunction[A, B]): Catenable[B] = {
     val predicate = f.lift
     foldLeft(Catenable.empty: Catenable[B]) { (acc, a) =>
@@ -110,6 +112,7 @@ sealed abstract class Catenable[+A] {
   private final def foreach(f: A => Unit): Unit = {
     var c: Catenable[A] = this
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+    // scalastyle:off null
     while (c ne null) {
       c match {
         case Empty =>
@@ -128,6 +131,7 @@ sealed abstract class Catenable[+A] {
         case Append(l, r) => c = l; rights += r
       }
     }
+    // scalastyle:on null
   }
 
 
@@ -151,17 +155,21 @@ sealed abstract class Catenable[+A] {
 
   def show[AA >: A](implicit AA: Show[AA]): String = {
     val builder = new StringBuilder("Catenable(")
+    var first = true
+
     foreach { a =>
-      builder ++= AA.show(a) + ", "; ()
+      if (first) { builder ++= AA.show(a); first = false }
+      else builder ++= ", " + AA.show(a)
+      ()
     }
     builder += ')'
     builder.result
   }
 
-  override def toString = show(Show.show[A](_.toString))
+  override def toString: String = show(Show.show[A](_.toString))
 }
 
-object Catenable {
+object Catenable extends CatenableInstances {
   private[data] final case object Empty extends Catenable[Nothing] {
     def isEmpty: Boolean = true
   }
@@ -223,6 +231,8 @@ private[data] sealed abstract class CatenableInstances {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Catenable[A], b: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Foldable[List].foldRight(fa.toList, b)(f)
+
+      override def map[A, B](fa: Catenable[A])(f: A => B): Catenable[B] = fa.map(f)
       override def toList[A](fa: Catenable[A]): List[A] = fa.toList
       override def isEmpty[A](fa: Catenable[A]): Boolean = fa.isEmpty
       def traverse[F[_], A, B](fa: Catenable[A])(f: A => F[B])(
@@ -259,5 +269,10 @@ private[data] sealed abstract class CatenableInstances {
 
   implicit def catsDataShowForCatenable[A](implicit A: Show[A]): Show[Catenable[A]] =
     Show.show[Catenable[A]](_.show)
+
+  implicit def catsDataEqForCatenable[A](implicit A: Eq[A]): Eq[Catenable[A]] = new Eq[Catenable[A]] {
+    def eqv(x: Catenable[A], y: Catenable[A]): Boolean =
+      (x eq y) || x.toList === y.toList
+  }
 
 }

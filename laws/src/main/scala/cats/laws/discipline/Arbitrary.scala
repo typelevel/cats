@@ -276,6 +276,17 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
     Cogen((seed, x) => F.perturb(seed, x))
 
+  implicit def catsLawsArbitraryForCatenable[A](implicit A: Arbitrary[A]): Arbitrary[Catenable[A]] =
+    Arbitrary(Gen.sized {
+      case 0 => Gen.const(Catenable.empty)
+      case 1 => A.arbitrary.map(Catenable.singleton)
+      case 2 => A.arbitrary.flatMap(a1 => A.arbitrary.flatMap(a2 =>
+        Catenable.append(Catenable.singleton(a1), Catenable.singleton(a2))))
+      case n => Catenable.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Catenable.empty: Catenable[A])) { (gen, _) =>
+        gen.flatMap(cat => A.arbitrary.map(a => cat :+ a))
+      }
+    })
+
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
