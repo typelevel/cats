@@ -187,6 +187,10 @@ versioning in the future. But that decision is yet to be made.
 
 Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [Add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
 
+- Apple Inc. (FEAR team)
+- Avast
+- Banno Group inside of Jack Henry & Associates
+- Buildo
 - Codecentric
 - DriveTribe
 - e.near
