@@ -31,7 +31,7 @@ sealed abstract class Catenable[+A] {
           }
         case Singleton(a) =>
           val next =
-            if (rights.isEmpty) empty
+            if (rights.isEmpty) nil
             else rights.reduceLeft((x, y) => Append(y, x))
           result = Some(a -> next)
         case Append(l, r) => c = l; rights += r
@@ -69,11 +69,11 @@ sealed abstract class Catenable[+A] {
 
   /** Applies the supplied function to each element and returns a new catenable. */
   final def map[B](f: A => B): Catenable[B] =
-    foldLeft(empty: Catenable[B])((acc, a) => acc :+ f(a))
+    foldLeft(nil: Catenable[B])((acc, a) => acc :+ f(a))
 
   /** Applies the supplied function to each element and returns a new catenable from the concatenated results */
   final def flatMap[B](f: A => Catenable[B]): Catenable[B] =
-    foldLeft(empty: Catenable[B])((acc, a) => acc ++ f(a))
+    foldLeft(nil: Catenable[B])((acc, a) => acc ++ f(a))
 
   /** Folds over the elements from left to right using the supplied initial value and function. */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
@@ -84,7 +84,7 @@ sealed abstract class Catenable[+A] {
 
   /** Collect `B` from this for which `f` is defined */
   final def collect[B](pf: PartialFunction[A, B]): Catenable[B] =
-    foldLeft(Catenable.empty: Catenable[B]) { (acc, a) =>
+    foldLeft(Catenable.nil: Catenable[B]) { (acc, a) =>
       // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
       val x = pf.applyOrElse(a, sentinel)
       if (x.asInstanceOf[AnyRef] ne sentinel) acc :+ x.asInstanceOf[B]
@@ -111,7 +111,7 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Check whether at least one element satisfies the predicate */
-  def exists(f: A => Boolean): Boolean = {
+  final def exists(f: A => Boolean): Boolean = {
     var result: Boolean = false
     foreachUntil { a =>
       val b = f(a)
@@ -122,9 +122,11 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Check whether all elements satisfy the predicate */
-  def forall(f: A => Boolean): Boolean =
+  final def forall(f: A => Boolean): Boolean =
     exists(a => !f(a))
 
+  final def contains[AA >: A](a: AA)(implicit A: Eq[AA]): Boolean =
+    exists(A.eqv(a, _))
 
 
   /**
@@ -142,7 +144,7 @@ sealed abstract class Catenable[+A] {
 
         case None => None
       }
-    go(this, Catenable.empty)
+    go(this, Catenable.nil)
   }
 
   /** Applies the supplied function to each element, left to right. */
@@ -238,7 +240,9 @@ object Catenable extends CatenableInstances {
   }
 
   /** Empty catenable. */
-  val empty: Catenable[Nothing] = Empty
+  val nil: Catenable[Nothing] = Empty
+
+  def empty[A]: Catenable[A] = nil
 
   /** Creates a catenable of 1 element. */
   def singleton[A](a: A): Catenable[A] = Singleton(a)
@@ -251,14 +255,14 @@ object Catenable extends CatenableInstances {
 
   /** Creates a catenable from the specified sequence. */
   def fromSeq[A](s: Seq[A]): Catenable[A] =
-    if (s.isEmpty) empty
+    if (s.isEmpty) nil
     else s.view.reverse.map(singleton).reduceLeft((x, y) => Append(y, x))
 
   /** Creates a catenable from the specified elements. */
   def apply[A](as: A*): Catenable[A] =
     as match {
       case w: collection.mutable.WrappedArray[A] =>
-        if (w.isEmpty) empty
+        if (w.isEmpty) nil
         else if (w.size == 1) singleton(w.head)
         else {
           val arr: Array[A] = w.array
@@ -276,7 +280,7 @@ object Catenable extends CatenableInstances {
 
 private[data] sealed abstract class CatenableInstances {
   implicit def catsDataMonoidForCatenable[A]: Monoid[Catenable[A]] = new Monoid[Catenable[A]] {
-    def empty: Catenable[A] = Catenable.empty
+    def empty: Catenable[A] = Catenable.nil
     def combine(c: Catenable[A], c2: Catenable[A]): Catenable[A] = Catenable.append(c, c2)
   }
 
@@ -293,13 +297,13 @@ private[data] sealed abstract class CatenableInstances {
       def traverse[F[_], A, B](fa: Catenable[A])(f: A => F[B])(
         implicit G: Applicative[F]): F[Catenable[B]] =
         Traverse[List].traverse(fa.toList)(f).map(Catenable.apply)
-      def empty[A]: Catenable[A] = Catenable.empty
+      def empty[A]: Catenable[A] = Catenable.nil
       def combineK[A](c: Catenable[A], c2: Catenable[A]): Catenable[A] = Catenable.append(c, c2)
       def pure[A](a: A): Catenable[A] = Catenable.singleton(a)
       def flatMap[A, B](fa: Catenable[A])(f: A => Catenable[B]): Catenable[B] =
         fa.flatMap(f)
       def tailRecM[A, B](a: A)(f: A => Catenable[Either[A, B]]): Catenable[B] = {
-        var acc: Catenable[B] = Catenable.empty
+        var acc: Catenable[B] = Catenable.nil
         @tailrec def go(rest: List[Catenable[Either[A, B]]]): Unit =
           rest match {
             case hd :: tl =>

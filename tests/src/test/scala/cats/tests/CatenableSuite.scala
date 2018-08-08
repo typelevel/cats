@@ -21,7 +21,7 @@ class CatenableSuite extends CatsSuite {
 
   test("show"){
     Show[Catenable[Int]].show(Catenable(1, 2, 3)) should === ("Catenable(1, 2, 3)")
-    (Catenable.empty: Catenable[Int]).show should === ("Catenable()")
+    Catenable.empty[Int].show should === ("Catenable()")
     forAll { l: Catenable[String] =>
       l.show should === (l.toString)
     }
