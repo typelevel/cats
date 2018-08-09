@@ -183,6 +183,30 @@ Any binary breaking changes will require a *MAJOR* version bump, which we will b
 cautious about. We will also consider using `organization` and package name for major 
 versioning in the future. But that decision is yet to be made. 
 
+### Adopters
+
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
+
+- [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
+- [Avast](https://avast.com)
+- [Banno Group inside of Jack Henry & Associates](https://banno.com/)
+- [Buildo](https://buildo.io)
+- [Codecentric](https://codecentric.de)
+- [DriveTribe](https://drivetribe.com/)
+- [Eloquentix](https://eloquentrix.com)
+- [Evotor Marketplace](https://market.evotor.ru/)
+- [Underscore Consulting](https://underscore.io/)
+- [e.near](http://enear.co)
+- [E.ON](https://eon.com)
+- [formation.ai](https://formation.ai)
+- [iHeartRadio](https://iheart.com)
+- [Scalac](https://scalac.io)
+- [Scala Center](https://scala.epfl.ch)
+- [Spotahome](https://spotahome.com)
+- [Stripe](https://stripe.com)
+- [Zalando](https://zalando.com)
+- [47 degrees](https://47deg.com)
+
 ### Maintainers
 
 The current maintainers (people who can merge pull requests) are:
