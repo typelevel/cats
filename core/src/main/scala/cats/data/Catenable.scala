@@ -148,14 +148,13 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Applies the supplied function to each element, left to right. */
-  private final def foreach(f: A => Unit): Unit =
-    foreachUntil { a => f(a); false }
+  private final def foreach(f: A => Unit): Unit = foreachUntil { a => f(a); false }
 
   /** Applies the supplied function to each element, left to right, but stops when true is returned */
   private final def foreachUntil(f: A => Boolean): Unit = {
     var c: Catenable[A] = this
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
-    // scalastyle:off null
+    // scalastyle:off null return
     while (c ne null) {
       c match {
         case Empty =>
@@ -175,8 +174,11 @@ sealed abstract class Catenable[+A] {
         case Append(l, r) => c = l; rights += r
       }
     }
-    // scalastyle:on null
+    // scalastyle:on null return
   }
+
+
+  final def iterator: Iterator[A] = new CatenableIterator[A](this)
 
   /** Returns the number of elements in this structure */
   final def length: Int = {
@@ -276,6 +278,31 @@ object Catenable extends CatenableInstances {
         }
       case _ => fromSeq(as)
     }
+
+  class CatenableIterator[A](self: Catenable[A]) extends Iterator[A] {
+    var c: Catenable[A] = if (self.isEmpty) null else self
+    val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+
+    override def hasNext: Boolean = c ne null
+
+    override def next(): A = {
+      @tailrec def go: A = c match {
+        case Empty =>
+          go // This can't happen
+        case Singleton(a) =>
+          c =
+            if (rights.isEmpty) null
+            else rights.reduceLeft((x, y) => Append(y, x))
+          rights.clear()
+          a
+        case Append(l, r) =>
+          c = l
+          rights += r
+          go
+      }
+      go
+    }
+  }
 }
 
 private[data] sealed abstract class CatenableInstances {

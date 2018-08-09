@@ -4,7 +4,7 @@ import cats.data.Catenable
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Thread)
-class CatenableBenchmark {
+class CatenableBench {
 
   private val smallCatenable = Catenable(1, 2, 3, 4, 5)
   private val smallVector = Vector(1, 2, 3, 4, 5)

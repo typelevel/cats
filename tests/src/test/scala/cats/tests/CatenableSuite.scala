@@ -56,4 +56,10 @@ class CatenableSuite extends CatsSuite {
       Catenable.fromSeq(ci.toVector) === ci
     }
   }
+
+  test("fromSeq . toList . iterator is id") {
+    forAll { (ci: Catenable[Int]) =>
+      Catenable.fromSeq(ci.iterator.toList) === ci
+    }
+  }
 }
