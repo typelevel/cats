@@ -185,19 +185,25 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [Add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
 
-- Apple Inc. (FEAR team)
-- Avast
-- Banno Group inside of Jack Henry & Associates
-- Buildo
-- Codecentric
-- DriveTribe
-- e.near
-- formation.ai
-- iHeartRadio
-- Scala Center
-- Stripe
+- [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
+- [Avast](https://avast.com)
+- [Banno Group inside of Jack Henry & Associates](https://banno.com/)
+- [Buildo](https://buildo.io)
+- [Codecentric](https://codecentric.de)
+- [DriveTribe](https://drivetribe.com/)
+- [Eloquentix](https://eloquentrix.com)
+- [e.near](http://enear.co)
+- [E.ON](https://eon.com)
+- [formation.ai](https://formation.ai)
+- [iHeartRadio](https://iheart.com)
+- [Scalac](https://scalac.io)
+- [Scala Center](https://scala.epfl.ch)
+- [Spotahome](https://spotahome.com)
+- [Stripe](https://stripe.com)
+- [Zalando](https://zalando.com)
+- [47 degrees](https://47deg.com)
 
 ### Maintainers
 
