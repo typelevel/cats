@@ -33,9 +33,15 @@ class CatenableSuite extends CatsSuite {
     }
   }
 
-  test("filterNot and then forall should always be false") {
+  test("filterNot and then exists should always be false") {
     forAll { (ci: Catenable[Int], f: Int => Boolean) =>
       ci.filterNot(f).exists(f) === false
+    }
+  }
+
+  test("filter and then forall should always be true") {
+    forAll { (ci: Catenable[Int], f: Int => Boolean) =>
+      ci.filter(f).forall(f) === true
     }
   }
 
@@ -45,9 +51,21 @@ class CatenableSuite extends CatsSuite {
     }
   }
 
+  test("deleteFirst consistent with find") {
+    forAll { (ci: Catenable[Int], f: Int => Boolean) =>
+      ci.find(f) === ci.deleteFirst(f).map(_._1)
+    }
+  }
+
+  test("filterNot element and then contains should be false") {
+    forAll { (ci: Catenable[Int], i: Int) =>
+      ci.filterNot(_ === i).contains(i) === false
+    }
+  }
+
   test("Always nonempty after cons") {
     forAll { (ci: Catenable[Int], i: Int) =>
-      ci.cons(i).nonEmpty === true
+      (i +: ci).nonEmpty === true
     }
   }
 
