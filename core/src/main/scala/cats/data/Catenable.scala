@@ -5,6 +5,7 @@ import cats.implicits._
 import Catenable._
 
 import scala.annotation.tailrec
+import scala.collection.{SortedMap, mutable}
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
@@ -122,11 +123,63 @@ sealed abstract class Catenable[+A] {
   }
 
   /** Check whether all elements satisfy the predicate */
-  final def forall(f: A => Boolean): Boolean =
-    exists(a => !f(a))
+  final def forall(f: A => Boolean): Boolean = {
+    var result: Boolean = true
+    foreachUntil { a =>
+      val b = f(a)
+      if (!b) result = false
+      !b
+    }
+    result
+  }
 
+  /** Check whether an element is in this structure */
   final def contains[AA >: A](a: AA)(implicit A: Eq[AA]): Boolean =
     exists(A.eqv(a, _))
+
+  /** Zips this `Catenable` with another `Catenable` and applies a function for each pair of elements. */
+  final def zipWith[B, C](other: Catenable[B])(f: (A, B) => C): Catenable[C] =
+    if (this.isEmpty || other.isEmpty) Catenable.Empty
+    else {
+      val iterA = iterator
+      val iterB = other.iterator
+
+      var result: Catenable[C] = Catenable.one(f(iterA.next(), iterB.next()))
+
+      while (iterA.hasNext && iterB.hasNext) {
+        result = result :+ f(iterA.next(), iterB.next())
+      }
+      result
+    }
+
+  /**
+   * Groups elements inside this `Catenable` according to the `Order`
+   * of the keys produced by the given mapping function.
+   */
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Catenable[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    var m = mutable.TreeMap.empty[B, Catenable[A]]
+
+    foreach { elem =>
+      val k = f(elem)
+
+      m.get(k) match {
+        case None => m += ((k, singleton(elem))); ()
+        case Some(cat) => m.update(k, cat :+ elem)
+      }
+    }
+    m
+  }
+
+  /** Reverses this `Catenable` */
+  def reverse: Catenable[A] = {
+    var result: Catenable[A] = Catenable.empty
+    foreach { a =>
+      result = a +: result
+      ()
+    }
+    result
+  }
 
 
   /**
