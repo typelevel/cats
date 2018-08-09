@@ -249,6 +249,9 @@ object Catenable extends CatenableInstances {
   /** Creates a catenable of 1 element. */
   def singleton[A](a: A): Catenable[A] = Singleton(a)
 
+  /** Alias for singleton */
+  def one[A](a: A): Catenable[A] = singleton(a)
+
   /** Appends two catenables. */
   def append[A](c: Catenable[A], c2: Catenable[A]): Catenable[A] =
     if (c.isEmpty) c2
@@ -279,6 +282,7 @@ object Catenable extends CatenableInstances {
       case _ => fromSeq(as)
     }
 
+  // scalastyle:off null
   class CatenableIterator[A](self: Catenable[A]) extends Iterator[A] {
     var c: Catenable[A] = if (self.isEmpty) null else self
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
@@ -303,6 +307,7 @@ object Catenable extends CatenableInstances {
       go
     }
   }
+  // scalastyle:on null
 }
 
 private[data] sealed abstract class CatenableInstances {
