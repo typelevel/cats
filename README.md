@@ -194,6 +194,8 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
 - [Eloquentix](https://eloquentrix.com)
+- [Evotor Marketplace](https://market.evotor.ru/)
+- [Underscore Consulting](https://underscore.io/)
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
