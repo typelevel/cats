@@ -35,7 +35,7 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 <p>Let’s use <code class="highlighter-rouge">Show</code>’s <code class="highlighter-rouge">Contravariant</code>:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">showSalary</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Salary</span><span class="o">]</span> <span class="k">=</span> <span class="n">showMoney</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">size</span><span class="o">)</span>
-<span class="c1">// showSalary: cats.Show[Salary] = cats.Show$$anon$1@12714a99
+<span class="c1">// showSalary: cats.Show[Salary] = cats.Show$$anon$1@774b91b
 </span>
 <span class="nc">Salary</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">)).</span><span class="n">show</span>
 <span class="c1">// res0: String = $1000
@@ -71,7 +71,7 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 <span class="c1">// import scala.math.Ordered._
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">moneyOrdering</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ordering</span><span class="o">.</span><span class="n">by</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">amount</span><span class="o">)</span>
-<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$10@33875d8b
+<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$10@2a9ddb65
 </span>
 <span class="nc">Money</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nc">Money</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
 <span class="c1">// res4: Boolean = true
@@ -89,22 +89,22 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 <span class="c1">// defined class B
 </span>
 <span class="k">val</span> <span class="n">b</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span>
-<span class="c1">// b: B = B@5b9564d1
+<span class="c1">// b: B = B@2bfd005
 </span>
 <span class="k">val</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">b</span>
-<span class="c1">// a: A = B@5b9564d1
+<span class="c1">// a: A = B@2bfd005
 </span>
 <span class="k">val</span> <span class="n">showA</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="s">"a!"</span><span class="o">)</span>
-<span class="c1">// showA: cats.Show[A] = cats.Show$$anon$1@fb35c7a
+<span class="c1">// showA: cats.Show[A] = cats.Show$$anon$1@39527f7
 </span>
 <span class="k">val</span> <span class="n">showB1</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">b</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-<span class="c1">// showB1: cats.Show[B] = cats.Show$$anon$1@3293a8a3
+<span class="c1">// showB1: cats.Show[B] = cats.Show$$anon$1@a136d6d
 </span>
 <span class="k">val</span> <span class="n">showB2</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">identity</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
-<span class="c1">// showB2: cats.Show[B] = cats.Show$$anon$1@26f4d88d
+<span class="c1">// showB2: cats.Show[B] = cats.Show$$anon$1@c5dc376
 </span>
 <span class="k">val</span> <span class="n">showB3</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Contravariant</span><span class="o">[</span><span class="kt">Show</span><span class="o">].</span><span class="n">narrow</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">showA</span><span class="o">)</span>
-<span class="c1">// showB3: cats.Show[B] = cats.Show$$anon$1@fb35c7a
+<span class="c1">// showB3: cats.Show[B] = cats.Show$$anon$1@39527f7
 </span></code></pre>
 </div>
 

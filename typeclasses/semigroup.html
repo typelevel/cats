@@ -78,10 +78,10 @@ for <code class="highlighter-rouge">Map</code>s.</p>
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
-<span class="c1">// res0: cats.kernel.Semigroup[Int] = cats.kernel.instances.IntGroup@6aaab7b7
+<span class="c1">// res0: cats.kernel.Semigroup[Int] = cats.kernel.instances.IntGroup@74280fd8
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-<span class="c1">// res1: cats.kernel.Semigroup[String] = cats.kernel.instances.StringMonoid@2b80bcff
+<span class="c1">// res1: cats.kernel.Semigroup[String] = cats.kernel.instances.StringMonoid@5e94d53c
 </span></code></pre>
 </div>
 
@@ -89,16 +89,16 @@ for <code class="highlighter-rouge">Map</code>s.</p>
 and <code class="highlighter-rouge">Set</code> (<code class="highlighter-rouge">union</code>)…</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Byte</span><span class="o">]]</span>
-<span class="c1">// res2: cats.kernel.Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@1063f184
+<span class="c1">// res2: cats.kernel.Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@7c47da8b
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Set</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span>
-<span class="c1">// res3: cats.kernel.Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@7c0b15d4
+<span class="c1">// res3: cats.kernel.Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@ca60b9b
 </span>
 <span class="k">trait</span> <span class="nc">Foo</span>
 <span class="c1">// defined trait Foo
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]]</span>
-<span class="c1">// res4: cats.kernel.Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@33721b1a
+<span class="c1">// res4: cats.kernel.Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@570bec68
 </span></code></pre>
 </div>
 
@@ -106,7 +106,7 @@ and <code class="highlighter-rouge">Set</code> (<code class="highlighter-rouge">
 as tuples (pointwise <code class="highlighter-rouge">combine</code>).</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[(</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">)]</span>
-<span class="c1">// res5: cats.kernel.Semigroup[(List[Foo], Int)] = cats.kernel.instances.TupleInstances2$$anon$182@68020904
+<span class="c1">// res5: cats.kernel.Semigroup[(List[Foo], Int)] = cats.kernel.instances.TupleInstances2$$anon$182@3f108e58
 </span></code></pre>
 </div>
 

@@ -100,7 +100,7 @@ and compose them. From there we can generalize to working with any N number of i
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">int</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">c</span><span class="o">))</span> <span class="c1">// what now?
-// res0: Option[Char =&gt; Double] = Some($$Lambda$10524/1640498524@4cd90673)
+// res0: Option[Char =&gt; Double] = Some($$Lambda$10785/2041940927@24244b0a)
 </span></code></pre>
 </div>
 
@@ -126,7 +126,7 @@ does <code class="highlighter-rouge">F[G[_]]</code>.</p>
 <span class="c1">// composed: scala.concurrent.Future[Option[Int]] = Future(&lt;not completed&gt;)
 </span>
 <span class="k">val</span> <span class="n">nested</span> <span class="k">=</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Nested</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Option</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">map2</span><span class="o">(</span><span class="nc">Nested</span><span class="o">(</span><span class="n">x</span><span class="o">),</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">y</span><span class="o">))(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
-<span class="c1">// nested: cats.data.Nested[scala.concurrent.Future,Option,Int] = Nested(Future(Success(Some(102))))
+<span class="c1">// nested: cats.data.Nested[scala.concurrent.Future,Option,Int] = Nested(Future(&lt;not completed&gt;))
 </span></code></pre>
 </div>
 
