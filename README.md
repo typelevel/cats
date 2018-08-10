@@ -190,7 +190,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [Avast](https://avast.com)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
-- [Buildo](https://buildo.io)
+- [buildo](https://buildo.io)
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
 - [Eloquentix](https://eloquentrix.com)
