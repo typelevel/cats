@@ -205,7 +205,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Spotahome](https://spotahome.com)
 - [Stripe](https://stripe.com)
 - [Zalando](https://zalando.com)
-- [47 degrees](https://47deg.com)
+- [47 Degrees](https://www.47deg.com)
 
 ### Maintainers
 
