@@ -31,10 +31,10 @@ private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 
   private[cats] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
     m.asInstanceOf[SortedMap[K, A]]
 
-  def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
+  def fromMap[K, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
     if (as.nonEmpty) Option(create(as)) else None
 
-  def fromMapUnsafe[K: Order, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
+  def fromMapUnsafe[K, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
     if (m.nonEmpty) create(m)
     else throw new IllegalArgumentException("Cannot create NonEmptyMap from empty map")
 
