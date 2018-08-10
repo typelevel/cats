@@ -23,7 +23,7 @@ def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
 ```
 
 Here `traverse` still has knowledge of `List`, but we could just as easily use
-`Vector` or similar data type. Another example is a binary tree:
+`Vector` or some similar data type. Another example is a binary tree:
 
 ```tut:book:silent
 object tree {
