@@ -87,7 +87,7 @@ to be updated:
 You can get a list of changes between release tags `v0.1.2` and
 `v0.2.0` via `git log v0.1.2..v0.2.0`. Scanning this list of commit
 messages is a good way to get a summary of what happened, although it
-does not account for conversations that occured on Github.
+does not account for conversations that occurred on Github.
 
 Once the relevant documentation changes have been committed, new
 [release notes](https://github.com/typelevel/cats/releases) should be

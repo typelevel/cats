@@ -92,7 +92,7 @@ import simulacrum.typeclass
     reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     Some(reduceLeftTo(fa)(f)(g))
@@ -104,7 +104,7 @@ import simulacrum.typeclass
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
     reduceRightTo(fa)(f)(g).map(Some(_))

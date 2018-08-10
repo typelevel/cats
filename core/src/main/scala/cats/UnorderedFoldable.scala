@@ -44,7 +44,7 @@ import cats.instances.long._
   /**
     * The size of this UnorderedFoldable.
     *
-    * This is overriden in structures that have more efficient size implementations
+    * This is overridden in structures that have more efficient size implementations
     * (e.g. Vector, Set, Map).
     *
     * Note: will not terminate for infinite-sized collections.
