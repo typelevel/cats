@@ -20,7 +20,7 @@ class EvalSuite extends CatsSuite {
    *
    * It will then proceed to call `value` 0-or-more times, verifying
    * that the result is equal to `value`, and also that the
-   * appropriate number of evaluations are occuring using the
+   * appropriate number of evaluations are occurring using the
    * `numCalls` function.
    *
    * In other words, each invocation of run says:
@@ -148,7 +148,7 @@ class EvalSuite extends CatsSuite {
     }
   }
 
-  // the following machinery is all to faciliate testing deeply-nested
+  // the following machinery is all to facilitate testing deeply-nested
   // eval values for stack safety. the idea is that we want to
   // randomly generate deep chains of eval operations.
   //

@@ -23,7 +23,7 @@ object SerializableLaws {
   // compile time, so we rely on scalac to prune away the "other"
   // branch. Thus, when scala.js look at this method it won't "see"
   // the branch which was removed, and will avoid an error trying to
-  // suport java.io.*.
+  // support java.io.*.
   //
   // This ends up being a lot nicer than having to split the entire
   // laws project.

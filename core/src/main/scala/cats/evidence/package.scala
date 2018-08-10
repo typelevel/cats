@@ -28,7 +28,7 @@ package object evidence {
 
   /**
    * The property that a value of type A can be used in a context
-   * expecting a B if A <~< B is refered to as the "Liskov
+   * expecting a B if A <~< B is referred to as the "Liskov
    * Substitution Principal", which is named for Barbara Liskov:
    * https://en.wikipedia.org/wiki/Barbara_Liskov
    */

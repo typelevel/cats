@@ -803,7 +803,7 @@ Additions:
  * [#1319](https://github.com/typelevel/cats/pull/1347): add missing `BigDecimal` instances.
  * [#1324](https://github.com/typelevel/cats/pull/1324): add missing function and `BitSet` instances.
 
-Note that 0.7.2 was preceeded by a botched 0.7.1. release. Please
+Note that 0.7.2 was preceded by a botched 0.7.1. release. Please
 avoid using this version of Cats -- it has major incompatibilities
 with 0.7.0 and is not documented here.
 
