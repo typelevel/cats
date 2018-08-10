@@ -5,7 +5,7 @@ import cats.implicits._
 import Catenable._
 
 import scala.annotation.tailrec
-import scala.collection.{SortedMap, mutable}
+import scala.collection.immutable.SortedMap
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
@@ -23,6 +23,16 @@ sealed abstract class Catenable[+A] {
     var result: Option[(A, Catenable[A])] = null
     while (result eq null) {
       c match {
+        case Singleton(a) =>
+          val next =
+            if (rights.isEmpty) nil
+            else rights.reduceLeft((x, y) => Append(y, x))
+          result = Some(a -> next)
+        case Append(l, r) => c = l; rights += r
+        case Wrap(seq) =>
+          val tail = seq.tail
+          val next = fromSeq(tail)
+          result = Some(seq.head -> next)
         case Empty =>
           if (rights.isEmpty) {
             result = None
@@ -30,12 +40,6 @@ sealed abstract class Catenable[+A] {
             c = rights.last
             rights.trimEnd(1)
           }
-        case Singleton(a) =>
-          val next =
-            if (rights.isEmpty) nil
-            else rights.reduceLeft((x, y) => Append(y, x))
-          result = Some(a -> next)
-        case Append(l, r) => c = l; rights += r
       }
     }
     // scalastyle:on null
@@ -70,7 +74,7 @@ sealed abstract class Catenable[+A] {
 
   /** Applies the supplied function to each element and returns a new catenable. */
   final def map[B](f: A => B): Catenable[B] =
-    foldLeft(nil: Catenable[B])((acc, a) => acc :+ f(a))
+    fromSeq(iterator.map(f).toVector)
 
   /** Applies the supplied function to each element and returns a new catenable from the concatenated results */
   final def flatMap[B](f: A => Catenable[B]): Catenable[B] =
@@ -158,14 +162,14 @@ sealed abstract class Catenable[+A] {
    */
   final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Catenable[A]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
-    var m = mutable.TreeMap.empty[B, Catenable[A]]
+    var m = SortedMap.empty[B, Catenable[A]]
 
     foreach { elem =>
       val k = f(elem)
 
       m.get(k) match {
         case None => m += ((k, singleton(elem))); ()
-        case Some(cat) => m.update(k, cat :+ elem)
+        case Some(cat) => m = m.updated(k, cat :+ elem)
       }
     }
     m
@@ -204,19 +208,13 @@ sealed abstract class Catenable[+A] {
   private final def foreach(f: A => Unit): Unit = foreachUntil { a => f(a); false }
 
   /** Applies the supplied function to each element, left to right, but stops when true is returned */
+  // scalastyle:off null return cyclomatic.complexity
   private final def foreachUntil(f: A => Boolean): Unit = {
     var c: Catenable[A] = this
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
-    // scalastyle:off null return
+
     while (c ne null) {
       c match {
-        case Empty =>
-          if (rights.isEmpty) {
-            c = null
-          } else {
-            c = rights.last
-            rights.trimEnd(1)
-          }
         case Singleton(a) =>
           val b = f(a)
           if (b) return ();
@@ -225,13 +223,33 @@ sealed abstract class Catenable[+A] {
             else rights.reduceLeft((x, y) => Append(y, x))
           rights.clear()
         case Append(l, r) => c = l; rights += r
+        case Wrap(seq) =>
+          val iterator = seq.iterator
+          while (iterator.hasNext) {
+            val b = f(iterator.next)
+            if (b) return ()
+          }
+          c =
+            if (rights.isEmpty) Empty
+            else rights.reduceLeft((x, y) => Append(y, x))
+          rights.clear()
+        case Empty =>
+          if (rights.isEmpty) {
+            c = null
+          } else {
+            c = rights.last
+            rights.trimEnd(1)
+          }
       }
     }
-    // scalastyle:on null return
   }
+  // scalastyle:on null return cyclomatic.complexity
 
 
-  final def iterator: Iterator[A] = new CatenableIterator[A](this)
+  final def iterator: Iterator[A] = this match {
+    case Wrap(seq) => seq.iterator
+    case _ => new CatenableIterator[A](this)
+  }
 
   /** Returns the number of elements in this structure */
   final def length: Int = {
@@ -293,6 +311,10 @@ object Catenable extends CatenableInstances {
     def isEmpty: Boolean =
       false // b/c `append` constructor doesn't allow either branch to be empty
   }
+  private[data] final case class Wrap[A](seq: Seq[A]) extends Catenable[A] {
+    override def isEmpty: Boolean =
+      false // b/c `fromSeq` constructor doesn't allow either branch to be empty
+  }
 
   /** Empty catenable. */
   val nil: Catenable[Nothing] = Empty
@@ -314,7 +336,7 @@ object Catenable extends CatenableInstances {
   /** Creates a catenable from the specified sequence. */
   def fromSeq[A](s: Seq[A]): Catenable[A] =
     if (s.isEmpty) nil
-    else s.view.reverse.map(singleton).reduceLeft((x, y) => Append(y, x))
+    else Wrap(s)
 
   /** Creates a catenable from the specified elements. */
   def apply[A](as: A*): Catenable[A] =
@@ -339,24 +361,40 @@ object Catenable extends CatenableInstances {
   class CatenableIterator[A](self: Catenable[A]) extends Iterator[A] {
     var c: Catenable[A] = if (self.isEmpty) null else self
     val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+    var currentIterator: Iterator[A] = null
 
-    override def hasNext: Boolean = c ne null
+    override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
 
     override def next(): A = {
-      @tailrec def go: A = c match {
-        case Empty =>
-          go // This can't happen
-        case Singleton(a) =>
-          c =
-            if (rights.isEmpty) null
-            else rights.reduceLeft((x, y) => Append(y, x))
-          rights.clear()
-          a
-        case Append(l, r) =>
-          c = l
-          rights += r
-          go
-      }
+      @tailrec def go: A =
+        if ((currentIterator ne null) && currentIterator.hasNext)
+          currentIterator.next()
+        else {
+          currentIterator = null
+
+          c match {
+            case Singleton(a) =>
+              c =
+                if (rights.isEmpty) null
+                else rights.reduceLeft((x, y) => Append(y, x))
+              rights.clear()
+              a
+            case Append(l, r) =>
+              c = l
+              rights += r
+              go
+            case Wrap(seq) =>
+              c =
+                if (rights.isEmpty) null
+                else rights.reduceLeft((x, y) => Append(y, x))
+              rights.clear()
+              currentIterator = seq.iterator
+              currentIterator.next
+            case Empty =>
+              go // This shouldn't happen
+          }
+        }
+
       go
     }
   }
