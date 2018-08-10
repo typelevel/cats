@@ -129,6 +129,13 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
     }
   }
 
+  test(s"Foldable[$name].combineAllOption") {
+    forAll { (fa: F[Int]) =>
+      val list = fa.toList
+      fa.combineAllOption should === (list.combineAllOption)
+    }
+  }
+
   test(s"Foldable[$name].intercalate") {
     forAll { (fa: F[String], a: String) =>
       fa.intercalate(a) should === (fa.toList.mkString(a))

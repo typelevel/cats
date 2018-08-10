@@ -34,6 +34,12 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
   def foldr[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(fa, b)(f)
 
+  /**
+   * given a Monoid evidence for `A`, it returns None if the foldable is empty or combines all the `A`s if it's not
+   */
+  def combineAllOption(implicit ev: Monoid[A], F: Foldable[F]): Option[A] =
+    if (F.isEmpty(fa)) None else Some(F.combineAll(fa))
+
    /**
    * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
    *
