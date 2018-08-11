@@ -5,6 +5,7 @@ import cats.implicits._
 import Catenable._
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ArrayStack
 import scala.collection.immutable.SortedMap
 
 /**
@@ -84,6 +85,15 @@ sealed abstract class Catenable[+A] {
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
     foreach(a => result = f(result, a))
+    result
+  }
+
+  /** Folds over the elements from right to left using the supplied initial value and function. */
+  final def foldRight[B](z: B)(f: (A, B) => B): B = {
+    val stack = new ArrayStack[A]
+    foreach { a => stack += a; () }
+    var result = z
+    while (!stack.isEmpty) { result = f(stack.pop, result) }
     result
   }
 
@@ -411,15 +421,18 @@ private[data] sealed abstract class CatenableInstances {
     new Traverse[Catenable] with Alternative[Catenable] with Monad[Catenable] {
       def foldLeft[A, B](fa: Catenable[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
-      def foldRight[A, B](fa: Catenable[A], b: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable[List].foldRight(fa.toList, b)(f)
+      def foldRight[A, B](fa: Catenable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Eval.defer(fa.foldRight(lb) { (a, lb) =>
+          Eval.defer(f(a, lb))
+        })
 
       override def map[A, B](fa: Catenable[A])(f: A => B): Catenable[B] = fa.map(f)
       override def toList[A](fa: Catenable[A]): List[A] = fa.toList
       override def isEmpty[A](fa: Catenable[A]): Boolean = fa.isEmpty
-      def traverse[F[_], A, B](fa: Catenable[A])(f: A => F[B])(
-        implicit G: Applicative[F]): F[Catenable[B]] =
-        Traverse[List].traverse(fa.toList)(f).map(Catenable.apply)
+      def traverse[G[_], A, B](fa: Catenable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Catenable[B]] =
+        fa.foldLeft[G[Catenable[B]]](G.pure(nil)) { (gcatb, a) =>
+          G.map2(gcatb, f(a))(_ :+ _)
+        }
       def empty[A]: Catenable[A] = Catenable.nil
       def combineK[A](c: Catenable[A], c2: Catenable[A]): Catenable[A] = Catenable.append(c, c2)
       def pure[A](a: A): Catenable[A] = Catenable.singleton(a)
