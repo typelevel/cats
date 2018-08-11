@@ -120,6 +120,11 @@ lazy val commonJvmSettings = Seq(
   }
 )
 
+lazy val commonNativeSettings = Seq(
+  scalaVersion := "2.11.12", //TODO load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
+  crossScalaVersions := Seq("2.11.12")
+)
+
 lazy val includeGeneratedSrc: Setting[_] = {
   mappings in (Compile, packageSrc) ++= {
     val base = (sourceManaged in Compile).value
@@ -340,6 +345,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
+  .nativeSettings(commonNativeSettings)
 
 
 lazy val kernelJVM = kernel.jvm
