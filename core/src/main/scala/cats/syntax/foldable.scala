@@ -1,8 +1,6 @@
 package cats
 package syntax
 
-import cats.data.OptionT
-
 trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUnorderedFoldableOps {
   implicit final def catsSyntaxNestedFoldable[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
@@ -116,7 +114,10 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
     * }}}
     */
   def collectFirstSomeM[G[_], B](f: A => G[Option[B]])(implicit F: Foldable[F], G: Monad[G]): G[Option[B]] =
-    F.foldRight(fa, Eval.now(OptionT.none[G, B]))((a, lb) =>
-      Eval.now(OptionT(f(a)).orElse(lb.value))
-    ).value.value
+    F.foldRight(fa, Eval.now(G.pure(Option.empty[B])))((a, lb) =>
+      Eval.now(G.flatMap(f(a)) {
+        case s @ Some(_) => G.pure(s)
+        case None => lb.value
+      })
+    ).value
 }
