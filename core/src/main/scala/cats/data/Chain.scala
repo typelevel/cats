@@ -79,10 +79,19 @@ sealed abstract class Chain[+A] {
   final def flatMap[B](f: A => Chain[B]): Chain[B] =
     foldLeft(nil: Chain[B])((acc, a) => acc ++ f(a))
 
+  /** Applies the supplied function to each element and returns a new Chain from the concatenated results */
+  final def flatMapIterator[B](f: A => Chain[B]): Chain[B] = {
+    var result = empty[B]
+    val iter = iterator
+    while (iter.hasNext) { result = result ++ f(iter.next) }
+    result
+  }
+
   /** Folds over the elements from left to right using the supplied initial value and function. */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
-    foreach(a => result = f(result, a))
+    val iter = iterator
+    while (iter.hasNext) { result = f(result, iter.next) }
     result
   }
 
@@ -118,6 +127,16 @@ sealed abstract class Chain[+A] {
       val b = f(a)
       if (b) result = Option(a)
       b
+    }
+    result
+  }
+
+  final def findIterator(f: A => Boolean): Option[A] = {
+    val iter = iterator
+    var result: Option[A] = Option.empty[A]
+    while (iter.hasNext && result.isEmpty) {
+      val a = iter.next
+      if (f(a)) result = Some(a)
     }
     result
   }
@@ -172,6 +191,23 @@ sealed abstract class Chain[+A] {
     var m = SortedMap.empty[B, Chain[A]]
 
     foreach { elem =>
+      val k = f(elem)
+
+      m.get(k) match {
+        case None => m += ((k, one(elem))); ()
+        case Some(cat) => m = m.updated(k, cat :+ elem)
+      }
+    }
+    m
+  }
+
+  final def groupByIterator[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Chain[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    var m = SortedMap.empty[B, Chain[A]]
+    val iter = iterator
+
+    while (iter.hasNext) {
+      val elem = iter.next
       val k = f(elem)
 
       m.get(k) match {
@@ -260,8 +296,9 @@ sealed abstract class Chain[+A] {
 
   /** Returns the number of elements in this structure */
   final def length: Int = {
+    val iter = iterator
     var i: Int = 0
-    foreach(_ => i += 1)
+    while(iter.hasNext) { i += 1; iter.next; }
     i
   }
 
