@@ -276,13 +276,13 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
     Cogen((seed, x) => F.perturb(seed, x))
 
-  implicit def catsLawsArbitraryForCatenable[A](implicit A: Arbitrary[A]): Arbitrary[Catenable[A]] =
+  implicit def catsLawsArbitraryForChain[A](implicit A: Arbitrary[A]): Arbitrary[Chain[A]] =
     Arbitrary(Gen.sized {
-      case 0 => Gen.const(Catenable.nil)
-      case 1 => A.arbitrary.map(Catenable.one)
+      case 0 => Gen.const(Chain.nil)
+      case 1 => A.arbitrary.map(Chain.one)
       case 2 => A.arbitrary.flatMap(a1 => A.arbitrary.flatMap(a2 =>
-        Catenable.append(Catenable.one(a1), Catenable.one(a2))))
-      case n => Catenable.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Catenable.empty[A])) { (gen, _) =>
+        Chain.append(Chain.one(a1), Chain.one(a2))))
+      case n => Chain.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Chain.empty[A])) { (gen, _) =>
         gen.flatMap(cat => A.arbitrary.map(a => cat :+ a))
       }
     })

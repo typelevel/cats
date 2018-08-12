@@ -2,26 +2,24 @@ package cats
 package data
 
 import cats.implicits._
-import Catenable._
+import Chain._
 
 import scala.annotation.tailrec
-import scala.collection.mutable.ArrayStack
 import scala.collection.immutable.SortedMap
 
 /**
  * Trivial catenable sequence. Supports O(1) append, and (amortized)
  * O(1) `uncons`, such that walking the sequence via N successive `uncons`
- * steps takes O(N). Like a difference list, conversion to a `Seq[A]`
- * takes linear time, regardless of how the sequence is built up.
+ * steps takes O(N).
  */
-sealed abstract class Catenable[+A] {
+sealed abstract class Chain[+A] {
 
-  /** Returns the head and tail of this catenable if non empty, none otherwise. Amortized O(1). */
-  final def uncons: Option[(A, Catenable[A])] = {
-    var c: Catenable[A] = this
-    val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+  /** Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1). */
+  final def uncons: Option[(A, Chain[A])] = {
+    var c: Chain[A] = this
+    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
     // scalastyle:off null
-    var result: Option[(A, Catenable[A])] = null
+    var result: Option[(A, Chain[A])] = null
     while (result eq null) {
       c match {
         case Singleton(a) =>
@@ -33,7 +31,7 @@ sealed abstract class Catenable[+A] {
         case Wrap(seq) =>
           val tail = seq.tail
           val next = fromSeq(tail)
-          result = Some(seq.head -> next)
+          result = Some((seq.head, next))
         case Empty =>
           if (rights.isEmpty) {
             result = None
@@ -54,32 +52,32 @@ sealed abstract class Catenable[+A] {
   def nonEmpty: Boolean = !isEmpty
 
   /** Concatenates this with `c` in O(1) runtime. */
-  final def ++[A2 >: A](c: Catenable[A2]): Catenable[A2] =
+  final def ++[A2 >: A](c: Chain[A2]): Chain[A2] =
     append(this, c)
 
-  /** Returns a new catenable consisting of `a` followed by this. O(1) runtime. */
-  final def cons[A2 >: A](a: A2): Catenable[A2] =
-    append(singleton(a), this)
+  /** Returns a new Chain consisting of `a` followed by this. O(1) runtime. */
+  final def cons[A2 >: A](a: A2): Chain[A2] =
+    append(one(a), this)
 
   /** Alias for [[cons]]. */
-  final def +:[A2 >: A](a: A2): Catenable[A2] =
+  final def +:[A2 >: A](a: A2): Chain[A2] =
     cons(a)
 
-  /** Returns a new catenable consisting of this followed by `a`. O(1) runtime. */
-  final def snoc[A2 >: A](a: A2): Catenable[A2] =
-    append(this, singleton(a))
+  /** Returns a new Chain consisting of this followed by `a`. O(1) runtime. */
+  final def snoc[A2 >: A](a: A2): Chain[A2] =
+    append(this, one(a))
 
   /** Alias for [[snoc]]. */
-  final def :+[A2 >: A](a: A2): Catenable[A2] =
+  final def :+[A2 >: A](a: A2): Chain[A2] =
     snoc(a)
 
-  /** Applies the supplied function to each element and returns a new catenable. */
-  final def map[B](f: A => B): Catenable[B] =
+  /** Applies the supplied function to each element and returns a new Chain. */
+  final def map[B](f: A => B): Chain[B] =
     fromSeq(iterator.map(f).toVector)
 
-  /** Applies the supplied function to each element and returns a new catenable from the concatenated results */
-  final def flatMap[B](f: A => Catenable[B]): Catenable[B] =
-    foldLeft(nil: Catenable[B])((acc, a) => acc ++ f(a))
+  /** Applies the supplied function to each element and returns a new Chain from the concatenated results */
+  final def flatMap[B](f: A => Chain[B]): Chain[B] =
+    foldLeft(nil: Chain[B])((acc, a) => acc ++ f(a))
 
   /** Folds over the elements from left to right using the supplied initial value and function. */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
@@ -90,16 +88,15 @@ sealed abstract class Catenable[+A] {
 
   /** Folds over the elements from right to left using the supplied initial value and function. */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
-    val stack = new ArrayStack[A]
-    foreach { a => stack += a; () }
     var result = z
-    while (!stack.isEmpty) { result = f(stack.pop, result) }
+    val iter = reverseIterator
+    while (iter.hasNext) { result = f(iter.next, result) }
     result
   }
 
   /** Collect `B` from this for which `f` is defined */
-  final def collect[B](pf: PartialFunction[A, B]): Catenable[B] =
-    foldLeft(Catenable.nil: Catenable[B]) { (acc, a) =>
+  final def collect[B](pf: PartialFunction[A, B]): Chain[B] =
+    foldLeft(Chain.nil: Chain[B]) { (acc, a) =>
       // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
       val x = pf.applyOrElse(a, sentinel)
       if (x.asInstanceOf[AnyRef] ne sentinel) acc :+ x.asInstanceOf[B]
@@ -107,11 +104,11 @@ sealed abstract class Catenable[+A] {
     }
 
   /** Remove elements not matching the predicate */
-  final def filter(f: A => Boolean): Catenable[A] =
+  final def filter(f: A => Boolean): Chain[A] =
     collect { case a if f(a) => a }
 
   /** Remove elements matching the predicate */
-  final def filterNot(f: A => Boolean): Catenable[A] =
+  final def filterNot(f: A => Boolean): Chain[A] =
     filter(a => !f(a))
 
   /** Find the first element matching the predicate, if one exists */
@@ -151,14 +148,14 @@ sealed abstract class Catenable[+A] {
   final def contains[AA >: A](a: AA)(implicit A: Eq[AA]): Boolean =
     exists(A.eqv(a, _))
 
-  /** Zips this `Catenable` with another `Catenable` and applies a function for each pair of elements. */
-  final def zipWith[B, C](other: Catenable[B])(f: (A, B) => C): Catenable[C] =
-    if (this.isEmpty || other.isEmpty) Catenable.Empty
+  /** Zips this `Chain` with another `Chain` and applies a function for each pair of elements. */
+  final def zipWith[B, C](other: Chain[B])(f: (A, B) => C): Chain[C] =
+    if (this.isEmpty || other.isEmpty) Chain.Empty
     else {
       val iterA = iterator
       val iterB = other.iterator
 
-      var result: Catenable[C] = Catenable.one(f(iterA.next(), iterB.next()))
+      var result: Chain[C] = Chain.one(f(iterA.next(), iterB.next()))
 
       while (iterA.hasNext && iterB.hasNext) {
         result = result :+ f(iterA.next(), iterB.next())
@@ -167,43 +164,38 @@ sealed abstract class Catenable[+A] {
     }
 
   /**
-   * Groups elements inside this `Catenable` according to the `Order`
+   * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Catenable[A]] = {
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Chain[A]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, Catenable[A]]
+    var m = SortedMap.empty[B, Chain[A]]
 
     foreach { elem =>
       val k = f(elem)
 
       m.get(k) match {
-        case None => m += ((k, singleton(elem))); ()
+        case None => m += ((k, one(elem))); ()
         case Some(cat) => m = m.updated(k, cat :+ elem)
       }
     }
     m
   }
 
-  /** Reverses this `Catenable` */
-  def reverse: Catenable[A] = {
-    var result: Catenable[A] = Catenable.empty
-    foreach { a =>
-      result = a +: result
-      ()
-    }
-    result
+  /** Reverses this `Chain` */
+  def reverse: Chain[A] = {
+    Wrap(reverseIterator.toList)
   }
 
 
   /**
-   * Yields to Some(a, Catenable[A]) with `a` removed where `f` holds for the first time,
+   * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
    * otherwise yields None, if `a` was not found
    * Traverses only until `a` is found.
    */
-  final def deleteFirst(f: A => Boolean): Option[(A, Catenable[A])] = {
+  final def deleteFirst(f: A => Boolean): Option[(A, Chain[A])] = {
     @tailrec
-    def go(rem: Catenable[A], acc: Catenable[A]): Option[(A, Catenable[A])] =
+    def go(rem: Chain[A], acc: Chain[A]): Option[(A, Chain[A])] =
       rem.uncons match {
         case Some((a, tail)) =>
           if (!f(a)) go(tail, acc :+ a)
@@ -211,7 +203,7 @@ sealed abstract class Catenable[+A] {
 
         case None => None
       }
-    go(this, Catenable.nil)
+    go(this, Chain.nil)
   }
 
   /** Applies the supplied function to each element, left to right. */
@@ -220,8 +212,8 @@ sealed abstract class Catenable[+A] {
   /** Applies the supplied function to each element, left to right, but stops when true is returned */
   // scalastyle:off null return cyclomatic.complexity
   private final def foreachUntil(f: A => Boolean): Unit = {
-    var c: Catenable[A] = this
-    val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+    var c: Chain[A] = this
+    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
 
     while (c ne null) {
       c match {
@@ -258,7 +250,12 @@ sealed abstract class Catenable[+A] {
 
   final def iterator: Iterator[A] = this match {
     case Wrap(seq) => seq.iterator
-    case _ => new CatenableIterator[A](this)
+    case _ => new ChainIterator[A](this)
+  }
+
+  final def reverseIterator: Iterator[A] = this match {
+    case Wrap(seq) => seq.reverseIterator
+    case _ => new ChainReverseIterator[A](this)
   }
 
   /** Returns the number of elements in this structure */
@@ -273,25 +270,15 @@ sealed abstract class Catenable[+A] {
 
 
   /** Converts to a list. */
-  final def toList: List[A] = {
-    val builder = List.newBuilder[A]
-    foreach { a =>
-      builder += a; ()
-    }
-    builder.result
-  }
+  final def toList: List[A] =
+    iterator.toList
 
   /** Converts to a vector. */
-  final def toVector: Vector[A] = {
-    val builder = new scala.collection.immutable.VectorBuilder[A]()
-    foreach { a =>
-      builder += a; ()
-    }
-    builder.result
-  }
+  final def toVector: Vector[A] =
+    iterator.toVector
 
   def show[AA >: A](implicit AA: Show[AA]): String = {
-    val builder = new StringBuilder("Catenable(")
+    val builder = new StringBuilder("Chain(")
     var first = true
 
     foreach { a =>
@@ -306,60 +293,58 @@ sealed abstract class Catenable[+A] {
   override def toString: String = show(Show.show[A](_.toString))
 }
 
-object Catenable extends CatenableInstances {
+object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
 
-  private[data] final case object Empty extends Catenable[Nothing] {
+  private[data] final case object Empty extends Chain[Nothing] {
     def isEmpty: Boolean = true
   }
-  private[data] final case class Singleton[A](a: A) extends Catenable[A] {
+  private[data] final case class Singleton[A](a: A) extends Chain[A] {
     def isEmpty: Boolean = false
   }
-  private[data] final case class Append[A](left: Catenable[A], right: Catenable[A])
-    extends Catenable[A] {
+  private[data] final case class Append[A](left: Chain[A], right: Chain[A])
+    extends Chain[A] {
     def isEmpty: Boolean =
       false // b/c `append` constructor doesn't allow either branch to be empty
   }
-  private[data] final case class Wrap[A](seq: Seq[A]) extends Catenable[A] {
+  private[data] final case class Wrap[A](seq: Seq[A]) extends Chain[A] {
     override def isEmpty: Boolean =
       false // b/c `fromSeq` constructor doesn't allow either branch to be empty
   }
 
-  /** Empty catenable. */
-  val nil: Catenable[Nothing] = Empty
+  /** Empty Chain. */
+  val nil: Chain[Nothing] = Empty
 
-  def empty[A]: Catenable[A] = nil
+  def empty[A]: Chain[A] = nil
 
-  /** Creates a catenable of 1 element. */
-  def singleton[A](a: A): Catenable[A] = Singleton(a)
+  /** Creates a Chain of 1 element. */
+  def one[A](a: A): Chain[A] = Singleton(a)
 
-  /** Alias for singleton */
-  def one[A](a: A): Catenable[A] = singleton(a)
-
-  /** Appends two catenables. */
-  def append[A](c: Catenable[A], c2: Catenable[A]): Catenable[A] =
+  /** Appends two Chains. */
+  def append[A](c: Chain[A], c2: Chain[A]): Chain[A] =
     if (c.isEmpty) c2
     else if (c2.isEmpty) c
     else Append(c, c2)
 
-  /** Creates a catenable from the specified sequence. */
-  def fromSeq[A](s: Seq[A]): Catenable[A] =
+  /** Creates a Chain from the specified sequence. */
+  def fromSeq[A](s: Seq[A]): Chain[A] =
     if (s.isEmpty) nil
+    else if (s.lengthCompare(1) == 0) one(s.head)
     else Wrap(s)
 
-  /** Creates a catenable from the specified elements. */
-  def apply[A](as: A*): Catenable[A] =
+  /** Creates a Chain from the specified elements. */
+  def apply[A](as: A*): Chain[A] =
     as match {
       case w: collection.mutable.WrappedArray[A] =>
         if (w.isEmpty) nil
-        else if (w.size == 1) singleton(w.head)
+        else if (w.size == 1) one(w.head)
         else {
           val arr: Array[A] = w.array
-          var c: Catenable[A] = singleton(arr.last)
+          var c: Chain[A] = one(arr.last)
           var idx = arr.size - 2
           while (idx >= 0) {
-            c = Append(singleton(arr(idx)), c)
+            c = Append(one(arr(idx)), c)
             idx -= 1
           }
           c
@@ -368,9 +353,9 @@ object Catenable extends CatenableInstances {
     }
 
   // scalastyle:off null
-  class CatenableIterator[A](self: Catenable[A]) extends Iterator[A] {
-    var c: Catenable[A] = if (self.isEmpty) null else self
-    val rights = new collection.mutable.ArrayBuffer[Catenable[A]]
+  class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
+    var c: Chain[A] = if (self.isEmpty) null else self
+    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
     var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
@@ -409,38 +394,86 @@ object Catenable extends CatenableInstances {
     }
   }
   // scalastyle:on null
+
+
+  // scalastyle:off null
+  class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
+    var c: Chain[A] = if (self.isEmpty) null else self
+    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    var currentIterator: Iterator[A] = null
+
+    override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
+
+    override def next(): A = {
+      @tailrec def go: A =
+        if ((currentIterator ne null) && currentIterator.hasNext)
+          currentIterator.next()
+        else {
+          currentIterator = null
+
+          c match {
+            case Singleton(a) =>
+              c =
+                if (lefts.isEmpty) null
+                else lefts.reduceLeft((x, y) => Append(x, y))
+              lefts.clear()
+              a
+            case Append(l, r) =>
+              c = r
+              lefts += l
+              go
+            case Wrap(seq) =>
+              c =
+                if (lefts.isEmpty) null
+                else lefts.reduceLeft((x, y) => Append(x, y))
+              lefts.clear()
+              currentIterator = seq.reverseIterator
+              currentIterator.next
+            case Empty =>
+              go // This shouldn't happen
+          }
+        }
+
+      go
+    }
+  }
+  // scalastyle:on null
 }
 
-private[data] sealed abstract class CatenableInstances {
-  implicit def catsDataMonoidForCatenable[A]: Monoid[Catenable[A]] = new Monoid[Catenable[A]] {
-    def empty: Catenable[A] = Catenable.nil
-    def combine(c: Catenable[A], c2: Catenable[A]): Catenable[A] = Catenable.append(c, c2)
+private[data] sealed abstract class ChainInstances {
+  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = new Monoid[Chain[A]] {
+    def empty: Chain[A] = Chain.nil
+    def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.append(c, c2)
   }
 
-  implicit val catsDataInstancesForCatenable: Traverse[Catenable] with Alternative[Catenable] with Monad[Catenable] =
-    new Traverse[Catenable] with Alternative[Catenable] with Monad[Catenable] {
-      def foldLeft[A, B](fa: Catenable[A], b: B)(f: (B, A) => B): B =
+  implicit val catsDataInstancesForChain: Traverse[Chain] with Alternative[Chain] with Monad[Chain] =
+    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] {
+      def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
-      def foldRight[A, B](fa: Catenable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         Eval.defer(fa.foldRight(lb) { (a, lb) =>
           Eval.defer(f(a, lb))
         })
 
-      override def map[A, B](fa: Catenable[A])(f: A => B): Catenable[B] = fa.map(f)
-      override def toList[A](fa: Catenable[A]): List[A] = fa.toList
-      override def isEmpty[A](fa: Catenable[A]): Boolean = fa.isEmpty
-      def traverse[G[_], A, B](fa: Catenable[A])(f: A => G[B])(implicit G: Applicative[G]): G[Catenable[B]] =
-        fa.foldLeft[G[Catenable[B]]](G.pure(nil)) { (gcatb, a) =>
-          G.map2(gcatb, f(a))(_ :+ _)
+      override def map[A, B](fa: Chain[A])(f: A => B): Chain[B] = fa.map(f)
+      override def toList[A](fa: Chain[A]): List[A] = fa.toList
+      override def isEmpty[A](fa: Chain[A]): Boolean = fa.isEmpty
+      override def exists[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.exists(p)
+      override def forall[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.forall(p)
+      override def find[A](fa: Chain[A])(f: A => Boolean): Option[A] = fa.find(f)
+
+      def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
+        fa.foldRight[G[Chain[B]]](G.pure(nil)) { (a, gcatb) =>
+          G.map2(f(a), gcatb)(_ +: _)
         }
-      def empty[A]: Catenable[A] = Catenable.nil
-      def combineK[A](c: Catenable[A], c2: Catenable[A]): Catenable[A] = Catenable.append(c, c2)
-      def pure[A](a: A): Catenable[A] = Catenable.singleton(a)
-      def flatMap[A, B](fa: Catenable[A])(f: A => Catenable[B]): Catenable[B] =
+      def empty[A]: Chain[A] = Chain.nil
+      def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.append(c, c2)
+      def pure[A](a: A): Chain[A] = Chain.one(a)
+      def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)
-      def tailRecM[A, B](a: A)(f: A => Catenable[Either[A, B]]): Catenable[B] = {
-        var acc: Catenable[B] = Catenable.nil
-        @tailrec def go(rest: List[Catenable[Either[A, B]]]): Unit =
+      def tailRecM[A, B](a: A)(f: A => Chain[Either[A, B]]): Chain[B] = {
+        var acc: Chain[B] = Chain.nil
+        @tailrec def go(rest: List[Chain[Either[A, B]]]): Unit =
           rest match {
             case hd :: tl =>
               hd.uncons match {
@@ -462,11 +495,11 @@ private[data] sealed abstract class CatenableInstances {
       }
     }
 
-  implicit def catsDataShowForCatenable[A](implicit A: Show[A]): Show[Catenable[A]] =
-    Show.show[Catenable[A]](_.show)
+  implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =
+    Show.show[Chain[A]](_.show)
 
-  implicit def catsDataEqForCatenable[A](implicit A: Eq[A]): Eq[Catenable[A]] = new Eq[Catenable[A]] {
-    def eqv(x: Catenable[A], y: Catenable[A]): Boolean =
+  implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] = new Eq[Chain[A]] {
+    def eqv(x: Chain[A], y: Chain[A]): Boolean =
       (x eq y) || x.toList === y.toList
   }
 
