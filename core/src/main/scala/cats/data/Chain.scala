@@ -219,9 +219,8 @@ sealed abstract class Chain[+A] {
   }
 
   /** Reverses this `Chain` */
-  def reverse: Chain[A] = {
-    Wrap(reverseIterator.toList)
-  }
+  def reverse: Chain[A] =
+    fromSeq(reverseIterator.toVector)
 
 
   /**
