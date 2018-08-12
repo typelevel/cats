@@ -193,7 +193,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [buildo](https://buildo.io)
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
-- [Eloquentix](https://eloquentrix.com)
+- [Eloquentix](https://eloquentix.com)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [Underscore Consulting](https://underscore.io/)
 - [e.near](http://enear.co)
