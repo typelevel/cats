@@ -29,7 +29,7 @@ class ChainSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
-      ci.size should === (ci.toList.size)
+      ci.size.toInt should === (ci.toList.size)
     }
   }
 
