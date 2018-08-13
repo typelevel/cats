@@ -191,6 +191,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Avast](https://avast.com)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [buildo](https://buildo.io)
+- [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
 - [Eloquentix](https://eloquentix.com)
