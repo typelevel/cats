@@ -75,12 +75,9 @@ sealed abstract class Chain[+A] {
   final def map[B](f: A => B): Chain[B] =
     fromSeq(iterator.map(f).toVector)
 
-  /** Applies the supplied function to each element and returns a new Chain from the concatenated results */
-  final def flatMap[B](f: A => Chain[B]): Chain[B] =
-    foldLeft(nil: Chain[B])((acc, a) => acc ++ f(a))
 
   /** Applies the supplied function to each element and returns a new Chain from the concatenated results */
-  final def flatMapIterator[B](f: A => Chain[B]): Chain[B] = {
+  final def flatMap[B](f: A => Chain[B]): Chain[B] = {
     var result = empty[B]
     val iter = iterator
     while (iter.hasNext) { result = result ++ f(iter.next) }
@@ -131,16 +128,6 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  final def findIterator(f: A => Boolean): Option[A] = {
-    val iter = iterator
-    var result: Option[A] = Option.empty[A]
-    while (iter.hasNext && result.isEmpty) {
-      val a = iter.next
-      if (f(a)) result = Some(a)
-    }
-    result
-  }
-
   /** Check whether at least one element satisfies the predicate */
   final def exists(f: A => Boolean): Boolean = {
     var result: Boolean = false
@@ -187,21 +174,6 @@ sealed abstract class Chain[+A] {
    * of the keys produced by the given mapping function.
    */
   final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Chain[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, Chain[A]]
-
-    foreach { elem =>
-      val k = f(elem)
-
-      m.get(k) match {
-        case None => m += ((k, one(elem))); ()
-        case Some(cat) => m = m.updated(k, cat :+ elem)
-      }
-    }
-    m
-  }
-
-  final def groupByIterator[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Chain[A]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
     var m = SortedMap.empty[B, Chain[A]]
     val iter = iterator
