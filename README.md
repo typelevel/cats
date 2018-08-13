@@ -210,6 +210,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
 - [eBay Inc.](https://www.ebay.com)
+- [Earnest](https://www.earnest.com)
 
 ### Maintainers
 
