@@ -292,21 +292,9 @@ object Free extends FreeInstances {
   def match_[F[_], G[_], A](fa: Free[F, A])(implicit F: Functor[F], I: InjectK[G, F]): Option[G[Free[F, A]]] =
     fa.resume.fold(I.prj(_), _ => None)
 
-  /**
-   * `Free[S, ?]` has a monad for any type constructor `S[_]`.
-   */
-  implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, ?]] =
-    new Monad[Free[S, ?]] with StackSafeMonad[Free[S, ?]] {
-      def pure[A](a: A): Free[S, A] = Free.pure(a)
-      override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
-      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
-    }
+  implicit def catsFreeMonadForId: Monad[Free[Id, ?]] = catsFreeMonadForFree[Id]
 
-  implicit def catsFreeDeferForFree[S[_]]: Defer[Free[S, ?]] =
-    new Defer[Free[S, ?]] {
-      def defer[A](fa: => Free[S, A]): Free[S, A] =
-        Free.defer(fa)
-    }
+  implicit def catsFreeDeferForId: Defer[Free[Id, ?]] = catsFreeDeferForFree[Id]
 }
 
 private trait FreeFoldable[F[_]] extends Foldable[Free[F, ?]] {
@@ -343,7 +331,26 @@ private trait FreeTraverse[F[_]] extends Traverse[Free[F, ?]] with FreeFoldable[
   override final def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = fa.map(f)
 }
 
-sealed private[free] abstract class FreeInstances {
+sealed private[free] abstract class FreeInstances extends FreeInstances1 {
+
+  /**
+   * `Free[S, ?]` has a monad for any type constructor `S[_]`.
+   */
+  implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, ?]] =
+    new Monad[Free[S, ?]] with StackSafeMonad[Free[S, ?]] {
+      def pure[A](a: A): Free[S, A] = Free.pure(a)
+      override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
+      def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
+    }
+
+  implicit def catsFreeDeferForFree[S[_]]: Defer[Free[S, ?]] =
+    new Defer[Free[S, ?]] {
+      def defer[A](fa: => Free[S, A]): Free[S, A] =
+        Free.defer(fa)
+    }
+}
+
+sealed private[free] abstract class FreeInstances1 {
 
   implicit def catsFreeFoldableForFree[F[_]](
     implicit
