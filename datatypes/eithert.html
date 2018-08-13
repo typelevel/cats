@@ -113,7 +113,7 @@ monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be
 
 <h2 id="from-fa-or-fb-to-eithertf-a-b">From <code class="highlighter-rouge">F[A]</code> or <code class="highlighter-rouge">F[B]</code> to <code class="highlighter-rouge">EitherT[F, A, B]</code></h2>
 
-<p>Similary, use <code class="highlighter-rouge">EitherT.left</code> and <code class="highlighter-rouge">EitherT.right</code> to convert an <code class="highlighter-rouge">F[A]</code> or an <code class="highlighter-rouge">F[B]</code>
+<p>Similarly, use <code class="highlighter-rouge">EitherT.left</code> and <code class="highlighter-rouge">EitherT.right</code> to convert an <code class="highlighter-rouge">F[A]</code> or an <code class="highlighter-rouge">F[B]</code>
 into an <code class="highlighter-rouge">EitherT</code>. It is also possible to use <code class="highlighter-rouge">EitherT.liftF</code> as an alias for
 <code class="highlighter-rouge">EitherT.right</code>.</p>
 
