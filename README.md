@@ -188,6 +188,7 @@ versioning in the future. But that decision is yet to be made.
 Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
 
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
+- [AutoScout24](https://www.autoscout24.com)
 - [Avast](https://avast.com)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [buildo](https://buildo.io)
