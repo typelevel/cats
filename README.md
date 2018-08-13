@@ -202,6 +202,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
 - [iHeartRadio](https://iheart.com)
+- [ITV](https://www.itv.com/)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
 - [Spotahome](https://spotahome.com)
