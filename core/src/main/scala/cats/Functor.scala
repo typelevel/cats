@@ -53,7 +53,7 @@ import simulacrum.typeclass
   /**
    * Empty the fa of the values, preserving the structure
    */
-  def void[A](fa: F[A]): F[Unit] = map(fa)(_ => ())
+  def void[A](fa: F[A]): F[Unit] = as(fa, ())
 
   /**
    * Tuple the values in fa with the result of applying a function
