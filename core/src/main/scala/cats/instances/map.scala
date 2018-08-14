@@ -4,6 +4,7 @@ package instances
 import cats.kernel.CommutativeMonoid
 
 import scala.annotation.tailrec
+import cats.arrow.Compose
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
@@ -79,4 +80,18 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
     }
   // scalastyle:on method.length
+
+  implicit def catsStdComposeForMap: Compose[Map] = new Compose[Map] {
+
+    def compose[A, B, C](f: Map[B, C], g: Map[A, B]): Map[A, C] = {
+      g.foldLeft(Map.empty[A, C]) {
+        case (acc, (key, value)) =>
+          f.get(value) match {
+            case Some(other) => acc + (key -> other)
+            case _ => acc
+          }
+      }
+    }
+
+  }
 }
