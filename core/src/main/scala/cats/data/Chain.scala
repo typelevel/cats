@@ -50,7 +50,7 @@ sealed abstract class Chain[+A] {
   /**
    * Returns true if there are no elements in this collection.
    */
-  final def isEmpty: Boolean
+  def isEmpty: Boolean
 
   /**
    * Returns false if there are no elements in this collection.
@@ -61,37 +61,37 @@ sealed abstract class Chain[+A] {
    * Concatenates this with `c` in O(1) runtime.
    */
   final def concat[A2 >: A](c: Chain[A2]): Chain[A2] =
-    append(this, c)
+    Chain.concat(this, c)
 
   /**
    * Alias for concat
    */
   final def ++[A2 >: A](c: Chain[A2]): Chain[A2] =
-    concat(this, c)
+    concat(c)
 
   /**
    * Returns a new Chain consisting of `a` followed by this. O(1) runtime.
    */
-  final def cons[A2 >: A](a: A2): Chain[A2] =
-    append(one(a), this)
+  final def prepend[A2 >: A](a: A2): Chain[A2] =
+    Chain.concat(one(a), this)
 
   /**
-   * Alias for [[cons]].
+   * Alias for [[prepend]].
    */
   final def +:[A2 >: A](a: A2): Chain[A2] =
-    cons(a)
+    prepend(a)
 
   /**
    * Returns a new Chain consisting of this followed by `a`. O(1) runtime.
    */
-  final def snoc[A2 >: A](a: A2): Chain[A2] =
-    append(this, one(a))
+  final def append[A2 >: A](a: A2): Chain[A2] =
+    Chain.concat(this, one(a))
 
   /**
-   * Alias for [[snoc]].
+   * Alias for [[append]].
    */
   final def :+[A2 >: A](a: A2): Chain[A2] =
-    snoc(a)
+    append(a)
 
   /**
    * Applies the supplied function to each element and returns a new Chain.
@@ -374,7 +374,7 @@ object Chain extends ChainInstances {
   private[data] final case class Append[A](left: Chain[A], right: Chain[A])
     extends Chain[A] {
     def isEmpty: Boolean =
-      false // b/c `append` constructor doesn't allow either branch to be empty
+      false // b/c `concat` constructor doesn't allow either branch to be empty
   }
   private[data] final case class Wrap[A](seq: Seq[A]) extends Chain[A] {
     override def isEmpty: Boolean =
@@ -389,8 +389,8 @@ object Chain extends ChainInstances {
   /** Creates a Chain of 1 element. */
   def one[A](a: A): Chain[A] = Singleton(a)
 
-  /** Appends two Chains. */
-  def append[A](c: Chain[A], c2: Chain[A]): Chain[A] =
+  /** Concatenates two Chains. */
+  def concat[A](c: Chain[A], c2: Chain[A]): Chain[A] =
     if (c.isEmpty) c2
     else if (c2.isEmpty) c
     else Append(c, c2)
@@ -511,7 +511,7 @@ object Chain extends ChainInstances {
 private[data] sealed abstract class ChainInstances {
   implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = new Monoid[Chain[A]] {
     def empty: Chain[A] = Chain.nil
-    def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.append(c, c2)
+    def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
   }
 
   implicit val catsDataInstancesForChain: Traverse[Chain] with Alternative[Chain] with Monad[Chain] =
@@ -535,7 +535,7 @@ private[data] sealed abstract class ChainInstances {
           G.map2(f(a), gcatb)(_ +: _)
         }
       def empty[A]: Chain[A] = Chain.nil
-      def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.append(c, c2)
+      def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
       def pure[A](a: A): Chain[A] = Chain.one(a)
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)
