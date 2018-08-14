@@ -92,12 +92,12 @@ options:
     url: typeclasses/parallel.html
     menu_type: typeclasses
 
-  - title: MonoidK
-    url: typeclasses/monoidk.html
-    menu_type: typeclasses
-
   - title: SemigroupK
     url: typeclasses/semigroupk.html
+    menu_type: typeclasses
+
+  - title: MonoidK
+    url: typeclasses/monoidk.html
     menu_type: typeclasses
 
   - title: Show
@@ -167,7 +167,7 @@ options:
   - title: Nested
     url: datatypes/nested.html
     menu_type: data
-    
+
   - title: NonEmptyList
     url: datatypes/nel.html
     menu_type: data
