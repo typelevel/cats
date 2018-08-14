@@ -210,6 +210,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [47 Degrees](https://www.47deg.com)
 - [eBay Inc.](https://www.ebay.com)
 - [Earnest](https://www.earnest.com)
+- [Rudder](https://rudder.io)
 
 ### Maintainers
 
