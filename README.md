@@ -203,6 +203,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [iHeartRadio](https://iheart.com)
 - [ITV](https://www.itv.com/)
+- [REA Group](https://www.realestate.com.au/)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
