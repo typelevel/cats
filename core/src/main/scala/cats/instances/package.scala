@@ -1,7 +1,7 @@
 package cats
 
 package object instances {
-  object all             extends AllInstances with AllInstancesBinCompat0
+  object all             extends AllInstances with AllInstancesBinCompat0 with AllInstancesBinCompat1
   object bigInt          extends BigIntInstances
   object bigDecimal      extends BigDecimalInstances
   object bitSet          extends BitSetInstances
@@ -21,7 +21,7 @@ package object instances {
   object invariant       extends InvariantMonoidalInstances
   object list            extends ListInstances
   object long            extends LongInstances
-  object map             extends MapInstances
+  object map             extends MapInstances with MapInstancesBinCompat0
   object option          extends OptionInstances
   object order           extends OrderInstances
   object ordering        extends OrderingInstances

@@ -81,6 +81,10 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
   // scalastyle:on method.length
 
+}
+
+trait MapInstancesBinCompat0 {
+
   implicit def catsStdComposeForMap: Compose[Map] = new Compose[Map] {
 
     def compose[A, B, C](f: Map[B, C], g: Map[A, B]): Map[A, C] = {
@@ -94,4 +98,5 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   }
+
 }
