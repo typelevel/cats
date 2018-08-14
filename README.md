@@ -193,6 +193,8 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
+- [Earnest](https://www.earnest.com)
+- [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [Underscore Consulting](https://underscore.io/)
@@ -201,16 +203,16 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [formation.ai](https://formation.ai)
 - [iHeartRadio](https://iheart.com)
 - [ITV](https://www.itv.com/)
+- [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
+- [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spotahome](https://spotahome.com)
 - [Stripe](https://stripe.com)
 - [The Guardian](https//www.theguardian.com)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
-- [eBay Inc.](https://www.ebay.com)
-- [Earnest](https://www.earnest.com)
-- [Snowplow Analytics](https://snowplowanalytics.com/)
+
 
 ### Maintainers
 
