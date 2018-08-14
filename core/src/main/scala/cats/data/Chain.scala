@@ -14,7 +14,9 @@ import scala.collection.immutable.SortedMap
  */
 sealed abstract class Chain[+A] {
 
-  /** Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1). */
+  /**
+   * Returns the head and tail of this Chain if non empty, none otherwise. Amortized O(1).
+   */
   final def uncons: Option[(A, Chain[A])] = {
     var c: Chain[A] = this
     val rights = new collection.mutable.ArrayBuffer[Chain[A]]
@@ -45,38 +47,62 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Returns true if there are no elements in this collection. */
-  def isEmpty: Boolean
+  /**
+   * Returns true if there are no elements in this collection.
+   */
+  final def isEmpty: Boolean
 
-  /** Returns false if there are no elements in this collection. */
-  def nonEmpty: Boolean = !isEmpty
+  /**
+   * Returns false if there are no elements in this collection.
+   */
+  final def nonEmpty: Boolean = !isEmpty
 
-  /** Concatenates this with `c` in O(1) runtime. */
-  final def ++[A2 >: A](c: Chain[A2]): Chain[A2] =
+  /**
+   * Concatenates this with `c` in O(1) runtime.
+   */
+  final def concat[A2 >: A](c: Chain[A2]): Chain[A2] =
     append(this, c)
 
-  /** Returns a new Chain consisting of `a` followed by this. O(1) runtime. */
+  /**
+   * Alias for concat
+   */
+  final def ++[A2 >: A](c: Chain[A2]): Chain[A2] =
+    concat(this, c)
+
+  /**
+   * Returns a new Chain consisting of `a` followed by this. O(1) runtime.
+   */
   final def cons[A2 >: A](a: A2): Chain[A2] =
     append(one(a), this)
 
-  /** Alias for [[cons]]. */
+  /**
+   * Alias for [[cons]].
+   */
   final def +:[A2 >: A](a: A2): Chain[A2] =
     cons(a)
 
-  /** Returns a new Chain consisting of this followed by `a`. O(1) runtime. */
+  /**
+   * Returns a new Chain consisting of this followed by `a`. O(1) runtime.
+   */
   final def snoc[A2 >: A](a: A2): Chain[A2] =
     append(this, one(a))
 
-  /** Alias for [[snoc]]. */
+  /**
+   * Alias for [[snoc]].
+   */
   final def :+[A2 >: A](a: A2): Chain[A2] =
     snoc(a)
 
-  /** Applies the supplied function to each element and returns a new Chain. */
+  /**
+   * Applies the supplied function to each element and returns a new Chain.
+   */
   final def map[B](f: A => B): Chain[B] =
     fromSeq(iterator.map(f).toVector)
 
 
-  /** Applies the supplied function to each element and returns a new Chain from the concatenated results */
+  /**
+   * Applies the supplied function to each element and returns a new Chain from the concatenated results
+   */
   final def flatMap[B](f: A => Chain[B]): Chain[B] = {
     var result = empty[B]
     val iter = iterator
@@ -84,7 +110,9 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Folds over the elements from left to right using the supplied initial value and function. */
+  /**
+   * Folds over the elements from left to right using the supplied initial value and function.
+   */
   final def foldLeft[B](z: B)(f: (B, A) => B): B = {
     var result = z
     val iter = iterator
@@ -92,7 +120,9 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Folds over the elements from right to left using the supplied initial value and function. */
+  /**
+   * Folds over the elements from right to left using the supplied initial value and function.
+   */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
     var result = z
     val iter = reverseIterator
@@ -100,7 +130,9 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Collect `B` from this for which `f` is defined */
+  /**
+   * Collect `B` from this for which `f` is defined
+   */
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] =
     foldLeft(Chain.nil: Chain[B]) { (acc, a) =>
       // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
@@ -109,15 +141,21 @@ sealed abstract class Chain[+A] {
       else acc
     }
 
-  /** Remove elements not matching the predicate */
+  /**
+   * Remove elements not matching the predicate
+   */
   final def filter(f: A => Boolean): Chain[A] =
     collect { case a if f(a) => a }
 
-  /** Remove elements matching the predicate */
+  /**
+   * Remove elements matching the predicate
+   */
   final def filterNot(f: A => Boolean): Chain[A] =
     filter(a => !f(a))
 
-  /** Find the first element matching the predicate, if one exists */
+  /**
+   * Find the first element matching the predicate, if one exists
+   */
   final def find(f: A => Boolean): Option[A] = {
     var result: Option[A] = Option.empty[A]
     foreachUntil { a =>
@@ -128,7 +166,9 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Check whether at least one element satisfies the predicate */
+  /**
+   * Check whether at least one element satisfies the predicate
+   */
   final def exists(f: A => Boolean): Boolean = {
     var result: Boolean = false
     foreachUntil { a =>
@@ -139,7 +179,9 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Check whether all elements satisfy the predicate */
+  /**
+   * Check whether all elements satisfy the predicate
+   */
   final def forall(f: A => Boolean): Boolean = {
     var result: Boolean = true
     foreachUntil { a =>
@@ -150,11 +192,15 @@ sealed abstract class Chain[+A] {
     result
   }
 
-  /** Check whether an element is in this structure */
+  /**
+   * Check whether an element is in this structure
+   */
   final def contains[AA >: A](a: AA)(implicit A: Eq[AA]): Boolean =
     exists(A.eqv(a, _))
 
-  /** Zips this `Chain` with another `Chain` and applies a function for each pair of elements. */
+  /**
+   * Zips this `Chain` with another `Chain` and applies a function for each pair of elements.
+   */
   final def zipWith[B, C](other: Chain[B])(f: (A, B) => C): Chain[C] =
     if (this.isEmpty || other.isEmpty) Chain.Empty
     else {
@@ -190,7 +236,9 @@ sealed abstract class Chain[+A] {
     m
   }
 
-  /** Reverses this `Chain` */
+  /**
+   * Reverses this `Chain`
+   */
   def reverse: Chain[A] =
     fromSeq(reverseIterator.toVector)
 
@@ -213,10 +261,14 @@ sealed abstract class Chain[+A] {
     go(this, Chain.nil)
   }
 
-  /** Applies the supplied function to each element, left to right. */
+  /**
+   * Applies the supplied function to each element, left to right.
+   */
   private final def foreach(f: A => Unit): Unit = foreachUntil { a => f(a); false }
 
-  /** Applies the supplied function to each element, left to right, but stops when true is returned */
+  /**
+   * Applies the supplied function to each element, left to right, but stops when true is returned
+   */
   // scalastyle:off null return cyclomatic.complexity
   private final def foreachUntil(f: A => Boolean): Unit = {
     var c: Chain[A] = this
@@ -265,7 +317,9 @@ sealed abstract class Chain[+A] {
     case _ => new ChainReverseIterator[A](this)
   }
 
-  /** Returns the number of elements in this structure */
+  /**
+   * Returns the number of elements in this structure
+   */
   final def length: Int = {
     val iter = iterator
     var i: Int = 0
@@ -273,15 +327,21 @@ sealed abstract class Chain[+A] {
     i
   }
 
-  /** Alias for length */
+  /**
+   * Alias for length
+   */
   final def size: Int = length
 
 
-  /** Converts to a list. */
+  /**
+   * Converts to a list.
+   */
   final def toList: List[A] =
     iterator.toList
 
-  /** Converts to a vector. */
+  /**
+   * Converts to a vector.
+   */
   final def toVector: Vector[A] =
     iterator.toVector
 
