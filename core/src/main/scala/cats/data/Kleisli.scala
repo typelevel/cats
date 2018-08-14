@@ -69,7 +69,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
 
   /** Discard computed B and yield the input value. */
   def tap(implicit F: Functor[F]): Kleisli[F, A, A] =
-    Kleisli(a => F.map(run(a))(_ => a))
+    Kleisli(a => F.as(run(a), a))
 
   /** Yield computed B combined with input value. */
   def tapWith[C](f: (A, B) => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
