@@ -52,6 +52,12 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
   def fromSeq[A](as: Seq[A]): Option[NonEmptyChain[A]] =
     if (as.nonEmpty) Option(create(Chain.fromSeq(as))) else None
 
+  def fromChainPrepend[A](a: A, ca: Chain[A]): NonEmptyChain[A] =
+    create(a +: ca)
+
+  def fromChainAppend[A](ca: Chain[A], a: A): NonEmptyChain[A] =
+    create(ca :+ a)
+
   def apply[A](a: A, as: A*): NonEmptyChain[A] =
     create(Chain.append(Chain.one(a), Chain.fromSeq(as)))
 
@@ -71,19 +77,25 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
 
   /**
    * Returns a new NonEmptyChain consisting of `a` followed by this. O(1) runtime.
-   * */
+   */
   final def cons[A2 >: A](a: A2): NonEmptyChain[A2] =
     create(toChain.cons(a))
 
-  /** Alias for [[cons]]. */
+  /**
+   * Alias for [[cons]].
+   */
   final def +:[A2 >: A](a: A2): NonEmptyChain[A2] =
     cons(a)
 
-  /** Returns a new Chain consisting of this followed by `a`. O(1) runtime. */
+  /**
+   * Returns a new Chain consisting of this followed by `a`. O(1) runtime.
+   */
   final def snoc[A2 >: A](a: A2): NonEmptyChain[A2] =
     create(toChain.snoc(a))
 
-  /** Alias for [[snoc]]. */
+  /**
+   * Alias for [[snoc]].
+   */
   final def :+[A2 >: A](a: A2): NonEmptyChain[A2] =
     snoc(a)
 
@@ -96,9 +108,41 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 4, 5, 7)
    * }}}
    */
-  final def ++[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
+  final def concat[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
     create(toChain ++ c.toChain)
 
+
+  /**
+   * Alias for concat
+   */
+  final def ++[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
+    concat(this, c)
+
+  /**
+   * Appends the given chain in O(1) runtime.
+   */
+  final def appendChain[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
+    if (c.isEmpty) this
+    else create(toChain ++ c)
+
+  /**
+   * Alias for `appendChain`
+   */
+  final def :++[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
+    appendChain(c)
+
+  /**
+   * Prepends the given chain in O(1) runtime.
+   */
+  final def prependChain[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
+    if (c.isEmpty) this
+    else create(c ++ toChain)
+
+  /**
+   * Alias for `prependChain`
+   */
+  final def ++:[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
+    prependChain(c)
 
   /**
    * Applies f to all the elements
