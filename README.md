@@ -209,6 +209,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Scala Center](https://scala.epfl.ch)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spotahome](https://spotahome.com)
+- [SpringerNature](https://www.springernature.com)
 - [Stripe](https://stripe.com)
 - [The Guardian](https//www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
