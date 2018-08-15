@@ -7,3 +7,4 @@ object implicits
     with syntax.AllSyntaxBinCompat2
     with instances.AllInstances
     with instances.AllInstancesBinCompat0
+    with instances.AllInstancesBinCompat1

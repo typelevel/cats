@@ -3,6 +3,7 @@ package data
 
 import cats.Bifunctor
 import cats.instances.either._
+import cats.instances.option._
 import cats.syntax.either._
 
 /**
@@ -505,6 +506,28 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
       def defer[A](fa: => EitherT[F, L, A]): EitherT[F, L, A] =
         EitherT(F.defer(fa.value))
     }
+
+  implicit def catsDataTraverseEmptyForEitherT[F[_], L](implicit F0: TraverseEmpty[F]): TraverseEmpty[EitherT[F, L, ?]] =
+    new EitherTFunctorEmpty[F, L] with TraverseEmpty[EitherT[F, L, ?]] {
+      implicit def F: FunctorEmpty[F] = F0
+      def traverse: Traverse[EitherT[F, L, ?]] = catsDataTraverseForEitherT[F, L](F0.traverse)
+
+      def traverseFilter[G[_], A, B]
+      (fa: EitherT[F, L, A])
+      (f: A => G[Option[B]])
+      (implicit G: Applicative[G]): G[EitherT[F, L, B]] =
+        G.map(
+          F0.traverseFilter[G, Either[L, A], Either[L, B]](fa.value) {
+            case l@Left(_) => G.pure(Option(l.rightCast[B]))
+            case Right(a) => G.map(f(a))(_.map(Either.right))
+          })(EitherT(_))
+
+      override def filterA[G[_], A]
+      (fa: EitherT[F, L, A])
+      (f: A => G[Boolean])
+      (implicit G: Applicative[G]): G[EitherT[F, L, A]] =
+        G.map(F0.filterA(fa.value)(_.fold(_ => G.pure(true), f)))(EitherT[F, L, A])
+    }
 }
 
 private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
@@ -536,6 +559,9 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
       override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
         fa.ensureOr(error)(predicate)(F)
     }
+
+  implicit def catsDataFunctorEmptyForEitherT[F[_], L](implicit F0: FunctorEmpty[F]): FunctorEmpty[EitherT[F, L, ?]] =
+    new EitherTFunctorEmpty[F, L] { implicit def F = F0 }
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
@@ -694,4 +720,25 @@ private[data] sealed trait EitherTOrder[F[_], L, A] extends Order[EitherT[F, L, 
   override implicit def F0: Order[F[Either[L, A]]]
 
   override def compare(x: EitherT[F, L, A], y: EitherT[F, L, A]): Int = x compare y
+}
+
+private[data] sealed trait EitherTFunctorEmpty[F[_], E] extends FunctorEmpty[EitherT[F, E, ?]] {
+  implicit def F: FunctorEmpty[F]
+
+  override def functor: Functor[EitherT[F, E, ?]] = EitherT.catsDataFunctorForEitherT[F, E](F.functor)
+
+  def mapFilter[A, B](fa: EitherT[F, E, A])(f: (A) => Option[B]): EitherT[F, E, B] =
+    EitherT[F, E, B](F.mapFilter(fa.value)(_.traverse(f)))
+
+  override def collect[A, B](fa: EitherT[F, E, A])(f: PartialFunction[A, B]): EitherT[F, E, B] = {
+    EitherT[F, E, B](F.mapFilter(fa.value)(_.traverse(f.lift)))
+  }
+
+  override def flattenOption[A](fa: EitherT[F, E, Option[A]]): EitherT[F, E, A] = {
+    EitherT[F, E, A](F.flattenOption[Either[E, A]](F.map(fa.value)(Traverse[Either[E, ?]].sequence[Option, A])))
+  }
+
+  override def filter[A](fa: EitherT[F, E, A])(f: (A) => Boolean): EitherT[F, E, A] = {
+    EitherT[F, E, A](F.filter(fa.value)(_.forall(f)))
+  }
 }

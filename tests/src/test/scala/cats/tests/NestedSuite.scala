@@ -26,6 +26,16 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // TraverseEmpty composition
+    implicit val instance = ListWrapper.traverseEmpty
+    implicit val traverseInstance = ListWrapper.traverse
+    checkAll("Nested[ListWrapper, ListWrapper]",
+      TraverseEmptyTests[Nested[ListWrapper, ListWrapper, ?]].traverseEmpty[Int, Int, Int])
+    checkAll("TraverseEmpty[Nested[ListWrapper, ListWrapper, ?]]",
+      SerializableTests.serializable(TraverseEmpty[Nested[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
     // Invariant + Covariant = Invariant
     val instance = Nested.catsDataInvariantForCovariantNested(ListWrapper.invariant, ListWrapper.functor)
     checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant", InvariantTests[Nested[ListWrapper, ListWrapper, ?]](instance).invariant[Int, Int, Int])

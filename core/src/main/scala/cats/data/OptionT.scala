@@ -231,6 +231,20 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
       def defer[A](fa: => OptionT[F, A]): OptionT[F, A] =
         OptionT(F.defer(fa.value))
     }
+
+  implicit def optionTFunctorEmpty[F[_]: Functor]: FunctorEmpty[OptionT[F, ?]] = {
+    new FunctorEmpty[OptionT[F, ?]] {
+      override val functor: Functor[OptionT[F, ?]] = OptionT.catsDataFunctorForOptionT[F]
+
+      override def mapFilter[A, B](fa: OptionT[F, A])(f: (A) => Option[B]): OptionT[F, B] = fa.subflatMap(f)
+
+      override def collect[A, B](fa: OptionT[F, A])(f: PartialFunction[A, B]): OptionT[F, B] = fa.subflatMap(f.lift)
+
+      override def flattenOption[A](fa: OptionT[F, Option[A]]): OptionT[F, A] = fa.subflatMap(identity)
+
+      override def filter[A](fa: OptionT[F, A])(f: (A) => Boolean): OptionT[F, A] = fa.filter(f)
+    }
+  }
 }
 
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {

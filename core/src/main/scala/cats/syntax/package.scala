@@ -28,6 +28,7 @@ package object syntax {
   object flatMap extends FlatMapSyntax
   object foldable extends FoldableSyntax
   object functor extends FunctorSyntax
+  object functorEmpty extends FunctorEmptySyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
@@ -49,6 +50,7 @@ package object syntax {
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
+  object traverseEmpty extends TraverseEmptySyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
   object validated extends ValidatedSyntax with ValidatedExtensionSyntax

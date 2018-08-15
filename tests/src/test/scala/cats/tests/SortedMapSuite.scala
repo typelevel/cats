@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.kernel.CommutativeMonoid
-import cats.kernel.laws.discipline.{HashTests, CommutativeMonoidTests, MonoidTests}
-import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
+import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseEmptyTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.collection.immutable.SortedMap
@@ -19,6 +19,9 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("SortedMap[Int, Int] with Option", TraverseTests[SortedMap[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[SortedMap[Int, ?]]", SerializableTests.serializable(Traverse[SortedMap[Int, ?]]))
+
+  checkAll("SortedMap[Int, Int]", TraverseEmptyTests[SortedMap[Int, ?]].traverseEmpty[Int, Int, Int])
+  checkAll("TraverseEmpty[SortedMap[Int, ?]]", SerializableTests.serializable(TraverseEmpty[SortedMap[Int, ?]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>

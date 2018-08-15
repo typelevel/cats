@@ -1,7 +1,8 @@
 package cats
 package tests
 
-import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests}
+import cats.laws.discipline.{FlatMapTests, FunctorEmptyTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests}
+import cats.laws.discipline.arbitrary._
 
 class MapSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
@@ -14,6 +15,9 @@ class MapSuite extends CatsSuite {
 
   checkAll("Map[Int, Int] with Option", UnorderedTraverseTests[Map[Int, ?]].unorderedTraverse[Int, Int, Int, Option, Option])
   checkAll("UnorderedTraverse[Map[Int, ?]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, ?]]))
+
+  checkAll("Map[Int, Int]", FunctorEmptyTests[Map[Int, ?]].functorEmpty[Int, Int, Int])
+  checkAll("FunctorEmpty[Map[Int, ?]]", SerializableTests.serializable(FunctorEmpty[Map[Int, ?]]))
 
 
   test("show isn't empty and is formatted as expected") {

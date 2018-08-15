@@ -1,9 +1,8 @@
 package cats
 package tests
 
-import cats.laws.discipline.{CommutativeApplyTests, CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseEmptyTests, TraverseTests}
 import cats.data.ZipStream
-
 import cats.laws.discipline.arbitrary._
 
 class StreamSuite extends CatsSuite {
@@ -21,6 +20,9 @@ class StreamSuite extends CatsSuite {
 
   checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Stream]", SerializableTests.serializable(Traverse[Stream]))
+
+  checkAll("Stream[Int]", TraverseEmptyTests[Stream].traverseEmpty[Int, Int, Int])
+  checkAll("TraverseEmpty[Stream]", SerializableTests.serializable(TraverseEmpty[Stream]))
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])

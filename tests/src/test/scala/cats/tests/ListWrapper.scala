@@ -56,6 +56,26 @@ object ListWrapper {
     }
   }
 
+  val traverseEmpty: TraverseEmpty[ListWrapper] = {
+    val F = TraverseEmpty[List]
+
+    new TraverseEmpty[ListWrapper] {
+      def traverse = ListWrapper.traverse
+      def traverseFilter[G[_], A, B](fa: ListWrapper[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[ListWrapper[B]] =
+        G.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
+    }
+  }
+
+  val functorEmpty: FunctorEmpty[ListWrapper] = {
+    val F = FunctorEmpty[List]
+
+    new FunctorEmpty[ListWrapper] {
+      def functor = ListWrapper.functor
+      def mapFilter[A, B](fa: ListWrapper[A])(f: A => Option[B]): ListWrapper[B] =
+        ListWrapper(F.mapFilter(fa.list)(f))
+    }
+  }
+
   val foldable: Foldable[ListWrapper] = traverse
 
   val functor: Functor[ListWrapper] = traverse

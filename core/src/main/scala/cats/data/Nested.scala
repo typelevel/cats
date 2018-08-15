@@ -2,7 +2,6 @@ package cats
 package data
 
 
-
 /** Similar to [[cats.data.Tuple2K]], but for nested composition.
  *
  * For instance, since both `List` and `Option` have a `Functor`, then so does
@@ -54,6 +53,14 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
       def defer[A](fa: => Nested[F, G, A]): Nested[F, G, A] =
         Nested(F.defer(fa.value))
     }
+
+  implicit def catsDataTraverseEmptyForNested[F[_], G[_]](implicit F0: Traverse[F], G0: TraverseEmpty[G]): TraverseEmpty[Nested[F, G, ?]] =
+    new NestedTraverseEmpty[F, G] {
+      implicit val F: Traverse[F] = F0
+      implicit val G: TraverseEmpty[G] = G0
+    }
+
+
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {
@@ -314,4 +321,36 @@ private[data] trait NestedInvariantSemigroupalApply[F[_], G[_]] extends Invarian
 
   def product[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, (A, B)] =
     Nested(FG.product(fa.value, fb.value))
+}
+
+private[data] abstract class NestedTraverseEmpty[F[_], G[_]] extends TraverseEmpty[Nested[F, G, ?]] {
+  implicit val F: Traverse[F]
+
+  implicit val G: TraverseEmpty[G]
+
+  def traverse: Traverse[Nested[F, G, ?]] = Nested.catsDataTraverseForNested(F, G.traverse)
+
+  override def mapFilter[A, B](fa: Nested[F, G, A])(f: (A) => Option[B]): Nested[F, G, B] =
+    Nested[F, G, B](F.map(fa.value)(G.mapFilter(_)(f)))
+
+  override def collect[A, B](fa: Nested[F, G, A])(f: PartialFunction[A, B]): Nested[F, G, B] =
+    Nested[F, G, B](F.map(fa.value)(G.collect(_)(f)))
+
+  override def flattenOption[A](fa: Nested[F, G, Option[A]]): Nested[F, G, A] =
+    Nested[F, G, A](F.map(fa.value)(G.flattenOption))
+
+  override def filter[A](fa: Nested[F, G, A])(f: (A) => Boolean): Nested[F, G, A] =
+    Nested[F, G, A](F.map(fa.value)(G.filter(_)(f)))
+
+  override def filterA[H[_], A]
+  (fa: Nested[F, G, A])
+  (f: A => H[Boolean])
+  (implicit H: Applicative[H]): H[Nested[F, G, A]] =
+    H.map(F.traverse(fa.value)(G.filterA[H, A](_)(f)))(Nested[F, G, A])
+
+  def traverseFilter[H[_], A, B]
+  (fga: Nested[F, G, A])
+  (f: A => H[Option[B]])
+  (implicit H: Applicative[H]): H[Nested[F, G, B]] =
+    H.map(F.traverse[H, G[A], G[B]](fga.value)(ga => G.traverseFilter(ga)(f)))(Nested[F, G, B])
 }
