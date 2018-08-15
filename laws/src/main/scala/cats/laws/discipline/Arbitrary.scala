@@ -287,6 +287,9 @@ object arbitrary extends ArbitraryInstances0 {
       }
     })
 
+  implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
+    Cogen[List[A]].contramap(_.toList)
+
 }
 
 private[discipline] sealed trait ArbitraryInstances0 {
