@@ -77,10 +77,15 @@ object arbitrary extends ArbitraryInstances0 {
     Cogen[List[A]].contramap(_.toList)
 
   implicit def catsLawsArbitraryForNonEmptyChain[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
-    Arbitrary(implicitly[Arbitrary[List[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptyChain(a, fa: _*))))
+    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap(fa =>
+      Gen.oneOf(
+        A.arbitrary.map(a => NonEmptyChain.fromChainPrepend(a, fa)),
+        A.arbitrary.map(a => NonEmptyChain.fromChainAppend(fa, a)),
+        A.arbitrary.map(NonEmptyChain.one)
+    )))
 
   implicit def catsLawsCogenForNonEmptyChain[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
-    Cogen[List[A]].contramap(_.toChain.toList)
+    Cogen[Chain[A]].contramap(_.toChain)
 
 
   implicit def catsLawsArbitraryForZipNonEmptyList[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyList[A]] =

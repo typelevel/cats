@@ -70,7 +70,7 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
 }
 
 
-sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
+class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Converts this chain to a `Chain`
@@ -106,8 +106,8 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> val nec = NonEmptyChain(1, 2, 4, 5)
-   * scala> nec ++ NonEmptyChain(1, 2, 7)
-   * res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 4, 5, 7)
+   * scala> nec ++ NonEmptyChain(7, 8)
+   * res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 4, 5, 7, 8)
    * }}}
    */
   final def concat[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
@@ -166,8 +166,7 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * Converts this chain to a `NonEmptyList`.
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
-   * scala> val nec = NonEmptyChain.of(1, 2, 3, 4, 5)
+   * scala> val nec = NonEmptyChain(1, 2, 3, 4, 5)
    * scala> nec.toNonEmptyList
    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4, 5)
    * }}}
@@ -178,9 +177,8 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * Converts this chain to a `NonEmptyVector`.
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
-   * scala> val nec = NonEmptyChain.of(1, 2, 3, 4, 5)
-   * scala> nec.NonEmptyVector
+   * scala> val nec = NonEmptyChain(1, 2, 3, 4, 5)
+   * scala> nec.toNonEmptyVector
    * res0: cats.data.NonEmptyVector[Int] = NonEmptyVector(1, 2, 3, 4, 5)
    * }}}
    */
@@ -295,10 +293,7 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * Reduce using the Semigroup of A
    */
   final def reduce[AA >: A](implicit S: Semigroup[AA]): AA = {
-    val iter: Iterator[AA] = toChain.iterator
-    var result = iter.next
-    while (iter.hasNext) { result = S.combine(result, iter.next) }
-    result
+    S.combineAllOption(iterator).get
   }
 
   /**
@@ -343,7 +338,6 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    *
    * {{{
    * scala> import cats.data.NonEmptyChain
-   * scala> import cats.implicits._
    * scala> val as = NonEmptyChain(1, 2, 3)
    * scala> val bs = NonEmptyChain("A", "B", "C")
    * scala> as.zipWith(bs)(_ + _)
