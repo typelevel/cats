@@ -193,11 +193,11 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [DriveTribe](https://drivetribe.com/)
+- [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
 - [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
 - [Evotor Marketplace](https://market.evotor.ru/)
-- [Underscore Consulting](https://underscore.io/)
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
@@ -211,9 +211,9 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Spotahome](https://spotahome.com)
 - [Stripe](https://stripe.com)
 - [The Guardian](https//www.theguardian.com)
+- [Underscore Consulting](https://underscore.io/)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
-
 
 ### Maintainers
 
