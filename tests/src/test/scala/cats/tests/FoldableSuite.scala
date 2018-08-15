@@ -140,10 +140,18 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
       fa.toList should === (iterator(fa).toList)
     }
   }
-  
+
   test(s"Foldable[$name] mkString_") {
     forAll { (fa: F[Int]) =>
       fa.mkString_("L[", ";", "]") should === (fa.toList.mkString("L[", ";", "]"))
+    }
+  }
+
+  test(s"Foldable[$name].collectFirstSomeM") {
+    forAll { (fa: F[Int], n: Int) =>
+      fa.collectFirstSomeM(x => (x > n).guard[Option].as(x).asRight[String]) should === (fa.toList.collectFirst {
+        case x if x > n => x
+      }.asRight[String])
     }
   }
 }
