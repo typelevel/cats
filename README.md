@@ -192,6 +192,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [buildo](https://buildo.io)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
+- [Colisweb](https://www.colisweb.com/)
 - [DriveTribe](https://drivetribe.com/)
 - [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
