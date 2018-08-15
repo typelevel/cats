@@ -149,8 +149,10 @@ possible:
  * P. Oscar Boykin
  * Paolo G. Giarrusso
  * Pascal Voitot
+ * Paul Chiusano
  * Paul Phillips
  * Paulo "JCranky" Siqueira
+ * Pavel Chlupacek
  * Pavkin Vladimir
  * Pepe García
  * Pere Villega
