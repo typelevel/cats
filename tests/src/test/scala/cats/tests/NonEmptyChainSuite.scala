@@ -3,7 +3,7 @@ package tests
 
 import cats.data.NonEmptyChain
 import cats.kernel.laws.discipline.SemigroupTests
-import cats.laws.discipline.{MonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyChainSuite extends CatsSuite {
@@ -13,8 +13,8 @@ class NonEmptyChainSuite extends CatsSuite {
   checkAll("NonEmptyChain[Int] with Option", NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyChain]", SerializableTests.serializable(Traverse[NonEmptyChain]))
 
-  checkAll("NonEmptyChain[Int]", MonadTests[NonEmptyChain].monad[Int, Int, Int])
-  checkAll("Monad[NonEmptyChain]", SerializableTests.serializable(Monad[NonEmptyChain]))
+  checkAll("NonEmptyChain[Int]", BimonadTests[NonEmptyChain].bimonad[Int, Int, Int])
+  checkAll("Bimonad[NonEmptyChain]", SerializableTests.serializable(Bimonad[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int]", SemigroupTests[NonEmptyChain[Int]].semigroup)
   checkAll("Monoid[NonEmptyChain]", SerializableTests.serializable(Semigroup[NonEmptyChain[Int]]))

@@ -21,7 +21,9 @@ import NonEmptyChainImpl.{create, unwrap}
 import cats.Order
 import cats.kernel._
 
+import scala.annotation.tailrec
 import scala.collection.immutable._
+import scala.collection.mutable.ListBuffer
 
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
@@ -59,7 +61,7 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
     create(ca :+ a)
 
   def apply[A](a: A, as: A*): NonEmptyChain[A] =
-    create(Chain.append(Chain.one(a), Chain.fromSeq(as)))
+    create(Chain.concat(Chain.one(a), Chain.fromSeq(as)))
 
   def one[A](a: A): NonEmptyChain[A] = create(Chain.one(a))
 
@@ -78,26 +80,26 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
   /**
    * Returns a new NonEmptyChain consisting of `a` followed by this. O(1) runtime.
    */
-  final def cons[A2 >: A](a: A2): NonEmptyChain[A2] =
-    create(toChain.cons(a))
+  final def prepend[A2 >: A](a: A2): NonEmptyChain[A2] =
+    create(toChain.prepend(a))
 
   /**
-   * Alias for [[cons]].
+   * Alias for [[prepend]].
    */
   final def +:[A2 >: A](a: A2): NonEmptyChain[A2] =
-    cons(a)
+    prepend(a)
 
   /**
    * Returns a new Chain consisting of this followed by `a`. O(1) runtime.
    */
-  final def snoc[A2 >: A](a: A2): NonEmptyChain[A2] =
-    create(toChain.snoc(a))
+  final def append[A2 >: A](a: A2): NonEmptyChain[A2] =
+    create(toChain.append(a))
 
   /**
-   * Alias for [[snoc]].
+   * Alias for [[append]].
    */
   final def :+[A2 >: A](a: A2): NonEmptyChain[A2] =
-    snoc(a)
+    append(a)
 
   /**
    * Concatenates this with `c` in O(1) runtime.
@@ -116,13 +118,13 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * Alias for concat
    */
   final def ++[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
-    concat(this, c)
+    concat(c)
 
   /**
    * Appends the given chain in O(1) runtime.
    */
   final def appendChain[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
-    if (c.isEmpty) this
+    if (c.isEmpty) value
     else create(toChain ++ c)
 
   /**
@@ -135,7 +137,7 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
    * Prepends the given chain in O(1) runtime.
    */
   final def prependChain[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
-    if (c.isEmpty) this
+    if (c.isEmpty) value
     else create(c ++ toChain)
 
   /**
@@ -370,8 +372,8 @@ sealed class NonEmptyChainOps[A](val value: NonEmptyChain[A]) {
 private[data] sealed abstract class NonEmptyChainInstances {
   implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
     with NonEmptyTraverse[NonEmptyChain]
-    with Monad[NonEmptyChain] =
-    new SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Monad[NonEmptyChain] {
+    with Bimonad[NonEmptyChain] =
+    new SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] {
 
       def combineK[A](a: NonEmptyChain[A], b: NonEmptyChain[A]): NonEmptyChain[A] =
         a ++ b
@@ -383,6 +385,17 @@ private[data] sealed abstract class NonEmptyChainInstances {
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyChain[Either[A, B]]): NonEmptyChain[B] =
         create(Monad[Chain].tailRecM(a)(a => unwrap(f(a))))
+
+      def extract[A](x: NonEmptyChain[A]): A = x.head
+
+      def coflatMap[A, B](fa: NonEmptyChain[A])(f: NonEmptyChain[A] => B): NonEmptyChain[B] = {
+        @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
+          as.uncons match {
+            case Some((h, t)) => go(t, res += f(NonEmptyChain.fromChainPrepend(h, t)))
+            case None => Chain.fromSeq(res.result())
+          }
+        NonEmptyChain.fromChainPrepend(f(fa), go(fa.tail, ListBuffer.empty))
+      }
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
         Foldable[Chain].reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>

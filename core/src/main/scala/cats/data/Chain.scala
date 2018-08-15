@@ -320,9 +320,9 @@ sealed abstract class Chain[+A] {
   /**
    * Returns the number of elements in this structure
    */
-  final def length: Int = {
+  final def length: Long = {
     val iter = iterator
-    var i: Int = 0
+    var i: Long = 0
     while(iter.hasNext) { i += 1; iter.next; }
     i
   }
@@ -330,7 +330,7 @@ sealed abstract class Chain[+A] {
   /**
    * Alias for length
    */
-  final def size: Int = length
+  final def size: Long = length
 
 
   /**
@@ -555,7 +555,7 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
           as.uncons match {
-            case Some((h, t)) => go(t, res += f(t))
+            case Some((_, t)) => go(t, res += f(as))
             case None => Chain.fromSeq(res.result())
           }
 
