@@ -15,7 +15,7 @@ def show(a: A): String
 ```
 
 You might be wondering why you would want to use this, considering `toString` already serves the same purpose and case classes already provide sensible implementations for `toString`.
-The difference, is that `toString` is defined on `Any`(Java's `Object`) and can therefore be called on anything, not just case classes.
+The difference is that `toString` is defined on `Any`(Java's `Object`) and can therefore be called on anything, not just case classes.
 Most often, this is unwanted behaviour, as the standard implementation of `toString` on non case classes is mostly gibberish.
 Consider the following example:
 

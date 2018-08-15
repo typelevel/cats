@@ -287,11 +287,14 @@ object arbitrary extends ArbitraryInstances0 {
       case 0 => Gen.const(Chain.nil)
       case 1 => A.arbitrary.map(Chain.one)
       case 2 => A.arbitrary.flatMap(a1 => A.arbitrary.flatMap(a2 =>
-        Chain.append(Chain.one(a1), Chain.one(a2))))
+        Chain.concat(Chain.one(a1), Chain.one(a2))))
       case n => Chain.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Chain.empty[A])) { (gen, _) =>
         gen.flatMap(cat => A.arbitrary.map(a => cat :+ a))
       }
     })
+
+  implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
+    Cogen[List[A]].contramap(_.toList)
 
 }
 

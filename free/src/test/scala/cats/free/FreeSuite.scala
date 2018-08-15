@@ -15,6 +15,13 @@ class FreeSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
 
+  Monad[Free[Id, ?]]
+  implicitly[Monad[Free[Id, ?]]]
+
+  checkAll("Free[Id, ?]", DeferTests[Free[Id, ?]].defer[Int])
+  checkAll("Free[Id, ?]", MonadTests[Free[Id, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Id, ?]]", SerializableTests.serializable(Monad[Free[Id, ?]]))
+
   checkAll("Free[Option, ?]", DeferTests[Free[Option, ?]].defer[Int])
   checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
   checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
@@ -224,7 +231,14 @@ object FreeSuite extends FreeSuiteInstances {
     freeEq[Function0, A]
 }
 
-sealed trait FreeSuiteInstances {
+sealed trait FreeSuiteInstances extends FreeSuiteInstances1 {
+
+  implicit def freeIdArbitrary[A](implicit A: Arbitrary[A]): Arbitrary[Free[Id, A]] = freeArbitrary[Id, A]
+
+  implicit def freeIdEq[A](implicit SA: Eq[A]): Eq[Free[Id, A]] = freeEq[Id, A]
+}
+
+sealed trait FreeSuiteInstances1 {
   val headOptionU = λ[FunctionK[List,Option]](_.headOption)
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {

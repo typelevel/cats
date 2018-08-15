@@ -92,7 +92,7 @@ import simulacrum.typeclass
     reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     Some(reduceLeftTo(fa)(f)(g))
@@ -104,7 +104,7 @@ import simulacrum.typeclass
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
     reduceRightTo(fa)(f)(g).map(Some(_))
@@ -127,7 +127,7 @@ import simulacrum.typeclass
    * the traversal.
    */
   def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
+    G.void(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -137,7 +137,7 @@ import simulacrum.typeclass
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
+    G.void(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>

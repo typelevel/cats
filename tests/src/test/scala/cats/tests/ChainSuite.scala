@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.data.Chain
-import cats.kernel.laws.discipline.MonoidTests
-import cats.laws.discipline.{AlternativeTests, MonadTests, SerializableTests, TraverseTests}
+import cats.kernel.laws.discipline.{MonoidTests, OrderTests}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class ChainSuite extends CatsSuite {
@@ -16,8 +16,14 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", MonadTests[Chain].monad[Int, Int, Int])
   checkAll("Monad[Chain]", SerializableTests.serializable(Monad[Chain]))
 
+  checkAll("Chain[Int]", CoflatMapTests[Chain].coflatMap[Int, Int, Int])
+  checkAll("Coflatmap[Chain]", SerializableTests.serializable(CoflatMap[Chain]))
+
   checkAll("Chain[Int]", MonoidTests[Chain[Int]].monoid)
   checkAll("Monoid[Chain]", SerializableTests.serializable(Monoid[Chain[Int]]))
+
+  checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
+  checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
 
   test("show"){
     Show[Chain[Int]].show(Chain(1, 2, 3)) should === ("Chain(1, 2, 3)")
@@ -29,7 +35,7 @@ class ChainSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
-      ci.size.toInt should === (ci.toList.size)
+      ci.size should === (ci.toList.size)
     }
   }
 

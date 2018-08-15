@@ -157,8 +157,8 @@ object AndThen extends AndThenInstances0 {
    * Establishes the maximum stack depth when fusing `andThen` or
    * `compose` calls.
    *
-   * The default is `128`, from which we substract one as an optimization,
-   * a "!=" comparisson being slightly more efficient than a "<".
+   * The default is `128`, from which we subtract one as an optimization,
+   * a "!=" comparison being slightly more efficient than a "<".
    *
    * This value was reached by taking into account the default stack
    * size as set on 32 bits or 64 bits, Linux or Windows systems,
