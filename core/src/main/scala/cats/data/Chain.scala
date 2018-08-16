@@ -219,9 +219,9 @@ sealed abstract class Chain[+A] {
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
    */
-  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, Chain[A]] = {
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
-    var m = SortedMap.empty[B, Chain[A]]
+    var m = SortedMap.empty[B, NonEmptyChain[A]]
     val iter = iterator
 
     while (iter.hasNext) {
@@ -229,7 +229,7 @@ sealed abstract class Chain[+A] {
       val k = f(elem)
 
       m.get(k) match {
-        case None => m += ((k, one(elem))); ()
+        case None => m += ((k, NonEmptyChain.one(elem))); ()
         case Some(cat) => m = m.updated(k, cat :+ elem)
       }
     }
@@ -320,9 +320,9 @@ sealed abstract class Chain[+A] {
   /**
    * Returns the number of elements in this structure
    */
-  final def length: Int = {
+  final def length: Long = {
     val iter = iterator
-    var i: Int = 0
+    var i: Long = 0
     while(iter.hasNext) { i += 1; iter.next; }
     i
   }
@@ -330,7 +330,7 @@ sealed abstract class Chain[+A] {
   /**
    * Alias for length
    */
-  final def size: Int = length
+  final def size: Long = length
 
 
   /**
@@ -555,7 +555,7 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
           as.uncons match {
-            case Some((h, t)) => go(t, res += f(t))
+            case Some((_, t)) => go(t, res += f(as))
             case None => Chain.fromSeq(res.result())
           }
 

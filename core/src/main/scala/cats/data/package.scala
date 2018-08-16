@@ -18,6 +18,9 @@ package object data {
   type NonEmptySet[A] = NonEmptySetImpl.Type[A]
   val NonEmptySet = NonEmptySetImpl
 
+  type NonEmptyChain[+A] = NonEmptyChainImpl.Type[A]
+  val NonEmptyChain = NonEmptyChainImpl
+
   type ReaderT[F[_], A, B] = Kleisli[F, A, B]
   val ReaderT = Kleisli
 
