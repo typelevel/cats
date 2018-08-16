@@ -129,6 +129,12 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Alias for `appendChain`
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(1, 2, 4, 5)
+   * scala> nec :++ Chain(3, 6, 9)
+   * res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 4, 5, 3, 6, 9)
+   * }}}
    */
   final def :++[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
     appendChain(c)
@@ -142,15 +148,15 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Alias for `prependChain`
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> Chain(1, 2, 3) ++: nec
+   * res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3, 4, 5, 6)
+   * }}}
    */
   final def ++:[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
     prependChain(c)
-
-  /**
-   * Applies f to all the elements
-   */
-  final def map[B](f: A => B): NonEmptyChain[B] =
-    create(toChain.map(f))
 
 
   /**
@@ -305,33 +311,9 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
 
   /**
-   * Typesafe stringification method.
-   *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
-   */
-  final def show(implicit A: Show[A]): String =
-    s"NonEmpty${Show[Chain[A]].show(toChain)}"
-
-  /**
-   * Typesafe equality operator.
-   *
-   * This method is similar to == except that it only allows two
-   * NonEmptyChain[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
-   */
-  final def ===(that: NonEmptyChain[A])(implicit A: Eq[A]): Boolean =
-    Eq[Chain[A]].eqv(toChain, that.toChain)
-
-  /**
    * Returns the number of elements in this chain.
    */
   final def length: Long = toChain.size
-
-  /** Alias for length */
-  final def size: Long = length
 
   /**
    * Zips this `NonEmptyChain` with another `NonEmptyChain` and applies a function for each pair of elements.
@@ -399,6 +381,9 @@ private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChain
           case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
         }.value
 
+      override def map[A, B](fa: NonEmptyChain[A])(f: A => B): NonEmptyChain[B] =
+        create(fa.toChain.map(f))
+
       override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 
       override def reduceLeft[A](fa: NonEmptyChain[A])(f: (A, A) => A): A =
@@ -445,7 +430,7 @@ private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChain
     Order.by[NonEmptyChain[A], Chain[A]](_.toChain)
 
   implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
-    Show.show[NonEmptyChain[A]](_.show)
+    Show.show[NonEmptyChain[A]](nec => s"NonEmpty${Show[Chain[A]].show(nec.toChain)}")
 
   implicit def catsDataSemigroupForNonEmptyChain[A]: Semigroup[NonEmptyChain[A]] = new Semigroup[NonEmptyChain[A]] {
     def combine(x: NonEmptyChain[A], y: NonEmptyChain[A]): NonEmptyChain[A] = x ++ y

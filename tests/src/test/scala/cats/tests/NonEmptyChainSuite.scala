@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import cats.data.NonEmptyChain
-import cats.kernel.laws.discipline.SemigroupTests
+import cats.data.{Chain, NonEmptyChain}
+import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
 import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
@@ -18,6 +18,9 @@ class NonEmptyChainSuite extends CatsSuite {
 
   checkAll("NonEmptyChain[Int]", SemigroupTests[NonEmptyChain[Int]].semigroup)
   checkAll("Monoid[NonEmptyChain]", SerializableTests.serializable(Semigroup[NonEmptyChain[Int]]))
+
+  checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
+  checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
 
   test("show"){
     Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) should === ("NonEmptyChain(1, 2, 3)")
@@ -69,6 +72,22 @@ class NonEmptyChainSuite extends CatsSuite {
     forAll { (ci: NonEmptyChain[Int]) =>
       NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) should === (ci)
     }
+  }
+
+  test("fromNonEmptyList . toNonEmptyList is id") {
+    forAll { (ci: NonEmptyChain[Int]) =>
+      NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) should === (ci)
+    }
+  }
+
+  test("fromChain . toChain is Option.some") {
+    forAll { (ci: NonEmptyChain[Int]) =>
+      NonEmptyChain.fromChain(ci.toChain) should === (Some(ci))
+    }
+  }
+
+  test("fromChainUnsafe throws exception when used with empty chain") {
+    Either.catchNonFatal(NonEmptyChain.fromChainUnsafe(Chain.empty[Int])).isLeft should === (true)
   }
 
   test("fromSeq . toList . iterator is id") {
