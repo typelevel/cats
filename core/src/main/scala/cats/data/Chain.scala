@@ -618,7 +618,7 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
     }
 
   implicit val catsDataTraverseEmptyForChain: TraverseEmpty[Chain] = new TraverseEmpty[Chain] {
-    def traverse: Traverse[Chain] = catsDataInstancesForChain
+    def traverse: Traverse[Chain] = Chain.catsDataInstancesForChain
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 
