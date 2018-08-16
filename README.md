@@ -215,6 +215,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Scala Center](https://scala.epfl.ch)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spotahome](https://spotahome.com)
+- [Spotify](https://www.spotify.com)
 - [SpringerNature](https://www.springernature.com)
 - [Stripe](https://stripe.com)
 - [Teikametrics](http://teikametrics.com)
