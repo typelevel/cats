@@ -14,15 +14,14 @@ package object instances {
   object eq              extends EqInstances
   object equiv           extends EquivInstances
   object float           extends FloatInstances
-  object function        extends FunctionInstances
-                         with    FunctionInstancesBinCompat0
+  object function        extends FunctionInstances with FunctionInstancesBinCompat0
   object future          extends FutureInstances
   object int             extends IntInstances
   object invariant       extends InvariantMonoidalInstances
   object list            extends ListInstances with ListInstancesBinCompat0
   object long            extends LongInstances
-  object map             extends MapInstances
   object option          extends OptionInstances with OptionInstancesBinCompat0
+  object map             extends MapInstances with MapInstancesBinCompat0
   object order           extends OrderInstances
   object ordering        extends OrderingInstances
   object parallel        extends ParallelInstances
