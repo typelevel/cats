@@ -207,6 +207,13 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Tests if some element is contained in this chain.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> nec.contains(5)
+   * res0: Boolean = true
+   * }}}
    */
   final def contains(a: A)(implicit A: Eq[A]): Boolean = toChain.contains(a)
 
@@ -227,6 +234,13 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Returns a new `Chain` containing all elements where the result of `pf` is final defined.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> import cats.implicits._
+   * scala> val nec = NonEmptyChain(4, 5, 6).map(n => if (n % 2 == 0) Some(n) else None)
+   * scala> nec.collect { case Some(n) => n }
+   * res0: cats.data.Chain[Int] = Chain(4, 6)
+   * }}}
    */
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] = toChain.collect(pf)
 
@@ -255,6 +269,12 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Left-associative reduce using f.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> nec.reduceLeft(_ + _)
+   * res0: Int = 15
+   * }}}
    */
   final def reduceLeft(f: (A, A) => A): A = {
     val iter = toChain.iterator
@@ -266,6 +286,12 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Apply `f` to the "initial element" of this chain and lazily combine it
    * with every other value using the given function `g`.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> nec.reduceLeftTo(_.toString)((acc, cur) => acc + cur.toString)
+   * res0: String = 456
+   * }}}
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toChain.iterator
@@ -276,6 +302,12 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Right-associative reduce using f.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> nec.reduceRight(_ + _)
+   * res0: Int = 15
+   * }}}
    */
   final def reduceRight(f: (A, A) => A): A = {
     val iter = toChain.reverseIterator
@@ -287,6 +319,12 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Apply `f` to the "initial element" of this chain and lazily combine it
    * with every other value using the given function `g`.
+   * {{{
+   * scala> import cats.data.NonEmptyChain
+   * scala> val nec = NonEmptyChain(4, 5, 6)
+   * scala> nec.reduceLeftTo(_.toString)((cur, acc) => acc + cur.toString)
+   * res0: String = 654
+   * }}}
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toChain.reverseIterator

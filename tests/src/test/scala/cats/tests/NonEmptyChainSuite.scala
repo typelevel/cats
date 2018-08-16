@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{Chain, NonEmptyChain}
-import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
@@ -21,6 +21,22 @@ class NonEmptyChainSuite extends CatsSuite {
 
   checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
   checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
+
+  {
+    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    checkAll("NonEmptyChain[ListWrapper[Int]]",
+      PartialOrderTests[NonEmptyChain[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[NonEmptyChain[ListWrapper[Int]]",
+      SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val eqv = ListWrapper.eqv[Int]
+    checkAll("NonEmptyChain[ListWrapper[Int]]",
+      EqTests[NonEmptyChain[ListWrapper[Int]]].eqv)
+    checkAll("Eq[NonEmptyChain[ListWrapper[Int]]",
+      SerializableTests.serializable(Eq[NonEmptyChain[ListWrapper[Int]]]))
+  }
 
   test("show"){
     Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) should === ("NonEmptyChain(1, 2, 3)")
