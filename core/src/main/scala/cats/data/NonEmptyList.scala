@@ -101,6 +101,22 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(a, head :: tail)
 
   /**
+    * Alias for append
+    *
+    * {{{
+    * scala> import cats.data.NonEmptyList
+    * scala> val nel = NonEmptyList.of(1, 2, 3)
+    * scala> nel :+ 4
+    * res0: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4)
+    * }}}
+    */
+  def :+[AA >: A](a: AA): NonEmptyList[AA] =
+    append(a)
+
+  def append[AA >: A](a: AA): NonEmptyList[AA] =
+    NonEmptyList(head, tail :+ a)
+
+  /**
     * Alias for concatNel
     *
     * {{{
