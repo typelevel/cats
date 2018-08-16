@@ -205,6 +205,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ITV](https://www.itv.com/)
+- [Lookout](https://www.lookout.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [REA Group](https://www.realestate.com.au/)
 - [Rudder](https://rudder.io)
