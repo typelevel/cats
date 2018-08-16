@@ -3,7 +3,7 @@ package tests
 
 import cats.data.Chain
 import cats.kernel.laws.discipline.{MonoidTests, OrderTests}
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, MonadTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, MonadTests, SerializableTests, TraverseEmptyTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class ChainSuite extends CatsSuite {
@@ -24,6 +24,9 @@ class ChainSuite extends CatsSuite {
 
   checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
   checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
+
+  checkAll("Chain[Int]", TraverseEmptyTests[Chain].traverseEmpty[Int, Int, Int])
+  checkAll("TraverseEmpty[Chain]", SerializableTests.serializable(TraverseEmpty[Chain]))
 
   test("show"){
     Show[Chain[Int]].show(Chain(1, 2, 3)) should === ("Chain(1, 2, 3)")

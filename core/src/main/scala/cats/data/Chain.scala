@@ -617,6 +617,29 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
       }
     }
 
+  implicit val catsDataTraverseEmptyForChain: TraverseEmpty[Chain] = new TraverseEmpty[Chain] {
+    def traverse: Traverse[Chain] = catsDataInstancesForChain
+
+    override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Chain[A])(f: PartialFunction[A, B]): Chain[B] = fa.collect(f)
+
+    override def mapFilter[A, B](fa: Chain[A])(f: A => Option[B]): Chain[B] = fa.collect(Function.unlift(f))
+
+    override def flattenOption[A](fa: Chain[Option[A]]): Chain[A] = fa.collect { case Some(a) => a }
+
+    def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
+      fa.foldRight(G.pure(Chain.empty[B]))(
+        (a, gcb) => G.map2(f(a), gcb)((ob, cb) => ob.fold(cb)(_ +: cb))
+      )
+
+    override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
+      fa.foldRight(G.pure(Chain.empty[A]))(
+        (a, gca) =>
+          G.map2(f(a), gca)((b, chain) => if (b) a +: chain else chain))
+
+  }
+
 }
 
 private[data] sealed abstract class ChainInstances1 extends ChainInstances2 {
