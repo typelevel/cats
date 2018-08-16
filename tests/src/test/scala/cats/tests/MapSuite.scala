@@ -1,8 +1,10 @@
 package cats
 package tests
 
-import cats.laws.discipline.{FlatMapTests, FunctorEmptyTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests}
+
+import cats.laws.discipline.{FlatMapTests, FunctorEmptyTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests, ComposeTests}
 import cats.laws.discipline.arbitrary._
+import cats.arrow.Compose
 
 class MapSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
@@ -18,6 +20,10 @@ class MapSuite extends CatsSuite {
 
   checkAll("Map[Int, Int]", FunctorEmptyTests[Map[Int, ?]].functorEmpty[Int, Int, Int])
   checkAll("FunctorEmpty[Map[Int, ?]]", SerializableTests.serializable(FunctorEmpty[Map[Int, ?]]))
+
+  checkAll("Map[Int, Long]", ComposeTests[Map].compose[Int, Long, String, Double])
+  checkAll("Compose[Map]", SerializableTests.serializable(Compose[Map]))
+
 
 
   test("show isn't empty and is formatted as expected") {

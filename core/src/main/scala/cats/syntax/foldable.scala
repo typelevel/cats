@@ -92,4 +92,32 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
         b.toString.dropRight(delim.length)
     } + suffix
   }
+
+  /**
+    * Monadic version of `collectFirstSome`.
+    * {{{
+    * scala> import cats.implicits._
+    * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
+    * scala> val keys1 = List("1", "2", "4", "5")
+    * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
+    * scala> keys1.collectFirstSomeM(parseInt(_) map map1.get)
+    * res1: scala.util.Either[String,Option[String]] = Right(Some(Four))
+    * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+    * scala> keys1.collectFirstSomeM(parseInt(_) map map2.get)
+    * res2: scala.util.Either[String,Option[String]] = Right(None)
+    * scala> val keys2 = List("1", "x", "4", "5")
+    * scala> keys2.collectFirstSomeM(parseInt(_) map map1.get)
+    * res3: scala.util.Either[String,Option[String]] = Left(For input string: "x")
+    * scala> val keys3 = List("1", "2", "4", "x")
+    * scala> keys3.collectFirstSomeM(parseInt(_) map map1.get)
+    * res4: scala.util.Either[String,Option[String]] = Right(Some(Four))
+    * }}}
+    */
+  def collectFirstSomeM[G[_], B](f: A => G[Option[B]])(implicit F: Foldable[F], G: Monad[G]): G[Option[B]] =
+    F.foldRight(fa, Eval.now(G.pure(Option.empty[B])))((a, lb) =>
+      Eval.now(G.flatMap(f(a)) {
+        case None => lb.value
+        case s => G.pure(s)
+      })
+    ).value
 }

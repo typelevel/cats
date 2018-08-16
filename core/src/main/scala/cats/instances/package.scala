@@ -21,8 +21,9 @@ package object instances {
   object invariant       extends InvariantMonoidalInstances
   object list            extends ListInstances with ListInstancesBinCompat0
   object long            extends LongInstances
-  object map             extends MapInstances
   object option          extends OptionInstances with OptionInstancesBinCompat0
+  object map             extends MapInstances with MapInstancesBinCompat0
+  object option          extends OptionInstances
   object order           extends OrderInstances
   object ordering        extends OrderingInstances
   object parallel        extends ParallelInstances
