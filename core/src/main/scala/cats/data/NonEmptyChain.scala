@@ -363,7 +363,7 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
     create(toChain.reverse)
 }
 
-private[data] sealed abstract class NonEmptyChainInstances {
+private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChainInstances1 {
   implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
     with NonEmptyTraverse[NonEmptyChain]
     with Bimonad[NonEmptyChain] =
@@ -441,10 +441,8 @@ private[data] sealed abstract class NonEmptyChainInstances {
         fa.toNonEmptyList
     }
 
-  implicit def catsDataEqForNonEmptyChain[A: Eq]: Eq[NonEmptyChain[A]] =
-    new Eq[NonEmptyChain[A]]{
-      def eqv(x: NonEmptyChain[A], y: NonEmptyChain[A]): Boolean = x.toChain === y.toChain
-    }
+  implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =
+    Order.by[NonEmptyChain[A], Chain[A]](_.toChain)
 
   implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
     Show.show[NonEmptyChain[A]](_.show)
@@ -454,3 +452,14 @@ private[data] sealed abstract class NonEmptyChainInstances {
   }
 }
 
+private[data] sealed abstract class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {
+  implicit def catsDataPartialOrderForNonEmptyChain[A: PartialOrder]: PartialOrder[NonEmptyChain[A]] =
+    PartialOrder.by[NonEmptyChain[A], Chain[A]](_.toChain)
+}
+
+private[data] sealed abstract class NonEmptyChainInstances2 {
+  implicit def catsDataEqForNonEmptyChain[A: Eq]: Eq[NonEmptyChain[A]] =
+    new Eq[NonEmptyChain[A]]{
+      def eqv(x: NonEmptyChain[A], y: NonEmptyChain[A]): Boolean = x.toChain === y.toChain
+    }
+}
