@@ -101,6 +101,15 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(a, head :: tail)
 
   /**
+    * Alias for append
+    */
+  def :+[AA >: A](a: AA): NonEmptyList[AA] =
+    append(a)
+
+  def append[AA >: A](a: AA): NonEmptyList[AA] =
+    NonEmptyList(head, tail :+ a)
+
+  /**
     * Alias for concatNel
     *
     * {{{
