@@ -45,6 +45,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def flatMapF[B](f: A => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
     OptionT(F.flatMap(value)(_.fold(F.pure[Option[B]](None))(f)))
 
+  def flatTransform[B](f: Option[A] => F[Option[B]])(implicit F: Monad[F]): OptionT[F, B] =
+    OptionT(F.flatMap(value)(f))
+
   def transform[B](f: Option[A] => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(f))
 

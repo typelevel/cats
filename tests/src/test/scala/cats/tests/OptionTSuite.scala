@@ -294,6 +294,12 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("flatTransform consistent with value.flatMap") {
+    forAll { (o: OptionT[List, Int], f: Option[Int] => List[Option[String]]) =>
+      o.flatTransform(f) should === (OptionT(o.value.flatMap(f)))
+    }
+  }
+
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (optiont: OptionT[List, Int]) =>

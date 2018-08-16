@@ -2,8 +2,8 @@ package cats
 package tests
 
 import cats.data.Chain
-import cats.kernel.laws.discipline.{MonoidTests, OrderTests}
 import cats.laws.discipline.{AlternativeTests, CoflatMapTests, MonadTests, SerializableTests, TraverseEmptyTests, TraverseTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.arbitrary._
 
 class ChainSuite extends CatsSuite {
@@ -25,8 +25,26 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
   checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
 
+
   checkAll("Chain[Int]", TraverseEmptyTests[Chain].traverseEmpty[Int, Int, Int])
   checkAll("TraverseEmpty[Chain]", SerializableTests.serializable(TraverseEmpty[Chain]))
+
+  {
+    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    checkAll("Chain[ListWrapper[Int]]",
+      PartialOrderTests[Chain[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[Chain[ListWrapper[Int]]",
+      SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val eqv = ListWrapper.eqv[Int]
+    checkAll("Chain[ListWrapper[Int]]",
+      EqTests[Chain[ListWrapper[Int]]].eqv)
+    checkAll("Eq[Chain[ListWrapper[Int]]",
+      SerializableTests.serializable(Eq[Chain[ListWrapper[Int]]]))
+  }
+
 
   test("show"){
     Show[Chain[Int]].show(Chain(1, 2, 3)) should === ("Chain(1, 2, 3)")
@@ -38,7 +56,7 @@ class ChainSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
-      ci.size should === (ci.toList.size)
+      ci.size.toInt should === (ci.toList.size)
     }
   }
 
