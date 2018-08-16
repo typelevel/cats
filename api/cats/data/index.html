@@ -147,6 +147,10 @@
                         <a class="trait" href="BinestedInstances0.html" title=""></a>
                         <a href="BinestedInstances0.html" title="">BinestedInstances0</a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="Chain$.html" title=""></a>
+                        <a class="class" href="Chain.html" title="Trivial catenable sequence."></a>
+                        <a href="Chain.html" title="Trivial catenable sequence.">Chain</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="Cokleisli$.html" title=""></a>
                         <a class="class" href="Cokleisli.html" title="Represents a function F[A] =&gt; B."></a>
                         <a href="Cokleisli.html" title="Represents a function F[A] =&gt; B.">Cokleisli</a>
@@ -593,6 +597,25 @@ res0: Either[<span class="std">List</span>[<span class="std">String</span>], <sp
       </span>
       
       
+    </li><li name="cats.data.Chain" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Chain[+A]extendsAnyRef"></a><a id="Chain[+A]:Chain[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#Chain[+A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Trivial catenable sequence." href="Chain.html"><span class="name">Chain</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Trivial catenable sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Trivial catenable sequence. Supports O(1) append, and (amortized)
+O(1) <code>uncons</code>, such that walking the sequence via N successive <code>uncons</code>
+steps takes O(N).
+</p></div></div>
     </li><li name="cats.data.Cokleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Cokleisli[F[_],A,B]extendsProductwithSerializable"></a><a id="Cokleisli[F[_],A,B]:Cokleisli[F,A,B]"></a>
       <span class="permalink">
@@ -1520,6 +1543,22 @@ context along with the <code>A</code> value.
       </span>
       <span class="symbol">
         <a title="" href="Binested$.html"><span class="name">Binested</span></a><span class="result"> extends <a href="BinestedInstances.html" class="extype" name="cats.data.BinestedInstances">BinestedInstances</a> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.Chain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Chain"></a><a id="Chain:Chain"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#Chain" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Chain$.html"><span class="name">Chain</span></a><span class="result"> extends <span class="extype" name="cats.data.ChainInstances">ChainInstances</span></span>
       </span>
       
       

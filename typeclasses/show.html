@@ -13,7 +13,7 @@ Most often, this is unwanted behaviour, as the standard implementation of <code 
 Consider the following example:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="k">new</span> <span class="o">{}).</span><span class="n">toString</span>
-<span class="c1">// res0: String = $anon$1@5d936e5f
+<span class="c1">// res0: String = $anon$1@4db1d32c
 </span></code></pre>
 </div>
 
@@ -40,13 +40,13 @@ In short, <code class="highlighter-rouge">Show</code> allows us to only have Str
 <span class="c1">// defined class Person
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showPerson</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Person</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">person</span> <span class="k">=&gt;</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
-<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$1@34454576
+<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$1@467abedf
 </span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Department</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="c1">// defined class Department
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showDep</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Department</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">fromToString</span>
-<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$2@518ae4d5
+<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$2@22f13d9f
 </span></code></pre>
 </div>
 
