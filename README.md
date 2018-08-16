@@ -218,6 +218,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [The Guardian](https//www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
 - [Wegtam GmbH](https://www.wegtam.com)
+- [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
 
