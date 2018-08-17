@@ -20,9 +20,3 @@ trait FunctorEmpty[F[_]] extends Serializable {
   def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(a => if (f(a)) Some(a) else None)
 }
-
-object FunctorEmpty {
-  implicit def catsFunctorForFunctorEmpty[F[_]](fe: FunctorEmpty[F]): Functor[F] =
-    fe.functor
-}
-

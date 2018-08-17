@@ -735,7 +735,7 @@ private[data] sealed trait EitherTFunctorEmpty[F[_], E] extends FunctorEmpty[Eit
   }
 
   override def flattenOption[A](fa: EitherT[F, E, Option[A]]): EitherT[F, E, A] = {
-    EitherT[F, E, A](F.flattenOption[Either[E, A]](F.map(fa.value)(Traverse[Either[E, ?]].sequence[Option, A])))
+    EitherT[F, E, A](F.flattenOption[Either[E, A]](F.functor.map(fa.value)(Traverse[Either[E, ?]].sequence[Option, A])))
   }
 
   override def filter[A](fa: EitherT[F, E, A])(f: (A) => Boolean): EitherT[F, E, A] = {

@@ -24,8 +24,3 @@ trait TraverseEmpty[F[_]] extends FunctorEmpty[F] {
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
 }
-
-object TraverseEmpty {
-  def catsTraverseForTraverseEmpty[F[_]](te: TraverseEmpty[F]): Traverse[F] =
-    te.traverse
-}
