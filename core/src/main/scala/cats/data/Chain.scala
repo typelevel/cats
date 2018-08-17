@@ -424,22 +424,7 @@ object Chain extends ChainInstances {
 
   /** Creates a Chain from the specified elements. */
   def apply[A](as: A*): Chain[A] =
-    as match {
-      case w: collection.mutable.WrappedArray[A] =>
-        if (w.isEmpty) nil
-        else if (w.size == 1) one(w.head)
-        else {
-          val arr: Array[A] = w.array
-          var c: Chain[A] = one(arr.last)
-          var idx = arr.size - 2
-          while (idx >= 0) {
-            c = Append(one(arr(idx)), c)
-            idx -= 1
-          }
-          c
-        }
-      case _ => fromSeq(as)
-    }
+    fromSeq(as)
 
   // scalastyle:off null
   class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
