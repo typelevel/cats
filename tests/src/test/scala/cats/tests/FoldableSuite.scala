@@ -351,10 +351,11 @@ class FoldableSuiteAdditional extends CatsSuite {
     assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
   }
 
-  test(".findM short-circuiting") {
+  test(".findM/.collectFirstSomeM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
     def boom: Stream[Int] = sys.error("boom")
     assert((1 #:: boom).findM[Id](_ > 0) == Some(1))
+    assert((1 #:: boom).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
 
   test("Foldable[List] doesn't break substitution") {
