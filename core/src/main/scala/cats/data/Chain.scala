@@ -31,8 +31,10 @@ sealed abstract class Chain[+A] {
           result = Some(a -> next)
         case Append(l, r) => c = l; rights += r
         case Wrap(seq) =>
-          val tail = seq.tail
-          val next = fromSeq(tail)
+          val tail = fromSeq(seq.tail)
+          val next =
+            if (rights.isEmpty) tail
+            else tail ++ rights.reduceLeft((x, y) => Append(y, x))
           result = Some((seq.head, next))
         case Empty =>
           if (rights.isEmpty) {
