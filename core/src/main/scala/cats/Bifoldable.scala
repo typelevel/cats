@@ -24,6 +24,35 @@ import simulacrum.typeclass
       val F = self
       val G = ev
     }
+
+  /**
+   * Traverse this `F[A, B]` into a `G` structure for the effect only.
+   *
+   * [[Bifoldable.bitraverse_]] mirrors [[Foldable.traverse_]].
+   *
+   * Example:
+   *
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.implicits._
+   *
+   * scala> type Acc[A] = State[Long, A]
+   *
+   * scala> def addInt(i: Int): Acc[Long] = State(acc => (acc + i.toLong, acc))
+   *
+   * scala> def addLong(l: Long): Acc[Long] = State(acc => (acc + l, acc))
+   *
+   * scala> val res = (3, 7L).bitraverse_(addInt, addLong)
+   *
+   * scala> res.runEmptyS.value
+   * res0: Long = 10
+   * }}}
+   */
+  def bitraverse_[G[_], A, B, C, D](fab: F[A, B])(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Unit] =
+    bifoldRight[A, B, G[Unit]](fab, Always(G.pure(())))(
+      (a, lgu) => G.map2Eval(f(a), lgu)((_, _) => ()),
+      (b, lgu) => G.map2Eval(g(b), lgu)((_, _) => ())
+    ).value
 }
 
 private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {
