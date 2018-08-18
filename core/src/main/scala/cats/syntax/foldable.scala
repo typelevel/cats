@@ -120,4 +120,32 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
         case s => G.pure(s)
       })
     ).value
+
+  /**
+    * Find the first element matching the effectful predicate, if one exists.
+    *
+    * If there are no elements, the result is `None`. `findM` short-circuits,
+    * i.e. once an element is found, no further effects are produced.
+    *
+    * For example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val list = List(1,2,3,4)
+    * scala> list.findM(n => (n >= 2).asRight[String])
+    * res0: Either[String,Option[Int]] = Right(Some(2))
+    *
+    * scala> list.findM(n => (n > 4).asRight[String])
+    * res1: Either[String,Option[Int]] = Right(None)
+    *
+    * scala> list.findM(n => Either.cond(n < 3, n >= 2, "error"))
+    * res2: Either[String,Option[Int]] = Right(Some(2))
+    *
+    * scala> list.findM(n => Either.cond(n < 3, false, "error"))
+    * res3: Either[String,Option[Int]] = Left(error)
+    * }}}
+    */
+  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] =
+    F.foldRight(fa, Eval.now(G.pure(Option.empty[A])))((a, lb) =>
+      Eval.now(G.flatMap(p(a))(if (_) G.pure(Some(a)) else lb.value))
+    ).value
 }

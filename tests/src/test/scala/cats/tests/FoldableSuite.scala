@@ -85,11 +85,12 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
     }
   }
 
-  test(s"Foldable[$name].find/exists/forall/existsM/forallM/filter_/dropWhile_") {
+  test(s"Foldable[$name].find/exists/forall/findM/existsM/forallM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
       fa.exists(_ > n) should === (iterator(fa).exists(_ > n))
       fa.forall(_ > n) should === (iterator(fa).forall(_ > n))
+      fa.findM(k => Option(k > n))   should === (Option(iterator(fa).find(_ > n)))
       fa.existsM(k => Option(k > n)) should === (Option(iterator(fa).exists(_ > n)))
       fa.forallM(k => Option(k > n)) should === (Option(iterator(fa).forall(_ > n)))
       fa.filter_(_ > n) should === (iterator(fa).filter(_ > n).toList)
@@ -322,6 +323,12 @@ class FoldableSuiteAdditional extends CatsSuite {
     def boom: Stream[Boolean] = sys.error("boom")
     assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
+  }
+
+  test(".findM short-circuiting") {
+    implicit val F = foldableStreamWithDefaultImpl
+    def boom: Stream[Int] = sys.error("boom")
+    assert((1 #:: boom).findM[Id](_ > 0) == Some(1))
   }
 
   test("Foldable[List] doesn't break substitution") {
