@@ -293,9 +293,20 @@ object arbitrary extends ArbitraryInstances0 {
       case 1 => A.arbitrary.map(Chain.one)
       case 2 => A.arbitrary.flatMap(a1 => A.arbitrary.flatMap(a2 =>
         Chain.concat(Chain.one(a1), Chain.one(a2))))
-      case n => Chain.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Chain.empty[A])) { (gen, _) =>
-        gen.flatMap(cat => A.arbitrary.map(a => cat :+ a))
-      }
+      case n =>
+        def fromList(m: Int) = Range.apply(0, m).toList.foldLeft(Gen.const(List.empty[A])) { (gen, _) =>
+          gen.flatMap(list => A.arbitrary.map(_ :: list))
+        }.map(Chain.fromSeq)
+        val split = fromList(n / 2).flatMap(as => fromList(n / 2).map(_ ++ as))
+        val appended = fromList(n - 1).flatMap(as => A.arbitrary.map(as :+ _))
+        val prepended = fromList(n - 1).flatMap(as => A.arbitrary.map(_ +: as))
+        val startEnd = fromList(n - 2).flatMap(as => A.arbitrary.flatMap(a => A.arbitrary.map(_ +: (as :+ a))))
+        val betweenListsAndEnd = fromList((n - 1) / 2).flatMap(as => A.arbitrary.flatMap(a =>
+          fromList((n - 1) / 2).flatMap(as2 => A.arbitrary.map(a2 => (as2 ++ (a +: as)) :+ a2))))
+        val betweenListsAndFront = fromList((n - 1) / 2).flatMap(as => A.arbitrary.flatMap(a =>
+          fromList((n - 1) / 2).flatMap(as2 => A.arbitrary.map(a2 => a2 +: (as2 ++ (a +: as))))))
+        Gen.oneOf(fromList(n), split, appended, prepended, startEnd, betweenListsAndEnd, betweenListsAndFront)
+
     })
 
   implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =

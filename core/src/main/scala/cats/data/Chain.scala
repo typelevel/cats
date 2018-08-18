@@ -31,8 +31,10 @@ sealed abstract class Chain[+A] {
           result = Some(a -> next)
         case Append(l, r) => c = l; rights += r
         case Wrap(seq) =>
-          val tail = seq.tail
-          val next = fromSeq(tail)
+          val tail = fromSeq(seq.tail)
+          val next =
+            if (rights.isEmpty) tail
+            else tail ++ rights.reduceLeft((x, y) => Append(y, x))
           result = Some((seq.head, next))
         case Empty =>
           if (rights.isEmpty) {
@@ -424,22 +426,7 @@ object Chain extends ChainInstances {
 
   /** Creates a Chain from the specified elements. */
   def apply[A](as: A*): Chain[A] =
-    as match {
-      case w: collection.mutable.WrappedArray[A] =>
-        if (w.isEmpty) nil
-        else if (w.size == 1) one(w.head)
-        else {
-          val arr: Array[A] = w.array
-          var c: Chain[A] = one(arr.last)
-          var idx = arr.size - 2
-          while (idx >= 0) {
-            c = Append(one(arr(idx)), c)
-            idx -= 1
-          }
-          c
-        }
-      case _ => fromSeq(as)
-    }
+    fromSeq(as)
 
   // scalastyle:off null
   class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
