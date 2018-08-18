@@ -200,16 +200,42 @@ class FoldableSuiteAdditional extends CatsSuite {
     larger.value should === (large.map(_ + 1))
   }
 
-  def checkFoldMStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {
+  def checkMonadicFoldsStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {
     def nonzero(acc: Long, x: Int): Option[Long] =
       if (x == 0) None else Some(acc + x)
 
+    def gte(lb: Int, x: Int): Option[Boolean] =
+      if (x >= lb) Some(true) else Some(false)
+
+    def gteSome(lb: Int, x: Int): Option[Option[Int]] =
+      if (x >= lb) Some(Some(x)) else Some(None)
+
     val n = 100000
-    val expected = n.toLong*(n.toLong+1)/2
-    val foldMResult = F.foldM(fromRange(1 to n), 0L)(nonzero)
-    assert(foldMResult.get == expected)
+    val src = fromRange(1 to n)
+
+    val foldMExpected = n.toLong*(n.toLong+1)/2
+    val foldMResult = F.foldM(src, 0L)(nonzero)
+    assert(foldMResult.get == foldMExpected)
+
+    val existsMExpected = true
+    val existsMResult = F.existsM(src)(gte(n, _))
+    assert(existsMResult.get == existsMExpected)
+
+    val forallMExpected = true
+    val forallMResult = F.forallM(src)(gte(0, _))
+    assert(forallMResult.get == forallMExpected)
+
+    val findMExpected = Some(n)
+    val findMResult = src.findM(gte(n, _))
+    assert(findMResult.get == findMExpected)
+
+    val collectFirstSomeMExpected = Some(n)
+    val collectFirstSomeMResult = src.collectFirstSomeM(gteSome(n, _))
+    assert(collectFirstSomeMResult.get == collectFirstSomeMExpected)
+
     ()
   }
+
   test(s"Foldable.iterateRight") {
     forAll { (fa: List[Int]) =>
       val eval = Foldable.iterateRight(fa, Eval.later(0)) { (a, eb) =>
@@ -223,36 +249,36 @@ class FoldableSuiteAdditional extends CatsSuite {
     }
   }
 
-  test("Foldable[List].foldM stack safety") {
-    checkFoldMStackSafety[List](_.toList)
+  test("Foldable[List].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[List](_.toList)
   }
 
   test("Foldable[Stream].foldM stack safety") {
-    checkFoldMStackSafety[Stream](_.toStream)
+    checkMonadicFoldsStackSafety[Stream](_.toStream)
   }
 
-  test("Foldable[Vector].foldM stack safety") {
-    checkFoldMStackSafety[Vector](_.toVector)
+  test("Foldable[Vector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[Vector](_.toVector)
   }
 
-  test("Foldable[SortedSet].foldM stack safety") {
-    checkFoldMStackSafety[SortedSet](s => SortedSet(s:_*))
+  test("Foldable[SortedSet].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[SortedSet](s => SortedSet(s:_*))
   }
 
-  test("Foldable[SortedMap[String, ?]].foldM stack safety") {
-    checkFoldMStackSafety[SortedMap[String, ?]](xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap)
+  test("Foldable[SortedMap[String, ?]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[SortedMap[String, ?]](xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap)
   }
 
-  test("Foldable[NonEmptyList].foldM stack safety") {
-    checkFoldMStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
+  test("Foldable[NonEmptyList].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[NonEmptyList](xs => NonEmptyList.fromListUnsafe(xs.toList))
   }
 
-  test("Foldable[NonEmptyVector].foldM stack safety") {
-    checkFoldMStackSafety[NonEmptyVector](xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
+  test("Foldable[NonEmptyVector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[NonEmptyVector](xs => NonEmptyVector.fromVectorUnsafe(xs.toVector))
   }
 
-  test("Foldable[NonEmptyStream].foldM stack safety") {
-    checkFoldMStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
+  test("Foldable[NonEmptyStream].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
   test("Foldable[Stream]") {
