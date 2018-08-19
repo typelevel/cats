@@ -55,7 +55,9 @@ possible:
  * Colt Frederickson
  * Connie Chen
  * Csongor Kiss
+ * dadepo
  * Dale Wijnand
+ * Daniel Karch
  * Daniel Spiewak
  * Daniel Urban
  * Daniela Sfregola
@@ -69,9 +71,11 @@ possible:
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
+ * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
  * Eric Torreborre
+ * ericaovo
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -103,6 +107,7 @@ possible:
  * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
  * Jens
+ * Jimin Hsieh
  * Jisoo Park
  * João Ferreira
  * John Sullivan
@@ -132,6 +137,7 @@ possible:
  * Marco Battaglia
  * Mark de Jong
  * Markus Hauck
+ * Martijn Hoekstra
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
@@ -154,12 +160,14 @@ possible:
  * Paulo "JCranky" Siqueira
  * Pavel Chlupacek
  * Pavkin Vladimir
+ * Paweł Lipski
  * Pepe García
  * Pere Villega
  * Peter Neyens
  * Peter Perhac
  * phderome
  * Philip Wills
+ * Piotr Gawryś
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
@@ -171,8 +179,10 @@ possible:
  * Rohan Shah
  * Romain Ruetschi
  * Ross A. Baker
+ * rsekulski
  * rsoeldner
  * Rüdiger Klaehn
+ * Rutvik Patel
  * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
@@ -181,6 +191,7 @@ possible:
  * Shunsuke Otani
  * Simeon H. K. Fitch
  * Sinisa Louc
+ * Song Kun
  * Stephen Carman
  * Stephen Judkins
  * Stephen Lazaro
@@ -210,7 +221,10 @@ possible:
  * Yilin Wei
  * Zach Abbott
  * zainab-ali
+ * Zelenya
+ * zhen
  * Ziyang Liu
+ * λoλcat
 
 Cats has been heavily inspired by many libraries, including [Scalaz](https://github.com/scalaz/scalaz),
 Haskell's [Prelude](https://hackage.haskell.org/package/base-4.9.0.0/docs/Prelude.html), and others.
