@@ -37,12 +37,9 @@ sealed abstract class Chain[+A] {
             else tail ++ rights.reduceLeft((x, y) => Append(y, x))
           result = Some((seq.head, next))
         case Empty =>
-          if (rights.isEmpty) {
-            result = None
-          } else {
-            c = rights.last
-            rights.trimEnd(1)
-          }
+          // Empty is only top level, it is never internal to an Append
+          if (rights.nonEmpty) throw new IllegalStateException(s"found internal Empty in $this")
+          result = None
       }
     }
     // scalastyle:on null
@@ -297,12 +294,9 @@ sealed abstract class Chain[+A] {
             else rights.reduceLeft((x, y) => Append(y, x))
           rights.clear()
         case Empty =>
-          if (rights.isEmpty) {
-            c = null
-          } else {
-            c = rights.last
-            rights.trimEnd(1)
-          }
+          // Empty is only top level, it is never internal to an Append
+          if (rights.nonEmpty) throw new IllegalStateException(s"found internal Empty in $this")
+          c = null
       }
     }
   }
@@ -462,7 +456,7 @@ object Chain extends ChainInstances {
               currentIterator = seq.iterator
               currentIterator.next
             case Empty =>
-              go // This shouldn't happen
+              throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
 
