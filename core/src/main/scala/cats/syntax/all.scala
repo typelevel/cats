@@ -72,3 +72,5 @@ trait AllSyntaxBinCompat1
 
 trait AllSyntaxBinCompat2
   extends ParallelTraverseSyntax
+    with EitherSyntaxBinCompat0
+    with ListSyntaxBinCompat0

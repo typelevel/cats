@@ -205,6 +205,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def toValidatedNel(implicit F: Functor[F]): F[ValidatedNel[A, B]] =
     F.map(value)(_.toValidatedNel)
 
+  def toValidatedNec(implicit F: Functor[F]): F[ValidatedNec[A, B]] = ???
+
   /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
    *
    * The [[Applicative]] instance for `EitherT` "fails fast" - it is often useful to "momentarily" have
@@ -274,6 +276,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    */
   def toNestedValidatedNel(implicit F: Functor[F]): Nested[F, ValidatedNel[A, ?], B] =
     Nested[F, ValidatedNel[A, ?], B](F.map(value)(_.toValidatedNel))
+
+  /**
+   * Transform this `EitherT[F, A, B]` into a `[[Nested]][F, ValidatedNec[A, ?], B]`.
+   */
+  def toNestedValidatedNec(implicit F: Functor[F]): Nested[F, ValidatedNec[A, ?], B] =
+    Nested[F, ValidatedNec[A, ?], B](F.map(value)(_.toValidatedNec))
 }
 
 object EitherT extends EitherTInstances {

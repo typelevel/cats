@@ -159,6 +159,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("toNestedValidatedNec") {
+    forAll { (eithert: EitherT[List, String, Int]) =>
+      eithert.toNestedValidatedNec.value should === (eithert.value.map(_.toValidatedNec))
+    }
+  }
+
   test("withValidated") {
     forAll { (eithert: EitherT[List, String, Int], f: String => Char, g: Int => Double) =>
       eithert.withValidated(_.bimap(f, g)) should === (eithert.bimap(f, g))

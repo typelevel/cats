@@ -314,7 +314,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   }
 }
 
-object Validated extends ValidatedInstances with ValidatedFunctions{
+object Validated extends ValidatedInstances with ValidatedFunctions with ValidatedFunctionsBinCompat0 {
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 
@@ -601,4 +601,39 @@ private[data] trait ValidatedFunctions {
    */
   final def condNel[A, B](test: Boolean, b: => B, a: => A): ValidatedNel[A, B] =
     if (test) validNel(b) else invalidNel(a)
+}
+
+private[data] trait ValidatedFunctionsBinCompat0 {
+
+
+  /**
+   * Converts a `B` to a `ValidatedNec[A, B]`.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.validNec[IllegalArgumentException, String]("Hello world")
+   * res0: ValidatedNec[IllegalArgumentException, String] = Valid(Hello world)
+   * }}}
+   */
+  def validNec[A, B](b: B): ValidatedNec[A, B] = Validated.Valid(b)
+
+
+
+  /**
+   * Converts an `A` to a `ValidatedNec[A, B]`.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.invalidNec[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+   * res0: ValidatedNec[IllegalArgumentException, String] = Invalid(Chain(java.lang.IllegalArgumentException: Argument is nonzero))
+   * }}}
+   */
+  def invalidNec[A, B](a: A): ValidatedNec[A, B] = Validated.Invalid(NonEmptyChain.one(a))
+
+  /**
+   * If the condition is satisfied, return the given `B` as valid NEC,
+   * otherwise return the given `A` as invalid NEC.
+   */
+  final def condNec[A, B](test: Boolean, b: => B, a: => A): ValidatedNec[A, B] =
+    if (test) validNec(b) else invalidNec(a)
 }

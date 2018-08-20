@@ -23,7 +23,7 @@ package object syntax {
   object contravariant extends ContravariantSyntax
   object contravariantSemigroupal extends ContravariantSemigroupalSyntax
   object contravariantMonoidal extends ContravariantMonoidalSyntax
-  object either extends EitherSyntax
+  object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
   object foldable extends FoldableSyntax
@@ -31,7 +31,7 @@ package object syntax {
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
-  object list extends ListSyntax
+  object list extends ListSyntax with ListSyntaxBinCompat0
   object monad extends MonadSyntax
   object monadError extends MonadErrorSyntax
   object monoid extends MonoidSyntax
