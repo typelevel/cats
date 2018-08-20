@@ -147,4 +147,24 @@ class ChainSuite extends CatsSuite {
       assert((a ++ Chain.nil) eq a)
     }
   }
+
+  test("Chain.iterator.next should throw NoSuchElementException") {
+    forAll { (a: Chain[Int]) =>
+      val it = a.iterator
+
+      while(it.hasNext) it.next
+
+      intercept[java.util.NoSuchElementException] {
+        it.next
+      }
+
+      val rit = a.reverseIterator
+
+      while(rit.hasNext) rit.next
+
+      intercept[java.util.NoSuchElementException] {
+        rit.next
+      }
+    }
+  }
 }

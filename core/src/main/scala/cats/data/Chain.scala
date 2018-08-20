@@ -455,7 +455,7 @@ object Chain extends ChainInstances {
               rights.clear()
               currentIterator = seq.iterator
               currentIterator.next
-            case Empty =>
+            case null | Empty =>
               throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
@@ -499,8 +499,8 @@ object Chain extends ChainInstances {
               lefts.clear()
               currentIterator = seq.reverseIterator
               currentIterator.next
-            case Empty =>
-              go // This shouldn't happen
+            case null | Empty =>
+              throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
 
