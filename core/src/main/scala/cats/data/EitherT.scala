@@ -205,7 +205,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def toValidatedNel(implicit F: Functor[F]): F[ValidatedNel[A, B]] =
     F.map(value)(_.toValidatedNel)
 
-  def toValidatedNec(implicit F: Functor[F]): F[ValidatedNec[A, B]] = ???
+  def toValidatedNec(implicit F: Functor[F]): F[ValidatedNec[A, B]] =
+    F.map(value)(_.toValidatedNec)
 
   /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
    *

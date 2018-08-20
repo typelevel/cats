@@ -412,7 +412,7 @@ final class EitherIdOpsBinCompat0[A](val value: A) extends AnyVal {
 final class EitherOpsBinCompat0[A, B](val value: Either[A, B]) extends AnyVal {
   /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
-  def toValidatedNec[AA >: A]: ValidatedNec[AA, B] = value match {
+  def toValidatedNec: ValidatedNec[A, B] = value match {
     case Left(a)  => Validated.invalidNec(a)
     case Right(b) => Validated.valid(b)
   }

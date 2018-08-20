@@ -51,7 +51,7 @@ package object syntax {
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
-  object validated extends ValidatedSyntax with ValidatedExtensionSyntax
+  object validated extends ValidatedSyntax with ValidatedExtensionSyntax with ValidatedSyntaxBincompat0
   object vector extends VectorSyntax
   object writer extends WriterSyntax
   object set extends SetSyntax
