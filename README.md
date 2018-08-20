@@ -218,6 +218,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Spotify](https://www.spotify.com)
 - [SpringerNature](https://www.springernature.com)
 - [Stripe](https://stripe.com)
+- [Tecsisa](https://www.tecsisa.com)
 - [Teikametrics](http://teikametrics.com)
 - [The Guardian](https//www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
