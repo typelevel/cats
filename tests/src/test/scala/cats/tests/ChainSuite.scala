@@ -126,4 +126,10 @@ class ChainSuite extends CatsSuite {
       ci.reverse.toList should === (ci.toList.reverse)
     }
   }
+
+  test("(a ++ b).isEmpty ==> a.isEmpty and b.isEmpty") {
+    forAll { (a: Chain[Int], b: Chain[Int]) =>
+      assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty))
+    }
+  }
 }
