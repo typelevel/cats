@@ -538,6 +538,7 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
       override def exists[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.exists(p)
       override def forall[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.forall(p)
       override def find[A](fa: Chain[A])(f: A => Boolean): Option[A] = fa.find(f)
+      override def size[A](fa: Chain[A]): Long = fa.length
 
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
