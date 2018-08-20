@@ -132,4 +132,19 @@ class ChainSuite extends CatsSuite {
       assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty))
     }
   }
+
+  test("a.isEmpty == (a eq Chain.nil)") {
+    assert(Chain.fromSeq(Nil) eq Chain.nil)
+
+    forAll { (a: Chain[Int]) =>
+      assert(a.isEmpty == (a eq Chain.nil))
+    }
+  }
+
+  test("(nil ++ a) eq a") {
+    forAll { (a: Chain[Int]) =>
+      assert((Chain.nil ++ a) eq a)
+      assert((a ++ Chain.nil) eq a)
+    }
+  }
 }
