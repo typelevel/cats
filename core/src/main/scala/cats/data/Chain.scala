@@ -421,10 +421,10 @@ object Chain extends ChainInstances {
     fromSeq(as)
 
   // scalastyle:off null
-  class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
-    var c: Chain[A] = if (self.isEmpty) null else self
-    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
-    var currentIterator: Iterator[A] = null
+  private class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
+    private[this] var c: Chain[A] = if (self.isEmpty) null else self
+    private[this] val rights = new collection.mutable.ArrayBuffer[Chain[A]]
+    private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
 
@@ -465,10 +465,10 @@ object Chain extends ChainInstances {
 
 
   // scalastyle:off null
-  class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
-    var c: Chain[A] = if (self.isEmpty) null else self
-    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
-    var currentIterator: Iterator[A] = null
+  private class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
+    private[this] var c: Chain[A] = if (self.isEmpty) null else self
+    private[this] val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
 
