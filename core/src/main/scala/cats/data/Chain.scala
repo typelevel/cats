@@ -37,12 +37,8 @@ sealed abstract class Chain[+A] {
             else tail ++ rights.reduceLeft((x, y) => Append(y, x))
           result = Some((seq.head, next))
         case Empty =>
-          if (rights.isEmpty) {
-            result = None
-          } else {
-            c = rights.last
-            rights.trimEnd(1)
-          }
+          // Empty is only top level, it is never internal to an Append
+          result = None
       }
     }
     // scalastyle:on null
@@ -297,12 +293,8 @@ sealed abstract class Chain[+A] {
             else rights.reduceLeft((x, y) => Append(y, x))
           rights.clear()
         case Empty =>
-          if (rights.isEmpty) {
-            c = null
-          } else {
-            c = rights.last
-            rights.trimEnd(1)
-          }
+          // Empty is only top level, it is never internal to an Append
+          c = null
       }
     }
   }
@@ -429,10 +421,10 @@ object Chain extends ChainInstances {
     fromSeq(as)
 
   // scalastyle:off null
-  class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
-    var c: Chain[A] = if (self.isEmpty) null else self
-    val rights = new collection.mutable.ArrayBuffer[Chain[A]]
-    var currentIterator: Iterator[A] = null
+  private class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
+    private[this] var c: Chain[A] = if (self.isEmpty) null else self
+    private[this] val rights = new collection.mutable.ArrayBuffer[Chain[A]]
+    private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
 
@@ -461,8 +453,8 @@ object Chain extends ChainInstances {
               rights.clear()
               currentIterator = seq.iterator
               currentIterator.next
-            case Empty =>
-              go // This shouldn't happen
+            case null | Empty =>
+              throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
 
@@ -473,10 +465,10 @@ object Chain extends ChainInstances {
 
 
   // scalastyle:off null
-  class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
-    var c: Chain[A] = if (self.isEmpty) null else self
-    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
-    var currentIterator: Iterator[A] = null
+  private class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
+    private[this] var c: Chain[A] = if (self.isEmpty) null else self
+    private[this] val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
 
@@ -505,8 +497,8 @@ object Chain extends ChainInstances {
               lefts.clear()
               currentIterator = seq.reverseIterator
               currentIterator.next
-            case Empty =>
-              go // This shouldn't happen
+            case null | Empty =>
+              throw new java.util.NoSuchElementException("next called on empty iterator")
           }
         }
 
