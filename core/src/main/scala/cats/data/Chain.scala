@@ -38,7 +38,6 @@ sealed abstract class Chain[+A] {
           result = Some((seq.head, next))
         case Empty =>
           // Empty is only top level, it is never internal to an Append
-          if (rights.nonEmpty) throw new IllegalStateException(s"found internal Empty in $this")
           result = None
       }
     }
@@ -295,7 +294,6 @@ sealed abstract class Chain[+A] {
           rights.clear()
         case Empty =>
           // Empty is only top level, it is never internal to an Append
-          if (rights.nonEmpty) throw new IllegalStateException(s"found internal Empty in $this")
           c = null
       }
     }
