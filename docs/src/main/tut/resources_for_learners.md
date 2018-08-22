@@ -15,6 +15,12 @@ position: 30
    to introduce monads, functors, and other functional programming patterns
    as a way to structure program design, and to explain how these 
    concepts are implemented in Cats.
+ * [Functional Programming for Mortals with Scalaz](https://leanpub.com/fpmortals)
+   by Sam Halliday - The aim of this book is to build a complete understanding of
+   functional programming through Cats' parent library, Scalaz, complete with 
+   worked examples, covering Magnolia, parts of Shapeless, testing strategy,
+   program structure, etc. A complete programmers guide to pragmatic development in FP.
+   
 
 # Tutorials
  * [herding cats](http://eed3si9n.com/herding-cats/) by Eugene Yokota
