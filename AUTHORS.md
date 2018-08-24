@@ -207,7 +207,6 @@ possible:
  * Stephen Carman
  * Stephen Judkins
  * Stephen Lazaro
- * Stew O'Connor
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee

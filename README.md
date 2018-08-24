@@ -76,7 +76,6 @@ By sharing the same set of type classes, instances and data types provided by Ca
 
 #### General purpose libraries to support pure functional programming
 
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
@@ -241,7 +240,6 @@ The current maintainers (people who can merge pull requests) are:
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [tpolecat](https://github.com/tpolecat) Rob Norris
- * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
