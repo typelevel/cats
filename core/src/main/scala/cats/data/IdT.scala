@@ -42,6 +42,12 @@ final case class IdT[F[_], A](value: F[A]) {
   def ap[B](f: IdT[F, A => B])(implicit F: Apply[F]): IdT[F, B] =
     IdT(F.ap(f.value)(value))
 
+  def flatTap[B](f: A => IdT[F, B])(implicit F: FlatMap[F]): IdT[F, A] =
+    flatMap(a => f(a).map(_ => a))
+
+  def flatTapF[B](f: A => F[B])(implicit F: FlatMap[F]): IdT[F, A] =
+    flatTap(f andThen IdT.apply)
+
 }
 
 object IdT extends IdTInstances {

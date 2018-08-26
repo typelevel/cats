@@ -101,6 +101,18 @@ class IdTSuite extends CatsSuite {
     }
   }
 
+  test("flatTap+pure consistent with identity") {
+    forAll { (idT: IdT[List, Int], f: Int => Long) =>
+      idT.flatTap(v => IdT(List(f(v)))) should === (idT)
+    }
+  }
+
+  test("flatTapF+pure consistent with identity") {
+    forAll { (idT: IdT[List, Int], f: Int => Long) =>
+      idT.flatTapF(v => List(f(v))) should === (idT)
+    }
+  }
+
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (idT: IdT[List, Int]) =>
