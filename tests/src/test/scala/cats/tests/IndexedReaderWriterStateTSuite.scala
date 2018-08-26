@@ -309,6 +309,18 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
+  test("flatTap+pure consistent with identity") {
+    forAll { (rwst: ReaderWriterStateT[List, String, Vector[String], Int, Int], g: Int => Long, c: String, initial: Int) =>
+      rwst.flatTap(a => ReaderWriterStateT.pure(List(g(a)))).run(c, initial) should === (rwst.run(c, initial))
+    }
+  }
+
+  test("flatTapF+pure consistent with identity") {
+    forAll { (rwst: ReaderWriterStateT[List, String, Vector[String], Int, Int], g: Int => Long, c: String, initial: Int) =>
+      rwst.flatTapF(a => List(g(a))).run(c, initial) should === (rwst.run(c, initial))
+    }
+  }
+
   implicit val iso = SemigroupalTests.Isomorphisms
     .invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]](IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor))
 

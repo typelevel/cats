@@ -109,6 +109,13 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
       }
     }
 
+  def flatTap[SC, B](f: A => IndexedReaderWriterStateT[F, E, L, SB, SC, B])(
+    implicit F: FlatMap[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SC, A] =
+    flatMap(a => f(a).map(_ => a))
+
+  def flatTapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+    flatMapF(a => F.as(faf(a), a))
+
   /**
    * Transform the resulting log, state and value using `f`.
    */
