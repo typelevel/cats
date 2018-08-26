@@ -97,6 +97,48 @@ class WriterTSuite extends CatsSuite {
     }
   }
 
+  test("flatMapF consistent with flatMap") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => WriterT[List, String, Double])  =>
+      writert.flatMapF(f(_).run) should === (writert.flatMap(f))
+    }
+  }
+
+  test("subflatMap consistent with flatMap+pure") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => (String, Double))  =>
+      writert.subflatMap(f) should === (writert.flatMap(v => WriterT(List(f(v)))))
+    }
+  }
+
+  test("semiflatMap consistent with flatMap+map(value)") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => List[Long]) =>
+      writert.semiflatMap(f) should === (writert.flatMap(v => WriterT(f(v).map(u => Writer.value[String, Long](u).run))))
+    }
+  }
+
+  test("flatTap+pure+value consistent with identity") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => Long) =>
+      writert.flatTap(v => WriterT(List(Writer.value[String, Long](f(v)).run))) should === (writert)
+    }
+  }
+
+  test("flatTapF+pure+value consistent with identity") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => Long) =>
+      writert.flatTapF(v => List(Writer.value[String, Long](f(v)).run)) should === (writert)
+    }
+  }
+
+  test("subflatTap+value consistent with identity") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => Long) =>
+      writert.subflatTap(v => Writer.value[String, Long](f(v)).run) should === (writert)
+    }
+  }
+
+  test("semiflatTap+pure consistent with identity") {
+    forAll { (writert: WriterT[List, String, Int], f: Int => Long) =>
+      writert.semiflatTap(v => List(f(v))) should === (writert)
+    }
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK

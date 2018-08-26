@@ -47,6 +47,32 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
       }
     }
 
+  def flatMapF[U](f: V => F[(L, U)])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, U] =
+    flatMap(f andThen WriterT.apply)
+
+  def subflatMap[U](f: V => (L, U))(implicit functorF: Functor[F], semigroupL: Semigroup[L]): WriterT[F, L, U] =
+    WriterT(functorF.map(run) { case (l1, v) =>
+      val (l2, u) = f(v)
+      (semigroupL.combine(l1, l2), u)
+    })
+
+  def semiflatMap[U](f: V => F[U])(implicit flatMapF: FlatMap[F]): WriterT[F, L, U] =
+    WriterT(flatMapF.flatMap(run) { case (l, v) =>
+      flatMapF.map(f(v))((l, _))
+    })
+
+  def flatTap[U](f: V => WriterT[F, L, U])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
+    flatMap(b => f(b).map(_ => b))
+
+  def flatTapF[U](f: V => F[(L, U)])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
+    flatTap(f andThen WriterT.apply)
+
+  def subflatTap[U](f: V => (L, U))(implicit functorF: Functor[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
+    subflatMap(b => (f(b)._1, b))
+
+  def semiflatTap[U](f: V => F[U])(implicit flatMapF: FlatMap[F]): WriterT[F, L, V] =
+    semiflatMap(b => flatMapF.as(f(b), b))
+
   def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
     WriterT { functorF.map(run)(f.tupled) }
 
