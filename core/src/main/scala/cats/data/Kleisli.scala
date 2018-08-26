@@ -33,6 +33,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
+  def flatTap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
+    flatMap(b => f(b).map(_ => b))
+
+  def flatTapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
+    flatMapF(b => F.as(f(b), b))
+
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 

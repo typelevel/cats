@@ -205,6 +205,18 @@ class KleisliSuite extends CatsSuite {
     }
   }
 
+  test("flatTap+pure consistent with identity") {
+    forAll { (f: Kleisli[List, Int, Int], t: Int => Long, i: Int) =>
+      f.flatTap(a => Kleisli.pure(List(t(a)))).run(i) should === (f.run(i))
+    }
+  }
+
+  test("flatTapF+pure consistent with identity") {
+    forAll { (f: Kleisli[List, Int, Int], t: Int => Long, i: Int) =>
+      f.flatTapF(a => List(t(a))).run(i) should === (f.run(i))
+    }
+  }
+
   test("lower") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       f.run(i) should === (f.lower.run(i).flatten)
