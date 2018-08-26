@@ -326,6 +326,30 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("flatTap+pure+some consistent with identity") {
+    forAll { (o: OptionT[List, Int], f: Int => Long) =>
+      o.flatTap(v => OptionT(List(f(v).some))) should === (o)
+    }
+  }
+
+  test("flatTapF+pure+some consistent with identity") {
+    forAll { (o: OptionT[List, Int], f: Int => Long) =>
+      o.flatTapF(v => List(f(v).some)) should === (o)
+    }
+  }
+
+  test("subflatTap+some consistent with identity") {
+    forAll { (o: OptionT[List, Int], f: Int => Long) =>
+      o.subflatTap(v => f(v).some) should === (o)
+    }
+  }
+
+  test("semiflatTap+pure consistent with identity") {
+    forAll { (o: OptionT[List, Int], f: Int => Long) =>
+      o.semiflatTap(v => List(f(v))) should === (o)
+    }
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
