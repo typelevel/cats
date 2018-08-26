@@ -461,19 +461,43 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("leftFlatMapF consistent with leftFlatMap") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => EitherT[List, Int, String])  =>
+      eithert.leftFlatMapF(f(_).value) should === (eithert.leftFlatMap(f))
+    }
+  }
+
+  test("leftFlatMapF consistent with swap and then flatMapF") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => List[Either[Int, String]])  =>
+      eithert.leftFlatMapF(f) should === (eithert.swap.flatMapF(a => f(a).map(_.swap)).swap)
+    }
+  }
+
+  test("leftSubflatMap consistent with value.map+leftFlatMap") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Either[Double, String]) =>
+      eithert.leftSubflatMap(f) should === (EitherT(eithert.value.map(_.leftFlatMap(f))))
+    }
+  }
+
+  test("leftSubflatMap consistent with swap and then subflatMap") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Either[Double, String]) =>
+      eithert.leftSubflatMap(f) should === (eithert.swap.subflatMap(a => f(a).swap).swap)
+    }
+  }
+
   test("leftSemiflatMap consistent with leftMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => String) =>
       eithert.leftSemiflatMap(v => List(f(v))) should ===(eithert.leftMap(f))
     }
   }
 
-  test("leftSemiflatmap consistent with swap and the semiflatMap") {
+  test("leftSemiflatMap consistent with swap and the semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => List[String]) =>
       eithert.leftSemiflatMap(f) should ===(eithert.swap.semiflatMap(a => f(a)).swap)
     }
   }
 
-  test("biSemiflatMap consistent with leftSemiflatMap and semiFlatmap") {
+  test("biSemiflatMap consistent with leftSemiflatMap and semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => List[Int], fb: Int => List[String]) =>
       eithert.biSemiflatMap(fa, fb) should === (eithert.leftSemiflatMap(fa).semiflatMap(fb))
     }
@@ -488,6 +512,54 @@ class EitherTSuite extends CatsSuite {
   test("biSemiflatMap consistent with semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], fb: Int => List[String]) =>
       eithert.biSemiflatMap(List(_), fb) should ===(eithert.semiflatMap(b => fb(b)))
+    }
+  }
+
+  test("flatTap+pure+right consistent with identity") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => Long) =>
+      eithert.flatTap(v => EitherT(List(f(v).asRight[String]))) should === (eithert)
+    }
+  }
+
+  test("flatTapF+pure+right consistent with identity") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => Long) =>
+      eithert.flatTapF(v => List(f(v).asRight[String])) should === (eithert)
+    }
+  }
+
+  test("subflatTap+right consistent with identity") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => Long) =>
+      eithert.subflatTap(v => f(v).asRight[String]) should === (eithert)
+    }
+  }
+
+  test("semiflatTap+pure consistent with identity") {
+    forAll { (eithert: EitherT[List, String, Int], f: Int => Long) =>
+      eithert.semiflatTap(v => List(f(v))) should === (eithert)
+    }
+  }
+
+  test("leftFlatTap+pure+left consistent with identity") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Long) =>
+      eithert.leftFlatTap(v => EitherT(List(f(v).asLeft[String]))) should === (eithert)
+    }
+  }
+
+  test("leftFlatTapF+pure+left consistent with identity") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Long) =>
+      eithert.leftFlatTapF(v => List(f(v).asLeft[String])) should === (eithert)
+    }
+  }
+
+  test("leftSubflatTap+left consistent with identity") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Long) =>
+      eithert.leftSubflatTap(v => f(v).asLeft[String]) should === (eithert)
+    }
+  }
+
+  test("leftSemiflatTap+pure consistent with identity") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Long) =>
+      eithert.leftSemiflatTap(v => List(f(v))) should === (eithert)
     }
   }
 

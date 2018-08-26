@@ -294,4 +294,16 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("flatTap+right consistent with identity") {
+    forAll { (either: Either[String, Int], f: Int => Double) =>
+      either.flatTap(v => Right(f(v))) should === (either)
+    }
+  }
+
+  test("leftFlatTap+left consistent with identity") {
+    forAll { (either: Either[Int, String], f: Int => Double) =>
+      either.leftFlatTap(v => Left(f(v))) should === (either)
+    }
+  }
+
 }
