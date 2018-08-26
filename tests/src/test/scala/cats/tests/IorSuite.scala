@@ -100,6 +100,30 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("leftFlatMap consistent with leftMap") {
+    forAll { (i: Int Ior String, f: Int => Double) =>
+      i.leftFlatMap(v => f(v).leftIor) should === (i.leftMap(f))
+    }
+  }
+
+  test("leftFlatMap consistent with swap and then flatMap") {
+    forAll { (i: Int Ior String, f: Int => Double Ior String) =>
+      i.leftFlatMap(f) should === (i.swap.flatMap(a => f(a).swap).swap)
+    }
+  }
+
+  test("flatTap+right consistent with identity") {
+    forAll { (i: String Ior Int, f: Int => Double) =>
+      i.flatTap(v => f(v).rightIor) should === (i)
+    }
+  }
+
+  test("leftFlatTap+left consistent with identity") {
+    forAll { (i: Int Ior String, f: Int => Double) =>
+      i.leftFlatTap(v => f(v).leftIor) should === (i)
+    }
+  }
+
   test("foreach is noop for left") {
     forAll { (i: Int) =>
       Ior.left[Int, String](i).foreach { _ => fail("should not be called") }

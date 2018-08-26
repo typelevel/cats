@@ -218,13 +218,37 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("leftFlatMapF consistent with leftFlatMap") {
+    forAll { (iort: IorT[List, Int, String], f: Int => IorT[List, Int, String])  =>
+      iort.leftFlatMapF(f(_).value) should === (iort.leftFlatMap(f))
+    }
+  }
+
+  test("leftFlatMapF consistent with swap and then flatMapF") {
+    forAll { (iort: IorT[List, Int, String], f: Int => List[Ior[Int, String]])  =>
+      iort.leftFlatMapF(f) should === (iort.swap.flatMapF(a => f(a).map(_.swap)).swap)
+    }
+  }
+
+  test("leftSubflatMap consistent with value.map+leftFlatMap") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Ior[Double, String]) =>
+      iort.leftSubflatMap(f) should === (IorT(iort.value.map(_.leftFlatMap(f))))
+    }
+  }
+
+  test("leftSubflatMap consistent with swap and then subflatMap") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Ior[Double, String]) =>
+      iort.leftSubflatMap(f) should === (iort.swap.subflatMap(a => f(a).swap).swap)
+    }
+  }
+
   test("leftSemiflatMap consistent with leftMap") {
     forAll { (iort: IorT[List, String, Int], f: String => String) =>
       iort.leftSemiflatMap(v => List(f(v))) should ===(iort.leftMap(f))
     }
   }
 
-  test("leftSemiflatmap consistent with swap and the semiflatMap") {
+  test("leftSemiflatMap consistent with swap and the semiflatMap") {
     forAll { (iort: IorT[List, String, Int], f: String => List[String]) =>
       iort.leftSemiflatMap(f) should ===(iort.swap.semiflatMap(a => f(a)).swap)
     }
@@ -261,6 +285,54 @@ class IorTSuite extends CatsSuite {
         case Ior.Right(b) => f(b).map(Ior.right)
         case Ior.Both(a, b) => f(b).map(Ior.both(a, _))
       }))
+    }
+  }
+
+  test("flatTap+pure+right consistent with identity") {
+    forAll { (iort: IorT[List, String, Int], f: Int => Long) =>
+      iort.flatTap(v => IorT(List(f(v).rightIor[String]))) should === (iort)
+    }
+  }
+
+  test("flatTapF+pure+right consistent with identity") {
+    forAll { (iort: IorT[List, String, Int], f: Int => Long) =>
+      iort.flatTapF(v => List(f(v).rightIor[String])) should === (iort)
+    }
+  }
+
+  test("subflatTap+right consistent with identity") {
+    forAll { (iort: IorT[List, String, Int], f: Int => Long) =>
+      iort.subflatTap(v => f(v).rightIor[String]) should === (iort)
+    }
+  }
+
+  test("semiflatTap+pure consistent with identity") {
+    forAll { (iort: IorT[List, String, Int], f: Int => Long) =>
+      iort.semiflatTap(v => List(f(v))) should === (iort)
+    }
+  }
+
+  test("leftFlatTap+pure+left consistent with identity") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Long) =>
+      iort.leftFlatTap(v => IorT(List(f(v).leftIor[String]))) should === (iort)
+    }
+  }
+
+  test("leftFlatTapF+pure+left consistent with identity") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Long) =>
+      iort.leftFlatTapF(v => List(f(v).leftIor[String])) should === (iort)
+    }
+  }
+
+  test("leftSubflatTap+left consistent with identity") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Long) =>
+      iort.leftSubflatTap(v => f(v).leftIor[String]) should === (iort)
+    }
+  }
+
+  test("leftSemiflatTap+pure consistent with identity") {
+    forAll { (iort: IorT[List, Int, String], f: Int => Long) =>
+      iort.leftSemiflatTap(v => List(f(v))) should === (iort)
     }
   }
 

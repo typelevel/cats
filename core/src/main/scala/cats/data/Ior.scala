@@ -81,6 +81,22 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     }
   }
 
+  final def leftFlatMap[BB >: B, C](f: A => C Ior BB)(implicit BB: Semigroup[BB]): C Ior BB = this match {
+    case Ior.Left(a) => f(a)
+    case r @ Ior.Right(_) => r
+    case Ior.Both(a, b1) => f(a) match {
+      case Ior.Left(c) => Ior.Both(c, b1)
+      case Ior.Right(b2) => Ior.Right(BB.combine(b1, b2))
+      case Ior.Both(c, b2) => Ior.Both(c, BB.combine(b1, b2))
+    }
+  }
+
+  final def flatTap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior B =
+    flatMap(b => f(b).map(_ => b))
+
+  final def leftFlatTap[BB >: B, C](f: A => C Ior BB)(implicit BB: Semigroup[BB]): A Ior BB =
+    leftFlatMap(a => f(a).leftMap(_ => a))
+
   final def foreach(f: B => Unit): Unit = {
     bimap(_ => (), f)
     ()

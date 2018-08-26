@@ -70,6 +70,12 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
       }
     })
 
+  def leftFlatMapF[BB >: B, C](f: A => F[Ior[C, BB]])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, C, BB] =
+    leftFlatMap(f andThen IorT.apply)
+
+  def leftSubflatMap[BB >: B, C](f: A => Ior[C, BB])(implicit F: Functor[F], BB: Semigroup[BB]): IorT[F, C, BB] =
+    IorT(F.map(value)(_.leftFlatMap(f)))
+
   def leftSemiflatMap[C](f: A => F[C])(implicit F: Monad[F]): IorT[F, C, B] =
     IorT(F.flatMap(value) {
       case Ior.Left(a) => F.map(f(a))(Ior.Left(_))
@@ -120,6 +126,31 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def combine(that: IorT[F, A, B])(implicit F: Apply[F], A: Semigroup[A], B: Semigroup[B]): IorT[F, A, B] =
     IorT(F.map2(this.value, that.value)(_ combine _))
+
+  def flatTap[AA >: A, D](f: B => IorT[F, AA, D])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, B] =
+    flatMap(b => f(b).map(_ => b))
+
+  def flatTapF[AA >: A, D](f: B => F[Ior[AA, D]])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, B] =
+    flatTap(f andThen IorT.apply)
+
+  def subflatTap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Functor[F], AA: Semigroup[AA]): IorT[F, AA, B] =
+    subflatMap(b => f(b).map(_ => b))
+
+  def semiflatTap[D](f: B => F[D])(implicit F: Monad[F]): IorT[F, A, B] =
+    semiflatMap(b => F.as(f(b), b))
+
+  def leftFlatTap[BB >: B, C](f: A => IorT[F, C, BB])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, A, BB] =
+    leftFlatMap(a => f(a).leftMap(_ => a))
+
+  def leftFlatTapF[BB >: B, C](f: A => F[Ior[C, BB]])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, A, BB] =
+    leftFlatTap(f andThen IorT.apply)
+
+  def leftSubflatTap[BB >: B, C](f: A => Ior[C, BB])(implicit F: Functor[F], BB: Semigroup[BB]): IorT[F, A, BB] =
+    leftSubflatMap(a => f(a).leftMap(_ => a))
+
+  def leftSemiflatTap[C](f: A => F[C])(implicit F: Monad[F]): IorT[F, A, B] =
+    leftSemiflatMap(a => F.as(f(a), a))
+
 }
 
 object IorT extends IorTInstances {
