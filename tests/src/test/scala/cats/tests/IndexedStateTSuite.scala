@@ -251,6 +251,18 @@ class IndexedStateTSuite extends CatsSuite {
     got should === (expected)
   }
 
+  test("flatTap+pure consistent with identity") {
+    forAll { (st: StateT[List, Int, Int], g: Int => Long, initial: Int) =>
+      st.flatTap(a => StateT.pure(List(g(a)))).run(initial) should === (st.run(initial))
+    }
+  }
+
+  test("flatTapF+pure consistent with identity") {
+    forAll { (st: StateT[List, Int, Int], g: Int => Long, initial: Int) =>
+      st.flatTapF(a => List(g(a))).run(initial) should === (st.run(initial))
+    }
+  }
+
 
   private val stackSafeTestSize =
     if (Platform.isJvm) 100000 else 100

@@ -167,6 +167,13 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    */
   def get(implicit F: Functor[F]): IndexedStateT[F, SA, SB, SB] =
     inspect(identity)
+
+  def flatTap[B, SC](fas: A => IndexedStateT[F, SB, SC, B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SC, A] =
+    flatMap(a => fas(a).map(_ => a))
+
+  def flatTapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SB, A] =
+    flatMapF(a => F.map(faf(a))(_ => a))
+
 }
 
 private[data] trait CommonStateTConstructors {
