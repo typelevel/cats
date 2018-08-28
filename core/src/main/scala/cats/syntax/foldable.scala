@@ -95,29 +95,67 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
     * Monadic version of `collectFirstSome`.
+    *
+    * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits,
+    * i.e. once a Some element is found, no further effects are produced.
+    *
+    * For example:
     * {{{
     * scala> import cats.implicits._
     * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
     * scala> val keys1 = List("1", "2", "4", "5")
     * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
     * scala> keys1.collectFirstSomeM(parseInt(_) map map1.get)
-    * res1: scala.util.Either[String,Option[String]] = Right(Some(Four))
+    * res0: scala.util.Either[String,Option[String]] = Right(Some(Four))
+    *
     * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
     * scala> keys1.collectFirstSomeM(parseInt(_) map map2.get)
-    * res2: scala.util.Either[String,Option[String]] = Right(None)
+    * res1: scala.util.Either[String,Option[String]] = Right(None)
+    *
     * scala> val keys2 = List("1", "x", "4", "5")
     * scala> keys2.collectFirstSomeM(parseInt(_) map map1.get)
-    * res3: scala.util.Either[String,Option[String]] = Left(For input string: "x")
+    * res2: scala.util.Either[String,Option[String]] = Left(For input string: "x")
+    *
     * scala> val keys3 = List("1", "2", "4", "x")
     * scala> keys3.collectFirstSomeM(parseInt(_) map map1.get)
-    * res4: scala.util.Either[String,Option[String]] = Right(Some(Four))
+    * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
     * }}}
     */
   def collectFirstSomeM[G[_], B](f: A => G[Option[B]])(implicit F: Foldable[F], G: Monad[G]): G[Option[B]] =
-    F.foldRight(fa, Eval.now(G.pure(Option.empty[B])))((a, lb) =>
-      Eval.now(G.flatMap(f(a)) {
-        case None => lb.value
-        case s => G.pure(s)
-      })
-    ).value
+    G.tailRecM(Foldable.Source.fromFoldable(fa))(_.uncons match {
+      case Some((a, src)) => G.map(f(a)) {
+        case None => Left(src.value)
+        case s => Right(s)
+      }
+      case None => G.pure(Right(None))
+    })
+
+  /**
+    * Find the first element matching the effectful predicate, if one exists.
+    *
+    * If there are no elements, the result is `None`. `findM` short-circuits,
+    * i.e. once an element is found, no further effects are produced.
+    *
+    * For example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val list = List(1,2,3,4)
+    * scala> list.findM(n => (n >= 2).asRight[String])
+    * res0: Either[String,Option[Int]] = Right(Some(2))
+    *
+    * scala> list.findM(n => (n > 4).asRight[String])
+    * res1: Either[String,Option[Int]] = Right(None)
+    *
+    * scala> list.findM(n => Either.cond(n < 3, n >= 2, "error"))
+    * res2: Either[String,Option[Int]] = Right(Some(2))
+    *
+    * scala> list.findM(n => Either.cond(n < 3, false, "error"))
+    * res3: Either[String,Option[Int]] = Left(error)
+    * }}}
+    */
+  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa))(_.uncons match {
+      case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
+      case None => G.pure(Right(None))
+    })
 }
