@@ -14,7 +14,7 @@ import simulacrum.typeclass
 trait TraverseEmpty[F[_]] extends FunctorEmpty[F] {
   def traverse: Traverse[F]
 
-  override def functor: Functor[F] = traverse
+  final override def functor: Functor[F] = traverse
 
   def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
 
