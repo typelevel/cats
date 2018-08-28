@@ -15,6 +15,7 @@ trait TraverseEmptyTests[F[_]] extends FunctorEmptyTests[F] {
                              ArbFOA: Arbitrary[F[Option[A]]],
                              ArbFABoo: Arbitrary[PartialFunction[A, B]],
                              ArbAOB: Arbitrary[A => Option[B]],
+                             ArbAOA: Arbitrary[A => Option[A]],
                              ArbAOOB: Arbitrary[A => Option[Option[B]]],
                              ArbBOC: Arbitrary[B => Option[C]],
                              ArbBOOC: Arbitrary[B => Option[Option[C]]],
@@ -32,6 +33,7 @@ trait TraverseEmptyTests[F[_]] extends FunctorEmptyTests[F] {
       parent = Some(functorEmpty[A, B, C]),
       "traverseFilter identity" -> forAll(laws.traverseFilterIdentity[Option, A] _),
       "traverseFilter nested composition" -> forAll(laws.traverseFilterComposition[A, B, C, Option, Option] _),
+      "traverseFilter consistent with traverse" -> forAll(laws.traverseFilterConsistentWithTraverse[Option, A] _),
       "filterA consistent with traverseFilter" -> forAll(laws.filterAConsistentWithTraverseFilter[Option, A] _)
     )
   }
