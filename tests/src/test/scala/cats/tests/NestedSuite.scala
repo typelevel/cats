@@ -26,13 +26,13 @@ class NestedSuite extends CatsSuite {
   }
 
   {
-    // TraverseEmpty composition
-    implicit val instance = ListWrapper.traverseEmpty
+    // TraverseFilter composition
+    implicit val instance = ListWrapper.traverseFilter
     implicit val traverseInstance = ListWrapper.traverse
     checkAll("Nested[ListWrapper, ListWrapper]",
-      TraverseEmptyTests[Nested[ListWrapper, ListWrapper, ?]].traverseEmpty[Int, Int, Int])
-    checkAll("TraverseEmpty[Nested[ListWrapper, ListWrapper, ?]]",
-      SerializableTests.serializable(TraverseEmpty[Nested[ListWrapper, ListWrapper, ?]]))
+      TraverseFilterTests[Nested[ListWrapper, ListWrapper, ?]].traverseFilter[Int, Int, Int])
+    checkAll("TraverseFilter[Nested[ListWrapper, ListWrapper, ?]]",
+      SerializableTests.serializable(TraverseFilter[Nested[ListWrapper, ListWrapper, ?]]))
   }
 
   {

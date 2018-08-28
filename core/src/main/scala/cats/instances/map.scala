@@ -109,8 +109,8 @@ trait MapInstancesBinCompat0 {
     }
   }
 
-  implicit def catsStdFunctorEmptyForMap[K]: FunctorEmpty[Map[K, ?]] = {
-    new FunctorEmpty[Map[K, ?]] {
+  implicit def catsStdFunctorFilterForMap[K]: FunctorFilter[Map[K, ?]] = {
+    new FunctorFilter[Map[K, ?]] {
 
       val functor: Functor[Map[K, ?]] = cats.instances.map.catsStdInstancesForMap[K]
 

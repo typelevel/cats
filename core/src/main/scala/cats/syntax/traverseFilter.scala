@@ -1,0 +1,4 @@
+package cats
+package syntax
+
+trait TraverseFilterSyntax extends TraverseFilter.ToTraverseFilterOps

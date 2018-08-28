@@ -2,8 +2,8 @@ package cats
 package laws
 
 
-trait FunctorEmptyLaws[F[_]] {
-  implicit def F: FunctorEmpty[F]
+trait FunctorFilterLaws[F[_]] {
+  implicit def F: FunctorFilter[F]
 
 
   implicit def functor: Functor[F] = F.functor
@@ -32,7 +32,7 @@ trait FunctorEmptyLaws[F[_]] {
   }
 }
 
-object FunctorEmptyLaws {
-  def apply[F[_]](implicit ev: FunctorEmpty[F]): FunctorEmptyLaws[F] =
-    new FunctorEmptyLaws[F] { def F: FunctorEmpty[F] = ev }
+object FunctorFilterLaws {
+  def apply[F[_]](implicit ev: FunctorFilter[F]): FunctorFilterLaws[F] =
+    new FunctorFilterLaws[F] { def F: FunctorFilter[F] = ev }
 }

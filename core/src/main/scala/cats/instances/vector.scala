@@ -116,7 +116,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 }
 
 trait VectorInstancesBinCompat0 {
-  implicit val catsStdTraverseEmptyForVector: TraverseEmpty[Vector] = new TraverseEmpty[Vector] {
+  implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
     val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
 
     override def mapFilter[A, B](fa: Vector[A])(f: (A) => Option[B]): Vector[B] =

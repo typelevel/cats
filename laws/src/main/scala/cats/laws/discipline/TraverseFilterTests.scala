@@ -7,10 +7,10 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 import cats.instances.option._
 
-trait TraverseEmptyTests[F[_]] extends FunctorEmptyTests[F] {
-  def laws: TraverseEmptyLaws[F]
+trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
+  def laws: TraverseFilterLaws[F]
 
-  def traverseEmpty[A, B, C](implicit
+  def traverseFilter[A, B, C](implicit
                              ArbFA: Arbitrary[F[A]],
                              ArbFOA: Arbitrary[F[Option[A]]],
                              ArbFABoo: Arbitrary[PartialFunction[A, B]],
@@ -29,8 +29,8 @@ trait TraverseEmptyTests[F[_]] extends FunctorEmptyTests[F] {
                              EqMNFC: Eq[Nested[Option, Option, F[C]]]
                             ): RuleSet = {
     new DefaultRuleSet(
-      name = "traverseEmpty",
-      parent = Some(functorEmpty[A, B, C]),
+      name = "traverseFilter",
+      parent = Some(functorFilter[A, B, C]),
       "traverseFilter identity" -> forAll(laws.traverseFilterIdentity[Option, A] _),
       "traverseFilter nested composition" -> forAll(laws.traverseFilterComposition[A, B, C, Option, Option] _),
       "traverseFilter consistent with traverse" -> forAll(laws.traverseFilterConsistentWithTraverse[Option, A] _),
@@ -39,7 +39,7 @@ trait TraverseEmptyTests[F[_]] extends FunctorEmptyTests[F] {
   }
 }
 
-object TraverseEmptyTests {
-  def apply[F[_]: TraverseEmpty]: TraverseEmptyTests[F] =
-    new TraverseEmptyTests[F] { def laws: TraverseEmptyLaws[F] = TraverseEmptyLaws[F] }
+object TraverseFilterTests {
+  def apply[F[_]: TraverseFilter]: TraverseFilterTests[F] =
+    new TraverseFilterTests[F] { def laws: TraverseFilterLaws[F] = TraverseFilterLaws[F] }
 }

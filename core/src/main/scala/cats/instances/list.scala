@@ -145,7 +145,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 }
 
 trait ListInstancesBinCompat0 {
-  implicit val catsStdTraverseEmptyForList: TraverseEmpty[List] = new TraverseEmpty[List] {
+  implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList
 
     override def mapFilter[A, B](fa: List[A])(f: (A) => Option[B]): List[B] = fa.collect(Function.unlift(f))

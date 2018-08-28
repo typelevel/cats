@@ -54,10 +54,10 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
         Nested(F.defer(fa.value))
     }
 
-  implicit def catsDataTraverseEmptyForNested[F[_], G[_]](implicit F0: Traverse[F], G0: TraverseEmpty[G]): TraverseEmpty[Nested[F, G, ?]] =
-    new NestedTraverseEmpty[F, G] {
+  implicit def catsDataTraverseFilterForNested[F[_], G[_]](implicit F0: Traverse[F], G0: TraverseFilter[G]): TraverseFilter[Nested[F, G, ?]] =
+    new NestedTraverseFilter[F, G] {
       implicit val F: Traverse[F] = F0
-      implicit val G: TraverseEmpty[G] = G0
+      implicit val G: TraverseFilter[G] = G0
     }
 
 
@@ -323,10 +323,10 @@ private[data] trait NestedInvariantSemigroupalApply[F[_], G[_]] extends Invarian
     Nested(FG.product(fa.value, fb.value))
 }
 
-private[data] abstract class NestedTraverseEmpty[F[_], G[_]] extends TraverseEmpty[Nested[F, G, ?]] {
+private[data] abstract class NestedTraverseFilter[F[_], G[_]] extends TraverseFilter[Nested[F, G, ?]] {
   implicit val F: Traverse[F]
 
-  implicit val G: TraverseEmpty[G]
+  implicit val G: TraverseFilter[G]
 
   def traverse: Traverse[Nested[F, G, ?]] = Nested.catsDataTraverseForNested(F, G.traverse)
 

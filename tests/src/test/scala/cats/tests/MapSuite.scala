@@ -2,7 +2,7 @@ package cats
 package tests
 
 
-import cats.laws.discipline.{FlatMapTests, FunctorEmptyTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests, ComposeTests}
+import cats.laws.discipline.{FlatMapTests, FunctorFilterTests, SemigroupalTests, SerializableTests, UnorderedTraverseTests, ComposeTests}
 import cats.laws.discipline.arbitrary._
 import cats.arrow.Compose
 
@@ -18,8 +18,8 @@ class MapSuite extends CatsSuite {
   checkAll("Map[Int, Int] with Option", UnorderedTraverseTests[Map[Int, ?]].unorderedTraverse[Int, Int, Int, Option, Option])
   checkAll("UnorderedTraverse[Map[Int, ?]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, ?]]))
 
-  checkAll("Map[Int, Int]", FunctorEmptyTests[Map[Int, ?]].functorEmpty[Int, Int, Int])
-  checkAll("FunctorEmpty[Map[Int, ?]]", SerializableTests.serializable(FunctorEmpty[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", FunctorFilterTests[Map[Int, ?]].functorFilter[Int, Int, Int])
+  checkAll("FunctorFilter[Map[Int, ?]]", SerializableTests.serializable(FunctorFilter[Map[Int, ?]]))
 
   checkAll("Map[Int, Long]", ComposeTests[Map].compose[Int, Long, String, Double])
   checkAll("Compose[Map]", SerializableTests.serializable(Compose[Map]))

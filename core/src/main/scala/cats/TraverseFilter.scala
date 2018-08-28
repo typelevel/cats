@@ -3,7 +3,7 @@ package cats
 import simulacrum.typeclass
 
 /**
- * `TraverseEmpty`, also known as `Witherable`, represents list-like structures
+ * `TraverseFilter`, also known as `Witherable`, represents list-like structures
  * that can essentially have a `traverse` and a `filter` applied as a single
  * combined operation (`traverseFilter`).
  *
@@ -11,7 +11,7 @@ import simulacrum.typeclass
  */
 
 @typeclass
-trait TraverseEmpty[F[_]] extends FunctorEmpty[F] {
+trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverse: Traverse[F]
 
   final override def functor: Functor[F] = traverse

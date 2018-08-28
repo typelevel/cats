@@ -6,10 +6,10 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 import org.typelevel.discipline.Laws
 
-trait FunctorEmptyTests[F[_]] extends Laws {
-  def laws: FunctorEmptyLaws[F]
+trait FunctorFilterTests[F[_]] extends Laws {
+  def laws: FunctorFilterLaws[F]
 
-  def functorEmpty[A, B, C](implicit
+  def functorFilter[A, B, C](implicit
                             ArbFA: Arbitrary[F[A]],
                             ArbFABoo: Arbitrary[PartialFunction[A, B]],
                             ArbFOA: Arbitrary[F[Option[A]]],
@@ -22,7 +22,7 @@ trait FunctorEmptyTests[F[_]] extends Laws {
                             EqFC: Eq[F[C]]
                            ): RuleSet = {
     new DefaultRuleSet(
-      name = "functorEmpty",
+      name = "functorFilter",
       parent = None,
       "mapFilter composition" -> forAll(laws.mapFilterComposition[A, B, C] _),
       "mapFilter map consistency" -> forAll(laws.mapFilterMapConsistency[A, B] _),
@@ -33,7 +33,7 @@ trait FunctorEmptyTests[F[_]] extends Laws {
   }
 }
 
-object FunctorEmptyTests {
-  def apply[F[_]: FunctorEmpty]: FunctorEmptyTests[F] =
-    new FunctorEmptyTests[F] { def laws: FunctorEmptyLaws[F] = FunctorEmptyLaws[F] }
+object FunctorFilterTests {
+  def apply[F[_]: FunctorFilter]: FunctorFilterTests[F] =
+    new FunctorFilterTests[F] { def laws: FunctorFilterLaws[F] = FunctorFilterLaws[F] }
 }

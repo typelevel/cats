@@ -123,7 +123,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 }
 
 trait OptionInstancesBinCompat0 {
-  implicit val catsStdTraverseEmptyForOption: TraverseEmpty[Option] = new TraverseEmpty[Option] {
+  implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
 
     override def mapFilter[A, B](fa: Option[A])(f: (A) => Option[B]): Option[B] = fa.flatMap(f)

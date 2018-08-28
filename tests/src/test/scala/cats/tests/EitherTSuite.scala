@@ -48,24 +48,24 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a TraverseEmpty for F is defined
-    implicit val F = ListWrapper.traverseEmpty
+    //If a TraverseFilter for F is defined
+    implicit val F = ListWrapper.traverseFilter
 
     checkAll("EitherT[ListWrapper, Int, ?]",
-      TraverseEmptyTests[EitherT[ListWrapper, Int, ?]].traverseEmpty[Int, Int, Int])
-    checkAll("TraverseEmpty[EitherT[ListWrapper, Int, ?]]",
-      SerializableTests.serializable(TraverseEmpty[EitherT[ListWrapper, Int, ?]]))
+      TraverseFilterTests[EitherT[ListWrapper, Int, ?]].traverseFilter[Int, Int, Int])
+    checkAll("TraverseFilter[EitherT[ListWrapper, Int, ?]]",
+      SerializableTests.serializable(TraverseFilter[EitherT[ListWrapper, Int, ?]]))
 
   }
 
   {
-    //If a FunctorEmpty for F is defined
-    implicit val F = ListWrapper.functorEmpty
+    //If a functorFilter for F is defined
+    implicit val F = ListWrapper.functorFilter
 
     checkAll("EitherT[ListWrapper, Int, ?]",
-      FunctorEmptyTests[EitherT[ListWrapper, Int, ?]].functorEmpty[Int, Int, Int])
-    checkAll("FunctorEmpty[EitherT[ListWrapper, Int, ?]]",
-      SerializableTests.serializable(FunctorEmpty[EitherT[ListWrapper, Int, ?]]))
+      FunctorFilterTests[EitherT[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[EitherT[ListWrapper, Int, ?]]",
+      SerializableTests.serializable(FunctorFilter[EitherT[ListWrapper, Int, ?]]))
 
   }
 

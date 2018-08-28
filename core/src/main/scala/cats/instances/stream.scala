@@ -155,7 +155,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 }
 
 trait StreamInstancesBinCompat0 {
-  implicit val catsStdTraverseEmptyForStream: TraverseEmpty[Stream] = new TraverseEmpty[Stream] {
+  implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
     val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream
 
     override def mapFilter[A, B](fa: Stream[A])(f: (A) => Option[B]): Stream[B] = {

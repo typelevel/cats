@@ -21,8 +21,8 @@ class OptionSuite extends CatsSuite {
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
 
-  checkAll("Option[Int] with Option", TraverseEmptyTests[Option].traverseEmpty[Int, Int, Int])
-  checkAll("TraverseEmpty[Option]", SerializableTests.serializable(TraverseEmpty[Option]))
+  checkAll("Option[Int] with Option", TraverseFilterTests[Option].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Option]", SerializableTests.serializable(TraverseFilter[Option]))
 
   checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))

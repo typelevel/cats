@@ -507,9 +507,9 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  implicit def catsDataTraverseEmptyForEitherT[F[_], L](implicit F0: TraverseEmpty[F]): TraverseEmpty[EitherT[F, L, ?]] =
-    new EitherTFunctorEmpty[F, L] with TraverseEmpty[EitherT[F, L, ?]] {
-      implicit def F: FunctorEmpty[F] = F0
+  implicit def catsDataTraverseFilterForEitherT[F[_], L](implicit F0: TraverseFilter[F]): TraverseFilter[EitherT[F, L, ?]] =
+    new EitherTFunctorFilter[F, L] with TraverseFilter[EitherT[F, L, ?]] {
+      implicit def F: FunctorFilter[F] = F0
       def traverse: Traverse[EitherT[F, L, ?]] = catsDataTraverseForEitherT[F, L](F0.traverse)
 
       def traverseFilter[G[_], A, B]
@@ -560,8 +560,8 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
         fa.ensureOr(error)(predicate)(F)
     }
 
-  implicit def catsDataFunctorEmptyForEitherT[F[_], L](implicit F0: FunctorEmpty[F]): FunctorEmpty[EitherT[F, L, ?]] =
-    new EitherTFunctorEmpty[F, L] { implicit def F = F0 }
+  implicit def catsDataFunctorFilterForEitherT[F[_], L](implicit F0: FunctorFilter[F]): FunctorFilter[EitherT[F, L, ?]] =
+    new EitherTFunctorFilter[F, L] { implicit def F = F0 }
 }
 
 private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
@@ -722,8 +722,8 @@ private[data] sealed trait EitherTOrder[F[_], L, A] extends Order[EitherT[F, L, 
   override def compare(x: EitherT[F, L, A], y: EitherT[F, L, A]): Int = x compare y
 }
 
-private[data] sealed trait EitherTFunctorEmpty[F[_], E] extends FunctorEmpty[EitherT[F, E, ?]] {
-  implicit def F: FunctorEmpty[F]
+private[data] sealed trait EitherTFunctorFilter[F[_], E] extends FunctorFilter[EitherT[F, E, ?]] {
+  implicit def F: FunctorFilter[F]
 
   override def functor: Functor[EitherT[F, E, ?]] = EitherT.catsDataFunctorForEitherT[F, E](F.functor)
 

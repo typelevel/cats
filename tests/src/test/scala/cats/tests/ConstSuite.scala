@@ -21,8 +21,8 @@ class ConstSuite extends CatsSuite {
   checkAll("Const[String, Int] with Option", TraverseTests[Const[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Const[String, ?]]", SerializableTests.serializable(Traverse[Const[String, ?]]))
 
-  checkAll("Const[String, Int]", TraverseEmptyTests[Const[String, ?]].traverseEmpty[Int, Int, Int])
-  checkAll("TraverseEmpty[Const[String, ?]]", SerializableTests.serializable(TraverseEmpty[Const[String, ?]]))
+  checkAll("Const[String, Int]", TraverseFilterTests[Const[String, ?]].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Const[String, ?]]", SerializableTests.serializable(TraverseFilter[Const[String, ?]]))
 
   // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
   {

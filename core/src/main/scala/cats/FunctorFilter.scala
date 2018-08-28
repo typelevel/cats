@@ -3,10 +3,10 @@ package cats
 import simulacrum.typeclass
 
 /**
- * `FunctorEmpty[F]` allows you to `map` and filter out elements simultaneously.
+ * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
 @typeclass
-trait FunctorEmpty[F[_]] extends Serializable {
+trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
 
   def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B]

@@ -1,6 +1,6 @@
 package cats.instances
 
-import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Order, Show, Traverse, TraverseEmpty}
+import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Order, Show, Traverse, TraverseFilter}
 import cats.kernel._
 import cats.kernel.instances.StaticMethods
 
@@ -168,8 +168,8 @@ class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends Monoi
 }
 
 trait SortedMapInstancesBinCompat0 {
-  implicit def catsStdTraverseEmptyForSortedMap[K: Order]: TraverseEmpty[SortedMap[K, ?]] =
-    new TraverseEmpty[SortedMap[K, ?]] {
+  implicit def catsStdTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, ?]] =
+    new TraverseFilter[SortedMap[K, ?]] {
 
       implicit val ordering: Ordering[K] = Order[K].toOrdering
 

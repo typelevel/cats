@@ -72,5 +72,5 @@ trait AllSyntaxBinCompat1
 
 trait AllSyntaxBinCompat2
   extends ParallelTraverseSyntax
-    with TraverseEmptySyntax
-    with FunctorEmptySyntax
+    with TraverseFilterSyntax
+    with FunctorFilterSyntax
