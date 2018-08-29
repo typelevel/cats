@@ -242,6 +242,9 @@ private[data] sealed trait Tuple2KTraverse[F[_], G[_]] extends Traverse[λ[α =>
 
   override def traverse[H[_], A, B](fa: Tuple2K[F, G, A])(f: A => H[B])(implicit H: Applicative[H]): H[Tuple2K[F, G, B]] =
     H.map2(F.traverse(fa.first)(f), G.traverse(fa.second)(f))(Tuple2K(_, _))
+
+  override def traverseM[H[_]: Monad, A, B](fa: Tuple2K[F, G, A])(f: A => H[B]): H[Tuple2K[F, G, B]] =
+    Monad[H].map2(F.traverseM(fa.first)(f), G.traverseM(fa.second)(f))(Tuple2K(_, _))
 }
 
 private[data] sealed trait Tuple2KShow[F[_], G[_], A] extends Show[Tuple2K[F, G, A]] {

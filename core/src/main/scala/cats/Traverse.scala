@@ -36,6 +36,16 @@ import simulacrum.typeclass
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
+    * This is exactly like traverse, except that it requires a Monad[G].
+    * It does this so that can use tailRecM to avoid stack overflows.
+    *
+    * combinators and potentially large data-structures should ideally
+    * override this.
+    */
+  def traverseM[M[_]: Monad, A, B](fa: F[A])(f: A => M[B]): M[F[B]] =
+    traverse[M, A, B](fa)(f)
+
+  /**
    * A traverse followed by flattening the inner result.
    *
    * Example:

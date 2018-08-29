@@ -5,6 +5,7 @@ package discipline
 import cats.instances.option._
 import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen, Prop}
+import cats.instances.list._
 import Prop._
 
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with UnorderedTraverseTests[F] {
@@ -47,6 +48,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
       def parents: Seq[RuleSet] = Seq(functor[A, B, C], foldable[A, M], unorderedTraverse[A, M, C, X, Y])
       def props: Seq[(String, Prop)] = Seq(
         "traverse identity" -> forAll(laws.traverseIdentity[A, C] _),
+        "traverseM consistency" -> forAll(laws.traverseMConsistency[A, C, List] _),
         "traverse sequential composition" -> forAll(laws.traverseSequentialComposition[A, B, C, X, Y] _),
         "traverse parallel composition" -> forAll(laws.traverseParallelComposition[A, B, X, Y] _),
         "traverse derive foldMap" -> forAll(laws.foldMapDerived[A, M] _),

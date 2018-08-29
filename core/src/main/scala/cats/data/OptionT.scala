@@ -114,6 +114,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
     G.map(F.compose(optionInstance).traverse(value)(f))(OptionT.apply)
 
+  def traverseM[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Monad[G]): G[OptionT[F, B]] =
+    G.map(F.compose(optionInstance).traverseM(value)(f))(OptionT.apply)
+
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.compose(optionInstance).foldLeft(value, b)(f)
 
@@ -350,6 +353,9 @@ private[data] sealed trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, ?]]
 
   def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
     fa traverse f
+
+  override def traverseM[G[_]: Monad, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =
+    fa traverseM f
 }
 
 private[data] trait OptionTSemigroup[F[_], A] extends Semigroup[OptionT[F, A]] {

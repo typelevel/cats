@@ -261,6 +261,9 @@ private[data] trait NestedTraverse[F[_], G[_]] extends Traverse[Nested[F, G, ?]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
     Applicative[H].map(FG.traverse(fga.value)(f))(Nested(_))
+
+  override def traverseM[H[_]: Monad, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
+    Applicative[H].map(FG.traverseM(fga.value)(f))(Nested(_))
 }
 
 private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F, G, ?]] with NestedFunctor[F, G] {

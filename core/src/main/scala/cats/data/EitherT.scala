@@ -150,6 +150,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Traverse[Either[A, ?]].traverse(axb)(f)))(EitherT.apply)
 
+  def traverseM[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F], monadG: Monad[G]): G[EitherT[F, A, D]] =
+    monadG.map(traverseF.traverseM(value)(axb => Traverse[Either[A, ?]].traverseM(axb)(f)))(EitherT.apply)
+
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
     F.foldLeft(value, c)((c, axb) => axb.foldLeft(c)(f))
 
@@ -652,6 +655,9 @@ private[data] sealed trait EitherTTraverse[F[_], L] extends Traverse[EitherT[F, 
 
   override def traverse[G[_]: Applicative, A, B](fa: EitherT[F, L, A])(f: A => G[B]): G[EitherT[F, L, B]] =
     fa traverse f
+
+  override def traverseM[G[_]: Monad, A, B](fa: EitherT[F, L, A])(f: A => G[B]): G[EitherT[F, L, B]] =
+    fa traverseM f
 }
 
 private[data] sealed trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F, ?, ?]] {

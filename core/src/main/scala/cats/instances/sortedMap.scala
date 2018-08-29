@@ -1,6 +1,6 @@
 package cats.instances
 
-import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Show, Traverse}
+import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monad, Monoid, Show, Traverse}
 import cats.kernel._
 import cats.kernel.instances.StaticMethods
 
@@ -34,6 +34,17 @@ trait SortedMapInstances extends SortedMapInstances2 {
         Foldable.iterateRight(fa, gba){ (kv, lbuf) =>
           G.map2Eval(f(kv._2), lbuf)({ (b, buf) => buf + (kv._1 -> b)})
         }.value
+      }
+
+      override def traverseM[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Monad[G]): G[SortedMap[K, B]] = {
+        def step(u: (List[(K, A)], SortedMap[K, B])): G[Either[(List[(K, A)], SortedMap[K, B]), SortedMap[K, B]]] = u match {
+          case (Nil, m) => G.pure(Right(m))
+          case ((k, a) :: tail, m) =>
+            G.map(f(a)) { b =>
+              Left((tail, m + ((k, b))))
+            }
+        }
+        G.tailRecM((fa.toList, SortedMap.empty[K, B]))(step)
       }
 
       def flatMap[A, B](fa: SortedMap[K, A])(f: A => SortedMap[K, B]): SortedMap[K, B] =

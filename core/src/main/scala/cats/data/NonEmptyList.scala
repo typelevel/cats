@@ -231,6 +231,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
     G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyList(_, _)).value
 
+  def traverseM[G[_], B](f: A => G[B])(implicit G: Monad[G]): G[NonEmptyList[B]] =
+    G.map2Eval(f(head), Always(Traverse[List].traverseM(tail)(f)))(NonEmptyList(_, _)).value
+
   def coflatMap[B](f: NonEmptyList[A] => B): NonEmptyList[B] = {
     val buf = ListBuffer.empty[B]
     @tailrec def consume(as: List[A]): List[B] =
@@ -518,6 +521,9 @@ private[data] sealed abstract class NonEmptyListInstances extends NonEmptyListIn
 
       override def traverse[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyList[B]] =
         fa traverse f
+
+      override def traverseM[G[_], A, B](fa: NonEmptyList[A])(f: A => G[B])(implicit G: Monad[G]): G[NonEmptyList[B]] =
+        fa traverseM f
 
       override def foldLeft[A, B](fa: NonEmptyList[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)

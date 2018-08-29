@@ -83,6 +83,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
 
+      override def traverseM[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Monad[G]): G[Vector[B]] =
+        foldM[G, A, Vector[B]](fa, Vector.empty[B]) { (vec, a) => G.map(f(a))(vec :+ _) }
+
       override def exists[A](fa: Vector[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 

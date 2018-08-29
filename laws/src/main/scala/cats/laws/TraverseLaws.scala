@@ -13,6 +13,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa.traverse[Id, B](f) <-> F.map(fa)(f)
   }
 
+  def traverseMConsistency[A, B, M[_]: Monad](fa: F[A], f: A => M[B]): IsEq[M[F[B]]] =
+    fa.traverse[M, B](f) <-> fa.traverseM[M, B](f)
+
   def traverseSequentialComposition[A, B, C, M[_], N[_]](
     fa: F[A],
     f: A => M[B],

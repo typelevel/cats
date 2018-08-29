@@ -54,6 +54,12 @@ final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
       , x => A.map(G.traverse(x)(g))(rightc(_))
     )
 
+  def traverseM[X[_], B](g: A => X[B])(implicit F: Traverse[F], G: Traverse[G], A: Monad[X]): X[EitherK[F, G, B]] =
+    run.fold(
+      x => A.map(F.traverseM(x)(g))(leftc(_))
+      , x => A.map(G.traverseM(x)(g))(rightc(_))
+    )
+
   def isLeft: Boolean =
     run.isLeft
 
@@ -215,6 +221,9 @@ private[data] trait EitherKTraverse[F[_], G[_]] extends EitherKFoldable[F, G] wi
 
   override def traverse[X[_] : Applicative, A, B](fa: EitherK[F, G, A])(f: A => X[B]): X[EitherK[F, G, B]] =
     fa traverse f
+
+  override def traverseM[X[_] : Monad, A, B](fa: EitherK[F, G, A])(f: A => X[B]): X[EitherK[F, G, B]] =
+    fa traverseM f
 }
 
 private[data] trait EitherKCoflatMap[F[_], G[_]] extends CoflatMap[EitherK[F, G, ?]] {
