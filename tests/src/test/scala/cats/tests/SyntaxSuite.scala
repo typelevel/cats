@@ -4,7 +4,7 @@ package tests
 import scala.collection.immutable.SortedSet
 import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
-import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySortedSet}
 import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
 
@@ -361,12 +361,12 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val binested: Binested[F, G, H, A, B] = fgahb.binested
   }
 
-  def testNonEmptySet[A, B: Order] : Unit = {
+  def testNonEmptySortedSet[A, B: Order] : Unit = {
     val f = mock[A => B]
     val set = mock[SortedSet[A]]
 
-    val nes: Option[NonEmptySet[A]] = set.toNes
-    val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
+    val nes: Option[NonEmptySortedSet[A]] = set.toNes
+    val grouped: SortedMap[B, NonEmptySortedSet[A]] = set.groupByNes(f)
   }
 
   def testNonEmptyList[A, B: Order] : Unit = {

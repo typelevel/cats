@@ -18,8 +18,13 @@ package object data {
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
 
-  type NonEmptySet[A] = NonEmptySetImpl.Type[A]
-  val NonEmptySet = NonEmptySetImpl
+  type NonEmptySortedSet[A] = NonEmptySetImpl.Type[A]
+  val NonEmptySortedSet = NonEmptySetImpl
+
+  @deprecated("Use NonEmptySortedSet", "1.2.1")
+  type NonEmptySet[A] = NonEmptySortedSet[A]
+  @deprecated("Use NonEmptySortedSet", "1.2.1")
+  val NonEmptySet = NonEmptySortedSet
 
   type NonEmptyChain[+A] = NonEmptyChainImpl.Type[A]
   val NonEmptyChain = NonEmptyChainImpl
