@@ -1,0 +1,5 @@
+package cats
+
+object FoldableTest {
+
+}

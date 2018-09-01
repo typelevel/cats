@@ -120,4 +120,7 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
         case s => G.pure(s)
       })
     ).value
+
+  def collectFold[M: Monoid](f: PartialFunction[A, M])(implicit F: Foldable[F]): M =
+    F.collectFold(fa)(f)
 }
