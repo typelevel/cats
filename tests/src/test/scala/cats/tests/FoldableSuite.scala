@@ -122,6 +122,15 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
     }
   }
 
+  test(s"Foldable[$name].maxByOption/minByOption") {
+    forAll { (fa: F[String], f: String => Int) =>
+      val maxOpt = fa.maxByOption(f)
+      val minOpt = fa.minByOption(f)
+      maxOpt.forall(i => fa.forall(x => f(x) <= f(i))) should === (true)
+      minOpt.forall(i => fa.forall(x => f(x) >= f(i))) should === (true)
+    }
+  }
+
   test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList

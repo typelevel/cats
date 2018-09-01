@@ -158,4 +158,10 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
       case None => G.pure(Right(None))
     })
+
+  def maxByOption[B](f: A => B)(implicit F: Foldable[F], B: Order[B]): Option[A] =
+    F.reduceLeftOption[A](fa)((a1, a2) => if(B.gteqv(f(a1), f(a2))) a1 else a2)
+
+  def minByOption[B](f: A => B)(implicit F: Foldable[F], B: Order[B]): Option[A] =
+    F.reduceLeftOption[A](fa)((a1, a2) => if(B.lteqv(f(a1), f(a2))) a1 else a2)
 }
