@@ -1,5 +1,0 @@
-package cats
-
-object FoldableTest {
-
-}
