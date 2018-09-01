@@ -276,7 +276,7 @@ sealed abstract class Chain[+A] {
       c match {
         case Singleton(a) =>
           val b = f(a)
-          if (b) return ();
+          if (b) return ()
           c =
             if (rights.isEmpty) Empty
             else rights.reduceLeft((x, y) => Append(y, x))

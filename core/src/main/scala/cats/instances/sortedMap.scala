@@ -120,7 +120,7 @@ class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K]) extends 
   import scala.util.hashing.MurmurHash3._
   def hash(x: SortedMap[K, V]): Int = {
     var a, b, n = 0
-    var c = 1;
+    var c = 1
     x foreach { case (k, v) =>
       val h = StaticMethods.product2Hash(K.hash(k), V.hash(v))
       a += h
