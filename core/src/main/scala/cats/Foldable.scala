@@ -272,9 +272,7 @@ import Foldable.sentinel
    *{{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
-   * scala> xs.collectFold {
-   *          case n if n % 2 == 0 => n
-   *        }
+   * scala> xs.collectFold { case n if n % 2 == 0 => n }
    * res0: Int = 6
    *}}}
    */

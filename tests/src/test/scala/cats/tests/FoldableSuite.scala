@@ -85,6 +85,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
     }
   }
 
+  test(s"Foldable[$name] partial summation") {
+    forAll { (fa: F[Int], f: Int ⇒ Boolean) ⇒
+      val m: Monoid[Int] = Monoid[Int]
+
+      val pf: PartialFunction[Int, Int] = {
+        case n if f(n) ⇒ n
+      }
+      fa.collectFold(pf) should === (fa.toList.collect(pf).fold(m.empty)(m.combine))
+
+      def g(a: Int): Option[Int] = Some(a).filter(f)
+      fa.filterFold(g) should === (fa.toList.filter(f).fold(m.empty)(m.combine))
+    }
+  }
+
   test(s"Foldable[$name].find/exists/forall/existsM/forallM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
       fa.find(_ > n)   should === (iterator(fa).find(_ > n))
