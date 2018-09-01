@@ -250,6 +250,40 @@ import Foldable.sentinel
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
 
   /**
+   * Tear down a subset of this structure using a `A => Option[M]`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
+   * scala> xs.filterFold(f)
+   * res0: Int = 6
+   *}}}
+   */
+  def filterFold[A, M: Monoid](fa: F[A])(f: A ⇒ Option[M]): M = {
+    val m = Monoid[M]
+    foldLeft(fa, m.empty)((acc, a) ⇒ f(a) match {
+      case Some(x) ⇒ m.combine(x, acc)
+      case None    ⇒ acc
+    })
+  }
+
+  /**
+   * Tear down a subset of this structure using a `PartialFunction`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> xs.collectFold {
+   *          case n if n % 2 == 0 => n
+   *        }
+   * res0: Int = 6
+   *}}}
+   */
+  def collectFold[A, M: Monoid](fa: F[A])(f: PartialFunction[A, M]): M = {
+    val m = Monoid[M]
+    foldLeft(fa, m.empty)((acc, a) ⇒ m.combine(acc, f.applyOrElse(a, (_: A) ⇒ m.empty)))
+  }
+
+  /**
    * Fold implemented by mapping `A` values into `B` and then
    * combining them using the given `Monoid[B]` instance.
    */
