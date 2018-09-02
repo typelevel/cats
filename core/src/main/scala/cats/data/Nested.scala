@@ -59,8 +59,6 @@ private[data] sealed abstract class NestedInstances extends NestedInstances0 {
       implicit val F: Traverse[F] = F0
       implicit val G: TraverseFilter[G] = G0
     }
-
-
 }
 
 private[data] sealed abstract class NestedInstances0 extends NestedInstances1 {

@@ -136,13 +136,13 @@ trait OptionInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Option[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
       fa match {
-        case _: None.type => G.pure(Option.empty[B])
+        case None => G.pure(Option.empty[B])
         case Some(a) => f(a)
       }
 
     override def filterA[G[_], A](fa: Option[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Option[A]] =
       fa match {
-        case _: None.type => G.pure(Option.empty[A])
+        case None => G.pure(Option.empty[A])
         case Some(a) => G.map(f(a))(b => if (b) Some(a) else None)
       }
 

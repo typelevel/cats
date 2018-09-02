@@ -14,6 +14,29 @@ class OptionTSuite extends CatsSuite {
 
 
   {
+    //If a Functor for F is defined
+    implicit val F = ListWrapper.functor
+
+    checkAll("OptionT[ListWrapper, ?]",
+      FunctorFilterTests[OptionT[ListWrapper, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[OptionT[ListWrapper, ?]]",
+      SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, ?]]))
+
+  }
+
+
+  {
+    //If a Traverse for F is defined
+    implicit val F = ListWrapper.traverse
+
+    checkAll("OptionT[ListWrapper, ?]",
+      TraverseFilterTests[OptionT[ListWrapper, ?]].traverseFilter[Int, Int, Int])
+    checkAll("TraverseFilter[OptionT[ListWrapper, ?]]",
+      SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, ?]]))
+
+  }
+
+  {
     implicit val F = ListWrapper.eqv[Option[Int]]
 
     checkAll("OptionT[ListWrapper, Int]", EqTests[OptionT[ListWrapper, Int]].eqv)
