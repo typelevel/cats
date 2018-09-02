@@ -557,11 +557,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/tpolecat/</url>
       </developer>
       <developer>
-        <id>stew</id>
-        <name>Mike O'Connor</name>
-        <url>https://github.com/stew/</url>
-      </developer>
-      <developer>
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>

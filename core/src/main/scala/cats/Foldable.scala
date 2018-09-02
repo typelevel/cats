@@ -633,11 +633,11 @@ object Foldable {
    * It could be made a value class after
    * https://github.com/scala/bug/issues/9600 is resolved.
    */
-  private sealed abstract class Source[+A] {
+  private[cats] sealed abstract class Source[+A] {
     def uncons: Option[(A, Eval[Source[A]])]
   }
 
-  private object Source {
+  private[cats] object Source {
     val Empty: Source[Nothing] = new Source[Nothing] {
       def uncons = None
     }

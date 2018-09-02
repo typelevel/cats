@@ -76,11 +76,14 @@ By sharing the same set of type classes, instances and data types provided by Ca
 
 #### General purpose libraries to support pure functional programming
 
- * [Dogs](https://github.com/stew/dogs): pure functional collections and data structures
+ * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
+ * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
+ * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
+ * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
  * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
@@ -93,6 +96,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
  * [circe](https://github.com/circe/circe): pure functional JSON library
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
+ * [cormorant](https://github.com/ChristopherDavenport/cormorant): CSV handling library for FP
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
  * [fastparse-cats](https://github.com/johnynek/fastparse-cats): cats Monad and Alternative instances for [fastparse](https://github.com/lihaoyi/fastparse)
@@ -106,6 +110,8 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
+ * [linebacker](https://github.com/ChristopherDavenport/linebacker): functional thread pool management
+ * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
@@ -190,6 +196,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [AutoScout24](https://www.autoscout24.com)
 - [Avast](https://avast.com)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
+- [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
@@ -214,6 +221,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
+- [Spiceworks](https://www.spiceworks.com/)
 - [Spotahome](https://spotahome.com)
 - [Spotify](https://www.spotify.com)
 - [SpringerNature](https://www.springernature.com)
@@ -223,6 +231,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [The Guardian](https//www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
 - [Wegtam GmbH](https://www.wegtam.com)
+- [WeWork](https://www.wework.com)
 - [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
@@ -239,7 +248,6 @@ The current maintainers (people who can merge pull requests) are:
  * [LukaJCB](https://github.com/LukaJCB) Luka Jacobowitz
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [tpolecat](https://github.com/tpolecat) Rob Norris
- * [stew](https://github.com/stew) Mike O'Connor
  * [non](https://github.com/non) Erik Osheim
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
