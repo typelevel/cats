@@ -262,7 +262,7 @@ import Foldable.sentinel
   def filterFold[A, M: Monoid](fa: F[A])(f: A ⇒ Option[M]): M = {
     val m = Monoid[M]
     foldLeft(fa, m.empty)((acc, a) ⇒ f(a) match {
-      case Some(x) ⇒ m.combine(x, acc)
+      case Some(x) ⇒ m.combine(acc, x)
       case None    ⇒ acc
     })
   }
