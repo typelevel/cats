@@ -131,4 +131,45 @@ class ChainSuite extends CatsSuite {
       ci.reverse.toList should === (ci.toList.reverse)
     }
   }
+
+  test("(a ++ b).isEmpty ==> a.isEmpty and b.isEmpty") {
+    forAll { (a: Chain[Int], b: Chain[Int]) =>
+      assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty))
+    }
+  }
+
+  test("a.isEmpty == (a eq Chain.nil)") {
+    assert(Chain.fromSeq(Nil) eq Chain.nil)
+
+    forAll { (a: Chain[Int]) =>
+      assert(a.isEmpty == (a eq Chain.nil))
+    }
+  }
+
+  test("(nil ++ a) eq a") {
+    forAll { (a: Chain[Int]) =>
+      assert((Chain.nil ++ a) eq a)
+      assert((a ++ Chain.nil) eq a)
+    }
+  }
+
+  test("Chain.iterator.next should throw NoSuchElementException") {
+    forAll { (a: Chain[Int]) =>
+      val it = a.iterator
+
+      while(it.hasNext) it.next
+
+      intercept[java.util.NoSuchElementException] {
+        it.next
+      }
+
+      val rit = a.reverseIterator
+
+      while(rit.hasNext) rit.next
+
+      intercept[java.util.NoSuchElementException] {
+        rit.next
+      }
+    }
+  }
 }

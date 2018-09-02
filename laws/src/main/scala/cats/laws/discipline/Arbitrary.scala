@@ -77,12 +77,12 @@ object arbitrary extends ArbitraryInstances0 {
     Cogen[List[A]].contramap(_.toList)
 
   implicit def catsLawsArbitraryForNonEmptyChain[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
-    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap(fa =>
-      Gen.oneOf(
-        A.arbitrary.map(a => NonEmptyChain.fromChainPrepend(a, fa)),
-        A.arbitrary.map(a => NonEmptyChain.fromChainAppend(fa, a)),
-        A.arbitrary.map(NonEmptyChain.one)
-    )))
+    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap { chain =>
+      NonEmptyChain.fromChain(chain) match {
+        case None => A.arbitrary.map(NonEmptyChain.one)
+        case Some(ne) => Gen.const(ne)
+      }
+    })
 
   implicit def catsLawsCogenForNonEmptyChain[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
     Cogen[Chain[A]].contramap(_.toChain)
@@ -287,16 +287,32 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
     Cogen((seed, x) => F.perturb(seed, x))
 
-  implicit def catsLawsArbitraryForChain[A](implicit A: Arbitrary[A]): Arbitrary[Chain[A]] =
-    Arbitrary(Gen.sized {
-      case 0 => Gen.const(Chain.nil)
-      case 1 => A.arbitrary.map(Chain.one)
-      case 2 => A.arbitrary.flatMap(a1 => A.arbitrary.flatMap(a2 =>
-        Chain.concat(Chain.one(a1), Chain.one(a2))))
-      case n => Chain.fromSeq(Range.apply(0, n)).foldLeft(Gen.const(Chain.empty[A])) { (gen, _) =>
-        gen.flatMap(cat => A.arbitrary.map(a => cat :+ a))
-      }
-    })
+  implicit def catsLawsArbitraryForChain[A](implicit A: Arbitrary[A]): Arbitrary[Chain[A]] = {
+    val genA = A.arbitrary
+
+    def genSize(sz: Int): Gen[Chain[A]] = {
+      val fromSeq = Gen.listOfN(sz, genA).map(Chain.fromSeq)
+      val recursive =
+        sz match {
+          case 0 => Gen.const(Chain.nil)
+          case 1 => genA.map(Chain.one)
+          case n =>
+            // Here we concat two chains
+            for {
+              n0 <- Gen.choose(1, n-1)
+              n1 = n - n0
+              left <- genSize(n0)
+              right <- genSize(n1)
+            } yield left ++ right
+        }
+
+      // prefer to generate recursively built Chains
+      // but sometimes create fromSeq
+      Gen.frequency((5, recursive), (1, fromSeq))
+    }
+
+    Arbitrary(Gen.sized(genSize))
+  }
 
   implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
     Cogen[List[A]].contramap(_.toList)

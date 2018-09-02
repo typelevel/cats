@@ -280,6 +280,12 @@ class ValidatedSuite extends CatsSuite {
     }
   }
 
+  test("condNec consistent with Either.cond + toValidatedNec") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      Validated.condNec(cond, s, i) should === (Either.cond(cond, s, i).toValidatedNec)
+    }
+  }
+
   test("liftTo consistent with direct to Option") {
     forAll { (v: Validated[Unit, Int]) =>
       v.liftTo[Option] shouldBe v.toOption

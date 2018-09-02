@@ -26,7 +26,7 @@ class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[
   import scala.util.hashing.MurmurHash3._
   def hash(x: Map[K, V]): Int = {
     var a, b, n = 0
-    var c = 1;
+    var c = 1
     x foreach { case (k, v) =>
       // use the default hash on keys because that's what Scala's Map does
       val h = StaticMethods.product2Hash(k.hashCode(), V.hash(v))
