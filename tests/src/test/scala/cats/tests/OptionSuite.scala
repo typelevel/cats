@@ -3,6 +3,7 @@ package tests
 
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
+import cats.laws.discipline.arbitrary._
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])
@@ -19,6 +20,9 @@ class OptionSuite extends CatsSuite {
 
   checkAll("Option[Int] with Option", TraverseTests[Option].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[Option]", SerializableTests.serializable(Traverse[Option]))
+
+  checkAll("Option[Int] with Option", TraverseFilterTests[Option].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Option]", SerializableTests.serializable(TraverseFilter[Option]))
 
   checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))

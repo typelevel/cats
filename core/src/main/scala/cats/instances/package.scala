@@ -14,15 +14,14 @@ package object instances {
   object eq              extends EqInstances
   object equiv           extends EquivInstances
   object float           extends FloatInstances
-  object function        extends FunctionInstances
-                         with    FunctionInstancesBinCompat0
+  object function        extends FunctionInstances with FunctionInstancesBinCompat0
   object future          extends FutureInstances
   object int             extends IntInstances
   object invariant       extends InvariantMonoidalInstances
-  object list            extends ListInstances
+  object list            extends ListInstances with ListInstancesBinCompat0
   object long            extends LongInstances
+  object option          extends OptionInstances with OptionInstancesBinCompat0
   object map             extends MapInstances with MapInstancesBinCompat0
-  object option          extends OptionInstances
   object order           extends OrderInstances
   object ordering        extends OrderingInstances
   object parallel        extends ParallelInstances
@@ -33,12 +32,11 @@ package object instances {
   object short           extends ShortInstances
   object sortedMap       extends SortedMapInstances
   object sortedSet       extends SortedSetInstances
-  object stream          extends StreamInstances
+  object stream          extends StreamInstances with StreamInstancesBinCompat0
   object string          extends StringInstances
   object try_            extends TryInstances
-  object tuple           extends TupleInstances
-                         with    Tuple2InstancesBinCompat0
+  object tuple           extends TupleInstances with Tuple2InstancesBinCompat0
   object unit            extends UnitInstances
   object uuid            extends UUIDInstances
-  object vector          extends VectorInstances
+  object vector          extends VectorInstances with VectorInstancesBinCompat0
 }
