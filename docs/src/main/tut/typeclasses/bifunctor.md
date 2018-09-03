@@ -1,6 +1,6 @@
 ---
 layout: docs
-title:  "Functor"
+title:  "Bifunctor"
 section: "typeclasses"
 source: "core/src/main/scala/cats/Bifunctor.scala"
 scaladoc: "#cats.Bifunctor"
