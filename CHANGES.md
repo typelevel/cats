@@ -47,6 +47,7 @@ Cats 1.3.0 does not support Scala 2.10.
 * [#2361](https://github.com/typelevel/cats/pull/2361) Make kittens officially a Cats module (still separate repo) by @kailuowang
 * [#2337](https://github.com/typelevel/cats/pull/2337) Update the outdated FAQ on IO/Task by @ceedubs
 * [#2344](https://github.com/typelevel/cats/pull/2344) Use sbt-doctest for Defer example by @ceedubs
+* [#2429](https://github.com/typelevel/cats/pull/2429) Replace all usage of the list Monoid in the docs with the chain Monoid by @jan0sch
 
 
 ### 6 Build and Tests Improvements:
