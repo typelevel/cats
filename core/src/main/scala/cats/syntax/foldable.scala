@@ -177,11 +177,11 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
     * scala> import cats.implicits._
     * scala> val xs = List(1, 2, 3, 4)
     * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
-    * scala> xs.filterFold(f)
+    * scala> xs.collectSomeFold(f)
     * res0: Int = 6
     *}}}
     */
-  def filterFold[M](f: A ⇒ Option[M])(implicit F: Foldable[F], M: Monoid[M]): M =
+  def collectSomeFold[M](f: A ⇒ Option[M])(implicit F: Foldable[F], M: Monoid[M]): M =
     F.foldLeft(fa, M.empty)((acc, a) ⇒ f(a) match {
       case Some(x) ⇒ M.combine(acc, x)
       case None    ⇒ acc

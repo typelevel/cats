@@ -95,7 +95,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
       fa.collectFold(pf) should === (fa.toList.collect(pf).fold(m.empty)(m.combine))
 
       def g(a: String): Option[String] = Some(a).filter(f)
-      fa.filterFold(g) should === (fa.toList.filter(f).fold(m.empty)(m.combine))
+      fa.collectSomeFold(g) should === (fa.toList.filter(f).fold(m.empty)(m.combine))
     }
   }
 
