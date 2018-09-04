@@ -8,16 +8,13 @@ Cats 1.3.0 does not support Scala 2.10.
 1.3.0 brought you:
 
 
-### 15 API Enhancements
+### 12 API Enhancements
 
-* [#2451](https://github.com/typelevel/cats/pull/2451) Remove unnecessary semicolons by @satansk
 * [#2431](https://github.com/typelevel/cats/pull/2431) Give NonEmptyChain more presence by @LukaJCB
-* [#2425](https://github.com/typelevel/cats/pull/2425) Override size in Chain instance by @ceedubs
 * [#2421](https://github.com/typelevel/cats/pull/2421) Add/fix Foldable extensions: findM and collectFirstSomeM by @catostrophe
 * [#2416](https://github.com/typelevel/cats/pull/2416) add append method to NEL by @julien-truffaut
 * [#2406](https://github.com/typelevel/cats/pull/2406) Add NonEmptyChain by @LukaJCB
 * [#2405](https://github.com/typelevel/cats/pull/2405) Add FunctorFilter and TraverseFilter by @LukaJCB
-* [#2403](https://github.com/typelevel/cats/pull/2403) use as and void instead of map(_ => ) by @julien-truffaut
 * [#2402](https://github.com/typelevel/cats/pull/2402) Add Compose instance for Map by @denisrosca
 * [#2371](https://github.com/typelevel/cats/pull/2371) Add Chain by @LukaJCB
 * [#2367](https://github.com/typelevel/cats/pull/2367) add Tuple2K#swap by @aoiroaoino
@@ -30,6 +27,12 @@ Cats 1.3.0 does not support Scala 2.10.
 
 * [#2383](https://github.com/typelevel/cats/pull/2383) Monad[Free[Id, ?]] cannot be found by @barambani
 
+
+### 3 Code Cleanups
+
+* [#2451](https://github.com/typelevel/cats/pull/2451) Remove unnecessary semicolons by @satansk
+* [#2425](https://github.com/typelevel/cats/pull/2425) Override size in Chain instance by @ceedubs
+* [#2403](https://github.com/typelevel/cats/pull/2403) use as and void instead of map(_ => ) by @julien-truffaut
 
 ### 11 Documentation Additions/Fixes
 
