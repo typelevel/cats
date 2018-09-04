@@ -97,7 +97,7 @@ Cats 1.1.0 is binary compatible with 1.0.1, i.e. its jar is a drop-in replacemen
 * [#2141](https://github.com/typelevel/cats/pull/2141) Add NonEmptyMap  by @LukaJCB
 * [#2123](https://github.com/typelevel/cats/pull/2123) Add `contains_`, `foldSmash` and `mkString_` to `FoldableOps`  by @rsoeldner
 * [#2119](https://github.com/typelevel/cats/pull/2119) Fixes type params for OptionT.getOrElse(F)  by @fcanedo
-* [#2076](https://github.com/typelevel/cats/pull/2076) Add `Endo` type alias for (`A =>A`)  by @kailuowang
+* [#2076](https://github.com/typelevel/cats/pull/2076) Add `Endo` type alias for (`A => A`)  by @kailuowang
 
 ### 4 Bug Fixes
 
