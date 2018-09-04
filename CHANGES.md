@@ -34,7 +34,7 @@ Cats 1.3.0 does not support Scala 2.10.
 * [#2425](https://github.com/typelevel/cats/pull/2425) Override size in Chain instance by @ceedubs
 * [#2403](https://github.com/typelevel/cats/pull/2403) use as and void instead of map(_ => ) by @julien-truffaut
 
-### 11 Documentation Additions/Fixes
+### 13 Documentation Additions/Fixes
 
 * [#2427](https://github.com/typelevel/cats/pull/2427) Add scaladoc example for Semigroupal.product by @ceedubs
 * [#2378](https://github.com/typelevel/cats/pull/2378) Fix typos detected by github.com/client9/misspell by @seratch
@@ -51,7 +51,7 @@ Cats 1.3.0 does not support Scala 2.10.
 * [#2465](https://github.com/typelevel/cats/pull/2465) fix laws link in CONTRIBUTING by @melrief
 
 
-### 6 Build and Tests Improvements:
+### 7 Build and Tests Improvements:
 
 * [#2430](https://github.com/typelevel/cats/pull/2430) Make Chain Arbitraries recursively build concatenations by @johnynek
 * [#2420](https://github.com/typelevel/cats/pull/2420) Better Chain Arbitrary by @LukaJCB
