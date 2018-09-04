@@ -48,6 +48,7 @@ Cats 1.3.0 does not support Scala 2.10.
 * [#2337](https://github.com/typelevel/cats/pull/2337) Update the outdated FAQ on IO/Task by @ceedubs
 * [#2344](https://github.com/typelevel/cats/pull/2344) Use sbt-doctest for Defer example by @ceedubs
 * [#2429](https://github.com/typelevel/cats/pull/2429) Replace all usage of the list Monoid in the docs with the chain Monoid by @jan0sch
+* [#2465](https://github.com/typelevel/cats/pull/2465) fix laws link in CONTRIBUTING by @melrief
 
 
 ### 6 Build and Tests Improvements:
@@ -58,6 +59,7 @@ Cats 1.3.0 does not support Scala 2.10.
 * [#2354](https://github.com/typelevel/cats/pull/2354) temporarily disable scaladoc on 2.13 by @kailuowang
 * [#2335](https://github.com/typelevel/cats/pull/2335) Updating to scala 2.13-M4 by @kailuowang
 * [#2306](https://github.com/typelevel/cats/pull/2306) Drop 2.10 support / update to 2.13-M4 by @larsrh
+* [##2466](https://github.com/typelevel/cats/pull/#2466) remove bench from release by @kailuowang
 
 
 
