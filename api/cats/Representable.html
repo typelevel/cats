@@ -311,6 +311,10 @@
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="FunctorFilter$.html" title=""></a>
+                        <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
+                        <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -410,6 +414,10 @@
                         <a class="object" href="Traverse$.html" title=""></a>
                         <a class="trait" href="Traverse.html" title="Traverse, also known as Traversable."></a>
                         <a href="Traverse.html" title="Traverse, also known as Traversable.">Traverse</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="TraverseFilter$.html" title=""></a>
+                        <a class="trait" href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)."></a>
+                        <a href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter).">TraverseFilter</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="UnorderedFoldable$.html" title=""></a>
                         <a class="trait" href="UnorderedFoldable.html" title="UnorderedFoldable is like a Foldable for unordered containers."></a>
@@ -546,7 +554,7 @@ http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Func
       </span>
       
       
-    </li><li name="cats.Representable#index" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Representable#index" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="index[A](f:F[A]):Representable.this.Representation=&gt;A"></a><a id="index[A](F[A]):(Representation)⇒A"></a>
       <span class="permalink">
       <a href="../cats/Representable.html#index[A](f:F[A]):Representable.this.Representation=&gt;A" title="Permalink">
@@ -561,9 +569,18 @@ http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Func
         <span class="name">index</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.Representable.F">F</span>[<span class="extype" name="cats.Representable.index.A">A</span>]</span>)</span><span class="result">: (<a href="#Representation" class="extmbr" name="cats.Representable.Representation">Representation</a>) ⇒ <span class="extype" name="cats.Representable.index.A">A</span></span>
       </span>
       
-      <p class="shortcomment cmt">Create a function that &quot;indexes&quot; into the <code>F</code> structure using <code>Representation</code>
-</p>
-    </li><li name="cats.Representable#tabulate" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Create a function that &quot;indexes&quot; into the <code>F</code> structure using <code>Representation</code></p><div class="fullcomment"><div class="comment cmt"><p>Create a function that &quot;indexes&quot; into the <code>F</code> structure using <code>Representation</code></p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">type</span> <span class="std">Pair</span>[A] = (A, A)
+
+scala&gt; <span class="kw">val</span> indexed: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = Representable[<span class="std">Pair</span>].index((<span class="lit">"foo"</span>, <span class="lit">"bar"</span>))
+
+scala&gt; indexed(<span class="kw">true</span>)
+res0: <span class="std">String</span> = foo
+
+scala&gt; indexed(<span class="kw">false</span>)
+res1: <span class="std">String</span> = bar</pre></div></div>
+    </li><li name="cats.Representable#tabulate" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="tabulate[A](f:Representable.this.Representation=&gt;A):F[A]"></a><a id="tabulate[A]((Representation)⇒A):F[A]"></a>
       <span class="permalink">
       <a href="../cats/Representable.html#tabulate[A](f:Representable.this.Representation=&gt;A):F[A]" title="Permalink">
@@ -578,8 +595,17 @@ http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Func
         <span class="name">tabulate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="f">f: (<a href="#Representation" class="extmbr" name="cats.Representable.Representation">Representation</a>) ⇒ <span class="extype" name="cats.Representable.tabulate.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.Representable.F">F</span>[<span class="extype" name="cats.Representable.tabulate.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Reconstructs the <code>F</code> structure using the index function
-</p>
+      <p class="shortcomment cmt">Reconstructs the <code>F</code> structure using the index function</p><div class="fullcomment"><div class="comment cmt"><p>Reconstructs the <code>F</code> structure using the index function</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">type</span> <span class="std">Pair</span>[A] = (A, A)
+
+scala&gt; <span class="kw">val</span> f: <span class="std">Boolean</span> <span class="kw">=&gt;</span> <span class="std">String</span> = {
+     | <span class="kw">case</span> <span class="kw">true</span> <span class="kw">=&gt;</span> <span class="lit">"foo"</span>
+     | <span class="kw">case</span> <span class="kw">false</span> <span class="kw">=&gt;</span> <span class="lit">"bar"</span>
+     | }
+
+scala&gt; f.tabulate[<span class="std">Pair</span>]
+res0: <span class="std">Pair</span>[<span class="std">String</span>] = (foo,bar)</pre></div></div>
     </li></ol>
             </div>
 

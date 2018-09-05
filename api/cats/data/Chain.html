@@ -183,6 +183,10 @@
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyChainOps.html" title=""></a>
+                        <a href="NonEmptyChainOps.html" title="">NonEmptyChainOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyList$.html" title=""></a>
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
@@ -825,9 +829,9 @@ Traverses only until <code>a</code> is found.</p>
               
         </dd></dl></div>
     </li><li name="cats.data.Chain#groupBy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.Chain[A]]"></a><a id="groupBy[B]((A)⇒B)(Order[B]):SortedMap[B,Chain[A]]"></a>
+      <a id="groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.NonEmptyChain[A]]"></a><a id="groupBy[B]((A)⇒B)(Order[B]):SortedMap[B,NonEmptyChain[A]]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Chain.html#groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.Chain[A]]" title="Permalink">
+      <a href="../../cats/data/Chain.html#groupBy[B](f:A=&gt;B)(implicitB:cats.Order[B]):scala.collection.immutable.SortedMap[B,cats.data.NonEmptyChain[A]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -836,7 +840,7 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Chain.A">A</span>) ⇒ <span class="extype" name="cats.data.Chain.groupBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Chain.groupBy.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.data.Chain.groupBy.B">B</span>, <a href="" class="extype" name="cats.data.Chain">Chain</a>[<span class="extype" name="cats.data.Chain.A">A</span>]]</span>
+        <span class="name">groupBy</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Chain.A">A</span>) ⇒ <span class="extype" name="cats.data.Chain.groupBy.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="B">B: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.data.Chain.groupBy.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.data.Chain.groupBy.B">B</span>, <a href="index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.Chain.A">A</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Groups elements inside this <code>Chain</code> according to the <code>Order</code>
@@ -893,9 +897,9 @@ of the keys produced by the given mapping function.</p>
       
       
     </li><li name="cats.data.Chain#length" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="length:Int"></a>
+      <a id="length:Long"></a>
       <span class="permalink">
-      <a href="../../cats/data/Chain.html#length:Int" title="Permalink">
+      <a href="../../cats/data/Chain.html#length:Long" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -904,7 +908,7 @@ of the keys produced by the given mapping function.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">length</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">length</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
       </span>
       
       <p class="shortcomment cmt">Returns the number of elements in this structure
@@ -1062,9 +1066,9 @@ of the keys produced by the given mapping function.</p>
       
       
     </li><li name="cats.data.Chain#size" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="size:Int"></a>
+      <a id="size:Long"></a>
       <span class="permalink">
-      <a href="../../cats/data/Chain.html#size:Int" title="Permalink">
+      <a href="../../cats/data/Chain.html#size:Long" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1073,7 +1077,7 @@ of the keys produced by the given mapping function.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">size</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">size</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
       </span>
       
       <p class="shortcomment cmt">Alias for length

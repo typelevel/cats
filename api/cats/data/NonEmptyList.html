@@ -183,6 +183,10 @@
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyChainOps.html" title=""></a>
+                        <a href="NonEmptyChainOps.html" title="">NonEmptyChainOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyList$.html" title=""></a>
                         <a class="class" href="" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
@@ -422,6 +426,25 @@ single element (head) and optional structure (tail).
       </span>
       
       
+    </li><li name="cats.data.NonEmptyList#:+" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id=":+[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]"></a><a id=":+[AA&gt;:A](AA):NonEmptyList[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#:+[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$plus" class="name">:+</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.NonEmptyList.:+.AA">AA</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.:+.AA">AA</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Alias for append</p><div class="fullcomment"><div class="comment cmt"><p>Alias for append</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+scala&gt; <span class="kw">val</span> nel = NonEmptyList.of(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+scala&gt; nel :+ <span class="num">4</span>
+res0: cats.data.NonEmptyList[<span class="std">Int</span>] = NonEmptyList(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)</pre></div></div>
     </li><li name="cats.data.NonEmptyList#::" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="::[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]"></a><a id="::[AA&gt;:A](AA):NonEmptyList[AA]"></a>
       <span class="permalink">
@@ -486,6 +509,22 @@ res0: cats.data.NonEmptyList[<span class="std">Int</span>] = NonEmptyList(<span 
       </span>
       <span class="symbol">
         <span title="gt4s: $eq$eq$eq" class="name">===</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="o">o: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.===.AA">AA</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="AA">AA: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="cats.Eq">Eq</a>[<span class="extype" name="cats.data.NonEmptyList.===.AA">AA</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptyList#append" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="append[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]"></a><a id="append[AA&gt;:A](AA):NonEmptyList[AA]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/NonEmptyList.html#append[AA&gt;:A](a:AA):cats.data.NonEmptyList[AA]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">append</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.NonEmptyList.A">A</span></span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.NonEmptyList.append.AA">AA</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.NonEmptyList">NonEmptyList</a>[<span class="extype" name="cats.data.NonEmptyList.append.AA">AA</span>]</span>
       </span>
       
       

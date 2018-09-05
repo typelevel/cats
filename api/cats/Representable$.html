@@ -311,6 +311,10 @@
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="FunctorFilter$.html" title=""></a>
+                        <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
+                        <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -410,6 +414,10 @@
                         <a class="object" href="Traverse$.html" title=""></a>
                         <a class="trait" href="Traverse.html" title="Traverse, also known as Traversable."></a>
                         <a href="Traverse.html" title="Traverse, also known as Traversable.">Traverse</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="TraverseFilter$.html" title=""></a>
+                        <a class="trait" href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)."></a>
+                        <a href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter).">TraverseFilter</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="UnorderedFoldable$.html" title=""></a>
                         <a class="trait" href="UnorderedFoldable.html" title="UnorderedFoldable is like a Foldable for unordered containers."></a>
@@ -576,10 +584,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.Representable#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[F[_]](implicitev:cats.Representable[F]):cats.Representable[F]"></a><a id="apply[F[_]](Representable[F]):Representable[F]"></a>
+    </li><li name="cats.Representable#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[F[_]](implicitev:cats.Representable[F]):cats.Representable.Aux[F,ev.Representation]"></a><a id="apply[F[_]](Representable[F]):Aux[F,Representation]"></a>
       <span class="permalink">
-      <a href="../cats/Representable$.html#apply[F[_]](implicitev:cats.Representable[F]):cats.Representable[F]" title="Permalink">
+      <a href="../cats/Representable$.html#apply[F[_]](implicitev:cats.Representable[F]):cats.Representable.Aux[F,ev.Representation]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -588,11 +596,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Representable.html" class="extype" name="cats.Representable">Representable</a>[<span class="extype" name="cats.Representable.apply.F">F</span>]</span>)</span><span class="result">: <a href="Representable.html" class="extype" name="cats.Representable">Representable</a>[<span class="extype" name="cats.Representable.apply.F">F</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Representable.html" class="extype" name="cats.Representable">Representable</a>[<span class="extype" name="cats.Representable.apply.F">F</span>]</span>)</span><span class="result">: <a href="#Aux[F[_],R]=cats.Representable[F]{typeRepresentation=R}" class="extmbr" name="cats.Representable.Aux">Aux</a>[<span class="extype" name="cats.Representable.apply.F">F</span>, <a href="Representable.html#Representation" class="extmbr" name="cats.Representable.Representation">Representation</a>]</span>
       </span>
       
-      <p class="shortcomment cmt">Summon the <code>Representable</code> instance for <code>F</code>
-</p>
+      <p class="shortcomment cmt">Summon the <code>Representable</code> instance for <code>F</code></p><div class="fullcomment"><div class="comment cmt"><p>Summon the <code>Representable</code> instance for <code>F</code></p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">type</span> <span class="std">Pair</span>[A] = (A, A)
+
+scala&gt; Representable[<span class="std">Pair</span>].index((<span class="lit">"foo"</span>, <span class="lit">"bar"</span>))(<span class="kw">false</span>)
+res0: <span class="std">String</span> = bar</pre></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">

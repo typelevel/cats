@@ -183,6 +183,10 @@
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyChainOps.html" title=""></a>
+                        <a href="NonEmptyChainOps.html" title="">NonEmptyChainOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyList$.html" title=""></a>
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
@@ -1269,6 +1273,22 @@ r2: cats.data.EitherT[<span class="std">Option</span>,<span class="std">String</
 scala&gt; <span class="kw">type</span> ErrorOr[A] = Validated[<span class="std">String</span>, A]
 scala&gt; (r1.toNestedValidated).ap(r2.toNestedValidated)
 res0: cats.data.Nested[<span class="std">Option</span>,ErrorOr,<span class="std">String</span>] = Nested(<span class="std">Some</span>(Valid(<span class="num">20</span>)))</pre></div></div>
+    </li><li name="cats.data.EitherT#toNestedValidatedNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toNestedValidatedNec(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$8$]cats.data.Validated[cats.data.NonEmptyChainImpl.Type[A],β$8$],B]"></a><a id="toNestedValidatedNec(Functor[F]):Nested[F,[β$8$]Validated[Type[A],β$8$],B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT.html#toNestedValidatedNec(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$8$]cats.data.Validated[cats.data.NonEmptyChainImpl.Type[A],β$8$],B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNestedValidatedNec</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, [β$8$]<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.NonEmptyChainImpl.Type">Type</span>[<span class="extype" name="cats.data.EitherT.A">A</span>], <span class="extype" name="cats.data.EitherT.&lt;refinement&gt;.Λ$.β$8$">β$8$</span>], <span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Transform this <code>EitherT[F, A, B]</code> into a <code><a href="Nested.html" class="extype" name="cats.data.Nested">Nested</a>[F, ValidatedNec[A, ?], B]</code>.</p>
     </li><li name="cats.data.EitherT#toNestedValidatedNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="toNestedValidatedNel(implicitF:cats.Functor[F]):cats.data.Nested[F,[β$6$]cats.data.Validated[cats.data.NonEmptyList[A],β$6$],B]"></a><a id="toNestedValidatedNel(Functor[F]):Nested[F,[β$6$]Validated[NonEmptyList[A],β$6$],B]"></a>
       <span class="permalink">
@@ -1314,6 +1334,22 @@ res0: cats.data.Nested[<span class="std">Option</span>,ErrorOr,<span class="std"
       </span>
       <span class="symbol">
         <span class="name">toValidated</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.EitherT#toValidatedNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toValidatedNec(implicitF:cats.Functor[F]):F[cats.data.ValidatedNec[A,B]]"></a><a id="toValidatedNec(Functor[F]):F[ValidatedNec[A,B]]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT.html#toValidatedNec(implicitF:cats.Functor[F]):F[cats.data.ValidatedNec[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidatedNec</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<a href="index.html#ValidatedNec[+E,+A]=cats.data.Validated[cats.data.package.NonEmptyChain[E],A]" class="extmbr" name="cats.data.ValidatedNec">ValidatedNec</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]]</span>
       </span>
       
       

@@ -311,6 +311,10 @@
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="FunctorFilter$.html" title=""></a>
+                        <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
+                        <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -410,6 +414,10 @@
                         <a class="object" href="Traverse$.html" title=""></a>
                         <a class="trait" href="Traverse.html" title="Traverse, also known as Traversable."></a>
                         <a href="Traverse.html" title="Traverse, also known as Traversable.">Traverse</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="TraverseFilter$.html" title=""></a>
+                        <a class="trait" href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)."></a>
+                        <a href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter).">TraverseFilter</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="UnorderedFoldable$.html" title=""></a>
                         <a class="trait" href="UnorderedFoldable.html" title="UnorderedFoldable is like a Foldable for unordered containers."></a>
@@ -544,7 +552,24 @@ and Semigroupal. It comes up enough to be useful, and composes well
         <span class="name">product</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.ContravariantSemigroupal.F">F</span>[<span class="extype" name="cats.Semigroupal.product.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.ContravariantSemigroupal.F">F</span>[<span class="extype" name="cats.Semigroupal.product.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.ContravariantSemigroupal.F">F</span>[(<span class="extype" name="cats.Semigroupal.product.A">A</span>, <span class="extype" name="cats.Semigroupal.product.B">B</span>)]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a></dd></dl></div>
+      <p class="shortcomment cmt">Combine an <code>F[A]</code> and an <code>F[B]</code> into an <code>F[(A, B)]</code> that maintains the effects of both <code>fa</code> and <code>fb</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Combine an <code>F[A]</code> and an <code>F[B]</code> into an <code>F[(A, B)]</code> that maintains the effects of both <code>fa</code> and <code>fb</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> noneInt: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">None</span>
+scala&gt; <span class="kw">val</span> some3: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">3</span>)
+scala&gt; <span class="kw">val</span> noneString: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span>
+scala&gt; <span class="kw">val</span> someFoo: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(<span class="lit">"foo"</span>)
+
+scala&gt; Semigroupal[<span class="std">Option</span>].product(noneInt, noneString)
+res0: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">None</span>
+
+scala&gt; Semigroupal[<span class="std">Option</span>].product(noneInt, someFoo)
+res1: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">None</span>
+
+scala&gt; Semigroupal[<span class="std">Option</span>].product(some3, noneString)
+res2: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">None</span>
+
+scala&gt; Semigroupal[<span class="std">Option</span>].product(some3, someFoo)
+res3: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">Some</span>((<span class="num">3</span>,foo))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a></dd></dl></div>
     </li></ol>
             </div>
 

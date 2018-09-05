@@ -38,7 +38,7 @@ standard library. Cats strives to provide functional programming abstractions th
 
 <p>And then create the Cats dependency, by adding the following to your <code class="highlighter-rouge">build.sbt</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"1.2.0"</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"1.3.0"</span>
 </code></pre>
 </div>
 
@@ -79,11 +79,14 @@ functionality, you can pick-and-choose from amongst these modules
 <h4 id="general-purpose-libraries-to-support-pure-functional-programming">General purpose libraries to support pure functional programming</h4>
 
 <ul>
-  <li><a href="https://github.com/stew/dogs">Dogs</a>: pure functional collections and data structures</li>
+  <li><a href="https://github.com/ChristopherDavenport/cats-par">cats-par</a>: Abstract type member Parallel instances</li>
+  <li><a href="https://github.com/ChristopherDavenport/cats-scalacheck">cats-scalacheck</a>: cats typeclass instances for scalacheck</li>
+  <li><a href="https://github.com/ChristopherDavenport/cats-time">cats-time</a>: cats typeclass instances for java time</li>
   <li><a href="https://github.com/andyscott/droste">droste</a>: recursion schemes for Cats</li>
   <li><a href="https://github.com/ThoughtWorksInc/Dsl.scala">Dsl.scala</a>: The <code class="highlighter-rouge">!</code>-notation for creating Cats monadic expressions</li>
   <li><a href="https://github.com/atnos-org/eff">eff</a>: functional effects and effect handlers (alternative to monad transformers)</li>
   <li><a href="https://github.com/frees-io/freestyle">Freestyle</a>: pure functional framework for Free and Tagless Final apps &amp; libs</li>
+  <li><a href="https://github.com/ChristopherDavenport/fuuid">fuuid</a>: functional uuid’s</li>
   <li><a href="https://github.com/frees-io/iota">iota</a>: Fast [co]product types with a clean syntax</li>
   <li><a href="https://github.com/julien-truffaut/Monocle">Monocle</a>: an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.</li>
   <li><a href="https://github.com/julien-truffaut/newts">newts</a>: Defines newtypes compatible with Cats type classes</li>
@@ -98,6 +101,7 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/tpolecat/atto">atto</a>: friendly little text parsers</li>
   <li><a href="https://github.com/circe/circe">circe</a>: pure functional JSON library</li>
   <li><a href="https://github.com/vlovgr/ciris">Ciris</a>: Lightweight, extensible, and validated configuration loading in Scala</li>
+  <li><a href="https://github.com/ChristopherDavenport/cormorant">cormorant</a>: CSV handling library for FP</li>
   <li><a href="https://github.com/bkirwi/decline">decline</a>: A composable command-line parser</li>
   <li><a href="https://github.com/tpolecat/doobie">doobie</a>: a pure functional JDBC layer for Scala</li>
   <li><a href="https://github.com/johnynek/fastparse-cats">fastparse-cats</a>: cats Monad and Alternative instances for <a href="https://github.com/lihaoyi/fastparse">fastparse</a></li>
@@ -111,6 +115,8 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/http4s/http4s">http4s</a>: A minimal, idiomatic Scala interface for HTTP</li>
   <li><a href="https://github.com/OlivierBlanvillain/monadic-html">monadic-html</a>: Tiny DOM binding library for Scala.js</li>
   <li><a href="https://github.com/monix/monix">Monix</a>: high-performance library for composing asynchronous and event-based programs</li>
+  <li><a href="https://github.com/ChristopherDavenport/linebacker">linebacker</a>: functional thread pool management</li>
+  <li><a href="https://github.com/ChristopherDavenport/log4cats">log4cats</a>: functional logging</li>
   <li><a href="https://github.com/pureconfig/pureconfig">pureconfig</a>: A boilerplate-free library for loading configuration files</li>
   <li><a href="https://github.com/stripe/rainier">rainier</a>: Bayesian inference in Scala</li>
   <li><a href="https://github.com/guardian/scanamo">scanamo</a>: simpler DynamoDB access for Scala</li>
@@ -197,6 +203,7 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://www.autoscout24.com">AutoScout24</a></li>
   <li><a href="https://avast.com">Avast</a></li>
   <li><a href="https://banno.com/">Banno Group inside of Jack Henry &amp; Associates</a></li>
+  <li><a href="https://basefarm.com/">Basefarm</a></li>
   <li><a href="https://buildo.io">buildo</a></li>
   <li><a href="https://www.codacy.com/">Codacy</a></li>
   <li><a href="https://codecentric.de">Codecentric</a></li>
@@ -206,6 +213,7 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://www.earnest.com">Earnest</a></li>
   <li><a href="https://www.ebay.com">eBay Inc.</a></li>
   <li><a href="https://eloquentix.com">Eloquentix</a></li>
+  <li><a href="https://www.esailors.de">eSailors</a></li>
   <li><a href="https://market.evotor.ru/">Evotor Marketplace</a></li>
   <li><a href="http://enear.co">e.near</a></li>
   <li><a href="https://eon.com">E.ON</a></li>
@@ -216,19 +224,23 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://www.lookout.com">Lookout</a></li>
   <li><a href="https://www.metacommerce.ru">Metacommerce</a></li>
   <li><a href="https://ncredinburgh.com/">NCR Edinburgh</a></li>
+  <li><a href="https://ocadotechnology.com">Ocado Technology</a></li>
   <li><a href="https://www.realestate.com.au/">REA Group</a></li>
   <li><a href="https://rudder.io">Rudder</a></li>
   <li><a href="https://scalac.io">Scalac</a></li>
   <li><a href="https://scala.epfl.ch">Scala Center</a></li>
   <li><a href="https://snowplowanalytics.com/">Snowplow Analytics</a></li>
+  <li><a href="https://www.spiceworks.com/">Spiceworks</a></li>
   <li><a href="https://spotahome.com">Spotahome</a></li>
   <li><a href="https://www.spotify.com">Spotify</a></li>
   <li><a href="https://www.springernature.com">SpringerNature</a></li>
   <li><a href="https://stripe.com">Stripe</a></li>
+  <li><a href="https://www.tecsisa.com">Tecsisa</a></li>
   <li><a href="http://teikametrics.com">Teikametrics</a></li>
-  <li><a href="https//www.theguardian.com">The Guardian</a></li>
+  <li><a href="https://www.theguardian.com">The Guardian</a></li>
   <li><a href="https://underscore.io/">Underscore Consulting</a></li>
   <li><a href="https://www.wegtam.com">Wegtam GmbH</a></li>
+  <li><a href="https://www.wework.com">WeWork</a></li>
   <li><a href="https://www.wix.com">Wix.com</a></li>
   <li><a href="https://zalando.com">Zalando</a></li>
   <li><a href="https://www.47deg.com">47 Degrees</a></li>
@@ -247,7 +259,6 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://github.com/LukaJCB">LukaJCB</a> Luka Jacobowitz</li>
   <li><a href="https://github.com/peterneyens">peterneyens</a> Peter Neyens</li>
   <li><a href="https://github.com/tpolecat">tpolecat</a> Rob Norris</li>
-  <li><a href="https://github.com/stew">stew</a> Mike O’Connor</li>
   <li><a href="https://github.com/non">non</a> Erik Osheim</li>
   <li><a href="https://github.com/mpilquist">mpilquist</a> Michael Pilquist</li>
   <li><a href="https://github.com/milessabin">milessabin</a> Miles Sabin</li>

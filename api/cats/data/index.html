@@ -199,6 +199,10 @@
                         <a class="class" href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition."></a>
                         <a href="Nested.html" title="Similar to cats.data.Tuple2K, but for nested composition.">Nested</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NonEmptyChainOps.html" title=""></a>
+                        <a href="NonEmptyChainOps.html" title="">NonEmptyChainOps</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="NonEmptyList$.html" title=""></a>
                         <a class="class" href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail)."></a>
                         <a href="NonEmptyList.html" title="A data type which represents a non empty list of A, with single element (head) and optional structure (tail).">NonEmptyList</a>
@@ -667,6 +671,22 @@ steps takes O(N).
       
       <p class="shortcomment cmt"><code>F</code> on the left and <code>G</code> on the right of <code>scala.util.Either</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>F</code> on the left and <code>G</code> on the right of <code>scala.util.Either</code>.
 </p></div><dl class="paramcmts block"><dt class="param">run</dt><dd class="cmt"><p>The underlying <code>scala.util.Either</code>.</p></dd></dl></div>
+    </li><li name="cats.data.EitherNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EitherNec[+E,+A]=Either[cats.data.package.NonEmptyChain[E],A]"></a><a id="EitherNec[+E,+A]:EitherNec[E,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#EitherNec[+E,+A]=Either[cats.data.package.NonEmptyChain[E],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EitherNec</span><span class="tparams">[<span name="E">+E</span>, <span name="A">+A</span>]</span><span class="result alias"> = <a href="http://www.scala-lang.org/api/2.12.6/scala/util/Either.html#scala.util.Either" class="extype" name="scala.util.Either">Either</a>[<a href="#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.EitherNec.E">E</span>], <span class="extype" name="cats.data.EitherNec.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.EitherNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EitherNel[+E,+A]=Either[cats.data.NonEmptyList[E],A]"></a><a id="EitherNel[+E,+A]:EitherNel[E,A]"></a>
       <span class="permalink">
@@ -817,6 +837,22 @@ an <code>A</code> and a <code>B</code>. It is right-biased so methods such as <c
 values, regardless of whether the <code>B</code> values appear in a <a href="Ior$$Right.html" class="extype" name="cats.data.Ior.Right">Right</a> or a <a href="Ior$$Both.html" class="extype" name="cats.data.Ior.Both">Both</a>.
 The isomorphic <code>scala.util.Either</code> form can be accessed via the <a href="Ior.html#unwrap:Either[Either[A,B],(A,B)]" class="extmbr" name="cats.data.Ior#unwrap">unwrap</a> method.
 </p></div></div>
+    </li><li name="cats.data.IorNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IorNec[+B,+A]=cats.data.Ior[cats.data.package.NonEmptyChain[B],A]"></a><a id="IorNec[+B,+A]:IorNec[B,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#IorNec[+B,+A]=cats.data.Ior[cats.data.package.NonEmptyChain[B],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IorNec</span><span class="tparams">[<span name="B">+B</span>, <span name="A">+A</span>]</span><span class="result alias"> = <a href="Ior.html" class="extype" name="cats.data.Ior">Ior</a>[<a href="#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.IorNec.B">B</span>], <span class="extype" name="cats.data.IorNec.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.IorNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="IorNel[+B,+A]=cats.data.Ior[cats.data.NonEmptyList[B],A]"></a><a id="IorNel[+B,+A]:IorNel[B,A]"></a>
       <span class="permalink">
@@ -893,6 +929,38 @@ scala&gt; <span class="kw">val</span> nested: Nested[<span class="std">List</spa
 scala&gt; <span class="kw">val</span> result: Nested[<span class="std">List</span>, <span class="std">Option</span>, <span class="std">String</span>] = Functor[Nested[<span class="std">List</span>, <span class="std">Option</span>, ?]].map(nested)(f)
 scala&gt; result.value
 res1: <span class="std">List</span>[<span class="std">Option</span>[<span class="std">String</span>]] = <span class="std">List</span>(<span class="std">Some</span>(<span class="num">2</span>), <span class="std">None</span>)</pre></div></div>
+    </li><li name="cats.data.NonEmptyChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]"></a><a id="NonEmptyChain[+A]:NonEmptyChain[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptyChain</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result alias"> = <span class="extype" name="cats.data.NonEmptyChainImpl.Type">Type</span>[<span class="extype" name="cats.data.NonEmptyChain.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="cats.data.NonEmptyChainOps" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyChainOps[A]extendsAnyVal"></a><a id="NonEmptyChainOps[A]:NonEmptyChainOps[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyChainOps[A]extendsAnyVal" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="NonEmptyChainOps.html"><span class="name">NonEmptyChainOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyVal.html#scala.AnyVal" class="extype" name="scala.AnyVal">AnyVal</a></span>
+      </span>
+      
+      
     </li><li name="cats.data.NonEmptyList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NonEmptyList[+A]extendsProductwithSerializable"></a><a id="NonEmptyList[+A]:NonEmptyList[A]"></a>
       <span class="permalink">
@@ -1266,6 +1334,22 @@ context along with the <code>A</code> value.
       </span>
       
       
+    </li><li name="cats.data.ValidatedNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValidatedNec[+E,+A]=cats.data.Validated[cats.data.package.NonEmptyChain[E],A]"></a><a id="ValidatedNec[+E,+A]:ValidatedNec[E,A]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#ValidatedNec[+E,+A]=cats.data.Validated[cats.data.package.NonEmptyChain[E],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ValidatedNec</span><span class="tparams">[<span name="E">+E</span>, <span name="A">+A</span>]</span><span class="result alias"> = <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<a href="#NonEmptyChain[+A]=cats.data.NonEmptyChainImpl.Type[A]" class="extmbr" name="cats.data.NonEmptyChain">NonEmptyChain</a>[<span class="extype" name="cats.data.ValidatedNec.E">E</span>], <span class="extype" name="cats.data.ValidatedNec.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="cats.data.ValidatedNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]"></a><a id="ValidatedNel[+E,+A]:ValidatedNel[E,A]"></a>
       <span class="permalink">
@@ -1383,6 +1467,22 @@ context along with the <code>A</code> value.
       </span>
       <span class="symbol">
         <span class="name">IRWST</span><span class="result">: <a href="IndexedReaderWriterStateT$.html" class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</a>.type</span>
+      </span>
+      
+      
+    </li><li name="cats.data#NonEmptyChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonEmptyChain:cats.data.NonEmptyChainImpl.type"></a><a id="NonEmptyChain:NonEmptyChainImpl.type"></a>
+      <span class="permalink">
+      <a href="../../cats/data/index.html#NonEmptyChain:cats.data.NonEmptyChainImpl.type" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonEmptyChain</span><span class="result">: <span class="extype" name="cats.data.NonEmptyChainImpl">NonEmptyChainImpl</span>.type</span>
       </span>
       
       
@@ -1974,7 +2074,7 @@ context along with the <code>A</code> value.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Validated$.html"><span class="name">Validated</span></a><span class="result"> extends <span class="extype" name="cats.data.ValidatedInstances">ValidatedInstances</span> with <span class="extype" name="cats.data.ValidatedFunctions">ValidatedFunctions</span> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Validated$.html"><span class="name">Validated</span></a><span class="result"> extends <span class="extype" name="cats.data.ValidatedInstances">ValidatedInstances</span> with <span class="extype" name="cats.data.ValidatedFunctions">ValidatedFunctions</span> with <span class="extype" name="cats.data.ValidatedFunctionsBinCompat0">ValidatedFunctionsBinCompat0</span> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

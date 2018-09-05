@@ -311,6 +311,10 @@
                         <a class="trait" href="Functor.html" title="Functor."></a>
                         <a href="Functor.html" title="Functor.">Functor</a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="FunctorFilter$.html" title=""></a>
+                        <a class="trait" href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously."></a>
+                        <a href="FunctorFilter.html" title="FunctorFilter[F] allows you to map and filter out elements simultaneously.">FunctorFilter</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Inject$.html" title=""></a>
                         <a class="class" href="Inject.html" title="Inject is a type class providing an injection from type A into type B."></a>
                         <a href="Inject.html" title="Inject is a type class providing an injection from type A into type B.">Inject</a>
@@ -410,6 +414,10 @@
                         <a class="object" href="Traverse$.html" title=""></a>
                         <a class="trait" href="Traverse.html" title="Traverse, also known as Traversable."></a>
                         <a href="Traverse.html" title="Traverse, also known as Traversable.">Traverse</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="TraverseFilter$.html" title=""></a>
+                        <a class="trait" href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)."></a>
+                        <a href="TraverseFilter.html" title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter).">TraverseFilter</a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="UnorderedFoldable$.html" title=""></a>
                         <a class="trait" href="UnorderedFoldable.html" title="UnorderedFoldable is like a Foldable for unordered containers."></a>
@@ -1111,6 +1119,22 @@ folding over F[A] values.</p><p>See: <a href="http://www.cs.nott.ac.uk/~pszgmh/f
       
       <p class="shortcomment cmt">Functor.</p><div class="fullcomment"><div class="comment cmt"><p>Functor.</p><p>The name is short for &quot;covariant functor&quot;.</p><p>Must obey the laws defined in cats.laws.FunctorLaws.
 </p></div></div>
+    </li><li name="cats.FunctorFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FunctorFilter[F[_]]extendsSerializable"></a><a id="FunctorFilter[F[_]]:FunctorFilter[F]"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#FunctorFilter[F[_]]extendsSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="FunctorFilter[F] allows you to map and filter out elements simultaneously." href="FunctorFilter.html"><span class="name">FunctorFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt"><code>FunctorFilter[F]</code> allows you to <code>map</code> and filter out elements simultaneously.</p>
     </li><li name="cats.Group" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Group[A]=cats.kernel.Group[A]"></a><a id="Group[A]:Group[A]"></a>
       <span class="permalink">
@@ -1723,6 +1747,27 @@ flatMap, and so this particular implementation was being repeated over and over 
       <p class="shortcomment cmt">Traverse, also known as Traversable.</p><div class="fullcomment"><div class="comment cmt"><p>Traverse, also known as Traversable.</p><p>Traversal over a structure with an effect.</p><p>Traversing with the <a href="#Id[A]=A" class="extmbr" name="cats.Id">cats.Id</a> effect is equivalent to <a href="Functor.html" class="extype" name="cats.Functor">cats.Functor</a>#map.
 Traversing with the <a href="data/Const.html" class="extype" name="cats.data.Const">cats.data.Const</a> effect where the first type parameter has
 a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">cats.Monoid</a> instance is equivalent to <a href="Foldable.html" class="extype" name="cats.Foldable">cats.Foldable</a>#fold.</p><p>See: <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>
+</p></div></div>
+    </li><li name="cats.TraverseFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TraverseFilter[F[_]]extendsFunctorFilter[F]withSerializable"></a><a id="TraverseFilter[F[_]]:TraverseFilter[F]"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#TraverseFilter[F[_]]extendsFunctorFilter[F]withSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="TraverseFilter, also known as Witherable, represents list-like structures that can essentially have a traverse and a filter applied as a single combined operation (traverseFilter)." href="TraverseFilter.html"><span class="name">TraverseFilter</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="FunctorFilter.html" class="extype" name="cats.FunctorFilter">FunctorFilter</a>[<span class="extype" name="cats.TraverseFilter.F">F</span>] with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt"><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
+that can essentially have a <code>traverse</code> and a <code>filter</code> applied as a single
+combined operation (<code>traverseFilter</code>).</p><div class="fullcomment"><div class="comment cmt"><p><code>TraverseFilter</code>, also known as <code>Witherable</code>, represents list-like structures
+that can essentially have a <code>traverse</code> and a <code>filter</code> applied as a single
+combined operation (<code>traverseFilter</code>).</p><p>Based on Haskell's <a href="https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html" target="_blank">Data.Witherable</a>
 </p></div></div>
     </li><li name="cats.UnorderedFoldable" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="UnorderedFoldable[F[_]]extendsAnywithSerializable"></a><a id="UnorderedFoldable[F[_]]:UnorderedFoldable[F]"></a>
@@ -2392,6 +2437,22 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
       </span>
       
       
+    </li><li name="cats.FunctorFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FunctorFilter"></a><a id="FunctorFilter:FunctorFilter"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#FunctorFilter" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="FunctorFilter$.html"><span class="name">FunctorFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
     </li><li name="cats.Inject" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Inject"></a><a id="Inject:Inject"></a>
       <span class="permalink">
@@ -2694,6 +2755,22 @@ a <a href="#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">c
       </span>
       <span class="symbol">
         <a title="" href="Traverse$.html"><span class="name">Traverse</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="cats.TraverseFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TraverseFilter"></a><a id="TraverseFilter:TraverseFilter"></a>
+      <span class="permalink">
+      <a href="../cats/index.html#TraverseFilter" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="TraverseFilter$.html"><span class="name">TraverseFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

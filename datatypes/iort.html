@@ -11,22 +11,22 @@ directly.</p>
 validating an address:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Ior</span>
-<span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span> <span class="nc">NonEmptyList</span> <span class="k">=&gt;</span> <span class="nc">Nel</span> <span class="o">}</span>
+<span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span> <span class="nc">NonEmptyChain</span> <span class="k">=&gt;</span> <span class="nc">Nec</span> <span class="o">}</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">}</span>
 
-<span class="k">type</span> <span class="kt">Logs</span> <span class="o">=</span> <span class="nc">Nel</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
+<span class="k">type</span> <span class="kt">Logs</span> <span class="o">=</span> <span class="nc">Nec</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
 
 <span class="k">def</span> <span class="n">parseNumber</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span>
   <span class="nc">Try</span><span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="n">trim</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
     <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">number</span><span class="o">)</span> <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">number</span><span class="o">))</span>
-    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is non-positive number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
-    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nec</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is non-positive number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nec</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a number"</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
   <span class="o">}</span>
 
 <span class="k">def</span> <span class="n">parseStreet</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="n">trim</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span>
-    <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a street"</span><span class="o">))</span>
+    <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="nc">Nec</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"'$input' is not a street"</span><span class="o">))</span>
   <span class="k">else</span>
     <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">input</span><span class="o">)</span>
 <span class="o">}</span>
@@ -34,7 +34,7 @@ validating an address:</p>
 <span class="k">def</span> <span class="n">numberToString</span><span class="o">(</span><span class="n">number</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="n">number</span> <span class="k">match</span> <span class="o">{</span>
     <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="n">toString</span><span class="o">)</span>
-    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nel</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"used default address number"</span><span class="o">),</span> <span class="s">"n/a"</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="nc">Nec</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"used default address number"</span><span class="o">),</span> <span class="s">"n/a"</span><span class="o">)</span>
   <span class="o">}</span>
 
 <span class="k">def</span> <span class="n">addressProgram</span><span class="o">(</span><span class="n">numberInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
@@ -55,10 +55,10 @@ steps are combined when using <code class="highlighter-rouge">flatMap</code>.</p
 <span class="c1">// res0: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
 </span>
 <span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
-<span class="c1">// res1: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+<span class="c1">// res1: cats.data.Ior[Logs,String] = Both(Chain('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
 </span>
 <span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
-<span class="c1">// res2: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+<span class="c1">// res2: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
 </span></code></pre>
 </div>
 
@@ -114,10 +114,10 @@ log messages would be lost.</p>
 <span class="c1">// res3: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
-<span class="c1">// res4: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+<span class="c1">// res4: cats.data.Ior[Logs,String] = Both(Chain('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
-<span class="c1">// res5: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+<span class="c1">// res5: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
 </span></code></pre>
 </div>
 
@@ -145,10 +145,10 @@ composing <code class="highlighter-rouge">IorT</code> values.</p>
 <span class="c1">// res6: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
-<span class="c1">// res7: cats.data.Ior[Logs,String] = Both(NonEmptyList('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
+<span class="c1">// res7: cats.data.Ior[Logs,String] = Both(Chain('SW1W' is not a number, used default address number),n/a, Buckingham Palace Rd)
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
-<span class="c1">// res8: cats.data.Ior[Logs,String] = Left(NonEmptyList('SW1W' is not a number, '' is not a street))
+<span class="c1">// res8: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
 </span></code></pre>
 </div>
 
