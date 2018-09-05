@@ -217,6 +217,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Lookout](https://www.lookout.com)
 - [Metacommerce](https://www.metacommerce.ru)
 - [NCR Edinburgh](https://ncredinburgh.com/)
+- [Ocado Technology](https://ocadotechnology.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
