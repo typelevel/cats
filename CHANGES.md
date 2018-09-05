@@ -1,9 +1,19 @@
+## Version 1.3.1
+
+> 2018 Sep 5
+
+Cats 1.3.1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0 and 1.2.0 jars. 
+Cats 1.3.1 does not support Scala 2.10.
+
+This is a bug fix release that fixed the binary compatibility breakage when summoning `Monad[OptionT[F, ?]]` in 1.3.0
+
 ## Version 1.3.0
 
-> 2018 Sep 3
+> 2018 Sep 4
 
-Cats 1.3.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0 and 1.2.0 jars.
+~Cats 1.3.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0 and 1.2.0 jars.~ There is a bug in this release that breaks binary compatibility when summoning `Monad[OptionT[F, ?]]`.
 Cats 1.3.0 does not support Scala 2.10.
+
 
 1.3.0 brought you:
 
