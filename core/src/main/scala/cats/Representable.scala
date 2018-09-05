@@ -21,11 +21,41 @@ trait Representable[F[_]] extends Serializable {
 
   /**
    * Create a function that "indexes" into the `F` structure using `Representation`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> type Pair[A] = (A, A)
+   *
+   * scala> val indexed: Boolean => String = Representable[Pair].index(("foo", "bar"))
+   *
+   * scala> indexed(true)
+   * res0: String = foo
+   *
+   * scala> indexed(false)
+   * res1: String = bar
+   * }}}
    */
   def index[A](f: F[A]): Representation => A
 
   /**
    * Reconstructs the `F` structure using the index function
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> type Pair[A] = (A, A)
+   *
+   * scala> val f: Boolean => String = {
+   *      | case true => "foo"
+   *      | case false => "bar"
+   *      | }
+   *
+   * scala> f.tabulate[Pair]
+   * res0: Pair[String] = (foo,bar)
+   * }}}
    */
   def tabulate[A](f: Representation => A): F[A]
 }
@@ -69,8 +99,18 @@ object Representable {
 
   /**
    * Summon the `Representable` instance for `F`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> type Pair[A] = (A, A)
+   *
+   * scala> Representable[Pair].index(("foo", "bar"))(false)
+   * res0: String = bar
+   * }}}
    */
-  def apply[F[_]](implicit ev: Representable[F]): Representable[F] = ev
+  def apply[F[_]](implicit ev: Representable[F]): Representable.Aux[F, ev.Representation] = ev
 
   /**
    * Derives a `Monad` instance for any `Representable` functor
