@@ -75,3 +75,4 @@ trait AllSyntaxBinCompat2
     with EitherSyntaxBinCompat0
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
+    with UnorderedFoldableSyntax

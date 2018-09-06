@@ -50,6 +50,7 @@ package object syntax {
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
+  object unorderedFoldable extends UnorderedFoldableSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
   object validated extends ValidatedSyntax with ValidatedExtensionSyntax with ValidatedSyntaxBincompat0
   object vector extends VectorSyntax
