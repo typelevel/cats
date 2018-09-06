@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{ EitherT, Validated }
+import cats.data.{ EitherT, Validated, NonEmptyList }
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import scala.util.Try
@@ -266,6 +266,16 @@ class EitherSuite extends CatsSuite {
   test("show Left") {
     val either = Either.left[String, Int]("string")
     either.show should === ("Left(string)")
+  }
+
+  test("toEitherNel Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNel should === (Either.left[NonEmptyList[String, Int]](NonEmptyList.one("oops")))
+  }
+
+  test("toEitherNel Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNel should === (Either.right[NonEmptyList[String, Int]](42))
   }
 
   test("ap consistent with Applicative") {

@@ -267,6 +267,8 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 
+  def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
+
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
