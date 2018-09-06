@@ -292,6 +292,10 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
 
   def right[A, B](b: B): Either[A, B] = Right(b)
 
+  def leftNel[A, B](a: A): EitherNel[A, B] = Left(NonEmptyList.one(a))
+
+  def rightNel[A, B](b: B): EitherNel[A, B] = Right(b)
+
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
    * the resulting `Either`. Uncaught exceptions are propagated.
