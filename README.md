@@ -119,7 +119,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
  * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
-*Feel free to submit a PR if you want a project you maintain to be added to this list.*
+Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
