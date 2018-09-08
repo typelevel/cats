@@ -76,3 +76,4 @@ trait AllSyntaxBinCompat2
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
     with UnorderedFoldableSyntax
+    with ReducibleSyntaxBinCompat0
