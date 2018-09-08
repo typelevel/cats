@@ -277,8 +277,8 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     * scala> import cats.implicits._
     * scala> import cats.data.EitherT
     * scala> val e: Either[String, Int] = Right(3)
-    * scala> e.liftTo[EitherT[Option, String, ?]]
-    * res0: cats.data.EitherT[Option, String, Int] = EitherT(Some(Right(3)))
+    * scala> e.liftTo[EitherT[Option, CharSequence, ?]]
+    * res0: cats.data.EitherT[Option, CharSequence, Int] = EitherT(Some(Right(3)))
     * }}}
     */
   def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
