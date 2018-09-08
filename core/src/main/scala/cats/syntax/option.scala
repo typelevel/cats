@@ -178,14 +178,11 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
     * Example:
     * {{{
     * scala> import cats.implicits._
-    * scala> import cats.data.EitherT
-    * scala> Some(1).liftTo[Either[String, ?]]("Empty")
-    * res0: scala.Either[String, Int] = Right(1)
+    * scala> Some(1).liftTo[Either[CharSequence, ?]]("Empty")
+    * res0: scala.Either[CharSequence, Int] = Right(1)
     *
-    * scala> Option.empty[Int].liftTo[Either[String, ?]]("Empty")
-    * res1: scala.Either[String, Int] = Left(Empty)
-    * scala> 42.some.liftTo[EitherT[Option, CharSequence, ?]]("Empty")
-    * res2: EitherT[Option, CharSequence, Int] = EitherT(Some(Right(42)))
+    * scala> Option.empty[Int].liftTo[Either[CharSequence, ?]]("Empty")
+    * res1: scala.Either[CharSequence, Int] = Left(Empty)
     * }}}
     */
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
