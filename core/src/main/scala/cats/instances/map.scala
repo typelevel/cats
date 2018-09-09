@@ -107,7 +107,26 @@ trait MapInstancesBinCompat0 {
           }
       }
     }
+  }
 
+  implicit def catsStdFunctorFilterForMap[K]: FunctorFilter[Map[K, ?]] = {
+    new FunctorFilter[Map[K, ?]] {
+
+      val functor: Functor[Map[K, ?]] = cats.instances.map.catsStdInstancesForMap[K]
+
+      def mapFilter[A, B](fa: Map[K, A])(f: A => Option[B]) =
+        fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
+
+      override def collect[A, B](fa: Map[K, A])(f: PartialFunction[A, B]) =
+        fa.collect(scala.Function.unlift(t => f.lift(t._2).map(t._1 -> _)))
+
+      override def flattenOption[A](fa: Map[K, Option[A]]) =
+        fa.collect(scala.Function.unlift(t => t._2.map(t._1 -> _)))
+
+      override def filter[A](fa: Map[K, A])(f: A => Boolean) =
+        fa.filter { case (_, v) => f(v) }
+
+    }
   }
 
 }

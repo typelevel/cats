@@ -121,3 +121,30 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       }
     }
 }
+
+trait OptionInstancesBinCompat0 {
+  implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
+    val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
+
+    override def mapFilter[A, B](fa: Option[A])(f: (A) => Option[B]): Option[B] = fa.flatMap(f)
+
+    override def filter[A](fa: Option[A])(f: (A) => Boolean): Option[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Option[A])(f: PartialFunction[A, B]): Option[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Option[Option[A]]): Option[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Option[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
+      fa match {
+        case None => G.pure(Option.empty[B])
+        case Some(a) => f(a)
+      }
+
+    override def filterA[G[_], A](fa: Option[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Option[A]] =
+      fa match {
+        case None => G.pure(Option.empty[A])
+        case Some(a) => G.map(f(a))(b => if (b) Some(a) else None)
+      }
+
+  }
+}

@@ -38,4 +38,9 @@ trait AllInstancesBinCompat0
     with    Tuple2InstancesBinCompat0
 
 trait AllInstancesBinCompat1
-    extends MapInstancesBinCompat0
+    extends OptionInstancesBinCompat0
+    with ListInstancesBinCompat0
+    with VectorInstancesBinCompat0
+    with StreamInstancesBinCompat0
+    with MapInstancesBinCompat0
+    with SortedMapInstancesBinCompat0

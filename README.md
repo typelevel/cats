@@ -40,7 +40,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.2.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.3.1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -119,7 +119,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
  * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
-*Feel free to submit a PR if you want a project you maintain to be added to this list.*
+Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
@@ -206,6 +206,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Earnest](https://www.earnest.com)
 - [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
+- [eSailors](https://www.esailors.de)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
@@ -215,7 +216,9 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [ITV](https://www.itv.com/)
 - [Lookout](https://www.lookout.com)
 - [Metacommerce](https://www.metacommerce.ru)
+- [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
+- [Ocado Technology](https://ocadotechnology.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
@@ -228,7 +231,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Stripe](https://stripe.com)
 - [Tecsisa](https://www.tecsisa.com)
 - [Teikametrics](http://teikametrics.com)
-- [The Guardian](https//www.theguardian.com)
+- [The Guardian](https://www.theguardian.com)
 - [Underscore Consulting](https://underscore.io/)
 - [Wegtam GmbH](https://www.wegtam.com)
 - [WeWork](https://www.wework.com)

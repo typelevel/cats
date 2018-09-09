@@ -2,7 +2,7 @@ package cats
 package tests
 
 import cats.data.{NonEmptyList, ZipList}
-import cats.laws.discipline.{CommutativeApplyTests, TraverseTests, CoflatMapTests, AlternativeTests, MonadTests, SerializableTests, SemigroupalTests}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class ListSuite extends CatsSuite {
@@ -21,6 +21,10 @@ class ListSuite extends CatsSuite {
 
   checkAll("List[Int]", MonadTests[List].monad[Int, Int, Int])
   checkAll("Monad[List]", SerializableTests.serializable(Monad[List]))
+
+  checkAll("List[Int]", TraverseFilterTests[List].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[List]", SerializableTests.serializable(TraverseFilter[List]))
+
 
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
