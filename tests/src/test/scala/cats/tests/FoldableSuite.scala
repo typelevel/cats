@@ -124,6 +124,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(
 
   test(s"Foldable[$name].maxByOption/minByOption") {
     forAll { (fa: F[String], f: String => Int) =>
+      implicit def foldableOps(fa: F[String]) = catsSyntaxFoldOps(fa)
       val maxOpt = fa.maxByOption(f)
       val minOpt = fa.minByOption(f)
       maxOpt.forall(i => fa.forall(x => f(x) <= f(i))) should === (true)
