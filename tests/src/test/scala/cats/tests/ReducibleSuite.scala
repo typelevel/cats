@@ -119,4 +119,14 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(
     }
   }
 
+  test(s"Reducible[$name].maxBy/minBy") {
+    forAll { (fa: F[String], f: String => Int) =>
+      val max = fa.maxBy(f)
+      val min = fa.minBy(f)
+      val fmax = f(max)
+      val fmin = f(min)
+      fa.forall(x => f(x) <= fmax) should === (true)
+      fa.forall(x => f(x) >= fmin) should === (true)
+    }
+  }
 }
