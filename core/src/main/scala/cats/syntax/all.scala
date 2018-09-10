@@ -6,6 +6,7 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
     with AllSyntaxBinCompat2
+    with AllSyntaxBinCompat3
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -77,5 +78,7 @@ trait AllSyntaxBinCompat2
     with EitherSyntaxBinCompat0
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
-    with UnorderedFoldableSyntax
+
+trait AllSyntaxBinCompat3
+  extends UnorderedFoldableSyntax
     with ReducibleSyntaxBinCompat0
