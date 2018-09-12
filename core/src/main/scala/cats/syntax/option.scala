@@ -178,12 +178,11 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
     * Example:
     * {{{
     * scala> import cats.implicits._
+    * scala> Some(1).liftTo[Either[CharSequence, ?]]("Empty")
+    * res0: scala.Either[CharSequence, Int] = Right(1)
     *
-    * scala> Some(1).liftTo[Either[String, ?]]("Empty")
-    * res0: scala.Either[String, Int] = Right(1)
-    *
-    * scala> Option.empty[Int].liftTo[Either[String, ?]]("Empty")
-    * res1: scala.Either[String, Int] = Left(Empty)
+    * scala> Option.empty[Int].liftTo[Either[CharSequence, ?]]("Empty")
+    * res1: scala.Either[CharSequence, Int] = Left(Empty)
     * }}}
     */
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
@@ -203,7 +202,7 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
 
 object OptionOps {
   private[syntax] final class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
-    def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+    def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       ApplicativeError.liftFromOption(oa, ifEmpty)
   }
 }
