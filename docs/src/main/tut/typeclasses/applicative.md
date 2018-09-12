@@ -66,6 +66,12 @@ Such an `Applicative` must obey three laws:
     * `fa.product(pure(())) ~ fa`
     * As an equality: `fa.product(pure(())).map(_._1) = fa`
 
+Note also that, although similar, `product` does not always yield the same results as the `combine` operations that you can find in `Semigroup`. For example for `Option` we have that:
+```tut:book:silent
+Semigroup[Option[Int]].combine(Some(1), None) == Some(1)
+Applicative[Option].product(Some(1), None) == None
+```
+
 ## Applicatives for effect management
 
 If we view `Functor` as the ability to work with a single effect, `Applicative` encodes working with
