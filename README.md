@@ -78,13 +78,10 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### General purpose libraries to support pure functional programming
 
  * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
- * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
- * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
- * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
  * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
@@ -95,6 +92,8 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### Libraries with more specific uses
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+ * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
+ * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [circe](https://github.com/circe/circe): pure functional JSON library
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [cormorant](https://github.com/ChristopherDavenport/cormorant): CSV handling library for FP
@@ -105,6 +104,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
