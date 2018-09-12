@@ -142,6 +142,7 @@ class Tests extends FunSuite with Discipline {
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
+  checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))

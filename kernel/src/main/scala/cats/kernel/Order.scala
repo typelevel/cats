@@ -170,6 +170,23 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
     }
 
   /**
+   * Define an `Order[A]` using the given 'less than' function `f`.
+   */
+  def fromLessThan[@sp A](f: (A, A) => Boolean): Order[A] =
+    new Order[A] {
+      override def compare(x: A, y: A): Int =
+        if (f(x, y)) -1 else if (f(y, x)) 1 else 0
+
+      // Overridden for performance (avoids multiple comparisons)
+      override def eqv(x: A, y: A): Boolean = !(f(x, y) || f(y, x))
+      override def neqv(x: A, y: A): Boolean = f(x, y) || f(y, x)
+      override def lteqv(x: A, y: A): Boolean = !f(y, x)
+      override def lt(x: A, y: A): Boolean = f(x, y)
+      override def gteqv(x: A, y: A): Boolean = !f(x, y)
+      override def gt(x: A, y: A): Boolean = f(y, x)
+    }
+
+  /**
    * An `Order` instance that considers all `A` instances to be equal.
    */
   def allEqual[A]: Order[A] =
