@@ -158,4 +158,33 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
       case None => G.pure(Right(None))
     })
+
+  /**
+    * Tear down a subset of this structure using a `PartialFunction`.
+    *{{{
+    * scala> import cats.implicits._
+    * scala> val xs = List(1, 2, 3, 4)
+    * scala> xs.collectFold { case n if n % 2 == 0 => n }
+    * res0: Int = 6
+    *}}}
+    */
+  def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M =
+    F.foldLeft(fa, M.empty)((acc, a) ⇒ M.combine(acc, f.applyOrElse(a, (_: A) ⇒ M.empty)))
+
+  /**
+    * Tear down a subset of this structure using a `A => Option[M]`.
+    *{{{
+    * scala> import cats.implicits._
+    * scala> val xs = List(1, 2, 3, 4)
+    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
+    * scala> xs.collectSomeFold(f)
+    * res0: Int = 6
+    *}}}
+    */
+  def collectSomeFold[M](f: A ⇒ Option[M])(implicit F: Foldable[F], M: Monoid[M]): M =
+    F.foldLeft(fa, M.empty)((acc, a) ⇒ f(a) match {
+      case Some(x) ⇒ M.combine(acc, x)
+      case None    ⇒ acc
+    })
+
 }
