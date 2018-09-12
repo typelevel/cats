@@ -1,3 +1,38 @@
+## Version 1.4.0
+
+> 2018 Sep 12
+
+Cats 1.4.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, and 1.3.1 jars. 
+Cats 1.3.1 introduced an unnecessary runtime dependency (scala-collection-compat), this 1.4.0 release removes it. 
+
+
+1.4.0 also brought you:
+ 
+### 2 Bug fixes 
+
+* [#2488](https://github.com/typelevel/cats/pull/2488) Kill scala-collection-compat  by @travisbrown 
+* [#2423](https://github.com/typelevel/cats/pull/2423) Fix NestedIdOps.value leaking to types of shapes `F[G[A]]`  by @zarthross 
+
+
+### 4 API Enhancements
+* [#2480](https://github.com/typelevel/cats/pull/2480) improve interaction with subtyping in OptionOps#liftTo  by @mberndt123 
+* [#2452](https://github.com/typelevel/cats/pull/2452) Add filterFold and collectFold to Foldable  by @satansk 
+* [#2426](https://github.com/typelevel/cats/pull/2426) Enrich return type for Representable.apply and add doctests  by @ceedubs 
+* [#2477](https://github.com/typelevel/cats/pull/2477) Add Order#fromLessThan by @vlovgr 
+
+
+### 7 Documentation Additions/Fixes
+
+* [#2485](https://github.com/typelevel/cats/pull/2485) Proposal - add cats-tagless as an external module  by @kailuowang 
+* [#2483](https://github.com/typelevel/cats/pull/2483) Add examples to Functor and verify with docstyle  by @YuvalItzchakov 
+* [#2481](https://github.com/typelevel/cats/pull/2481) moved a couple of ecosystem project to more accurate section  by @kailuowang 
+* [#2478](https://github.com/typelevel/cats/pull/2478) Made it slightly easier to add a Cats ecosystem project  by @kailuowang 
+* [#2476](https://github.com/typelevel/cats/pull/2476) add nezasa to adopters list  by @rethab 
+* [#2461](https://github.com/typelevel/cats/pull/2461) Fix typo in CHANGES  by @asakaev 
+* [#2234](https://github.com/typelevel/cats/pull/2234) Fix CONTRIBUTING docs  by @asakaev 
+
+
+
 ## Version 1.3.1
 
 > 2018 Sep 5
