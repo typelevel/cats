@@ -375,6 +375,12 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (o: OptionT[List, Int], b: Long) =>
+      o.as(b) should === (o.map(_ => b))
+    }
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */

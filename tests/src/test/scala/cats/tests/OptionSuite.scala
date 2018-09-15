@@ -103,4 +103,10 @@ class OptionSuite extends CatsSuite {
     List(false) should === (1.some.toOptionT[List].isEmpty)
     List(true) should === (Option.empty[Int].toOptionT[List].isEmpty)
   }
+
+  test("as consistent with map+const") {
+    forAll { (o: Option[String], b: Double) =>
+      o.as(b) should === (o.map(_ => b))
+    }
+  }
 }

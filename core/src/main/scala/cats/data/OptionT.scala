@@ -3,6 +3,7 @@ package data
 
 import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
 import cats.syntax.either._
+import cats.syntax.option._
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -27,6 +28,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
+
+  def as[B](b: B)(implicit F: Functor[F]): OptionT[F, B] =
+    OptionT(F.map(value)(_.as(b)))
 
   /**
    * Modify the context `F` using transformation `f`.
@@ -58,10 +62,10 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     flatTapF(a => f(a).value)
 
   def flatTapF[B](f: A => F[Option[B]])(implicit F: Monad[F]): OptionT[F, A] =
-    flatMapF(a => F.map(f(a))(_.map(_ => a)))
+    flatMapF(a => F.map(f(a))(_.as(a)))
 
   def subflatTap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, A] =
-    subflatMap(a => f(a).map(_ => a))
+    subflatMap(a => f(a).as(a))
 
   def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
     semiflatMap(a => F.as(f(a), a))
@@ -318,6 +322,8 @@ private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
+
+  override def as[A, B](fa: OptionT[F, A], b: B): OptionT[F, B] = fa.as(b)
 }
 
 private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {

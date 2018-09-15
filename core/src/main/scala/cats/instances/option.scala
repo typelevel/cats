@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.syntax.option._
 import scala.annotation.tailrec
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
@@ -16,6 +17,9 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def map[A, B](fa: Option[A])(f: A => B): Option[B] =
         fa.map(f)
+
+      override def as[A, B](fa: Option[A], b: B): Option[B] =
+        fa.as(b)
 
       def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
         fa.flatMap(f)

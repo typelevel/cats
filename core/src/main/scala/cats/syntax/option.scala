@@ -198,6 +198,8 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
     * }}}
     */
   def toOptionT[F[_]: Applicative]: OptionT[F, A] = OptionT.fromOption(oa)
+
+  def as[B](b: B): Option[B] = if (oa.isEmpty) None else Some(b)
 }
 
 object OptionOps {
