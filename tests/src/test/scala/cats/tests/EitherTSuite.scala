@@ -575,6 +575,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("biSemiflatTap+pure consistent with identity") {
+    forAll { (eithert: EitherT[List, Int, String], f: Int => Long, g: String => Double) =>
+      eithert.biSemiflatTap(l => List(f(l)), r => List(g(r))) should === (eithert)
+    }
+  }
+
   test("as consistent with map+const") {
     forAll { (eithert: EitherT[List, Int, String], d: Long) =>
       eithert.as(d) should === (eithert.map(_ => d))
