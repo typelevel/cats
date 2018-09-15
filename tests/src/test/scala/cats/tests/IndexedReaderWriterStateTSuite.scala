@@ -321,6 +321,12 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (rwst: ReaderWriterStateT[List, String, Vector[String], Int, Int], b: Long, c: String, initial: Int) =>
+      rwst.as(b).run(c, initial) should === (rwst.map(_ => b).run(c, initial))
+    }
+  }
+
   implicit val iso = SemigroupalTests.Isomorphisms
     .invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]](IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor))
 

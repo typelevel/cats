@@ -52,6 +52,9 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     transform { (l, s, a) => (l, s, f(a)) }
 
+  def as[B](b: B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    transform { (l, s, a) => (l, s, b) }
+
   /**
    * Modify the context `F` using transformation `f`.
    */
@@ -111,7 +114,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
 
   def flatTap[SC, B](f: A => IndexedReaderWriterStateT[F, E, L, SB, SC, B])(
     implicit F: FlatMap[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SC, A] =
-    flatMap(a => f(a).map(_ => a))
+    flatMap(a => f(a).as(a))
 
   def flatTapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
     flatMapF(a => F.as(faf(a), a))
@@ -521,6 +524,9 @@ private[data] sealed abstract class IRWSTFunctor[F[_], E, L, SA, SB] extends Fun
 
   override def map[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A])(f: A => B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     fa.map(f)
+
+  override def as[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A], b: B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    fa.as(b)
 }
 
 private[data] sealed abstract class IRWSTContravariant[F[_], E, L, SB, T] extends Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] {
