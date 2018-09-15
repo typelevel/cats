@@ -199,6 +199,12 @@ class KleisliSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (f: Kleisli[List, Int, Int], c: Long, i: Int) =>
+      f.as(c).run(i) should === (f.map(_ => c).run(i))
+    }
+  }
+
   test("flatMapF") {
     forAll { (f: Kleisli[List, Int, Int], t: Int => List[Int], i: Int) =>
       f.run(i).flatMap(t) should === (f.flatMapF(t).run(i))

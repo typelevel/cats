@@ -18,6 +18,9 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(f))
 
+  def as[C](c: C)(implicit F: Functor[F]): Kleisli[F, A, C] =
+    Kleisli(a => F.as(run(a), c))
+
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
     Kleisli(run andThen f)
 
@@ -34,7 +37,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
   def flatTap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
-    flatMap(b => f(b).map(_ => b))
+    flatMap(b => f(b).as(b))
 
   def flatTapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
     flatMapF(b => F.as(f(b), b))
@@ -469,6 +472,9 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, ?]] {
 
   override def map[B, C](fa: Kleisli[F, A, B])(f: B => C): Kleisli[F, A, C] =
     fa.map(f)
+
+  override def as[B, C](fa: Kleisli[F, A, B], c: C): Kleisli[F, A, C] =
+    fa.as(c)
 }
 
 private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, ?]] {
