@@ -263,6 +263,12 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (st: StateT[List, Int, Int], b: Long, initial: Int) =>
+      st.as(b).run(initial) should === (st.map(_ => b).run(initial))
+    }
+  }
+
 
   private val stackSafeTestSize =
     if (Platform.isJvm) 100000 else 100

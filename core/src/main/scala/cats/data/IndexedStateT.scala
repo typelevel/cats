@@ -39,6 +39,9 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SB, B] =
     transform { case (s, a) => (s, f(a)) }
 
+  def as[B](b: B)(implicit F: Functor[F]): IndexedStateT[F, SA, SB, B] =
+    transform { case (s, a) => (s, b) }
+
   /**
    * Modify the context `F` using transformation `f`.
    */
@@ -169,10 +172,10 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
     inspect(identity)
 
   def flatTap[B, SC](fas: A => IndexedStateT[F, SB, SC, B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SC, A] =
-    flatMap(a => fas(a).map(_ => a))
+    flatMap(a => fas(a).as(a))
 
   def flatTapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SB, A] =
-    flatMapF(a => F.map(faf(a))(_ => a))
+    flatMapF(a => F.as(faf(a), a))
 
 }
 
@@ -332,6 +335,9 @@ private[data] sealed abstract class IndexedStateTFunctor[F[_], SA, SB] extends F
 
   override def map[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => B): IndexedStateT[F, SA, SB, B] =
     fa.map(f)
+
+  override def as[A, B](fa: IndexedStateT[F, SA, SB, A], b: B): IndexedStateT[F, SA, SB, B] =
+    fa.as(b)
 }
 
 private[data] sealed abstract class IndexedStateTContravariant[F[_], SB, V] extends Contravariant[IndexedStateT[F, ?, SB, V]] {
