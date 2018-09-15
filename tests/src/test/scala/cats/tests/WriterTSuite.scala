@@ -139,6 +139,12 @@ class WriterTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (writert: WriterT[List, String, Int], b: Long) =>
+      writert.as(b) should === (writert.map(_ => b))
+    }
+  }
+
   {
     // F has a SemigroupK
     implicit val F: SemigroupK[ListWrapper] = ListWrapper.semigroupK

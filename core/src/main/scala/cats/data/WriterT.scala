@@ -27,6 +27,9 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
       functorF.map(run) { z => (z._1, fn(z._2)) }
     }
 
+  def as[Z](z: Z)(implicit functorF: Functor[F]): WriterT[F, L, Z] =
+    WriterT(functorF.map(run)(w => (w._1, z)))
+
   /**
    * Modify the context `F` using transformation `f`.
    */
@@ -62,7 +65,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     })
 
   def flatTap[U](f: V => WriterT[F, L, U])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
-    flatMap(b => f(b).map(_ => b))
+    flatMap(b => f(b).as(b))
 
   def flatTapF[U](f: V => F[(L, U)])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
     flatTap(f andThen WriterT.apply)
@@ -324,6 +327,9 @@ private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L,
 
   override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
     fa.map(f)
+
+  override def as[A, B](fa: WriterT[F, L, A], b: B): WriterT[F, L, B] =
+    fa.as(b)
 }
 
 private[data] sealed trait WriterTContravariant[F[_], L] extends Contravariant[WriterT[F, L, ?]] {
