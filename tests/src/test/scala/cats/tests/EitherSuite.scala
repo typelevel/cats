@@ -307,4 +307,16 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (either: Either[Int, String], d: Double) =>
+      either.as(d) should === (either.map(_ => d))
+    }
+  }
+
+  test("leftAs consistent with leftMap+const") {
+    forAll { (either: Either[Int, String], c: Double) =>
+      either.leftAs(c) should === (either.leftMap(_ => c))
+    }
+  }
+
 }

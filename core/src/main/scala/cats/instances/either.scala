@@ -46,6 +46,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.right.map(f)
 
+      override def as[B, C](fa: Either[A, B], c: C): Either[A, C] =
+        fa.as(c)
+
       @tailrec
       def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
         f(b) match {

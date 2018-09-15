@@ -100,18 +100,20 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     EitherT(F.map(value)(f))
 
   def flatTap[AA >: A, D](f: B => EitherT[F, AA, D])(implicit F: Monad[F]): EitherT[F, AA, B] =
-    flatMap(b => f(b).map(_ => b))
+    flatMap(b => f(b).as(b))
 
   def flatTapF[AA >: A, D](f: B => F[Either[AA, D]])(implicit F: Monad[F]): EitherT[F, AA, B] =
     flatTap(f andThen EitherT.apply)
 
   def subflatTap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, B] =
-    subflatMap(b => f(b).map(_ => b))
+    subflatMap(b => f(b).as(b))
 
   def semiflatTap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, B] =
     semiflatMap(b => F.as(f(b), b))
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
+
+  def as[D](d: D)(implicit F: Functor[F]): EitherT[F, A, D] = EitherT(F.map(value)(_.as(d)))
 
   /**
    * Modify the context `F` using transformation `f`.
@@ -119,6 +121,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def mapK[G[_]](f: F ~> G): EitherT[G, A, B] = EitherT[G, A, B](f(value))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
+
+  def leftAs[C](c: C)(implicit F: Functor[F]): EitherT[F, C, B] = EitherT(F.map(value)(_.leftAs(c)))
 
   def leftFlatMap[BB >: B, C](f: A => EitherT[F, C, BB])(implicit F: Monad[F]): EitherT[F, C, BB] =
     EitherT(F.flatMap(value) {
@@ -139,13 +143,13 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     })
 
   def leftFlatTap[BB >: B, C](f: A => EitherT[F, C, BB])(implicit F: Monad[F]): EitherT[F, A, BB] =
-    leftFlatMap(a => f(a).leftMap(_ => a))
+    leftFlatMap(a => f(a).leftAs(a))
 
   def leftFlatTapF[BB >: B, C](f: A => F[Either[C, BB]])(implicit F: Monad[F]): EitherT[F, A, BB] =
     leftFlatTap(f andThen EitherT.apply)
 
   def leftSubflatTap[BB >: B, C](f: A => Either[C, BB])(implicit F: Functor[F]): EitherT[F, A, BB] =
-    leftSubflatMap(a => f(a).leftMap(_ => a))
+    leftSubflatMap(a => f(a).leftAs(a))
 
   def leftSemiflatTap[C](f: A => F[C])(implicit F: Monad[F]): EitherT[F, A, B] =
     leftSemiflatMap(a => F.as(f(a), a))
@@ -636,6 +640,7 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
 private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, ?]] {
   implicit val F: Functor[F]
   override def map[A, B](fa: EitherT[F, L, A])(f: A => B): EitherT[F, L, B] = fa map f
+  override def as[A, B](fa: EitherT[F, L, A], b: B): EitherT[F, L, B] = fa as b
 }
 
 private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with EitherTFunctor[F, L] {

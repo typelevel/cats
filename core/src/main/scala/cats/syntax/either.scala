@@ -133,6 +133,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b)    => Right(f(b))
   }
 
+  def as[C](c: C): Either[A, C] = eab match {
+    case l @ Left(_) => EitherUtil.rightCast(l)
+    case Right(_)    => Right(c)
+  }
+
   def map2Eval[AA >: A, C, Z](fc: Eval[Either[AA, C]])(f: (B, C) => Z): Eval[Either[AA, Z]] =
     eab match {
       case l @ Left(_) => Now(EitherUtil.rightCast(l))
@@ -141,6 +146,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
 
   def leftMap[C](f: A => C): Either[C, B] = eab match {
     case Left(a)      => Left(f(a))
+    case r @ Right(_) => EitherUtil.leftCast(r)
+  }
+
+  def leftAs[C](c: C): Either[C, B] = eab match {
+    case Left(_)      => Left(c)
     case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
@@ -155,10 +165,10 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   }
 
   def flatTap[AA >: A, D](f: B => Either[AA, D]): Either[AA, B] =
-    flatMap(b => new EitherOps(f(b)).map(_ => b))
+    flatMap(b => new EitherOps(f(b)).as(b))
 
   def leftFlatTap[C, BB >: B](f: A => Either[C, BB]): Either[A, BB] =
-    leftFlatMap(a => new EitherOps(f(a)).leftMap(_ => a))
+    leftFlatMap(a => new EitherOps(f(a)).leftAs(a))
 
   def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int = eab match {
     case Left(a1)  =>

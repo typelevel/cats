@@ -575,4 +575,16 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (eithert: EitherT[List, Int, String], d: Long) =>
+      eithert.as(d) should === (eithert.map(_ => d))
+    }
+  }
+
+  test("leftAs consistent with leftMap+const") {
+    forAll { (eithert: EitherT[List, Int, String], c: Long) =>
+      eithert.leftAs(c) should === (eithert.leftMap(_ => c))
+    }
+  }
+
 }
