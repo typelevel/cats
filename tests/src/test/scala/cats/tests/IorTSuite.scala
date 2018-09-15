@@ -336,6 +336,18 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (iort: IorT[List, Int, String], d: Long) =>
+      iort.as(d) should === (iort.map(_ => d))
+    }
+  }
+
+  test("leftAs consistent with leftMap+const") {
+    forAll { (iort: IorT[List, Int, String], c: Long) =>
+      iort.leftAs(c) should === (iort.leftMap(_ => c))
+    }
+  }
+
   test("IorT.left with Option isLeft") {
     forAll { (option: Option[String]) =>
       IorT.left[Int](option).isLeft should === (option.map(_ => true))

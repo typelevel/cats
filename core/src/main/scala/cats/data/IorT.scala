@@ -53,11 +53,15 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def map[D](f: B => D)(implicit F: Functor[F]): IorT[F, A, D] = IorT(F.map(value)(_.map(f)))
 
+  def as[D](d: D)(implicit F: Functor[F]): IorT[F, A, D] = IorT(F.map(value)(_.as(d)))
+
   def mapK[G[_]](f: F ~> G): IorT[G, A, B] = IorT[G, A, B](f(value))
 
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): IorT[F, C, D] = IorT(F.map(value)(_.bimap(fa, fb)))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): IorT[F, C, B] = IorT(F.map(value)(_.leftMap(f)))
+
+  def leftAs[C](c: C)(implicit F: Functor[F]): IorT[F, C, B] = IorT(F.map(value)(_.leftAs(c)))
 
   def leftFlatMap[BB >: B, C](f: A => IorT[F, C, BB])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, C, BB] =
     IorT(F.flatMap(value) {
@@ -128,25 +132,25 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
     IorT(F.map2(this.value, that.value)(_ combine _))
 
   def flatTap[AA >: A, D](f: B => IorT[F, AA, D])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, B] =
-    flatMap(b => f(b).map(_ => b))
+    flatMap(b => f(b).as(b))
 
   def flatTapF[AA >: A, D](f: B => F[Ior[AA, D]])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, B] =
     flatTap(f andThen IorT.apply)
 
   def subflatTap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Functor[F], AA: Semigroup[AA]): IorT[F, AA, B] =
-    subflatMap(b => f(b).map(_ => b))
+    subflatMap(b => f(b).as(b))
 
   def semiflatTap[D](f: B => F[D])(implicit F: Monad[F]): IorT[F, A, B] =
     semiflatMap(b => F.as(f(b), b))
 
   def leftFlatTap[BB >: B, C](f: A => IorT[F, C, BB])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, A, BB] =
-    leftFlatMap(a => f(a).leftMap(_ => a))
+    leftFlatMap(a => f(a).leftAs(a))
 
   def leftFlatTapF[BB >: B, C](f: A => F[Ior[C, BB]])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, A, BB] =
     leftFlatTap(f andThen IorT.apply)
 
   def leftSubflatTap[BB >: B, C](f: A => Ior[C, BB])(implicit F: Functor[F], BB: Semigroup[BB]): IorT[F, A, BB] =
-    leftSubflatMap(a => f(a).leftMap(_ => a))
+    leftSubflatMap(a => f(a).leftAs(a))
 
   def leftSemiflatTap[C](f: A => F[C])(implicit F: Monad[F]): IorT[F, A, B] =
     leftSemiflatMap(a => F.as(f(a), a))
@@ -530,6 +534,8 @@ private[data] sealed trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
   implicit def F0: Functor[F]
 
   override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
+
+  override def as[B, D](iort: IorT[F, A, B], d: D): IorT[F, A, D] = iort.as(d)
 }
 
 private[data] sealed trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {

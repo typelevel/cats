@@ -256,4 +256,16 @@ class IorSuite extends CatsSuite {
       x.getOrElse(default) should === (x.toOption.getOrElse(default))
     }
   }
+
+  test("as consistent with map+const") {
+    forAll { (x: Int Ior String, d: Double) =>
+      x.as(d) should === (x.map(_ => d))
+    }
+  }
+
+  test("leftAs consistent with leftMap+const") {
+    forAll { (x: Int Ior String, c: Double) =>
+      x.leftAs(c) should === (x.leftMap(_ => c))
+    }
+  }
 }

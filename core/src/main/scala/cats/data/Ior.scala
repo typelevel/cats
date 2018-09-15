@@ -71,6 +71,18 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def map[D](f: B => D): A Ior D = bimap(identity, f)
   final def leftMap[C](f: A => C): C Ior B = bimap(f, identity)
 
+  final def as[D](d: D): A Ior D = this match {
+    case l @ Ior.Left(_) => l
+    case Ior.Right(_) => Ior.Right(d)
+    case Ior.Both(a, _) => Ior.Both(a, d)
+  }
+
+  final def leftAs[C](c: C): C Ior B = this match {
+    case Ior.Left(_) => Ior.Left(c)
+    case r @ Ior.Right(_) => r
+    case Ior.Both(_, b) => Ior.Both(c, b)
+  }
+
   final def flatMap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior D = this match {
     case l @ Ior.Left(_) => l
     case Ior.Right(b) => f(b)
@@ -92,10 +104,10 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   }
 
   final def flatTap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior B =
-    flatMap(b => f(b).map(_ => b))
+    flatMap(b => f(b).as(b))
 
   final def leftFlatTap[BB >: B, C](f: A => C Ior BB)(implicit BB: Semigroup[BB]): A Ior BB =
-    leftFlatMap(a => f(a).leftMap(_ => a))
+    leftFlatMap(a => f(a).leftAs(a))
 
   final def foreach(f: B => Unit): Unit = {
     bimap(_ => (), f)
@@ -238,6 +250,9 @@ private[data] sealed abstract class IorInstances extends IorInstances0 {
 
       override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
         fa.map(f)
+
+      override def as[B, C](fa: A Ior B, c: C): A Ior C =
+        fa.as(c)
     }
 
   implicit def catsDataBifunctorForIor: Bifunctor[Ior] =
@@ -305,6 +320,9 @@ private[data] sealed abstract class IorInstances0 {
 
     override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
       fa.map(f)
+
+    override def as[B, C](fa: A Ior B, c: C): A Ior C =
+      fa.as(c)
   }
 }
 
