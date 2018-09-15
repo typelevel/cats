@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.instances.option.{catsStdInstancesForOption => optionInstance}
+import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
 import cats.syntax.either._
 
 /**
@@ -229,6 +229,10 @@ object OptionT extends OptionTInstances {
 }
 
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
+  // to maintain binary compatibility
+  def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
+    new OptionTMonad[F] { implicit val F = F0 }
+
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
     new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
 
@@ -245,6 +249,26 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
     new Defer[OptionT[F, ?]] {
       def defer[A](fa: => OptionT[F, A]): OptionT[F, A] =
         OptionT(F.defer(fa.value))
+    }
+
+  implicit def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, ?]] =
+    new OptionTFunctorFilter[F] with TraverseFilter[OptionT[F, ?]] {
+      implicit def F: Functor[F] = F0
+
+      val traverse: Traverse[OptionT[F, ?]] = OptionT.catsDataTraverseForOptionT[F]
+
+      def traverseFilter[G[_], A, B](fa: OptionT[F, A])
+        (f: A => G[Option[B]])
+        (implicit G: Applicative[G]): G[OptionT[F, B]] =
+          G.map(Traverse[F].traverse[G, Option[A], Option[B]](fa.value) {
+            oa => TraverseFilter[Option].traverseFilter(oa)(f)
+          })(OptionT[F, B])
+
+      override def filterA[G[_], A](fa: OptionT[F, A])
+        (f: A => G[Boolean])
+        (implicit G: Applicative[G]): G[OptionT[F, A]] =
+          G.map(Traverse[F].traverse(fa.value)(TraverseFilter[Option].filterA[G, A](_)(f)))(OptionT[F, A])
+
     }
 }
 
@@ -263,6 +287,9 @@ private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 
 
   implicit def catsDataPartialOrderForOptionT[F[_], A](implicit F0: PartialOrder[F[Option[A]]]): PartialOrder[OptionT[F, A]] =
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
+
+  implicit def catsDateFunctorFilterForOptionT[F[_]](implicit F0: Functor[F]): FunctorFilter[OptionT[F, ?]] =
+    new OptionTFunctorFilter[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 {
@@ -397,6 +424,20 @@ private[data] sealed trait OptionTPartialOrder[F[_], A] extends PartialOrder[Opt
   override implicit def F: PartialOrder[F[Option[A]]]
 
   override def partialCompare(x: OptionT[F, A], y: OptionT[F, A]): Double = x partialCompare y
+}
+
+private[data] sealed trait OptionTFunctorFilter[F[_]] extends FunctorFilter[OptionT[F, ?]] {
+  implicit def F: Functor[F]
+
+  def functor: Functor[OptionT[F, ?]] = OptionT.catsDataFunctorForOptionT[F]
+
+  def mapFilter[A, B](fa: OptionT[F, A])(f: (A) => Option[B]): OptionT[F, B] = fa.subflatMap(f)
+
+  override def collect[A, B](fa: OptionT[F, A])(f: PartialFunction[A, B]): OptionT[F, B] = fa.subflatMap(f.lift)
+
+  override def flattenOption[A](fa: OptionT[F, Option[A]]): OptionT[F, A] = fa.subflatMap(identity)
+
+  override def filter[A](fa: OptionT[F, A])(f: (A) => Boolean): OptionT[F, A] = fa.filter(f)
 }
 
 private[data] sealed trait OptionTOrder[F[_], A] extends Order[OptionT[F, A]] with OptionTPartialOrder[F, A]{

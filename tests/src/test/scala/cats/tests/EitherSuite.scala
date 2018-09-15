@@ -223,6 +223,7 @@ class EitherSuite extends CatsSuite {
       x.isLeft should === (x.toList.isEmpty)
       x.isLeft should === (x.toValidated.isInvalid)
       x.isLeft should === (x.toValidatedNel.isInvalid)
+      x.isLeft should === (x.toValidatedNec.isInvalid)
       Option(x.isLeft) should === (x.toEitherT[Option].isLeft)
     }
   }

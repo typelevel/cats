@@ -1,6 +1,6 @@
 package cats.instances
 
-import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Show, Traverse}
+import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Order, Show, Traverse, TraverseFilter}
 import cats.kernel._
 import cats.kernel.instances.StaticMethods
 
@@ -120,7 +120,7 @@ class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K]) extends 
   import scala.util.hashing.MurmurHash3._
   def hash(x: SortedMap[K, V]): Int = {
     var a, b, n = 0
-    var c = 1;
+    var c = 1
     x foreach { case (k, v) =>
       val h = StaticMethods.product2Hash(K.hash(k), V.hash(v))
       a += h
@@ -165,4 +165,43 @@ class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends Monoi
       }
     }
 
+}
+
+trait SortedMapInstancesBinCompat0 {
+  implicit def catsStdTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, ?]] =
+    new TraverseFilter[SortedMap[K, ?]] {
+
+      implicit val ordering: Ordering[K] = Order[K].toOrdering
+
+      val traverse: Traverse[SortedMap[K, ?]] = cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
+
+      override def traverseFilter[G[_], A, B]
+      (fa: SortedMap[K, A])
+      (f: A => G[Option[B]])
+      (implicit G: Applicative[G]): G[SortedMap[K, B]] = {
+        val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty))
+        Foldable.iterateRight(fa, gba) { (kv, lbuf) =>
+          G.map2Eval(f(kv._2), lbuf)({ (ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b)) })
+        }.value
+      }
+
+      override def mapFilter[A, B](fa: SortedMap[K, A])(f: (A) => Option[B]): SortedMap[K, B] =
+        fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
+
+      override def collect[A, B](fa: SortedMap[K, A])(f: PartialFunction[A, B]): SortedMap[K, B] =
+        fa.collect(scala.Function.unlift(t => f.lift(t._2).map(t._1 -> _)))
+
+      override def flattenOption[A](fa: SortedMap[K, Option[A]]): SortedMap[K, A] =
+        fa.collect(scala.Function.unlift(t => t._2.map(t._1 -> _)))
+
+      override def filter[A](fa: SortedMap[K, A])(f: (A) => Boolean): SortedMap[K, A] =
+        fa.filter { case (_, v) => f(v) }
+
+
+      override def filterA[G[_], A]
+      (fa: SortedMap[K, A])
+      (f: (A) => G[Boolean])
+      (implicit G: Applicative[G]): G[SortedMap[K, A]] =
+        traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
+    }
 }

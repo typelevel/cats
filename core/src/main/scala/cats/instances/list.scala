@@ -143,3 +143,29 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         fa.iterator.map(_.show).mkString("List(", ", ", ")")
     }
 }
+
+trait ListInstancesBinCompat0 {
+  implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
+    val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList
+
+    override def mapFilter[A, B](fa: List[A])(f: (A) => Option[B]): List[B] = fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: List[A])(f: (A) => Boolean): List[A] = fa.filter(f)
+
+    override def collect[A, B](fa: List[A])(f: PartialFunction[A, B]): List[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: List[Option[A]]): List[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
+      fa.foldRight(Eval.now(G.pure(List.empty[B])))(
+        (x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o))
+      ).value
+
+    override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
+      fa.foldRight(Eval.now(G.pure(List.empty[A])))(
+        (x, xse) =>
+          G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
+      ).value
+  }
+}

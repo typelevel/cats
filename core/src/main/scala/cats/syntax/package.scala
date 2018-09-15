@@ -23,15 +23,16 @@ package object syntax {
   object contravariant extends ContravariantSyntax
   object contravariantSemigroupal extends ContravariantSemigroupalSyntax
   object contravariantMonoidal extends ContravariantMonoidalSyntax
-  object either extends EitherSyntax
+  object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
   object foldable extends FoldableSyntax
   object functor extends FunctorSyntax
+  object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
-  object list extends ListSyntax
+  object list extends ListSyntax with ListSyntaxBinCompat0
   object monad extends MonadSyntax
   object monadError extends MonadErrorSyntax
   object monoid extends MonoidSyntax
@@ -49,9 +50,10 @@ package object syntax {
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object traverse extends TraverseSyntax
+  object traverseFilter extends TraverseFilterSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
-  object validated extends ValidatedSyntax with ValidatedExtensionSyntax
+  object validated extends ValidatedSyntax with ValidatedExtensionSyntax with ValidatedSyntaxBincompat0
   object vector extends VectorSyntax
   object writer extends WriterSyntax
   object set extends SetSyntax

@@ -153,3 +153,32 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
 }
+
+trait StreamInstancesBinCompat0 {
+  implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
+    val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream
+
+    override def mapFilter[A, B](fa: Stream[A])(f: (A) => Option[B]): Stream[B] = {
+      fa.collect(Function.unlift(f))
+    }
+
+    override def filter[A](fa: Stream[A])(f: (A) => Boolean): Stream[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Stream[Option[A]]): Stream[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
+      fa.foldRight(Eval.now(G.pure(Stream.empty[B])))(
+        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+      ).value
+    }
+
+    override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] = {
+      fa.foldRight(Eval.now(G.pure(Stream.empty[A])))(
+        (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+      ).value
+    }
+
+  }
+}
