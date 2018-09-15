@@ -113,6 +113,12 @@ class IdTSuite extends CatsSuite {
     }
   }
 
+  test("as consistent with map+const") {
+    forAll { (idT: IdT[List, Int], b: Long) =>
+      idT.as(b) should === (idT.map(_ => b))
+    }
+  }
+
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (idT: IdT[List, Int]) =>

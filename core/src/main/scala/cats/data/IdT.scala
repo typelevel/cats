@@ -9,6 +9,9 @@ final case class IdT[F[_], A](value: F[A]) {
   def map[B](f: A => B)(implicit F: Functor[F]): IdT[F, B] =
     IdT(F.map(value)(f))
 
+  def as[B](b: B)(implicit F: Functor[F]): IdT[F, B] =
+    IdT(F.as(value, b))
+
   /**
    * Modify the context `F` using transformation `f`.
    */
@@ -43,7 +46,7 @@ final case class IdT[F[_], A](value: F[A]) {
     IdT(F.ap(f.value)(value))
 
   def flatTap[B](f: A => IdT[F, B])(implicit F: FlatMap[F]): IdT[F, A] =
-    flatMap(a => f(a).map(_ => a))
+    flatMap(a => f(a).as(a))
 
   def flatTapF[B](f: A => F[B])(implicit F: FlatMap[F]): IdT[F, A] =
     flatTap(f andThen IdT.apply)
@@ -61,6 +64,9 @@ private[data] sealed trait IdTFunctor[F[_]] extends Functor[IdT[F, ?]] {
 
   override def map[A, B](fa: IdT[F, A])(f: A => B): IdT[F, B] =
     fa.map(f)
+
+  override def as[A, B](fa: IdT[F, A], b: B): IdT[F, B] =
+    fa.as(b)
 }
 
 private[data] sealed trait IdTApply[F[_]] extends Apply[IdT[F, ?]] with IdTFunctor[F] {
