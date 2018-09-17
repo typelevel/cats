@@ -6,14 +6,14 @@ package data
  * the Haskell package Control.Monad.Cont
  *
  * This is reasonably straight-forward except that to make
- * a tailRecM implementation we leverage the Defer typeclass to
+ * a tailRecM implementation we leverage the Defer type class to
  * obtain stack-safety.
  */
 sealed trait ContT[M[_], A, B] extends Serializable { self =>
-  def run(cb: B => M[A]): M[A]
+  def run: (B => M[A]) => M[A]
 
   def map[C](fn: B => C): ContT[M, A, C] =
-    ContT[M, A, C] { fn2 =>
+    ContT { fn2 =>
       run(AndThen(fn).andThen(fn2))
     }
 
@@ -21,13 +21,14 @@ sealed trait ContT[M[_], A, B] extends Serializable { self =>
    * c.mapCont(f).run(g) == f(c.run(g))
    */
   def mapCont(fn: M[A] => M[A]): ContT[M, A, B] =
-    ContT.MapCont(this, fn)
+    // Use later here to avoid forcing run
+    ContT.later(AndThen(run).andThen(fn))
 
   /**
    * cont.withCont(f).run(cb) == cont.run(f(cb))
    */
   def withCont[C](fn: (C => M[A]) => B => M[A]): ContT[M, A, C] =
-    ContT.WithCont(this, fn)
+    ContT { cb => run(fn(cb)) }
 
   def flatMap[C](fn: B => ContT[M, A, C]): ContT[M, A, C] =
     ContT[M, A, C] { fn2 =>
@@ -38,39 +39,30 @@ sealed trait ContT[M[_], A, B] extends Serializable { self =>
 
 object ContT {
 
-  private case class Pure[M[_], A, B](b: B) extends ContT[M, A, B] {
-    def run(cb: B => M[A]): M[A] = cb(b)
-  }
+  // Note, we only have two instances of ContT in order to be gentle on the JVM JIT
+  // which treats classes with more than two subclasses differently
 
-  private case class FromFn[M[_], A, B](fn: (B => M[A]) => M[A]) extends ContT[M, A, B] {
-    def run(cb: B => M[A]): M[A] = fn(cb)
-  }
-
-  private case class WithCont[M[_], A, B, C](c0: ContT[M, A, B], fn: (C => M[A]) => B => M[A]) extends ContT[M, A, C] {
-    def run(cb: C => M[A]) = c0.run(fn(cb))
-  }
-
-  private case class MapCont[M[_], A, B](c0: ContT[M, A, B], fn: M[A] => M[A]) extends ContT[M, A, B] {
-    def run(cb: B => M[A]) = fn(c0.run(cb))
-  }
+  private case class FromFn[M[_], A, B](run: (B => M[A]) => M[A]) extends ContT[M, A, B]
 
   private case class DeferCont[M[_], A, B](next: () => ContT[M, A, B]) extends ContT[M, A, B] {
-    def run(cb: B => M[A]) = {
-      def loop(n: () => ContT[M, A, B]): ContT[M, A, B] =
-        n() match {
-          case DeferCont(n) => loop(n)
-          case notDefer => notDefer
-        }
+    @annotation.tailrec
+    private def loop(n: () => ContT[M, A, B]): ContT[M, A, B] =
+      n() match {
+        case DeferCont(n) => loop(n)
+        case notDefer => notDefer
+      }
 
-      loop(next).run(cb)
-    }
+    lazy val run: (B => M[A]) => M[A] = loop(next).run
   }
 
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
-    Pure(b)
+    apply { cb => cb(b) }
 
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(fn)
+
+  def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
+    DeferCont(() => FromFn(fn))
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
     ContT[M, C, B] { cb: (B => M[C]) =>
