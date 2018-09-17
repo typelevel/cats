@@ -216,10 +216,10 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-def mimaSettings(moduleName: String) = {
+def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[ModuleID] = {
   import sbtrelease.Version
 
-  def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
+  def semverBinCompatVersions(major: Int, minor: Int, patch: Int): List[(Int, Int, Int)] = {
     val majorVersions: List[Int] = List(major)
     val minorVersions : List[Int] =
       if (major >= 1) Range(0, minor).inclusive.toList
@@ -234,30 +234,37 @@ def mimaSettings(moduleName: String) = {
       min <- minorVersions
       pat <- patchVersions(min)
     } yield (maj, min, pat)
-    versions.toSet
+    versions.toList
   }
 
-  def mimaVersions(version: String): Set[String] = {
-    Version(version) match {
+  val mimaVersions: List[String] = {
+    Version(ver) match {
       case Some(Version(major, Seq(minor, patch), _)) =>
         semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
           .map{case (maj, min, pat) => s"${maj}.${min}.${pat}"}
       case _ =>
-        Set.empty[String]
+        List.empty[String]
     }
   }
   // Safety Net For Exclusions
-  lazy val excludedVersions: Set[String] = Set()
+  lazy val excludedVersions: List[String] = List()
 
   // Safety Net for Inclusions
-  lazy val extraVersions: Set[String] = Set()
+  lazy val extraVersions: List[String] = List()
+
+
+  if(priorTo2_13(scalaVer)) {
+    (mimaVersions ++ extraVersions)
+      .filterNot(excludedVersions.contains(_))
+      .map(v => "org.typelevel" %% moduleName % v)
+  } else List()
+
+}
+
+def mimaSettings(moduleName: String) = {
 
   Seq(
-    mimaPreviousArtifacts := { if(priorTo2_13(scalaVersion.value)) {
-      (mimaVersions(version.value) ++ extraVersions)
-        .filterNot(excludedVersions.contains(_))
-        .map(v => "org.typelevel" %% moduleName % v)
-    } else Set() },
+    mimaPreviousArtifacts := mimaPrevious(moduleName, scalaVersion.value, version.value).toSet,
 
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core._
@@ -277,6 +284,7 @@ def mimaSettings(moduleName: String) = {
     }
   )
 }
+
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -494,6 +502,18 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   ))
   .enablePlugins(JmhPlugin)
 
+
+lazy val binCompactTest = project
+  .settings(catsSettings)
+  .settings(noPublishSettings)
+  .settings(libraryDependencies ++= List(
+//    mimaPrevious("cats-core", scalaVersion.value, version.value).head % Compile,
+    "org.typelevel" %% "cats-core" % "1.2.0" % Compile,
+    "org.typelevel" %% "cats-core" % "1.3.0" % Test,
+    "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
+  ))
+
+
 // cats-js is JS-only
 lazy val js = project
   .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
@@ -611,7 +631,9 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;mimaReportBinaryIssues;makeMicrosite")
+addCommandAlias("validateBC", ";catsJVM/publishLocal;binCompTest/test;mimaReportBinaryIssues")
+
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 
