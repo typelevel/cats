@@ -10,31 +10,40 @@ package data
  * obtain stack-safety.
  */
 sealed trait ContT[M[_], A, B] extends Serializable { self =>
-  def run: (B => M[A]) => M[A]
+  final def run: (B => M[A]) => M[A] = runAndThen
+  protected def runAndThen: AndThen[B => M[A], M[A]]
 
-  def map[C](fn: B => C): ContT[M, A, C] =
+  def map[C](fn: B => C): ContT[M, A, C] = {
+    // allocate/pattern match once
+    val fnAndThen = AndThen(fn)
     ContT { fn2 =>
-      run(AndThen(fn).andThen(fn2))
+      run(fnAndThen.andThen(fn2))
     }
+  }
 
   /**
    * c.mapCont(f).run(g) == f(c.run(g))
    */
   def mapCont(fn: M[A] => M[A]): ContT[M, A, B] =
     // Use later here to avoid forcing run
-    ContT.later(AndThen(run).andThen(fn))
+    ContT.later(runAndThen.andThen(fn))
 
   /**
    * cont.withCont(f).run(cb) == cont.run(f(cb))
    */
   def withCont[C](fn: (C => M[A]) => B => M[A]): ContT[M, A, C] =
-    ContT { cb => run(fn(cb)) }
+    // lazy to avoid forcing run
+    ContT.later(AndThen(fn).andThen(runAndThen))
 
-  def flatMap[C](fn: B => ContT[M, A, C]): ContT[M, A, C] =
+  def flatMap[C](fn: B => ContT[M, A, C]): ContT[M, A, C] = {
+    // allocate/pattern match once
+    val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
-      val fn3: B => M[A] = AndThen(fn).andThen { cont => cont.run(fn2) }
+      val contRun: ContT[M, A, C] => M[A] = (_.run(fn2))
+      val fn3: B => M[A] = fnAndThen.andThen(contRun)
       run(fn3)
     }
+  }
 }
 
 object ContT {
@@ -42,7 +51,7 @@ object ContT {
   // Note, we only have two instances of ContT in order to be gentle on the JVM JIT
   // which treats classes with more than two subclasses differently
 
-  private case class FromFn[M[_], A, B](run: (B => M[A]) => M[A]) extends ContT[M, A, B]
+  private case class FromFn[M[_], A, B](runAndThen: AndThen[B => M[A], M[A]]) extends ContT[M, A, B]
 
   private case class DeferCont[M[_], A, B](next: () => ContT[M, A, B]) extends ContT[M, A, B] {
     @annotation.tailrec
@@ -52,17 +61,17 @@ object ContT {
         case notDefer => notDefer
       }
 
-    lazy val run: (B => M[A]) => M[A] = loop(next).run
+    lazy val runAndThen: AndThen[B => M[A], M[A]] = loop(next).runAndThen
   }
 
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
     apply { cb => cb(b) }
 
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
-    FromFn(fn)
+    FromFn(AndThen(fn))
 
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
-    DeferCont(() => FromFn(fn))
+    DeferCont(() => FromFn(AndThen(fn)))
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
     ContT[M, C, B] { cb: (B => M[C]) =>
