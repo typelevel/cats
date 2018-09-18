@@ -9,15 +9,16 @@ package data
  * a tailRecM implementation we leverage the Defer type class to
  * obtain stack-safety.
  */
-sealed trait ContT[M[_], A, B] extends Serializable { self =>
+sealed abstract class ContT[M[_], A, B] extends Serializable { self =>
   final def run: (B => M[A]) => M[A] = runAndThen
   protected def runAndThen: AndThen[B => M[A], M[A]]
 
-  def map[C](fn: B => C): ContT[M, A, C] = {
+  def map[C](fn: B => C)(implicit M: Defer[M]): ContT[M, A, C] = {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT { fn2 =>
-      run(fnAndThen.andThen(fn2))
+      val cb = fnAndThen.andThen(fn2)
+      M.defer(run(cb))
     }
   }
 
@@ -35,13 +36,13 @@ sealed trait ContT[M[_], A, B] extends Serializable { self =>
     // lazy to avoid forcing run
     ContT.later(AndThen(fn).andThen(runAndThen))
 
-  def flatMap[C](fn: B => ContT[M, A, C]): ContT[M, A, C] = {
+  def flatMap[C](fn: B => ContT[M, A, C])(implicit M: Defer[M]): ContT[M, A, C] = {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
       val contRun: ContT[M, A, C] => M[A] = (_.run(fn2))
       val fn3: B => M[A] = fnAndThen.andThen(contRun)
-      run(fn3)
+      M.defer(run(fn3))
     }
   }
 }
@@ -79,7 +80,7 @@ object ContT {
       def go(a: A): M[C] =
         fn(a).run {
           case Left(a) => M.defer(go(a))
-          case Right(b) => cb(b)
+          case Right(b) => M.defer(cb(b))
         }
 
       go(a)
