@@ -509,7 +509,12 @@ lazy val binCompactTest = project
   .settings(
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
     libraryDependencies ++= List(
-      mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
+      {
+        if (priorTo2_13(scalaVersion.value))
+          mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
+        else //We are not testing BC on Scala 2.13 yet.
+          "org.typelevel" %% "cats-core" % version.value % Provided
+      },
       "org.typelevel" %% "cats-core" % version.value % Test,
       "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
     )
