@@ -235,10 +235,10 @@ object OptionT extends OptionTInstances {
 private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
   // to maintain binary compatibility
   def catsDataMonadForOptionT[F[_]](implicit F0: Monad[F]): Monad[OptionT[F, ?]] =
-    new OptionTMonad[F] { implicit val F = F0 }
+    new OptionTMonad[F] with OptionTMonadExtBinCompat0[F] { implicit val F = F0 }
 
   implicit def catsDataTraverseForOptionT[F[_]](implicit F0: Traverse[F]): Traverse[OptionT[F, ?]] =
-    new OptionTTraverse[F] with OptionTFunctor[F] { implicit val F = F0 }
+    new OptionTTraverse[F] with OptionTFunctor[F] with OptionTFunctorExtBinCompat0[F] { implicit val F = F0 }
 
   implicit def catsDataOrderForOptionT[F[_], A](implicit F0: Order[F[Option[A]]]): Order[OptionT[F, A]] =
     new OptionTOrder[F, A] { implicit val F = F0 }
@@ -278,7 +278,7 @@ private[data] sealed abstract class OptionTInstances extends OptionTInstances0 {
 
 private[data] sealed abstract class OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
-    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
+    new OptionTMonadErrorMonad[F] with OptionTMonadExtBinCompat0[F] { implicit val F = F0 }
 
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit F0: ContravariantMonoidal[F]): ContravariantMonoidal[OptionT[F, ?]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
@@ -304,7 +304,7 @@ private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 
     new OptionTEq[F, A] { implicit val F = F0 }
 
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
+    new OptionTMonadError[F, E] with OptionTMonadExtBinCompat0[F] { implicit val F = F0 }
 
 }
 
@@ -315,15 +315,17 @@ private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 
 
 private[data] sealed abstract class OptionTInstances3 {
   implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
-    new OptionTFunctor[F] { implicit val F = F0 }
+    new OptionTFunctor[F] with OptionTFunctorExtBinCompat0[F] { implicit val F = F0 }
 }
 
 private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: OptionT[F, A])(f: A => B): OptionT[F, B] = fa.map(f)
+}
 
-  override def as[A, B](fa: OptionT[F, A], b: B): OptionT[F, B] = fa.as(b)
+private[data] trait OptionTFunctorExtBinCompat0[F[_]] { self: OptionTFunctor[F] =>
+  override def as[A, B](fa: OptionT[F, A], b: B): OptionT[F, B] = fa as b
 }
 
 private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
@@ -339,6 +341,10 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
     OptionT(F.tailRecM(a)(a0 => F.map(f(a0).value)(
       _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
     )))
+}
+
+private[data] trait OptionTMonadExtBinCompat0[F[_]] { self: OptionTMonad[F] =>
+  override def as[A, B](fa: OptionT[F, A], b: B): OptionT[F, B] = fa as b
 }
 
 private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, ?], Unit] with OptionTMonad[F] {

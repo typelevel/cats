@@ -445,7 +445,7 @@ private[data] abstract class IorTInstances extends IorTInstances1 {
     }
 
   implicit def catsDataTraverseForIorT[F[_], A](implicit F: Traverse[F]): Traverse[IorT[F, A, ?]] =
-    new IorTTraverse[F, A] with IorTFunctor[F, A] { val F0: Traverse[F] = F }
+    new IorTTraverse[F, A] with IorTFunctor[F, A] with IorTFunctorExtBinCompat0[F, A] { val F0: Traverse[F] = F }
 
   implicit def catsDataMonoidForIorT[F[_], A, B](implicit F: Monoid[F[Ior[A, B]]]): Monoid[IorT[F, A, B]] =
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }
@@ -489,7 +489,7 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
     new IorTFoldable[F, A] { val F0: Foldable[F] = F }
 
   implicit def catsDataMonadErrorForIorT[F[_], A](implicit F: Monad[F], A: Semigroup[A]): MonadError[IorT[F, A, ?], A] =
-    new IorTMonadError[F, A] {
+    new IorTMonadError[F, A] with IorTFunctorExtBinCompat0[F, A] {
       val A0: Semigroup[A] = A
       val F0: Monad[F] = F
     }
@@ -516,7 +516,7 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
 
 private[data] abstract class IorTInstances2 extends IorTInstances3 {
   implicit def catsDataMonadErrorFForIorT[F[_], A, E](implicit FE: MonadError[F, E], A: Semigroup[A]): MonadError[IorT[F, A, ?], E] =
-    new IorTMonadErrorF[F, A, E] {
+    new IorTMonadErrorF[F, A, E] with IorTFunctorExtBinCompat0[F, A] {
       val A0: Semigroup[A] = A
       val F0: MonadError[F, E] = FE
     }
@@ -527,15 +527,17 @@ private[data] abstract class IorTInstances2 extends IorTInstances3 {
 
 private[data] abstract class IorTInstances3 {
   implicit def catsDataFunctorForIorT[F[_], A](implicit F: Functor[F]): Functor[IorT[F, A, ?]] =
-    new IorTFunctor[F, A] { val F0: Functor[F] = F }
+    new IorTFunctor[F, A] with IorTFunctorExtBinCompat0[F, A] { val F0: Functor[F] = F }
 }
 
 private[data] sealed trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
   implicit def F0: Functor[F]
 
   override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
+}
 
-  override def as[B, D](iort: IorT[F, A, B], d: D): IorT[F, A, D] = iort.as(d)
+private[data] sealed trait IorTFunctorExtBinCompat0[F[_], A] { self: IorTFunctor[F, A] =>
+  override def as[B, D](iort: IorT[F, A, B], d: D): IorT[F, A, D] = iort as d
 }
 
 private[data] sealed trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {

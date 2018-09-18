@@ -538,7 +538,7 @@ private[data] abstract class EitherTInstances extends EitherTInstances1 {
     }
 
   implicit def catsDataTraverseForEitherT[F[_], L](implicit FF: Traverse[F]): Traverse[EitherT[F, L, ?]] =
-    new EitherTTraverse[F, L] with EitherTFunctor[F, L] {
+    new EitherTTraverse[F, L] with EitherTFunctor[F, L] with EitherTFunctorExtBinCompat0[F, L] {
       val F0: Traverse[F] = FF
       val F: Functor[F] = FF
     }
@@ -574,7 +574,7 @@ private[data] abstract class EitherTInstances1 extends EitherTInstances2 {
     }
 
   implicit def catsDataMonadErrorForEitherT[F[_], L](implicit F0: Monad[F]): MonadError[EitherT[F, L, ?], L] =
-    new EitherTMonadError[F, L] {
+    new EitherTMonadError[F, L] with EitherTFunctorExtBinCompat0[F, L] {
       implicit val F = F0
       override def ensure[A](fa: EitherT[F, L, A])(error: => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
         fa.ensure(error)(predicate)(F)
@@ -600,7 +600,7 @@ private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
    * }}}
    */
   implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit FE0: MonadError[F, E]): MonadError[EitherT[F, L, ?], E] =
-    new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
+    new EitherTMonadErrorF[F, E, L] with EitherTFunctorExtBinCompat0[F, L] { implicit val F = FE0 }
 
 
   implicit def catsDataSemigroupKForEitherT[F[_], L](implicit F0: Monad[F]): SemigroupK[EitherT[F, L, ?]] =
@@ -614,7 +614,7 @@ private[data] abstract class EitherTInstances2 extends EitherTInstances3 {
 
 private[data] abstract class EitherTInstances3 {
   implicit def catsDataFunctorForEitherT[F[_], L](implicit F0: Functor[F]): Functor[EitherT[F, L, ?]] =
-    new EitherTFunctor[F, L] { implicit val F = F0 }
+    new EitherTFunctor[F, L] with EitherTFunctorExtBinCompat0[F, L] { implicit val F = F0 }
 }
 
 private[data] trait EitherTSemigroup[F[_], L, A] extends Semigroup[EitherT[F, L, A]] {
@@ -640,6 +640,9 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
 private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, ?]] {
   implicit val F: Functor[F]
   override def map[A, B](fa: EitherT[F, L, A])(f: A => B): EitherT[F, L, B] = fa map f
+}
+
+private[data] trait EitherTFunctorExtBinCompat0[F[_], L] { self: EitherTFunctor[F, L] =>
   override def as[A, B](fa: EitherT[F, L, A], b: B): EitherT[F, L, B] = fa as b
 }
 

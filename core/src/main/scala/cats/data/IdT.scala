@@ -64,9 +64,10 @@ private[data] sealed trait IdTFunctor[F[_]] extends Functor[IdT[F, ?]] {
 
   override def map[A, B](fa: IdT[F, A])(f: A => B): IdT[F, B] =
     fa.map(f)
+}
 
-  override def as[A, B](fa: IdT[F, A], b: B): IdT[F, B] =
-    fa.as(b)
+private[data] sealed trait IdTFunctorExtBinCompat0[F[_]] extends Functor[IdT[F, ?]] { self: IdTFunctor[F] =>
+  override def as[A, B](fa: IdT[F, A], b: B): IdT[F, B] = fa as b
 }
 
 private[data] sealed trait IdTApply[F[_]] extends Apply[IdT[F, ?]] with IdTFunctor[F] {
@@ -149,12 +150,16 @@ private[data] sealed trait IdTNonEmptyTraverse[F[_]] extends IdTTraverse[F] with
 
 private[data] sealed abstract class IdTInstances8 {
   implicit def catsDataCommutativeFlatMapForIdT[F[_]](implicit F: CommutativeFlatMap[F]): CommutativeFlatMap[IdT[F, ?]] =
-    new IdTFlatMap[F] with CommutativeFlatMap[IdT[F, ?]] { implicit val F0: CommutativeFlatMap[F] = F }
+    new IdTFlatMap[F] with CommutativeFlatMap[IdT[F, ?]] with IdTFunctorExtBinCompat0[F] {
+      implicit val F0: CommutativeFlatMap[F] = F
+    }
 }
 
 private[data] sealed abstract class IdTInstances7 extends IdTInstances8{
   implicit def catsDataCommutativeMonadForIdT[F[_]](implicit F: CommutativeMonad[F]): CommutativeMonad[IdT[F, ?]] =
-    new IdTMonad[F] with CommutativeMonad[IdT[F, ?]] { implicit val F0: CommutativeMonad[F] = F }
+    new IdTMonad[F] with CommutativeMonad[IdT[F, ?]] with IdTFunctorExtBinCompat0[F] {
+      implicit val F0: CommutativeMonad[F] = F
+    }
 }
 
 private[data] sealed abstract class IdTInstances6 extends IdTInstances7 {
@@ -164,27 +169,27 @@ private[data] sealed abstract class IdTInstances6 extends IdTInstances7 {
 
 private[data] sealed abstract class IdTInstances5 extends IdTInstances6 {
   implicit def catsDataFunctorForIdT[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
-    new IdTFunctor[F] { implicit val F0: Functor[F] = F }
+    new IdTFunctor[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: Functor[F] = F }
 }
 
 private[data] sealed abstract class IdTInstances4 extends IdTInstances5 {
   implicit def catsDataApplyForIdT[F[_]](implicit F: Apply[F]): Apply[IdT[F, ?]] =
-    new IdTApply[F] { implicit val F0: Apply[F] = F }
+    new IdTApply[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: Apply[F] = F }
 }
 
 private[data] sealed abstract class IdTInstances3 extends IdTInstances4 {
   implicit def catsDataApplicativeForIdT[F[_]](implicit F: Applicative[F]): Applicative[IdT[F, ?]] =
-    new IdTApplicative[F] { implicit val F0: Applicative[F] = F }
+    new IdTApplicative[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: Applicative[F] = F }
 }
 
 private[data] sealed abstract class IdTInstances2 extends IdTInstances3 {
   implicit def catsDataFlatMapForIdT[F[_]](implicit F: FlatMap[F]): FlatMap[IdT[F, ?]] =
-    new IdTFlatMap[F] { implicit val F0: FlatMap[F] = F }
+    new IdTFlatMap[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: FlatMap[F] = F }
 }
 
 private[data] sealed abstract class IdTInstances1 extends IdTInstances2 {
   implicit def catsDataMonadForIdT[F[_]](implicit F: Monad[F]): Monad[IdT[F, ?]] =
-    new IdTMonad[F] { implicit val F0: Monad[F] = F }
+    new IdTMonad[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: Monad[F] = F }
 
   implicit def catsDataFoldableForIdT[F[_]](implicit F: Foldable[F]): Foldable[IdT[F, ?]] =
     new IdTFoldable[F] { implicit val F0: Foldable[F] = F }
@@ -193,7 +198,7 @@ private[data] sealed abstract class IdTInstances1 extends IdTInstances2 {
 private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 
   implicit def catsDataTraverseForIdT[F[_]](implicit F: Traverse[F]): Traverse[IdT[F, ?]] =
-    new IdTTraverse[F] { implicit val F0: Traverse[F] = F }
+    new IdTTraverse[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: Traverse[F] = F }
 
   implicit def catsDataEqForIdT[F[_], A](implicit F: Eq[F[A]]): Eq[IdT[F, A]] =
     Eq.by[IdT[F, A], F[A]](_.value)
@@ -202,7 +207,7 @@ private[data] sealed abstract class IdTInstances0 extends IdTInstances1 {
 private[data] sealed abstract class IdTInstances extends IdTInstances0 {
 
   implicit def catsDataNonEmptyTraverseForIdT[F[_]](implicit F: NonEmptyTraverse[F]): NonEmptyTraverse[IdT[F, ?]] =
-    new IdTNonEmptyTraverse[F] { implicit val F0: NonEmptyTraverse[F] = F }
+    new IdTNonEmptyTraverse[F] with IdTFunctorExtBinCompat0[F] { implicit val F0: NonEmptyTraverse[F] = F }
 
   implicit def catsDataOrderForIdT[F[_], A](implicit F: Order[F[A]]): Order[IdT[F, A]] =
     Order.by[IdT[F, A], F[A]](_.value)
