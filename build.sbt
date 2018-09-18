@@ -504,14 +504,16 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
 
 
 lazy val binCompactTest = project
-  .settings(catsSettings)
+  .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
-  .settings(libraryDependencies ++= List(
-//    mimaPrevious("cats-core", scalaVersion.value, version.value).head % Compile,
-    "org.typelevel" %% "cats-core" % "1.2.0" % Compile,
-    "org.typelevel" %% "cats-core" % "1.3.0" % Test,
-    "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
-  ))
+  .settings(
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
+    libraryDependencies ++= List(
+      mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
+      "org.typelevel" %% "cats-core" % version.value % Test,
+      "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
+    )
+  )
 
 
 // cats-js is JS-only
@@ -631,7 +633,7 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateBC", ";catsJVM/publishLocal;binCompTest/test;mimaReportBinaryIssues")
+addCommandAlias("validateBC", ";catsJVM/publishLocal;binCompactTest/test;mimaReportBinaryIssues")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
 
