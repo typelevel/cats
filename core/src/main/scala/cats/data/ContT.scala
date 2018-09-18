@@ -9,11 +9,11 @@ package data
  * a tailRecM implementation we leverage the Defer type class to
  * obtain stack-safety.
  */
-sealed abstract class ContT[M[_], A, B] extends Serializable { self =>
+sealed abstract class ContT[M[_], A, +B] extends Serializable {
   final def run: (B => M[A]) => M[A] = runAndThen
   protected def runAndThen: AndThen[B => M[A], M[A]]
 
-  def map[C](fn: B => C)(implicit M: Defer[M]): ContT[M, A, C] = {
+  final def map[C](fn: B => C)(implicit M: Defer[M]): ContT[M, A, C] = {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT { fn2 =>
@@ -25,18 +25,18 @@ sealed abstract class ContT[M[_], A, B] extends Serializable { self =>
   /**
    * c.mapCont(f).run(g) == f(c.run(g))
    */
-  def mapCont(fn: M[A] => M[A]): ContT[M, A, B] =
+  final def mapCont(fn: M[A] => M[A]): ContT[M, A, B] =
     // Use later here to avoid forcing run
     ContT.later(runAndThen.andThen(fn))
 
   /**
    * cont.withCont(f).run(cb) == cont.run(f(cb))
    */
-  def withCont[C](fn: (C => M[A]) => B => M[A]): ContT[M, A, C] =
+  final def withCont[C](fn: (C => M[A]) => B => M[A]): ContT[M, A, C] =
     // lazy to avoid forcing run
     ContT.later(AndThen(fn).andThen(runAndThen))
 
-  def flatMap[C](fn: B => ContT[M, A, C])(implicit M: Defer[M]): ContT[M, A, C] = {
+  final def flatMap[C](fn: B => ContT[M, A, C])(implicit M: Defer[M]): ContT[M, A, C] = {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
