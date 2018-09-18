@@ -478,7 +478,7 @@ private[data] trait KleisliFunctor[F[_], A] extends Functor[Kleisli[F, A, ?]] {
     fa.map(f)
 }
 
-private[data] trait KleisliFunctorExtBinCompat0[F[_], A] extends Functor[Kleisli[F, A, ?]] { self: KleisliFunctor[F, A] =>
+private[data] trait KleisliFunctorExtBinCompat0[F[_], A] { self: KleisliFunctor[F, A] =>
   override def as[B, C](fa: Kleisli[F, A, B], c: C): Kleisli[F, A, C] = fa as c
 }
 

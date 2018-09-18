@@ -66,7 +66,7 @@ private[data] sealed trait IdTFunctor[F[_]] extends Functor[IdT[F, ?]] {
     fa.map(f)
 }
 
-private[data] sealed trait IdTFunctorExtBinCompat0[F[_]] extends Functor[IdT[F, ?]] { self: IdTFunctor[F] =>
+private[data] sealed trait IdTFunctorExtBinCompat0[F[_]] { self: IdTFunctor[F] =>
   override def as[A, B](fa: IdT[F, A], b: B): IdT[F, B] = fa as b
 }
 
