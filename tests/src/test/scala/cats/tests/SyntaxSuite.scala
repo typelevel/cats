@@ -349,6 +349,10 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val gea4 = ga.recoverWith(pfegea)
   }
 
+  def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
+    val fea = "meow".raiseError[F, A]
+  }
+
   def testNested[F[_], G[_], A]: Unit = {
     val fga: F[G[A]] = mock[F[G[A]]]
 
