@@ -327,9 +327,6 @@ private[data] sealed trait WriterTFunctor[F[_], L] extends Functor[WriterT[F, L,
 
   override def map[A, B](fa: WriterT[F, L, A])(f: A => B): WriterT[F, L, B] =
     fa.map(f)
-
-  override def as[A, B](fa: WriterT[F, L, A], b: B): WriterT[F, L, B] =
-    fa.as(b)
 }
 
 private[data] sealed trait WriterTContravariant[F[_], L] extends Contravariant[WriterT[F, L, ?]] {

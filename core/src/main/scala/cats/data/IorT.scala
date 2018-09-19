@@ -534,8 +534,6 @@ private[data] sealed trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
   implicit def F0: Functor[F]
 
   override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
-
-  override def as[B, D](iort: IorT[F, A, B], d: D): IorT[F, A, D] = iort.as(d)
 }
 
 private[data] sealed trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {

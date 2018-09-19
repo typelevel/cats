@@ -335,9 +335,6 @@ private[data] sealed abstract class IndexedStateTFunctor[F[_], SA, SB] extends F
 
   override def map[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => B): IndexedStateT[F, SA, SB, B] =
     fa.map(f)
-
-  override def as[A, B](fa: IndexedStateT[F, SA, SB, A], b: B): IndexedStateT[F, SA, SB, B] =
-    fa.as(b)
 }
 
 private[data] sealed abstract class IndexedStateTContravariant[F[_], SB, V] extends Contravariant[IndexedStateT[F, ?, SB, V]] {

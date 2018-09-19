@@ -524,9 +524,6 @@ private[data] sealed abstract class IRWSTFunctor[F[_], E, L, SA, SB] extends Fun
 
   override def map[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A])(f: A => B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     fa.map(f)
-
-  override def as[A, B](fa: IndexedReaderWriterStateT[F, E, L, SA, SB, A], b: B): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
-    fa.as(b)
 }
 
 private[data] sealed abstract class IRWSTContravariant[F[_], E, L, SB, T] extends Contravariant[IndexedReaderWriterStateT[F, E, L, ?, SB, T]] {
