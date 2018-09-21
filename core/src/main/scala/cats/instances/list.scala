@@ -70,7 +70,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))) { (a, lglb) => G.map2Eval(f(a), lglb)(_ :: _)
+        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ :: _)
         }.value
 
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
@@ -82,13 +83,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def partitionEither[A, B, C](
         fa: List[A]
       )(f: (A) => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =
-        fa.foldRight((List.empty[B], List.empty[C]))(
+        foldRight(fa, Eval.now((List.empty[B], List.empty[C])))(
           (a, acc) =>
             f(a) match {
-              case Left(b)  => (b :: acc._1, acc._2)
-              case Right(c) => (acc._1, c :: acc._2)
+              case Left(b)  => acc.map { case (lefts, rights) => (b :: lefts, rights) }
+              case Right(c) => acc.map { case (lefts, rights) => (lefts, c :: rights) }
           }
-        )
+        ).value
 
       @tailrec
       override def get[A](fa: List[A])(idx: Long): Option[A] =
@@ -112,7 +113,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
           case (Nil, b) => G.pure(Right(b))
           case (a :: tail, b) =>
-            G.map(f(b, a)) { bnext => Left((tail, bnext))
+            G.map(f(b, a)) { bnext =>
+              Left((tail, bnext))
             }
         }
 
