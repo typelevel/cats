@@ -69,10 +69,10 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    * {{{
    * scala> import cats.implicits._
    *
-   * scala> Monoid[String].combineAllOption(List("One ", "Two ", "Three"))
+   * scala> Monoid[String].combineAll(List("One ", "Two ", "Three"))
    * res0: String = "One Two Three"
    *
-   * scala> Monoid[String].combineAllOption(List.empty)
+   * scala> Monoid[String].combineAll(List.empty)
    * res1: String = ""
    * }}}
    */
