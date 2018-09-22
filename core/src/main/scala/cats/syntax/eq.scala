@@ -10,8 +10,8 @@ trait EqSyntax {
 }
 
 final class EqOps[A: Eq](lhs: A) {
-  def ===(rhs: A): Boolean  = macro Ops.binop[A, Boolean]
-  def =!=(rhs: A): Boolean  = macro Ops.binop[A, Boolean]
-  def eqv(rhs: A): Boolean  = Eq[A].eqv(lhs,rhs)
+  def ===(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def =!=(rhs: A): Boolean = macro Ops.binop[A, Boolean]
+  def eqv(rhs: A): Boolean = Eq[A].eqv(lhs,rhs)
   def neqv(rhs: A): Boolean = Eq[A].neqv(lhs,rhs)
 }
