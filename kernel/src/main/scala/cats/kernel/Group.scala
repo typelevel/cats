@@ -11,6 +11,14 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
    * Find the inverse of `a`.
    *
    * `combine(a, inverse(a))` = `combine(inverse(a), a)` = `empty`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Group[Int].inverse(5)
+   * res0: Int = -5
+   * }}}
    */
   def inverse(a: A): A
 
@@ -18,6 +26,14 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
    * Remove the element `b` from `a`.
    *
    * Equivalent to `combine(a, inverse(b))`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Group[Int].remove(5, 2)
+   * res0: Int = 3
+   * }}}
    */
   def remove(a: A, b: A): A = combine(a, inverse(b))
 

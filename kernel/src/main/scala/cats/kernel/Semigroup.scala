@@ -1,6 +1,6 @@
 package cats.kernel
 
-import scala.{ specialized => sp }
+import scala.{specialized => sp}
 import scala.annotation.tailrec
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
@@ -9,11 +9,33 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
    * Associative operation which combines two values.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Semigroup[String]("Hello ", "World!")
+   * res0: String = "Hello World!"
+   *
+   * scala> Semigroup[Option[Int]].combine(None, Some(1))
+   * res1: Option[Int] = Some(1)
+   * }}}
    */
   def combine(x: A, y: A): A
 
   /**
    * Return `a` combined with itself `n` times.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Semigroup[Int].combineN(1, 10)
+   * res0: Int = 10
+   *
+   * scala> Semigroup[String].combineN("ha", 3)
+   * res1: String = "hahaha"
+   * }}}
    */
   def combineN(a: A, n: Int): A =
     if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroups must have n > 0")
@@ -35,6 +57,17 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    * Given a sequence of `as`, combine them and return the total.
    *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> Semigroup[String].combineAllOption(List("One ", "Two ", "Three"))
+   * res0: Option[String] = Some("One Two Three")
+   *
+   * scala> Semigroup[String].combineAllOption(List.empty)
+   * res1: Option[String] = None
+   * }}}
    */
   def combineAllOption(as: TraversableOnce[A]): Option[A] =
     cats.kernel.compat.TraversableOnce.reduceOption(as, combine)
