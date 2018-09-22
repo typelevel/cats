@@ -15,19 +15,17 @@ final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
     * For example:
     * {{{
     * scala> import cats.implicits._
-    * scala> val set1 = Set[String]()
-    * scala> set1.count_(_.length > 0)
+    * scala> val map1 = Map[Int, String]()
+    * scala> val p1: String => Boolean = _.length > 0
+    * scala> map1.count(p1)
     * res0: Long = 0
     *
-    * scala> val set2 = Set("hello", "world", "!")
-    * scala> set2.count_(_.length > 1)
+    * scala> val map2 = Map(1 -> "hello", 2 -> "world", 3 -> "!")
+    * scala> val p2: String => Boolean = _.length > 1
+    * scala> map2.count(p2)
     * res1: Long = 2
-    *
-    * scala> val set3 = Set(41, 32, 23)
-    * scala> set3.count_(_ % 2 == 0)
-    * res2: Long = 1
     * }}}
     */
-  def count_(p: A => Boolean)(implicit F: UnorderedFoldable[F]): Long =
+  def count(p: A => Boolean)(implicit F: UnorderedFoldable[F]): Long =
     F.unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }

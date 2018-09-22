@@ -12,7 +12,7 @@ abstract class UnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(
 
   test(s"UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
-      fa.count_(p) === iterator(fa).count(p).toLong
+      fa.count(p) === iterator(fa).count(p).toLong
     }
   }
 }
