@@ -52,6 +52,7 @@ package object syntax {
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
+  object unorderedFoldable extends UnorderedFoldableSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
   object validated extends ValidatedSyntax with ValidatedExtensionSyntax with ValidatedSyntaxBincompat0
   object vector extends VectorSyntax
