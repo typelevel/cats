@@ -81,4 +81,3 @@ trait AllSyntaxBinCompat2
 
 trait AllSyntaxBinCompat3
   extends UnorderedFoldableSyntax
-    with ReducibleSyntaxBinCompat0

@@ -159,57 +159,6 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       case None => G.pure(Right(None))
     })
 
-
-  /**
-    * Find the maximum item in this structure according to the given function.
-    *
-    * If there are no elements, the result is `None`.
-    *
-    * For example:
-    * {{{
-    * scala> import cats.syntax.foldable._
-    * scala> import cats.instances.all._
-    * scala> val list1 = List[String]()
-    * scala> list1.maxByOption(_.length)
-    * res0: Option[String] = None
-    *
-    * scala> val list2 = List[String]("Two", "Three", "Four")
-    * scala> list2.maxByOption(_.length)
-    * res1: Option[String] = Some(Three)
-    *
-    * scala> val list3 = List[Int](41, 32, 23)
-    * scala> list3.maxByOption(_ % 10)
-    * res2: Option[Int] = Some(23)
-    * }}}
-    */
-  def maxByOption[B](f: A => B)(implicit F: Foldable[F], B: Order[B]): Option[A] =
-    F.reduceLeftOption[A](fa)((a1, a2) => if (B.gteqv(f(a1), f(a2))) a1 else a2)
-
-  /**
-    * Find the minimum item in this structure according to the given function.
-    *
-    * If there are no elements, the result is `None`.
-    *
-    * For example:
-    * {{{
-    * scala> import cats.syntax.foldable._
-    * scala> import cats.instances.all._
-    * scala> val list1 = List[String]()
-    * scala> list1.minByOption(_.length)
-    * res0: Option[String] = None
-    *
-    * scala> val list2 = List[String]("Two", "Three", "Four")
-    * scala> list2.minByOption(_.length)
-    * res1: Option[String] = Some(Two)
-    *
-    * scala> val list3 = List[Int](41, 32, 23)
-    * scala> list3.minByOption(_ % 10)
-    * res2: Option[Int] = Some(41)
-    * }}}
-    */
-  def minByOption[B](f: A => B)(implicit F: Foldable[F], B: Order[B]): Option[A] =
-    F.reduceLeftOption[A](fa)((a1, a2) => if (B.lteqv(f(a1), f(a2))) a1 else a2)
-  
   /**
     * Tear down a subset of this structure using a `PartialFunction`.
     *{{{
@@ -237,4 +186,5 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       case Some(x) ⇒ M.combine(acc, x)
       case None    ⇒ acc
     })
+
 }

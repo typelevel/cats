@@ -42,7 +42,7 @@ package object syntax {
   object parallel extends ParallelSyntax with ParallelTraverseSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
-  object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
+  object reducible extends ReducibleSyntax
   object representable extends RepresentableSyntax
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
