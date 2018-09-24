@@ -50,7 +50,7 @@ pull request. The preferred ways to do that are to either:
 
 Things that belong in cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](laws).
+ * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
@@ -106,9 +106,9 @@ To build Cats you should have
  * `scalastyle`: run the style-checker on the code
  * `validate`: run tests, style-checker, and doc generation
 
-#### Scala and Scala-js
+#### Scala and Scala.js
 
-Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+Cats cross-compiles to both JVM and JavaScript runtimes. If you are not used to
 working with cross-compiling builds, the first things that you will notice is that
 builds:
 

@@ -36,8 +36,6 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
   fork in test := true,
-  libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
@@ -266,7 +264,6 @@ def mimaSettings(moduleName: String) = {
       import com.typesafe.tools.mima.core.ProblemFilters._
       //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances.catsDataMonadForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonoidKForOptionT"),
@@ -296,15 +293,15 @@ lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
   .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
+  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test")
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm)
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
@@ -614,7 +611,7 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;mimaReportBinaryIssues;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 

@@ -40,7 +40,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.2.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -62,6 +62,7 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-mtl`](https://github.com/typelevel/cats-mtl): transformer typeclasses for Cats' Monads, Applicatives and Functors.
  * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods) 
  * [`kittens`](https://github.com/typelevel/kittens): automatic type class instance derivation for Cats and generic utility functions
+ * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
@@ -77,13 +78,10 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### General purpose libraries to support pure functional programming
 
  * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
- * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
- * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
  * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
- * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
  * [Monocle](https://github.com/julien-truffaut/Monocle): an optics library for Scala (and Scala.js) strongly inspired by Haskell Lens.
  * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
@@ -94,6 +92,8 @@ By sharing the same set of type classes, instances and data types provided by Ca
 #### Libraries with more specific uses
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
+ * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
+ * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [circe](https://github.com/circe/circe): pure functional JSON library
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
  * [cormorant](https://github.com/ChristopherDavenport/cormorant): CSV handling library for FP
@@ -104,6 +104,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
+ * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
@@ -119,7 +120,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
  * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
   
-*Feel free to submit a PR if you want a project you maintain to be added to this list.*
+Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
 
@@ -206,6 +207,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Earnest](https://www.earnest.com)
 - [eBay Inc.](https://www.ebay.com)
 - [Eloquentix](https://eloquentix.com)
+- [eSailors](https://www.esailors.de)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
@@ -215,7 +217,9 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [ITV](https://www.itv.com/)
 - [Lookout](https://www.lookout.com)
 - [Metacommerce](https://www.metacommerce.ru)
+- [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
+- [Ocado Technology](https://ocadotechnology.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
