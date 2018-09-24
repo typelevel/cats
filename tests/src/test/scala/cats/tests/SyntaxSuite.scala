@@ -64,6 +64,8 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val y = mock[A]
     val b0: Boolean = x === y
     val b1: Boolean = x =!= y
+    val b2: Boolean = x eqv y
+    val b3: Boolean = x neqv y
   }
 
   def testPartialOrder[A: PartialOrder]: Unit = {
