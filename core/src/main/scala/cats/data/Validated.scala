@@ -128,6 +128,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Invalid(e)  => Validated.invalidNel(e)
     }
 
+  /** Lift the Invalid value into a NonEmptyChain. */
+  def toValidatedNec[EE >: E, AA >: A]: ValidatedNec[EE, AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)  => Validated.invalidNec(e)
+    }
+
   /**
    * Convert to an Either, apply a function, convert back.  This is handy
    * when you want to use the Monadic properties of the Either type.
