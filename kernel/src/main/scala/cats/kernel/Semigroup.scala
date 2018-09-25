@@ -12,10 +12,12 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.string._
+   * scala> import cats.kernel.instances.int._
+   * scala> import cats.kernel.instances.option._
    *
-   * scala> Semigroup[String]("Hello ", "World!")
-   * res0: String = "Hello World!"
+   * scala> Semigroup[String].combine("Hello ", "World!")
+   * res0: String = Hello World!
    *
    * scala> Semigroup[Option[Int]].combine(None, Some(1))
    * res1: Option[Int] = Some(1)
@@ -28,13 +30,14 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.int._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Semigroup[Int].combineN(1, 10)
    * res0: Int = 10
    *
    * scala> Semigroup[String].combineN("ha", 3)
-   * res1: String = "hahaha"
+   * res1: String = hahaha
    * }}}
    */
   def combineN(a: A, n: Int): A =
@@ -60,10 +63,10 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Semigroup[String].combineAllOption(List("One ", "Two ", "Three"))
-   * res0: Option[String] = Some("One Two Three")
+   * res0: Option[String] = Some(One Two Three)
    *
    * scala> Semigroup[String].combineAllOption(List.empty)
    * res1: Option[String] = None

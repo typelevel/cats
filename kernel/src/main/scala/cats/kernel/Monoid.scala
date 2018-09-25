@@ -15,7 +15,8 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.int._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Monoid[String].empty
    * res0: String = ""
@@ -31,7 +32,7 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Monoid[String].isEmpty("")
    * res0: Boolean = true
@@ -48,10 +49,10 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Monoid[String].combineN("ha", 3)
-   * res0: String = "hahaha"
+   * res0: String = hahaha
    *
    * scala> Monoid[String].combineN("ha", 0)
    * res1: String = ""
@@ -67,10 +68,10 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.kernel.instances.string._
    *
    * scala> Monoid[String].combineAll(List("One ", "Two ", "Three"))
-   * res0: String = "One Two Three"
+   * res0: String = One Two Three
    *
    * scala> Monoid[String].combineAll(List.empty)
    * res1: String = ""
