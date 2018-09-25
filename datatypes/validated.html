@@ -1,4 +1,4 @@
-<html><head><title>Cats: Validated</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Validated" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Validated" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class=" active ">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="validated">Validated</h1>
+<html><head><title>Cats: Validated</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Validated" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Validated" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/chain.html" class="">Chain</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class=" active ">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="validated">Validated</h1>
 
 <p>Imagine you are filling out a web form to signup for an account. You input your username and password and submit.
 Response comes back saying your username can’t have dashes in it, so you make some changes and resubmit. Can’t
@@ -50,19 +50,19 @@ well-formed.</p>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">PasswordDoesNotMeetCriteria</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>  <span class="s">"Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."</span>
+  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">FirstNameHasSpecialCharacters</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>  <span class="s">"First name cannot contain spaces, numbers or special characters."</span>
+  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"First name cannot contain spaces, numbers or special characters."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">LastNameHasSpecialCharacters</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>  <span class="s">"Last name cannot contain spaces, numbers or special characters."</span>
+  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Last name cannot contain spaces, numbers or special characters."</span>
 <span class="o">}</span>
 
 <span class="k">case</span> <span class="k">object</span> <span class="nc">AgeIsInvalid</span> <span class="k">extends</span> <span class="nc">DomainValidation</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>  <span class="s">"You must be aged 18 and not older than 75 to use our services."</span>
+  <span class="k">def</span> <span class="n">errorMessage</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"You must be aged 18 and not older than 75 to use our services."</span>
 <span class="o">}</span>
 </code></pre>
 </div>
@@ -71,11 +71,11 @@ well-formed.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.either._</span>
 
-<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidator</span><span class="o">{</span>
+<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidator</span> <span class="o">{</span>
  <span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
     <span class="nc">Either</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span>
-      <span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">),</span> 
-      <span class="n">userName</span><span class="o">,</span> 
+      <span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">),</span>
+      <span class="n">userName</span><span class="o">,</span>
       <span class="nc">UsernameHasSpecialCharacters</span>
     <span class="o">)</span>
 
@@ -115,8 +115,7 @@ well-formed.</p>
       <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
       <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
       <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
-    <span class="o">}</span>
-      <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
   <span class="o">}</span>
 
 <span class="o">}</span>
@@ -141,8 +140,7 @@ Note that we took advantage of the <code class="highlighter-rouge">.cond</code> 
   <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
   <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
   <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
-<span class="o">}</span>
-  <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
 </code></pre>
 </div>
 
@@ -151,9 +149,9 @@ Note that we took advantage of the <code class="highlighter-rouge">.cond</code> 
 <p>If we run our code:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">FormValidator</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
-  <span class="n">username</span> <span class="k">=</span> <span class="s">"fakeUs3rname"</span><span class="o">,</span> 
-  <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span> 
-  <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span> 
+  <span class="n">username</span> <span class="k">=</span> <span class="s">"fakeUs3rname"</span><span class="o">,</span>
+  <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
+  <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">15</span>
 <span class="o">)</span>
@@ -189,8 +187,7 @@ Note that we took advantage of the <code class="highlighter-rouge">.cond</code> 
     <span class="n">validatedFirstName</span> <span class="k">&lt;-</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
     <span class="n">validatedLastName</span> <span class="k">&lt;-</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="o">)</span>
     <span class="n">validatedAge</span> <span class="k">&lt;-</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)</span>
-  <span class="o">}</span>
-    <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="nc">RegistrationData</span><span class="o">(</span><span class="n">validatedUserName</span><span class="o">,</span> <span class="n">validatedPassword</span><span class="o">,</span> <span class="n">validatedFirstName</span><span class="o">,</span> <span class="n">validatedLastName</span><span class="o">,</span> <span class="n">validatedAge</span><span class="o">)</span>
 <span class="o">}</span>
 <span class="c1">// &lt;console&gt;:34: error: value flatMap is not a member of cats.data.Validated[DomainValidation,String]
 //            validatedUserName &lt;- validateUserName(username)
@@ -221,25 +218,25 @@ That’s why you see the message: <code class="highlighter-rouge">error: value f
 
 <p>We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidatorNel</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidatorNec</span> <span class="o">{</span>
 
-  <span class="k">type</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNel</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">A</span><span class="o">]</span>
+  <span class="k">type</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ValidatedNec</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">A</span><span class="o">]</span>
 
   <span class="k">private</span> <span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">))</span> <span class="n">userName</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="nc">UsernameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNel</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">userName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z0-9]+$"</span><span class="o">))</span> <span class="n">userName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">UsernameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
 
   <span class="k">private</span> <span class="k">def</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">password</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">))</span> <span class="n">password</span><span class="o">.</span><span class="n">validNel</span>
-    <span class="k">else</span> <span class="nc">PasswordDoesNotMeetCriteria</span><span class="o">.</span><span class="n">invalidNel</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">password</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"</span><span class="o">))</span> <span class="n">password</span><span class="o">.</span><span class="n">validNec</span>
+    <span class="k">else</span> <span class="nc">PasswordDoesNotMeetCriteria</span><span class="o">.</span><span class="n">invalidNec</span>
 
   <span class="k">private</span> <span class="k">def</span> <span class="n">validateFirstName</span><span class="o">(</span><span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">firstName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">firstName</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="nc">FirstNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNel</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">firstName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">firstName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">FirstNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
 
   <span class="k">private</span> <span class="k">def</span> <span class="n">validateLastName</span><span class="o">(</span><span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">lastName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">lastName</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNel</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">lastName</span><span class="o">.</span><span class="n">matches</span><span class="o">(</span><span class="s">"^[a-zA-Z]+$"</span><span class="o">))</span> <span class="n">lastName</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">.</span><span class="n">invalidNec</span>
 
   <span class="k">private</span> <span class="k">def</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="o">)</span> <span class="n">age</span><span class="o">.</span><span class="n">validNel</span> <span class="k">else</span> <span class="nc">AgeIsInvalid</span><span class="o">.</span><span class="n">invalidNel</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="mi">75</span><span class="o">)</span> <span class="n">age</span><span class="o">.</span><span class="n">validNec</span> <span class="k">else</span> <span class="nc">AgeIsInvalid</span><span class="o">.</span><span class="n">invalidNec</span>
 
   <span class="k">def</span> <span class="n">validateForm</span><span class="o">(</span><span class="n">username</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResult</span><span class="o">[</span><span class="kt">RegistrationData</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
     <span class="o">(</span><span class="n">validateUserName</span><span class="o">(</span><span class="n">username</span><span class="o">),</span>
@@ -251,43 +248,43 @@ That’s why you see the message: <code class="highlighter-rouge">error: value f
 
 <span class="o">}</span>
 
-<span class="k">object</span> <span class="nc">FormValidatorNel</span> <span class="k">extends</span> <span class="nc">FormValidatorNel</span>
+<span class="k">object</span> <span class="nc">FormValidatorNec</span> <span class="k">extends</span> <span class="nc">FormValidatorNec</span>
 </code></pre>
 </div>
 
 <p>Let’s see what changed here:</p>
 
 <ol>
-  <li>In this new implementation, we’re using a <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyList.scala">NonEmptyList</a>, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you’ll get a list of <code class="highlighter-rouge">DomainValidation</code>.</li>
-  <li><code class="highlighter-rouge">ValidatedNel[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyList[DomainValidation], A]</code>. When you use <code class="highlighter-rouge">ValidatedNel</code> you’re stating that your accumulative structure will be a <code class="highlighter-rouge">NonEmptyList</code>. With <code class="highlighter-rouge">Validated</code>, you have the choice about which data structure you want for reporting the errors (more on that soon).</li>
+  <li>In this new implementation, we’re using a <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyChain.scala">NonEmptyChain</a>, a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you’ll get a chain of <code class="highlighter-rouge">DomainValidation</code>.</li>
+  <li><code class="highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. When you use <code class="highlighter-rouge">ValidatedNec</code> you’re stating that your accumulative structure will be a <code class="highlighter-rouge">NonEmptyChain</code>. With <code class="highlighter-rouge">Validated</code>, you have the choice about which data structure you want for reporting the errors (more on that soon).</li>
   <li>We’ve declared the type alias <code class="highlighter-rouge">ValidationResult</code> that conveniently expresses the return type of our validation.</li>
-  <li><code class="highlighter-rouge">.validNel</code> and <code class="highlighter-rouge">.invalidNel</code> combinators lets you <em>lift</em> the success or failure in their respective container (either a <code class="highlighter-rouge">Valid</code> or <code class="highlighter-rouge">Invalid[NonEmptyList[A]]</code>).</li>
-  <li>The <a href="../typeclasses/applicative.html">applicative</a> syntax <code class="highlighter-rouge">(a, b, c, ...).mapN(...)</code> provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the <code class="highlighter-rouge">NonEmptyList</code>. Then, we transform that product with <code class="highlighter-rouge">mapN</code> into a valid instance of <code class="highlighter-rouge">RegistrationData</code>.</li>
+  <li><code class="highlighter-rouge">.validNec</code> and <code class="highlighter-rouge">.invalidNec</code> combinators lets you <em>lift</em> the success or failure in their respective container (either a <code class="highlighter-rouge">Valid</code> or <code class="highlighter-rouge">Invalid[NonEmptyChain[A]]</code>).</li>
+  <li>The <a href="../typeclasses/applicative.html">applicative</a> syntax <code class="highlighter-rouge">(a, b, c, ...).mapN(...)</code> provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the <code class="highlighter-rouge">NonEmptyChain</code>. Then, we transform that product with <code class="highlighter-rouge">mapN</code> into a valid instance of <code class="highlighter-rouge">RegistrationData</code>.</li>
 </ol>
 
 <p><strong>Deprecation notice:</strong> since cats <code class="highlighter-rouge">1.0.0-MF</code> the cartesian syntax <code class="highlighter-rouge">|@|</code> for applicatives is deprecated. If you’re using <code class="highlighter-rouge">0.9.0</code> or less, you can use the syntax: <code class="highlighter-rouge">(a |@| b |@| ...).map(...)</code>.</p>
 
-<p>Note that, at the end, we expect to lift the result of the validation functions in a <code class="highlighter-rouge">RegistrationData</code> instance. If the process fails, we’ll get our <code class="highlighter-rouge">NonEmptyList</code> detailing what went wrong.</p>
+<p>Note that, at the end, we expect to lift the result of the validation functions in a <code class="highlighter-rouge">RegistrationData</code> instance. If the process fails, we’ll get our <code class="highlighter-rouge">NonEmptyChain</code> detailing what went wrong.</p>
 
 <p>For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">FormValidatorNel</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"Passw0r$1234"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
 <span class="o">)</span>
-<span class="c1">// res2: FormValidatorNel.ValidationResult[RegistrationData] = Valid(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
+<span class="c1">// res2: FormValidatorNec.ValidationResult[RegistrationData] = Valid(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
 </span>
-<span class="nc">FormValidatorNel</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+<span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe%%%"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
 <span class="o">)</span>
-<span class="c1">// res3: FormValidatorNel.ValidationResult[RegistrationData] = Invalid(NonEmptyList(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria))
+<span class="c1">// res3: FormValidatorNec.ValidationResult[RegistrationData] = Invalid(Chain(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria))
 </span></code></pre>
 </div>
 
@@ -295,26 +292,26 @@ That’s why you see the message: <code class="highlighter-rouge">error: value f
 
 <h3 id="a-short-detour">A short detour</h3>
 
-<p>As previously stated, <code class="highlighter-rouge">ValidatedNel[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyList[DomainValidation], A]</code>. Typically, you’ll see that <code class="highlighter-rouge">Validated</code> is accompanied by a <code class="highlighter-rouge">NonEmptyList</code> when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you’re not limited to the aforementioned construction.</p>
+<p>As previously stated, <code class="highlighter-rouge">ValidatedNec[DomainValidation, A]</code> is an alias for <code class="highlighter-rouge">Validated[NonEmptyChain[DomainValidation], A]</code>. Typically, you’ll see that <code class="highlighter-rouge">Validated</code> is accompanied by a <code class="highlighter-rouge">NonEmptyChain</code> when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you’re not limited to the aforementioned construction.</p>
 
-<p>For doing this, you have to provide a <code class="highlighter-rouge">Semigroup</code> instance. <code class="highlighter-rouge">NonEmptyList</code>, by definition has its own <code class="highlighter-rouge">Semigroup</code>. For those who don’t know what a <code class="highlighter-rouge">Semigroup</code> is, you can find out more <a href="../typeclasses/semigroup.html">here</a>.</p>
+<p>For doing this, you have to provide a <code class="highlighter-rouge">Semigroup</code> instance. <code class="highlighter-rouge">NonEmptyChain</code>, by definition has its own <code class="highlighter-rouge">Semigroup</code>. For those who don’t know what a <code class="highlighter-rouge">Semigroup</code> is, you can find out more <a href="../typeclasses/semigroup.html">here</a>.</p>
 
 <h4 id="accumulative-structures">Accumulative Structures</h4>
 
-<p>Let’s take a look about how a <code class="highlighter-rouge">Semigroup</code> works in a <code class="highlighter-rouge">NonEmptyList</code>:</p>
+<p>Let’s take a look about how a <code class="highlighter-rouge">Semigroup</code> works in a <code class="highlighter-rouge">NonEmptyChain</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">UsernameHasSpecialCharacters</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">NonEmptyList</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">FirstNameHasSpecialCharacters</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="nc">LastNameHasSpecialCharacters</span><span class="o">))</span>
-<span class="c1">// res4: cats.data.NonEmptyList[DomainValidation] = NonEmptyList(UsernameHasSpecialCharacters, FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">one</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">UsernameHasSpecialCharacters</span><span class="o">)</span> <span class="o">|+|</span> <span class="nc">NonEmptyChain</span><span class="o">[</span><span class="kt">DomainValidation</span><span class="o">](</span><span class="nc">FirstNameHasSpecialCharacters</span><span class="o">,</span> <span class="nc">LastNameHasSpecialCharacters</span><span class="o">)</span>
+<span class="c1">// res4: cats.data.NonEmptyChain[DomainValidation] = Chain(UsernameHasSpecialCharacters, FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
 </span></code></pre>
 </div>
 
-<p>We’re combining a couple of <code class="highlighter-rouge">NonEmptyList</code>’s. The first one has its mandatory element (note that we’ve built an instance of it with <code class="highlighter-rouge">.one</code>) and the second has a couple of elements. As you can see, the output of the combination, expressed by the <code class="highlighter-rouge">|+|</code> operator is another <code class="highlighter-rouge">NonEmptyList</code> with the three elements.</p>
+<p>We’re combining a couple of <code class="highlighter-rouge">NonEmptyChain</code>s. The first one has its mandatory element (note that we’ve built an instance of it with <code class="highlighter-rouge">.one</code>) and the second has a couple of elements. As you can see, the output of the combination, expressed by the <code class="highlighter-rouge">|+|</code> operator is another <code class="highlighter-rouge">NonEmptyChain</code> with the three elements.</p>
 
 <p>But, what about if we want <em>another</em> way of combining? We can provide our custom <code class="highlighter-rouge">Semigroup</code> instance with the desired combining logic and pass it implicitly to your scope.</p>
 
 <h3 id="going-back-and-forth">Going back and forth</h3>
 
-<p>cats offers you a nice set of combinators for transforming your <code class="highlighter-rouge">Validated</code> based approach to an <code class="highlighter-rouge">Either</code> one and vice-versa.
+<p>Cats offers you a nice set of combinators for transforming your <code class="highlighter-rouge">Validated</code> based approach to an <code class="highlighter-rouge">Either</code> one and vice-versa.
 We’ve used <code class="highlighter-rouge">.toValidated</code> in our second example, now let’s see how to use <code class="highlighter-rouge">.toEither</code>.</p>
 
 <h4 id="from-validated-to-either">From <code class="highlighter-rouge">Validated</code> to <code class="highlighter-rouge">Either</code></h4>
@@ -322,28 +319,28 @@ We’ve used <code class="highlighter-rouge">.toValidated</code> in our second e
 <p>To do this, simply use <code class="highlighter-rouge">.toEither</code> combinator:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Successful case
-</span><span class="nc">FormValidatorNel</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+</span><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"Passw0r$1234"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">21</span>
 <span class="o">).</span><span class="n">toEither</span>
-<span class="c1">// res6: Either[cats.data.NonEmptyList[DomainValidation],RegistrationData] = Right(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
+<span class="c1">// res6: Either[cats.data.NonEmptyChain[DomainValidation],RegistrationData] = Right(RegistrationData(Joe,Passw0r$1234,John,Doe,21))
 </span>
 <span class="c1">// Invalid case
-</span><span class="nc">FormValidatorNel</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
+</span><span class="nc">FormValidatorNec</span><span class="o">.</span><span class="n">validateForm</span><span class="o">(</span>
   <span class="n">username</span> <span class="k">=</span> <span class="s">"Joe123#"</span><span class="o">,</span>
   <span class="n">password</span> <span class="k">=</span> <span class="s">"password"</span><span class="o">,</span>
   <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span><span class="o">,</span>
   <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span><span class="o">,</span>
   <span class="n">age</span> <span class="k">=</span> <span class="mi">5</span>
 <span class="o">).</span><span class="n">toEither</span>
-<span class="c1">// res8: Either[cats.data.NonEmptyList[DomainValidation],RegistrationData] = Left(NonEmptyList(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria, AgeIsInvalid))
+<span class="c1">// res8: Either[cats.data.NonEmptyChain[DomainValidation],RegistrationData] = Left(Chain(UsernameHasSpecialCharacters, PasswordDoesNotMeetCriteria, AgeIsInvalid))
 </span></code></pre>
 </div>
 
-<p>With this conversion, as you can see, we got an <code class="highlighter-rouge">Either</code> with a <code class="highlighter-rouge">NonEmptyList</code> detailing the possible validation errors or our <code class="highlighter-rouge">RegistrationData</code> object.</p>
+<p>With this conversion, as you can see, we got an <code class="highlighter-rouge">Either</code> with a <code class="highlighter-rouge">NonEmptyChain</code> detailing the possible validation errors or our <code class="highlighter-rouge">RegistrationData</code> object.</p>
 
 <h2 id="another-case">Another case</h2>
 
@@ -445,7 +442,7 @@ for all of it up front. Let’s start with two pieces of data.</p>
 </div>
 
 <p>We’ve run into a problem. In the case where both have errors, we want to report both. But we have
-no way of combining the two errors into one error! Perhaps we can put both errors into a <code class="highlighter-rouge">List</code>,
+no way of combining the two errors into one error! Perhaps we can put both errors into a <code class="highlighter-rouge">Chain</code>,
 but that seems needlessly specific - clients may want to define their own way of combining errors.</p>
 
 <p>How then do we abstract over a binary operation? The <code class="highlighter-rouge">Semigroup</code> type class captures this idea.</p>
@@ -463,25 +460,25 @@ but that seems needlessly specific - clients may want to define their own way of
 </div>
 
 <p>Perfect! But.. going back to our example, we don’t have a way to combine <code class="highlighter-rouge">ConfigError</code>s. But as clients,
-we can change our <code class="highlighter-rouge">Validated</code> values where the error can be combined, say, a <code class="highlighter-rouge">List[ConfigError]</code>. It is
-more common however to use a <code class="highlighter-rouge">NonEmptyList[ConfigError]</code> - the <code class="highlighter-rouge">NonEmptyList</code> statically guarantees we
+we can change our <code class="highlighter-rouge">Validated</code> values where the error can be combined, say, a <code class="highlighter-rouge">Chain[ConfigError]</code>. It is
+more common however to use a <code class="highlighter-rouge">NonEmptyChain[ConfigError]</code> - the <code class="highlighter-rouge">NonEmptyChain</code> statically guarantees we
 have at least one value, which aligns with the fact that if we have an <code class="highlighter-rouge">Invalid</code>, then we most
 certainly have at least one error. This technique is so common there is a convenient method on <code class="highlighter-rouge">Validated</code>
-called <code class="highlighter-rouge">toValidatedNel</code> that turns any <code class="highlighter-rouge">Validated[E, A]</code> value to a <code class="highlighter-rouge">Validated[NonEmptyList[E], A]</code>.
-Additionally, the type alias <code class="highlighter-rouge">ValidatedNel[E, A]</code> is provided.</p>
+called <code class="highlighter-rouge">toValidatedNec</code> that turns any <code class="highlighter-rouge">Validated[E, A]</code> value to a <code class="highlighter-rouge">Validated[NonEmptyChain[E], A]</code>.
+Additionally, the type alias <code class="highlighter-rouge">ValidatedNec[E, A]</code> is provided.</p>
 
 <p>Time to parse.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.SemigroupK</span>
-<span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
+<span class="k">import</span> <span class="nn">cats.data.NonEmptyChain</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">ConnectionParams</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">port</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"not an int"</span><span class="o">)))</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">nelSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
 
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">readString</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Read</span><span class="o">.</span><span class="n">stringRead</span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">readInt</span><span class="k">:</span> <span class="kt">Read</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Read</span><span class="o">.</span><span class="n">intRead</span>
@@ -490,20 +487,20 @@ Additionally, the type alias <code class="highlighter-rouge">ValidatedNel[E, A]<
 
 <p>Any and all errors are reported!</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v1</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"url"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v1: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(NonEmptyList(MissingConfig(url), ParseError(port)))
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v1</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"url"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
+<span class="c1">// v1: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Invalid(Chain(MissingConfig(url), ParseError(port)))
 </span>
-<span class="k">val</span> <span class="n">v2</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v2: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Invalid(NonEmptyList(ParseError(port)))
+<span class="k">val</span> <span class="n">v2</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
+<span class="c1">// v2: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Invalid(Chain(ParseError(port)))
 </span>
 <span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"endpoint"</span><span class="o">,</span> <span class="s">"127.0.0.1"</span><span class="o">),</span> <span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">)))</span>
 <span class="c1">// config: Config = Config(Map(endpoint -&gt; 127.0.0.1, port -&gt; 1234))
 </span>
-<span class="k">val</span> <span class="n">v3</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
-<span class="c1">// v3: cats.data.Validated[cats.data.NonEmptyList[ConfigError],ConnectionParams] = Valid(ConnectionParams(127.0.0.1,1234))
+<span class="k">val</span> <span class="n">v3</span> <span class="k">=</span> <span class="n">parallelValidate</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"endpoint"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                          <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"port"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)(</span><span class="nc">ConnectionParams</span><span class="o">.</span><span class="n">apply</span><span class="o">)</span>
+<span class="c1">// v3: cats.data.Validated[cats.data.NonEmptyChain[ConfigError],ConnectionParams] = Valid(ConnectionParams(127.0.0.1,1234))
 </span></code></pre>
 </div>
 
@@ -543,10 +540,10 @@ Additionally, the type alias <code class="highlighter-rouge">ValidatedNel[E, A]<
 <p>We can now easily ask for several bits of configuration and get any and all errors returned back.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Apply</span>
-<span class="k">import</span> <span class="nn">cats.data.ValidatedNel</span>
+<span class="k">import</span> <span class="nn">cats.data.ValidatedNec</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="n">nelSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">necSemigroup</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">].</span><span class="n">algebra</span><span class="o">[</span><span class="kt">ConfigError</span><span class="o">]</span>
 
 <span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="nc">Map</span><span class="o">((</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"cat"</span><span class="o">),</span> <span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="s">"not a number"</span><span class="o">),</span> <span class="o">(</span><span class="s">"houseNumber"</span><span class="o">,</span> <span class="s">"1234"</span><span class="o">),</span> <span class="o">(</span><span class="s">"lane"</span><span class="o">,</span> <span class="s">"feline street"</span><span class="o">)))</span>
 
@@ -557,14 +554,14 @@ Additionally, the type alias <code class="highlighter-rouge">ValidatedNel[E, A]<
 
 <p>Thus.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">personFromConfig</span><span class="k">:</span> <span class="kt">ValidatedNel</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Person</span><span class="o">]</span> <span class="k">=</span>
-  <span class="nc">Apply</span><span class="o">[</span><span class="kt">ValidatedNel</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">map4</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"name"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"age"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">,</span>
-                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"street"</span><span class="o">).</span><span class="n">toValidatedNel</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">personFromConfig</span><span class="k">:</span> <span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Person</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">Apply</span><span class="o">[</span><span class="kt">ValidatedNec</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">map4</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"name"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"age"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">,</span>
+                                           <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"street"</span><span class="o">).</span><span class="n">toValidatedNec</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">case</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">,</span> <span class="nc">Address</span><span class="o">(</span><span class="n">houseNumber</span><span class="o">,</span> <span class="n">street</span><span class="o">))</span>
   <span class="o">}</span>
-<span class="c1">// personFromConfig: cats.data.ValidatedNel[ConfigError,Person] = Invalid(NonEmptyList(ParseError(age), MissingConfig(house_number), MissingConfig(street)))
+<span class="c1">// personFromConfig: cats.data.ValidatedNec[ConfigError,Person] = Invalid(Chain(ParseError(age), MissingConfig(house_number), MissingConfig(street)))
 </span></code></pre>
 </div>
 
@@ -613,8 +610,8 @@ let’s implement the <code class="highlighter-rouge">Monad</code> type class.</
 <p>However, the <code class="highlighter-rouge">ap</code> behavior defined in terms of <code class="highlighter-rouge">flatMap</code> does not behave the same as that of
 our <code class="highlighter-rouge">ap</code> defined above. Observe:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v</span> <span class="k">=</span> <span class="n">validatedMonad</span><span class="o">.</span><span class="n">tuple2</span><span class="o">(</span><span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNel</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"oops"</span><span class="o">),</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNel</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">](</span><span class="s">"uh oh"</span><span class="o">))</span>
-<span class="c1">// v: cats.data.Validated[cats.data.NonEmptyList[String],(Int, Double)] = Invalid(NonEmptyList(oops))
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">v</span> <span class="k">=</span> <span class="n">validatedMonad</span><span class="o">.</span><span class="n">tuple2</span><span class="o">(</span><span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"oops"</span><span class="o">),</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">invalidNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">](</span><span class="s">"uh oh"</span><span class="o">))</span>
+<span class="c1">// v: cats.data.Validated[cats.data.NonEmptyChain[String],(Int, Double)] = Invalid(Chain(oops))
 </span></code></pre>
 </div>
 
@@ -635,7 +632,7 @@ that of <code class="highlighter-rouge">ap</code>, not good. Therefore, <code cl
 <p>If you do want error accumulation but occasionally run into places where you sequential validation is needed, then <code class="highlighter-rouge">Validated</code> provides a couple methods that may be helpful.</p>
 
 <h3 id="andthen"><code class="highlighter-rouge">andThen</code></h3>
-<p>The <code class="highlighter-rouge">andThen</code> method is similar to <code class="highlighter-rouge">flatMap</code> (such as <code class="highlighter-rouge">Either.flatMap</code>). In the cause of success, it passes the valid value into a function that returns a new <code class="highlighter-rouge">Validated</code> instance.</p>
+<p>The <code class="highlighter-rouge">andThen</code> method is similar to <code class="highlighter-rouge">flatMap</code> (such as <code class="highlighter-rouge">Either.flatMap</code>). In the case of success, it passes the valid value into a function that returns a new <code class="highlighter-rouge">Validated</code> instance.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">houseNumber</span> <span class="k">=</span> <span class="n">config</span><span class="o">.</span><span class="n">parse</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"house_number"</span><span class="o">).</span><span class="n">andThen</span><span class="o">{</span> <span class="n">n</span> <span class="k">=&gt;</span>
    <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Validated</span><span class="o">.</span><span class="n">valid</span><span class="o">(</span><span class="n">n</span><span class="o">)</span>

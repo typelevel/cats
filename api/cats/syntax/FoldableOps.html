@@ -1060,6 +1060,45 @@ res2: scala.util.Either[<span class="std">String</span>,<span class="std">Option
 scala&gt; <span class="kw">val</span> keys3 = <span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"2"</span>, <span class="lit">"4"</span>, <span class="lit">"x"</span>)
 scala&gt; keys3.collectFirstSomeM(parseInt(_) map map1.get)
 res3: scala.util.Either[<span class="std">String</span>,<span class="std">Option</span>[<span class="std">String</span>]] = Right(<span class="std">Some</span>(Four))</pre></div></div>
+    </li><li name="cats.syntax.FoldableOps#collectFold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collectFold[M](f:PartialFunction[A,M])(implicitF:cats.Foldable[F],implicitM:cats.Monoid[M]):M"></a><a id="collectFold[M](PartialFunction[A,M])(Foldable[F],Monoid[M]):M"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps.html#collectFold[M](f:PartialFunction[A,M])(implicitF:cats.Foldable[F],implicitM:cats.Monoid[M]):M" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collectFold</span><span class="tparams">[<span name="M">M</span>]</span><span class="params">(<span name="f">f: <a href="http://www.scala-lang.org/api/2.12.6/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.syntax.FoldableOps.A">A</span>, <span class="extype" name="cats.syntax.FoldableOps.collectFold.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps.F">F</span>]</span>, <span name="M">M: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.syntax.FoldableOps.collectFold.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FoldableOps.collectFold.M">M</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Tear down a subset of this structure using a <code>PartialFunction</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tear down a subset of this structure using a <code>PartialFunction</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> xs = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)
+scala&gt; xs.collectFold { <span class="kw">case</span> n <span class="kw">if</span> n % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> n }
+res0: <span class="std">Int</span> = <span class="num">6</span></pre></div></div>
+    </li><li name="cats.syntax.FoldableOps#collectSomeFold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collectSomeFold[M](f:A=&gt;Option[M])(implicitF:cats.Foldable[F],implicitM:cats.Monoid[M]):M"></a><a id="collectSomeFold[M]((A)⇒Option[M])(Foldable[F],Monoid[M]):M"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps.html#collectSomeFold[M](f:A=&gt;Option[M])(implicitF:cats.Foldable[F],implicitM:cats.Monoid[M]):M" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collectSomeFold</span><span class="tparams">[<span name="M">M</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.FoldableOps.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.6/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.syntax.FoldableOps.collectSomeFold.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps.F">F</span>]</span>, <span name="M">M: <a href="../index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.syntax.FoldableOps.collectSomeFold.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FoldableOps.collectSomeFold.M">M</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Tear down a subset of this structure using a <code>A =&gt; Option[M]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tear down a subset of this structure using a <code>A =&gt; Option[M]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="kw">val</span> xs = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)
+scala&gt; <span class="kw">def</span> f(n: <span class="std">Int</span>): <span class="std">Option</span>[<span class="std">Int</span>] = <span class="kw">if</span> (n % <span class="num">2</span> == <span class="num">0</span>) <span class="std">Some</span>(n) <span class="kw">else</span> <span class="std">None</span>
+scala&gt; xs.collectSomeFold(f)
+res0: <span class="std">Int</span> = <span class="num">6</span></pre></div></div>
     </li><li name="cats.syntax.FoldableOps#contains_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contains_(v:A)(implicitev:cats.Eq[A],implicitF:cats.Foldable[F]):Boolean"></a><a id="contains_(A)(Eq[A],Foldable[F]):Boolean"></a>
       <span class="permalink">

@@ -1093,8 +1093,11 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="name">as</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.as.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.Functor.as.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.as.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the <code>A</code> value in <code>F[A]</code> with the supplied value.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForList
+
+scala&gt; Functor[<span class="std">List</span>].as(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>), <span class="lit">"hello"</span>)
+res0: <span class="std">List</span>[<span class="std">String</span>] = <span class="std">List</span>(hello, hello, hello)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -1428,10 +1431,12 @@ res0: <span class="std">Map</span>[<span class="std">Int</span>,<span class="std
       </span>
       
       <p class="shortcomment cmt">Tuple the values in fa with the result of applying a function
-with the value
-</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
-with the value
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+with the value</p><div class="fullcomment"><div class="comment cmt"><p>Tuple the values in fa with the result of applying a function
+with the value</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForOption
+
+scala&gt; Functor[<span class="std">Option</span>].fproduct(<span class="std">Option</span>(<span class="num">42</span>))(_.toString)
+res0: <span class="std">Option</span>[(<span class="std">Int</span>, <span class="std">String</span>)] = <span class="std">Some</span>((<span class="num">42</span>,<span class="num">42</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -1545,9 +1550,12 @@ res1: FiniteDuration = <span class="num">5</span> seconds</pre></div><dl class="
         <span class="name">lift</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Functor.lift.A">A</span>) ⇒ <span class="extype" name="cats.Functor.lift.B">B</span></span>)</span><span class="result">: (<span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.lift.A">A</span>]) ⇒ <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.lift.B">B</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Lift a function f to operate on Functors
-</p><div class="fullcomment"><div class="comment cmt"><p>Lift a function f to operate on Functors
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Lift a function f to operate on Functors</p><div class="fullcomment"><div class="comment cmt"><p>Lift a function f to operate on Functors</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForOption
+
+scala&gt; <span class="kw">val</span> o = <span class="std">Option</span>(<span class="num">42</span>)
+scala&gt; Functor[<span class="std">Option</span>].lift((x: <span class="std">Int</span>) <span class="kw">=&gt;</span> x + <span class="num">10</span>)(o)
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">52</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Applicative#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map[A,B](fa:F[A])(f:A=&gt;B):F[B]"></a><a id="map[A,B](F[A])((A)⇒B):F[B]"></a>
       <span class="permalink">
@@ -2554,8 +2562,12 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
         <span class="name">tupleLeft</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.tupleLeft.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.Functor.tupleLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[(<span class="extype" name="cats.Functor.tupleLeft.B">B</span>, <span class="extype" name="cats.Functor.tupleLeft.A">A</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the left.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the left.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the left.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the left.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> scala.collection.immutable.Queue
+scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForQueue
+
+scala&gt; Functor[Queue].tupleLeft(Queue(<span class="lit">"hello"</span>, <span class="lit">"world"</span>), <span class="num">42</span>)
+res0: scala.collection.immutable.Queue[(<span class="std">Int</span>, <span class="std">String</span>)] = Queue((<span class="num">42</span>,hello), (<span class="num">42</span>,world))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Functor#tupleRight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="tupleRight[A,B](fa:F[A],b:B):F[(A,B)]"></a><a id="tupleRight[A,B](F[A],B):F[(A,B)]"></a>
       <span class="permalink">
@@ -2571,8 +2583,12 @@ res0: (<span class="std">List</span>[<span class="std">String</span>], <span cla
         <span class="name">tupleRight</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.tupleRight.A">A</span>]</span>, <span name="b">b: <span class="extype" name="cats.Functor.tupleRight.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[(<span class="extype" name="cats.Functor.tupleRight.A">A</span>, <span class="extype" name="cats.Functor.tupleRight.B">B</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.</p><div class="fullcomment"><div class="comment cmt"><p>Tuples the <code>A</code> value in <code>F[A]</code> with the supplied <code>B</code> value, with the <code>B</code> value on the right.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> scala.collection.immutable.Queue
+scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForQueue
+
+scala&gt; Functor[Queue].tupleRight(Queue(<span class="lit">"hello"</span>, <span class="lit">"world"</span>), <span class="num">42</span>)
+res0: scala.collection.immutable.Queue[(<span class="std">String</span>, <span class="std">Int</span>)] = Queue((hello,<span class="num">42</span>), (world,<span class="num">42</span>))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="cats.Applicative#unit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unit:F[Unit]"></a>
       <span class="permalink">
@@ -2662,9 +2678,11 @@ res3: <span class="std">List</span>[<span class="std">Unit</span>] = <span class
         <span class="name">void</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.Alternative.F">F</span>[<span class="extype" name="cats.Functor.void.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Alternative.F">F</span>[<a href="http://www.scala-lang.org/api/2.12.6/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
-      <p class="shortcomment cmt">Empty the fa of the values, preserving the structure
-</p><div class="fullcomment"><div class="comment cmt"><p>Empty the fa of the values, preserving the structure
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+      <p class="shortcomment cmt">Empty the fa of the values, preserving the structure</p><div class="fullcomment"><div class="comment cmt"><p>Empty the fa of the values, preserving the structure</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForList
+
+scala&gt; Functor[<span class="std">List</span>].void(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>))
+res0: <span class="std">List</span>[<span class="std">Unit</span>] = <span class="std">List</span>((), (), ())</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
@@ -2784,8 +2802,12 @@ implemented as a type cast. It could be implemented as <code>map(identity)</code
 according to the functor laws, that should be equal to <code>fa</code>, and a type
 cast is often much more performant.
 See <a href="https://github.com/typelevel/cats/issues/1080#issuecomment-225892635" target="_blank">this example</a>
-of <code>widen</code> creating a <code>ClassCastException</code>.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
+of <code>widen</code> creating a <code>ClassCastException</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.Functor
+scala&gt; <span class="kw">import</span> cats.implicits.catsStdInstancesForOption
+
+scala&gt; <span class="kw">val</span> s = <span class="std">Some</span>(<span class="num">42</span>)
+scala&gt; Functor[<span class="std">Option</span>].widen(s)
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">42</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Functor.html" class="extype" name="cats.Functor">Functor</a></dd></dl></div>
     </li>
               </ol>
             </div>

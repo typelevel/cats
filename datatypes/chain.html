@@ -1,0 +1,174 @@
+<html><head><title>Cats: Chain</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Chain" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Chain" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li>                <li><a href="/cats/datatypes.html" class="">Data Types</a></li> <li><a href="/cats/datatypes/chain.html" class=" active ">Chain</a></li> <li><a href="/cats/datatypes/const.html" class="">Const</a></li> <li><a href="/cats/datatypes/either.html" class="">Either</a></li> <li><a href="/cats/datatypes/eval.html" class="">Eval</a></li> <li><a href="/cats/datatypes/freeapplicative.html" class="">FreeApplicatives</a></li> <li><a href="/cats/datatypes/freemonad.html" class="">FreeMonads</a></li> <li><a href="/cats/datatypes/functionk.html" class="">FunctionK</a></li> <li><a href="/cats/datatypes/id.html" class="">Id</a></li> <li><a href="/cats/datatypes/ior.html" class="">Ior</a></li> <li><a href="/cats/datatypes/kleisli.html" class="">Kleisli</a></li> <li><a href="/cats/datatypes/nested.html" class="">Nested</a></li> <li><a href="/cats/datatypes/nel.html" class="">NonEmptyList</a></li> <li><a href="/cats/datatypes/oneand.html" class="">OneAnd</a></li> <li><a href="/cats/datatypes/optiont.html" class="">OptionT</a></li> <li><a href="/cats/datatypes/eithert.html" class="">EitherT</a></li> <li><a href="/cats/datatypes/iort.html" class="">IorT</a></li> <li><a href="/cats/datatypes/state.html" class="">State</a></li> <li><a href="/cats/datatypes/validated.html" class="">Validated</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="chain">Chain</h1>
+
+<p><code class="highlighter-rouge">Chain</code> is a data structure that allows constant time prepending and appending.
+This makes it especially efficient when used as a <code class="highlighter-rouge">Monoid</code>, e.g. with <code class="highlighter-rouge">Validated</code> or <code class="highlighter-rouge">Writer</code>.
+As such it aims to be used where <code class="highlighter-rouge">List</code> and <code class="highlighter-rouge">Vector</code> incur a performance penalty.</p>
+
+<p><code class="highlighter-rouge">List</code> is a great data type, it is very simple and easy to understand.
+It has very low overhead for the most important functions such as <code class="highlighter-rouge">fold</code> and <code class="highlighter-rouge">map</code> and also supports prepending a single element in constant time.</p>
+
+<p>Traversing a data structure with something like <code class="highlighter-rouge">Writer[List[Log], A]</code> or <code class="highlighter-rouge">ValidatedNel[Error, A]</code> is  powerful and allows us to precisely specify what kind of iteration we want to do while remaining succint.
+However, in terms of efficiency it’s a whole different story unfortunately.
+That is because both of these traversals make use of the <code class="highlighter-rouge">List</code> monoid (or the <code class="highlighter-rouge">NonEmptyList</code> semigroup), which by the nature of <code class="highlighter-rouge">List</code> is very inefficient.
+If you use <code class="highlighter-rouge">traverse</code> with a data structure with <code class="highlighter-rouge">n</code> elements and <code class="highlighter-rouge">Writer</code> or <code class="highlighter-rouge">Validated</code> as the <code class="highlighter-rouge">Applicative</code> type, you will end up with a runtime of <code class="highlighter-rouge">O(n^2)</code>.
+This is because, with <code class="highlighter-rouge">List</code>, appending a single element requires iterating over the entire data structure and therefore takes linear time.</p>
+
+<p>So <code class="highlighter-rouge">List</code> isn’t all that great for this use case, so let’s use <code class="highlighter-rouge">Vector</code> or <code class="highlighter-rouge">NonEmptyVector</code> instead, right?</p>
+
+<p>Well, <code class="highlighter-rouge">Vector</code> has its own problems and in this case it’s unfortunately not that much faster than <code class="highlighter-rouge">List</code> at all. You can check <a href="http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok">this blog post</a> by Li Haoyi for some deeper insight into <code class="highlighter-rouge">Vector</code>s issues.</p>
+
+<p><code class="highlighter-rouge">Chain</code> evolved from what used to be <code class="highlighter-rouge">fs2.Catenable</code> and Erik Osheim’s <a href="https://github.com/non/chain">Chain</a> library.
+Similar to <code class="highlighter-rouge">List</code>, it is also a very simple data structure, but unlike <code class="highlighter-rouge">List</code> it supports both constant O(1) time <code class="highlighter-rouge">append</code> and <code class="highlighter-rouge">prepend</code>.
+This makes its <code class="highlighter-rouge">Monoid</code> instance super performant and a much better fit for usage with <code class="highlighter-rouge">Validated</code>,<code class="highlighter-rouge">Writer</code>, <code class="highlighter-rouge">Ior</code> or <code class="highlighter-rouge">Const</code>.</p>
+
+<p>To utilize this Cats includes type aliases like <code class="highlighter-rouge">ValidatedNec</code> or <code class="highlighter-rouge">IorNec</code> as well as helper functions like <code class="highlighter-rouge">groupByNec</code> or <code class="highlighter-rouge">Validated.invalidNec</code>.</p>
+
+<p>To get a good idea of the performance improvements, here are some benchmarks that test monoidal append (higher score is better):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[info] Benchmark                                  Mode  Cnt   Score   Error  Units
+[info] CollectionMonoidBench.accumulateChain     thrpt   20  51.911 ± 7.453  ops/s
+[info] CollectionMonoidBench.accumulateList      thrpt   20   6.973 ± 0.781  ops/s
+[info] CollectionMonoidBench.accumulateVector    thrpt   20   6.304 ± 0.129  ops/s
+</code></pre>
+</div>
+
+<p>As you can see accumulating things with <code class="highlighter-rouge">Chain</code> is more than 7 times faster than <code class="highlighter-rouge">List</code> and over 8 times faster than <code class="highlighter-rouge">Vector</code>.
+So appending is a lot more performant than the standard library collections, but what about operations like <code class="highlighter-rouge">map</code> or <code class="highlighter-rouge">fold</code>?
+Fortunately we’ve also benchmarked these (again, higher score is better):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[info] Benchmark                           Mode  Cnt          Score         Error  Units
+[info] ChainBench.foldLeftLargeChain      thrpt   20        117.267 ±       1.815  ops/s
+[info] ChainBench.foldLeftLargeList       thrpt   20        135.954 ±       3.340  ops/s
+[info] ChainBench.foldLeftLargeVector     thrpt   20         61.613 ±       1.326  ops/s
+[info]
+[info] ChainBench.mapLargeChain           thrpt   20         59.379 ±       0.866  ops/s
+[info] ChainBench.mapLargeList            thrpt   20         66.729 ±       7.165  ops/s
+[info] ChainBench.mapLargeVector          thrpt   20         61.374 ±       2.004  ops/s
+</code></pre>
+</div>
+
+<p>While not as dominant, <code class="highlighter-rouge">Chain</code> holds its ground fairly well.
+It won’t have the random access performance of something like <code class="highlighter-rouge">Vector</code>, but in a lot of other cases, <code class="highlighter-rouge">Chain</code> seems to outperform it quite handily.
+So if you don’t perform a lot of random access on your data structure, then you should be fine using <code class="highlighter-rouge">Chain</code> extensively instead.</p>
+
+<p>So next time you write any code that uses <code class="highlighter-rouge">List</code> or <code class="highlighter-rouge">Vector</code> as a <code class="highlighter-rouge">Monoid</code>, be sure to use <code class="highlighter-rouge">Chain</code> instead!
+You can also check out the benchmarks <a href="https://github.com/typelevel/cats/blob/v1.3.0/bench/src/main/scala/cats/bench">here</a>.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<p><code class="highlighter-rouge">Chain</code> is a fairly simple data structure compared to something like <code class="highlighter-rouge">Vector</code>.
+It’s a simple ADT that has only 4 cases.
+It is either an empty <code class="highlighter-rouge">Chain</code> with no elements, a singleton <code class="highlighter-rouge">Chain</code> with exactly one element, a concatenation of two chains or a wrapper for another collect
+ion.
+In code it looks like this:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>
+<span class="c1">// defined class Chain
+</span>
+<span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">Empty</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">Nothing</span><span class="o">]</span>
+<span class="c1">// defined object Empty
+</span>
+<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Singleton</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<span class="c1">// defined class Singleton
+</span>
+<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Append</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">left</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">right</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<span class="c1">// defined class Append
+</span>
+<span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Wrap</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">seq</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<span class="c1">// defined class Wrap
+</span></code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">Append</code> constructor is what gives us the fast concatenation ability.
+Concatenating two existing <code class="highlighter-rouge">Chain</code>s, is just a call to the <code class="highlighter-rouge">Append</code> constructor, which is always constant time <code class="highlighter-rouge">O(1)</code>.</p>
+
+<p>In case we want to append or prepend a single element,
+ all we have to do is wrap the element with the <code class="highlighter-rouge">Singleton</code> constructor and then use the <code class="highlighter-rouge">Append</code> constructor to append or prepend the <code class="highlighter-rouge">Singleton</code> <code class="highlighter-rouge">Chain</code>.</p>
+
+<p>The <code class="highlighter-rouge">Wrap</code> constructor lifts any <code class="highlighter-rouge">Seq</code> into a <code class="highlighter-rouge">Chain</code>.
+This can be useful for concatenating already created collections that don’t have great concatenation performance.
+<code class="highlighter-rouge">Append(Wrap(list1), Wrap(list2)).foldMap(f)</code> will in general be much faster than just concatenating <code class="highlighter-rouge">list1</code> and <code class="highlighter-rouge">list2</code> and folding the result.</p>
+
+<p><code class="highlighter-rouge">Chain</code> doesn’t directly expose the <code class="highlighter-rouge">Append</code> and <code class="highlighter-rouge">Wrap</code> constructors, because the arguments might refer to an empty <code class="highlighter-rouge">Chain</code> or <code class="highlighter-rouge">Seq</code>.
+Instead of calling <code class="highlighter-rouge">Append</code> directly you can simply use <code class="highlighter-rouge">Chain.concat</code> or <code class="highlighter-rouge">++</code>, which will check if one of the arguments is empty:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">concat</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">c2</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">c2</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">c2</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">c</span>
+  <span class="k">else</span> <span class="nc">Append</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">c2</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>To construct a <code class="highlighter-rouge">Chain</code> from a <code class="highlighter-rouge">Seq</code> you should use <code class="highlighter-rouge">Chain.fromSeq</code> which will also check for emptiness:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">fromSeq</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">nil</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">lengthCompare</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="o">)</span>
+  <span class="k">else</span> <span class="nc">Wrap</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>In conclusion <code class="highlighter-rouge">Chain</code> supports constant time appending and prepending, because it builds an unbalance tree of <code class="highlighter-rouge">Append</code>s.
+This unbalanced tree will always allow iteration in linear time.</p>
+
+<h2 id="nonemptychain">NonEmptyChain</h2>
+
+<p><code class="highlighter-rouge">NonEmptyChain</code> is the non empty version of <code class="highlighter-rouge">Chain</code> it does not have a <code class="highlighter-rouge">Monoid</code> instance since it cannot be empty, but it does have a <code class="highlighter-rouge">Semigroup</code> instance.
+Likewise, it defines a <code class="highlighter-rouge">NonEmptyTraverse</code> instace, but no <code class="highlighter-rouge">TraverseFilter</code> instance.</p>
+
+<p>There are numerous ways to construct a <code class="highlighter-rouge">NonEmptyChain</code>, e.g. you can create one from a single element, a <code class="highlighter-rouge">NonEmptyList</code> or a <code class="highlighter-rouge">NonEmptyVector</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="c1">// import cats.data._
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+<span class="c1">// res0: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3, 4)
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromNonEmptyList</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)))</span>
+<span class="c1">// res1: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3)
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromNonEmptyVector</span><span class="o">(</span><span class="nc">NonEmptyVector</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">Vector</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)))</span>
+<span class="c1">// res2: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3)
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res3: cats.data.NonEmptyChain[Int] = Chain(1)
+</span></code></pre>
+</div>
+
+<p>You can also create an <code class="highlighter-rouge">Option</code> of <code class="highlighter-rouge">NonEmptyChain</code> from a <code class="highlighter-rouge">Chain</code> or any other collection type:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="c1">// import cats.data._
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChain</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+<span class="c1">// res4: Option[cats.data.NonEmptyChain[Int]] = Some(Chain(1, 2, 3))
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromSeq</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="n">empty</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span>
+<span class="c1">// res5: Option[cats.data.NonEmptyChain[Int]] = None
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromSeq</span><span class="o">(</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+<span class="c1">// res6: Option[cats.data.NonEmptyChain[Int]] = Some(Chain(1, 2, 3))
+</span></code></pre>
+</div>
+
+<p>Sometimes, you’ll want to prepend or append a single element to a chain and return the result as a <code class="highlighter-rouge">NonEmptyChain</code>:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="c1">// import cats.data._
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChainAppend</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="mi">4</span><span class="o">)</span>
+<span class="c1">// res7: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3, 4)
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChainAppend</span><span class="o">(</span><span class="nc">Chain</span><span class="o">.</span><span class="n">empty</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="mi">1</span><span class="o">)</span>
+<span class="c1">// res8: cats.data.NonEmptyChain[Int] = Chain(1)
+</span>
+<span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChainPrepend</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">Chain</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+<span class="c1">// res9: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3)
+</span></code></pre>
+</div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

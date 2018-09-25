@@ -695,9 +695,9 @@ to Scalaz by Brian McKenna.
               
         </dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#cond" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="cond[A,B](test:Boolean,b:=&gt;B,a:=&gt;A):cats.data.Validated[A,B]"></a><a id="cond[A,B](Boolean,⇒B,⇒A):Validated[A,B]"></a>
+      <a id="cond[E,A](test:Boolean,a:=&gt;A,e:=&gt;E):cats.data.Validated[E,A]"></a><a id="cond[E,A](Boolean,⇒A,⇒E):Validated[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#cond[A,B](test:Boolean,b:=&gt;B,a:=&gt;A):cats.data.Validated[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#cond[E,A](test:Boolean,a:=&gt;A,e:=&gt;E):cats.data.Validated[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -706,12 +706,12 @@ to Scalaz by Brian McKenna.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cond</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="test">test: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="b">b: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.cond.B">B</span></span>, <span name="a">a: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.cond.A">A</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.cond.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.cond.B">B</span>]</span>
+        <span class="name">cond</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="test">test: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="a">a: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.cond.A">A</span></span>, <span name="e">e: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.cond.E">E</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.cond.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.cond.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">If the condition is satisfied, return the given <code>B</code> as valid,
-otherwise return the given <code>A</code> as invalid.</p><div class="fullcomment"><div class="comment cmt"><p>If the condition is satisfied, return the given <code>B</code> as valid,
-otherwise return the given <code>A</code> as invalid.
+      <p class="shortcomment cmt">If the condition is satisfied, return the given <code>A</code> as valid,
+otherwise return the given <code>E</code> as invalid.</p><div class="fullcomment"><div class="comment cmt"><p>If the condition is satisfied, return the given <code>A</code> as valid,
+otherwise return the given <code>E</code> as invalid.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctionsBinCompat0#condNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="condNec[A,B](test:Boolean,b:=&gt;B,a:=&gt;A):cats.data.ValidatedNec[A,B]"></a><a id="condNec[A,B](Boolean,⇒B,⇒A):ValidatedNec[A,B]"></a>
@@ -733,9 +733,9 @@ otherwise return the given <code>A</code> as invalid NEC.</p><div class="fullcom
 otherwise return the given <code>A</code> as invalid NEC.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctionsBinCompat0</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#condNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="condNel[A,B](test:Boolean,b:=&gt;B,a:=&gt;A):cats.data.ValidatedNel[A,B]"></a><a id="condNel[A,B](Boolean,⇒B,⇒A):ValidatedNel[A,B]"></a>
+      <a id="condNel[E,A](test:Boolean,a:=&gt;A,e:=&gt;E):cats.data.ValidatedNel[E,A]"></a><a id="condNel[E,A](Boolean,⇒A,⇒E):ValidatedNel[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#condNel[A,B](test:Boolean,b:=&gt;B,a:=&gt;A):cats.data.ValidatedNel[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#condNel[E,A](test:Boolean,a:=&gt;A,e:=&gt;E):cats.data.ValidatedNel[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -744,12 +744,12 @@ otherwise return the given <code>A</code> as invalid NEC.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">condNel</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="test">test: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="b">b: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.condNel.B">B</span></span>, <span name="a">a: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.condNel.A">A</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.condNel.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.condNel.B">B</span>]</span>
+        <span class="name">condNel</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="test">test: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="a">a: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.condNel.A">A</span></span>, <span name="e">e: ⇒ <span class="extype" name="cats.data.ValidatedFunctions.condNel.E">E</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.condNel.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.condNel.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">If the condition is satisfied, return the given <code>B</code> as valid NEL,
-otherwise return the given <code>A</code> as invalid NEL.</p><div class="fullcomment"><div class="comment cmt"><p>If the condition is satisfied, return the given <code>B</code> as valid NEL,
-otherwise return the given <code>A</code> as invalid NEL.
+      <p class="shortcomment cmt">If the condition is satisfied, return the given <code>A</code> as valid NEL,
+otherwise return the given <code>E</code> as invalid NEL.</p><div class="fullcomment"><div class="comment cmt"><p>If the condition is satisfied, return the given <code>A</code> as valid NEL,
+otherwise return the given <code>E</code> as invalid NEL.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
@@ -914,9 +914,9 @@ the invalid of the <code>Validated</code> when the specified <code>Option</code>
               
         </dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#invalid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invalid[A,B](a:A):cats.data.Validated[A,B]"></a><a id="invalid[A,B](A):Validated[A,B]"></a>
+      <a id="invalid[E,A](e:E):cats.data.Validated[E,A]"></a><a id="invalid[E,A](E):Validated[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#invalid[A,B](a:A):cats.data.Validated[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#invalid[E,A](e:E):cats.data.Validated[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -925,10 +925,10 @@ the invalid of the <code>Validated</code> when the specified <code>Option</code>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invalid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.ValidatedFunctions.invalid.A">A</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.invalid.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.invalid.B">B</span>]</span>
+        <span class="name">invalid</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="cats.data.ValidatedFunctions.invalid.E">E</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.invalid.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.invalid.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts an <code>A</code> to a <code>Validated[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>A</code> to a <code>Validated[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.invalid[IllegalArgumentException, <span class="std">String</span>](<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Argument is nonzero"</span>))
+      <p class="shortcomment cmt">Converts an <code>E</code> to a <code>Validated[E, A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>E</code> to a <code>Validated[E, A]</code>.</p><p>For example:</p><pre>scala&gt; Validated.invalid[IllegalArgumentException, <span class="std">String</span>](<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Argument is nonzero"</span>))
 res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctionsBinCompat0#invalidNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="invalidNec[A,B](a:A):cats.data.ValidatedNec[A,B]"></a><a id="invalidNec[A,B](A):ValidatedNec[A,B]"></a>
@@ -948,9 +948,9 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Inv
       <p class="shortcomment cmt">Converts an <code>A</code> to a <code>ValidatedNec[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>A</code> to a <code>ValidatedNec[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.invalidNec[IllegalArgumentException, <span class="std">String</span>](<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Argument is nonzero"</span>))
 res0: ValidatedNec[IllegalArgumentException, <span class="std">String</span>] = Invalid(Chain(java.lang.IllegalArgumentException: Argument is nonzero))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctionsBinCompat0</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#invalidNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invalidNel[A,B](a:A):cats.data.ValidatedNel[A,B]"></a><a id="invalidNel[A,B](A):ValidatedNel[A,B]"></a>
+      <a id="invalidNel[E,A](e:E):cats.data.ValidatedNel[E,A]"></a><a id="invalidNel[E,A](E):ValidatedNel[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#invalidNel[A,B](a:A):cats.data.ValidatedNel[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#invalidNel[E,A](e:E):cats.data.ValidatedNel[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -959,10 +959,10 @@ res0: ValidatedNec[IllegalArgumentException, <span class="std">String</span>] = 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invalidNel</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.ValidatedFunctions.invalidNel.A">A</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.invalidNel.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.invalidNel.B">B</span>]</span>
+        <span class="name">invalidNel</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="e">e: <span class="extype" name="cats.data.ValidatedFunctions.invalidNel.E">E</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.invalidNel.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.invalidNel.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts an <code>A</code> to a <code>ValidatedNel[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>A</code> to a <code>ValidatedNel[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.invalidNel[IllegalArgumentException, <span class="std">String</span>](<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Argument is nonzero"</span>))
+      <p class="shortcomment cmt">Converts an <code>E</code> to a <code>ValidatedNel[E, A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an <code>E</code> to a <code>ValidatedNel[E, A]</code>.</p><p>For example:</p><pre>scala&gt; Validated.invalidNel[IllegalArgumentException, <span class="std">String</span>](<span class="kw">new</span> IllegalArgumentException(<span class="lit">"Argument is nonzero"</span>))
 res0: ValidatedNel[IllegalArgumentException, <span class="std">String</span>] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -1067,9 +1067,9 @@ res0: ValidatedNel[IllegalArgumentException, <span class="std">String</span>] = 
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#valid" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="valid[A,B](b:B):cats.data.Validated[A,B]"></a><a id="valid[A,B](B):Validated[A,B]"></a>
+      <a id="valid[E,A](a:A):cats.data.Validated[E,A]"></a><a id="valid[E,A](A):Validated[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#valid[A,B](b:B):cats.data.Validated[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#valid[E,A](a:A):cats.data.Validated[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1078,10 +1078,10 @@ res0: ValidatedNel[IllegalArgumentException, <span class="std">String</span>] = 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">valid</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.ValidatedFunctions.valid.B">B</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.valid.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.valid.B">B</span>]</span>
+        <span class="name">valid</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.ValidatedFunctions.valid.A">A</span></span>)</span><span class="result">: <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.ValidatedFunctions.valid.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.valid.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts a <code>B</code> to a <code>Validated[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>B</code> to a <code>Validated[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.valid[IllegalArgumentException, <span class="std">String</span>](<span class="lit">"Hello world"</span>)
+      <p class="shortcomment cmt">Converts a <code>A</code> to a <code>Validated[E, A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>A</code> to a <code>Validated[E, A]</code>.</p><p>For example:</p><pre>scala&gt; Validated.valid[IllegalArgumentException, <span class="std">String</span>](<span class="lit">"Hello world"</span>)
 res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Valid(Hello world)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctionsBinCompat0#validNec" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validNec[A,B](b:B):cats.data.ValidatedNec[A,B]"></a><a id="validNec[A,B](B):ValidatedNec[A,B]"></a>
@@ -1101,9 +1101,9 @@ res0: Validated[IllegalArgumentException, <span class="std">String</span>] = Val
       <p class="shortcomment cmt">Converts a <code>B</code> to a <code>ValidatedNec[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>B</code> to a <code>ValidatedNec[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.validNec[IllegalArgumentException, <span class="std">String</span>](<span class="lit">"Hello world"</span>)
 res0: ValidatedNec[IllegalArgumentException, <span class="std">String</span>] = Valid(Hello world)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctionsBinCompat0</dd></dl></div>
     </li><li name="cats.data.ValidatedFunctions#validNel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="validNel[A,B](b:B):cats.data.ValidatedNel[A,B]"></a><a id="validNel[A,B](B):ValidatedNel[A,B]"></a>
+      <a id="validNel[E,A](a:A):cats.data.ValidatedNel[E,A]"></a><a id="validNel[E,A](A):ValidatedNel[E,A]"></a>
       <span class="permalink">
-      <a href="../../cats/data/Validated$.html#validNel[A,B](b:B):cats.data.ValidatedNel[A,B]" title="Permalink">
+      <a href="../../cats/data/Validated$.html#validNel[E,A](a:A):cats.data.ValidatedNel[E,A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1112,10 +1112,10 @@ res0: ValidatedNec[IllegalArgumentException, <span class="std">String</span>] = 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validNel</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.ValidatedFunctions.validNel.B">B</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.validNel.A">A</span>, <span class="extype" name="cats.data.ValidatedFunctions.validNel.B">B</span>]</span>
+        <span class="name">validNel</span><span class="tparams">[<span name="E">E</span>, <span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="cats.data.ValidatedFunctions.validNel.A">A</span></span>)</span><span class="result">: <a href="index.html#ValidatedNel[+E,+A]=cats.data.Validated[cats.data.NonEmptyList[E],A]" class="extmbr" name="cats.data.ValidatedNel">ValidatedNel</a>[<span class="extype" name="cats.data.ValidatedFunctions.validNel.E">E</span>, <span class="extype" name="cats.data.ValidatedFunctions.validNel.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Converts a <code>B</code> to a <code>ValidatedNel[A, B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>B</code> to a <code>ValidatedNel[A, B]</code>.</p><p>For example:</p><pre>scala&gt; Validated.validNel[IllegalArgumentException, <span class="std">String</span>](<span class="lit">"Hello world"</span>)
+      <p class="shortcomment cmt">Converts a <code>A</code> to a <code>ValidatedNel[E, A]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>A</code> to a <code>ValidatedNel[E, A]</code>.</p><p>For example:</p><pre>scala&gt; Validated.validNel[IllegalArgumentException, <span class="std">String</span>](<span class="lit">"Hello world"</span>)
 res0: ValidatedNel[IllegalArgumentException, <span class="std">String</span>] = Valid(Hello world)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidatedFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

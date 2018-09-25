@@ -1076,12 +1076,11 @@
       </span>
       
       <p class="shortcomment cmt">Lift to a F[A] as long as it has an ApplicativeError[F] instance</p><div class="fullcomment"><div class="comment cmt"><p>Lift to a F[A] as long as it has an ApplicativeError[F] instance</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+scala&gt; <span class="std">Some</span>(<span class="num">1</span>).liftTo[Either[CharSequence, ?]](<span class="lit">"Empty"</span>)
+res0: scala.Either[CharSequence, <span class="std">Int</span>] = Right(<span class="num">1</span>)
 
-scala&gt; <span class="std">Some</span>(<span class="num">1</span>).liftTo[Either[<span class="std">String</span>, ?]](<span class="lit">"Empty"</span>)
-res0: scala.Either[<span class="std">String</span>, <span class="std">Int</span>] = Right(<span class="num">1</span>)
-
-scala&gt; <span class="std">Option</span>.empty[<span class="std">Int</span>].liftTo[Either[<span class="std">String</span>, ?]](<span class="lit">"Empty"</span>)
-res1: scala.Either[<span class="std">String</span>, <span class="std">Int</span>] = Left(Empty)</pre></div></div>
+scala&gt; <span class="std">Option</span>.empty[<span class="std">Int</span>].liftTo[Either[CharSequence, ?]](<span class="lit">"Empty"</span>)
+res1: scala.Either[CharSequence, <span class="std">Int</span>] = Left(Empty)</pre></div></div>
     </li><li name="cats.syntax.OptionOps#oa" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="oa:Option[A]"></a>
       <span class="permalink">
