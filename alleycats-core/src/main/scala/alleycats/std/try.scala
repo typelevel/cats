@@ -44,6 +44,13 @@ object TryInstances {
 
       def tailRecM[A, B](a: A)(f: (A) => Try[Either[A, B]]): Try[B] = cats.instances.try_.catsStdInstancesForTry.tailRecM(a)(f)
     }
+
+  @export(Orphan)
+  implicit val tryOrEls: OrElse[Try] =
+    new OrElse[Try] {
+      override def orElse[A](fa: Try[A], alternative: => Try[A]): Try[A] =
+        fa.orElse(alternative)
+    }
 }
 
 // TODO: remove when cats.{ Monad, Comonad, Bimonad } support export-hook

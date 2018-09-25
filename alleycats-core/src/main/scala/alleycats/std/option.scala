@@ -13,4 +13,11 @@ object OptionInstances {
     new EmptyK[Option] {
       def empty[A]: Option[A] = None
     }
+
+  @export(Orphan)
+  implicit val exportOptionOrElse: OrElse[Option] =
+    new OrElse[Option] {
+      override def orElse[A](fa: Option[A], alternative: => Option[A]): Option[A] =
+        fa.orElse(alternative)
+    }
 }
