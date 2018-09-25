@@ -138,7 +138,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   )
 }
 
-object Ior extends IorInstances with IorFunctions {
+object Ior extends IorInstances with IorFunctions with IorFunctions2 {
   final case class Left[+A](a: A) extends (A Ior Nothing)
   final case class Right[+B](b: B) extends (Nothing Ior B)
   final case class Both[+A, +B](a: A, b: B) extends (A Ior B)
@@ -353,4 +353,9 @@ private[data] sealed trait IorFunctions {
       case Left(a) => left(a)
       case Right(b) => right(b)
     }
+}
+
+private[data] sealed trait IorFunctions2{
+  def leftNec[A, B](a: A): IorNec[A, B] = Ior.left(NonEmptyChain.one(a))
+  def bothNec[A, B](a: A, b: B): IorNec[A, B] = Ior.both(NonEmptyChain.one(a), b)
 }

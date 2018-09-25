@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{BifunctorTests, BitraverseTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
-import cats.data.{Ior, NonEmptyList, EitherT}
+import cats.data.{Ior,NonEmptyChain, NonEmptyList, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -221,9 +221,21 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("leftNec") {
+    forAll { (x: String) =>
+      Ior.leftNec(x).left should === (Some(NonEmptyChain.one(x)))
+    }
+  }
+
   test("bothNel") {
     forAll { (x: Int, y: String) =>
       Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.one(y), x)))
+    }
+  }
+
+  test("bothNec") {
+    forAll { (x: Int, y: String) =>
+      Ior.bothNec(y, x).onlyBoth should === (Some((NonEmptyChain.one(y), x)))
     }
   }
 
