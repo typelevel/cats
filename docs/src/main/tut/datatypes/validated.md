@@ -58,19 +58,19 @@ case object UsernameHasSpecialCharacters extends DomainValidation {
 }
 
 case object PasswordDoesNotMeetCriteria extends DomainValidation {
-  def errorMessage: String =  "Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."
+  def errorMessage: String = "Password must be at least 10 characters long, including an uppercase and a lowercase letter, one number and one special character."
 }
 
 case object FirstNameHasSpecialCharacters extends DomainValidation {
-  def errorMessage: String =  "First name cannot contain spaces, numbers or special characters."
+  def errorMessage: String = "First name cannot contain spaces, numbers or special characters."
 }
 
 case object LastNameHasSpecialCharacters extends DomainValidation {
-  def errorMessage: String =  "Last name cannot contain spaces, numbers or special characters."
+  def errorMessage: String = "Last name cannot contain spaces, numbers or special characters."
 }
 
 case object AgeIsInvalid extends DomainValidation {
-  def errorMessage: String =  "You must be aged 18 and not older than 75 to use our services."
+  def errorMessage: String = "You must be aged 18 and not older than 75 to use our services."
 }
 ```
 
@@ -79,7 +79,7 @@ We have our `RegistrationData` case class that will hold the information the use
 ```tut:silent
 import cats.syntax.either._
 
-sealed trait FormValidator{
+sealed trait FormValidator {
  def validateUserName(userName: String): Either[DomainValidation, String] =
     Either.cond(
       userName.matches("^[a-zA-Z0-9]+$"), 
@@ -123,8 +123,7 @@ sealed trait FormValidator{
       validatedFirstName <- validateFirstName(firstName)
       validatedLastName <- validateLastName(lastName)
       validatedAge <- validateAge(age)
-    }
-      yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+    } yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
   }
 
 }
@@ -149,8 +148,7 @@ for {
   validatedFirstName <- validateFirstName(firstName)
   validatedLastName <- validateLastName(lastName)
   validatedAge <- validateAge(age)
-}
-  yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+} yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
 ```
 
 A for-comprehension is _fail-fast_. If some of the evaluations in the `for` block fails for some reason, the `yield` statement will not complete. In our case, if that happens we won't be getting the accumulated list of errors.
@@ -196,8 +194,7 @@ def validateForm(username: String, password: String, firstName: String, lastName
     validatedFirstName <- validateFirstName(firstName)
     validatedLastName <- validateLastName(lastName)
     validatedAge <- validateAge(age)
-  }
-    yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
+  } yield RegistrationData(validatedUserName, validatedPassword, validatedFirstName, validatedLastName, validatedAge)
 }
 ```
 
@@ -216,25 +213,25 @@ So, how do we do here?
 We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.
 
 ```tut:silent
-sealed trait FormValidatorNel {
+sealed trait FormValidatorNec {
 
-  type ValidationResult[A] = ValidatedNel[DomainValidation, A]
+  type ValidationResult[A] = ValidatedNec[DomainValidation, A]
 
   private def validateUserName(userName: String): ValidationResult[String] =
-    if (userName.matches("^[a-zA-Z0-9]+$")) userName.validNel else UsernameHasSpecialCharacters.invalidNel
+    if (userName.matches("^[a-zA-Z0-9]+$")) userName.validNec else UsernameHasSpecialCharacters.invalidNec
 
   private def validatePassword(password: String): ValidationResult[String] =
-    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) password.validNel
-    else PasswordDoesNotMeetCriteria.invalidNel
+    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) password.validNec
+    else PasswordDoesNotMeetCriteria.invalidNec
 
   private def validateFirstName(firstName: String): ValidationResult[String] =
-    if (firstName.matches("^[a-zA-Z]+$")) firstName.validNel else FirstNameHasSpecialCharacters.invalidNel
+    if (firstName.matches("^[a-zA-Z]+$")) firstName.validNec else FirstNameHasSpecialCharacters.invalidNec
 
   private def validateLastName(lastName: String): ValidationResult[String] =
-    if (lastName.matches("^[a-zA-Z]+$")) lastName.validNel else LastNameHasSpecialCharacters.invalidNel
+    if (lastName.matches("^[a-zA-Z]+$")) lastName.validNec else LastNameHasSpecialCharacters.invalidNec
 
   private def validateAge(age: Int): ValidationResult[Int] =
-    if (age >= 18 && age <= 75) age.validNel else AgeIsInvalid.invalidNel
+    if (age >= 18 && age <= 75) age.validNec else AgeIsInvalid.invalidNec
 
   def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): ValidationResult[RegistrationData] = {
     (validateUserName(username),
@@ -246,25 +243,25 @@ sealed trait FormValidatorNel {
 
 }
 
-object FormValidatorNel extends FormValidatorNel
+object FormValidatorNec extends FormValidatorNec
 ```
 
 Let's see what changed here:
 
-1. In this new implementation, we're using a [NonEmptyList](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyList.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a list of `DomainValidation`.
-2. `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. When you use `ValidatedNel` you're stating that your accumulative structure will be a `NonEmptyList`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
+1. In this new implementation, we're using a [NonEmptyChain](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/data/NonEmptyChain.scala), a data structure that guarantees that at least one element will be present. In case that multiple errors arise, you'll get a chain of `DomainValidation`.
+2. `ValidatedNec[DomainValidation, A]` is an alias for `Validated[NonEmptyChain[DomainValidation], A]`. When you use `ValidatedNec` you're stating that your accumulative structure will be a `NonEmptyChain`. With `Validated`, you have the choice about which data structure you want for reporting the errors (more on that soon).
 3. We've declared the type alias `ValidationResult` that conveniently expresses the return type of our validation.
-4. `.validNel` and `.invalidNel` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyList[A]]`).
-5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyList`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
+4. `.validNec` and `.invalidNec` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyChain[A]]`).
+5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyChain`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
 
 **Deprecation notice:** since cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
 
-Note that, at the end, we expect to lift the result of the validation functions in a `RegistrationData` instance. If the process fails, we'll get our `NonEmptyList` detailing what went wrong.
+Note that, at the end, we expect to lift the result of the validation functions in a `RegistrationData` instance. If the process fails, we'll get our `NonEmptyChain` detailing what went wrong.
 
 For example:
 
 ```tut:book
-FormValidatorNel.validateForm(
+FormValidatorNec.validateForm(
   username = "Joe",
   password = "Passw0r$1234",
   firstName = "John",
@@ -272,7 +269,7 @@ FormValidatorNel.validateForm(
   age = 21
 )
 
-FormValidatorNel.validateForm(
+FormValidatorNec.validateForm(
   username = "Joe%%%",
   password = "password",
   firstName = "John",
@@ -285,25 +282,25 @@ Sweet success! Now you can take your validation process to the next level!
 
 ### A short detour
 
-As previously stated, `ValidatedNel[DomainValidation, A]` is an alias for `Validated[NonEmptyList[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyList` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
+As previously stated, `ValidatedNec[DomainValidation, A]` is an alias for `Validated[NonEmptyChain[DomainValidation], A]`. Typically, you'll see that `Validated` is accompanied by a `NonEmptyChain` when it comes to accumulation. The thing here is that you can define your own accumulative data structure and you're not limited to the aforementioned construction.
 
-For doing this, you have to provide a `Semigroup` instance. `NonEmptyList`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
+For doing this, you have to provide a `Semigroup` instance. `NonEmptyChain`, by definition has its own `Semigroup`. For those who don't know what a `Semigroup` is, you can find out more [here](../typeclasses/semigroup.html).
 
 #### Accumulative Structures
 
-Let's take a look about how a `Semigroup` works in a `NonEmptyList`:
+Let's take a look about how a `Semigroup` works in a `NonEmptyChain`:
 
 ```tut:book
-NonEmptyList.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyList[DomainValidation](FirstNameHasSpecialCharacters, List(LastNameHasSpecialCharacters))
+NonEmptyChain.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyChain[DomainValidation](FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
 ```
 
-We're combining a couple of `NonEmptyList`'s. The first one has its mandatory element (note that we've built an instance of it with `.one`) and the second has a couple of elements. As you can see, the output of the combination, expressed by the `|+|` operator is another `NonEmptyList` with the three elements.
+We're combining a couple of `NonEmptyChain`s. The first one has its mandatory element (note that we've built an instance of it with `.one`) and the second has a couple of elements. As you can see, the output of the combination, expressed by the `|+|` operator is another `NonEmptyChain` with the three elements.
 
 But, what about if we want _another_ way of combining? We can provide our custom `Semigroup` instance with the desired combining logic and pass it implicitly to your scope.
 
 ### Going back and forth
 
-cats offers you a nice set of combinators for transforming your `Validated` based approach to an `Either` one and vice-versa.
+Cats offers you a nice set of combinators for transforming your `Validated` based approach to an `Either` one and vice-versa.
 We've used `.toValidated` in our second example, now let's see how to use `.toEither`.
 
 #### From `Validated` to `Either`
@@ -312,7 +309,7 @@ To do this, simply use `.toEither` combinator:
 
 ```tut:book
 // Successful case
-FormValidatorNel.validateForm(
+FormValidatorNec.validateForm(
   username = "Joe",
   password = "Passw0r$1234",
   firstName = "John",
@@ -321,7 +318,7 @@ FormValidatorNel.validateForm(
 ).toEither
 
 // Invalid case
-FormValidatorNel.validateForm(
+FormValidatorNec.validateForm(
   username = "Joe123#",
   password = "password",
   firstName = "John",
@@ -330,7 +327,7 @@ FormValidatorNel.validateForm(
 ).toEither
 ```
 
-With this conversion, as you can see, we got an `Either` with a `NonEmptyList` detailing the possible validation errors or our `RegistrationData` object.
+With this conversion, as you can see, we got an `Either` with a `NonEmptyChain` detailing the possible validation errors or our `RegistrationData` object.
 
 ## Another case
 
@@ -434,7 +431,7 @@ def parallelValidate[E, A, B, C](v1: Validated[E, A], v2: Validated[E, B])(f: (A
 ```
 
 We've run into a problem. In the case where both have errors, we want to report both. But we have
-no way of combining the two errors into one error! Perhaps we can put both errors into a `List`,
+no way of combining the two errors into one error! Perhaps we can put both errors into a `Chain`,
 but that seems needlessly specific - clients may want to define their own way of combining errors.
 
 How then do we abstract over a binary operation? The `Semigroup` type class captures this idea.
@@ -452,26 +449,26 @@ def parallelValidate[E : Semigroup, A, B, C](v1: Validated[E, A], v2: Validated[
 ```
 
 Perfect! But.. going back to our example, we don't have a way to combine `ConfigError`s. But as clients,
-we can change our `Validated` values where the error can be combined, say, a `List[ConfigError]`. It is
-more common however to use a `NonEmptyList[ConfigError]` - the `NonEmptyList` statically guarantees we
+we can change our `Validated` values where the error can be combined, say, a `Chain[ConfigError]`. It is
+more common however to use a `NonEmptyChain[ConfigError]` - the `NonEmptyChain` statically guarantees we
 have at least one value, which aligns with the fact that if we have an `Invalid`, then we most
 certainly have at least one error. This technique is so common there is a convenient method on `Validated`
-called `toValidatedNel` that turns any `Validated[E, A]` value to a `Validated[NonEmptyList[E], A]`.
-Additionally, the type alias `ValidatedNel[E, A]` is provided.
+called `toValidatedNec` that turns any `Validated[E, A]` value to a `Validated[NonEmptyChain[E], A]`.
+Additionally, the type alias `ValidatedNec[E, A]` is provided.
 
 Time to parse.
 
 ```tut:silent
 import cats.SemigroupK
-import cats.data.NonEmptyList
+import cats.data.NonEmptyChain
 import cats.implicits._
 
 case class ConnectionParams(url: String, port: Int)
 
 val config = Config(Map(("endpoint", "127.0.0.1"), ("port", "not an int")))
 
-implicit val nelSemigroup: Semigroup[NonEmptyList[ConfigError]] =
-  SemigroupK[NonEmptyList].algebra[ConfigError]
+implicit val necSemigroup: Semigroup[NonEmptyChain[ConfigError]] =
+  SemigroupK[NonEmptyChain].algebra[ConfigError]
 
 implicit val readString: Read[String] = Read.stringRead
 implicit val readInt: Read[Int] = Read.intRead
@@ -480,15 +477,15 @@ implicit val readInt: Read[Int] = Read.intRead
 Any and all errors are reported!
 
 ```tut:book
-val v1 = parallelValidate(config.parse[String]("url").toValidatedNel,
-                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+val v1 = parallelValidate(config.parse[String]("url").toValidatedNec,
+                          config.parse[Int]("port").toValidatedNec)(ConnectionParams.apply)
 
-val v2 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
-                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+val v2 = parallelValidate(config.parse[String]("endpoint").toValidatedNec,
+                          config.parse[Int]("port").toValidatedNec)(ConnectionParams.apply)
 
 val config = Config(Map(("endpoint", "127.0.0.1"), ("port", "1234")))
-val v3 = parallelValidate(config.parse[String]("endpoint").toValidatedNel,
-                          config.parse[Int]("port").toValidatedNel)(ConnectionParams.apply)
+val v3 = parallelValidate(config.parse[String]("endpoint").toValidatedNec,
+                          config.parse[Int]("port").toValidatedNec)(ConnectionParams.apply)
 ```
 
 ## Apply
@@ -528,10 +525,10 @@ We can now easily ask for several bits of configuration and get any and all erro
 
 ```tut:silent
 import cats.Apply
-import cats.data.ValidatedNel
+import cats.data.ValidatedNec
 
-implicit val nelSemigroup: Semigroup[NonEmptyList[ConfigError]] =
-  SemigroupK[NonEmptyList].algebra[ConfigError]
+implicit val necSemigroup: Semigroup[NonEmptyChain[ConfigError]] =
+  SemigroupK[NonEmptyChain].algebra[ConfigError]
 
 val config = Config(Map(("name", "cat"), ("age", "not a number"), ("houseNumber", "1234"), ("lane", "feline street")))
 
@@ -542,11 +539,11 @@ case class Person(name: String, age: Int, address: Address)
 Thus.
 
 ```tut:book
-val personFromConfig: ValidatedNel[ConfigError, Person] =
-  Apply[ValidatedNel[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNel,
-                                           config.parse[Int]("age").toValidatedNel,
-                                           config.parse[Int]("house_number").toValidatedNel,
-                                           config.parse[String]("street").toValidatedNel) {
+val personFromConfig: ValidatedNec[ConfigError, Person] =
+  Apply[ValidatedNec[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNec,
+                                           config.parse[Int]("age").toValidatedNec,
+                                           config.parse[Int]("house_number").toValidatedNec,
+                                           config.parse[String]("street").toValidatedNec) {
     case (name, age, houseNumber, street) => Person(name, age, Address(houseNumber, street))
   }
 ```
@@ -597,7 +594,7 @@ However, the `ap` behavior defined in terms of `flatMap` does not behave the sam
 our `ap` defined above. Observe:
 
 ```tut:book
-val v = validatedMonad.tuple2(Validated.invalidNel[String, Int]("oops"), Validated.invalidNel[String, Double]("uh oh"))
+val v = validatedMonad.tuple2(Validated.invalidNec[String, Int]("oops"), Validated.invalidNec[String, Double]("uh oh"))
 ```
 
 This one short circuits! Therefore, if we were to define a `Monad` (or `FlatMap`) instance for `Validated` we would
