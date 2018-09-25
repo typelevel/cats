@@ -82,8 +82,8 @@ import cats.syntax.either._
 sealed trait FormValidator {
  def validateUserName(userName: String): Either[DomainValidation, String] =
     Either.cond(
-      userName.matches("^[a-zA-Z0-9]+$"), 
-      userName, 
+      userName.matches("^[a-zA-Z0-9]+$"),
+      userName,
       UsernameHasSpecialCharacters
     )
 
@@ -157,9 +157,9 @@ If we run our code:
 
 ```tut:book
 FormValidator.validateForm(
-  username = "fakeUs3rname", 
-  password = "password", 
-  firstName = "John", 
+  username = "fakeUs3rname",
+  password = "password",
+  firstName = "John",
   lastName = "Doe",
   age = 15
 )
@@ -614,7 +614,7 @@ If you are trying to decide whether you want to use `Validated` or `Either`, a s
 If you do want error accumulation but occasionally run into places where you sequential validation is needed, then `Validated` provides a couple methods that may be helpful.
 
 ### `andThen`
-The `andThen` method is similar to `flatMap` (such as `Either.flatMap`). In the cause of success, it passes the valid value into a function that returns a new `Validated` instance.
+The `andThen` method is similar to `flatMap` (such as `Either.flatMap`). In the case of success, it passes the valid value into a function that returns a new `Validated` instance.
 
 ```tut:book
 val houseNumber = config.parse[Int]("house_number").andThen{ n =>
