@@ -280,6 +280,12 @@ def mimaSettings(moduleName: String) = {
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT")
+      ) ++ // Only compile-time abstractions (macros) allowed here
+      Seq(
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
+        exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
+        exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
       )
     }
   )
