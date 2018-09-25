@@ -76,6 +76,14 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
       def eqv(x: A, y: A) = eq1.eqv(x, y) || eq2.eqv(x, y)
     }
 
+  /**
+    * Return an Eq that gives the result of conjunction of all arguments
+    * Note this is idempotent
+    */
+  def compose[@sp A](eqs: Eq[A]*): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = eqs.forall(_.eqv(x, y))
+    }
 
   /**
    * Create an `Eq` instance from an `eqv` implementation.
