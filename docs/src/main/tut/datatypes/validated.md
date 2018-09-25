@@ -291,7 +291,7 @@ For doing this, you have to provide a `Semigroup` instance. `NonEmptyChain`, by 
 Let's take a look about how a `Semigroup` works in a `NonEmptyChain`:
 
 ```tut:book
-NonEmptyChain.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyChain[DomainValidation](FirstNameHasSpecialCharacters, Chain(LastNameHasSpecialCharacters))
+NonEmptyChain.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyChain[DomainValidation](FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
 ```
 
 We're combining a couple of `NonEmptyChain`s. The first one has its mandatory element (note that we've built an instance of it with `.one`) and the second has a couple of elements. As you can see, the output of the combination, expressed by the `|+|` operator is another `NonEmptyChain` with the three elements.
