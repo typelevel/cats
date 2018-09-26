@@ -516,10 +516,10 @@ lazy val binCompatTest = project
         else //We are not testing BC on Scala 2.13 yet.
           "org.typelevel" %% "cats-core" % version.value % Provided
       },
-      "org.typelevel" %% "cats-core" % version.value % Test,
       "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
     )
   )
+  .dependsOn(coreJVM % Test)
 
 
 // cats-js is JS-only
