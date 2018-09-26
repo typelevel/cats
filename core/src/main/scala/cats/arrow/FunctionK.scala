@@ -124,7 +124,7 @@ private[arrow] object FunctionKMacros extends MacroCompat {
         val G = punchHole(evG.tpe)
 
         q"""
-        new FunctionK[$F, $G] {
+        new _root_.cats.arrow.FunctionK[$F, $G] {
           def apply[A](fa: $F[A]): $G[A] = $trans(fa)
         }
        """

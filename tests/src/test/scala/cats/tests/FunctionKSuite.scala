@@ -82,6 +82,15 @@ class FunctionKSuite extends CatsSuite {
     }
   }
 
+  test("hygiene") {
+    trait FunctionK
+    def optionToList[A](option: Option[A]): List[A] = option.toList
+    val fOptionToList = cats.arrow.FunctionK.lift(optionToList _)
+    forAll { (a: Option[Int]) =>
+      fOptionToList(a) should === (optionToList(a))
+    }
+  }
+
   test("lift compound unary") {
     val fNelFromList = FunctionK.lift[List, λ[α ⇒ Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
     forAll { (a: List[String]) =>
