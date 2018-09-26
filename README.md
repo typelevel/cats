@@ -274,4 +274,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2017.
+Copyright the maintainers, 2015-2018.
