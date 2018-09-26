@@ -503,7 +503,7 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .enablePlugins(JmhPlugin)
 
 
-lazy val binCompactTest = project
+lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
