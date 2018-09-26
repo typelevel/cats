@@ -645,7 +645,7 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateBC", ";catsJVM/publishLocal;binCompatTest/test;mimaReportBinaryIssues")
+addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
 
