@@ -9,5 +9,6 @@ import export._
   OptionInstances,
   SetInstances,
   TryInstances,
-  IterableInstances
+  IterableInstances,
+  FutureInstances
 ) object all extends LegacySetInstances with LegacyTryInstances with LegacyIterableInstances with MapInstances

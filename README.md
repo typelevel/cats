@@ -192,6 +192,7 @@ versioning in the future. But that decision is yet to be made.
 
 Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md)
 
+- [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [AutoScout24](https://www.autoscout24.com)
@@ -273,4 +274,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2017.
+Copyright the maintainers, 2015-2018.
