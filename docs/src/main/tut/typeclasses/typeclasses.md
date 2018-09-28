@@ -38,25 +38,47 @@ The name `Monoid` is taken from abstract algebra which specifies precisely this 
 We can now write the functions above against this interface.
 
 ```tut:book:silent
-def combineAll[A](list: List[A], A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
+def combineAll[A](list: List[A], ma: Monoid[A]): A = list.foldRight(ma.empty)(ma.combine)
+```
+(And you would invoke this as `val sum: Int = combineAll(mylist, intAdditionMonoid)` - given `val mylist: List[Int] = List(1, 2, 3)`, for example.)
+
+## Hypothetical exercise with subtyping
+
+The previous definition takes an actual monoid argument instead of doing the usual object-oriented practice of using subtype constraints.
+Let's explore an OO-hypothetical for a bit: could we somehow tell our method how to figure out which monoid instance it should use?
+
+Before we start, let's pretend we have `MyInt` which mixes in the `Monoid` trait but works same as `Int` in all other aspects:
+
+```
+class MyInt extends Monoid[MyInt] {
+  def empty: MyInt = MyInt.ZERO
+  def combine(x: MyInt, y: MyInt): MyInt = x + y
+
+  // ... (pretend this acts as a regular Int)
+}
 ```
 
-## Type classes vs. subtyping
-The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
-subtype constraints.
+Now, having mentioned a type that implements `Monoid` trait, what about `combineAll` signature?
 
 ```tut:book:silent
-// Subtyping
+// require that type A must mix in Monoid trait
 def combineAll[A <: Monoid[A]](list: List[A]): A = ???
 ```
 
-This has a subtle difference with the earlier explicit example. In order to seed the `foldRight` with the empty value,
-we need to get a hold of it given only the type `A`. Taking `Monoid[A]` as an argument gives us this by calling the
-appropriate `empty` method on it. With the subtype example, the `empty` method would be on a **value** of type
-`Monoid[A]` itself, which we are only getting from the `list` argument. If `list` is empty, we have no values to work
-with and therefore can't get the empty value. Not to mention the oddity of getting a constant value from a non-static
-object.
+Here we ask that given `A` should be constrained by uppper type bound: must be subtype of `Monoid[A]`.
+(A compliant `A` type will mix in the `Monoid` trait).
 
+This definition does not meet the mark.
+
+Even if we pretend this was OK for a moment, in order to seed the `foldRight` with the appropriate *empty* value,
+we need to get a hold of one.
+
+In the previous `combineAll` example, taking `Monoid[A]` as an argument gives us this by calling the
+corresponding `empty` method on it.
+
+But in this type upper bound exercise, we could call the corresponding `empty` method on a list element (because `A` is subclass of `Monoid[A]`). However if list is empty we have no values to work with and therefore can’t get the *empty* value. Not to mention the oddity of getting a constant value from a non-static object.
+
+OK, let's go for something else (and forget the MyInt dead-end idea).
 ---
 
 For another motivating difference, consider the simple pair type.
@@ -66,19 +88,22 @@ final case class Pair[A, B](first: A, second: B)
 ```
 
 Defining a `Monoid[Pair[A, B]]` depends on the ability to define a `Monoid[A]` and `Monoid[B]`, where the definition
-is point-wise. With subtyping such a constraint would be encoded as something like
+is point-wise. With subtyping such a constraint would be encoded as something like:
 
 ```tut:book:silent
-final case class Pair[A <: Monoid[A], B <: Monoid[B]](first: A, second: B) extends Monoid[Pair[A, B]] {
-  def empty: Pair[A, B] = ???
+final case class PairMonoid[A <: Monoid[A], B <: Monoid[B]](first: A, second: B) extends Monoid[PairMonoid[A, B]] {
+  def empty: PairMonoid[A, B] = ???
 
-  def combine(x: Pair[A, B], y: Pair[A, B]): Pair[A, B] = ???
+  def combine(x: PairMonoid[A, B], y: PairMonoid[A, B]): PairMonoid[A, B] = ???
 }
 ```
 
-Not only is the type signature of `Pair` now messy but it also forces all instances of `Pair` to have a `Monoid`
-instance, whereas `Pair` should be able to carry any types it wants and if the types happens to have a
-`Monoid` instance then so would it. We could try bubbling down the constraint into the methods themselves.
+You see we are going down the wrong rabbit hole here...
+Not only is the type signature of `PairMonoid` now messy but it also forces all types that `PairMonoid` may contain to also have a `Monoid`
+instance, whereas a proper `Pair` should be able to carry any types it wants. If the types happen to have a
+`Monoid` instance then so would it, ideally.
+
+To resolve the issue can we try bubbling down the constraint into the methods themselves?
 
 ```tut:book:fail
 final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
@@ -88,21 +113,21 @@ final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
 }
 ```
 
-But now these don't conform to the interface of `Monoid` due to the implicit constraints.
+But now these don't even conform to the interface of `Monoid` due to the implicit constraints.
 
 ### Implicit derivation
 
-Note that a `Monoid[Pair[A, B]]` is derivable given `Monoid[A]` and `Monoid[B]`:
+It is possible to create a generic `Monoid[Pair[A, B]]` implementation by deriving it given `Monoid[A]` and `Monoid[B]`:
 
 ```tut:book:silent
 final case class Pair[A, B](first: A, second: B)
 
-def deriveMonoidPair[A, B](A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] =
+def deriveMonoidPair[A, B](ma: Monoid[A], mb: Monoid[B]): Monoid[Pair[A, B]] =
   new Monoid[Pair[A, B]] {
-    def empty: Pair[A, B] = Pair(A.empty, B.empty)
+    def empty: Pair[A, B] = Pair(ma.empty, mb.empty)
 
     def combine(x: Pair[A, B], y: Pair[A, B]): Pair[A, B] =
-      Pair(A.combine(x.first, y.first), B.combine(x.second, y.second))
+      Pair(ma.combine(x.first, y.first), mb.combine(x.second, y.second))
   }
 ```
 
@@ -114,19 +139,19 @@ object Demo { // needed for tut, irrelevant to demonstration
   final case class Pair[A, B](first: A, second: B)
 
   object Pair {
-    implicit def tuple2Instance[A, B](implicit A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] =
+    implicit def monoidInstance[A, B](implicit imma: Monoid[A], immb: Monoid[B]): Monoid[Pair[A, B]] =
       new Monoid[Pair[A, B]] {
-        def empty: Pair[A, B] = Pair(A.empty, B.empty)
+        def empty: Pair[A, B] = Pair(imma.empty, immb.empty)
 
         def combine(x: Pair[A, B], y: Pair[A, B]): Pair[A, B] =
-          Pair(A.combine(x.first, y.first), B.combine(x.second, y.second))
+          Pair(imma.combine(x.first, y.first), immb.combine(x.second, y.second))
       }
   }
 }
 ```
+Here `imma` is shorthand of "implicit Monoid of A" and `immb` stands for "implicit Monoid of B".
 
-We also change any functions that have a `Monoid` constraint on the type parameter to take the argument implicitly,
-and any instances of the type class to be implicit.
+With this theory at hand, we instruct the function take the Monoid argument implicitly, and instances of the Monoid type to be implicit.
 
 ```tut:book:silent
 implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
@@ -134,11 +159,11 @@ implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
   def combine(x: Int, y: Int): Int = x + y
 }
 
-def combineAll[A](list: List[A])(implicit A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
+def combineAll[A](list: List[A])(implicit imma: Monoid[A]): A = list.foldRight(imma.empty)(imma.combine)
 ```
 
-Now we can also `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
-instances.
+Now we can also just as well `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
+instances:
 
 ```tut:book:silent
 implicit val stringMonoid: Monoid[String] = new Monoid[String] {
@@ -154,25 +179,30 @@ combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
 ```
 
 ## A note on syntax
-In many cases, including the `combineAll` function above, the implicit arguments can be written with syntactic sugar.
+In many cases, including the `combineAll` function above, the implicit arguments can be written using the *context bound* syntax (as syntactic sugar).
 
 ```tut:book:silent
 def combineAll[A : Monoid](list: List[A]): A = ???
 ```
 
-While nicer to read as a user, it comes at a cost for the implementer.
+Here combineAll is defined using *context bound*: `[A : Monoid]` adds an (unnamed) implicit parameter of `Monoid[A]` to the method declaration.
+(While nicer to read as a user, it comes at a bit of a cost for the implementer.)
 
 ```tut:book:silent
-// Defined in the standard library, shown for illustration purposes
-// Implicitly looks in implicit scope for a value of type `A` and just hands it back
-def implicitly[A](implicit ev: A): A = ev
+// (`implicitly` is defined by the standard library - see Predef.scala, shown here for illustration purposes.
+// Compiler looks up the instance of type `T` from implicit scope (well, the one instance that's marked *implicit*), and the method just hands it back to us:
+def implicitly[T](implicit e: T): T = e
 
+// With this knowledge, we write:
 def combineAll[A : Monoid](list: List[A]): A =
   list.foldRight(implicitly[Monoid[A]].empty)(implicitly[Monoid[A]].combine)
 ```
+What is happening is that there is implicit `Monoid[A]` bound to combineAll method, and we get the instance by calling `implicitly[Monoid[A]]()`.
+Where did the instance come from? Well, compiler either finds the `stringMonoid` instance, or `intAdditionMonoid` instance, as appropriate, or auto-generates one on demand, by invoking `Pair.monoidInstance(...)` method because it's marked *implicit* and will produce a `Monoid[Pair[Int, String]]` when compiler asks.
 
-For this reason, many libraries that provide type classes provide a utility method on the companion object of the type
-class, usually under the name `apply`, that skirts the need to call `implicitly` everywhere.
+
+Many libraries that provide type classes often add an utility `apply` method on the companion object of the type
+class, which skirts the need to call `implicitly` everywhere, and enables even shorter syntax.
 
 ```tut:book:silent
 object Monoid {
@@ -183,7 +213,15 @@ def combineAll[A : Monoid](list: List[A]): A =
   list.foldRight(Monoid[A].empty)(Monoid[A].combine)
 ```
 
+For what it's worth - the above syntax is equivalent to fully writing out:
+```tut:book:silent
+def combineAll[A](list: List[A])(implicit eva: Monoid[A]): A = // 'eva' stands for "evidence of Monoid[A]"
+  list.foldRight(Monoid.apply(eva).empty)(Monoid.apply(eva).combine)
+```
+(From compiler standpoint `Monoid[A].empty` (having synthetic implicit in scope courtesy of *context bound*) is completely equivalent to `Monoid.apply(eva).empty` - where "eva" was declared manually by us.)
+
 Cats uses [simulacrum][simulacrum] for defining type classes which will auto-generate such an `apply` method.
+As result, you get the `Monoid[A].*method*` syntax everywhere for free!
 
 # Laws
 
