@@ -1,9 +1,9 @@
 package cats
 package arrow
 
-import cats.data.{EitherK, Tuple2K}
+import scala.reflect.macros.blackbox.Context
 
-import cats.macros.MacroCompat
+import cats.data.{EitherK, Tuple2K}
 
 /**
   * `FunctionK[F[_], G[_]]` is a functor transformation from `F` to `G`
@@ -95,7 +95,7 @@ object FunctionK {
 
 }
 
-private[arrow] object FunctionKMacros extends MacroCompat {
+private[arrow] object FunctionKMacros {
 
   def lift[F[_], G[_]](c: Context)(
     f: c.Expr[(F[α] ⇒ G[α]) forSome { type α }]
@@ -124,7 +124,7 @@ private[arrow] object FunctionKMacros extends MacroCompat {
         val G = punchHole(evG.tpe)
 
         q"""
-        new FunctionK[$F, $G] {
+        new _root_.cats.arrow.FunctionK[$F, $G] {
           def apply[A](fa: $F[A]): $G[A] = $trans(fa)
         }
        """
@@ -139,7 +139,7 @@ private[arrow] object FunctionKMacros extends MacroCompat {
 
     private[this] def punchHole(tpe: Type): Tree = tpe match {
       case PolyType(undet :: Nil, underlying: TypeRef) ⇒
-        val α = compatNewTypeName(c, "α")
+        val α = TypeName("α")
         def rebind(typeRef: TypeRef): Tree =
           if (typeRef.sym == undet) tq"$α"
           else {

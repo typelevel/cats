@@ -1,12 +1,14 @@
 package catsBC
 import cats.implicits._
-import cats._, data._, cats.arrow._
 
 object MimaExceptions {
-  import cats.implicits._
+
+  def headOption[A](list: List[A]): Option[A] = list.headOption
+
+  import cats.arrow.FunctionK // needs to be imported because of a hygiene problem
 
   def isBinaryCompatible = (
-      Monad[OptionT[List, ?]],
+      cats.Monad[cats.data.OptionT[List, ?]],
       cats.data.OptionT.catsDataTraverseForOptionT[List],
       cats.data.Kleisli.catsDataCommutativeArrowForKleisliId,
       cats.data.OptionT.catsDataMonoidKForOptionT[List],
@@ -15,7 +17,8 @@ object MimaExceptions {
       cats.data.Kleisli.catsDataCommutativeArrowForKleisli[Option],
       cats.data.Kleisli.catsDataCommutativeFlatMapForKleisli[Option, Int],
       cats.data.IRWST.catsDataStrongForIRWST[List, Int, Int, Int],
-      cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List]
+      cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List],
+      FunctionK.lift(headOption)
   )
 
 }

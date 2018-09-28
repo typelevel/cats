@@ -280,6 +280,12 @@ def mimaSettings(moduleName: String) = {
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT")
+      ) ++ // Only compile-time abstractions (macros) allowed here
+      Seq(
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
+        exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
+        exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
       )
     }
   )
@@ -516,10 +522,10 @@ lazy val binCompatTest = project
         else //We are not testing BC on Scala 2.13 yet.
           "org.typelevel" %% "cats-core" % version.value % Provided
       },
-      "org.typelevel" %% "cats-core" % version.value % Test,
       "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
     )
   )
+  .dependsOn(coreJVM % Test)
 
 
 // cats-js is JS-only
@@ -639,7 +645,7 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateBC", ";catsJVM/publishLocal;binCompatTest/test;mimaReportBinaryIssues")
+addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 
 addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
 
