@@ -13,12 +13,6 @@ trait FiniteDurationInstances {
 }
 
 
-/**
-  * This ordering is valid for all defined durations.
-  *
-  * The value Duration.Undefined breaks our laws, because undefined
-  * values are not equal to themselves.
-  */
 class FiniteDurationOrder extends Order[FiniteDuration] with Hash[FiniteDuration] {
   def hash(x: FiniteDuration): Int = x.hashCode()
 
@@ -35,13 +29,6 @@ class FiniteDurationOrder extends Order[FiniteDuration] with Hash[FiniteDuration
   override def max(x: FiniteDuration, y: FiniteDuration): FiniteDuration = x max y
 }
 
-/**
-  * This group models addition, but has a few problematic edge cases.
-  *
-  *   1. finite values can overflow, throwing an exception
-  *   2. inf + (-inf) = undefined, not zero
-  *   3. undefined + zero = undefined
-  */
 class FiniteDurationGroup extends CommutativeGroup[FiniteDuration] {
   def empty: FiniteDuration = Duration.Zero
   def inverse(x: FiniteDuration): FiniteDuration = -x
