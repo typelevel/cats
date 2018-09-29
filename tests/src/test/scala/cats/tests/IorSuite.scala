@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{BifunctorTests, BitraverseTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
-import cats.data.{Ior,NonEmptyChain, NonEmptyList, EitherT}
+import cats.data.{Ior, NonEmptyChain, NonEmptyList, NonEmptySet, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -213,6 +213,32 @@ class IorSuite extends CatsSuite {
     forAll { (x: Int Ior String) =>
       x.toValidated.toOption should === (x.right)
     }
+  }
+
+  test("toIorNec Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNec should === (Ior.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+  }
+  test("toIorNec Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNec should === (Ior.right[NonEmptyChain[String], Int](42))
+  }
+  test("toIorNec Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNec should === (Ior.both[NonEmptyChain[String], Int](NonEmptyChain.one("oops"), 42))
+  }
+
+  test("toIorNes Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNes should === (Ior.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+  }
+  test("toIorNes Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNes should === (Ior.right[NonEmptySet[String], Int](42))
+  }
+  test("toIorNes Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNes should === (Ior.both[NonEmptySet[String], Int](NonEmptySet.one("oops"), 42))
   }
 
   test("leftNel") {

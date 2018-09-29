@@ -267,6 +267,12 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 
+
+
+  def toEitherNec[AA >: A]: EitherNec[AA, B] = leftMap(NonEmptyChain.one)
+
+  def toEitherNes[AA >: A](implicit O: Order[AA]): EitherNes[AA, B] = leftMap(NonEmptySet.one(_))
+
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
@@ -289,6 +295,16 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)
+
+
+
+  def leftNec[A, B](a: A): EitherNec[A, B] = Left(NonEmptyChain.one(a))
+
+  def rightNec[A, B](b: B): EitherNec[A, B] = Right(b)
+
+  def leftNes[A, B](a: A)(implicit O: Order[A]): EitherNes[A, B] = Left(NonEmptySet.one(a))
+
+  def rightNes[A, B](b: B)(implicit O: Order[B]): EitherNes[A, B] = Right(b)
 
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
