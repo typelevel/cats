@@ -28,15 +28,15 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
-  /**
-   * Modify the context `F` using transformation `f`.
-   */
-  def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(value))
-
   def contramap[B](f: B => A)(implicit F: Contravariant[F]): OptionT[F, B] =
     OptionT {
       F.contramap(value)(_ map f)
     }
+
+  /**
+   * Modify the context `F` using transformation `f`.
+   */
+  def mapK[G[_]](f: F ~> G): OptionT[G, A] = OptionT[G, A](f(value))
 
   def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMap(a => OptionT.liftF(f(a)))
@@ -294,21 +294,19 @@ private[data] sealed abstract class OptionTInstances1 extends OptionTInstances2 
 
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
-
-  implicit def catsDataContravariantForOptionT[F[_]](implicit F: Contravariant[F]): Contravariant[OptionT[F, ?]] =
-    new OptionTContravariant[F] {
-      implicit val F0: Contravariant[F] = F
-    }
 }
 
 private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 {
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
     new OptionTFoldable[F] { implicit val F = F0 }
+
+  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
+    new OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances3 {
-  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
-    new OptionTFunctor[F] { implicit val F = F0 }
+  implicit def catsDataContravariantForOptionT[F[_]](implicit F0: Contravariant[F]): Contravariant[OptionT[F, ?]] =
+    new OptionTContravariant[F] { implicit val F = F0 }
 }
 
 private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
@@ -318,7 +316,7 @@ private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
 }
 
 private[data] sealed trait OptionTContravariant[F[_]] extends Contravariant[OptionT[F, ?]] {
-  implicit def F0: Contravariant[F]
+  implicit def F: Contravariant[F]
 
   override def contramap[A, B](fa: OptionT[F, A])(f: B => A): OptionT[F, B] =
     fa contramap f

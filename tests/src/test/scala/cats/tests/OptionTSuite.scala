@@ -71,12 +71,23 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
+    // F has an Invariant
+    implicitly[Invariant[OptionT[Const[String, ?], ?]]]
+    Invariant[OptionT[Const[String, ?], ?]]
+
+    checkAll("OptionT[Const[String, ?], ?]", InvariantTests[OptionT[Const[String, ?], ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[OptionT[Const[String, ?], ?]]", SerializableTests.serializable(Invariant[OptionT[Const[String, ?], ?]]))
+  }
+
+  {
     // F has a Contravariant
+    implicitly[Contravariant[OptionT[Const[String, ?], ?]]]
     Contravariant[OptionT[Const[String, ?], ?]]
 
     checkAll("OptionT[Const[String, ?], ?]", ContravariantTests[OptionT[Const[String, ?], ?]].contravariant[Int, Int, Int])
     checkAll("Contravariant[OptionT[Const[String, ?], ?]]", SerializableTests.serializable(Contravariant[OptionT[Const[String, ?], ?]]))
 
+    implicitly[Contravariant[OptionT[Show, ?]]]
     Contravariant[OptionT[Show, ?]]
   }
 

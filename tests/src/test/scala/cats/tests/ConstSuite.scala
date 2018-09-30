@@ -45,6 +45,14 @@ class ConstSuite extends CatsSuite {
   checkAll("PartialOrder[Const[Set[Int], String]]", PartialOrderTests[Const[Set[Int], String]].partialOrder)
   checkAll("Order[Const[Int, String]]", OrderTests[Const[Int, String]].order)
 
+  {
+    implicitly[Invariant[Const[String, ?]]]
+    Invariant[Const[String, ?]]
+
+    checkAll("Const[String, Int]", InvariantTests[Const[String, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[Const[String, ?]]", SerializableTests.serializable(Invariant[Const[String, ?]]))
+  }
+
   checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
 

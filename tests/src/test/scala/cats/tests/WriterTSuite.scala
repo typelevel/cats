@@ -372,6 +372,14 @@ class WriterTSuite extends CatsSuite {
   }
 
   {
+    // F has an Invariant
+    Invariant[WriterT[Const[String, ?], Int, ?]]
+
+    checkAll("WriterT[Const[String, ?], Int, ?]", InvariantTests[WriterT[Const[String, ?], Int, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Const[String, ?], Int, ?]]))
+  }
+
+  {
     // F has a Foldable and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     Foldable[Const[String, ?]]
