@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{ EitherT, Validated, NonEmptySet, NonEmptyChain }
+import cats.data.{ EitherT, Validated, NonEmptySet, NonEmptyChain, NonEmptyList }
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import scala.util.Try
