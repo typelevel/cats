@@ -109,6 +109,18 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("leftNel is consistent with left(NEL)") {
+    forAll { s: String =>
+      Either.leftNel[String, Int](s) should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
+    }
+  }
+
+  test("rightNel is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNel[String, Int](i) should === (Either.right[NonEmptyList[String], Int](i))
+    }
+  }
+
   test("double swap is identity") {
     forAll { (x: Either[Int, String]) =>
       x.swap.swap should === (x)
@@ -306,6 +318,16 @@ class EitherSuite extends CatsSuite {
   test("show Left") {
     val either = Either.left[String, Int]("string")
     either.show should === ("Left(string)")
+  }
+
+  test("toEitherNel Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNel should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+  }
+
+  test("toEitherNel Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNel should === (Either.right[NonEmptyList[String], Int](42))
   }
 
   test("ap consistent with Applicative") {

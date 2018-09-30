@@ -49,9 +49,10 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def pad: (Option[A], Option[B]) = fold(a => (Some(a), None), b => (None, Some(b)), (a, b) => (Some(a), Some(b)))
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
-
   final def toIorNes[AA >: A](implicit O: Order[AA]): IorNes[AA, B] = leftMap(NonEmptySet.one(_))
   final def toIorNec[AA >: A]: IorNec[AA, B] = leftMap(NonEmptyChain.one)
+  final def toIorNel[AA >: A]: IorNel[AA, B] = leftMap(NonEmptyList.one)
+
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
   final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right

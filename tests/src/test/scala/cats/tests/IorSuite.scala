@@ -239,6 +239,20 @@ class IorSuite extends CatsSuite {
   test("toIorNes Both") {
     val ior = Ior.both[String, Int]("oops", 42)
     ior.toIorNes should === (Ior.both[NonEmptySet[String], Int](NonEmptySet.one("oops"), 42))
+
+  test("toIorNel Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNel should === (Ior.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+  }
+
+  test("toIorNel Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNel should === (Ior.right[NonEmptyList[String], Int](42))
+  }
+
+  test("toIorNel Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNel should === (Ior.both[NonEmptyList[String], Int](NonEmptyList.one("oops"), 42))
   }
 
   test("leftNel") {
