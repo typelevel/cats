@@ -300,13 +300,13 @@ private[data] sealed abstract class OptionTInstances2 extends OptionTInstances3 
   implicit def catsDataFoldableForOptionT[F[_]](implicit F0: Foldable[F]): Foldable[OptionT[F, ?]] =
     new OptionTFoldable[F] { implicit val F = F0 }
 
-  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
-    new OptionTFunctor[F] { implicit val F = F0 }
+  implicit def catsDataContravariantForOptionT[F[_]](implicit F0: Contravariant[F]): Contravariant[OptionT[F, ?]] =
+    new OptionTContravariant[F] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class OptionTInstances3 {
-  implicit def catsDataContravariantForOptionT[F[_]](implicit F0: Contravariant[F]): Contravariant[OptionT[F, ?]] =
-    new OptionTContravariant[F] { implicit val F = F0 }
+  implicit def catsDataFunctorForOptionT[F[_]](implicit F0: Functor[F]): Functor[OptionT[F, ?]] =
+    new OptionTFunctor[F] { implicit val F = F0 }
 }
 
 private[data] trait OptionTFunctor[F[_]] extends Functor[OptionT[F, ?]] {
