@@ -373,10 +373,11 @@ class WriterTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    Invariant[WriterT[Const[String, ?], Int, ?]]
+    Invariant[Show]
+    Invariant[WriterT[Show, Int, ?]]
 
-    checkAll("WriterT[Const[String, ?], Int, ?]", InvariantTests[WriterT[Const[String, ?], Int, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Const[String, ?], Int, ?]]))
+    checkAll("WriterT[Show, Int, ?]", InvariantTests[WriterT[Show, Int, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[WriterT[Show, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Show, Int, ?]]))
   }
 
   {

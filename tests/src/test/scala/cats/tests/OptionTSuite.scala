@@ -5,6 +5,7 @@ import cats.data.{Const, OptionT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
 
 class OptionTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
@@ -72,25 +73,21 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    implicitly[Invariant[OptionT[Const[String, ?], ?]]]
-    Invariant[OptionT[Const[String, ?], ?]]
+    Invariant[Show]
+    Invariant[OptionT[Show, ?]]
 
-    checkAll("OptionT[Const[String, ?], ?]", InvariantTests[OptionT[Const[String, ?], ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[OptionT[Const[String, ?], ?]]", SerializableTests.serializable(Invariant[OptionT[Const[String, ?], ?]]))
+    checkAll("OptionT[Show, ?]", InvariantTests[OptionT[Show, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[OptionT[Show, ?]]", SerializableTests.serializable(Invariant[OptionT[Show, ?]]))
   }
 
   {
     // F has a Contravariant
-    implicitly[Contravariant[OptionT[Const[String, ?], ?]]]
-    Contravariant[OptionT[Const[String, ?], ?]]
-
-    checkAll("OptionT[Const[String, ?], ?]", ContravariantTests[OptionT[Const[String, ?], ?]].contravariant[Int, Int, Int])
-    checkAll("Contravariant[OptionT[Const[String, ?], ?]]", SerializableTests.serializable(Contravariant[OptionT[Const[String, ?], ?]]))
-
-    implicitly[Contravariant[OptionT[Show, ?]]]
+    Contravariant[Show]
     Contravariant[OptionT[Show, ?]]
-  }
 
+    checkAll("OptionT[Show, ?]", ContravariantTests[OptionT[Show, ?]].contravariant[Int, Int, Int])
+    checkAll("Contravariant[OptionT[Show, ?]]", SerializableTests.serializable(Contravariant[OptionT[Show, ?]]))
+  }
 
   {
     // F has a ContravariantMonoidal
