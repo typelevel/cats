@@ -37,8 +37,13 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
   /**
    * given a Monoid evidence for `A`, it returns None if the foldable is empty or combines all the `A`s if it's not
    */
-  def combineAllOption(implicit ev: Monoid[A], F: Foldable[F]): Option[A] =
-    if (F.isEmpty(fa)) None else Some(F.combineAll(fa))
+  def combineAllOption(implicit ev: Semigroup[A], F: Foldable[F]): Option[A] =
+    if (F.isEmpty(fa)) None else ev.combineAllOption(toIterator)
+
+  def toIterator(implicit F: Foldable[F]): Iterator[A] =
+    F.foldRight[A, Stream[A]](fa, Eval.later(Stream.empty)) {
+      (a, eb) => eb map (Stream.cons(a, _))
+    }.value.iterator
 
    /**
    * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
