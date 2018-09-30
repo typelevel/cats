@@ -70,6 +70,16 @@ class OptionTSuite extends CatsSuite {
     checkAll("Functor[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, ?]]))
   }
 
+  {
+    // F has a Contravariant
+    Contravariant[OptionT[Const[String, ?], ?]]
+
+    checkAll("OptionT[Const[String, ?], ?]", ContravariantTests[OptionT[Const[String, ?], ?]].contravariant[Int, Int, Int])
+    checkAll("Contravariant[OptionT[Const[String, ?], ?]]", SerializableTests.serializable(Contravariant[OptionT[Const[String, ?], ?]]))
+
+    Contravariant[OptionT[Show, ?]]
+  }
+
 
   {
     // F has a ContravariantMonoidal
