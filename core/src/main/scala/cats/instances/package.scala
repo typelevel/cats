@@ -14,6 +14,7 @@ package object instances {
   object eq              extends EqInstances
   object equiv           extends EquivInstances
   object float           extends FloatInstances
+  object finiteDuration  extends FiniteDurationInstances
   object function        extends FunctionInstances with FunctionInstancesBinCompat0
   object future          extends FutureInstances
   object int             extends IntInstances

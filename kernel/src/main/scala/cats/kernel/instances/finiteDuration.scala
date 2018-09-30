@@ -6,8 +6,8 @@ import scala.concurrent.duration.{ Duration, FiniteDuration }
 object finiteDuration extends FiniteDurationInstances
 
 trait FiniteDurationInstances {
-  implicit val catsKernelStdOrderForDuration: Order[FiniteDuration] with Hash[FiniteDuration] = new FiniteDurationOrder
-  implicit val catsKernelStdGroupForDuration: CommutativeGroup[FiniteDuration] = new FiniteDurationGroup
+  implicit val catsKernelStdOrderForFiniteDuration: Order[FiniteDuration] with Hash[FiniteDuration] = new FiniteDurationOrder
+  implicit val catsKernelStdGroupForFiniteDuration: CommutativeGroup[FiniteDuration] = new FiniteDurationGroup
 }
 
 
