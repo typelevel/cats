@@ -55,6 +55,17 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
+  test("State.empty, StateT.empty and IndexedStateT.empty are consistent"){
+    forAll { (s: String) =>
+      val state: State[String, Int] = State.empty
+      val stateT: State[String, Int] = StateT.empty
+      val indexedStateT: State[String, Int] = IndexedStateT.empty
+
+      state.run(s) should === (stateT.run(s))
+      state.run(s) should === (indexedStateT.run(s))
+    }
+  }
+
   test("State.get, StateT.get and IndexedStateT.get are consistent") {
     forAll{ (s: String) =>
       val state: State[String, String] = State.get
