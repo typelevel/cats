@@ -28,11 +28,6 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
 
-  def imap[B](f: A => B)(g: B => A)(implicit F: Invariant[F]): OptionT[F, B] =
-    OptionT {
-      F.imap(value)(_ map f)(_ map g)
-    }
-
   def contramap[B](f: B => A)(implicit F: Contravariant[F]): OptionT[F, B] =
     OptionT {
       F.contramap(value)(_ map f)
