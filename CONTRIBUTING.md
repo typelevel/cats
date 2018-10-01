@@ -27,7 +27,7 @@ skip these steps and jump straight to submitting a pull request.
  3. [Build the project](#build-project)
  4. [Implement your contribution](#write-code)
  5. [Write tests](#write-tests)
- 6. [Write documentation](#write-documentation)
+ 6. [Write documentation](#contributing-documentation)
  7. [Write examples](#write-examples)
  8. [Submit pull request](#submit-a-pull-request)
 
