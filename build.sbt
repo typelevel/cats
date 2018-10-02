@@ -647,7 +647,7 @@ addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFre
 
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
+addCommandAlias("validateJVM", ";scalastyle;scalafmt::test;test:scalafmt::test;buildJVM;bench/test;validateBC;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 

@@ -104,6 +104,7 @@ To build Cats you should have
  * `test`: run the tests
  * `unidoc`: generate the documentation
  * `scalastyle`: run the style-checker on the code
+ * `scalafmt`: run the code formatter
  * `validate`: run tests, style-checker, and doc generation
 
 #### Scala and Scala.js
