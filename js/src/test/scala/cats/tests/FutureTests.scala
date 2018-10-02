@@ -37,7 +37,6 @@ class FutureTests extends CatsSuite {
       }
     }
 
-
   implicit val throwableEq: Eq[Throwable] =
     Eq.by[Throwable, String](_.toString)
 

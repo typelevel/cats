@@ -13,9 +13,9 @@ object future extends FutureInstances0
 
 object Await {
   def result[A](f: Future[A], atMost: FiniteDuration): A = f.value match {
-      case Some(v) => v.get
-      case None => throw new IllegalStateException()
-    }
+    case Some(v) => v.get
+    case None => throw new IllegalStateException()
+  }
 }
 
 private[instances] sealed trait FutureInstances0 extends FutureInstances1 {
