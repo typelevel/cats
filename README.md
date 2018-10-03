@@ -63,6 +63,7 @@ functionality, you can pick-and-choose from amongst these modules
  * [`mouse`](https://github.com/typelevel/mouse): a small companion to Cats that provides convenient syntax (aka extension methods) 
  * [`kittens`](https://github.com/typelevel/kittens): automatic type class instance derivation for Cats and generic utility functions
  * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
+ * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
