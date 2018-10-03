@@ -14,7 +14,7 @@ import Arbitrary.arbitrary
 import org.scalactic.anyvals.{ PosInt, PosZInt }
 import org.scalatest.FunSuite
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
 
@@ -47,6 +47,20 @@ object KernelCheck {
       Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))))
   }
 
+  implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
+    // max range is +/- 292 years, but we give ourselves some extra headroom
+    // to ensure that we can add these things up. they crash on overflow.
+    val n = (292L * 365) / 50
+    Arbitrary(Gen.oneOf(
+      Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
+      Gen.choose(-n * 24L, n * 24L).map(FiniteDuration(_, HOURS)),
+      Gen.choose(-n * 1440L, n * 1440L).map(FiniteDuration(_, MINUTES)),
+      Gen.choose(-n * 86400L, n * 86400L).map(FiniteDuration(_, SECONDS)),
+      Gen.choose(-n * 86400000L, n * 86400000L).map(FiniteDuration(_, MILLISECONDS)),
+      Gen.choose(-n * 86400000000L, n * 86400000000L).map(FiniteDuration(_, MICROSECONDS)),
+      Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(FiniteDuration(_, NANOSECONDS))))
+  }
+
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
@@ -69,6 +83,19 @@ object KernelCheck {
       else if (d == Duration.MinusInf) 1844151880988859955L
       else if (d == Duration.Undefined) -7917359255778781894L
       else d.length * (d.unit match {
+        case DAYS => -6307593037248227856L
+        case HOURS => -3527447467459552709L
+        case MINUTES => 5955657079535371609L
+        case SECONDS => 5314272869665647192L
+        case MILLISECONDS => -2025740217814855607L
+        case MICROSECONDS => -2965853209268633779L
+        case NANOSECONDS => 6128745701389500153L
+      })
+    }
+
+  implicit val cogenFiniteDuration: Cogen[FiniteDuration] =
+    Cogen[Long].contramap { d =>
+      d.length * (d.unit match {
         case DAYS => -6307593037248227856L
         case HOURS => -3527447467459552709L
         case MINUTES => 5955657079535371609L
@@ -132,6 +159,7 @@ class Tests extends FunSuite with Discipline {
   checkAll("PartialOrder[BitSet]", PartialOrderTests[BitSet].partialOrder)
   checkAll("Order[BigInt]", OrderTests[BigInt].order)
   checkAll("Order[Duration]", OrderTests[Duration].order)
+  checkAll("Order[FiniteDuration]", OrderTests[FiniteDuration].order)
   checkAll("Order[UUID]", OrderTests[UUID].order)
   checkAll("Order[List[Int]]", OrderTests[List[Int]]  .order)
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
@@ -187,6 +215,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("CommutativeGroup[BigInt]", SerializableTests.serializable(CommutativeGroup[BigInt]))
   checkAll("CommutativeGroup[Duration]", CommutativeGroupTests[Duration].commutativeGroup)
   checkAll("CommutativeGroup[Duration]", SerializableTests.serializable(CommutativeGroup[Duration]))
+  checkAll("CommutativeGroup[FiniteDuration]", CommutativeGroupTests[FiniteDuration].commutativeGroup)
+  checkAll("CommutativeGroup[FiniteDuration]", SerializableTests.serializable(CommutativeGroup[FiniteDuration]))
 
 
   checkAll("Hash[Unit]" , HashTests[Unit].hash)
@@ -198,6 +228,7 @@ class Tests extends FunSuite with Discipline {
   checkAll("Hash[Char]" , HashTests[Char].hash)
   checkAll("Hash[Int]" , HashTests[Int].hash)
   checkAll("Hash[Duration]", HashTests[Duration].hash)
+  checkAll("Hash[FiniteDuration]", HashTests[FiniteDuration].hash)
 
   // NOTE: Do not test for Float/Double/Long. These types'
   // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].

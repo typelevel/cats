@@ -14,6 +14,7 @@ trait AllInstances
     with EqInstances
     with EitherInstances
     with DurationInstances
+    with FiniteDurationInstances
     with FloatInstances
     with FunctionInstances
     with HashInstances

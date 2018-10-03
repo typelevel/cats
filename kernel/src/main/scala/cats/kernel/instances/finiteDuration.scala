@@ -3,7 +3,7 @@ package instances
 
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 
-object finiteDuration extends FiniteDurationInstances
+package object finiteDuration extends FiniteDurationInstances
 
 trait FiniteDurationInstances {
   implicit val catsKernelStdOrderForFiniteDuration: Order[FiniteDuration] with Hash[FiniteDuration] = new FiniteDurationOrder
