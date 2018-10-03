@@ -3,14 +3,11 @@ package instances
 
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 
-package object finiteDuration extends FiniteDurationInstances
 
 trait FiniteDurationInstances {
   implicit val catsKernelStdOrderForFiniteDuration: Order[FiniteDuration] with Hash[FiniteDuration] = new FiniteDurationOrder
   implicit val catsKernelStdGroupForFiniteDuration: CommutativeGroup[FiniteDuration] = new FiniteDurationGroup
 }
-
-
 class FiniteDurationOrder extends Order[FiniteDuration] with Hash[FiniteDuration] {
   def hash(x: FiniteDuration): Int = x.hashCode()
 
