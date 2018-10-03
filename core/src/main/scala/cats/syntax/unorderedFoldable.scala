@@ -1,6 +1,7 @@
 package cats
 package syntax
 
+import cats.instances.long._
 import cats.kernel.CommutativeMonoid
 
 trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
@@ -15,7 +16,7 @@ final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       override def combine(optX: Option[A], optY: Option[A]): Option[A] = (optX, optY) match {
         case (None, y) => y
         case (x, None) => x
-        case (Some(x), Some(y)) => if (ev.gteqv(f(x), f(y))) Some(x) else Some(y)
+        case (sx @ Some(x), sy @ Some(y)) => if (ev.gteqv(f(x), f(y))) sx else sy
       }
     }
 
@@ -25,7 +26,7 @@ final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       override def combine(optX: Option[A], optY: Option[A]): Option[A] = (optX, optY) match {
         case (None, y) => y
         case (x, None) => x
-        case (Some(x), Some(y)) => if (ev.lteqv(f(x), f(y))) Some(x) else Some(y)
+        case (sx @ Some(x), sy @ Some(y)) => if (ev.lteqv(f(x), f(y))) sx else sy
       }
     }
 
@@ -51,7 +52,7 @@ final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
     * }}}
     */
   def maxByOption[B](f: A => B)(implicit F: UnorderedFoldable[F], B: Order[B]): Option[A] =
-    F.unorderedFoldMap(fa)(Option.apply)(orderMaxCommutativeMonoidBy(f))
+    F.unorderedFoldMap(fa)(Some.apply: A => Option[A])(orderMaxCommutativeMonoidBy(f))
 
   /**
     * Find the minimum item in this structure according to the given function.
@@ -75,5 +76,25 @@ final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
     * }}}
     */
   def minByOption[B](f: A => B)(implicit F: UnorderedFoldable[F], B: Order[B]): Option[A] =
-    F.unorderedFoldMap(fa)(Option.apply)(orderMinCommutativeMonoidBy(f))
+    F.unorderedFoldMap(fa)(Some.apply: A => Option[A])(orderMinCommutativeMonoidBy(f))
+
+  /**
+    * Count the number of elements in the structure that satisfy the given predicate.
+    *
+    * For example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val map1 = Map[Int, String]()
+    * scala> val p1: String => Boolean = _.length > 0
+    * scala> map1.count(p1)
+    * res0: Long = 0
+    *
+    * scala> val map2 = Map(1 -> "hello", 2 -> "world", 3 -> "!")
+    * scala> val p2: String => Boolean = _.length > 1
+    * scala> map2.count(p2)
+    * res1: Long = 2
+    * }}}
+    */
+  def count(p: A => Boolean)(implicit F: UnorderedFoldable[F]): Long =
+    F.unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }

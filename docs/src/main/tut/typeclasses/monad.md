@@ -159,3 +159,26 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 This sort of construction is called a monad transformer.
 
 Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+
+## FlatMap - a weakened Monad
+A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`
+method. Indeed in Cats `Monad` is a subclass of `FlatMap` (from which it gets `flatMap`)
+and `Applicative` (from which it gets `pure`).
+
+```scala
+trait FlatMap[F[_]] extends Apply[F] {
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+}
+
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
+```
+
+The laws for `FlatMap` are just the laws of `Monad` that don't mention `pure`.
+
+One of the motivations for `FlatMap`'s existence is that some types have `FlatMap` instances but not
+`Monad` - one example is `Map[K, ?]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
+
+However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
+pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has an `FlatMap` instance.
+

@@ -67,7 +67,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 }
 
 final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
-  def raiseError[F[_], A](implicit F: ApplicativeError[F, E]): F[A] =
+  def raiseError[F[_], A](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     F.raiseError(e)
 }
 
