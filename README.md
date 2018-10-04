@@ -99,13 +99,16 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [cormorant](https://github.com/ChristopherDavenport/cormorant): CSV handling library for FP
  * [decline](https://github.com/bkirwi/decline): A composable command-line parser
  * [doobie](https://github.com/tpolecat/doobie): a pure functional JDBC layer for Scala
+ * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
  * [fastparse-cats](https://github.com/johnynek/fastparse-cats): cats Monad and Alternative instances for [fastparse](https://github.com/lihaoyi/fastparse)
  * [Fetch](https://github.com/47deg/fetch): efficient data access to heterogeneous data sources
  * [finch](https://github.com/finagle/finch): Scala combinator library for building Finagle HTTP services
  * [Frameless](https://github.com/typelevel/frameless): Expressive types for Spark
  * [FS2](https://github.com/functional-streams-for-scala): compositional, streaming I/O library
  * [fuuid](https://github.com/ChristopherDavenport/fuuid): functional uuid's
+ * [github4s](https://github.com/47deg/github4s): wrapper around the GitHub API
  * [grafter](https://github.com/zalando/grafter): dependency-injection library using the `Reader` pattern
+ * [gsheets4s](https://github.com/benfradet/gsheets4s): wrapper around the Google Sheets API
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
@@ -115,10 +118,13 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
+ * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
+ * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
+ * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
+ * [scala-weather](https://github.com/snowplow/scala-weather): weather lookups
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
- * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library.
- * [extruder](https://github.com/janstenpickle/extruder): Populate case classes from any data source
+ * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
   
 Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
