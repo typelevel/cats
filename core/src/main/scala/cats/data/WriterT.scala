@@ -27,6 +27,11 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
       functorF.map(run) { z => (z._1, fn(z._2)) }
     }
 
+  def imap[Z](f: V => Z)(g: Z => V)(implicit F: Invariant[F]): WriterT[F, L, Z] =
+    WriterT {
+      F.imap(run)(z => (z._1, f(z._2)))(z => (z._1, g(z._2)))
+    }
+
   /**
    * Modify the context `F` using transformation `f`.
    */
@@ -253,9 +258,10 @@ private[data] sealed abstract class WriterTInstances8 extends WriterTInstances9 
       implicit val L0: Semigroup[L] = L
     }
 
-  implicit def catsDataContravariantForWriterT[F[_], L](implicit F: Contravariant[F]): Contravariant[WriterT[F, L, ?]] = new WriterTContravariant[F, L] {
-    implicit val F0: Contravariant[F] = F
-  }
+  implicit def catsDataContravariantForWriterT[F[_], L](implicit F: Contravariant[F]): Contravariant[WriterT[F, L, ?]] =
+    new WriterTContravariant[F, L] {
+      implicit val F0: Contravariant[F] = F
+    }
 }
 
 private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10 {
@@ -269,6 +275,9 @@ private[data] sealed abstract class WriterTInstances9 extends WriterTInstances10
       implicit val F0: Applicative[F] = F
       implicit val L0: Monoid[L] = L
     }
+
+  implicit def catsDataInvariantForWriterT[F[_], L](implicit F0: Invariant[F]): Invariant[WriterT[F, L, ?]] =
+    new WriterTInvariant[F, L] { implicit val F = F0 }
 }
 
 private[data] sealed abstract class WriterTInstances10 extends WriterTInstances11 {
@@ -305,6 +314,13 @@ private[data] sealed trait WriterTContravariant[F[_], L] extends Contravariant[W
 
   override def contramap[A, B](fa: WriterT[F, L, A])(f: B => A): WriterT[F, L, B] =
     fa.contramap(f)
+}
+
+private[data] sealed trait WriterTInvariant[F[_], L] extends Invariant[WriterT[F, L, ?]] {
+  implicit def F: Invariant[F]
+
+  override def imap[A, B](fa: WriterT[F, L, A])(f: A => B)(g: B => A): WriterT[F, L, B] =
+    fa.imap(f)(g)
 }
 
 private[data] sealed trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] with Apply[WriterT[F, L, ?]] {

@@ -2,7 +2,8 @@ package cats
 package tests
 
 import cats.data.{Const, OptionT}
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
+import cats.kernel.{Monoid, Semigroup}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -73,11 +74,11 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    Invariant[Show]
-    Invariant[OptionT[Show, ?]]
+    Invariant[Semigroup]
+    Invariant[OptionT[Semigroup, ?]]
 
-    checkAll("OptionT[Show, ?]", InvariantTests[OptionT[Show, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[OptionT[Show, ?]]", SerializableTests.serializable(Invariant[OptionT[Show, ?]]))
+    checkAll("OptionT[Semigroup, ?]", InvariantTests[OptionT[Semigroup, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[OptionT[Semigroup, ?]]", SerializableTests.serializable(Invariant[OptionT[Semigroup, ?]]))
   }
 
   {

@@ -2,12 +2,11 @@ package cats
 package tests
 
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
-
+import cats.kernel.Semigroup
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -373,11 +372,11 @@ class WriterTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    Invariant[Show]
-    Invariant[WriterT[Show, Int, ?]]
+    Invariant[Semigroup]
+    Invariant[WriterT[Semigroup, Int, ?]]
 
-    checkAll("WriterT[Show, Int, ?]", InvariantTests[WriterT[Show, Int, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[WriterT[Show, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Show, Int, ?]]))
+    checkAll("WriterT[Semigroup, Int, ?]", InvariantTests[WriterT[Semigroup, Int, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[WriterT[Semigroup, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Semigroup, Int, ?]]))
   }
 
   {

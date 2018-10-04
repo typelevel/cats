@@ -4,9 +4,11 @@ package discipline
 
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+
 import scala.util.{Failure, Success, Try}
 import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.data._
+import cats.kernel.Semigroup
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 
@@ -319,7 +321,7 @@ object arbitrary extends ArbitraryInstances0 {
 
 }
 
-private[discipline] sealed trait ArbitraryInstances0 {
+private[discipline] sealed trait ArbitraryInstances0 extends ArbitraryInstances1 {
 
   implicit def catsLawArbitraryForIndexedStateT[F[_], SA, SB, A](implicit F: Arbitrary[F[SA => F[(SB, A)]]]): Arbitrary[IndexedStateT[F, SA, SB, A]] =
     Arbitrary(F.arbitrary.map(IndexedStateT.applyF))
@@ -335,4 +337,30 @@ private[discipline] sealed trait ArbitraryInstances0 {
 
   implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
+}
+
+private[discipline] sealed trait ArbitraryInstances1 {
+
+  implicit def catsLawsArbitraryForSemigroupOfOption[A](implicit ev: Semigroup[A]): Arbitrary[Semigroup[Option[A]]] =
+    Arbitrary {
+      Gen.const(
+        new Semigroup[Option[A]] {
+          def combine(x: Option[A], y: Option[A]): Option[A] =
+            (x, y) match {
+              case (Some(a1), Some(a2)) => Some(ev.combine(a1, a2))
+              case _ => None
+            }
+        }
+      )
+    }
+
+  implicit def catsLawsArbitraryForSemigroupOfTuple[L, V](implicit ev1: Semigroup[L], ev2: Semigroup[V]): Arbitrary[Semigroup[(L, V)]] =
+    Arbitrary {
+      Gen.const(
+        new Semigroup[(L, V)] {
+          def combine(x: (L, V), y: (L, V)): (L, V) =
+            ev1.combine(x._1, y._1) -> ev2.combine(x._2, y._2)
+        }
+      )
+    }
 }
