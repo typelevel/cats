@@ -6,7 +6,6 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
-import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector: Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
@@ -89,8 +88,13 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
 
-      override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable[List].foldM(fa.toList, z)(f)
+      override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        val length = fa.length
+        G.tailRecM((z, 0)) { case (b, i) =>
+          if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          else G.pure(Right(b))
+        }
+      }
 
       override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
