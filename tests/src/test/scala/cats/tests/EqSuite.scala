@@ -19,8 +19,8 @@ class EqSuite extends CatsSuite {
 
     case class Something(a: Int, b: Int, c: Int)
 
-    test("Eq returned by Eq.compose yields true on all underlying Eq's true") {
-        val somethingEq = Eq.compose[Something](
+    test("Eq returned by Eq.allOf yields true on all underlying Eq's true") {
+        val somethingEq = Eq.allOf[Something](
             Eq.by(_.a), Eq.by(_.b), Eq.by(_.c)
         )
 
@@ -29,8 +29,8 @@ class EqSuite extends CatsSuite {
         somethingEq.eqv(sut, sut) shouldBe true
     }
 
-    test("Eq returned by Eq.compose yields false if some of underlying Eq's false") {
-        val somethingEq = Eq.compose[Something](
+    test("Eq returned by Eq.allOf yields false if some of underlying Eq's false") {
+        val somethingEq = Eq.allOf[Something](
             Eq.by(_.a), Eq.by(_.b), Eq.by(_.c)
         )
 

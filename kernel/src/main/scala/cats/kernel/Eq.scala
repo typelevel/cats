@@ -80,7 +80,7 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
     * Return an Eq that gives the result of conjunction of all arguments
     * Note this is idempotent
     */
-  def compose[@sp A](eqs: Eq[A]*): Eq[A] =
+  def allOf[@sp A](eqs: Eq[A]*): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A) = eqs.forall(_.eqv(x, y))
     }
