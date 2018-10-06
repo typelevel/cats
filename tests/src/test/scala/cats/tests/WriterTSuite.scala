@@ -372,11 +372,12 @@ class WriterTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    Invariant[Semigroup]
-    Invariant[WriterT[Semigroup, Int, ?]]
+    implicit val evidence = ListWrapper.invariant
+    Invariant[ListWrapper]
+    Invariant[WriterT[ListWrapper, Int, ?]]
 
-    checkAll("WriterT[Semigroup, Int, ?]", InvariantTests[WriterT[Semigroup, Int, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[WriterT[Semigroup, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[Semigroup, Int, ?]]))
+    checkAll("WriterT[ListWrapper, Int, ?]", InvariantTests[WriterT[ListWrapper, Int, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[WriterT[ListWrapper, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[ListWrapper, Int, ?]]))
   }
 
   {

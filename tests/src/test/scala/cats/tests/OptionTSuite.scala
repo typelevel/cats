@@ -74,11 +74,12 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    Invariant[Semigroup]
-    Invariant[OptionT[Semigroup, ?]]
+    implicit val evidence = ListWrapper.invariant
+    Invariant[ListWrapper]
+    Invariant[OptionT[ListWrapper, ?]]
 
-    checkAll("OptionT[Semigroup, ?]", InvariantTests[OptionT[Semigroup, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[OptionT[Semigroup, ?]]", SerializableTests.serializable(Invariant[OptionT[Semigroup, ?]]))
+    checkAll("OptionT[ListWrapper, ?]", InvariantTests[OptionT[ListWrapper, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[OptionT[ListWrapper, ?]]", SerializableTests.serializable(Invariant[OptionT[ListWrapper, ?]]))
   }
 
   {
