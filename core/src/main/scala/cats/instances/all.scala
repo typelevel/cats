@@ -47,3 +47,4 @@ trait AllInstancesBinCompat1
 
 trait AllInstancesBinCompat2
   extends DurationInstances
+  with FiniteDurationInstances

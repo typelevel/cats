@@ -1,7 +1,7 @@
 package cats.kernel
 package instances
 
-package object all extends AllInstances
+package object all extends AllInstances with AllInstancesBinCompat0
 
 trait AllInstances
     extends BigDecimalInstances
@@ -34,3 +34,6 @@ trait AllInstances
     with UnitInstances
     with UUIDInstances
     with VectorInstances
+
+
+trait AllInstancesBinCompat0 extends FiniteDurationInstances
