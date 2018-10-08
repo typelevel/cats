@@ -406,6 +406,21 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     */
   def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
     NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+
+  /**
+    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
+    *{{{
+    * scala> import cats.data._
+    * scala> import cats.instances.int._
+    * scala> val nel = NonEmptyList((0, "a"), List((1, "b"),(0, "c"), (2, "d")))
+    * scala> nel.toNem
+    * res0: NonEmptyMap[Int,String] = Map(0 -> c, 1 -> b, 2 -> d)
+    *}}}
+    *
+    */
+  def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
+    NonEmptyMap.fromMapUnsafe(SortedMap(toList.map(ev): _*)(order.toOrdering))
 }
 
 object NonEmptyList extends NonEmptyListInstances {

@@ -3,10 +3,11 @@ package tests
 
 import cats.kernel.laws.discipline.{SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 
-import cats.data.{NonEmptyList, NonEmptyVector}
+import cats.data.{NonEmptyList, NonEmptyVector, NonEmptyMap}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{CommutativeApplyTests, BimonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests}
+import scala.collection.immutable.SortedMap
 
 class NonEmptyListSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -313,6 +314,12 @@ class NonEmptyListSuite extends CatsSuite {
 
       ior.left.map(xs => xs.sorted should === (xs))
       ior.right.map(xs => xs.sorted should === (xs))
+    }
+  }
+
+  test("NonEmptyList#toNem is consistent with List#toMap and creating NonEmptyMap from it") {
+    forAll { nel: NonEmptyList[(Int, String)] =>
+      nel.toNem should ===(NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap))
     }
   }
 }
