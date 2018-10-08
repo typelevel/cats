@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{ EitherT, Validated, NonEmptyList }
+import cats.data.{ EitherT, Validated, NonEmptySet, NonEmptyChain, NonEmptyList }
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import scala.util.Try
@@ -124,6 +124,28 @@ class EitherSuite extends CatsSuite {
   test("double swap is identity") {
     forAll { (x: Either[Int, String]) =>
       x.swap.swap should === (x)
+    }
+  }
+
+  test("leftNec is consistent with left(NEC)") {
+    forAll { s: String =>
+      Either.leftNec[String, Int](s) should === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s)))
+    }
+  }
+  test("rightNec is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNec[String, Int](i) should === (Either.right[NonEmptyChain[String], Int](i))
+    }
+  }
+
+  test("leftNes is consistent with left(NES)") {
+    forAll { s: String =>
+      Either.leftNes[String, Int](s) should === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s)))
+    }
+  }
+  test("rightNes is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNes[String, Int](i) should === (Either.right[NonEmptySet[String], Int](i))
     }
   }
 
@@ -268,6 +290,24 @@ class EitherSuite extends CatsSuite {
     forAll { (x: Either[Int, String], y: Either[Int, String])  =>
       x.partialCompare(y) should === (partialOrder.partialCompare(x, y))
     }
+  }
+
+  test("toEitherNec Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNec should === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+  }
+  test("toEitherNec Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNec should === (Either.right[NonEmptyChain[String], Int](42))
+  }
+
+  test("toEitherNes Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNes should === (Either.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+  }
+  test("toEitherNes Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNes should === (Either.right[NonEmptySet[String], Int](42))
   }
 
   test("show Right") {
