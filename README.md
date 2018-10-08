@@ -129,7 +129,14 @@ By sharing the same set of type classes, instances and data types provided by Ca
   
 Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
-*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
+*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
+
+*We offer a [Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge.svg) to let others know your project works with cats!*
+
+Below is a quick html snippet to use the badge in your own project.
+```
+<a href="https://typelevel.org/cats/"><img src="https://typelevel.org/cats/img/cats-badge.svg" alt="Cats friendly" /></a>
+```
 
 ### How can I contribute to Cats?
 
