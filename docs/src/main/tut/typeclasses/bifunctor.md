@@ -81,3 +81,5 @@ val result: List[Int] =
 ```
 
 As you can see, this instance makes it convenient to process two related pieces of data in independent ways, especially when there is no state relationship between the two until processing is complete.
+
+Note that, just as with the bifunctor for `Either`, we do not have a `rightMap` function since the relevant instances of `Bifunctor` induce a `Functor` in the second argument, so we just use `map`.
