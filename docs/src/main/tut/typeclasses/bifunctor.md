@@ -50,3 +50,34 @@ def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
 
 There is no `rightMap` however - use `map` instead. The reasoning behind this is that in Cats, the instances of
 `Bifunctor` are also mostly instances of `Functor`, as it is the case with `Either`.
+
+## Tuple2 as a Bifunctor
+
+Another very popular `Bifunctor` is that for the `Tuple2` data type, or `(A, B)` for types `A` and `B`.
+
+Let's say we have a list of balances and want divide them by the number of months in the lifetime of the account holder.
+A bit contrived, but we want an average contribution per month to the given account.
+The list of balances is given as a list of numeric strings (except when they aren't), and the account lifetime is given in years.
+
+```tut:book
+val records: List[String] = List("4", "77", "99", "21", "oops")
+val lifetimes: List[Int] = List(5, 25, 3, 4, 30)
+val withLifetime: List[(String, Int)] = records.zip(lifetimes)
+
+def decodeInt(s: String): Either[Throwable, Int] = Either.catchNonFatal(s.toInt)
+
+val result: List[Int] =
+  withLifetime.map(
+      _.leftMap(decodeInt)
+    ).map(
+        _.bimap({
+          case Right(v) => v
+          case Left(_) => 0
+        },
+        years => 12 * years
+    )).map({
+      case (balance, lifetime) => balance / lifetime
+    })
+```
+
+As you can see, this instance makes it convenient to process two related pieces of data in independent ways, especially when there is no state relationship between the two until processing is complete.
