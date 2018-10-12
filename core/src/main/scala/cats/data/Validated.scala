@@ -128,6 +128,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case Invalid(e)  => Validated.invalidNel(e)
     }
 
+  /** Lift the Invalid value into a NonEmptyChain. */
+  def toValidatedNec[EE >: E, AA >: A]: ValidatedNec[EE, AA] =
+    this match {
+      case v @ Valid(_) => v
+      case Invalid(e)  => Validated.invalidNec(e)
+    }
+
   /**
    * Convert to an Either, apply a function, convert back.  This is handy
    * when you want to use the Monadic properties of the Either type.
@@ -314,7 +321,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   }
 }
 
-object Validated extends ValidatedInstances with ValidatedFunctions{
+object Validated extends ValidatedInstances with ValidatedFunctions with ValidatedFunctionsBinCompat0 {
   final case class Valid[+A](a: A) extends Validated[Nothing, A]
   final case class Invalid[+E](e: E) extends Validated[E, Nothing]
 
@@ -514,7 +521,7 @@ private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplic
 
 private[data] trait ValidatedFunctions {
   /**
-    * Converts an `A` to a `Validated[A, B]`.
+    * Converts an `E` to a `Validated[E, A]`.
     *
     * For example:
     * {{{
@@ -522,10 +529,10 @@ private[data] trait ValidatedFunctions {
     * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Argument is nonzero)
     * }}}
     */
-  def invalid[A, B](a: A): Validated[A, B] = Validated.Invalid(a)
+  def invalid[E, A](e: E): Validated[E, A] = Validated.Invalid(e)
 
   /**
-    * Converts an `A` to a `ValidatedNel[A, B]`.
+    * Converts an `E` to a `ValidatedNel[E, A]`.
     *
     * For example:
     * {{{
@@ -533,10 +540,10 @@ private[data] trait ValidatedFunctions {
     * res0: ValidatedNel[IllegalArgumentException, String] = Invalid(NonEmptyList(java.lang.IllegalArgumentException: Argument is nonzero))
     * }}}
     */
-  def invalidNel[A, B](a: A): ValidatedNel[A, B] = Validated.Invalid(NonEmptyList(a, Nil))
+  def invalidNel[E, A](e: E): ValidatedNel[E, A] = Validated.Invalid(NonEmptyList(e, Nil))
 
   /**
-    * Converts a `B` to a `Validated[A, B]`.
+    * Converts a `A` to a `Validated[E, A]`.
     *
     * For example:
     * {{{
@@ -544,10 +551,10 @@ private[data] trait ValidatedFunctions {
     * res0: Validated[IllegalArgumentException, String] = Valid(Hello world)
     * }}}
     */
-  def valid[A, B](b: B): Validated[A, B] = Validated.Valid(b)
+  def valid[E, A](a: A): Validated[E, A] = Validated.Valid(a)
 
   /**
-    * Converts a `B` to a `ValidatedNel[A, B]`.
+    * Converts a `A` to a `ValidatedNel[E, A]`.
     *
     * For example:
     * {{{
@@ -555,7 +562,7 @@ private[data] trait ValidatedFunctions {
     * res0: ValidatedNel[IllegalArgumentException, String] = Valid(Hello world)
     * }}}
     */
-  def validNel[A, B](b: B): ValidatedNel[A, B] = Validated.Valid(b)
+  def validNel[E, A](a: A): ValidatedNel[E, A] = Validated.Valid(a)
 
   def catchNonFatal[A](f: => A): Validated[Throwable, A] =
     try {
@@ -589,16 +596,51 @@ private[data] trait ValidatedFunctions {
   def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
 
   /**
-   * If the condition is satisfied, return the given `B` as valid,
-   * otherwise return the given `A` as invalid.
+   * If the condition is satisfied, return the given `A` as valid,
+   * otherwise return the given `E` as invalid.
    */
-  final def cond[A, B](test: Boolean, b: => B, a: => A): Validated[A, B] =
-    if (test) valid(b) else invalid(a)
+  final def cond[E, A](test: Boolean, a: => A, e: => E): Validated[E, A] =
+    if (test) valid(a) else invalid(e)
 
   /**
-   * If the condition is satisfied, return the given `B` as valid NEL,
-   * otherwise return the given `A` as invalid NEL.
+   * If the condition is satisfied, return the given `A` as valid NEL,
+   * otherwise return the given `E` as invalid NEL.
    */
-  final def condNel[A, B](test: Boolean, b: => B, a: => A): ValidatedNel[A, B] =
-    if (test) validNel(b) else invalidNel(a)
+  final def condNel[E, A](test: Boolean, a: => A, e: => E): ValidatedNel[E, A] =
+    if (test) validNel(a) else invalidNel(e)
+}
+
+private[data] trait ValidatedFunctionsBinCompat0 {
+
+
+  /**
+   * Converts a `B` to a `ValidatedNec[A, B]`.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.validNec[IllegalArgumentException, String]("Hello world")
+   * res0: ValidatedNec[IllegalArgumentException, String] = Valid(Hello world)
+   * }}}
+   */
+  def validNec[A, B](b: B): ValidatedNec[A, B] = Validated.Valid(b)
+
+
+
+  /**
+   * Converts an `A` to a `ValidatedNec[A, B]`.
+   *
+   * For example:
+   * {{{
+   * scala> Validated.invalidNec[IllegalArgumentException, String](new IllegalArgumentException("Argument is nonzero"))
+   * res0: ValidatedNec[IllegalArgumentException, String] = Invalid(Chain(java.lang.IllegalArgumentException: Argument is nonzero))
+   * }}}
+   */
+  def invalidNec[A, B](a: A): ValidatedNec[A, B] = Validated.Invalid(NonEmptyChain.one(a))
+
+  /**
+   * If the condition is satisfied, return the given `B` as valid NEC,
+   * otherwise return the given `A` as invalid NEC.
+   */
+  final def condNec[A, B](test: Boolean, b: => B, a: => A): ValidatedNec[A, B] =
+    if (test) validNec(b) else invalidNec(a)
 }

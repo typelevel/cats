@@ -10,6 +10,31 @@ class OptionTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[ListWrapper, ?]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
 
   checkAll("OptionT[Eval, ?]", DeferTests[OptionT[Eval, ?]].defer[Int])
+  checkAll("OptionT[Eval, ?]", FunctorFilterTests[OptionT[Eval, ?]].functorFilter[Int, Int, Int])
+
+
+  {
+    //If a Functor for F is defined
+    implicit val F = ListWrapper.functor
+
+    checkAll("OptionT[ListWrapper, ?]",
+      FunctorFilterTests[OptionT[ListWrapper, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[OptionT[ListWrapper, ?]]",
+      SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, ?]]))
+
+  }
+
+
+  {
+    //If a Traverse for F is defined
+    implicit val F = ListWrapper.traverse
+
+    checkAll("OptionT[ListWrapper, ?]",
+      TraverseFilterTests[OptionT[ListWrapper, ?]].traverseFilter[Int, Int, Int])
+    checkAll("TraverseFilter[OptionT[ListWrapper, ?]]",
+      SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, ?]]))
+
+  }
 
   {
     implicit val F = ListWrapper.eqv[Option[Int]]
@@ -289,6 +314,12 @@ class OptionTSuite extends CatsSuite {
   test("transform consistent with value.map") {
     forAll { (o: OptionT[List, Int], f: Option[Int] => Option[String]) =>
       o.transform(f) should === (OptionT(o.value.map(f)))
+    }
+  }
+
+  test("flatTransform consistent with value.flatMap") {
+    forAll { (o: OptionT[List, Int], f: Option[Int] => List[Option[String]]) =>
+      o.flatTransform(f) should === (OptionT(o.value.flatMap(f)))
     }
   }
 

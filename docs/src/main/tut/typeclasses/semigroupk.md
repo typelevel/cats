@@ -39,7 +39,7 @@ types, a `Semigroup[Option[A]]` knows the concrete type of `A` and will use
 `Semigroup[A].combine` to combine the inner `A`s. Consequently,
 `Semigroup[Option[A]].combine` requires an implicit `Semigroup[A]`.
 
-In contrast, since `SemigroupK[Option]` operates on `Option` where
+In contrast, `SemigroupK[Option]` operates on `Option` where
 the inner type is not fully specified and can be anything (i.e. is
 "universally quantified"). Thus, we cannot know how to `combine`
 two of them. Therefore, in the case of `Option` the

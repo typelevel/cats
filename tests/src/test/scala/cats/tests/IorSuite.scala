@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{BifunctorTests, BitraverseTests, SemigroupalTests, MonadErrorTests, SerializableTests, TraverseTests}
-import cats.data.{Ior, NonEmptyList, EitherT}
+import cats.data.{Ior, NonEmptyChain, NonEmptyList, NonEmptySet, EitherT}
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
@@ -215,15 +215,68 @@ class IorSuite extends CatsSuite {
     }
   }
 
+  test("toIorNec Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNec should === (Ior.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+  }
+  test("toIorNec Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNec should === (Ior.right[NonEmptyChain[String], Int](42))
+  }
+  test("toIorNec Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNec should === (Ior.both[NonEmptyChain[String], Int](NonEmptyChain.one("oops"), 42))
+  }
+
+  test("toIorNes Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNes should === (Ior.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+  }
+  test("toIorNes Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNes should === (Ior.right[NonEmptySet[String], Int](42))
+  }
+  test("toIorNes Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNes should ===(Ior.both[NonEmptySet[String], Int](NonEmptySet.one("oops"), 42))
+  }
+
+  test("toIorNel Left") {
+    val ior = Ior.left[String, Int]("oops")
+    ior.toIorNel should === (Ior.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+  }
+
+  test("toIorNel Right") {
+    val ior = Ior.right[String, Int](42)
+    ior.toIorNel should === (Ior.right[NonEmptyList[String], Int](42))
+  }
+
+  test("toIorNel Both") {
+    val ior = Ior.both[String, Int]("oops", 42)
+    ior.toIorNel should === (Ior.both[NonEmptyList[String], Int](NonEmptyList.one("oops"), 42))
+  }
+
   test("leftNel") {
     forAll { (x: String) =>
       Ior.leftNel(x).left should === (Some(NonEmptyList.one(x)))
     }
   }
 
+  test("leftNec") {
+    forAll { (x: String) =>
+      Ior.leftNec(x).left should === (Some(NonEmptyChain.one(x)))
+    }
+  }
+
   test("bothNel") {
     forAll { (x: Int, y: String) =>
       Ior.bothNel(y, x).onlyBoth should === (Some((NonEmptyList.one(y), x)))
+    }
+  }
+
+  test("bothNec") {
+    forAll { (x: Int, y: String) =>
+      Ior.bothNec(y, x).onlyBoth should === (Some((NonEmptyChain.one(y), x)))
     }
   }
 

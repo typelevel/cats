@@ -2,10 +2,10 @@ package cats
 package instances
 
 import cats.syntax.show._
+
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
-import list._
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector: Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
@@ -88,8 +88,13 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def isEmpty[A](fa: Vector[A]): Boolean = fa.isEmpty
 
-      override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
-        Foldable[List].foldM(fa.toList, z)(f)
+      override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
+        val length = fa.length
+        G.tailRecM((z, 0)) { case (b, i) =>
+          if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+          else G.pure(Right(b))
+        }
+      }
 
       override def fold[A](fa: Vector[A])(implicit A: Monoid[A]): A = A.combineAll(fa)
 
@@ -112,4 +117,30 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def show(fa: Vector[A]): String =
         fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
     }
+}
+
+trait VectorInstancesBinCompat0 {
+  implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
+    val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
+
+    override def mapFilter[A, B](fa: Vector[A])(f: (A) => Option[B]): Vector[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: Vector[A])(f: (A) => Boolean): Vector[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
+      fa.foldRight(Eval.now(G.pure(Vector.empty[B])))(
+        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+      ).value
+
+    override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
+      fa.foldRight(Eval.now(G.pure(Vector.empty[A])))(
+        (x, xse) =>
+          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+      ).value
+  }
 }

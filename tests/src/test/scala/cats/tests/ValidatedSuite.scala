@@ -91,6 +91,14 @@ class ValidatedSuite extends CatsSuite {
     }
   }
 
+  test("ValidatedNec") {
+    forAll { (e: String) ⇒
+      val manual = Validated.invalid[NonEmptyChain[String], Int](NonEmptyChain.one(e))
+      Validated.invalidNec[String, Int](e) should === (manual)
+      Validated.invalid[String, Int](e).toValidatedNec should === (manual)
+    }
+  }
+
   test("isInvalid consistent with forall and exists") {
     forAll { (v: Validated[String, Int], p: Int => Boolean) =>
       if (v.isInvalid) {
@@ -277,6 +285,12 @@ class ValidatedSuite extends CatsSuite {
   test("condNel consistent with Either.cond + toValidatedNel") {
     forAll { (cond: Boolean, s: String, i: Int) =>
       Validated.condNel(cond, s, i) should === (Either.cond(cond, s, i).toValidatedNel)
+    }
+  }
+
+  test("condNec consistent with Either.cond + toValidatedNec") {
+    forAll { (cond: Boolean, s: String, i: Int) =>
+      Validated.condNec(cond, s, i) should === (Either.cond(cond, s, i).toValidatedNec)
     }
   }
 

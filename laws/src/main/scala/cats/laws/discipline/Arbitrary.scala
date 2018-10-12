@@ -76,6 +76,17 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForNonEmptyList[A](implicit A: Cogen[A]): Cogen[NonEmptyList[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit def catsLawsArbitraryForNonEmptyChain[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
+    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap { chain =>
+      NonEmptyChain.fromChain(chain) match {
+        case None => A.arbitrary.map(NonEmptyChain.one)
+        case Some(ne) => Gen.const(ne)
+      }
+    })
+
+  implicit def catsLawsCogenForNonEmptyChain[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
+    Cogen[Chain[A]].contramap(_.toChain)
+
 
   implicit def catsLawsArbitraryForZipNonEmptyList[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyList[A]] =
     Arbitrary(implicitly[Arbitrary[NonEmptyList[A]]].arbitrary.map(nel => new ZipNonEmptyList(nel)))
@@ -275,6 +286,36 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
     Cogen((seed, x) => F.perturb(seed, x))
+
+  implicit def catsLawsArbitraryForChain[A](implicit A: Arbitrary[A]): Arbitrary[Chain[A]] = {
+    val genA = A.arbitrary
+
+    def genSize(sz: Int): Gen[Chain[A]] = {
+      val fromSeq = Gen.listOfN(sz, genA).map(Chain.fromSeq)
+      val recursive =
+        sz match {
+          case 0 => Gen.const(Chain.nil)
+          case 1 => genA.map(Chain.one)
+          case n =>
+            // Here we concat two chains
+            for {
+              n0 <- Gen.choose(1, n-1)
+              n1 = n - n0
+              left <- genSize(n0)
+              right <- genSize(n1)
+            } yield left ++ right
+        }
+
+      // prefer to generate recursively built Chains
+      // but sometimes create fromSeq
+      Gen.frequency((5, recursive), (1, fromSeq))
+    }
+
+    Arbitrary(Gen.sized(genSize))
+  }
+
+  implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
+    Cogen[List[A]].contramap(_.toList)
 
 }
 

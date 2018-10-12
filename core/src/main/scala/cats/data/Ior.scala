@@ -49,6 +49,10 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   final def pad: (Option[A], Option[B]) = fold(a => (Some(a), None), b => (None, Some(b)), (a, b) => (Some(a), Some(b)))
   final def unwrap: Either[Either[A, B], (A, B)] = fold(a => Left(Left(a)), b => Left(Right(b)), (a, b) => Right((a, b)))
 
+  final def toIorNes[AA >: A](implicit O: Order[AA]): IorNes[AA, B] = leftMap(NonEmptySet.one(_))
+  final def toIorNec[AA >: A]: IorNec[AA, B] = leftMap(NonEmptyChain.one)
+  final def toIorNel[AA >: A]: IorNel[AA, B] = leftMap(NonEmptyList.one)
+
   final def toEither: Either[A, B] = fold(Left(_), Right(_), (_, b) => Right(b))
   final def toValidated: Validated[A, B] = fold(Invalid(_), Valid(_), (_, b) => Valid(b))
   final def toOption: Option[B] = right
@@ -138,7 +142,7 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
   )
 }
 
-object Ior extends IorInstances with IorFunctions {
+object Ior extends IorInstances with IorFunctions with IorFunctions2 {
   final case class Left[+A](a: A) extends (A Ior Nothing)
   final case class Right[+B](b: B) extends (Nothing Ior B)
   final case class Both[+A, +B](a: A, b: B) extends (A Ior B)
@@ -353,4 +357,9 @@ private[data] sealed trait IorFunctions {
       case Left(a) => left(a)
       case Right(b) => right(b)
     }
+}
+
+private[data] sealed trait IorFunctions2{
+  def leftNec[A, B](a: A): IorNec[A, B] = Ior.left(NonEmptyChain.one(a))
+  def bothNec[A, B](a: A, b: B): IorNec[A, B] = Ior.both(NonEmptyChain.one(a), b)
 }

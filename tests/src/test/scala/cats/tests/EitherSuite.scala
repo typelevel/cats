@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{ EitherT, Validated }
+import cats.data.{ EitherT, Validated, NonEmptySet, NonEmptyChain, NonEmptyList }
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
 import scala.util.Try
@@ -109,9 +109,43 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("leftNel is consistent with left(NEL)") {
+    forAll { s: String =>
+      Either.leftNel[String, Int](s) should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
+    }
+  }
+
+  test("rightNel is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNel[String, Int](i) should === (Either.right[NonEmptyList[String], Int](i))
+    }
+  }
+
   test("double swap is identity") {
     forAll { (x: Either[Int, String]) =>
       x.swap.swap should === (x)
+    }
+  }
+
+  test("leftNec is consistent with left(NEC)") {
+    forAll { s: String =>
+      Either.leftNec[String, Int](s) should === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s)))
+    }
+  }
+  test("rightNec is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNec[String, Int](i) should === (Either.right[NonEmptyChain[String], Int](i))
+    }
+  }
+
+  test("leftNes is consistent with left(NES)") {
+    forAll { s: String =>
+      Either.leftNes[String, Int](s) should === (Either.left[NonEmptySet[String], Int](NonEmptySet.one(s)))
+    }
+  }
+  test("rightNes is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNes[String, Int](i) should === (Either.right[NonEmptySet[String], Int](i))
     }
   }
 
@@ -223,6 +257,7 @@ class EitherSuite extends CatsSuite {
       x.isLeft should === (x.toList.isEmpty)
       x.isLeft should === (x.toValidated.isInvalid)
       x.isLeft should === (x.toValidatedNel.isInvalid)
+      x.isLeft should === (x.toValidatedNec.isInvalid)
       Option(x.isLeft) should === (x.toEitherT[Option].isLeft)
     }
   }
@@ -257,6 +292,24 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("toEitherNec Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNec should === (Either.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+  }
+  test("toEitherNec Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNec should === (Either.right[NonEmptyChain[String], Int](42))
+  }
+
+  test("toEitherNes Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNes should === (Either.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+  }
+  test("toEitherNes Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNes should === (Either.right[NonEmptySet[String], Int](42))
+  }
+
   test("show Right") {
     val either = Either.right[String, Int](10)
     either.show should === ("Right(10)")
@@ -265,6 +318,16 @@ class EitherSuite extends CatsSuite {
   test("show Left") {
     val either = Either.left[String, Int]("string")
     either.show should === ("Left(string)")
+  }
+
+  test("toEitherNel Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNel should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+  }
+
+  test("toEitherNel Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNel should === (Either.right[NonEmptyList[String], Int](42))
   }
 
   test("ap consistent with Applicative") {

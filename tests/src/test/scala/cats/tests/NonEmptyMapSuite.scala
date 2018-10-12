@@ -201,4 +201,10 @@ class NonEmptyMapSuite extends CatsSuite {
       nem.length should ===(nem.toSortedMap.size)
     }
   }
+
+  test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it"){
+    forAll{ nem: NonEmptyMap[String, Int] =>
+      nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
+    }
+  }
 }

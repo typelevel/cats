@@ -1,7 +1,8 @@
 package cats
 package syntax
 
-import cats.data.{EitherT, Ior, NonEmptyList, Validated, ValidatedNel}
+import cats.data._
+
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import EitherSyntax._
@@ -266,6 +267,12 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 
+  def toEitherNec[AA >: A]: EitherNec[AA, B] = leftMap(NonEmptyChain.one)
+
+  def toEitherNes[AA >: A](implicit O: Order[AA]): EitherNes[AA, B] = leftMap(NonEmptySet.one(_))
+
+  def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
+
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
@@ -276,11 +283,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     * scala> import cats.implicits._
     * scala> import cats.data.EitherT
     * scala> val e: Either[String, Int] = Right(3)
-    * scala> e.liftTo[EitherT[Option, String, ?]]
-    * res0: cats.data.EitherT[Option, String, Int] = EitherT(Some(Right(3)))
+    * scala> e.liftTo[EitherT[Option, CharSequence, ?]]
+    * res0: cats.data.EitherT[Option, CharSequence, Int] = EitherT(Some(Right(3)))
     * }}}
     */
-  def liftTo[F[_]](implicit F: ApplicativeError[F, A]): F[B] = F.fromEither(eab)
+  def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
 }
 
 
@@ -288,6 +295,18 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)
+
+  def leftNec[A, B](a: A): EitherNec[A, B] = Left(NonEmptyChain.one(a))
+
+  def rightNec[A, B](b: B): EitherNec[A, B] = Right(b)
+
+  def leftNes[A, B](a: A)(implicit O: Order[A]): EitherNes[A, B] = Left(NonEmptySet.one(a))
+
+  def rightNes[A, B](b: B)(implicit O: Order[B]): EitherNes[A, B] = Right(b)
+
+  def leftNel[A, B](a: A): EitherNel[A, B] = Left(NonEmptyList.one(a))
+
+  def rightNel[A, B](b: B): EitherNel[A, B] = Right(b)
 
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
@@ -372,6 +391,49 @@ final class EitherIdOps[A](val obj: A) extends AnyVal {
    */
   def rightNel[B]: Either[NonEmptyList[B], A] = Right(obj)
 
+}
+
+trait EitherSyntaxBinCompat0 {
+  implicit final def catsSyntaxEitherBinCompat0[A, B](eab: Either[A, B]): EitherOpsBinCompat0[A, B] =
+    new EitherOpsBinCompat0(eab)
+
+  implicit final def catsSyntaxEitherIdBinCompat0[A](a: A): EitherIdOpsBinCompat0[A] =
+    new EitherIdOpsBinCompat0(a)
+}
+
+final class EitherIdOpsBinCompat0[A](val value: A) extends AnyVal {
+  /**
+   * Wrap a value to a left EitherNec
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> "Err".leftNec[Int]
+   * res0: Either[NonEmptyChain[String], Int] = Left(Chain(Err))
+   * }}}
+   */
+  def leftNec[B]: Either[NonEmptyChain[A], B] = Left(NonEmptyChain.one(value))
+
+  /**
+   * Wrap a value to a right EitherNec
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> 1.rightNec[String]
+   * res0: Either[NonEmptyChain[String], Int] = Right(1)
+   * }}}
+   */
+  def rightNec[B]: Either[NonEmptyChain[B], A] = Right(value)
+}
+
+final class EitherOpsBinCompat0[A, B](val value: Either[A, B]) extends AnyVal {
+  /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+  def toValidatedNec: ValidatedNec[A, B] = value match {
+    case Left(a)  => Validated.invalidNec(a)
+    case Right(b) => Validated.valid(b)
+  }
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */

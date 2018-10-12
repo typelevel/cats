@@ -36,8 +36,6 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")),
   fork in test := true,
-  libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
@@ -223,10 +221,10 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-def mimaSettings(moduleName: String) = {
+def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[ModuleID] = {
   import sbtrelease.Version
 
-  def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
+  def semverBinCompatVersions(major: Int, minor: Int, patch: Int): List[(Int, Int, Int)] = {
     val majorVersions: List[Int] = List(major)
     val minorVersions : List[Int] =
       if (major >= 1) Range(0, minor).inclusive.toList
@@ -241,37 +239,43 @@ def mimaSettings(moduleName: String) = {
       min <- minorVersions
       pat <- patchVersions(min)
     } yield (maj, min, pat)
-    versions.toSet
+    versions.toList
   }
 
-  def mimaVersions(version: String): Set[String] = {
-    Version(version) match {
+  val mimaVersions: List[String] = {
+    Version(ver) match {
       case Some(Version(major, Seq(minor, patch), _)) =>
         semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
           .map{case (maj, min, pat) => s"${maj}.${min}.${pat}"}
       case _ =>
-        Set.empty[String]
+        List.empty[String]
     }
   }
   // Safety Net For Exclusions
-  lazy val excludedVersions: Set[String] = Set()
+  lazy val excludedVersions: List[String] = List()
 
   // Safety Net for Inclusions
-  lazy val extraVersions: Set[String] = Set()
+  lazy val extraVersions: List[String] = List()
+
+
+  if(priorTo2_13(scalaVer)) {
+    (mimaVersions ++ extraVersions)
+      .filterNot(excludedVersions.contains(_))
+      .map(v => "org.typelevel" %% moduleName % v)
+  } else List()
+
+}
+
+def mimaSettings(moduleName: String) = {
 
   Seq(
-    mimaPreviousArtifacts := { if(priorTo2_13(scalaVersion.value)) {
-      (mimaVersions(version.value) ++ extraVersions)
-        .filterNot(excludedVersions.contains(_))
-        .map(v => "org.typelevel" %% moduleName % v)
-    } else Set() },
+    mimaPreviousArtifacts := mimaPrevious(moduleName, scalaVersion.value, version.value).toSet,
 
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core._
       import com.typesafe.tools.mima.core.ProblemFilters._
       //Only sealed abstract classes that provide implicit instances to companion objects are allowed here, since they don't affect usage outside of the file.
       Seq(
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances.catsDataMonadForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances2.catsDataTraverseForOptionT"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisliId"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonoidKForOptionT"),
@@ -281,10 +285,17 @@ def mimaSettings(moduleName: String) = {
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT")
+      ) ++ // Only compile-time abstractions (macros) allowed here
+      Seq(
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
+        exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
+        exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
+        exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
       )
     }
   )
 }
+
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
@@ -301,15 +312,15 @@ lazy val cats = project.in(file("."))
   .settings(catsSettings)
   .settings(noPublishSettings)
   .aggregate(catsJVM, catsJS)
-  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test", bench % "compile-internal;test-internal -> test")
+  .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test")
 
 lazy val catsJVM = project.in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs, bench)
-  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm, bench % "compile-internal;test-internal -> test")
+  .aggregate(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM, alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM, jvm, docs)
+  .dependsOn(macrosJVM, kernelJVM, kernelLawsJVM, coreJVM, lawsJVM, freeJVM, testkitJVM, testsJVM % "test-internal -> test", alleycatsCoreJVM, alleycatsLawsJVM, alleycatsTestsJVM % "test-internal -> test", jvm)
 
 lazy val catsJS = project.in(file(".catsJS"))
   .settings(moduleName := "cats")
@@ -346,7 +357,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
   .nativeSettings(commonNativeSettings)
-
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -497,8 +508,30 @@ lazy val bench = project.dependsOn(macrosJVM, coreJVM, freeJVM, lawsJVM)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(libraryDependencies ++= Seq(
-    "org.scalaz" %% "scalaz-core" % "7.2.23"))
+    "org.scalaz" %% "scalaz-core" % "7.2.23",
+    "org.spire-math" %% "chain" % "0.3.0",
+    "co.fs2" %% "fs2-core" % "0.10.4"
+  ))
   .enablePlugins(JmhPlugin)
+
+
+lazy val binCompatTest = project
+  .disablePlugins(CoursierPlugin)
+  .settings(noPublishSettings)
+  .settings(
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
+    libraryDependencies ++= List(
+      {
+        if (priorTo2_13(scalaVersion.value))
+          mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
+        else //We are not testing BC on Scala 2.13 yet.
+          "org.typelevel" %% "cats-core" % version.value % Provided
+      },
+      "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
+    )
+  )
+  .dependsOn(coreJVM % Test)
+
 
 // cats-js is JS-only
 lazy val js = project
@@ -560,11 +593,6 @@ lazy val publishSettings = Seq(
         <url>https://github.com/tpolecat/</url>
       </developer>
       <developer>
-        <id>stew</id>
-        <name>Mike O'Connor</name>
-        <url>https://github.com/stew/</url>
-      </developer>
-      <developer>
         <id>non</id>
         <name>Erik Osheim</name>
         <url>https://github.com/non/</url>
@@ -622,7 +650,9 @@ addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/te
 
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 
-addCommandAlias("validateJVM", ";scalastyle;buildJVM;mimaReportBinaryIssues;makeMicrosite")
+addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
+
+addCommandAlias("validateJVM", ";scalastyle;buildJVM;bench/test;validateBC;makeMicrosite")
 
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 

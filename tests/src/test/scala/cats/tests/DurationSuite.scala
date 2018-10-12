@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.instances.duration._
 import cats.laws.discipline.SerializableTests
 
 import scala.concurrent.duration.{Duration, DurationInt}

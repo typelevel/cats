@@ -26,6 +26,26 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // FunctorFilter composition
+    implicit val instance = ListWrapper.functorFilter
+    implicit val functorInstance = ListWrapper.functor
+    checkAll("Nested[ListWrapper, ListWrapper]",
+      FunctorFilterTests[Nested[ListWrapper, ListWrapper, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Nested[ListWrapper, ListWrapper, ?]]",
+      SerializableTests.serializable(FunctorFilter[Nested[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
+    // TraverseFilter composition
+    implicit val instance = ListWrapper.traverseFilter
+    implicit val traverseInstance = ListWrapper.traverse
+    checkAll("Nested[ListWrapper, ListWrapper]",
+      TraverseFilterTests[Nested[ListWrapper, ListWrapper, ?]].traverseFilter[Int, Int, Int])
+    checkAll("TraverseFilter[Nested[ListWrapper, ListWrapper, ?]]",
+      SerializableTests.serializable(TraverseFilter[Nested[ListWrapper, ListWrapper, ?]]))
+  }
+
+  {
     // Invariant + Covariant = Invariant
     val instance = Nested.catsDataInvariantForCovariantNested(ListWrapper.invariant, ListWrapper.functor)
     checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant", InvariantTests[Nested[ListWrapper, ListWrapper, ?]](instance).invariant[Int, Int, Int])

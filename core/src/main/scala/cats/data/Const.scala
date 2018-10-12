@@ -87,6 +87,25 @@ private[data] sealed abstract class ConstInstances extends ConstInstances0 {
       fa.traverse(f)
   }
 
+  implicit def catsDataTraverseFilterForConst[C]: TraverseFilter[Const[C, ?]] = new TraverseFilter[Const[C, ?]] {
+
+    override def mapFilter[A, B](fa: Const[C, A])(f: (A) => Option[B]): Const[C, B] = fa.retag
+
+    override def collect[A, B](fa: Const[C, A])(f: PartialFunction[A, B]): Const[C, B] = fa.retag
+
+    override def flattenOption[A](fa: Const[C, Option[A]]): Const[C, A] = fa.retag
+
+    override def filter[A](fa: Const[C, A])(f: (A) => Boolean): Const[C, A] = fa.retag
+
+    def traverseFilter[G[_], A, B](fa: Const[C, A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =
+      G.pure(fa.retag[B])
+
+    override def filterA[G[_], A](fa: Const[C, A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Const[C, A]] =
+      G.pure(fa)
+
+    val traverse: Traverse[Const[C, ?]] = Const.catsDataTraverseForConst[C]
+  }
+
   implicit def catsDataMonoidForConst[A: Monoid, B]: Monoid[Const[A, B]] = new Monoid[Const[A, B]]{
     def empty: Const[A, B] =
       Const.empty

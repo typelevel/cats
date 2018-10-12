@@ -26,6 +26,7 @@ position: 40
  * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
  * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
+ * [Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?](#monad-transformer-variance)
  * [How to try cats in a REPL?](#ammonite)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -272,4 +273,6 @@ import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
 ```
 Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
 
+## <a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
 
+Please see [Variance of Monad Transformers](https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html) on the Typelevel blog.

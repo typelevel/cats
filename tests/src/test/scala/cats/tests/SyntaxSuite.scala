@@ -4,7 +4,7 @@ package tests
 import scala.collection.immutable.SortedSet
 import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
-import cats.data.{Binested, Nested, NonEmptyList, NonEmptySet}
+import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
 
@@ -64,6 +64,8 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val y = mock[A]
     val b0: Boolean = x === y
     val b1: Boolean = x =!= y
+    val b2: Boolean = x eqv y
+    val b3: Boolean = x neqv y
   }
 
   def testPartialOrder[A: PartialOrder]: Unit = {
@@ -349,6 +351,10 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val gea4 = ga.recoverWith(pfegea)
   }
 
+  def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
+    val fea = "meow".raiseError[F, A]
+  }
+
   def testNested[F[_], G[_], A]: Unit = {
     val fga: F[G[A]] = mock[F[G[A]]]
 
@@ -375,6 +381,13 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     val nel: Option[NonEmptyList[A]] = list.toNel
     val grouped: SortedMap[B, NonEmptyList[A]] = list.groupByNel(f)
+  }
+
+  def testNonEmptyChain[A, B: Order] : Unit = {
+    val f = mock[A => B]
+    val list = mock[List[A]]
+
+    val grouped: SortedMap[B, NonEmptyChain[A]] = list.groupByNec(f)
   }
 
 }

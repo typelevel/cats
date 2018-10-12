@@ -140,5 +140,5 @@ import simulacrum.noop
     * }}}
     */
   def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
-    flatMap(fa)(a => map(f(a))(_ => a))
+    flatMap(fa)(a => as(f(a), a))
 }

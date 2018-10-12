@@ -4,6 +4,7 @@ package instances
 import cats.kernel.CommutativeMonoid
 
 import scala.annotation.tailrec
+import cats.arrow.Compose
 
 trait MapInstances extends cats.kernel.instances.MapInstances {
 
@@ -79,4 +80,53 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
     }
   // scalastyle:on method.length
+
+}
+
+trait MapInstancesBinCompat0 {
+
+  implicit val catsStdComposeForMap: Compose[Map] = new Compose[Map] {
+
+    /**
+      * Compose two maps `g` and `f` by using the values in `f` as keys for `g`.
+      * {{{
+      * scala> import cats.arrow.Compose
+      * scala> import cats.implicits._
+      * scala> val first = Map(1 -> "a", 2 -> "b", 3 -> "c", 4 -> "a")
+      * scala> val second = Map("a" -> true, "b" -> false, "d" -> true)
+      * scala> Compose[Map].compose(second, first)
+      * res0: Map[Int, Boolean] = Map(1 -> true, 2 -> false, 4 -> true)
+      * }}}
+      */
+    def compose[A, B, C](f: Map[B, C], g: Map[A, B]): Map[A, C] = {
+      g.foldLeft(Map.empty[A, C]) {
+        case (acc, (key, value)) =>
+          f.get(value) match {
+            case Some(other) => acc + (key -> other)
+            case _ => acc
+          }
+      }
+    }
+  }
+
+  implicit def catsStdFunctorFilterForMap[K]: FunctorFilter[Map[K, ?]] = {
+    new FunctorFilter[Map[K, ?]] {
+
+      val functor: Functor[Map[K, ?]] = cats.instances.map.catsStdInstancesForMap[K]
+
+      def mapFilter[A, B](fa: Map[K, A])(f: A => Option[B]) =
+        fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
+
+      override def collect[A, B](fa: Map[K, A])(f: PartialFunction[A, B]) =
+        fa.collect(scala.Function.unlift(t => f.lift(t._2).map(t._1 -> _)))
+
+      override def flattenOption[A](fa: Map[K, Option[A]]) =
+        fa.collect(scala.Function.unlift(t => t._2.map(t._1 -> _)))
+
+      override def filter[A](fa: Map[K, A])(f: A => Boolean) =
+        fa.filter { case (_, v) => f(v) }
+
+    }
+  }
+
 }

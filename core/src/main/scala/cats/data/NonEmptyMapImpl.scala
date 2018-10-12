@@ -250,6 +250,10 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
     */
   def length: Int = toSortedMap.size
 
+  /**
+    * Returns a non empty list of map contents, similarly to Map#toList
+    */
+  def toNel: NonEmptyList[(K, A)] = NonEmptyList.fromListUnsafe(toSortedMap.toList)
 }
 
 private[data] sealed abstract class NonEmptyMapInstances {
