@@ -2,12 +2,11 @@ package cats
 package tests
 
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
-
+import cats.kernel.Semigroup
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
@@ -369,6 +368,16 @@ class WriterTSuite extends CatsSuite {
 
     checkAll("WriterT[Const[String, ?], Int, ?]", ContravariantMonoidalTests[WriterT[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
     checkAll("ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]", SerializableTests.serializable(ContravariantMonoidal[WriterT[Const[String, ?], Int, ?]]))
+  }
+
+  {
+    // F has an Invariant
+    implicit val evidence = ListWrapper.invariant
+    Invariant[ListWrapper]
+    Invariant[WriterT[ListWrapper, Int, ?]]
+
+    checkAll("WriterT[ListWrapper, Int, ?]", InvariantTests[WriterT[ListWrapper, Int, ?]].invariant[Int, Int, Int])
+    checkAll("Invariant[WriterT[ListWrapper, Int, ?]]", SerializableTests.serializable(Invariant[WriterT[ListWrapper, Int, ?]]))
   }
 
   {
