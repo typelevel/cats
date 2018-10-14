@@ -232,6 +232,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
+- [Free2Move](https://free2move.com)
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ITV](https://www.itv.com/)

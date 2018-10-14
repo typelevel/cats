@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-import cats.data.{Ior, OptionT, Validated, ValidatedNel}
+import cats.data.{Ior, OptionT, Validated, ValidatedNel, ValidatedNec}
 import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
@@ -72,6 +72,28 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
   def toInvalidNel[B](b: => B): ValidatedNel[A, B] = oa.fold[ValidatedNel[A, B]](Validated.Valid(b))(Validated.invalidNel)
 
   /**
+    * If the `Option` is a `Some`, wrap its value in a [[cats.data.Chain]]
+    * and return it in a [[cats.data.Validated.Invalid]].
+    * If the `Option` is `None`, return the provided `B` value in a
+    * [[cats.data.Validated.Valid]].
+    *
+    * Example:
+    * {{{
+    * scala> import cats.data.ValidatedNec
+    * scala> import cats.implicits._
+    *
+    * scala> val error1: Option[String] = Some("error!")
+    * scala> error1.toInvalidNec(3)
+    * res0: ValidatedNec[String, Int] = Invalid(Chain(error!))
+    *
+    * scala> val error2: Option[String] = None
+    * scala> error2.toInvalidNec(3)
+    * res1: ValidatedNec[String, Int] = Valid(3)
+    * }}}
+    */
+  def toInvalidNec[B](b: => B): ValidatedNec[A, B] = oa.fold[ValidatedNec[A, B]](Validated.Valid(b))(Validated.invalidNec)
+
+  /**
    * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
    * If the `Option` is `None`, return the provided `B` value in a
    * [[cats.data.Validated.Invalid]].
@@ -112,6 +134,27 @@ final class OptionOps[A](val oa: Option[A]) extends AnyVal {
    * }}}
    */
   def toValidNel[B](b: => B): ValidatedNel[B, A] = oa.fold[ValidatedNel[B, A]](Validated.invalidNel(b))(Validated.Valid(_))
+
+  /**
+    * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
+    * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Chain]]
+    * and return the result in a [[cats.data.Validated.Invalid]].
+    *
+    * Example:
+    * {{{
+    * scala> import cats.data.ValidatedNec
+    * scala> import cats.implicits._
+    *
+    * scala> val result1: Option[Int] = Some(3)
+    * scala> result1.toValidNec("error!")
+    * res0: ValidatedNec[String, Int] = Valid(3)
+    *
+    * scala> val result2: Option[Int] = None
+    * scala> result2.toValidNec("error!")
+    * res1: ValidatedNec[String, Int] = Invalid(Chain(error!))
+    * }}}
+    */
+  def toValidNec[B](b: => B): ValidatedNec[B, A] = oa.fold[ValidatedNec[B, A]](Validated.invalidNec(b))(Validated.Valid(_))
 
   /**
     * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Right]].
