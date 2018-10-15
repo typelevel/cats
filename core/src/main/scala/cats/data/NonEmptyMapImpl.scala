@@ -97,7 +97,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
     * Returns a `SortedSet` containing all the keys of this map.
     */
-  def keys: NonEmptySet[K] = NonEmptySet.fromSetUnsafe(toSortedMap.keySet)
+  def keys: NonEmptySortedSet[K] = NonEmptySortedSet.fromSetUnsafe(toSortedMap.keySet)
 
   /**
     * Returns the first key-value pair of this map.
@@ -238,7 +238,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
     * Typesafe equality operator.
     *
     * This method is similar to == except that it only allows two
-    * NonEmptySet[A] values to be compared to each other, and uses
+    * NonEmptySortedSet[A] values to be compared to each other, and uses
     * equality provided by Eq[_] instances, rather than using the
     * universal equality provided by .equals.
     */
