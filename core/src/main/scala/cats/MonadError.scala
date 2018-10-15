@@ -43,6 +43,16 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
 
   /**
+    * Returns a new value that transforms the result of the source,
+    * given the `recover` or `bind` functions, which get executed depending
+    * on whether the result is successful or if it ends in error.
+    *
+    * This is an optimization on usage of [[attempt]] and [[flatMap]].
+    */
+  def redeemWith[A, B](fa: F[A])(recover: E => F[B], bind: A => F[B]): F[B] =
+    flatMap(attempt(fa))(_.fold(recover, bind))
+
+  /**
    * Inverse of `attempt`
    *
    * Example:

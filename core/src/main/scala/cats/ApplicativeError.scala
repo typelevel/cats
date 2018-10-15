@@ -73,6 +73,16 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
 
   /**
+    * Returns a new value that transforms the result of the source,
+    * given the `recover` or `map` functions, which get executed depending
+    * on whether the result is successful or if it ends in error.
+    *
+    * This is an optimization on usage of [[attempt]] and [[map]].
+    */
+  def redeem[A, B](fa: F[A])(recover: E => B, mapper: A => B): F[B] =
+    map(attempt(fa))(_.fold(recover, mapper))
+
+  /**
    * Recover from certain errors by mapping them to an `A` value.
    *
    * @see [[handleError]] to handle any/all errors.

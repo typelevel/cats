@@ -84,6 +84,9 @@ final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
   def attemptT(implicit F: ApplicativeError[F, E]): EitherT[F, E, A] =
     F.attemptT(fa)
 
+  def redeem[B](recover: E => B, map: A => B)(implicit F: ApplicativeError[F, E]): F[B] =
+    F.redeem(fa)(recover, map)
+
   def recover(pf: PartialFunction[E, A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.recover(fa)(pf)
 

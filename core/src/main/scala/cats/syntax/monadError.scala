@@ -23,6 +23,9 @@ final class MonadErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
+
+  def redeemWith[B](recover: E => F[B], bind: A => F[B])(implicit F: MonadError[F, E]): F[B] =
+    F.redeemWith(fa)(recover, bind)
 }
 
 final class MonadErrorRethrowOps[F[_], E, A](val fea: F[Either[E, A]]) extends AnyVal {
