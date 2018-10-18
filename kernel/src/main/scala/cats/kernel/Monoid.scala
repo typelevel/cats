@@ -1,6 +1,6 @@
 package cats.kernel
 
-import scala.{ specialized => sp }
+import scala.{specialized => sp}
 
 /**
  * A monoid is a semigroup with an identity. A monoid is a specialization of a

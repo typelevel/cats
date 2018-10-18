@@ -4,7 +4,6 @@ package data
 import java.io.Serializable
 import cats.arrow.{ArrowChoice, CommutativeArrow}
 
-
 /**
  * A function type of a single input that can do function composition
  * (via `andThen` and `compose`) in constant stack space with amortized
@@ -60,15 +59,14 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
  *   }
  * }}}
  */
-sealed abstract class AndThen[-T, +R]
-  extends (T => R) with Product with Serializable {
+sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Serializable {
 
   import AndThen._
 
   final def apply(a: T): R =
     runLoop(a)
 
-  override def andThen[A](g: R => A): AndThen[T, A] = {
+  override def andThen[A](g: R => A): AndThen[T, A] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
@@ -77,9 +75,8 @@ sealed abstract class AndThen[-T, +R]
       case _ =>
         andThenF(AndThen(g))
     }
-  }
 
-  override def compose[A](g: A => T): AndThen[A, R] = {
+  override def compose[A](g: A => T): AndThen[A, R] =
     // Fusing calls up to a certain threshold, using the fusion
     // technique implemented for `cats.effect.IO#map`
     this match {
@@ -88,7 +85,6 @@ sealed abstract class AndThen[-T, +R]
       case _ =>
         composeF(AndThen(g))
     }
-  }
 
   private def runLoop(start: T): R = {
     var self: AndThen[Any, Any] = this.asInstanceOf[AndThen[Any, Any]]
@@ -112,13 +108,13 @@ sealed abstract class AndThen[-T, +R]
     current.asInstanceOf[R]
   }
 
-  private final def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
+  final private def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
     Concat(this, right)
-  private final def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
+  final private def composeF[X](right: AndThen[X, T]): AndThen[X, R] =
     Concat(right, this)
 
   // converts left-leaning to right-leaning
-  protected final def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
+  final protected def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
     var self: AndThen[Any, Any] = this.asInstanceOf[AndThen[Any, Any]]
     var right: AndThen[Any, Any] = _right.asInstanceOf[AndThen[Any, Any]]
     var continue = true
@@ -141,17 +137,16 @@ sealed abstract class AndThen[-T, +R]
 }
 
 object AndThen extends AndThenInstances0 {
+
   /** Builds an [[AndThen]] reference by wrapping a plain function. */
   def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
       case ref: AndThen[A, B] @unchecked => ref
-      case _ => Single(f, 0)
+      case _                             => Single(f, 0)
     }
 
-  private final case class Single[-A, +B](f: A => B, index: Int)
-    extends AndThen[A, B]
-  private final case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B])
-    extends AndThen[A, B]
+  final private case class Single[-A, +B](f: A => B, index: Int) extends AndThen[A, B]
+  final private case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B]) extends AndThen[A, B]
 
   /**
    * Establishes the maximum stack depth when fusing `andThen` or
@@ -165,10 +160,11 @@ object AndThen extends AndThenInstances0 {
    * being enough to notice performance gains, but not big enough
    * to be in danger of triggering a stack-overflow error.
    */
-  private final val fusionMaxStackDepth = 127
+  final private val fusionMaxStackDepth = 127
 }
 
-private[data] abstract class AndThenInstances0 extends AndThenInstances1 {
+abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
+
   /**
    * [[cats.Monad]] instance for [[AndThen]].
    */
@@ -193,7 +189,7 @@ private[data] abstract class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.ContravariantMonoidal]] instance for [[AndThen]].
    */
-  implicit def catsDataContravariantMonoidalForAndThen[R : Monoid]: ContravariantMonoidal[AndThen[?, R]] =
+  implicit def catsDataContravariantMonoidalForAndThen[R: Monoid]: ContravariantMonoidal[AndThen[?, R]] =
     new ContravariantMonoidal[AndThen[?, R]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdContravariantMonoidalForFunction1[R]
@@ -235,7 +231,8 @@ private[data] abstract class AndThenInstances0 extends AndThenInstances1 {
     }
 }
 
-private[data] abstract class AndThenInstances1 {
+abstract private[data] class AndThenInstances1 {
+
   /**
    * [[cats.Contravariant]] instance for [[AndThen]].
    */

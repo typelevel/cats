@@ -16,7 +16,6 @@ package object data {
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, tail.toStream)
 
-
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
 
@@ -39,7 +38,7 @@ package object data {
   object Writer {
     def apply[L, V](l: L, v: V): WriterT[Id, L, V] = WriterT[Id, L, V]((l, v))
 
-    def value[L:Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
+    def value[L: Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
 
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
   }

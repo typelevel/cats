@@ -66,7 +66,6 @@ import simulacrum.typeclass
    *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
    */
   @simulacrum.op("&&&", alias = true)
-  def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] = {
+  def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =
     andThen(lift((x: A) => (x, x)), split(f, g))
-  }
 }

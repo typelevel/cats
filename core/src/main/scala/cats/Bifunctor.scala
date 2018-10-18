@@ -1,5 +1,6 @@
 package cats
 import simulacrum.typeclass
+
 /**
  * A type class of types which give rise to two independent, covariant
  * functors.
@@ -22,10 +23,10 @@ import simulacrum.typeclass
   def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D]
 
   def rightFunctor[X]: Functor[F[X, ?]] =
-    new RightFunctor[F, X] {val F = self}
+    new RightFunctor[F, X] { val F = self }
 
   def leftFunctor[X]: Functor[F[?, X]] =
-    new LeftFunctor[F, X] {val F = self}
+    new LeftFunctor[F, X] { val F = self }
 
   // derived methods
   /**
@@ -54,8 +55,7 @@ import simulacrum.typeclass
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
 }
 
-private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
-  extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
+private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
   def F: Bifunctor[F]
   def G: Bifunctor[G]
 
@@ -65,14 +65,14 @@ private[cats] trait ComposedBifunctor[F[_, _], G[_, _]]
   }
 }
 
-private abstract class LeftFunctor[F[_, _], X] extends Functor[F[?, X]] {
+abstract private class LeftFunctor[F[_, _], X] extends Functor[F[?, X]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fax: F[A, X])(f: A => C): F[C, X] =
     F.bimap(fax)(f, identity)
 }
 
-private abstract class RightFunctor[F[_, _], X] extends Functor[F[X, ?]] {
+abstract private class RightFunctor[F[_, _], X] extends Functor[F[X, ?]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fxa: F[X, A])(f: A => C): F[X, C] =

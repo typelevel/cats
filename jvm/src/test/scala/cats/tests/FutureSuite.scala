@@ -23,14 +23,15 @@ class FutureSuite extends CatsSuite {
   implicit def eqfa[A: Eq]: Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(fx: Future[A], fy: Future[A]): Boolean = {
-        val fz = futureEither(fx) zip futureEither(fy)
+        val fz = futureEither(fx).zip(futureEither(fy))
         Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
       }
     }
 
   implicit def cogen[A: Cogen]: Cogen[Future[A]] =
-    Cogen[Future[A]] { (seed: Seed, t: Future[A]) => Cogen[A].perturb(seed, Await.result(t, timeout)) }
-
+    Cogen[Future[A]] { (seed: Seed, t: Future[A]) =>
+      Cogen[A].perturb(seed, Await.result(t, timeout))
+    }
 
   implicit val throwableEq: Eq[Throwable] =
     Eq.by[Throwable, String](_.toString)

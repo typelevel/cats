@@ -4,22 +4,22 @@ package tests
 import cats.data.Writer
 
 class WriterSuite extends CatsSuite {
-  test("pure syntax creates a writer with an empty log"){
+  test("pure syntax creates a writer with an empty log") {
     forAll { (result: String) =>
       type Logged[A] = Writer[List[Int], A]
-      result.pure[Logged] should === (Writer(List.empty[Int], result))
+      result.pure[Logged] should ===(Writer(List.empty[Int], result))
     }
   }
 
-  test("tell syntax creates a writer with a unit result"){
+  test("tell syntax creates a writer with a unit result") {
     forAll { (log: List[Int]) =>
-      log.tell should === (Writer(log, ()))
+      log.tell should ===(Writer(log, ()))
     }
   }
 
   test("writer syntax creates a writer with the specified result and log") {
     forAll { (result: String, log: List[Int]) =>
-      result.writer(log) should === (Writer(log, result))
+      result.writer(log) should ===(Writer(log, result))
     }
   }
 }

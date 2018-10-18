@@ -10,10 +10,9 @@ trait BifoldableTests[F[_, _]] extends Laws {
   def laws: BifoldableLaws[F]
 
   def bifoldable[A: Arbitrary, B: Arbitrary, C: Arbitrary: Monoid: Eq](implicit
-    ArbFAB: Arbitrary[F[A, B]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B]
-  ): RuleSet =
+                                                                       ArbFAB: Arbitrary[F[A, B]],
+                                                                       CogenA: Cogen[A],
+                                                                       CogenB: Cogen[B]): RuleSet =
     new DefaultRuleSet(
       name = "bifoldable",
       parent = None,

@@ -9,6 +9,8 @@ object foldable extends FoldableSyntax
 trait FoldableSyntax {
   implicit class ExtraFoldableOps[F[_]: Foldable, A](fa: F[A]) {
     def foreach(f: A => Unit): Unit =
-      fa.foldLeft(()) { (_, a) => f(a) }
+      fa.foldLeft(()) { (_, a) =>
+        f(a)
+      }
   }
 }

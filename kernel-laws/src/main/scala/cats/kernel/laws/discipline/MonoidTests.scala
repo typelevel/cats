@@ -20,7 +20,8 @@ trait MonoidTests[A] extends SemigroupTests[A] {
       "combine all" -> forAll(laws.combineAll _),
       "collect0" -> forAll(laws.collect0 _),
       "is id" -> forAll((a: A) => laws.isId(a, eqA)),
-      "repeat0" -> forAll(laws.repeat0 _))
+      "repeat0" -> forAll(laws.repeat0 _)
+    )
 
 }
 

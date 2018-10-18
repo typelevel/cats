@@ -3,7 +3,7 @@ package free
 
 // To workaround SI-7139 `object Trampoline` needs to be defined inside the package object
 // together with the type alias.
-private[free] abstract class TrampolineFunctions {
+abstract private[free] class TrampolineFunctions {
   def done[A](a: A): Trampoline[A] =
     Free.pure[Function0, A](a)
 
@@ -17,4 +17,3 @@ private[free] abstract class TrampolineFunctions {
   def delay[A](a: => A): Trampoline[A] =
     defer(done(a))
 }
-

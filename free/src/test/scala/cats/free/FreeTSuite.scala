@@ -8,7 +8,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 import cats.instances.option._
-import org.scalacheck.{Arbitrary, Gen, Cogen}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 
 class FreeTSuite extends CatsSuite {
 
@@ -41,17 +41,20 @@ class FreeTSuite extends CatsSuite {
   {
     implicit val eqEitherTFA: Eq[EitherT[FreeTOption, Unit, Int]] = EitherT.catsDataEqForEitherT[FreeTOption, Unit, Int]
     checkAll("FreeT[Option, Option, Int]", MonadErrorTests[FreeTOption, Unit].monadError[Int, Int, Int])
-    checkAll("MonadError[FreeT[Option, Option, ?], Unit]", SerializableTests.serializable(MonadError[FreeTOption, Unit]))
+    checkAll("MonadError[FreeT[Option, Option, ?], Unit]",
+             SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
 
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      Monad[FreeTOption].tailRecM(0)((i: Int) =>
-        if (i < 50000)
-          Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
-        else
-          Applicative[FreeTOption].pure(Either.right[Int, Unit](())))
+      Monad[FreeTOption].tailRecM(0)(
+        (i: Int) =>
+          if (i < 50000)
+            Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
+          else
+            Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
+      )
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
   }
@@ -95,7 +98,7 @@ class FreeTSuite extends CatsSuite {
       val b = a.compile(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
       val fk = FreeT.compile[Option, Option, Option](FunctionK.id)
-      a should === (fk(a))
+      a should ===(fk(a))
     }
   }
 
@@ -112,13 +115,13 @@ class FreeTSuite extends CatsSuite {
       val y = a.foldMap(FunctionK.id)
       val fk = FreeT.foldMap[Option, Option](FunctionK.id)
       Eq[Option[Int]].eqv(x, y) should ===(true)
-      y should === (fk(a))
+      y should ===(fk(a))
     }
   }
 
   sealed trait Test1Algebra[A]
 
-  case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
+  case class Test1[A](value: Int, f: Int => A) extends Test1Algebra[A]
 
   def test1[A](value: Int, f: Int => A): Test1Algebra[A] = Test1(value, f)
 
@@ -130,13 +133,14 @@ class FreeTSuite extends CatsSuite {
         }
       }
 
-    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
-      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test1(s, f))
+    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
+                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
+      Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test1(s, f))
   }
 
   sealed trait Test2Algebra[A]
 
-  case class Test2[A](value : Int, f: Int => A) extends Test2Algebra[A]
+  case class Test2[A](value: Int, f: Int => A) extends Test2Algebra[A]
 
   def test2[A](value: Int, f: Int => A): Test2Algebra[A] = Test2(value, f)
 
@@ -148,37 +152,35 @@ class FreeTSuite extends CatsSuite {
         }
       }
 
-    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
-      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
+    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
+                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
+      Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test2(s, f))
   }
 
   type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
-  object Test1Interpreter extends FunctionK[Test1Algebra,Id] {
+  object Test1Interpreter extends FunctionK[Test1Algebra, Id] {
     override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
       case Test1(k, h) => h(k)
     }
   }
 
-  object Test2Interpreter extends FunctionK[Test2Algebra,Id] {
+  object Test2Interpreter extends FunctionK[Test2Algebra, Id] {
     override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
       case Test2(k, h) => h(k)
     }
   }
 
-  val eitherKInterpreter: FunctionK[T,Id] = Test1Interpreter or Test2Interpreter
+  val eitherKInterpreter: FunctionK[T, Id] = Test1Interpreter.or(Test2Interpreter)
 
   test(".liftInject") {
     forAll { (x: Int, y: Int) =>
-      def res[F[_]]
-      (implicit I0: Test1Algebra :<: F,
-       I1: Test2Algebra :<: F): FreeT[F, Id, Int] = {
+      def res[F[_]](implicit I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): FreeT[F, Id, Int] =
         for {
           a <- FreeT.liftInject[Id, F](test1(x, identity))
           b <- FreeT.liftInject[Id, F](test2(y, identity))
         } yield a + b
-      }
-      (res[T] foldMap eitherKInterpreter) == (x + y) should ===(true)
+      (res[T].foldMap(eitherKInterpreter)) == (x + y) should ===(true)
     }
   }
 
@@ -197,7 +199,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   private[free] def liftTCompilationTests() = {
-    val a: Either[String, Int]= Right(42)
+    val a: Either[String, Int] = Right(42)
     val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftT(a)
   }
 
@@ -208,11 +210,14 @@ object FreeTSuite extends FreeTSuiteInstances {
   import Arbitrary._
   import org.scalacheck.Arbitrary
 
-
-  implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
+  implicit def freeTArb[F[_], G[_]: Applicative, A](implicit F: Arbitrary[F[A]],
+                                                    G: Arbitrary[G[A]],
+                                                    A: Arbitrary[A]): Arbitrary[FreeT[F, G, A]] =
     Arbitrary(freeTGen[F, G, A](4))
 
-  private def freeTGen[F[_], G[_]: Applicative, A](maxDepth: Int)(implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Gen[FreeT[F, G, A]] = {
+  private def freeTGen[F[_], G[_]: Applicative, A](
+    maxDepth: Int
+  )(implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]], A: Arbitrary[A]): Gen[FreeT[F, G, A]] = {
     val noFlatMapped = Gen.oneOf(
       A.arbitrary.map(FreeT.pure[F, G, A]),
       F.arbitrary.map(FreeT.liftF[F, G, A])
@@ -220,12 +225,13 @@ object FreeTSuite extends FreeTSuiteInstances {
 
     val nextDepth = Gen.chooseNum(1, math.max(1, maxDepth - 1))
 
-    def withFlatMapped = for {
-      fDepth <- nextDepth
-      freeDepth <- nextDepth
-      f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth)), Cogen[Unit].contramap(_ => ())).arbitrary
-      freeFGA <- freeTGen[F, G, A](freeDepth)
-    } yield freeFGA.flatMap(f)
+    def withFlatMapped =
+      for {
+        fDepth <- nextDepth
+        freeDepth <- nextDepth
+        f <- arbFunction1[A, FreeT[F, G, A]](Arbitrary(freeTGen[F, G, A](fDepth)), Cogen[Unit].contramap(_ => ())).arbitrary
+        freeFGA <- freeTGen[F, G, A](freeDepth)
+      } yield freeFGA.flatMap(f)
 
     if (maxDepth <= 1) noFlatMapped
     else Gen.oneOf(noFlatMapped, withFlatMapped)
@@ -270,6 +276,7 @@ trait FreeTSuiteInstances {
   }
 
   implicit def freeTStateEq[A](implicit A: Eq[A], SM: Monad[IntState]): Eq[FreeTState[A]] = new Eq[FreeTState[A]] {
-    def eqv(a: FreeTState[A], b: FreeTState[A]) = Eq[IntState[A]].eqv(a.runM(identity)(SM, SM), b.runM(identity)(SM, SM))
+    def eqv(a: FreeTState[A], b: FreeTState[A]) =
+      Eq[IntState[A]].eqv(a.runM(identity)(SM, SM), b.runM(identity)(SM, SM))
   }
 }

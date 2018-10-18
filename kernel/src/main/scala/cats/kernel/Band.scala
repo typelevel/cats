@@ -2,7 +2,6 @@ package cats.kernel
 
 import scala.{specialized => sp}
 
-
 /**
  * Bands are semigroups whose operation
  * (i.e. combine) is also idempotent.

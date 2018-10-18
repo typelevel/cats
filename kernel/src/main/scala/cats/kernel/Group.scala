@@ -1,6 +1,6 @@
 package cats.kernel
 
-import scala.{ specialized => sp }
+import scala.{specialized => sp}
 
 /**
  * A group is a monoid where each element has an inverse.
@@ -41,7 +41,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
    * Return `a` appended to itself `n` times. If `n` is negative, then
    * this returns `inverse(a)` appended to itself `n` times.
    */
-  override def combineN(a: A, n: Int): A = {
+  override def combineN(a: A, n: Int): A =
     // This method is a bit tricky. Normally, to sum x a negative
     // number of times (n), we can sum (-x) a positive number of times
     // (-n). The issue here is that Int.MinValue cannot be negated; in
@@ -58,7 +58,6 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
     else if (n == 0) empty
     else if (n == Int.MinValue) combineN(inverse(combine(a, a)), 1073741824)
     else repeatedCombineN(inverse(a), -n)
-  }
 }
 
 abstract class GroupFunctions[G[T] <: Group[T]] extends MonoidFunctions[Group] {

@@ -24,7 +24,6 @@ import cats.laws.discipline.arbitrary._
 import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.{Band, BoundedSemilattice, Semilattice}
 
-
 class FunctionSuite extends CatsSuite {
 
   import Helpers._
@@ -70,8 +69,6 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[Int, Int]", DistributiveTests[Int => ?].distributive[Int, Int, Int, Id, Function1[Int, ?]])
   checkAll("Distributive[Int => ?]", SerializableTests.serializable(Distributive[Int => ?]))
 
-
-
   // law checks for the various Function0-related instances
   checkAll("Function0[Eqed]", EqTests[Function0[Eqed]].eqv)
   checkAll("Function0[POrd]", PartialOrderTests[Function0[POrd]].partialOrder)
@@ -87,7 +84,6 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[CGrp]", CommutativeGroupTests[Function0[CGrp]].commutativeGroup)
   checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
 
-
   test("Function0[Hsh]") {
     forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
       HashLaws[Function0[Hsh]].hashCompatibility(x, y)
@@ -97,7 +93,8 @@ class FunctionSuite extends CatsSuite {
   // Test for Arrow applicative
   Applicative[String => ?]
   checkAll("Function1[String, ?]",
-    ApplicativeTests[Function1[String, ?]](Applicative.catsApplicativeForArrow[Function1, String]).applicative[Int, Int, Int])
+           ApplicativeTests[Function1[String, ?]](Applicative.catsApplicativeForArrow[Function1, String])
+             .applicative[Int, Int, Int])
 
   // serialization tests for the various Function0-related instances
   checkAll("Eq[() => Eqed]", SerializableTests.serializable(Eq[() => Eqed]))
@@ -130,7 +127,8 @@ class FunctionSuite extends CatsSuite {
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
-  checkAll("CommutativeSemigroup[String => Semi]", SerializableTests.serializable(CommutativeSemigroup[String => CSemi]))
+  checkAll("CommutativeSemigroup[String => Semi]",
+           SerializableTests.serializable(CommutativeSemigroup[String => CSemi]))
   checkAll("Band[String => Bnd]", SerializableTests.serializable(Band[String => Bnd]))
   checkAll("Semilattice[String => SL]", SerializableTests.serializable(Semilattice[String => SL]))
   checkAll("BoundedSemilattice[String => BSL]", SerializableTests.serializable(BoundedSemilattice[String => BSL]))
@@ -138,5 +136,6 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[String => CMono]", SerializableTests.serializable(CommutativeMonoid[String => CMono]))
   checkAll("Group[String => Grp]", SerializableTests.serializable(Group[String => Grp]))
   checkAll("CommutativeGroup[String => CGrp]", SerializableTests.serializable(CommutativeGroup[String => CGrp]))
-  checkAll("ContravariantMonoidal[Function1[?, Monoid]]", SerializableTests.serializable(ContravariantMonoidal[? => Long]))
+  checkAll("ContravariantMonoidal[Function1[?, Monoid]]",
+           SerializableTests.serializable(ContravariantMonoidal[? => Long]))
 }

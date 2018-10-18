@@ -2,9 +2,8 @@ package cats
 package kernel
 package laws
 
-
 trait CommutativeGroupLaws[A] extends GroupLaws[A] with CommutativeMonoidLaws[A] {
-  override implicit def S: CommutativeGroup[A]
+  implicit override def S: CommutativeGroup[A]
 }
 
 object CommutativeGroupLaws {

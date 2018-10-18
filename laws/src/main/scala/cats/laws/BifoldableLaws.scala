@@ -12,7 +12,9 @@ trait BifoldableLaws[F[_, _]] {
     expected <-> F.bifoldMap(fab)(f, g)
   }
 
-  def bifoldRightConsistentWithBifoldMap[A, B, C](fab: F[A, B], f: A => C, g: B => C)(implicit C: Monoid[C]): IsEq[C] = {
+  def bifoldRightConsistentWithBifoldMap[A, B, C](fab: F[A, B], f: A => C, g: B => C)(
+    implicit C: Monoid[C]
+  ): IsEq[C] = {
     val expected = F.bifoldRight(fab, Later(C.empty))(
       (a: A, ec: Eval[C]) => ec.map(c => C.combine(f(a), c)),
       (b: B, ec: Eval[C]) => ec.map(c => C.combine(g(b), c))

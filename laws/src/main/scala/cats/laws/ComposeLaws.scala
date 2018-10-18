@@ -11,7 +11,7 @@ trait ComposeLaws[F[_, _]] {
   implicit def F: Compose[F]
 
   def composeAssociativity[A, B, C, D](fab: F[A, B], fbc: F[B, C], fcd: F[C, D]): IsEq[F[A, D]] =
-    ((fab andThen fbc) andThen fcd) <-> (fab andThen (fbc andThen fcd))
+    ((fab.andThen(fbc)).andThen(fcd)) <-> (fab.andThen(fbc.andThen(fcd)))
 }
 
 object ComposeLaws {

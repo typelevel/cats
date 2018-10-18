@@ -7,7 +7,7 @@ package free
  * `F` is not a contravariant functor. Implemented using a List of functions for stack-safety.
  */
 sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self =>
-  import ContravariantCoyoneda.{Aux, unsafeApply}
+  import ContravariantCoyoneda.{unsafeApply, Aux}
 
   /** The pivot between `fi` and `k`, usually existential. */
   type Pivot

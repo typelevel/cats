@@ -12,20 +12,19 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
   def laws: ReducibleLaws[F]
 
   def reducible[G[_]: Applicative, A: Arbitrary, B: Arbitrary](implicit
-    ArbFA: Arbitrary[F[A]],
-    ArbFB: Arbitrary[F[B]],
-    ArbFGA: Arbitrary[F[G[A]]],
-    ArbGB: Arbitrary[G[B]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    EqG: Eq[G[Unit]],
-    EqA: Eq[A],
-    EqB: Eq[B],
-    EqFA: Eq[F[A]],
-    EqOptionA: Eq[Option[A]],
-    MonoidA: CommutativeMonoid[A],
-    MonoidB: CommutativeMonoid[B]
-  ): RuleSet =
+                                                               ArbFA: Arbitrary[F[A]],
+                                                               ArbFB: Arbitrary[F[B]],
+                                                               ArbFGA: Arbitrary[F[G[A]]],
+                                                               ArbGB: Arbitrary[G[B]],
+                                                               CogenA: Cogen[A],
+                                                               CogenB: Cogen[B],
+                                                               EqG: Eq[G[Unit]],
+                                                               EqA: Eq[A],
+                                                               EqB: Eq[B],
+                                                               EqFA: Eq[F[A]],
+                                                               EqOptionA: Eq[Option[A]],
+                                                               MonoidA: CommutativeMonoid[A],
+                                                               MonoidB: CommutativeMonoid[B]): RuleSet =
     new DefaultRuleSet(
       name = "reducible",
       parent = Some(foldable[A, B]),
@@ -44,6 +43,6 @@ trait ReducibleTests[F[_]] extends FoldableTests[F] {
 }
 
 object ReducibleTests {
-  def apply[F[_] : Reducible]: ReducibleTests[F] =
+  def apply[F[_]: Reducible]: ReducibleTests[F] =
     new ReducibleTests[F] { def laws: ReducibleLaws[F] = ReducibleLaws[F] }
 }

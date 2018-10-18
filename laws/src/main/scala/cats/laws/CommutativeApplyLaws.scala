@@ -3,8 +3,8 @@ package cats.laws
 import cats.CommutativeApply
 
 /**
-  * Laws that must be obeyed by any `CommutativeApply`.
-  */
+ * Laws that must be obeyed by any `CommutativeApply`.
+ */
 trait CommutativeApplyLaws[F[_]] extends ApplyLaws[F] {
   implicit override def F: CommutativeApply[F]
 

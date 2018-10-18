@@ -14,8 +14,8 @@ class BooleanOrder extends Order[Boolean] with Hash[Boolean] {
   def compare(x: Boolean, y: Boolean): Int =
     if (x == y) 0 else if (x) 1 else -1
 
-  override def eqv(x:Boolean, y:Boolean): Boolean = x == y
-  override def neqv(x:Boolean, y:Boolean): Boolean = x != y
+  override def eqv(x: Boolean, y: Boolean): Boolean = x == y
+  override def neqv(x: Boolean, y: Boolean): Boolean = x != y
   override def gt(x: Boolean, y: Boolean): Boolean = x && !y
   override def lt(x: Boolean, y: Boolean): Boolean = !x && y
   override def gteqv(x: Boolean, y: Boolean): Boolean = x == y || x

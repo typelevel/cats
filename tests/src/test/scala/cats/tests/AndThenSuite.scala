@@ -19,7 +19,8 @@ class AndThenSuite extends CatsSuite {
   {
     implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[?, Int]]
     checkAll("AndThen[Int, Int]", ContravariantMonoidalTests[AndThen[?, Int]].contravariantMonoidal[Int, Int, Int])
-    checkAll("ContravariantMonoidal[AndThen[?, Int]]", SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
+    checkAll("ContravariantMonoidal[AndThen[?, Int]]",
+             SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
   }
 
   checkAll("AndThen[Int, Int]", MonadTests[AndThen[Int, ?]].monad[Int, Int, Int])
@@ -57,7 +58,9 @@ class AndThenSuite extends CatsSuite {
 
   test("andThen is stack safe") {
     val count = if (Platform.isJvm) 500000 else 1000
-    val fs = (0 until count).map(_ => { i: Int => i + 1 })
+    val fs = (0 until count).map(_ => { i: Int =>
+      i + 1
+    })
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.andThen(_))(42)
 
     result shouldEqual (count + 42)
@@ -65,7 +68,9 @@ class AndThenSuite extends CatsSuite {
 
   test("compose is stack safe") {
     val count = if (Platform.isJvm) 500000 else 1000
-    val fs = (0 until count).map(_ => { i: Int => i + 1 })
+    val fs = (0 until count).map(_ => { i: Int =>
+      i + 1
+    })
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.compose(_))(42)
 
     result shouldEqual (count + 42)

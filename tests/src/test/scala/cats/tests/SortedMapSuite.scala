@@ -17,7 +17,8 @@ class SortedMapSuite extends CatsSuite {
   checkAll("SortedMap[Int, Int]", FlatMapTests[SortedMap[Int, ?]].flatMap[Int, Int, Int])
   checkAll("FlatMap[SortedMap[Int, ?]]", SerializableTests.serializable(FlatMap[SortedMap[Int, ?]]))
 
-  checkAll("SortedMap[Int, Int] with Option", TraverseTests[SortedMap[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("SortedMap[Int, Int] with Option",
+           TraverseTests[SortedMap[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[SortedMap[Int, ?]]", SerializableTests.serializable(Traverse[SortedMap[Int, ?]]))
 
   checkAll("SortedMap[Int, Int]", TraverseFilterTests[SortedMap[Int, ?]].traverseFilter[Int, Int, Int])
@@ -25,15 +26,17 @@ class SortedMapSuite extends CatsSuite {
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>
-      map.show.nonEmpty should === (true)
-      map.show.startsWith("SortedMap(") should === (true)
-      map.show should === (implicitly[Show[SortedMap[Int, String]]].show(map))
+      map.show.nonEmpty should ===(true)
+      map.show.startsWith("SortedMap(") should ===(true)
+      map.show should ===(implicitly[Show[SortedMap[Int, String]]].show(map))
     }
   }
 
-  checkAll("Hash[SortedMap[Int, String]]" , HashTests[SortedMap[Int, String]].hash)
-  checkAll("CommutativeMonoid[SortedMap[String, Int]]", CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
-  checkAll("CommutativeMonoid[SortedMap[String, Int]]", SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
+  checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
   checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
   checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
 }

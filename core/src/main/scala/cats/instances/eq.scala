@@ -4,6 +4,7 @@ package instances
 trait EqInstances extends kernel.instances.EqInstances {
   implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     new ContravariantMonoidal[Eq] {
+
       /**
        * Defaults to the trivial equivalence relation
        * contracting the type to a point

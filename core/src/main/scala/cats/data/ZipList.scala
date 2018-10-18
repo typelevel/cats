@@ -15,7 +15,7 @@ object ZipList {
       ZipList(fa.value.map(f))
 
     def ap[A, B](ff: ZipList[A => B])(fa: ZipList[A]): ZipList[B] =
-      ZipList((ff.value, fa.value).zipped.map(_ apply _))
+      ZipList((ff.value, fa.value).zipped.map(_.apply(_)))
 
     override def product[A, B](fa: ZipList[A], fb: ZipList[B]): ZipList[(A, B)] =
       ZipList(fa.value.zip(fb.value))

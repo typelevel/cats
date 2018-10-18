@@ -9,5 +9,6 @@ object BoundedSemilattice extends SemilatticeFunctions[BoundedSemilattice] {
   /**
    * Access an implicit `BoundedSemilattice[A]`.
    */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: BoundedSemilattice[A]): BoundedSemilattice[A] = ev
+  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: BoundedSemilattice[A]): BoundedSemilattice[A] =
+    ev
 }

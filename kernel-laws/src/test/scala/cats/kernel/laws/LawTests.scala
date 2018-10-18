@@ -6,23 +6,21 @@ import catalysts.macros.TypeTagM
 import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 
-
 import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.{ Arbitrary, Cogen, Gen }
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
-import org.scalactic.anyvals.{ PosInt, PosZInt }
+import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.FunSuite
 
-import scala.concurrent.duration.{ Duration, FiniteDuration }
+import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
 
 import java.util.UUID
-import java.util.concurrent.TimeUnit.{DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS}
+import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
 
 object KernelCheck {
-
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
     Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
@@ -37,28 +35,34 @@ object KernelCheck {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
     val n = (292L * 365) / 50
-    Arbitrary(Gen.oneOf(
-      Gen.choose(-n, n).map(Duration(_, DAYS)),
-      Gen.choose(-n * 24L, n * 24L).map(Duration(_, HOURS)),
-      Gen.choose(-n * 1440L, n * 1440L).map(Duration(_, MINUTES)),
-      Gen.choose(-n * 86400L, n * 86400L).map(Duration(_, SECONDS)),
-      Gen.choose(-n * 86400000L, n * 86400000L).map(Duration(_, MILLISECONDS)),
-      Gen.choose(-n * 86400000000L, n * 86400000000L).map(Duration(_, MICROSECONDS)),
-      Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))))
+    Arbitrary(
+      Gen.oneOf(
+        Gen.choose(-n, n).map(Duration(_, DAYS)),
+        Gen.choose(-n * 24L, n * 24L).map(Duration(_, HOURS)),
+        Gen.choose(-n * 1440L, n * 1440L).map(Duration(_, MINUTES)),
+        Gen.choose(-n * 86400L, n * 86400L).map(Duration(_, SECONDS)),
+        Gen.choose(-n * 86400000L, n * 86400000L).map(Duration(_, MILLISECONDS)),
+        Gen.choose(-n * 86400000000L, n * 86400000000L).map(Duration(_, MICROSECONDS)),
+        Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(Duration(_, NANOSECONDS))
+      )
+    )
   }
 
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
     val n = (292L * 365) / 50
-    Arbitrary(Gen.oneOf(
-      Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
-      Gen.choose(-n * 24L, n * 24L).map(FiniteDuration(_, HOURS)),
-      Gen.choose(-n * 1440L, n * 1440L).map(FiniteDuration(_, MINUTES)),
-      Gen.choose(-n * 86400L, n * 86400L).map(FiniteDuration(_, SECONDS)),
-      Gen.choose(-n * 86400000L, n * 86400000L).map(FiniteDuration(_, MILLISECONDS)),
-      Gen.choose(-n * 86400000000L, n * 86400000000L).map(FiniteDuration(_, MICROSECONDS)),
-      Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(FiniteDuration(_, NANOSECONDS))))
+    Arbitrary(
+      Gen.oneOf(
+        Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
+        Gen.choose(-n * 24L, n * 24L).map(FiniteDuration(_, HOURS)),
+        Gen.choose(-n * 1440L, n * 1440L).map(FiniteDuration(_, MINUTES)),
+        Gen.choose(-n * 86400L, n * 86400L).map(FiniteDuration(_, SECONDS)),
+        Gen.choose(-n * 86400000L, n * 86400000L).map(FiniteDuration(_, MILLISECONDS)),
+        Gen.choose(-n * 86400000000L, n * 86400000000L).map(FiniteDuration(_, MICROSECONDS)),
+        Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(FiniteDuration(_, NANOSECONDS))
+      )
+    )
   }
 
   // this instance is not available in scalacheck 1.13.2.
@@ -82,27 +86,28 @@ object KernelCheck {
       if (d == Duration.Inf) 3896691548866406746L
       else if (d == Duration.MinusInf) 1844151880988859955L
       else if (d == Duration.Undefined) -7917359255778781894L
-      else d.length * (d.unit match {
-        case DAYS => -6307593037248227856L
-        case HOURS => -3527447467459552709L
-        case MINUTES => 5955657079535371609L
-        case SECONDS => 5314272869665647192L
-        case MILLISECONDS => -2025740217814855607L
-        case MICROSECONDS => -2965853209268633779L
-        case NANOSECONDS => 6128745701389500153L
-      })
+      else
+        d.length * (d.unit match {
+          case DAYS         => -6307593037248227856L
+          case HOURS        => -3527447467459552709L
+          case MINUTES      => 5955657079535371609L
+          case SECONDS      => 5314272869665647192L
+          case MILLISECONDS => -2025740217814855607L
+          case MICROSECONDS => -2965853209268633779L
+          case NANOSECONDS  => 6128745701389500153L
+        })
     }
 
   implicit val cogenFiniteDuration: Cogen[FiniteDuration] =
     Cogen[Long].contramap { d =>
       d.length * (d.unit match {
-        case DAYS => -6307593037248227856L
-        case HOURS => -3527447467459552709L
-        case MINUTES => 5955657079535371609L
-        case SECONDS => 5314272869665647192L
+        case DAYS         => -6307593037248227856L
+        case HOURS        => -3527447467459552709L
+        case MINUTES      => 5955657079535371609L
+        case SECONDS      => 5314272869665647192L
         case MILLISECONDS => -2025740217814855607L
         case MICROSECONDS => -2965853209268633779L
-        case NANOSECONDS => 6128745701389500153L
+        case NANOSECONDS  => 6128745701389500153L
       })
     }
 }
@@ -117,18 +122,13 @@ class Tests extends FunSuite with Discipline {
   final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(
-      minSuccessful = PropMinSuccessful,
-      sizeRange = PropMaxSize,
-      workers = PropWorkers)
-
+    PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
 
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
   }
-
 
   checkAll("Eq[List[HasEq[Int]]]", EqTests[List[HasEq[Int]]].eqv)
   checkAll("Eq[Option[HasEq[Int]]]", EqTests[Option[HasEq[Int]]].eqv)
@@ -137,15 +137,21 @@ class Tests extends FunSuite with Discipline {
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
-  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])", PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
-  checkAll("PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))", PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder)
+  checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])",
+           PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
+  checkAll(
+    "PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))",
+    PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder
+  )
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
-  checkAll("Semilattice.asMeetPartialOrder[Set[Int]]", PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
-  checkAll("Semilattice.asJoinPartialOrder[Set[Int]]", PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
+  checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
+           PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
+  checkAll("Semilattice.asJoinPartialOrder[Set[Int]]",
+           PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
 
   checkAll("Order[Unit]", OrderTests[Unit].order)
   checkAll("Order[Boolean]", OrderTests[Boolean].order)
@@ -161,7 +167,7 @@ class Tests extends FunSuite with Discipline {
   checkAll("Order[Duration]", OrderTests[Duration].order)
   checkAll("Order[FiniteDuration]", OrderTests[FiniteDuration].order)
   checkAll("Order[UUID]", OrderTests[UUID].order)
-  checkAll("Order[List[Int]]", OrderTests[List[Int]]  .order)
+  checkAll("Order[List[Int]]", OrderTests[List[Int]].order)
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
   checkAll("Order[List[String]", OrderTests[List[String]].order)
   checkAll("Order[Vector[Int]]", OrderTests[Vector[Int]].order)
@@ -218,15 +224,14 @@ class Tests extends FunSuite with Discipline {
   checkAll("CommutativeGroup[FiniteDuration]", CommutativeGroupTests[FiniteDuration].commutativeGroup)
   checkAll("CommutativeGroup[FiniteDuration]", SerializableTests.serializable(CommutativeGroup[FiniteDuration]))
 
-
-  checkAll("Hash[Unit]" , HashTests[Unit].hash)
-  checkAll("Hash[Boolean]" , HashTests[Boolean].hash)
-  checkAll("Hash[String]" , HashTests[String].hash)
-  checkAll("Hash[Symbol]" , HashTests[Symbol].hash)
-  checkAll("Hash[Byte]" , HashTests[Byte].hash)
-  checkAll("Hash[Short]" , HashTests[Short].hash)
-  checkAll("Hash[Char]" , HashTests[Char].hash)
-  checkAll("Hash[Int]" , HashTests[Int].hash)
+  checkAll("Hash[Unit]", HashTests[Unit].hash)
+  checkAll("Hash[Boolean]", HashTests[Boolean].hash)
+  checkAll("Hash[String]", HashTests[String].hash)
+  checkAll("Hash[Symbol]", HashTests[Symbol].hash)
+  checkAll("Hash[Byte]", HashTests[Byte].hash)
+  checkAll("Hash[Short]", HashTests[Short].hash)
+  checkAll("Hash[Char]", HashTests[Char].hash)
+  checkAll("Hash[Int]", HashTests[Int].hash)
   checkAll("Hash[Duration]", HashTests[Duration].hash)
   checkAll("Hash[FiniteDuration]", HashTests[FiniteDuration].hash)
 
@@ -234,22 +239,20 @@ class Tests extends FunSuite with Discipline {
   // `##` is different from `hashCode`. See [[scala.runtime.Statics.anyHash]].
   // checkAll("Hash[Float]" , HashTests[Float].hash)
   // checkAll("Hash[Double]" , HashTests[Double].hash)
-  checkAll("Hash[BitSet]" , HashTests[BitSet].hash)
-  checkAll("Hash[BigDecimal]" , HashTests[BigDecimal].hash)
-  checkAll("Hash[BigInt]" , HashTests[BigInt].hash)
-  checkAll("Hash[UUID]" , HashTests[UUID].hash)
-  checkAll("Hash[List[Int]]" , HashTests[List[Int]].hash)
-  checkAll("Hash[Option[String]]" , HashTests[Option[String]].hash)
-  checkAll("Hash[List[String]]" , HashTests[List[String]].hash)
-  checkAll("Hash[Vector[Int]]" , HashTests[Vector[Int]].hash)
-  checkAll("Hash[Stream[Int]]" , HashTests[Stream[Int]].hash)
-  checkAll("Hash[Set[Int]]" , HashTests[Set[Int]].hash)
-  checkAll("Hash[(Int, String)]" , HashTests[(Int, String)].hash)
-  checkAll("Hash[Either[Int, String]]" , HashTests[Either[Int, String]].hash)
-  checkAll("Hash[Map[Int, String]]" , HashTests[Map[Int, String]].hash)
+  checkAll("Hash[BitSet]", HashTests[BitSet].hash)
+  checkAll("Hash[BigDecimal]", HashTests[BigDecimal].hash)
+  checkAll("Hash[BigInt]", HashTests[BigInt].hash)
+  checkAll("Hash[UUID]", HashTests[UUID].hash)
+  checkAll("Hash[List[Int]]", HashTests[List[Int]].hash)
+  checkAll("Hash[Option[String]]", HashTests[Option[String]].hash)
+  checkAll("Hash[List[String]]", HashTests[List[String]].hash)
+  checkAll("Hash[Vector[Int]]", HashTests[Vector[Int]].hash)
+  checkAll("Hash[Stream[Int]]", HashTests[Stream[Int]].hash)
+  checkAll("Hash[Set[Int]]", HashTests[Set[Int]].hash)
+  checkAll("Hash[(Int, String)]", HashTests[(Int, String)].hash)
+  checkAll("Hash[Either[Int, String]]", HashTests[Either[Int, String]].hash)
+  checkAll("Hash[Map[Int, String]]", HashTests[Map[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
-
-
 
   {
     // default Arbitrary[BigDecimal] is a bit too intense :/
@@ -272,8 +275,8 @@ class Tests extends FunSuite with Discipline {
   def subsetPartialOrder[A]: PartialOrder[Set[A]] = new PartialOrder[Set[A]] {
     def partialCompare(x: Set[A], y: Set[A]): Double =
       if (x == y) 0.0
-      else if (x subsetOf y) -1.0
-      else if (y subsetOf x) 1.0
+      else if (x.subsetOf(y)) -1.0
+      else if (y.subsetOf(x)) 1.0
       else Double.NaN
   }
 
@@ -282,14 +285,13 @@ class Tests extends FunSuite with Discipline {
   {
     implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] = new PartialOrdering[Set[A]] {
 
-      override def tryCompare(x: Set[A], y: Set[A]): Option[Int] = {
+      override def tryCompare(x: Set[A], y: Set[A]): Option[Int] =
         if (x == y) Some(0)
-        else if (x subsetOf y) Some(-1)
-        else if (y subsetOf x) Some(1)
+        else if (x.subsetOf(y)) Some(-1)
+        else if (y.subsetOf(x)) Some(1)
         else None
-      }
 
-      override def lteq(x: Set[A], y: Set[A]): Boolean = (x subsetOf y) || (x == y)
+      override def lteq(x: Set[A], y: Set[A]): Boolean = (x.subsetOf(y)) || (x == y)
     }
     checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
   }
@@ -305,17 +307,17 @@ class Tests extends FunSuite with Discipline {
   test("comparison") {
     val order = Order[Int]
     val eqv = Eq[Comparison]
-    eqv.eqv(order.comparison(1, 0),  Comparison.GreaterThan) &&
-    eqv.eqv(order.comparison(0, 0),  Comparison.EqualTo)     &&
+    eqv.eqv(order.comparison(1, 0), Comparison.GreaterThan) &&
+    eqv.eqv(order.comparison(0, 0), Comparison.EqualTo) &&
     eqv.eqv(order.comparison(-1, 0), Comparison.LessThan)
   }
 
   test("partialComparison") {
     val po = subsetPartialOrder[Int]
     val eqv = Eq[Option[Comparison]]
-    eqv.eqv(po.partialComparison(Set(1), Set()),        Some(Comparison.GreaterThan)) &&
-    eqv.eqv(po.partialComparison(Set(), Set()),         Some(Comparison.EqualTo))     &&
-    eqv.eqv(po.partialComparison(Set(), Set(1)),        Some(Comparison.LessThan))    &&
+    eqv.eqv(po.partialComparison(Set(1), Set()), Some(Comparison.GreaterThan)) &&
+    eqv.eqv(po.partialComparison(Set(), Set()), Some(Comparison.EqualTo)) &&
+    eqv.eqv(po.partialComparison(Set(), Set(1)), Some(Comparison.LessThan)) &&
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
@@ -352,7 +354,9 @@ class Tests extends FunSuite with Discipline {
     // integers.
     implicit val arbNOrder: Arbitrary[Order[N]] = Arbitrary(arbitrary[Int].map { seed =>
       val order = new Random(seed).shuffle(Vector.range(0, nMax))
-      Order.by { (n: N) => order(n.n) }
+      Order.by { (n: N) =>
+        order(n.n)
+      }
     })
     implicit val cogNOrder: Cogen[Order[N]] =
       Cogen[Unit].contramap(_ => ())
@@ -360,7 +364,9 @@ class Tests extends FunSuite with Discipline {
     // integers.
     implicit val arbNEq: Arbitrary[Eq[N]] = Arbitrary(arbitrary[Int].map { seed =>
       val mapping = new Random(seed).shuffle(Vector.range(0, nMax))
-      Eq.by { (n: N) => mapping(n.n) }
+      Eq.by { (n: N) =>
+        mapping(n.n)
+      }
     })
     implicit val cogNEq: Cogen[Eq[N]] =
       Cogen[Unit].contramap(_ => ())
@@ -374,8 +380,11 @@ class Tests extends FunSuite with Discipline {
     }
     implicit val NEqEq: Eq[Eq[N]] = new Eq[Eq[N]] {
       def eqv(a: Eq[N], b: Eq[N]) =
-        Iterator.tabulate(nMax)(N)
-          .flatMap { x => Iterator.tabulate(nMax)(N).map((x, _)) }
+        Iterator
+          .tabulate(nMax)(N)
+          .flatMap { x =>
+            Iterator.tabulate(nMax)(N).map((x, _))
+          }
           .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
     }
 
@@ -434,5 +443,5 @@ class Tests extends FunSuite with Discipline {
     laws[L, A]("")
 
   private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    LawChecker("[" + tag.name.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
+    LawChecker("[" + tag.name.toString + (if (extraTag != "") "@@" + extraTag else "") + "]", laws)
 }
