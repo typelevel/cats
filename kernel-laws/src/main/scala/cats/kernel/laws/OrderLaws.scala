@@ -5,7 +5,7 @@ import cats.kernel.Order
 
 trait OrderLaws[A] extends PartialOrderLaws[A] {
 
-  override implicit def E: Order[A]
+  implicit override def E: Order[A]
 
   def totality(x: A, y: A): IsEq[Boolean] =
     (E.lteqv(x, y) || E.lteqv(y, x)) <-> true
@@ -37,4 +37,3 @@ object OrderLaws {
   def apply[A](implicit ev: Order[A]): OrderLaws[A] =
     new OrderLaws[A] { def E: Order[A] = ev }
 }
-

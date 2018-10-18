@@ -49,7 +49,7 @@
  <check level="error" class="org.scalastyle.scalariform.SimplifyBooleanExpressionChecker" enabled="true"></check>
  <check level="error" class="org.scalastyle.scalariform.MethodLengthChecker" enabled="true">
   <parameters>
-   <parameter name="maxLength"><![CDATA[50]]></parameter>
+   <parameter name="maxLength"><![CDATA[55]]></parameter>
   </parameters>
  </check>
  <check level="error" class="org.scalastyle.file.NewLineAtEofChecker" enabled="true"></check>
@@ -65,11 +65,6 @@
   </parameters>
   <customMessage><![CDATA[Use Greek characters in a kind projection (λ[α => ...]).]]></customMessage>
  </check>
- <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceAfterTokenChecker" level="error">
-  <parameters>
-   <parameter name="tokens">PACKAGE, WHILE, CASE, NEW, DO, EQUALS, SUBTYPE, SEALED, TYPE, FINAL, IMPORT, RETURN, VAL, VAR, ELSE, MATCH, TRY, SUPERTYPE, OP, CATCH, THROW, CLASS, DEF, FOR, LARROW, ABSTRACT, IF, OBJECT, COMMA, YIELD, PIPE, IMPLICIT, LAZY, TRAIT, FORSOME, FINALLY, OVERRIDE, ARROW, EXTENDS</parameter>
-  </parameters>
- </check>
  <check enabled="true" class="org.scalastyle.scalariform.EnsureSingleSpaceBeforeTokenChecker" level="error">
    <parameters>
      <parameter name="tokens">OP, PIPE, FORSOME</parameter>
@@ -84,11 +79,5 @@
    <parameter name="regex"><![CDATA[(?<!@|simulacrum\.)typeclass]]></parameter>
   </parameters>
   <customMessage><![CDATA[Use 'type class' instead of typeclass (See #441)]]></customMessage>
- </check>
- <check level="error" class="org.scalastyle.file.RegexChecker" enabled="true" customId="if.paren.spacing">
-  <parameters>
-   <parameter name="regex"><![CDATA[if\(|if\s\s+\(]]></parameter>
-  </parameters>
-  <customMessage><![CDATA[Put exactly a single space between 'if' and the following parenthesis.]]></customMessage>
  </check>
 </scalastyle>

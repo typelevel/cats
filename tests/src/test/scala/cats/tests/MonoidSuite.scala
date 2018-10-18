@@ -1,8 +1,6 @@
 package cats
 package tests
 
-
-
 class MonoidSuite extends CatsSuite {
   {
     Invariant[Monoid]

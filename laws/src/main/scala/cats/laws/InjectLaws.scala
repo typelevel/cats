@@ -5,7 +5,7 @@ trait InjectLaws[A, B] {
   def inject: Inject[A, B]
 
   def injectRoundTripInj(a: A): IsEq[Option[A]] =
-    (inject.prj compose inject.inj).apply(a) <-> Some(a)
+    inject.prj.compose(inject.inj).apply(a) <-> Some(a)
 
   def injectRoundTripPrj(b: B): IsEq[Option[B]] =
     inject.prj(b) match {
@@ -16,5 +16,5 @@ trait InjectLaws[A, B] {
 
 object InjectLaws {
   def apply[A, B](implicit ev: Inject[A, B]): InjectLaws[A, B] =
-    new InjectLaws[A, B]{ val inject: Inject[A, B] = ev }
+    new InjectLaws[A, B] { val inject: Inject[A, B] = ev }
 }

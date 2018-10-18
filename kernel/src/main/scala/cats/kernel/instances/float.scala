@@ -33,8 +33,8 @@ class FloatOrder extends Order[Float] with Hash[Float] {
   def compare(x: Float, y: Float): Int =
     java.lang.Float.compare(x, y)
 
-  override def eqv(x:Float, y:Float): Boolean = x == y
-  override def neqv(x:Float, y:Float): Boolean = x != y
+  override def eqv(x: Float, y: Float): Boolean = x == y
+  override def neqv(x: Float, y: Float): Boolean = x != y
   override def gt(x: Float, y: Float): Boolean = x > y
   override def gteqv(x: Float, y: Float): Boolean = x >= y
   override def lt(x: Float, y: Float): Boolean = x < y

@@ -17,4 +17,3 @@ object ConsK extends ConsK0 {
 
 @imports[ConsK]
 trait ConsK0
-

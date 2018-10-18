@@ -4,8 +4,8 @@ package tests
 import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 
-import cats.kernel.{ CommutativeSemigroup, CommutativeMonoid, CommutativeGroup }
-import cats.kernel.{ Band, Semilattice, BoundedSemilattice }
+import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
+import cats.kernel.{Band, BoundedSemilattice, Semilattice}
 
 /**
  * Helpers provides new concrete types where we control exactly which
@@ -45,8 +45,8 @@ object Helpers {
   object POrd extends Arb(new POrd(_)) {
     implicit object O extends PartialOrder[POrd] {
       def partialCompare(x: POrd, y: POrd): Double =
-        if (x.n >= 0 && y.n >= 0) (x.n compare y.n).toDouble
-        else if (x.n <= 0 && y.n <= 0) (y.n compare x.n).toDouble
+        if (x.n >= 0 && y.n >= 0) x.n.compare(y.n).toDouble
+        else if (x.n <= 0 && y.n <= 0) y.n.compare(x.n).toDouble
         else Double.NaN
     }
   }
@@ -55,7 +55,7 @@ object Helpers {
   case class Ord(n: Int) extends N
   object Ord extends Arb(new Ord(_)) {
     implicit object O extends Order[Ord] {
-      def compare(x: Ord, y: Ord): Int = x.n compare y.n
+      def compare(x: Ord, y: Ord): Int = x.n.compare(y.n)
     }
   }
 
@@ -113,7 +113,7 @@ object Helpers {
   object Mono extends Companion(new Mono(_)) {
     implicit object Alg extends Monoid[Mono] {
       def empty: Mono = Mono(Int.MaxValue)
-      def combine(x: Mono, y: Mono): Mono = Mono(x.n min y.n)
+      def combine(x: Mono, y: Mono): Mono = Mono(x.n.min(y.n))
     }
   }
 
@@ -122,7 +122,7 @@ object Helpers {
   object CMono extends Companion(new CMono(_)) {
     implicit object Alg extends CommutativeMonoid[CMono] {
       def empty: CMono = CMono(Int.MaxValue)
-      def combine(x: CMono, y: CMono): CMono = CMono(x.n min y.n)
+      def combine(x: CMono, y: CMono): CMono = CMono(x.n.min(y.n))
     }
   }
 

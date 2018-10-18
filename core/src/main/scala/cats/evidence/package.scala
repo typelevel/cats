@@ -1,6 +1,7 @@
 package cats
 
 package object evidence {
+
   /**
    * A convenient type alias for Is, which declares that A is the same
    * type as B.

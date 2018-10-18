@@ -97,7 +97,6 @@ sealed abstract class Chain[+A] {
   final def map[B](f: A => B): Chain[B] =
     fromSeq(iterator.map(f).toVector)
 
-
   /**
    * Applies the supplied function to each element and returns a new Chain from the concatenated results
    */
@@ -227,7 +226,7 @@ sealed abstract class Chain[+A] {
       val k = f(elem)
 
       m.get(k) match {
-        case None => m += ((k, NonEmptyChain.one(elem))); ()
+        case None      => m += ((k, NonEmptyChain.one(elem))); ()
         case Some(cat) => m = m.updated(k, cat :+ elem)
       }
     }
@@ -239,7 +238,6 @@ sealed abstract class Chain[+A] {
    */
   def reverse: Chain[A] =
     fromSeq(reverseIterator.toVector)
-
 
   /**
    * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
@@ -262,13 +260,15 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element, left to right.
    */
-  private final def foreach(f: A => Unit): Unit = foreachUntil { a => f(a); false }
+  final private def foreach(f: A => Unit): Unit = foreachUntil { a =>
+    f(a); false
+  }
 
   /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
    */
   // scalastyle:off null return cyclomatic.complexity
-  private final def foreachUntil(f: A => Boolean): Unit = {
+  final private def foreachUntil(f: A => Boolean): Unit = {
     var c: Chain[A] = this
     val rights = new collection.mutable.ArrayBuffer[Chain[A]]
 
@@ -300,15 +300,14 @@ sealed abstract class Chain[+A] {
   }
   // scalastyle:on null return cyclomatic.complexity
 
-
   final def iterator: Iterator[A] = this match {
     case Wrap(seq) => seq.iterator
-    case _ => new ChainIterator[A](this)
+    case _         => new ChainIterator[A](this)
   }
 
   final def reverseIterator: Iterator[A] = this match {
     case Wrap(seq) => seq.reverseIterator
-    case _ => new ChainReverseIterator[A](this)
+    case _         => new ChainReverseIterator[A](this)
   }
 
   /**
@@ -317,7 +316,7 @@ sealed abstract class Chain[+A] {
   final def length: Long = {
     val iter = iterator
     var i: Long = 0
-    while(iter.hasNext) { i += 1; iter.next; }
+    while (iter.hasNext) { i += 1; iter.next; }
     i
   }
 
@@ -325,7 +324,6 @@ sealed abstract class Chain[+A] {
    * Alias for length
    */
   final def size: Long = length
-
 
   /**
    * Converts to a list.
@@ -365,8 +363,7 @@ sealed abstract class Chain[+A] {
     var first = true
 
     foreach { a =>
-      if (first) { builder ++= AA.show(a); first = false }
-      else builder ++= ", " + AA.show(a)
+      if (first) { builder ++= AA.show(a); first = false } else builder ++= ", " + AA.show(a)
       ()
     }
     builder += ')'
@@ -378,20 +375,19 @@ sealed abstract class Chain[+A] {
 
 object Chain extends ChainInstances {
 
-  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
-  private[data] final case object Empty extends Chain[Nothing] {
+  final private[data] case object Empty extends Chain[Nothing] {
     def isEmpty: Boolean = true
   }
-  private[data] final case class Singleton[A](a: A) extends Chain[A] {
+  final private[data] case class Singleton[A](a: A) extends Chain[A] {
     def isEmpty: Boolean = false
   }
-  private[data] final case class Append[A](left: Chain[A], right: Chain[A])
-    extends Chain[A] {
+  final private[data] case class Append[A](left: Chain[A], right: Chain[A]) extends Chain[A] {
     def isEmpty: Boolean =
       false // b/c `concat` constructor doesn't allow either branch to be empty
   }
-  private[data] final case class Wrap[A](seq: Seq[A]) extends Chain[A] {
+  final private[data] case class Wrap[A](seq: Seq[A]) extends Chain[A] {
     override def isEmpty: Boolean =
       false // b/c `fromSeq` constructor doesn't allow either branch to be empty
   }
@@ -463,7 +459,6 @@ object Chain extends ChainInstances {
   }
   // scalastyle:on null
 
-
   // scalastyle:off null
   private class ChainReverseIterator[A](self: Chain[A]) extends Iterator[A] {
     private[this] var c: Chain[A] = if (self.isEmpty) null else self
@@ -508,14 +503,14 @@ object Chain extends ChainInstances {
   // scalastyle:on null
 }
 
-private[data] sealed abstract class ChainInstances extends ChainInstances1 {
+sealed abstract private[data] class ChainInstances extends ChainInstances1 {
   implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = new Monoid[Chain[A]] {
     def empty: Chain[A] = Chain.nil
     def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
   }
 
-  implicit val catsDataInstancesForChain: Traverse[Chain] with Alternative[Chain]
-    with Monad[Chain] with CoflatMap[Chain] =
+  implicit val catsDataInstancesForChain
+    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] =
     new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] {
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -536,7 +531,7 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
           as.uncons match {
             case Some((_, t)) => go(t, res += f(as))
-            case None => Chain.fromSeq(res.result())
+            case None         => Chain.fromSeq(res.result())
           }
 
         go(fa, ListBuffer.empty)
@@ -581,20 +576,22 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
   implicit def catsDataOrderForChain[A](implicit A0: Order[A]): Order[Chain[A]] =
     new Order[Chain[A]] with ChainPartialOrder[A] {
       implicit def A: PartialOrder[A] = A0
-      def compare(x: Chain[A], y: Chain[A]): Int = if (x eq y) 0 else {
-        val iterX = x.iterator
-        val iterY = y.iterator
-        while (iterX.hasNext && iterY.hasNext) {
-          val n = A0.compare(iterX.next, iterY.next)
-          // scalastyle:off return
-          if (n != 0) return n
-          // scalastyle:on return
-        }
+      def compare(x: Chain[A], y: Chain[A]): Int =
+        if (x eq y) 0
+        else {
+          val iterX = x.iterator
+          val iterY = y.iterator
+          while (iterX.hasNext && iterY.hasNext) {
+            val n = A0.compare(iterX.next, iterY.next)
+            // scalastyle:off return
+            if (n != 0) return n
+            // scalastyle:on return
+          }
 
-        if (iterX.hasNext) 1
-        else if (iterY.hasNext) -1
-        else 0
-      }
+          if (iterX.hasNext) 1
+          else if (iterY.hasNext) -1
+          else 0
+        }
     }
 
   implicit val catsDataTraverseFilterForChain: TraverseFilter[Chain] = new TraverseFilter[Chain] {
@@ -614,20 +611,18 @@ private[data] sealed abstract class ChainInstances extends ChainInstances1 {
       )
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
-      fa.foldRight(G.pure(Chain.empty[A]))(
-        (a, gca) =>
-          G.map2(f(a), gca)((b, chain) => if (b) a +: chain else chain))
+      fa.foldRight(G.pure(Chain.empty[A]))((a, gca) => G.map2(f(a), gca)((b, chain) => if (b) a +: chain else chain))
 
   }
 
 }
 
-private[data] sealed abstract class ChainInstances1 extends ChainInstances2 {
+sealed abstract private[data] class ChainInstances1 extends ChainInstances2 {
   implicit def catsDataPartialOrderForChain[A](implicit A0: PartialOrder[A]): PartialOrder[Chain[A]] =
     new ChainPartialOrder[A] { implicit def A: PartialOrder[A] = A0 }
 }
 
-private[data] sealed abstract class ChainInstances2 {
+sealed abstract private[data] class ChainInstances2 {
   implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] = new Eq[Chain[A]] {
     def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
   }
@@ -636,20 +631,22 @@ private[data] sealed abstract class ChainInstances2 {
 private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {
   implicit def A: PartialOrder[A]
 
-  override def partialCompare(x: Chain[A], y: Chain[A]): Double = if (x eq y) 0.0 else {
-    val iterX = x.iterator
-    val iterY = y.iterator
-    while (iterX.hasNext && iterY.hasNext) {
-      val n = A.partialCompare(iterX.next, iterY.next)
-      // scalastyle:off return
-      if (n != 0.0) return n
-      // scalastyle:on return
-    }
+  override def partialCompare(x: Chain[A], y: Chain[A]): Double =
+    if (x eq y) 0.0
+    else {
+      val iterX = x.iterator
+      val iterY = y.iterator
+      while (iterX.hasNext && iterY.hasNext) {
+        val n = A.partialCompare(iterX.next, iterY.next)
+        // scalastyle:off return
+        if (n != 0.0) return n
+        // scalastyle:on return
+      }
 
-    if (iterX.hasNext) 1.0
-    else if (iterY.hasNext) -1.0
-    else 0.0
-  }
+      if (iterX.hasNext) 1.0
+      else if (iterY.hasNext) -1.0
+      else 0.0
+    }
 
   override def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
 }

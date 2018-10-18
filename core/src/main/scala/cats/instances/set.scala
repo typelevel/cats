@@ -35,7 +35,7 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
     }
 
-  implicit def catsStdShowForSet[A:Show]: Show[Set[A]] = new Show[Set[A]] {
+  implicit def catsStdShowForSet[A: Show]: Show[Set[A]] = new Show[Set[A]] {
     def show(fa: Set[A]): String =
       fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
   }

@@ -3,7 +3,14 @@ package tests
 
 import scala.collection.immutable.Queue
 
-import cats.laws.discipline.{CoflatMapTests, MonadTests, AlternativeTests, SerializableTests, TraverseTests, SemigroupalTests}
+import cats.laws.discipline.{
+  AlternativeTests,
+  CoflatMapTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseTests
+}
 
 class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", SemigroupalTests[Queue].semigroupal[Int, Int, Int])
@@ -22,7 +29,7 @@ class QueueSuite extends CatsSuite {
   checkAll("Traverse[Queue]", SerializableTests.serializable(Traverse[Queue]))
 
   test("show") {
-    Queue(1, 2, 3).show should === ("Queue(1, 2, 3)")
-    Queue.empty[Int].show should === ("Queue()")
+    Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")
+    Queue.empty[Int].show should ===("Queue()")
   }
 }

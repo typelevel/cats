@@ -21,7 +21,7 @@ class BigDecimalOrder extends Order[BigDecimal] with Hash[BigDecimal] {
 
   def hash(x: BigDecimal): Int = x.hashCode()
 
-  def compare(x: BigDecimal, y: BigDecimal): Int = x compare y
+  def compare(x: BigDecimal, y: BigDecimal): Int = x.compare(y)
 
   override def eqv(x: BigDecimal, y: BigDecimal): Boolean = x == y
   override def neqv(x: BigDecimal, y: BigDecimal): Boolean = x != y
@@ -30,6 +30,6 @@ class BigDecimalOrder extends Order[BigDecimal] with Hash[BigDecimal] {
   override def lt(x: BigDecimal, y: BigDecimal): Boolean = x < y
   override def lteqv(x: BigDecimal, y: BigDecimal): Boolean = x <= y
 
-  override def min(x: BigDecimal, y: BigDecimal): BigDecimal = x min y
-  override def max(x: BigDecimal, y: BigDecimal): BigDecimal = x max y
+  override def min(x: BigDecimal, y: BigDecimal): BigDecimal = x.min(y)
+  override def max(x: BigDecimal, y: BigDecimal): BigDecimal = x.max(y)
 }

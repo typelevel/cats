@@ -5,8 +5,9 @@ import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import cats.instances.all._
 
-abstract class UnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(
-  implicit ArbFString: Arbitrary[F[String]]) extends CatsSuite with PropertyChecks {
+abstract class UnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(implicit ArbFString: Arbitrary[F[String]])
+    extends CatsSuite
+    with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 

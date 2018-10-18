@@ -35,5 +35,4 @@ trait AllInstances
     with UUIDInstances
     with VectorInstances
 
-
 trait AllInstancesBinCompat0 extends FiniteDurationInstances

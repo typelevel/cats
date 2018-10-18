@@ -26,9 +26,11 @@ import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {
 
-
   checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, ?]].semigroupK[Int])
-  checkAll("NonEmptyMap[String, Int]", NonEmptyTraverseTests[NonEmptyMap[String, ?]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option])
+  checkAll(
+    "NonEmptyMap[String, Int]",
+    NonEmptyTraverseTests[NonEmptyMap[String, ?]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
+  )
   checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
 
@@ -90,13 +92,13 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("lookup is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should === (nem.contains(key))
+      nem(key).isDefined should ===(nem.contains(key))
     }
   }
 
   test("keys.contains is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should === (nem.keys.contains(key))
+      nem(key).isDefined should ===(nem.keys.contains(key))
     }
   }
 
@@ -191,7 +193,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("+ consistent with Map") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      (nem add i).toSortedMap should ===(nem.toSortedMap + i)
+      nem.add(i).toSortedMap should ===(nem.toSortedMap + i)
     }
   }
 
@@ -202,8 +204,8 @@ class NonEmptyMapSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it"){
-    forAll{ nem: NonEmptyMap[String, Int] =>
+  test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it") {
+    forAll { nem: NonEmptyMap[String, Int] =>
       nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
     }
   }

@@ -32,7 +32,7 @@ class OptionOrder[A](implicit A: Order[A]) extends Order[Option[A]] {
         if (y.isEmpty) 0 else -1
       case Some(a) =>
         y match {
-          case None => 1
+          case None    => 1
           case Some(b) => A.compare(a, b)
         }
     }
@@ -45,7 +45,7 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
         if (y.isEmpty) 0.0 else -1.0
       case Some(a) =>
         y match {
-          case None => 1.0
+          case None    => 1.0
           case Some(b) => A.partialCompare(a, b)
         }
     }
@@ -53,7 +53,7 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
 
 class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Option[A]] {
   def hash(x: Option[A]): Int = x match {
-    case None => None.hashCode()
+    case None     => None.hashCode()
     case Some(xx) => StaticMethods.product1Hash(A.hash(xx))
   }
 }
@@ -64,7 +64,7 @@ class OptionEq[A](implicit A: Eq[A]) extends Eq[Option[A]] {
       case None => y.isEmpty
       case Some(a) =>
         y match {
-          case None => false
+          case None    => false
           case Some(b) => A.eqv(a, b)
         }
     }
@@ -77,7 +77,7 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
       case None => y
       case Some(a) =>
         y match {
-          case None => x
+          case None    => x
           case Some(b) => Some(A.combine(a, b))
         }
     }

@@ -48,20 +48,27 @@ class FuncSuite extends CatsSuite {
     implicit val appFuncApp = AppFunc.appFuncApplicative[Option, Int]
     implicit val iso = SemigroupalTests.Isomorphisms.invariant[AppFunc[Option, Int, ?]]
     checkAll("AppFunc[Option, Int, Int]", ApplicativeTests[AppFunc[Option, Int, ?]].applicative[Int, Int, Int])
-    checkAll("Applicative[AppFunc[Option, Int, ?]]", SerializableTests.serializable(Applicative[AppFunc[Option, Int, ?]]))
+    checkAll("Applicative[AppFunc[Option, Int, ?]]",
+             SerializableTests.serializable(Applicative[AppFunc[Option, Int, ?]]))
   }
 
   test("product") {
-    val f = appFunc { (x: Int) => (Some(x + 10): Option[Int]) }
-    val g = appFunc { (x: Int) => List(x * 2) }
-    val h = f product g
+    val f = appFunc { (x: Int) =>
+      (Some(x + 10): Option[Int])
+    }
+    val g = appFunc { (x: Int) =>
+      List(x * 2)
+    }
+    val h = f.product(g)
     val x = h.run(1)
-    (x.first, x.second) should === ((Some(11), List(2)))
+    (x.first, x.second) should ===((Some(11), List(2)))
   }
 
   test("traverse") {
-    val f = Func.appFunc { (x: Int) => (Some(x + 10): Option[Int]) }
-    val xs = f traverse List(1, 2, 3)
-    xs should === (Some(List(11, 12, 13)))
+    val f = Func.appFunc { (x: Int) =>
+      (Some(x + 10): Option[Int])
+    }
+    val xs = f.traverse(List(1, 2, 3))
+    xs should ===(Some(List(11, 12, 13)))
   }
 }

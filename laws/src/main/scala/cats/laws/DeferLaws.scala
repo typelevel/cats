@@ -2,6 +2,7 @@ package cats
 package laws
 
 import catalysts.Platform
+
 /**
  * Laws that must be obeyed by any `Defer`.
  */

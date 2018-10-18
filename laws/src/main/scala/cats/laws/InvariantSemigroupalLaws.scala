@@ -1,10 +1,9 @@
 package cats
 package laws
 
-
 /**
-  * Laws that are expected for any `cats.InvariantSemigroupal`.
-  */
+ * Laws that are expected for any `cats.InvariantSemigroupal`.
+ */
 trait InvariantSemigroupalLaws[F[_]] extends InvariantLaws[F] with SemigroupalLaws[F] {
   implicit override def F: InvariantSemigroupal[F]
 

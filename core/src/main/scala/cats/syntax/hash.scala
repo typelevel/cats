@@ -11,6 +11,7 @@ trait HashSyntax {
 }
 
 final class HashOps[A: Hash](a: A) {
+
   /**
    * Gets the hash code of this object given an implicit `Hash` instance.
    */

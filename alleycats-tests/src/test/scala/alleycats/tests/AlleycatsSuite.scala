@@ -1,7 +1,6 @@
 package alleycats
 package tests
 
-
 import alleycats.std.MapInstances
 import catalysts.Platform
 import cats._
@@ -25,7 +24,8 @@ trait TestSettings extends Configuration with Matchers {
       maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
       minSize = PosZInt(0),
       sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
-      workers = PosInt(1))
+      workers = PosInt(1)
+    )
 
   lazy val slowCheckConfiguration: PropertyCheckConfiguration =
     if (Platform.isJvm) checkConfiguration
@@ -36,7 +36,17 @@ trait TestSettings extends Configuration with Matchers {
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Alleycats tests. Derived from Cats.
  */
-trait AlleycatsSuite extends FunSuite with Matchers with GeneratorDrivenPropertyChecks with Discipline with TestSettings with AllInstances with AllSyntax with TestInstances with StrictCatsEquality with MapInstances {
+trait AlleycatsSuite
+    extends FunSuite
+    with Matchers
+    with GeneratorDrivenPropertyChecks
+    with Discipline
+    with TestSettings
+    with AllInstances
+    with AllSyntax
+    with TestInstances
+    with StrictCatsEquality
+    with MapInstances {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
 
@@ -48,7 +58,5 @@ trait AlleycatsSuite extends FunSuite with Matchers with GeneratorDrivenProperty
 sealed trait TestInstances {
   // To be replaced by https://github.com/rickynils/scalacheck/pull/170
   implicit def arbitraryTry[A: Arbitrary]: Arbitrary[Try[A]] =
-    Arbitrary(Gen.oneOf(
-      arbitrary[A].map(Success(_)),
-      arbitrary[Throwable].map(Failure(_))))
+    Arbitrary(Gen.oneOf(arbitrary[A].map(Success(_)), arbitrary[Throwable].map(Failure(_))))
 }

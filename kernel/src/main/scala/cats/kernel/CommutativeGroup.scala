@@ -1,6 +1,6 @@
 package cats.kernel
 
-import scala.{ specialized => sp }
+import scala.{specialized => sp}
 
 /**
  * An commutative group (also known as an abelian group) is a group

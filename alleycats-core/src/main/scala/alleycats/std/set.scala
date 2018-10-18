@@ -80,15 +80,15 @@ object SetInstances {
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
         @tailrec
-        def go(idx: Int, it: Iterator[A]): Option[A] = {
+        def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next) else {
+            if (idx == 0) Some(it.next)
+            else {
               it.next
               go(idx - 1, it)
             }
           } else None
-        }
-        if (idx < Int.MaxValue && idx >= 0L)  go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
       }
 
       override def size[A](fa: Set[A]): Long = fa.size.toLong

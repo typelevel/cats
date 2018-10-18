@@ -177,29 +177,30 @@ import simulacrum.typeclass
     }
 
   /**
-    * Partition this Reducible by a separating function `A => Either[B, C]`
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyList
-    * scala> val nel = NonEmptyList.of(1,2,3,4)
-    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
-    * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
-    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
-    * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
-    * }}}
-    */
+   * Partition this Reducible by a separating function `A => Either[B, C]`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1,2,3,4)
+   * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+   * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
+   * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
+   * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
+   * }}}
+   */
   def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
     import cats.syntax.either._
 
-    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] = {
-      eval.map(ior =>
-      (f(a), ior) match {
-        case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-        case (Right(c), _) => ior.map(c :: _)
-        case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-        case (Left(b), _) => ior.leftMap(b :: _)
-      })
-    }
+    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
+      eval.map(
+        ior =>
+          (f(a), ior) match {
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+            case (Right(c), _)           => ior.map(c :: _)
+            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+            case (Left(b), _)            => ior.leftMap(b :: _)
+        }
+      )
 
     reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
   }
@@ -231,8 +232,9 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap { case (a, ga) =>
-      f(a, G.foldRight(ga, lb)(f))
+    Always(split(fa)).flatMap {
+      case (a, ga) =>
+        f(a, G.foldRight(ga, lb)(f))
     }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
@@ -241,11 +243,12 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap { case (a, ga) =>
-      G.reduceRightToOption(ga)(f)(g).flatMap {
-        case Some(b) => g(a, Now(b))
-        case None => Later(f(a))
-      }
+    Always(split(fa)).flatMap {
+      case (a, ga) =>
+        G.reduceRightToOption(ga)(f)(g).flatMap {
+          case Some(b) => g(a, Now(b))
+          case None    => Later(f(a))
+        }
     }
 
   override def size[A](fa: F[A]): Long = {

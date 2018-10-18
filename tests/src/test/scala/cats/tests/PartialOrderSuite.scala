@@ -14,9 +14,8 @@ class PartialOrderSuite extends CatsSuite {
    * Check that two partial compare results are "the same".
    * This works around the fact that `NaN` is not equal to itself.
    */
-  def checkPartialCompare(res1: Double, res2: Double): Assertion = {
+  def checkPartialCompare(res1: Double, res2: Double): Assertion =
     (res1 == res2 || (res1.isNaN && res2.isNaN)) should ===(true)
-  }
 
   {
     Invariant[PartialOrder]
@@ -46,10 +45,10 @@ class PartialOrderSuite extends CatsSuite {
       (i < j) should ===(PartialOrder.lt(i, j))
       (i <= j) should ===(PartialOrder.lteqv(i, j))
 
-      checkPartialCompare(i partialCompare j, PartialOrder.partialCompare(i, j))
-      (i tryCompare j) should ===(PartialOrder.tryCompare(i, j))
-      (i pmin j) should ===(PartialOrder.pmin(i, j))
-      (i pmax j) should ===(PartialOrder.pmax(i, j))
+      checkPartialCompare(i.partialCompare(j), PartialOrder.partialCompare(i, j))
+      (i.tryCompare(j)) should ===(PartialOrder.tryCompare(i, j))
+      (i.pmin(j)) should ===(PartialOrder.pmin(i, j))
+      (i.pmax(j)) should ===(PartialOrder.pmax(i, j))
     }
   }
 }

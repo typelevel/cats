@@ -23,5 +23,3 @@ object SemilatticeTests {
   def apply[A: Semilattice]: SemilatticeTests[A] =
     new SemilatticeTests[A] { def laws: SemilatticeLaws[A] = SemilatticeLaws[A] }
 }
-
-

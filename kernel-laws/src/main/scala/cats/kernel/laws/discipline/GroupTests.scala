@@ -16,7 +16,8 @@ trait GroupTests[A] extends MonoidTests[A] {
       Some(monoid),
       "left inverse" -> forAll(laws.leftInverse _),
       "right inverse" -> forAll(laws.rightInverse _),
-      "consistent inverse" -> forAll(laws.consistentInverse _))
+      "consistent inverse" -> forAll(laws.consistentInverse _)
+    )
 
 }
 

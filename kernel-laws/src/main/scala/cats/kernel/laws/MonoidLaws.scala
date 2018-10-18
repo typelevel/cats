@@ -3,7 +3,7 @@ package cats.kernel.laws
 import cats.kernel.{Eq, Monoid}
 
 trait MonoidLaws[A] extends SemigroupLaws[A] {
-  override implicit def S: Monoid[A]
+  implicit override def S: Monoid[A]
 
   def leftIdentity(x: A): IsEq[A] =
     S.combine(S.empty, x) <-> x
@@ -20,9 +20,8 @@ trait MonoidLaws[A] extends SemigroupLaws[A] {
   def combineAll(xs: Vector[A]): IsEq[A] =
     S.combineAll(xs) <-> (S.empty +: xs).reduce(S.combine)
 
-  def isId(x: A, eqv: Eq[A]): IsEq[Boolean] = {
+  def isId(x: A, eqv: Eq[A]): IsEq[Boolean] =
     eqv.eqv(x, S.empty) <-> S.isEmpty(x)(eqv)
-  }
 
 }
 
