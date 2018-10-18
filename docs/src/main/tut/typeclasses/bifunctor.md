@@ -60,24 +60,25 @@ A bit contrived, but we want an average contribution per month to the given acco
 The list of balances is given as a list of numeric strings (except when they aren't), and the account lifetime is given in years.
 
 ```tut:book
-val records: List[String] = List("4", "77", "99", "21", "oops")
-val lifetimes: List[Int] = List(5, 25, 3, 4, 30)
+val records: List[String] = List("4500", "7700", "9900", "21", "oops")
+val lifetimes: List[Int] = List(3, 4, 2, 4, 3)
 val withLifetime: List[(String, Int)] = records.zip(lifetimes)
 
 def decodeInt(s: String): Either[Throwable, Int] = Either.catchNonFatal(s.toInt)
 
+def fillErrorsAt0(e: Either[Throwable, Int]): Int = e.getOrElse(0)
+
+def calculateContributionPerMonth(balance: Int, lifetime: Int) = balance / lifetime
+
+val withDecodedBalance = withLifetime.map(_.leftMap(decodeInt))
+
 val result: List[Int] =
-  withLifetime.map(
-      _.leftMap(decodeInt)
-    ).map(
-        _.bimap({
-          case Right(v) => v
-          case Left(_) => 0
-        },
+  withDecodedBalance.map(
+      _.bimap(
+        fillErrorsAt0,
         years => 12 * years
-    )).map({
-      case (balance, lifetime) => balance / lifetime
-    })
+      )
+    ).map((calculateContributionPerMonth _).tupled)
 ```
 
 As you can see, this instance makes it convenient to process two related pieces of data in independent ways, especially when there is no state relationship between the two until processing is complete.
