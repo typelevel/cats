@@ -106,7 +106,7 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
         (ab: (A, B)) =>
           ab match {
             case (a, b) => Monoid[R].combine(fa(a), fb(b))
-        }
+          }
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =

@@ -363,7 +363,9 @@ sealed abstract class Chain[+A] {
     var first = true
 
     foreach { a =>
-      if (first) { builder ++= AA.show(a); first = false } else builder ++= ", " + AA.show(a)
+      if (first) {
+        builder ++= AA.show(a); first = false
+      } else builder ++= ", " + AA.show(a)
       ()
     }
     builder += ')'

@@ -144,12 +144,13 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    * }}}
    */
   def transformS[R](f: R => SA, g: (R, SB) => R)(implicit F: Functor[F]): IndexedStateT[F, R, R, A] =
-    StateT.applyF(F.map(runF) { sfsa =>
-      { r: R =>
-        val sa = f(r)
-        val fsba = sfsa(sa)
-        F.map(fsba) { case (sb, a) => (g(r, sb), a) }
-      }
+    StateT.applyF(F.map(runF) {
+      sfsa =>
+        { r: R =>
+          val sa = f(r)
+          val fsba = sfsa(sa)
+          F.map(fsba) { case (sb, a) => (g(r, sb), a) }
+        }
     })
 
   /**
@@ -410,7 +411,7 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
       s =>
         F.tailRecM[(S, A), (S, B)]((s, a)) {
           case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
-      }
+        }
     )
 }
 
@@ -447,7 +448,7 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
             (tup: (S, A)) =>
               f(tup._2) match {
                 case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
-            }
+              }
           )(G, F)
       )
     )

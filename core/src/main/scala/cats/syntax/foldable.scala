@@ -188,7 +188,7 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
         f(a) match {
           case Some(x) ⇒ M.combine(acc, x)
           case None ⇒ acc
-      }
+        }
     )
 
 }

@@ -355,7 +355,7 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
         a0 =>
           F.map(f(a0).value)(
             _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
-        )
+          )
       )
     )
 }
@@ -397,7 +397,7 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
           t match {
             case Some((x, y)) => (Some(x), Some(y))
             case None         => (None, None)
-        }
+          }
       )
     )
 }

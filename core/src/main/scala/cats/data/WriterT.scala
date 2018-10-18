@@ -476,7 +476,7 @@ sealed private[data] trait WriterTContravariantMonoidal[F[_], L] extends Contrav
         (t: (L, (A, B))) =>
           t match {
             case (l, (a, b)) => ((l, a), (l, b))
-        }
+          }
       )
     )
 }
