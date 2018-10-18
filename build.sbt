@@ -17,7 +17,7 @@ organization in ThisBuild := "org.typelevel"
 lazy val scalafmtSettings = Seq(
   scalafmtDiff := {
     org.scalafmt.cli.Cli.exceptionThrowingMain(
-      Array("--non-interactive", "--diff")
+      Array("--non-interactive", "--diff-branch", "HEAD")
     )
   },
   compileInputs in (Compile, compile) := (compileInputs in (Compile, compile))
