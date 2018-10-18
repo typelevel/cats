@@ -3,12 +3,13 @@ import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
 )
+
+val scalafmtDiff = taskKey[Unit]("Scalafmt the diff files")
 
 organization in ThisBuild := "org.typelevel"
 
@@ -34,6 +35,14 @@ lazy val commonSettings = Seq(
   },
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   fork in test := true,
+  scalafmtDiff := {
+    org.scalafmt.cli.Cli.exceptionThrowingMain(
+      Array("--non-interactive", "--diff")
+    )
+  },
+  compileInputs in (Compile, compile) := (compileInputs in (Compile, compile))
+    .dependsOn(scalafmtDiff)
+    .value,
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
   //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
@@ -65,7 +74,7 @@ lazy val catsSettings = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.5",
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
-  ) ++ macroDependencies(scalaVersion.value),
+  ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
