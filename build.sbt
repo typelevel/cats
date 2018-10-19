@@ -3,6 +3,7 @@ import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
 lazy val scoverageSettings = Seq(
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
