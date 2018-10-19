@@ -55,27 +55,18 @@ There is no `rightMap` however - use `map` instead. The reasoning behind this is
 
 Another very popular `Bifunctor` is that for the `Tuple2` data type, or `(A, B)` for types `A` and `B`.
 
-Let's say we have a list of balances and want divide them by the number of months in the lifetime of the account holder.
-A bit contrived, but we want an average contribution per month to the given account.
-The list of balances is given as a list of numeric strings (except when they aren't), and the account lifetime is given in years.
+Let's say we have a list of balances and want divide them by the number of months in the lifetime of the account holder. The balances are given in cents.
+A bit contrived, but we want an average contribution per month to the given account. We want the result in dollars per month. The lifetime is given in the number of years the account has been active.
 
 ```tut:book
-val records: List[String] = List("4500", "7700", "9900", "21", "oops")
-val lifetimes: List[Int] = List(3, 4, 2, 4, 3)
-val withLifetime: List[(String, Int)] = records.zip(lifetimes)
-
-def decodeInt(s: String): Either[Throwable, Int] = Either.catchNonFatal(s.toInt)
-
-def fillErrorsAt0(e: Either[Throwable, Int]): Int = e.getOrElse(0)
+val records: List[(Int, Int)] = List((450000, 3), (770000, 4), (990000, 2), (2100, 4), (43300, 3))
 
 def calculateContributionPerMonth(balance: Int, lifetime: Int) = balance / lifetime
 
-val withDecodedBalance = withLifetime.map(_.leftMap(decodeInt))
-
 val result: List[Int] =
-  withDecodedBalance.map(
-      _.bimap(
-        fillErrorsAt0,
+  records.map(
+      record => record.bimap(
+        cents => cents / 100,
         years => 12 * years
       )
     ).map((calculateContributionPerMonth _).tupled)
