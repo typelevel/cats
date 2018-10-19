@@ -390,7 +390,7 @@ lazy val macros = crossProject(JSPlatform, JVMPlatform)
 lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
-lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("kernel"))
   .settings(moduleName := "cats-kernel", name := "Cats kernel")
@@ -401,12 +401,10 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .nativeSettings(commonNativeSettings)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
-lazy val kernelNative = kernel.native
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
