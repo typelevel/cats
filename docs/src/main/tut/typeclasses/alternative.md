@@ -99,10 +99,8 @@ implicit val decoderAlternative = new Alternative[Decoder] {
 The addition of the `Alternative` methods allows us to prioritize multiple strategies, compensating for inconsistencies in the source data.
 
 ```tut:book
-import scala.util.Try
-
-def parseInt(s: String) = Try(s.toInt).toEither
-def parseIntFirstChar(s: String) = Try(2 * Character.digit(s.charAt(0), 10)).toEither
+def parseInt(s: String) = Either.catchNonFatal(s.toInt)
+def parseIntFirstChar(s: String) = Either.catchNonFatal(2 * Character.digit(s.charAt(0), 10))
 
 // Try first parsing the whole, then just the first character.
 val decoder = Decoder.from(parseInt _) <+> Decoder.from(parseIntFirstChar _)
