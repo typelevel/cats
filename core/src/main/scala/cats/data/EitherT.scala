@@ -78,7 +78,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
 
   def biFlatMap[AA >: A, BB >: B](fa: A => EitherT[F, AA, BB],
-                                  fb: B => EitherT[F, AA, BB])(implicit F: Monad[F]): EitherT[F, AA, BB] =
+                                  fb: B => EitherT[F, AA, BB])(implicit F: FlatMap[F]): EitherT[F, AA, BB] =
     EitherT(F.flatMap(value) {
       case Left(a)  => fa(a).value
       case Right(a) => fb(a).value
