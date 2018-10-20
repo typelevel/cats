@@ -23,9 +23,9 @@ trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] {
 }
 ```
 
-As you might recall, `pure` wraps values in the context and `ap` allows us to do calculations in the context, while `combineK` allows us to combine, for any given type `A`, any two contextual values `F[A]` and `empty` provides the identity element for the combine operation.
+As you might recall, `pure` wraps values in the context; `ap` allows us to do calculations in the context; `combineK` allows us to combine, for any given type `A`, any two contextual values `F[A]`; and `empty` provides the identity element for the combine operation.
 
-Of course, like other type classes, `Alternative` instances must obey some laws, in addition to those otherwise applying to `MonoidK` and `Applicative instances`:
+Like other type classes, `Alternative` instances must obey some laws, in addition to those otherwise applying to `MonoidK` and `Applicative instances`:
 
 * Right Absorption: Applying a contextual function `F[A => B]` to `empty [A]` should be `empty [B]`.
   * `ff ap F.empty[A] = F.empty[B]`.
@@ -34,7 +34,7 @@ Of course, like other type classes, `Alternative` instances must obey some laws,
 * Right Distributivity: Applying the combination of two functions must be the combination of their applications.
   * `(ff <+> fg) ap fa = (ff ap fa) <+> (fg ap fa)` where `ff: F[A => B]`, `fg: F[A => B]`, and `fa: F[A]`.
 
-Morally, these laws guarantee the compatibility of the otherwise possibly independent `Applicative` and `MonoidK` structures.
+These laws guarantee the compatibility of the otherwise possibly independent `Applicative` and `MonoidK` structures.
 
 ## Vector as an Alternative
 
@@ -78,7 +78,7 @@ object Decoder {
 
 Then, we can implement an `Alternative` instance for this type like so:
 
-```tut:book
+```tut:book:silent
 implicit val decoderAlternative = new Alternative[Decoder] {
   def pure[A](a: A) = Decoder.from(Function.const(Right(a)))
 
@@ -98,12 +98,17 @@ implicit val decoderAlternative = new Alternative[Decoder] {
 
 The addition of the `Alternative` methods allows us to prioritize multiple strategies, compensating for inconsistencies in the source data.
 
-```tut:book
-def parseInt(s: String) = Either.catchNonFatal(s.toInt)
-def parseIntFirstChar(s: String) = Either.catchNonFatal(2 * Character.digit(s.charAt(0), 10))
+```tut:book:silent
+def parseInt(s: String): Either[Throwable, Int] = Either.catchNonFatal(s.toInt)
+def parseIntFirstChar(s: String): Either[Throwable, Int] = Either.catchNonFatal(2 * Character.digit(s.charAt(0), 10))
 
 // Try first parsing the whole, then just the first character.
-val decoder = Decoder.from(parseInt _) <+> Decoder.from(parseIntFirstChar _)
+val decoder: Decoder[Int] = Decoder.from(parseInt _) <+> Decoder.from(parseIntFirstChar _)
+```
+
+This decoder correctly attempts each strategy in turn, as you can see:
+
+```tut:book
 
 decoder.decode("555")
 decoder.decode("5a")
@@ -115,23 +120,25 @@ decoder.decode("5a")
 
 The trick here is that the inner type constructor (essentially the replacement for `Boolean` as the target of our "predicate") must have a `Bifoldable` available. A great example of a `Bifoldable` is `Either`, and another is `Tuple2`.
 
-Let's imagine that we're trying to make a bunch of independent possibly failure prone calls with a bunch of different `Int` inputs (say it's the id of a resource), each returning `Either[Int, Int]` where a left of an integer is the code modeling the failure we're given (say it's the HTTP code returned by a remote API we're calling), while right of an integer is the output of the calculation.
+Let's imagine that we're trying to make a bunch of independent possibly failure-prone calls with a bunch of different `Int` inputs (say it's the id of a resource), each returning `Either[Int, Int]` where a left of an integer is the code modeling the failure we're given (say it's the HTTP code returned by a remote API we're calling), while right of an integer is the output of the calculation.
 
-We can use `separate` to pull apart the failures and successes zipped with the input, letting us log failures and proceed with successes intelligently.
+```tut:book:silent
+// Resource holder returns (Request, Status)
+def requestResource(a: Int): Either[(Int, String), (Int, Long)] = {
+  if (a % 4 == 0) Left((a, "Bad request"))
+  else if (a % 3 == 0) Left((a, "Server error"))
+  else Right((a, 200L))
+}
+```
+
+We can use `separate` to pull apart the failures and successes zipped with the input, letting us log failures and proceed with successes intelligently. `separate` will pull the two different outcomes into different sides of a tuple.
 
 ```tut:book
-// Resource holder returns (Request, Status)
-def requestResource(a: Int): Either[(Int, Int), (Int, Int)] = {
-  if (a % 4 == 0) Left((a, 400))
-  else if (a % 3 == 0) Left((a, 500))
-  else Right((a, 200))
-}
-
 val partitionedResults = 
   ((requestResource _).pure[Vector] ap Vector(5, 6, 7, 99, 1200, 8, 22)).separate
 ```
 
-Alternatively (no pun intended), in a totally different version of the same idea, we can lean on the instance of `Bitraverse` for `Tuple2` to try and partition cleanly the outcomes of two different calculations that each depend pairwise on the same input (maybe we have a primary key and we want to select both the remote id of the resources with that key, and those that are foreign key linked to the input key).
+Alternatively (no pun intended), in a totally different version of the same idea, we can lean on the instance of `Bitraverse` for `Tuple2` to try and partition cleanly the outcomes of two different calculations that each depend pairwise on the same input (maybe we have a primary key and we want to select both the remote id of the resources with that key, and those that are linked via the foreign key to the input key).
 
 ```tut:book
 // Surprising regularity in this politico-geographical data model!
@@ -141,5 +148,3 @@ val regionsWithDistricts = (getRegionAndDistrict _).pure[Vector] ap Vector(5, 6,
 val regionIds = regionsWithDistricts.separate._1
 val districtIds = regionsWithDistricts.separate._2.flatten
 ```
-
-
