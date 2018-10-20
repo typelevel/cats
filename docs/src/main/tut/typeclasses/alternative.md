@@ -64,7 +64,7 @@ val apForVectors = (double.pure[Vector] <+> addFive.pure[Vector]) ap concatenate
 
 Suppose we have a simple parser library with an interface something like:
 
-```tut:book
+```tut:book:silent
 trait Decoder[A] {
   def decode(in: String): Either[Throwable, A]
 }
