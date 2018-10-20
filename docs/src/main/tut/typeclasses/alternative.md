@@ -120,7 +120,7 @@ decoder.decode("5a")
 
 The trick here is that the inner type constructor (essentially the replacement for `Boolean` as the target of our "predicate") must have a `Bifoldable` available. A great example of a `Bifoldable` is `Either`, and another is `Tuple2`.
 
-Let's imagine that we're trying to make a bunch of independent possibly failure-prone calls with a bunch of different `Int` inputs (say it's the id of a resource), each returning `Either[Int, Int]` where a left of an integer is the code modeling the failure we're given (say it's the HTTP code returned by a remote API we're calling), while right of an integer is the output of the calculation.
+Let's imagine that we're trying to make a bunch of independent possibly failure-prone calls with a bunch of different `Int` inputs (say it's the id of a resource), each returning `Either[String, Int]` where a left `String` is the code modeling the failure we're given (say it's the HTTP code returned by a remote API we're calling), while right of an integer is the output of the calculation.
 
 ```tut:book:silent
 // Resource holder returns (Request, Status)
