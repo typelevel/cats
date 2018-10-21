@@ -372,6 +372,24 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /** Reverses this `NonEmptyChain` */
   final def reverse: NonEmptyChain[A] =
     create(toChain.reverse)
+
+  /**
+    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+    */
+  final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] = {
+    implicit val ord = O.toOrdering
+
+    var alreadyIn = TreeSet(head: AA)
+
+    foldLeft(NonEmptyChain(head: AA)) { (elementsSoFar, b) =>
+      if (alreadyIn.contains(b)) {
+        elementsSoFar
+      } else {
+        alreadyIn += b
+        elementsSoFar :+ b
+      }
+    }
+  }
 }
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
