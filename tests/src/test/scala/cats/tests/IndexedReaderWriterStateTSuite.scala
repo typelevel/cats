@@ -52,13 +52,13 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("ReaderWriterState.pure, ReaderWriterStateT.pure and IndexedReaderWriterStateT.pure are consistent") {
-    forAll { (value: Int) =>
+    forAll { (context: String, value: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterState.pure(value)
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.pure(value)
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.pure(value)
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, value) should ===(rwst.run(context, value))
+      rwst.run(context, value) should ===(irwst.run(context, value))
     }
   }
 
@@ -70,131 +70,131 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("ReaderWriterState.get, ReaderWriterStateT.get and IndexedReaderWriterStateT.get are consistent") {
-    forAll { (initial: Int) =>
+    forAll { (context: String, initial: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterState.get
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.get
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.get
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.get and instance get are consistent") {
-    forAll { (initial: Int) =>
+    forAll { (context: String, initial: Int) =>
       val singleton = ReaderWriterState.get[String, String, Int]
       val instance = ReaderWriterState.pure[String, String, Int, Unit](()).get
 
-      singleton should ===(instance)
+      singleton.run(context, initial) should ===(instance.run(context, initial))
     }
   }
 
   test("ReaderWriterState.inspect and instance inspect are consistent") {
-    forAll { (initial: Int) =>
+    forAll { (context: String, initial: Int) =>
       val singleton = ReaderWriterState.inspect[String, String, Int, String](_.toString)
       val instance = ReaderWriterState.pure[String, String, Int, Unit](()).inspect(_.toString)
 
-      singleton should ===(instance)
+      singleton.run(context, initial) should ===(instance.run(context, initial))
     }
   }
 
   test("ReaderWriterState.inspect, ReaderWriterStateT.inspect and IndexedReaderWriterStateT.inspect are consistent") {
-    forAll { (f: Int => Int) =>
+    forAll { (context: String, initial: Int, f: Int => Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterState.inspect(f)
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.inspect(f)
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.inspect(f)
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.inspect, ReaderWriterStateT.inspectF and IndexedReaderWriterStateT.inspectF are consistent") {
-    forAll { (f: Int => Int) =>
+    forAll { (context: String, initial: Int, f: Int => Int) =>
       val rws: ReaderWriterState[String, String, Int, Int] = ReaderWriterState.inspect(f)
       val rwst: ReaderWriterState[String, String, Int, Int] = ReaderWriterStateT.inspectF(f.andThen(Eval.now))
       val irwst: ReaderWriterState[String, String, Int, Int] = IndexedReaderWriterStateT.inspectF(f.andThen(Eval.now))
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.modify, ReaderWriterStateT.modify and IndexedReaderWriterStateT.modify are consistent") {
-    forAll { (f: Int => Int) =>
+    forAll { (context: String, initial: Int, f: Int => Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterState.modify(f)
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.modify(f)
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.modify(f)
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.modify, ReaderWriterStateT.modifyF and IndexedReaderWriterStateT.modifyF are consistent") {
-    forAll { (f: Int => Int) =>
+    forAll { (context: String, initial: Int, f: Int => Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterState.modify(f)
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.modifyF(f.andThen(Eval.now))
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] =
         IndexedReaderWriterStateT.modifyF(f.andThen(Eval.now))
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.pure, ReaderWriterStateT.liftF and IndexedReaderWriterStateT.liftF are consistent") {
-    forAll { (value: Int) =>
+    forAll { (context: String, initial: Int, value: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterState.pure(value)
       val rwst: ReaderWriterState[String, Vector[String], Int, Int] = ReaderWriterStateT.liftF(Eval.now(value))
       val irwst: ReaderWriterState[String, Vector[String], Int, Int] = IndexedReaderWriterStateT.liftF(Eval.now(value))
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.set, ReaderWriterStateT.set and IndexedReaderWriterStateT.set are consistent") {
-    forAll { (next: Int) =>
+    forAll { (context: String, initial: Int, next: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterState.set(next)
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.set(next)
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.set(next)
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.set, ReaderWriterStateT.setF and IndexedReaderWriterStateT.setF are consistent") {
-    forAll { (next: Int) =>
+    forAll { (context: String, initial: Int, next: Int) =>
       val rws: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterState.set(next)
       val rwst: ReaderWriterState[String, Vector[String], Int, Unit] = ReaderWriterStateT.setF(Eval.now(next))
       val irwst: ReaderWriterState[String, Vector[String], Int, Unit] = IndexedReaderWriterStateT.setF(Eval.now(next))
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.tell, ReaderWriterStateT.tell and IndexedReaderWriterStateT.tell are consistent") {
-    forAll { (log: String) =>
+    forAll { (context: String, initial: Int, log: String) =>
       val rws: ReaderWriterState[String, String, Int, Unit] = ReaderWriterState.tell(log)
       val rwst: ReaderWriterState[String, String, Int, Unit] = ReaderWriterStateT.tell(log)
       val irwst: ReaderWriterState[String, String, Int, Unit] = IndexedReaderWriterStateT.tell(log)
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
   test("ReaderWriterState.tell, ReaderWriterStateT.tellF and IndexedReaderWriterStateT.tellF are consistent") {
-    forAll { (log: String) =>
+    forAll { (context: String, initial: Int, log: String) =>
       val rws: ReaderWriterState[String, String, Int, Unit] = ReaderWriterState.tell(log)
       val rwst: ReaderWriterState[String, String, Int, Unit] = ReaderWriterStateT.tellF(Eval.now(log))
       val irwst: ReaderWriterState[String, String, Int, Unit] = IndexedReaderWriterStateT.tellF(Eval.now(log))
 
-      rws should ===(rwst)
-      rwst should ===(irwst)
+      rws.run(context, initial) should ===(rwst.run(context, initial))
+      rwst.run(context, initial) should ===(irwst.run(context, initial))
     }
   }
 
@@ -236,7 +236,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   test("reset on pure is a noop") {
     forAll { (c: String, s: Int, a: Int) =>
       val pure = ReaderWriterState.pure[String, String, Int, Int](a)
-      pure.reset should ===(pure)
+      pure.reset.run(c, s) should ===(pure.run(c, s))
     }
   }
 
@@ -316,15 +316,17 @@ class ReaderWriterStateTSuite extends CatsSuite {
       IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor)
     )
 
-  checkAll("IndexedReaderWriterStateT[Eval, String, String, Int, String, ?]",
-           DeferTests[IndexedReaderWriterStateT[Eval, String, String, Int, String, ?]].defer[Int])
+  checkAll(
+    "IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, ?]",
+    DeferTests[IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, ?]].defer[Int]
+  )
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, Int]",
-      FunctorTests[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]].functor[Int, Int, Int]
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, ?]",
+      FunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, ?]].functor[Int, Int, Int]
     )
     checkAll(
       "Functor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]]",
@@ -332,9 +334,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, String, Int, Int]",
-      ContravariantTests[IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]]
-        .contravariant[String, String, String]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]",
+      ContravariantTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, Int, Int]]
+        .contravariant[MiniInt, String, Boolean]
     )
     checkAll(
       "Contravariant[IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]]",
@@ -342,9 +344,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, Int]",
-      ProfunctorTests[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]
-        .profunctor[Int, Int, Int, String, String, String]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]",
+      ProfunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]]
+        .profunctor[MiniInt, Int, Int, String, String, String]
     )
     checkAll(
       "Profunctor[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
@@ -352,9 +354,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, Int]",
-      StrongTests[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]
-        .strong[Int, Int, Int, String, String, String]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]",
+      StrongTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]]
+        .strong[MiniInt, Int, Int, String, Boolean, String]
     )
     checkAll(
       "Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
@@ -362,9 +364,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, String]",
-      BifunctorTests[IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]]
-        .bifunctor[Int, Int, Int, String, String, String]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]",
+      BifunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?, ?]]
+        .bifunctor[Int, Int, Boolean, String, String, String]
     )
     checkAll(
       "Bifunctor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]]",
@@ -375,13 +377,13 @@ class ReaderWriterStateTSuite extends CatsSuite {
   {
     implicit val G: Monad[ListWrapper] = ListWrapper.monad
 
-    val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, String, String, Int](ListWrapper.monad,
-                                                                                 ListWrapper.alternative,
-                                                                                 Monoid[String])
+    val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, Boolean, String, MiniInt](ListWrapper.monad,
+                                                                                      ListWrapper.alternative,
+                                                                                      Monoid[String])
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, Int]",
-      AlternativeTests[IRWST[ListWrapper, String, String, Int, Int, ?]](SA).alternative[Int, Int, Int]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, ?]",
+      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, ?]](SA).alternative[Int, Int, Int]
     )
     checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, ?]]",
              SerializableTests.serializable(SA))
@@ -390,8 +392,10 @@ class ReaderWriterStateTSuite extends CatsSuite {
   {
     implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
 
-    checkAll("ReaderWriterStateT[ListWrapper, String, String, Int, Int]",
-             MonadTests[ReaderWriterStateT[ListWrapper, String, String, Int, ?]].monad[Int, Int, Int])
+    checkAll(
+      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, ?]",
+      MonadTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]].monad[Int, Int, Int]
+    )
     checkAll(
       "Monad[ReaderWriterStateT[ListWrapper, String, String, Int, ?]]",
       SerializableTests.serializable(Monad[ReaderWriterStateT[ListWrapper, String, String, Int, ?]])
@@ -399,12 +403,14 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[ReaderWriterStateT[Option, String, String, Int, ?]]
-    implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, String, String, Int, ?], Unit, Int]] =
-      EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, String, String, Int, ?], Unit, Int]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?]]
+    implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit, Int]] =
+      EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit, Int]
 
-    checkAll("ReaderWriterStateT[Option, String, String, Int, Int]",
-             MonadErrorTests[ReaderWriterStateT[Option, String, String, Int, ?], Unit].monadError[Int, Int, Int])
+    checkAll(
+      "ReaderWriterStateT[Option, Boolean, String, MiniIntInt, ?]",
+      MonadErrorTests[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit].monadError[Int, Int, Int]
+    )
     checkAll(
       "MonadError[ReaderWriterStateT[Option, String, String, Int, ?], Unit]",
       SerializableTests.serializable(MonadError[ReaderWriterStateT[Option, String, String, Int, ?], Unit])
@@ -415,8 +421,10 @@ class ReaderWriterStateTSuite extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
-    checkAll("ReaderWriterStateT[ListWrapper, String, String, Int, Int]",
-             SemigroupKTests[ReaderWriterStateT[ListWrapper, String, String, Int, ?]].semigroupK[Int])
+    checkAll(
+      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]",
+      SemigroupKTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]].semigroupK[Int]
+    )
     checkAll(
       "SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, ?]]",
       SerializableTests.serializable(SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, ?]])
@@ -442,9 +450,9 @@ object ReaderWriterStateTSuite {
     }
   }
 
-  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: Arbitrary[SA],
+  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],
                                               SB: Arbitrary[SB],
-                                              E: Arbitrary[E],
+                                              E: ExhaustiveCheck[E],
                                               FLSB: Eq[F[(L, SB, A)]],
                                               F: Monad[F]): Eq[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Eq.by[IndexedReaderWriterStateT[F, E, L, SA, SB, A], (E, SA) => F[(L, SB, A)]] { state => (e, s) =>

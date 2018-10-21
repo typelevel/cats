@@ -21,7 +21,8 @@ class WriterTSuite extends CatsSuite {
   checkAll("WriterT[List, Int, Int]", EqTests[WriterT[List, Int, Int]].eqv)
   checkAll("Eq[WriterT[List, Int, Int]]", SerializableTests.serializable(Eq[WriterT[List, Int, Int]]))
 
-  checkAll("WriterT[Show, Int, Int]", ContravariantTests[WriterT[Show, Int, ?]].contravariant[Int, Int, Int])
+  checkAll("WriterT[Show, MiniInt, ?]",
+           ContravariantTests[WriterT[Show, MiniInt, ?]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[WriterT[Show, Int, Int]]",
            SerializableTests.serializable(Contravariant[WriterT[Show, Int, ?]]))
 

@@ -10,14 +10,103 @@ import cats.data.AndThen
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
+import cats.instances.tuple._
 import cats.kernel._
 import cats.syntax.eq._
 import org.scalacheck.Arbitrary
 
-object eq {
+object eq extends DisciplineEqInstances {
+
+  implicit def catsLawsEqForFn1Exhaustive[A, B](implicit A: ExhaustiveCheck[A], B: Eq[B]): Eq[A => B] =
+    Eq.instance((f, g) => A.allValues.forall(a => B.eqv(f(a), g(a))))
+
+  implicit def catsLawsEqForFn2Exhaustive[A, B, C](implicit A: ExhaustiveCheck[A],
+                                                   B: ExhaustiveCheck[B],
+                                                   C: Eq[C]): Eq[(A, B) => C] =
+    Eq.by((_: (A, B) => C).tupled)(catsLawsEqForFn1Exhaustive)
+
+  implicit def catsLawsEqForAndThenExhaustive[A, B](implicit A: ExhaustiveCheck[A], B: Eq[B]): Eq[AndThen[A, B]] =
+    Eq.instance(catsLawsEqForFn1Exhaustive[A, B].eqv(_, _))
+
+  implicit def catsLawsEqForShowExhaustive[A: ExhaustiveCheck]: Eq[Show[A]] =
+    Eq.by[Show[A], A => String](showA => a => showA.show(a))
+
+  implicit def catsLawsEqForEqExhaustive[A: ExhaustiveCheck]: Eq[Eq[A]] =
+    Eq.by[Eq[A], (A, A) => Boolean](e => (a1, a2) => e.eqv(a1, a2))
+
+  implicit def catsLawsEqForEquivExhaustive[A: ExhaustiveCheck]: Eq[Equiv[A]] =
+    Eq.by[Equiv[A], (A, A) => Boolean](e => (a1, a2) => e.equiv(a1, a2))
+
+  implicit def catsLawsEqForPartialOrderExhaustive[A: ExhaustiveCheck]: Eq[PartialOrder[A]] = {
+    import cats.instances.option._
+
+    Eq.by[PartialOrder[A], (A, A) => Option[Int]](o => (a1, a2) => o.tryCompare(a1, a2))
+  }
+
+  implicit def catsLawsEqForPartialOrderingExhaustive[A: ExhaustiveCheck]: Eq[PartialOrdering[A]] = {
+    import cats.instances.option._
+
+    Eq.by[PartialOrdering[A], (A, A) => Option[Int]](
+      (o: PartialOrdering[A]) => (a1, a2) => o.tryCompare(a1, a2)
+    )
+  }
+
+  implicit def catsLawsEqForOrderExhaustive[A: ExhaustiveCheck]: Eq[Order[A]] =
+    Eq.by[Order[A], (A, A) => Int](o => (a1, a2) => o.compare(a1, a2))
+
+  implicit def catsLawsEqForOrderingExhaustive[A: ExhaustiveCheck]: Eq[Ordering[A]] =
+    Eq.by[Ordering[A], (A, A) => Int](o => (a1, a2) => o.compare(a1, a2))
+
+  implicit def catsLawsEqForHashExhaustive[A: ExhaustiveCheck]: Eq[Hash[A]] =
+    Eq.by[Hash[A], A => Int](h => a => h.hash(a))
+
+  implicit def catsLawsEqForSemigroupExhaustive[A: ExhaustiveCheck: Eq]: Eq[Semigroup[A]] =
+    Eq.by[Semigroup[A], (A, A) => A](s => (a1, a2) => s.combine(a1, a2))
+
+  implicit def catsLawsEqForCommutativeSemigroupExhaustive[A: ExhaustiveCheck: Eq]: Eq[CommutativeSemigroup[A]] =
+    Eq.by[CommutativeSemigroup[A], (A, A) => (A, Boolean)](
+      s => (x, y) => (s.combine(x, y), s.combine(x, y) === s.combine(y, x))
+    )
+
+  implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
+    def eqv(f: Monoid[A], g: Monoid[A]): Boolean =
+      eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
+  }
+
+  implicit def catsLawsEqForSemilattice[A](implicit eqBA: Eq[Band[A]],
+                                           eqCA: Eq[CommutativeSemigroup[A]],
+                                           eqA: Eq[A]): Eq[Semilattice[A]] =
+    Eq.instance((f, g) => eqBA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForCommutativeMonoid[A](implicit eqSA: Eq[CommutativeSemigroup[A]],
+                                                 eqMA: Eq[Monoid[A]],
+                                                 eqA: Eq[A]): Eq[CommutativeMonoid[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqMA.eqv(f, g))
+
+  implicit def catsLawsEqForBoundedSemilattice[A](implicit eqSA: Eq[Semilattice[A]],
+                                                  eqCA: Eq[CommutativeMonoid[A]],
+                                                  eqA: Eq[A]): Eq[BoundedSemilattice[A]] =
+    Eq.instance((f, g) => eqSA.eqv(f, g) && eqCA.eqv(f, g))
+
+  implicit def catsLawsEqForCommutativeGroup[A](implicit eqMA: Eq[CommutativeMonoid[A]],
+                                                eqGA: Eq[Group[A]],
+                                                eqA: Eq[A]): Eq[CommutativeGroup[A]] =
+    Eq.instance((f, g) => eqMA.eqv(f, g) && eqGA.eqv(f, g))
+
+  implicit def catsLawsEqForRepresentableStore[F[_]: Representable, S, A](implicit eqFA: Eq[F[A]],
+                                                                          eqS: Eq[S]): Eq[RepresentableStore[F, S, A]] =
+    Eq.instance((s1, s2) => eqFA.eqv(s1.fa, s2.fa) && eqS.eqv(s1.index, s2.index))
+}
+
+/**
+ * These instances are questionable and can lead to false positives. For the sake of compatibility,
+ * they haven't been removed, but they should be considered to be deprecated, and we put them in a
+ * lower implicit scope priority.
+ */
+private[discipline] trait DisciplineEqInstances {
 
   /**
-   * Create an approximation of Eq[A => B] by generating 100 values for A
+   * Create an approximation of Eq[A => B] by generating random values for A
    * and comparing the application of the two functions.
    */
   implicit def catsLawsEqForFn1[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[A => B] = new Eq[A => B] {
@@ -32,32 +121,22 @@ object eq {
     }
   }
 
-  /** `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]]. */
-  implicit def catsLawsEqForAndThen[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[AndThen[A, B]] =
-    Eq.instance(catsLawsEqForFn1[A, B].eqv(_, _))
-
   /**
-   * Create an approximation of Eq[(A, B) => C] by generating 100 values for A and B
+   * Create an approximation of Eq[(A, B) => C] by generating random values for A and B
    * and comparing the application of the two functions.
    */
   implicit def catsLawsEqForFn2[A, B, C](implicit A: Arbitrary[A], B: Arbitrary[B], C: Eq[C]): Eq[(A, B) => C] =
-    new Eq[(A, B) => C] {
-      val sampleCnt: Int = if (Platform.isJvm) 50 else 5
+    Eq.by((_: (A, B) => C).tupled)(catsLawsEqForFn1)
 
-      def eqv(f: (A, B) => C, g: (A, B) => C): Boolean = {
-        val samples = List.fill(sampleCnt)((A.arbitrary.sample, B.arbitrary.sample)).collect {
-          case (Some(a), Some(b)) => (a, b)
-          case _                  => sys.error("Could not generate arbitrary values to compare two functions")
-        }
-        samples.forall { case (a, b) => C.eqv(f(a, b), g(a, b)) }
-      }
-    }
+  /** `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]]. */
+  implicit def catsLawsEqForAndThen[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[AndThen[A, B]] =
+    Eq.instance(catsLawsEqForFn1[A, B].eqv(_, _))
 
   /** Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
   implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] =
     Eq.by[Show[A], A => String] { showInstance => (a: A) =>
       showInstance.show(a)
-    }
+    }(catsLawsEqForFn1)
 
   /**
    * Create an approximate Eq instance for some type A, by comparing
@@ -139,26 +218,6 @@ object eq {
       f => Function.tupled((x, y) => f.combine(x, y) === f.combine(f.combine(x, y), y))
     )(catsLawsEqForFn1[(A, A), Boolean])
 
-  implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
-    def eqv(f: Monoid[A], g: Monoid[A]): Boolean =
-      eqSA.eqv(f, g) && eqA.eqv(f.empty, g.empty)
-  }
-
-  implicit def catsLawsEqForSemilattice[A](implicit eqBA: Eq[Band[A]],
-                                           eqCA: Eq[CommutativeSemigroup[A]],
-                                           eqA: Eq[A]): Eq[Semilattice[A]] =
-    Eq.instance((f, g) => eqBA.eqv(f, g) && eqCA.eqv(f, g))
-
-  implicit def catsLawsEqForCommutativeMonoid[A](implicit eqSA: Eq[CommutativeSemigroup[A]],
-                                                 eqMA: Eq[Monoid[A]],
-                                                 eqA: Eq[A]): Eq[CommutativeMonoid[A]] =
-    Eq.instance((f, g) => eqSA.eqv(f, g) && eqMA.eqv(f, g))
-
-  implicit def catsLawsEqForBoundedSemilattice[A](implicit eqSA: Eq[Semilattice[A]],
-                                                  eqCA: Eq[CommutativeMonoid[A]],
-                                                  eqA: Eq[A]): Eq[BoundedSemilattice[A]] =
-    Eq.instance((f, g) => eqSA.eqv(f, g) && eqCA.eqv(f, g))
-
   implicit def catsLawsEqForGroup[A](implicit arbAA: Arbitrary[(A, A)],
                                      eqMA: Eq[Monoid[A]],
                                      eqA: Eq[A]): Eq[Group[A]] = {
@@ -181,13 +240,4 @@ object eq {
 
     Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))
   }
-
-  implicit def catsLawsEqForCommutativeGroup[A](implicit eqMA: Eq[CommutativeMonoid[A]],
-                                                eqGA: Eq[Group[A]],
-                                                eqA: Eq[A]): Eq[CommutativeGroup[A]] =
-    Eq.instance((f, g) => eqMA.eqv(f, g) && eqGA.eqv(f, g))
-
-  implicit def catsLawsEqForRepresentableStore[F[_]: Representable, S, A](implicit eqFA: Eq[F[A]],
-                                                                          eqS: Eq[S]): Eq[RepresentableStore[F, S, A]] =
-    Eq.instance((s1, s2) => eqFA.eqv(s1.fa, s2.fa) && eqS.eqv(s1.index, s2.index))
 }

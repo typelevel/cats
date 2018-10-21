@@ -32,7 +32,7 @@ class EitherKSuite extends CatsSuite {
   checkAll("EitherK[Option, Option, Int]", EqTests[EitherK[Option, Option, Int]].eqv)
   checkAll("Eq[EitherK[Option, Option, Int]]", SerializableTests.serializable(Eq[EitherK[Option, Option, Int]]))
 
-  checkAll("EitherK[Show, Show, ?]", ContravariantTests[EitherK[Show, Show, ?]].contravariant[Int, Int, Int])
+  checkAll("EitherK[Show, Show, ?]", ContravariantTests[EitherK[Show, Show, ?]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[EitherK[Show, Show, ?]]",
            SerializableTests.serializable(Contravariant[EitherK[Show, Show, ?]]))
 

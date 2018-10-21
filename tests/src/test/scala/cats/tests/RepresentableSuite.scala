@@ -3,7 +3,7 @@ package cats.tests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.{BimonadTests, MonadTests, RepresentableTests, SerializableTests}
+import cats.laws.discipline.{BimonadTests, MiniInt, MonadTests, RepresentableTests, SerializableTests}
 import cats.{Bimonad, Eq, Eval, Id, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
@@ -15,7 +15,7 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Id[String] <-> Unit => String", RepresentableTests[Id, Unit].representable[String])
   checkAll("Representable[Id]", SerializableTests.serializable(Representable[Id]))
 
-  checkAll("String => Int <-> String => Int", RepresentableTests[String => ?, String].representable[Int])
+  checkAll("MiniInt => Int <-> MiniInt => Int", RepresentableTests[MiniInt => ?, MiniInt].representable[Int])
   checkAll("Representable[String => ?]", SerializableTests.serializable(Representable[String => ?]))
 
   checkAll("Pair[String, String] <-> Boolean => String", RepresentableTests[Pair, Boolean].representable[String])
@@ -25,26 +25,26 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Representable[Eval]", SerializableTests.serializable(Representable[Eval]))
 
   {
-    implicit val representableKleisliPair = Kleisli.catsDataRepresentableForKleisli[Pair, Boolean, String]
+    implicit val representableKleisliPair = Kleisli.catsDataRepresentableForKleisli[Pair, Boolean, MiniInt]
 
-    implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
+    implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
     checkAll(
-      "Kleisli[Pair, String, Int] <-> (String, Boolean) => Int",
+      "Kleisli[Pair, MiniInt, Int] <-> (MiniInt, Boolean) => Int",
       // Have to summon all implicits using 'implicitly' otherwise we get a diverging implicits error
-      RepresentableTests[Kleisli[Pair, String, ?], (String, Boolean)].representable[Int](
+      RepresentableTests[Kleisli[Pair, MiniInt, ?], (MiniInt, Boolean)].representable[Int](
         implicitly[Arbitrary[Int]],
-        implicitly[Arbitrary[Kleisli[Pair, String, Int]]],
-        implicitly[Arbitrary[(String, Boolean)]],
-        implicitly[Arbitrary[((String, Boolean)) => Int]],
-        implicitly[Eq[Kleisli[Pair, String, Int]]],
+        implicitly[Arbitrary[Kleisli[Pair, MiniInt, Int]]],
+        implicitly[Arbitrary[(MiniInt, Boolean)]],
+        implicitly[Arbitrary[((MiniInt, Boolean)) => Int]],
+        implicitly[Eq[Kleisli[Pair, MiniInt, Int]]],
         implicitly[Eq[Int]]
       )
     )
 
-    checkAll("Representable[Kleisli[Pair, String, ?]]",
-             SerializableTests.serializable(Representable[Kleisli[Pair, String, ?]]))
+    checkAll("Representable[Kleisli[Pair, MiniInt, ?]]",
+             SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, ?]]))
   }
 
   {
@@ -60,8 +60,8 @@ class RepresentableSuite extends CatsSuite {
   }
 
   {
-    implicit val monadInstance = Representable.monad[String => ?]
-    checkAll("String => ?", MonadTests[String => ?].monad[String, String, String])
+    implicit val monadInstance = Representable.monad[MiniInt => ?]
+    checkAll("MiniInt => ?", MonadTests[MiniInt => ?].monad[String, String, String])
   }
 
   // Syntax tests. If it compiles is "passes"

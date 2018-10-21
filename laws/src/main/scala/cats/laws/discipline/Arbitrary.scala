@@ -349,6 +349,11 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit val catsLawsCogenForMiniInt: Cogen[MiniInt] =
+    Cogen[Int].contramap(_.asInt)
+
+  implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
+    Arbitrary(Gen.oneOf(MiniInt.allValues))
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {
