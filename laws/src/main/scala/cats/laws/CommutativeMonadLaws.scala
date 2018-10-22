@@ -4,7 +4,10 @@ package laws
 /**
  * Laws that must be obeyed by any `CommutativeMonad`.
  */
-trait CommutativeMonadLaws[F[_]] extends MonadLaws[F] with CommutativeFlatMapLaws[F] with CommutativeApplicativeLaws[F] {
+trait CommutativeMonadLaws[F[_]]
+    extends MonadLaws[F]
+    with CommutativeFlatMapLaws[F]
+    with CommutativeApplicativeLaws[F] {
   implicit override def F: CommutativeMonad[F]
 }
 

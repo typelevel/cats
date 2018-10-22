@@ -13,7 +13,7 @@ import scala.util.{Either, Left, Right}
 trait StackSafeMonad[F[_]] extends Monad[F] {
 
   override def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B] = flatMap(f(a)) {
-    case Left(a) => tailRecM(a)(f)
+    case Left(a)  => tailRecM(a)(f)
     case Right(b) => pure(b)
   }
 }

@@ -30,8 +30,8 @@ class RepresentableSuite extends CatsSuite {
     implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-    checkAll("Kleisli[Pair, String, Int] <-> (String, Boolean) => Int",
-
+    checkAll(
+      "Kleisli[Pair, String, Int] <-> (String, Boolean) => Int",
       // Have to summon all implicits using 'implicitly' otherwise we get a diverging implicits error
       RepresentableTests[Kleisli[Pair, String, ?], (String, Boolean)].representable[Int](
         implicitly[Arbitrary[Int]],
@@ -43,7 +43,8 @@ class RepresentableSuite extends CatsSuite {
       )
     )
 
-    checkAll("Representable[Kleisli[Pair, String, ?]]", SerializableTests.serializable(Representable[Kleisli[Pair, String, ?]]))
+    checkAll("Representable[Kleisli[Pair, String, ?]]",
+             SerializableTests.serializable(Representable[Kleisli[Pair, String, ?]]))
   }
 
   {
@@ -76,7 +77,3 @@ class RepresentableSuite extends CatsSuite {
     val tabulatedFunction = indexedFunction.tabulate
   }
 }
-
-
-
-

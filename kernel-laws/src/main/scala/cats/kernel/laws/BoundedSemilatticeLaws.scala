@@ -3,7 +3,7 @@ package cats.kernel.laws
 import cats.kernel.BoundedSemilattice
 
 trait BoundedSemilatticeLaws[A] extends CommutativeMonoidLaws[A] with SemilatticeLaws[A] {
-  override implicit def S: BoundedSemilattice[A]
+  implicit override def S: BoundedSemilattice[A]
 
 }
 

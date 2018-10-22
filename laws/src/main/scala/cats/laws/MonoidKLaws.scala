@@ -5,7 +5,7 @@ package laws
  * Laws that must be obeyed by any `cats.MonoidK`.
  */
 trait MonoidKLaws[F[_]] extends SemigroupKLaws[F] {
-  override implicit def F: MonoidK[F]
+  implicit override def F: MonoidK[F]
 
   def monoidKLeftIdentity[A](a: F[A]): IsEq[F[A]] =
     F.combineK(F.empty, a) <-> a

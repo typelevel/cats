@@ -8,7 +8,8 @@ import Prop._
 trait DistributiveTests[F[_]] extends FunctorTests[F] {
   def laws: DistributiveLaws[F]
 
-  def distributive[A: Arbitrary, B: Arbitrary, C: Arbitrary, X[_]: Functor, Y[_]: Distributive](implicit
+  def distributive[A: Arbitrary, B: Arbitrary, C: Arbitrary, X[_]: Functor, Y[_]: Distributive](
+    implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbXA: Arbitrary[X[A]],
@@ -24,7 +25,7 @@ trait DistributiveTests[F[_]] extends FunctorTests[F] {
     EqFYXC: Eq[F[Y[X[C]]]],
     EqFYA: Eq[F[Y[A]]],
     EqYFB: Eq[Y[F[B]]]
-  ): RuleSet = {
+  ): RuleSet =
     new RuleSet {
       def name: String = "distributive"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -36,7 +37,6 @@ trait DistributiveTests[F[_]] extends FunctorTests[F] {
         "distributive double cosequence identity" -> forAll(laws.cosequenceTwiceIsId[A, Y] _)
       )
     }
-  }
 }
 
 object DistributiveTests {

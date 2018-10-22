@@ -20,7 +20,7 @@ class BigIntGroup extends CommutativeGroup[BigInt] {
 class BigIntOrder extends Order[BigInt] with Hash[BigInt] {
 
   def hash(x: BigInt): Int = x.hashCode()
-  def compare(x: BigInt, y: BigInt): Int = x compare y
+  def compare(x: BigInt, y: BigInt): Int = x.compare(y)
 
   override def eqv(x: BigInt, y: BigInt): Boolean = x == y
   override def neqv(x: BigInt, y: BigInt): Boolean = x != y
@@ -29,6 +29,6 @@ class BigIntOrder extends Order[BigInt] with Hash[BigInt] {
   override def lt(x: BigInt, y: BigInt): Boolean = x < y
   override def lteqv(x: BigInt, y: BigInt): Boolean = x <= y
 
-  override def min(x: BigInt, y: BigInt): BigInt = x min y
-  override def max(x: BigInt, y: BigInt): BigInt = x max y
+  override def min(x: BigInt, y: BigInt): BigInt = x.min(y)
+  override def max(x: BigInt, y: BigInt): BigInt = x.max(y)
 }

@@ -34,8 +34,6 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
 
   @deprecated("Use <* instead", "1.0.0-RC1")
   def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
-
-
   @deprecated("Use productREval instead.", "1.0.0-RC2")
   def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
     F.productREval(fa)(fb)
@@ -106,7 +104,6 @@ final class IfMOps[F[_]](val fa: F[Boolean]) extends AnyVal {
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B])(implicit F: FlatMap[F]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }
 
-
 final class FlatMapIdOps[A](val a: A) extends AnyVal {
 
   /**
@@ -128,7 +125,9 @@ final class FlatMapIdOps[A](val a: A) extends AnyVal {
    * a new state and repeat.
    */
   def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] =
-    tailRecM[F, B](f.andThen { fa => F.map(fa)(Left(_): Either[A, B]) })
+    tailRecM[F, B](f.andThen { fa =>
+      F.map(fa)(Left(_): Either[A, B])
+    })
 }
 
 trait FlatMapOptionSyntax {
@@ -137,6 +136,7 @@ trait FlatMapOptionSyntax {
 }
 
 final class FlatMapOptionOps[F[_], A](val fopta: F[Option[A]]) extends AnyVal {
+
   /**
    * This repeats an F until we get defined values. This can be useful
    * for polling type operations on State (or RNG) Monads, or in effect
@@ -145,7 +145,7 @@ final class FlatMapOptionOps[F[_], A](val fopta: F[Option[A]]) extends AnyVal {
   def untilDefinedM(implicit F: FlatMap[F]): F[A] = {
     val leftUnit: Either[Unit, A] = Left(())
     val feither: F[Either[Unit, A]] = F.map(fopta) {
-      case None => leftUnit
+      case None    => leftUnit
       case Some(a) => Right(a)
     }
     F.tailRecM(())(_ => feither)

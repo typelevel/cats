@@ -16,7 +16,7 @@ final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
 
 object Op extends OpInstances
 
-private[data] sealed abstract class OpInstances extends OpInstances0 {
+sealed abstract private[data] class OpInstances extends OpInstances0 {
   implicit def catsDataCategoryForOp[Arr[_, _]](implicit ArrC: Category[Arr]): Category[Op[Arr, ?, ?]] =
     new OpCategory[Arr] { def Arr: Category[Arr] = ArrC }
 
@@ -24,7 +24,7 @@ private[data] sealed abstract class OpInstances extends OpInstances0 {
     new OpEq[Arr, A, B] { def Arr: Eq[Arr[B, A]] = ArrEq }
 }
 
-private[data] sealed abstract class OpInstances0 {
+sealed abstract private[data] class OpInstances0 {
   implicit def catsDataComposeForOp[Arr[_, _]](implicit ArrC: Compose[Arr]): Compose[Op[Arr, ?, ?]] =
     new OpCompose[Arr] { def Arr: Compose[Arr] = ArrC }
 }

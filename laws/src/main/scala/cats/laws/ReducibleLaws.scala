@@ -10,24 +10,21 @@ trait ReducibleLaws[F[_]] extends FoldableLaws[F] {
     fa: F[A],
     f: A => B
   )(implicit
-    B: Semigroup[B]
-  ): IsEq[B] =
+    B: Semigroup[B]): IsEq[B] =
     fa.reduceMap(f) <-> fa.reduceLeftTo(f)((b, a) => b |+| f(a))
 
   def reduceRightToConsistentWithReduceMap[A, B](
     fa: F[A],
     f: A => B
   )(implicit
-    B: Semigroup[B]
-  ): IsEq[B] =
+    B: Semigroup[B]): IsEq[B] =
     fa.reduceMap(f) <-> fa.reduceRightTo(f)((a, eb) => eb.map(f(a) |+| _)).value
 
   def reduceRightToConsistentWithReduceRightToOption[A, B](
     fa: F[A],
     f: A => B
   )(implicit
-    B: Semigroup[B]
-  ): IsEq[Option[B]] =
+    B: Semigroup[B]): IsEq[Option[B]] =
     fa.reduceRightToOption(f)((a, eb) => eb.map(f(a) |+| _)).value <->
       fa.reduceRightTo(f)((a, eb) => eb.map(f(a) |+| _)).map(Option(_)).value
 

@@ -14,7 +14,7 @@ object ZipVector {
     override def map[A, B](fa: ZipVector[A])(f: (A) => B): ZipVector[B] =
       ZipVector(fa.value.map(f))
     def ap[A, B](ff: ZipVector[A => B])(fa: ZipVector[A]): ZipVector[B] =
-      ZipVector((ff.value, fa.value).zipped.map(_ apply _))
+      ZipVector((ff.value, fa.value).zipped.map(_.apply(_)))
 
   }
 

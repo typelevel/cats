@@ -2,17 +2,19 @@ package cats
 package tests
 
 import cats.data.{Const, IdT, NonEmptyList}
-import cats.kernel.laws.discipline.{OrderTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, OrderTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import Helpers.CSemi
 
 class IdTSuite extends CatsSuite {
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
+  implicit val iso =
+    SemigroupalTests.Isomorphisms.invariant[IdT[ListWrapper, ?]](IdT.catsDataFunctorForIdT(ListWrapper.functor))
 
   checkAll("IdT[(CSemi, ?), Int]", CommutativeFlatMapTests[IdT[(CSemi, ?), ?]].commutativeFlatMap[Int, Int, Int])
-  checkAll("CommutativeFlatMap[IdT[(CSemi, ?), ?]]", SerializableTests.serializable(CommutativeFlatMap[IdT[(CSemi, ?), ?]]))
+  checkAll("CommutativeFlatMap[IdT[(CSemi, ?), ?]]",
+           SerializableTests.serializable(CommutativeFlatMap[IdT[(CSemi, ?), ?]]))
 
   checkAll("IdT[Option, Int]", CommutativeMonadTests[IdT[Option, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[IdT[Option, ?]]", SerializableTests.serializable(CommutativeMonad[IdT[Option, ?]]))
@@ -54,9 +56,9 @@ class IdTSuite extends CatsSuite {
 
   {
     checkAll("IdT[Const[String, ?], ?]",
-      ContravariantMonoidalTests[IdT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[IdT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
     checkAll("ContravariantMonoidal[IdT[Const[String, ?], ?]]",
-      SerializableTests.serializable(ContravariantMonoidal[IdT[Const[String, ?], ?]]))
+             SerializableTests.serializable(ContravariantMonoidal[IdT[Const[String, ?], ?]]))
   }
 
   {
@@ -83,28 +85,30 @@ class IdTSuite extends CatsSuite {
   {
     implicit val F = ListWrapper.traverse
 
-    checkAll("IdT[ListWrapper, Int] with Option", TraverseTests[IdT[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("IdT[ListWrapper, Int] with Option",
+             TraverseTests[IdT[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[IdT[ListWrapper, ?]]", SerializableTests.serializable(Traverse[IdT[ListWrapper, ?]]))
   }
 
   {
     implicit val F = NonEmptyList.catsDataInstancesForNonEmptyList
 
-    checkAll("IdT[NonEmptyList, Int]", NonEmptyTraverseTests[IdT[NonEmptyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
-    checkAll("NonEmptyTraverse[IdT[NonEmptyList, ?]]", SerializableTests.serializable(NonEmptyTraverse[IdT[NonEmptyList, ?]]))
+    checkAll("IdT[NonEmptyList, Int]",
+             NonEmptyTraverseTests[IdT[NonEmptyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+    checkAll("NonEmptyTraverse[IdT[NonEmptyList, ?]]",
+             SerializableTests.serializable(NonEmptyTraverse[IdT[NonEmptyList, ?]]))
   }
 
-
   test("flatMap and flatMapF consistent") {
-    forAll { (idT: IdT[Option, Int], f: Int => IdT[Option, Int])  =>
-      idT.flatMap(f) should === (idT.flatMapF(f(_).value))
+    forAll { (idT: IdT[Option, Int], f: Int => IdT[Option, Int]) =>
+      idT.flatMap(f) should ===(idT.flatMapF(f(_).value))
     }
   }
 
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (idT: IdT[List, Int]) =>
-      idT.mapK(f) should === (IdT(f(idT.value)))
+      idT.mapK(f) should ===(IdT(f(idT.value)))
     }
   }
 

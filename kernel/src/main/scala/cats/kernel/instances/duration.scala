@@ -21,7 +21,7 @@ trait DurationInstances {
 class DurationOrder extends Order[Duration] with Hash[Duration] {
   def hash(x: Duration): Int = x.hashCode()
 
-  def compare(x: Duration, y: Duration): Int = x compare y
+  def compare(x: Duration, y: Duration): Int = x.compare(y)
 
   override def eqv(x: Duration, y: Duration): Boolean = x == y
   override def neqv(x: Duration, y: Duration): Boolean = x != y
@@ -30,8 +30,8 @@ class DurationOrder extends Order[Duration] with Hash[Duration] {
   override def lt(x: Duration, y: Duration): Boolean = x < y
   override def lteqv(x: Duration, y: Duration): Boolean = x <= y
 
-  override def min(x: Duration, y: Duration): Duration = x min y
-  override def max(x: Duration, y: Duration): Duration = x max y
+  override def min(x: Duration, y: Duration): Duration = x.min(y)
+  override def max(x: Duration, y: Duration): Duration = x.max(y)
 }
 
 /**

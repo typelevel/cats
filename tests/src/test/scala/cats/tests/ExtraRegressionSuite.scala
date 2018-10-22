@@ -1,10 +1,10 @@
 package cats
 package tests
 
-
 import ExtraRegressionSuite._
 
 class ExtraRegressionSuite extends CatsSuite {
+
   /**
    * Placed here to work around scala/bug#6260 on scala 2.10
    */
@@ -12,7 +12,6 @@ class ExtraRegressionSuite extends CatsSuite {
     Show[First[String]]
   }
 }
-
 
 object ExtraRegressionSuite {
   final case class First[A](getFirst: A) extends AnyVal

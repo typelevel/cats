@@ -8,11 +8,9 @@ class InjectSuite extends CatsSuite {
   type StringOrInt = Either[String, Int]
 
   test("inj & prj") {
-    def distr[F](f1: F, f2: F)
-      (implicit
-        I0: Inject[String, F],
-        I1: Inject[Int, F]
-      ): Option[String] =
+    def distr[F](f1: F, f2: F)(implicit
+                               I0: Inject[String, F],
+                               I1: Inject[Int, F]): Option[String] =
       for {
         x <- I0.prj(f1)
         y <- I1.prj(f2)
@@ -27,11 +25,9 @@ class InjectSuite extends CatsSuite {
   }
 
   test("apply & unapply") {
-    def distr[F](f1: F, f2: F)
-      (implicit
-        I0: Inject[String, F],
-        I1: Inject[Int, F]
-      ): Option[String] =
+    def distr[F](f1: F, f2: F)(implicit
+                               I0: Inject[String, F],
+                               I1: Inject[Int, F]): Option[String] =
       for {
         x <- I0.unapply(f1)
         y <- I1.unapply(f2)

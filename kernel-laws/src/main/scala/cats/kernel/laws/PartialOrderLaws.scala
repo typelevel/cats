@@ -4,7 +4,7 @@ import cats.kernel.{Eq, PartialOrder}
 import cats.kernel.instances.option._
 
 trait PartialOrderLaws[A] extends EqLaws[A] {
-  override implicit def E: PartialOrder[A]
+  implicit override def E: PartialOrder[A]
 
   def reflexitivityLt(x: A): IsEq[Boolean] =
     E.lteqv(x, x) <-> true
@@ -49,7 +49,6 @@ trait PartialOrderLaws[A] extends EqLaws[A] {
     else if (c > 0) Eq[Option[A]].eqv(m, Option(x)) <-> true
     else Eq[Option[A]].eqv(m, None) <-> true
   }
-
 
 }
 

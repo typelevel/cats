@@ -1,7 +1,7 @@
 package cats
 
-
-private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
+private[cats] trait ComposedDistributive[F[_], G[_]] extends Distributive[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
+  outer =>
   def F: Distributive[F]
   def G: Distributive[G]
 
@@ -36,7 +36,8 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] 
     F.map2(fga, fgb)(G.product)
 }
 
-private[cats] trait ComposedApplicative[F[_], G[_]] extends Applicative[λ[α => F[G[α]]]] with ComposedApply[F, G] { outer =>
+private[cats] trait ComposedApplicative[F[_], G[_]] extends Applicative[λ[α => F[G[α]]]] with ComposedApply[F, G] {
+  outer =>
   def F: Applicative[F]
   def G: Applicative[G]
 
@@ -55,7 +56,10 @@ private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]
   override def empty[A]: F[G[A]] = F.empty
 }
 
-private[cats] trait ComposedAlternative[F[_], G[_]] extends Alternative[λ[α => F[G[α]]]] with ComposedApplicative[F, G] with ComposedMonoidK[F, G] { outer =>
+private[cats] trait ComposedAlternative[F[_], G[_]]
+    extends Alternative[λ[α => F[G[α]]]]
+    with ComposedApplicative[F, G]
+    with ComposedMonoidK[F, G] { outer =>
   def F: Alternative[F]
 }
 
@@ -70,7 +74,10 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[�
     F.foldRight(fga, lb)((ga, lb) => G.foldRight(ga, lb)(f))
 }
 
-private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[α]]]] with ComposedFoldable[F, G] with ComposedFunctor[F, G] {
+private[cats] trait ComposedTraverse[F[_], G[_]]
+    extends Traverse[λ[α => F[G[α]]]]
+    with ComposedFoldable[F, G]
+    with ComposedFunctor[F, G] {
   def F: Traverse[F]
   def G: Traverse[G]
 
@@ -78,7 +85,10 @@ private[cats] trait ComposedTraverse[F[_], G[_]] extends Traverse[λ[α => F[G[�
     F.traverse(fga)(ga => G.traverse(ga)(f))
 }
 
-private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]] extends NonEmptyTraverse[λ[α => F[G[α]]]] with ComposedTraverse[F, G] with ComposedReducible[F, G] {
+private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]
+    extends NonEmptyTraverse[λ[α => F[G[α]]]]
+    with ComposedTraverse[F, G]
+    with ComposedReducible[F, G] {
   def F: NonEmptyTraverse[F]
   def G: NonEmptyTraverse[G]
 
@@ -121,7 +131,8 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
     F.contramap(fga)(gb => G.map(gb)(f))
 }
 
-private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[λ[α => F[G[α]]]] { outer =>
+private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]]
+    extends ContravariantMonoidal[λ[α => F[G[α]]]] { outer =>
   def F: Applicative[F]
   def G: ContravariantMonoidal[G]
 
@@ -134,7 +145,9 @@ private[cats] trait ComposedApplicativeContravariantMonoidal[F[_], G[_]] extends
     F.map2(fa, fb)(G.product(_, _))
 }
 
-private[cats] trait ComposedSemigroupal[F[_], G[_]] extends ContravariantSemigroupal[λ[α => F[G[α]]]] with ComposedContravariantCovariant[F, G] { outer =>
+private[cats] trait ComposedSemigroupal[F[_], G[_]]
+    extends ContravariantSemigroupal[λ[α => F[G[α]]]]
+    with ComposedContravariantCovariant[F, G] { outer =>
   def F: ContravariantSemigroupal[F]
   def G: Functor[G]
 
@@ -144,13 +157,16 @@ private[cats] trait ComposedSemigroupal[F[_], G[_]] extends ContravariantSemigro
     }
 }
 
-private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]] extends InvariantSemigroupal[λ[α => F[G[α]]]] with ComposedInvariantCovariant[F, G] { outer =>
+private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]]
+    extends InvariantSemigroupal[λ[α => F[G[α]]]]
+    with ComposedInvariantCovariant[F, G] { outer =>
   def F: InvariantSemigroupal[F]
   def G: Apply[G]
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
-    F.imap(F.product(fa, fb)) { case (ga, gb) =>
-      G.map2(ga, gb)(_ -> _)
+    F.imap(F.product(fa, fb)) {
+      case (ga, gb) =>
+        G.map2(ga, gb)(_ -> _)
     } { g: G[(A, B)] =>
       (G.map(g)(_._1), G.map(g)(_._2))
     }

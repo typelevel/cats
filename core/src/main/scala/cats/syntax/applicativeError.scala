@@ -8,38 +8,40 @@ trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
 
-  implicit final def catsSyntaxApplicativeError[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
+  implicit final def catsSyntaxApplicativeError[F[_], E, A](
+    fa: F[A]
+  )(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
     new ApplicativeErrorOps[F, E, A](fa)
 }
 
 /**
-  * Extension to ApplicativeError in a binary compat way
-  */
+ * Extension to ApplicativeError in a binary compat way
+ */
 trait ApplicativeErrorExtension {
-  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](F: ApplicativeError[F, E]):
-    ApplicativeErrorExtensionOps[F, E] =
-      new ApplicativeErrorExtensionOps(F)
+  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](
+    F: ApplicativeError[F, E]
+  ): ApplicativeErrorExtensionOps[F, E] =
+    new ApplicativeErrorExtensionOps(F)
 }
 
 final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
-
   /**
-    * Convert from scala.Option
-    *
-    * Example:
-    * {{{
-    * scala> import cats.implicits._
-    * scala> import cats.ApplicativeError
-    * scala> val F = ApplicativeError[Either[String, ?], String]
-    *
-    * scala> F.fromOption(Some(1), "Empty")
-    * res0: scala.Either[String, Int] = Right(1)
-    *
-    * scala> F.fromOption(Option.empty[Int], "Empty")
-    * res1: scala.Either[String, Int] = Left(Empty)
-    * }}}
-    */
+   * Convert from scala.Option
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   * scala> val F = ApplicativeError[Either[String, ?], String]
+   *
+   * scala> F.fromOption(Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> F.fromOption(Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
   def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
     ApplicativeError.liftFromOption(oa, ifEmpty)(F)
 
@@ -61,7 +63,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
   def fromValidated[A](x: Validated[E, A]): F[A] =
     x match {
       case Invalid(e) => F.raiseError(e)
-      case Valid(a) => F.pure(a)
+      case Valid(a)   => F.pure(a)
     }
 
 }

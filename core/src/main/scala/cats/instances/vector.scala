@@ -8,7 +8,8 @@ import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
-  implicit val catsStdInstancesForVector: Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
+  implicit val catsStdInstancesForVector
+    : Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
     new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
@@ -27,7 +28,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         @tailrec def loop(builder: VectorBuilder[B], as: Vector[A]): Vector[B] =
           as match {
             case _ +: rest => loop(builder += f(as), rest)
-            case _ => builder.result()
+            case _         => builder.result()
           }
         loop(new VectorBuilder[B], fa)
       }
@@ -73,7 +74,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (idx < Int.MaxValue && fa.size > idx && idx >= 0) Some(fa(idx.toInt)) else None
 
       override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
-        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))){ (a, lgvb) =>
+        foldRight[A, G[Vector[B]]](fa, Always(G.pure(Vector.empty))) { (a, lgvb) =>
           G.map2Eval(f(a), lgvb)(_ +: _)
         }.value
 
@@ -90,9 +91,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def foldM[G[_], A, B](fa: Vector[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         val length = fa.length
-        G.tailRecM((z, 0)) { case (b, i) =>
-          if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
-          else G.pure(Right(b))
+        G.tailRecM((z, 0)) {
+          case (b, i) =>
+            if (i < length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+            else G.pure(Right(b))
         }
       }
 
@@ -109,10 +111,11 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def collectFirst[A, B](fa: Vector[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
-      override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
+      override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForVector[A:Show]: Show[Vector[A]] =
+  implicit def catsStdShowForVector[A: Show]: Show[Vector[A]] =
     new Show[Vector[A]] {
       def show(fa: Vector[A]): String =
         fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
@@ -134,13 +137,14 @@ trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       fa.foldRight(Eval.now(G.pure(Vector.empty[B])))(
-        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-      ).value
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
+        .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
       fa.foldRight(Eval.now(G.pure(Vector.empty[A])))(
-        (x, xse) =>
-          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
-      ).value
+          (x, xse) => G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        )
+        .value
   }
 }

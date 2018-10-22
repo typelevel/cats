@@ -79,6 +79,9 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Alternative
+    url: typeclasses/alternative.html
+    menu_type: typeclasses
 
   - title: Eq
     url: typeclasses/eq.html

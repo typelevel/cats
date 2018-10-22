@@ -10,17 +10,16 @@ trait DeferTests[F[_]] extends Laws {
   def laws: DeferLaws[F]
 
   def defer[A: Arbitrary](implicit
-    ArbFA: Arbitrary[F[A]],
-    EqFA: Eq[F[A]],
-    EqBool: Eq[Boolean]
-  ): RuleSet = {
+                          ArbFA: Arbitrary[F[A]],
+                          EqFA: Eq[F[A]],
+                          EqBool: Eq[Boolean]): RuleSet =
     new DefaultRuleSet(
       name = "defer",
       parent = None,
       "defer Identity" -> forAll(laws.deferIdentity[A] _),
       "defer does not evaluate" -> forAll(laws.deferDoesNotEvaluate[A] _),
-      "defer is stack safe" -> forAll(laws.deferIsStackSafe[A] _))
-  }
+      "defer is stack safe" -> forAll(laws.deferIsStackSafe[A] _)
+    )
 }
 
 object DeferTests {

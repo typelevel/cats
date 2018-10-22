@@ -2,7 +2,7 @@ package cats.instances
 
 import cats.kernel._
 import cats.kernel.instances.unit._
-import cats.{InvariantMonoidal, Monoid, InvariantSemigroupal}
+import cats.{InvariantMonoidal, InvariantSemigroupal, Monoid}
 
 trait InvariantMonoidalInstances {
 
@@ -31,16 +31,19 @@ trait InvariantMonoidalInstances {
     def unit: Semigroup[Unit] = implicitly
   }
 
-  implicit val catsInvariantMonoidalCommutativeSemigroup: InvariantMonoidal[CommutativeSemigroup] = new InvariantMonoidal[CommutativeSemigroup] {
-    def product[A, B](fa: CommutativeSemigroup[A], fb: CommutativeSemigroup[B]): CommutativeSemigroup[(A, B)] = new CommutativeSemigroup[(A, B)] {
-      def combine(x: (A, B), y: (A, B)): (A, B) = fa.combine(x._1, y._1) -> fb.combine(x._2, y._2)
-    }
+  implicit val catsInvariantMonoidalCommutativeSemigroup: InvariantMonoidal[CommutativeSemigroup] =
+    new InvariantMonoidal[CommutativeSemigroup] {
+      def product[A, B](fa: CommutativeSemigroup[A], fb: CommutativeSemigroup[B]): CommutativeSemigroup[(A, B)] =
+        new CommutativeSemigroup[(A, B)] {
+          def combine(x: (A, B), y: (A, B)): (A, B) = fa.combine(x._1, y._1) -> fb.combine(x._2, y._2)
+        }
 
-    def imap[A, B](fa: CommutativeSemigroup[A])(f: A => B)(g: B => A): CommutativeSemigroup[B] = new CommutativeSemigroup[B] {
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-    }
+      def imap[A, B](fa: CommutativeSemigroup[A])(f: A => B)(g: B => A): CommutativeSemigroup[B] =
+        new CommutativeSemigroup[B] {
+          def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        }
 
-    def unit: CommutativeSemigroup[Unit] = implicitly
-  }
+      def unit: CommutativeSemigroup[Unit] = implicitly
+    }
 
 }

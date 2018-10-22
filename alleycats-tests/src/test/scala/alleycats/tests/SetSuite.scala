@@ -11,6 +11,3 @@ class SetSuite extends AlleycatsSuite {
 
   checkAll("Foldable[Set]", SerializableTests.serializable(Foldable[Set]))
 }
-
-
-

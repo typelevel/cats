@@ -30,6 +30,7 @@ trait ValidatedSyntaxBincompat0 {
 }
 
 final class ValidatedIdOpsBinCompat0[A](val a: A) extends AnyVal {
+
   /**
    * Wrap a value to a valid ValidatedNec
    *

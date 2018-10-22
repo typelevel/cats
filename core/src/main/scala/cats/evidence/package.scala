@@ -1,6 +1,7 @@
 package cats
 
 package object evidence {
+
   /**
    * A convenient type alias for Is, which declares that A is the same
    * type as B.
@@ -29,7 +30,7 @@ package object evidence {
   /**
    * The property that a value of type A can be used in a context
    * expecting a B if A <~< B is referred to as the "Liskov
-   * Substitution Principal", which is named for Barbara Liskov:
+   * Substitution Principle", which is named for Barbara Liskov:
    * https://en.wikipedia.org/wiki/Barbara_Liskov
    */
   type Liskov[-A, +B] = A As B

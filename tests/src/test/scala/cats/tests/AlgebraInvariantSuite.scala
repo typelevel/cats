@@ -4,7 +4,7 @@ package tests
 import cats.Invariant
 import cats.kernel._
 import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
-import cats.laws.discipline.{InvariantMonoidalTests, InvariantTests, SerializableTests, InvariantSemigroupalTests}
+import cats.laws.discipline.{InvariantMonoidalTests, InvariantSemigroupalTests, InvariantTests, SerializableTests}
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -59,13 +59,11 @@ class AlgebraInvariantSuite extends CatsSuite {
   implicit val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
-
-
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
+  checkAll("InvariantMonoidal[CommutativeSemigroup]",
+           CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
 
   checkAll("InvariantSemigroupal[Monoid]", InvariantSemigroupalTests[Monoid].invariantSemigroupal[Int, Int, Int])
-
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
@@ -92,12 +90,10 @@ class AlgebraInvariantSuite extends CatsSuite {
     checkAll("CommutativeMonoid[Int]", CommutativeMonoidTests[Int](S).commutativeMonoid)
   }
 
-
   {
     val S: CommutativeGroup[Int] = CommutativeGroup[Int].imap(identity)(identity)
     checkAll("CommutativeGroup[Int]", CommutativeGroupTests[Int](S).commutativeGroup)
   }
-
 
   {
     val S: Band[Set[Int]] = Band[Set[Int]].imap(identity)(identity)
@@ -113,7 +109,6 @@ class AlgebraInvariantSuite extends CatsSuite {
     val S: BoundedSemilattice[Set[Int]] = BoundedSemilattice[Set[Int]].imap(identity)(identity)
     checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]](S).boundedSemilattice)
   }
-
 
   checkAll("Invariant[Semigroup]", InvariantTests[Semigroup].invariant[Int, Int, Int])
   checkAll("Invariant[Semigroup]", SerializableTests.serializable(Invariant[Semigroup]))
@@ -145,7 +140,9 @@ class AlgebraInvariantSuite extends CatsSuite {
   checkAll("InvariantMonoidal[Semigroup]", InvariantMonoidalTests[Semigroup].invariantMonoidal[Int, Int, Int])
   checkAll("InvariantMonoidal[Semigroup]", SerializableTests.serializable(InvariantMonoidal[Semigroup]))
 
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", InvariantMonoidalTests[CommutativeSemigroup].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[CommutativeSemigroup]", SerializableTests.serializable(InvariantMonoidal[CommutativeSemigroup]))
+  checkAll("InvariantMonoidal[CommutativeSemigroup]",
+           InvariantMonoidalTests[CommutativeSemigroup].invariantMonoidal[Int, Int, Int])
+  checkAll("InvariantMonoidal[CommutativeSemigroup]",
+           SerializableTests.serializable(InvariantMonoidal[CommutativeSemigroup]))
 
 }

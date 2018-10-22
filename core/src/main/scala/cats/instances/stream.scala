@@ -6,7 +6,8 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
-  implicit val catsStdInstancesForStream: Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+  implicit val catsStdInstancesForStream
+    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
@@ -45,14 +46,13 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       override def foldMap[A, B](fa: Stream[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
-      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] = {
+      def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] =
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        foldRight(fa, Always(G.pure(Stream.empty[B]))){ (a, lgsb) =>
+        foldRight(fa, Always(G.pure(Stream.empty[B]))) { (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
-      }
 
       override def mapWithIndex[A, B](fa: Stream[A])(f: (A, Int) => B): Stream[B] =
         fa.zipWithIndex.map(ai => f(ai._1, ai._2))
@@ -122,11 +122,13 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def foldM[G[_], A, B](fa: Stream[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         def step(in: (Stream[A], B)): G[Either[(Stream[A], B), B]] = {
-          val (s, b)  = in
+          val (s, b) = in
           if (s.isEmpty)
             G.pure(Right(b))
           else
-            G.map(f(b, s.head)) { bnext => Left((s.tail, bnext)) }
+            G.map(f(b, s.head)) { bnext =>
+              Left((s.tail, bnext))
+            }
         }
 
         G.tailRecM((fa, z))(step)
@@ -145,7 +147,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def collectFirst[A, B](fa: Stream[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
-      override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
+      override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
@@ -158,9 +161,8 @@ trait StreamInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
     val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream
 
-    override def mapFilter[A, B](fa: Stream[A])(f: (A) => Option[B]): Stream[B] = {
+    override def mapFilter[A, B](fa: Stream[A])(f: (A) => Option[B]): Stream[B] =
       fa.collect(Function.unlift(f))
-    }
 
     override def filter[A](fa: Stream[A])(f: (A) => Boolean): Stream[A] = fa.filter(f)
 
@@ -168,17 +170,17 @@ trait StreamInstancesBinCompat0 {
 
     override def flattenOption[A](fa: Stream[Option[A]]): Stream[A] = fa.flatten
 
-    def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] = {
+    def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
       fa.foldRight(Eval.now(G.pure(Stream.empty[B])))(
-        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-      ).value
-    }
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
+        .value
 
-    override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] = {
+    override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] =
       fa.foldRight(Eval.now(G.pure(Stream.empty[A])))(
-        (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
-      ).value
-    }
+          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+        )
+        .value
 
   }
 }

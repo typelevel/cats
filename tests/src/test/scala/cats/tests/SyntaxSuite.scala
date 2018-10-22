@@ -49,7 +49,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val z: Boolean = x.isEmpty
   }
 
-  def testCompose[F[_,_] : Compose, A, B, C, D]: Unit = {
+  def testCompose[F[_, _]: Compose, A, B, C, D]: Unit = {
     val x = mock[F[A, B]]
     val y = mock[F[B, C]]
     val z = mock[F[C, D]]
@@ -64,8 +64,8 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val y = mock[A]
     val b0: Boolean = x === y
     val b1: Boolean = x =!= y
-    val b2: Boolean = x eqv y
-    val b3: Boolean = x neqv y
+    val b2: Boolean = x.eqv(y)
+    val b3: Boolean = x.neqv(y)
   }
 
   def testPartialOrder[A: PartialOrder]: Unit = {
@@ -75,18 +75,18 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val b1: Boolean = x <= y
     val b2: Boolean = x > y
     val b3: Boolean = x >= y
-    val f: Double = x partialCompare y
-    val oi: Option[Int] = x tryCompare y
-    val oz0: Option[A] = x pmin y
-    val oz1: Option[A] = x pmax y
+    val f: Double = x.partialCompare(y)
+    val oi: Option[Int] = x.tryCompare(y)
+    val oz0: Option[A] = x.pmin(y)
+    val oz1: Option[A] = x.pmax(y)
   }
 
   def testOrder[A: Order]: Unit = {
     val x = mock[A]
     val y = mock[A]
-    val i: Int = x compare y
-    val z0: A = x min y
-    val z1: A = x max y
+    val i: Int = x.compare(y)
+    val z0: A = x.min(y)
+    val z1: A = x.max(y)
   }
 
   def testInvariantFunctor[F[_]: Invariant, A, B]: Unit = {
@@ -149,10 +149,9 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     val ft = mock[(A, B, C) => G[Z]]
 
-    val gfabc  = tfabc traverseN ft
-    val gfabc2 = (fa, fb, fc) traverseN ft
+    val gfabc = tfabc.traverseN(ft)
+    val gfabc2 = (fa, fb, fc).traverseN(ft)
   }
-
 
   def testNonEmptyTraverse[F[_]: NonEmptyTraverse: FlatMap, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
@@ -165,8 +164,6 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val fga = mock[F[G[A]]]
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
-
-
 
   def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
     val ta = mock[T[A]]
@@ -199,8 +196,8 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val fc = mock[M[C]]
     val f = mock[(A, B, C) => Z]
 
-    tfabc parMapN f
-    (fa, fb, fc) parMapN f
+    tfabc.parMapN(f)
+    (fa, fb, fc).parMapN(f)
   }
 
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
@@ -244,7 +241,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val fb1: F[B] = fa.as(b)
   }
 
-  def testApply[F[_]: Apply : Semigroupal, G[_]: Contravariant : Semigroupal, H[_]: Invariant : Semigroupal, A, B, C, D, E, Z] = {
+  def testApply[F[_]: Apply: Semigroupal, G[_]: Contravariant: Semigroupal, H[_]: Invariant: Semigroupal, A, B, C, D, E, Z] = {
     val tfabc = mock[(F[A], F[B], F[C])]
     val fa = mock[F[A]]
     val fb = mock[F[B]]
@@ -255,17 +252,17 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     fa *> fb
     fb <* fc
 
-    tfabc mapN f
-    (fa, fb, fc) mapN f
-    (fa, fb, fc) apWith ff
+    tfabc.mapN(f)
+    (fa, fb, fc).mapN(f)
+    (fa, fb, fc).apWith(ff)
 
     val tgabc = mock[(G[A], G[B])]
     val ga = mock[G[A]]
     val gb = mock[G[B]]
     val g = mock[Z => (A, B)]
 
-    tgabc contramapN g
-    (ga, gb) contramapN g
+    tgabc.contramapN(g)
+    (ga, gb).contramapN(g)
 
     val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
     val ha = mock[H[A]]
@@ -320,7 +317,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val fa = a.pure[F]
   }
 
-  def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
@@ -367,7 +364,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val binested: Binested[F, G, H, A, B] = fgahb.binested
   }
 
-  def testNonEmptySet[A, B: Order] : Unit = {
+  def testNonEmptySet[A, B: Order]: Unit = {
     val f = mock[A => B]
     val set = mock[SortedSet[A]]
 
@@ -375,7 +372,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
   }
 
-  def testNonEmptyList[A, B: Order] : Unit = {
+  def testNonEmptyList[A, B: Order]: Unit = {
     val f = mock[A => B]
     val list = mock[List[A]]
 
@@ -383,7 +380,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val grouped: SortedMap[B, NonEmptyList[A]] = list.groupByNel(f)
   }
 
-  def testNonEmptyChain[A, B: Order] : Unit = {
+  def testNonEmptyChain[A, B: Order]: Unit = {
     val f = mock[A => B]
     val list = mock[List[A]]
 
@@ -391,4 +388,3 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
   }
 
 }
-
