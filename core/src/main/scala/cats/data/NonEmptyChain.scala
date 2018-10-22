@@ -374,8 +374,8 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
     create(toChain.reverse)
 
   /**
-    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
-    */
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
   final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] = {
     implicit val ord = O.toOrdering
 
