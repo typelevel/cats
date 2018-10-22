@@ -3,7 +3,7 @@ package cats.kernel.laws
 import cats.kernel.CommutativeSemigroup
 
 trait CommutativeSemigroupLaws[A] extends SemigroupLaws[A] {
-  override implicit def S: CommutativeSemigroup[A]
+  implicit override def S: CommutativeSemigroup[A]
 
   def commutative(x: A, y: A): IsEq[A] =
     S.combine(x, y) <-> S.combine(y, x)

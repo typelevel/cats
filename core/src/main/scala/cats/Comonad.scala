@@ -2,7 +2,6 @@ package cats
 
 import simulacrum.typeclass
 
-
 /**
  * Comonad
  *

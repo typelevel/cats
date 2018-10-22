@@ -1,10 +1,8 @@
 package cats
 package laws
 
-
 trait FunctorFilterLaws[F[_]] {
   implicit def F: FunctorFilter[F]
-
 
   implicit def functor: Functor[F] = F.functor
 
@@ -14,22 +12,18 @@ trait FunctorFilterLaws[F[_]] {
     lhs <-> rhs
   }
 
-  def mapFilterMapConsistency[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
-    F.mapFilter(fa)(f andThen (x => Some(x): Option[B])) <-> functor.map(fa)(f)
-  }
+  def mapFilterMapConsistency[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
+    F.mapFilter(fa)(f.andThen(x => Some(x): Option[B])) <-> functor.map(fa)(f)
 
-  def collectConsistentWithMapFilter[A, B](fa: F[A], f: PartialFunction[A, B]): IsEq[F[B]] = {
+  def collectConsistentWithMapFilter[A, B](fa: F[A], f: PartialFunction[A, B]): IsEq[F[B]] =
     F.collect(fa)(f) <-> F.mapFilter(fa)(f.lift)
-  }
 
-  def flattenOptionConsistentWithMapFilter[A](fa: F[Option[A]]): IsEq[F[A]] = {
+  def flattenOptionConsistentWithMapFilter[A](fa: F[Option[A]]): IsEq[F[A]] =
     F.flattenOption(fa) <-> F.mapFilter(fa)(identity)
-  }
 
-  def filterConsistentWithMapFilter[A](fa: F[A], f: A => Boolean): IsEq[F[A]] = {
+  def filterConsistentWithMapFilter[A](fa: F[A], f: A => Boolean): IsEq[F[A]] =
     F.filter(fa)(f) <->
       F.mapFilter(fa)(a => if (f(a)) Some(a) else None)
-  }
 }
 
 object FunctorFilterLaws {

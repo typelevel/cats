@@ -26,7 +26,6 @@ abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
 
 }
 
-
 object Hash extends HashFunctions[Hash] {
 
   /** Fetch a `Hash` instance given the specific type. */

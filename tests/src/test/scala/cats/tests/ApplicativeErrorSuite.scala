@@ -8,37 +8,39 @@ class ApplicativeErrorSuite extends CatsSuite {
     (()).raiseError[Option, Int]
 
   test("raiseError syntax creates an Option with the correct value") {
-    failed should === (None: Option[Int])
+    failed should ===(None: Option[Int])
   }
 
   test("handleError syntax transforms an error to a success") {
-    failed.handleError(_ => 7) should === (Some(7))
+    failed.handleError(_ => 7) should ===(Some(7))
   }
 
   test("handleErrorWith transforms an error to a success") {
-    failed.handleErrorWith(_ => Some(7)) should === (Some(7))
+    failed.handleErrorWith(_ => Some(7)) should ===(Some(7))
   }
 
   test("attempt syntax creates a wrapped Either") {
-    failed.attempt should === (Option(Left(())))
+    failed.attempt should ===(Option(Left(())))
   }
 
   test("attemptT syntax creates an EitherT") {
-    failed.attemptT should === (EitherT[Option, Unit, Int](Option(Left(()))))
+    failed.attemptT should ===(EitherT[Option, Unit, Int](Option(Left(()))))
   }
 
   test("recover syntax transforms an error to a success") {
-    failed.recover { case _ => 7 } should === (Some(7))
+    failed.recover { case _ => 7 } should ===(Some(7))
   }
 
   test("recoverWith transforms an error to a success") {
-    failed.recoverWith { case _ => Some(7) } should === (Some(7))
+    failed.recoverWith { case _ => Some(7) } should ===(Some(7))
   }
 
   {
     final case class OptionWrapper[A](option: Option[A])
 
-    implicit def mayBeApplicativeError[E](implicit ev: ApplicativeError[Option, E]): ApplicativeError[OptionWrapper, E] =
+    implicit def mayBeApplicativeError[E](
+      implicit ev: ApplicativeError[Option, E]
+    ): ApplicativeError[OptionWrapper, E] =
       new ApplicativeError[OptionWrapper, E] {
 
         def raiseError[A](e: E): OptionWrapper[A] =
@@ -55,11 +57,11 @@ class ApplicativeErrorSuite extends CatsSuite {
       }
 
     test("orElse leaves a success unchanged") {
-      (OptionWrapper(17.some) orElse OptionWrapper(None)).option should === (OptionWrapper(17.some).option)
+      OptionWrapper(17.some).orElse(OptionWrapper(None)).option should ===(OptionWrapper(17.some).option)
     }
 
     test("orElse transforms an error to the alternative") {
-      (().raiseError[OptionWrapper, Int] orElse OptionWrapper(17.some)).option should === (OptionWrapper(17.some).option)
+      ().raiseError[OptionWrapper, Int].orElse(OptionWrapper(17.some)).option should ===(OptionWrapper(17.some).option)
     }
   }
 }

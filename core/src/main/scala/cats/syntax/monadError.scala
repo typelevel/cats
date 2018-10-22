@@ -5,7 +5,9 @@ trait MonadErrorSyntax {
   implicit final def catsSyntaxMonadError[F[_], E, A](fa: F[A])(implicit F: MonadError[F, E]): MonadErrorOps[F, E, A] =
     new MonadErrorOps(fa)
 
-  implicit final def catsSyntaxMonadErrorRethrow[F[_], E, A](fea: F[Either[E, A]])(implicit F: MonadError[F, E]): MonadErrorRethrowOps[F, E, A] =
+  implicit final def catsSyntaxMonadErrorRethrow[F[_], E, A](
+    fea: F[Either[E, A]]
+  )(implicit F: MonadError[F, E]): MonadErrorRethrowOps[F, E, A] =
     new MonadErrorRethrowOps(fea)
 }
 

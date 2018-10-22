@@ -1,7 +1,6 @@
 package cats
 package tests
 
-
 class HashSuite extends CatsSuite {
 
   {
@@ -11,6 +10,5 @@ class HashSuite extends CatsSuite {
 
   assert(1.hash == 1.hashCode)
   assert("ABC".hash == "ABC".hashCode)
-
 
 }

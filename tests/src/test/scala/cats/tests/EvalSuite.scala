@@ -2,7 +2,14 @@ package cats
 package tests
 
 import cats.laws.ComonadLaws
-import cats.laws.discipline.{BimonadTests, CommutativeMonadTests, DeferTests, SemigroupalTests, ReducibleTests, SerializableTests}
+import cats.laws.discipline.{
+  BimonadTests,
+  CommutativeMonadTests,
+  DeferTests,
+  ReducibleTests,
+  SemigroupalTests,
+  SerializableTests
+}
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -35,10 +42,10 @@ class EvalSuite extends CatsSuite {
       val (spooky, lz) = init(value)
       (0 until n).foreach { _ =>
         val result = lz.value
-        result should === (value)
+        result should ===(value)
         spin ^= result.##
       }
-      spooky.counter should === (numEvals)
+      spooky.counter should ===(numEvals)
       ()
     }
     (0 to 2).foreach(n => nTimes(n, numCalls(n)))
@@ -74,18 +81,18 @@ class EvalSuite extends CatsSuite {
     runValue(999)(always)(n => n)
   }
 
-  test(".value should evaluate only once on the result of .memoize"){
+  test(".value should evaluate only once on the result of .memoize") {
     val spooky = new Spooky
     val i2 = Eval.always(spooky.increment()).memoize
     val i3 = Eval.now(()).flatMap(_ => Eval.later(spooky.increment())).memoize
     i2.value
-    spooky.counter should === (1)
+    spooky.counter should ===(1)
     i2.value
-    spooky.counter should === (1)
+    spooky.counter should ===(1)
     i3.value
-    spooky.counter should === (2)
+    spooky.counter should ===(2)
     i3.value
-    spooky.counter should === (2)
+    spooky.counter should ===(2)
   }
 
   {
@@ -137,14 +144,14 @@ class EvalSuite extends CatsSuite {
   test("cokleisli left identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliLeftIdentity(fa, f)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
   test("cokleisli right identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliRightIdentity(fa, f)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
@@ -184,11 +191,12 @@ class EvalSuite extends CatsSuite {
     case class ODefer[A]() extends O[A]
 
     implicit def arbitraryO[A: Arbitrary: Cogen]: Arbitrary[O[A]] =
-      Arbitrary(Gen.oneOf(
-        arbitrary[A => A].map(OMap(_)),
-        arbitrary[A => Eval[A]].map(OFlatMap(_)),
-        Gen.const(OMemoize[A]),
-        Gen.const(ODefer[A])))
+      Arbitrary(
+        Gen.oneOf(arbitrary[A => A].map(OMap(_)),
+                  arbitrary[A => Eval[A]].map(OFlatMap(_)),
+                  Gen.const(OMemoize[A]),
+                  Gen.const(ODefer[A]))
+      )
 
     def build[A](leaf: () => Eval[A], os: Vector[O[A]]): DeepEval[A] = {
 
@@ -197,12 +205,13 @@ class EvalSuite extends CatsSuite {
 
       @tailrec def step(i: Int, leaf: () => Eval[A], cbs: List[Eval[A] => Eval[A]]): Eval[A] =
         if (i >= os.length) cbs.foldLeft(leaf())((e, f) => f(e))
-        else os(i) match {
-          case ODefer() => Eval.defer(restart(i + 1, leaf, cbs))
-          case OMemoize() => step(i + 1, leaf, ((e: Eval[A]) => e.memoize) :: cbs)
-          case OMap(f) => step(i + 1, leaf, ((e: Eval[A]) => e.map(f)) :: cbs)
-          case OFlatMap(f) => step(i + 1, leaf, ((e: Eval[A]) => e.flatMap(f)) :: cbs)
-        }
+        else
+          os(i) match {
+            case ODefer()    => Eval.defer(restart(i + 1, leaf, cbs))
+            case OMemoize()  => step(i + 1, leaf, ((e: Eval[A]) => e.memoize) :: cbs)
+            case OMap(f)     => step(i + 1, leaf, ((e: Eval[A]) => e.map(f)) :: cbs)
+            case OFlatMap(f) => step(i + 1, leaf, ((e: Eval[A]) => e.flatMap(f)) :: cbs)
+          }
 
       DeepEval(step(0, leaf, Nil))
     }
@@ -227,8 +236,9 @@ class EvalSuite extends CatsSuite {
       try {
         d.eval.value
         succeed
-      } catch { case (e: StackOverflowError) =>
-        fail(s"stack overflowed with eval-depth ${DeepEval.MaxDepth}")
+      } catch {
+        case (e: StackOverflowError) =>
+          fail(s"stack overflowed with eval-depth ${DeepEval.MaxDepth}")
       }
     }
   }
@@ -236,7 +246,9 @@ class EvalSuite extends CatsSuite {
   test("memoize handles branched evaluation correctly") {
     forAll { (e: Eval[Int], fn: Int => Eval[Int]) =>
       var n0 = 0
-      val a0 = e.flatMap { i => n0 += 1; fn(i); }.memoize
+      val a0 = e.flatMap { i =>
+        n0 += 1; fn(i);
+      }.memoize
       assert(a0.flatMap(i1 => a0.map(i1 == _)).value == true)
       assert(n0 == 1)
 

@@ -3,9 +3,9 @@ package free
 
 import cats.arrow.FunctionK
 import cats.tests.CatsSuite
-import cats.laws.discipline.{ ContravariantTests, SerializableTests }
+import cats.laws.discipline.{ContravariantTests, SerializableTests}
 
-import org.scalacheck.{ Arbitrary }
+import org.scalacheck.{Arbitrary}
 
 class ContravariantCoyonedaSuite extends CatsSuite {
 
@@ -16,8 +16,7 @@ class ContravariantCoyonedaSuite extends CatsSuite {
     Arbitrary(F.arbitrary.map(ContravariantCoyoneda.lift[? => T, A](_)))
 
   // We can't really test that functions are equal but we can try it with a bunch of test data.
-  implicit def contravariantCoyonedaEq[A: Arbitrary, T](
-    implicit eqft: Eq[T]): Eq[ContravariantCoyoneda[? => T, A]] =
+  implicit def contravariantCoyonedaEq[A: Arbitrary, T](implicit eqft: Eq[T]): Eq[ContravariantCoyoneda[? => T, A]] =
     new Eq[ContravariantCoyoneda[? => T, A]] {
       def eqv(cca: ContravariantCoyoneda[? => T, A], ccb: ContravariantCoyoneda[? => T, A]): Boolean =
         Arbitrary.arbitrary[List[A]].sample.get.forall { a =>
@@ -30,8 +29,10 @@ class ContravariantCoyonedaSuite extends CatsSuite {
   implicit val contravariantContravariantCoyonedaToString: Contravariant[ContravariantCoyoneda[? => String, ?]] =
     ContravariantCoyoneda.catsFreeContravariantFunctorForContravariantCoyoneda[? => String]
 
-  checkAll("ContravariantCoyoneda[? => String, Int]", ContravariantTests[ContravariantCoyoneda[? => String, ?]].contravariant[Int, Int, Int])
-  checkAll("Contravariant[ContravariantCoyoneda[Option, ?]]", SerializableTests.serializable(Contravariant[ContravariantCoyoneda[Option, ?]]))
+  checkAll("ContravariantCoyoneda[? => String, Int]",
+           ContravariantTests[ContravariantCoyoneda[? => String, ?]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[ContravariantCoyoneda[Option, ?]]",
+           SerializableTests.serializable(Contravariant[ContravariantCoyoneda[Option, ?]]))
 
   test("mapK and run is same as applying natural trans") {
     forAll { (b: Boolean) =>
@@ -47,7 +48,8 @@ class ContravariantCoyonedaSuite extends CatsSuite {
       .lift[? => Int, String](_.count(_ == 'x'))
       .contramap((s: String) => s + "x")
       .contramap((s: String) => s * 3)
-      .run.apply("foo") === 3
+      .run
+      .apply("foo") === 3
   }
 
   test("stack-safe contramapmap") {
@@ -58,15 +60,16 @@ class ContravariantCoyonedaSuite extends CatsSuite {
   }
 
   test("run, foldMap consistent") {
-    forAll { (
-      c: ContravariantCoyoneda[? => Int, String],
-      f: Byte => String,
-      g: Float => Byte,
-      s: Float
-    ) =>
-      val cʹ = c.contramap(f).contramap(g) // just to ensure there's some structure
-      val h  = cʹ.foldMap[? => Int](FunctionK.id[? => Int])
-      cʹ.run.apply(s) === h(s)
+    forAll {
+      (
+        c: ContravariantCoyoneda[? => Int, String],
+        f: Byte => String,
+        g: Float => Byte,
+        s: Float
+      ) =>
+        val cʹ = c.contramap(f).contramap(g) // just to ensure there's some structure
+        val h = cʹ.foldMap[? => Int](FunctionK.id[? => Int])
+        cʹ.run.apply(s) === h(s)
     }
   }
 

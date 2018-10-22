@@ -129,7 +129,19 @@ By sharing the same set of type classes, instances and data types provided by Ca
   
 Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
-*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*  
+*The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
+
+*We offer a [Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge.svg) to let others know your project works with Cats!*
+
+![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-normal.png) 
+
+Below are quick html and markdown snippets to use the badge in your own project.
+```html
+<a href="https://typelevel.org/cats/"><img src="https://typelevel.org/cats/img/cats-badge-tiny.png" alt="Cats friendly" /></a>
+```
+```markdown
+![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-tiny.png) 
+```
 
 ### How can I contribute to Cats?
 
@@ -202,7 +214,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
-- [AutoScout24](https://www.autoscout24.com)
+- [AutoScout24](https://www.autoscout24.com) 
 - [Avast](https://avast.com)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [Basefarm](https://basefarm.com/)
@@ -220,8 +232,10 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [e.near](http://enear.co)
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
+- [Free2Move](https://free2move.com)
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
+- [ImmobilienScout24](https://www.immobilienscout24.de/)
 - [ITV](https://www.itv.com/)
 - [Lookout](https://www.lookout.com)
 - [Metacommerce](https://www.metacommerce.ru)

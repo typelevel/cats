@@ -18,7 +18,8 @@ trait SemigroupTests[A] extends Laws {
       "associative" -> forAll(laws.semigroupAssociative _),
       "repeat1" -> forAll(laws.repeat1 _),
       "repeat2" -> forAll(laws.repeat2 _),
-      "combineAllOption" -> forAll(laws.combineAllOption _))
+      "combineAllOption" -> forAll(laws.combineAllOption _)
+    )
 }
 
 object SemigroupTests {

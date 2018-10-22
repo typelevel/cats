@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.{ EitherT, Validated, NonEmptyList }
+import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.laws.discipline._
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests, OrderTests, PartialOrderTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
@@ -27,10 +27,12 @@ class EitherSuite extends CatsSuite {
   checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))
 
   checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
-  checkAll("SemigroupK[Either[ListWrapper[String], ?]]", SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
+  checkAll("SemigroupK[Either[ListWrapper[String], ?]]",
+           SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
 
   checkAll("Either[ListWrapper[String], Int]", SemigroupTests[Either[ListWrapper[String], Int]].semigroup)
-  checkAll("Semigroup[Either[ListWrapper[String], Int]]", SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
+  checkAll("Semigroup[Either[ListWrapper[String], Int]]",
+           SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
   val partialOrder = catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
@@ -40,8 +42,10 @@ class EitherSuite extends CatsSuite {
   {
     implicit val S = ListWrapper.eqv[String]
     implicit val I = ListWrapper.eqv[Int]
-    checkAll("Either[ListWrapper[String], ListWrapper[Int]]", EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
-    checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]", SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]]))
+    checkAll("Either[ListWrapper[String], ListWrapper[Int]]",
+             EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
+    checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]",
+             SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]]))
   }
 
   checkAll("Either[Int, String]", PartialOrderTests[Either[Int, String]](partialOrder).partialOrder)
@@ -50,7 +54,7 @@ class EitherSuite extends CatsSuite {
   test("Left/Right cast syntax") {
     forAll { (e: Either[Int, String]) =>
       e match {
-        case l @ Left(_)  =>
+        case l @ Left(_) =>
           l.rightCast[Double]: Either[Int, Double]
           assert(true)
         case r @ Right(_) =>
@@ -76,82 +80,106 @@ class EitherSuite extends CatsSuite {
 
   test("show isn't empty") {
     forAll { (e: Either[Int, String]) =>
-      show.show(e).nonEmpty should === (true)
+      show.show(e).nonEmpty should ===(true)
     }
   }
 
   test("map2Eval is lazy") {
     val bomb: Eval[Either[String, Int]] = Later(sys.error("boom"))
     val x: Either[String, Int] = Left("l")
-    x.map2Eval(bomb)(_ + _).value should === (x)
+    x.map2Eval(bomb)(_ + _).value should ===(x)
   }
 
   test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Either.catchOnly[IndexOutOfBoundsException]{ "foo".toInt }
+      Either.catchOnly[IndexOutOfBoundsException] { "foo".toInt }
     }
   }
 
   test("catchNonFatal catches non-fatal exceptions") {
-    assert(Either.catchNonFatal{ "foo".toInt }.isLeft)
-    assert(Either.catchNonFatal{ throw new Throwable("blargh") }.isLeft)
+    assert(Either.catchNonFatal { "foo".toInt }.isLeft)
+    assert(Either.catchNonFatal { throw new Throwable("blargh") }.isLeft)
   }
 
   test("fromTry is left for failed Try") {
     forAll { t: Try[Int] =>
-      t.isFailure should === (Either.fromTry(t).isLeft)
+      t.isFailure should ===(Either.fromTry(t).isLeft)
     }
   }
 
   test("fromOption isLeft consistent with Option.isEmpty") {
     forAll { (o: Option[Int], s: String) =>
-      Either.fromOption(o, s).isLeft should === (o.isEmpty)
+      Either.fromOption(o, s).isLeft should ===(o.isEmpty)
     }
   }
 
   test("leftNel is consistent with left(NEL)") {
     forAll { s: String =>
-      Either.leftNel[String, Int](s) should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
+      Either.leftNel[String, Int](s) should ===(Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
     }
   }
 
   test("rightNel is consistent with right") {
     forAll { i: Int =>
-      Either.rightNel[String, Int](i) should === (Either.right[NonEmptyList[String], Int](i))
+      Either.rightNel[String, Int](i) should ===(Either.right[NonEmptyList[String], Int](i))
     }
   }
 
   test("double swap is identity") {
     forAll { (x: Either[Int, String]) =>
-      x.swap.swap should === (x)
+      x.swap.swap should ===(x)
+    }
+  }
+
+  test("leftNec is consistent with left(NEC)") {
+    forAll { s: String =>
+      Either.leftNec[String, Int](s) should ===(Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s)))
+    }
+  }
+  test("rightNec is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNec[String, Int](i) should ===(Either.right[NonEmptyChain[String], Int](i))
+    }
+  }
+
+  test("leftNes is consistent with left(NES)") {
+    forAll { s: String =>
+      Either.leftNes[String, Int](s) should ===(Either.left[NonEmptySet[String], Int](NonEmptySet.one(s)))
+    }
+  }
+  test("rightNes is consistent with right") {
+    forAll { i: Int =>
+      Either.rightNes[String, Int](i) should ===(Either.right[NonEmptySet[String], Int](i))
     }
   }
 
   test("swap negates isLeft/isRight") {
     forAll { (x: Either[Int, String]) =>
-      x.isLeft should !== (x.swap.isLeft)
-      x.isRight should !== (x.swap.isRight)
+      x.isLeft should !==(x.swap.isLeft)
+      x.isRight should !==(x.swap.isRight)
     }
   }
 
   test("isLeft consistent with isRight") {
     forAll { (x: Either[Int, String]) =>
-      x.isLeft should !== (x.isRight)
+      x.isLeft should !==(x.isRight)
     }
   }
 
   test("foreach is noop for left") {
     forAll { (x: Either[Int, String]) =>
       var count = 0
-      x.foreach{ _ => count += 1}
-      (count == 0) should === (x.isLeft)
+      x.foreach { _ =>
+        count += 1
+      }
+      (count == 0) should ===(x.isLeft)
     }
   }
 
   test("getOrElse ignores default for right") {
     forAll { (x: Either[Int, String], s: String, t: String) =>
       if (x.isRight) {
-        x.getOrElse(s) should === (x.getOrElse(t))
+        x.getOrElse(s) should ===(x.getOrElse(t))
       }
     }
   }
@@ -159,50 +187,50 @@ class EitherSuite extends CatsSuite {
   test("orElse") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
       val z = x.orElse(y)
-      (z === (x)) || (z === (y)) should === (true)
+      (z === (x)) || (z === (y)) should ===(true)
     }
   }
 
   test("recover recovers handled values") {
     val either = Either.left[String, Int]("either")
-    either.recover { case "either" => 5 }.isRight should === (true)
+    either.recover { case "either" => 5 }.isRight should ===(true)
   }
 
   test("recover ignores unhandled values") {
     val either = Either.left[String, Int]("either")
-    either.recover { case "noteither" => 5 } should === (either)
+    either.recover { case "noteither" => 5 } should ===(either)
   }
 
   test("recover ignores the right side") {
     val either = Either.right[String, Int](10)
-    either.recover { case "either" => 5 } should === (either)
+    either.recover { case "either" => 5 } should ===(either)
   }
 
   test("recoverWith recovers handled values") {
     val either = Either.left[String, Int]("either")
-    either.recoverWith { case "either" => Either.right[String, Int](5) }.isRight should === (true)
+    either.recoverWith { case "either" => Either.right[String, Int](5) }.isRight should ===(true)
   }
 
   test("recoverWith ignores unhandled values") {
     val either = Either.left[String, Int]("either")
-    either.recoverWith { case "noteither" => Either.right[String, Int](5) } should === (either)
+    either.recoverWith { case "noteither" => Either.right[String, Int](5) } should ===(either)
   }
 
   test("recoverWith ignores the right side") {
     val either = Either.right[String, Int](10)
-    either.recoverWith { case "either" => Either.right[String, Int](5) } should === (either)
+    either.recoverWith { case "either" => Either.right[String, Int](5) } should ===(either)
   }
 
   test("valueOr consistent with swap then map then merge") {
     forAll { (x: Either[Int, String], f: Int => String) =>
-      x.valueOr(f) should === (x.swap.map(f).merge)
+      x.valueOr(f) should ===(x.swap.map(f).merge)
     }
   }
 
   test("isLeft implies forall") {
     forAll { (x: Either[Int, String], p: String => Boolean) =>
       if (x.isLeft) {
-        x.forall(p) should === (true)
+        x.forall(p) should ===(true)
       }
     }
   }
@@ -210,14 +238,14 @@ class EitherSuite extends CatsSuite {
   test("isLeft implies exists is false") {
     forAll { (x: Either[Int, String], p: String => Boolean) =>
       if (x.isLeft) {
-        x.exists(p) should === (false)
+        x.exists(p) should ===(false)
       }
     }
   }
 
   test("toIor then toEither is identity") {
     forAll { (x: Either[Int, String]) =>
-      x.toIor.toEither should === (x)
+      x.toIor.toEither should ===(x)
     }
   }
 
@@ -225,95 +253,112 @@ class EitherSuite extends CatsSuite {
     implicit def eqTh: Eq[Throwable] = Eq.allEqual
 
     forAll { (x: Throwable Either String) =>
-      Either.fromTry(x.toTry) should === (x)
+      Either.fromTry(x.toTry) should ===(x)
     }
   }
 
   test("isLeft consistency") {
     forAll { (x: Either[Int, String]) =>
-      x.isLeft should === (x.toOption.isEmpty)
-      x.isLeft should === (x.toList.isEmpty)
-      x.isLeft should === (x.toValidated.isInvalid)
-      x.isLeft should === (x.toValidatedNel.isInvalid)
-      x.isLeft should === (x.toValidatedNec.isInvalid)
-      Option(x.isLeft) should === (x.toEitherT[Option].isLeft)
+      x.isLeft should ===(x.toOption.isEmpty)
+      x.isLeft should ===(x.toList.isEmpty)
+      x.isLeft should ===(x.toValidated.isInvalid)
+      x.isLeft should ===(x.toValidatedNel.isInvalid)
+      x.isLeft should ===(x.toValidatedNec.isInvalid)
+      Option(x.isLeft) should ===(x.toEitherT[Option].isLeft)
     }
   }
 
   test("withValidated") {
     forAll { (x: Either[Int, String], f: Int => Double) =>
-      x.withValidated(_.bimap(f, identity)) should === (x.leftMap(f))
+      x.withValidated(_.bimap(f, identity)) should ===(x.leftMap(f))
     }
   }
 
   test("combine is right iff both operands are right") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
-      x.combine(y).isRight should === (x.isRight && y.isRight)
+      x.combine(y).isRight should ===(x.isRight && y.isRight)
     }
   }
 
   test("to consistent with toList") {
     forAll { (x: Either[Int, String]) =>
-      x.to[List] should === (x.toList)
+      x.to[List] should ===(x.toList)
     }
   }
 
   test("to consistent with toOption") {
     forAll { (x: Either[Int, String]) =>
-      x.to[Option] should === (x.toOption)
+      x.to[Option] should ===(x.toOption)
     }
   }
 
   test("partialCompare consistent with PartialOrder") {
-    forAll { (x: Either[Int, String], y: Either[Int, String])  =>
-      x.partialCompare(y) should === (partialOrder.partialCompare(x, y))
+    forAll { (x: Either[Int, String], y: Either[Int, String]) =>
+      x.partialCompare(y) should ===(partialOrder.partialCompare(x, y))
     }
+  }
+
+  test("toEitherNec Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNec should ===(Either.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+  }
+  test("toEitherNec Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNec should ===(Either.right[NonEmptyChain[String], Int](42))
+  }
+
+  test("toEitherNes Left") {
+    val either = Either.left[String, Int]("oops")
+    either.toEitherNes should ===(Either.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+  }
+  test("toEitherNes Right") {
+    val either = Either.right[String, Int](42)
+    either.toEitherNes should ===(Either.right[NonEmptySet[String], Int](42))
   }
 
   test("show Right") {
     val either = Either.right[String, Int](10)
-    either.show should === ("Right(10)")
+    either.show should ===("Right(10)")
   }
 
   test("show Left") {
     val either = Either.left[String, Int]("string")
-    either.show should === ("Left(string)")
+    either.show should ===("Left(string)")
   }
 
   test("toEitherNel Left") {
     val either = Either.left[String, Int]("oops")
-    either.toEitherNel should === (Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+    either.toEitherNel should ===(Either.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
   }
 
   test("toEitherNel Right") {
     val either = Either.right[String, Int](42)
-    either.toEitherNel should === (Either.right[NonEmptyList[String], Int](42))
+    either.toEitherNel should ===(Either.right[NonEmptyList[String], Int](42))
   }
 
   test("ap consistent with Applicative") {
     val fab = implicitly[Applicative[Either[String, ?]]]
-    forAll { (fa: Either[String, Int],
-              f: Int => String) =>
-      fa.ap(Either.right(f)) should === (fab.map(fa)(f))
+    forAll { (fa: Either[String, Int], f: Int => String) =>
+      fa.ap(Either.right(f)) should ===(fab.map(fa)(f))
     }
   }
 
   test("raiseOrPure syntax consistent with fromEither") {
     val ev = ApplicativeError[Validated[String, ?], String]
     forAll { (fa: Either[String, Int]) =>
-      fa.raiseOrPure[Validated[String, ?]] should === (ev.fromEither(fa))
+      fa.raiseOrPure[Validated[String, ?]] should ===(ev.fromEither(fa))
     }
   }
 
   test("leftFlatMap consistent with leftMap") {
     forAll { (either: Either[String, Int], f: String => String) =>
-      either.leftFlatMap(v => Left(f(v))) should === (either.leftMap(f))
+      either.leftFlatMap(v => Left(f(v))) should ===(either.leftMap(f))
     }
   }
 
   test("leftFlatMap consistent with swap and then flatMap") {
     forAll { (either: Either[String, Int], f: String => Either[String, Int]) =>
-      either.leftFlatMap(f) should === (either.swap.flatMap(a => f(a).swap).swap)
+      either.leftFlatMap(f) should ===(either.swap.flatMap(a => f(a).swap).swap)
     }
   }
 

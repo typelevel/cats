@@ -9,7 +9,8 @@ import Prop._
 trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
   def laws: ArrowLaws[F]
 
-  def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFAC: Arbitrary[F[A, C]],

@@ -79,6 +79,10 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Alternative
+    url: typeclasses/alternative.html
+    menu_type: typeclasses
+  
   - title: Bifunctor
     url: typeclasses/bifunctor.html
     menu_type: typeclasses

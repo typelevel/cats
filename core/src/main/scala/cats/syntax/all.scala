@@ -56,13 +56,10 @@ trait AllSyntax
     with VectorSyntax
     with WriterSyntax
 
-trait AllSyntaxBinCompat0
-    extends UnorderedTraverseSyntax
-    with ApplicativeErrorExtension
-    with TrySyntax
+trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
 trait AllSyntaxBinCompat1
-  extends FlatMapOptionSyntax
+    extends FlatMapOptionSyntax
     with ChoiceSyntax
     with NestedSyntax
     with BinestedSyntax
@@ -72,12 +69,11 @@ trait AllSyntaxBinCompat1
     with RepresentableSyntax
 
 trait AllSyntaxBinCompat2
-  extends ParallelTraverseSyntax
+    extends ParallelTraverseSyntax
     with TraverseFilterSyntax
     with FunctorFilterSyntax
     with EitherSyntaxBinCompat0
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
 
-trait AllSyntaxBinCompat3
-  extends UnorderedFoldableSyntax
+trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax

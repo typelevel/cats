@@ -32,11 +32,10 @@ class FutureTests extends CatsSuite {
   implicit def eqfa[A: Eq]: Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(fx: Future[A], fy: Future[A]): Boolean = {
-        val fz = futureEither(fx) zip futureEither(fy)
+        val fz = futureEither(fx).zip(futureEither(fy))
         Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
       }
     }
-
 
   implicit val throwableEq: Eq[Throwable] =
     Eq.by[Throwable, String](_.toString)

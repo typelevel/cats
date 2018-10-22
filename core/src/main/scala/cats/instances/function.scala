@@ -2,24 +2,24 @@ package cats
 package instances
 
 import cats.Contravariant
-import cats.arrow.{Category, ArrowChoice, CommutativeArrow}
+import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
 
 import annotation.tailrec
 
-
-trait FunctionInstances extends cats.kernel.instances.FunctionInstances
-    with Function0Instances with Function1Instances
+trait FunctionInstances extends cats.kernel.instances.FunctionInstances with Function0Instances with Function1Instances
 
 trait FunctionInstancesBinCompat0 {
+
   /**
    * Witness for: E => A <-> E => A
    */
-  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => ?]): Representable.Aux[E => ?, E] = new Representable[E => ?] {
-    override type Representation = E
-    override val F: Functor[E => ?] = EF
-    override def tabulate[A](f: E => A): E => A = f
-    override def index[A](f: E => A): E => A = f
-  }
+  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => ?]): Representable.Aux[E => ?, E] =
+    new Representable[E => ?] {
+      override type Representation = E
+      override val F: Functor[E => ?] = EF
+      override def tabulate[A](f: E => A): E => A = f
+      override def index[A](f: E => A): E => A = f
+    }
 
   implicit val catsSddDeferForFunction0: Defer[Function0] =
     new Defer[Function0] {
@@ -29,7 +29,7 @@ trait FunctionInstancesBinCompat0 {
           def loop(f: () => Function0[A]): A =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next()
+              case next        => next()
             }
           loop(fa)
         }
@@ -48,7 +48,7 @@ trait FunctionInstancesBinCompat0 {
           def loop(f: () => A => B): B =
             f() match {
               case Deferred(f) => loop(f)
-              case next => next(a)
+              case next        => next(a)
             }
           loop(fa)
         }
@@ -60,7 +60,7 @@ trait FunctionInstancesBinCompat0 {
     }
 }
 
-private[instances] sealed trait Function0Instances extends Function0Instances0 {
+sealed private[instances] trait Function0Instances extends Function0Instances0 {
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
     new Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
@@ -77,7 +77,7 @@ private[instances] sealed trait Function0Instances extends Function0Instances0 {
         () => {
           @tailrec
           def loop(thisA: A): B = fn(thisA)() match {
-            case Right(b) => b
+            case Right(b)    => b
             case Left(nextA) => loop(nextA)
           }
           loop(a)
@@ -86,23 +86,26 @@ private[instances] sealed trait Function0Instances extends Function0Instances0 {
 
 }
 
-private[instances] sealed trait Function0Instances0 {
-   implicit def function0Distributive: Distributive[Function0] = new Distributive[Function0] {
-    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = {() => Functor[F].map(fa)(a => f(a)()) }
+sealed private[instances] trait Function0Instances0 {
+  implicit def function0Distributive: Distributive[Function0] = new Distributive[Function0] {
+    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = { () =>
+      Functor[F].map(fa)(a => f(a)())
+    }
 
     def map[A, B](fa: Function0[A])(f: A => B): Function0[B] = () => f(fa())
   }
 }
 
-private[instances] sealed trait Function1Instances extends Function1Instances0 {
+sealed private[instances] trait Function1Instances extends Function1Instances0 {
   implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
     new ContravariantMonoidal[? => R] {
       def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
-        fa compose f
+        fa.compose(f)
       def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
-        (ab: (A, B)) => ab match {
-          case (a, b) => Monoid[R].combine(fa(a), fb(b))
+        (ab: (A, B)) =>
+          ab match {
+            case (a, b) => Monoid[R].combine(fa(a), fb(b))
         }
     }
 
@@ -120,7 +123,7 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
         (t: T1) => {
           @tailrec
           def step(thisA: A): B = fn(thisA)(t) match {
-            case Right(b) => b
+            case Right(b)    => b
             case Left(nextA) => step(nextA)
           }
           step(a)
@@ -131,7 +134,7 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
     new ArrowChoice[Function1] with CommutativeArrow[Function1] {
       def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] =
         _ match {
-          case Left(a) => Left(f(a))
+          case Left(a)  => Left(f(a))
           case Right(b) => Right(g(b))
         }
 
@@ -151,10 +154,9 @@ private[instances] sealed trait Function1Instances extends Function1Instances0 {
   implicit val catsStdMonoidKForFunction1: MonoidK[Endo] =
     Category[Function1].algebraK
 
-
 }
 
-private[instances] sealed trait Function1Instances0 {
+sealed private[instances] trait Function1Instances0 {
   implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
     new Contravariant[? => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
@@ -162,8 +164,12 @@ private[instances] sealed trait Function1Instances0 {
     }
 
   implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
-    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = {t1 => Functor[F].map(fa)(a => f(a)(t1)) }
+    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
+      Functor[F].map(fa)(a => f(a)(t1))
+    }
 
-    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = {t1 => f(fa(t1))}
+    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
+      f(fa(t1))
+    }
   }
 }

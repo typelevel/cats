@@ -7,7 +7,9 @@ trait BitraverseSyntax extends BitraverseSyntax1 {
 }
 
 private[syntax] trait BitraverseSyntax1 {
-  implicit final def catsSyntaxNestedBitraverse[F[_, _]: Bitraverse, G[_], A, B](fgagb: F[G[A], G[B]]): NestedBitraverseOps[F, G, A, B] =
+  implicit final def catsSyntaxNestedBitraverse[F[_, _]: Bitraverse, G[_], A, B](
+    fgagb: F[G[A], G[B]]
+  ): NestedBitraverseOps[F, G, A, B] =
     new NestedBitraverseOps[F, G, A, B](fgagb)
 }
 

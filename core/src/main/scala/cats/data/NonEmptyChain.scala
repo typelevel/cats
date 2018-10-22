@@ -25,7 +25,6 @@ import scala.annotation.tailrec
 import scala.collection.immutable._
 import scala.collection.mutable.ListBuffer
 
-
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
 
   private[data] type Base
@@ -69,7 +68,6 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
     new NonEmptyChainOps(value)
 }
 
-
 class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
@@ -112,7 +110,6 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
    */
   final def concat[A2 >: A](c: NonEmptyChain[A2]): NonEmptyChain[A2] =
     create(toChain ++ c.toChain)
-
 
   /**
    * Alias for concat
@@ -158,7 +155,6 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   final def ++:[A2 >: A](c: Chain[A2]): NonEmptyChain[A2] =
     prependChain(c)
 
-
   /**
    * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
    * otherwise yields None, if `a` was not found
@@ -166,7 +162,6 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
    */
   final def deleteFirst(f: A => Boolean): Option[(A, Chain[A])] =
     toChain.deleteFirst(f)
-
 
   /**
    * Converts this chain to a `NonEmptyList`.
@@ -254,7 +249,6 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
    */
   final def filterNot(p: A ⇒ Boolean): Chain[A] = filter(t => !p(t))
 
-
   /**
    * Left-associative fold using f.
    */
@@ -336,17 +330,14 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Reduce using the Semigroup of A
    */
-  final def reduce[AA >: A](implicit S: Semigroup[AA]): AA = {
+  final def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
     S.combineAllOption(iterator).get
-  }
 
   /**
    * Applies the supplied function to each element and returns a new NonEmptyChain from the concatenated results
    */
-  final def flatMap[B](f: A => NonEmptyChain[B]): NonEmptyChain[B] = {
-    create(toChain.flatMap(f andThen (_.toChain)))
-  }
-
+  final def flatMap[B](f: A => NonEmptyChain[B]): NonEmptyChain[B] =
+    create(toChain.flatMap(f.andThen(_.toChain)))
 
   /**
    * Returns the number of elements in this chain.
@@ -383,10 +374,9 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
     create(toChain.reverse)
 }
 
-private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChainInstances1 {
-  implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
-    with NonEmptyTraverse[NonEmptyChain]
-    with Bimonad[NonEmptyChain] =
+sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
+  implicit val catsDataInstancesForNonEmptyChain
+    : SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] =
     new SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] {
 
       def combineK[A](a: NonEmptyChain[A], b: NonEmptyChain[A]): NonEmptyChain[A] =
@@ -406,18 +396,21 @@ private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChain
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
           as.uncons match {
             case Some((h, t)) => go(t, res += f(NonEmptyChain.fromChainPrepend(h, t)))
-            case None => Chain.fromSeq(res.result())
+            case None         => Chain.fromSeq(res.result())
           }
         NonEmptyChain.fromChainPrepend(f(fa), go(fa.tail, ListBuffer.empty))
       }
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
-        Foldable[Chain].reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-          Apply[G].map2Eval(f(a), lglb)(_ +: _)
-        }.map {
-          case None => Apply[G].map(f(fa.head))(NonEmptyChain.one)
-          case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
-        }.value
+        Foldable[Chain]
+          .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
+            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+          }
+          .map {
+            case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
+            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
+          }
+          .value
 
       override def map[A, B](fa: NonEmptyChain[A])(f: A => B): NonEmptyChain[B] =
         create(fa.toChain.map(f))
@@ -475,14 +468,14 @@ private[data] sealed abstract class NonEmptyChainInstances extends NonEmptyChain
   }
 }
 
-private[data] sealed abstract class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {
+sealed abstract private[data] class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {
   implicit def catsDataPartialOrderForNonEmptyChain[A: PartialOrder]: PartialOrder[NonEmptyChain[A]] =
     PartialOrder.by[NonEmptyChain[A], Chain[A]](_.toChain)
 }
 
-private[data] sealed abstract class NonEmptyChainInstances2 {
+sealed abstract private[data] class NonEmptyChainInstances2 {
   implicit def catsDataEqForNonEmptyChain[A: Eq]: Eq[NonEmptyChain[A]] =
-    new Eq[NonEmptyChain[A]]{
+    new Eq[NonEmptyChain[A]] {
       def eqv(x: NonEmptyChain[A], y: NonEmptyChain[A]): Boolean = x.toChain === y.toChain
     }
 }

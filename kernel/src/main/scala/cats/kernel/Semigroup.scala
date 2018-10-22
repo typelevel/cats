@@ -2,6 +2,7 @@ package cats.kernel
 
 import scala.{specialized => sp}
 import scala.annotation.tailrec
+
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
@@ -49,7 +50,8 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    */
   protected[this] def repeatedCombineN(a: A, n: Int): A = {
     @tailrec def loop(b: A, k: Int, extra: A): A =
-      if (k == 1) combine(b, extra) else {
+      if (k == 1) combine(b, extra)
+      else {
         val x = if ((k & 1) == 1) combine(b, extra) else extra
         loop(combine(b, b), k >>> 1, x)
       }
@@ -83,13 +85,13 @@ abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {
   def maybeCombine[@sp(Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: S[A]): A =
     ox match {
       case Some(x) => ev.combine(x, y)
-      case None => y
+      case None    => y
     }
 
   def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: S[A]): A =
     oy match {
       case Some(y) => ev.combine(x, y)
-      case None => x
+      case None    => x
     }
 
   def isCommutative[A](implicit ev: S[A]): Boolean =

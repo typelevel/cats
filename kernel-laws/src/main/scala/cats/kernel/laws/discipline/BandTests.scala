@@ -11,10 +11,7 @@ trait BandTests[A] extends SemigroupTests[A] {
   def laws: BandLaws[A]
 
   def band(implicit arbA: Arbitrary[A], eqA: Eq[A]): RuleSet =
-    new DefaultRuleSet(
-      "band",
-      Some(semigroup),
-      "idempotency" -> forAll(laws.idempotence _))
+    new DefaultRuleSet("band", Some(semigroup), "idempotency" -> forAll(laws.idempotence _))
 
 }
 

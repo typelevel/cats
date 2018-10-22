@@ -16,24 +16,25 @@ package object cats {
   /** [[cats.InjectK]][F, G] */
   type :≺:[F[_], G[_]] = InjectK[F, G]
 
-/**
- * Identity, encoded as `type Id[A] = A`, a convenient alias to make
- * identity instances well-kinded.
- *
- * The identity monad can be seen as the ambient monad that encodes
- * the effect of having no effect. It is ambient in the sense that
- * plain pure values are values of `Id`.
- *
- * For instance, the [[cats.Functor]] instance for `[[cats.Id]]`
- * allows us to apply a function `A => B` to an `Id[A]` and get an
- * `Id[B]`. However, an `Id[A]` is the same as `A`, so all we're doing
- * is applying a pure function of type `A => B` to a pure value  of
- * type `A` to get a pure value of type `B`. That is, the instance
- * encodes pure unary function application.
- */
+  /**
+   * Identity, encoded as `type Id[A] = A`, a convenient alias to make
+   * identity instances well-kinded.
+   *
+   * The identity monad can be seen as the ambient monad that encodes
+   * the effect of having no effect. It is ambient in the sense that
+   * plain pure values are values of `Id`.
+   *
+   * For instance, the [[cats.Functor]] instance for `[[cats.Id]]`
+   * allows us to apply a function `A => B` to an `Id[A]` and get an
+   * `Id[B]`. However, an `Id[A]` is the same as `A`, so all we're doing
+   * is applying a pure function of type `A => B` to a pure value  of
+   * type `A` to get a pure value of type `B`. That is, the instance
+   * encodes pure unary function application.
+   */
   type Id[A] = A
   type Endo[A] = A => A
-  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+  implicit val catsInstancesForId
+    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
     new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
@@ -75,7 +76,7 @@ package object cats {
       override def get[A](fa: Id[A])(idx: Long): Option[A] =
         if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
-  }
+    }
 
   /**
    * Witness for: Id[A] <-> Unit => A

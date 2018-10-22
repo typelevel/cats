@@ -28,11 +28,11 @@ class OptionSuite extends CatsSuite {
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
 
   test("show") {
-    none[Int].show should === ("None")
-    1.some.show should === ("Some(1)")
+    none[Int].show should ===("None")
+    1.some.show should ===("Some(1)")
 
     forAll { fs: Option[String] =>
-      fs.show should === (fs.toString)
+      fs.show should ===(fs.toString)
     }
   }
 
@@ -42,31 +42,23 @@ class OptionSuite extends CatsSuite {
   // instances.
 
   test("Kleisli associativity") {
-    forAll { (l: Long,
-              f: Long => Option[Int],
-              g: Int  => Option[Char],
-              h: Char => Option[String]) =>
+    forAll { (l: Long, f: Long => Option[Int], g: Int => Option[Char], h: Char => Option[String]) =>
       val isEq = FlatMapLaws[Option].kleisliAssociativity(f, g, h, l)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
   test("Cokleisli associativity") {
-    forAll { (l: Option[Long],
-              f: Option[Long] => Int,
-              g: Option[Int]  => Char,
-              h: Option[Char] => String) =>
+    forAll { (l: Option[Long], f: Option[Long] => Int, g: Option[Int] => Char, h: Option[Char] => String) =>
       val isEq = CoflatMapLaws[Option].cokleisliAssociativity(f, g, h, l)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
   test("applicative composition") {
-    forAll { (fa: Option[Int],
-              fab: Option[Int => Long],
-              fbc: Option[Long => Char]) =>
+    forAll { (fa: Option[Int], fab: Option[Int => Long], fbc: Option[Long => Char]) =>
       val isEq = ApplicativeLaws[Option].applicativeComposition(fa, fab, fbc)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
@@ -75,14 +67,14 @@ class OptionSuite extends CatsSuite {
   test("Kleisli left identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliLeftIdentity(a, f)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
   test("Kleisli right identity") {
     forAll { (a: Int, f: Int => Option[Long]) =>
       val isEq = monadLaws.kleisliRightIdentity(a, f)
-      isEq.lhs should === (isEq.rhs)
+      isEq.lhs should ===(isEq.rhs)
     }
   }
 
@@ -96,11 +88,11 @@ class OptionSuite extends CatsSuite {
 
   test("map2Eval is lazy") {
     val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
-    none[Int].map2Eval(bomb)(_ + _).value should === (None)
+    none[Int].map2Eval(bomb)(_ + _).value should ===(None)
   }
 
-  test("toOptionT consistency"){
-    List(false) should === (1.some.toOptionT[List].isEmpty)
-    List(true) should === (Option.empty[Int].toOptionT[List].isEmpty)
+  test("toOptionT consistency") {
+    List(false) should ===(1.some.toOptionT[List].isEmpty)
+    List(true) should ===(Option.empty[Int].toOptionT[List].isEmpty)
   }
 }

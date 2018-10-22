@@ -11,10 +11,7 @@ trait CommutativeSemigroupTests[A] extends SemigroupTests[A] {
   def laws: CommutativeSemigroupLaws[A]
 
   def commutativeSemigroup(implicit arbA: Arbitrary[A], eqA: Eq[A]): RuleSet =
-    new DefaultRuleSet(
-      "commutativeSemigroup",
-      Some(semigroup),
-      "commutative" -> forAll(laws.commutative _))
+    new DefaultRuleSet("commutativeSemigroup", Some(semigroup), "commutative" -> forAll(laws.commutative _))
 
 }
 

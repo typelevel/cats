@@ -69,18 +69,17 @@ private trait RepresentableMonad[F[_], R] extends Monad[F] {
   override def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] =
     R.tabulate(a => R.index(f(R.index(fa)(a)))(a))
 
-  override def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B] = {
+  override def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B] =
     R.tabulate { r: R =>
       @annotation.tailrec
       def loop(a: A): B =
         R.index(f(a))(r) match {
           case Right(b) => b
-          case Left(a) => loop(a)
+          case Left(a)  => loop(a)
         }
 
       loop(a)
     }
-  }
 }
 
 private trait RepresentableBimonad[F[_], R] extends RepresentableMonad[F, R] with Bimonad[F] {
@@ -123,8 +122,9 @@ object Representable {
    * Derives a `Bimonad` instance for any `Representable` functor whos representation
    * has a `Monoid` instance.
    */
-  def bimonad[F[_], R](implicit Rep: Representable.Aux[F, R], Mon: Monoid[R]): Bimonad[F] = new RepresentableBimonad[F, R] {
-    override def R: Representable.Aux[F, R] = Rep
-    override def M: Monoid[R] = Mon
-  }
+  def bimonad[F[_], R](implicit Rep: Representable.Aux[F, R], Mon: Monoid[R]): Bimonad[F] =
+    new RepresentableBimonad[F, R] {
+      override def R: Representable.Aux[F, R] = Rep
+      override def M: Monoid[R] = Mon
+    }
 }

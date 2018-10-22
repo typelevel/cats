@@ -3,7 +3,7 @@ package cats.kernel.laws
 import cats.kernel.CommutativeMonoid
 
 trait CommutativeMonoidLaws[A] extends MonoidLaws[A] with CommutativeSemigroupLaws[A] {
-  override implicit def S: CommutativeMonoid[A]
+  implicit override def S: CommutativeMonoid[A]
 
 }
 

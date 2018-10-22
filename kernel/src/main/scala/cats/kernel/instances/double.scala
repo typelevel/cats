@@ -21,8 +21,8 @@ class DoubleOrder extends Order[Double] with Hash[Double] {
   def compare(x: Double, y: Double): Int =
     java.lang.Double.compare(x, y)
 
-  override def eqv(x:Double, y:Double): Boolean = x == y
-  override def neqv(x:Double, y:Double): Boolean = x != y
+  override def eqv(x: Double, y: Double): Boolean = x == y
+  override def neqv(x: Double, y: Double): Boolean = x != y
   override def gt(x: Double, y: Double): Boolean = x > y
   override def gteqv(x: Double, y: Double): Boolean = x >= y
   override def lt(x: Double, y: Double): Boolean = x < y

@@ -7,26 +7,22 @@ trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: UnorderedTraverse[F]
 
   def unorderedTraverseIdentity[A, B](fa: F[A])(f: A => B)(implicit ev: Functor[F]): IsEq[F[B]] =
-      F.unorderedTraverse[Id, A, B](fa)(f) <-> (ev.map(fa)(f))
+    F.unorderedTraverse[Id, A, B](fa)(f) <-> (ev.map(fa)(f))
 
-  def unorderedTraverseSequentialComposition[A, B, C, M[_], N[_]]
-    (fa: F[A],
-    f: A => M[B],
-    g: B => N[C])
-    (implicit N: CommutativeApplicative[N],
-              M: CommutativeApplicative[M]): IsEq[Nested[M, N, F[C]]] = {
+  def unorderedTraverseSequentialComposition[A, B, C, M[_], N[_]](fa: F[A], f: A => M[B], g: B => N[C])(
+    implicit N: CommutativeApplicative[N],
+    M: CommutativeApplicative[M]
+  ): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(F.unorderedTraverse(fa)(f))(fb => F.unorderedTraverse(fb)(g)))
     val rhs = F.unorderedTraverse[Nested[M, N, ?], A, C](fa)(a => Nested(M.map(f(a))(g)))
     lhs <-> rhs
   }
 
-  def unorderedTraverseParallelComposition[A, B, M[_], N[_]]
-    (fa: F[A],
-     f: A => M[B],
-     g: A => N[B])
-    (implicit N: CommutativeApplicative[N],
-              M: CommutativeApplicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
+  def unorderedTraverseParallelComposition[A, B, M[_], N[_]](fa: F[A], f: A => M[B], g: A => N[B])(
+    implicit N: CommutativeApplicative[N],
+    M: CommutativeApplicative[M]
+  ): IsEq[(M[F[B]], N[F[B]])] = {
 
     type MN[Z] = (M[Z], N[Z])
     implicit val MN = new CommutativeApplicative[MN] {

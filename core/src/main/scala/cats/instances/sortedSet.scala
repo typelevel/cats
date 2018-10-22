@@ -24,15 +24,15 @@ trait SortedSetInstances extends SortedSetInstances1 {
 
       override def get[A](fa: SortedSet[A])(idx: Long): Option[A] = {
         @tailrec
-        def go(idx: Int, it: Iterator[A]): Option[A] = {
+        def go(idx: Int, it: Iterator[A]): Option[A] =
           if (it.hasNext) {
-            if (idx == 0) Some(it.next) else {
+            if (idx == 0) Some(it.next)
+            else {
               it.next
               go(idx - 1, it)
             }
           } else None
-        }
-        if (idx < Int.MaxValue && idx >= 0L)  go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
       }
 
       override def size[A](fa: SortedSet[A]): Long = fa.size.toLong
@@ -79,13 +79,11 @@ trait SortedSetInstances1 {
 }
 
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
-  def compare(a1: SortedSet[A], a2: SortedSet[A]): Int = {
-
+  def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     Order[Int].compare(a1.size, a2.size) match {
       case 0 => Order.compare(a1.toStream, a2.toStream)
       case x => x
     }
-  }
 
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
@@ -101,7 +99,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
   def hash(xs: SortedSet[A]): Int = {
     var a, b, n = 0
     var c = 1
-    xs foreach { x =>
+    xs.foreach { x =>
       val h = Hash[A].hash(x)
       a += h
       b ^= h
@@ -124,4 +122,3 @@ class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
   def empty: SortedSet[A] = SortedSet.empty(implicitly[Order[A]].toOrdering)
   def combine(x: SortedSet[A], y: SortedSet[A]): SortedSet[A] = x | y
 }
-

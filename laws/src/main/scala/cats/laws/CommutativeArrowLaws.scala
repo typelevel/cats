@@ -6,8 +6,8 @@ import cats.syntax.compose._
 import cats.syntax.strong._
 
 /** Reference: "Causal Commutative Arrows", Journal of Functional Programming
-  *  Figure 4.
-  */
+ *  Figure 4.
+ */
 trait CommutativeArrowLaws[F[_, _]] extends ArrowLaws[F] {
   implicit override def F: CommutativeArrow[F]
 

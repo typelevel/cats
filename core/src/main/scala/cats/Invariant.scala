@@ -2,6 +2,7 @@ package cats
 
 import cats.kernel._
 import simulacrum.typeclass
+
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
@@ -73,8 +74,6 @@ object Invariant {
 
   }
 
-
-
   implicit val catsInvariantCommutativeMonoid: Invariant[CommutativeMonoid] = new Invariant[CommutativeMonoid] {
 
     def imap[A, B](fa: CommutativeMonoid[A])(f: A => B)(g: B => A): CommutativeMonoid[B] = new CommutativeMonoid[B] {
@@ -96,7 +95,6 @@ object Invariant {
     }
 
   }
-
 
   implicit val catsInvariantGroup: Invariant[Group] = new Invariant[Group] {
 

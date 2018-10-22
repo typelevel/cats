@@ -11,28 +11,26 @@ trait ContravariantSemigroupalTests[F[_]] extends ContravariantTests[F] with Sem
   def laws: ContravariantSemigroupalLaws[F]
 
   def contravariantSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    arbFA: Arbitrary[F[A]],
-    arbFB: Arbitrary[F[B]],
-    arbFC: Arbitrary[F[C]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    CogenC: Cogen[C],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]],
-    EqFABC: Eq[F[(A, B, C)]],
-    iso: Isomorphisms[F]
-    ): RuleSet = {
-      new RuleSet {
-        val name = "contravariantSemigroupal"
-        val parents = Seq(contravariant[A, B, C], semigroupal[A, B, C])
-        val bases = Seq.empty
-        val props = Seq(
-          "contravariantSemigroupal contramap2 delta associates" ->
-            forAll(laws.contravariantSemigroupalContramap2DiagonalAssociates[A] _)
-         )
-      }
-  }
+                                                                         arbFA: Arbitrary[F[A]],
+                                                                         arbFB: Arbitrary[F[B]],
+                                                                         arbFC: Arbitrary[F[C]],
+                                                                         CogenA: Cogen[A],
+                                                                         CogenB: Cogen[B],
+                                                                         CogenC: Cogen[C],
+                                                                         EqFA: Eq[F[A]],
+                                                                         EqFB: Eq[F[B]],
+                                                                         EqFC: Eq[F[C]],
+                                                                         EqFABC: Eq[F[(A, B, C)]],
+                                                                         iso: Isomorphisms[F]): RuleSet =
+    new RuleSet {
+      val name = "contravariantSemigroupal"
+      val parents = Seq(contravariant[A, B, C], semigroupal[A, B, C])
+      val bases = Seq.empty
+      val props = Seq(
+        "contravariantSemigroupal contramap2 delta associates" ->
+          forAll(laws.contravariantSemigroupalContramap2DiagonalAssociates[A] _)
+      )
+    }
 }
 
 object ContravariantSemigroupalTests {

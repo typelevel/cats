@@ -1,9 +1,8 @@
 package cats.kernel
 package laws
 
-
 trait GroupLaws[A] extends MonoidLaws[A] {
-  override implicit def S: Group[A]
+  implicit override def S: Group[A]
 
   def leftInverse(x: A): IsEq[A] =
     S.empty <-> S.combine(S.inverse(x), x)
@@ -19,5 +18,3 @@ object GroupLaws {
   def apply[A](implicit ev: Group[A]): GroupLaws[A] =
     new GroupLaws[A] { def S: Group[A] = ev }
 }
-
-

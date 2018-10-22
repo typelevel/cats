@@ -2,7 +2,16 @@ package cats
 package tests
 
 import cats.data.{NonEmptyVector, ZipVector}
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  AlternativeTests,
+  CoflatMapTests,
+  CommutativeApplyTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.laws.discipline.arbitrary._
 
 class VectorSuite extends CatsSuite {
@@ -27,12 +36,12 @@ class VectorSuite extends CatsSuite {
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 
   test("show") {
-    Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")
+    Vector(1, 2, 3).show should ===("Vector(1, 2, 3)")
 
-    Vector.empty[Int].show should === ("Vector()")
+    Vector.empty[Int].show should ===("Vector()")
 
     forAll { vec: Vector[String] =>
-      vec.show should === (vec.toString)
+      vec.show should ===(vec.toString)
     }
   }
 
@@ -42,7 +51,7 @@ class VectorSuite extends CatsSuite {
     }
   )
 
-  test("toNev on empty vector returns None"){
+  test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
   }
 }

@@ -4,7 +4,9 @@ package syntax
 import cats.data.Binested
 
 trait BinestedSyntax {
-  implicit final def catsSyntaxBinestedId[F[_, _], G[_], H[_], A, B](value: F[G[A], H[B]]): BinestedIdOps[F, G, H, A, B] =
+  implicit final def catsSyntaxBinestedId[F[_, _], G[_], H[_], A, B](
+    value: F[G[A], H[B]]
+  ): BinestedIdOps[F, G, H, A, B] =
     new BinestedIdOps(value)
 }
 

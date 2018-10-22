@@ -4,6 +4,7 @@ package arrow
 import simulacrum.typeclass
 
 @typeclass trait Choice[F[_, _]] extends Category[F] {
+
   /**
    * Given two `F`s (`f` and `g`) with a common target type, create a new `F`
    * with the same target type, but with a source type of either `f`'s source

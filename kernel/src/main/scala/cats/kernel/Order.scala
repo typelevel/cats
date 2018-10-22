@@ -20,6 +20,7 @@ import scala.{specialized => sp}
  * By the totality law, x <= y and y <= x cannot be both false.
  */
 trait Order[@sp A] extends Any with PartialOrder[A] { self =>
+
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:
    * - negative iff `x < y`
@@ -113,6 +114,7 @@ abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O]
 }
 
 trait OrderToOrderingConversion {
+
   /**
    * Implicitly derive a `scala.math.Ordering[A]` from a `Order[A]`
    * instance.
@@ -123,6 +125,7 @@ trait OrderToOrderingConversion {
 }
 
 object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
+
   /**
    * Access an implicit `Order[A]`.
    */
@@ -138,20 +141,20 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
     }
 
   /**
-    * Defines an ordering on `A` from the given order such that all arrows switch direction.
-    */
+   * Defines an ordering on `A` from the given order such that all arrows switch direction.
+   */
   def reverse[@sp A](order: Order[A]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = order.compare(y, x)
     }
 
   /**
-    * Returns a new `Order[A]` instance that first compares by the first
-    * `Order` instance and uses the second `Order` instance to "break ties".
-    *
-    * That is, `Order.whenEqual(x, y)` creates an `Order` that first orders by `x` and
-    * then (if two elements are equal) falls back to `y` for the comparison.
-    */
+   * Returns a new `Order[A]` instance that first compares by the first
+   * `Order` instance and uses the second `Order` instance to "break ties".
+   *
+   * That is, `Order.whenEqual(x, y)` creates an `Order` that first orders by `x` and
+   * then (if two elements are equal) falls back to `y` for the comparison.
+   */
   def whenEqual[@sp A](first: Order[A], second: Order[A]): Order[A] =
     new Order[A] {
       def compare(x: A, y: A) = {
@@ -222,10 +225,9 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
       override def toOrdering: Ordering[A] = ev
     }
 
-  def fromComparable[A <: Comparable[A]]: Order[A] = {
+  def fromComparable[A <: Comparable[A]]: Order[A] =
     new Order[A] {
       override def compare(x: A, y: A): Int =
-        x compareTo y
+        x.compareTo(y)
     }
-  }
 }

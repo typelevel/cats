@@ -7,20 +7,18 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import org.typelevel.discipline.Laws
 
-
 trait FlatMapRecTests[F[_]] extends Laws {
   def laws: FlatMapLaws[F]
 
   def tailRecM[A: Arbitrary](implicit
                              ArbFA: Arbitrary[F[A]],
                              ArbAFA: Arbitrary[A => F[A]],
-                             EqFA: Eq[F[A]]
-                            ): RuleSet = {
+                             EqFA: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       name = "flatMapTailRec",
       parent = None,
-      "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _))
-  }
+      "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _)
+    )
 }
 
 object FlatMapRecTests {
