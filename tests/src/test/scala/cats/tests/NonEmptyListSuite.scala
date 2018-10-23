@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 
-import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
+import cats.data.{NonEmptyList, NonEmptyVector, NonEmptyMap, NonEmptySet}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
@@ -159,18 +159,21 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("reduce consistent with fold") {
-    forAll { (nel: NonEmptyList[Int]) => nel.reduce should ===(nel.fold)
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.reduce should ===(nel.fold)
     }
   }
 
   test("reduce consistent with reduceK") {
-    forAll { (nel: NonEmptyList[Option[Int]]) => nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK)
+    forAll { (nel: NonEmptyList[Option[Int]]) =>
+      nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK)
     }
   }
 
   test("reduceLeftToOption consistent with foldLeft + Option") {
     forAll { (nel: NonEmptyList[Int], f: Int => String, g: (String, Int) => String) =>
-      val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) => opt.map(s => g(s, i))
+      val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
+        opt.map(s => g(s, i))
       }
       nel.reduceLeftToOption(f)(g) should ===(expected)
     }
@@ -180,7 +183,8 @@ class NonEmptyListSuite extends CatsSuite {
     forAll { (nel: NonEmptyList[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
       val got = nel.reduceRightToOption(f)(g).value
       val last :: rev = nel.toList.reverse
-      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) => opt.map(s => g(i, Now(s)).value)
+      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
+        opt.map(s => g(i, Now(s)).value)
       }
       got should ===(expected)
     }
@@ -189,22 +193,26 @@ class NonEmptyListSuite extends CatsSuite {
   test("reduceLeftM consistent with foldM") {
     forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) =>
       val got = nel.reduceLeftM(f)((acc, i) => f(i).map(acc + _))
-      val expected = f(nel.head).flatMap { hd => nel.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
+      val expected = f(nel.head).flatMap { hd =>
+        nel.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
       }
       got should ===(expected)
     }
   }
 
   test("reduceMapM consistent with foldMapM") {
-    forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) => nel.reduceMapM(f) should ===(nel.foldMapM(f))
+    forAll { (nel: NonEmptyList[Int], f: Int => Option[Int]) =>
+      nel.reduceMapM(f) should ===(nel.foldMapM(f))
     }
   }
 
   test("fromList round trip") {
-    forAll { l: List[Int] => NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should ===(l)
+    forAll { l: List[Int] =>
+      NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should ===(l)
     }
 
-    forAll { nel: NonEmptyList[Int] => NonEmptyList.fromList(nel.toList) should ===(Some(nel))
+    forAll { nel: NonEmptyList[Int] =>
+      NonEmptyList.fromList(nel.toList) should ===(Some(nel))
     }
   }
 
@@ -228,27 +236,32 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#distinct is consistent with List#distinct") {
-    forAll { nel: NonEmptyList[Int] => nel.distinct.toList should ===(nel.toList.distinct)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.distinct.toList should ===(nel.toList.distinct)
     }
   }
 
   test("NonEmptyList#reverse is consistent with List#reverse") {
-    forAll { nel: NonEmptyList[Int] => nel.reverse.toList should ===(nel.toList.reverse)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.reverse.toList should ===(nel.toList.reverse)
     }
   }
 
   test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
-    forAll { nel: NonEmptyList[Int] => nel.zipWithIndex.toList should ===(nel.toList.zipWithIndex)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.zipWithIndex.toList should ===(nel.toList.zipWithIndex)
     }
   }
 
   test("NonEmptyList#last is consistent with List#last") {
-    forAll { nel: NonEmptyList[Int] => nel.last should ===(nel.toList.last)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.last should ===(nel.toList.last)
     }
   }
 
   test("NonEmptyList#init is consistent with List#init") {
-    forAll { nel: NonEmptyList[Int] => nel.init should ===(nel.toList.init)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.init should ===(nel.toList.init)
     }
   }
 
@@ -260,12 +273,14 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#sorted is consistent with List#sorted") {
-    forAll { nel: NonEmptyList[Int] => nel.sorted.toList should ===(nel.toList.sorted)
+    forAll { nel: NonEmptyList[Int] =>
+      nel.sorted.toList should ===(nel.toList.sorted)
     }
   }
 
   test("NonEmptyList#sortBy is consistent with List#sortBy") {
-    forAll { (nel: NonEmptyList[Int], f: Int => Int) => nel.sortBy(f).toList should ===(nel.toList.sortBy(f))
+    forAll { (nel: NonEmptyList[Int], f: Int => Int) =>
+      nel.sortBy(f).toList should ===(nel.toList.sortBy(f))
     }
   }
 
@@ -284,7 +299,8 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#fromFoldabale is consistent with NonEmptyList#fromList") {
-    forAll { (xs: List[Int]) => NonEmptyList.fromList(xs) should ===(NonEmptyList.fromFoldable(xs))
+    forAll { (xs: List[Int]) =>
+      NonEmptyList.fromList(xs) should ===(NonEmptyList.fromFoldable(xs))
     }
   }
 
