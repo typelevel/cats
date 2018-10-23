@@ -419,17 +419,17 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyMap.fromMapUnsafe(SortedMap(toList.map(ev): _*)(order.toOrdering))
 
   /**
-    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-    *{{{
-    * scala> import cats.data._
-    * scala> import cats.instances.int._
-    * scala> val nel = NonEmptyList(1, List(2,2,3,4))
-    * scala> nel.toNes
-    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-    *}}}
-    */
+   * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
+   *{{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyList(1, List(2,2,3,4))
+   * scala> nel.toNes
+   * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
+   *}}}
+   */
   def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail :_*)
+    NonEmptySet.of(head, tail: _*)
 }
 
 object NonEmptyList extends NonEmptyListInstances {
