@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 
-import cats.data.{NonEmptyList, NonEmptyVector, NonEmptyMap, NonEmptySet}
+import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
