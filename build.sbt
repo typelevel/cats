@@ -33,7 +33,6 @@ lazy val commonSettings = Seq(
       false
   },
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
-  fork in test := true,
   test / javaOptions := Seq("-Xmx6G"),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
@@ -110,6 +109,7 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
+  Test / fork := true,
   testOptions in Test += {
     val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
