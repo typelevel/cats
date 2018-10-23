@@ -82,6 +82,10 @@ options:
   - title: Alternative
     url: typeclasses/alternative.html
     menu_type: typeclasses
+  
+  - title: Bifunctor
+    url: typeclasses/bifunctor.html
+    menu_type: typeclasses
 
   - title: Eq
     url: typeclasses/eq.html
