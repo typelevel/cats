@@ -9,10 +9,6 @@ package discipline
  */
 trait ExhaustiveCheck[A] extends Serializable { self =>
   def allValues: Stream[A]
-
-  def map[B](f: A => B): ExhaustiveCheck[B] = new ExhaustiveCheck[B] {
-    def allValues: Stream[B] = self.allValues.map(f)
-  }
 }
 
 object ExhaustiveCheck {

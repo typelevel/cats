@@ -25,5 +25,5 @@ object OptionWrapper {
   implicit def catsLawsExhaustiveCheckForOptionWrapper[A](
     implicit A: ExhaustiveCheck[A]
   ): ExhaustiveCheck[OptionWrapper[A]] =
-    ExhaustiveCheck[Option[A]].map(OptionWrapper(_))
+    ExhaustiveCheck.instance(ExhaustiveCheck[Option[A]].allValues.map(OptionWrapper(_)))
 }
