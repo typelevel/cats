@@ -21,27 +21,27 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
 
   test(s"UnorderedFoldable[$name].isEmpty") {
     forAll { fa: F[String] =>
-      instance.isEmpty(fa) should === (instance.size(fa) === 0L)
+      instance.isEmpty(fa) should ===(instance.size(fa) === 0L)
     }
   }
 
   test(s"UnorderedFoldable[$name].nonEmpty") {
     forAll { fa: F[String] =>
-      instance.nonEmpty(fa) should === (instance.size(fa) > 0L)
+      instance.nonEmpty(fa) should ===(instance.size(fa) > 0L)
     }
   }
 
   test(s"UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
       implicit val F: UnorderedFoldable[F] = instance
-      fa.count(p) should === (iterator(fa).count(p).toLong)
+      fa.count(p) should ===(iterator(fa).count(p).toLong)
     }
   }
 
   test(s"UnorderedFoldable[$name].size") {
     forAll { fa: F[String] =>
       implicit val F: UnorderedFoldable[F] = instance
-      fa.count(Function.const(true)) should === (fa.size)
+      fa.count(Function.const(true)) should ===(fa.size)
     }
   }
 }
@@ -58,15 +58,16 @@ final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String,
     catsStdInstancesForMap[String].unorderedFoldMap(fa)(f)
 }
 
-sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(implicit ArbFString: Arbitrary[F[String]])
-    extends CatsSuite
+sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(
+  implicit ArbFString: Arbitrary[F[String]]
+) extends CatsSuite
     with PropertyChecks {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
   test(s"Specialized UnorderedFoldable[$name].count") {
     forAll { (fa: F[String], p: String => Boolean) =>
-      fa.count(p) should === (iterator(fa).count(p).toLong)
+      fa.count(p) should ===(iterator(fa).count(p).toLong)
     }
   }
 }
