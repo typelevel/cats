@@ -18,7 +18,7 @@ import cats.instances.long._
    * Returns true if there are no elements. Otherwise false.
    */
   def isEmpty[A](fa: F[A]): Boolean =
-    exists(fa)(Function.const(true))
+    !exists(fa)(Function.const(true))
 
   def nonEmpty[A](fa: F[A]): Boolean =
     !isEmpty(fa)
