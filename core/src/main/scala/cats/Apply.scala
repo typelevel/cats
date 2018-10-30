@@ -40,6 +40,28 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
   /**
+   * Given a function in the Apply context and a plain value, supplies the
+   * value to the function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val someF: Option[Int => Long] = Some(_.toLong + 1L)
+   * scala> val noneF: Option[Int => Long] = None
+   * scala> val anInt: Int = 3
+   *
+   * scala> Apply[Option].flap(someF)(anInt)
+   * res0: Option[Long] = Some(4)
+   *
+   * scala> Apply[Option].flap(noneF)(anInt)
+   * res1: Option[Long] = None
+   *
+   * }}}
+   */
+  def flap[A, B](ff: F[A => B])(a: A): F[B] = map(ff)(_(a))
+
+  /**
    * Compose two actions, discarding any value produced by the first.
    *
    * @see [[productL]] to discard the value of the second instead.
