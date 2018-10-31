@@ -63,7 +63,7 @@ lazy val catsSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.6",
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
