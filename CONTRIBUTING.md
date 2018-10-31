@@ -131,7 +131,7 @@ builds:
 
 ### Write code
 
-[See guidelines](/cats/guidelines.html).
+[See guidelines](https://typelevel.org/cats/guidelines.html).
 
 ### Attributions
 
