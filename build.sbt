@@ -216,7 +216,7 @@ lazy val docSettings = Seq(
           Seq("-Yno-adapted-args")
         else
           Seq("-Ymacro-annotations")),
-  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports","-Ywarn-dead-code"))),
+  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value
@@ -790,13 +790,14 @@ lazy val sharedReleaseProcess = Seq(
 
 lazy val warnUnusedImport = Seq(
   scalacOptions ++= {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 11)) =>
-          Seq("-Ywarn-unused-import")
-        case Some((2, n)) if n >= 12 =>
-          Seq("-Ywarn-unused:imports")
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 11)) =>
+        Seq("-Ywarn-unused-import")
+      case Some((2, n)) if n >= 12 =>
+        Seq("-Ywarn-unused:imports")
 
-      }},
+    }
+  },
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
