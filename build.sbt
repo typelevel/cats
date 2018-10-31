@@ -62,7 +62,7 @@ lazy val catsSettings = Seq(
     "bintray/non".at("http://dl.bintray.com/non/maven")
   ),
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "machinist" % "0.6.5",
+    "org.typelevel" %%% "machinist" % "0.6.6",
     compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
