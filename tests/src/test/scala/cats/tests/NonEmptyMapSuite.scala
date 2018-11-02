@@ -214,7 +214,12 @@ class NonEmptyMapSuite extends CatsSuite {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
       nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
       nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
-      nem.lookup(i._1) should ===(nem.updateWith(i._1)(_ => i._2).lookup(i._1))
     }
   }
+
+  test("NonEmptyMap#updateWith should not act when key is missing") {
+    val single = NonEmptyMap[String, Int](("here", 1), SortedMap())
+    single.lookup("notHere") should ===(single.updateWith("notHere")(_ => 1).lookup("notHere"))
+  }
+
 }
