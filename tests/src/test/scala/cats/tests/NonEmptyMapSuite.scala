@@ -210,9 +210,14 @@ class NonEmptyMapSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyMap#updateWith consistent with equivalent operations") {
+  test("NonEmptyMap#updateWith identity should be a no-op") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
       nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
+    }
+  }
+
+  test("NonEmptyMap#updateWith on existing value should behave like Option#map on the same value") {
+    forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
       nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
     }
   }
