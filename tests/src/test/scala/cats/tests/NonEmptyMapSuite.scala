@@ -212,9 +212,9 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("NonEmptyMap#updateWith consistent with equivalent operations") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      nem.add(i) should ===(nem.add(i).updateWith(i._1, identity))
-      nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1, _ + 1).lookup(i._1))
-      nem.lookup(i._1) should ===(nem.updateWith(i._1, _ => i._2).lookup(i._1))
+      nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
+      nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
+      nem.lookup(i._1) should ===(nem.updateWith(i._1)(_ => i._2).lookup(i._1))
     }
   }
 }
