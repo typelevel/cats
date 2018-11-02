@@ -96,7 +96,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
    * Applies f to the value stored at k. If lookup misses, does nothing.
    */
-  def updateWith(k: K, f: A => A): NonEmptyMap[K, A] = lookup(k).fold(value)(v => add((k, f(v))))
+  def updateWith(k: K)(f: A => A): NonEmptyMap[K, A] = lookup(k).fold(value)(v => add((k, f(v))))
 
   /**
    * Returns a `SortedSet` containing all the keys of this map.
