@@ -361,8 +361,10 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val F0 = ListWrapper.monad
     implicit val FF = ListWrapper.functorFilter
 
-    checkAll("IndexedStateT[ListWrapper, String, Int, ?]", FunctorFilterTests[IndexedStateT[ListWrapper, String, Int, ?]].functorFilter[Int, Int, Int])
-    checkAll("FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]", SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]))
+    checkAll("IndexedStateT[ListWrapper, String, Int, ?]",
+             FunctorFilterTests[IndexedStateT[ListWrapper, String, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]",
+             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]))
 
     FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]
   }

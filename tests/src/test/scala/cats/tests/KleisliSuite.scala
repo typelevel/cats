@@ -144,8 +144,10 @@ class KleisliSuite extends CatsSuite {
   {
     implicit val FF = ListWrapper.functorFilter
 
-    checkAll("Kleisli[ListWrapper, Int, ?]", FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
-    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]", SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
+    checkAll("Kleisli[ListWrapper, Int, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
 
     FunctorFilter[ReaderT[ListWrapper, Int, ?]]
   }

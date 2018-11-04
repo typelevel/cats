@@ -265,8 +265,9 @@ sealed abstract private[data] class IndexedStateTInstances extends IndexedStateT
 
   implicit def catsDataFunctorFilterForIndexedStateT[F[_], SA, SB](
     implicit
-      ev1: Monad[F],
-      ev2: FunctorFilter[F]): FunctorFilter[IndexedStateT[F, SA, SB, ?]] =
+    ev1: Monad[F],
+    ev2: FunctorFilter[F]
+  ): FunctorFilter[IndexedStateT[F, SA, SB, ?]] =
     new IndexedStateTFunctorFilter[F, SA, SB] {
       val F0 = ev1
       val FF = ev2
