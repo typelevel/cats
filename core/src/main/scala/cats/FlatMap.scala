@@ -22,12 +22,6 @@ import simulacrum.noop
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
 
-  override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
-    flatMap(fa)(_ => fb)
-
-  override def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
-    flatMap(fa)(a => map(fb)(_ => a))
-
   /**
    * "flatten" a nested `F` of `F` structure into a single-layer `F` structure.
    *
@@ -102,6 +96,11 @@ import simulacrum.noop
   override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     flatMap(fa)(a => map(fb)(b => f(a, b)))
 
+  override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
+    flatMap(fa)(_ => fb)
+
+  override def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
+    map2(fa, fb)((a, _) => a)
 
   /**
    * Pair `A` with the result of function application.
