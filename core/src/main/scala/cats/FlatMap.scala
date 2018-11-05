@@ -21,6 +21,13 @@ import simulacrum.noop
 @typeclass trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
+
+  override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
+    flatMap(fa)(_ => fb)
+
+  override def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
+    flatMap(fa)(a => map(fb)(_ => a))
+
   /**
    * "flatten" a nested `F` of `F` structure into a single-layer `F` structure.
    *
