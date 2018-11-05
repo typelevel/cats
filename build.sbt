@@ -151,7 +151,6 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
-
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -478,9 +477,7 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
   .enablePlugins(BuildInfoPlugin)
-  .settings(
-    buildInfoKeys := Seq[BuildInfoKey](scalaVersion),
-    buildInfoPackage := "cats.tests")
+  .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)

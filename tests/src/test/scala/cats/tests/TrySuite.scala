@@ -18,7 +18,7 @@ class TrySuite extends CatsSuite {
   checkAll("CoflatMap[Try]", SerializableTests.serializable(CoflatMap[Try]))
 
   //temporarily disable this test due to scala.util.Failure regression https://github.com/scala/bug/issues/11242
-  if(BuildInfo.scalaVersion != "2.13.0-M5") {
+  if (BuildInfo.scalaVersion != "2.13.0-M5") {
     checkAll("Try with Throwable", MonadErrorTests[Try, Throwable].monadError[Int, Int, Int])
   }
 
