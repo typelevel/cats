@@ -267,6 +267,9 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
         G.map(Traverse[F].traverse(fa.value)(TraverseFilter[Option].filterA[G, A](_)(f)))(OptionT[F, A])
 
     }
+
+    implicit def catsDataDecideableForOptionT[F[_]](implicit F0: Decideable[F]): Decideable[OptionT[F, ?]] =
+      new OptionTDecideable[F] { implicit val F = F0 }
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
@@ -380,6 +383,18 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, ?], E] wi
 
   override def handleErrorWith[A](fa: OptionT[F, A])(f: E => OptionT[F, A]): OptionT[F, A] =
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
+}
+
+private trait OptionTDecideable[F[_]] extends Decideable[OptionT[F, ?]] with OptionTContravariantMonoidal[F] {
+  def F: Decideable[F]
+
+  def sum[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, Either[A, B]] =
+    OptionT(F.decide(fa.value, fb.value)(
+      (e: Option[Either[A, B]]) => e match {
+        case Some(Right(b)) => Right(Option(b))
+        case Some(Left(a)) => Left(Option(a))
+        case None => Left(None)
+      }))
 }
 
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {

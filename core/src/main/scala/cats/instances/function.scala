@@ -97,16 +97,19 @@ sealed private[instances] trait Function0Instances0 {
 }
 
 sealed private[instances] trait Function1Instances extends Function1Instances0 {
-  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
-    new ContravariantMonoidal[? => R] {
-      def unit: Unit => R = Function.const(Monoid[R].empty)
-      def contramap[A, B](fa: A => R)(f: B => A): B => R =
+  implicit def catsStdDecideableForPredicate: Decideable[? => Boolean] =
+    new Decideable[? => Boolean] {
+      def empty[A]: A => Boolean = Function.const(false)
+      def unit: Unit => Boolean = Function.const(true)
+      def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
         fa.compose(f)
-      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
+      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean =
         (ab: (A, B)) =>
           ab match {
-            case (a, b) => Monoid[R].combine(fa(a), fb(b))
+            case (a, b) => fa(a) && fb(b)
         }
+      def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
+        either => either.fold(fa, fb)
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
@@ -154,6 +157,17 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
   implicit val catsStdMonoidKForFunction1: MonoidK[Endo] =
     Category[Function1].algebraK
 
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
+    new ContravariantMonoidal[? => R] {
+      def unit: Unit => R = Function.const(Monoid[R].empty)
+      def contramap[A, B](fa: A => R)(f: B => A): B => R =
+        fa.compose(f)
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
+        (ab: (A, B)) =>
+          ab match {
+            case (a, b) => Monoid[R].combine(fa(a), fb(b))
+        }
+    }
 }
 
 sealed private[instances] trait Function1Instances0 {
