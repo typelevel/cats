@@ -96,6 +96,13 @@ import simulacrum.noop
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     flatMap(fa)(a => map(fb)(b => (a, b)))
 
+  override def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
+    flatMap(fa)(a => flatMap(fb)(b => map(ff)(_(a, b))))
+
+  override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
+    flatMap(fa)(a => map(fb)(b => f(a, b)))
+
+
   /**
    * Pair `A` with the result of function application.
    *
