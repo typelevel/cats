@@ -112,7 +112,7 @@ lazy val commonJvmSettings = Seq(
     val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
-  Test / fork := true,
+  Test / fork := priorTo2_13(scalaVersion.value), //disable fork test in 2.13 due to https://github.com/scalatest/scalatest/issues/1423
   Test / javaOptions := Seq("-Xmx6G")
 )
 
@@ -151,8 +151,7 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
-  // 2.13.0-M3 workaround
-  // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
+
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -481,8 +480,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  // 2.13.0-M3 workaround
-  //.settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
   .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
