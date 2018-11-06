@@ -174,4 +174,10 @@ class ChainSuite extends CatsSuite {
       }
     }
   }
+
+  test("Chain#distinct is consistent with List#distinct") {
+    forAll { a: Chain[Int] =>
+      a.distinct.toList should ===(a.toList.distinct)
+    }
+  }
 }

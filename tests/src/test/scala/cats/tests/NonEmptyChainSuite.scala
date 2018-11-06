@@ -133,4 +133,10 @@ class NonEmptyChainSuite extends CatsSuite {
       ci.reverse.toChain should ===(ci.toChain.reverse)
     }
   }
+
+  test("NonEmptyChain#distinct is consistent with List#distinct") {
+    forAll { ci: NonEmptyChain[Int] =>
+      ci.distinct.toList should ===(ci.toList.distinct)
+    }
+  }
 }

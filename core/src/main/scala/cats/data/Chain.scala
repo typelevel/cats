@@ -5,6 +5,7 @@ import Chain._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
+import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -357,6 +358,24 @@ sealed abstract class Chain[+A] {
 
       iterX.hasNext == iterY.hasNext
     }
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct[AA >: A](implicit O: Order[AA]): Chain[AA] = {
+    implicit val ord = O.toOrdering
+
+    var alreadyIn = TreeSet.empty[AA]
+
+    foldLeft(Chain.empty[AA]) { (elementsSoFar, b) =>
+      if (alreadyIn.contains(b)) {
+        elementsSoFar
+      } else {
+        alreadyIn += b
+        elementsSoFar :+ b
+      }
+    }
+  }
 
   def show[AA >: A](implicit AA: Show[AA]): String = {
     val builder = new StringBuilder("Chain(")
