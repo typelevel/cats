@@ -31,6 +31,7 @@ trait AllSyntax
     with EqSyntax
     with FlatMapSyntax
     with FoldableSyntax
+    with Function1Syntax
     with FunctorSyntax
     with GroupSyntax
     with HashSyntax
