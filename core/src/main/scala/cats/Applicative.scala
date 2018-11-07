@@ -137,6 +137,12 @@ import simulacrum.typeclass
       val G = ContravariantMonoidal[G]
     }
 
+  def composeDecideable[G[_]: Decideable]: Decideable[λ[α => F[G[α]]]] =
+    new ComposedApplicativeDecideable[F, G] {
+      val F = self
+      val G = Decideable[G]
+    }
+
   /**
    * Returns the given argument (mapped to Unit) if `cond` is `false`,
    * otherwise, unit lifted into F.

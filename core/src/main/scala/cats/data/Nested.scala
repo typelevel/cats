@@ -43,10 +43,10 @@ sealed abstract private[data] class NestedInstances extends NestedInstances0 {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
 
-  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
-    : ContravariantMonoidal[Nested[F, G, ?]] =
-    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
-      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
+  implicit def catsDataDecideableForApplicativeForNested[F[_]: Applicative, G[_]: Decideable]
+    : Decideable[Nested[F, G, ?]] =
+    new NestedDecideable[F, G] with NestedContravariant[F, G] {
+      val FG: Decideable[λ[α => F[G[α]]]] = Applicative[F].composeDecideable[G]
     }
 
   implicit def catsDataDeferForNested[F[_], G[_]](implicit F: Defer[F]): Defer[Nested[F, G, ?]] =
@@ -74,6 +74,12 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
     new NestedFunctorFilter[F, G] {
       implicit val F: Functor[F] = F0
       implicit val G: FunctorFilter[G] = G0
+    }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
+    : ContravariantMonoidal[Nested[F, G, ?]] =
+    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
 }
 
@@ -327,6 +333,13 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
 
   override def contramap[A, B](fga: Nested[F, G, A])(f: B => A): Nested[F, G, B] =
     Nested(FG.contramap(fga.value)(f))
+}
+
+private[data] trait NestedDecideable[F[_], G[_]] extends Decideable[Nested[F, G, ?]] with NestedContravariantMonoidal[F, G] {
+  def FG: Decideable[λ[α => F[G[α]]]]
+
+  def sum[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, Either[A, B]] =
+    Nested(FG.sum(fa.value, fb.value))
 }
 
 private[data] trait NestedContravariantMonoidal[F[_], G[_]] extends ContravariantMonoidal[Nested[F, G, ?]] {
