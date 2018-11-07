@@ -108,7 +108,7 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonJvmSettings = Seq(
-  test / testOptions += {
+  testOptions in Test += {
     val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
