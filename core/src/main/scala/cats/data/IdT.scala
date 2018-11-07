@@ -73,6 +73,13 @@ sealed private[data] trait IdTApplicative[F[_]] extends Applicative[IdT[F, ?]] w
   def pure[A](a: A): IdT[F, A] = IdT.pure(a)
 }
 
+sealed private[data] trait IdTDecideable[F[_]] extends Decideable[IdT[F, ?]] with IdTContravariantMonoidal[F] {
+  implicit val F0: Decideable[F]
+
+  override def sum[A, B](fa: IdT[F, A], fb: IdT[F, B]): IdT[F, Either[A, B]] =
+    IdT(F0.sum(fa.value, fb.value))
+}
+
 sealed private[data] trait IdTContravariantMonoidal[F[_]] extends ContravariantMonoidal[IdT[F, ?]] {
   implicit val F0: ContravariantMonoidal[F]
 
@@ -148,6 +155,7 @@ sealed abstract private[data] class IdTInstances8 {
 sealed abstract private[data] class IdTInstances7 extends IdTInstances8 {
   implicit def catsDataCommutativeMonadForIdT[F[_]](implicit F: CommutativeMonad[F]): CommutativeMonad[IdT[F, ?]] =
     new IdTMonad[F] with CommutativeMonad[IdT[F, ?]] { implicit val F0: CommutativeMonad[F] = F }
+
 }
 
 sealed abstract private[data] class IdTInstances6 extends IdTInstances7 {
@@ -160,6 +168,11 @@ sealed abstract private[data] class IdTInstances6 extends IdTInstances7 {
 sealed abstract private[data] class IdTInstances5 extends IdTInstances6 {
   implicit def catsDataFunctorForIdT[F[_]](implicit F: Functor[F]): Functor[IdT[F, ?]] =
     new IdTFunctor[F] { implicit val F0: Functor[F] = F }
+
+  implicit def catsDataDecideableForIdT[F[_]](
+    implicit F: Decideable[F]
+  ): Decideable[IdT[F, ?]] =
+    new IdTDecideable[F] { implicit val F0: Decideable[F] = F }
 }
 
 sealed abstract private[data] class IdTInstances4 extends IdTInstances5 {
