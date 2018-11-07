@@ -83,7 +83,12 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def apply(a: A): F[B] = run(a)
 }
 
-object Kleisli extends KleisliInstances with KleisliFunctions with KleisliFunctionsBinCompat with KleisliExplicitInstances {
+object Kleisli
+    extends KleisliInstances
+    with KleisliFunctions
+    with KleisliFunctionsBinCompat
+    with KleisliExplicitInstances {
+
   /**
    * Internal API — shifts the execution of `run` in the `F` context.
    *
@@ -110,21 +115,21 @@ object Kleisli extends KleisliInstances with KleisliFunctions with KleisliFuncti
     }
 }
 
-private[data] sealed trait KleisliFunctions {
+sealed private[data] trait KleisliFunctions {
 
   def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
   /**
-    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
-    * {{{
-    * scala> import cats._, data._, implicits._
-    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
-    * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
-    * scala> b.value.run("").value
-    * res0: Option[Int] = Some(1)
-    * }}}
-    */
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
+   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
+   * scala> b.value.run("").value
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
   def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
     λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
 
@@ -139,30 +144,30 @@ private[data] sealed trait KleisliFunctions {
     Kleisli(F.pure)
 
   def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] =
-    Kleisli(f andThen fa.run)
+    Kleisli(f.andThen(fa.run))
 }
 
-private[data] sealed trait KleisliFunctionsBinCompat {
+sealed private[data] trait KleisliFunctionsBinCompat {
 
   /**
-    * Lifts a natural transformation of effects within a Kleisli
-    * to a transformation of Kleislis.
-    *
-    * Equivalent to running `mapK(f) on a Kleisli.
-    *
-    * {{{
-    * scala> import cats._, data._
-    * scala> val f: (List ~> Option) = λ[List ~> Option](_.headOption)
-    *
-    * scala> val k: Kleisli[List, String, Char] = Kleisli(_.toList)
-    * scala> k.run("foo")
-    * res0: List[Char] = List(f, o, o)
-    *
-    * scala> val k2: Kleisli[Option, String, Char] = Kleisli.liftNT(f)(k)
-    * scala> k2.run("foo")
-    * res1: Option[Char] = Some(f)
-    * }}}
-    * */
+   * Lifts a natural transformation of effects within a Kleisli
+   * to a transformation of Kleislis.
+   *
+   * Equivalent to running `mapK(f) on a Kleisli.
+   *
+   * {{{
+   * scala> import cats._, data._
+   * scala> val f: (List ~> Option) = λ[List ~> Option](_.headOption)
+   *
+   * scala> val k: Kleisli[List, String, Char] = Kleisli(_.toList)
+   * scala> k.run("foo")
+   * res0: List[Char] = List(f, o, o)
+   *
+   * scala> val k2: Kleisli[Option, String, Char] = Kleisli.liftNT(f)(k)
+   * scala> k2.run("foo")
+   * res1: Option[Char] = Some(f)
+   * }}}
+   * */
   def liftNT[F[_], G[_], A](f: F ~> G): Kleisli[F, A, ?] ~> Kleisli[G, A, ?] =
     λ[Kleisli[F, A, ?] ~> Kleisli[G, A, ?]](_.mapK(f))
 }
