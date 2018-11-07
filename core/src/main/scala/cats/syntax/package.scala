@@ -51,7 +51,7 @@ package object syntax {
   object strong extends StrongSyntax
   object try_ extends TrySyntax
   object traverse extends TraverseSyntax
-  object traverseFilter extends TraverseFilterSyntax
+  object traverseFilter extends TraverseFilterSyntax with TraverseFilterSyntaxBinCompat0
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedFoldable extends UnorderedFoldableSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax
