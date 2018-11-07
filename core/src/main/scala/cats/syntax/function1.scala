@@ -7,6 +7,7 @@ trait Function1Syntax {
     new Function1Ops[F, A, B](fab)
 
   final class Function1Ops[F[_]: Functor, A, B](fab: F[Function1[A, B]]) {
+
     /**
      * Given a function in the Functor context and a plain value, supplies the
      * value to the function.
