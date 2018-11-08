@@ -31,7 +31,6 @@ trait AllSyntax
     with EqSyntax
     with FlatMapSyntax
     with FoldableSyntax
-    with Function1Syntax
     with FunctorSyntax
     with GroupSyntax
     with HashSyntax
@@ -77,4 +76,4 @@ trait AllSyntaxBinCompat2
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
 
-trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax
+trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
