@@ -60,8 +60,12 @@ class RepresentableSuite extends CatsSuite {
   }
 
   {
+    //the monadInstance below made a conflict to resolve this one.
+    implicit val isoFun1: Isomorphisms[String => ?] = Isomorphisms.invariant[String => ?]
+
     implicit val monadInstance = Representable.monad[String => ?]
     checkAll("String => ?", MonadTests[String => ?].monad[String, String, String])
+
   }
 
   // Syntax tests. If it compiles is "passes"

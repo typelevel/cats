@@ -62,13 +62,13 @@ lazy val catsSettings = Seq(
     "bintray/non".at("http://dl.bintray.com/non/maven")
   ),
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "machinist" % "0.6.5",
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+    "org.typelevel" %%% "machinist" % "0.6.6",
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.13.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.14.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -132,10 +132,10 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 // 2.13.0-M4 workarounds
 def catalystsVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.6" else "0.7"
+  if (priorTo2_13(scalaVersion)) "0.6" else "0.8"
 
 def scalatestVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP1"
+  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
 
 def scalaCheckVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "1.13.5" else "1.14.0"
@@ -151,8 +151,6 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
   libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
-  // 2.13.0-M3 workaround
-  // libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion % "test")
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -216,7 +214,7 @@ lazy val docSettings = Seq(
           Seq("-Yno-adapted-args")
         else
           Seq("-Ymacro-annotations")),
-  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))),
+  scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
   includeFilter in Jekyll := (includeFilter in makeSite).value
@@ -478,11 +476,11 @@ lazy val testsJS = tests.js
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .dependsOn(macros, core, laws)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  // 2.13.0-M3 workaround
-  //.settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalaTestVersion)
   .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -506,7 +504,7 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
-  .settings(scalacOptions ~= { _.filterNot("-Ywarn-unused-import" == _) }) //export-hook triggers unused import
+  .settings(scalacOptions ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) }) //export-hook triggers unused import
 
 lazy val alleycatsCoreJVM = alleycatsCore.jvm
 lazy val alleycatsCoreJS = alleycatsCore.js
@@ -789,8 +787,16 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= Seq("-Ywarn-unused-import"),
-  scalacOptions in (Compile, console) ~= { _.filterNot("-Ywarn-unused-import" == _) },
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 11)) =>
+        Seq("-Ywarn-unused-import")
+      case Some((2, n)) if n >= 12 =>
+        Seq("-Ywarn-unused:imports")
+
+    }
+  },
+  scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
 
