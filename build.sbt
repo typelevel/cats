@@ -112,7 +112,7 @@ lazy val commonJvmSettings = Seq(
     val flag = if ((isTravisBuild in Global).value) "-oCI" else "-oDF"
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
-  Test / fork := priorTo2_13(scalaVersion.value), //disable fork test in 2.13 due to https://github.com/scalatest/scalatest/issues/1423
+  Test / fork := true,
   Test / javaOptions := Seq("-Xmx6G")
 )
 
@@ -135,7 +135,7 @@ def catalystsVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "0.6" else "0.8"
 
 def scalatestVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP4"
+  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
 
 def scalaCheckVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "1.13.5" else "1.14.0"
