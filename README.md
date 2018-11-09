@@ -251,6 +251,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Spotahome](https://spotahome.com)
 - [Spotify](https://www.spotify.com)
 - [SpringerNature](https://www.springernature.com)
+- [SRF](https://www.srf.ch)
 - [Stripe](https://stripe.com)
 - [Tecsisa](https://www.tecsisa.com)
 - [Teikametrics](http://teikametrics.com)
