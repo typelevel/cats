@@ -3,10 +3,10 @@
 
 > 2018 Nov 8
 
-Cats 1.5.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars. 
+Cats 1.5.0-RC0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars. 
  
 
-1.5.0 brought
+1.5.0-RC0 brought
 
 
 ### 23 API/Feature enhancements
