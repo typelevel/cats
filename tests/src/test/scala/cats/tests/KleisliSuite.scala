@@ -234,7 +234,7 @@ class KleisliSuite extends CatsSuite {
   test("liftNT consistent with mapK") {
     val t: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      (f.mapK(t).run(i)) should === (Kleisli.liftNT(t)(f).run(i))
+      (f.mapK(t).run(i)) should ===(Kleisli.liftNT(t)(f).run(i))
     }
   }
 
