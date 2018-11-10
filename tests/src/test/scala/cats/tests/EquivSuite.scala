@@ -12,9 +12,11 @@ class EquivSuite extends CatsSuite {
   Semigroupal[Equiv]
   ContravariantSemigroupal[Equiv]
   ContravariantMonoidal[Equiv]
+  Decideable[Equiv]
 
   checkAll("Contravariant[Equiv]", ContravariantTests[Equiv].contravariant[Int, Int, Int])
   checkAll("Semigroupal[Equiv]", SemigroupalTests[Equiv].semigroupal[Int, Int, Int])
   checkAll("ContravariantMonoidal[Equiv]", ContravariantMonoidalTests[Equiv].contravariantMonoidal[Int, Int, Int])
-  checkAll("ContravariantMonoidal[Equiv]", SerializableTests.serializable(ContravariantMonoidal[Equiv]))
+  checkAll("Decideable[Equiv]", DecideableTests[Equiv].decideable[Int, Int, Int])
+  checkAll("Decideable[Equiv]", SerializableTests.serializable(Decideable[Equiv]))
 }

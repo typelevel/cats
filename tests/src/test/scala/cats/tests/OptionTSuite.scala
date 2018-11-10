@@ -90,11 +90,12 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
-    // F has a ContravariantMonoidal
-    checkAll("OptionT[Const[String, ?], Int]",
-             ContravariantMonoidalTests[OptionT[Const[String, ?], ?]].contravariantMonoidal[Int, Int, Int])
-    checkAll("ContravariantMonoidal[OptionT[Const[String, ?], Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, ?], ?]]))
+    // F has a Decideable
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[Const[String, ?], ?]]
+
+    checkAll("OptionT[Const[String, ?], Int]", DecideableTests[OptionT[Const[String, ?], ?]].decideable[Int, Int, Int])
+    checkAll("Decideable[OptionT[Const[String, ?], Int]]",
+             SerializableTests.serializable(Decideable[OptionT[Const[String, ?], ?]]))
   }
 
   {

@@ -114,6 +114,17 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
+    implicit val catsDataDecideableForKleisli =
+      Kleisli.catsDataDecideableForKleisli[Const[String, ?], Int]
+    checkAll("Kleisli[Const[String, ?], Int, Int]",
+             DecideableTests[Kleisli[Const[String, ?], Int, ?]].decideable[Int, Int, Int])
+    checkAll(
+      "Decideable[Kleisli[Option, Int, ?]]",
+      SerializableTests.serializable[Decideable[Kleisli[Const[String, ?], Int, ?]]](catsDataDecideableForKleisli)
+    )
+  }
+
+  {
     implicit val catsDataContravariantMonoidalForKleisli =
       Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, ?], Int]
     checkAll("Kleisli[Const[String, ?], Int, Int]",

@@ -21,6 +21,30 @@ class OpSuite extends CatsSuite {
     checkAll("Category[Op[Function1, ?, ?]]", SerializableTests.serializable(Category[Op[Function1, ?, ?]]))
   }
 
+  {
+    implicit val catsDataDecideableForOp = Op.catsDataDecideableForOp[Function1, Int]
+    implicit val coproductIsos = DecideableTests.Isomorphisms.invariant[Op[Function1, Int, ?]]
+    checkAll("Op[Function1, Monoid, ?]", DecideableTests[Op[Function1, Int, ?]].decideable[Char, Char, Char])
+    checkAll("Decideable[Op[Function1, Monoid, ?]]", SerializableTests.serializable(Decideable[Op[Function1, Int, ?]]))
+  }
+
+  {
+    implicit val catsDataContravariantMonoidalForOp = Op.catsDataContravariantMonoidalForOp[Function1, Int]
+    checkAll("Op[Function1, Monoid, ?]",
+             ContravariantMonoidalTests[Op[Function1, Int, ?]].contravariantMonoidal[Char, Char, Char])
+    checkAll("ContravariantMonoidal[Op[Function1, Monoid, ?]]",
+             SerializableTests.serializable(ContravariantMonoidal[Op[Function1, Int, ?]]))
+
+  }
+
+  {
+    implicit val catsDataContravariantForOp = Op.catsDataContravariantForOp[Function1, Unit]
+    checkAll("Op[Function1, Unit, ?]", ContravariantTests[Op[Function1, Unit, ?]].contravariant[Char, Char, Char])
+    checkAll("Contravariant[Op[Function1, Unit, ?]]",
+             SerializableTests.serializable(Contravariant[Op[Function1, Int, ?]]))
+
+  }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */

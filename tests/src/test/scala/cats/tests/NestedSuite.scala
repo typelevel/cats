@@ -97,6 +97,15 @@ class NestedSuite extends CatsSuite {
   }
 
   {
+    // Applicative + Decideable functor compositoin
+    implicit val coproductIsos = DecideableTests.Isomorphisms.invariant[Nested[Option, Const[String, ?], ?]]
+    checkAll("Nested[Option, Const[String, ?], ?]",
+             DecideableTests[Nested[Option, Const[String, ?], ?]].decideable[Int, Int, Int])
+    checkAll("Decideable[Nested[Option, Const[String, ?], ?]]",
+             SerializableTests.serializable(Decideable[Nested[Option, Const[String, ?], ?]]))
+  }
+
+  {
     // Contravariant + Contravariant = Functor
     type ConstInt[A] = Const[Int, A]
     checkAll("Nested[Const[Int, ?], Show, ?]", FunctorTests[Nested[ConstInt, Show, ?]].functor[Int, Int, Int])

@@ -125,6 +125,12 @@ class FunctionSuite extends CatsSuite {
   implicit val isoCodomain = SemigroupalTests.Isomorphisms.invariant[Function1[?, Long]]
   checkAll("Function1[?, Monoid]", ContravariantMonoidalTests[Function1[?, Long]].contravariantMonoidal[Int, Int, Int])
 
+  // Isos for Decideable
+  implicit val isoCodomainBoolean = SemigroupalTests.Isomorphisms.invariant[Function1[?, Boolean]]
+  implicit val isoCoproductCodomain = DecideableTests.Isomorphisms.invariant[Function1[?, Boolean]]
+  checkAll("Function1[?, Boolean]", DecideableTests[Function1[?, Boolean]].decideable[Int, Int, Int])
+  checkAll("Decideable[? => Boolean]", SerializableTests.serializable(Decideable[Function1[?, Boolean]]))
+
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
   checkAll("CommutativeSemigroup[String => Semi]",

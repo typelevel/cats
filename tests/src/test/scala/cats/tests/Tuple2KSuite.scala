@@ -33,6 +33,16 @@ class Tuple2KSuite extends CatsSuite {
     SerializableTests.serializable(ContravariantMonoidal[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]])
   )
 
+  // Coproduct isos for DecideableTests
+  implicit val coproductIso = DecideableTests.Isomorphisms.invariant[Tuple2K[Const[String, ?], Const[Int, ?], ?]]
+
+  checkAll("Tuple2K[Const[String, ?], Const[Int, ?], Long]",
+           DecideableTests[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]].decideable[Long, Long, Long])
+  checkAll(
+    "Decideable[Tuple2K[Const[String, ?], Const[Int, ?], Long]]",
+    SerializableTests.serializable(Decideable[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]])
+  )
+
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
 
   {
