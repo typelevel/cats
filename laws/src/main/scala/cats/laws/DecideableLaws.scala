@@ -5,15 +5,14 @@ trait DecideableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
   implicit override def F: Decideable[F]
 
   def decideableDecideRightAbsorption[A](fa: F[A]): IsEq[F[A]] =
-    (F.decide(fa, F.trivial[A])(Right.apply[A, A])) <-> F.trivial[A]
-
-  def decideableDecideLeftUnit[A](fa: F[A]): IsEq[F[A]] =
     (F.decide(F.trivial[A], fa))(Right.apply[A, A]) <-> fa
 
-  def decideableLeftDistributivity[A, B](fa: F[A], fa2: F[A], f: B => A): IsEq[F[B]] = F.decide(fa, fa2)(f andThen Left.apply) <-> F.contramap(fa)(f)
+  def decideableSumAssociativity[A, B, C](fa: F[A],
+                                          fb: F[B],
+                                          fc: F[C]): (F[Either[A, Either[B, C]]], F[Either[Either[A, B], C]]) =
+    (F.sum(fa, F.sum(fb, fc)), F.sum(F.sum(fa, fb), fc))
 
-  def decideableRightDistributivity[A, B](fa: F[A], fa2: F[A], f: B => A): IsEq[F[B]] = F.decide(fa, fa2)(f andThen Right.apply) <-> F.contramap(fa2)(f)
-
+  // What is the right distributivity law here?
 }
 
 object DecideableLaws {
