@@ -32,10 +32,9 @@ trait EqInstances extends kernel.instances.EqInstances {
             if (right.isRight)
               (left, right).mapN(fb.eqv).right.get
             else false
-          else
-            if (right.isLeft)
-              (left.swap, right.swap).mapN(fa.eqv).right.get
-            else false
+          else if (right.isLeft)
+            (left.swap, right.swap).mapN(fa.eqv).right.get
+          else false
         }
     }
 }

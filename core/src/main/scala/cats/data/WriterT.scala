@@ -469,16 +469,21 @@ sealed private[data] trait WriterTAlternative[F[_], L]
   implicit override def F0: Alternative[F]
 }
 
-sealed private[data] trait WriterTDecideable[F[_], L] extends WriterTContravariantMonoidal[F, L] with Decideable[WriterT[F, L, ?]] {
+sealed private[data] trait WriterTDecideable[F[_], L]
+    extends WriterTContravariantMonoidal[F, L]
+    with Decideable[WriterT[F, L, ?]] {
   implicit def F0: Decideable[F]
 
   override def sum[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, Either[A, B]] =
-    WriterT(F0.decide(fa.run, fb.run)(
-      (e: (L, Either[A, B])) =>
-        e match {
-          case (l, Right(b)) => Right((l, b))
-          case (l, Left(a)) => Left((l, a))
-        }))
+    WriterT(
+      F0.decide(fa.run, fb.run)(
+        (e: (L, Either[A, B])) =>
+          e match {
+            case (l, Right(b)) => Right((l, b))
+            case (l, Left(a))  => Left((l, a))
+        }
+      )
+    )
 }
 
 sealed private[data] trait WriterTContravariantMonoidal[F[_], L] extends ContravariantMonoidal[WriterT[F, L, ?]] {

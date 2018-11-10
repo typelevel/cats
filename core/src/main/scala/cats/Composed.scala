@@ -131,7 +131,9 @@ private[cats] trait ComposedContravariantCovariant[F[_], G[_]] extends Contravar
     F.contramap(fga)(gb => G.map(gb)(f))
 }
 
-private[cats] trait ComposedApplicativeDecideable[F[_], G[_]] extends Decideable[λ[α => F[G[α]]]] with ComposedApplicativeContravariantMonoidal[F, G] { outer =>
+private[cats] trait ComposedApplicativeDecideable[F[_], G[_]]
+    extends Decideable[λ[α => F[G[α]]]]
+    with ComposedApplicativeContravariantMonoidal[F, G] { outer =>
   def F: Applicative[F]
   def G: Decideable[G]
 

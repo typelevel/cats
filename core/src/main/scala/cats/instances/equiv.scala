@@ -39,10 +39,9 @@ trait EquivInstances {
               if (y.isRight)
                 (x, y).mapN(fb.equiv).right.get
               else false
-            else
-              if (y.isLeft)
-                (x.swap, y.swap).mapN(fa.equiv).right.get
-              else false
+            else if (y.isLeft)
+              (x.swap, y.swap).mapN(fa.equiv).right.get
+            else false
         }
     }
 }

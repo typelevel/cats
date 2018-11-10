@@ -32,16 +32,14 @@ trait OrderInstances extends kernel.instances.OrderInstances {
 
       def sum[A, B](fa: Order[A], fb: Order[B]): Order[Either[A, B]] =
         new Order[Either[A, B]] {
-          def compare(x: Either[A, B], y: Either[A, B]): Int = {
+          def compare(x: Either[A, B], y: Either[A, B]): Int =
             if (x.isRight)
               if (y.isRight)
                 (x, y).mapN(fb.compare).right.get
               else 1
-            else
-              if (y.isLeft)
-                (x.swap, y.swap).mapN(fa.compare).right.get
-              else -1
-          }
+            else if (y.isLeft)
+              (x.swap, y.swap).mapN(fa.compare).right.get
+            else -1
         }
     }
 }

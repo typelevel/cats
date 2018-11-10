@@ -267,19 +267,14 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
         G.map(Traverse[F].traverse(fa.value)(TraverseFilter[Option].filterA[G, A](_)(f)))(OptionT[F, A])
 
     }
-
-    implicit def catsDataDecideableForOptionT[F[_]](implicit F0: Decideable[F]): Decideable[OptionT[F, ?]] =
-      new OptionTDecideable[F] { implicit val F = F0 }
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
   implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
     new OptionTMonadErrorMonad[F] { implicit val F = F0 }
 
-  implicit def catsDataContravariantMonoidalForOptionT[F[_]](
-    implicit F0: ContravariantMonoidal[F]
-  ): ContravariantMonoidal[OptionT[F, ?]] =
-    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
+  implicit def catsDataDecideableForOptionT[F[_]](implicit F0: Decideable[F]): Decideable[OptionT[F, ?]] =
+    new OptionTDecideable[F] { implicit val F = F0 }
 
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, ?]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
@@ -308,6 +303,12 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
 
   implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
     new OptionTMonadError[F, E] { implicit val F = F0 }
+
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](
+    implicit F0: ContravariantMonoidal[F]
+  ): ContravariantMonoidal[OptionT[F, ?]] =
+    new OptionTContravariantMonoidal[F] { implicit val F = F0 }
+
 }
 
 sealed abstract private[data] class OptionTInstances2 extends OptionTInstances3 {
@@ -389,12 +390,16 @@ private trait OptionTDecideable[F[_]] extends Decideable[OptionT[F, ?]] with Opt
   def F: Decideable[F]
 
   def sum[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, Either[A, B]] =
-    OptionT(F.decide(fa.value, fb.value)(
-      (e: Option[Either[A, B]]) => e match {
-        case Some(Right(b)) => Right(Option(b))
-        case Some(Left(a)) => Left(Option(a))
-        case None => Left(None)
-      }))
+    OptionT(
+      F.decide(fa.value, fb.value)(
+        (e: Option[Either[A, B]]) =>
+          e match {
+            case Some(Right(b)) => Right(Option(b))
+            case Some(Left(a))  => Left(Option(a))
+            case None           => Left(None)
+        }
+      )
+    )
 }
 
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, ?]] {

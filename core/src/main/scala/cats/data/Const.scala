@@ -122,13 +122,15 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 
 sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
 
-  implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, ?]] =
-    new ContravariantMonoidal[Const[D, ?]] {
+  implicit def catsDataDecideableForConst[D: Monoid]: Decideable[Const[D, ?]] =
+    new Decideable[Const[D, ?]] {
       override def unit = Const.empty[D, Unit]
       override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
         fa.retag[B]
       override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
         fa.retag[(A, B)].combine(fb.retag[(A, B)])
+      def sum[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
+        fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
     }
 
   implicit def catsDataCommutativeApplicativeForConst[C](

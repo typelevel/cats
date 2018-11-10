@@ -207,7 +207,9 @@ sealed private[data] trait Tuple2KContravariant[F[_], G[_]] extends Contravarian
     Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
-sealed private[data] trait Tuple2KDecideable[F[_], G[_]] extends Decideable[λ[α => Tuple2K[F, G, α]]] with Tuple2KContravariantMonoidal[F, G] {
+sealed private[data] trait Tuple2KDecideable[F[_], G[_]]
+    extends Decideable[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KContravariantMonoidal[F, G] {
   def F: Decideable[F]
   def G: Decideable[G]
 

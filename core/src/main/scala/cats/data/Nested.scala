@@ -335,7 +335,9 @@ private[data] trait NestedContravariant[F[_], G[_]] extends Contravariant[Nested
     Nested(FG.contramap(fga.value)(f))
 }
 
-private[data] trait NestedDecideable[F[_], G[_]] extends Decideable[Nested[F, G, ?]] with NestedContravariantMonoidal[F, G] {
+private[data] trait NestedDecideable[F[_], G[_]]
+    extends Decideable[Nested[F, G, ?]]
+    with NestedContravariantMonoidal[F, G] {
   def FG: Decideable[λ[α => F[G[α]]]]
 
   def sum[A, B](fa: Nested[F, G, A], fb: Nested[F, G, B]): Nested[F, G, Either[A, B]] =

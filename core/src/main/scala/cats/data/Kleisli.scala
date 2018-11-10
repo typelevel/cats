@@ -423,7 +423,9 @@ private[data] trait KleisliAlternative[F[_], A]
   implicit def F: Alternative[F]
 }
 
-sealed private[data] trait KleisliDecideable[F[_], D] extends Decideable[Kleisli[F, D, ?]] with KleisliContravariantMonoidal[F, D] {
+sealed private[data] trait KleisliDecideable[F[_], D]
+    extends Decideable[Kleisli[F, D, ?]]
+    with KleisliContravariantMonoidal[F, D] {
   implicit def F: Decideable[F]
 
   def sum[A, B](fa: Kleisli[F, D, A], fb: Kleisli[F, D, B]): Kleisli[F, D, Either[A, B]] =
