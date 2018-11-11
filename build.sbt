@@ -1,4 +1,4 @@
-﻿import microsites._
+import microsites._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
