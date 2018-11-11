@@ -1,4 +1,4 @@
-import microsites._
+﻿import microsites._
 import ReleaseTransformations._
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
@@ -113,7 +113,7 @@ lazy val commonJvmSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest, flag)
   },
   Test / fork := true,
-  Test / javaOptions := Seq("-Xmx6G")
+  Test / javaOptions := Seq("-Xmx3G")
 )
 
 lazy val commonNativeSettings = Seq(
