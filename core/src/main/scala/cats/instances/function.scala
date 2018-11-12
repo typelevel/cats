@@ -58,6 +58,21 @@ trait FunctionInstancesBinCompat0 {
         Deferred(() => cachedFa)
       }
     }
+
+  implicit def catsStdDecideableForPredicate: Decideable[? => Boolean] =
+    new Decideable[? => Boolean] {
+      def empty[A]: A => Boolean = Function.const(false)
+      def unit: Unit => Boolean = Function.const(true)
+      def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
+        fa.compose(f)
+      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean =
+        (ab: (A, B)) =>
+          ab match {
+            case (a, b) => fa(a) && fb(b)
+        }
+      def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
+        either => either.fold(fa, fb)
+    }
 }
 
 sealed private[instances] trait Function0Instances extends Function0Instances0 {
@@ -97,20 +112,6 @@ sealed private[instances] trait Function0Instances0 {
 }
 
 sealed private[instances] trait Function1Instances extends Function1Instances0 {
-  implicit def catsStdDecideableForPredicate: Decideable[? => Boolean] =
-    new Decideable[? => Boolean] {
-      def empty[A]: A => Boolean = Function.const(false)
-      def unit: Unit => Boolean = Function.const(true)
-      def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
-        fa.compose(f)
-      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean =
-        (ab: (A, B)) =>
-          ab match {
-            case (a, b) => fa(a) && fb(b)
-        }
-      def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
-        either => either.fold(fa, fb)
-    }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
     new Monad[T1 => ?] {

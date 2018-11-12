@@ -9,20 +9,20 @@ trait DecideableTests[F[_]] extends ContravariantMonoidalTests[F] {
   def laws: DecideableLaws[F]
 
   def decideable[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    arbFA: Arbitrary[F[A]],
-    arbFB: Arbitrary[F[B]],
-    arbFC: Arbitrary[F[C]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    CogenC: Cogen[C],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]],
-    EqFABC: Eq[F[(A, B, C)]],
-    EqCC: Eq[F[Either[C, C]]],
-    EqFEitABC: Eq[F[Either[Either[A, B], C]]],
-    iso: SemigroupalTests.Isomorphisms[F],
-    iso2: DecideableTests.Isomorphisms[F]): RuleSet =
+                                                           arbFA: Arbitrary[F[A]],
+                                                           arbFB: Arbitrary[F[B]],
+                                                           arbFC: Arbitrary[F[C]],
+                                                           CogenA: Cogen[A],
+                                                           CogenB: Cogen[B],
+                                                           CogenC: Cogen[C],
+                                                           EqFA: Eq[F[A]],
+                                                           EqFB: Eq[F[B]],
+                                                           EqFC: Eq[F[C]],
+                                                           EqFABC: Eq[F[(A, B, C)]],
+                                                           EqCC: Eq[F[Either[C, C]]],
+                                                           EqFEitABC: Eq[F[Either[Either[A, B], C]]],
+                                                           iso: SemigroupalTests.Isomorphisms[F],
+                                                           iso2: DecideableTests.Isomorphisms[F]): RuleSet =
     new RuleSet {
       val name = "decideable"
       val parents = Seq(contravariantMonoidal[A, B, C])
@@ -31,7 +31,8 @@ trait DecideableTests[F[_]] extends ContravariantMonoidalTests[F] {
         "decideable right absorption" ->
           forAll(laws.decideableDecideRightAbsorption[A] _),
         "decideable sum associativity" -> forAll(
-          (fa: F[A], fb: F[B], fc: F[C]) => iso2.associativity(laws.decideableSumAssociativity[A, B, C](fa, fb, fc))),
+          (fa: F[A], fb: F[B], fc: F[C]) => iso2.associativity(laws.decideableSumAssociativity[A, B, C](fa, fb, fc))
+        ),
         "decideable right distributivity" ->
           forAll(laws.decideableRightDistributivity[A, B, C] _)
       )

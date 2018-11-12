@@ -35,7 +35,7 @@ final case class Const[A, B](getConst: A) {
     s"Const(${A.show(getConst)})"
 }
 
-object Const extends ConstInstances {
+object Const extends ConstInstances with ConstInstancesBinCompat0 {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
 
@@ -121,16 +121,13 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 }
 
 sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
-
-  implicit def catsDataDecideableForConst[D: Monoid]: Decideable[Const[D, ?]] =
-    new Decideable[Const[D, ?]] {
+  implicit def catsDataContravariantMonoidalForConst[D: Monoid]: ContravariantMonoidal[Const[D, ?]] =
+    new ContravariantMonoidal[Const[D, ?]] {
       override def unit = Const.empty[D, Unit]
       override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
         fa.retag[B]
       override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
         fa.retag[(A, B)].combine(fb.retag[(A, B)])
-      def sum[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
-        fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
     }
 
   implicit def catsDataCommutativeApplicativeForConst[C](
@@ -179,6 +176,20 @@ sealed abstract private[data] class ConstInstances4 {
 
   implicit def catsDataContravariantForConst[C]: Contravariant[Const[C, ?]] =
     new ConstContravariant[C] {}
+}
+
+trait ConstInstancesBinCompat0 {
+  implicit def catsDataDecideableForConst[D: Monoid]: Decideable[Const[D, ?]] =
+    new Decideable[Const[D, ?]] {
+      override def unit = Const.empty[D, Unit]
+      override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
+        fa.retag[B]
+      override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
+        fa.retag[(A, B)].combine(fb.retag[(A, B)])
+      def sum[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
+        fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
+    }
+
 }
 
 sealed private[data] trait ConstFunctor[C] extends Functor[Const[C, ?]] {
