@@ -43,6 +43,6 @@ final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) e
 }
 
 final class RightNestedBitraverseOps[F[_, _], G[_], A, B](val fagb: F[A, G[B]]) extends AnyVal {
-  def sequence(implicit F: Bitraverse[F], G: Applicative[G]): G[F[A,B]] =
+  def sequence(implicit F: Bitraverse[F], G: Applicative[G]): G[F[A, B]] =
     F.bitraverse(fagb)(G.pure(_), identity)
 }
