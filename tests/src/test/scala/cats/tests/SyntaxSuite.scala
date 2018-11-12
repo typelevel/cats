@@ -306,10 +306,10 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val gfab = fgagb.bisequence
 
     val fgab = mock[F[G[A], B]]
-    val gfab = fgab.leftSequence
+    val gfab2 = fgab.leftSequence
 
     val fagb = mock[F[A, G[B]]]
-    val gfab = fagb.sequence
+    val gfab3 = fagb.sequence
   }
 
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
