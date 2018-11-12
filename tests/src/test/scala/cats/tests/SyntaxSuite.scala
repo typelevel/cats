@@ -299,7 +299,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     val fab = mock[F[A, B]]
     val gfcd = fab.bitraverse(f, g)
-    val gfad = fab.traverse(g)
+    val gfad = fab.rightTraverse(g)
     val gfcb = fab.leftTraverse(f)
 
     val fgagb = mock[F[G[A], G[B]]]
@@ -309,7 +309,7 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val gfab2 = fgab.leftSequence
 
     val fagb = mock[F[A, G[B]]]
-    val gfab3 = fagb.sequence
+    val gfab3 = fagb.rightSequence
   }
 
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
