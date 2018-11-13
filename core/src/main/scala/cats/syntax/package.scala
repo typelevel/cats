@@ -49,6 +49,7 @@ package object syntax {
   object semigroupk extends SemigroupKSyntax
   object show extends ShowSyntax
   object strong extends StrongSyntax
+  object try_ extends TrySyntax
   object traverse extends TraverseSyntax
   object traverseFilter extends TraverseFilterSyntax
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
