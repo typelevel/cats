@@ -11,7 +11,7 @@ package object syntax {
   object bifunctor extends BifunctorSyntax
   object bifoldable extends BifoldableSyntax
   object binested extends BinestedSyntax
-  object bitraverse extends BitraverseSyntax
+  object bitraverse extends BitraverseSyntax with BitraverseSyntaxBinCompat0
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
   object cartesian extends SemigroupalSyntax
   object choice extends ChoiceSyntax
