@@ -45,6 +45,11 @@ sealed abstract class Chain[+A] {
     // scalastyle:on null
     result
   }
+  
+  /**
+   * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  def headOption: Option[A] = uncons.map(_._1)
 
   /**
    * Returns true if there are no elements in this collection.
