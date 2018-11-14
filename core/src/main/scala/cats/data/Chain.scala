@@ -45,7 +45,7 @@ sealed abstract class Chain[+A] {
     // scalastyle:on null
     result
   }
-  
+
   /**
    * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
    */
