@@ -57,8 +57,8 @@ class ChainSuite extends CatsSuite {
   }
 
   test("headOption") {
-    forAll { (ci: Chain[Int], i: Int) =>
-      (i +: ci).headOption should ===(i.some)
+    forAll { (s: Seq[Int])  =>
+      Chain.fromSeq(s).headOption should ===(s.headOption)
     }
   }
 
