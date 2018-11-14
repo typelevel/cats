@@ -14,10 +14,15 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
     new ApplyOps(fa)
 }
 
-final class IfAOps[F[_]](val fa: F[Boolean]) extends AnyVal {
+final class IfAOps[F[_]](val fcond: F[Boolean]) extends AnyVal {
 
   /**
-   * A conditional lifted into the `F` context.
+   * An `if-then-else` lifted into the `F` context.
+   * This function combines the effects of the `fcond` condition and of the two branches,
+   * in the order in which they are given.
+   *
+   * The value of the result is, depending on the value of the condition,
+   * the value of the first argument, or the value of the second argument.
    *
    * Example:
    * {{{
@@ -39,7 +44,12 @@ final class IfAOps[F[_]](val fa: F[Boolean]) extends AnyVal {
    *
    * }}}
    */
-  def ifA[A](ifTrue: F[A], ifFalse: => F[A])(implicit F: Apply[F]): F[A] = F.ifA(fa)(ifTrue, ifFalse)
+  def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = {
+    def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
+
+    F.ap2(F.map(fcond)(ite))(ifTrue, ifFalse)
+  }
+
 }
 
 final class ApplyOps[F[_], A](val fa: F[A]) extends AnyVal {

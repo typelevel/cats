@@ -195,14 +195,6 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     fb.map(fb => map2(fa, fb)(f))
 
   /**
-   * `if-then-else` lifted into the applicative
-   */
-  def ifA[A](cond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
-    def ite(cond: Boolean)(t: A, f: A) = if (cond) t else f
-    ap2(map(cond)(ite))(ifTrue, ifFalse)
-  }
-
-  /**
    * Compose an `Apply[F]` and an `Apply[G]` into an `Apply[λ[α => F[G[α]]]]`.
    *
    * Example:
