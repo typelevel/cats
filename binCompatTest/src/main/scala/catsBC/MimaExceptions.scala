@@ -21,6 +21,7 @@ object MimaExceptions {
       FunctionK.lift(headOption),
       "blah".leftNec[Int],
       List(Some(4), None).nested
+      EitherT.left[Int](Option("err"))
   )
 
 }
