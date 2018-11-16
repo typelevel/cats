@@ -273,7 +273,9 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
 
   // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
   // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] { type Dummy } =
+  implicit def catsDataMonadErrorForOptionT[F[_], E](
+    implicit F0: MonadError[F, E]
+  ): MonadError[OptionT[F, ?], E] { type Dummy } =
     new OptionTMonadError[F, E] {
       type Dummy
       implicit val F = F0

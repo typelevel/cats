@@ -18,7 +18,9 @@ object MimaExceptions {
       cats.data.Kleisli.catsDataCommutativeFlatMapForKleisli[Option, Int],
       cats.data.IRWST.catsDataStrongForIRWST[List, Int, Int, Int],
       cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List],
-      FunctionK.lift(headOption)
+      FunctionK.lift(headOption),
+      cats.data.OptionT.catsDataMonadErrorForOptionT[Either[String, ?], String],
+      cats.data.OptionT[Either[String, ?], Int](Right(Some(17))).ensure("error")(_ => true)
   )
 
 }
