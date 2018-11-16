@@ -270,8 +270,14 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
-  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
-    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
+
+  // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
+  // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] { type Dummy } =
+    new OptionTMonadError[F, E] {
+      type Dummy
+      implicit val F = F0
+    }
 
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](
     implicit F0: ContravariantMonoidal[F]
@@ -303,8 +309,8 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
 
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
+  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
+    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
 }
 
 sealed abstract private[data] class OptionTInstances2 extends OptionTInstances3 {
