@@ -404,7 +404,7 @@ trait EitherSyntaxBinCompat0 {
     new EitherIdOpsBinCompat0(a)
 }
 
-final class EitherIdOpsBinCompat0[A](val value: A) extends AnyVal {
+final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
 
   /**
    * Wrap a value to a left EitherNec

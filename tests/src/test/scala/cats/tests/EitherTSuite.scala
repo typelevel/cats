@@ -523,28 +523,28 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
-  test("biFlatMap consistent with flatMap") {
+  test("biflatMap consistent with flatMap") {
     forAll { (eithert: EitherT[List, String, Int], fb: Int => EitherT[List, String, Int]) =>
       val noChangeLeft = (s: String) => EitherT.left[Int](List(s))
 
-      eithert.biFlatMap(noChangeLeft, fb) should ===(eithert.flatMap(fb))
+      eithert.biflatMap(noChangeLeft, fb) should ===(eithert.flatMap(fb))
     }
   }
 
-  test("biFlatMap consistent with leftFlatMap") {
+  test("biflatMap consistent with leftFlatMap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => EitherT[List, String, Int]) =>
       val noChangeRight = (i: Int) => EitherT.right[String](List(i))
 
-      eithert.biFlatMap(fa, noChangeRight) should ===(eithert.leftFlatMap(fa))
+      eithert.biflatMap(fa, noChangeRight) should ===(eithert.leftFlatMap(fa))
     }
   }
 
-  test("biFlatMap with Left and Right consistent with leftFlatMap and then flatMap") {
+  test("biflatMap with Left and Right consistent with leftFlatMap and then flatMap") {
     forAll { (eithert: EitherT[List, String, Int], string: String, int: Int) =>
       val leftFun = (_: String) => EitherT.left[Int](List(string))
       val rightFun = (_: Int) => EitherT.right[String](List(int))
 
-      eithert.biFlatMap(leftFun, rightFun) should ===(eithert.leftFlatMap(leftFun).flatMap(rightFun))
+      eithert.biflatMap(leftFun, rightFun) should ===(eithert.leftFlatMap(leftFun).flatMap(rightFun))
     }
   }
 

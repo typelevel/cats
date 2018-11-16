@@ -21,6 +21,8 @@ object MimaExceptions {
       FunctionK.lift(headOption),
       cats.data.OptionT.catsDataMonadErrorForOptionT[Either[String, ?], String],
       cats.data.OptionT[Either[String, ?], Int](Right(Some(17))).ensure("error")(_ => true)
+      "blah".leftNec[Int],
+      List(Some(4), None).nested
   )
 
 }
