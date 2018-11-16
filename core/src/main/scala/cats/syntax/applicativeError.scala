@@ -68,12 +68,12 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
 }
 
-final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
+final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {
   def raiseError[F[_], A](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     F.raiseError(e)
 }
 
-final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
+final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
 

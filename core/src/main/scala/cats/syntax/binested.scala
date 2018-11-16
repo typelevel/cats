@@ -10,6 +10,6 @@ trait BinestedSyntax {
     new BinestedIdOps(value)
 }
 
-final class BinestedIdOps[F[_, _], G[_], H[_], A, B](val value: F[G[A], H[B]]) extends AnyVal {
+final class BinestedIdOps[F[_, _], G[_], H[_], A, B](private val value: F[G[A], H[B]]) extends AnyVal {
   def binested: Binested[F, G, H, A, B] = Binested(value)
 }
