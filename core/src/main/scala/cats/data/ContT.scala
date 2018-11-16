@@ -59,14 +59,16 @@ object ContT {
     private def loop(n: () => ContT[M, A, B]): ContT[M, A, B] =
       n() match {
         case DeferCont(n) => loop(n)
-        case notDefer => notDefer
+        case notDefer     => notDefer
       }
 
     lazy val runAndThen: AndThen[B => M[A], M[A]] = loop(next).runAndThen
   }
 
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
-    apply { cb => cb(b) }
+    apply { cb =>
+      cb(b)
+    }
 
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(AndThen(fn))
@@ -76,10 +78,9 @@ object ContT {
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
     ContT[M, C, B] { cb: (B => M[C]) =>
-
       def go(a: A): M[C] =
         fn(a).run {
-          case Left(a) => M.defer(go(a))
+          case Left(a)  => M.defer(go(a))
           case Right(b) => M.defer(cb(b))
         }
 
