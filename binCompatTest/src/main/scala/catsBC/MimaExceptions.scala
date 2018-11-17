@@ -20,8 +20,9 @@ object MimaExceptions {
       cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List],
       FunctionK.lift(headOption),
       "blah".leftNec[Int],
-      List(Some(4), None).nested
-      EitherT.left[Int](Option("err"))
+      List(Some(4), None).nested,
+      cats.data.EitherT.left[Int](Option("err")),
+      true.iterateUntilM(Option(_))(identity _)
   )
 
 }
