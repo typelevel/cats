@@ -291,32 +291,35 @@ sealed abstract private[data] class KleisliInstances4 extends KleisliInstances5 
   implicit def catsDataSemigroupKForKleisli[F[_], A](implicit F0: SemigroupK[F]): SemigroupK[Kleisli[F, A, ?]] =
     new KleisliSemigroupK[F, A] { def F: SemigroupK[F] = F0 }
 
-  implicit def catsDataApplicativeErrorForKleisli[F[_], E, A](
-    implicit F0: ApplicativeError[F, E]
-  ): ApplicativeError[Kleisli[F, A, ?], E] =
-    new KleisliApplicativeError[F, A, E] { def F: ApplicativeError[F, E] = F0 }
-
   implicit def catsDataFlatMapForKleisli[F[_], A](implicit FM: FlatMap[F]): FlatMap[Kleisli[F, A, ?]] =
     new KleisliFlatMap[F, A] { def F: FlatMap[F] = FM }
 
 }
 
 sealed abstract private[data] class KleisliInstances5 extends KleisliInstances6 {
+
+  implicit def catsDataApplicativeErrorForKleisli[F[_], E, A](
+    implicit F0: ApplicativeError[F, E]
+  ): ApplicativeError[Kleisli[F, A, ?], E] =
+    new KleisliApplicativeError[F, A, E] { def F: ApplicativeError[F, E] = F0 }
+}
+
+sealed abstract private[data] class KleisliInstances6 extends KleisliInstances7 {
   implicit def catsDataApplicativeForKleisli[F[_], A](implicit A: Applicative[F]): Applicative[Kleisli[F, A, ?]] =
     new KleisliApplicative[F, A] { def F: Applicative[F] = A }
 }
 
-sealed abstract private[data] class KleisliInstances6 extends KleisliInstances7 {
+sealed abstract private[data] class KleisliInstances7 extends KleisliInstances8 {
   implicit def catsDataApplyForKleisli[F[_], A](implicit A: Apply[F]): Apply[Kleisli[F, A, ?]] =
     new KleisliApply[F, A] { def F: Apply[F] = A }
 }
 
-sealed abstract private[data] class KleisliInstances7 extends KleisliInstances8 {
+sealed abstract private[data] class KleisliInstances8 extends KleisliInstances9 {
   implicit def catsDataDistributiveForKleisli[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
     new KleisliDistributive[F, R] with KleisliFunctor[F, R] { implicit def F: Distributive[F] = F0 }
 }
 
-sealed abstract private[data] class KleisliInstances8 {
+sealed abstract private[data] class KleisliInstances9 {
   implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
 }
