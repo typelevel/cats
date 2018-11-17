@@ -285,7 +285,6 @@ def mimaSettings(moduleName: String) =
         //These 2 things are `.value` on a Ops class (which shouldn't have ever been exposed) - See #2514 and #2613.
         exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOpsBinCompat0.value"),
         exclude[DirectMissingMethodProblem]("cats.syntax.NestedIdOps.value")
-
       ) ++ // Only compile-time abstractions (macros) allowed here
         Seq(
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
