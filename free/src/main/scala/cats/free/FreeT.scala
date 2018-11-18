@@ -212,7 +212,8 @@ object FreeT extends FreeTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[free] class FreeTLiftInjectKPartiallyApplied[M[_], G[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[free] class FreeTLiftInjectKPartiallyApplied[M[_], G[_]](private val dummy: Boolean = true)
+      extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G], m: Applicative[M]): FreeT[G, M, A] =
       FreeT.liftF[G, M, A](I.inj(fa))
   }

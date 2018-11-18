@@ -262,7 +262,7 @@ object Free extends FreeInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
@@ -281,7 +281,7 @@ object Free extends FreeInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }

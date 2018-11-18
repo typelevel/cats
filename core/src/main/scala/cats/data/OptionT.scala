@@ -156,7 +156,7 @@ object OptionT extends OptionTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class PurePartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class PurePartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: A)(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(Some(value)))
   }
@@ -201,7 +201,7 @@ object OptionT extends OptionTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }

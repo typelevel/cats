@@ -22,6 +22,8 @@ object MimaExceptions {
       cats.data.OptionT.catsDataMonadErrorForOptionT[Either[String, ?], String],
       cats.data.OptionT[Either[String, ?], Int](Right(Some(17))).ensure("error")(_ => true),
       "blah".leftNec[Int],
-      List(Some(4), None).nested
+      List(Some(4), None).nested,
+      cats.data.EitherT.left[Int](Option("err")),
+      true.iterateUntilM(Option(_))(identity _)
   )
 }

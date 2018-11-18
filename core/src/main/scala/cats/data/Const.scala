@@ -42,7 +42,7 @@ object Const extends ConstInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class OfPartiallyApplied[B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class OfPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A): Const[A, B] = Const(a)
   }
 
