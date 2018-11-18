@@ -130,7 +130,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class LeftPartiallyApplied[B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fa)(Ior.left))
   }
 
@@ -148,7 +148,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class LeftTPartiallyApplied[F[_], B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftTPartiallyApplied[F[_], B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.left(a)))
   }
 
@@ -167,7 +167,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class RightPartiallyApplied[A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class RightPartiallyApplied[A](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fb)(Ior.right))
   }
 
@@ -208,7 +208,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class BothTPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class BothTPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](a: A, b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.Both(a, b)))
   }
 
@@ -226,7 +226,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class PurePartiallyApplied[F[_], A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class PurePartiallyApplied[F[_], A](private val dummy: Boolean = true) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.right(b)))
   }
 
@@ -274,7 +274,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromIorPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromIorPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](ior: Ior[A, B])(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(ior))
   }
 
@@ -293,7 +293,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromEitherPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromEitherPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): IorT[F, E, A] = IorT(F.pure(either.toIor))
   }
 
@@ -325,7 +325,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](option: Option[A], ifNone: => E)(implicit F: Applicative[F]): IorT[F, E, A] =
       IorT(F.pure(option.toRightIor(ifNone)))
   }
@@ -363,7 +363,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class CondPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class CondPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](test: Boolean, right: => B, left: => A)(implicit F: Applicative[F]): IorT[F, A, B] =
       IorT(F.pure(if (test) Ior.right(right) else Ior.left(left)))
   }

@@ -6,7 +6,7 @@ trait IorSyntax {
   implicit final def catsSyntaxIorId[A](a: A): IorIdOps[A] = new IorIdOps(a)
 }
 
-final class IorIdOps[A](val a: A) extends AnyVal {
+final class IorIdOps[A](private val a: A) extends AnyVal {
 
   /**
    * Wrap a value in `Ior.Right`.

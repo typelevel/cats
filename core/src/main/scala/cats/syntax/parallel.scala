@@ -33,40 +33,40 @@ trait ParallelTraverseSyntax {
     new ParallelSequence_Ops[T, M, A](tma)
 }
 
-final class ParallelTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
+final class ParallelTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
   def parTraverse[M[_]: Monad, F[_], B](f: A => M[B])(implicit T: Traverse[T], P: Parallel[M, F]): M[T[B]] =
     Parallel.parTraverse(ta)(f)
 
 }
 
-final class ParallelTraversable_Ops[T[_], A](val ta: T[A]) extends AnyVal {
+final class ParallelTraversable_Ops[T[_], A](private val ta: T[A]) extends AnyVal {
   def parTraverse_[M[_], F[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M, F]): M[Unit] =
     Parallel.parTraverse_(ta)(f)
 }
 
-final class ParallelFlatTraversableOps[T[_], A](val ta: T[A]) extends AnyVal {
+final class ParallelFlatTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
   def parFlatTraverse[M[_]: Monad, F[_], B](
     f: A => M[T[B]]
   )(implicit T0: Traverse[T], T1: FlatMap[T], P: Parallel[M, F]): M[T[B]] =
     Parallel.parFlatTraverse(ta)(f)
 }
 
-final class ParallelSequenceOps[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal {
+final class ParallelSequenceOps[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
   def parSequence[F[_]](implicit M: Monad[M], T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
     Parallel.parSequence(tma)
 }
 
-final class ParallelSequence_Ops[T[_], M[_], A](val tma: T[M[A]]) extends AnyVal {
+final class ParallelSequence_Ops[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
   def parSequence_[F[_]](implicit T: Foldable[T], P: Parallel[M, F]): M[Unit] =
     Parallel.parSequence_(tma)
 }
 
-final class ParallelFlatSequenceOps[T[_], M[_], A](val tmta: T[M[T[A]]]) extends AnyVal {
+final class ParallelFlatSequenceOps[T[_], M[_], A](private val tmta: T[M[T[A]]]) extends AnyVal {
   def parFlatSequence[F[_]](implicit M: Monad[M], T0: Traverse[T], T1: FlatMap[T], P: Parallel[M, F]): M[T[A]] =
     Parallel.parFlatSequence(tmta)
 }
 
-final class ParallelApOps[M[_], A](val ma: M[A]) extends AnyVal {
+final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
 
   def &>[F[_], B](mb: M[B])(implicit P: Parallel[M, F]): M[B] =
     P.parProductR(ma)(mb)
