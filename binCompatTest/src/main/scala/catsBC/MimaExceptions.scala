@@ -18,7 +18,11 @@ object MimaExceptions {
       cats.data.Kleisli.catsDataCommutativeFlatMapForKleisli[Option, Int],
       cats.data.IRWST.catsDataStrongForIRWST[List, Int, Int, Int],
       cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List],
-      FunctionK.lift(headOption)
+      FunctionK.lift(headOption),
+      "blah".leftNec[Int],
+      List(Some(4), None).nested,
+      cats.data.EitherT.left[Int](Option("err")),
+      true.iterateUntilM(Option(_))(identity _)
   )
 
 }

@@ -13,12 +13,12 @@ private[syntax] trait BitraverseSyntax1 {
     new NestedBitraverseOps[F, G, A, B](fgagb)
 }
 
-final class BitraverseOps[F[_, _], A, B](val fab: F[A, B]) extends AnyVal {
+final class BitraverseOps[F[_, _], A, B](private val fab: F[A, B]) extends AnyVal {
   def bitraverse[G[_]: Applicative, C, D](f: A => G[C], g: B => G[D])(implicit F: Bitraverse[F]): G[F[C, D]] =
     F.bitraverse(fab)(f, g)
 }
 
-final class NestedBitraverseOps[F[_, _], G[_], A, B](val fgagb: F[G[A], G[B]]) extends AnyVal {
+final class NestedBitraverseOps[F[_, _], G[_], A, B](private val fgagb: F[G[A], G[B]]) extends AnyVal {
   def bisequence(implicit F: Bitraverse[F], G: Applicative[G]): G[F[A, B]] =
     F.bisequence(fgagb)
 }

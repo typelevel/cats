@@ -9,7 +9,7 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUno
     new FoldableOps[F, A](fa)
 }
 
-final class NestedFoldableOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
+final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
   def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = F.sequence_(fga)
 
   /**
@@ -27,7 +27,7 @@ final class NestedFoldableOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
   def foldK(implicit F: Foldable[F], G: MonoidK[G]): G[A] = F.foldK(fga)
 }
 
-final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldl[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.foldLeft(fa, b)(f)
 

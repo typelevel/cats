@@ -9,10 +9,10 @@ trait RepresentableSyntax {
     new IndexOps[F, A](fa)
 }
 
-final class IndexOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class IndexOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def index[R](implicit R: Representable.Aux[F, R]): R => A = R.index(fa)
 }
 
-final class TabulateOps[A, R](val f: R => A) extends AnyVal {
+final class TabulateOps[A, R](private val f: R => A) extends AnyVal {
   def tabulate[F[_]](implicit R: Representable.Aux[F, R]): F[A] = R.tabulate(f)
 }

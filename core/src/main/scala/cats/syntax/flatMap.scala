@@ -16,7 +16,7 @@ trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
     new FlatMapOps[F, A](fa)
 }
 
-final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class FlatMapOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Alias for [[flatMap]].
@@ -63,7 +63,7 @@ final class FlatMapOps[F[_], A](val fa: F[A]) extends AnyVal {
 
 }
 
-final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
+final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
 
   /**
    * Flatten nested `F` values.
@@ -80,7 +80,7 @@ final class FlattenOps[F[_], A](val ffa: F[F[A]]) extends AnyVal {
   def flatten(implicit F: FlatMap[F]): F[A] = F.flatten(ffa)
 }
 
-final class IfMOps[F[_]](val fa: F[Boolean]) extends AnyVal {
+final class IfMOps[F[_]](private val fa: F[Boolean]) extends AnyVal {
 
   /**
    * A conditional lifted into the `F` context.
@@ -104,7 +104,7 @@ final class IfMOps[F[_]](val fa: F[Boolean]) extends AnyVal {
   def ifM[B](ifTrue: => F[B], ifFalse: => F[B])(implicit F: FlatMap[F]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
 }
 
-final class FlatMapIdOps[A](val a: A) extends AnyVal {
+final class FlatMapIdOps[A](private val a: A) extends AnyVal {
 
   /**
    * Example:
@@ -135,7 +135,7 @@ trait FlatMapOptionSyntax {
     new FlatMapOptionOps[F, A](foa)
 }
 
-final class FlatMapOptionOps[F[_], A](val fopta: F[Option[A]]) extends AnyVal {
+final class FlatMapOptionOps[F[_], A](private val fopta: F[Option[A]]) extends AnyVal {
 
   /**
    * This repeats an F until we get defined values. This can be useful

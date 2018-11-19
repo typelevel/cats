@@ -8,7 +8,7 @@ trait NestedSyntax {
     new NestedIdOps[F, G, A](value)
 }
 
-final class NestedIdOps[F[_], G[_], A](private[syntax] val value: F[G[A]]) extends AnyVal {
+final class NestedIdOps[F[_], G[_], A](private val value: F[G[A]]) extends AnyVal {
 
   /**
    * Wrap a value in `Nested`.
