@@ -168,6 +168,11 @@ sealed abstract private[data] class KleisliInstances extends KleisliInstances0 {
         }
       }
     }
+
+  implicit def catsDataFunctorFilterForKleisli[F[_], A](
+    implicit ev: FunctorFilter[F]
+  ): FunctorFilter[Kleisli[F, A, ?]] =
+    new KleisliFunctorFilter[F, A] { val FF = ev }
 }
 
 sealed abstract private[data] class KleisliInstances0 extends KleisliInstances0_5 {
@@ -505,4 +510,16 @@ private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, ?]
     Kleisli(r => F.distribute(a)(f(_).run(r)))
 
   def map[A, B](fa: Kleisli[F, R, A])(f: A => B): Kleisli[F, R, B] = fa.map(f)
+}
+
+private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[F, R, ?]] {
+
+  def FF: FunctorFilter[F]
+
+  def functor: Functor[Kleisli[F, R, ?]] = Kleisli.catsDataFunctorForKleisli(FF.functor)
+
+  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] =
+    Kleisli[F, R, B] { r =>
+      FF.mapFilter(fa.run(r))(f)
+    }
 }

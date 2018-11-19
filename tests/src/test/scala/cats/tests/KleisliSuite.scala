@@ -3,7 +3,7 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -139,6 +139,17 @@ class KleisliSuite extends CatsSuite {
     implicit val catsDataFunctorForKleisli = Kleisli.catsDataFunctorForKleisli[Option, Int]
     checkAll("Kleisli[Option, Int, Int]", FunctorTests[Kleisli[Option, Int, ?]].functor[Int, Int, Int])
     checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
+  }
+
+  {
+    implicit val FF = ListWrapper.functorFilter
+
+    checkAll("Kleisli[ListWrapper, Int, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
+
+    FunctorFilter[ReaderT[ListWrapper, Int, ?]]
   }
 
   {
