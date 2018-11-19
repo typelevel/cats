@@ -280,7 +280,8 @@ def mimaSettings(moduleName: String) =
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances1.catsDataCommutativeArrowForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT")
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT"),
       ) ++
         //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
         //provide any value. Making them private because of issues like #2514 and #2613.
@@ -646,7 +647,7 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8"),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))
