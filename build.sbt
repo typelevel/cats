@@ -652,17 +652,17 @@ addCommandAlias("fmt", "; compile:scalafmt; test:scalafmt; scalafmtSbt")
 addCommandAlias("fmtCheck", "; compile:scalafmtCheck; test:scalafmtCheck; scalafmtSbtCheck")
 
 // These aliases serialise the build for the benefit of Travis-CI.
-addCommandAlias("buildKernelJVM", ";kernel.jvm/test;kernelLaws.jvm/test")
-addCommandAlias("buildCoreJVM", ";macros.jvm/test;core.jvm/test")
-addCommandAlias("buildTestsJVM", ";laws.jvm/test;testkit.jvm/test;tests.jvm/test;jvm/test")
-addCommandAlias("buildFreeJVM", ";free.jvm/test")
-addCommandAlias("buildAlleycatsJVM", ";alleycatsCore.jvm/test;alleycatsLaws.jvm/test;alleycatsTests.jvm/test")
-addCommandAlias("buildJVM", ";buildKernelJVM;buildCore.jvm;buildTestsJVM;buildFree.jvm;buildAlleycatsJVM")
+addCommandAlias("buildKernelJVM", ";kernelJVM/test;kernelLawsJVM/test")
+addCommandAlias("buildCoreJVM", ";macrosJVM/test;coreJVM/test")
+addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
+addCommandAlias("buildFreeJVM", ";freeJVM/test")
+addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
+addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
 addCommandAlias("validateJVM", ";scalastyle;fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
-addCommandAlias("validateJS", ";catsJS/compile;tests.js/test;js/test")
-addCommandAlias("validateKernelJS", "kernelLaws.js/test")
-addCommandAlias("validateFreeJS", "free.js/test") //separated due to memory constraint on travis
+addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
+addCommandAlias("validateKernelJS", "kernelLawsJS/test")
+addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
 addCommandAlias("prePR", ";fmt;validateBC")
