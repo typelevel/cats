@@ -1,3 +1,39 @@
+## Version 1.5.0-RC1
+
+> 2018 Nov 19
+
+Cats 1.5.0-RC1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars.
+
+It brought you:
+
+### 5 API/Feature enhancements
+
+* [#2610](https://github.com/typelevel/cats/pull/2610) Expose headOption for Chain  by @ChristopherDavenport
+* [#2596](https://github.com/typelevel/cats/pull/2596) Add standalone Try syntax import  by @kubukoz
+* [#2594](https://github.com/typelevel/cats/pull/2594) Get FunctorFilter on par with the other MTL typeclasses  by @barambani
+* [#2588](https://github.com/typelevel/cats/pull/2588) Add flap function to Apply  by @ssanj
+* [#2506](https://github.com/typelevel/cats/pull/2506) Add ContT monad  by @johnynek
+        
+
+### 1 test improvment
+
+* [#2578](https://github.com/typelevel/cats/pull/2578) Add awk script to parse test durations  by @ceedubs
+        
+
+### 5 bug fixes
+
+* [#2618](https://github.com/typelevel/cats/pull/2618) Issue 2608 - Ambiguous implicit values for Functor[Kleisli[F, A, ?]]  by @barambani
+* [#2617](https://github.com/typelevel/cats/pull/2617) Make the vals inside all 'Ops' style classes private  by @coltfred
+* [#2615](https://github.com/typelevel/cats/pull/2615) 2611 - MonadError syntax for OptionT uses incorrect instance  by @barambani
+* [#2614](https://github.com/typelevel/cats/pull/2614) Make the value of the class private  by @coltfred
+* [#2603](https://github.com/typelevel/cats/pull/2603) Rename EitherT.biflatMap  by @ochrons
+        
+
+### 1 build improvement
+
+* [#2605](https://github.com/typelevel/cats/pull/2605) Reduce Xmx in .jvmopts and build.sbt  by @Alistair-Johnson
+
+
 
 ## Version 1.5.0-RC0
 
