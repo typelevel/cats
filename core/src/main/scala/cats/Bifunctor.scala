@@ -34,6 +34,11 @@ import simulacrum.typeclass
    */
   def leftMap[A, B, C](fab: F[A, B])(f: A => C): F[C, B] = bimap(fab)(f, identity)
 
+  /**
+    * apply a function to the "right" functor
+    */
+  def rightMap[A, B, D](fab: F[A, B])(g: A => D): F[A, D] = bimap(fab)(identity, g)
+
   /** The composition of two Bifunctors is itself a Bifunctor */
   def compose[G[_, _]](implicit G0: Bifunctor[G]): Bifunctor[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBifunctor[F, G] {
@@ -42,17 +47,22 @@ import simulacrum.typeclass
     }
 
   /**
-   * Widens A into a supertype AA.
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> sealed trait Foo
-   * scala> case object Bar extends Foo
-   * scala> val x1: Either[Bar.type, Int] = Either.left(Bar)
-   * scala> val x2: Either[Foo, Int] = x1.leftWiden
-   * }}}
-   */
+    * Widens A into a supertype AA.
+    * Example:
+    * {{{
+    * scala> import cats.implicits._
+    * scala> sealed trait Foo
+    * scala> case object Bar extends Foo
+    * scala> val x1: Either[Bar.type, Int] = Either.left(Bar)
+    * scala> val x2: Either[Foo, Int] = x1.leftWiden
+    * }}}
+    */
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
+
+  /**
+    * Lifts functions f and g to operate on Bifunctors
+    */
+  def lift[A, B, C, D](f: A => C, g: B => D): F[A, B] => F[C, D] = bimap(_)(f, g)
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
