@@ -44,7 +44,7 @@ Because `cats` is a library for Scala, and because Scala has many more knobs and
 
 | Type          | Method Name | Symbol   |
 | ------------- |--------------|------------|
-| `F[A] => F[A] => F[A]` | `productL`  | `<*`
+| `F[A] => F[B] => F[A]` | `productL`  | `<*`
 | `F[A] => F[B] => F[B]` | `productR`  | `*>`
 | `F[A] => F[B] => F[(A,B)]` | `product`  |
 | `F[A => B] => F[A] => F[B]` | `ap`  |  `<*>`
