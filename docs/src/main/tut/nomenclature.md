@@ -17,7 +17,7 @@ Those looking for a printable version may want to check out the [cats-cheatsheet
 
 Because `cats` is a library for Scala, and because Scala has many more knobs and switches, the actual definitions and implementations of some functions in the library can seem a bit too obfuscated at first sight. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:
 
-- We use `A,B,C` for type variables of kind `*`, and `F, G, H` for type variables of a higher kind. 
+- We use `A,B,C` for type variables of kind `*`, and `F, G, H` for type variables of a higher kind.
 - We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow `=>` operation. In Scala, a method's parameters may be split in several comma-separated lists.
 - We do not differentiate between methods from the type-class trait (e.g. `trait Functor`), or the companion object, or the syntax companion (`implicit class`).
 - For functions defined as method of the typeclass' trait, we ignore the receiver object.
@@ -124,7 +124,7 @@ The source code of `cats` uses the `E` type variable for the error type.
 | Type          | Method Name  | Constrains
 | ------------- |--------------|-----------
 | `F[A] => B => ((B,A) => B) => F[B]` | `foldLeft`
-| `F[A] => (A => G[B]) => G[B]` | `foldMapM` | `G: Monad` and `B: Monad`
+| `F[A] => (A => G[B]) => G[B]` | `foldMapM` | `G: Monad` and `B: Monoid`
 
 ### Reducible
 
