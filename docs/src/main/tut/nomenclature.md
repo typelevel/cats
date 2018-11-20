@@ -56,8 +56,8 @@ Because `cats` is a library for Scala, and because Scala has many more knobs and
 | ------------- |--------------|------------|
 | `A => F[A]`   | `pure` |
 | `=> F[Unit]`  | `unit` |
-| `Boolean => F[Unit] => F[Unit]` | `when`   | Performs effect iff condition is true
-|                                 | `unless` | Adds effect iff condition is false
+| `Boolean => F[Unit] => F[Unit]` | `when`   | Performs effect if condition is true
+|                                 | `unless` | Adds effect if condition is false
 
 ### FlatMap / Monad
 

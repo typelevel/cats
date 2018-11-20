@@ -23,9 +23,9 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:
-   * - negative iff `x < y`
-   * - zero     iff `x = y`
-   * - positive iff `x > y`
+   * - negative if `x < y`
+   * - zero     if `x = y`
+   * - positive if `x > y`
    */
   def compare(x: A, y: A): Int
 

@@ -225,7 +225,7 @@ class ValidatedSuite extends CatsSuite {
     }
   }
 
-  test("isValid after combine, iff both are valid") {
+  test("isValid after combine, if both are valid") {
     forAll { (lhs: Validated[Int, String], rhs: Validated[Int, String]) =>
       lhs.combine(rhs).isValid should ===(lhs.isValid && rhs.isValid)
     }

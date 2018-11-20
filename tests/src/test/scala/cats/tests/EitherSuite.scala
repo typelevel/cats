@@ -274,7 +274,7 @@ class EitherSuite extends CatsSuite {
     }
   }
 
-  test("combine is right iff both operands are right") {
+  test("combine is right if both operands are right") {
     forAll { (x: Either[Int, String], y: Either[Int, String]) =>
       x.combine(y).isRight should ===(x.isRight && y.isRight)
     }

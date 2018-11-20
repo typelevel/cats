@@ -28,9 +28,9 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * Result of comparing `x` with `y`. Returns NaN if operands are not
    * comparable. If operands are comparable, returns a Double whose
    * sign is:
-   * - negative iff `x < y`
-   * - zero     iff `x = y`
-   * - positive iff `x > y`
+   * - negative if `x < y`
+   * - zero     if `x = y`
+   * - positive if `x > y`
    */
   def partialCompare(x: A, y: A): Double
 
@@ -45,9 +45,9 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * Result of comparing `x` with `y`. Returns None if operands are
    * not comparable. If operands are comparable, returns Some[Int]
    * where the Int sign is:
-   * - negative iff `x < y`
-   * - zero     iff `x = y`
-   * - positive iff `x > y`
+   * - negative if `x < y`
+   * - zero     if `x = y`
+   * - positive if `x > y`
    */
   def tryCompare(x: A, y: A): Option[Int] = {
     val c = partialCompare(x, y)
