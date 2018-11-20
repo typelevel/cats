@@ -14,7 +14,7 @@ final class BifunctorOps[F[_,_], A, B](private val fab: F[A,B]) extends AnyVal {
 
   def leftMap[C](f: A => C)(implicit F: Bifunctor[F]): F[C, B] = F.bimap(fab)(f, identity)
 
-  def rightMap[D](g: A => D)(implicit F: Bifunctor[F]): F[A, D] = F.bimap(fab)(identity, g)
+  def rightMap[D](g: B => D)(implicit F: Bifunctor[F]): F[A, D] = F.bimap(fab)(identity, g)
 
   def leftWiden[AA >: A]: F[AA, B] = fab.asInstanceOf[F[AA, B]]
 
