@@ -1,0 +1,918 @@
+<html><head><title>Cats: Glossary</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Glossary" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Glossary" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper navbar-inverse"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/cats/" class="brand"><div class="icon-wrapper"><span>Cats</span></div></a></div><nav class="text-right"><ul class=""><li><a href="https://github.com/typelevel/cats"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="/cats/api/cats/index.html"><i class="fa fa-file-text"></i><span class="hidden-xs">API Documentation</span></a></li></ul></nav></div></div><div class="jumbotron" style="background-image:url('/cats/img/jumbotron_pattern.png')"></div><div><ul class="horizontalNav">                                                                                           <li><a class="" href="/cats/">Home</a></li>  <li><a class="" href="/cats/typeclasses.html">Type Classes</a></li>  <li><a class="" href="/cats/datatypes.html">Data Types</a></li>  <li><a class="" href="/cats/motivations.html">Motivations</a></li>  <li><a class="" href="/cats/resources_for_learners.html">Resources for Learners</a></li>  <li><a class="" href="/cats/faq.html">FAQ</a></li>  <li><a class="" href="/cats/contributing.html">Contributing</a></li>  <li><a class="" href="/cats/colophon.html">Colophon</a></li>  <li><a class=" active " href="/cats/nomenclature.html">Glossary</a></li>  <li><a class="" href="/cats/guidelines.html">Guidelines</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><blockquote>
+  <ul>
+    <li>What is the difference between <code class="highlighter-rouge">unit</code> and <code class="highlighter-rouge">void</code>?</li>
+    <li>To discard the first value and keep only the first effect, is it <code class="highlighter-rouge">&lt;*</code> or <code class="highlighter-rouge">*&gt;</code>?</li>
+    <li>How do I make a computation <code class="highlighter-rouge">F[A]</code> fail by checking a condition on the value?</li>
+  </ul>
+</blockquote>
+
+<p>This page contains a catalogue of the major functions, type classes, and types aliases within the <code class="highlighter-rouge">cats</code> library. This catalogue serves, on one hand, as a bird’s-eye view of the capabilities of each class. It is also intended as a go-to page for any <code class="highlighter-rouge">cats</code>-using developer, who may not remember the answer to any of the questions above.</p>
+
+<p>Those looking for a printable version may want to check out the <a href="https://arosien.github.io/cats-cheatsheets/typeclasses.pdf">cats-cheatsheet</a> file.</p>
+
+<h4 id="simplifications">Simplifications</h4>
+
+<p>Because <code class="highlighter-rouge">cats</code> is a library for Scala, and because Scala has many more knobs and switches, the actual definitions and implementations of some functions in the library can seem a bit too obfuscated at first sight. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:</p>
+
+<ul>
+  <li>We use <code class="highlighter-rouge">A,B,C</code> for type variables of kind <code class="highlighter-rouge">*</code>, and <code class="highlighter-rouge">F, G, H</code> for type variables of a higher kind.</li>
+  <li>We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow <code class="highlighter-rouge">=&gt;</code> operation. In Scala, a method’s parameters may be split in several comma-separated lists.</li>
+  <li>We do not differentiate between methods from the type-class trait (e.g. <code class="highlighter-rouge">trait Functor</code>), or the companion object, or the syntax companion (<code class="highlighter-rouge">implicit class</code>).</li>
+  <li>For functions defined as method of the typeclass’ trait, we ignore the receiver object.</li>
+  <li>We ignore the implicit parameters. When a function requires another type-class constraint which is not the one in the section, we add the constraints on the side.</li>
+  <li>In the parameters, we do not differentiate <code class="highlighter-rouge">Function</code> from <code class="highlighter-rouge">PartialFunction</code>. Instead, we use the arrow symbol <code class="highlighter-rouge">A =&gt; B</code> for both, and add a note if it is a <code class="highlighter-rouge">PartialFunction</code>.</li>
+  <li>Some functions are defined through the <a href="http://typelevel.org/cats/guidelines.html#partially-applied-type-params">Partially Applied Type Params</a> pattern. We ignore this.</li>
+  <li>We ignore the distinction between by-name and by-value input parameters, so we just use the type for both. We use the notation <code class="highlighter-rouge">=&gt; A</code>, without any parameters, to indicate constant functions.</li>
+  <li>We ignore Scala variance annotations. We also ignore extra type parameters, which in some methods are added with a subtype-constraint, (e.g. <code class="highlighter-rouge">B &gt;: A</code>). These are usually meant for flexibility, but we replace each one by its bound.</li>
+</ul>
+
+<h2 id="type-classes-of-kind----">Type-Classes of Kind <code class="highlighter-rouge">* -&gt; *</code></h2>
+
+<h3 id="functor">Functor</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[Unit]</code></td>
+      <td><code class="highlighter-rouge">void</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">as</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">map</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; F[(B, A)]</code></td>
+      <td><code class="highlighter-rouge">tupleLeft</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; F[(A, B)]</code></td>
+      <td><code class="highlighter-rouge">tupleRight</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">(A =&gt; B) =&gt; (F[A] =&gt; F[B])</code></td>
+      <td><code class="highlighter-rouge">lift</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="apply">Apply</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">productL</code></td>
+      <td><code class="highlighter-rouge">&lt;*</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[B] =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">productR</code></td>
+      <td><code class="highlighter-rouge">*&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[B] =&gt; F[(A,B)]</code></td>
+      <td><code class="highlighter-rouge">product</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A =&gt; B] =&gt; F[A] =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">ap</code></td>
+      <td><code class="highlighter-rouge">&lt;*&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[B] =&gt; (A =&gt; B =&gt; C) =&gt; F[C]</code></td>
+      <td><code class="highlighter-rouge">map2</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="applicative">Applicative</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">A =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">pure</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">=&gt; F[Unit]</code></td>
+      <td><code class="highlighter-rouge">unit</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Boolean =&gt; F[Unit] =&gt; F[Unit]</code></td>
+      <td><code class="highlighter-rouge">when</code></td>
+      <td>Performs effect iff condition is true</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="highlighter-rouge">unless</code></td>
+      <td>Adds effect iff condition is false</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="flatmap--monad">FlatMap / Monad</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[F[A]] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">flatten</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; F[B]) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">flatMap</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; F[B]) =&gt; F[(A,B)]</code></td>
+      <td><code class="highlighter-rouge">productM</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[Boolean] =&gt; F[A] =&gt; F[A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">ifM</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; F[-]) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">flatTap</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="functorfilter">FunctorFilter</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Boolean) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">filter</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Option[B]) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">mapFilter</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">collect</code></td>
+      <td>The <code class="highlighter-rouge">A =&gt; B</code> is a PartialFunction</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[Option[A]] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">flattenOption</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="applicativeerrore-f"><code class="highlighter-rouge">ApplicativeError[E, F]</code></h3>
+
+<p>The source code of <code class="highlighter-rouge">cats</code> uses the <code class="highlighter-rouge">E</code> type variable for the error type.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">E =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">raiseError</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[Either[E,A]]</code></td>
+      <td><code class="highlighter-rouge">attempt</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; A) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">handleError</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; F[A]) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">handleErrorWith</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; A) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">recover</code></td>
+      <td>The <code class="highlighter-rouge">E =&gt; A</code> is a PartialFunction.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; F[A]) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">recoverWith</code></td>
+      <td>The <code class="highlighter-rouge">E =&gt; F[A]</code> is a PartialFunction.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; F[Unit]) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">onError</code></td>
+      <td>The <code class="highlighter-rouge">E =&gt; F[Unit]</code> is a PartialFunction.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Either[E,A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">fromEither</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Option[A] =&gt; E =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">liftFromOption</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="monaderrore-f"><code class="highlighter-rouge">MonadError[E, F]</code></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; E =&gt; (A =&gt; Boolean) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">ensure</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; E) =&gt; (A =&gt; Boolean) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">ensureOr</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (E =&gt; E) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">adaptError</code></td>
+      <td>The <code class="highlighter-rouge">E =&gt; E</code> is a PartialFunction.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[Either[E,A]] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">rethrow</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="unorderedfoldable"><code class="highlighter-rouge">UnorderedFoldable</code></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; Boolean</code></td>
+      <td><code class="highlighter-rouge">isEmpty</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; Boolean</code></td>
+      <td><code class="highlighter-rouge">nonEmpty</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; Long</code></td>
+      <td><code class="highlighter-rouge">size</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Boolean) =&gt; Boolean</code></td>
+      <td><code class="highlighter-rouge">forall</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Boolean) =&gt; Boolean</code></td>
+      <td><code class="highlighter-rouge">exists</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; A</code></td>
+      <td><code class="highlighter-rouge">unorderedFold</code></td>
+      <td><code class="highlighter-rouge">A: CommutativeMonoid</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; B</code></td>
+      <td><code class="highlighter-rouge">unorderedFoldMap</code></td>
+      <td><code class="highlighter-rouge">B: CommutativeMonoid</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="foldable"><code class="highlighter-rouge">Foldable</code></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constrains</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; ((B,A) =&gt; B) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">foldLeft</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; G[B]) =&gt; G[B]</code></td>
+      <td><code class="highlighter-rouge">foldMapM</code></td>
+      <td><code class="highlighter-rouge">G: Monad</code> and <code class="highlighter-rouge">B: Monad</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="reducible">Reducible</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constrains</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; ((A,A) =&gt; A) =&gt; A</code></td>
+      <td><code class="highlighter-rouge">reduceLeft</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; A</code></td>
+      <td><code class="highlighter-rouge">reduce</code></td>
+      <td><code class="highlighter-rouge">A: Semigroup</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="traverse">Traverse</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constrains</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[G[A]] =&gt; G[F[A]]</code></td>
+      <td><code class="highlighter-rouge">sequence</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; G[B]) =&gt; G[F[B]]</code></td>
+      <td><code class="highlighter-rouge">traverse</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; G[F[B]]) =&gt; G[F[B]]</code></td>
+      <td><code class="highlighter-rouge">flatTraverse</code></td>
+      <td><code class="highlighter-rouge">F: FlatMap</code> and <code class="highlighter-rouge">G: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[G[F[A]]] =&gt; G[F[A]]</code></td>
+      <td><code class="highlighter-rouge">flatSequence</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code> and <code class="highlighter-rouge">F: FlatMap</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[(A,Int)]</code></td>
+      <td><code class="highlighter-rouge">zipWithIndex</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; ((A,Int) =&gt; B) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">mapWithIndex</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="transformers">Transformers</h2>
+
+<h3 id="constructors-and-wrappers">Constructors and wrappers</h3>
+
+<p>Most monad transformers and data types come down to a</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data Type</th>
+      <th>is an alias or wrapper of</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">OptionT[F[_], A]</code></td>
+      <td><code class="highlighter-rouge">F[Option[A]]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">EitherT[F[_], A, B]</code></td>
+      <td><code class="highlighter-rouge">F[Either[A,B]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Kleisli[F[_], A, B]</code></td>
+      <td><code class="highlighter-rouge">A =&gt; F[B]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Reader[A, B]</code></td>
+      <td><code class="highlighter-rouge">A =&gt; B</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ReaderT[F[_], A, B]</code></td>
+      <td><code class="highlighter-rouge">Kleisli[F, A, B]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Writer[A, B]</code></td>
+      <td><code class="highlighter-rouge">(A,B)</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">WriterT[F[_], A, B]</code></td>
+      <td><code class="highlighter-rouge">F[(A,B)]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Tuple2K[F[_], G[_], A]</code></td>
+      <td><code class="highlighter-rouge">(F[A], G[A])</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">EitherK[F[_], G[_], A]</code></td>
+      <td><code class="highlighter-rouge">Either[F[A], G[A]]</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">FunctionK[F[_], G[_]</code></td>
+      <td><code class="highlighter-rouge">F[X] =&gt; G[X]</code> for every <code class="highlighter-rouge">X</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F ~&gt; G</code></td>
+      <td>Alias of <code class="highlighter-rouge">FunctionK[F, G]</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="optiont"><code class="highlighter-rouge">OptionT</code></h3>
+
+<p>For convenience, in these types we use the symbol <code class="highlighter-rouge">OT</code> to abbreviate <code class="highlighter-rouge">OptionT</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">=&gt; OT[F, A]</code></td>
+      <td><code class="highlighter-rouge">none</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">A =&gt; OT[F, A]</code></td>
+      <td><code class="highlighter-rouge">some</code> or <code class="highlighter-rouge">pure</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; OT[F, A]</code></td>
+      <td><code class="highlighter-rouge">liftF</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; F[Option[A]]</code></td>
+      <td><code class="highlighter-rouge">value</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; (A =&gt; B) =&gt; OT[F, B]</code></td>
+      <td><code class="highlighter-rouge">map</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; (F ~&gt; G) =&gt; OT[G, B]</code></td>
+      <td><code class="highlighter-rouge">mapK</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; (A =&gt; Option[B]) =&gt; OT[F, B]</code></td>
+      <td><code class="highlighter-rouge">mapFilter</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; B =&gt; (A =&gt; B) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">fold</code> or <code class="highlighter-rouge">cata</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; (A =&gt; OT[F, B]) =&gt; OT[F,B]</code></td>
+      <td><code class="highlighter-rouge">flatMap</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; (A =&gt; F[Option[B]]) =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">flatMapF</code></td>
+      <td><code class="highlighter-rouge">F: Monad</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; A =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">getOrElse</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; F[A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">getOrElseF</code></td>
+      <td><code class="highlighter-rouge">F: Monad</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">OT[F, A] =&gt; OT[F, A] =&gt; OT[F, A]</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="eithert"><code class="highlighter-rouge">EitherT</code></h3>
+
+<p>For convenience, in these types we use the symbol <code class="highlighter-rouge">ET</code> to abbreviate <code class="highlighter-rouge">EitherT</code>. In these signatures, we use the type variables <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> to indicate the left and right sides of the <code class="highlighter-rouge">Either</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">A =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">leftT</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">B =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">rightT</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="highlighter-rouge">pure</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">left</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[B] =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">right</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="highlighter-rouge">liftF</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Either[A, B] =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">fromEither</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Option[B] =&gt; A =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">fromOption</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[Option[B]] =&gt; A =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">fromOptionF</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Boolean =&gt; B =&gt; A =&gt; ET[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">cond</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ET[F, A, B] =&gt; (A =&gt; C) =&gt; (B =&gt; C) =&gt; F[C]</code></td>
+      <td><code class="highlighter-rouge">fold</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ET[F, A, B] =&gt; ET[F, B, A]</code></td>
+      <td><code class="highlighter-rouge">swap</code></td>
+      <td><code class="highlighter-rouge">F: Functor</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">ET[F, A, A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">merge</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="kleisli-aka-readert"><code class="highlighter-rouge">Kleisli</code>, a.k.a <code class="highlighter-rouge">ReaderT</code></h3>
+
+<p>For convenience, in this section we use the symbol <code class="highlighter-rouge">Ki</code> to abbreviate <code class="highlighter-rouge">Kleisli</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; (A =&gt; F[B])</code></td>
+      <td><code class="highlighter-rouge">run</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; A =&gt; F[B]</code></td>
+      <td><code class="highlighter-rouge">apply</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">A =&gt; Ki[F, A, A]</code></td>
+      <td><code class="highlighter-rouge">ask</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">B =&gt; Ki[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">pure</code></td>
+      <td><code class="highlighter-rouge">F: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[B] =&gt; Ki[F, A, B]</code></td>
+      <td><code class="highlighter-rouge">liftF</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; (C =&gt; A) =&gt; Ki[F, C, B]</code></td>
+      <td><code class="highlighter-rouge">local</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; Ki[F, A, A]</code></td>
+      <td><code class="highlighter-rouge">tap</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; (B =&gt; C) =&gt; Ki[F, A, C]</code></td>
+      <td><code class="highlighter-rouge">map</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; (F ~&gt; G) =&gt; Ki[G, A, B]</code></td>
+      <td><code class="highlighter-rouge">mapK</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; (F[B] =&gt; G[C]) =&gt; Ki[F, A, C]</code></td>
+      <td><code class="highlighter-rouge">mapF</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ki[F, A, B] =&gt; Ki[F, A, F[B]]</code></td>
+      <td><code class="highlighter-rouge">lower</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="type-classes-of-kind---">Type Classes of Kind <code class="highlighter-rouge">(*,*) =&gt; *</code></h2>
+
+<p>For these type-classes, we sometimes use the infix type notation <code class="highlighter-rouge">A F B</code> instead of <code class="highlighter-rouge">F[A, B]</code>. The goal of this notation is to reinforce the idea that many of these type-classes represent “functions with effects”.</p>
+
+<h3 id="bifunctor">Bifunctor</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (A =&gt; C) =&gt; F[C,B]</code></td>
+      <td><code class="highlighter-rouge">leftMap</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (B =&gt; D) =&gt; F[A,D]</code></td>
+      <td><code class="highlighter-rouge">.rightFunctor</code> and <code class="highlighter-rouge">.map</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (A =&gt; C) =&gt; (B =&gt; D) =&gt; F[C,D]</code></td>
+      <td><code class="highlighter-rouge">bimap</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="profunctor">Profunctor</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (B =&gt; C) =&gt; F[A,C]</code></td>
+      <td><code class="highlighter-rouge">rmap</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (C =&gt; A) =&gt; F[C,B]</code></td>
+      <td><code class="highlighter-rouge">lmap</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; (C =&gt; A) =&gt; (B =&gt; D) =&gt; F[C,D]</code></td>
+      <td><code class="highlighter-rouge">dimap</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="strong-profunctor">Strong Profunctor</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; ( (A, C) F (B, C) )</code></td>
+      <td><code class="highlighter-rouge">first</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; ( (C, A) F (C, B) )</code></td>
+      <td><code class="highlighter-rouge">second</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="compose----category----choice">Compose – Category – Choice</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,A] =&gt; F[C,B]</code></td>
+      <td><code class="highlighter-rouge">compose</code></td>
+      <td><code class="highlighter-rouge">&lt;&lt;&lt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[B,C] =&gt; F[A,C]</code></td>
+      <td><code class="highlighter-rouge">andThen</code></td>
+      <td><code class="highlighter-rouge">&gt;&gt;&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">=&gt; F[A,A]</code></td>
+      <td><code class="highlighter-rouge">id</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,B] =&gt; F[(A|C), B]</code></td>
+      <td><code class="highlighter-rouge">choice</code></td>
+      <td><code class="highlighter-rouge">|||</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">=&gt; (A|A) F A</code></td>
+      <td><code class="highlighter-rouge">codiagonal</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="arrow">Arrow</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">(A =&gt; B) =&gt; F[A,B]</code></td>
+      <td><code class="highlighter-rouge">lift</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,D] =&gt; F[(A,C),(B,D)]</code></td>
+      <td><code class="highlighter-rouge">split</code></td>
+      <td><code class="highlighter-rouge">***</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[A,C] =&gt; F[A, (B,C)]</code></td>
+      <td><code class="highlighter-rouge">merge</code></td>
+      <td><code class="highlighter-rouge">&amp;&amp;&amp;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="arrowchoice">ArrowChoice</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Method Name</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,D] =&gt; F[Either[A, C], Either[B, D]]</code></td>
+      <td><code class="highlighter-rouge">choose</code></td>
+      <td><code class="highlighter-rouge">+++</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[Either[A, C], Either[B, C]]</code></td>
+      <td><code class="highlighter-rouge">left</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[Either[C, A], Either[C, B]]</code></td>
+      <td><code class="highlighter-rouge">right</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
+<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+</div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script></body></html>

@@ -256,7 +256,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="CommutativeMonoid.html" class="extype" name="cats.kernel.CommutativeMonoid">CommutativeMonoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Semilattice.html" class="extype" name="cats.kernel.Semilattice">Semilattice</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="CommutativeSemigroup.html" class="extype" name="cats.kernel.CommutativeSemigroup">CommutativeSemigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Band.html" class="extype" name="cats.kernel.Band">Band</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>], <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -326,8 +326,15 @@
         <span class="name">combine</span><span class="params">(<span name="x">x: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>, <span name="y">y: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
       </span>
       
-      <p class="shortcomment cmt">Associative operation which combines two values.</p><div class="fullcomment"><div class="comment cmt"><p>Associative operation which combines two values.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+      <p class="shortcomment cmt">Associative operation which combines two values.</p><div class="fullcomment"><div class="comment cmt"><p>Associative operation which combines two values.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+scala&gt; <span class="kw">import</span> cats.kernel.instances.int._
+scala&gt; <span class="kw">import</span> cats.kernel.instances.option._
+
+scala&gt; Semigroup[<span class="std">String</span>].combine(<span class="lit">"Hello "</span>, <span class="lit">"World!"</span>)
+res0: <span class="std">String</span> = Hello World!
+
+scala&gt; Semigroup[<span class="std">Option</span>[<span class="std">Int</span>]].combine(<span class="std">None</span>, <span class="std">Some</span>(<span class="num">1</span>))
+res1: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#empty" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="empty:A"></a>
       <span class="permalink">
@@ -343,8 +350,14 @@
         <span class="name">empty</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
       </span>
       
-      <p class="shortcomment cmt">Return the identity element for this monoid.</p><div class="fullcomment"><div class="comment cmt"><p>Return the identity element for this monoid.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
+      <p class="shortcomment cmt">Return the identity element for this monoid.</p><div class="fullcomment"><div class="comment cmt"><p>Return the identity element for this monoid.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.int._
+scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+
+scala&gt; Monoid[<span class="std">String</span>].empty
+res0: <span class="std">String</span> = <span class="lit">""</span>
+
+scala&gt; Monoid[<span class="std">Int</span>].empty
+res1: <span class="std">Int</span> = <span class="num">0</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
     </li><li name="scala.Any#getClass" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -379,7 +392,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -395,7 +408,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -411,7 +424,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -492,8 +505,13 @@ operator to determine the partial ordering. This method assumes
         <span class="name">combineAll</span><span class="params">(<span name="as">as: <span class="extype" name="scala.TraversableOnce">TraversableOnce</span>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
       </span>
       
-      <p class="shortcomment cmt">Given a sequence of <code>as</code>, sum them using the monoid and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, sum them using the monoid and return the total.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
+      <p class="shortcomment cmt">Given a sequence of <code>as</code>, sum them using the monoid and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, sum them using the monoid and return the total.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+
+scala&gt; Monoid[<span class="std">String</span>].combineAll(<span class="std">List</span>(<span class="lit">"One "</span>, <span class="lit">"Two "</span>, <span class="lit">"Three"</span>))
+res0: <span class="std">String</span> = One Two Three
+
+scala&gt; Monoid[<span class="std">String</span>].combineAll(<span class="std">List</span>.empty)
+res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#combineAllOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineAllOption(as:TraversableOnce[A]):Option[A]"></a><a id="combineAllOption(TraversableOnce[A]):Option[A]"></a>
       <span class="permalink">
@@ -506,11 +524,16 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combineAllOption</span><span class="params">(<span name="as">as: <span class="extype" name="scala.TraversableOnce">TraversableOnce</span>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>
+        <span class="name">combineAllOption</span><span class="params">(<span name="as">as: <span class="extype" name="scala.TraversableOnce">TraversableOnce</span>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Given a sequence of <code>as</code>, combine them and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, combine them and return the total.</p><p>If the sequence is empty, returns None. Otherwise, returns Some(total).
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+      <p class="shortcomment cmt">Given a sequence of <code>as</code>, combine them and return the total.</p><div class="fullcomment"><div class="comment cmt"><p>Given a sequence of <code>as</code>, combine them and return the total.</p><p>If the sequence is empty, returns None. Otherwise, returns Some(total).</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+
+scala&gt; Semigroup[<span class="std">String</span>].combineAllOption(<span class="std">List</span>(<span class="lit">"One "</span>, <span class="lit">"Two "</span>, <span class="lit">"Three"</span>))
+res0: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(One Two Three)
+
+scala&gt; Semigroup[<span class="std">String</span>].combineAllOption(<span class="std">List</span>.empty)
+res1: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">None</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="cats.kernel.Monoid#combineN" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="combineN(a:A,n:Int):A"></a><a id="combineN(A,Int):A"></a>
       <span class="permalink">
@@ -523,11 +546,16 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">combineN</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>, <span name="n">n: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
+        <span class="name">combineN</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>, <span name="n">n: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
       </span>
       
-      <p class="shortcomment cmt">Return <code>a</code> appended to itself <code>n</code> times.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> appended to itself <code>n</code> times.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
+      <p class="shortcomment cmt">Return <code>a</code> appended to itself <code>n</code> times.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> appended to itself <code>n</code> times.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+
+scala&gt; Monoid[<span class="std">String</span>].combineN(<span class="lit">"ha"</span>, <span class="num">3</span>)
+res0: <span class="std">String</span> = hahaha
+
+scala&gt; Monoid[<span class="std">String</span>].combineN(<span class="lit">"ha"</span>, <span class="num">0</span>)
+res1: <span class="std">String</span> = <span class="lit">""</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a> → <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a></dd></dl></div>
     </li><li name="scala.Any#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
@@ -540,7 +568,7 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -556,7 +584,7 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -572,11 +600,16 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isEmpty</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isEmpty</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="Eq.html" class="extype" name="cats.kernel.Eq">Eq</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <p class="shortcomment cmt">Tests if <code>a</code> is the identity.</p><div class="fullcomment"><div class="comment cmt"><p>Tests if <code>a</code> is the identity.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
+      <p class="shortcomment cmt">Tests if <code>a</code> is the identity.</p><div class="fullcomment"><div class="comment cmt"><p>Tests if <code>a</code> is the identity.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.kernel.instances.string._
+
+scala&gt; Monoid[<span class="std">String</span>].isEmpty(<span class="lit">""</span>)
+res0: <span class="std">Boolean</span> = <span class="kw">true</span>
+
+scala&gt; Monoid[<span class="std">String</span>].isEmpty(<span class="lit">"something"</span>)
+res1: <span class="std">Boolean</span> = <span class="kw">false</span></pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Monoid.html" class="extype" name="cats.kernel.Monoid">Monoid</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -589,7 +622,7 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.6/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -605,7 +638,7 @@ operator to determine the partial ordering. This method assumes
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">repeatedCombineN</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>, <span name="n">n: <a href="http://www.scala-lang.org/api/2.12.6/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
+        <span class="name">repeatedCombineN</span><span class="params">(<span name="a">a: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>, <span name="n">n: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span></span>
       </span>
       
       <p class="shortcomment cmt">Return <code>a</code> combined with itself more than once.</p><div class="fullcomment"><div class="comment cmt"><p>Return <code>a</code> combined with itself more than once.
@@ -649,11 +682,11 @@ operator to determine the partial ordering. This method assumes
             </div><div class="parent" name="cats.kernel.Semigroup">
               <h3>Inherited from <a href="Semigroup.html" class="extype" name="cats.kernel.Semigroup">Semigroup</a>[<span class="extype" name="cats.kernel.BoundedSemilattice.A">A</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.6/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>
