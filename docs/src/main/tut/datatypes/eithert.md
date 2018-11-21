@@ -122,13 +122,15 @@ Use `EitherT.fromEither` to lift a value of `Either[A, B]` into `EitherT[F, A, B
 An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
 ```tut:silent
+import cats.data.Chain
+
 val numberE: Either[String, Int] = Right(100)
 val errorE: Either[String, Int] = Left("Not a number")
-val numberFE: List[Either[String, Int]] = List(Right(250))
+val numberFE: Chain[Either[String, Int]] = Chain(Right(250))
 
-val numberET: EitherT[List, String, Int] = EitherT.fromEither(numberE)
-val errorET: EitherT[List, String, Int] = EitherT.fromEither(errorE)
-val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
+val numberET: EitherT[Chain, String, Int] = EitherT.fromEither(numberE)
+val errorET: EitherT[Chain, String, Int] = EitherT.fromEither(errorE)
+val numberFET: EitherT[Chain, String, Int] = EitherT(numberFE)
 ```
 
 ## From `Option[B]` or `F[Option[B]]` to `EitherT[F, A, B]`
@@ -138,11 +140,13 @@ An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed t
 `EitherT`.
 
 ```tut:book
+import cats.data.Chain
+
 val myOption: Option[Int] = None
-val myOptionList: List[Option[Int]] = List(None, Some(2), Some(3), None, Some(5))
+val myOptionChain: Chain[Option[Int]] = Chain(None, Some(2), Some(3), None, Some(5))
 
 val myOptionET = EitherT.fromOption[Future](myOption, "option not defined")
-val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
+val myOptionChainET = EitherT.fromOptionF(myOptionChain, "option not defined")
 ```
 
 ## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`

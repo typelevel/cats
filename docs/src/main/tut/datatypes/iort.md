@@ -226,10 +226,12 @@ to `IorT.fromOption` and `IorT.fromOptionF`, respectively, to produce an
 `IorT`.
 
 ```tut:silent
-val numberOption: Option[Int] = None
-val numberFOption: List[Option[Int]] = List(None, Some(2), None, Some(5))
+import cats.data.Chain
 
-val number = IorT.fromOption[List](numberOption, "Not defined")
+val numberOption: Option[Int] = None
+val numberFOption: Chain[Option[Int]] = Chain(None, Some(2), None, Some(5))
+
+val number = IorT.fromOption[Chain](numberOption, "Not defined")
 val numberF = IorT.fromOptionF(numberFOption, "Not defined")
 ```
 
