@@ -23,6 +23,8 @@ lazy val commonSettings = Seq(
         extraDirs("-2.12-")
       case Some((2, y)) if y >= 13 =>
         extraDirs("-2.13+")
+      case Some((0, 10)) =>
+        extraDirs("-0.10")
       case _ => Nil
     }
   },
@@ -382,6 +384,7 @@ lazy val docs = project
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
   .dependsOn(coreJVM, freeJVM, kernelLawsJVM, lawsJVM, testkitJVM)
@@ -391,6 +394,7 @@ lazy val cats = project
   .settings(moduleName := "root")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .aggregate(catsJVM, catsJS)
   .dependsOn(catsJVM, catsJS, testsJVM % "test-internal -> test")
 
@@ -398,6 +402,7 @@ lazy val catsJVM = project
   .in(file(".catsJVM"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
   .aggregate(macrosJVM,
@@ -432,6 +437,7 @@ lazy val catsJS = project
   .in(file(".catsJS"))
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
   .aggregate(macrosJS,
@@ -466,6 +472,7 @@ lazy val macros = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .settings(moduleName := "cats-macros", name := "Cats macros")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
@@ -483,9 +490,14 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(scoverageSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(KernelBoiler.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .jsSettings(commonJsSettings)
+  .jsSettings(commonJsSettings ++ noDottySettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+  .settings(libraryDependencies ++= {
+     if (!isDotty.value)
+        Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+     else
+        Seq()
+  })
 
 lazy val kernelJVM = kernel.jvm
 lazy val kernelJS = kernel.js
@@ -496,6 +508,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)
   .settings(publishSettings)
+  .settings(noDottySettings)
   .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
@@ -512,6 +525,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros, kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
@@ -526,6 +540,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros, kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
@@ -540,6 +555,7 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros, core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-free"))
 
@@ -552,6 +568,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
 
@@ -566,6 +583,7 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
+  .settings(noDottySettings)
   .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
@@ -585,6 +603,7 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(catsSettings)
   .settings(publishSettings)
+  .settings(noDottySettings)
   .settings(scoverageSettings)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
@@ -601,6 +620,7 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "alleycats-laws", name := "Alleycats laws")
   .settings(catsSettings)
   .settings(publishSettings)
+  .settings(noDottySettings)
   .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
@@ -619,6 +639,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "alleycats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
 
@@ -632,6 +653,7 @@ lazy val bench = project
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(
@@ -646,6 +668,7 @@ lazy val bench = project
 lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
+  .settings(noDottySettings)
   .settings(
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8"),
     libraryDependencies ++= List(
@@ -665,6 +688,7 @@ lazy val js = project
   .dependsOn(macrosJS, coreJS, testsJS % "test-internal -> test")
   .settings(moduleName := "cats-js")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .settings(commonJsSettings)
   .enablePlugins(ScalaJSPlugin)
 
@@ -673,6 +697,7 @@ lazy val jvm = project
   .dependsOn(macrosJVM, coreJVM, testsJVM % "test-internal -> test")
   .settings(moduleName := "cats-jvm")
   .settings(catsSettings)
+  .settings(noDottySettings)
   .settings(commonJvmSettings)
 
 lazy val publishSettings = Seq(
@@ -790,6 +815,10 @@ addCommandAlias("prePR", ";fmt;validateBC")
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
+lazy val noDottySettings = Seq(
+  crossScalaVersions ~=  {_.filterNot(Set("0.10.0-RC1"))}
+)
+
 lazy val noPublishSettings = Seq(
   publish := {},
   publishLocal := {},
@@ -878,7 +907,8 @@ lazy val warnUnusedImport = Seq(
         Seq("-Ywarn-unused-import")
       case Some((2, n)) if n >= 12 =>
         Seq("-Ywarn-unused:imports")
-
+      case Some((0, 10))  =>
+        Seq("-Ywarn-unused:imports")
     }
   },
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
@@ -906,6 +936,7 @@ lazy val xlint = Seq(
   scalacOptions += {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Xlint:-unused,_"
+      case Some((0, 10))                             => "-Xlint:-unused,_"
       case _                                         => "-Xlint"
     }
   }

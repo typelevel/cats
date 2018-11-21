@@ -4,7 +4,7 @@ package instances
 package object char extends CharInstances
 
 trait CharInstances {
-  implicit val catsKernelStdOrderForChar = new CharOrder
+  implicit val catsKernelStdOrderForChar: CharOrder = new CharOrder
 }
 
 class CharOrder extends Order[Char] with Hash[Char] {

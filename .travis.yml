@@ -12,6 +12,7 @@ git:
 scala:
   - 2.11.12
   - 2.13.0-M5
+  - 0.10.0-RC1
   - 2.12.7
 
 jdk:
@@ -46,6 +47,11 @@ env:
     - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
     - TRAVIS_NODE_VERSION="4"
 
+matrix:
+  exclude:
+    - scala: 0.10.0-RC1
+      env: JS_BUILD=true
+
 cache:
   directories:
     - $HOME/.m2
@@ -54,4 +60,3 @@ cache:
     - $HOME/.coursier
     # Pants cache
     - $HOME/.cache
-
