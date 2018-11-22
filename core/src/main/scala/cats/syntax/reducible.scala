@@ -6,6 +6,6 @@ trait ReducibleSyntax extends Reducible.ToReducibleOps {
     new NestedReducibleOps[F, G, A](fga)
 }
 
-final class NestedReducibleOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
+final class NestedReducibleOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
   def reduceK(implicit F: Reducible[F], G: SemigroupK[G]): G[A] = F.reduceK(fga)
 }

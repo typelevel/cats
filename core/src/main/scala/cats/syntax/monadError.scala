@@ -11,7 +11,7 @@ trait MonadErrorSyntax {
     new MonadErrorRethrowOps(fea)
 }
 
-final class MonadErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
+final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def ensure(error: => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensure(fa)(error)(predicate)
 
@@ -27,6 +27,6 @@ final class MonadErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
     F.adaptError(fa)(pf)
 }
 
-final class MonadErrorRethrowOps[F[_], E, A](val fea: F[Either[E, A]]) extends AnyVal {
+final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {
   def rethrow(implicit F: MonadError[F, E]): F[A] = F.rethrow(fea)
 }

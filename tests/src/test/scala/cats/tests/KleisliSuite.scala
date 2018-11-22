@@ -3,7 +3,7 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -142,6 +142,17 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
+    implicit val FF = ListWrapper.functorFilter
+
+    checkAll("Kleisli[ListWrapper, Int, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
+
+    FunctorFilter[ReaderT[ListWrapper, Int, ?]]
+  }
+
+  {
     checkAll("Kleisli[Function0, Int, ?]",
              DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
     checkAll("Distributive[Kleisli[Function0, Int, ?]]",
@@ -189,6 +200,11 @@ class KleisliSuite extends CatsSuite {
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]",
            SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
+
+  test("Functor[Kleisli[F, Int, ?]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
+    def shouldCompile1[F[_]: ApplicativeError[?[_], E]: FlatMap, E]: Functor[Kleisli[F, Int, ?]] =
+      Functor[Kleisli[F, Int, ?]]
+  }
 
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>

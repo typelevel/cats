@@ -14,7 +14,7 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
     new ApplyOps(fa)
 }
 
-final class IfAOps[F[_]](val fcond: F[Boolean]) extends AnyVal {
+final class IfAOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
 
   /**
    * An `if-then-else` lifted into the `F` context.
@@ -52,7 +52,7 @@ final class IfAOps[F[_]](val fcond: F[Boolean]) extends AnyVal {
 
 }
 
-final class ApplyOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /** Alias for [[Apply.productR]]. */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")

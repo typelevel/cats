@@ -8,7 +8,7 @@ trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
     new UnorderedFoldableOps[F, A](fa)
 }
 
-final class UnorderedFoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Count the number of elements in the structure that satisfy the given predicate.
