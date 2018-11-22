@@ -12,9 +12,12 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
+
+  implicit final def catsSyntaxIfApplyOps[F[_], A](fa: F[A]): IfApplyOps[F] =
+    new IfApplyOps[F](fa)
 }
 
-final class IfAOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
+final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
 
   /**
    * An `if-then-else` lifted into the `F` context.
