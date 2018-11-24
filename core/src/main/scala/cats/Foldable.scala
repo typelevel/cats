@@ -507,6 +507,35 @@ import Foldable.sentinel
   }
 
   /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
+   * Equivalent to `Bitraversable#traverse` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Left(a.toString)) else Eval.now(Right(a))).value
+   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+   * scala> Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4))).value
+   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+   * }}}
+   */
+  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
+                                                                         M: Monad[G]): G[(F[B], F[C])] = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    foldMapM[G, A, (F[B], F[C])](fa)(
+      a =>
+        M.map(f(a)) {
+          case Right(c) => (A.empty[B], A.pure(c))
+          case Left(b)  => (A.pure(b), A.empty[C])
+      }
+    )
+  }
+
+  /**
    * Convert F[A] to a List[A], only including elements which match `p`.
    */
   def filter_[A](fa: F[A])(p: A => Boolean): List[A] =
