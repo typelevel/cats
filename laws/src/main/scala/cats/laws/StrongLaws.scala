@@ -4,7 +4,6 @@ package laws
 import cats.arrow.Strong
 import cats.syntax.profunctor._
 import cats.syntax.strong._
-import cats.instances.function._
 
 /**
  * Laws that must be obeyed by any `cats.functor.Strong`.
@@ -13,16 +12,6 @@ import cats.instances.function._
  */
 trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
   implicit override def F: Strong[F]
-
-  def strongFirstDistributivity[A0, A1, B1, B2, C](fab: F[A1, B1],
-                                                   f: A0 => A1,
-                                                   g: B1 => B2): IsEq[F[(A0, C), (B2, C)]] =
-    fab.dimap(f)(g).first[C] <-> fab.first[C].dimap(f.first[C])(g.first[C])
-
-  def strongSecondDistributivity[A0, A1, B1, B2, C](fab: F[A1, B1],
-                                                    f: A0 => A1,
-                                                    g: B1 => B2): IsEq[F[(C, A0), (C, B2)]] =
-    fab.dimap(f)(g).second[C] <-> fab.second[C].dimap(f.second[C])(g.second[C])
 
   private def swapTuple[X, Y]: Tuple2[X, Y] => Tuple2[Y, X] = _.swap
 
@@ -43,18 +32,16 @@ trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
     fab.lmap[(C, A)]({ case (_, b) => b }) <-> fab.second[C].rmap[B](_._2)
 
   /** lmap (second f) . first == rmap (second f) . first */
-  def dinaturalityFirst[A, B, C, D](fab: F[A, B],
-                                    f: C => D)(implicit PF: Strong[Function1]): IsEq[F[(A, C), (B, D)]] = {
-    val idbf: ((B, C)) => (B, D) = PF.second(f)
-    val idaf: ((A, C)) => (A, D) = PF.second(f)
+  def dinaturalityFirst[A, B, C, D](fab: F[A, B], f: C => D): IsEq[F[(A, C), (B, D)]] = {
+    val idbf: ((B, C)) => (B, D) = { case (b, c) => (b, f(c)) }
+    val idaf: ((A, C)) => (A, D) = { case (a, c) => (a, f(c)) }
     fab.first[C].rmap(idbf) <-> fab.first[D].lmap(idaf)
   }
 
   /** lmap (first f) . second == rmap (first f) . second */
-  def dinaturalitySecond[A, B, C, D](fab: F[A, B],
-                                     f: C => D)(implicit PF: Strong[Function1]): IsEq[F[(C, A), (D, B)]] = {
-    val idbf: ((C, B)) => (D, B) = PF.first(f)
-    val idaf: ((C, A)) => (D, A) = PF.first(f)
+  def dinaturalitySecond[A, B, C, D](fab: F[A, B], f: C => D): IsEq[F[(C, A), (D, B)]] = {
+    val idbf: ((C, B)) => (D, B) = { case (c, b) => (f(c), b) }
+    val idaf: ((C, A)) => (D, A) = { case (c, a) => (f(c), a) }
     fab.second[C].rmap(idbf) <-> fab.second[D].lmap(idaf)
   }
 

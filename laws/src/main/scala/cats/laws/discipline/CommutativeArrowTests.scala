@@ -33,9 +33,12 @@ trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
     EqFACBD: Eq[F[(A, C), (B, D)]],
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
-    EqFAEDE: Eq[F[(A, E), (D, E)]],
-    EqFEAED: Eq[F[(E, A), (E, D)]],
-    EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
+    EqFDADB: Eq[F[(D, A), (D, B)]],
+    EqFCADB: Eq[F[(C, A), (D, B)]],
+    EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
+    EqFACDBCD2: Eq[F[((A, C), D), ((B, C), D)]],
+    EqFDCADCB: Eq[F[(D, (C, A)), (D, (C, B))]],
+    EqFCAB: Eq[F[(C, A), B]]
   ): RuleSet =
     new DefaultRuleSet(name = "commutative arrow",
                        parent = Some(arrow[A, B, C, D, E, G]),
