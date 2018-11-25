@@ -8,6 +8,8 @@ import cats.instances.function._
 
 /**
  * Laws that must be obeyed by any `cats.functor.Strong`.
+ *
+ * See: [[https://arxiv.org/abs/1406.4823 E. Rivas, M. Jaskelioff Notions of Computation as Monoids, Chapter 7]]
  */
 trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
   implicit override def F: Strong[F]
