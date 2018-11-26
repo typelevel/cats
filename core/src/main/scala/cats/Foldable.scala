@@ -513,9 +513,12 @@ import Foldable.sentinel
    * {{{
    * scala> import cats.implicits._
    * scala> val list = List(1,2,3,4)
-   * scala> Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Left(a.toString)) else Eval.now(Right(a))).value
+   * scala> val partitioned1 = Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
+   * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
+   * scala> partitioned1.value
    * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
-   * scala> Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4))).value
+   * scala> val partitioned2 = Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4)))
+   * scala> partitioned2.value
    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
    * }}}
    */
