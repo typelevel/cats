@@ -67,7 +67,7 @@ Because `cats` is a library for Scala, and because Scala has many more knobs and
 | `F[A] => (A => F[B]) => F[B]` | `flatMap`
 | `F[A] => (A => F[B]) => F[(A,B)]` | `productM`
 | `F[Boolean] => F[A] => F[A] => F[A]` | `ifM`
-| `F[A] => (A => F[-]) => F[A]` | `flatTap`
+| `F[A] => (A => F[B]) => F[A]` | `flatTap`
 
 
 ### FunctorFilter
@@ -121,21 +121,21 @@ The source code of `cats` uses the `E` type variable for the error type.
 
 ### `Foldable`
 
-| Type          | Method Name  | Constrains
+| Type          | Method Name  | Constraints
 | ------------- |--------------|-----------
 | `F[A] => B => ((B,A) => B) => F[B]` | `foldLeft`
 | `F[A] => (A => G[B]) => G[B]` | `foldMapM` | `G: Monad` and `B: Monoid`
 
 ### Reducible
 
-| Type          | Method Name  | Constrains
+| Type          | Method Name  | Constraints
 | ------------- |--------------|-----------
 | `F[A] => ((A,A) => A) => A` | `reduceLeft`  |
 | `F[A] => A` | `reduce`  | `A: Semigroup`
 
 ### Traverse
 
-| Type         | Method Name  | Constrains |
+| Type         | Method Name  | Constraints |
 |------------|--------------|-----------|
 | `F[G[A]] => G[F[A]]`  | `sequence` | `G: Applicative` |
 | `F[A] => (A => G[B]) => G[F[B]]` | `traverse` | `G: Applicative` |
