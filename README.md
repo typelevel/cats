@@ -243,6 +243,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
 - [REA Group](https://www.realestate.com.au/)
+- [Reality Games](https://wearerealitygames.com)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
