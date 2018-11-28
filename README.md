@@ -242,6 +242,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Reality Games](https://wearerealitygames.com)
 - [Rudder](https://rudder.io)
@@ -263,7 +264,6 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
 - [47 Degrees](https://www.47deg.com)
-- [Rakuten](https://www.rakuten.com)
 
 ### Maintainers
 
