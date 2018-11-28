@@ -2,8 +2,9 @@ package cats
 package laws
 
 import cats.data.Nested
+import cats.syntax.BitraverseSyntaxBinCompat0
 
-trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] {
+trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] with BitraverseSyntaxBinCompat0 {
   implicit override def F: Bitraverse[F]
 
   def bitraverseIdentity[A, B](fab: F[A, B]): IsEq[F[A, B]] =
@@ -28,6 +29,21 @@ trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] {
 
     hi <-> c.value
   }
+
+  def leftTraverseIdentity[A, B](fab: F[A, B]): IsEq[F[A, B]] =
+    fab <-> fab.leftTraverse[Id, A](identity)
+
+  def leftTraverseCompose[G[_], A, B, C, D](
+    fab: F[A, B],
+    f: A => G[C],
+    g: C => G[D]
+  )(implicit G: Applicative[G]): IsEq[G[G[F[D, B]]]] = {
+    val fg = G.map(fab.leftTraverse(f))(f => f.leftTraverse(g))
+    val fg2 = fab.leftTraverse(a => Nested(G.map(f(a))(g)))
+
+    fg <-> fg2.value
+  }
+
 }
 
 object BitraverseLaws {
