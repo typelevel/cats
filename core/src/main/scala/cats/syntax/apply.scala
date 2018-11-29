@@ -12,8 +12,10 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
 
   implicit final def catsSyntaxApplyOps[F[_], A](fa: F[A]): ApplyOps[F, A] =
     new ApplyOps(fa)
+}
 
-  implicit final def catsSyntaxIfApplyOps[F[_], A](fa: F[A]): IfApplyOps[F] =
+trait ApplySyntaxBinCompat0 {
+  implicit final def catsSyntaxIfApplyOps[F[_]](fa: F[Boolean]): IfApplyOps[F] =
     new IfApplyOps[F](fa)
 }
 
@@ -49,10 +51,8 @@ final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
    */
   def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = {
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
-
     F.ap2(F.map(fcond)(ite))(ifTrue, ifFalse)
   }
-
 }
 
 final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
