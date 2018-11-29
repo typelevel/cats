@@ -32,7 +32,9 @@ import org.scalacheck.Arbitrary.arbitrary
  * }
  * }}}
  */
-final case class ListWrapper[A](list: List[A]) extends AnyVal
+final case class ListWrapper[A](listA: List[A]) extends AnyVal {
+  def list: List[A] = listA.take(100)
+}
 
 object ListWrapper {
   def order[A: Order]: Order[ListWrapper[A]] = Order.by(_.list)
