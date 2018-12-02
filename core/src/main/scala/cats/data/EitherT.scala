@@ -44,6 +44,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case other                        => F.pure(other)
     })
 
+  /**
+   * Inverse of `MonadError#attemptT`
+   */
+  def rethrowT(implicit F: MonadError[F, A]): F[B] =
+    F.rethrow(value)
+
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
   def valueOrF[BB >: B](f: A => F[BB])(implicit F: Monad[F]): F[BB] =
