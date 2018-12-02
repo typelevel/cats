@@ -18,10 +18,12 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def ensureOr(error: A => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensureOr(fa)(error)(predicate)
 
+  /**
+   * Turns a successful value into the error returned by a given partial function if it is
+   * in the partial function's domain.
+   */
   def reject(pf: PartialFunction[A, E])(implicit F: MonadError[F, E]): F[A] =
-    F.flatMap(fa) { a =>
-      pf.andThen(F.raiseError[A]).applyOrElse(a, (_: A) => fa)
-    }
+    F.flatMap(fa)(pf.andThen(F.raiseError[A]).applyOrElse(_, (_: A) => fa))
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
