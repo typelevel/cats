@@ -15,7 +15,7 @@ This is because, with <code class="highlighter-rouge">List</code>, appending a s
 
 <p>So <code class="highlighter-rouge">List</code> isn’t all that great for this use case, so let’s use <code class="highlighter-rouge">Vector</code> or <code class="highlighter-rouge">NonEmptyVector</code> instead, right?</p>
 
-<p>Well, <code class="highlighter-rouge">Vector</code> has its own problems and in this case it’s unfortunately not that much faster than <code class="highlighter-rouge">List</code> at all. You can check <a href="http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok">this blog post</a> by Li Haoyi for some deeper insight into <code class="highlighter-rouge">Vector</code>s issues.</p>
+<p>Well, <code class="highlighter-rouge">Vector</code> has its own problems and in this case it’s unfortunately not that much faster than <code class="highlighter-rouge">List</code> at all. You can check <a href="http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok">this blog post</a> by Li Haoyi for some deeper insight into <code class="highlighter-rouge">Vector</code>’s issues.</p>
 
 <p><code class="highlighter-rouge">Chain</code> evolved from what used to be <code class="highlighter-rouge">fs2.Catenable</code> and Erik Osheim’s <a href="https://github.com/non/chain">Chain</a> library.
 Similar to <code class="highlighter-rouge">List</code>, it is also a very simple data structure, but unlike <code class="highlighter-rouge">List</code> it supports both constant O(1) time <code class="highlighter-rouge">append</code> and <code class="highlighter-rouge">prepend</code>.

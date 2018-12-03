@@ -6,27 +6,13 @@
   </ul>
 </blockquote>
 
-<p>This page contains a catalogue of the major functions, type classes, and types aliases within the <code class="highlighter-rouge">cats</code> library. This catalogue serves, on one hand, as a bird’s-eye view of the capabilities of each class. It is also intended as a go-to page for any <code class="highlighter-rouge">cats</code>-using developer, who may not remember the answer to any of the questions above.</p>
+<p>This is a catalogue of the major functions, type classes, and data types in <code class="highlighter-rouge">cats</code>. It serves as a bird’s-eye view of each class capabilities. It is also intended as a go-to reference for <code class="highlighter-rouge">cats</code> users, who may not recall the answer to questions like the ones above.</p>
 
-<p>Those looking for a printable version may want to check out the <a href="https://arosien.github.io/cats-cheatsheets/typeclasses.pdf">cats-cheatsheet</a> file.</p>
+<p>The signatures and type-classes have been simplified, are described <a href="#simplifications">below</a>. If you want a printable version, you can also check out this <a href="https://arosien.github.io/cats-cheatsheets/typeclasses.pdf">cats-cheatsheet</a>.</p>
 
-<h4 id="simplifications">Simplifications</h4>
+<p><em>WARNING</em>: this page is written manually, and not automatically generated, so many things may be missing. If you find a mistake, or addition, please submit a PR following the guidelines below.</p>
 
-<p>Because <code class="highlighter-rouge">cats</code> is a library for Scala, and because Scala has many more knobs and switches, the actual definitions and implementations of some functions in the library can seem a bit too obfuscated at first sight. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:</p>
-
-<ul>
-  <li>We use <code class="highlighter-rouge">A,B,C</code> for type variables of kind <code class="highlighter-rouge">*</code>, and <code class="highlighter-rouge">F, G, H</code> for type variables of a higher kind.</li>
-  <li>We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow <code class="highlighter-rouge">=&gt;</code> operation. In Scala, a method’s parameters may be split in several comma-separated lists.</li>
-  <li>We do not differentiate between methods from the type-class trait (e.g. <code class="highlighter-rouge">trait Functor</code>), or the companion object, or the syntax companion (<code class="highlighter-rouge">implicit class</code>).</li>
-  <li>For functions defined as method of the typeclass’ trait, we ignore the receiver object.</li>
-  <li>We ignore the implicit parameters. When a function requires another type-class constraint which is not the one in the section, we add the constraints on the side.</li>
-  <li>In the parameters, we do not differentiate <code class="highlighter-rouge">Function</code> from <code class="highlighter-rouge">PartialFunction</code>. Instead, we use the arrow symbol <code class="highlighter-rouge">A =&gt; B</code> for both, and add a note if it is a <code class="highlighter-rouge">PartialFunction</code>.</li>
-  <li>Some functions are defined through the <a href="http://typelevel.org/cats/guidelines.html#partially-applied-type-params">Partially Applied Type Params</a> pattern. We ignore this.</li>
-  <li>We ignore the distinction between by-name and by-value input parameters, so we just use the type for both. We use the notation <code class="highlighter-rouge">=&gt; A</code>, without any parameters, to indicate constant functions.</li>
-  <li>We ignore Scala variance annotations. We also ignore extra type parameters, which in some methods are added with a subtype-constraint, (e.g. <code class="highlighter-rouge">B &gt;: A</code>). These are usually meant for flexibility, but we replace each one by its bound.</li>
-</ul>
-
-<h2 id="type-classes-of-kind----">Type-Classes of Kind <code class="highlighter-rouge">* -&gt; *</code></h2>
+<h2 id="type-classes-over-an-f">Type-Classes over an <code class="highlighter-rouge">F[_]</code></h2>
 
 <h3 id="functor">Functor</h3>
 
@@ -49,6 +35,10 @@
     <tr>
       <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; F[B]</code></td>
       <td><code class="highlighter-rouge">map</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; F[(A,B)]</code></td>
+      <td><code class="highlighter-rouge">fproduct</code></td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; F[(B, A)]</code></td>
@@ -77,7 +67,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">F[A] =&gt; F[A] =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">F[A] =&gt; F[B] =&gt; F[A]</code></td>
       <td><code class="highlighter-rouge">productL</code></td>
       <td><code class="highlighter-rouge">&lt;*</code></td>
     </tr>
@@ -95,6 +85,11 @@
       <td><code class="highlighter-rouge">F[A =&gt; B] =&gt; F[A] =&gt; F[B]</code></td>
       <td><code class="highlighter-rouge">ap</code></td>
       <td><code class="highlighter-rouge">&lt;*&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A =&gt; B =&gt; C] =&gt; F[A] =&gt; F[B] =&gt; F[C]</code></td>
+      <td><code class="highlighter-rouge">ap2</code></td>
+      <td> </td>
     </tr>
     <tr>
       <td><code class="highlighter-rouge">F[A] =&gt; F[B] =&gt; (A =&gt; B =&gt; C) =&gt; F[C]</code></td>
@@ -138,7 +133,7 @@
   </tbody>
 </table>
 
-<h3 id="flatmap--monad">FlatMap / Monad</h3>
+<h3 id="flatmap">FlatMap</h3>
 
 <table>
   <thead>
@@ -165,7 +160,7 @@
       <td><code class="highlighter-rouge">ifM</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; F[-]) =&gt; F[A]</code></td>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; F[B]) =&gt; F[A]</code></td>
       <td><code class="highlighter-rouge">flatTap</code></td>
     </tr>
   </tbody>
@@ -205,7 +200,7 @@
   </tbody>
 </table>
 
-<h3 id="applicativeerrore-f"><code class="highlighter-rouge">ApplicativeError[E, F]</code></h3>
+<h3 id="applicativeerror">ApplicativeError</h3>
 
 <p>The source code of <code class="highlighter-rouge">cats</code> uses the <code class="highlighter-rouge">E</code> type variable for the error type.</p>
 
@@ -266,7 +261,9 @@
   </tbody>
 </table>
 
-<h3 id="monaderrore-f"><code class="highlighter-rouge">MonadError[E, F]</code></h3>
+<h3 id="monaderror">MonadError</h3>
+
+<p>Like the previous section, we use the <code class="highlighter-rouge">E</code> for the error parameter type.</p>
 
 <table>
   <thead>
@@ -300,7 +297,7 @@
   </tbody>
 </table>
 
-<h3 id="unorderedfoldable"><code class="highlighter-rouge">UnorderedFoldable</code></h3>
+<h3 id="unorderedfoldable">UnorderedFoldable</h3>
 
 <table>
   <thead>
@@ -349,26 +346,61 @@
   </tbody>
 </table>
 
-<h3 id="foldable"><code class="highlighter-rouge">Foldable</code></h3>
+<h3 id="foldable">Foldable</h3>
 
 <table>
   <thead>
     <tr>
       <th>Type</th>
       <th>Method Name</th>
-      <th>Constrains</th>
+      <th>Constraints</th>
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; A</code></td>
+      <td><code class="highlighter-rouge">fold</code></td>
+      <td><code class="highlighter-rouge">A: Monoid</code></td>
+    </tr>
     <tr>
       <td><code class="highlighter-rouge">F[A] =&gt; B =&gt; ((B,A) =&gt; B) =&gt; F[B]</code></td>
       <td><code class="highlighter-rouge">foldLeft</code></td>
       <td> </td>
     </tr>
     <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; B</code></td>
+      <td><code class="highlighter-rouge">foldMap</code></td>
+      <td><code class="highlighter-rouge">B: Monoid</code></td>
+    </tr>
+    <tr>
       <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; G[B]) =&gt; G[B]</code></td>
       <td><code class="highlighter-rouge">foldMapM</code></td>
-      <td><code class="highlighter-rouge">G: Monad</code> and <code class="highlighter-rouge">B: Monad</code></td>
+      <td><code class="highlighter-rouge">G: Monad</code> and <code class="highlighter-rouge">B: Monoid</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; B) =&gt; Option[B]</code></td>
+      <td><code class="highlighter-rouge">collectFirst</code></td>
+      <td>The <code class="highlighter-rouge">A =&gt; B</code> is a <code class="highlighter-rouge">PartialFunction</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Option[B]) =&gt; Option[B]</code></td>
+      <td><code class="highlighter-rouge">collectFirstSome</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; G[B]) =&gt; G[Unit]</code></td>
+      <td><code class="highlighter-rouge">traverse_</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[G[A]] =&gt; G[Unit]</code></td>
+      <td><code class="highlighter-rouge">sequence_</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; (A =&gt; Either[B, C] =&gt; (F[B], F[C])</code></td>
+      <td><code class="highlighter-rouge">partitionEither</code></td>
+      <td><code class="highlighter-rouge">G: Applicative</code></td>
     </tr>
   </tbody>
 </table>
@@ -380,7 +412,7 @@
     <tr>
       <th>Type</th>
       <th>Method Name</th>
-      <th>Constrains</th>
+      <th>Constraints</th>
     </tr>
   </thead>
   <tbody>
@@ -404,7 +436,7 @@
     <tr>
       <th>Type</th>
       <th>Method Name</th>
-      <th>Constrains</th>
+      <th>Constraints</th>
     </tr>
   </thead>
   <tbody>
@@ -438,14 +470,17 @@
       <td><code class="highlighter-rouge">mapWithIndex</code></td>
       <td> </td>
     </tr>
+    <tr>
+      <td><code class="highlighter-rouge">F[A] =&gt; ((A,Int) =&gt; G[B]) =&gt; G[F[B]]</code></td>
+      <td><code class="highlighter-rouge">traverseWithIndex</code></td>
+      <td><code class="highlighter-rouge">F: Monad</code></td>
+    </tr>
   </tbody>
 </table>
 
 <h2 id="transformers">Transformers</h2>
 
 <h3 id="constructors-and-wrappers">Constructors and wrappers</h3>
-
-<p>Most monad transformers and data types come down to a</p>
 
 <table>
   <thead>
@@ -502,7 +537,7 @@
   </tbody>
 </table>
 
-<h3 id="optiont"><code class="highlighter-rouge">OptionT</code></h3>
+<h3 id="optiont">OptionT</h3>
 
 <p>For convenience, in these types we use the symbol <code class="highlighter-rouge">OT</code> to abbreviate <code class="highlighter-rouge">OptionT</code>.</p>
 
@@ -583,9 +618,9 @@
   </tbody>
 </table>
 
-<h3 id="eithert"><code class="highlighter-rouge">EitherT</code></h3>
+<h3 id="eithert">EitherT</h3>
 
-<p>For convenience, in these types we use the symbol <code class="highlighter-rouge">ET</code> to abbreviate <code class="highlighter-rouge">EitherT</code>. In these signatures, we use the type variables <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> to indicate the left and right sides of the <code class="highlighter-rouge">Either</code>.</p>
+<p>Here, we use <code class="highlighter-rouge">ET</code> to abbreviate <code class="highlighter-rouge">EitherT</code>; and we use <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> as type variables for the left and right sides of the <code class="highlighter-rouge">Either</code>.</p>
 
 <table>
   <thead>
@@ -664,9 +699,9 @@
   </tbody>
 </table>
 
-<h3 id="kleisli-aka-readert"><code class="highlighter-rouge">Kleisli</code>, a.k.a <code class="highlighter-rouge">ReaderT</code></h3>
+<h3 id="kleisli-or-readert">Kleisli (or ReaderT)</h3>
 
-<p>For convenience, in this section we use the symbol <code class="highlighter-rouge">Ki</code> to abbreviate <code class="highlighter-rouge">Kleisli</code></p>
+<p>Here, we use <code class="highlighter-rouge">Ki</code> as a short-hand for <code class="highlighter-rouge">Kleisli</code>.</p>
 
 <table>
   <thead>
@@ -735,9 +770,7 @@
   </tbody>
 </table>
 
-<h2 id="type-classes-of-kind---">Type Classes of Kind <code class="highlighter-rouge">(*,*) =&gt; *</code></h2>
-
-<p>For these type-classes, we sometimes use the infix type notation <code class="highlighter-rouge">A F B</code> instead of <code class="highlighter-rouge">F[A, B]</code>. The goal of this notation is to reinforce the idea that many of these type-classes represent “functions with effects”.</p>
+<h2 id="type-classes-for-types-f-">Type Classes for types <code class="highlighter-rouge">F[_, _]</code></h2>
 
 <h3 id="bifunctor">Bifunctor</h3>
 
@@ -775,15 +808,15 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; (B =&gt; C) =&gt; F[A,C]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; (B =&gt; C) =&gt; F[A, C]</code></td>
       <td><code class="highlighter-rouge">rmap</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; (C =&gt; A) =&gt; F[C,B]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; (C =&gt; A) =&gt; F[C, B]</code></td>
       <td><code class="highlighter-rouge">lmap</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; (C =&gt; A) =&gt; (B =&gt; D) =&gt; F[C,D]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; (C =&gt; A) =&gt; (B =&gt; D) =&gt; F[C,D]</code></td>
       <td><code class="highlighter-rouge">dimap</code></td>
     </tr>
   </tbody>
@@ -800,17 +833,17 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; ( (A, C) F (B, C) )</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; F[(A,C), (B,C)]</code></td>
       <td><code class="highlighter-rouge">first</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; ( (C, A) F (C, B) )</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; F[(C,A), (C,B)]</code></td>
       <td><code class="highlighter-rouge">second</code></td>
     </tr>
   </tbody>
 </table>
 
-<h4 id="compose----category----choice">Compose – Category – Choice</h4>
+<h4 id="compose-category-choice">Compose, Category, Choice</h4>
 
 <table>
   <thead>
@@ -822,12 +855,12 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,A] =&gt; F[C,B]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; F[C, A] =&gt; F[C, B]</code></td>
       <td><code class="highlighter-rouge">compose</code></td>
       <td><code class="highlighter-rouge">&lt;&lt;&lt;</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; F[B,C] =&gt; F[A,C]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; F[B, C] =&gt; F[A, C]</code></td>
       <td><code class="highlighter-rouge">andThen</code></td>
       <td><code class="highlighter-rouge">&gt;&gt;&gt;</code></td>
     </tr>
@@ -837,12 +870,12 @@
       <td> </td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,B] =&gt; F[(A|C), B]</code></td>
+      <td><code class="highlighter-rouge">F[A, B] =&gt; F[C, B] =&gt; F[Either[A, C], B]</code></td>
       <td><code class="highlighter-rouge">choice</code></td>
       <td><code class="highlighter-rouge">|||</code></td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">=&gt; (A|A) F A</code></td>
+      <td><code class="highlighter-rouge">=&gt; F[ Either[A, A], A]</code></td>
       <td><code class="highlighter-rouge">codiagonal</code></td>
       <td> </td>
     </tr>
@@ -861,12 +894,12 @@
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">(A =&gt; B) =&gt; F[A,B]</code></td>
+      <td><code class="highlighter-rouge">(A =&gt; B) =&gt; F[A, B]</code></td>
       <td><code class="highlighter-rouge">lift</code></td>
       <td> </td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,D] =&gt; F[(A,C),(B,D)]</code></td>
+      <td><code class="highlighter-rouge">F[A,B] =&gt; F[C,D] =&gt; F[(A,C), (B,D)]</code></td>
       <td><code class="highlighter-rouge">split</code></td>
       <td><code class="highlighter-rouge">***</code></td>
     </tr>
@@ -907,6 +940,21 @@
   </tbody>
 </table>
 
+<h2 id="simplifications">Simplifications</h2>
+
+<p>Because <code class="highlighter-rouge">cats</code> is a Scala library and Scala has many knobs and switches, the actual definitions and the implementations of the functions and type-classes in <code class="highlighter-rouge">cats</code> can be a bit obfuscated at first. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:</p>
+
+<ul>
+  <li>We use <code class="highlighter-rouge">A,B,C</code> for type variables of kind <code class="highlighter-rouge">*</code>, and <code class="highlighter-rouge">F, G, H</code> for type variables of a higher kind.</li>
+  <li>We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow <code class="highlighter-rouge">=&gt;</code> operation. In Scala, a method’s parameters may be split in several comma-separated lists.</li>
+  <li>We do not differentiate between methods from the type-class trait (e.g. <code class="highlighter-rouge">trait Functor</code>), or the companion object, or the syntax companion (<code class="highlighter-rouge">implicit class</code>).</li>
+  <li>For functions defined as method of the typeclass trait, we ignore the receiver object.</li>
+  <li>We ignore implicit parameters that represent type-class constraints; and write them on a side column instad.</li>
+  <li>We use <code class="highlighter-rouge">A =&gt; B</code> for both <code class="highlighter-rouge">Function1[A, B]</code> and <code class="highlighter-rouge">PartialFunction[A, B]</code> parameters, without distinction. We add a side note when one is  a <code class="highlighter-rouge">PartialFunction</code>.</li>
+  <li>Some functions are defined through the <a href="http://typelevel.org/cats/guidelines.html#partially-applied-type-params">Partially Applied Type Params</a> pattern. We ignore this.</li>
+  <li>We ignore the distinction between by-name and by-value input parameters. We use the notation <code class="highlighter-rouge">=&gt; A</code>, without parameters, to indicate constant functions.</li>
+  <li>We ignore Scala variance annotations. We also ignore extra type parameters, which in some methods are added with a subtype-constraint, (e.g. <code class="highlighter-rouge">B &gt;: A</code>). These are usually meant for flexibility, but we replace each one by its bound.</li>
+</ul>
 </div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
 <p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
 <p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
