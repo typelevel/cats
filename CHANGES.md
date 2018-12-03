@@ -1,3 +1,12 @@
+## Version 1.5.0
+
+> 2018 Nov 30
+
+Cats 1.5.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars.
+
+The artifacts are identical to Cats 1.5.0-RC1. For changes since 1.4.0 please check release notes of [Cats 1.5.0-RC0](https://github.com/typelevel/cats/releases/tag/v1.5.0-RC0) and [Cats 1.5.0-RC1](https://github.com/typelevel/cats/releases/tag/v1.5.0-RC1). 
+
+
 ## Version 1.5.0-RC1
 
 > 2018 Nov 19
