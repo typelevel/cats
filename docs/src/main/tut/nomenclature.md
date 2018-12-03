@@ -58,7 +58,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | `F[A] => (A => F[B]) => F[B]` | `flatMap`
 | `F[A] => (A => F[B]) => F[(A,B)]` | `productM`
 | `F[Boolean] => F[A] => F[A] => F[A]` | `ifM`
-| `F[A] => (A => F[-]) => F[A]` | `flatTap`
+| `F[A] => (A => F[B]) => F[A]` | `flatTap`
 
 ### FunctorFilter
 

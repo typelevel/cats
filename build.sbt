@@ -63,7 +63,7 @@ lazy val catsSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.6",
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
+    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
@@ -614,7 +614,7 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8"),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))

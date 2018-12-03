@@ -40,7 +40,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.5.0-RC1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.5.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -242,7 +242,9 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
+- [Reality Games](https://wearerealitygames.com)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
