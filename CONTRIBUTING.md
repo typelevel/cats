@@ -166,13 +166,13 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
 
 ### Binary compatibility
 
-It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `++2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
 
 A summary of these steps is as follows:
 
 ```
 $ sbt
-> +2.11.12
+> ++2.11.12
 > mimaReportBinaryIssues
 ```
 This procedure will report if there are any binary compatibility issues that should be fixed.
