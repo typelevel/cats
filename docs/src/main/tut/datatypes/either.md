@@ -69,7 +69,7 @@ in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have b
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```tut:book
-import cats.syntax.either._
+import cats.implicits._
 
 val right: Either[String, Int] = Right(5)
 right.map(_ + 1)
