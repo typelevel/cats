@@ -58,7 +58,7 @@ def combineAll[A: Monoid](as: List[A]): A =
 which can be used for any type that has a `Monoid` instance.
 
 ```tut:book:silent
-import cats.instances.all._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -100,7 +100,7 @@ How then can we collapse a `List[NonEmptyList[A]]` ? For such types that only ha
 lift into `Option` to get a `Monoid`.
 
 ```tut:book:silent
-import cats.syntax.semigroup._
+import cats.implicits._
 
 implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] = new Monoid[Option[A]] {
   def empty: Option[A] = None
@@ -124,7 +124,7 @@ Thus:
 ```tut:reset:book:silent
 import cats.Monoid
 import cats.data.NonEmptyList
-import cats.instances.option._
+import cats.implicits._
 
 val list = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
 val lifted = list.map(nel => Option(nel))

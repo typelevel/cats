@@ -66,8 +66,7 @@ Such composition can be achieved via the `Functor#compose` method.
 
 ```tut:reset:book:silent
 import cats.Functor
-import cats.instances.list._
-import cats.instances.option._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -96,7 +95,7 @@ We can make this nicer at the cost of boxing with the `Nested` data type.
 
 ```tut:book:silent
 import cats.data.Nested
-import cats.syntax.functor._
+import cats.implicits._
 ```
 
 ```tut:book
