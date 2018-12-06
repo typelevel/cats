@@ -33,7 +33,7 @@ val both = Ior.both("Warning", 3)
 Cats also offers syntax enrichment for `Ior`. The `leftIor` and `rightIor` functions can be imported from `cats.syntax.ior._`:
 
 ```tut
-import cats.syntax.ior._
+import cats.implicits._
 
 val right = 3.rightIor
 
