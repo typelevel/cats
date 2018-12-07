@@ -212,7 +212,7 @@ This function is provided by Cats via the `Traverse[List]` instance and syntax, 
 tutorial.
 
 ```tut:book:silent
-import cats.implicits
+import cats.implicits._
 ```
 
 ```tut:book
