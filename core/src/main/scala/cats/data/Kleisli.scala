@@ -125,12 +125,12 @@ sealed private[data] trait KleisliFunctions {
    * {{{
    * scala> import cats._, data._, implicits._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
-   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
+   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftFunctionK)
    * scala> b.value.run("").value
    * res0: Option[Int] = Some(1)
    * }}}
    */
-  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
+  def liftFunctionK[F[_], A]: F ~> Kleisli[F, A, ?] =
     λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
