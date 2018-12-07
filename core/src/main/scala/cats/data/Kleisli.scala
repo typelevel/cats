@@ -125,12 +125,12 @@ sealed private[data] trait KleisliFunctions {
    * {{{
    * scala> import cats._, data._, implicits._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, ?]]
-   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftFunctionK)
+   * scala> val b: OptionT[Kleisli[Eval, String, ?], Int] = a.mapK(Kleisli.liftK)
    * scala> b.value.run("").value
    * res0: Option[Int] = Some(1)
    * }}}
    */
-  def liftFunctionK[F[_], A]: F ~> Kleisli[F, A, ?] =
+  def liftK[F[_], A]: F ~> Kleisli[F, A, ?] =
     λ[F ~> Kleisli[F, A, ?]](Kleisli.liftF(_))
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
@@ -163,12 +163,12 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * scala> k.run("foo")
    * res0: List[Char] = List(f, o, o)
    *
-   * scala> val k2: Kleisli[Option, String, Char] = Kleisli.liftNT(f)(k)
+   * scala> val k2: Kleisli[Option, String, Char] = Kleisli.liftFunctionK(f)(k)
    * scala> k2.run("foo")
    * res1: Option[Char] = Some(f)
    * }}}
    * */
-  def liftNT[F[_], G[_], A](f: F ~> G): Kleisli[F, A, ?] ~> Kleisli[G, A, ?] =
+  def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, ?] ~> Kleisli[G, A, ?] =
     λ[Kleisli[F, A, ?] ~> Kleisli[G, A, ?]](_.mapK(f))
 }
 
