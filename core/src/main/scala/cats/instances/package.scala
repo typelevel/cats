@@ -9,12 +9,12 @@ package object instances {
   object byte extends ByteInstances
   object char extends CharInstances
   object double extends DoubleInstances
-  object duration extends DurationInstances
+  object duration extends CoreDurationInstances with DurationInstances
   object either extends EitherInstances
   object eq extends EqInstances
   object equiv extends EquivInstances
   object float extends FloatInstances
-  object finiteDuration extends FiniteDurationInstances
+  object finiteDuration extends CoreDurationInstances with FiniteDurationInstances
   object function extends FunctionInstances with FunctionInstancesBinCompat0
   object future extends FutureInstances
   object int extends IntInstances

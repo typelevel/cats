@@ -1,9 +1,26 @@
 package cats
 package instances
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait DurationInstances extends cats.kernel.instances.DurationInstances {
-  implicit val catsStdShowForDuration: Show[Duration] =
+
+  val catsStdShowForDuration: Show[Duration] =
+    CoreDurationInstances().catsStdShowForDurationUnambiguous
+}
+
+private[instances] trait CoreDurationInstances extends CoreDurationInstances0
+
+private[instances] sealed trait CoreDurationInstances0 extends CoreDurationInstances1 {
+  implicit final val catsStdShowForFiniteDurationUnambiguous: Show[FiniteDuration] =
+    Show.fromToString[FiniteDuration]
+}
+
+private[instances] sealed trait CoreDurationInstances1 {
+  implicit final val catsStdShowForDurationUnambiguous: Show[Duration] =
     Show.fromToString[Duration]
+}
+
+private[instances] object CoreDurationInstances {
+  final def apply(): CoreDurationInstances = new CoreDurationInstances {}
 }
