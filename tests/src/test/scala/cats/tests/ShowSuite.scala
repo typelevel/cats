@@ -1,10 +1,14 @@
 package cats
 package tests
 
-import cats.Contravariant
+import java.util.concurrent.TimeUnit
+
+import cats.Show.ContravariantShow
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.laws.discipline.eq._
+
+import scala.concurrent.duration.FiniteDuration
 
 class ShowSuite extends CatsSuite {
   checkAll("Contravariant[Show]", ContravariantTests[Show].contravariant[Int, Int, Int])
@@ -33,5 +37,13 @@ class ShowSuite extends CatsSuite {
     val tod: Morning.type = Morning
 
     assertResult("Good morning")(show"Good $tod")
+  }
+
+  test("contravariant show is not ambiguous when both FiniteDuration's and Duration's instances are in scope") {
+    implicitly[ContravariantShow[FiniteDuration]]
+  }
+
+  test("show interpolation works when both FiniteDuration's and Duration's instances are in scope") {
+    show"instance resolution is not ambiguous for ${FiniteDuration(3L, TimeUnit.SECONDS)}"
   }
 }
