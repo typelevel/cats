@@ -3,7 +3,13 @@ package tests
 
 import catalysts.Platform
 
-import cats.instances.{AllInstances, AllInstancesBinCompat0, AllInstancesBinCompat1, AllInstancesBinCompat2, AllInstancesBinCompat3}
+import cats.instances.{
+  AllInstances,
+  AllInstancesBinCompat0,
+  AllInstancesBinCompat1,
+  AllInstancesBinCompat2,
+  AllInstancesBinCompat3
+}
 import cats.syntax.{
   AllSyntax,
   AllSyntaxBinCompat0,

@@ -11,12 +11,12 @@ trait DurationInstances extends cats.kernel.instances.DurationInstances {
 
 private[instances] trait CoreDurationInstances extends CoreDurationInstances0
 
-private[instances] sealed trait CoreDurationInstances0 extends CoreDurationInstances1 {
+sealed private[instances] trait CoreDurationInstances0 extends CoreDurationInstances1 {
   implicit final val catsStdShowForFiniteDurationUnambiguous: Show[FiniteDuration] =
     Show.fromToString[FiniteDuration]
 }
 
-private[instances] sealed trait CoreDurationInstances1 {
+sealed private[instances] trait CoreDurationInstances1 {
   implicit final val catsStdShowForDurationUnambiguous: Show[Duration] =
     Show.fromToString[Duration]
 }
