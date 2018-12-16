@@ -8,7 +8,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ContravariantTests, SerializableTests}
 import cats.laws.discipline.eq._
 
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
   checkAll("Contravariant[Show]", ContravariantTests[Show].contravariant[Int, Int, Int])
@@ -41,9 +41,11 @@ class ShowSuite extends CatsSuite {
 
   test("contravariant show is not ambiguous when both FiniteDuration's and Duration's instances are in scope") {
     implicitly[ContravariantShow[FiniteDuration]]
+    implicitly[ContravariantShow[Duration]]
   }
 
   test("show interpolation works when both FiniteDuration's and Duration's instances are in scope") {
     show"instance resolution is not ambiguous for ${FiniteDuration(3L, TimeUnit.SECONDS)}"
+    show"instance resolution is not ambiguous for ${Duration(3L, TimeUnit.SECONDS)}"
   }
 }
