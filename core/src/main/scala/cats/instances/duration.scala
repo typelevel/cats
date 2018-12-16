@@ -6,7 +6,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 trait DurationInstances extends cats.kernel.instances.DurationInstances {
 
   val catsStdShowForDuration: Show[Duration] =
-    CoreDurationInstances().catsStdShowForDurationUnambiguous
+    CoreDurationInstances.materialise.catsStdShowForDurationUnambiguous
 }
 
 private[instances] trait CoreDurationInstances extends CoreDurationInstances0
@@ -22,5 +22,5 @@ private[instances] sealed trait CoreDurationInstances1 {
 }
 
 private[instances] object CoreDurationInstances {
-  final def apply(): CoreDurationInstances = new CoreDurationInstances {}
+  final val materialise: CoreDurationInstances = new CoreDurationInstances {}
 }
