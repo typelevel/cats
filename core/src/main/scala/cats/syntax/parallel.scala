@@ -3,6 +3,9 @@ package cats.syntax
 import cats.{FlatMap, Foldable, Monad, Parallel, Traverse}
 
 trait ParallelSyntax extends TupleParallelSyntax {
+   implicit final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
+     new ParallelApplyOps[F, A, B](fa)
+
   implicit final def catsSyntaxParallelTraverse[T[_]: Traverse, A](ta: T[A]): ParallelTraversableOps[T, A] =
     new ParallelTraversableOps[T, A](ta)
 
@@ -74,4 +77,9 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
   def <&[F[_], B](mb: M[B])(implicit P: Parallel[M, F]): M[A] =
     P.parProductL(ma)(mb)
 
+}
+
+final class ParallelApplyOps[M[_], A, B](private val mab: M[A=>B]) extends AnyVal {
+  def <&>[F[_]](ma: M[A])(implicit P: Parallel[M,F]): M[B] =
+    Parallel.parAp(mab)(ma)
 }

@@ -183,6 +183,9 @@ object SyntaxSuite
 
     val mb2: M[B] = ma &> mb
     val ma2: M[A] = ma <& mb
+
+    val mab = mock[M[A => B]]
+    val mb3: M[B] = mab <&> ma
   }
 
   def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
