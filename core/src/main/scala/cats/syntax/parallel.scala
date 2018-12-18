@@ -3,8 +3,6 @@ package cats.syntax
 import cats.{FlatMap, Foldable, Monad, Parallel, Traverse}
 
 trait ParallelSyntax extends TupleParallelSyntax {
-  implicit final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
-    new ParallelApplyOps[F, A, B](fa)
 
   implicit final def catsSyntaxParallelTraverse[T[_]: Traverse, A](ta: T[A]): ParallelTraversableOps[T, A] =
     new ParallelTraversableOps[T, A](ta)
@@ -16,6 +14,11 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps[M, A](ma)
 
+}
+
+trait ParallelApplySyntax {
+  implicit final def catsSyntaxParallelApply[F[_], A, B](fa: F[A => B]): ParallelApplyOps[F, A, B] =
+    new ParallelApplyOps[F, A, B](fa)
 }
 
 trait ParallelFlatSyntax {
