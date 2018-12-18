@@ -79,4 +79,8 @@ trait AllSyntaxBinCompat2
 
 trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
 
-trait AllSyntaxBinCompat4 extends TraverseFilterSyntaxBinCompat0 with ParallelApplySyntax
+trait AllSyntaxBinCompat4
+    extends TraverseFilterSyntaxBinCompat0
+    with ParallelApplySyntax
+    with FoldableSyntaxBinCompat0
+    with ReducibleSyntaxBinCompat0
