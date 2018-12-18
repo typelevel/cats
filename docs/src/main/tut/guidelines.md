@@ -127,7 +127,7 @@ import cats._, cats.data._, cats.implicits._
 
 val a = EitherT(List(Left("err"), Right(1)))
 val x = (a *> a).value
-x: List[Either[String, Int]] = List(Left("err"), Left("err"), Right(1))
+> x: List[Either[String, Int]] = List(Left("err"), Left("err"), Right(1))
 
 val y = (a.toNested *> a.toNested).value
 > y: List[Either[String, Int]] = List(Left("err"), Left("err"), Left("err"), Right(1))
