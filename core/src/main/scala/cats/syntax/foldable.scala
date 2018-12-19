@@ -204,11 +204,13 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
    * combining them using the `MonoidK[G]` instance.
    *
-   * scala>import cats._, cats.implicits._
-   * scala>val f: Int => Endo[String] = i => (s => s + i)
-   * scala>val x: Endo[String] = List(1, 2, 3).foldMapK(f)
-   * scala>val a = x("foo")
+   * {{{
+   * scala> import cats._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = List(1, 2, 3).foldMapK(f)
+   * scala> val a = x("foo")
    * a: String = "foo321"
+   * }}}
    * */
   def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] =
     F.foldMap(fa)(f)(G.algebra)

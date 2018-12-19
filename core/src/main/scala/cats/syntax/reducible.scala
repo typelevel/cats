@@ -21,11 +21,13 @@ final class ReducibleOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * Apply `f` to each element of `fa` and combine them using the
    * given `SemigroupK[G]`.
    *
-   * scala>import cats._, cats.implicits._
-   * scala>val f: Int => Endo[String] = i => (s => s + i)
-   * scala>val x: Endo[String] = NonEmptyList(1, 2, 3).reduceMapK(f)
-   * scala>val a = x("foo")
+   * {{{
+   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = NonEmptyList.of(1, 2, 3).reduceMapK(f)
+   * scala> val a = x("foo")
    * a: String = "foo321"
+   * }}}
    * */
   def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] =
     F.reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
