@@ -39,7 +39,7 @@ package object syntax {
   object nested extends NestedSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
-  object parallel extends ParallelSyntax with ParallelTraverseSyntax
+  object parallel extends ParallelSyntax with ParallelTraverseSyntax with ParallelFlatSyntax with ParallelApplySyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax
