@@ -243,6 +243,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
 - [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Reality Games](https://wearerealitygames.com)
