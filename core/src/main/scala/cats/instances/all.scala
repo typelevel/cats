@@ -45,4 +45,4 @@ trait AllInstancesBinCompat1
 
 trait AllInstancesBinCompat2 extends DurationInstances with FiniteDurationInstances
 
-trait AllInstancesBinCompat3 extends CoreDurationInstances
+trait AllInstancesBinCompat3 extends AllCoreDurationInstances
