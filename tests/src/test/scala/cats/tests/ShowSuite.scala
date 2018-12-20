@@ -53,7 +53,9 @@ class ShowSuite extends CatsSuite {
 
 final class ShowSuite2 extends FunSuite {
 
-  test("contravariant show for FiniteDuration can be inferred when importing both duration's and finiteDuration's instances") {
+  test(
+    "contravariant show for FiniteDuration can be inferred when importing both duration's and finiteDuration's instances"
+  ) {
 
     import cats.instances.duration._
     import cats.instances.finiteDuration._
