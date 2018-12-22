@@ -87,7 +87,7 @@ def product3[F[_]: Applicative, A, B, C](fa: F[A], fb: F[B], fc: F[C]): F[(A, B,
 Let's see what happens if we try to compose two effectful values with just `map`.
 
 ```tut:book:silent
-import cats.instances.option._
+import cats.implicits._
 
 val f: (Int, Char) => Double = (i, c) => (i + c).toDouble
 
@@ -109,7 +109,7 @@ does `F[G[_]]`.
 
 ```tut:book:silent
 import cats.data.Nested
-import cats.instances.future._
+import cats.implicits._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -181,7 +181,7 @@ This works...but if we look carefully at the implementation there's nothing `Opt
 another example let's implement the same function but for `Either`.
 
 ```tut:book:silent
-import cats.instances.either._
+import cats.implicits._
 
 def traverseEither[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
   as.foldRight(Right(List.empty[B]): Either[E, List[B]]) { (a: A, acc: Either[E, List[B]]) =>
@@ -212,8 +212,7 @@ This function is provided by Cats via the `Traverse[List]` instance and syntax, 
 tutorial.
 
 ```tut:book:silent
-import cats.instances.list._
-import cats.syntax.traverse._
+import cats.implicits._
 ```
 
 ```tut:book

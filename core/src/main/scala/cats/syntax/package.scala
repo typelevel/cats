@@ -39,7 +39,7 @@ package object syntax {
   object nested extends NestedSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
-  object parallel extends ParallelSyntax with ParallelTraverseSyntax
+  object parallel extends ParallelSyntax with ParallelTraverseSyntax with ParallelFlatSyntax with ParallelApplySyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax
@@ -51,7 +51,7 @@ package object syntax {
   object strong extends StrongSyntax
   object try_ extends TrySyntax
   object traverse extends TraverseSyntax
-  object traverseFilter extends TraverseFilterSyntax
+  object traverseFilter extends TraverseFilterSyntax with TraverseFilterSyntaxBinCompat0
   object nonEmptyTraverse extends NonEmptyTraverseSyntax
   object unorderedFoldable extends UnorderedFoldableSyntax
   object unorderedTraverse extends UnorderedTraverseSyntax

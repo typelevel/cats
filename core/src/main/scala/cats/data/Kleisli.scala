@@ -83,7 +83,11 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def apply(a: A): F[B] = run(a)
 }
 
-object Kleisli extends KleisliInstances with KleisliFunctions with KleisliExplicitInstances {
+object Kleisli
+    extends KleisliInstances
+    with KleisliFunctions
+    with KleisliFunctionsBinCompat
+    with KleisliExplicitInstances {
 
   /**
    * Internal API — shifts the execution of `run` in the `F` context.
@@ -143,6 +147,31 @@ sealed private[data] trait KleisliFunctions {
     Kleisli(f.andThen(fa.run))
 }
 
+sealed private[data] trait KleisliFunctionsBinCompat {
+
+  /**
+   * Lifts a natural transformation of effects within a Kleisli
+   * to a transformation of Kleislis.
+   *
+   * Equivalent to running `mapK(f) on a Kleisli.
+   *
+   * {{{
+   * scala> import cats._, data._
+   * scala> val f: (List ~> Option) = λ[List ~> Option](_.headOption)
+   *
+   * scala> val k: Kleisli[List, String, Char] = Kleisli(_.toList)
+   * scala> k.run("foo")
+   * res0: List[Char] = List(f, o, o)
+   *
+   * scala> val k2: Kleisli[Option, String, Char] = Kleisli.liftFunctionK(f)(k)
+   * scala> k2.run("foo")
+   * res1: Option[Char] = Some(f)
+   * }}}
+   * */
+  def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, ?] ~> Kleisli[G, A, ?] =
+    λ[Kleisli[F, A, ?] ~> Kleisli[G, A, ?]](_.mapK(f))
+}
+
 sealed private[data] trait KleisliExplicitInstances {
 
   def endoSemigroupK[F[_]](implicit FM: FlatMap[F]): SemigroupK[λ[α => Kleisli[F, α, α]]] =
@@ -168,6 +197,11 @@ sealed abstract private[data] class KleisliInstances extends KleisliInstances0 {
         }
       }
     }
+
+  implicit def catsDataFunctorFilterForKleisli[F[_], A](
+    implicit ev: FunctorFilter[F]
+  ): FunctorFilter[Kleisli[F, A, ?]] =
+    new KleisliFunctorFilter[F, A] { val FF = ev }
 }
 
 sealed abstract private[data] class KleisliInstances0 extends KleisliInstances0_5 {
@@ -505,4 +539,16 @@ private trait KleisliDistributive[F[_], R] extends Distributive[Kleisli[F, R, ?]
     Kleisli(r => F.distribute(a)(f(_).run(r)))
 
   def map[A, B](fa: Kleisli[F, R, A])(f: A => B): Kleisli[F, R, B] = fa.map(f)
+}
+
+private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[F, R, ?]] {
+
+  def FF: FunctorFilter[F]
+
+  def functor: Functor[Kleisli[F, R, ?]] = Kleisli.catsDataFunctorForKleisli(FF.functor)
+
+  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] =
+    Kleisli[F, R, B] { r =>
+      FF.mapFilter(fa.run(r))(f)
+    }
 }

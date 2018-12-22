@@ -23,7 +23,7 @@ This is because, with `List`, appending a single element requires iterating over
 
 So `List` isn't all that great for this use case, so let's use `Vector` or `NonEmptyVector` instead, right?
 
-Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`s issues.
+Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`'s issues.
 
 
 `Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain ) library.

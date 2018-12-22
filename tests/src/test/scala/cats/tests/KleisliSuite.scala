@@ -3,7 +3,7 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -142,6 +142,17 @@ class KleisliSuite extends CatsSuite {
   }
 
   {
+    implicit val FF = ListWrapper.functorFilter
+
+    checkAll("Kleisli[ListWrapper, Int, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
+
+    FunctorFilter[ReaderT[ListWrapper, Int, ?]]
+  }
+
+  {
     checkAll("Kleisli[Function0, Int, ?]",
              DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
     checkAll("Distributive[Kleisli[Function0, Int, ?]]",
@@ -217,6 +228,13 @@ class KleisliSuite extends CatsSuite {
     val t: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       t(f.run(i)) should ===(f.mapK(t).run(i))
+    }
+  }
+
+  test("liftFunctionK consistent with mapK") {
+    val t: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i))
     }
   }
 
