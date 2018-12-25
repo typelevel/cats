@@ -126,6 +126,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scala-weather](https://github.com/snowplow/scala-weather): weather lookups
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
   
 Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
