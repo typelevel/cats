@@ -14,6 +14,11 @@ trait FoldableSyntaxBinCompat0 {
     new FoldableOps0[F, A](fa)
 }
 
+trait FoldableSyntaxBinCompat1 {
+  implicit final def catsSyntaxFoldableBinCompat0[F[_]](fa: Foldable[F]): FoldableOps1[F] =
+    new FoldableOps1(fa)
+}
+
 final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
   def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = F.sequence_(fga)
 
@@ -195,7 +200,6 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
           case None ⇒ acc
       }
     )
-
 }
 
 final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
@@ -214,4 +218,72 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * */
   def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] =
     F.foldMap(fa)(f)(G.algebra)
+
+  /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
+   * Equivalent to `Bitraversable#traverse` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Eval
+   * scala> val list = List(1,2,3,4)
+   * scala> val partitioned1 = list.partitionEitherM(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
+   * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
+   * scala> partitioned1.value
+   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+   * scala> val partitioned2 = list.partitionEitherM(a => Eval.later(Either.right(a * 4)))
+   * scala> partitioned2.value
+   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+   * }}}
+   */
+  def partitionEitherM[G[_], B, C](
+    f: A => G[Either[B, C]]
+  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    F.foldMapM[G, A, (F[B], F[C])](fa)(
+      a =>
+        M.map(f(a)) {
+          case Right(c) => (A.empty[B], A.pure(c))
+          case Left(b)  => (A.pure(b), A.empty[C])
+      }
+    )
+  }
+}
+
+final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
+
+  /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
+   * Equivalent to `Bitraversable#traverse` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Foldable, cats.Eval
+   * scala> val list = List(1,2,3,4)
+   * scala> val partitioned1 = Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
+   * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
+   * scala> partitioned1.value
+   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+   * scala> val partitioned2 = Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4)))
+   * scala> partitioned2.value
+   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+   * }}}
+   */
+  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
+                                                                         M: Monad[G]): G[(F[B], F[C])] = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    F.foldMapM[G, A, (F[B], F[C])](fa)(
+      a =>
+        M.map(f(a)) {
+          case Right(c) => (A.empty[B], A.pure(c))
+          case Left(b)  => (A.pure(b), A.empty[C])
+      }
+    )
+  }
 }

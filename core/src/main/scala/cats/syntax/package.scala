@@ -26,7 +26,7 @@ package object syntax {
   object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
-  object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0
+  object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0 with FoldableSyntaxBinCompat1
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
