@@ -8,6 +8,11 @@
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
 
+### Community Announcements
+
+* To help us better plan for 2019, please consider participate in our [Cats Ecosystem Community Survey 2018](https://goo.gl/forms/CYwRqs015SyW6XkC2)
+
+
 ### Overview
 
 Cats is a library which provides abstractions for functional programming in the [Scala programming language](https://scala-lang.org).
