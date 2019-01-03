@@ -63,9 +63,7 @@
 a <code class="highlighter-rouge">List[Option[A]]</code>. Since the values themselves are effects, traversing with <code class="highlighter-rouge">identity</code>
 will turn the traversable “inside out.”</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.list._</span>
-<span class="k">import</span> <span class="nn">cats.instances.option._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 

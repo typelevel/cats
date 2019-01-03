@@ -69,7 +69,7 @@ well-formed.</p>
 
 <p>We have our <code class="highlighter-rouge">RegistrationData</code> case class that will hold the information the user has submitted, alongside the definition of the error model that we’ll be using for displaying the possible errors of every field. Now, let’s explore the proposed implementation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.either._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">FormValidator</span> <span class="o">{</span>
  <span class="k">def</span> <span class="n">validateUserName</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">DomainValidation</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
@@ -645,7 +645,7 @@ that of <code class="highlighter-rouge">ap</code>, not good. Therefore, <code cl
 <h3 id="witheither"><code class="highlighter-rouge">withEither</code></h3>
 <p>The <code class="highlighter-rouge">withEither</code> method allows you to temporarily turn a <code class="highlighter-rouge">Validated</code> instance into an <code class="highlighter-rouge">Either</code> instance and apply it to a function.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.either._</span> <span class="c1">// get Either#flatMap
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span> <span class="c1">// get Either#flatMap
 </span>
 <span class="k">def</span> <span class="n">positive</span><span class="o">(</span><span class="n">field</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">ConfigError</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Right</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>

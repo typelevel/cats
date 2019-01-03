@@ -21,8 +21,7 @@ structure every time you want to perform a <code class="highlighter-rouge">map</
 <p><code class="highlighter-rouge">Nested</code> can help with this by composing the two <code class="highlighter-rouge">map</code> operations into one:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
-<span class="k">import</span> <span class="nn">cats.instances.option._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.functor._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">val</span> <span class="n">nested</span><span class="k">:</span> <span class="kt">Nested</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">?</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="mi">123</span><span class="o">)))</span>
 </code></pre>
 </div>
@@ -83,10 +82,7 @@ creates a list of <code class="highlighter-rouge">User</code>s:</p>
 <span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
 <span class="k">import</span> <span class="nn">cats.Applicative</span>
 <span class="k">import</span> <span class="nn">cats.data.Nested</span>
-<span class="k">import</span> <span class="nn">cats.instances.either._</span>
-<span class="k">import</span> <span class="nn">cats.instances.future._</span>
-<span class="k">import</span> <span class="nn">cats.instances.list._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">def</span> <span class="n">createUsers</span><span class="o">(</span><span class="n">userInfos</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">UserInfo</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">User</span><span class="o">]]]</span> <span class="k">=</span>
   <span class="n">userInfos</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">userInfo</span> <span class="k">=&gt;</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">createUser</span><span class="o">(</span><span class="n">userInfo</span><span class="o">))).</span><span class="n">value</span>

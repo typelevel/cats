@@ -52,7 +52,7 @@ to give if the list was empty. With <code class="highlighter-rouge">Monoid</code
 
 <p>which can be used for any type that has a <code class="highlighter-rouge">Monoid</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.all._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 
@@ -98,7 +98,7 @@ identity element to form a monoid.</p>
 <p>How then can we collapse a <code class="highlighter-rouge">List[NonEmptyList[A]]</code> ? For such types that only have a <code class="highlighter-rouge">Semigroup</code> we can
 lift into <code class="highlighter-rouge">Option</code> to get a <code class="highlighter-rouge">Monoid</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">optionMonoid</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">empty</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
@@ -122,7 +122,7 @@ lift into <code class="highlighter-rouge">Option</code> to get a <code class="hi
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
 <span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
-<span class="k">import</span> <span class="nn">cats.instances.option._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)),</span> <span class="nc">NonEmptyList</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)))</span>
 <span class="k">val</span> <span class="n">lifted</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">nel</span> <span class="k">=&gt;</span> <span class="nc">Option</span><span class="o">(</span><span class="n">nel</span><span class="o">))</span>

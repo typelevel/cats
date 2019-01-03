@@ -11,6 +11,7 @@
   <li><a href="#example-compile">Why is some example code not compiling for me?</a></li>
   <li><a href="#traverse">How can I turn my List of <code class="highlighter-rouge">&lt;something&gt;</code> into a <code class="highlighter-rouge">&lt;something&gt;</code> of a list?</a></li>
   <li><a href="#listt">Where is <code class="highlighter-rouge">ListT</code>?</a></li>
+  <li>[Where are <code class="highlighter-rouge">Applicative</code>s for monad transformers?(#applicative-monad-transformers)</li>
   <li><a href="#task">Where is <code class="highlighter-rouge">IO</code>/<code class="highlighter-rouge">Task</code>?</a></li>
   <li><a href="#simulacrum">What does <code class="highlighter-rouge">@typeclass</code> mean?</a></li>
   <li><a href="#kind-projector">What do types like <code class="highlighter-rouge">?</code> and <code class="highlighter-rouge">λ</code> mean?</a></li>
@@ -127,6 +128,12 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 <span class="c1">// res4: ErrorsOr[cats.data.Nested[Option,List,Int]] = Invalid(NonEmptyList(1 is odd, 3 is odd, 5 is odd))
 </span></code></pre>
 </div>
+
+<h2 id="a-idapplicative-monad-transformers-hrefapplicative-monad-transformerswhere-are-applicatives-for-monad-transformersa"><a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are <code class="highlighter-rouge">Applicative</code>s for monad transformers?</a></h2>
+
+<p>An <code class="highlighter-rouge">Applicative</code> instance for <code class="highlighter-rouge">OptionT[F, ?]</code>/<code class="highlighter-rouge">EitherT[F, E, ?]</code>, built without a corresponding <code class="highlighter-rouge">Monad</code> instance for <code class="highlighter-rouge">F</code>, would be unlawful, so it’s not included. See <a href="the guidelines">https://typelevel.org/cats/guidelines.html#applicative-monad-transformers</a> for a more detailed explanation.</p>
+
+<p>As an alternative, using <code class="highlighter-rouge">.toNested</code> on the monad transformer is recommended, although its <code class="highlighter-rouge">ap</code> will still be inconsistent with the Monad instance’s.`.</p>
 
 <h2 id="a-idtask-hreftaskawhere-is-iotask"><a id="task" href="#task"></a>Where is IO/Task?</h2>
 
@@ -418,7 +425,7 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 <p>The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:</p>
 
 <ul>
-  <li>Find an undocumented method and write a ScalaDoc entry for it. See <a href="/core/src/main/scala/cats/arrow/Arrow.scala">Arrow.scala</a> for some examples of ScalaDoc entries that use <a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>.</li>
+  <li>Find an undocumented method and write a ScalaDoc entry for it. See <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/arrow/Arrow.scala">Arrow.scala</a> for some examples of ScalaDoc entries that use <a href="https://github.com/tkawachi/sbt-doctest">sbt-doctest</a>.</li>
   <li>Look at the <a href="https://codecov.io/github/typelevel/cats?branch=master">code coverage report</a>, find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.</li>
   <li>Find an <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready">open issue</a>, leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the <a href="https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22">low-hanging-fruit</a> label.</li>
 </ul>

@@ -83,18 +83,18 @@ therefore name our implicits according to the following rules:</p>
 
 <h3 id="a-idimplicit-priority-hrefimplicit-prioritya-implicit-instance-priority"><a id="implicit-priority" href="#implicit-priority"></a> Implicit instance priority</h3>
 
-<p>When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy, 
+<p>When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy,
 the instances need to be separated out into different abstract class/traits so that they don’t conflict with each other. The names of these abstract classes/traits should be numbered with a priority with 0 being the highest priority. The abstract classes/trait
 with higher priority inherits from the ones with lower priority. The most specific (whose type class is the lowest in the hierarchy) instance should be placed in the abstract class/ trait with the highest priority.  Here is an example.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nd">@typeclass</span> 
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nd">@typeclass</span>
 <span class="k">trait</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span>
 
 <span class="nc">@</span><span class="n">typeclass</span>
 <span class="k">trait</span> <span class="nc">Monad</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Functor</span>
 
 <span class="o">...</span>
-<span class="k">object</span> <span class="nc">Kleisli</span> <span class="k">extends</span> <span class="nc">KleisliInstance0</span> 
+<span class="k">object</span> <span class="nc">Kleisli</span> <span class="k">extends</span> <span class="nc">KleisliInstance0</span>
 
 <span class="k">abstract</span> <span class="k">class</span> <span class="nc">KleisliInstance0</span> <span class="k">extends</span> <span class="nc">KleisliInstance1</span> <span class="o">{</span>
   <span class="k">implicit</span> <span class="k">def</span> <span class="n">catsDataMonadForKleisli</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">Kleisli</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span> <span class="o">...</span>
@@ -108,8 +108,28 @@ with higher priority inherits from the ones with lower priority. The most specif
 
 <h3 id="type-classes-that-only-define-laws">Type classes that ONLY define laws.</h3>
 
-<p>We can introduce new type classes for the sake of adding laws that don’t apply to the parent type class, e.g. <code class="highlighter-rouge">CommutativeSemigroup</code> and 
+<p>We can introduce new type classes for the sake of adding laws that don’t apply to the parent type class, e.g. <code class="highlighter-rouge">CommutativeSemigroup</code> and
 <code class="highlighter-rouge">CommutativeArrow</code>.</p>
+
+<h3 id="a-idapplicative-monad-transformers-hrefapplicative-monad-transformersapplicative-instances-for-monad-transformersa"><a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a></h3>
+
+<p>We explicitly don’t provide an instance of <code class="highlighter-rouge">Applicative</code> for e.g. <code class="highlighter-rouge">EitherT[F, String, ?]</code> given an <code class="highlighter-rouge">Applicative[F]</code>.
+An attempt to construct one without a proper <code class="highlighter-rouge">Monad[F]</code> instance would be inconsistent in <code class="highlighter-rouge">ap</code> with the provided <code class="highlighter-rouge">Monad</code> instance
+for <code class="highlighter-rouge">EitherT[F, String, ?]</code>. Such an instance will be derived if you use <code class="highlighter-rouge">Nested</code> instead:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span><span class="o">,</span> <span class="n">cats</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="k">_</span><span class="o">,</span> <span class="n">cats</span><span class="o">.</span><span class="n">implicits</span><span class="o">.</span><span class="k">_</span>
+
+<span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">1</span><span class="o">)))</span>
+<span class="k">val</span> <span class="n">x</span> <span class="k">=</span> <span class="o">(</span><span class="n">a</span> <span class="o">*&gt;</span> <span class="n">a</span><span class="o">).</span><span class="n">value</span>
+<span class="o">&gt;</span> <span class="n">x</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="n">y</span> <span class="k">=</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="n">toNested</span> <span class="o">*&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toNested</span><span class="o">).</span><span class="n">value</span>
+<span class="o">&gt;</span> <span class="n">y</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"err"</span><span class="o">),</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+
+<span class="n">x</span> <span class="o">===</span> <span class="n">y</span>
+<span class="o">&gt;</span> <span class="kc">false</span>
+</code></pre>
+</div>
 
 <h4 id="todo">TODO:</h4>
 

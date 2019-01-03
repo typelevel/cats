@@ -90,7 +90,7 @@ and compose them. From there we can generalize to working with any N number of i
 
 <p>Let’s see what happens if we try to compose two effectful values with just <code class="highlighter-rouge">map</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.option._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">c</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">c</span><span class="o">).</span><span class="n">toDouble</span>
 
@@ -100,7 +100,7 @@ and compose them. From there we can generalize to working with any N number of i
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">int</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">f</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">c</span><span class="o">))</span> <span class="c1">// what now?
-// res0: Option[Char =&gt; Double] = Some($$Lambda$13680/1485962711@60acb1d1)
+// res0: Option[Char =&gt; Double] = Some($$Lambda$14240/1093165715@64c429b6)
 </span></code></pre>
 </div>
 
@@ -113,7 +113,7 @@ but <code class="highlighter-rouge">map</code> doesn’t give us enough power to
 does <code class="highlighter-rouge">F[G[_]]</code>.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
-<span class="k">import</span> <span class="nn">cats.instances.future._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 
@@ -126,7 +126,7 @@ does <code class="highlighter-rouge">F[G[_]]</code>.</p>
 <span class="c1">// composed: scala.concurrent.Future[Option[Int]] = Future(&lt;not completed&gt;)
 </span>
 <span class="k">val</span> <span class="n">nested</span> <span class="k">=</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Nested</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Option</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">map2</span><span class="o">(</span><span class="nc">Nested</span><span class="o">(</span><span class="n">x</span><span class="o">),</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">y</span><span class="o">))(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
-<span class="c1">// nested: cats.data.Nested[scala.concurrent.Future,Option,Int] = Nested(Future(&lt;not completed&gt;))
+<span class="c1">// nested: cats.data.Nested[scala.concurrent.Future,Option,Int] = Nested(Future(Success(Some(102))))
 </span></code></pre>
 </div>
 
@@ -189,7 +189,7 @@ familiar.</p>
 <p>This works…but if we look carefully at the implementation there’s nothing <code class="highlighter-rouge">Option</code>-specific going on. As
 another example let’s implement the same function but for <code class="highlighter-rouge">Either</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.either._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">def</span> <span class="n">traverseEither</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
   <span class="n">as</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="n">empty</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]])</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">acc</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">E</span>, <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]])</span> <span class="k">=&gt;</span>
@@ -221,8 +221,7 @@ appropriately, and new data types need only be concerned with implementing <code
 <p>This function is provided by Cats via the <code class="highlighter-rouge">Traverse[List]</code> instance and syntax, which is covered in another
 tutorial.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.list._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.traverse._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 

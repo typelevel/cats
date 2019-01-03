@@ -29,8 +29,8 @@ You can see this in the function signature of <code class="highlighter-rouge">ma
 
 <p>Cats also offers syntax enrichment for <code class="highlighter-rouge">Ior</code>. The <code class="highlighter-rouge">leftIor</code> and <code class="highlighter-rouge">rightIor</code> functions can be imported from <code class="highlighter-rouge">cats.syntax.ior._</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.syntax.ior._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.ior._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">right</span> <span class="k">=</span> <span class="mf">3.</span><span class="n">rightIor</span>
 <span class="n">right</span><span class="k">:</span> <span class="kt">cats.data.Ior</span><span class="o">[</span><span class="kt">Nothing</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>

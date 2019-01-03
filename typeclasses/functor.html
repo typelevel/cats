@@ -65,8 +65,7 @@ like <code class="highlighter-rouge">_.map(_.map(_.map(f)))</code>. As it turns 
 <p>Such composition can be achieved via the <code class="highlighter-rouge">Functor#compose</code> method.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
-<span class="k">import</span> <span class="nn">cats.instances.list._</span>
-<span class="k">import</span> <span class="nn">cats.instances.option._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 
@@ -97,7 +96,7 @@ composed instance during the function call or create a local implicit.</p>
 <p>We can make this nicer at the cost of boxing with the <code class="highlighter-rouge">Nested</code> data type.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
-<span class="k">import</span> <span class="nn">cats.syntax.functor._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 

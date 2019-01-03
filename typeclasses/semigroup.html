@@ -42,8 +42,8 @@
 
 <p>Infix syntax is also available for types that have a <code class="highlighter-rouge">Semigroup</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
-<span class="c1">// import cats.syntax.semigroup._
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
 </span>
 <span class="mi">1</span> <span class="o">|+|</span> <span class="mi">2</span>
 <span class="c1">// res3: Int = 3
@@ -53,7 +53,7 @@
 <p>A more compelling example which we’ll see later in this tutorial is the <code class="highlighter-rouge">Semigroup</code>
 for <code class="highlighter-rouge">Map</code>s.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.map._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">map1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"hello"</span> <span class="o">-&gt;</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"world"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">map2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"hello"</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">,</span> <span class="s">"cats"</span>  <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">)</span>
@@ -73,15 +73,15 @@ for <code class="highlighter-rouge">Map</code>s.</p>
 <p>Cats provides many <code class="highlighter-rouge">Semigroup</code> instances out of the box such as <code class="highlighter-rouge">Int</code> (<code class="highlighter-rouge">+</code>) and <code class="highlighter-rouge">String</code> (<code class="highlighter-rouge">++</code>)…</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
-<span class="k">import</span> <span class="nn">cats.instances.all._</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
 </code></pre>
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
-<span class="c1">// res0: cats.kernel.Semigroup[Int] = cats.kernel.instances.IntGroup@6a5b4afe
+<span class="c1">// res0: cats.kernel.Semigroup[Int] = cats.kernel.instances.IntGroup@4355655a
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
-<span class="c1">// res1: cats.kernel.Semigroup[String] = cats.kernel.instances.StringMonoid@3250b1b7
+<span class="c1">// res1: cats.kernel.Semigroup[String] = cats.kernel.instances.StringMonoid@988390e
 </span></code></pre>
 </div>
 
@@ -89,16 +89,16 @@ for <code class="highlighter-rouge">Map</code>s.</p>
 and <code class="highlighter-rouge">Set</code> (<code class="highlighter-rouge">union</code>)…</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Byte</span><span class="o">]]</span>
-<span class="c1">// res2: cats.kernel.Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@3da39b1e
+<span class="c1">// res2: cats.kernel.Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@1560337f
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Set</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span>
-<span class="c1">// res3: cats.kernel.Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@424fe50
+<span class="c1">// res3: cats.kernel.Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@18e58d22
 </span>
 <span class="k">trait</span> <span class="nc">Foo</span>
 <span class="c1">// defined trait Foo
 </span>
 <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]]</span>
-<span class="c1">// res4: cats.kernel.Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@76a0b672
+<span class="c1">// res4: cats.kernel.Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@38c46267
 </span></code></pre>
 </div>
 
@@ -106,7 +106,7 @@ and <code class="highlighter-rouge">Set</code> (<code class="highlighter-rouge">
 as tuples (pointwise <code class="highlighter-rouge">combine</code>).</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[(</span><span class="kt">List</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">)]</span>
-<span class="c1">// res5: cats.kernel.Semigroup[(List[Foo], Int)] = cats.kernel.instances.TupleInstances2$$anon$182@4031a5a1
+<span class="c1">// res5: cats.kernel.Semigroup[(List[Foo], Int)] = cats.kernel.instances.TupleInstances2$$anon$182@5751f439
 </span></code></pre>
 </div>
 
@@ -117,8 +117,7 @@ the same key. It is straightforward to write these for <code class="highlighter-
 type say, <code class="highlighter-rouge">Int</code> or <code class="highlighter-rouge">List[String]</code>, but we can write it once and for all for
 any type with a <code class="highlighter-rouge">Semigroup</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.all._</span>
-<span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">def</span> <span class="n">optionCombine</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">opt</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
   <span class="n">opt</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">a</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>

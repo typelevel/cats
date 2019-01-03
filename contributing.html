@@ -104,7 +104,9 @@ contributors from duplicating effort.</p>
 
 <p>To build Cats you should have
 <a href="http://www.scala-sbt.org/0.13/tutorial/Setup.html">sbt</a> and <a href="https://nodejs.org/">Node.js</a>
- installed. Run <code class="highlighter-rouge">sbt</code>, and then use any of the following commands:</p>
+ installed. If you’d like, you can use the <a href="#nix-cats-development-environment">Nix Cats development environment</a>.</p>
+
+<p>Run <code class="highlighter-rouge">sbt</code>, and then use any of the following commands:</p>
 
 <ul>
   <li><code class="highlighter-rouge">compile</code>: compile the code</li>
@@ -188,12 +190,12 @@ with <a href="https://github.com/typelevel/discipline">Discipline</a> for law ch
 
 <h3 id="binary-compatibility">Binary compatibility</h3>
 
-<p>It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala &lt;2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command <code class="highlighter-rouge">+2.11.12</code>, which sets the cats’ Scala version to <code class="highlighter-rouge">2.11.12</code> and then run <code class="highlighter-rouge">mimaReportBinaryIssues</code>.</p>
+<p>It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala &lt;2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command <code class="highlighter-rouge">++2.11.12</code>, which sets the cats’ Scala version to <code class="highlighter-rouge">2.11.12</code> and then run <code class="highlighter-rouge">mimaReportBinaryIssues</code>.</p>
 
 <p>A summary of these steps is as follows:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>$ sbt
-&gt; +2.11.12
+&gt; ++2.11.12
 &gt; mimaReportBinaryIssues
 </code></pre>
 </div>
@@ -226,6 +228,8 @@ with <a href="https://github.com/typelevel/discipline">Discipline</a> for law ch
     <p><code class="highlighter-rouge">apt-get install ruby-full; gem install jekyll</code></p>
 
     <p><code class="highlighter-rouge">gem install jekyll</code></p>
+
+    <p>Or just dropping into a <code class="highlighter-rouge">nix-shell</code> if you are using the <a href="#nix-cats-development-environment">Nix Cats development environment</a>.</p>
   </li>
   <li>
     <p>In a shell, navigate to the generated site directory in <code class="highlighter-rouge">docs/target/site</code></p>
@@ -309,6 +313,19 @@ escalate into larger problems.</p>
 
 <p>If you are being harassed, please contact one of <a href="https://github.com/typelevel/cats#maintainers">us</a>
 immediately so that we can support you.</p>
+
+<h2 id="nix-cats-development-environment">Nix Cats Development Environment</h2>
+
+<p>Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (SBT, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a <code class="highlighter-rouge">shell.nix</code> for anyone using the <a href="https://nixos.org/nix/">Nix package manager</a>.</p>
+
+<p>To use the Nix-based Cats development environment:</p>
+
+<ol>
+  <li><a href="https://nixos.org/nix/download.html">Install</a> the Nix package manager.</li>
+  <li>At the root level of the Cats repository, run <code class="highlighter-rouge">nix-shell --pure</code>. This will drop you into a minimal bash shell that has just the required dependencies on the <code class="highlighter-rouge">PATH</code>. Note that the first time that you run this it will take some extra time to download the necessary dependencies into your local Nix store.</li>
+  <li>Run <code class="highlighter-rouge">sbt</code>, <code class="highlighter-rouge">jekyll</code>, etc as required from the <code class="highlighter-rouge">nix-shell</code>.</li>
+  <li>When you are finished you can <code class="highlighter-rouge">exit</code> the <code class="highlighter-rouge">nix-shell</code>.</li>
+</ol>
 
 </div></div></section><section class="technologies"><div class="container"><div class="row"></div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Cats is designed and developed by <a href="https://github.com/typelevel/cats" target="_blank">Cats contributors</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/typelevel/cats"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6">
 <p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>

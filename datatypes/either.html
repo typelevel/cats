@@ -67,8 +67,8 @@ the right side is most often chosen. In Scala 2.12.x this convention
 in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have been filled via syntax
 enrichments available under <code class="highlighter-rouge">cats.syntax.either._</code> or <code class="highlighter-rouge">cats.implicits._</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.either._</span>
-<span class="c1">// import cats.syntax.either._
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
 </span>
 <span class="k">val</span> <span class="n">right</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="c1">// right: Either[String,Int] = Right(5)
