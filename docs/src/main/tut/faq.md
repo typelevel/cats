@@ -17,7 +17,7 @@ position: 40
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
- * [Where are `Applicative`s for monad transformers?(#applicative-monad-transformers)
+ * [Where are `Applicative`s for monad transformers?](#applicative-monad-transformers)
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
