@@ -63,7 +63,7 @@ at this point. To make our program useful we need to interpret it.</p>
 </div>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">validator</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">FromString</span><span class="o">](</span><span class="n">compiler</span><span class="o">)</span>
-<span class="c1">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$2$$Lambda$13488/738390205@73ee53c9
+<span class="c1">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$2$$Lambda$12859/1125495554@438b1ec3
 </span>
 <span class="n">validator</span><span class="o">(</span><span class="s">"1234"</span><span class="o">)</span>
 <span class="c1">// res1: Boolean = false
