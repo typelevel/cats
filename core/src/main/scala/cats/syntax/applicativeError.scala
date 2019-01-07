@@ -98,4 +98,7 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * this would result in ambiguous implicits.
    */
   def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] = F.adaptError(fa)(pf)
+
+  def orElseRaise(other: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+    orElse(F.raiseError(other))
 }
