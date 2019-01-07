@@ -443,7 +443,7 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
     }
   }
 
-  implicit def catsDataDeferForIor[F[_], E](implicit F: Defer[F]): Defer[IorT[F, E, ?]] =
+  implicit def catsDataDeferForIorT[F[_], E](implicit F: Defer[F]): Defer[IorT[F, E, ?]] =
     new Defer[IorT[F, E, ?]] {
       def defer[A](fa: => IorT[F, E, A]): IorT[F, E, A] =
         IorT(F.defer(fa.value))
