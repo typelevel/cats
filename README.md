@@ -1,3 +1,8 @@
+
+### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+ To help us better plan for 2019, please consider participating in our [Cats Ecosystem Community Survey 2018](https://goo.gl/forms/CYwRqs015SyW6XkC2).
+
+
 ## Cats
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
@@ -7,6 +12,7 @@
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
+
 
 ### Overview
 
@@ -126,6 +132,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scala-weather](https://github.com/snowplow/scala-weather): weather lookups
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
+ * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
   
 Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)

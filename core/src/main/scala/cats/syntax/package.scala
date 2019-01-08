@@ -26,7 +26,7 @@ package object syntax {
   object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
-  object foldable extends FoldableSyntax
+  object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
@@ -42,7 +42,7 @@ package object syntax {
   object parallel extends ParallelSyntax with ParallelTraverseSyntax with ParallelFlatSyntax with ParallelApplySyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
-  object reducible extends ReducibleSyntax
+  object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
   object representable extends RepresentableSyntax
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
