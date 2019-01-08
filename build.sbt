@@ -580,7 +580,6 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
-  .dependsOn(alleycatsCore)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -747,7 +746,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;validateBC")
+addCommandAlias("prePR", ";fmt;++2.11.12;validateBC")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
