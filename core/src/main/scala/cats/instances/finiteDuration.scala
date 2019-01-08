@@ -10,5 +10,5 @@ trait FiniteDurationInstances extends cats.kernel.instances.FiniteDurationInstan
     "1.5.0"
   )
   val catsStdShowForFiniteDuration: Show[FiniteDuration] =
-    AllCoreDurationInstances.materialise.catsStdShowForFiniteDurationUnambiguous
+    AllCoreDurationInstances.catsStdShowForFiniteDurationUnambiguous
 }

@@ -8,7 +8,7 @@ trait DurationInstances extends cats.kernel.instances.DurationInstances {
   @deprecated("Left to keep binary compatibility. Use CoreDurationInstances.catsStdShowForDurationUnambiguous instead.",
               "1.5.0")
   val catsStdShowForDuration: Show[Duration] =
-    AllCoreDurationInstances.materialise.catsStdShowForDurationUnambiguous
+    AllCoreDurationInstances.catsStdShowForDurationUnambiguous
 }
 
 private[instances] trait AllCoreDurationInstances extends CoreFiniteDurationInstances
@@ -23,6 +23,4 @@ private[instances] trait CoreDurationInstances {
     Show.fromToString[Duration]
 }
 
-private[instances] object AllCoreDurationInstances {
-  final val materialise: AllCoreDurationInstances = new AllCoreDurationInstances {}
-}
+private[instances] object AllCoreDurationInstances extends AllCoreDurationInstances
