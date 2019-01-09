@@ -321,6 +321,7 @@ def mimaSettings(moduleName: String) =
           exclude[DirectMissingMethodProblem]("cats.syntax.DistributiveOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOps.obj"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOpsBinCompat0.value"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EitherSyntax#CatchOnlyPartiallyApplied.dummy"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherKOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherObjectOps.either"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherOps.eab"),

@@ -24,6 +24,7 @@ object MimaExceptions {
       "blah".leftNec[Int],
       List(Some(4), None).nested,
       cats.data.EitherT.left[Int](Option("err")),
-      true.iterateUntilM(Option(_))(identity _)
+      true.iterateUntilM(Option(_))(identity _),
+      Either.catchOnly[NumberFormatException] { "foo".toInt }
   )
 }

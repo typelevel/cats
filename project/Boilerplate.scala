@@ -12,7 +12,7 @@ import sbt._
 object Boilerplate {
   import scala.StringContext._
 
-  implicit final class BlockHelper(val sc: StringContext) extends AnyVal {
+  implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
