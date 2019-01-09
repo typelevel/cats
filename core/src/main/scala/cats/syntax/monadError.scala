@@ -23,7 +23,9 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
    * in the partial function's domain.
    */
   def reject(pf: PartialFunction[A, E])(implicit F: MonadError[F, E]): F[A] =
-    F.flatMap(fa)(pf.andThen(F.raiseError[A]).applyOrElse(_, (_: A) => fa))
+    F.flatMap(fa) { a =>
+      pf.andThen(F.raiseError[A]).applyOrElse(a, (_: A) => fa)
+    }
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
