@@ -41,6 +41,8 @@ object ListWrapper {
 
   def eqv[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
 
+  def hash[A: Hash]: Hash[ListWrapper[A]] = Hash.by(_.list)
+
   val traverse: Traverse[ListWrapper] = {
     val F = Traverse[List]
 
