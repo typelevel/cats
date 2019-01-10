@@ -35,11 +35,47 @@ trait BitraverseSyntaxBinCompat0 {
 }
 
 final class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends AnyVal {
+
+  /**
+   *  Traverse over the left side of the structure.
+   *  For the right side, use the standard `traverse` from [[cats.Traverse]].
+   *
+   *  Example:
+   *  {{{
+   *  scala> import cats.implicits._
+   *
+   *  scala> val intAndString: (Int, String) = (7, "test")
+   *
+   *  scala> intAndString.leftTraverse(i => Option(i).filter(_ > 5))
+   *  res1: Option[(Int, String)] = Some(7, "test")
+   *
+   *  scala> intAndString.leftTraverse(i => Option(i).filter(_ < 5))
+   *  res2: Option[(Int, String)] = None
+   *  }}}
+   */
   def leftTraverse[G[_], C](f: A => G[C])(implicit F: Bitraverse[F], G: Applicative[G]): G[F[C, B]] =
     F.bitraverse(fab)(f, G.pure(_))
 }
 
 final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) extends AnyVal {
+
+  /**
+   * Sequence the left side of the structure.
+   * For the right side, use the standard `sequence` from [[cats.Traverse]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val optionalErrorNone: Either[[Option[String], Int] = Either.right(123)
+   * scala> optionalErrorNone.leftSequence
+   * res1: Option[Either[String, Int]] = None
+   *
+   * scala> val optionalErrorSome: Either[[Option[String], Int] = Either.left(Some("something went wrong"))
+   * scala> optionalErrorSome.leftSequence
+   * res2: Option[Either[String, Int]] = Some(Left(something went wrong))
+   * }}}
+   */
   def leftSequence(implicit F: Bitraverse[F], G: Applicative[G]): G[F[A, B]] =
     F.bitraverse(fgab)(identity, G.pure(_))
 }
