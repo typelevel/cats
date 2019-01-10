@@ -319,6 +319,12 @@ sealed abstract private[data] class IndexedStateTInstances4 {
     new IndexedStateTStrong[F, V] { implicit def F = F0 }
 }
 
+abstract private[data] class IndexedStateFunctions {
+
+  def apply[S1, S2, A](f: S1 => (S2, A)): IndexedState[S1, S2, A] =
+    IndexedStateT.applyF(Now((s: S1) => Now(f(s))))
+}
+
 // To workaround SI-7139 `object State` needs to be defined inside the package object
 // together with the type alias.
 abstract private[data] class StateFunctions {
