@@ -76,7 +76,7 @@ final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) e
    * res2: Option[Either[String, Int]] = Some(Left(something went wrong))
    *
    * scala> val optionalErrorLeftNone: Either[Option[String], Int] = Either.left(Some("something went wrong"))
-   * scala> optionalErrorLeftNone.sequence
+   * scala> optionalErrorLeftNone.leftSequence
    * res3: Option[Either[String,Int]] = None
    * }}}
    */
