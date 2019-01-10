@@ -43,6 +43,9 @@ package object data {
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
   }
 
+  type IndexedState[S1, S2, A] = IndexedStateT[Eval, S1, S2, A]
+  object IndexedState extends IndexedStateFunctions
+
   /**
    * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
    * argument and produces an `A` value wrapped in `F`. However, it also produces
