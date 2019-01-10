@@ -47,7 +47,7 @@ final class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends Any
    *  scala> val intAndString: (Int, String) = (7, "test")
    *
    *  scala> intAndString.leftTraverse(i => Option(i).filter(_ > 5))
-   *  res1: Option[(Int, String)] = Some(7,test)
+   *  res1: Option[(Int, String)] = Some((7,test))
    *
    *  scala> intAndString.leftTraverse(i => Option(i).filter(_ < 5))
    *  res2: Option[(Int, String)] = None
@@ -75,7 +75,7 @@ final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) e
    * scala> optionalErrorLeftSome.leftSequence
    * res2: Option[Either[String, Int]] = Some(Left(something went wrong))
    *
-   * scala> val optionalErrorLeftNone: Either[Option[String], Int] = Either.left(Some("something went wrong"))
+   * scala> val optionalErrorLeftNone: Either[Option[String], Int] = Either.left(None)
    * scala> optionalErrorLeftNone.leftSequence
    * res3: Option[Either[String,Int]] = None
    * }}}
