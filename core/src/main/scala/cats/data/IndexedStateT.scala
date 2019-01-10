@@ -321,6 +321,18 @@ sealed abstract private[data] class IndexedStateTInstances4 {
 
 abstract private[data] class IndexedStateFunctions {
 
+  /**
+   * Instantiate an `IndexedState[S1, S2, A]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.IndexedState
+   *
+   * scala> val is = IndexedState[Int, Long, String](i => (i + 1L, "Here is " + i))
+   * scala> is.run(3).value
+   * res0: (Long, String) = (4,Here is 3)
+   * }}}
+   */
   def apply[S1, S2, A](f: S1 => (S2, A)): IndexedState[S1, S2, A] =
     IndexedStateT.applyF(Now((s: S1) => Now(f(s))))
 }
