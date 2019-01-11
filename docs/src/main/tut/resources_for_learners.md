@@ -21,6 +21,12 @@ position: 30
  * [Scala Exercises](https://www.scala-exercises.org/cats) by 47 Degrees 
    offers multiple online exercises to learn about the type classes and 
    datatypes included in Cats.
+
+# Examples
+ * [Scala Pets Store](https://github.com/pauljamescleary/scala-pet-store) 
+   An implementation of the java pet store using FP techniques in scala. Stack includes Http4s, Circe,
+   Doobie, Cats, ScalaCheck, and PureConfig.
+   
    
 # Videos
  * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
