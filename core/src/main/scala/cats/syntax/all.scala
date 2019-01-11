@@ -84,3 +84,4 @@ trait AllSyntaxBinCompat4
     with ParallelApplySyntax
     with FoldableSyntaxBinCompat0
     with ReducibleSyntaxBinCompat0
+    with BitraverseSyntaxBinCompat0
