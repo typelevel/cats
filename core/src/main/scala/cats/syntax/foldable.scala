@@ -238,18 +238,8 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
   def partitionEitherM[G[_], B, C](
     f: A => G[Either[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] = {
-    import cats.instances.tuple._
-
-    implicit val mb: Monoid[F[B]] = A.algebra[B]
-    implicit val mc: Monoid[F[C]] = A.algebra[C]
-
-    F.foldMapM[G, A, (F[B], F[C])](fa)(
-      a =>
-        M.map(f(a)) {
-          case Right(c) => (A.empty[B], A.pure(c))
-          case Left(b)  => (A.pure(b), A.empty[C])
-      }
-    )
+    import cats.syntax.foldable._
+    F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
   }
 }
 
