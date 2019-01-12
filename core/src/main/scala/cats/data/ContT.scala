@@ -70,6 +70,9 @@ object ContT {
       cb(b)
     }
 
+  def defer[M[_], A, B](b: => B)(implicit M: Defer[ContT[M, A, ?]]): ContT[M, A, B] =
+    M.defer(pure(b))
+
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(AndThen(fn))
 
