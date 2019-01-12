@@ -3,7 +3,13 @@ package tests
 
 import catalysts.Platform
 
-import cats.instances.{AllInstances, AllInstancesBinCompat0, AllInstancesBinCompat1, AllInstancesBinCompat2}
+import cats.instances.{
+  AllInstances,
+  AllInstancesBinCompat0,
+  AllInstancesBinCompat1,
+  AllInstancesBinCompat2,
+  AllInstancesBinCompat3
+}
 import cats.syntax.{
   AllSyntax,
   AllSyntaxBinCompat0,
@@ -47,6 +53,7 @@ trait CatsSuite
     with AllInstancesBinCompat0
     with AllInstancesBinCompat1
     with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
     with AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1

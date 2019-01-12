@@ -2,6 +2,7 @@ package cats
 package data
 
 import Chain._
+import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
@@ -394,7 +395,16 @@ sealed abstract class Chain[+A] {
     builder.result
   }
 
+  def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
+
   override def toString: String = show(Show.show[A](_.toString))
+
+  override def equals(o: Any): Boolean =
+    if (o.isInstanceOf[Chain[_]])
+      (this: Chain[Any]).===(o.asInstanceOf[Chain[Any]])(Eq.fromUniversalEquals[Any])
+    else false
+
+  override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
 }
 
 object Chain extends ChainInstances {
@@ -646,7 +656,15 @@ sealed abstract private[data] class ChainInstances1 extends ChainInstances2 {
     new ChainPartialOrder[A] { implicit def A: PartialOrder[A] = A0 }
 }
 
-sealed abstract private[data] class ChainInstances2 {
+sealed abstract private[data] class ChainInstances2 extends ChainInstances3 {
+  implicit def catsDataHashForChain[A](implicit A: Hash[A]): Hash[Chain[A]] = new Hash[Chain[A]] {
+    def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+
+    def hash(fa: Chain[A]): Int = fa.hash
+  }
+}
+
+sealed abstract private[data] class ChainInstances3 {
   implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] = new Eq[Chain[A]] {
     def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
   }

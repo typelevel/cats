@@ -7,6 +7,7 @@ import cats.data.EitherT
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms
@@ -268,6 +269,20 @@ class EitherTSuite extends CatsSuite {
   test("recoverWith ignores unhandled values") {
     val eithert = EitherT.leftT[Id, Int]("eithert")
     eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should ===(eithert)
+  }
+
+  test("rethrowT is inverse of attemptT when applied to a successful value") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val success: Try[Int] = Success(42)
+
+    success.attemptT.rethrowT should ===(success)
+  }
+
+  test("rethrowT is inverse of attemptT when applied to a failed value") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val failed: Try[Int] = Failure(new IllegalArgumentException("error"))
+
+    failed.attemptT.rethrowT should ===(failed)
   }
 
   test("transform consistent with value.map") {
