@@ -32,7 +32,7 @@ install:
 notifications:
   webhooks:
     urls:
-    - https://webhooks.gitter.im/e/2d5ea16a2f66f60a590b
+    - ${GITTER_WEBHOOK_URL}
     on_success: change
     on_failure: always
     on_start: false
