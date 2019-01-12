@@ -22,10 +22,10 @@ position: 30
    offers multiple online exercises to learn about the type classes and 
    datatypes included in Cats.
 
-# Examples
- * [Scala Pets Store](https://github.com/pauljamescleary/scala-pet-store) 
+# Example Projects
+ * [Scala Pet Store](https://github.com/pauljamescleary/scala-pet-store) 
    An implementation of the java pet store using FP techniques in scala. Stack includes Http4s, Circe,
-   Doobie, Cats, ScalaCheck, and PureConfig.
+   Doobie, Cats, and ScalaCheck. Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie
    
    
 # Videos
