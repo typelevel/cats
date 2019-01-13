@@ -97,4 +97,15 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
 
   def orElse(other: => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(_ => other)
+
+  /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
+   * this would result in ambiguous implicits. `adaptError` will be moved from `MonadError`
+   * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
+   */
+  def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] =
+    F.recoverWith(fa)(pf.andThen(F.raiseError))
 }

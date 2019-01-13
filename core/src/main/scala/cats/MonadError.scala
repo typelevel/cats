@@ -1,5 +1,7 @@
 package cats
 
+import cats.syntax.ApplicativeErrorOps
+
 /**
  * A monad that also allows you to raise and or handle an error value.
  *
@@ -38,9 +40,11 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * scala> 1.asRight[String].adaptError(pf)
    * res2: Either[String,Int] = Right(1)
    * }}}
+   *
+   * Will be moved to ApplicativeError in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
-    flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
+    new ApplicativeErrorOps(fa).adaptErr(pf)(this)
 
   /**
    * Inverse of `attempt`
