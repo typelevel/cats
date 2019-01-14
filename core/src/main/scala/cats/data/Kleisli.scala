@@ -113,6 +113,33 @@ object Kleisli
       case _ =>
         Kleisli(run)
     }
+
+  /**
+   * Creates a `FunctionK` that transforms a `Kleisli[F, A, B]` into an `F[B]` by applying the value of type `a:A`.
+   * {{{
+   * scala> import cats.{~>}, cats.data.{Kleisli, EitherT}
+   *
+   * scala> def f(i: Int): Option[Either[Char, Char]] = if (i > 0) Some(Right('n')) else if (i < 0) Some(Left('z')) else None
+   *
+   * scala> type KOI[A] = Kleisli[Option, Int, A]
+   * scala> val b: KOI[Either[Char, Char]] = Kleisli[Option, Int, Either[Char, Char]](f _)
+   * scala> val nt: Kleisli[Option, Int, ?] ~> Option = Kleisli.applyK[Option, Int](1)
+   * scala> nt(b)
+   * res0: Option[Either[Char, Char]] = Some(Right('n'))
+   *
+   * scala> type EKOIC[A] = EitherT[KOI, Char, A]
+   * scala> val c: EKOIC[Char] = EitherT[KOI, Char, Char](b)
+   * scala> c.mapK(nt).value
+   * res1: Option[Either[Char, Char]] = Some(Right('n'))
+   *
+   * scala> val ntz = Kleisli.applyK[Option, Int](0)
+   * scala> c.mapK(ntz).value
+   * res2: Option[Either[Char, Char]] = None
+   * }}}
+   */
+  def applyK[F[_], A](a: A): Kleisli[F, A, ?] ~> F =
+    λ[Kleisli[F, A, ?] ~> F](_.apply(a))
+
 }
 
 sealed private[data] trait KleisliFunctions {
