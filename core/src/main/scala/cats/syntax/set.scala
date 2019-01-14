@@ -8,7 +8,7 @@ trait SetSyntax {
   implicit final def catsSyntaxSet[A](se: SortedSet[A]): SetOps[A] = new SetOps(se)
 }
 
-final class SetOps[A](val se: SortedSet[A]) extends AnyVal {
+final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
 
   /**
    * Returns an Option of NonEmptySet from a SortedSet

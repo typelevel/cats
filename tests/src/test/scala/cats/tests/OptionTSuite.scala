@@ -184,6 +184,12 @@ class OptionTSuite extends CatsSuite {
     checkAll("MonadError[OptionT[List, ?]]", SerializableTests.serializable(MonadError[OptionT[ListWrapper, ?], Unit]))
   }
 
+  test("MonadError[OptionT[F, ?], E] instance has higher priority than MonadError[OptionT[F, ?], Unit]") {
+
+    def shouldCompile[F[_]: MonadError[?[_], E], E](x: OptionT[F, Int], e: E): OptionT[F, Int] =
+      x.ensure(e)(_ => true)
+  }
+
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
       o.fold(s)(f) should ===(o.cata(s, f))

@@ -97,7 +97,9 @@ git clone git@github.com:typelevel/cats.git
 
 To build Cats you should have
 [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
- installed. Run `sbt`, and then use any of the following commands:
+ installed. If you'd like, you can use the [Nix Cats development environment](#nix-cats-development-environment).
+
+ Run `sbt`, and then use any of the following commands:
 
  * `compile`: compile the code
  * `console`: launch a REPL
@@ -131,7 +133,7 @@ builds:
 
 ### Write code
 
-[See guidelines](/cats/guidelines.html).
+[See guidelines](https://typelevel.org/cats/guidelines.html).
 
 ### Attributions
 
@@ -166,13 +168,13 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
 
 ### Binary compatibility
 
-It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `+2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `++2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
 
 A summary of these steps is as follows:
 
 ```
 $ sbt
-> +2.11.12
+> ++2.11.12
 > mimaReportBinaryIssues
 ```
 This procedure will report if there are any binary compatibility issues that should be fixed.
@@ -201,6 +203,8 @@ run `sbt docs/makeMicrosite`
     `apt-get install ruby-full; gem install jekyll`
 
     `gem install jekyll`
+
+    Or just dropping into a `nix-shell` if you are using the [Nix Cats development environment](#nix-cats-development-environment).
 
 2. In a shell, navigate to the generated site directory in `docs/target/site`
 
@@ -278,3 +282,14 @@ escalate into larger problems.
 
 If you are being harassed, please contact one of [us](https://github.com/typelevel/cats#maintainers)
 immediately so that we can support you.
+
+## Nix Cats Development Environment
+
+Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (SBT, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a `shell.nix` for anyone using the [Nix package manager](https://nixos.org/nix/).
+
+To use the Nix-based Cats development environment:
+
+1. [Install](https://nixos.org/nix/download.html) the Nix package manager.
+2. At the root level of the Cats repository, run `nix-shell --pure`. This will drop you into a minimal bash shell that has just the required dependencies on the `PATH`. Note that the first time that you run this it will take some extra time to download the necessary dependencies into your local Nix store.
+3. Run `sbt`, `jekyll`, etc as required from the `nix-shell`.
+4. When you are finished you can `exit` the `nix-shell`.

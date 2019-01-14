@@ -17,6 +17,7 @@ position: 40
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
+ * [Where are `Applicative`s for monad transformers?](#applicative-monad-transformers)
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
@@ -123,6 +124,12 @@ def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".i
 ```tut:book
 nl.traverse(even)
 ```
+
+## <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are `Applicative`s for monad transformers?</a>
+
+An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [https://typelevel.org/cats/guidelines.html#applicative-monad-transformers](the guidelines) for a more detailed explanation.
+
+As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
 
 ## <a id="task" href="#task"></a>Where is IO/Task?
 
@@ -254,7 +261,7 @@ You can find more information [here](typeclasses/lawtesting.html).
 
 The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:
 
-- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala]({{ site.sources }}/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
+- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
 - Look at the [code coverage report](https://codecov.io/github/typelevel/cats?branch=master), find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 

@@ -11,8 +11,8 @@ git:
 
 scala:
   - 2.11.12
-  - 2.13.0-M4
-  - 2.12.6
+  - 2.13.0-M5
+  - 2.12.7
 
 jdk:
   - oraclejdk8
@@ -32,7 +32,7 @@ install:
 notifications:
   webhooks:
     urls:
-    - https://webhooks.gitter.im/e/2d5ea16a2f66f60a590b
+    - ${GITTER_WEBHOOK_URL}
     on_success: change
     on_failure: always
     on_start: false

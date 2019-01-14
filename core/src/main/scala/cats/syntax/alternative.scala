@@ -13,7 +13,7 @@ trait AlternativeSyntax {
     new GuardOps(b)
 }
 
-final class UniteOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
+final class UniteOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
 
   /**
    * @see [[Alternative.unite]]
@@ -32,7 +32,7 @@ final class UniteOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
             G: Foldable[G]): F[A] = A.unite[G, A](fga)
 }
 
-final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVal {
+final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) extends AnyVal {
 
   /**
    * @see [[Alternative.separate]]
@@ -51,7 +51,7 @@ final class SeparateOps[F[_], G[_, _], A, B](val fgab: F[G[A, B]]) extends AnyVa
                G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
 }
 
-final class GuardOps(val condition: Boolean) extends AnyVal {
+final class GuardOps(private val condition: Boolean) extends AnyVal {
 
   /**
    * @see [[Alternative.guard]]

@@ -77,7 +77,7 @@ case object AgeIsInvalid extends DomainValidation {
 We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
 ```tut:silent
-import cats.syntax.either._
+import cats.implicits._
 
 sealed trait FormValidator {
  def validateUserName(userName: String): Either[DomainValidation, String] =
@@ -627,7 +627,7 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 The `withEither` method allows you to temporarily turn a `Validated` instance into an `Either` instance and apply it to a function.
 
 ```tut:silent
-import cats.syntax.either._ // get Either#flatMap
+import cats.implicits._ // get Either#flatMap
 
 def positive(field: String, i: Int): Either[ConfigError, Int] = {
   if (i >= 0) Right(i)

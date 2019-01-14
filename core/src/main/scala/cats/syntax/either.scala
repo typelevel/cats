@@ -36,7 +36,7 @@ object EitherSyntax {
   }
 }
 
-final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
+final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def foreach(f: B => Unit): Unit = eab match {
     case Left(_)  => ()
     case Right(b) => f(b)
@@ -293,7 +293,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
 }
 
-final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
+final class EitherObjectOps(private val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)
@@ -350,19 +350,19 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   }
 }
 
-final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal {
+final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
 
   /** Cast the right type parameter of the `Left`. */
   def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
 }
 
-final class RightOps[A, B](val right: Right[A, B]) extends AnyVal {
+final class RightOps[A, B](private val right: Right[A, B]) extends AnyVal {
 
   /** Cast the left type parameter of the `Right`. */
   def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
 }
 
-final class EitherIdOps[A](val obj: A) extends AnyVal {
+final class EitherIdOps[A](private val obj: A) extends AnyVal {
 
   /** Wrap a value in `Left`. */
   def asLeft[B]: Either[A, B] = Left(obj)
@@ -404,7 +404,7 @@ trait EitherSyntaxBinCompat0 {
     new EitherIdOpsBinCompat0(a)
 }
 
-final class EitherIdOpsBinCompat0[A](val value: A) extends AnyVal {
+final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
 
   /**
    * Wrap a value to a left EitherNec
@@ -431,7 +431,7 @@ final class EitherIdOpsBinCompat0[A](val value: A) extends AnyVal {
   def rightNec[B]: Either[NonEmptyChain[B], A] = Right(value)
 }
 
-final class EitherOpsBinCompat0[A, B](val value: Either[A, B]) extends AnyVal {
+final class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
 
   /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */

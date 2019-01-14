@@ -7,7 +7,7 @@ trait TrySyntax {
   implicit final def catsSyntaxTry[A](t: Try[A]): TryOps[A] = new TryOps(t)
 }
 
-final class TryOps[A](val self: Try[A]) extends AnyVal {
+final class TryOps[A](private val self: Try[A]) extends AnyVal {
 
   /**
    * lift the `try` into a `F[_]` with `ApplicativeError[F, Throwable]` instance

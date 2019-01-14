@@ -3,7 +3,7 @@ package tests
 
 import cats.Contravariant
 import cats.arrow._
-import cats.data.{Const, EitherT, Kleisli, Reader}
+import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -102,6 +102,17 @@ class KleisliSuite extends CatsSuite {
   checkAll("Kleisli[Option, MiniInt, Int]", FunctorTests[Kleisli[Option, MiniInt, ?]].functor[Int, Int, Int])
   checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
 
+  {
+    implicit val FF = ListWrapper.functorFilter
+
+    checkAll("Kleisli[ListWrapper, MiniInt, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, MiniInt, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, MiniInt, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, MiniInt, ?]]))
+
+    FunctorFilter[ReaderT[ListWrapper, Int, ?]]
+  }
+
   checkAll("Kleisli[Function0, MiniInt, ?]",
            DistributiveTests[Kleisli[Function0, MiniInt, ?]].distributive[Int, Int, Int, Option, Id])
   checkAll("Distributive[Kleisli[Function0, Int, ?]]",
@@ -140,6 +151,11 @@ class KleisliSuite extends CatsSuite {
   checkAll("Contravariant[Kleisli[Option, ?, Int]]",
            SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
 
+  test("Functor[Kleisli[F, Int, ?]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
+    def shouldCompile1[F[_]: ApplicativeError[?[_], E]: FlatMap, E]: Functor[Kleisli[F, Int, ?]] =
+      Functor[Kleisli[F, Int, ?]]
+  }
+
   test("local composes functions") {
     forAll { (f: Int => Option[String], g: Int => Int, i: Int) =>
       f(g(i)) should ===(Kleisli.local[Option, String, Int](g)(Kleisli(f)).run(i))
@@ -162,6 +178,13 @@ class KleisliSuite extends CatsSuite {
     val t: List ~> Option = λ[List ~> Option](_.headOption)
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       t(f.run(i)) should ===(f.mapK(t).run(i))
+    }
+  }
+
+  test("liftFunctionK consistent with mapK") {
+    val t: List ~> Option = λ[List ~> Option](_.headOption)
+    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
+      (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i))
     }
   }
 

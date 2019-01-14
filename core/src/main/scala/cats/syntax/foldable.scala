@@ -9,7 +9,12 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUno
     new FoldableOps[F, A](fa)
 }
 
-final class NestedFoldableOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
+trait FoldableSyntaxBinCompat0 {
+  implicit final def catsSyntaxFoldableOps0[F[_], A](fa: F[A]): FoldableOps0[F, A] =
+    new FoldableOps0[F, A](fa)
+}
+
+final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
   def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = F.sequence_(fga)
 
   /**
@@ -27,7 +32,7 @@ final class NestedFoldableOps[F[_], G[_], A](val fga: F[G[A]]) extends AnyVal {
   def foldK(implicit F: Foldable[F], G: MonoidK[G]): G[A] = F.foldK(fga)
 }
 
-final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldl[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
     F.foldLeft(fa, b)(f)
 
@@ -191,4 +196,22 @@ final class FoldableOps[F[_], A](val fa: F[A]) extends AnyVal {
       }
     )
 
+}
+
+final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
+
+  /**
+   * Fold implemented by mapping `A` values into `B` in a context `G` and then
+   * combining them using the `MonoidK[G]` instance.
+   *
+   * {{{
+   * scala> import cats._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = List(1, 2, 3).foldMapK(f)
+   * scala> val a = x("foo")
+   * a: String = "foo321"
+   * }}}
+   * */
+  def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] =
+    F.foldMap(fa)(f)(G.algebra)
 }

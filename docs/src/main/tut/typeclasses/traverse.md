@@ -72,9 +72,7 @@ a `List[Option[A]]`. Since the values themselves are effects, traversing with `i
 will turn the traversable "inside out."
 
 ```tut:reset:book:silent
-import cats.instances.list._
-import cats.instances.option._
-import cats.syntax.traverse._
+import cats.implicits._
 ```
 
 ```tut:book

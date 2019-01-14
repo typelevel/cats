@@ -60,6 +60,10 @@ class RepresentableSuite extends CatsSuite {
   }
 
   {
+    //the monadInstance below made a conflict to resolve this one.
+    // TODO ceedubs is this needed?
+    implicit val isoFun1: Isomorphisms[MiniInt => ?] = Isomorphisms.invariant[MiniInt => ?]
+
     implicit val monadInstance = Representable.monad[MiniInt => ?]
     checkAll("MiniInt => ?", MonadTests[MiniInt => ?].monad[String, String, String])
   }

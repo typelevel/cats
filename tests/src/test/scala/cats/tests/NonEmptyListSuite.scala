@@ -3,7 +3,7 @@ package tests
 
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 
-import cats.data.{NonEmptyList, NonEmptyMap, NonEmptyVector}
+import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
@@ -15,6 +15,7 @@ import cats.laws.discipline.{
   SerializableTests
 }
 import scala.collection.immutable.SortedMap
+import scala.collection.immutable.SortedSet
 
 class NonEmptyListSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
@@ -327,6 +328,12 @@ class NonEmptyListSuite extends CatsSuite {
   test("NonEmptyList#toNem is consistent with List#toMap and creating NonEmptyMap from it") {
     forAll { nel: NonEmptyList[(Int, String)] =>
       nel.toNem should ===(NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap))
+    }
+  }
+
+  test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
+    forAll { nel: NonEmptyList[Int] =>
+      nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
     }
   }
 }
