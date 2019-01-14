@@ -30,7 +30,7 @@ object TryInstances {
   // that the Monad[Try] instance has ended up here in Alleycats.
   //
   // Furthermore, since Cats has introduced a Bimonad[A], the Monad[Try]
-  // and Comanad[Try] instances have been replaced by a single Bimonad[Try]
+  // and Comonad[Try] instances have been replaced by a single Bimonad[Try]
   // instance.
   //
   @export(Orphan)
