@@ -220,6 +220,27 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
     F.foldMap(fa)(f)(G.algebra)
 
   /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => H[B, C]` for some `Bifoldable[H]`
+   * Equivalent to `Functor#map` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Foldable, cats.Eval
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].partitionBifoldable(list)(a => (a, s"value ${a}"))
+   * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
+   * `Const`'s second parameter is never instantiated, so we can use an impossible type:
+   * scala> Foldable[List].partitionBifoldable(list)(a => Option(Const[Int, Nothing with Any](a)))
+   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
+   * }}}
+   */
+  def partitionBifoldable[H[_, _], B, C](
+    fa: F[A]
+  )(f: A => H[B, C])(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) = {
+    import cats.syntax.foldable._
+    F.partitionBifoldable[H, A, B, C](fa)(f)(A, H)
+  }
+
+  /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
    * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
    *
@@ -267,6 +288,31 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
 }
 
 final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
+
+  /**
+   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`
+   * Equivalent to `Functor#map` and then `Alternative#separate`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].partitionBifoldable(list)(a => (s"value ${a}", if (a % 2 == 0) -a else a))
+   * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
+   * scala> Foldable[List].partitionBifoldable(list)(a => Const[Int, Nothing with Any](a))
+   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
+   * }}}
+   */
+  def partitionBifoldable[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
+                                                                       H: Bifoldable[H]): (F[B], F[C]) = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    F.foldMap[A, (F[B], F[C])](fa)(
+      a => H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+    )
+  }
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
