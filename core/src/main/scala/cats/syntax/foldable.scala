@@ -265,7 +265,7 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Bitraversable#traverse` over `Alternative#separate`
+   * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.implicits._, cats.Eval
