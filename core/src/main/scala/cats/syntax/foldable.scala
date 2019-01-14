@@ -240,7 +240,7 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
-   * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.implicits._, cats.Foldable
@@ -261,7 +261,7 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.implicits._, cats.Eval
@@ -312,7 +312,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
-   * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.implicits._, cats.Foldable
@@ -344,7 +344,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Bitraverse#traverse` over `Alternative#separate`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.implicits._, cats.Foldable, cats.Eval
