@@ -24,8 +24,7 @@ position: 30
 
 # Example Projects
  * [Scala Pet Store](https://github.com/pauljamescleary/scala-pet-store) 
-   An implementation of the java pet store using FP techniques in scala. Stack includes Http4s, Circe,
-   Doobie, Cats, and ScalaCheck. Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie
+   Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie.
    
    
 # Videos
