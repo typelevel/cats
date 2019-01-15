@@ -21,6 +21,11 @@ position: 30
  * [Scala Exercises](https://www.scala-exercises.org/cats) by 47 Degrees 
    offers multiple online exercises to learn about the type classes and 
    datatypes included in Cats.
+
+# Example Projects
+ * [Scala Pet Store](https://github.com/pauljamescleary/scala-pet-store) 
+   Demonstrates FP techniques while maintaining approachability for people with an OO background. Uses tagless final for the core domain, and popular Typelevel libraries including Cats, Http4s, Circe and Doobie.
+   
    
 # Videos
  * [Functional Structures in Scala](https://www.youtube.com/playlist?list=PLFrwDVdSrYE6dy14XCmUtRAJuhCxuzJp0) 
