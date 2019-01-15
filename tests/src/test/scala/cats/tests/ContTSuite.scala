@@ -64,4 +64,19 @@ class ContTSuite extends CatsSuite {
     withContLaw[Eval, Int, String, Int]
   }
 
+  test("ContT.defer defers evaluation until run is invoked") {
+    forAll { (b: Int, cb: Int => Eval[String]) =>
+      var didSideEffect = false
+
+      val contT = ContT.defer[Eval, String, Int] {
+        didSideEffect = true
+        b
+      }
+      didSideEffect should ===(false)
+
+      contT.run(cb)
+      didSideEffect should ===(true)
+    }
+  }
+
 }
