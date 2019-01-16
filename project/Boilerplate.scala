@@ -470,7 +470,7 @@ object Boilerplate {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
       |
-        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) extends AnyVal {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}]($tupleTpe) {
         -  $map
         -  $contramap
         -  $imap
