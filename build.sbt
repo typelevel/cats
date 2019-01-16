@@ -382,14 +382,11 @@ def mimaBoilerplateSyntaxExclusions(scalaVersion: String) = {
   import com.typesafe.tools.mima.core.ProblemFilters._
 
   Seq(
-    exclude[IncompatibleResultTypeProblem]("cats.*.catsSyntaxTuple*Semigroupal"),
-    exclude[IncompatibleResultTypeProblem]("cats.*.catsSyntaxTuple*Parallel"),
+    exclude[IncompatibleResultTypeProblem]("cats.*.catsSyntaxTuple*Parallel")
   ) ++ (CrossVersion.partialVersion(scalaVersion) match {
     case Some((2, 11)) =>
       Seq(
-        exclude[DirectMissingMethodProblem]("cats.syntax.TupleSemigroupalSyntax.catsSyntaxTuple*Semigroupal"),
         exclude[DirectMissingMethodProblem]("cats.syntax.TupleParallelSyntax.catsSyntaxTuple*Parallel"),
-        exclude[ReversedMissingMethodProblem]("cats.syntax.TupleSemigroupalSyntax.catsSyntaxTuple*Semigroupal"),
         exclude[ReversedMissingMethodProblem]("cats.syntax.TupleParallelSyntax.catsSyntaxTuple*Parallel")
       )
     case _ => Seq.empty
