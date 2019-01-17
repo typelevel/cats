@@ -233,7 +233,9 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
    * }}}
    */
-  def partitionBifoldable[H[_, _], B, C](f: A => H[B, C])(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) = {
+  def partitionBifoldable[H[_, _], B, C](
+    f: A => H[B, C]
+  )(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) = {
     import cats.syntax.foldable._
     F.partitionBifoldable[H, A, B, C](fa)(f)(A, H)
   }
@@ -254,7 +256,9 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
    * }}}
    */
-  def partitionBifoldableM[G[_], H[_, _], B, C](f: A => G[H[B, C]])(implicit A: Alternative[F], F: Foldable[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
+  def partitionBifoldableM[G[_], H[_, _], B, C](
+    f: A => G[H[B, C]]
+  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
     import cats.syntax.foldable._
     F.partitionBifoldableM[G, H, A, B, C](fa)(f)(A, M, H)
   }
