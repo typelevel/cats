@@ -321,6 +321,7 @@ def mimaSettings(moduleName: String) =
           exclude[DirectMissingMethodProblem]("cats.syntax.DistributiveOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOps.obj"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOpsBinCompat0.value"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EitherSyntax#CatchOnlyPartiallyApplied.dummy"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherKOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherObjectOps.either"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherOps.eab"),
@@ -372,9 +373,25 @@ def mimaSettings(moduleName: String) =
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
           exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
-        )
+        ) ++ mimaBoilerplateSyntaxExclusions(scalaVersion.value)
     }
   )
+
+def mimaBoilerplateSyntaxExclusions(scalaVersion: String) = {
+  import com.typesafe.tools.mima.core._
+  import com.typesafe.tools.mima.core.ProblemFilters._
+
+  Seq(
+    exclude[IncompatibleResultTypeProblem]("cats.*.catsSyntaxTuple*Parallel")
+  ) ++ (CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, 11)) =>
+      Seq(
+        exclude[DirectMissingMethodProblem]("cats.syntax.TupleParallelSyntax.catsSyntaxTuple*Parallel"),
+        exclude[ReversedMissingMethodProblem]("cats.syntax.TupleParallelSyntax.catsSyntaxTuple*Parallel")
+      )
+    case _ => Seq.empty
+  })
+}
 
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)

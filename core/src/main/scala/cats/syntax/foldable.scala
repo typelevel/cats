@@ -198,7 +198,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
 }
 
-final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
+final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then

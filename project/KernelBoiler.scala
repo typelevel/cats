@@ -13,7 +13,7 @@ import sbt._
 object KernelBoiler {
   import scala.StringContext._
 
-  implicit class BlockHelper(val sc: StringContext) extends AnyVal {
+  implicit class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
