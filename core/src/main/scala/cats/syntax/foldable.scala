@@ -226,7 +226,7 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * {{{
    * scala> import cats.implicits._, cats.data.Const
    * scala> val list = List(1,2,3,4)
-   * scala> list.partitionBifold(a => (a, s"value ${a}"))
+   * scala> list.partitionBifold(a => (a, "value " + a.toString))
    * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> list.partitionBifold(a => Const[Int, Nothing with Any](a))
@@ -292,7 +292,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
    * {{{
    * scala> import cats.implicits._, cats.Foldable, cats.data.Const
    * scala> val list = List(1,2,3,4)
-   * scala> Foldable[List].partitionBifold(list)(a => (s"value ${a}", if (a % 2 == 0) -a else a))
+   * scala> Foldable[List].partitionBifold(list)(a => ("value " + a.toString(), if (a % 2 == 0) -a else a))
    * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
    * scala> Foldable[List].partitionBifold(list)(a => Const[Int, Nothing with Any](a))
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
