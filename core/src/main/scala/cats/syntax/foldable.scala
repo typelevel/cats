@@ -224,12 +224,12 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * Equivalent to `Functor#map` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable
+   * scala> import cats.implicits._, cats.data.Const
    * scala> val list = List(1,2,3,4)
-   * scala> Foldable[List].partitionBifoldable(list)(a => (a, s"value ${a}"))
+   * scala> list.partitionBifoldable(a => (a, s"value ${a}"))
    * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
-   * scala> Foldable[List].partitionBifoldable(list)(a => Option(Const[Int, Nothing with Any](a)))
+   * scala> list.partitionBifoldable(a => Const[Int, Nothing with Any](a))
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
    * }}}
    */
@@ -245,15 +245,11 @@ final class FoldableOps0[F[_], A](val fa: F[A]) extends AnyVal {
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable
+   * scala> import cats.implicits._, cats.data.Const
    * scala> val list = List(1,2,3,4)
-   * scala> val partitioned1 = Foldable[List].partitionBifoldableM(list)(a => (Free.pure((a, s"value ${a}"))): Free[Id, Tuple2[Int, String]])
-   * Since `Free.pure` yields a deferred computation, we need to force it to inspect the result:
-   * scala> partitioned1.run
-   * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
-   * scala> Foldable[List].partitionEitherM(list)(a => Option(Const[Int, Nothing with Any](a)))
-   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
+   * scala> list.partitionBifoldableM(a => Option(Const[Int, Nothing with Any](a)))
+   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4), List()))
    * }}}
    */
   def partitionBifoldableM[G[_], H[_, _], B, C](
@@ -294,7 +290,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
    * Equivalent to `Functor#map` and then `Alternative#separate`.
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable
+   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
    * scala> val list = List(1,2,3,4)
    * scala> Foldable[List].partitionBifoldable(list)(a => (s"value ${a}", if (a % 2 == 0) -a else a))
    * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
@@ -319,15 +315,11 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
    * Equivalent to `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
-   * scala> import cats.implicits._, cats.Foldable
+   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
    * scala> val list = List(1,2,3,4)
-   * scala> val partitioned1 = Foldable[List].partitionBifoldableM(list)(a => (Free.pure((a, s"value ${a}"))): Free[Id, Tuple2[Int, String]])
-   * Since `Free.pure` yields a deferred computation, we need to force it to inspect the result:
-   * scala> partitioned1.run
-   * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
-   * scala> Foldable[List].partitionEitherM(list)(a => Option(Const[Int, Nothing with Any](a)))
-   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
+   * scala> Foldable[List].partitionBifoldableM(list)(a => Option(Const[Int, Nothing with Any](a)))
+   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4), List()))
    * }}}
    */
   def partitionBifoldableM[G[_], H[_, _], A, B, C](
