@@ -299,7 +299,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
    * }}}
    */
   def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
-                                                                       H: Bifoldable[H]): (F[B], F[C]) = {
+                                                                   H: Bifoldable[H]): (F[B], F[C]) = {
     import cats.instances.tuple._
 
     implicit val mb: Monoid[F[B]] = A.algebra[B]
