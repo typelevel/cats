@@ -404,7 +404,7 @@ object Boilerplate {
          -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
       |}
       |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) extends AnyVal {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
          -  $parMap
          -  $parTupled
          -}
