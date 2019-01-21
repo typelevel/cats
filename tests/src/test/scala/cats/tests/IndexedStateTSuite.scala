@@ -4,7 +4,6 @@ package tests
 import catalysts.Platform
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.arrow.Profunctor
 import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -351,7 +350,7 @@ class IndexedStateTSuite extends CatsSuite {
 
     checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
              FunctorTests[IndexedStateT[ListWrapper, String, Int, ?]].functor[Int, Int, Int])
-    checkAll("Functor[IndexedStateT[ListWrapper, Int, ?]]",
+    checkAll("Functor[IndexedStateT[ListWrapper, String, Int, ?]]",
              SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, ?]]))
 
     Functor[IndexedStateT[ListWrapper, String, Int, ?]]

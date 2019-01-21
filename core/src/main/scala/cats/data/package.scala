@@ -58,6 +58,12 @@ package object data {
   type State[S, A] = StateT[Eval, S, A]
   object State extends StateFunctions
 
+  type StoreT[F[_], A, B] = IndexedStoreT[F, A, A, B]
+  object StoreT extends StoreTFunctions
+
+  type StoreId[A, B] = StoreT[Eval, A, B]
+  object StoreId extends StoreFunctions
+
   type IRWST[F[_], E, L, SA, SB, A] = IndexedReaderWriterStateT[F, E, L, SA, SB, A]
   val IRWST = IndexedReaderWriterStateT
 
