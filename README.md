@@ -1,6 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
- To help us better plan for 2019, please consider participating in our [Cats Ecosystem Community Survey 2018](https://goo.gl/forms/CYwRqs015SyW6XkC2).
+Cats ecosystem community survey 2018 is closed. It received 588 responses. Thank you all very much! We will publish results in a couple of weeks.
 
 
 ## Cats
