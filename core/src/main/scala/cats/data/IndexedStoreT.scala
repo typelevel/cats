@@ -1,41 +1,40 @@
 package cats
 package data
 
-
 final class IndexedStoreT[F[_], I, A, B](val run: (F[A => B], I)) extends Serializable {
   import StoreT._
 
-  def xmap[X1, X2](f: I => X1)(g: X2 => A)(implicit  F: Functor[F]): IndexedStoreT[F, X1, X2, B] =
-    indexedStoreT((F.map(set)(_ compose g), f(pos)))
+  def xmap[X1, X2](f: I => X1)(g: X2 => A)(implicit F: Functor[F]): IndexedStoreT[F, X1, X2, B] =
+    indexedStoreT((F.map(set)(_.compose(g)), f(pos)))
 
   def imap[X](f: I => X): IndexedStoreT[F, X, A, B] =
     indexedStoreT((set, f(pos)))
 
   def contramap[X](g: X => A)(implicit F: Functor[F]): IndexedStoreT[F, I, X, B] =
-    indexedStoreT((F.map(set)(_ compose g), pos))
+    indexedStoreT((F.map(set)(_.compose(g)), pos))
 
-  def bimap[X, Y](f: I => X, g: B => Y)(implicit  F: Functor[F]): IndexedStoreT[F, X, A, Y] =
+  def bimap[X, Y](f: I => X, g: B => Y)(implicit F: Functor[F]): IndexedStoreT[F, X, A, Y] =
     indexedStoreT((F.map(set)(g.compose), f(pos)))
 
   def leftMap[X](f: I => X): IndexedStoreT[F, X, A, B] =
     imap(f)
 
-  def map[C](f: B => C)(implicit  F: Functor[F]): IndexedStoreT[F, I, A, C] =
-    indexedStoreT(mapRun(g => f compose g))
+  def map[C](f: B => C)(implicit F: Functor[F]): IndexedStoreT[F, I, A, C] =
+    indexedStoreT(mapRun(g => f.compose(g)))
 
-  private def mapRun[C](f: (A => B) => C)(implicit  F: Functor[F]): (F[C], I) =
+  private def mapRun[C](f: (A => B) => C)(implicit F: Functor[F]): (F[C], I) =
     (F.map(run._1)(f), run._2)
 
-  def put(a: A)(implicit  F: Functor[F]): F[B] =
+  def put(a: A)(implicit F: Functor[F]): F[B] =
     F.map(run._1)(_(a))
 
-  def puts(f: I => A)(implicit  F: Functor[F]): F[B] =
+  def puts(f: I => A)(implicit F: Functor[F]): F[B] =
     put(f(pos))
 
-  def putf[G[_]](a: G[A])(implicit  F: Functor[F], G: Functor[G]): G[F[B]] =
+  def putf[G[_]](a: G[A])(implicit F: Functor[F], G: Functor[G]): G[F[B]] =
     G.map(a)(put)
 
-  def putsf[G[_]](f: I => G[A])(implicit F: Functor[F], G: Functor[G]): G[F[B]]  =
+  def putsf[G[_]](f: I => G[A])(implicit F: Functor[F], G: Functor[G]): G[F[B]] =
     putf(f(pos))
 
   def set: F[A => B] = run._1
@@ -87,26 +86,26 @@ abstract private[data] class StoreTFunctions extends CommonStoreTConstructors {
 
 abstract private[data] class StoreFunctions {
 
-  def apply[A, B](f:A => B, a: A): StoreId[A, B] =
-    IndexedStoreT.applyF((Now(f),a))
+  def apply[A, B](f: A => B, a: A): StoreId[A, B] =
+    IndexedStoreT.applyF((Now(f), a))
 
 }
 
-
-sealed abstract private[data] class IndexedStoreTFunctorLeft[F[_], A0, B0] extends Functor[IndexedStoreT[F, ?, A0, B0]] {
+sealed abstract private[data] class IndexedStoreTFunctorLeft[F[_], A0, B0]
+    extends Functor[IndexedStoreT[F, ?, A0, B0]] {
   override def map[A, B](fa: IndexedStoreT[F, A, A0, B0])(f: A => B): IndexedStoreT[F, B, A0, B0] =
-    fa leftMap f
+    fa.leftMap(f)
 }
 
 sealed abstract private[data] class IndexedStoreTFunctor[F[_], I0, A0] extends Functor[IndexedStoreT[F, I0, A0, ?]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: IndexedStoreT[F, I0, A0, A])(f: A => B): IndexedStoreT[F, I0, A0, B] =
-    fa map f
+    fa.map(f)
 }
 
 sealed abstract private[data] class IndexedStoreTContravariant[F[_], I0, B0]
-  extends Contravariant[IndexedStoreT[F, I0, ?, B0]] {
+    extends Contravariant[IndexedStoreT[F, I0, ?, B0]] {
   implicit def F: Functor[F]
 
   override def contramap[A, B](fa: IndexedStoreT[F, I0, A, B0])(f: B => A): IndexedStoreT[F, I0, B, B0] =
@@ -120,14 +119,18 @@ sealed abstract private[data] class IndexedStoreTBifunctor[F[_], A0] extends Bif
     fab.bimap(f, g)
 }
 
-sealed abstract private[data] class StoreTCoflatMap[F[_], A0] extends IndexedStoreTFunctor[F, A0, A0] with CoflatMap[StoreT[F, A0, ?]]{
+sealed abstract private[data] class StoreTCoflatMap[F[_], A0]
+    extends IndexedStoreTFunctor[F, A0, A0]
+    with CoflatMap[StoreT[F, A0, ?]] {
   implicit def F: CoflatMap[F]
 
-  override def coflatMap[A, B](fab: StoreT[F, A0, A])(f: StoreT[F, A0, A]=> B): StoreT[F, A0, B] =
-    fab coflatMap f
+  override def coflatMap[A, B](fab: StoreT[F, A0, A])(f: StoreT[F, A0, A] => B): StoreT[F, A0, B] =
+    fab.coflatMap(f)
 }
 
-sealed abstract private[data] class StoreTComonad[F[_], A0] extends StoreTCoflatMap[F, A0] with Comonad[StoreT[F, A0, ?]]{
+sealed abstract private[data] class StoreTComonad[F[_], A0]
+    extends StoreTCoflatMap[F, A0]
+    with Comonad[StoreT[F, A0, ?]] {
   implicit def F: Comonad[F]
 
   override def coflatten[A](fa: StoreT[F, A0, A]): StoreT[F, A0, StoreT[F, A0, A]] = fa.duplicate
@@ -136,7 +139,9 @@ sealed abstract private[data] class StoreTComonad[F[_], A0] extends StoreTCoflat
 }
 
 sealed abstract private[data] class IndexedStoreTInstances2 {
-  implicit def catsDataContravariantForIndexedStoreT[F[_], I, B](implicit F0: Functor[F]): Contravariant[IndexedStoreT[F, I, ?, B]] =
+  implicit def catsDataContravariantForIndexedStoreT[F[_], I, B](
+    implicit F0: Functor[F]
+  ): Contravariant[IndexedStoreT[F, I, ?, B]] =
     new IndexedStoreTContravariant[F, I, B] { implicit def F = F0 }
 }
 
@@ -146,21 +151,25 @@ sealed abstract private[data] class IndexedStoreTInstances1 extends IndexedStore
 }
 
 sealed abstract private[data] class IndexedStoreTInstances0 extends IndexedStoreTInstances1 {
-  implicit def catsDataBifunctorForIndexedStoreT[F[_], A](implicit F0: Functor[F]): Bifunctor[IndexedStoreT[F, ?, A, ?]] =
+  implicit def catsDataBifunctorForIndexedStoreT[F[_], A](
+    implicit F0: Functor[F]
+  ): Bifunctor[IndexedStoreT[F, ?, A, ?]] =
     new IndexedStoreTBifunctor[F, A] { implicit def F = F0 }
 }
 
 sealed abstract private[data] class IndexedStoreTInstances extends IndexedStoreTInstances0 {
-  implicit def catsDataFunctorRightForIndexedStoreT[F[_], I, A](implicit F0: Functor[F]): Functor[IndexedStoreT[F, I, A, ?]] =
+  implicit def catsDataFunctorRightForIndexedStoreT[F[_], I, A](
+    implicit F0: Functor[F]
+  ): Functor[IndexedStoreT[F, I, A, ?]] =
     new IndexedStoreTFunctor[F, I, A] { implicit def F = F0 }
 }
 
 sealed abstract private[data] class StoreTInstances1 extends IndexedStoreTInstances {
   implicit def catsDataCoflatMapForStoreT[F[_], A](implicit F0: CoflatMap[F]): CoflatMap[StoreT[F, A, ?]] =
-    new StoreTCoflatMap[F, A] { implicit def F = F0}
+    new StoreTCoflatMap[F, A] { implicit def F = F0 }
 }
 
 sealed abstract private[data] class StoreTInstances extends StoreTInstances1 {
   implicit def catsDataComonadForStoreT[F[_], A](implicit F0: Comonad[F]): Comonad[StoreT[F, A, ?]] =
-    new StoreTComonad[F, A] { implicit def F = F0}
+    new StoreTComonad[F, A] { implicit def F = F0 }
 }

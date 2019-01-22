@@ -363,7 +363,9 @@ sealed private[discipline] trait ArbitraryInstances0 {
   ): Arbitrary[IndexedStoreT[F, I, A, B]] =
     Arbitrary(F.arbitrary.map(IndexedStoreT.applyF))
 
-  implicit def catsLawsCogenForIndexedStoreT[F[_], I, A, B] (implicit F: Cogen[(F[A => B], I)]): Cogen[IndexedStoreT[F, I, A, B]] =
+  implicit def catsLawsCogenForIndexedStoreT[F[_], I, A, B](
+    implicit F: Cogen[(F[A => B], I)]
+  ): Cogen[IndexedStoreT[F, I, A, B]] =
     F.contramap(_.run)
 
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
