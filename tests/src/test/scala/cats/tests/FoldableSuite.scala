@@ -78,6 +78,63 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test("Foldable#partitionEitherM retains size") {
+    import cats.syntax.foldable._
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val vector = Foldable[F].toList(fi).toVector
+      val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map {
+        case (lefts, rights) =>
+          (lefts <+> rights).size
+      }
+      result should ===(Option(vector.size))
+    }
+  }
+
+  test("Foldable#partitionEitherM consistent with List#partition") {
+    import cats.syntax.foldable._
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val list = Foldable[F].toList(fi)
+      val partitioned = Foldable[List].partitionEitherM(list)(f.andThen(Option.apply))
+      val (ls, rs) = list
+        .map(f)
+        .partition({
+          case Left(_)  => true
+          case Right(_) => false
+        })
+
+      partitioned.map(_._1.map(_.asLeft[String])) should ===(Option(ls))
+      partitioned.map(_._2.map(_.asRight[String])) should ===(Option(rs))
+    }
+  }
+
+  test("Foldable#partitionEitherM to one side is identity") {
+    import cats.syntax.foldable._
+    forAll { (fi: F[Int], f: Int => String) =>
+      val list = Foldable[F].toList(fi)
+      val g: Int => Option[Either[Double, String]] = f.andThen(Right.apply).andThen(Option.apply)
+      val h: Int => Option[Either[String, Double]] = f.andThen(Left.apply).andThen(Option.apply)
+
+      val withG = Foldable[List].partitionEitherM(list)(g).map(_._2)
+      withG should ===(Option(list.map(f)))
+
+      val withH = Foldable[List].partitionEitherM(list)(h).map(_._1)
+      withH should ===(Option(list.map(f)))
+    }
+  }
+
+  test("Foldable#partitionEitherM remains sorted") {
+    import cats.syntax.foldable._
+    forAll { (fi: F[Int], f: Int => Either[String, String]) =>
+      val list = Foldable[F].toList(fi)
+
+      val sorted = list.map(f).sorted
+      val pairs = Foldable[List].partitionEitherM(sorted)(Option.apply)
+
+      pairs.map(_._1.sorted) should ===(pairs.map(_._1))
+      pairs.map(_._2.sorted) should ===(pairs.map(_._2))
+    }
+  }
+
   test(s"Foldable[$name] summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
