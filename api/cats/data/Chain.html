@@ -167,6 +167,10 @@
                         <a class="class" href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A."></a>
                         <a href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A.">IndexedReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$IndexedState$.html" title=""></a>
+                        <a href="package$$IndexedState$.html" title="">IndexedState</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="IndexedStateT$.html" title=""></a>
                         <a class="class" href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A."></a>
                         <a href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A.">IndexedStateT</a>
@@ -658,10 +662,10 @@ Traverses only until <code>a</code> is found.</p>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+    </li><li name="cats.data.Chain#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(o:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../cats/data/Chain.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../cats/data/Chain.html#equals(o:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -670,10 +674,10 @@ Traverses only until <code>a</code> is found.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="o">o: <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.Chain">Chain</a> → AnyRef → Any</dd></dl></div>
     </li><li name="cats.data.Chain#exists" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="exists(f:A=&gt;Boolean):Boolean"></a><a id="exists((A)⇒Boolean):Boolean"></a>
       <span class="permalink">
@@ -866,7 +870,23 @@ Traverses only until <code>a</code> is found.</p>
       
       <p class="shortcomment cmt">Groups elements inside this <code>Chain</code> according to the <code>Order</code>
 of the keys produced by the given mapping function.</p>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="cats.data.Chain#hash" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hash[AA&gt;:A](implicithashA:cats.Hash[AA]):Int"></a><a id="hash[AA&gt;:A](Hash[AA]):Int"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Chain.html#hash[AA&gt;:A](implicithashA:cats.Hash[AA]):Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.Chain.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="hashA">hashA: <a href="../index.html#Hash[A]=cats.kernel.Hash[A]" class="extmbr" name="cats.Hash">Hash</a>[<span class="extype" name="cats.data.Chain.hash.AA">AA</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+      </span>
+      
+      
+    </li><li name="cats.data.Chain#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
       <a href="../../cats/data/Chain.html#hashCode():Int" title="Permalink">
@@ -881,10 +901,7 @@ of the keys produced by the given mapping function.</p>
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
-                <span class="name">@native</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="cats.data.Chain">Chain</a> → AnyRef → Any</dd></dl></div>
     </li><li name="cats.data.Chain#headOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="headOption:Option[A]"></a>
       <span class="permalink">

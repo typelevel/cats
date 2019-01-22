@@ -120,6 +120,10 @@
                         <a href="AllInstancesBinCompat2.html" title="">AllInstancesBinCompat2</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="AllInstancesBinCompat3.html" title=""></a>
+                        <a href="AllInstancesBinCompat3.html" title="">AllInstancesBinCompat3</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AnyValInstances.html" title=""></a>
                         <a href="AnyValInstances.html" title="">AnyValInstances</a>
                       </li><li class="current-entities indented2">
@@ -553,7 +557,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">finiteDuration</span><span class="result"> extends <a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a></span>
+        <span class="name">finiteDuration</span><span class="result"> extends <span class="extype" name="cats.instances.CoreFiniteDurationInstances">CoreFiniteDurationInstances</span> with <a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a></span>
       </span>
       </h4>
 
@@ -562,7 +566,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a>, <a href="../kernel/instances/FiniteDurationInstances.html" class="extype" name="cats.kernel.instances.FiniteDurationInstances">kernel.instances.FiniteDurationInstances</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a>, <a href="../kernel/instances/FiniteDurationInstances.html" class="extype" name="cats.kernel.instances.FiniteDurationInstances">kernel.instances.FiniteDurationInstances</a>, <span class="extype" name="cats.instances.CoreFiniteDurationInstances">CoreFiniteDurationInstances</span>, <span class="extype" name="cats.instances.CoreDurationInstances">CoreDurationInstances</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -588,7 +592,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.instances.finiteDuration"><span>finiteDuration</span></li><li class="in" name="cats.instances.FiniteDurationInstances"><span>FiniteDurationInstances</span></li><li class="in" name="cats.kernel.instances.FiniteDurationInstances"><span>FiniteDurationInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.instances.finiteDuration"><span>finiteDuration</span></li><li class="in" name="cats.instances.FiniteDurationInstances"><span>FiniteDurationInstances</span></li><li class="in" name="cats.kernel.instances.FiniteDurationInstances"><span>FiniteDurationInstances</span></li><li class="in" name="cats.instances.CoreFiniteDurationInstances"><span>CoreFiniteDurationInstances</span></li><li class="in" name="cats.instances.CoreDurationInstances"><span>CoreDurationInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -711,22 +715,38 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../kernel/instances/FiniteDurationInstances.html" class="extype" name="cats.kernel.instances.FiniteDurationInstances">FiniteDurationInstances</a></dd></dl></div>
-    </li><li name="cats.instances.FiniteDurationInstances#catsStdShowForFiniteDuration" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="catsStdShowForFiniteDuration:cats.Show[scala.concurrent.duration.FiniteDuration]"></a><a id="catsStdShowForFiniteDuration:Show[FiniteDuration]"></a>
+    </li><li name="cats.instances.CoreDurationInstances#catsStdShowForDurationUnambiguous" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForDurationUnambiguous:cats.Show[scala.concurrent.duration.Duration]"></a><a id="catsStdShowForDurationUnambiguous:Show[Duration]"></a>
       <span class="permalink">
-      <a href="../../cats/instances/package$$finiteDuration$.html#catsStdShowForFiniteDuration:cats.Show[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+      <a href="../../cats/instances/package$$finiteDuration$.html#catsStdShowForDurationUnambiguous:cats.Show[scala.concurrent.duration.Duration]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit final </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">catsStdShowForFiniteDuration</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+        <span class="name">catsStdShowForDurationUnambiguous</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/concurrent/duration/Duration.html#scala.concurrent.duration.Duration" class="extype" name="scala.concurrent.duration.Duration">Duration</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoreDurationInstances</dd></dl></div>
+    </li><li name="cats.instances.CoreFiniteDurationInstances#catsStdShowForFiniteDurationUnambiguous" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForFiniteDurationUnambiguous:cats.Show[scala.concurrent.duration.FiniteDuration]"></a><a id="catsStdShowForFiniteDurationUnambiguous:Show[FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$finiteDuration$.html#catsStdShowForFiniteDurationUnambiguous:cats.Show[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdShowForFiniteDurationUnambiguous</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CoreFiniteDurationInstances</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1019,7 +1039,29 @@
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="cats.instances.FiniteDurationInstances#catsStdShowForFiniteDuration" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdShowForFiniteDuration:cats.Show[scala.concurrent.duration.FiniteDuration]"></a><a id="catsStdShowForFiniteDuration:Show[FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$finiteDuration$.html#catsStdShowForFiniteDuration:cats.Show[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Left to keep binary compatibility. Use CoreFiniteDurationInstances.catsStdShowForFiniteDurationUnambiguous instead.">catsStdShowForFiniteDuration</span><span class="result">: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Left to keep binary compatibility. Use CoreFiniteDurationInstances.catsStdShowForFiniteDurationUnambiguous instead.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
@@ -1027,6 +1069,10 @@
               <h3>Inherited from <a href="FiniteDurationInstances.html" class="extype" name="cats.instances.FiniteDurationInstances">FiniteDurationInstances</a></h3>
             </div><div class="parent" name="cats.kernel.instances.FiniteDurationInstances">
               <h3>Inherited from <a href="../kernel/instances/FiniteDurationInstances.html" class="extype" name="cats.kernel.instances.FiniteDurationInstances">kernel.instances.FiniteDurationInstances</a></h3>
+            </div><div class="parent" name="cats.instances.CoreFiniteDurationInstances">
+              <h3>Inherited from <span class="extype" name="cats.instances.CoreFiniteDurationInstances">CoreFiniteDurationInstances</span></h3>
+            </div><div class="parent" name="cats.instances.CoreDurationInstances">
+              <h3>Inherited from <span class="extype" name="cats.instances.CoreDurationInstances">CoreDurationInstances</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

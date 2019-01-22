@@ -167,6 +167,10 @@
                         <a class="class" href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A."></a>
                         <a href="IndexedReaderWriterStateT.html" title="Represents a stateful computation in a context F[_], from state SA to state SB, with an initial environment E, an accumulated log L and a result A.">IndexedReaderWriterStateT</a>
                       </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$IndexedState$.html" title=""></a>
+                        <a href="package$$IndexedState$.html" title="">IndexedState</a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="IndexedStateT$.html" title=""></a>
                         <a class="class" href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A."></a>
                         <a href="IndexedStateT.html" title="IndexedStateT[F, SA, SB, A] is a stateful computation in a context F yielding a value of type A.">IndexedStateT</a>
@@ -1145,6 +1149,23 @@ res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, 
       </span>
       
       
+    </li><li name="cats.data.EitherT#rethrowT" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rethrowT(implicitF:cats.MonadError[F,A]):F[B]"></a><a id="rethrowT(MonadError[F,A]):F[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/EitherT.html#rethrowT(implicitF:cats.MonadError[F,A]):F[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rethrowT</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../MonadError.html" class="extype" name="cats.MonadError">MonadError</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT.F">F</span>[<span class="extype" name="cats.data.EitherT.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Inverse of <code>MonadError#attemptT</code>
+</p>
     </li><li name="cats.data.EitherT#semiflatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="semiflatMap[D](f:B=&gt;F[D])(implicitF:cats.Monad[F]):cats.data.EitherT[F,A,D]"></a><a id="semiflatMap[D]((B)⇒F[D])(Monad[F]):EitherT[F,A,D]"></a>
       <span class="permalink">
