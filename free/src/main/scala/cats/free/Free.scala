@@ -183,6 +183,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
     mapK(λ[S ~> G](ev.inj(_)))
 
+  final def toFreeT: FreeT[S, Id, A] =
+    foldMap[FreeT[S, Id, ?]] { // this is safe because Free is stack safe
+      new (S ~> FreeT[S, Id, ?]) {
+        def apply[B](fa: S[B]): FreeT[S, Id, B] = FreeT.liftF((fa))
+      }
+    }(FreeT.catsFreeMonadForFreeT[S,Id])
+
+
   override def toString: String =
     "Free(...)"
 }

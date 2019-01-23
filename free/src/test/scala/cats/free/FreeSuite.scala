@@ -45,6 +45,28 @@ class FreeSuite extends CatsSuite {
     rr.toString.length should be > 0
   }
 
+  test("toFreeT is stack-safe") {
+    trait FTestApi[A]
+    case class TB(i: Int) extends FTestApi[Int]
+
+    type FTest[A] = Free[FTestApi, A]
+
+    def tb(i: Int): FTest[Int] = Free.liftF(TB(i))
+
+    def a(i: Int): FTest[Int] =
+      for {
+        j <- tb(i)
+        z <- if (j < 10000) a(j) else Free.pure[FTestApi, Int](j)
+      } yield z
+
+    def runner: FunctionK[FTestApi, Id] = λ[FunctionK[FTestApi, Id]] {
+      case TB(i) => i + 1
+    }
+
+    val prg = a(0)
+    prg.toFreeT.foldMap(runner) should ===(prg.foldMap(runner))
+  }
+
   test("compile id") {
     forAll { x: Free[List, Int] =>
       x.compile(FunctionK.id[List]) should ===(x)
