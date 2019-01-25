@@ -222,6 +222,12 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Foldable[$name] mkString_ delimiter only") {
+    forAll { (fa: F[Int]) =>
+      fa.mkString_(",") should ===(fa.toList.mkString(","))
+    }
+  }
+
   test(s"Foldable[$name].collectFirstSomeM") {
     forAll { (fa: F[Int], n: Int) =>
       fa.collectFirstSomeM(x => (x > n).guard[Option].as(x).asRight[String]) should ===(
