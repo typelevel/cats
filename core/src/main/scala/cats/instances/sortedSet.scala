@@ -78,6 +78,15 @@ trait SortedSetInstances1 {
     new SortedSetSemilattice[A]
 }
 
+trait SortedSetInstancesBinCompat0 {
+  def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
+    implicit val orderingA = fa.ordering
+    implicit val orderingB = fb.ordering
+
+    fa.flatMap(a => fb.map(b => a -> b))
+  }
+}
+
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     Order[Int].compare(a1.size, a2.size) match {

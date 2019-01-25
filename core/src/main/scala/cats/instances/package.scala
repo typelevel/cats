@@ -32,7 +32,7 @@ package object instances {
   object set extends SetInstances
   object short extends ShortInstances
   object sortedMap extends SortedMapInstances
-  object sortedSet extends SortedSetInstances
+  object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
   object stream extends StreamInstances with StreamInstancesBinCompat0
   object string extends StringInstances
   object try_ extends TryInstances
