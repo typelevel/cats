@@ -1,6 +1,8 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
-Cats ecosystem community survey 2018 is closed. It received 588 responses. Thank you all very much! We will publish results in a couple of weeks.
+
+* **Jan 22 2019** Cats 1.6.0-RC1 is released. Please help test.
+* **Jan 21 2019** Cats ecosystem community survey 2018 is closed. It received 588 responses. Thank you all very much! We will publish results in a couple of weeks.
 
 
 ## Cats

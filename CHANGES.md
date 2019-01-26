@@ -1,3 +1,69 @@
+## Version 1.6.0-RC1
+
+> 2019 Jan 22
+
+Cats 1.6.0-RC1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0 and 1.5.0 jars.
+
+It brought you:
+
+### 12 API/Feature enhancements
+
+* [#2641](https://github.com/typelevel/cats/pull/2641) Adding partitionEitherM  by @blast-hardcheese
+* [#2609](https://github.com/typelevel/cats/pull/2609) Add an If-Then-Else operation to the Apply.  by @diesalbla
+* [#2606](https://github.com/typelevel/cats/pull/2606) Add syntax for Bitraverse to allow traversal and sequencing of the left side  by @andimiller
+* [#2600](https://github.com/typelevel/cats/pull/2600) Add `sequenceFilter` syntax  by @kubukoz
+* [#2563](https://github.com/typelevel/cats/pull/2563) Add an `applyK` function to `Kleisli`.  by @diesalbla
+* [#2450](https://github.com/typelevel/cats/pull/2450) Add Kleisli#mapK equivalent returning FunctionK  by @kubukoz
+* [#2292](https://github.com/typelevel/cats/pull/2292) Add foldMapK, reduceMapK  by @kubukoz
+* [#2693](https://github.com/typelevel/cats/pull/2693) Add IndexedState alias (#2686)  by @valydia
+* [#2690](https://github.com/typelevel/cats/pull/2690) Override equals and hashCode on Chain  by @ceedubs
+* [#2671](https://github.com/typelevel/cats/pull/2671) add syntax <&> for parallel  by @jcouyang
+* [#2655](https://github.com/typelevel/cats/pull/2655) Add `rethrowT` method to EitherT  by @bplommer
+* [#2647](https://github.com/typelevel/cats/pull/2647) Move cats.tests.ListWrapper to cats-testkit  by @ArturGajowy
+        
+
+### 3 bug fixes
+
+* [#2702](https://github.com/typelevel/cats/pull/2702) Reverted binary incompatible changes to generated parallel syntax  by @barambani
+* [#2692](https://github.com/typelevel/cats/pull/2692) Private val in value classes (Resolve TODO since 2.10 is dropped)  by @barambani
+* [#2670](https://github.com/typelevel/cats/pull/2670) Issue 2657 - Ambiguous duration instances  by @barambani
+        
+
+### 17 documentation additions/fixes
+
+* [#2642](https://github.com/typelevel/cats/pull/2642) Update table headers and clarify method signature for `flatTap`  by @mtomko
+* [#2636](https://github.com/typelevel/cats/pull/2636) Some changes to glossary.  by @diesalbla
+* [#2630](https://github.com/typelevel/cats/pull/2630) Fix a typo in Chain's doc  by @satansk
+* [#2627](https://github.com/typelevel/cats/pull/2627) A bit clarification on PULL Request template  by @kailuowang
+* [#2625](https://github.com/typelevel/cats/pull/2625) Fix type signature of `productL` in cats glossary  by @mtomko
+* [#2622](https://github.com/typelevel/cats/pull/2622) Fix documented constraint on B param in foldMapM  by @ksonj
+* [#2574](https://github.com/typelevel/cats/pull/2574) Remove duplicate menu item in docs  by @petern-sc
+* [#2277](https://github.com/typelevel/cats/pull/2277) Add an explanation for the missing Applicative instances for monad transformers  by @kubukoz
+* [#2700](https://github.com/typelevel/cats/pull/2700) update the copyright  by @RafalSladek
+* [#2699](https://github.com/typelevel/cats/pull/2699) typo in Comanad[Try]  by @philipschwarz
+* [#2684](https://github.com/typelevel/cats/pull/2684) Fix FAQ formatting error  by @ceedubs
+* [#2677](https://github.com/typelevel/cats/pull/2677) Write documentation for ContT  by @cb372
+* [#2668](https://github.com/typelevel/cats/pull/2668) Fix broken link to Arrow.scala  by @DieBauer
+* [#2665](https://github.com/typelevel/cats/pull/2665) minor fix  by @kailuowang
+* [#2664](https://github.com/typelevel/cats/pull/2664) Cleaning up docs to no longer use fine grained imports  by @calvinbrown085
+* [#2659](https://github.com/typelevel/cats/pull/2659) change prePR to run BC test on Scala 2.11  build by @kailuowang
+* [#2656](https://github.com/typelevel/cats/pull/2656) Fix instructions for checking binary compatibility  by @bplommer
+        
+
+### 10 build improvements
+
+* [#2637](https://github.com/typelevel/cats/pull/2637) Update kind-projector to 0.9.9  by @scala-steward
+* [#2619](https://github.com/typelevel/cats/pull/2619) Use composite projects  by @Alistair-Johnson
+* [#2703](https://github.com/typelevel/cats/pull/2703) Update simulacrum to 0.15.0  by @scala-steward
+* [#2691](https://github.com/typelevel/cats/pull/2691) Don't send Gitter notifications for fork builds  by @ceedubs
+* [#2681](https://github.com/typelevel/cats/pull/2681) Update sbt-release to 1.0.11  by @scala-steward
+* [#2674](https://github.com/typelevel/cats/pull/2674) minor fix to build  by @kailuowang
+* [#2660](https://github.com/typelevel/cats/pull/2660) Update tut-plugin to 0.6.10  by @scala-steward
+* [#2654](https://github.com/typelevel/cats/pull/2654) Add a shell.nix and instructions for using it  by @ceedubs
+* [#2652](https://github.com/typelevel/cats/pull/2652) Update SBT 1.2.7  by @ChristopherDavenport
+* [#2643](https://github.com/typelevel/cats/pull/2643) Update sbt-scalajs, scalajs-compiler, scalajs-library... to 0.6.26  by @scala-steward
+
+
 ## Version 1.5.0
 
 > 2018 Nov 30
