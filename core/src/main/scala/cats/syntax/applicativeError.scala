@@ -102,6 +102,22 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * Transform certain errors using `pf` and rethrow them.
    * Non matching errors and successful values are not affected by this function.
    *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> "error".asLeft[Int].adaptErr(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> "err".asLeft[Int].adaptErr(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> 1.asRight[String].adaptErr(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   *
    * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
    * this would result in ambiguous implicits. `adaptError` will be moved from `MonadError`
    * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
