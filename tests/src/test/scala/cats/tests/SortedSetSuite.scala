@@ -2,13 +2,17 @@ package cats
 package tests
 
 import cats.kernel.{BoundedSemilattice, Semilattice}
-import cats.laws.discipline.{FoldableTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests}
 import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, PartialOrderTests}
 import cats.laws.discipline.arbitrary._
 
 import scala.collection.immutable.SortedSet
 
 class SortedSetSuite extends CatsSuite {
+
+  checkAll("SortedSet[Int]", SemigroupalTests[SortedSet].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[SortedSet]", SerializableTests.serializable(Semigroupal[SortedSet]))
+
   checkAll("SortedSet[Int]", SemigroupKTests[SortedSet].semigroupK[Int])
   checkAll("SemigroupK[SortedSet]", SerializableTests.serializable(SemigroupK[SortedSet]))
 
