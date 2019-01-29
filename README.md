@@ -176,7 +176,7 @@ You can get an overview of who is working on what
 via [Waffle.io](https://waffle.io/typelevel/cats).
 
 People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
 venues.
 
