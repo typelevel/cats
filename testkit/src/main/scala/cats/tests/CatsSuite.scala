@@ -16,7 +16,7 @@ import cats.syntax.{
   AllSyntaxBinCompat1,
   AllSyntaxBinCompat2,
   AllSyntaxBinCompat3,
-  AllSyntaxBinCompat4
+  AllSyntaxBinCompat4,
   EqOps
 }
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
