@@ -16,6 +16,7 @@ import cats.syntax.{
   AllSyntaxBinCompat1,
   AllSyntaxBinCompat2,
   AllSyntaxBinCompat3,
+  AllSyntaxBinCompat4
   EqOps
 }
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
@@ -59,6 +60,7 @@ trait CatsSuite
     with AllSyntaxBinCompat1
     with AllSyntaxBinCompat2
     with AllSyntaxBinCompat3
+    with AllSyntaxBinCompat4
     with StrictCatsEquality { self: FunSuiteLike =>
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
