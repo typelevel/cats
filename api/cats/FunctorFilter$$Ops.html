@@ -145,7 +145,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -229,9 +229,9 @@
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.FunctorFilter.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[A]"></a>
+      <a id="self:F[C]"></a>
       <span class="permalink">
-      <a href="../cats/FunctorFilter$$Ops.html#self:F[A]" title="Permalink">
+      <a href="../cats/FunctorFilter$$Ops.html#self:F[C]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -240,7 +240,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.A">A</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>]</span>
       </span>
       
       
@@ -354,6 +354,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.FunctorFilter.Ops#collect" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collect[B](f:PartialFunction[C,B]):F[B]"></a><a id="collect[B](PartialFunction[C,B]):F[B]"></a>
+      <span class="permalink">
+      <a href="../cats/FunctorFilter$$Ops.html#collect[B](f:PartialFunction[C,B]):F[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: <a href="http://www.scala-lang.org/api/2.12.7/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>, <span class="extype" name="cats.FunctorFilter.Ops.collect.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.collect.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -386,6 +402,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.FunctorFilter.Ops#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="filter(f:C=&gt;Boolean):F[C]"></a><a id="filter((C)⇒Boolean):F[C]"></a>
+      <span class="permalink">
+      <a href="../cats/FunctorFilter$$Ops.html#filter(f:C=&gt;Boolean):F[C]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -408,6 +440,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.FunctorFilter.Ops#flattenOption" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flattenOption[A](implicitev$macro$77:C&lt;:&lt;Option[A]):F[A]"></a><a id="flattenOption[A](&lt;:&lt;[C,Option[A]]):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/FunctorFilter$$Ops.html#flattenOption[A](implicitev$macro$77:C&lt;:&lt;Option[A]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flattenOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.FunctorFilter.Ops.flattenOption.A">A</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.flattenOption.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -462,6 +510,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.FunctorFilter.Ops#mapFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mapFilter[B](f:C=&gt;Option[B]):F[B]"></a><a id="mapFilter[B]((C)⇒Option[B]):F[B]"></a>
+      <span class="permalink">
+      <a href="../cats/FunctorFilter$$Ops.html#mapFilter[B](f:C=&gt;Option[B]):F[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapFilter</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.FunctorFilter.Ops.C">C</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.FunctorFilter.Ops.mapFilter.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="cats.FunctorFilter.Ops.F">F</span>[<span class="extype" name="cats.FunctorFilter.Ops.mapFilter.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

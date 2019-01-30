@@ -161,7 +161,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="E">E</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -245,9 +245,9 @@
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.arrow.ArrowChoice.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[A,B]"></a>
+      <a id="self:F[A,E]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/ArrowChoice$$Ops.html#self:F[A,B]" title="Permalink">
+      <a href="../../cats/arrow/ArrowChoice$$Ops.html#self:F[A,E]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -256,7 +256,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.B">B</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.E">E</span>]</span>
       </span>
       
       
@@ -314,6 +314,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.arrow.ArrowChoice.Ops#+++" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="+++[B,D](g:F[B,D]):F[Either[A,B],Either[E,D]]"></a><a id="+++[B,D](F[B,D]):F[Either[A,B],Either[E,D]]"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/ArrowChoice$$Ops.html#+++[B,D](g:F[B,D]):F[Either[A,B],Either[E,D]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus$plus" class="name">+++</span><span class="tparams">[<span name="B">B</span>, <span name="D">D</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.+++.B">B</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.+++.D">D</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.+++.B">B</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.E">E</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.+++.D">D</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
@@ -346,6 +362,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.arrow.ArrowChoice.Ops#choose" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="choose[B,D](g:F[B,D]):F[Either[A,B],Either[E,D]]"></a><a id="choose[B,D](F[B,D]):F[Either[A,B],Either[E,D]]"></a>
+      <span class="permalink">
+      <a href="../../cats/arrow/ArrowChoice$$Ops.html#choose[B,D](g:F[B,D]):F[Either[A,B],Either[E,D]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">choose</span><span class="tparams">[<span name="B">B</span>, <span name="D">D</span>]</span><span class="params">(<span name="g">g: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.choose.B">B</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.choose.D">D</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.choose.B">B</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.E">E</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.choose.D">D</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -479,9 +511,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="cats.arrow.ArrowChoice.Ops#left" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="left[C]:F[Either[A,C],Either[B,C]]"></a>
+      <a id="left[C]:F[Either[A,C],Either[E,C]]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/ArrowChoice$$Ops.html#left[C]:F[Either[A,C],Either[B,C]]" title="Permalink">
+      <a href="../../cats/arrow/ArrowChoice$$Ops.html#left[C]:F[Either[A,C],Either[E,C]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -490,7 +522,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">left</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.left.C">C</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.B">B</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.left.C">C</span>]]</span>
+        <span class="name">left</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.left.C">C</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.E">E</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.left.C">C</span>]]</span>
       </span>
       
       
@@ -549,9 +581,9 @@
               
         </dd></dl></div>
     </li><li name="cats.arrow.ArrowChoice.Ops#right" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="right[C]:F[Either[C,A],Either[C,B]]"></a>
+      <a id="right[C]:F[Either[C,A],Either[C,E]]"></a>
       <span class="permalink">
-      <a href="../../cats/arrow/ArrowChoice$$Ops.html#right[C]:F[Either[C,A],Either[C,B]]" title="Permalink">
+      <a href="../../cats/arrow/ArrowChoice$$Ops.html#right[C]:F[Either[C,A],Either[C,E]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -560,7 +592,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">right</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.right.C">C</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.right.C">C</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.B">B</span>]]</span>
+        <span class="name">right</span><span class="tparams">[<span name="C">C</span>]</span><span class="result">: <span class="extype" name="cats.arrow.ArrowChoice.Ops.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.right.C">C</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.A">A</span>], <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.arrow.ArrowChoice.Ops.right.C">C</span>, <span class="extype" name="cats.arrow.ArrowChoice.Ops.E">E</span>]]</span>
       </span>
       
       

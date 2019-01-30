@@ -145,7 +145,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -229,9 +229,9 @@
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.Traverse.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[A]"></a>
+      <a id="self:F[C]"></a>
       <span class="permalink">
-      <a href="../cats/Traverse$$Ops.html#self:F[A]" title="Permalink">
+      <a href="../cats/Traverse$$Ops.html#self:F[C]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -240,7 +240,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.A">A</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.C">C</span>]</span>
       </span>
       
       
@@ -408,6 +408,38 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Traverse.Ops#flatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatSequence[G[_],A](implicitev$macro$46:C&lt;:&lt;G[F[A]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]"></a><a id="flatSequence[G[_],A](&lt;:&lt;[C,G[F[A]]],Applicative[G],FlatMap[F]):G[F[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#flatSequence[G[_],A](implicitev$macro$46:C&lt;:&lt;G[F[A]],implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatSequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.Ops.C">C</span>, <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.A">A</span>]]]</span>, <span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatSequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatSequence.A">A</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Traverse.Ops#flatTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatTraverse[G[_],B](f:C=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]"></a><a id="flatTraverse[G[_],B]((C)⇒G[F[B]])(Applicative[G],FlatMap[F]):G[F[B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#flatTraverse[G[_],B](f:C=&gt;G[F[B]])(implicitG:cats.Applicative[G],implicitF:cats.FlatMap[F]):G[F[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatTraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.Ops.C">C</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>]</span>, <span name="F">F: <a href="FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.Traverse.Ops.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.flatTraverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.flatTraverse.B">B</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -462,6 +494,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Traverse.Ops#mapWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mapWithIndex[B](f:(C,Int)=&gt;B):F[B]"></a><a id="mapWithIndex[B]((C,Int)⇒B):F[B]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#mapWithIndex[B](f:(C,Int)=&gt;B):F[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapWithIndex</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.Ops.C">C</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.mapWithIndex.B">B</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -516,6 +564,22 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="cats.Traverse.Ops#sequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sequence[G[_],A](implicitev$macro$45:C&lt;:&lt;G[A],implicitevidence$2:cats.Applicative[G]):G[F[A]]"></a><a id="sequence[G[_],A](&lt;:&lt;[C,G[A]],Applicative[G]):G[F[A]]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#sequence[G[_],A](implicitev$macro$45:C&lt;:&lt;G[A],implicitevidence$2:cats.Applicative[G]):G[F[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Traverse.Ops.C">C</span>, <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.sequence.A">A</span>]]</span>, <span name="arg1">arg1: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.sequence.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.sequence.A">A</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -548,6 +612,38 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Traverse.Ops#traverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]"></a><a id="traverse[G[_],B]((C)⇒G[B])(Applicative[G]):G[F[B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#traverse[G[_],B](f:C=&gt;G[B])(implicitevidence$1:cats.Applicative[G]):G[F[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.Ops.C">C</span>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverse.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverse.B">B</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Traverse.Ops#traverseWithIndexM" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="traverseWithIndexM[G[_],B](f:(C,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]"></a><a id="traverseWithIndexM[G[_],B]((C,Int)⇒G[B])(Monad[G]):G[F[B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#traverseWithIndexM[G[_],B](f:(C,Int)=&gt;G[B])(implicitG:cats.Monad[G]):G[F[B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverseWithIndexM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Traverse.Ops.C">C</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>) ⇒ <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="G">G: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.G">G</span>[<span class="extype" name="cats.Traverse.Ops.F">F</span>[<span class="extype" name="cats.Traverse.Ops.traverseWithIndexM.B">B</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
@@ -616,6 +712,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Traverse.Ops#zipWithIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="zipWithIndex:F[(C,Int)]"></a>
+      <span class="permalink">
+      <a href="../cats/Traverse$$Ops.html#zipWithIndex:F[(C,Int)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zipWithIndex</span><span class="result">: <span class="extype" name="cats.Traverse.Ops.F">F</span>[(<span class="extype" name="cats.Traverse.Ops.C">C</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>)]</span>
+      </span>
+      
+      
     </li>
               </ol>
             </div>

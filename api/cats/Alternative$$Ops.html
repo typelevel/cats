@@ -145,7 +145,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -229,9 +229,9 @@
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.Alternative.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[A]"></a>
+      <a id="self:F[C]"></a>
       <span class="permalink">
-      <a href="../cats/Alternative$$Ops.html#self:F[A]" title="Permalink">
+      <a href="../cats/Alternative$$Ops.html#self:F[C]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -240,7 +240,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Alternative.Ops.F">F</span>[<span class="extype" name="cats.Alternative.Ops.A">A</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Alternative.Ops.F">F</span>[<span class="extype" name="cats.Alternative.Ops.C">C</span>]</span>
       </span>
       
       
@@ -516,6 +516,22 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="cats.Alternative.Ops#separate" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="separate[G[_,_],A,B](implicitev$macro$65:C&lt;:&lt;G[A,B],implicitFM:cats.Monad[F],implicitG:cats.Bifoldable[G]):(F[A],F[B])"></a><a id="separate[G[_,_],A,B](&lt;:&lt;[C,G[A,B]],Monad[F],Bifoldable[G]):(F[A],F[B])"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative$$Ops.html#separate[G[_,_],A,B](implicitev$macro$65:C&lt;:&lt;G[A,B],implicitFM:cats.Monad[F],implicitG:cats.Bifoldable[G]):(F[A],F[B])" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">separate</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Alternative.Ops.C">C</span>, <span class="extype" name="cats.Alternative.Ops.separate.G">G</span>[<span class="extype" name="cats.Alternative.Ops.separate.A">A</span>, <span class="extype" name="cats.Alternative.Ops.separate.B">B</span>]]</span>, <span name="FM">FM: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Alternative.Ops.F">F</span>]</span>, <span name="G">G: <a href="Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.Alternative.Ops.separate.G">G</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.Alternative.Ops.F">F</span>[<span class="extype" name="cats.Alternative.Ops.separate.A">A</span>], <span class="extype" name="cats.Alternative.Ops.F">F</span>[<span class="extype" name="cats.Alternative.Ops.separate.B">B</span>])</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -548,6 +564,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="cats.Alternative.Ops#unite" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unite[G[_],A](implicitev$macro$64:C&lt;:&lt;G[A],implicitFM:cats.Monad[F],implicitG:cats.Foldable[G]):F[A]"></a><a id="unite[G[_],A](&lt;:&lt;[C,G[A]],Monad[F],Foldable[G]):F[A]"></a>
+      <span class="permalink">
+      <a href="../cats/Alternative$$Ops.html#unite[G[_],A](implicitev$macro$64:C&lt;:&lt;G[A],implicitFM:cats.Monad[F],implicitG:cats.Foldable[G]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unite</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Alternative.Ops.C">C</span>, <span class="extype" name="cats.Alternative.Ops.unite.G">G</span>[<span class="extype" name="cats.Alternative.Ops.unite.A">A</span>]]</span>, <span name="FM">FM: <a href="Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.Alternative.Ops.F">F</span>]</span>, <span name="G">G: <a href="Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.Alternative.Ops.unite.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Alternative.Ops.F">F</span>[<span class="extype" name="cats.Alternative.Ops.unite.A">A</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">

@@ -336,12 +336,20 @@
                         <a href="" title="">FoldableOps0</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="class" href="FoldableOps1.html" title=""></a>
+                        <a href="FoldableOps1.html" title="">FoldableOps1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="FoldableSyntax.html" title=""></a>
                         <a href="FoldableSyntax.html" title="">FoldableSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="FoldableSyntaxBinCompat0.html" title=""></a>
                         <a href="FoldableSyntaxBinCompat0.html" title="">FoldableSyntaxBinCompat0</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="FoldableSyntaxBinCompat1.html" title=""></a>
+                        <a href="FoldableSyntaxBinCompat1.html" title="">FoldableSyntaxBinCompat1</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="trait" href="Function1Syntax.html" title=""></a>
@@ -1160,6 +1168,78 @@ a: <span class="std">String</span> = <span class="lit">"foo321"</span></pre></di
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.FoldableOps0#partitionBifold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partitionBifold[H[_,_],B,C](f:A=&gt;H[B,C])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitH:cats.Bifoldable[H]):(F[B],F[C])"></a><a id="partitionBifold[H[_,_],B,C]((A)⇒H[B,C])(Alternative[F],Foldable[F],Bifoldable[H]):(F[B],F[C])"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps0.html#partitionBifold[H[_,_],B,C](f:A=&gt;H[B,C])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitH:cats.Bifoldable[H]):(F[B],F[C])" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partitionBifold</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.FoldableOps0.A">A</span>) ⇒ <span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.H">H</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.B">B</span>, <span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="H">H: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.H">H</span>]</span>)</span><span class="result">: (<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.B">B</span>], <span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifold.C">C</span>])</span>
+      </span>
+      
+      <p class="shortcomment cmt">Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; H[B, C]</code> for some <code>Bifoldable[H]</code>
+Equivalent to <code>Functor#map</code> over <code>Alternative#separate</code></p><div class="fullcomment"><div class="comment cmt"><p>Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; H[B, C]</code> for some <code>Bifoldable[H]</code>
+Equivalent to <code>Functor#map</code> over <code>Alternative#separate</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._, cats.data.Const
+scala&gt; <span class="kw">val</span> list = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>)
+scala&gt; list.partitionBifold(a <span class="kw">=&gt;</span> (a, <span class="lit">"value "</span> + a.toString))
+res0: (<span class="std">List</span>[<span class="std">Int</span>], <span class="std">List</span>[<span class="std">String</span>]) = (<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>),<span class="std">List</span>(value <span class="num">1</span>, value <span class="num">2</span>, value <span class="num">3</span>, value <span class="num">4</span>))
+`Const`'s second parameter is never instantiated, so we can use an impossible <span class="kw">type</span>:
+scala&gt; list.partitionBifold(a <span class="kw">=&gt;</span> Const[<span class="std">Int</span>, <span class="std">Nothing</span> <span class="kw">with</span> Any](a))
+res1: (<span class="std">List</span>[<span class="std">Int</span>], <span class="std">List</span>[<span class="std">Nothing</span> <span class="kw">with</span> Any]) = (<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>), <span class="std">List</span>())</pre></div></div>
+    </li><li name="cats.syntax.FoldableOps0#partitionBifoldM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partitionBifoldM[G[_],H[_,_],B,C](f:A=&gt;G[H[B,C]])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitM:cats.Monad[G],implicitH:cats.Bifoldable[H]):G[(F[B],F[C])]"></a><a id="partitionBifoldM[G[_],H[_,_],B,C]((A)⇒G[H[B,C]])(Alternative[F],Foldable[F],Monad[G],Bifoldable[H]):G[(F[B],F[C])]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps0.html#partitionBifoldM[G[_],H[_,_],B,C](f:A=&gt;G[H[B,C]])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitM:cats.Monad[G],implicitH:cats.Bifoldable[H]):G[(F[B],F[C])]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partitionBifoldM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="H">H<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.FoldableOps0.A">A</span>) ⇒ <span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.G">G</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.H">H</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.B">B</span>, <span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.C">C</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.G">G</span>]</span>, <span name="H">H: <a href="../Bifoldable.html" class="extype" name="cats.Bifoldable">Bifoldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.G">G</span>[(<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.B">B</span>], <span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionBifoldM.C">C</span>])]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; G[H[B, C]]</code> for some <code>Bifoldable[H]</code>
+Equivalent to <code>Traverse#traverse</code> over <code>Alternative#separate</code></p><div class="fullcomment"><div class="comment cmt"><p>Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; G[H[B, C]]</code> for some <code>Bifoldable[H]</code>
+Equivalent to <code>Traverse#traverse</code> over <code>Alternative#separate</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._, cats.data.Const
+scala&gt; <span class="kw">val</span> list = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>)
+`Const`'s second parameter is never instantiated, so we can use an impossible <span class="kw">type</span>:
+scala&gt; list.partitionBifoldM(a <span class="kw">=&gt;</span> <span class="std">Option</span>(Const[<span class="std">Int</span>, <span class="std">Nothing</span> <span class="kw">with</span> Any](a)))
+res0: <span class="std">Option</span>[(<span class="std">List</span>[<span class="std">Int</span>], <span class="std">List</span>[<span class="std">Nothing</span> <span class="kw">with</span> Any])] = <span class="std">Some</span>((<span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>), <span class="std">List</span>()))</pre></div></div>
+    </li><li name="cats.syntax.FoldableOps0#partitionEitherM" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="partitionEitherM[G[_],B,C](f:A=&gt;G[Either[B,C]])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitM:cats.Monad[G]):G[(F[B],F[C])]"></a><a id="partitionEitherM[G[_],B,C]((A)⇒G[Either[B,C]])(Alternative[F],Foldable[F],Monad[G]):G[(F[B],F[C])]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps0.html#partitionEitherM[G[_],B,C](f:A=&gt;G[Either[B,C]])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitM:cats.Monad[G]):G[(F[B],F[C])]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partitionEitherM</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.syntax.FoldableOps0.A">A</span>) ⇒ <span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.G">G</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.B">B</span>, <span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.C">C</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Alternative.html" class="extype" name="cats.Alternative">Alternative</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>, <span name="M">M: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.G">G</span>[(<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.B">B</span>], <span class="extype" name="cats.syntax.FoldableOps0.F">F</span>[<span class="extype" name="cats.syntax.FoldableOps0.partitionEitherM.C">C</span>])]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; G[Either[B, C]]</code>
+Equivalent to <code>Traverse#traverse</code> over <code>Alternative#separate</code></p><div class="fullcomment"><div class="comment cmt"><p>Separate this Foldable into a Tuple by an effectful separating function <code>A =&gt; G[Either[B, C]]</code>
+Equivalent to <code>Traverse#traverse</code> over <code>Alternative#separate</code></p><pre>scala&gt; <span class="kw">import</span> cats.implicits._, cats.Eval
+scala&gt; <span class="kw">val</span> list = <span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>)
+scala&gt; <span class="kw">val</span> partitioned1 = list.partitionEitherM(a <span class="kw">=&gt;</span> <span class="kw">if</span> (a % <span class="num">2</span> == <span class="num">0</span>) Eval.now(Either.left[<span class="std">String</span>, <span class="std">Int</span>](a.toString)) <span class="kw">else</span> Eval.now(Either.right[<span class="std">String</span>, <span class="std">Int</span>](a)))
+Since `Eval.now` yields a <span class="kw">lazy</span> computation, we need to force it to inspect the result:
+scala&gt; partitioned1.value
+res0: (<span class="std">List</span>[<span class="std">String</span>], <span class="std">List</span>[<span class="std">Int</span>]) = (<span class="std">List</span>(<span class="num">2</span>, <span class="num">4</span>),<span class="std">List</span>(<span class="num">1</span>, <span class="num">3</span>))
+scala&gt; <span class="kw">val</span> partitioned2 = list.partitionEitherM(a <span class="kw">=&gt;</span> Eval.later(Either.right(a * <span class="num">4</span>)))
+scala&gt; partitioned2.value
+res1: (<span class="std">List</span>[<span class="std">Nothing</span>], <span class="std">List</span>[<span class="std">Int</span>]) = (<span class="std">List</span>(),<span class="std">List</span>(<span class="num">4</span>, <span class="num">8</span>, <span class="num">12</span>, <span class="num">16</span>))</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">

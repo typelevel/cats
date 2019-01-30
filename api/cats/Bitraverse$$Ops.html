@@ -145,7 +145,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">Ops</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="E">E</span>, <span name="H">H</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
 
@@ -229,9 +229,9 @@
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="cats.Bitraverse.Ops#self" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="self:F[A,B]"></a>
+      <a id="self:F[E,H]"></a>
       <span class="permalink">
-      <a href="../cats/Bitraverse$$Ops.html#self:F[A,B]" title="Permalink">
+      <a href="../cats/Bitraverse$$Ops.html#self:F[E,H]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -240,7 +240,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Bitraverse.Ops.F">F</span>[<span class="extype" name="cats.Bitraverse.Ops.A">A</span>, <span class="extype" name="cats.Bitraverse.Ops.B">B</span>]</span>
+        <span class="name">self</span><span class="result">: <span class="extype" name="cats.Bitraverse.Ops.F">F</span>[<span class="extype" name="cats.Bitraverse.Ops.E">E</span>, <span class="extype" name="cats.Bitraverse.Ops.H">H</span>]</span>
       </span>
       
       
@@ -330,6 +330,38 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.Bitraverse.Ops#bisequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="bisequence[G[_],A,B](implicitev$macro$109:E&lt;:&lt;G[A],implicitev$macro$110:H&lt;:&lt;G[B],implicitevidence$2:cats.Applicative[G]):G[F[A,B]]"></a><a id="bisequence[G[_],A,B](&lt;:&lt;[E,G[A]],&lt;:&lt;[H,G[B]],Applicative[G]):G[F[A,B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Bitraverse$$Ops.html#bisequence[G[_],A,B](implicitev$macro$109:E&lt;:&lt;G[A],implicitev$macro$110:H&lt;:&lt;G[B],implicitevidence$2:cats.Applicative[G]):G[F[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bisequence</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Bitraverse.Ops.E">E</span>, <span class="extype" name="cats.Bitraverse.Ops.bisequence.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.bisequence.A">A</span>]]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="cats.Bitraverse.Ops.H">H</span>, <span class="extype" name="cats.Bitraverse.Ops.bisequence.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.bisequence.B">B</span>]]</span>, <span name="arg2">arg2: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Bitraverse.Ops.bisequence.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bitraverse.Ops.bisequence.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.F">F</span>[<span class="extype" name="cats.Bitraverse.Ops.bisequence.A">A</span>, <span class="extype" name="cats.Bitraverse.Ops.bisequence.B">B</span>]]</span>
+      </span>
+      
+      
+    </li><li name="cats.Bitraverse.Ops#bitraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="bitraverse[G[_],C,D](f:E=&gt;G[C],g:H=&gt;G[D])(implicitevidence$1:cats.Applicative[G]):G[F[C,D]]"></a><a id="bitraverse[G[_],C,D]((E)⇒G[C],(H)⇒G[D])(Applicative[G]):G[F[C,D]]"></a>
+      <span class="permalink">
+      <a href="../cats/Bitraverse$$Ops.html#bitraverse[G[_],C,D](f:E=&gt;G[C],g:H=&gt;G[D])(implicitevidence$1:cats.Applicative[G]):G[F[C,D]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bitraverse</span><span class="tparams">[<span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Bitraverse.Ops.E">E</span>) ⇒ <span class="extype" name="cats.Bitraverse.Ops.bitraverse.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.bitraverse.C">C</span>]</span>, <span name="g">g: (<span class="extype" name="cats.Bitraverse.Ops.H">H</span>) ⇒ <span class="extype" name="cats.Bitraverse.Ops.bitraverse.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.bitraverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.Bitraverse.Ops.bitraverse.G">G</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Bitraverse.Ops.bitraverse.G">G</span>[<span class="extype" name="cats.Bitraverse.Ops.F">F</span>[<span class="extype" name="cats.Bitraverse.Ops.bitraverse.C">C</span>, <span class="extype" name="cats.Bitraverse.Ops.bitraverse.D">D</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">

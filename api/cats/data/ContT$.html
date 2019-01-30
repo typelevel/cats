@@ -413,7 +413,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.data.ContT#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.ContT#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[M[_],A,B](fn:(B=&gt;M[A])=&gt;M[A]):cats.data.ContT[M,A,B]"></a><a id="apply[M[_],A,B](((B)⇒M[A])⇒M[A]):ContT[M,A,B]"></a>
       <span class="permalink">
       <a href="../../cats/data/ContT$.html#apply[M[_],A,B](fn:(B=&gt;M[A])=&gt;M[A]):cats.data.ContT[M,A,B]" title="Permalink">
@@ -428,7 +428,14 @@
         <span class="name">apply</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fn">fn: ((<span class="extype" name="cats.data.ContT.apply.B">B</span>) ⇒ <span class="extype" name="cats.data.ContT.apply.M">M</span>[<span class="extype" name="cats.data.ContT.apply.A">A</span>]) ⇒ <span class="extype" name="cats.data.ContT.apply.M">M</span>[<span class="extype" name="cats.data.ContT.apply.A">A</span>]</span>)</span><span class="result">: <a href="ContT.html" class="extype" name="cats.data.ContT">ContT</a>[<span class="extype" name="cats.data.ContT.apply.M">M</span>, <span class="extype" name="cats.data.ContT.apply.A">A</span>, <span class="extype" name="cats.data.ContT.apply.B">B</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Build a computation that makes use of a callback, also known as a continuation.</p><div class="fullcomment"><div class="comment cmt"><p>Build a computation that makes use of a callback, also known as a continuation.</p><p>Example:</p><pre>ContT.apply { callback <span class="kw">=&gt;</span>
+  <span class="kw">for</span> {
+    a <span class="kw">&lt;-</span> doFirstThing()
+    b <span class="kw">&lt;-</span> doSecondThing(a)
+    c <span class="kw">&lt;-</span> callback(b)
+    d <span class="kw">&lt;-</span> doFourthThing(c)
+  } <span class="kw">yield</span> d
+}</pre></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -501,6 +508,32 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.data.ContT#defer" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defer[M[_],A,B](b:=&gt;B):cats.data.ContT[M,A,B]"></a><a id="defer[M[_],A,B](⇒B):ContT[M,A,B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/ContT$.html#defer[M[_],A,B](b:=&gt;B):cats.data.ContT[M,A,B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defer</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="cats.data.ContT.defer.B">B</span></span>)</span><span class="result">: <a href="ContT.html" class="extype" name="cats.data.ContT">ContT</a>[<span class="extype" name="cats.data.ContT.defer.M">M</span>, <span class="extype" name="cats.data.ContT.defer.A">A</span>, <span class="extype" name="cats.data.ContT.defer.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Similar to <a href="#pure[M[_],A,B](b:B):cats.data.ContT[M,A,B]" class="extmbr" name="cats.data.ContT#pure">pure</a> but evaluation of the argument is deferred.</p><div class="fullcomment"><div class="comment cmt"><p>Similar to <a href="#pure[M[_],A,B](b:B):cats.data.ContT[M,A,B]" class="extmbr" name="cats.data.ContT#pure">pure</a> but evaluation of the argument is deferred.</p><p>This is useful for building a computation which calls its continuation as the final step.
+Instead of writing:</p><pre>ContT.apply { cb <span class="kw">=&gt;</span>
+  <span class="kw">val</span> x = foo()
+  <span class="kw">val</span> y = bar(x)
+  <span class="kw">val</span> z = baz(y)
+  cb(z)
+}</pre><p>you can write:</p><pre>ContT.defer {
+  <span class="kw">val</span> x = foo()
+  <span class="kw">val</span> y = bar(x)
+  baz(y)
+}</pre></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -624,7 +657,7 @@
         <span class="name">later</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fn">fn: ⇒ ((<span class="extype" name="cats.data.ContT.later.B">B</span>) ⇒ <span class="extype" name="cats.data.ContT.later.M">M</span>[<span class="extype" name="cats.data.ContT.later.A">A</span>]) ⇒ <span class="extype" name="cats.data.ContT.later.M">M</span>[<span class="extype" name="cats.data.ContT.later.A">A</span>]</span>)</span><span class="result">: <a href="ContT.html" class="extype" name="cats.data.ContT">ContT</a>[<span class="extype" name="cats.data.ContT.later.M">M</span>, <span class="extype" name="cats.data.ContT.later.A">A</span>, <span class="extype" name="cats.data.ContT.later.B">B</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Similar to <a href="#apply[M[_],A,B](fn:(B=&gt;M[A])=&gt;M[A]):cats.data.ContT[M,A,B]" class="extmbr" name="cats.data.ContT#apply">apply</a> but evaluation of the argument is deferred.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -694,7 +727,7 @@
         <span class="name">pure</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="cats.data.ContT.pure.B">B</span></span>)</span><span class="result">: <a href="ContT.html" class="extype" name="cats.data.ContT">ContT</a>[<span class="extype" name="cats.data.ContT.pure.M">M</span>, <span class="extype" name="cats.data.ContT.pure.A">A</span>, <span class="extype" name="cats.data.ContT.pure.B">B</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Lift a pure value into <code>ContT</code></p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
