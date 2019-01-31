@@ -79,7 +79,6 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test("Foldable#partitionEitherM retains size") {
-    import cats.syntax.foldable._
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val vector = Foldable[F].toList(fi).toVector
       val result = Foldable[Vector].partitionEitherM(vector)(f.andThen(Option.apply)).map {
@@ -91,7 +90,6 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test("Foldable#partitionEitherM consistent with List#partition") {
-    import cats.syntax.foldable._
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
       val partitioned = Foldable[List].partitionEitherM(list)(f.andThen(Option.apply))
@@ -108,7 +106,6 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test("Foldable#partitionEitherM to one side is identity") {
-    import cats.syntax.foldable._
     forAll { (fi: F[Int], f: Int => String) =>
       val list = Foldable[F].toList(fi)
       val g: Int => Option[Either[Double, String]] = f.andThen(Right.apply).andThen(Option.apply)
@@ -123,7 +120,6 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test("Foldable#partitionEitherM remains sorted") {
-    import cats.syntax.foldable._
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val list = Foldable[F].toList(fi)
 
