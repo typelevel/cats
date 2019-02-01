@@ -77,7 +77,9 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
     A.combine(prefix, A.combine(F.intercalate(fa, delim), suffix))
 
   /**
-   * Make a string using `Show`, named as `mkString_` to avoid conflict
+   * Make a string using `Show`, prefix, delimiter, and suffix.
+   *
+   * Named as `mkString_` to avoid conflict.
    *
    * Example:
    * {{{
@@ -203,6 +205,26 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 }
 
 final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
+
+  /**
+   * Make a string using `Show` and delimiter.
+   *
+   * Named as `mkString_` to avoid conflict.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val l: List[Int] = List(1, 2, 3)
+   * scala> l.mkString_(",")
+   * res0: String = 1,2,3
+   * scala> val el: List[Int] = List()
+   * scala> el.mkString_(",")
+   * res1: String =
+   * }}}
+   */
+  def mkString_(delim: String)(implicit A: Show[A], F: Foldable[F]): String =
+    new FoldableOps(fa).mkString_("", delim, "")
 
   /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
