@@ -2,14 +2,12 @@
 
 > 2019 Jan 31
 
-## Version 1.6.0-RC1
-
 Cats 1.6.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0 and 1.5.0 jars. 
 1.6.0 is mostly identical to 1.6.0-RC1 except one additional feature enhancement.
 
-
 * [#2709](https://github.com/typelevel/cats/pull/2709) Adds version of mkString_ with no prefix/suffix, matching the std lib.  by @matthughes
 
+## Version 1.6.0-RC1
 
 > 2019 Jan 22
 
