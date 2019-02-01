@@ -1168,6 +1168,29 @@ a: <span class="std">String</span> = <span class="lit">"foo321"</span></pre></di
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.FoldableOps0#mkString_" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mkString_(delim:String)(implicitA:cats.Show[A],implicitF:cats.Foldable[F]):String"></a><a id="mkString_(String)(Show[A],Foldable[F]):String"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/FoldableOps0.html#mkString_(delim:String)(implicitA:cats.Show[A],implicitF:cats.Foldable[F]):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mkString_</span><span class="params">(<span name="delim">delim: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Show.html" class="extype" name="cats.Show">Show</a>[<span class="extype" name="cats.syntax.FoldableOps0.A">A</span>]</span>, <span name="F">F: <a href="../Foldable.html" class="extype" name="cats.Foldable">Foldable</a>[<span class="extype" name="cats.syntax.FoldableOps0.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Make a string using <code>Show</code> and delimiter.</p><div class="fullcomment"><div class="comment cmt"><p>Make a string using <code>Show</code> and delimiter.</p><p>Named as <code>mkString_</code> to avoid conflict.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.implicits._
+
+scala&gt; <span class="kw">val</span> l: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+scala&gt; l.mkString_(<span class="lit">","</span>)
+res0: <span class="std">String</span> = <span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>
+scala&gt; <span class="kw">val</span> el: <span class="std">List</span>[<span class="std">Int</span>] = <span class="std">List</span>()
+scala&gt; el.mkString_(<span class="lit">","</span>)
+res1: <span class="std">String</span> =</pre></div></div>
     </li><li name="cats.syntax.FoldableOps0#partitionBifold" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionBifold[H[_,_],B,C](f:A=&gt;H[B,C])(implicitA:cats.Alternative[F],implicitF:cats.Foldable[F],implicitH:cats.Bifoldable[H]):(F[B],F[C])"></a><a id="partitionBifold[H[_,_],B,C]((A)⇒H[B,C])(Alternative[F],Foldable[F],Bifoldable[H]):(F[B],F[C])"></a>
       <span class="permalink">
