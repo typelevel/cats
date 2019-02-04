@@ -46,25 +46,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("toFreeT is stack-safe") {
-    trait FTestApi[A]
-    case class TB(i: Int) extends FTestApi[Int]
-
-    type FTest[A] = Free[FTestApi, A]
-
-    def tb(i: Int): FTest[Int] = Free.liftF(TB(i))
-
-    def a(i: Int): FTest[Int] =
-      for {
-        j <- tb(i)
-        z <- if (j < 10000) a(j) else Free.pure[FTestApi, Int](j)
-      } yield z
-
-    def runner: FunctionK[FTestApi, Id] = λ[FunctionK[FTestApi, Id]] {
-      case TB(i) => i + 1
-    }
-
-    val prg = a(0)
-    prg.toFreeT.foldMap(runner) should ===(prg.foldMap(runner))
+    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should === (FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test("compile id") {
@@ -105,10 +87,9 @@ class FreeSuite extends CatsSuite {
     fa should ===(Free.pure[Option, Int](n))
   }
 
-  test("foldMap is stack safe") {
-    trait FTestApi[A]
-    case class TB(i: Int) extends FTestApi[Int]
-
+  trait FTestApi[A]
+  case class TB(i: Int) extends FTestApi[Int]
+  object FTestApi {
     type FTest[A] = Free[FTestApi, A]
 
     def tb(i: Int): FTest[Int] = Free.liftF(TB(i))
@@ -122,8 +103,10 @@ class FreeSuite extends CatsSuite {
     def runner: FunctionK[FTestApi, Id] = λ[FunctionK[FTestApi, Id]] {
       case TB(i) => i + 1
     }
+  }
 
-    assert(10000 == a(0).foldMap(runner))
+  test("foldMap is stack safe") {
+    assert(10000 == FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test(".runTailRec") {
