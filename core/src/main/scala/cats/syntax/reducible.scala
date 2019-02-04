@@ -15,7 +15,7 @@ trait ReducibleSyntaxBinCompat0 {
     new ReducibleOps0[F, A](fa)
 }
 
-final class ReducibleOps0[F[_], A](val fa: F[A]) extends AnyVal {
+final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Apply `f` to each element of `fa` and combine them using the

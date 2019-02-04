@@ -1,7 +1,10 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
- To help us better plan for 2019, please consider participating in our [Cats Ecosystem Community Survey 2018](https://goo.gl/forms/CYwRqs015SyW6XkC2).
 
+* **Feb 2 2019** [Call for proposals for the Philadelphia Typelevel Summit](https://www.papercall.io/typelevel-summit-phl-2019) is still open (until Feb 10). Great opportunity to share anything related to Cats ecosystem. 
+* **Feb 1 2019** Please help review our proposal for [2019 roadmap](https://github.com/typelevel/cats/issues/2719)
+* **Jan 31 2019** Cats 1.6.0 is released.
+* **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
 
 ## Cats
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
@@ -46,7 +49,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.5.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.6.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -174,7 +177,7 @@ You can get an overview of who is working on what
 via [Waffle.io](https://waffle.io/typelevel/cats).
 
 People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
 venues.
 
@@ -308,4 +311,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2018.
+Copyright the maintainers, 2015-2019.

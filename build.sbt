@@ -68,7 +68,7 @@ lazy val catsSettings = Seq(
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.14.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.15.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -321,6 +321,7 @@ def mimaSettings(moduleName: String) =
           exclude[DirectMissingMethodProblem]("cats.syntax.DistributiveOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOps.obj"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOpsBinCompat0.value"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EitherSyntax#CatchOnlyPartiallyApplied.dummy"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherKOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherObjectOps.either"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherOps.eab"),

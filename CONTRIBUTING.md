@@ -269,7 +269,7 @@ feature, or have a question about the code. Pull requests are also
 gladly accepted.
 
 People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
 venues.
 

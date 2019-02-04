@@ -8,7 +8,7 @@ trait TraverseFilterSyntaxBinCompat0 {
     new SequenceFilterOps(fgoa)
 }
 
-final class SequenceFilterOps[F[_], G[_], A](val fgoa: F[G[Option[A]]]) extends AnyVal {
+final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) extends AnyVal {
 
   /**
    * {{{
