@@ -12,9 +12,21 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def ap[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
 
+  /**
+   * Performs [[local]] and [[map]] simultaneously.
+   */
   def dimap[C, D](f: C => A)(g: B => D)(implicit F: Functor[F]): Kleisli[F, C, D] =
     Kleisli(c => F.map(run(f(c)))(g))
 
+  /**
+   * Modify the output of the Kleisli function with `f`.
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
+   * scala> takeHead.map(_.toDouble).run(List(1))
+   * res0: Option[Double] = Some(1.0)
+   * }}}
+   */
   def map[C](f: B => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
     Kleisli(a => F.map(run(a))(f))
 
@@ -33,9 +45,23 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
+  /**
+   * Composes [[run]] with a function `B => F[C]` not lifted into Kleisli.
+   */
   def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
+  /**
+   * Tip to tail Kleisli arrow composition.
+   * Creates a function `A => F[C]` from [[run]] (`A => F[B]`) and the given Kleisli of `B => F[C]`.
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
+   * scala> val plusOne = Kleisli[Option, Int, Int](i => Some(i + 1))
+   * scala> (takeHead andThen plusOne).run(List(1))
+   * res0: Option[Int] = Some(2)
+   * }}}
+   */
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     this.andThen(k.run)
 
@@ -51,6 +77,16 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
     Kleisli[λ[α => G[F[α]]], A, B](a => Applicative[G].pure(run(a)))
 
+  /**
+   * Contramap the input using `f`, where `f` may modify the input type of the Kleisli arrow.
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> type ParseResult[A] = Either[Throwable, A]
+   * scala> val parseInt = Kleisli[ParseResult, String, Int](s => Either.catchNonFatal(s.toInt))
+   * scala> parseInt.local[List[String]](_.combineAll).run(List("1", "2"))
+   * res0: ParseResult[Int] = Right(12)
+   * }}}
+   */
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
     Kleisli(f.andThen(run))
 
@@ -144,6 +180,16 @@ object Kleisli
 
 sealed private[data] trait KleisliFunctions {
 
+  /**
+   * Creates a Kleisli that ignores its input `A` and returns the given `F[B]`.
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val takeHead = Kleisli((_:List[Int]).headOption)
+   * scala> val makeList = Kleisli.liftF[Option, Unit, List[Int]](Some(List(1,2,3)))
+   * scala> (makeList andThen takeHead).run(())
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
   def liftF[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
@@ -164,12 +210,33 @@ sealed private[data] trait KleisliFunctions {
   def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
+  /**
+   * Creates a Kleisli ignoring input and lifting `A` into applicative context `F`.
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val pureOpt = Kleisli.pure[Option, Unit, String]("beam me up!")
+   * scala> pureOpt.run(())
+   * res0: Option[String] = Some(beam me up!)
+   * }}}
+   */
   def pure[F[_], A, B](x: B)(implicit F: Applicative[F]): Kleisli[F, A, B] =
     Kleisli(_ => F.pure(x))
 
+  /**
+   * Similar to [[pure]] except the input type is the same as the `A` in output type `F[A]`.
+   */
   def ask[F[_], A](implicit F: Applicative[F]): Kleisli[F, A, A] =
     Kleisli(F.pure)
 
+  /**
+   * Modifies the input environment with `f`, without changing the input type of the Kleisli.
+   * {{{
+   * scala> import cats.data.Kleisli
+   * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
+   * scala> Kleisli.local[Option, Int, List[Int]](1 :: _)(takeHead).run(List(2,3))
+   * res0: Option[Int] = Some(1)
+   * }}}
+   */
   def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] =
     Kleisli(f.andThen(fa.run))
 }
