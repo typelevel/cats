@@ -1,6 +1,6 @@
 package alleycats.std
 
-import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse}
+import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 import export._
 
 import scala.annotation.tailrec
@@ -116,14 +116,32 @@ object SetInstances {
       override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
     }
+
+  @export(Orphan)
+  implicit val setTraverseFilter: TraverseFilter[Set] =
+    new TraverseFilter[Set] {
+      val traverse: Traverse[Set] = setTraverse
+
+      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
+        fa.foldLeft(G.pure(Set.empty[B])) { (gSet, a) =>
+          G.map2(f(a), gSet) {
+            case (Some(b), set) => set + b
+            case (None, set)    => set
+          }
+        }
+    }
 }
 
 @reexports(SetInstances)
-object set extends LegacySetInstances
+object set extends LegacySetInstances with LegacySetInstancesBinCompat0
 
 // TODO: remove when cats.{ Set, Traverse } support export-hook
 trait LegacySetInstances {
   implicit def legacySetMonad(implicit e: ExportOrphan[Monad[Set]]): Monad[Set] = e.instance
 
   implicit def legacySetTraverse(implicit e: ExportOrphan[Traverse[Set]]): Traverse[Set] = e.instance
+}
+
+trait LegacySetInstancesBinCompat0 {
+  implicit def legacySetTraverseFilter(implicit e: ExportOrphan[TraverseFilter[Set]]): TraverseFilter[Set] = e.instance
 }
