@@ -226,7 +226,7 @@ sealed private[data] trait KleisliFunctions {
    * Creates a Kleisli arrow which can lift an `A` into applicative context `F`.
    * This is distinct from [[pure]] in that the input is what is lifted (and not ignored).
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli
    * scala> Kleisli.ask[Option, Int].run(1)
    * res0: Option[Int]: Some(1)
    * }}}
