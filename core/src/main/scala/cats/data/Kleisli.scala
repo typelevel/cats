@@ -211,7 +211,7 @@ sealed private[data] trait KleisliFunctions {
     Kleisli(_ => x)
 
   /**
-   * Creates a Kleisli ignoring input and lifting `A` into applicative context `F`.
+   * Creates a Kleisli arrow ignoring its input and lifting the given `B` into applicative context `F`.
    * {{{
    * scala> import cats.data.Kleisli, cats.implicits._
    * scala> val pureOpt = Kleisli.pure[Option, Unit, String]("beam me up!")
@@ -223,7 +223,13 @@ sealed private[data] trait KleisliFunctions {
     Kleisli(_ => F.pure(x))
 
   /**
-   * Similar to [[pure]] except the input type is the same as the `A` in output type `F[A]`.
+   * Creates a Kleisli arrow which can lift an `A` into applicative context `F`.
+   * This is distinct from [[pure]] in that the input is what is lifted (and not ignored).
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> Kleisli.ask[Option, Int].run(1)
+   * res0: Option[Int]: Some(1)
+   * }}}
    */
   def ask[F[_], A](implicit F: Applicative[F]): Kleisli[F, A, A] =
     Kleisli(F.pure)
