@@ -113,6 +113,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      override def grouped[A](fa: Vector[A])(size: Int)(implicit F: Alternative[Vector]): Vector[Vector[A]] =
+        if (size <= 0) Vector.empty else fa.grouped(size).toVector
     }
 
   implicit def catsStdShowForVector[A: Show]: Show[Vector[A]] =

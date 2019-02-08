@@ -582,6 +582,32 @@ import Foldable.sentinel
 
   override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
     foldMap(fa)(f)
+
+  /**
+   * Partitions elements in fixed size.
+   * Returns empty `F` if `size <= 0`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val x: List[Int] = List(1, 2, 3, 4, 5)
+   * scala> Foldable[List].grouped(x)(2)
+   * res0: List[List[Int]] = List(List(1, 2), List(3, 4), List(5))
+   * }}}
+   */
+  def grouped[A](fa: F[A])(size: Int)(implicit F: Alternative[F]): F[F[A]] =
+    // Need to check on empty as otherwise the final combine would return F[Empty] rather than just Empty
+    if (size <= 0 || isEmpty(fa)) {
+      F.empty
+    } else {
+      val (l, r, _) = foldLeft(fa, (F.empty[F[A]], F.empty[A], 0)) {
+        case ((finalResult, intermediateGrouping, `size`), newElement) =>
+          (F.combineK(finalResult, F.pure(intermediateGrouping)), F.pure(newElement), 1)
+        case ((finalResult, intermediateGrouping, currentSize), newElement) =>
+          (finalResult, F.combineK(intermediateGrouping, F.pure(newElement)), currentSize + 1)
+      }
+      F.combineK(l, F.pure(r))
+    }
 }
 
 object Foldable {

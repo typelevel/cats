@@ -149,6 +149,9 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      override def grouped[A](fa: Stream[A])(size: Int)(implicit F: Alternative[Stream]): Stream[Stream[A]] =
+        if (size <= 0) Stream.empty else fa.grouped(size).toStream
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =

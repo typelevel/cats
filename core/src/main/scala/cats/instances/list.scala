@@ -143,6 +143,8 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
 
+      override def grouped[A](fa: List[A])(size: Int)(implicit F: Alternative[List]): List[List[A]] =
+        if (size <= 0) List.empty else fa.grouped(size).toList
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
