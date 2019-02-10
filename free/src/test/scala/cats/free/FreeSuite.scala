@@ -46,7 +46,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("toFreeT is stack-safe") {
-    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should === (FTestApi.a(0).foldMap(FTestApi.runner))
+    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should ===(FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test("compile id") {
