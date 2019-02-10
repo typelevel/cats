@@ -190,7 +190,6 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
       }
     }(FreeT.catsFreeMonadForFreeT[S, G])
 
-
   override def toString: String =
     "Free(...)"
 }
