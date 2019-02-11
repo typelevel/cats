@@ -72,7 +72,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    */
   def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
-    map2(fa, fb)((_, b) => b)
+    ap(map(fa)(_ => (b: B) => b))(fb)
 
   /**
    * Compose two actions, discarding any value produced by the second.
