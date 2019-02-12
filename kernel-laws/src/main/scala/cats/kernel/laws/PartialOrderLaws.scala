@@ -6,10 +6,10 @@ import cats.kernel.instances.option._
 trait PartialOrderLaws[A] extends EqLaws[A] {
   implicit override def E: PartialOrder[A]
 
-  def reflexitivityLt(x: A): IsEq[Boolean] =
+  def reflexivityLt(x: A): IsEq[Boolean] =
     E.lteqv(x, x) <-> true
 
-  def reflexitivityGt(x: A): IsEq[Boolean] =
+  def reflexivityGt(x: A): IsEq[Boolean] =
     E.gteqv(x, x) <-> true
 
   def antisymmetry(x: A, y: A): IsEq[Boolean] =
