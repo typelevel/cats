@@ -15,3 +15,4 @@ import export._
     with LegacyTryInstances
     with LegacyIterableInstances
     with MapInstances
+    with MapInstancesBinCompat0
