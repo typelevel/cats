@@ -18,12 +18,16 @@ lazy val commonSettings = Seq(
     val bd = baseDirectory.value
     def extraDirs(suffix: String) =
       CrossType.Pure.sharedSrcDir(bd, "main").toList.map(f => file(f.getPath + suffix))
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, y)) if y <= 12 =>
-        extraDirs("-2.12-")
-      case Some((2, y)) if y >= 13 =>
-        extraDirs("-2.13+")
-      case _ => Nil
+    if (moduleName.value == "root") {
+      Seq.empty
+    } else {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, y)) if y <= 12 =>
+          extraDirs("-2.12-")
+        case Some((2, y)) if y >= 13 =>
+          extraDirs("-2.13+")
+        case _ => Nil
+      }
     }
   },
   coverageEnabled := {
