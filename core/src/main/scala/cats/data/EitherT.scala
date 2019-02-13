@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
 
@@ -108,6 +107,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def subflatMap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, D] =
     transform(_.flatMap(f))
 
+  def subProductR[AA >: A, D](faad: Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, D] =
+    subflatMap(_ => faad)
+
+  def subProductL[AA >: A, D](faad: Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, B] =
+    subflatMap(fab => Functor[Either[AA, ?]].as(faad, fab))
+
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
 
   /**
@@ -117,6 +122,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
     flatMap(b => EitherT.right(f(b)))
+
+  def semiProductR[D](fd: F[D])(implicit F: Monad[F]): EitherT[F, A, D] =
+    semiflatMap(_ => fd)
+
+  def semiProductL[D](fd: F[D])(implicit F: Monad[F]): EitherT[F, A, B] =
+    semiflatMap(b => F.as(fd, b))
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 

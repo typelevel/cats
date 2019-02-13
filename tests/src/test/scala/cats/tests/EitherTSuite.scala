@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.Bifunctor
 import cats.data.EitherT
 
 import cats.laws.discipline._
@@ -307,9 +306,39 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("semiProductR consistent with value.flatMap+pure") {
+    forAll { (eithert: EitherT[List, String, Int], f: List[String]) =>
+      eithert.semiProductR(f) should ===(EitherT(eithert.value.flatMap {
+        case l @ Left(_) => List(l.asInstanceOf[Either[String, String]])
+        case Right(_)    => f.map(Right(_))
+      }))
+    }
+  }
+
+  test("semiProductL consistent with value.flatMap+as") {
+    forAll { (eithert: EitherT[List, String, Int], f: List[String]) =>
+      eithert.semiProductL(f) should ===(EitherT(eithert.value.flatMap {
+        case l @ Left(_)  => List(l.asInstanceOf[Either[String, Int]])
+        case r @ Right(_) => f.as(r)
+      }))
+    }
+  }
+
   test("subflatMap consistent with value.map+flatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: Int => Either[String, Double]) =>
       eithert.subflatMap(f) should ===(EitherT(eithert.value.map(_.flatMap(f))))
+    }
+  }
+
+  test("subProductR consistent with value.map+productR") {
+    forAll { (eithert: EitherT[List, String, Int], f: Either[String, Double]) =>
+      eithert.subProductR(f) should ===(EitherT(eithert.value.map(_.productR(f))))
+    }
+  }
+
+  test("subProductL consistent with value.map+productL") {
+    forAll { (eithert: EitherT[List, String, Int], f: Either[String, Double]) =>
+      eithert.subProductL(f) should ===(EitherT(eithert.value.map(_.productL(f))))
     }
   }
 
