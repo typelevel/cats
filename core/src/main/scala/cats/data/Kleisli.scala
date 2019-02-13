@@ -45,6 +45,9 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
+  def semiflatMap[N[_], C](f: F[B] => Kleisli[N, A, C]): Kleisli[N, A, C] =
+    Kleisli(a => f(run(a)).run(a))
+
   /**
    * Composes [[run]] with a function `B => F[C]` not lifted into Kleisli.
    */

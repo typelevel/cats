@@ -244,6 +244,12 @@ class KleisliSuite extends CatsSuite {
     }
   }
 
+  test("semiflatMap") {
+    forAll { (f: Kleisli[List, Int, Int], t: List[Int] => Kleisli[List, Int, Int], i: Int) =>
+      t(f.run(i)).run(i) should ===(f.semiflatMap(t).run(i))
+    }
+  }
+
   test("lower") {
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       f.run(i) should ===(f.lower.run(i).flatten)
