@@ -804,7 +804,6 @@ def priorTo2_13(scalaVersion: String): Boolean =
   }
 
 lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := true,
   releaseTagName := tagName.value,
   releaseVcsSign := true,
   useGpg := true, // bouncycastle has bugs with subkeys, so we use gpg instead
