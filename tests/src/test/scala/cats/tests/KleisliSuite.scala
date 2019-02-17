@@ -79,7 +79,8 @@ class KleisliSuite extends CatsSuite {
   checkAll("Reader[MiniInt, ?]", MonadTests[Reader[MiniInt, ?]].monad[Int, Int, Int])
   checkAll("Monad[Reader[?, ?], Int]", SerializableTests.serializable(Monad[Reader[Int, ?]]))
 
-  checkAll("Kleisli[Option, ?, ?]", StrongTests[Kleisli[Option, ?, ?]].strong[MiniInt, Int, Int, Int, Boolean, Int])
+  checkAll("Kleisli[Option, ?, ?]",
+           StrongTests[Kleisli[Option, ?, ?]].strong[MiniInt, Boolean, Boolean, Boolean, Boolean, Int])
   checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
 
   checkAll("Kleisli[Option, MiniInt, Int]", FlatMapTests[Kleisli[Option, MiniInt, ?]].flatMap[Int, Int, Int])

@@ -411,7 +411,7 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Strong[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, ?, ?, Int]",
-             StrongTests[IndexedStateT[ListWrapper, ?, ?, Int]].strong[MiniInt, String, String, Int, Boolean, Int])
+             StrongTests[IndexedStateT[ListWrapper, ?, ?, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String])
     checkAll("Strong[IndexedStateT[ListWrapper, ?, ?, Int]]",
              SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, ?, ?, Int]]))
 

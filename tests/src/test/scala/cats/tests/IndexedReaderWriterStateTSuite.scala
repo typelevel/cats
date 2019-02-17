@@ -354,9 +354,9 @@ class ReaderWriterStateTSuite extends CatsSuite {
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]",
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]",
       StrongTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]]
-        .strong[MiniInt, Int, Int, String, Boolean, String]
+        .strong[MiniInt, Int, Boolean, Boolean, Boolean, String]
     )
     checkAll(
       "Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
