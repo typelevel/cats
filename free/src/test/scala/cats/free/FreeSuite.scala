@@ -45,10 +45,6 @@ class FreeSuite extends CatsSuite {
     rr.toString.length should be > 0
   }
 
-  test("toFreeT is stack-safe") {
-    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should ===(FTestApi.a(0).foldMap(FTestApi.runner))
-  }
-
   test("compile id") {
     forAll { x: Free[List, Int] =>
       x.compile(FunctionK.id[List]) should ===(x)
@@ -107,6 +103,10 @@ class FreeSuite extends CatsSuite {
 
   test("foldMap is stack safe") {
     assert(10000 == FTestApi.a(0).foldMap(FTestApi.runner))
+  }
+
+  test("toFreeT is stack-safe") {
+    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should ===(FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test(".runTailRec") {
