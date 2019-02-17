@@ -350,7 +350,7 @@ object arbitrary extends ArbitraryInstances0 {
     Cogen[List[A]].contramap(_.toList)
 
   implicit val catsLawsCogenForMiniInt: Cogen[MiniInt] =
-    Cogen[Int].contramap(_.asInt)
+    Cogen[Int].contramap(_.toInt)
 
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))

@@ -21,6 +21,9 @@ object ExhaustiveCheck {
   implicit val catsLawsExhaustiveCheckForBoolean: ExhaustiveCheck[Boolean] =
     instance(Stream(false, true))
 
+  implicit val catsLawsExhaustiveCheckForSetBoolean: ExhaustiveCheck[Set[Boolean]] =
+    forSet[Boolean]
+
   /**
    * Warning: the domain of (A, B) is the cross-product of the domain of `A` and the domain of `B`.
    */
@@ -48,4 +51,12 @@ object ExhaustiveCheck {
 
   implicit def catsLawsExhaustiveCheckForOption[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Option[A]] =
     instance(Stream.cons(None, A.allValues.map(Some(_))))
+
+  /**
+   * Creates an `ExhaustiveCheck[Set[A]]` given an `ExhaustiveCheck[A]` by computing the powerset of
+   * values. Note that if there are `n` elements in the domain of `A` there will be `2^n` elements
+   * in the domain of `Set[A]`, so use this only on small domains.
+   */
+  def forSet[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Set[A]] =
+    instance(A.allValues.toSet.subsets.toStream)
 }
