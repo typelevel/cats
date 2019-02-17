@@ -252,7 +252,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * res0: (List[Int], List[String]) = (List(1, 2, 3, 4),List(value 1, value 2, value 3, value 4))
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> list.partitionBifold(a => Const[Int, Nothing with Any](a))
-   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4), List())
+   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
    * }}}
    */
   def partitionBifold[H[_, _], B, C](
@@ -271,7 +271,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> val list = List(1,2,3,4)
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> list.partitionBifoldM(a => Option(Const[Int, Nothing with Any](a)))
-   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4), List()))
+   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
   def partitionBifoldM[G[_], H[_, _], B, C](
@@ -341,7 +341,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
    * scala> val list = List(1,2,3,4)
    * `Const`'s second parameter is never instantiated, so we can use an impossible type:
    * scala> Foldable[List].partitionBifoldM(list)(a => Option(Const[Int, Nothing with Any](a)))
-   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4), List()))
+   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
   def partitionBifoldM[G[_], H[_, _], A, B, C](
