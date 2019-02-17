@@ -6,7 +6,7 @@
 # This is useful for sorting the test output by test duration and seeing which tests are taking the longest.
 #
 # Example usage:
-# sbt buildJVM tee test-output.txt
+# sbt buildJVM | tee test-output.txt
 # gawk -f scripts/parse-test-durations.awk test-output.txt | sort -k 1 -n
 #
 # Example output:
