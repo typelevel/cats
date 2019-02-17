@@ -9,25 +9,78 @@ group: edge
 git:
   depth: 9999
 
-scala:
-  - 2.11.12
-  - 2.13.0-M5
-  - 2.12.7
-
 jdk:
   - oraclejdk8
+
+scala_version_211: &scala_version_211 2.11.12
+scala_version_212: &scala_version_212 2.12.7
+scala_version_213: &scala_version_213 2.13.0-M5
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
 
-script:
-  - scripts/travis-publish.sh
+stages:
+  - name: test
+  - name: publish snapshot
+    if: (branch = master AND type = push)
 
-# http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
-install:
-  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - pip install --user codecov
-  - gem install jekyll -v 2.5
+jobs:
+  include:
+    # it can speed up the overall build to have the longer-running jobs at the top of this list.
+    - env: TEST="coverage"
+      install: pip install --user codecov
+      script: sbt coverage buildJVM bench/test coverageReport && codecov
+
+    - &js_tests
+      env: TEST="JS tests"
+      # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
+      install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+      script: sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+      scala: *scala_version_211
+    - <<: *js_tests
+      scala: *scala_version_212
+
+    - &jvm_tests
+      env: TEST="JVM tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+      scala: *scala_version_211
+    - <<: *jvm_tests
+      scala: *scala_version_212
+    - <<: *jvm_tests
+      scala: *scala_version_213
+      # the bench module has dependencies not available in Scala 2.13, so don't test it
+      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM
+
+    - env: TEST="docs"
+      install: gem install jekyll -v 2.5
+      script: sbt makeMicrosite
+
+    - env: TEST="linting"
+      script: sbt scalastyle fmtCheck
+
+    - env: TEST="scalafix"
+      script: cd scalafix && sbt tests/test
+
+    - &bincompat_check
+      env: TEST="binary compatibility"
+      script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
+      scala: *scala_version_211
+    - <<: *bincompat_check
+      scala: *scala_version_212
+
+    - &publish_snapshot
+      stage: publish snapshot
+      script: |
+        if [[ $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
+          sbt ++$TRAVIS_SCALA_VERSION! publish gitSnapshots publish
+        else
+          echo Not publishing a snapshot because the version does not end with -SNAPSHOT for version $TRAVIS_SCALA_VERSION
+        fi
+      scala: *scala_version_211
+    - <<: *publish_snapshot
+      scala: *scala_version_212
+    - <<: *publish_snapshot
+      scala: *scala_version_213
 
 notifications:
   webhooks:
@@ -38,9 +91,6 @@ notifications:
     on_start: false
 
 env:
-  matrix:
-    - JS_BUILD=false
-    - JS_BUILD=true
   global:
     - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
     - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
