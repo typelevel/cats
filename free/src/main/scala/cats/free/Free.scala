@@ -184,9 +184,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     mapK(λ[S ~> G](ev.inj(_)))
 
   final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
-    foldMap[FreeT[S, G, ?]](
-      λ[S ~> FreeT[S, G, ?]](FreeT.liftF(_))
-    )
+    foldMap[FreeT[S, G, ?]](λ[S ~> FreeT[S, G, ?]](FreeT.liftF(_)))
 
   override def toString: String =
     "Free(...)"
