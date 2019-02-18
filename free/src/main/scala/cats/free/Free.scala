@@ -30,7 +30,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def mapK[T[_]](f: S ~> T): Free[T, A] =
     foldMap[Free[T, ?]] { // this is safe because Free is stack safe
       λ[FunctionK[S, Free[T, ?]]](fa => Suspend(f(fa)))
-    }(Free.catsFreeMonadForFree)
+    }
 
   /**
    * Bind the given continuation to the result of this computation.
@@ -186,7 +186,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
     foldMap[FreeT[S, G, ?]](
       λ[S ~> FreeT[S, G, ?]](FreeT.liftF(_))
-    )(FreeT.catsFreeMonadForFreeT[S, G])
+    )
 
   override def toString: String =
     "Free(...)"
