@@ -1,8 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
 
-* **Feb 2 2019** [Call for proposals for the Philadelphia Typelevel Summit](https://www.papercall.io/typelevel-summit-phl-2019) is still open (until Feb 10). Great opportunity to share anything related to Cats ecosystem. 
-* **Feb 1 2019** Please help review our proposal for [2019 roadmap](https://github.com/typelevel/cats/issues/2719)
+* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 * **Jan 31 2019** Cats 1.6.0 is released.
 * **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
 
@@ -28,6 +27,9 @@ standard library. Cats strives to provide functional programming abstractions th
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
 
 You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
+
+We have an exciting [2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md).
+
 
 ### Getting Started
 
