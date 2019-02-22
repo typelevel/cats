@@ -161,12 +161,12 @@ object Kleisli
    * scala> val b: KOI[Either[Char, Char]] = Kleisli[Option, Int, Either[Char, Char]](f _)
    * scala> val nt: Kleisli[Option, Int, ?] ~> Option = Kleisli.applyK[Option, Int](1)
    * scala> nt(b)
-   * res0: Option[Either[Char, Char]] = Some(Right('n'))
+   * res0: Option[Either[Char, Char]] = Some(Right(n))
    *
    * scala> type EKOIC[A] = EitherT[KOI, Char, A]
    * scala> val c: EKOIC[Char] = EitherT[KOI, Char, Char](b)
    * scala> c.mapK(nt).value
-   * res1: Option[Either[Char, Char]] = Some(Right('n'))
+   * res1: Option[Either[Char, Char]] = Some(Right(n))
    *
    * scala> val ntz = Kleisli.applyK[Option, Int](0)
    * scala> c.mapK(ntz).value
