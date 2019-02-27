@@ -5,6 +5,12 @@ import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
+  coverageEnabled := {
+    if (priorTo2_13(scalaVersion.value))
+      coverageEnabled.value
+    else
+      false
+  },
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -25,12 +31,6 @@ lazy val commonSettings = Seq(
         extraDirs("-2.13+")
       case _ => Nil
     }
-  },
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
   },
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
@@ -389,9 +389,9 @@ lazy val docs = project
 
 lazy val cats = project
   .in(file("."))
-  .settings(moduleName := "root")
-  .settings(catsSettings)
-  .settings(noPublishSettings)
+  .settings(moduleName := "root", crossScalaVersions := Nil)
+  .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
+  .settings(noPublishSettings) // this is to exclue the root module itself from being published.
   .aggregate(catsJVM, catsJS)
   .dependsOn(catsJVM, catsJS, tests.jvm % "test-internal -> test")
 
@@ -804,9 +804,7 @@ def priorTo2_13(scalaVersion: String): Boolean =
   }
 
 lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := true,
   releaseTagName := tagName.value,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseVcsSign := true,
   useGpg := true, // bouncycastle has bugs with subkeys, so we use gpg instead
   publishMavenStyle := true,
@@ -825,12 +823,11 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    runClean,
-    releaseStepCommand("validate"),
+    releaseStepCommandAndRemaining("+validate"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    publishArtifacts,
+    releaseStepCommandAndRemaining("+publishSigned"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
