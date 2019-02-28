@@ -755,7 +755,10 @@ scala&gt; <span class="lit">"err"</span>.asLeft[<span class="std">Int</span>].ad
 res1: Either[<span class="std">String</span>,<span class="std">Int</span>] = Left(err)
 
 scala&gt; <span class="num">1.</span>asRight[<span class="std">String</span>].adaptError(pf)
-res2: Either[<span class="std">String</span>,<span class="std">Int</span>] = Right(<span class="num">1</span>)</pre></div></div>
+res2: Either[<span class="std">String</span>,<span class="std">Int</span>] = Right(<span class="num">1</span>)</pre><p>The same function is available in <code>ApplicativeErrorOps</code> as <code>adaptErr</code> - it cannot have the same
+name because this would result in ambiguous implicits. <code>adaptError</code> will be moved from MonadError to
+ApplicativeError in Cats 2.0: see <a href="https://github.com/typelevel/cats/issues/2685" target="_blank">https://github.com/typelevel/cats/issues/2685</a>
+</p></div></div>
     </li><li name="cats.FlatMap#ap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ap[A,B](ff:F[A=&gt;B])(fa:F[A]):F[B]"></a><a id="ap[A,B](F[(A)⇒B])(F[A]):F[B]"></a>
       <span class="permalink">

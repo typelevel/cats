@@ -436,12 +436,12 @@ scala&gt; <span class="kw">type</span> KOI[A] = Kleisli[<span class="std">Option
 scala&gt; <span class="kw">val</span> b: KOI[Either[<span class="std">Char</span>, <span class="std">Char</span>]] = Kleisli[<span class="std">Option</span>, <span class="std">Int</span>, Either[<span class="std">Char</span>, <span class="std">Char</span>]](f _)
 scala&gt; <span class="kw">val</span> nt: Kleisli[<span class="std">Option</span>, <span class="std">Int</span>, ?] ~&gt; <span class="std">Option</span> = Kleisli.applyK[<span class="std">Option</span>, <span class="std">Int</span>](<span class="num">1</span>)
 scala&gt; nt(b)
-res0: <span class="std">Option</span>[Either[<span class="std">Char</span>, <span class="std">Char</span>]] = <span class="std">Some</span>(Right(<span class="lit">'n'</span>))
+res0: <span class="std">Option</span>[Either[<span class="std">Char</span>, <span class="std">Char</span>]] = <span class="std">Some</span>(Right(n))
 
 scala&gt; <span class="kw">type</span> EKOIC[A] = EitherT[KOI, <span class="std">Char</span>, A]
 scala&gt; <span class="kw">val</span> c: EKOIC[<span class="std">Char</span>] = EitherT[KOI, <span class="std">Char</span>, <span class="std">Char</span>](b)
 scala&gt; c.mapK(nt).value
-res1: <span class="std">Option</span>[Either[<span class="std">Char</span>, <span class="std">Char</span>]] = <span class="std">Some</span>(Right(<span class="lit">'n'</span>))
+res1: <span class="std">Option</span>[Either[<span class="std">Char</span>, <span class="std">Char</span>]] = <span class="std">Some</span>(Right(n))
 
 scala&gt; <span class="kw">val</span> ntz = Kleisli.applyK[<span class="std">Option</span>, <span class="std">Int</span>](<span class="num">0</span>)
 scala&gt; c.mapK(ntz).value
@@ -477,7 +477,9 @@ res2: <span class="std">Option</span>[Either[<span class="std">Char</span>, <spa
         <span class="name">ask</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliFunctions.ask.F">F</span>]</span>)</span><span class="result">: <a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliFunctions.ask.F">F</span>, <span class="extype" name="cats.data.KleisliFunctions.ask.A">A</span>, <span class="extype" name="cats.data.KleisliFunctions.ask.A">A</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a Kleisli arrow which can lift an <code>A</code> into applicative context <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Kleisli arrow which can lift an <code>A</code> into applicative context <code>F</code>.
+This is distinct from <a href="#pure[F[_],A,B](x:B)(implicitF:cats.Applicative[F]):cats.data.Kleisli[F,A,B]" class="extmbr" name="cats.data.Kleisli#pure">pure</a> in that the input is what is lifted (and not ignored).</p><pre>scala&gt; Kleisli.ask[<span class="std">Option</span>, <span class="std">Int</span>].run(<span class="num">1</span>)
+res0: <span class="std">Option</span>[<span class="std">Int</span>]: <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
     </li><li name="cats.data.KleisliInstances2#catsDataAlternativeForKleisli" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsDataAlternativeForKleisli[F[_],A](implicitF0:cats.Alternative[F]):cats.Alternative[[γ$54$]cats.data.Kleisli[F,A,γ$54$]]"></a><a id="catsDataAlternativeForKleisli[F[_],A](Alternative[F]):Alternative[[γ$54$]Kleisli[F,A,γ$54$]]"></a>
       <span class="permalink">
@@ -1125,7 +1127,11 @@ if M is Representable
         <span class="name">liftF</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.data.KleisliFunctions.liftF.F">F</span>[<span class="extype" name="cats.data.KleisliFunctions.liftF.B">B</span>]</span>)</span><span class="result">: <a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliFunctions.liftF.F">F</span>, <span class="extype" name="cats.data.KleisliFunctions.liftF.A">A</span>, <span class="extype" name="cats.data.KleisliFunctions.liftF.B">B</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a Kleisli that ignores its input <code>A</code> and returns the given <code>F[B]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Kleisli that ignores its input <code>A</code> and returns the given <code>F[B]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli, cats.implicits._
+scala&gt; <span class="kw">val</span> takeHead = Kleisli((_:<span class="std">List</span>[<span class="std">Int</span>]).headOption)
+scala&gt; <span class="kw">val</span> makeList = Kleisli.liftF[<span class="std">Option</span>, <span class="std">Unit</span>, <span class="std">List</span>[<span class="std">Int</span>]](<span class="std">Some</span>(<span class="std">List</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>)))
+scala&gt; (makeList andThen takeHead).run(())
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
     </li><li name="cats.data.KleisliFunctionsBinCompat#liftFunctionK" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="liftFunctionK[F[_],G[_],A](f:F~&gt;G):[γ$6$]cats.data.Kleisli[F,A,γ$6$]~&gt;[γ$7$]cats.data.Kleisli[G,A,γ$7$]"></a><a id="liftFunctionK[F[_],G[_],A](~&gt;[F,G]):~&gt;[[γ$6$]Kleisli[F,A,γ$6$],[γ$7$]Kleisli[G,A,γ$7$]]"></a>
       <span class="permalink">
@@ -1188,7 +1194,10 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="name">local</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="R">R</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.KleisliFunctions.local.R">R</span>) ⇒ <span class="extype" name="cats.data.KleisliFunctions.local.R">R</span></span>)</span><span class="params">(<span name="fa">fa: <a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliFunctions.local.M">M</span>, <span class="extype" name="cats.data.KleisliFunctions.local.R">R</span>, <span class="extype" name="cats.data.KleisliFunctions.local.A">A</span>]</span>)</span><span class="result">: <a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliFunctions.local.M">M</span>, <span class="extype" name="cats.data.KleisliFunctions.local.R">R</span>, <span class="extype" name="cats.data.KleisliFunctions.local.A">A</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Modifies the input environment with <code>f</code>, without changing the input type of the Kleisli.</p><div class="fullcomment"><div class="comment cmt"><p>Modifies the input environment with <code>f</code>, without changing the input type of the Kleisli.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli
+scala&gt; <span class="kw">val</span> takeHead = Kleisli[<span class="std">Option</span>, <span class="std">List</span>[<span class="std">Int</span>], <span class="std">Int</span>](_.headOption)
+scala&gt; Kleisli.local[<span class="std">Option</span>, <span class="std">Int</span>, <span class="std">List</span>[<span class="std">Int</span>]](<span class="num">1</span> :: _)(takeHead).run(<span class="std">List</span>(<span class="num">2</span>,<span class="num">3</span>))
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">1</span>)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1258,7 +1267,10 @@ res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span clas
         <span class="name">pure</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="cats.data.KleisliFunctions.pure.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a>[<span class="extype" name="cats.data.KleisliFunctions.pure.F">F</span>]</span>)</span><span class="result">: <a href="Kleisli.html" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.KleisliFunctions.pure.F">F</span>, <span class="extype" name="cats.data.KleisliFunctions.pure.A">A</span>, <span class="extype" name="cats.data.KleisliFunctions.pure.B">B</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
+      <p class="shortcomment cmt">Creates a Kleisli arrow ignoring its input and lifting the given <code>B</code> into applicative context <code>F</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Kleisli arrow ignoring its input and lifting the given <code>B</code> into applicative context <code>F</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli, cats.implicits._
+scala&gt; <span class="kw">val</span> pureOpt = Kleisli.pure[<span class="std">Option</span>, <span class="std">Unit</span>, <span class="std">String</span>](<span class="lit">"beam me up!"</span>)
+scala&gt; pureOpt.run(())
+res0: <span class="std">Option</span>[<span class="std">String</span>] = <span class="std">Some</span>(beam me up!)</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>KleisliFunctions</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

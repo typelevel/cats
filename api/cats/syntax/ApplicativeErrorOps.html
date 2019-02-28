@@ -1098,6 +1098,37 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.syntax.ApplicativeErrorOps#adaptErr" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="adaptErr(pf:PartialFunction[E,E])(implicitF:cats.ApplicativeError[F,E]):F[A]"></a><a id="adaptErr(PartialFunction[E,E])(ApplicativeError[F,E]):F[A]"></a>
+      <span class="permalink">
+      <a href="../../cats/syntax/ApplicativeErrorOps.html#adaptErr(pf:PartialFunction[E,E])(implicitF:cats.ApplicativeError[F,E]):F[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">adaptErr</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.12.7/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../ApplicativeError.html" class="extype" name="cats.ApplicativeError">ApplicativeError</a>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>, <span class="extype" name="cats.syntax.ApplicativeErrorOps.E">E</span>]</span>)</span><span class="result">: <span class="extype" name="cats.syntax.ApplicativeErrorOps.F">F</span>[<span class="extype" name="cats.syntax.ApplicativeErrorOps.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Transform certain errors using <code>pf</code> and rethrow them.</p><div class="fullcomment"><div class="comment cmt"><p>Transform certain errors using <code>pf</code> and rethrow them.
+Non matching errors and successful values are not affected by this function.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats._, implicits._
+
+scala&gt; <span class="kw">def</span> pf: PartialFunction[<span class="std">String</span>, <span class="std">String</span>] = { <span class="kw">case</span> <span class="lit">"error"</span> <span class="kw">=&gt;</span> <span class="lit">"ERROR"</span> }
+
+scala&gt; <span class="lit">"error"</span>.asLeft[<span class="std">Int</span>].adaptErr(pf)
+res0: Either[<span class="std">String</span>,<span class="std">Int</span>] = Left(ERROR)
+
+scala&gt; <span class="lit">"err"</span>.asLeft[<span class="std">Int</span>].adaptErr(pf)
+res1: Either[<span class="std">String</span>,<span class="std">Int</span>] = Left(err)
+
+scala&gt; <span class="num">1.</span>asRight[<span class="std">String</span>].adaptErr(pf)
+res2: Either[<span class="std">String</span>,<span class="std">Int</span>] = Right(<span class="num">1</span>)</pre><p>This is the same as <code>MonadErrorOps#adaptError</code>. It cannot have the same name because
+this would result in ambiguous implicits. <code>adaptError</code> will be moved from <code>MonadError</code>
+to <code>ApplicativeError</code> in Cats 2.0: see <a href="https://github.com/typelevel/cats/issues/2685" target="_blank">https://github.com/typelevel/cats/issues/2685</a>
+</p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">

@@ -433,7 +433,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="cats.data.Kleisli#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Kleisli#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="andThen[C](k:cats.data.Kleisli[F,B,C])(implicitF:cats.FlatMap[F]):cats.data.Kleisli[F,A,C]"></a><a id="andThen[C](Kleisli[F,B,C])(FlatMap[F]):Kleisli[F,A,C]"></a>
       <span class="permalink">
       <a href="../../cats/data/Kleisli.html#andThen[C](k:cats.data.Kleisli[F,B,C])(implicitF:cats.FlatMap[F]):cats.data.Kleisli[F,A,C]" title="Permalink">
@@ -448,7 +448,12 @@
         <span class="name">andThen</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="k">k: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.B">B</span>, <span class="extype" name="cats.data.Kleisli.andThen.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.andThen.C">C</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Tip to tail Kleisli arrow composition.</p><div class="fullcomment"><div class="comment cmt"><p>Tip to tail Kleisli arrow composition.
+Creates a function <code>A =&gt; F[C]</code> from <a href="#run:A=&gt;F[B]" class="extmbr" name="cats.data.Kleisli#run">run</a> (<code>A =&gt; F[B]</code>) and the given Kleisli of <code>B =&gt; F[C]</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli, cats.implicits._
+scala&gt; <span class="kw">val</span> takeHead = Kleisli[<span class="std">Option</span>, <span class="std">List</span>[<span class="std">Int</span>], <span class="std">Int</span>](_.headOption)
+scala&gt; <span class="kw">val</span> plusOne = Kleisli[<span class="std">Option</span>, <span class="std">Int</span>, <span class="std">Int</span>](i <span class="kw">=&gt;</span> <span class="std">Some</span>(i + <span class="num">1</span>))
+scala&gt; (takeHead andThen plusOne).run(<span class="std">List</span>(<span class="num">1</span>))
+res0: <span class="std">Option</span>[<span class="std">Int</span>] = <span class="std">Some</span>(<span class="num">2</span>)</pre></div></div>
     </li><li name="cats.data.Kleisli#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="andThen[C](f:B=&gt;F[C])(implicitF:cats.FlatMap[F]):cats.data.Kleisli[F,A,C]"></a><a id="andThen[C]((B)⇒F[C])(FlatMap[F]):Kleisli[F,A,C]"></a>
       <span class="permalink">
@@ -464,7 +469,7 @@
         <span class="name">andThen</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Kleisli.B">B</span>) ⇒ <span class="extype" name="cats.data.Kleisli.F">F</span>[<span class="extype" name="cats.data.Kleisli.andThen.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.andThen.C">C</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Composes <a href="#run:A=&gt;F[B]" class="extmbr" name="cats.data.Kleisli#run">run</a> with a function <code>B =&gt; F[C]</code> not lifted into Kleisli.</p>
     </li><li name="cats.data.Kleisli#ap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ap[C](f:cats.data.Kleisli[F,A,B=&gt;C])(implicitF:cats.Apply[F]):cats.data.Kleisli[F,A,C]"></a><a id="ap[C](Kleisli[F,A,(B)⇒C])(Apply[F]):Kleisli[F,A,C]"></a>
       <span class="permalink">
@@ -584,7 +589,7 @@
         <span class="name">dimap</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Kleisli.dimap.C">C</span>) ⇒ <span class="extype" name="cats.data.Kleisli.A">A</span></span>)</span><span class="params">(<span name="g">g: (<span class="extype" name="cats.data.Kleisli.B">B</span>) ⇒ <span class="extype" name="cats.data.Kleisli.dimap.D">D</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.dimap.C">C</span>, <span class="extype" name="cats.data.Kleisli.dimap.D">D</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Performs <a href="#local[AA](f:AA=&gt;A):cats.data.Kleisli[F,AA,B]" class="extmbr" name="cats.data.Kleisli#local">local</a> and <a href="#map[C](f:B=&gt;C)(implicitF:cats.Functor[F]):cats.data.Kleisli[F,A,C]" class="extmbr" name="cats.data.Kleisli#map">map</a> simultaneously.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -722,7 +727,7 @@
       </span>
       
       
-    </li><li name="cats.data.Kleisli#local" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Kleisli#local" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="local[AA](f:AA=&gt;A):cats.data.Kleisli[F,AA,B]"></a><a id="local[AA]((AA)⇒A):Kleisli[F,AA,B]"></a>
       <span class="permalink">
       <a href="../../cats/data/Kleisli.html#local[AA](f:AA=&gt;A):cats.data.Kleisli[F,AA,B]" title="Permalink">
@@ -737,7 +742,11 @@
         <span class="name">local</span><span class="tparams">[<span name="AA">AA</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Kleisli.local.AA">AA</span>) ⇒ <span class="extype" name="cats.data.Kleisli.A">A</span></span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.local.AA">AA</span>, <span class="extype" name="cats.data.Kleisli.B">B</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Contramap the input using <code>f</code>, where <code>f</code> may modify the input type of the Kleisli arrow.</p><div class="fullcomment"><div class="comment cmt"><p>Contramap the input using <code>f</code>, where <code>f</code> may modify the input type of the Kleisli arrow.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli, cats.implicits._
+scala&gt; <span class="kw">type</span> ParseResult[A] = Either[Throwable, A]
+scala&gt; <span class="kw">val</span> parseInt = Kleisli[ParseResult, <span class="std">String</span>, <span class="std">Int</span>](s <span class="kw">=&gt;</span> Either.catchNonFatal(s.toInt))
+scala&gt; parseInt.local[<span class="std">List</span>[<span class="std">String</span>]](_.combineAll).run(<span class="std">List</span>(<span class="lit">"1"</span>, <span class="lit">"2"</span>))
+res0: ParseResult[<span class="std">Int</span>] = Right(<span class="num">12</span>)</pre></div></div>
     </li><li name="cats.data.Kleisli#lower" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="lower(implicitF:cats.Applicative[F]):cats.data.Kleisli[F,A,F[B]]"></a><a id="lower(Applicative[F]):Kleisli[F,A,F[B]]"></a>
       <span class="permalink">
@@ -754,7 +763,7 @@
       </span>
       
       
-    </li><li name="cats.data.Kleisli#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.data.Kleisli#map" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map[C](f:B=&gt;C)(implicitF:cats.Functor[F]):cats.data.Kleisli[F,A,C]"></a><a id="map[C]((B)⇒C)(Functor[F]):Kleisli[F,A,C]"></a>
       <span class="permalink">
       <a href="../../cats/data/Kleisli.html#map[C](f:B=&gt;C)(implicitF:cats.Functor[F]):cats.data.Kleisli[F,A,C]" title="Permalink">
@@ -769,7 +778,10 @@
         <span class="name">map</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Kleisli.B">B</span>) ⇒ <span class="extype" name="cats.data.Kleisli.map.C">C</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.Kleisli">Kleisli</a>[<span class="extype" name="cats.data.Kleisli.F">F</span>, <span class="extype" name="cats.data.Kleisli.A">A</span>, <span class="extype" name="cats.data.Kleisli.map.C">C</span>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Modify the output of the Kleisli function with <code>f</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Modify the output of the Kleisli function with <code>f</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.Kleisli, cats.implicits._
+scala&gt; <span class="kw">val</span> takeHead = Kleisli[<span class="std">Option</span>, <span class="std">List</span>[<span class="std">Int</span>], <span class="std">Int</span>](_.headOption)
+scala&gt; takeHead.map(_.toDouble).run(<span class="std">List</span>(<span class="num">1</span>))
+res0: <span class="std">Option</span>[<span class="std">Double</span>] = <span class="std">Some</span>(<span class="num">1.0</span>)</pre></div></div>
     </li><li name="cats.data.Kleisli#mapF" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mapF[N[_],C](f:F[B]=&gt;N[C]):cats.data.Kleisli[N,A,C]"></a><a id="mapF[N[_],C]((F[B])⇒N[C]):Kleisli[N,A,C]"></a>
       <span class="permalink">
