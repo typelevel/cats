@@ -67,18 +67,18 @@ import simulacrum.typeclass
   }
 
   /**
-    * Return ().pure[F] if `condition` is true, `empty` otherwise
-    *
-    * Example:
-    * {{{
-    * scala> import cats.implicits._
-    * scala> def even(i: Int): Option[String] = Alternative[Option].guard(i % 2 == 0).as("even")
-    * scala> even(2)
-    * res0: Option[String] = Some(even)
-    * scala> even(3)
-    * res1: Option[String] = None
-    * }}}
-    */
+   * Return ().pure[F] if `condition` is true, `empty` otherwise
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> def even(i: Int): Option[String] = Alternative[Option].guard(i % 2 == 0).as("even")
+   * scala> even(2)
+   * res0: Option[String] = Some(even)
+   * scala> even(3)
+   * res1: Option[String] = None
+   * }}}
+   */
   def guard(condition: Boolean): F[Unit] =
     if (condition) unit else empty
 
