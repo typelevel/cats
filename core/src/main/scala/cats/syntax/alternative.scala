@@ -9,6 +9,11 @@ trait AlternativeSyntax {
   implicit final def catsSyntaxAlternativeSeparate[F[_], G[_, _], A, B](fgab: F[G[A, B]]): SeparateOps[F, G, A, B] =
     new SeparateOps[F, G, A, B](fgab)
 
+  implicit final def catsSyntaxAlternativeSeparateFoldable[F[_], G[_, _], A, B](
+    fgab: F[G[A, B]]
+  ): SeparateFoldableOps[F, G, A, B] =
+    new SeparateFoldableOps[F, G, A, B](fgab)
+
   implicit final def catsSyntaxAlternativeGuard(b: Boolean): GuardOps =
     new GuardOps(b)
 }
@@ -49,6 +54,9 @@ final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) exten
                F: Monad[F],
                A: Alternative[F],
                G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
+}
+
+final class SeparateFoldableOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) extends AnyVal {
 
   /**
    * @see [[Alternative.separateFoldable]]
