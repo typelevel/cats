@@ -3,7 +3,14 @@ package tests
 
 import cats.kernel.CommutativeMonoid
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
-import cats.laws.discipline.{FlatMapTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  FlatMapTests,
+  MonoidKTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.laws.discipline.arbitrary._
 
 import scala.collection.immutable.SortedMap
@@ -39,4 +46,7 @@ class SortedMapSuite extends CatsSuite {
            SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
   checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
   checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
+
+  checkAll("SortedMap[String, String]", MonoidKTests[SortedMap[String, ?]].monoidK[String])
+  checkAll("MonoidK[SortedMap[String, ?]]", SerializableTests.serializable(MonoidK[SortedMap[String, ?]]))
 }

@@ -1,6 +1,6 @@
 package cats.instances
 
-import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, Order, Show, Traverse, TraverseFilter}
+import cats.{Always, Applicative, Eval, FlatMap, Foldable, Monoid, MonoidK, Order, Show, Traverse, TraverseFilter}
 import cats.kernel._
 import cats.kernel.instances.StaticMethods
 
@@ -222,4 +222,12 @@ trait SortedMapInstancesBinCompat0 {
       )(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[SortedMap[K, A]] =
         traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
     }
+}
+
+trait SortedMapInstancesBinCompat1 {
+  implicit def catsStdMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, ?]] = new MonoidK[SortedMap[K, ?]] {
+    override def empty[A]: SortedMap[K, A] = SortedMap.empty[K, A](Order[K].toOrdering)
+
+    override def combineK[A](x: SortedMap[K, A], y: SortedMap[K, A]): SortedMap[K, A] = x ++ y
+  }
 }

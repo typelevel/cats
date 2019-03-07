@@ -134,3 +134,11 @@ trait MapInstancesBinCompat0 {
     }
 
 }
+
+trait MapInstancesBinCompat1 {
+  implicit def catsStdMonoidKForMap[K]: MonoidK[Map[K, ?]] = new MonoidK[Map[K, ?]] {
+    override def empty[A]: Map[K, A] = Map.empty
+
+    override def combineK[A](x: Map[K, A], y: Map[K, A]): Map[K, A] = x ++ y
+  }
+}
