@@ -1,14 +1,14 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
 
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]])
     extends CatsSuite
-    with PropertyChecks {
+    with ScalaCheckPropertyChecks {
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>

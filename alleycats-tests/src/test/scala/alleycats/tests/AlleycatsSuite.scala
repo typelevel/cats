@@ -9,7 +9,8 @@ import cats.syntax.{AllSyntax, EqOps}
 import cats.tests.StrictCatsEquality
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.{FunSuite, Matchers}
-import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
+import org.scalatest.prop.{Configuration}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
@@ -39,7 +40,7 @@ trait TestSettings extends Configuration with Matchers {
 trait AlleycatsSuite
     extends FunSuite
     with Matchers
-    with GeneratorDrivenPropertyChecks
+    with ScalaCheckDrivenPropertyChecks
     with Discipline
     with TestSettings
     with AllInstances
