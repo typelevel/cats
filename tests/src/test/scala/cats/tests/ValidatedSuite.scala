@@ -25,6 +25,8 @@ class ValidatedSuite extends CatsSuite {
            ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Validated, String]",
            SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))
+  checkAll("Validated[String, Int]",
+    SelectiveTests[Validated[String, ?]].selective[Int, Int, Int])
 
   checkAll("Validated[String, Int] with Option",
            TraverseTests[Validated[String, ?]].traverse[Int, Int, Int, Int, Option, Option])

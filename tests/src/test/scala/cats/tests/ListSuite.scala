@@ -2,16 +2,7 @@ package cats
 package tests
 
 import cats.data.{NonEmptyList, ZipList}
-import cats.laws.discipline.{
-  AlternativeTests,
-  CoflatMapTests,
-  CommutativeApplyTests,
-  MonadTests,
-  SemigroupalTests,
-  SerializableTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SelectiveTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 
 class ListSuite extends CatsSuite {
@@ -29,6 +20,11 @@ class ListSuite extends CatsSuite {
   checkAll("Traverse[List]", SerializableTests.serializable(Traverse[List]))
 
   checkAll("List[Int]", MonadTests[List].monad[Int, Int, Int])
+
+  // TODO Added here as an example of testing a monad as a Selective.
+  // Not sure of the best way to add these tests into the suites for all the monad instances.
+  checkAll("List[Int]", SelectiveTests.monad[List].selective[Int, Int, Int])
+
   checkAll("Monad[List]", SerializableTests.serializable(Monad[List]))
 
   checkAll("List[Int]", TraverseFilterTests[List].traverseFilter[Int, Int, Int])

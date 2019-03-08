@@ -428,6 +428,18 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
         }
       def raiseError[A](e: E): Validated[E, A] = Validated.Invalid(e)
     }
+
+  implicit def catsDataSelectiveForValidated[E](implicit E: Semigroup[E]): Selective[Validated[E, ?]] =
+    new Selective[Validated[E, ?]] {
+
+      def applicative: Applicative[Validated[E, ?]] = catsDataApplicativeErrorForValidated[E]
+
+      def select[A, B](fab: Validated[E, scala.Either[A, B]])(f: Validated[E, A => B]): Validated[E, B] = fab andThen {
+        case Right(b) => Valid(b)
+        case Left(a) => f.map(fn => fn(a))
+      }
+
+    }
 }
 
 sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstances2 {
