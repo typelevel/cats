@@ -85,7 +85,6 @@ class AlgebraInvariantSuite extends CatsSuite {
     checkAll("CommutativeSemigroup[Int]", CommutativeSemigroupTests[Int](S).commutativeSemigroup)
   }
 
-
   {
     val S: CommutativeSemigroup[Option[Int]] = CommutativeApply.commutativeSemigroupFor[Option, Int]
     checkAll("CommutativeSemigroup[Option[Int]", CommutativeSemigroupTests[Option[Int]](S).commutativeSemigroup)
