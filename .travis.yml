@@ -20,6 +20,7 @@ before_install:
  - export PATH=${PATH}:./vendor/bundle
 
 stages:
+  - name: styling
   - name: test
   - name: publish snapshot
     if: (branch = master AND type = push)
@@ -55,7 +56,8 @@ jobs:
       install: gem install jekyll -v 2.5
       script: sbt makeMicrosite
 
-    - env: TEST="linting"
+    - stage: styling
+      env: TEST="linting"
       script: sbt scalastyle fmtCheck
 
     - env: TEST="scalafix"
@@ -68,19 +70,13 @@ jobs:
     - <<: *bincompat_check
       scala: *scala_version_212
 
-    - &publish_snapshot
-      stage: publish snapshot
+    - stage: publish snapshot
       script: |
         if [[ $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
-          sbt ++$TRAVIS_SCALA_VERSION! publish gitSnapshots publish
+          sbt +publish gitSnapshots +publish
         else
           echo Not publishing a snapshot because the version does not end with -SNAPSHOT for version $TRAVIS_SCALA_VERSION
         fi
-      scala: *scala_version_211
-    - <<: *publish_snapshot
-      scala: *scala_version_212
-    - <<: *publish_snapshot
-      scala: *scala_version_213
 
 notifications:
   webhooks:
