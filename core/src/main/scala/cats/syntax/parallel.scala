@@ -86,3 +86,13 @@ final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends Any
   def <&>[F[_]](ma: M[A])(implicit P: Parallel[M, F]): M[B] =
     Parallel.parAp(mab)(ma)
 }
+
+trait ParallelReplicateSyntax {
+  implicit final def catsSyntaxParallelReplicate[M[_], A](ma: M[A]): ParallelReplicateOps[M, A] =
+    new ParallelReplicateOps[M, A](ma)
+}
+
+final class ParallelReplicateOps[M[_], A](private val ma: M[A]) extends AnyVal {
+  import cats.instances.list._
+  def replicatePar[F[_]](n: Int)(implicit P: Parallel[M, F]): M[List[A]] = Parallel.parSequence(List.fill(n)(ma))
+}

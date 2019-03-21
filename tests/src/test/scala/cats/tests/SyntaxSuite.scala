@@ -404,4 +404,11 @@ object SyntaxSuite
 
     val result: Either[A, List[B]] = f.sequenceFilter
   }
+
+  def testReplicatePar[A, M[_], F[_]](implicit P: Parallel[M, F]): Unit = {
+    val f = mock[M[A]]
+    val n = mock[Int]
+
+    val result: M[List[A]] = f.replicatePar(n)
+  }
 }
