@@ -127,7 +127,7 @@ nl.traverse(even)
 
 ## <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are `Applicative`s for monad transformers?</a>
 
-An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [https://typelevel.org/cats/guidelines.html#applicative-monad-transformers](the guidelines) for a more detailed explanation.
+An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [the guidelines](https://typelevel.org/cats/guidelines.html#applicative-monad-transformers) for a more detailed explanation.
 
 As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
 
