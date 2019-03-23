@@ -89,5 +89,4 @@ trait AllSyntaxBinCompat4
     with FoldableSyntaxBinCompat1
     with BitraverseSyntaxBinCompat0
 
-trait AllSyntaxBinCompat5
-    extends ParallelReplicateSyntax
+trait AllSyntaxBinCompat5 extends ParallelReplicateSyntax
