@@ -22,7 +22,7 @@ import cats.Order
 import cats.kernel._
 
 import scala.annotation.tailrec
-import scala.collection.immutable._
+import scala.collection.immutable.TreeSet
 import scala.collection.mutable.ListBuffer
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
