@@ -3,6 +3,7 @@ package instances
 
 import cats.Contravariant
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
+import cats.data.AndThen
 
 import annotation.tailrec
 
@@ -151,8 +152,15 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit val catsStdMonoidKForFunction1: MonoidK[Endo] =
-    Category[Function1].algebraK
+  implicit val catsStdMonoidKForFunction1: MonoidK[Endo] = new MonoidK[Endo] {
+
+    val category: Category[Function] = Category[Function1]
+
+    override def empty[A]: Endo[A] = category.id
+
+    override def combineK[A](x: Endo[A], y: Endo[A]): Endo[A] =
+      AndThen(category.compose(x, y))
+  }
 
 }
 
