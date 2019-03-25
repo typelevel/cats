@@ -14,7 +14,7 @@ import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.FunSuite
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.collection.immutable.{BitSet, Queue}
+import scala.collection.immutable.{BitSet, ListSet, Queue}
 import scala.util.Random
 
 import java.util.UUID
@@ -196,6 +196,8 @@ class Tests extends FunSuite with Discipline {
   checkAll("Monoid[Map[String, String]]", SerializableTests.serializable(Monoid[Map[String, String]]))
   checkAll("Monoid[Queue[Int]]", MonoidTests[Queue[Int]].monoid)
   checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
+  checkAll("Monoid[ListSet[Int]]", MonoidTests[ListSet[Int]].monoid)
+  checkAll("Monoid[ListSet[Int]]", SerializableTests.serializable(Monoid[ListSet[Int]]))
 
   checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
   checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))

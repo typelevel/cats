@@ -20,6 +20,7 @@ package object instances {
   object int extends IntInstances
   object invariant extends InvariantMonoidalInstances
   object list extends ListInstances with ListInstancesBinCompat0
+  object listset extends ListSetInstances
   object long extends LongInstances
   object option extends OptionInstances with OptionInstancesBinCompat0
   object map extends MapInstances with MapInstancesBinCompat0 with MapInstancesBinCompat1

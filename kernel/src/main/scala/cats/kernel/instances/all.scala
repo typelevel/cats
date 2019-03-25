@@ -19,6 +19,7 @@ trait AllInstances
     with HashInstances
     with IntInstances
     with ListInstances
+    with ListSetInstances
     with LongInstances
     with MapInstances
     with OptionInstances
