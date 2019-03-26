@@ -131,7 +131,7 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 
 <h2 id="a-idapplicative-monad-transformers-hrefapplicative-monad-transformerswhere-are-applicatives-for-monad-transformersa"><a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are <code class="highlighter-rouge">Applicative</code>s for monad transformers?</a></h2>
 
-<p>An <code class="highlighter-rouge">Applicative</code> instance for <code class="highlighter-rouge">OptionT[F, ?]</code>/<code class="highlighter-rouge">EitherT[F, E, ?]</code>, built without a corresponding <code class="highlighter-rouge">Monad</code> instance for <code class="highlighter-rouge">F</code>, would be unlawful, so it’s not included. See <a href="the guidelines">https://typelevel.org/cats/guidelines.html#applicative-monad-transformers</a> for a more detailed explanation.</p>
+<p>An <code class="highlighter-rouge">Applicative</code> instance for <code class="highlighter-rouge">OptionT[F, ?]</code>/<code class="highlighter-rouge">EitherT[F, E, ?]</code>, built without a corresponding <code class="highlighter-rouge">Monad</code> instance for <code class="highlighter-rouge">F</code>, would be unlawful, so it’s not included. See <a href="https://typelevel.org/cats/guidelines.html#applicative-monad-transformers">the guidelines</a> for a more detailed explanation.</p>
 
 <p>As an alternative, using <code class="highlighter-rouge">.toNested</code> on the monad transformer is recommended, although its <code class="highlighter-rouge">ap</code> will still be inconsistent with the Monad instance’s.`.</p>
 
