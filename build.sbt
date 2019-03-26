@@ -130,27 +130,23 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-// 2.13.0-M4 workarounds
-def catalystsVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.6" else "0.8"
+val catalystsVersion = "0.8"
 
 def scalatestVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
 
-def scalaCheckVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "1.13.5" else "1.14.0"
+val scalaCheckVersion = "1.14.0"
 
-def disciplineVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.9.0" else "0.10.0"
+val disciplineVersion = "0.10.0"
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value),
-  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion(scalaVersion.value)
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -483,7 +479,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -506,7 +502,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
 
