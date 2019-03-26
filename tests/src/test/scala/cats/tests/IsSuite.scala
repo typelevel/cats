@@ -1,8 +1,13 @@
 package cats
 package tests
 
+import cats.arrow._
+import cats.kernel.laws.discipline.SerializableTests
+
 class IsSuite extends CatsSuite {
   import evidence._
+
+  checkAll("Category[Is]", SerializableTests.serializable(Category[Is]))
 
   test("syntax") {
     trait Bar
