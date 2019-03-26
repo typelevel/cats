@@ -138,4 +138,12 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeGroup[String => CGrp]", SerializableTests.serializable(CommutativeGroup[String => CGrp]))
   checkAll("ContravariantMonoidal[Function1[?, Monoid]]",
            SerializableTests.serializable(ContravariantMonoidal[? => Long]))
+
+  test("MonoidK[Endo] is stack safe on combineK") {
+    def incrementAll(as: Int): Int = as + 1
+    val bigList: List[Int => Int] = List.fill(50000)(incrementAll)
+
+    val sumAll = bigList.combineAll(MonoidK[Endo].algebra)
+    List(1, 1, 1).map(sumAll)
+  }
 }
