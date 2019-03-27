@@ -137,7 +137,7 @@ def scalatestVersion(scalaVersion: String): String =
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.10.0"
+val disciplineVersion = "0.11.0"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
