@@ -1,7 +1,6 @@
 package cats
 package syntax
 
-import cats.macros.Ops
 import cats.kernel.Comparison
 
 trait OrderSyntax extends PartialOrderSyntax {
@@ -10,8 +9,8 @@ trait OrderSyntax extends PartialOrderSyntax {
 }
 
 final class OrderOps[A: Order](lhs: A) {
-  def compare(rhs: A): Int = macro Ops.binop[A, Int]
-  def min(rhs: A): A = macro Ops.binop[A, A]
-  def max(rhs: A): A = macro Ops.binop[A, A]
-  def comparison(rhs: A): Comparison = macro Ops.binop[A, Comparison]
+  def compare(rhs: A): Int = implicitly[Order[A]].compare(lhs, rhs)
+  def min(rhs: A): A = implicitly[Order[A]].min(lhs, rhs)
+  def max(rhs: A): A = implicitly[Order[A]].max(lhs, rhs)
+  def comparison(rhs: A): Comparison = implicitly[Order[A]].comparison(lhs, rhs)
 }

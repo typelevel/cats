@@ -1,8 +1,6 @@
 package cats
 package syntax
 
-import cats.macros.Ops
-
 trait GroupSyntax extends SemigroupSyntax {
   // TODO: use simulacrum instances eventually
   implicit def catsSyntaxGroup[A: Group](a: A): GroupOps[A] =
@@ -10,7 +8,7 @@ trait GroupSyntax extends SemigroupSyntax {
 }
 
 final class GroupOps[A: Group](lhs: A) {
-  def |-|(rhs: A): A = macro Ops.binop[A, A]
-  def remove(rhs: A): A = macro Ops.binop[A, A]
-  def inverse(): A = macro Ops.unop[A]
+  def |-|(rhs: A): A = implicitly[Group[A]].remove(lhs, rhs)
+  def remove(rhs: A): A = implicitly[Group[A]].remove(lhs, rhs)
+  def inverse(): A = implicitly[Group[A]].inverse(lhs)
 }
