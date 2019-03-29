@@ -354,6 +354,8 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))
+
+  implicit def cogenKlei[F[_], A, T](implicit cogen: Cogen[A => F[T]]): Cogen[Kleisli[F, A, T]] = cogen.contramap(_.run)
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {
