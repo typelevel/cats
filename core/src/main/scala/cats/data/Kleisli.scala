@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.{Contravariant, Id}
 import cats.arrow._
 
 /**
@@ -455,6 +454,14 @@ sealed abstract private[data] class KleisliInstances8 extends KleisliInstances9 
 sealed abstract private[data] class KleisliInstances9 {
   implicit def catsDataFunctorForKleisli[F[_], A](implicit F0: Functor[F]): Functor[Kleisli[F, A, ?]] =
     new KleisliFunctor[F, A] { def F: Functor[F] = F0 }
+
+  implicit def catsDataCoflatMapForKleisli[F[_], In](implicit F0: Applicative[F]): CoflatMap[Kleisli[F, In, ?]] =
+    new CoflatMap[Kleisli[F, In, ?]] {
+      override def coflatMap[A, B](fa: Kleisli[F, In, A])(f: Kleisli[F, In, A] => B): Kleisli[F, In, B] =
+        Kleisli(_ => F0.pure(f(fa)))
+
+      override def map[A, B](fa: Kleisli[F, In, A])(f: A => B): Kleisli[F, In, B] = fa.map(f)
+    }
 }
 
 private[data] trait KleisliCommutativeArrow[F[_]]

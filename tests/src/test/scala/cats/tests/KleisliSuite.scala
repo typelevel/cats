@@ -1,12 +1,12 @@
 package cats
 package tests
 
-import cats.Contravariant
 import cats.arrow._
 import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import org.scalacheck.{Arbitrary, Cogen}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
 import cats.platform.Platform
@@ -24,6 +24,8 @@ class KleisliSuite extends CatsSuite {
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
   implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[Reader[Int, ?]]
+
+  implicit def cogenKlei[F[_], A, T](implicit cogen: Cogen[A => F[T]]): Cogen[Kleisli[F, A, T]] = cogen.contramap(_.run)
 
   {
     implicit val instance: ApplicativeError[Kleisli[Option, MiniInt, ?], Unit] =
@@ -147,6 +149,14 @@ class KleisliSuite extends CatsSuite {
   checkAll("MonoidK[Kleisli[Option, String, ?]]", SerializableTests.serializable(MonoidK[Kleisli[Option, String, ?]]))
 
   checkAll("Reader[MiniInt, Int]", FunctorTests[Reader[MiniInt, ?]].functor[Int, Int, Int])
+
+  {
+    implicit val coflatmap = Kleisli.catsDataCoflatMapForKleisli[Option, String]
+    checkAll("Kleisli[Option, String, Int]", CoflatMapTests[Kleisli[Option, String, ?]].coflatMap[Int, Int, Int])
+    checkAll("CoflatMapTests[Kleisli[Option, String, ?]]", SerializableTests.serializable(coflatmap))
+  }
+
+  checkAll("Reader[Int, Int]", FunctorTests[Reader[Int, ?]].functor[Int, Int, Int])
 
   checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]",
