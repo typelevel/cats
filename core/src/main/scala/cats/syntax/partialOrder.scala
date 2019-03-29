@@ -2,7 +2,7 @@ package cats
 package syntax
 
 trait PartialOrderSyntax extends EqSyntax {
-  implicit def catsSyntaxPartialOrder[A: PartialOrder](a: A): PartialOrderOps[A] =
+  implicit final def catsSyntaxPartialOrder[A: PartialOrder](a: A): PartialOrderOps[A] =
     new PartialOrderOps[A](a)
 }
 

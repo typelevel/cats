@@ -21,14 +21,14 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
    * `cats.data.Kleisli` arrows. This is analogous to [[monadLeftIdentity]].
    */
   def kleisliLeftIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
-    (Kleisli(F.pure[A]) andThen Kleisli(f)).run(a) <-> f(a)
+    Kleisli(F.pure[A]).andThen(Kleisli(f)).run(a) <-> f(a)
 
   /**
    * `pure` is the right identity element under left-to-right composition of
    * `cats.data.Kleisli` arrows. This is analogous to [[monadRightIdentity]].
    */
   def kleisliRightIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
-    (Kleisli(f) andThen Kleisli(F.pure[B])).run(a) <-> f(a)
+    Kleisli(f).andThen(Kleisli(F.pure[B])).run(a) <-> f(a)
 
   /**
    * Make sure that map and flatMap are consistent.
@@ -36,7 +36,7 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
   def mapFlatMapCoherence[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.flatMap(a => F.pure(f(a))) <-> fa.map(f)
 
-  val tailRecMStackSafety: IsEq[F[Int]] = {
+  lazy val tailRecMStackSafety: IsEq[F[Int]] = {
     val n = 50000
     val res = F.tailRecM(0)(i => F.pure(if (i < n) Either.left(i + 1) else Either.right(i)))
     res <-> F.pure(n)

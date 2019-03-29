@@ -4,7 +4,7 @@ package instances
 package object float extends FloatInstances
 
 trait FloatInstances {
-  implicit val catsKernelStdOrderForFloat: Order[Float] = new FloatOrder
+  implicit val catsKernelStdOrderForFloat: Order[Float] with Hash[Float] = new FloatOrder
   implicit val catsKernelStdGroupForFloat: CommutativeGroup[Float] = new FloatGroup
 }
 
@@ -26,13 +26,15 @@ class FloatGroup extends CommutativeGroup[Float] {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class FloatOrder extends Order[Float] {
+class FloatOrder extends Order[Float] with Hash[Float] {
+
+  def hash(x: Float): Int = x.hashCode()
 
   def compare(x: Float, y: Float): Int =
     java.lang.Float.compare(x, y)
 
-  override def eqv(x:Float, y:Float): Boolean = x == y
-  override def neqv(x:Float, y:Float): Boolean = x != y
+  override def eqv(x: Float, y: Float): Boolean = x == y
+  override def neqv(x: Float, y: Float): Boolean = x != y
   override def gt(x: Float, y: Float): Boolean = x > y
   override def gteqv(x: Float, y: Float): Boolean = x >= y
   override def lt(x: Float, y: Float): Boolean = x < y

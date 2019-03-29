@@ -1,11 +1,11 @@
 package cats
 package laws
 
-import cats.functor.Contravariant
+import cats.Contravariant
 import cats.syntax.contravariant._
 
 /**
- * Laws that must be obeyed by any `cats.functor.Contravariant`.
+ * Laws that must be obeyed by any `cats.Contravariant`.
  */
 trait ContravariantLaws[F[_]] extends InvariantLaws[F] {
   implicit override def F: Contravariant[F]
@@ -14,7 +14,7 @@ trait ContravariantLaws[F[_]] extends InvariantLaws[F] {
     fa.contramap(identity[A]) <-> fa
 
   def contravariantComposition[A, B, C](fa: F[A], f: B => A, g: C => B): IsEq[F[C]] =
-    fa.contramap(f).contramap(g) <-> fa.contramap(f compose g)
+    fa.contramap(f).contramap(g) <-> fa.contramap(f.compose(g))
 }
 
 object ContravariantLaws {

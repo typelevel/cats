@@ -7,70 +7,138 @@ scaladoc: "#cats.kernel.Monoid"
 ---
 # Monoid
 
-`Monoid` extends the [`Semigroup`](semigroup.html) type class, adding an 
-`empty` method to semigroup's `combine`. The `empty` method must return a 
-value that when combined with any other instance of that type returns the 
-other instance, i.e.
+`Monoid` extends the power of `Semigroup` by providing an additional `empty` value.
 
-```scala
-(combine(x, empty) == combine(empty, x) == x)
+```tut:book:silent
+trait Semigroup[A] {
+  def combine(x: A, y: A): A
+}
+
+trait Monoid[A] extends Semigroup[A] {
+  def empty: A
+}
 ```
-    
-For example, if we have a `Monoid[String]` with `combine` defined as string 
-concatenation, then `empty = ""`.
 
-Having an `empty` defined allows us to combine all the elements of some 
-potentially empty collection of `T` for which a `Monoid[T]` is defined and 
-return a `T`, rather than an `Option[T]` as we have a sensible default to 
-fall back to.
+This `empty` value should be an identity for the `combine` operation, which means the following equalities hold
+for any choice of `x`.
 
-First some imports.
+```
+combine(x, empty) = combine(empty, x) = x
+```
 
-```tut:silent
-import cats._
+Many types that form a `Semigroup` also form a `Monoid`, such as `Int`s (with `0`) and `Strings` (with `""`).
+
+```tut:reset:book:silent
+import cats.Monoid
+
+implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
+  def empty: Int = 0
+  def combine(x: Int, y: Int): Int = x + y
+}
+
+val x = 1
+```
+
+```tut:book
+Monoid[Int].combine(x, Monoid[Int].empty)
+
+Monoid[Int].combine(Monoid[Int].empty, x)
+```
+
+# Example usage: Collapsing a list
+
+In the `Semigroup` section we had trouble writing a generic `combineAll` function because we had nothing
+to give if the list was empty. With `Monoid` we can return `empty`, giving us
+
+```tut:book:silent
+def combineAll[A: Monoid](as: List[A]): A =
+  as.foldLeft(Monoid[A].empty)(Monoid[A].combine)
+```
+
+which can be used for any type that has a `Monoid` instance.
+
+```tut:book:silent
 import cats.implicits._
 ```
 
-Examples.
-
 ```tut:book
-Monoid[String].empty
-Monoid[String].combineAll(List("a", "b", "c"))
-Monoid[String].combineAll(List())
+combineAll(List(1, 2, 3))
+
+combineAll(List("hello", " ", "world"))
+
+combineAll(List(Map('a' -> 1), Map('a' -> 2, 'b' -> 3), Map('b' -> 4, 'c' -> 5)))
+
+combineAll(List(Set(1, 2), Set(2, 3, 4, 5)))
 ```
 
-The advantage of using these type class provided methods, rather than the 
-specific ones for each type, is that we can compose monoids to allow us to 
-operate on more complex types, e.g.
- 
-```tut:book
-Monoid[Map[String,Int]].combineAll(List(Map("a" -> 1, "b" -> 2), Map("a" -> 3)))
-Monoid[Map[String,Int]].combineAll(List())
+This function is provided in Cats as `Monoid.combineAll`.
+
+# The `Option` monoid
+
+There are some types that can form a `Semigroup` but not a `Monoid`. For example, the
+following `NonEmptyList` type forms a semigroup through `++`, but has no corresponding
+identity element to form a monoid.
+
+```tut:book:silent
+import cats.Semigroup
+
+final case class NonEmptyList[A](head: A, tail: List[A]) {
+  def ++(other: NonEmptyList[A]): NonEmptyList[A] = NonEmptyList(head, tail ++ other.toList)
+
+  def toList: List[A] = head :: tail
+}
+
+object NonEmptyList {
+  implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] =
+    new Semigroup[NonEmptyList[A]] {
+      def combine(x: NonEmptyList[A], y: NonEmptyList[A]): NonEmptyList[A] = x ++ y
+    }
+}
 ```
 
-This is also true if we define our own instances. As an example, let's use 
-[`Foldable`](foldable.html)'s `foldMap`, which maps over values accumulating
-the results, using the available `Monoid` for the type mapped onto. 
+How then can we collapse a `List[NonEmptyList[A]]` ? For such types that only have a `Semigroup` we can
+lift into `Option` to get a `Monoid`.
 
-```tut:book
-val l = List(1, 2, 3, 4, 5)
-l.foldMap(identity)
-l.foldMap(i => i.toString)
+```tut:book:silent
+import cats.implicits._
+
+implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] = new Monoid[Option[A]] {
+  def empty: Option[A] = None
+
+  def combine(x: Option[A], y: Option[A]): Option[A] =
+    x match {
+      case None => y
+      case Some(xv) =>
+        y match {
+          case None => x
+          case Some(yv) => Some(xv |+| yv)
+        }
+    }
+}
 ```
 
-To use this
-with a function that produces a tuple, cats also provides a `Monoid` for a tuple
-that will be valid for any tuple where the types it contains also have a 
-`Monoid` available, thus.
+This is the `Monoid` for `Option`: for any `Semigroup[A]`, there is a `Monoid[Option[A]]`.
 
-```tut:book
-l.foldMap(i => (i, i.toString)) // do both of the above in one pass, hurrah!
+Thus:
+
+```tut:reset:book:silent
+import cats.Monoid
+import cats.data.NonEmptyList
+import cats.implicits._
+
+val list = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
+val lifted = list.map(nel => Option(nel))
 ```
 
--------------------------------------------------------------------------------
- 
+```tut:book
+Monoid.combineAll(lifted)
+```
+
+This lifting and combining of `Semigroup`s into `Option` is provided by Cats as `Semigroup.combineAllOption`.
+
+-----
+
 N.B.
-Cats defines  the `Monoid` type class in cats-kernel. The [`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
-defines type aliases to the `Monoid` from cats-kernel, so that you can
-`import cats.Monoid`. Also the `Monoid` instance for tuple is also [implemented in cats-kernel](https://github.com/typelevel/cats/blob/master/project/KernelBoiler.scala), 
-cats merely provides it through [inheritance](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/std/tuple.scala).
+Cats defines  the `Monoid` type class in cats-kernel. The
+[`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+defines type aliases to the `Monoid` from cats-kernel, so that you can simply import `cats.Monoid`.

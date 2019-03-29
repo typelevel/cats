@@ -19,6 +19,12 @@ trait FunctionInstances extends FunctionInstances0 {
 
 trait FunctionInstances0 extends FunctionInstances1 {
 
+  implicit def catsKernelHashForFunction0[A](implicit ev: Hash[A]): Hash[() => A] =
+    new Hash[() => A] {
+      def hash(x: () => A) = ev.hash(x())
+      def eqv(x: () => A, y: () => A) = ev.eqv(x(), y())
+    }
+
   implicit def catsKernelPartialOrderForFunction0[A](implicit ev: PartialOrder[A]): PartialOrder[() => A] =
     new PartialOrder[() => A] {
       def partialCompare(x: () => A, y: () => A): Double = ev.partialCompare(x(), y())
@@ -30,10 +36,14 @@ trait FunctionInstances0 extends FunctionInstances1 {
   implicit def catsKernelGroupForFunction1[A, B](implicit G: Group[B]): Group[A => B] =
     new Function1Group[A, B] { def B: Group[B] = G }
 
-  implicit def catsKernelBoundedSemilatticeForFunction0[A](implicit G: BoundedSemilattice[A]): BoundedSemilattice[() => A] =
+  implicit def catsKernelBoundedSemilatticeForFunction0[A](
+    implicit G: BoundedSemilattice[A]
+  ): BoundedSemilattice[() => A] =
     new Function0Monoid[A] with BoundedSemilattice[() => A] { def A: Monoid[A] = G }
 
-  implicit def catsKernelBoundedSemilatticeForFunction1[A, B](implicit G: BoundedSemilattice[B]): BoundedSemilattice[A => B] =
+  implicit def catsKernelBoundedSemilatticeForFunction1[A, B](
+    implicit G: BoundedSemilattice[B]
+  ): BoundedSemilattice[A => B] =
     new Function1Monoid[A, B] with BoundedSemilattice[A => B] { def B: Monoid[B] = G }
 }
 
@@ -44,10 +54,14 @@ trait FunctionInstances1 extends FunctionInstances2 {
       def eqv(x: () => A, y: () => A): Boolean = ev.eqv(x(), y())
     }
 
-  implicit def catsKernelCommutativeMonoidForFunction0[A](implicit M: CommutativeMonoid[A]): CommutativeMonoid[() => A] =
+  implicit def catsKernelCommutativeMonoidForFunction0[A](
+    implicit M: CommutativeMonoid[A]
+  ): CommutativeMonoid[() => A] =
     new Function0Monoid[A] with CommutativeMonoid[() => A] { def A: Monoid[A] = M }
 
-  implicit def catsKernelCommutativeMonoidForFunction1[A, B](implicit M: CommutativeMonoid[B]): CommutativeMonoid[A => B] =
+  implicit def catsKernelCommutativeMonoidForFunction1[A, B](
+    implicit M: CommutativeMonoid[B]
+  ): CommutativeMonoid[A => B] =
     new Function1Monoid[A, B] with CommutativeMonoid[A => B] { def B: Monoid[B] = M }
 
   implicit def catsKernelSemilatticeForFunction0[A](implicit M: Semilattice[A]): Semilattice[() => A] =
@@ -74,10 +88,14 @@ trait FunctionInstances2 extends FunctionInstances3 {
 
 trait FunctionInstances3 extends FunctionInstances4 {
 
-  implicit def catsKernelCommutativeSemigroupForFunction0[A](implicit S: CommutativeSemigroup[A]): CommutativeSemigroup[() => A] =
+  implicit def catsKernelCommutativeSemigroupForFunction0[A](
+    implicit S: CommutativeSemigroup[A]
+  ): CommutativeSemigroup[() => A] =
     new Function0Semigroup[A] with CommutativeSemigroup[() => A] { def A: Semigroup[A] = S }
 
-  implicit def catsKernelCommutativeSemigroupForFunction1[A, B](implicit S: CommutativeSemigroup[B]): CommutativeSemigroup[A => B] =
+  implicit def catsKernelCommutativeSemigroupForFunction1[A, B](
+    implicit S: CommutativeSemigroup[B]
+  ): CommutativeSemigroup[A => B] =
     new Function1Semigroup[A, B] with CommutativeSemigroup[A => B] { def B: Semigroup[B] = S }
 }
 

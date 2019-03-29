@@ -4,7 +4,7 @@ package instances
 package object bigDecimal extends BigDecimalInstances // scalastyle:ignore package.object.name
 
 trait BigDecimalInstances {
-  implicit val catsKernelStdOrderForBigDecimal: Order[BigDecimal] =
+  implicit val catsKernelStdOrderForBigDecimal: Order[BigDecimal] with Hash[BigDecimal] =
     new BigDecimalOrder
   implicit val catsKernelStdGroupForBigDecimal: CommutativeGroup[BigDecimal] =
     new BigDecimalGroup
@@ -17,9 +17,11 @@ class BigDecimalGroup extends CommutativeGroup[BigDecimal] {
   override def remove(x: BigDecimal, y: BigDecimal): BigDecimal = x - y
 }
 
-class BigDecimalOrder extends Order[BigDecimal] {
+class BigDecimalOrder extends Order[BigDecimal] with Hash[BigDecimal] {
 
-  def compare(x: BigDecimal, y: BigDecimal): Int = x compare y
+  def hash(x: BigDecimal): Int = x.hashCode()
+
+  def compare(x: BigDecimal, y: BigDecimal): Int = x.compare(y)
 
   override def eqv(x: BigDecimal, y: BigDecimal): Boolean = x == y
   override def neqv(x: BigDecimal, y: BigDecimal): Boolean = x != y
@@ -28,6 +30,6 @@ class BigDecimalOrder extends Order[BigDecimal] {
   override def lt(x: BigDecimal, y: BigDecimal): Boolean = x < y
   override def lteqv(x: BigDecimal, y: BigDecimal): Boolean = x <= y
 
-  override def min(x: BigDecimal, y: BigDecimal): BigDecimal = x min y
-  override def max(x: BigDecimal, y: BigDecimal): BigDecimal = x max y
+  override def min(x: BigDecimal, y: BigDecimal): BigDecimal = x.min(y)
+  override def max(x: BigDecimal, y: BigDecimal): BigDecimal = x.max(y)
 }

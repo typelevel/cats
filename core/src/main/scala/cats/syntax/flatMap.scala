@@ -1,24 +1,69 @@
 package cats
 package syntax
 
-private[syntax] trait FlatMapSyntax1 {
-  implicit def catsSyntaxUFlatMap[FA](fa: FA)(implicit U: Unapply[FlatMap, FA]): FlatMap.Ops[U.M, U.A] =
-    new FlatMap.Ops[U.M, U.A]{
-      val self = U.subst(fa)
-      val typeClassInstance = U.TC
-    }
-}
+trait FlatMapSyntax extends FlatMap.ToFlatMapOps {
 
-trait FlatMapSyntax extends FlatMap.ToFlatMapOps with FlatMapSyntax1 {
-
-  implicit def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
+  implicit final def catsSyntaxFlatten[F[_]: FlatMap, A](ffa: F[F[A]]): FlattenOps[F, A] =
     new FlattenOps[F, A](ffa)
 
-  implicit def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
+  implicit final def catsSyntaxIfM[F[_]: FlatMap](fa: F[Boolean]): IfMOps[F] =
     new IfMOps[F](fa)
+
+  implicit final def catsSyntaxFlatMapIdOps[A](a: A): FlatMapIdOps[A] =
+    new FlatMapIdOps[A](a)
+
+  implicit final def catsSyntaxFlatMapOps[F[_]: FlatMap, A](fa: F[A]): FlatMapOps[F, A] =
+    new FlatMapOps[F, A](fa)
 }
 
-final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
+final class FlatMapOps[F[_], A](private val fa: F[A]) extends AnyVal {
+
+  /**
+   * Alias for [[flatMap]].
+   */
+  def >>=[B](f: A => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(f)
+
+  /**
+   * Alias for `fa.flatMap(_ => fb)`.
+   *
+   * Unlike `*>`, `fb` is defined as a by-name parameter, allowing this
+   * method to be used in cases where computing `fb` is not stack safe
+   * unless suspended in a `flatMap`.
+   */
+  def >>[B](fb: => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(_ => fb)
+
+  @deprecated("Use <* instead", "1.0.0-RC1")
+  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
+  @deprecated("Use productREval instead.", "1.0.0-RC2")
+  def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
+    F.productREval(fa)(fb)
+
+  @deprecated("Use productLEval instead.", "1.0.0-RC2")
+  def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
+    F.productLEval(fa)(fb)
+
+  /**
+   * Like an infinite loop of >> calls. This is most useful effect loops
+   * that you want to run forever in for instance a server.
+   *
+   * This will be an infinite loop, or it will return an F[Nothing].
+   *
+   * Be careful using this.
+   * For instance, a List of length k will produce a list of length k^n at iteration
+   * n. This means if k = 0, we return an empty list, if k = 1, we loop forever
+   * allocating single element lists, but if we have a k > 1, we will allocate
+   * exponentially increasing memory and very quickly OOM.
+   */
+  def foreverM[B](implicit F: FlatMap[F]): F[B] = {
+    // allocate two things once for efficiency.
+    val leftUnit = Left(())
+    val stepResult: F[Either[Unit, B]] = F.map(fa)(_ => leftUnit)
+    F.tailRecM(())(_ => stepResult)
+  }
+
+}
+
+final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
 
   /**
    * Flatten nested `F` values.
@@ -32,10 +77,10 @@ final class FlattenOps[F[_], A](ffa: F[F[A]])(implicit F: FlatMap[F]) {
    * res0: ErrorOr[Int] = Right(3)
    * }}}
    */
-  def flatten: F[A] = F.flatten(ffa)
+  def flatten(implicit F: FlatMap[F]): F[A] = F.flatten(ffa)
 }
 
-final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
+final class IfMOps[F[_]](private val fa: F[Boolean]) extends AnyVal {
 
   /**
    * A conditional lifted into the `F` context.
@@ -56,5 +101,53 @@ final class IfMOps[F[_]](fa: F[Boolean])(implicit F: FlatMap[F]) {
    * res1: Int = 0
    * }}}
    */
-  def ifM[B](ifTrue: => F[B], ifFalse: => F[B]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
+  def ifM[B](ifTrue: => F[B], ifFalse: => F[B])(implicit F: FlatMap[F]): F[B] = F.ifM(fa)(ifTrue, ifFalse)
+}
+
+final class FlatMapIdOps[A](private val a: A) extends AnyVal {
+
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val a: Int = 10
+   * scala> a.tailRecM[Option,String](i => if (i == 20) Some(Right("done")) else Some(Left(i+1)))
+   * res0: Option[String] = Some(done)
+   *
+   *}}}
+   */
+  def tailRecM[F[_], B](f: A => F[Either[A, B]])(implicit F: FlatMap[F]): F[B] = F.tailRecM(a)(f)
+
+  /**
+   * iterateForeverM is almost exclusively useful for effect types. For instance,
+   * A may be some state, we may take the current state, run some effect to get
+   * a new state and repeat.
+   */
+  def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] =
+    tailRecM[F, B](f.andThen { fa =>
+      F.map(fa)(Left(_): Either[A, B])
+    })
+}
+
+trait FlatMapOptionSyntax {
+  implicit final def catsSyntaxFlatMapOptionOps[F[_]: FlatMap, A](foa: F[Option[A]]): FlatMapOptionOps[F, A] =
+    new FlatMapOptionOps[F, A](foa)
+}
+
+final class FlatMapOptionOps[F[_], A](private val fopta: F[Option[A]]) extends AnyVal {
+
+  /**
+   * This repeats an F until we get defined values. This can be useful
+   * for polling type operations on State (or RNG) Monads, or in effect
+   * monads.
+   */
+  def untilDefinedM(implicit F: FlatMap[F]): F[A] = {
+    val leftUnit: Either[Unit, A] = Left(())
+    val feither: F[Either[Unit, A]] = F.map(fopta) {
+      case None    => leftUnit
+      case Some(a) => Right(a)
+    }
+    F.tailRecM(())(_ => feither)
+  }
 }

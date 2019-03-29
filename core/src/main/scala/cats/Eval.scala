@@ -1,6 +1,7 @@
 package cats
 
 import scala.annotation.tailrec
+
 import cats.syntax.all._
 
 /**
@@ -71,28 +72,28 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    */
   def flatMap[B](f: A => Eval[B]): Eval[B] =
     this match {
-      case c: Eval.Compute[A] =>
-        new Eval.Compute[B] {
+      case c: Eval.FlatMap[A] =>
+        new Eval.FlatMap[B] {
           type Start = c.Start
           // See https://issues.scala-lang.org/browse/SI-9931 for an explanation
           // of why the type annotations are necessary in these two lines on
           // Scala 2.12.0.
           val start: () => Eval[Start] = c.start
           val run: Start => Eval[B] = (s: c.Start) =>
-            new Eval.Compute[B] {
+            new Eval.FlatMap[B] {
               type Start = A
               val start = () => c.run(s)
               val run = f
-            }
+          }
         }
-      case c: Eval.Call[A] =>
-        new Eval.Compute[B] {
+      case c: Eval.Defer[A] =>
+        new Eval.FlatMap[B] {
           type Start = A
           val start = c.thunk
           val run = f
         }
       case _ =>
-        new Eval.Compute[B] {
+        new Eval.FlatMap[B] {
           type Start = A
           val start = () => self
           val run = f
@@ -109,7 +110,6 @@ sealed abstract class Eval[+A] extends Serializable { self =>
   def memoize: Eval[A]
 }
 
-
 /**
  * Construct an eager Eval[A] instance.
  *
@@ -121,7 +121,6 @@ sealed abstract class Eval[+A] extends Serializable { self =>
 final case class Now[A](value: A) extends Eval[A] {
   def memoize: Eval[A] = this
 }
-
 
 /**
  * Construct a lazy Eval[A] instance.
@@ -203,59 +202,95 @@ object Eval extends EvalInstances {
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
-    new Eval.Call[A](a _) {}
+    new Eval.Defer[A](a _) {}
 
   /**
-   * Static Eval instances for some common values.
+   * Static Eval instance for common value `Unit`.
    *
-   * These can be useful in cases where the same values may be needed
+   * This can be useful in cases where the same value may be needed
    * many times.
    */
   val Unit: Eval[Unit] = Now(())
+
+  /**
+   * Static Eval instance for common value `true`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val True: Eval[Boolean] = Now(true)
+
+  /**
+   * Static Eval instance for common value `false`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val False: Eval[Boolean] = Now(false)
+
+  /**
+   * Static Eval instance for common value `0`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val Zero: Eval[Int] = Now(0)
+
+  /**
+   * Static Eval instance for common value `1`.
+   *
+   * This can be useful in cases where the same value may be needed
+   * many times.
+   */
   val One: Eval[Int] = Now(1)
 
   /**
-   * Call is a type of Eval[A] that is used to defer computations
+   * Defer is a type of Eval[A] that is used to defer computations
    * which produce Eval[A].
    *
-   * Users should not instantiate Call instances themselves. Instead,
+   * Users should not instantiate Defer instances themselves. Instead,
    * they will be automatically created when needed.
    */
-  sealed abstract class Call[A](val thunk: () => Eval[A]) extends Eval[A] {
-    def memoize: Eval[A] = new Later(() => value)
-    def value: A = Call.loop(this).value
+  sealed abstract class Defer[A](val thunk: () => Eval[A]) extends Eval[A] {
+
+    def memoize: Eval[A] = Memoize(this)
+    def value: A = evaluate(this)
   }
 
-  object Call {
-    /** Collapse the call stack for eager evaluations */
-    @tailrec private def loop[A](fa: Eval[A]): Eval[A] = fa match {
-      case call: Eval.Call[A] =>
-        loop(call.thunk())
-      case compute: Eval.Compute[A] =>
-        new Eval.Compute[A] {
+  /**
+   * Advance until we find a non-deferred Eval node.
+   *
+   * Often we may have deep chains of Defer nodes; the goal here is to
+   * advance through those to find the underlying "work" (in the case
+   * of FlatMap nodes) or "value" (in the case of Now, Later, or
+   * Always nodes).
+   */
+  @tailrec private def advance[A](fa: Eval[A]): Eval[A] =
+    fa match {
+      case call: Eval.Defer[A] =>
+        advance(call.thunk())
+      case compute: Eval.FlatMap[A] =>
+        new Eval.FlatMap[A] {
           type Start = compute.Start
           val start: () => Eval[Start] = () => compute.start()
-          val run: Start => Eval[A] = s => loop1(compute.run(s))
+          val run: Start => Eval[A] = s => advance1(compute.run(s))
         }
       case other => other
     }
 
-    /**
-     * Alias for loop that can be called in a non-tail position
-     * from an otherwise tailrec-optimized loop.
-     */
-    private def loop1[A](fa: Eval[A]): Eval[A] = loop(fa)
-  }
+  /**
+   * Alias for advance that can be called in a non-tail position
+   * from an otherwise tailrec-optimized advance.
+   */
+  private def advance1[A](fa: Eval[A]): Eval[A] =
+    advance(fa)
 
   /**
-   * Compute is a type of Eval[A] that is used to chain computations
+   * FlatMap is a type of Eval[A] that is used to chain computations
    * involving .map and .flatMap. Along with Eval#flatMap it
    * implements the trampoline that guarantees stack-safety.
    *
-   * Users should not instantiate Compute instances
+   * Users should not instantiate FlatMap instances
    * themselves. Instead, they will be automatically created when
    * needed.
    *
@@ -263,75 +298,158 @@ object Eval extends EvalInstances {
    * trampoline are not exposed. This allows a slightly more efficient
    * implementation of the .value method.
    */
-  sealed abstract class Compute[A] extends Eval[A] {
+  sealed abstract class FlatMap[A] extends Eval[A] { self =>
     type Start
     val start: () => Eval[Start]
     val run: Start => Eval[A]
 
-    def memoize: Eval[A] = Later(value)
+    def memoize: Eval[A] = Memoize(this)
+    def value: A = evaluate(this)
+  }
 
-    def value: A = {
-      type L = Eval[Any]
-      type C = Any => Eval[Any]
-      @tailrec def loop(curr: L, fs: List[C]): Any =
-        curr match {
-          case c: Compute[_] =>
-            c.start() match {
-              case cc: Compute[_] =>
-                loop(
-                  cc.start().asInstanceOf[L],
-                  cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
-              case xx =>
-                loop(c.run(xx.value), fs)
-            }
-          case x =>
-            fs match {
-              case f :: fs => loop(f(x.value), fs)
-              case Nil => x.value
-            }
-        }
-      loop(this.asInstanceOf[L], Nil).asInstanceOf[A]
+  private case class Memoize[A](eval: Eval[A]) extends Eval[A] {
+    var result: Option[A] = None
+    def memoize: Eval[A] = this
+    def value: A =
+      result match {
+        case Some(a) => a
+        case None =>
+          val a = evaluate(this)
+          result = Some(a)
+          a
+      }
+  }
+
+  private def evaluate[A](e: Eval[A]): A = {
+    type L = Eval[Any]
+    type M = Memoize[Any]
+    type C = Any => Eval[Any]
+
+    def addToMemo(m: M): C = { a: Any =>
+      m.result = Some(a)
+      Now(a)
     }
+
+    @tailrec def loop(curr: L, fs: List[C]): Any =
+      curr match {
+        case c: FlatMap[_] =>
+          c.start() match {
+            case cc: FlatMap[_] =>
+              loop(cc.start().asInstanceOf[L], cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case mm @ Memoize(eval) =>
+              mm.result match {
+                case Some(a) =>
+                  loop(Now(a), c.run.asInstanceOf[C] :: fs)
+                case None =>
+                  loop(eval, addToMemo(mm.asInstanceOf[M]) :: c.run.asInstanceOf[C] :: fs)
+              }
+            case xx =>
+              loop(c.run(xx.value), fs)
+          }
+        case call: Defer[_] =>
+          loop(advance(call), fs)
+        case m @ Memoize(eval) =>
+          m.result match {
+            case Some(a) =>
+              fs match {
+                case f :: fs => loop(f(a), fs)
+                case Nil     => a
+              }
+            case None =>
+              loop(eval, addToMemo(m) :: fs)
+          }
+        case x =>
+          fs match {
+            case f :: fs => loop(f(x.value), fs)
+            case Nil     => x.value
+          }
+      }
+
+    loop(e.asInstanceOf[L], Nil).asInstanceOf[A]
   }
 }
 
-private[cats] trait EvalInstances extends EvalInstances0 {
+sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with Monad[Eval] =
-    new Bimonad[Eval] with Monad[Eval] {
+  implicit val catsBimonadForEval: Bimonad[Eval] with CommutativeMonad[Eval] =
+    new Bimonad[Eval] with StackSafeMonad[Eval] with CommutativeMonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
-      def tailRecM[A, B](a: A)(f: A => Eval[Either[A, B]]): Eval[B] = f(a).flatMap { // OK because Eval is trampolined
-        case Left(nextA) => tailRecM(nextA)(f)
-        case Right(b)    => pure(b)
-      }
+    }
+
+  implicit val catsDeferForEval: Defer[Eval] =
+    new Defer[Eval] {
+      def defer[A](e: => Eval[A]): Eval[A] =
+        Eval.defer(e)
+    }
+
+  implicit val catsReducibleForEval: Reducible[Eval] =
+    new Reducible[Eval] {
+      def foldLeft[A, B](fa: Eval[A], b: B)(f: (B, A) => B): B =
+        f(b, fa.value)
+      def foldRight[A, B](fa: Eval[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.flatMap(f(_, lb))
+
+      override def reduce[A](fa: Eval[A])(implicit A: Semigroup[A]): A =
+        fa.value
+      override def reduceLeft[A](fa: Eval[A])(f: (A, A) => A): A =
+        fa.value
+      def reduceLeftTo[A, B](fa: Eval[A])(f: A => B)(g: (B, A) => B): B =
+        f(fa.value)
+      override def reduceRight[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        fa
+      def reduceRightTo[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa.map(f)
+      override def reduceRightOption[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
+        fa.map(Some(_))
+      override def reduceRightToOption[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        fa.map { a =>
+          Some(f(a))
+        }
+      override def size[A](f: Eval[A]): Long = 1L
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value compare ly.value
+        lx.value.compare(ly.value)
     }
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }
+
+  implicit val catsRepresentableForEval: Representable.Aux[Eval, Unit] = new Representable[Eval] {
+    override type Representation = Unit
+
+    override val F: Functor[Eval] = Functor[Eval]
+
+    /**
+     * Create a function that "indexes" into the `F` structure using `Representation`
+     */
+    override def index[A](f: Eval[A]): Unit => A = (_: Unit) => f.value
+
+    /**
+     * Reconstructs the `F` structure using the index function
+     */
+    override def tabulate[A](f: Unit => A): Eval[A] = Eval.later(f(()))
+  }
 }
 
-private[cats] trait EvalInstances0 extends EvalInstances1 {
+sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        lx.value partialCompare ly.value
+        lx.value.partialCompare(ly.value)
     }
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
     new EvalMonoid[A] { val algebra = Monoid[A] }
 }
 
-private[cats] trait EvalInstances1 {
+sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =

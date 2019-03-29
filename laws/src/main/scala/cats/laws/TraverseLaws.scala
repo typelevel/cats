@@ -2,16 +2,15 @@ package cats
 package laws
 
 import cats.Id
-import cats.data.{Const, Nested}
+import cats.data.{Const, Nested, State, StateT}
 import cats.syntax.traverse._
 import cats.syntax.foldable._
 
-trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
+trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with UnorderedTraverseLaws[F] {
   implicit override def F: Traverse[F]
 
-  def traverseIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
+  def traverseIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.traverse[Id, B](f) <-> F.map(fa)(f)
-  }
 
   def traverseSequentialComposition[A, B, C, M[_], N[_]](
     fa: F[A],
@@ -19,8 +18,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     g: B => N[C]
   )(implicit
     N: Applicative[N],
-    M: Applicative[M]
-  ): IsEq[Nested[M, N, F[C]]] = {
+    M: Applicative[M]): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(fa.traverse(f))(fb => fb.traverse(g)))
     val rhs = fa.traverse[Nested[M, N, ?], C](a => Nested(M.map(f(a))(g)))
@@ -33,8 +31,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
     g: A => N[B]
   )(implicit
     N: Applicative[N],
-    M: Applicative[M]
-  ): IsEq[(M[F[B]], N[F[B]])] = {
+    M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
     implicit val MN = new Applicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
@@ -64,6 +61,45 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] {
   )(implicit B: Monoid[B]): IsEq[B] = {
     val lhs: B = fa.traverse[Const[B, ?], B](a => Const(f(a))).getConst
     val rhs: B = fa.foldMap(f)
+    lhs <-> rhs
+  }
+
+  def traverseOrderConsistent[A](fa: F[A]): IsEq[Option[A]] = {
+    class FirstOption[T](val o: Option[T])
+
+    implicit val firstOptionMonoid = new Monoid[FirstOption[A]] {
+      def empty = new FirstOption(None)
+      def combine(x: FirstOption[A], y: FirstOption[A]) = new FirstOption(x.o.orElse(y.o))
+    }
+
+    def liftId[T](a: T): Id[T] = a
+    def store[T](a: T): Const[FirstOption[T], T] = Const(new FirstOption(Some(a)))
+
+    val first = F.traverse[Const[FirstOption[A], ?], A, A](fa)(store).getConst.o
+    val traverseFirst = F
+      .traverse[Const[FirstOption[A], ?], A, A](
+        F.traverse(fa)(liftId)
+      )(store)
+      .getConst
+      .o
+
+    first <-> traverseFirst
+  }
+  def mapWithIndexRef[A, B](fa: F[A], f: (A, Int) => B): IsEq[F[B]] = {
+    val lhs = F.mapWithIndex(fa)(f)
+    val rhs = F.traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+    lhs <-> rhs
+  }
+
+  def traverseWithIndexMRef[G[_], A, B](fa: F[A], f: (A, Int) => G[B])(implicit G: Monad[G]): IsEq[G[F[B]]] = {
+    val lhs = F.traverseWithIndexM(fa)(f)
+    val rhs = F.traverse(fa)(a => StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+    lhs <-> rhs
+  }
+
+  def zipWithIndexRef[A, B](fa: F[A], f: ((A, Int)) => B): IsEq[F[B]] = {
+    val lhs = F.map(F.zipWithIndex(fa))(f)
+    val rhs = F.map(F.mapWithIndex(fa)((a, i) => (a, i)))(f)
     lhs <-> rhs
   }
 }

@@ -4,6 +4,7 @@ package arrow
 import simulacrum.typeclass
 
 @typeclass trait Choice[F[_, _]] extends Category[F] {
+
   /**
    * Given two `F`s (`f` and `g`) with a common target type, create a new `F`
    * with the same target type, but with a source type of either `f`'s source
@@ -14,7 +15,7 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val b: Boolean => String = _ + " is a boolean"
    * scala> val i: Int => String =  _ + " is an integer"
-   * scala> val f: (Either[Boolean, Int]) => String = Choice[Function1].choice(b, i)
+   * scala> val f: (Either[Boolean, Int]) => String = b ||| i
    *
    * scala> f(Right(3))
    * res0: String = 3 is an integer
@@ -23,6 +24,7 @@ import simulacrum.typeclass
    * res0: String = false is a boolean
    * }}}
    */
+  @simulacrum.op("|||", alias = true)
   def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]
 
   /**

@@ -46,7 +46,7 @@ of a for-comprehension. We can however still use `Applicative` syntax provided b
 ```tut:silent
 import cats.implicits._
 
-val prog: Validation[Boolean] = (size(5) |@| hasNumber).map { case (l, r) => l && r}
+val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && r}
 ```
 
 As it stands, our program is just an instance of a data structure - nothing has happened
@@ -60,14 +60,13 @@ import cats.implicits._
 // a function that takes a string as input
 type FromString[A] = String => A
 
-val compiler =
-   λ[FunctionK[ValidationOp, FromString]] { fa =>
-      str =>
-        fa match {
-          case Size(size) => str.size >= size
-          case HasNumber  => str.exists(c => "0123456789".contains(c))
-        }
-   }
+val compiler = new FunctionK[ValidationOp, FromString] {
+  def apply[A](fa: ValidationOp[A]): FromString[A] = str =>
+    fa match {
+      case Size(size) => str.size >= size
+      case HasNumber  => str.exists(c => "0123456789".contains(c))
+    }
+}
 ```
 
 ```tut:book
@@ -101,17 +100,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
 // recall Kleisli[Future, String, A] is the same as String => Future[A]
 type ParValidator[A] = Kleisli[Future, String, A]
 
-val parCompiler =
-  λ[FunctionK[ValidationOp, ParValidator]] { fa =>
-    Kleisli { str =>
-      fa match {
-        case Size(size) => Future { str.size >= size }
-        case HasNumber  => Future { str.exists(c => "0123456789".contains(c)) }
-      }
+val parCompiler = new FunctionK[ValidationOp, ParValidator] {
+  def apply[A](fa: ValidationOp[A]): ParValidator[A] = Kleisli { str =>
+    fa match {
+      case Size(size) => Future { str.size >= size }
+      case HasNumber => Future { str.exists(c => "0123456789".contains(c)) }
     }
   }
+}
 
-val parValidation = prog.foldMap[ParValidator](parCompiler)
+val parValidator = prog.foldMap[ParValidator](parCompiler)
 ```
 
 ### Logging
@@ -127,11 +125,12 @@ import cats.implicits._
 
 type Log[A] = Const[List[String], A]
 
-val logCompiler =
-  λ[FunctionK[ValidationOp, Log]] {
+val logCompiler = new FunctionK[ValidationOp, Log] {
+  def apply[A](fa: ValidationOp[A]): Log[A] = fa match {
     case Size(size) => Const(List(s"size >= $size"))
-    case HasNumber  => Const(List("has number"))
+    case HasNumber => Const(List("has number"))
   }
+}
 
 def logValidation[A](validation: Validation[A]): List[String] =
   validation.foldMap[Log](logCompiler).getConst
@@ -140,7 +139,7 @@ def logValidation[A](validation: Validation[A]): List[String] =
 ```tut:book
 logValidation(prog)
 logValidation(size(5) *> hasNumber *> size(10))
-logValidation((hasNumber |@| size(3)).map(_ || _))
+logValidation((hasNumber, size(3)).mapN(_ || _))
 ```
 
 ### Why not both?
@@ -153,27 +152,116 @@ Another useful property `Applicative`s have over `Monad`s is that given two `App
 case for monads.
 
 Therefore, we can write an interpreter that uses the product of the `ParValidator` and `Log` `Applicative`s
-to interpret our program in one go.
+to interpret our program in one go. We can create this interpreter easily by using `FunctionK#and`.
 
 ```tut:silent
-import cats.data.Prod
+import cats.data.Tuple2K
 
-type ValidateAndLog[A] = Prod[ParValidator, Log, A]
+type ValidateAndLog[A] = Tuple2K[ParValidator, Log, A]
 
-val prodCompiler =
-  λ[FunctionK[ValidationOp, ValidateAndLog]] {
-    case Size(size) =>
-      val f: ParValidator[Boolean] = Kleisli(str => Future { str.size >= size })
-      val l: Log[Boolean] = Const(List(s"size > $size"))
-      Prod[ParValidator, Log, Boolean](f, l)
-    case HasNumber  =>
-      val f: ParValidator[Boolean] = Kleisli(str => Future(str.exists(c => "0123456789".contains(c))))
-      val l: Log[Boolean] = Const(List("has number"))
-      Prod[ParValidator, Log, Boolean](f, l)
-  }
+val prodCompiler: FunctionK[ValidationOp, ValidateAndLog] = parCompiler and logCompiler
 
 val prodValidation = prog.foldMap[ValidateAndLog](prodCompiler)
 ```
+
+### The way FreeApplicative#foldMap works
+Despite being an imperative loop, there is a functional intuition behind `FreeApplicative#foldMap`.
+
+The new `FreeApplicative`'s `foldMap` is a sort of mutually-recursive function that operates on an argument stack and a 
+function stack, where the argument stack has type `List[FreeApplicative[F, _]]` and the functions have type `List[Fn[G, _, _]]`.
+`Fn[G[_, _]]` contains a function to be `Ap`'d that has already been translated to the target `Applicative`,
+as well as the number of functions that were `Ap`'d immediately subsequently to it.
+
+#### Main re-association loop
+Pull an argument out of the stack, eagerly remove right-associated `Ap` nodes, by looping on the right and 
+adding the `Ap` nodes' arguments on the left to the argument stack; at the end, pushes a single function to the 
+function stack of the applied functions, the rest of which will be pushed in this loop in later iterations. 
+Once all of the `Ap` nodes on the right are removed, the loop resets to deal with the ones on the left.
+
+Here's an example `FreeApplicative` value to demonstrate the loop's function, at the end of every iteration.
+Every node in the tree is annotated with an identifying number and the concrete type of the node
+(A -> `Ap`, L -> `Lift`, P -> `Pure`), and an apostrophe to denote where `argF` (the current argument) currently
+points; as well the argument and function branches off `Ap` nodes are explicitly denoted.
+
+```
+==> begin.
+           '1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A        3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L     7L
+
+args: Nil
+functions: Nil
+==> loop.
+
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A        '3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L    7L
+
+args: 2A :: Nil
+functions: Nil
+==> loop.
+
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A         3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P   6L   '7L
+
+args: 6L :: 2A :: Nil
+functions: Fn(gab = foldArg(7L), argc = 2) :: Nil
+==> finished.
+```
+
+At the end of the loop the entire right branch of `Ap`s under `argF` has been peeled off into a single curried function,
+all of the arguments to that function are on the argument stack and that function itself is on the function stack,
+annotated with the amount of arguments it takes.
+
+#### Function application loop
+Once `argF` isn't an `Ap` node, a loop runs which pulls functions from the stack until it reaches a curried function,
+in which case it applies the function to `argF` transformed into a `G[Any]` value, and pushes the resulting function
+back to the function stack, before returning to the main loop.
+
+I'll continue the example from before here:
+```
+==> loop.
+            1A
+           /  \
+       arg/    \fun
+         /      \
+        /        \
+       2A         3A
+   arg/  \fun arg/  \fun
+     /    \     /    \
+    4L    5P  '6L    7L
+
+args: 2A :: Nil
+functions: Fn(gab = foldArg(7L) ap foldArg(6L), argc = 1) :: Nil
+==> finished.
+```
+
+At the end of this loop every function on the top of the function stack with `length == 1` (not curried)
+has been applied to a single argument from the argument stack, and the first curried function (`length != 1`)
+on the stack has been applied to a single argument from the argument stack.
+The reason we can't keep applying the curried function to arguments is that the node on top of the argument
+stack *must* be an `Ap` node if the function is curried, so we can't translate it directly to `G[_]`.
+
+Once the last function has been applied to the last argument, the fold has finished and the result is returned.
 
 ## References
 Deeper explanations can be found in this paper [Free Applicative Functors by Paolo Capriotti](http://www.paolocapriotti.com/assets/applicative.pdf)

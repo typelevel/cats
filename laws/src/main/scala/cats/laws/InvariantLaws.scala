@@ -1,11 +1,11 @@
 package cats
 package laws
 
-import cats.functor.Invariant
+import cats.Invariant
 import cats.syntax.invariant._
 
 /**
- * Laws that must be obeyed by any `cats.functor.Invariant`.
+ * Laws that must be obeyed by any `cats.Invariant`.
  */
 trait InvariantLaws[F[_]] {
   implicit def F: Invariant[F]
@@ -14,7 +14,7 @@ trait InvariantLaws[F[_]] {
     fa.imap(identity[A])(identity[A]) <-> fa
 
   def invariantComposition[A, B, C](fa: F[A], f1: A => B, f2: B => A, g1: B => C, g2: C => B): IsEq[F[C]] =
-    fa.imap(f1)(f2).imap(g1)(g2) <-> fa.imap(g1 compose f1)(f2 compose g2)
+    fa.imap(f1)(f2).imap(g1)(g2) <-> fa.imap(g1.compose(f1))(f2.compose(g2))
 }
 
 object InvariantLaws {

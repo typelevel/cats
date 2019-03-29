@@ -56,7 +56,7 @@ The output type of `parse` is `Option[Int]` whereas the input type of `reciproca
 This is where `Kleisli` comes into play.
 
 ## Kleisli
-At it's core, `Kleisli[F[_], A, B]` is just a wrapper around the function `A => F[B]`. Depending on the
+At its core, `Kleisli[F[_], A, B]` is just a wrapper around the function `A => F[B]`. Depending on the
 properties of the `F[_]`, we can do different things with `Kleisli`s. For instance, if `F[_]` has a
 `FlatMap[F]` instance (we can call `flatMap` on `F[A]` values), we can
 compose two `Kleisli`s much like we can two functions.
@@ -77,11 +77,14 @@ Returning to our earlier example:
 // Bring in cats.FlatMap[Option] instance
 import cats.implicits._
 
-val parse = Kleisli((s: String) => try { Some(s.toInt) } catch { case _: NumberFormatException => None })
+val parse: Kleisli[Option,String,Int] =
+  Kleisli((s: String) => if (s.matches("-?[0-9]+")) Some(s.toInt) else None)
 
-val reciprocal = Kleisli((i: Int) => if (i == 0) None else Some(1.0 / i))
+val reciprocal: Kleisli[Option,Int,Double] =
+  Kleisli((i: Int) => if (i != 0) Some(1.0 / i) else None)
 
-val parseAndReciprocal = reciprocal.compose(parse)
+val parseAndReciprocal: Kleisli[Option,String,Double] =
+  reciprocal.compose(parse)
 ```
 
 `Kleisli#andThen` can be defined similarly.
@@ -215,7 +218,7 @@ Functional programming advocates the creation of programs and modules by composi
 philosophy intentionally mirrors that of function composition - write many small functions, and compose them
 to build larger ones. After all, our programs are just functions.
 
-Let's look at some example modules, where each module has it's own configuration that is validated by a function.
+Let's look at some example modules, where each module has its own configuration that is validated by a function.
 If the configuration is good, we return a `Some` of the module, otherwise a `None`. This example uses `Option` for
 simplicity - if you want to provide error messages or other failure context, consider using `Either` instead.
 
