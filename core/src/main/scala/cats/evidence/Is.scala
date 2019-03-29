@@ -74,7 +74,7 @@ sealed abstract class IsInstances {
    */
   implicit val leibniz: Category[Is] = new Category[Is] {
     def id[A]: A Is A = refl[A]
-    def compose[A, B, C](bc: B Is C, ab: A Is B): A Is C = bc compose ab
+    def compose[A, B, C](bc: B Is C, ab: A Is B): A Is C = bc.compose(ab)
   }
 }
 
