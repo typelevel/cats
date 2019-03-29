@@ -3,11 +3,8 @@ package arrow
 
 import scala.reflect.macros.blackbox.Context
 
-<<<<<<< HEAD
-=======
 import cats.data.{EitherK, Tuple2K}
 
->>>>>>> 60c2fe6336f1e4dff1cd7d7eb839c19f83778b63
 /**
  * `FunctionK[F[_], G[_]]` is a functor transformation from `F` to `G`
  * in the same manner that function `A => B` is a morphism from values
