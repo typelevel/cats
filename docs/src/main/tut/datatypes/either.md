@@ -59,7 +59,7 @@ e2.right.map(_ + 1)
 Note the return types are themselves back to `Either`, so if we want to make more calls to
 `flatMap` or `map` then we again must call `right` or `left`.
 
-However, the convention is almost always to right-bias `Either`. Indeed in Scala 2.12.x `Either` will be
+However, the convention is almost always to right-bias `Either`. Indeed in Scala 2.12.x `Either` is
 [right-biased](https://github.com/scala/scala/pull/5135) by default.
 
 More often than not we want to just bias towards one side and call it a day - by convention,
@@ -69,7 +69,7 @@ in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have b
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```tut:book
-import cats.syntax.either._
+import cats.implicits._
 
 val right: Either[String, Int] = Right(5)
 right.map(_ + 1)
@@ -239,10 +239,9 @@ values and do service things. Glancing at the types, it looks like `flatMap` wil
 def doApp = Database.databaseThings().flatMap(Service.serviceThings)
 ```
 
-If you're on Scala 2.12, this line will compile and work as expected, but if you're on an earlier
-version of Scala it won't! This difference is related to the right-biasing of `Either` in Scala 2.12
-that was mentioned above. In Scala 2.12 the `flatMap` we get here is a method on `Either` with this
-signature:
+This line will compile and work as expected, no matter if you're on 2.12 or an earlier
+version of Scala.  The `flatMap` we get here (either provided by Cats's `Either` syntax for
+Scala 2.10 and 2.11, or, in Scala 2.12, a method on `Either`) has this signature:
 
 ```scala
 def flatMap[AA >: A, Y](f: (B) => Either[AA, Y]): Either[AA, Y]
@@ -253,15 +252,11 @@ has two type parameters, with the extra `AA` parameter allowing us to `flatMap` 
 with a different type on the left side.
 
 This behavior is consistent with the covariance of `Either`, and in some cases it can be convenient,
-but it also makes it easy to run into nasty variance issues (such as `Object` being inferred as the
-type of the left side, as it is in this case).
+but it also makes it easy to run into nasty variance issues - such as `Object` being inferred as the
+type of the left side, as it is in this case.
 
-For this reason the `flatMap` provided by Cats's `Either` syntax (which is the one you'll get for
-Scala 2.10 and 2.11) does not include this extra type parameter. Instead the left sides have to
-match, which means our `doApp` definition above will not compile on versions of Scala before 2.12.
 
 ### Solution 1: Application-wide errors
-So clearly in order for us to easily compose `Either` values, the left type parameter must be the same.
 We may then be tempted to make our entire application share an error data type.
 
 ```tut:silent
@@ -337,6 +332,7 @@ def awesome =
     case Right(_)                   => "everything is alright!"
   }
 ```
+
 
 ## Working with exception-y code
 There will inevitably come a time when your nice `Either` code will have to interact with exception-throwing

@@ -60,6 +60,23 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
+Part of the reason for this is that name `flatMap` has special significance in
+scala, as for-comprehensions rely on this method to chain together operations
+in a monadic context.
+
+```tut:book
+import scala.reflect.runtime.universe
+
+universe.reify(
+  for {
+    x <- Some(1)
+    y <- Some(2)
+  } yield x + y
+).tree
+```
+
+### tailRecM
+
 In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 `tailRecM` which encodes stack safe monadic recursion, as described in
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
@@ -87,20 +104,8 @@ implicit val optionMonad = new Monad[Option] {
 }
 ```
 
-Part of the reason for this is that name `flatMap` has special significance in
-scala, as for-comprehensions rely on this method to chain together operations
-in a monadic context.
+More discussion about `tailRecM` can be found in the [FAQ](../faq.html#tailrecm).
 
-```tut:book
-import scala.reflect.runtime.universe
-
-universe.reify(
-  for {
-    x <- Some(1)
-    y <- Some(2)
-  } yield x + y
-).tree
-```
 
 ### ifM
 
@@ -111,7 +116,7 @@ statement into the monadic context.
 ```tut:book
 import cats.implicits._
 
-Monad[List].ifM(List(true, false, true))(List(1, 2), List(3, 4))
+Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 4))
 ```
 
 ### Composition
@@ -154,3 +159,26 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 This sort of construction is called a monad transformer.
 
 Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+
+## FlatMap - a weakened Monad
+A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`
+method. Indeed in Cats `Monad` is a subclass of `FlatMap` (from which it gets `flatMap`)
+and `Applicative` (from which it gets `pure`).
+
+```scala
+trait FlatMap[F[_]] extends Apply[F] {
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+}
+
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
+```
+
+The laws for `FlatMap` are just the laws of `Monad` that don't mention `pure`.
+
+One of the motivations for `FlatMap`'s existence is that some types have `FlatMap` instances but not
+`Monad` - one example is `Map[K, ?]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
+
+However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
+pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has an `FlatMap` instance.
+

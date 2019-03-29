@@ -193,6 +193,123 @@ val robot = createRobot.runA(initialSeed).value
 
 This may seem surprising, but keep in mind that `b` isn't simply a `Boolean`. It is a function that takes a seed and _returns_ a `Boolean`, threading state along the way. Since the seed that is being passed into `b` changes from line to line, so do the returned `Boolean` values.
 
-## Fine print
+## Interleaving effects
 
-TODO explain StateT and the fact that State is an alias for StateT with Eval.
+Let's expand on the above example; assume that our random number generator works asynchronously by fetching results from a remote server:
+```tut:silent
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+final case class AsyncSeed(long: Long) {
+  def next = Future(AsyncSeed(long * 6364136223846793005L + 1442695040888963407L))
+}
+```
+
+Using a proper `IO` data type would be ideal, but `Future` serves our purpose here.
+
+We now need to redefine our `nextLong` action:
+```tut:book:fail
+val nextLong: State[AsyncSeed, Future[Long]] = State { seed =>
+  (seed.next, seed.long)
+}
+```
+
+Oops! That doesn't work: `State[S, A]` requires that we return a pure next `S` in the `State.apply` constructor. We could define `nextLong` as `State[Future[AsyncSeed], Future[Long]]`, but that would get us into even more trouble:
+```tut:book:fail
+val nextLong: State[Future[AsyncSeed], Future[Long]] = State { seedF => 
+  seedF.map { seed =>
+    (seed.next, seed.long)
+  }
+}
+```
+
+The `seed` that `State.apply` passes in is now a `Future`, so we must map it. But we can't return a `Future[(Future[S], [A])]`; so what do we do?
+
+Luckily, `State[S, A]` is an alias for `StateT[Eval, S, A]` - a monad transformer defined as `StateT[F[_], S, A]`. This data type represents computations of the form `S => F[(S, A)]`. 
+
+If we plug in our concrete types, we get `AsyncSeed => Future[(AsyncSeed, A)]`, which is something we can work with:
+```tut:silent
+import cats.data.StateT
+import cats.instances.future._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+val nextLong: StateT[Future, AsyncSeed, Long] = StateT { seed =>
+  seed.next zip Future.successful(seed.long)
+}
+```
+
+Now, what do we get back if we invoke `run` on our `nextLong` action?
+```tut:book
+nextLong.run(AsyncSeed(0))
+```
+
+Since every intermediate computation returns a `Future`, the composite computation returns a `Future` as well. To summarize, `StateT[F[_], S, A]` allows us to interleave effects of type `F[_]` in the computations wrapped by it. 
+
+It should be noted that different combinators on `StateT` impose different constraints on `F`; for example, `map` only requires that `F` has a `Functor` instance, but `flatMap` naturally requires `F` to have a `FlatMap` instance. Have a look at the method signatures for the details.
+
+## Changing States
+
+More complex, stateful computations cannot be easily modeled by a single type. For example, let's try to model a door's state:
+```tut:silent
+sealed trait DoorState
+case object Open extends DoorState
+case object Closed extends DoorState
+
+case class Door(state: DoorState)
+
+def open: State[DoorState, Unit] = ???
+def close: State[DoorState, Unit] = ???
+```
+
+We would naturally expect that `open` would only operate on doors that are `Closed`, and vice-versa. However, to implement these methods currently, we have to pattern-match on the state:
+```tut:silent
+val open: State[DoorState, Unit] = State { doorState =>
+  doorState match {
+    case Closed => (Open, ())
+    case Open   => ??? // What now?
+  }
+}
+```
+
+This puts us in the awkward situation of deciding how to handle invalid states; what's the appropriate behavior? Should we just leave the door open? Should we return a failure? That would mean that our return type needs to be modified.
+
+The most elegant solution would be to model this requirement statically using types, and luckily, `StateT` is an alias for another type: `IndexedStateT[F[_], SA, SB, A]`.
+
+This data type models a stateful computation of the form `SA => F[(SB, A)]`; that's a function that receives an initial state of type `SA` and results in a state of type `SB` and a result of type `A`, using an effect of `F`.
+
+So, let's model our typed door:
+```tut:silent
+import cats.Eval
+import cats.data.IndexedStateT
+
+def open: IndexedStateT[Eval, Closed.type, Open.type, Unit] = IndexedStateT.set(Open)
+def close: IndexedStateT[Eval, Open.type, Closed.type, Unit] = IndexedStateT.set(Closed)
+```
+
+We can now reject, at compile time, sequences of `open` and `close` that are invalid:
+```tut:book:fail
+val invalid = for {
+  _ <- open
+  _ <- close
+  _ <- close
+} yield ()
+```
+
+While valid sequences will be accepted:
+```tut:book
+val valid = for {
+  _ <- open
+  _ <- close
+  _ <- open
+} yield ()
+```
+
+Note that the inferred type of `valid` correctly models that this computation can be executed only with an initial `Closed` state.
+
+```tut:book:fail
+valid.run(Open)
+```
+
+```tut:book
+valid.run(Closed)
+```

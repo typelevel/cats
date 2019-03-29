@@ -2,10 +2,15 @@ package cats
 
 import simulacrum.typeclass
 
-@typeclass trait FunctorFilter[F[_]] extends Functor[F] {
+/**
+ * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
+ */
+@typeclass
+trait FunctorFilter[F[_]] extends Serializable {
+  def functor: Functor[F]
 
   /**
-   * A combined [[map]] and [[filter]]. Filtering is handled via `Option`
+   * A combined `map` and `filter`. Filtering is handled via `Option`
    * instead of `Boolean` such that the output type `B` can be different than
    * the input type `A`.
    *
@@ -41,6 +46,7 @@ import simulacrum.typeclass
 
   /**
    * "Flatten" out a structure by collapsing `Option`s.
+   * Equivalent to using `mapFilter` with `identity`.
    *
    * Example:
    * {{{
@@ -50,7 +56,8 @@ import simulacrum.typeclass
    * res0: List[Int] = List(1, 3)
    * }}}
    */
-  def flattenOption[A](fa: F[Option[A]]): F[A] = mapFilter(fa)(identity)
+  def flattenOption[A](fa: F[Option[A]]): F[A] =
+    mapFilter(fa)(identity)
 
   /**
    * Apply a filter to a structure such that the output structure contains all

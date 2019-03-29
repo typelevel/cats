@@ -21,6 +21,17 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   final def map[B](f: A => B)(implicit M: Applicative[M]): FreeT[S, M, B] =
     flatMap(a => pure(f(a)))
 
+  /**
+   * Modify the context `M` using transformation `mn`.
+   */
+  def mapK[N[_]](mn: M ~> N): FreeT[S, N, A] =
+    step match {
+      case e @ FlatMapped(_, _) =>
+        FlatMapped(e.a.mapK(mn), e.f.andThen(_.mapK(mn)))
+      case Suspend(m) =>
+        Suspend(mn(m))
+    }
+
   /** Binds the given continuation to the result of this computation. */
   final def flatMap[B](f: A => FreeT[S, M, B]): FreeT[S, M, B] =
     FlatMapped(this, f)
@@ -30,12 +41,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
    */
   def hoist[N[_]](mn: FunctionK[M, N]): FreeT[S, N, A] =
-    step match {
-      case e @ FlatMapped(_, _) =>
-        FlatMapped(e.a.hoist(mn), e.f.andThen(_.hoist(mn)))
-      case Suspend(m) =>
-        Suspend(mn(m))
-    }
+    mapK(mn)
 
   @deprecated("Use compile", "0.8.0")
   def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
@@ -56,17 +62,20 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   def foldMap(f: FunctionK[S, M])(implicit M: Monad[M]): M[A] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], A]] =
       ft match {
-        case Suspend(ma) => M.flatMap(ma) {
-          case Right(a) => M.pure(Right(a))
-          case Left(sa) => M.map(f(sa))(Right(_))
-        }
-        case g @ FlatMapped(_, _) => g.a match {
-          case Suspend(mx) => M.flatMap(mx) {
-            case Right(x) => M.pure(Left(g.f(x)))
-            case Left(sx) => M.map(f(sx))(x => Left(g.f(x)))
+        case Suspend(ma) =>
+          M.flatMap(ma) {
+            case Right(a) => M.pure(Right(a))
+            case Left(sa) => M.map(f(sa))(Right(_))
           }
-          case g0 @ FlatMapped(_, _) => M.pure(Left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
-        }
+        case g @ FlatMapped(_, _) =>
+          g.a match {
+            case Suspend(mx) =>
+              M.flatMap(mx) {
+                case Right(x) => M.pure(Left(g.f(x)))
+                case Left(sx) => M.map(f(sx))(x => Left(g.f(x)))
+              }
+            case g0 @ FlatMapped(_, _) => M.pure(Left(g0.a.flatMap(g0.f(_).flatMap(g.f))))
+          }
       }
 
     M.tailRecM(this)(go)
@@ -77,13 +86,15 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], Either[S[FreeT[S, M, A]], A]]] =
       ft match {
         case Suspend(f) => M.map(f)(as => Right(as.left.map(S.map(_)(pure(_)))))
-        case g1 @ FlatMapped(_, _) => g1.a match {
-          case Suspend(m1) => M.map(m1) {
-            case Right(a) => Left(g1.f(a))
-            case Left(fc) => Right(Left(S.map(fc)(g1.f(_))))
+        case g1 @ FlatMapped(_, _) =>
+          g1.a match {
+            case Suspend(m1) =>
+              M.map(m1) {
+                case Right(a) => Left(g1.f(a))
+                case Left(fc) => Right(Left(S.map(fc)(g1.f(_))))
+              }
+            case g2 @ FlatMapped(_, _) => M.pure(Left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
           }
-          case g2 @ FlatMapped(_, _) => M.pure(Left(g2.a.flatMap(g2.f(_).flatMap(g1.f))))
-        }
       }
 
     M.tailRecM(this)(go)
@@ -107,28 +118,32 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * is preserved.
    */
   @tailrec
-  private[cats] final def toM(implicit M: Applicative[M]): M[FreeT[S, M, A]] =
+  final private[cats] def toM(implicit M: Applicative[M]): M[FreeT[S, M, A]] =
     this match {
-      case Suspend(m) => M.map(m) {
-        case Right(a) => pure(a)
-        case Left(s) => liftF(s)
-      }
-      case g1 @ FlatMapped(_, _) => g1.a match {
-        case Suspend(m) => M.map(m) {
-          case Right(a) => g1.f(a)
-          case Left(s) => liftF[S, M, g1.A](s).flatMap(g1.f)
+      case Suspend(m) =>
+        M.map(m) {
+          case Right(a) => pure(a)
+          case Left(s)  => liftF(s)
         }
-        case g0 @ FlatMapped(_, _) => g0.a.flatMap(g0.f(_).flatMap(g1.f)).toM
-      }
+      case g1 @ FlatMapped(_, _) =>
+        g1.a match {
+          case Suspend(m) =>
+            M.map(m) {
+              case Right(a) => g1.f(a)
+              case Left(s)  => liftF[S, M, g1.A](s).flatMap(g1.f)
+            }
+          case g0 @ FlatMapped(_, _) => g0.a.flatMap(g0.f(_).flatMap(g1.f)).toM
+        }
     }
 
   @tailrec
   private def step: FreeT[S, M, A] =
     this match {
-      case g @ FlatMapped(_, _) => g.a match {
-        case g0 @ FlatMapped(_, _) => g0.a.flatMap(a => g0.f(a).flatMap(g.f)).step
-        case _ => g
-      }
+      case g @ FlatMapped(_, _) =>
+        g.a match {
+          case g0 @ FlatMapped(_, _) => g0.a.flatMap(a => g0.f(a).flatMap(g.f)).step
+          case _                     => g
+        }
       case x => x
     }
 
@@ -136,11 +151,13 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
 }
 
 object FreeT extends FreeTInstances {
+
   /** Suspend the computation with the given suspension. */
   private[free] case class Suspend[S[_], M[_], A](a: M[Either[S[A], A]]) extends FreeT[S, M, A]
 
   /** Call a subroutine and continue with the given function. */
-  private[free] case class FlatMapped[S[_], M[_], A0, B](a0: FreeT[S, M, A0], f0: A0 => FreeT[S, M, B]) extends FreeT[S, M, B] {
+  private[free] case class FlatMapped[S[_], M[_], A0, B](a0: FreeT[S, M, A0], f0: A0 => FreeT[S, M, B])
+      extends FreeT[S, M, B] {
     type A = A0
     def a: FreeT[S, M, A] = a0
     def f: A => FreeT[S, M, B] = f0
@@ -149,9 +166,13 @@ object FreeT extends FreeTInstances {
   /** Return the given value in the free monad. */
   def pure[S[_], M[_], A](value: A)(implicit M: Applicative[M]): FreeT[S, M, A] = Suspend(M.pure(Right(value)))
 
+  @deprecated("Use FreeT.defer.", "1.0.0-MF")
   def suspend[S[_], M[_], A](a: M[Either[A, S[FreeT[S, M, A]]]])(implicit M: Applicative[M]): FreeT[S, M, A] =
+    defer(a)
+
+  def defer[S[_], M[_], A](a: M[Either[A, S[FreeT[S, M, A]]]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftT(a).flatMap({
-      case Left(a) => pure(a)
+      case Left(a)  => pure(a)
       case Right(s) => roll(s)
     })
 
@@ -164,10 +185,6 @@ object FreeT extends FreeTInstances {
   def liftT[S[_], M[_], A](value: M[A])(implicit M: Functor[M]): FreeT[S, M, A] =
     Suspend(M.map(value)(Right(_)))
 
-  /** A version of `liftT` that infers the nested type constructor. */
-  def liftTU[S[_], MA](value: MA)(implicit M: Unapply[Functor, MA]): FreeT[S, M.M, M.A] =
-    liftT[S, M.M, M.A](M.subst(value))(M.TC)
-
   /** Suspends a value within a functor in a single step. Monadic unit for a higher-order monad. */
   def liftF[S[_], M[_], A](value: S[A])(implicit M: Applicative[M]): FreeT[S, M, A] =
     Suspend(M.pure(Left(value)))
@@ -176,31 +193,36 @@ object FreeT extends FreeTInstances {
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
   def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
-    new FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] {
-     def apply[A](f: FreeT[S, M, A]) = f.compile(st)
-    }
+    λ[FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]]](f => f.compile(st))
 
   def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
-    new FunctionK[FreeT[S, M, ?], M] {
-     def apply[A](f: FreeT[S, M, A]) = f.foldMap(fk)
-    }
+    λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
+
+  /**
+   * This method is used to defer the application of an InjectK[F, G]
+   * instance. The actual work happens in
+   * `FreeTLiftInjectKPartiallyApplied#apply`.
+   *
+   * This method exists to allow the `M` and `G` parameters to be
+   * bound independently of the `F` and `A` parameters below.
+   */
+  def liftInject[M[_], G[_]]: FreeTLiftInjectKPartiallyApplied[M, G] =
+    new FreeTLiftInjectKPartiallyApplied
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  final private[free] class FreeTLiftInjectKPartiallyApplied[M[_], G[_]](private val dummy: Boolean = true)
+      extends AnyVal {
+    def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G], m: Applicative[M]): FreeT[G, M, A] =
+      FreeT.liftF[G, M, A](I.inj(fa))
+  }
 }
 
-private[free] sealed trait FreeTInstances3 {
-  implicit def catsFreeMonadStateForFreeT[S[_], M[_], E](implicit M1: MonadState[M, E]): MonadState[FreeT[S, M, ?], E] =
-    new MonadState[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def get =
-        FreeT.liftT(M1.get)
-      override def set(s: E) =
-        FreeT.liftT(M1.set(s))
-    }
-}
-
-private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
+sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
   implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
     new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
-      override def M = implicitly
+      override def M = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
         FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
       override def raiseError[A](e: E) =
@@ -208,64 +230,61 @@ private[free] sealed trait FreeTInstances2 extends FreeTInstances3 {
     }
 }
 
-private[free] sealed trait FreeTInstances1 extends FreeTInstances2 {
-  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
-    new FreeTFlatMap[S, M] {
-      implicit def M: Applicative[M] = M0
-    }
-
-  implicit def catsFreeTransLiftForFreeT[S[_]]: TransLift.Aux[FreeT[S, ?[_], ?], Functor] =
-    new TransLift[FreeT[S, ?[_], ?]] {
-
-      type TC[M[_]] = Functor[M]
-
-      override def liftT[M[_]: Functor, A](ma: M[A]): FreeT[S, M, A] =
-        FreeT.liftT(ma)
-    }
-}
-
-private[free] sealed trait FreeTInstances0 extends FreeTInstances1 {
+sealed abstract private[free] class FreeTInstances0 extends FreeTInstances1 {
   implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, ?]] =
     new FreeTMonad[S, M] {
       def M = M0
     }
+}
 
-  implicit def catsFreeCombineForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
-    new FreeTCombine[S, M] {
-      override def M = implicitly
-      override def M1 = implicitly
+sealed abstract private[free] class FreeTInstances1 extends FreeTInstances2 {
+  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
+    new FreeTFlatMap[S, M] {
+      implicit def M: Applicative[M] = M0
     }
 }
 
-private[free] sealed trait FreeTInstances extends FreeTInstances0 {
-  implicit def catsFreeMonadCombineForFreeT[S[_], M[_]: Alternative]: MonadCombine[FreeT[S, M, ?]] =
-    new MonadCombine[FreeT[S, M, ?]] with FreeTCombine[S, M] with FreeTMonad[S, M] {
-      override def M = implicitly
-      override def M1 = implicitly
-
-      override def empty[A] = FreeT.liftT[S, M, A](MonoidK[M].empty[A])(M)
+sealed abstract private[free] class FreeTInstances2 extends FreeTInstances3 {
+  implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, ?]] =
+    new Alternative[FreeT[S, M, ?]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
+      override def M = Alternative[M]
+      override def M1 = Alternative[M]
     }
 }
 
-private[free] sealed trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, ?]] {
+sealed abstract private[free] class FreeTInstances3 {
+  implicit def catsFreeSemigroupKForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
+    new FreeTSemigroupK[S, M] {
+      override def M = Applicative[M]
+      override def M1 = SemigroupK[M]
+    }
+}
+
+sealed private[free] trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
 
-  override final def map[A, B](fa: FreeT[S, M, A])(f: A => B): FreeT[S, M, B] = fa.map(f)
+  final override def map[A, B](fa: FreeT[S, M, A])(f: A => B): FreeT[S, M, B] = fa.map(f)
   def flatMap[A, B](fa: FreeT[S, M, A])(f: A => FreeT[S, M, B]): FreeT[S, M, B] = fa.flatMap(f)
-  override final def tailRecM[A, B](a: A)(f: A => FreeT[S, M, Either[A, B]]): FreeT[S, M, B] =
+  final override def tailRecM[A, B](a: A)(f: A => FreeT[S, M, Either[A, B]]): FreeT[S, M, B] =
     FreeT.tailRecM(a)(f)
 }
 
-private[free] sealed trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
+sealed private[free] trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
   implicit def M: Applicative[M]
 
-  override final def pure[A](a: A): FreeT[S, M, A] =
+  final override def pure[A](a: A): FreeT[S, M, A] =
     FreeT.pure[S, M, A](a)
 }
 
-private[free] sealed trait FreeTCombine[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
+sealed private[free] trait FreeTMonoidK[S[_], M[_]] extends MonoidK[FreeT[S, M, ?]] with FreeTSemigroupK[S, M] {
+  implicit def M: Applicative[M]
+  def M1: MonoidK[M]
+  final override def empty[A]: FreeT[S, M, A] = FreeT.liftT[S, M, A](M1.empty[A])(M)
+}
+
+sealed private[free] trait FreeTSemigroupK[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
   implicit def M: Applicative[M]
   def M1: SemigroupK[M]
-  override final def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
+  final override def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =
     FreeT.liftT(M1.combineK(a.toM, b.toM))(M).flatMap(identity)
 }

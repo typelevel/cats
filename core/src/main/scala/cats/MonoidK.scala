@@ -8,7 +8,7 @@ import simulacrum.typeclass
  * This type class is useful when its type parameter F[_] has a
  * structure that can be combined for any particular type, and which
  * also has an "empty" representation. Thus, MonoidK is like a Monoid
- * for kinds (i.e. parameterized types).
+ * for kinds (i.e. parametrized types).
  *
  * A MonoidK[F] can produce a Monoid[F[A]] for any type A.
  *
@@ -26,6 +26,13 @@ import simulacrum.typeclass
 
   /**
    * Given a type A, create an "empty" F[A] value.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> MonoidK[List].empty[Long]
+   * res0: List[Long] = List()
+   * }}}
    */
   def empty[A]: F[A]
 

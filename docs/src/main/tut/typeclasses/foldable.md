@@ -10,15 +10,23 @@ scaladoc: "#cats.Foldable"
 Foldable type class instances can be defined for data structures that can be 
 folded to a summary value.
 
-In the case of a collection (such as `List` or `Set`), these methods will fold 
+In the case of a collection (such as `List` or `Vector`), these methods will fold
 together (combine) the values contained in the collection to produce a single 
 result. Most collection types have `foldLeft` methods, which will usually be 
 used by the associated `Foldable[_]` instance.
 
 `Foldable[F]` is implemented in terms of two basic methods:
 
- - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
- - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
+ - `foldLeft(fa, b)(f)` eagerly performs a left-associative fold over `fa`.
+ - `foldRight(fa, b)(f)` lazily performs a right-associative fold over `fa`.
+
+Consider a simple list like `List(1, 2, 3)`. You could sum the numbers of this list using folds
+where `0` is the starting value (`b`) and integer addition (`+`) is the combination operation
+(`f`). Since `foldLeft` is left-associative, the execution of this fold would look something like
+`((0 + 1) + 2) + 3`. The execution of a similar `foldRight`-based solution would look something
+like `0 + (1 + (2 + 3))`. In this case, since integer addition is associative, both approaches will
+yield the same result. However, for non-associative operations, the two methods can produce
+different results.
  
 These form the basis for many other operations, see also: 
 [A tutorial on the universality and expressiveness of fold](http://www.cs.nott.ac.uk/~gmh/fold.pdf)
@@ -40,10 +48,10 @@ Foldable[List].reduceLeftToOption(List[Int]())(_.toString)((s,i) => s + i)
 Foldable[List].reduceLeftToOption(List(1,2,3,4))(_.toString)((s,i) => s + i)
 Foldable[List].reduceRightToOption(List(1,2,3,4))(_.toString)((i,s) => Later(s.value + i)).value
 Foldable[List].reduceRightToOption(List[Int]())(_.toString)((i,s) => Later(s.value + i)).value
-Foldable[Set].find(Set(1,2,3))(_ > 2)
-Foldable[Set].exists(Set(1,2,3))(_ > 2)
-Foldable[Set].forall(Set(1,2,3))(_ > 2)
-Foldable[Set].forall(Set(1,2,3))(_ < 4)
+Foldable[List].find(List(1,2,3))(_ > 2)
+Foldable[List].exists(List(1,2,3))(_ > 2)
+Foldable[List].forall(List(1,2,3))(_ > 2)
+Foldable[List].forall(List(1,2,3))(_ < 4)
 Foldable[Vector].filter_(Vector(1,2,3))(_ < 3)
 Foldable[List].isEmpty(List(1,2))
 Foldable[Option].isEmpty(None)
@@ -57,6 +65,10 @@ Foldable[List].traverse_(List("1", "2"))(parseInt)
 Foldable[List].traverse_(List("1", "A"))(parseInt)
 Foldable[List].sequence_(List(Option(1), Option(2)))
 Foldable[List].sequence_(List(Option(1), None))
+
+Foldable[List].forallM(List(1, 2, 3))(i => if (i < 2) Some(i % 2 == 0) else None)
+Foldable[List].existsM(List(1, 2, 3))(i => if (i < 2) Some(i % 2 == 0) else None)
+Foldable[List].existsM(List(1, 2, 3))(i => if (i < 3) Some(i % 2 == 0) else None)
 
 val prints: Eval[Unit] = List(Eval.always(println(1)), Eval.always(println(2))).sequence_
 prints.value

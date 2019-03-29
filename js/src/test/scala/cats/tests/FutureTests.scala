@@ -2,10 +2,11 @@ package cats
 package js
 package tests
 
+import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
-import cats.tests.CatsSuite
+import cats.tests.{CatsSuite, ListWrapper}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -31,13 +32,13 @@ class FutureTests extends CatsSuite {
   implicit def eqfa[A: Eq]: Eq[Future[A]] =
     new Eq[Future[A]] {
       def eqv(fx: Future[A], fy: Future[A]): Boolean = {
-        val fz = futureEither(fx) zip futureEither(fy)
+        val fz = futureEither(fx).zip(futureEither(fy))
         Await.result(fz.map { case (tx, ty) => tx === ty }, timeout)
       }
     }
 
   implicit val throwableEq: Eq[Throwable] =
-    Eq[String].on(_.toString)
+    Eq.by[Throwable, String](_.toString)
 
   implicit val comonad: Comonad[Future] = futureComonad(timeout)
 
@@ -54,4 +55,11 @@ class FutureTests extends CatsSuite {
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
   checkAll("Future[Int]", ComonadTests[Future].comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
+
+  {
+    implicit val F = ListWrapper.semigroup[Int]
+    checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
+  }
+
+  checkAll("Future[Int]", MonoidLawTests[Future[Int]].monoid)
 }

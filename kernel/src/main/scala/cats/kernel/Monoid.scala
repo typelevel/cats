@@ -1,6 +1,6 @@
 package cats.kernel
 
-import scala.{ specialized => sp }
+import scala.{specialized => sp}
 
 /**
  * A monoid is a semigroup with an identity. A monoid is a specialization of a
@@ -12,17 +12,51 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * Return the identity element for this monoid.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.kernel.instances.int._
+   * scala> import cats.kernel.instances.string._
+   *
+   * scala> Monoid[String].empty
+   * res0: String = ""
+   *
+   * scala> Monoid[Int].empty
+   * res1: Int = 0
+   * }}}
    */
   def empty: A
 
   /**
    * Tests if `a` is the identity.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.kernel.instances.string._
+   *
+   * scala> Monoid[String].isEmpty("")
+   * res0: Boolean = true
+   *
+   * scala> Monoid[String].isEmpty("something")
+   * res1: Boolean = false
+   * }}}
    */
   def isEmpty(a: A)(implicit ev: Eq[A]): Boolean =
     ev.eqv(a, empty)
 
   /**
    * Return `a` appended to itself `n` times.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.kernel.instances.string._
+   *
+   * scala> Monoid[String].combineN("ha", 3)
+   * res0: String = hahaha
+   *
+   * scala> Monoid[String].combineN("ha", 0)
+   * res1: String = ""
+   * }}}
    */
   override def combineN(a: A, n: Int): A =
     if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
@@ -31,6 +65,17 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * Given a sequence of `as`, sum them using the monoid and return the total.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.kernel.instances.string._
+   *
+   * scala> Monoid[String].combineAll(List("One ", "Two ", "Three"))
+   * res0: String = One Two Three
+   *
+   * scala> Monoid[String].combineAll(List.empty)
+   * res1: String = ""
+   * }}}
    */
   def combineAll(as: TraversableOnce[A]): A =
     as.foldLeft(empty)(combine)

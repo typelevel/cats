@@ -4,14 +4,17 @@ import simulacrum.typeclass
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
- * that can essentially have a [[traverse]] and a [[filter]] applied as a single
- * combined operation ([[traverseFilter]]).
- *
- * Must obey the laws defined in cats.laws.TraverseFilterLaws.
+ * that can essentially have a `traverse` and a `filter` applied as a single
+ * combined operation (`traverseFilter`).
  *
  * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
-@typeclass trait TraverseFilter[F[_]] extends Traverse[F] with FunctorFilter[F] { self =>
+
+@typeclass
+trait TraverseFilter[F[_]] extends FunctorFilter[F] {
+  def traverse: Traverse[F]
+
+  final override def functor: Functor[F] = traverse
 
   /**
    * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option`
@@ -29,10 +32,7 @@ import simulacrum.typeclass
    * res0: List[String] = List(one, three)
    * }}}
    */
-  def traverseFilter[G[_]: Applicative, A, B](fa: F[A])(f: A => G[Option[B]]): G[F[B]]
-
-  override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
-    traverseFilter[Id, A, B](fa)(f)
+  def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
 
   /**
    *
@@ -57,9 +57,6 @@ import simulacrum.typeclass
   def filterA[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
 
-  override def filter[A](fa: F[A])(f: A => Boolean): F[A] =
-    filterA[Id, A](fa)(f)
-
-  override def traverse[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[F[B]] =
-    traverseFilter(fa)(a => G.map(f(a))(Some(_)))
+  override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
+    traverseFilter[Id, A, B](fa)(f)
 }

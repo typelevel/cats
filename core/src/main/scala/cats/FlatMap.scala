@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import simulacrum.noop
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -21,11 +22,6 @@ import simulacrum.typeclass
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
   /**
-   * Alias for [[flatMap]].
-   */
-  def >>=[A, B](fa: F[A])(f: A => F[B]): F[B] = flatMap(fa)(f)
-
-  /**
    * "flatten" a nested `F` of `F` structure into a single-layer `F` structure.
    *
    * This is also commonly called `join`.
@@ -44,15 +40,9 @@ import simulacrum.typeclass
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-  /** Sequentially compose two actions, discarding any value produced by the first. */
-  def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] = flatMap(fa)(_ => fb)
-
-  /** Alias for [[followedBy]]. */
-  @inline final def >>[A, B](fa: F[A])(fb: F[B]): F[B] = followedBy(fa)(fb)
-
   /**
    * Sequentially compose two actions, discarding any value produced by the first. This variant of
-   * [[followedBy]] also lets you define the evaluation strategy of the second action. For instance
+   * [[productR]] also lets you define the evaluation strategy of the second action. For instance
    * you can evaluate it only ''after'' the first action has finished:
    *
    * {{{
@@ -60,17 +50,56 @@ import simulacrum.typeclass
    * scala> import cats.implicits._
    * scala> val fa: Option[Int] = Some(3)
    * scala> def fb: Option[String] = Some("foo")
-   * scala> fa.followedByEval(Eval.later(fb))
+   * scala> fa.productREval(Eval.later(fb))
    * res0: Option[String] = Some(foo)
    * }}}
    */
-  def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
+  def productREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
+
+  @deprecated("Use productREval instead.", "1.0.0-RC2")
+  @noop def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
+
+  /**
+   * Sequentially compose two actions, discarding any value produced by the second. This variant of
+   * [[productL]] also lets you define the evaluation strategy of the second action. For instance
+   * you can evaluate it only ''after'' the first action has finished:
+   *
+   * {{{
+   * scala> import cats.Eval
+   * scala> import cats.implicits._
+   * scala> var count = 0
+   * scala> val fa: Option[Int] = Some(3)
+   * scala> def fb: Option[Unit] = Some(count += 1)
+   * scala> fa.productLEval(Eval.later(fb))
+   * res0: Option[Int] = Some(3)
+   * scala> assert(count == 1)
+   * scala> none[Int].productLEval(Eval.later(fb))
+   * res1: Option[Int] = None
+   * scala> assert(count == 1)
+   * }}}
+   */
+  def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
+
+  @deprecated("Use productLEval instead.", "1.0.0-RC2")
+  @noop def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     flatMap(fa)(a => map(fb)(b => (a, b)))
+
+  override def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
+    flatMap(fa)(a => flatMap(fb)(b => map(ff)(_(a, b))))
+
+  override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
+    flatMap(fa)(a => map(fb)(b => f(a, b)))
+
+  override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
+    flatMap(fa)(_ => fb)
+
+  override def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
+    map2(fa, fb)((a, _) => a)
 
   /**
    * Pair `A` with the result of function application.
@@ -100,4 +129,24 @@ import simulacrum.typeclass
    * Implementations of this method should use constant stack space relative to `f`.
    */
   def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+
+  /**
+   * Apply a monadic function and discard the result while keeping the effect.
+   *
+   * {{{
+   * scala> import cats._, implicits._
+   * scala> Option(1).flatTap(_ => None)
+   * res0: Option[Int] = None
+   * scala> Option(1).flatTap(_ => Some("123"))
+   * res1: Option[Int] = Some(1)
+   * scala> def nCats(n: Int) = List.fill(n)("cat")
+   * nCats: (n: Int)List[String]
+   * scala> List[Int](0).flatTap(nCats)
+   * res2: List[Int] = List()
+   * scala> List[Int](4).flatTap(nCats)
+   * res3: List[Int] = List(4, 4, 4, 4)
+   * }}}
+   */
+  def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
+    flatMap(fa)(a => as(f(a), a))
 }

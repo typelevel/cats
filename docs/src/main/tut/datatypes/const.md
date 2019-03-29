@@ -29,7 +29,7 @@ Because the second type parameter is not used in the data type, the type paramet
 
 ## Why do we care?
 It would seem `Const` gives us no benefit over a data type that would simply not have the second type parameter.
-However, while we don't directly use the second type parameter, it's existence becomes useful in certain contexts.
+However, while we don't directly use the second type parameter, its existence becomes useful in certain contexts.
 
 ### Example 1: Lens
 The following is heavily inspired by [Julien Truffaut](https://github.com/julien-truffaut)'s

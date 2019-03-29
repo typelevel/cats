@@ -6,12 +6,14 @@ import cats.arrow.Arrow
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 
-trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with StrongTests[F] {
+trait ArrowTests[F[_, _]] extends CategoryTests[F] with StrongTests[F] {
   def laws: ArrowLaws[F]
 
-  def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def arrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
+    ArbFAC: Arbitrary[F[A, C]],
     ArbFCD: Arbitrary[F[C, D]],
     ArbFDE: Arbitrary[F[D, E]],
     ArbFEG: Arbitrary[F[E, G]],
@@ -30,16 +32,19 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
     EqFACBD: Eq[F[(A, C), (B, D)]],
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
-    EqFAEDE: Eq[F[(A, E), (D, E)]],
-    EqFEAED: Eq[F[(E, A), (E, D)]],
-    EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
+    EqFDADB: Eq[F[(D, A), (D, B)]],
+    EqFCADB: Eq[F[(C, A), (D, B)]],
+    EqFABC: Eq[F[A, (B, C)]],
+    EqFCAB: Eq[F[(C, A), B]],
+    EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
+    EqFACDBCD2: Eq[F[((A, C), D), ((B, C), D)]],
+    EqFDCADCB: Eq[F[(D, (C, A)), (D, (C, B))]]
   ): RuleSet =
     new RuleSet {
       def name: String = "arrow"
       def bases: Seq[(String, RuleSet)] = Nil
       def parents: Seq[RuleSet] = Seq(
         category[A, B, C, D],
-        split[A, B, C, D, E, G],
         strong[A, B, C, D, E, G]
       )
       def props: Seq[(String, Prop)] = Seq(
@@ -49,7 +54,9 @@ trait ArrowTests[F[_, _]] extends CategoryTests[F] with SplitTests[F] with Stron
         "arrow functor" -> forAll(laws.arrowFunctor[A, B, C, D] _),
         "arrow exchange" -> forAll(laws.arrowExchange[A, B, C, D] _),
         "arrow unit" -> forAll(laws.arrowUnit[A, B, C] _),
-        "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _)
+        "arrow association" -> forAll(laws.arrowAssociation[A, B, C, D] _),
+        "split consistent with andThen" -> forAll(laws.splitConsistentWithAndThen[A, B, C, D] _),
+        "merge consistent with andThen" -> forAll(laws.mergeConsistentWithAndThen[A, B, C] _)
       )
     }
 }

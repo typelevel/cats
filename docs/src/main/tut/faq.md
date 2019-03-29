@@ -2,24 +2,33 @@
 layout: page
 title:  "FAQ"
 section: "faq"
-position: 4
+position: 40
 ---
 
 # Frequently Asked Questions
 
 ## Questions
-
  * [What imports do I need?](#what-imports)
+ * [I am new to pure functional programming, what quick wins can I get from Cats?](#quick-wins)
+ * [What is the difference between Cats and Scalaz?](#diff-scalaz)
  * [Where is right-biased `Either`?](#either)
+ * [Why is the compiler having trouble with types with more than one type parameter?](#si-2712)
  * [Why can't the compiler find implicit instances for Future?](#future-instances)
+ * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
+ * [Where are `Applicative`s for monad transformers?](#applicative-monad-transformers)
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
  * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
+ * [What does this symbol mean?](#symbol)
+ * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
+ * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
+ * [Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?](#monad-transformer-variance)
+ * [How to try cats in a REPL?](#ammonite)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
 
@@ -32,6 +41,16 @@ import cats.implicits._
 ```
 
 This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
+
+## <a id="quick-wins" href="#quick-wins"></a>I am new to pure functional programming, what quick wins can I get from Cats?
+
+Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html).
+
+## <a id="diff-scalaz" href="#diff-scalaz"></a>What is the difference between Cats and Scalaz?
+
+Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
+
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/. It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -47,13 +66,22 @@ There are a few minor mismatches between `Xor` and `Either`. For example, in som
 
 Similarly, `cats.data.XorT` has been replaced with `cats.data.EitherT`, although since this is a type defined in Cats, you don't need to import syntax or instances for it (although you may need imports for the underlying monad).
 
+## <a id="si-2712" href="#si-2712"></a>Why is the compiler having trouble with types with more than one type parameter?
+
+When you encounter a situation where the same code works fine with a type with one type parameter, e.g. List[A], but doesn't work with types with more than one, e.g. Either[A, B], you probably hit [SI-2712](https://issues.scala-lang.org/browse/SI-2712). Without going into the details, it's highly recommended to enable a partial SI-2712 fix in your project. The easiest way to achieve that is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+Cats used to provide mitigation to this issue semi-transparently, but given the fact that the fix is now mainstream, we decided to drop that mitigation machinery in favor of reducing the complexity. See this [issue](https://github.com/typelevel/cats/issues/1073) for details.
+
+## <a id="example-compile" href="#example-compile"></a>Why is some example code not compiling for me?
+
+A portion of example code requires either the [Kind-projector](https://github.com/non/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
 If you have already followed the [imports advice](#what-imports) but are still getting error messages like `could not find implicit value for parameter e: cats.Monad[scala.concurrent.Future]` or `value |+| is not a member of scala.concurrent.Future[Int]`, then make sure that you have an implicit `scala.concurrent.ExecutionContext` in scope. The easiest way to do this is to `import scala.concurrent.ExecutionContext.Implicits.global`, but note that you may want to use a different execution context for your production application.
 
 ## <a id="traverse" href="#traverse"></a>How can I turn my List of `<something>` into a `<something>` of a list?
 
-It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence`, `sequenceU`, `traverse`, and `traverseU` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/typeclasses/traverse.html).
+It's really common to have a `List` of values with types like `Option`, `Either`, or `Validated` that you would like to turn "inside out" into an `Option` (or `Either` or `Validated`) of a `List`. The `sequence` and `traverse` methods are _really_ handy for this. You can read more about them in the [Traverse documentation]({{ site.baseurl }}/typeclasses/traverse.html).
 
 ## <a id="listt" href="#listt"></a>Where is ListT?
 
@@ -91,31 +119,27 @@ We can even perform more complicated operations, such as a `traverse` of the nes
 import cats.data.ValidatedNel
 type ErrorsOr[A] = ValidatedNel[String, A]
 def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
+```
 
 ```tut:book
 nl.traverse(even)
 ```
 
+## <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are `Applicative`s for monad transformers?</a>
+
+An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [the guidelines](https://typelevel.org/cats/guidelines.html#applicative-monad-transformers) for a more detailed explanation.
+
+As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
+
 ## <a id="task" href="#task"></a>Where is IO/Task?
 
-In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. There [have](https://github.com/typelevel/cats/pull/894) [been](https://github.com/typelevel/cats/pull/907) [several](https://github.com/typelevel/cats/issues/1224) GitHub issues/PRs about this and many more Gitter/IRL conversations, but they all seem to arrive at the conclusion that there isn't a clear canonical `IO` or `Task` that serves everyones' needs. Some of the questions that come up are:
+In purely functional programming, a monadic `IO` or `Task` type is often used to handle side effects such as file/network IO. In some languages and frameworks, such a type also serves as the primary abstraction through which parallelism is achieved.  Nearly every real-world purely functional application or service is going to require such a data type, and this gives rise to an obvious question: why doesn't cats include such a type?
 
-- Should tasks be interruptible?
-- Should there be a single `Task` that subsumes `IO` and adds support for asynchrony and concurrency, or should there be separate `IO` and `Task` types?
-- How should concurrency be managed/configured?
-- Is [scala.js](https://www.scala-js.org/) supported?
-- Should you be able to block a thread waiting for the result of a task? This is really convenient for tests, but it isn't really compatible with a JavaScript runtime and therefore is an issue for [scala.js](https://www.scala-js.org/).
+The answer is that cats *does* include an `IO`, it just isn't included in the core library.  The decision was made to split `IO` away from cats-core and (indeed the whole cats release cycle!) in order to make it easier to ensure modular versioning and compatibility across the ecosystem.  The [cats-effect](https://github.com/typelevel/cats-effect) project defines a type, `cats.effect.IO`, which is intended to be a very minimal, very performant data type for managing synchronous and asynchronous side-effects, integrated into the cats ecosystem.
 
-For some use-cases, a very simple `IO` is the best answer, as it avoids a lot of the overhead and complexity of other solutions. However, other use-cases require low-level concurrency control with asynchrony, resource management, and stack-safety. Considering all of the competing concerns, Cats has opted to not implement its own `IO`/`Task` types and instead encourage users to use a separate library that best serves their use-case.
+However, we acknowledge that this type may not meet everyone's needs. The cats-effect project characterizes the space of side-effect-capturing data types with a set of typeclasses (deriving from `cats.Monad`), and so all such data types are, broadly-speaking, mutually compatible and interchangeable in many generic contexts. For example, [Monix](https://monix.io) provides support for IO, concurrency, and streaming and integrates with the cats-effect type classes.
 
-Here are a couple libraries with `Task` implementations that you may find useful (in no particular order):
-
-- [Monix](https://monix.io/) - Asynchronous Programming for Scala and [Scala.js](https://www.scala-js.org/).
-  - The `monix-eval` module provides a full-featured [Task](https://monix.io/docs/2x/eval/task.html) that is both cancellable and Scala.js-compatible.
-- [fs2](https://github.com/functional-streams-for-scala/fs2) - Compositional, streaming I/O library for Scala
-  - fs2 provides a [Task](https://github.com/functional-streams-for-scala/fs2/blob/series/0.9/core/shared/src/main/scala/fs2/Task.scala) that is a convenient option if you are already using fs2. fs2's `Task` is also Scala.js-compatible.
-
-It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/datatypes/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` (or even simply `Try`, `Future`, or [`Id`]({{ site.baseurl }}/typeclasses/id.html)) as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
+It may be worth keeping in mind that `IO` and `Task` are pretty blunt instruments (they are essentially the `Any` of side effect management), and you may want to narrow the scope of your effects throughout most of your application. The [free monad]({{ site.baseurl }}/datatypes/freemonad.html) documentation describes a way to abstractly define controlled effects and interpret them into a type such as `IO` or `Task` as late as possible. As more of your code becomes pure through these controlled effects the less it matters which type you end up choosing to represent your side effects.
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
@@ -191,12 +215,71 @@ If you're having trouble figuring out how to implement `tailRecM` lawfully, you 
 
 In some cases you may decide that providing a lawful `tailRecM` may be impractical or even impossible (if so we'd like to hear about it). For these cases we provide a way of testing all of the monad laws _except_ for the stack safety of `tailRecM`: just replace `MonadTests[F].monad[A, B, C]` in your tests with `MonadTests[F].stackUnsafeMonad[A, B, C]`.
 
+
+## <a id="symbol" href="#symbol"></a>What does this symbol mean?
+
+Below is a list of symbols used in cats.
+
+The `~>`, `⊥`, `⊤`, `:<:` and `:≺:` symbols can be imported with `import cats._`.
+
+All other symbols can be imported with `import cats.implicits._`
+
+| Symbol                           | Name                     | Nickname         | Type Class              | Signature                                                           |
+| -------------------------------- | -------------------------| ---------------- | ----------------------- | --------------------------------------------------------------------|
+| `fa *> fb`                       | product right              |                  | `Apply[F[_]]`           | `productR(fa: F[A])(fb: F[B]): F[B]`                              |
+| `fa <* fb`                       | product left               |                  | `Apply[F[_]]`           | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+| `x === y`                        | equals                   |                  | `Eq[A]`                 | `eqv(x: A, y: A): Boolean`                                          |
+| `x =!= y`                        | not equals               |                  | `Eq[A]`                 | `neqv(x: A, y: A): Boolean`                                         |
+| `fa >>= f`                       | flatMap                  |                  | `FlatMap[F[_]]`         | `flatMap(fa: F[A])(f: A => F[B]): F[B]`                             |
+| `fa >> fb`                       | followed by              |                  | `FlatMap[F[_]]`         | `>>(fb: => F[B]): F[B]`                              |
+| <code>x &#124;-&#124; y</code>   | remove                   |                  | `Group[A]`              | `remove(x: A, y: A): A`                                             |
+| `x > y`                          | greater than             |                  | `PartialOrder[A]`       | `gt(x: A, y: A): Boolean`                                           |
+| `x >= y`                         | greater than or equal    |                  | `PartialOrder[A]`       | `gteq(x: A, y: A): Boolean`                                         |
+| `x < y`                          | less than                |                  | `PartialOrder[A]`       | `lt(x: A, y: A): Boolean`                                           |
+| `x <= y`                         | less than or equal       |                  | `PartialOrder[A]`       | `lteq(x: A, y: A): Boolean`                                         |
+| <code>x &#124;+&#124; y</code>   | Semigroup combine        |                  | `Semigroup[A]`          | `combine(x: A, y: A): A`                                            |
+| `x <+> y`                        | SemigroupK combine       |                  | `SemigroupK[F[_]]`      | `combineK(x: F[A], y: F[A]): F[A]`                                  |
+| `f <<< g`                        | Arrow compose            |                  | `Compose[F[_, _]]`      | `compose(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f >>> g`                        | Arrow andThen            |                  | `Compose[F[_, _]]`      | `andThen(f: F[B, C], g: F[A, B]): F[A, C]`                          |
+| `f &&& g`                        | Arrow merge              |                  | `Arrow[F[_, _]]`        | `merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)]`              |
+| `f -< g`                         | Arrow combine and bypass |                  | `Arrow[F[_, _]]`        | `combineAndByPass[A, B, C](f: F[A, B], g: F[B, C]): F[A, (B, C)]`   | 
+| `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
+| `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
+| `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
+| `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
+
+
+## <a id="law-testing" href="#law-testing"></a>How can I test instances against their type classes' laws?
+
+You can find more information [here](typeclasses/lawtesting.html).
+
 ## <a id="contributing" href="#contributing"></a>How can I help?
 
 The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:
 
-- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala]({{ site.sources }}/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
+- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
 - Look at the [code coverage report](https://codecov.io/github/typelevel/cats?branch=master), find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
 See the [contributing guide]({{ site.baseurl }}/contributing.html) for more information.
+
+## <a id="sbt-catalysts" href="#sbt-catalysts"></a>Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?
+
+Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is created particularly for this purpose. It also provides a g8 template so that you can run `sbt new typelevel/sbt-catalysts.g8` to quickly set up a project using Cats ecosystem libraries through this plugin. For more details, go to [sbt-catalysts](https://github.com/typelevel/sbt-catalysts). 
+
+## <a id="ammonite" href="#ammonite"></a>How to try Cats in a REPL? 
+
+The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
+```scala
+interp.configureCompiler(_.settings.YpartialUnification.value = true)
+import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
+```
+Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
+
+## <a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
+
+Please see [Variance of Monad Transformers](https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html) on the Typelevel blog.

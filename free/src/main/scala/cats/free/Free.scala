@@ -12,10 +12,25 @@ import cats.arrow.FunctionK
  */
 sealed abstract class Free[S[_], A] extends Product with Serializable {
 
-  import Free.{ Pure, Suspend, FlatMapped }
+  import Free.{FlatMapped, Pure, Suspend}
 
   final def map[B](f: A => B): Free[S, B] =
     flatMap(a => Pure(f(a)))
+
+  /**
+   * Modify the functor context `S` using transformation `f`.
+   *
+   * This is effectively compiling your free monad into another
+   * language by changing the suspension functor using the given
+   * natural transformation `f`.
+   *
+   * If your natural transformation is effectful, be careful. These
+   * effects will be applied by `mapK`.
+   */
+  final def mapK[T[_]](f: S ~> T): Free[T, A] =
+    foldMap[Free[T, ?]] { // this is safe because Free is stack safe
+      λ[FunctionK[S, Free[T, ?]]](fa => Suspend(f(fa)))
+    }
 
   /**
    * Bind the given continuation to the result of this computation.
@@ -35,8 +50,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   @tailrec
   final def step: Free[S, A] = this match {
     case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case FlatMapped(Pure(a), f) => f(a).step
-    case x => x
+    case FlatMapped(Pure(a), f)          => f(a).step
+    case x                               => x
   }
 
   /**
@@ -44,14 +59,28 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   @tailrec
   final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
-    case Pure(a) => Right(a)
+    case Pure(a)    => Right(a)
     case Suspend(t) => Left(S.map(t)(Pure(_)))
     case FlatMapped(c, f) =>
       c match {
-        case Pure(a) => f(a).resume
-        case Suspend(t) => Left(S.map(t)(f))
+        case Pure(a)          => f(a).resume
+        case Suspend(t)       => Left(S.map(t)(f))
         case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
       }
+  }
+
+  /**
+   * A combination of step and fold.
+   */
+  final private[free] def foldStep[B](
+    onPure: A => B,
+    onSuspend: S[A] => B,
+    onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
+  ): B = this.step match {
+    case Pure(a)                    => onPure(a)
+    case Suspend(a)                 => onSuspend(a)
+    case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
+    case _                          => sys.error("FlatMapped should be right associative after step")
   }
 
   /**
@@ -61,7 +90,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S]): A = {
     @tailrec def loop(t: Free[S, A]): A =
       t.resume match {
-        case Left(s) => loop(f(s))
+        case Left(s)  => loop(f(s))
         case Right(r) => r
       }
     loop(this)
@@ -122,8 +151,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def foldMap[M[_]](f: FunctionK[S, M])(implicit M: Monad[M]): M[A] =
     M.tailRecM(this)(_.step match {
-      case Pure(a) => M.pure(Right(a))
-      case Suspend(sa) => M.map(f(sa))(Right(_))
+      case Pure(a)          => M.pure(Right(a))
+      case Suspend(sa)      => M.map(f(sa))(Right(_))
       case FlatMapped(c, g) => M.map(c.foldMap(f))(cc => Left(g(cc)))
     })
 
@@ -134,29 +163,45 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * If your natural transformation is effectful, be careful. These
    * effects will be applied by `compile`.
    */
-  final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] =
-    foldMap[Free[T, ?]] { // this is safe because Free is stack safe
-      new FunctionK[S, Free[T, ?]] {
-        def apply[B](fa: S[B]): Free[T, B] = Suspend(f(fa))
-      }
-    }(Free.catsFreeMonadForFree)
+  final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] = mapK(f)
+
+  /**
+   * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
+   * to `Free.inject` but lifts programs rather than constructors.
+   *
+   *{{{
+   *scala> type Lo[A] = cats.data.EitherK[List, Option, A]
+   *defined type alias Lo
+   *
+   *scala> val fo = Free.liftF(Option("foo"))
+   *fo: cats.free.Free[Option,String] = Free(...)
+   *
+   *scala> fo.inject[Lo]
+   *res4: cats.free.Free[Lo,String] = Free(...)
+   *}}}
+   */
+  final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
+    mapK(λ[S ~> G](ev.inj(_)))
+
+  final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
+    foldMap[FreeT[S, G, ?]](λ[S ~> FreeT[S, G, ?]](FreeT.liftF(_)))
 
   override def toString: String =
     "Free(...)"
 }
 
-object Free {
+object Free extends FreeInstances {
 
   /**
    * Return from the computation with the given value.
    */
-  private[free] final case class Pure[S[_], A](a: A) extends Free[S, A]
+  final private[free] case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /** Suspend the computation with the given suspension. */
-  private[free] final case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
+  final private[free] case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /** Call a subroutine and continue with the given function. */
-  private[free] final case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
+  final private[free] case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
    * Lift a pure `A` value into the free monad.
@@ -169,76 +214,160 @@ object Free {
   def liftF[F[_], A](value: F[A]): Free[F, A] = Suspend(value)
 
   /**
+   * Absorb a step into the free monad.
+   */
+  def roll[F[_], A](value: F[Free[F, A]]): Free[F, A] =
+    liftF(value).flatMap(identity)
+
+  /**
    * Suspend the creation of a `Free[F, A]` value.
    */
+  @deprecated("Use Free.defer.", "1.0.0-MF")
   def suspend[F[_], A](value: => Free[F, A]): Free[F, A] =
+    defer(value)
+
+  /**
+   * Defer the creation of a `Free[F, A]` value.
+   */
+  def defer[F[_], A](value: => Free[F, A]): Free[F, A] =
     pure(()).flatMap(_ => value)
+
+  /**
+   * a FunctionK, suitable for composition, which calls mapK
+   */
+  def mapK[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
+    λ[FunctionK[Free[F, ?], Free[G, ?]]](f => f.mapK(fk))
 
   /**
    * a FunctionK, suitable for composition, which calls compile
    */
   def compile[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, ?], Free[G, ?]] =
-    new FunctionK[Free[F, ?], Free[G, ?]] {
-      def apply[A](f: Free[F, A]): Free[G, A] = f.compile(fk)
-    }
+    mapK(fk)
+
   /**
    * a FunctionK, suitable for composition, which calls foldMap
    */
   def foldMap[F[_], M[_]: Monad](fk: FunctionK[F, M]): FunctionK[Free[F, ?], M] =
-    new FunctionK[Free[F, ?], M] {
-      def apply[A](f: Free[F, A]): M[A] = f.foldMap(fk)
-    }
+    λ[FunctionK[Free[F, ?], M]](f => f.foldMap(fk))
 
   /**
-   * This method is used to defer the application of an Inject[F, G]
+   * This method is used to defer the application of an InjectK[F, G]
    * instance. The actual work happens in
-   * `FreeInjectPartiallyApplied#apply`.
+   * `FreeInjectKPartiallyApplied#apply`.
    *
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  def inject[F[_], G[_]]: FreeInjectPartiallyApplied[F, G] =
-    new FreeInjectPartiallyApplied
+  // TODO to be deprecated / removed in cats 2.0
+  def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
+    new FreeInjectKPartiallyApplied
 
   /**
-   * Pre-application of an injection to a `F[A]` value.
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final class FreeInjectPartiallyApplied[F[_], G[_]] private[free] {
-    def apply[A](fa: F[A])(implicit I: Inject[F, G]): Free[G, A] =
+  final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
+
+  /**
+   * This method is used to defer the application of an InjectK[F, G]
+   * instance. The actual work happens in
+   * `FreeLiftInjectKPartiallyApplied#apply`.
+   *
+   * This method exists to allow the `G` parameter to be
+   * bound independently of the `F` and `A` parameters below.
+   */
+  def liftInject[G[_]]: FreeLiftInjectKPartiallyApplied[G] =
+    new FreeLiftInjectKPartiallyApplied
+
+  /**
+   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   */
+  final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
+      Free.liftF(I.inj(fa))
+  }
+
+  def injectRoll[F[_], G[_], A](ga: G[Free[F, A]])(implicit I: InjectK[G, F]): Free[F, A] =
+    Free.roll(I.inj(ga))
+
+  def match_[F[_], G[_], A](fa: Free[F, A])(implicit F: Functor[F], I: InjectK[G, F]): Option[G[Free[F, A]]] =
+    fa.resume.fold(I.prj(_), _ => None)
+
+  implicit def catsFreeMonadForId: Monad[Free[Id, ?]] = catsFreeMonadForFree[Id]
+
+  implicit def catsFreeDeferForId: Defer[Free[Id, ?]] = catsFreeDeferForFree[Id]
+}
+
+private trait FreeFoldable[F[_]] extends Foldable[Free[F, ?]] {
+
+  implicit def F: Foldable[F]
+
+  final override def foldLeft[A, B](fa: Free[F, A], b: B)(f: (B, A) => B): B =
+    fa.foldStep(
+      a => f(b, a),
+      fa => F.foldLeft(fa, b)(f),
+      { case (fx, g) => F.foldLeft(fx, b)((bb, x) => foldLeft(g(x), bb)(f)) }
+    )
+
+  final override def foldRight[A, B](fa: Free[F, A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    fa.foldStep(
+      a => f(a, lb),
+      fa => F.foldRight(fa, lb)(f),
+      { case (fx, g) => F.foldRight(fx, lb)((a, lbb) => foldRight(g(a), lbb)(f)) }
+    )
+}
+
+private trait FreeTraverse[F[_]] extends Traverse[Free[F, ?]] with FreeFoldable[F] {
+  implicit def TraversableF: Traverse[F]
+
+  def F: Foldable[F] = TraversableF
+
+  final override def traverse[G[_], A, B](fa: Free[F, A])(f: A => G[B])(implicit G: Applicative[G]): G[Free[F, B]] =
+    fa.resume match {
+      case Right(a)     => G.map(f(a))(Free.pure(_))
+      case Left(ffreeA) => G.map(TraversableF.traverse(ffreeA)(traverse(_)(f)))(Free.roll(_))
+    }
+
+  // Override Traverse's map to use Free's map for better performance
+  final override def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = fa.map(f)
+}
+
+sealed abstract private[free] class FreeInstances extends FreeInstances1 {
 
   /**
    * `Free[S, ?]` has a monad for any type constructor `S[_]`.
    */
   implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, ?]] =
-    new Monad[Free[S, ?]] {
+    new Monad[Free[S, ?]] with StackSafeMonad[Free[S, ?]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
-      def tailRecM[A, B](a: A)(f: A => Free[S, Either[A, B]]): Free[S, B] =
-        f(a).flatMap {
-          case Left(a1) => tailRecM(a1)(f) // recursion OK here, since Free is lazy
-          case Right(b) => pure(b)
-        }
     }
 
-  /**
-   * Perform a stack-safe monadic fold from the source context `F`
-   * into the target monad `G`.
-   *
-   * This method can express short-circuiting semantics. Even when
-   * `fa` is an infinite structure, this method can potentially
-   * terminate if the `foldRight` implementation for `F` and the
-   * `tailRecM` implementation for `G` are sufficiently lazy.
-   */
-  def foldLeftM[F[_]: Foldable, G[_]: Monad, A, B](fa: F[A], z: B)(f: (B, A) => G[B]): G[B] =
-    unsafeFoldLeftM[F, Free[G, ?], A, B](fa, z) { (b, a) =>
-      Free.liftF(f(b, a))
-    }.runTailRec
+  implicit def catsFreeDeferForFree[S[_]]: Defer[Free[S, ?]] =
+    new Defer[Free[S, ?]] {
+      def defer[A](fa: => Free[S, A]): Free[S, A] =
+        Free.defer(fa)
+    }
+}
 
-  private def unsafeFoldLeftM[F[_], G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit F: Foldable[F], G: Monad[G]): G[B] =
-    F.foldRight(fa, Always((w: B) => G.pure(w))) { (a, lb) =>
-      Always((w: B) => G.flatMap(f(w, a))(lb.value))
-    }.value.apply(z)
+sealed abstract private[free] class FreeInstances1 {
+
+  implicit def catsFreeFoldableForFree[F[_]](
+    implicit
+    foldableF: Foldable[F]
+  ): Foldable[Free[F, ?]] =
+    new FreeFoldable[F] {
+      val F = foldableF
+    }
+
+  implicit def catsFreeTraverseForFree[F[_]](
+    implicit
+    traversableF: Traverse[F]
+  ): Traverse[Free[F, ?]] =
+    new FreeTraverse[F] {
+      val TraversableF = traversableF
+    }
 }

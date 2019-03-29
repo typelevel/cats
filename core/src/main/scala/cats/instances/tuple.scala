@@ -1,9 +1,35 @@
 package cats
 package instances
 
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
+
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
+
+trait Tuple2InstancesBinCompat0 {
+
+  /**
+   * Witness for: (A, A) <-> Boolean => A
+   */
+  implicit def catsDataRepresentableForPair(
+    implicit PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
+    override type Representation = Boolean
+    override val F: Functor[λ[P => (P, P)]] = PF
+
+    override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
+
+    override def index[A](pair: (A, A)): Boolean => A = {
+      case true  => pair._1
+      case false => pair._2
+    }
+  }
+
+  implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
+    override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
+  }
+}
 
 sealed trait Tuple2Instances extends Tuple2Instances1 {
   implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
@@ -14,18 +40,18 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
         g(f(c, fab._1), fab._2)
 
-      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
 
   implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
-    override def show(f: (A, B)): String = {
+    override def show(f: (A, B)): String =
       s"(${aShow.show(f._1)},${bShow.show(f._2)})"
-    }
   }
 
-  implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] =
-    new Traverse[(X, ?)] with Comonad[(X, ?)] {
+  implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] =
+    new Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))
 
@@ -40,17 +66,63 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def extract[A](fa: (X, A)): A = fa._2
 
       override def coflatten[A](fa: (X, A)): (X, (X, A)) = (fa._1, fa)
+
+      override def foldMap[A, B](fa: (X, A))(f: A => B)(implicit B: Monoid[B]): B = f(fa._2)
+
+      override def reduce[A](fa: (X, A))(implicit A: Semigroup[A]): A = fa._2
+
+      def reduceLeftTo[A, B](fa: (X, A))(f: A => B)(g: (B, A) => B): B = f(fa._2)
+
+      override def reduceLeft[A](fa: (X, A))(f: (A, A) => A): A = fa._2
+
+      override def reduceLeftToOption[A, B](fa: (X, A))(f: A => B)(g: (B, A) => B): Option[B] =
+        Some(f(fa._2))
+
+      override def reduceRight[A](fa: (X, A))(f: (A, Eval[A]) => Eval[A]): Eval[A] =
+        Now(fa._2)
+
+      def reduceRightTo[A, B](fa: (X, A))(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Now(f(fa._2))
+
+      override def reduceRightToOption[A, B](fa: (X, A))(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
+        Now(Some(f(fa._2)))
+
+      override def reduceMap[A, B](fa: (X, A))(f: A => B)(implicit B: Semigroup[B]): B =
+        f(fa._2)
+
+      override def size[A](fa: (X, A)): Long = 1L
+
+      override def get[A](fa: (X, A))(idx: Long): Option[A] =
+        if (idx == 0L) Some(fa._2) else None
+
+      override def exists[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)
+
+      override def forall[A](fa: (X, A))(p: A => Boolean): Boolean = p(fa._2)
+
+      override def isEmpty[A](fa: (X, A)): Boolean = false
     }
 }
 
 sealed trait Tuple2Instances1 extends Tuple2Instances2 {
+  implicit def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, ?)] =
+    new FlatMapTuple2[X](MX) with CommutativeMonad[(X, ?)] {
+      def pure[A](a: A): (X, A) = (MX.empty, a)
+    }
+}
+
+sealed trait Tuple2Instances2 extends Tuple2Instances3 {
+  implicit def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, ?)] =
+    new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, ?)]
+}
+
+sealed trait Tuple2Instances3 extends Tuple2Instances4 {
   implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, ?)] =
     new FlatMapTuple2[X](MX) with Monad[(X, ?)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances2 {
+sealed trait Tuple2Instances4 {
   implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, ?)] =
     new FlatMapTuple2[X](SX)
 }
@@ -76,8 +148,11 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     (x, xb._2)
   }
 
-  override def followedBy[A, B](a: (X, A))(b: (X, B)): (X, B) =
+  override def productR[A, B](a: (X, A))(b: (X, B)): (X, B) =
     (s.combine(a._1, b._1), b._2)
+
+  override def productL[A, B](a: (X, A))(b: (X, B)): (X, A) =
+    (s.combine(a._1, b._1), a._2)
 
   override def mproduct[A, B](fa: (X, A))(f: A => (X, B)): (X, (A, B)) = {
     val xb = f(fa._2)
@@ -90,10 +165,10 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     def loop(x: X, aa: A): (X, B) =
       f(aa) match {
         case (nextX, Left(nextA)) => loop(s.combine(x, nextX), nextA)
-        case (nextX, Right(b)) => (s.combine(x, nextX), b)
+        case (nextX, Right(b))    => (s.combine(x, nextX), b)
       }
     f(a) match {
-      case (x, Right(b)) => (x, b)
+      case (x, Right(b))    => (x, b)
       case (x, Left(nextA)) => loop(x, nextA)
     }
   }
