@@ -6,10 +6,9 @@ import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
 import org.scalatest.FunSuite
-import cats.laws.discipline.{ApplicativeErrorTests, NonEmptyParallelTests, ParallelTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.Arbitrary
 import org.typelevel.discipline.scalatest.Discipline
 import scala.collection.immutable.SortedSet
 
@@ -353,12 +352,13 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
            SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
 
   {
-    implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
+    implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
     checkAll(
-      "Parallel[KlesliT[M, ?], Nested[F, Option, ?]]",
-      ParallelTests[Kleisli[Either[String, ?], Int, ?], Kleisli[Validated[String, ?], Int, ?]].parallel[Int, String]
+      "Parallel[KlesliT[M, A, ?], Kleisli[F, A, ?]]",
+      ParallelTests[Kleisli[Either[String, ?], MiniInt, ?], Kleisli[Validated[String, ?], MiniInt, ?]]
+        .parallel[Int, String]
     )
   }
 
