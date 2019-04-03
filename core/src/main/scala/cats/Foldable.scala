@@ -98,7 +98,7 @@ import Foldable.sentinel
   def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
     Defer[G].defer(
       this.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(fn(elem, acc(z)))
+        Defer[G].defer(acc(fn(elem, z)))
       }(gb)
     )
 
