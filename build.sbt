@@ -1,5 +1,9 @@
+import java.time.LocalDateTime
+
 import microsites._
 import ReleaseTransformations._
+import sbt.io.Using
+
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
@@ -18,7 +22,24 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
+val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
+val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
+isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
+
+crossScalaVersionsFromTravis in Global := {
+  val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
+  import collection.JavaConverters._
+  Using.fileInputStream(manifest) { fis =>
+    List(new org.yaml.snakeyaml.Yaml().load(fis))
+      .collect { case map: java.util.Map[_, _] => map.asScala.toList }
+      .flatMap(_.collect {
+        case (k: String, v: String) if k.contains("scala_version_") => v
+      })
+  }
+}
+
 lazy val commonSettings = Seq(
+  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories ++= {
     val bd = baseDirectory.value
@@ -610,6 +631,7 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
+    crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
     libraryDependencies ++= List(
       {
@@ -743,7 +765,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;++2.11.12;validateBC")
+addCommandAlias("prePR", ";fmt;++2.11.12 mimaReportBinaryIssues")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
