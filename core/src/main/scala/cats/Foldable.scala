@@ -95,13 +95,6 @@ import Foldable.sentinel
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
-  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
-    Defer[G].defer(
-      this.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(acc(fn(elem, z)))
-      }(gb)
-    )
-
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
       case (Some(b), a) => Some(g(b, a))
