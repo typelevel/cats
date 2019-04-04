@@ -10,32 +10,31 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 
 class AndThenSuite extends CatsSuite {
-  {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[Int, ?]]
-    checkAll("AndThen[Int, Int]", SemigroupalTests[AndThen[Int, ?]].semigroupal[Int, Int, Int])
-    checkAll("Semigroupal[AndThen[Int, ?]]", SerializableTests.serializable(Semigroupal[AndThen[Int, ?]]))
-  }
+  checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, ?]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[AndThen[Int, ?]]", SerializableTests.serializable(Semigroupal[AndThen[Int, ?]]))
 
   {
     implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[?, Int]]
-    checkAll("AndThen[Int, Int]", ContravariantMonoidalTests[AndThen[?, Int]].contravariantMonoidal[Int, Int, Int])
+    checkAll("AndThen[?, Int]",
+             ContravariantMonoidalTests[AndThen[?, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean])
     checkAll("ContravariantMonoidal[AndThen[?, Int]]",
              SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
   }
 
-  checkAll("AndThen[Int, Int]", MonadTests[AndThen[Int, ?]].monad[Int, Int, Int])
+  checkAll("AndThen[MiniInt, Int]", MonadTests[AndThen[MiniInt, ?]].monad[Int, Int, Int])
   checkAll("Monad[AndThen[Int, ?]]", SerializableTests.serializable(Monad[AndThen[Int, ?]]))
 
-  checkAll("AndThen[Int, Int]", CommutativeArrowTests[AndThen].commutativeArrow[Int, Int, Int, Int, Int, Int])
+  checkAll("AndThen",
+           CommutativeArrowTests[AndThen].commutativeArrow[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean])
   checkAll("Arrow[AndThen]", SerializableTests.serializable(CommutativeArrow[AndThen]))
 
-  checkAll("AndThen[Int, Int]", ChoiceTests[AndThen].choice[Int, Int, Int, Int])
+  checkAll("AndThen", ChoiceTests[AndThen].choice[MiniInt, Boolean, Int, Int])
   checkAll("Choice[AndThen]", SerializableTests.serializable(Choice[AndThen]))
 
-  checkAll("AndThen[Int, Int]", ArrowChoiceTests[AndThen].arrowChoice[Int, Int, Int, Int, Int, Int])
+  checkAll("AndThen", ArrowChoiceTests[AndThen].arrowChoice[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean])
   checkAll("ArrowChoice[AndThen]", SerializableTests.serializable(ArrowChoice[AndThen]))
 
-  checkAll("AndThen[Int, Int]", ContravariantTests[AndThen[?, Int]].contravariant[Int, Int, Int])
+  checkAll("AndThen[?, Int]", ContravariantTests[AndThen[?, Int]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[AndThen[?, Int]]", SerializableTests.serializable(Contravariant[AndThen[?, Int]]))
 
   test("compose a chain of functions with andThen") {

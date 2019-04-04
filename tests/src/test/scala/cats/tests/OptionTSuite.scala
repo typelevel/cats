@@ -85,7 +85,7 @@ class OptionTSuite extends CatsSuite {
     Contravariant[Show]
     Contravariant[OptionT[Show, ?]]
 
-    checkAll("OptionT[Show, ?]", ContravariantTests[OptionT[Show, ?]].contravariant[Int, Int, Int])
+    checkAll("OptionT[Show, ?]", ContravariantTests[OptionT[Show, ?]].contravariant[MiniInt, Int, Boolean])
     checkAll("Contravariant[OptionT[Show, ?]]", SerializableTests.serializable(Contravariant[OptionT[Show, ?]]))
   }
 

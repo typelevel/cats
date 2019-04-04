@@ -3,10 +3,11 @@ package tests
 
 import cats.arrow.FunctionK
 import cats.free.FreeInvariantMonoidal
-import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
+import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Gen}
-import cats.tests.CsvCodecInvariantMonoidalSuite._
+import cats.tests.BinCodecInvariantMonoidalSuite._
 
 class FreeInvariantMonoidalSuite extends CatsSuite {
   implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]],
@@ -25,24 +26,25 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
       }
     }
 
-  implicit val isoFreeCsvCodec = Isomorphisms.invariant[FreeInvariantMonoidal[CsvCodec, ?]]
+  implicit val isoFreeBinCodec = Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, ?]]
 
-  checkAll("FreeInvariantMonoidal[CsvCodec, ?]",
-           InvariantMonoidalTests[FreeInvariantMonoidal[CsvCodec, ?]].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[FreeInvariantMonoidal[CsvCodec, ?]]",
-           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[CsvCodec, ?]]))
+  checkAll("FreeInvariantMonoidal[BinCodec, ?]",
+           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, ?]].invariantMonoidal[MiniInt, Boolean, Boolean])
+  checkAll("InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]",
+           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]))
 
   test("FreeInvariantMonoidal#fold") {
-    val n = 2
-    val i1 = numericSystemCodec(8)
-    val i2 = InvariantMonoidal[CsvCodec].point(n)
-    val iExpr = i1.product(i2.imap(_ * 2)(_ / 2))
+    forAll { i1: BinCodec[MiniInt] =>
+      val n = MiniInt.unsafeFromInt(2)
+      val i2 = InvariantMonoidal[BinCodec].point(n)
+      val iExpr = i1.product(i2.imap(_ * n)(_ / n))
 
-    val f1 = FreeInvariantMonoidal.lift[CsvCodec, Int](i1)
-    val f2 = FreeInvariantMonoidal.pure[CsvCodec, Int](n)
-    val fExpr = f1.product(f2.imap(_ * 2)(_ / 2))
+      val f1 = FreeInvariantMonoidal.lift[BinCodec, MiniInt](i1)
+      val f2 = FreeInvariantMonoidal.pure[BinCodec, MiniInt](n)
+      val fExpr = f1.product(f2.imap(_ * n)(_ / n))
 
-    fExpr.fold should ===(iExpr)
+      fExpr.fold should ===(iExpr)
+    }
   }
 
   implicit val idIsInvariantMonoidal: InvariantMonoidal[Id] = new InvariantMonoidal[Id] {

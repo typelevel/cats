@@ -5,7 +5,6 @@ import cats._
 import cats.arrow.FunctionK
 import cats.data._
 import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 import cats.instances.option._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -247,7 +246,7 @@ trait FreeTSuiteInstances {
   import cats.tests.IndexedStateTSuite._
   import SemigroupalTests._
 
-  type IntState[A] = State[Int, A]
+  type IntState[A] = State[MiniInt, A]
   type FreeTOption[A] = FreeT[Option, Option, A]
   type FreeTState[A] = FreeT[IntState, IntState, A]
 
@@ -260,16 +259,6 @@ trait FreeTSuiteInstances {
   implicit val jfFunctor: Functor[JustFunctor] = new Functor[JustFunctor] {
     override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
   }
-
-  implicit val intEq: Eq[Int] = new Eq[Int] {
-    def eqv(a: Int, b: Int) = a == b
-  }
-
-  implicit def evalEq[A: Eq]: Eq[Eval[A]] = Eval.catsEqForEval[A]
-
-  implicit def intStateEq[A: Eq]: Eq[IntState[A]] = stateEq[Int, A]
-
-  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = catsLawArbitraryForState[Int, A]
 
   implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))

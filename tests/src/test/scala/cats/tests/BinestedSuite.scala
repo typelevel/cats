@@ -28,13 +28,17 @@ class BinestedSuite extends CatsSuite {
 
   {
     // Profunctor + Functor + Functor = Profunctor
-    implicit val instance = ListWrapper.functor
+    implicit val instance = OptionWrapper.functor
+    Eq[OptionWrapper[MiniInt] => Option[Int]]
     checkAll(
-      "Binested[Function1, ListWrapper, Option, ?, ?]",
-      ProfunctorTests[Binested[Function1, ListWrapper, Option, ?, ?]].profunctor[Int, Int, Int, String, String, String]
+      "Binested[Function1, OptionWrapper, Option, ?, ?]",
+      ProfunctorTests[Binested[Function1, OptionWrapper, Option, ?, ?]]
+        .profunctor[MiniInt, Int, Int, String, String, String]
     )
-    checkAll("Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]",
-             SerializableTests.serializable(Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]))
+    checkAll(
+      "Profunctor[Binested[Function1, OptionWrapper, Option, ?, ?]]",
+      SerializableTests.serializable(Profunctor[Binested[Function1, OptionWrapper, Option, ?, ?]])
+    )
   }
 
   {
