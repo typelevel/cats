@@ -303,31 +303,6 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     import cats.syntax.foldable._
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
   }
-
-  /**
-   * Right associative lazy fold on `F` using the folding function 'f'
-   * provided that `G[_]` has a `Defer[G]` instance in scope.
-   *
-   * For more detailed information about how this method works see the
-   * documentation for `Defer[F]`.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.Eval, cats.implicits._
-   * scala> val fa = Option(1)
-   *
-   * Folding by addition to zero:
-   * With syntax extensions, we can write the same thing like this:
-   * scala> val folded2 = fa.foldRightDefer(Eval.now(0))((n, a) => a.map(_ + n))
-   * scala> folded2.value
-   * res1: Int = 1
-   * }}}
-   */
-  def foldRightDefer[G[_]: Defer, B](gb: G[B])(fn: (A, G[B]) => G[B])(implicit F: Foldable[F]): G[B] = {
-    import cats.syntax.foldable._
-    F.foldRightDefer(fa, gb)(fn)
-  }
-
 }
 
 final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
@@ -406,30 +381,4 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
     import cats.instances.either._
     partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
   }
-
-  /**
-   * Right associative lazy fold on `F` using the folding function 'f'
-   * provided that `G[_]` has a `Defer[G]` instance in scope.
-   *
-   * For more detailed information about how this method works see the
-   * documentation for `Defer[F]`.
-   *
-   * Example:
-   * {{{
-   * scala> import cats.Foldable, cats.Eval, cats.implicits._
-   * scala> val fa = Option(1)
-   *
-   * Folding by addition to zero:
-   * scala> val folded1 = Foldable[Option].foldRightDefer(fa, Eval.now(0))((n, a) => a.map(_ + n))
-   * Since `foldRightDefer` yields a lazy computation, we need to force it to inspect the result:
-   * scala> folded1.value
-   * res0: Int = 1
-   * }}}
-   */
-  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
-    Defer[G].defer(
-      F.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(acc(fn(elem, z)))
-      }(gb)
-    )
 }
