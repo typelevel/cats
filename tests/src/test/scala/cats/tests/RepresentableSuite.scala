@@ -3,7 +3,14 @@ package cats.tests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.{BimonadTests, MiniInt, MonadTests, RepresentableTests, SerializableTests}
+import cats.laws.discipline.{
+  BimonadTests,
+  DistributiveTests,
+  MiniInt,
+  MonadTests,
+  RepresentableTests,
+  SerializableTests
+}
 import cats.{Bimonad, Eq, Eval, Id, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
@@ -60,12 +67,17 @@ class RepresentableSuite extends CatsSuite {
   }
 
   {
-    //the monadInstance below made a conflict to resolve this one.
+    // the monadInstance below made a conflict to resolve this one.
     // TODO ceedubs is this needed?
     implicit val isoFun1: Isomorphisms[MiniInt => ?] = Isomorphisms.invariant[MiniInt => ?]
 
     implicit val monadInstance = Representable.monad[MiniInt => ?]
     checkAll("MiniInt => ?", MonadTests[MiniInt => ?].monad[String, String, String])
+  }
+
+  {
+    implicit val distributiveInstance = Representable.distributive[Pair]
+    checkAll("Pair[Int]", DistributiveTests[Pair].distributive[Int, Int, Int, Option, MiniInt => ?])
   }
 
   // Syntax tests. If it compiles is "passes"
