@@ -1,6 +1,6 @@
 package cats.syntax
 
-import cats.{FlatMap, Foldable, Monad, Parallel, Traverse}
+import cats.{Bitraverse, FlatMap, Foldable, Monad, Parallel, Traverse}
 
 trait ParallelSyntax extends TupleParallelSyntax {
 
@@ -37,6 +37,28 @@ trait ParallelTraverseSyntax {
 
   implicit final def catsSyntaxParallelSequence_[T[_]: Foldable, M[_], A](tma: T[M[A]]): ParallelSequence_Ops[T, M, A] =
     new ParallelSequence_Ops[T, M, A](tma)
+}
+
+trait ParallelBitraverseSyntax {
+  implicit final def catsSyntaxParallelBitraverse[T[_, _]: Bitraverse, A, B](
+    tab: T[A, B]
+  ): ParallelBitraverseOps[T, A, B] =
+    new ParallelBitraverseOps[T, A, B](tab)
+
+  implicit final def catsSyntaxParallelBisequence[T[_, _]: Bitraverse, M[_], A, B](
+    tmamb: T[M[A], M[B]]
+  ): ParallelBisequenceOps[T, M, A, B] =
+    new ParallelBisequenceOps[T, M, A, B](tmamb)
+
+  implicit final def catsSyntaxParallelLeftTraverse[T[_, _]: Bitraverse, A, B](
+    tab: T[A, B]
+  ): ParallelLeftTraverseOps[T, A, B] =
+    new ParallelLeftTraverseOps[T, A, B](tab)
+
+  implicit final def catsSyntaxParallelLeftSequence[T[_, _]: Bitraverse, M[_], A, B](
+    tmab: T[M[A], B]
+  ): ParallelLeftSequenceOps[T, M, A, B] =
+    new ParallelLeftSequenceOps[T, M, A, B](tmab)
 }
 
 final class ParallelTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
@@ -85,4 +107,25 @@ final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>[F[_]](ma: M[A])(implicit P: Parallel[M, F]): M[B] =
     Parallel.parAp(mab)(ma)
+}
+
+final class ParallelBitraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {
+  def parBitraverse[M[_], F[_], C, D](f: A => M[C], g: B => M[D])(implicit T: Bitraverse[T],
+                                                                  P: Parallel[M, F]): M[T[C, D]] =
+    Parallel.parBitraverse(tab)(f, g)
+}
+
+final class ParallelBisequenceOps[T[_, _], M[_], A, B](private val tmamb: T[M[A], M[B]]) extends AnyVal {
+  def parBisequence[F[_]](implicit T: Bitraverse[T], P: Parallel[M, F]): M[T[A, B]] =
+    Parallel.parBisequence(tmamb)
+}
+
+final class ParallelLeftTraverseOps[T[_, _], A, B](private val tab: T[A, B]) extends AnyVal {
+  def parLeftTraverse[M[_], F[_], C](f: A => M[C])(implicit T: Bitraverse[T], P: Parallel[M, F]): M[T[C, B]] =
+    Parallel.parLeftTraverse(tab)(f)
+}
+
+final class ParallelLeftSequenceOps[T[_, _], M[_], A, B](private val tmab: T[M[A], B]) extends AnyVal {
+  def parLeftSequence[F[_]](implicit T: Bitraverse[T], P: Parallel[M, F]): M[T[A, B]] =
+    Parallel.parLeftSequence(tmab)
 }
