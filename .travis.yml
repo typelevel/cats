@@ -18,7 +18,7 @@ scala_version_213: &scala_version_213 2.13.0-RC1
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
- - mkdir -p $HOME/.triplequote && echo "$HydraLicense" > "$HOME/.triplequote/hydra.license"
+ - mkdir -p  /home/travis/.triplequote && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license"
 
 stages:
   - name: styling
