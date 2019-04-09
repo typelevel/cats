@@ -18,3 +18,8 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.27")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.3.9")
 addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "1.5.1")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")
+
+resolvers += Resolver.url("Triplequote Plugins Releases",
+  url("https://repo.triplequote.com/artifactory/sbt-plugins-release/"))(Resolver.ivyStylePatterns)
+
+addSbtPlugin("com.triplequote" % "sbt-hydra" % "2.1.2")

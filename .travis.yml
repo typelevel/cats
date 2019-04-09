@@ -18,6 +18,7 @@ scala_version_213: &scala_version_213 2.13.0-RC1
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
+ - mkdir -p $HOME/.triplequote && echo "$HydraLicense" > "$HOME/.triplequote/hydra.license"
 
 stages:
   - name: styling
@@ -91,7 +92,7 @@ env:
     - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
     - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
     - TRAVIS_NODE_VERSION="4"
-
+    - secure: "wCgbhaAzGWCIpHldNFr8c9cAb1DM01HZh6nhOmj49QSvGcrS6jOYCPwZxwia4tZX0AwfVQ/lp0U+hdDXA7yyJWDwXMp2XxLmOExFMhZdmDmnLVLNqf76hIiRyL+wDiRuixyX1WDNBk1cCmMaIyubAfGPom9RFWhQadmnq0Wjsz0="
 cache:
   directories:
     - $HOME/.m2
