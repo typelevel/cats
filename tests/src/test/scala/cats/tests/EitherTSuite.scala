@@ -325,6 +325,12 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("foldF with Id consistent with Either fold") {
+    forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
+      eithert.foldF(f, g) should ===(eithert.value.fold(f, g))
+    }
+  }
+
   test("valueOr with Id consistent with Either valueOr") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Int) =>
       eithert.valueOr(f) should ===(eithert.value.valueOr(f))

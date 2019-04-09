@@ -15,6 +15,8 @@ import cats.syntax.either._
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 
+  def foldF[C](fa: A => F[C], fb: B => F[C])(implicit F: FlatMap[F]): F[C] = F.flatMap(value)(_.fold(fa, fb))
+
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
   def isRight(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isRight)
