@@ -104,4 +104,12 @@ class FunctionKSuite extends CatsSuite {
     assertTypeError("FunctionK.lift(sample[Nothing])")
   }
 
+  test("apply ops") {
+    implicit val lToO: List ~> Option = listToOption
+    implicit val oToL: Option ~> List = optionToList
+
+    FunctionK[List, Option] should be(listToOption)
+    FunctionK[Option, List] should be(optionToList)
+  }
+
 }

@@ -66,6 +66,12 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
 object FunctionK {
 
   /**
+   * Summon an instance from the implicit scope if such an instance
+   * is available.
+   */
+  def apply[F[_], G[_]](implicit instance: F ~> G): F ~> G = instance
+
+  /**
    * The identity transformation of `F` to `F`
    */
   def id[F[_]]: FunctionK[F, F] = λ[FunctionK[F, F]](fa => fa)
