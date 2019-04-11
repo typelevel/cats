@@ -1,6 +1,7 @@
 package cats.evidence
 
 import cats.Id
+import cats.arrow._
 
 /**
  * A value of `A Is B` is proof that the types `A` and `B` are the same. More
@@ -65,7 +66,19 @@ abstract class Is[A, B] extends Serializable {
     substitute[A =:= ?](implicitly[A =:= A])
 }
 
-object Is {
+sealed abstract class IsInstances {
+  import Is._
+
+  /**
+   * The category instance on Leibniz categories.
+   */
+  implicit val leibniz: Category[Is] = new Category[Is] {
+    def id[A]: A Is A = refl[A]
+    def compose[A, B, C](bc: B Is C, ab: A Is B): A Is C = bc.compose(ab)
+  }
+}
+
+object Is extends IsInstances {
 
   /**
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that

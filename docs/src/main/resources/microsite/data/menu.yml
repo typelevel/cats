@@ -40,22 +40,9 @@ options:
        menu_section: applicative
 
   - title: Monads
-    url: typeclasses/functor.html
+    url: typeclasses/monad.html
     menu_type: typeclasses
     menu_section: monads
-
-    nested_options:
-     - title: Functor
-       url: typeclasses/functor.html
-       menu_section: monads
-       menu_section: monads
-     - title: Applicative
-       url: typeclasses/applicative.html
-       menu_section: monads
-     - title: Monad
-       url: typeclasses/monad.html
-       menu_type: typeclasses
-       menu_section: monads
 
   - title: Variance and Functors
     url: typeclasses/functor.html

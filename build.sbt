@@ -1,10 +1,20 @@
+import java.time.LocalDateTime
+
 import microsites._
 import ReleaseTransformations._
+import sbt.io.Using
+
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
+  coverageEnabled := {
+    if (priorTo2_13(scalaVersion.value))
+      coverageEnabled.value
+    else
+      false
+  },
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -12,7 +22,24 @@ lazy val scoverageSettings = Seq(
 
 organization in ThisBuild := "org.typelevel"
 
+val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
+val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
+isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
+
+crossScalaVersionsFromTravis in Global := {
+  val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
+  import collection.JavaConverters._
+  Using.fileInputStream(manifest) { fis =>
+    List(new org.yaml.snakeyaml.Yaml().load(fis))
+      .collect { case map: java.util.Map[_, _] => map.asScala.toList }
+      .flatMap(_.collect {
+        case (k: String, v: String) if k.contains("scala_version_") => v
+      })
+  }
+}
+
 lazy val commonSettings = Seq(
+  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories ++= {
     val bd = baseDirectory.value
@@ -25,12 +52,6 @@ lazy val commonSettings = Seq(
         extraDirs("-2.13+")
       case _ => Nil
     }
-  },
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
   },
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
@@ -51,7 +72,7 @@ def macroDependencies(scalaVersion: String) =
   CrossVersion.partialVersion(scalaVersion) match {
     case Some((2, minor)) if minor < 13 =>
       Seq(
-        compilerPlugin(("org.scalamacros" %% "paradise" % "2.1.0").cross(CrossVersion.patch))
+        compilerPlugin(("org.scalamacros" %% "paradise" % "2.1.1").cross(CrossVersion.patch))
       )
     case _ => Seq()
   }
@@ -68,7 +89,7 @@ lazy val catsSettings = Seq(
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.14.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.15.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -130,27 +151,23 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-// 2.13.0-M4 workarounds
-def catalystsVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.6" else "0.8"
+val catalystsVersion = "0.8"
 
 def scalatestVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
 
-def scalaCheckVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "1.13.5" else "1.14.0"
+val scalaCheckVersion = "1.14.0"
 
-def disciplineVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "0.9.0" else "0.10.0"
+val disciplineVersion = "0.10.0"
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value),
-  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion(scalaVersion.value)
+  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion(scalaVersion.value),
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion(scalaVersion.value) % "test",
+  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
+  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -321,6 +338,7 @@ def mimaSettings(moduleName: String) =
           exclude[DirectMissingMethodProblem]("cats.syntax.DistributiveOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOps.obj"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherIdOpsBinCompat0.value"),
+          exclude[DirectMissingMethodProblem]("cats.syntax.EitherSyntax#CatchOnlyPartiallyApplied.dummy"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherKOps.fa"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherObjectOps.either"),
           exclude[DirectMissingMethodProblem]("cats.syntax.EitherOps.eab"),
@@ -388,9 +406,9 @@ lazy val docs = project
 
 lazy val cats = project
   .in(file("."))
-  .settings(moduleName := "root")
-  .settings(catsSettings)
-  .settings(noPublishSettings)
+  .settings(moduleName := "root", crossScalaVersions := Nil)
+  .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
+  .settings(noPublishSettings) // this is to exclue the root module itself from being published.
   .aggregate(catsJVM, catsJS)
   .dependsOn(catsJVM, catsJS, tests.jvm % "test-internal -> test")
 
@@ -482,7 +500,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -505,7 +523,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion(scalaVersion.value) % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
 
@@ -613,6 +631,7 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
+    crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
     libraryDependencies ++= List(
       {
@@ -746,7 +765,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;++2.11.12;validateBC")
+addCommandAlias("prePR", ";fmt;++2.11.12 mimaReportBinaryIssues")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -803,9 +822,7 @@ def priorTo2_13(scalaVersion: String): Boolean =
   }
 
 lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := true,
   releaseTagName := tagName.value,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseVcsSign := true,
   useGpg := true, // bouncycastle has bugs with subkeys, so we use gpg instead
   publishMavenStyle := true,
@@ -824,12 +841,11 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    runClean,
-    releaseStepCommand("validate"),
+    releaseStepCommandAndRemaining("+validate"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    publishArtifacts,
+    releaseStepCommandAndRemaining("+publishSigned"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),

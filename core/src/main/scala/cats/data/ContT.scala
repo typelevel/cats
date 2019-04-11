@@ -65,14 +65,62 @@ object ContT {
     lazy val runAndThen: AndThen[B => M[A], M[A]] = loop(next).runAndThen
   }
 
+  /** Lift a pure value into `ContT` */
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
     apply { cb =>
       cb(b)
     }
 
+  /**
+   * Similar to [[pure]] but evaluation of the argument is deferred.
+   *
+   * This is useful for building a computation which calls its continuation as the final step.
+   * Instead of writing:
+   *
+   * {{{
+   *   ContT.apply { cb =>
+   *     val x = foo()
+   *     val y = bar(x)
+   *     val z = baz(y)
+   *     cb(z)
+   *   }
+   * }}}
+   *
+   * you can write:
+   *
+   * {{{
+   *   ContT.defer {
+   *     val x = foo()
+   *     val y = bar(x)
+   *     baz(y)
+   *   }
+   * }}}
+   */
+  def defer[M[_], A, B](b: => B): ContT[M, A, B] =
+    apply { cb =>
+      cb(b)
+    }
+
+  /**
+   * Build a computation that makes use of a callback, also known as a continuation.
+   *
+   * Example:
+   *
+   * {{{
+   *   ContT.apply { callback =>
+   *     for {
+   *       a <- doFirstThing()
+   *       b <- doSecondThing(a)
+   *       c <- callback(b)
+   *       d <- doFourthThing(c)
+   *     } yield d
+   *   }
+   * }}}
+   */
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(AndThen(fn))
 
+  /** Similar to [[apply]] but evaluation of the argument is deferred. */
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
     DeferCont(() => FromFn(AndThen(fn)))
 

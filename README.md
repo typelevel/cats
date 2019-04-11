@@ -1,7 +1,9 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
- To help us better plan for 2019, please consider participating in our [Cats Ecosystem Community Survey 2018](https://goo.gl/forms/CYwRqs015SyW6XkC2).
 
+* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
+* **Jan 31 2019** Cats 1.6.0 is released.
+* **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
 
 ## Cats
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
@@ -26,6 +28,9 @@ For more detail about Cats' motivations, go [here](http://typelevel.org/cats/mot
 
 You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
 
+We have an exciting [2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md).
+
+
 ### Getting Started
 
 Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-M4,  and [Scala.js](http://www.scala-js.org/).
@@ -46,7 +51,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.5.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.6.0"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -174,7 +179,7 @@ You can get an overview of who is working on what
 via [Waffle.io](https://waffle.io/typelevel/cats).
 
 People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
 venues.
 
@@ -224,6 +229,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Apple Inc. (FEAR team)](https://news.ycombinator.com/item?id=16969118)
 - [AutoScout24](https://www.autoscout24.com) 
 - [Avast](https://avast.com)
+- [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
@@ -250,6 +256,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
+- [Packlink](https://packlink.com/)
 - [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
 - [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
@@ -257,6 +264,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
+- [Sigma](https://try.sig.ma)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spiceworks](https://www.spiceworks.com/)
 - [Spotahome](https://spotahome.com)
@@ -307,4 +315,4 @@ http://opensource.org/licenses/mit-license.php and also in the
 [COPYING](COPYING) file. The design is informed by many other
 projects, in particular [Scalaz](https://github.com/scalaz/scalaz).
 
-Copyright the maintainers, 2015-2018.
+Copyright the maintainers, 2015-2019.

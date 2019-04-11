@@ -12,7 +12,7 @@ import sbt._
 object Boilerplate {
   import scala.StringContext._
 
-  implicit final class BlockHelper(val sc: StringContext) extends AnyVal {
+  implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
@@ -404,7 +404,7 @@ object Boilerplate {
          -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
       |}
       |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) {
          -  $parMap
          -  $parTupled
          -}
@@ -470,7 +470,7 @@ object Boilerplate {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
       |
-        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}]($tupleTpe) {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) {
         -  $map
         -  $contramap
         -  $imap

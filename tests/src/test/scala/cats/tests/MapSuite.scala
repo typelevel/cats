@@ -5,15 +5,16 @@ import cats.laws.discipline.{
   ComposeTests,
   FlatMapTests,
   FunctorFilterTests,
+  MonoidKTests,
   SemigroupalTests,
   SerializableTests,
   UnorderedTraverseTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.arrow.Compose
+import cats.kernel.instances.StaticMethods.wrapMutableMap
 
 class MapSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
 
   checkAll("Map[Int, Int]", SemigroupalTests[Map[Int, ?]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Map[Int, ?]]", SerializableTests.serializable(Semigroupal[Map[Int, ?]]))
@@ -31,11 +32,19 @@ class MapSuite extends CatsSuite {
   checkAll("Map[Int, Long]", ComposeTests[Map].compose[Int, Long, String, Double])
   checkAll("Compose[Map]", SerializableTests.serializable(Compose[Map]))
 
+  checkAll("Map[Int, Int]", MonoidKTests[Map[Int, ?]].monoidK[Int])
+  checkAll("MonoidK[Map[Int, ?]]", SerializableTests.serializable(MonoidK[Map[Int, ?]]))
+
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>
       map.show.nonEmpty should ===(true)
       map.show.startsWith("Map(") should ===(true)
       map.show should ===(implicitly[Show[Map[Int, String]]].show(map))
     }
+  }
+
+  {
+    val m = wrapMutableMap(scala.collection.mutable.Map(1 -> "one", 2 -> "two"))
+    checkAll("WrappedMutableMap", SerializableTests.serializable(m))
   }
 }

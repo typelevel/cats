@@ -6,7 +6,7 @@ trait EqLaws[A] {
 
   implicit def E: Eq[A]
 
-  def reflexitivityEq(x: A): IsEq[A] =
+  def reflexivityEq(x: A): IsEq[A] =
     x <-> x
 
   def symmetryEq(x: A, y: A): IsEq[Boolean] =

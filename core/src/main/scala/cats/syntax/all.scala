@@ -8,6 +8,7 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat2
     with AllSyntaxBinCompat3
     with AllSyntaxBinCompat4
+    with AllSyntaxBinCompat5
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -81,6 +82,11 @@ trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
 
 trait AllSyntaxBinCompat4
     extends TraverseFilterSyntaxBinCompat0
+    with ApplySyntaxBinCompat0
     with ParallelApplySyntax
     with FoldableSyntaxBinCompat0
     with ReducibleSyntaxBinCompat0
+    with FoldableSyntaxBinCompat1
+    with BitraverseSyntaxBinCompat0
+
+trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax

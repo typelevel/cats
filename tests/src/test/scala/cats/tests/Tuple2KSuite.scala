@@ -19,8 +19,8 @@ class Tuple2KSuite extends CatsSuite {
   checkAll("Alternative[Tuple2K[Option, List, Int]]",
            SerializableTests.serializable(Alternative[λ[α => Tuple2K[Option, List, α]]]))
 
-  checkAll("Tuple2K[Show, Order, Int]",
-           ContravariantTests[λ[α => Tuple2K[Show, Order, α]]].contravariant[Int, Int, Int])
+  checkAll("Tuple2K[Show, Order, MiniInt]",
+           ContravariantTests[λ[α => Tuple2K[Show, Order, α]]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Tuple2K[Show, Order, Int]]",
            SerializableTests.serializable(Contravariant[λ[α => Tuple2K[Show, Order, α]]]))
 

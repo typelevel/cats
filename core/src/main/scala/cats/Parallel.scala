@@ -236,6 +236,52 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
+   * Like `Bitraverse[A].bitraverse`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parBitraverse[T[_, _]: Bitraverse, M[_], F[_], A, B, C, D](
+    tab: T[A, B]
+  )(f: A => M[C], g: B => M[D])(implicit P: Parallel[M, F]): M[T[C, D]] = {
+    val ftcd: F[T[C, D]] =
+      Bitraverse[T].bitraverse(tab)(f.andThen(P.parallel.apply), g.andThen(P.parallel.apply))(P.applicative)
+    P.sequential(ftcd)
+  }
+
+  /**
+   * Like `Bitraverse[A].bisequence`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parBisequence[T[_, _]: Bitraverse, M[_], F[_], A, B](
+    tmamb: T[M[A], M[B]]
+  )(implicit P: Parallel[M, F]): M[T[A, B]] = {
+    val ftab: F[T[A, B]] = Bitraverse[T].bitraverse(tmamb)(P.parallel.apply, P.parallel.apply)(P.applicative)
+    P.sequential(ftab)
+  }
+
+  /**
+   * Like `Bitraverse[A].leftTraverse`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parLeftTraverse[T[_, _]: Bitraverse, M[_], F[_], A, B, C](
+    tab: T[A, B]
+  )(f: A => M[C])(implicit P: Parallel[M, F]): M[T[C, B]] = {
+    val ftcb: F[T[C, B]] =
+      Bitraverse[T].bitraverse(tab)(f.andThen(P.parallel.apply), P.applicative.pure)(P.applicative)
+    P.sequential(ftcb)
+  }
+
+  /**
+   * Like `Bitraverse[A].leftSequence`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parLeftSequence[T[_, _]: Bitraverse, M[_], F[_], A, B](
+    tmab: T[M[A], B]
+  )(implicit P: Parallel[M, F]): M[T[A, B]] = {
+    val ftab: F[T[A, B]] = Bitraverse[T].bitraverse(tmab)(P.parallel.apply, P.applicative.pure)(P.applicative)
+    P.sequential(ftab)
+  }
+
+  /**
    * Like `Applicative[F].ap`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */

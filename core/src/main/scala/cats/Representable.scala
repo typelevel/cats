@@ -93,6 +93,16 @@ private trait RepresentableBimonad[F[_], R] extends RepresentableMonad[F, R] wit
     R.index(fa)(M.empty)
 }
 
+private trait RepresentableDistributive[F[_], R] extends Distributive[F] {
+
+  def R: Representable.Aux[F, R]
+
+  override def distribute[G[_], A, B](ga: G[A])(f: A => F[B])(implicit G: Functor[G]): F[G[B]] =
+    R.tabulate(r => G.map(ga)(a => R.index(f(a))(r)))
+
+  override def map[A, B](fa: F[A])(f: A => B): F[B] = R.F.map(fa)(f)
+}
+
 object Representable {
   type Aux[F[_], R] = Representable[F] { type Representation = R }
 
@@ -119,12 +129,20 @@ object Representable {
   }
 
   /**
-   * Derives a `Bimonad` instance for any `Representable` functor whos representation
+   * Derives a `Bimonad` instance for any `Representable` functor whose representation
    * has a `Monoid` instance.
    */
   def bimonad[F[_], R](implicit Rep: Representable.Aux[F, R], Mon: Monoid[R]): Bimonad[F] =
     new RepresentableBimonad[F, R] {
       override def R: Representable.Aux[F, R] = Rep
       override def M: Monoid[R] = Mon
+    }
+
+  /**
+   * Derives a `Distributive` instance for any `Representable` functor
+   */
+  def distributive[F[_]](implicit Rep: Representable[F]): Distributive[F] =
+    new RepresentableDistributive[F, Rep.Representation] {
+      override def R: Aux[F, Rep.Representation] = Rep
     }
 }

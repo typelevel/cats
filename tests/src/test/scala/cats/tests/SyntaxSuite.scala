@@ -208,6 +208,20 @@ object SyntaxSuite
     (fa, fb, fc).parMapN(f)
   }
 
+  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel[M, F]): Unit = {
+    val tab = mock[T[A, B]]
+    val f = mock[A => M[C]]
+    val g = mock[B => M[D]]
+    val mtcd = tab.parBitraverse(f, g)
+    val mtcb = tab.parLeftTraverse(f)
+
+    val tmamb = mock[T[M[A], M[B]]]
+    val mtab1 = tmamb.parBisequence
+
+    val tmab = mock[T[M[A], B]]
+    val mtab2 = tmab.parLeftSequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
@@ -307,9 +321,13 @@ object SyntaxSuite
 
     val fab = mock[F[A, B]]
     val gfcd = fab.bitraverse(f, g)
+    val gfcb = fab.leftTraverse(f)
 
     val fgagb = mock[F[G[A], G[B]]]
     val gfab = fgagb.bisequence
+
+    val fgab = mock[F[G[A], B]]
+    val gfab2 = fgab.leftSequence
   }
 
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
