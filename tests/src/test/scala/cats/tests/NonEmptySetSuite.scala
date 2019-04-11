@@ -20,16 +20,40 @@ package tests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data.NonEmptySet
-import cats.kernel.laws.discipline.{EqTests, SemilatticeTests}
+import cats.kernel.Semilattice
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemilatticeTests}
 
 import scala.collection.immutable.SortedSet
 
 class NonEmptySetSuite extends CatsSuite {
 
   checkAll("NonEmptySet[Int]", SemigroupKTests[NonEmptySet].semigroupK[Int])
+  checkAll("SemigroupK[NonEmptySet[A]]", SerializableTests.serializable(SemigroupK[NonEmptySet]))
+
   checkAll("NonEmptySet[Int]", ReducibleTests[NonEmptySet].reducible[Option, Int, Int])
+  checkAll("Reducible[NonEmptySet]", SerializableTests.serializable(Reducible[NonEmptySet]))
+
   checkAll("NonEmptySet[String]", SemilatticeTests[NonEmptySet[String]].band)
+  checkAll("Semilattice[NonEmptySet]", SerializableTests.serializable(Semilattice[NonEmptySet[String]]))
+
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
+  checkAll("Eq[NonEmptySet[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptySet[ListWrapper[Int]]]))
+
+  {
+    implicit val A = ListWrapper.order[Int]
+    checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
+    checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
+             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
+
+    // NOTE: Order[NonEmptySet[A]] instance depends on Order[SortedSet[A]]. SortedSet only has Order instance which depends on Order[A] instance
+    //       and thus the only way we can get PartialOrder[NonEmptySet[A]] is via construction of Order[NonEmptySet[A]]
+    checkAll("NonEmptySet[ListWrapper[Int]]", PartialOrderTests[NonEmptySet[ListWrapper[Int]]].partialOrder)
+    checkAll("PartialOrder[NonEmptySet[ListWrapper[Int]]]",
+             SerializableTests.serializable(PartialOrder[NonEmptySet[ListWrapper[Int]]]))
+
+    Eq[NonEmptySet[ListWrapper[Int]]]
+    PartialOrder[NonEmptySet[ListWrapper[Int]]]
+  }
 
   test("First element is always the smallest") {
     forAll { (nes: NonEmptySet[Int]) =>
