@@ -6,6 +6,7 @@ import simulacrum.typeclass
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
  */
 @typeclass trait Bifoldable[F[_, _]] { self =>
+
   /** Collapse the structure with a left-associative function */
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
 
@@ -36,7 +37,8 @@ private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(
       (c: C, gab: G[A, B]) => G.bifoldLeft(gab, c)(f, g)
     )
 
-  override def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]], c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+  override def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+                                                                          g: (B, Eval[C]) => Eval[C]): Eval[C] =
     F.bifoldRight(fab, c)(
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g),
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g)

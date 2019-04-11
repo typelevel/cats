@@ -6,41 +6,42 @@ import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 
 /** This data type exists purely for testing.
-  *
-  * The problem this type solves is to assist in picking up type class
-  * instances that have more general constraints.
-  *
-  * For instance, OneAnd[?, F[_]] has a Monad instance if F[_] does too.
-  * By extension, it has an Applicative instance, since Applicative is
-  * a superclass of Monad.
-  *
-  * However, if F[_] doesn't have a Monad instance but does have an
-  * Applicative instance (e.g. Validated), you can still get an
-  * Applicative instance for OneAnd[?, F[_]]. These two instances
-  * are different however, and it is a good idea to test to make sure
-  * all "variants" of the instances are lawful.
-  *
-  * By providing this data type, we can have implicit search pick up
-  * a specific type class instance by asking for it explicitly in a block.
-  * Note that ListWrapper has no type class instances in implicit scope,
-  * save for ones related to testing (e.g. Eq, Arbitrary, Cogen).
-  *
-  * {{{
-  * {
-  *   implicit val functor = ListWrapper.functor
-  *   checkAll(..., ...)
-  * }
-  * }}}
-  */
-
+ *
+ * The problem this type solves is to assist in picking up type class
+ * instances that have more general constraints.
+ *
+ * For instance, OneAnd[?, F[_]] has a Monad instance if F[_] does too.
+ * By extension, it has an Applicative instance, since Applicative is
+ * a superclass of Monad.
+ *
+ * However, if F[_] doesn't have a Monad instance but does have an
+ * Applicative instance (e.g. Validated), you can still get an
+ * Applicative instance for OneAnd[?, F[_]]. These two instances
+ * are different however, and it is a good idea to test to make sure
+ * all "variants" of the instances are lawful.
+ *
+ * By providing this data type, we can have implicit search pick up
+ * a specific type class instance by asking for it explicitly in a block.
+ * Note that ListWrapper has no type class instances in implicit scope,
+ * save for ones related to testing (e.g. Eq, Arbitrary, Cogen).
+ *
+ * {{{
+ * {
+ *   implicit val functor = ListWrapper.functor
+ *   checkAll(..., ...)
+ * }
+ * }}}
+ */
 final case class ListWrapper[A](list: List[A]) extends AnyVal
 
 object ListWrapper {
-  def order[A:Order]: Order[ListWrapper[A]] = Order.by(_.list)
+  def order[A: Order]: Order[ListWrapper[A]] = Order.by(_.list)
 
-  def partialOrder[A:PartialOrder]: PartialOrder[ListWrapper[A]] = PartialOrder.by(_.list)
+  def partialOrder[A: PartialOrder]: PartialOrder[ListWrapper[A]] = PartialOrder.by(_.list)
 
-  def eqv[A : Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
+  def eqv[A: Eq]: Eq[ListWrapper[A]] = Eq.by(_.list)
+
+  def hash[A: Hash]: Hash[ListWrapper[A]] = Hash.by(_.list)
 
   val traverse: Traverse[ListWrapper] = {
     val F = Traverse[List]
@@ -50,9 +51,30 @@ object ListWrapper {
         F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         F.foldRight(fa.list, lb)(f)
-      def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] = {
+      def traverse[G[_], A, B](fa: ListWrapper[A])(f: A => G[B])(implicit G0: Applicative[G]): G[ListWrapper[B]] =
         G0.map(F.traverse(fa.list)(f))(ListWrapper.apply)
-      }
+    }
+  }
+
+  val traverseFilter: TraverseFilter[ListWrapper] = {
+    val F = TraverseFilter[List]
+
+    new TraverseFilter[ListWrapper] {
+      def traverse = ListWrapper.traverse
+      def traverseFilter[G[_], A, B](
+        fa: ListWrapper[A]
+      )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[ListWrapper[B]] =
+        G.map(F.traverseFilter(fa.list)(f))(ListWrapper.apply)
+    }
+  }
+
+  val functorFilter: FunctorFilter[ListWrapper] = {
+    val F = FunctorFilter[List]
+
+    new FunctorFilter[ListWrapper] {
+      def functor = ListWrapper.functor
+      def mapFilter[A, B](fa: ListWrapper[A])(f: A => Option[B]): ListWrapper[B] =
+        ListWrapper(F.mapFilter(fa.list)(f))
     }
   }
 
@@ -98,9 +120,11 @@ object ListWrapper {
     val M = Monad[List]
     def pure[A](x: A): ListWrapper[A] = ListWrapper(x :: Nil)
 
-    def flatMap[A, B](fa: ListWrapper[A])(f: (A) => ListWrapper[B]): ListWrapper[B] = ListWrapper(fa.list.flatMap(f(_).list))
+    def flatMap[A, B](fa: ListWrapper[A])(f: (A) => ListWrapper[B]): ListWrapper[B] =
+      ListWrapper(fa.list.flatMap(f(_).list))
 
-    def tailRecM[A, B](a: A)(f: (A) => ListWrapper[Either[A, B]]): ListWrapper[B] = ListWrapper(M.tailRecM(a)(f(_).list))
+    def tailRecM[A, B](a: A)(f: (A) => ListWrapper[Either[A, B]]): ListWrapper[B] =
+      ListWrapper(M.tailRecM(a)(f(_).list))
   }
 
   val flatMap: FlatMap[ListWrapper] = monad

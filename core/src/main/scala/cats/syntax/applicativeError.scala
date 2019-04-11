@@ -1,22 +1,79 @@
 package cats
 package syntax
 
-import cats.data.EitherT
+import cats.data.Validated.{Invalid, Valid}
+import cats.data.{EitherT, Validated}
 
 trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
 
-  implicit final def catsSyntaxApplicativeError[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
+  implicit final def catsSyntaxApplicativeError[F[_], E, A](
+    fa: F[A]
+  )(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
     new ApplicativeErrorOps[F, E, A](fa)
 }
 
-final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
-  def raiseError[F[_], A](implicit F: ApplicativeError[F, E]): F[A] =
+/**
+ * Extension to ApplicativeError in a binary compat way
+ */
+trait ApplicativeErrorExtension {
+  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](
+    F: ApplicativeError[F, E]
+  ): ApplicativeErrorExtensionOps[F, E] =
+    new ApplicativeErrorExtensionOps(F)
+}
+
+final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
+
+  /**
+   * Convert from scala.Option
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   * scala> val F = ApplicativeError[Either[String, ?], String]
+   *
+   * scala> F.fromOption(Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> F.fromOption(Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
+  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
+    ApplicativeError.liftFromOption(oa, ifEmpty)(F)
+
+  /**
+   * Convert from cats.data.Validated
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(().invalid[Int])
+   * res1: scala.Option[Int] = None
+   * }}}
+   */
+  def fromValidated[A](x: Validated[E, A]): F[A] =
+    x match {
+      case Invalid(e) => F.raiseError(e)
+      case Valid(a)   => F.pure(a)
+    }
+
+}
+
+final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {
+  def raiseError[F[_], A](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     F.raiseError(e)
 }
 
-final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
+final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
 
@@ -37,4 +94,7 @@ final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 
   def onError(pf: PartialFunction[E, F[Unit]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.onError(fa)(pf)
+
+  def orElse(other: => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
+    F.handleErrorWith(fa)(_ => other)
 }

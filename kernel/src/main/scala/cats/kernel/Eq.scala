@@ -33,6 +33,7 @@ abstract class EqFunctions[E[T] <: Eq[T]] {
 }
 
 trait EqToEquivConversion {
+
   /**
    * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
    * instance.
@@ -59,23 +60,22 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
     }
 
   /**
-    * Return an Eq that gives the result of the and of eq1 and eq2
-    * note this is idempotent
-    */
+   * Return an Eq that gives the result of the and of eq1 and eq2
+   * note this is idempotent
+   */
   def and[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A) = eq1.eqv(x, y) && eq2.eqv(x, y)
     }
 
   /**
-    * Return an Eq that gives the result of the or of this and that
-    * Note this is idempotent
-    */
+   * Return an Eq that gives the result of the or of this and that
+   * Note this is idempotent
+   */
   def or[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A) = eq1.eqv(x, y) || eq2.eqv(x, y)
     }
-
 
   /**
    * Create an `Eq` instance from an `eqv` implementation.

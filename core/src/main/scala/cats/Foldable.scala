@@ -56,7 +56,6 @@ import Foldable.sentinel
    */
   def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
 
-
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
@@ -99,14 +98,14 @@ import Foldable.sentinel
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
       case (Some(b), a) => Some(g(b, a))
-      case (None, a) => Some(f(a))
+      case (None, a)    => Some(f(a))
     }
 
   def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
     foldRight(fa, Now(Option.empty[B])) { (a, lb) =>
       lb.flatMap {
         case Some(b) => g(a, Now(b)).map(Some(_))
-        case None => Later(Some(f(a)))
+        case None    => Later(Some(f(a)))
       }
     }
 
@@ -195,26 +194,25 @@ import Foldable.sentinel
     reduceLeftOption(fa)(A.max)
 
   /**
-    * Get the element at the index of the `Foldable`.
-    */
+   * Get the element at the index of the `Foldable`.
+   */
   def get[A](fa: F[A])(idx: Long): Option[A] =
     if (idx < 0L) None
     else
       foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
         if (i == idx) Left(a) else Right(i + 1L)
       } match {
-        case Left(a) => Some(a)
+        case Left(a)  => Some(a)
         case Right(_) => None
       }
 
   def collectFirst[A, B](fa: F[A])(pf: PartialFunction[A, B]): Option[B] =
     foldRight(fa, Eval.now(Option.empty[B])) { (a, lb) =>
-      // trick from TravsersableOnce
+      // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
       val x = pf.applyOrElse(a, sentinel)
       if (x.asInstanceOf[AnyRef] ne sentinel) Eval.now(Some(x.asInstanceOf[B]))
       else lb
     }.value
-
 
   /**
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
@@ -271,10 +269,13 @@ import Foldable.sentinel
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
-    G.tailRecM((z, src)) { case (b, src) => src.uncons match {
-      case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
-      case None => G.pure(Right(b))
-    }}
+    G.tailRecM((z, src)) {
+      case (b, src) =>
+        src.uncons match {
+          case Some((a, src)) => G.map(f(b, a))(b => Left((b, src.value)))
+          case None           => G.pure(Right(b))
+        }
+    }
   }
 
   /**
@@ -328,7 +329,9 @@ import Foldable.sentinel
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     foldRight(fa, Always(G.pure(()))) { (a, acc) =>
-      G.map2Eval(f(a), acc) { (_, _) => () }
+      G.map2Eval(f(a), acc) { (_, _) =>
+        ()
+      }
     }.value
 
   /**
@@ -398,76 +401,74 @@ import Foldable.sentinel
     }.value
 
   /**
-    * Check whether at least one element satisfies the effectful predicate.
-    *
-    * If there are no elements, the result is `false`.  `existsM` short-circuits,
-    * i.e. once a `true` result is encountered, no further effects are produced.
-    *
-    * For example:
-    *
-    * {{{
-    * scala> import cats.implicits._
-    * scala> val F = Foldable[List]
-    * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
-    * res0: Option[Boolean] = Some(true)
-    *
-    * scala> F.existsM(List(1,2,3,4))(n => Option(n > 4))
-    * res1: Option[Boolean] = Some(false)
-    *
-    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
-    * res2: Option[Boolean] = Some(true)
-    *
-    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else None)
-    * res3: Option[Boolean] = Some(true)
-    *
-    * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) None else Option(true))
-    * res4: Option[Boolean] = None
-    * }}}
-    */
-  def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
-    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
-      src => src.uncons match {
+   * Check whether at least one element satisfies the effectful predicate.
+   *
+   * If there are no elements, the result is `false`.  `existsM` short-circuits,
+   * i.e. once a `true` result is encountered, no further effects are produced.
+   *
+   * For example:
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val F = Foldable[List]
+   * scala> F.existsM(List(1,2,3,4))(n => Option(n <= 4))
+   * res0: Option[Boolean] = Some(true)
+   *
+   * scala> F.existsM(List(1,2,3,4))(n => Option(n > 4))
+   * res1: Option[Boolean] = Some(false)
+   *
+   * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+   * res2: Option[Boolean] = Some(true)
+   *
+   * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) Option(true) else None)
+   * res3: Option[Boolean] = Some(true)
+   *
+   * scala> F.existsM(List(1,2,3,4))(n => if (n <= 2) None else Option(true))
+   * res4: Option[Boolean] = None
+   * }}}
+   */
+  def existsM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) { src =>
+      src.uncons match {
         case Some((a, src)) => G.map(p(a))(bb => if (bb) Right(true) else Left(src.value))
-        case None => G.pure(Right(false))
+        case None           => G.pure(Right(false))
       }
     }
-  }
 
   /**
-    * Check whether all elements satisfy the effectful predicate.
-    *
-    * If there are no elements, the result is `true`.  `forallM` short-circuits,
-    * i.e. once a `false` result is encountered, no further effects are produced.
-    *
-    * For example:
-    *
-    * {{{
-    * scala> import cats.implicits._
-    * scala> val F = Foldable[List]
-    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
-    * res0: Option[Boolean] = Some(true)
-    *
-    * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 1))
-    * res1: Option[Boolean] = Some(false)
-    *
-    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
-    * res2: Option[Boolean] = Some(false)
-    *
-    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(false) else None)
-    * res3: Option[Boolean] = Some(false)
-    *
-    * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) None else Option(false))
-    * res4: Option[Boolean] = None
-    * }}}
-    */
-  def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] = {
-    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) {
-      src => src.uncons match {
+   * Check whether all elements satisfy the effectful predicate.
+   *
+   * If there are no elements, the result is `true`.  `forallM` short-circuits,
+   * i.e. once a `false` result is encountered, no further effects are produced.
+   *
+   * For example:
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val F = Foldable[List]
+   * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 4))
+   * res0: Option[Boolean] = Some(true)
+   *
+   * scala> F.forallM(List(1,2,3,4))(n => Option(n <= 1))
+   * res1: Option[Boolean] = Some(false)
+   *
+   * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(true) else Option(false))
+   * res2: Option[Boolean] = Some(false)
+   *
+   * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) Option(false) else None)
+   * res3: Option[Boolean] = Some(false)
+   *
+   * scala> F.forallM(List(1,2,3,4))(n => if (n <= 2) None else Option(false))
+   * res4: Option[Boolean] = None
+   * }}}
+   */
+  def forallM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self)) { src =>
+      src.uncons match {
         case Some((a, src)) => G.map(p(a))(bb => if (!bb) Right(false) else Left(src.value))
-        case None => G.pure(Right(true))
+        case None           => G.pure(Right(true))
       }
     }
-  }
 
   /**
    * Convert F[A] to a List[A].
@@ -478,28 +479,31 @@ import Foldable.sentinel
     }.toList
 
   /**
-    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
-    * Equivalent to `Functor#map` and then `Alternative#separate`.
-    *
-    * {{{
-    * scala> import cats.implicits._
-    * scala> val list = List(1,2,3,4)
-    * scala> Foldable[List].partitionEither(list)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
-    * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
-    * scala> Foldable[List].partitionEither(list)(a => Right(a * 4))
-    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
-    * }}}
-    */
+   * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
+   * Equivalent to `Functor#map` and then `Alternative#separate`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].partitionEither(list)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+   * scala> Foldable[List].partitionEither(list)(a => Right(a * 4))
+   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+   * }}}
+   */
   def partitionEither[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit A: Alternative[F]): (F[B], F[C]) = {
     import cats.instances.tuple._
 
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMap(fa)(a => f(a) match {
-      case Right(c) => (A.empty[B], A.pure(c))
-      case Left(b) => (A.pure(b), A.empty[C])
-    })
+    foldMap(fa)(
+      a =>
+        f(a) match {
+          case Right(c) => (A.empty[B], A.pure(c))
+          case Left(b)  => (A.pure(b), A.empty[C])
+      }
+    )
   }
 
   /**
@@ -560,7 +564,7 @@ import Foldable.sentinel
     val it = xs.iterator
     if (it.hasNext) {
       bld += it.next
-      while(it.hasNext) {
+      while (it.hasNext) {
         bld += x
         bld += it.next
       }
@@ -581,7 +585,7 @@ import Foldable.sentinel
 }
 
 object Foldable {
-  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any]{ def apply(a: Any) = this }
+  private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
   def iterateRight[A, B](iterable: Iterable[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def loop(it: Iterator[A]): Eval[B] =
@@ -589,7 +593,6 @@ object Foldable {
 
     Eval.always(iterable.iterator).flatMap(loop)
   }
-
 
   /**
    * Isomorphic to
@@ -601,11 +604,11 @@ object Foldable {
    * It could be made a value class after
    * https://github.com/scala/bug/issues/9600 is resolved.
    */
-  private sealed abstract class Source[+A] {
+  sealed abstract private[cats] class Source[+A] {
     def uncons: Option[(A, Eval[Source[A]])]
   }
 
-  private object Source {
+  private[cats] object Source {
     val Empty: Source[Nothing] = new Source[Nothing] {
       def uncons = None
     }
@@ -615,8 +618,6 @@ object Foldable {
     }
 
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
-      F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) =>
-        Later(cons(a, evalSrc))
-      ).value
+      F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
   }
 }

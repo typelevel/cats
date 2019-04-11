@@ -20,6 +20,7 @@ object CsvCodecInvariantMonoidalSuite {
    * `forAll { (a: A) => g(f(a)) == a }`.
    */
   trait CsvCodec[A] extends Serializable { self =>
+
     /** Reads the first value of a CSV, returning an optional value of type `A` and the remaining CSV. */
     def read(s: CSV): (Option[A], CSV)
 
@@ -43,7 +44,7 @@ object CsvCodecInvariantMonoidalSuite {
           def read(s: CSV): (Option[(A, B)], CSV) = {
             val (a1, s1) = fa.read(s)
             val (a2, s2) = fb.read(s1)
-            ((a1,  a2).mapN(_ -> _), s2)
+            ((a1, a2).mapN(_ -> _), s2)
           }
 
           def write(a: (A, B)): CSV =
@@ -82,7 +83,8 @@ object CsvCodecInvariantMonoidalSuite {
 
   implicit def csvCodecsEq[A](implicit a: Arbitrary[A], e: Eq[A]): Eq[CsvCodec[A]] = {
     val writeEq: Eq[CsvCodec[A]] = Eq.by[CsvCodec[A], A => CSV](_.write)(catsLawsEqForFn1[A, CSV])
-    val readEq: Eq[CsvCodec[A]] = Eq.by[CsvCodec[A], CSV => (Option[A], CSV)](_.read)(catsLawsEqForFn1[CSV, (Option[A], CSV)])
+    val readEq: Eq[CsvCodec[A]] =
+      Eq.by[CsvCodec[A], CSV => (Option[A], CSV)](_.read)(catsLawsEqForFn1[CSV, (Option[A], CSV)])
     Eq.and(writeEq, readEq)
   }
 }

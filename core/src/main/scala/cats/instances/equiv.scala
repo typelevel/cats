@@ -4,6 +4,7 @@ package instances
 trait EquivInstances {
   implicit val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
     new ContravariantMonoidal[Equiv] {
+
       /**
        * Defaults to trivially contracting the type
        * to a point

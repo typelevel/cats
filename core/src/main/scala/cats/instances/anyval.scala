@@ -2,16 +2,16 @@ package cats
 package instances
 
 trait AnyValInstances
-  extends IntInstances
-  with    ByteInstances
-  with    CharInstances
-  with    LongInstances
-  with    ShortInstances
-  with    FloatInstances
-  with    DoubleInstances
-  with    BooleanInstances
-  with    UnitInstances
-  with    TupleInstances
+    extends IntInstances
+    with ByteInstances
+    with CharInstances
+    with LongInstances
+    with ShortInstances
+    with FloatInstances
+    with DoubleInstances
+    with BooleanInstances
+    with UnitInstances
+    with TupleInstances
 
 trait IntInstances extends cats.kernel.instances.IntInstances {
   implicit val catsStdShowForInt: Show[Int] = Show.fromToString[Int]

@@ -23,10 +23,13 @@ object arbitrary extends ArbitraryInstances0 {
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForTry[A](implicit A: Cogen[A]): Cogen[Try[A]] =
-    Cogen((seed, x) => x match {
-      case Success(a) => A.perturb(seed, a)
-      case Failure(e) => Cogen[Throwable].perturb(seed, e)
-    })
+    Cogen(
+      (seed, x) =>
+        x match {
+          case Success(a) => A.perturb(seed, a)
+          case Failure(e) => Cogen[Throwable].perturb(seed, e)
+      }
+    )
 
   // this instance is not available in scalacheck 1.13.2.
   // remove this once a newer version is available.
@@ -39,7 +42,8 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForConst[A, B](implicit A: Cogen[A]): Cogen[Const[A, B]] =
     A.contramap(_.getConst)
 
-  implicit def catsLawsArbitraryForOneAnd[F[_], A](implicit A: Arbitrary[A], F: Arbitrary[F[A]]): Arbitrary[OneAnd[F, A]] =
+  implicit def catsLawsArbitraryForOneAnd[F[_], A](implicit A: Arbitrary[A],
+                                                   F: Arbitrary[F[A]]): Arbitrary[OneAnd[F, A]] =
     Arbitrary(F.arbitrary.flatMap(fa => A.arbitrary.map(a => OneAnd(a, fa))))
 
   implicit def catsLawsCogenForOneAnd[F[_], A](implicit A: Cogen[A], F: Cogen[F[A]]): Cogen[OneAnd[F, A]] =
@@ -50,6 +54,12 @@ object arbitrary extends ArbitraryInstances0 {
 
   implicit def catsLawsCogenForNonEmptyVector[A](implicit A: Cogen[A]): Cogen[NonEmptyVector[A]] =
     Cogen[Vector[A]].contramap(_.toVector)
+
+  implicit def catsLawsArbitraryForNonEmptySet[A: Order](implicit A: Arbitrary[A]): Arbitrary[NonEmptySet[A]] =
+    Arbitrary(implicitly[Arbitrary[SortedSet[A]]].arbitrary.flatMap(fa => A.arbitrary.map(a => NonEmptySet(a, fa))))
+
+  implicit def catsLawsCogenForNonEmptySet[A: Order: Cogen]: Cogen[NonEmptySet[A]] =
+    Cogen[SortedSet[A]].contramap(_.toSortedSet)
 
   implicit def catsLawsArbitraryForZipVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipVector[A]] =
     Arbitrary(implicitly[Arbitrary[Vector[A]]].arbitrary.map(v => new ZipVector(v)))
@@ -69,30 +79,52 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForNonEmptyList[A](implicit A: Cogen[A]): Cogen[NonEmptyList[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit def catsLawsArbitraryForNonEmptyChain[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
+    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap { chain =>
+      NonEmptyChain.fromChain(chain) match {
+        case None     => A.arbitrary.map(NonEmptyChain.one)
+        case Some(ne) => Gen.const(ne)
+      }
+    })
+
+  implicit def catsLawsCogenForNonEmptyChain[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
+    Cogen[Chain[A]].contramap(_.toChain)
 
   implicit def catsLawsArbitraryForZipNonEmptyList[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyList[A]] =
     Arbitrary(implicitly[Arbitrary[NonEmptyList[A]]].arbitrary.map(nel => new ZipNonEmptyList(nel)))
 
-  implicit def catsLawsArbitraryForEitherT[F[_], A, B](implicit F: Arbitrary[F[Either[A, B]]]): Arbitrary[EitherT[F, A, B]] =
+  implicit def arbNonEmptyMap[K: Order, A](implicit A: Arbitrary[A], K: Arbitrary[K]): Arbitrary[NonEmptyMap[K, A]] =
+    Arbitrary(for {
+      fa <- implicitly[Arbitrary[SortedMap[K, A]]].arbitrary
+      k <- K.arbitrary
+      a <- A.arbitrary
+    } yield NonEmptyMap((k, a), fa))
+
+  implicit def cogenNonEmptyMap[K: Order: Cogen, A: Order: Cogen]: Cogen[NonEmptyMap[K, A]] =
+    Cogen[SortedMap[K, A]].contramap(_.toSortedMap)
+
+  implicit def catsLawsArbitraryForEitherT[F[_], A, B](
+    implicit F: Arbitrary[F[Either[A, B]]]
+  ): Arbitrary[EitherT[F, A, B]] =
     Arbitrary(F.arbitrary.map(EitherT(_)))
 
   implicit def catsLawsCogenForEitherT[F[_], A, B](implicit F: Cogen[F[Either[A, B]]]): Cogen[EitherT[F, A, B]] =
     F.contramap(_.value)
 
-  implicit def catsLawsArbitraryForValidated[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[Validated[A, B]] =
+  implicit def catsLawsArbitraryForValidated[A, B](implicit A: Arbitrary[A],
+                                                   B: Arbitrary[B]): Arbitrary[Validated[A, B]] =
     Arbitrary(Gen.oneOf(A.arbitrary.map(Validated.invalid), B.arbitrary.map(Validated.valid)))
 
   implicit def catsLawsCogenForValidated[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[Validated[A, B]] =
     Cogen((seed, x) => x.fold(A.perturb(seed, _), B.perturb(seed, _)))
 
   implicit def catsLawsArbitraryForIor[A, B](implicit A: Arbitrary[A], B: Arbitrary[B]): Arbitrary[A Ior B] =
-    Arbitrary(Gen.oneOf(A.arbitrary.map(Ior.left), B.arbitrary.map(Ior.right), for { a <- A.arbitrary; b <- B.arbitrary } yield Ior.both(a, b)))
+    Arbitrary(Gen.oneOf(A.arbitrary.map(Ior.left), B.arbitrary.map(Ior.right), for {
+      a <- A.arbitrary; b <- B.arbitrary
+    } yield Ior.both(a, b)))
 
   implicit def catsLawsCogenForIor[A, B](implicit A: Cogen[A], B: Cogen[B]): Cogen[A Ior B] =
-    Cogen((seed, x) => x.fold(
-      A.perturb(seed, _),
-      B.perturb(seed, _),
-      (a, b) => A.perturb(B.perturb(seed, b), a)))
+    Cogen((seed, x) => x.fold(A.perturb(seed, _), B.perturb(seed, _), (a, b) => A.perturb(B.perturb(seed, b), a)))
 
   implicit def catsLawsArbitraryForIorT[F[_], A, B](implicit F: Arbitrary[F[Ior[A, B]]]): Arbitrary[IorT[F, A, B]] =
     Arbitrary(F.arbitrary.map(IorT(_)))
@@ -113,39 +145,48 @@ object arbitrary extends ArbitraryInstances0 {
     F.contramap(_.value)
 
   implicit def catsLawsArbitraryForEval[A: Arbitrary]: Arbitrary[Eval[A]] =
-    Arbitrary(Gen.oneOf(
-      getArbitrary[A].map(a => Eval.now(a)),
-      getArbitrary[() => A].map(f => Eval.later(f())),
-      getArbitrary[() => A].map(f => Eval.always(f()))))
+    Arbitrary(
+      Gen.oneOf(getArbitrary[A].map(a => Eval.now(a)),
+                getArbitrary[() => A].map(f => Eval.later(f())),
+                getArbitrary[() => A].map(f => Eval.always(f())))
+    )
 
   implicit def catsLawsCogenForEval[A: Cogen]: Cogen[Eval[A]] =
     Cogen[A].contramap(_.value)
 
-  implicit def catsLawsArbitraryForTuple2K[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[Tuple2K[F, G, A]] =
+  implicit def catsLawsArbitraryForTuple2K[F[_], G[_], A](implicit F: Arbitrary[F[A]],
+                                                          G: Arbitrary[G[A]]): Arbitrary[Tuple2K[F, G, A]] =
     Arbitrary(F.arbitrary.flatMap(fa => G.arbitrary.map(ga => Tuple2K[F, G, A](fa, ga))))
 
-  implicit def catsLawsArbitraryForFunc[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
+  implicit def catsLawsArbitraryForFunc[F[_], A, B](implicit AA: Arbitrary[A],
+                                                    CA: Cogen[A],
+                                                    F: Arbitrary[F[B]]): Arbitrary[Func[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Func.func))
 
-  implicit def catsLawsArbitraryForAppFunc[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]], FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
+  implicit def catsLawsArbitraryForAppFunc[F[_], A, B](implicit AA: Arbitrary[A],
+                                                       CA: Cogen[A],
+                                                       F: Arbitrary[F[B]],
+                                                       FF: Applicative[F]): Arbitrary[AppFunc[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Func.appFunc(_)))
 
-  implicit def catsLawsArbitraryForWriter[L:Arbitrary, V:Arbitrary]: Arbitrary[Writer[L, V]] =
+  implicit def catsLawsArbitraryForWriter[L: Arbitrary, V: Arbitrary]: Arbitrary[Writer[L, V]] =
     catsLawsArbitraryForWriterT[Id, L, V]
 
   implicit def catsLawsCogenForWriter[L: Cogen, V: Cogen]: Cogen[Writer[L, V]] =
     Cogen[(L, V)].contramap(_.run)
 
   // until this is provided by scalacheck
-  implicit def catsLawsArbitraryForPartialFunction[A, B](implicit F: Arbitrary[A => Option[B]]): Arbitrary[PartialFunction[A, B]] =
+  implicit def catsLawsArbitraryForPartialFunction[A, B](
+    implicit F: Arbitrary[A => Option[B]]
+  ): Arbitrary[PartialFunction[A, B]] =
     Arbitrary(F.arbitrary.map(Function.unlift))
 
-  implicit def catsLawsArbitraryForEitherK[F[_], G[_], A](implicit F: Arbitrary[F[A]], G: Arbitrary[G[A]]): Arbitrary[EitherK[F, G, A]] =
-    Arbitrary(Gen.oneOf(
-      F.arbitrary.map(EitherK.leftc[F, G, A]),
-      G.arbitrary.map(EitherK.rightc[F, G, A])))
+  implicit def catsLawsArbitraryForEitherK[F[_], G[_], A](implicit F: Arbitrary[F[A]],
+                                                          G: Arbitrary[G[A]]): Arbitrary[EitherK[F, G, A]] =
+    Arbitrary(Gen.oneOf(F.arbitrary.map(EitherK.leftc[F, G, A]), G.arbitrary.map(EitherK.rightc[F, G, A])))
 
-  implicit def catsLawsCogenForEitherK[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[EitherK[F, G, A]] =
+  implicit def catsLawsCogenForEitherK[F[_], G[_], A](implicit F: Cogen[F[A]],
+                                                      G: Cogen[G[A]]): Cogen[EitherK[F, G, A]] =
     Cogen((seed, x) => x.run.fold(F.perturb(seed, _), G.perturb(seed, _)))
 
   implicit def catLawsCogenForTuple2K[F[_], G[_], A](implicit F: Cogen[F[A]], G: Cogen[G[A]]): Cogen[Tuple2K[F, G, A]] =
@@ -162,26 +203,41 @@ object arbitrary extends ArbitraryInstances0 {
   // implies equal, in order to avoid producing invalid instances.
 
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
-    Arbitrary(getArbitrary[Int => Int].map(f => new Eq[A] {
-      def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-    }))
+    Arbitrary(
+      getArbitrary[Int => Int].map(
+        f =>
+          new Eq[A] {
+            def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
+        }
+      )
+    )
 
   implicit def catsLawsArbitraryForEquiv[A: Arbitrary]: Arbitrary[Equiv[A]] =
     Arbitrary(getArbitrary[Eq[A]].map(Eq.catsKernelEquivForEq(_)))
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
-    Arbitrary(getArbitrary[Int => Double].map(f => new PartialOrder[A] {
-      def partialCompare(x: A, y: A): Double =
-        if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-    }))
+    Arbitrary(
+      getArbitrary[Int => Double].map(
+        f =>
+          new PartialOrder[A] {
+            def partialCompare(x: A, y: A): Double =
+              if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
+        }
+      )
+    )
 
   implicit def catsLawsArbitraryForPartialOrdering[A: Arbitrary]: Arbitrary[PartialOrdering[A]] =
     Arbitrary(getArbitrary[PartialOrder[A]].map(PartialOrder.catsKernelPartialOrderingForPartialOrder(_)))
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
-    Arbitrary(getArbitrary[Int => Int].map(f => new Order[A] {
-      def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
-    }))
+    Arbitrary(
+      getArbitrary[Int => Int].map(
+        f =>
+          new Order[A] {
+            def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
+        }
+      )
+    )
 
   implicit def catsLawsArbitraryForSortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
     Arbitrary(getArbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
@@ -211,6 +267,11 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsArbitraryForNested[F[_], G[_], A](implicit FG: Arbitrary[F[G[A]]]): Arbitrary[Nested[F, G, A]] =
     Arbitrary(FG.arbitrary.map(Nested(_)))
 
+  implicit def catsLawsArbitraryForBinested[F[_, _], G[_], H[_], A, B](
+    implicit F: Arbitrary[F[G[A], H[B]]]
+  ): Arbitrary[Binested[F, G, H, A, B]] =
+    Arbitrary(F.arbitrary.map(Binested(_)))
+
   implicit def catsLawArbitraryForState[S: Arbitrary: Cogen, A: Arbitrary]: Arbitrary[State[S, A]] =
     catsLawArbitraryForIndexedStateT[Eval, S, S, A]
 
@@ -220,15 +281,81 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawArbitraryForCokleisliId[A: Arbitrary: Cogen, B: Arbitrary]: Arbitrary[Cokleisli[Id, A, B]] =
     catsLawsArbitraryForCokleisli[Id, A, B]
 
-  implicit def catsLawsArbitraryForIRWST[F[_]: Applicative, E, L, SA, SB, A](implicit
-    F: Arbitrary[(E, SA) => F[(L, SB, A)]]): Arbitrary[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
+  implicit def catsLawsArbitraryForOp[Arr[_, _], A, B](implicit Arr: Arbitrary[Arr[B, A]]): Arbitrary[Op[Arr, A, B]] =
+    Arbitrary(Arr.arbitrary.map(Op(_)))
+
+  implicit def catsLawsCogenForOp[Arr[_, _], A, B](implicit Arr: Cogen[Arr[B, A]]): Cogen[Op[Arr, A, B]] =
+    Arr.contramap(_.run)
+
+  implicit def catsLawsArbitraryForIRWST[F[_]: Applicative, E, L, SA, SB, A](
+    implicit
+    F: Arbitrary[(E, SA) => F[(L, SB, A)]]
+  ): Arbitrary[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Arbitrary(F.arbitrary.map(IndexedReaderWriterStateT(_)))
+
+  implicit def catsLawsArbitraryForRepresentableStore[F[_], S, A](
+    implicit
+    R: Representable.Aux[F, S],
+    ArbS: Arbitrary[S],
+    ArbFA: Arbitrary[F[A]]
+  ): Arbitrary[RepresentableStore[F, S, A]] =
+    Arbitrary {
+      for {
+        fa <- ArbFA.arbitrary
+        s <- ArbS.arbitrary
+      } yield {
+        RepresentableStore[F, S, A](fa, s)
+      }
+    }
+
+  implicit def catsLawsCogenForRepresentableStore[F[_]: Representable, S, A](
+    implicit CA: Cogen[A]
+  ): Cogen[RepresentableStore[F, S, A]] =
+    CA.contramap(_.extract)
+
+  implicit def catsLawsArbitraryForAndThen[A, B](implicit F: Arbitrary[A => B]): Arbitrary[AndThen[A, B]] =
+    Arbitrary(F.arbitrary.map(AndThen(_)))
+
+  implicit def catsLawsCogenForAndThen[A, B](implicit F: Cogen[A => B]): Cogen[AndThen[A, B]] =
+    Cogen((seed, x) => F.perturb(seed, x))
+
+  implicit def catsLawsArbitraryForChain[A](implicit A: Arbitrary[A]): Arbitrary[Chain[A]] = {
+    val genA = A.arbitrary
+
+    def genSize(sz: Int): Gen[Chain[A]] = {
+      val fromSeq = Gen.listOfN(sz, genA).map(Chain.fromSeq)
+      val recursive =
+        sz match {
+          case 0 => Gen.const(Chain.nil)
+          case 1 => genA.map(Chain.one)
+          case n =>
+            // Here we concat two chains
+            for {
+              n0 <- Gen.choose(1, n - 1)
+              n1 = n - n0
+              left <- genSize(n0)
+              right <- genSize(n1)
+            } yield left ++ right
+        }
+
+      // prefer to generate recursively built Chains
+      // but sometimes create fromSeq
+      Gen.frequency((5, recursive), (1, fromSeq))
+    }
+
+    Arbitrary(Gen.sized(genSize))
+  }
+
+  implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
+    Cogen[List[A]].contramap(_.toList)
 
 }
 
-private[discipline] sealed trait ArbitraryInstances0 {
+sealed private[discipline] trait ArbitraryInstances0 {
 
-  implicit def catsLawArbitraryForIndexedStateT[F[_], SA, SB, A](implicit F: Arbitrary[F[SA => F[(SB, A)]]]): Arbitrary[IndexedStateT[F, SA, SB, A]] =
+  implicit def catsLawArbitraryForIndexedStateT[F[_], SA, SB, A](
+    implicit F: Arbitrary[F[SA => F[(SB, A)]]]
+  ): Arbitrary[IndexedStateT[F, SA, SB, A]] =
     Arbitrary(F.arbitrary.map(IndexedStateT.applyF))
 
   implicit def catsLawsArbitraryForWriterT[F[_], L, V](implicit F: Arbitrary[F[(L, V)]]): Arbitrary[WriterT[F, L, V]] =
@@ -237,9 +364,13 @@ private[discipline] sealed trait ArbitraryInstances0 {
   implicit def catsLawsCogenForWriterT[F[_], L, V](implicit F: Cogen[F[(L, V)]]): Cogen[WriterT[F, L, V]] =
     F.contramap(_.run)
 
-  implicit def catsLawsArbitraryForKleisli[F[_], A, B](implicit AA: Arbitrary[A], CA: Cogen[A], F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
+  implicit def catsLawsArbitraryForKleisli[F[_], A, B](implicit AA: Arbitrary[A],
+                                                       CA: Cogen[A],
+                                                       F: Arbitrary[F[B]]): Arbitrary[Kleisli[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[A => F[B]].map(Kleisli(_)))
 
-  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]], CFA: Cogen[F[A]], B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
+  implicit def catsLawsArbitraryForCokleisli[F[_], A, B](implicit AFA: Arbitrary[F[A]],
+                                                         CFA: Cogen[F[A]],
+                                                         B: Arbitrary[B]): Arbitrary[Cokleisli[F, A, B]] =
     Arbitrary(Arbitrary.arbitrary[F[A] => B].map(Cokleisli(_)))
 }

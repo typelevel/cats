@@ -1,4 +1,5 @@
-package cats.kernel
+package cats
+package kernel
 package instances
 
 import scala.collection.mutable
@@ -8,12 +9,11 @@ object StaticMethods {
   def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
     new WrappedMutableMap(m)
 
-  private[kernel] class WrappedMutableMap[K, V](m: mutable.Map[K, V]) extends Map[K, V] {
+  private[kernel] class WrappedMutableMap[K, V](m: mutable.Map[K, V])
+      extends kernel.compat.WrappedMutableMapBase[K, V](m) {
     override def size: Int = m.size
     def get(k: K): Option[V] = m.get(k)
     def iterator: Iterator[(K, V)] = m.iterator
-    def +[V2 >: V](kv: (K, V2)): Map[K, V2] = m.toMap + kv
-    def -(key: K): Map[K, V] = m.toMap - key
   }
 
   // scalastyle:off return
@@ -119,7 +119,7 @@ object StaticMethods {
     import scala.util.hashing.MurmurHash3._
     var n = 0
     var h = seqSeed
-    xs foreach { x =>
+    xs.foreach { x =>
       h = mix(h, A.hash(x))
       n += 1
     }

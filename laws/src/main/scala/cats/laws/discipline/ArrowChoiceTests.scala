@@ -10,7 +10,8 @@ import Prop._
 trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
   def laws: ArrowChoiceLaws[F]
 
-  def arrowChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def arrowChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFAC: Arbitrary[F[A, C]],

@@ -9,7 +9,8 @@ import Prop._
 trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
   def laws: CommutativeArrowLaws[F]
 
-  def commutativeArrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def commutativeArrow[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFAC: Arbitrary[F[A, C]],
     ArbFBC: Arbitrary[F[B, C]],
@@ -36,10 +37,9 @@ trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
     EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]]
   ): RuleSet =
-    new DefaultRuleSet(
-      name = "commutative arrow",
-      parent = Some(arrow[A, B, C, D, E, G]),
-      "arrow commutativity" -> forAll(laws.arrowCommutative[A, B, C, D] _))
+    new DefaultRuleSet(name = "commutative arrow",
+                       parent = Some(arrow[A, B, C, D, E, G]),
+                       "arrow commutativity" -> forAll(laws.arrowCommutative[A, B, C, D] _))
 }
 
 object CommutativeArrowTests {

@@ -10,7 +10,7 @@ position: 30
    specifically cover Cats, it is a great introduction to functional
    programming in Scala in general and covers some of the abstractions
    that can be found in Cats.
- * [Advanced Scala with Cats](http://underscore.io/books/advanced-scala/) 
+ * [Scala with Cats](https://underscore.io/books/scala-with-cats/) 
    by Noel Welsh and Dave Gurnell - The aims of this book are two-fold: 
    to introduce monads, functors, and other functional programming patterns
    as a way to structure program design, and to explain how these 
@@ -31,4 +31,8 @@ position: 30
    of category theory lectures oriented towards programmers. The sample code
    is in basic Haskell/C++ but the course is designed for programmers of all 
    background to follow. 
+* [Easy and efficient data validation with Cats](https://www.youtube.com/watch?v=P8nGAo3Jp-Q) by [Daniela Sfregola](https://danielasfregola.com/)  this talk introduces Cats, and some of its most interesting components for data validation. In particular, we’ll discuss some options to achieve efficient and expressive data validation. We will also argue that, compared to other options in the language, Cats is particularly suited for the task thanks to its easy-to-use data types and more approachable syntax.
+
+# Social network
+* [@impurepics](https://twitter.com/impurepics) regularly tweet informative and kawaii educational pieces about Cats and FP in Scala.  
    

@@ -84,7 +84,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
               type Start = A
               val start = () => c.run(s)
               val run = f
-            }
+          }
         }
       case c: Eval.Defer[A] =>
         new Eval.FlatMap[B] {
@@ -121,7 +121,6 @@ sealed abstract class Eval[+A] extends Serializable { self =>
 final case class Now[A](value: A) extends Eval[A] {
   def memoize: Eval[A] = this
 }
-
 
 /**
  * Construct a lazy Eval[A] instance.
@@ -321,7 +320,6 @@ object Eval extends EvalInstances {
       }
   }
 
-
   private def evaluate[A](e: Eval[A]): A = {
     type L = Eval[Any]
     type M = Memoize[Any]
@@ -337,10 +335,8 @@ object Eval extends EvalInstances {
         case c: FlatMap[_] =>
           c.start() match {
             case cc: FlatMap[_] =>
-              loop(
-                cc.start().asInstanceOf[L],
-                cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
-            case mm@Memoize(eval) =>
+              loop(cc.start().asInstanceOf[L], cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
                   loop(Now(a), c.run.asInstanceOf[C] :: fs)
@@ -352,12 +348,12 @@ object Eval extends EvalInstances {
           }
         case call: Defer[_] =>
           loop(advance(call), fs)
-        case m@Memoize(eval) =>
+        case m @ Memoize(eval) =>
           m.result match {
             case Some(a) =>
               fs match {
                 case f :: fs => loop(f(a), fs)
-                case Nil => a
+                case Nil     => a
               }
             case None =>
               loop(eval, addToMemo(m) :: fs)
@@ -365,7 +361,7 @@ object Eval extends EvalInstances {
         case x =>
           fs match {
             case f :: fs => loop(f(x.value), fs)
-            case Nil => x.value
+            case Nil     => x.value
           }
       }
 
@@ -373,7 +369,7 @@ object Eval extends EvalInstances {
   }
 }
 
-private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
+sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
   implicit val catsBimonadForEval: Bimonad[Eval] with CommutativeMonad[Eval] =
     new Bimonad[Eval] with StackSafeMonad[Eval] with CommutativeMonad[Eval] {
@@ -382,6 +378,12 @@ private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
+    }
+
+  implicit val catsDeferForEval: Defer[Eval] =
+    new Defer[Eval] {
+      def defer[A](e: => Eval[A]): Eval[A] =
+        Eval.defer(e)
     }
 
   implicit val catsReducibleForEval: Reducible[Eval] =
@@ -404,32 +406,50 @@ private[cats] sealed abstract class EvalInstances extends EvalInstances0 {
       override def reduceRightOption[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
         fa.map(Some(_))
       override def reduceRightToOption[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-        fa.map { a => Some(f(a)) }
+        fa.map { a =>
+          Some(f(a))
+        }
       override def size[A](f: Eval[A]): Long = 1L
     }
 
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value compare ly.value
+        lx.value.compare(ly.value)
     }
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
     new EvalGroup[A] { val algebra: Group[A] = Group[A] }
+
+  implicit val catsRepresentableForEval: Representable.Aux[Eval, Unit] = new Representable[Eval] {
+    override type Representation = Unit
+
+    override val F: Functor[Eval] = Functor[Eval]
+
+    /**
+     * Create a function that "indexes" into the `F` structure using `Representation`
+     */
+    override def index[A](f: Eval[A]): Unit => A = (_: Unit) => f.value
+
+    /**
+     * Reconstructs the `F` structure using the index function
+     */
+    override def tabulate[A](f: Unit => A): Eval[A] = Eval.later(f(()))
+  }
 }
 
-private[cats] sealed abstract class EvalInstances0 extends EvalInstances1 {
+sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        lx.value partialCompare ly.value
+        lx.value.partialCompare(ly.value)
     }
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
     new EvalMonoid[A] { val algebra = Monoid[A] }
 }
 
-private[cats] sealed abstract class EvalInstances1 {
+sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =

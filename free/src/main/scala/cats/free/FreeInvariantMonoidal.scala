@@ -8,7 +8,7 @@ import cats.data.Const
  * Invariant Monoidal for Free
  */
 sealed abstract class FreeInvariantMonoidal[F[_], A] extends Product with Serializable { self =>
-  import FreeInvariantMonoidal.{FA, Zip, Imap, lift}
+  import FreeInvariantMonoidal.{lift, FA, Imap, Zip}
 
   def imap[B](f: A => B)(g: B => A): FA[F, B] =
     Imap(this, f, g)
@@ -41,22 +41,22 @@ sealed abstract class FreeInvariantMonoidal[F[_], A] extends Product with Serial
 object FreeInvariantMonoidal {
   type FA[F[_], A] = FreeInvariantMonoidal[F, A]
 
-  private final case class Pure[F[_], A](a: A) extends FA[F, A] {
+  final private case class Pure[F[_], A](a: A) extends FA[F, A] {
     def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[A] =
       im.point(a)
   }
 
-  private final case class Suspend[F[_], A](fa: F[A]) extends FA[F, A] {
+  final private case class Suspend[F[_], A](fa: F[A]) extends FA[F, A] {
     def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[A] =
       nt(fa)
   }
 
-  private final case class Zip[F[_], A, B](fa: FA[F, A], fb: FA[F, B]) extends FA[F, (A, B)] {
+  final private case class Zip[F[_], A, B](fa: FA[F, A], fb: FA[F, B]) extends FA[F, (A, B)] {
     def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[(A, B)] =
       im.product(fa.foldMap(nt), fb.foldMap(nt))
   }
 
-  private final case class Imap[F[_], A, B](fa: FA[F, A], f: A => B, g: B => A) extends FA[F, B] {
+  final private case class Imap[F[_], A, B](fa: FA[F, A], f: A => B, g: B => A) extends FA[F, B] {
     def foldMap[G[_]](nt: FunctionK[F, G])(implicit im: InvariantMonoidal[G]): G[B] =
       im.imap(fa.foldMap(nt))(f)(g)
   }

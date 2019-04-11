@@ -21,14 +21,14 @@ trait MonadLaws[F[_]] extends ApplicativeLaws[F] with FlatMapLaws[F] {
    * `cats.data.Kleisli` arrows. This is analogous to [[monadLeftIdentity]].
    */
   def kleisliLeftIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
-    (Kleisli(F.pure[A]) andThen Kleisli(f)).run(a) <-> f(a)
+    Kleisli(F.pure[A]).andThen(Kleisli(f)).run(a) <-> f(a)
 
   /**
    * `pure` is the right identity element under left-to-right composition of
    * `cats.data.Kleisli` arrows. This is analogous to [[monadRightIdentity]].
    */
   def kleisliRightIdentity[A, B](a: A, f: A => F[B]): IsEq[F[B]] =
-    (Kleisli(f) andThen Kleisli(F.pure[B])).run(a) <-> f(a)
+    Kleisli(f).andThen(Kleisli(F.pure[B])).run(a) <-> f(a)
 
   /**
    * Make sure that map and flatMap are consistent.

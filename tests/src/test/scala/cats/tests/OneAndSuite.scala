@@ -1,11 +1,23 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 
 import cats.instances.stream._
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.laws.discipline.{ApplicativeTests, SemigroupalTests, ComonadTests, FoldableTests, FunctorTests, MonadTests, NonEmptyTraverseTests, ReducibleTests, SemigroupKTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{
+  ApplicativeTests,
+  ComonadTests,
+  FoldableTests,
+  FunctorTests,
+  MonadTests,
+  NonEmptyTraverseTests,
+  ReducibleTests,
+  SemigroupKTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseTests
+}
 import cats.laws.discipline.arbitrary._
 
 class OneAndSuite extends CatsSuite {
@@ -15,19 +27,22 @@ class OneAndSuite extends CatsSuite {
 
   checkAll("OneAnd[Stream, Int]", EqTests[OneAnd[Stream, Int]].eqv)
 
-  checkAll("OneAnd[Stream, Int] with Option", NonEmptyTraverseTests[OneAnd[Stream, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("OneAnd[Stream, Int] with Option",
+           NonEmptyTraverseTests[OneAnd[Stream, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[Stream, ?]]))
 
   {
     implicit val traverse = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)
-    checkAll("OneAnd[ListWrapper, Int] with Option", TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("OneAnd[ListWrapper, Int] with Option",
+             TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, ?]]))
   }
 
   checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[Stream, ?]].reducible[Option, Int, Int])
   checkAll("Reducible[OneAnd[Stream, ?]]", SerializableTests.serializable(Reducible[OneAnd[Stream, ?]]))
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
+  implicit val iso = SemigroupalTests.Isomorphisms
+    .invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
@@ -80,76 +95,75 @@ class OneAndSuite extends CatsSuite {
 
   test("size is consistent with toList.size") {
     forAll { (oa: OneAnd[Vector, Int]) =>
-      oa.size should === (oa.toList.size.toLong)
+      oa.size should ===(oa.toList.size.toLong)
     }
   }
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      nel.show.nonEmpty should === (true)
-      nel.show.startsWith("OneAnd(") should === (true)
-      nel.show should === (implicitly[Show[NonEmptyStream[Int]]].show(nel))
-      nel.show.contains(nel.head.show) should === (true)
+      nel.show.nonEmpty should ===(true)
+      nel.show.startsWith("OneAnd(") should ===(true)
+      nel.show should ===(implicitly[Show[NonEmptyStream[Int]]].show(nel))
+      nel.show.contains(nel.head.show) should ===(true)
     }
   }
 
   test("Show is formatted correctly") {
     val oneAnd = NonEmptyStream("Test")
-    oneAnd.show should === ("OneAnd(Test, Stream())")
+    oneAnd.show should ===("OneAnd(Test, Stream())")
   }
 
   test("Creating OneAnd + unwrap is identity") {
     forAll { (i: Int, tail: Stream[Int]) =>
       val stream = i #:: tail
       val oneAnd = NonEmptyStream(i, tail: _*)
-      stream should === (oneAnd.unwrap)
+      stream should ===(oneAnd.unwrap)
     }
   }
 
   test("NonEmptyStream#find is consistent with Stream#find") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.find(p) should === (stream.find(p))
+      nel.find(p) should ===(stream.find(p))
     }
   }
 
   test("NonEmptyStream#exists is consistent with Stream#exists") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.exists(p) should === (stream.exists(p))
+      nel.exists(p) should ===(stream.exists(p))
     }
   }
 
   test("NonEmptyStream#forall is consistent with Stream#forall") {
     forAll { (nel: NonEmptyStream[Int], p: Int => Boolean) =>
       val stream = nel.unwrap
-      nel.forall(p) should === (stream.forall(p))
+      nel.forall(p) should ===(stream.forall(p))
     }
   }
 
   test("NonEmptyStream#map is consistent with Stream#map") {
     forAll { (nel: NonEmptyStream[Int], p: Int => String) =>
       val stream = nel.unwrap
-      nel.map(p).unwrap should === (stream.map(p))
+      nel.map(p).unwrap should ===(stream.map(p))
     }
   }
 
   test("NonEmptyStream#nonEmptyPartition remains sorted") {
     forAll { (nes: NonEmptyStream[Int], f: Int => Either[String, String]) =>
-
       val nesf = nes.map(f)
       val sortedStream = (nesf.head #:: nesf.tail).sorted
       val sortedNes = OneAnd(sortedStream.head, sortedStream.tail)
       val ior = Reducible[NonEmptyStream].nonEmptyPartition(sortedNes)(identity)
 
-      ior.left.map(xs => xs.sorted should === (xs))
-      ior.right.map(xs => xs.sorted should === (xs))
+      ior.left.map(xs => xs.sorted should ===(xs))
+      ior.right.map(xs => xs.sorted should ===(xs))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nel: NonEmptyStream[Int], f: (Int, Int) => Int) =>
-      nel.reduceLeft(f) should === (nel.tail.foldLeft(nel.head)(f))
+      nel.reduceLeft(f) should ===(nel.tail.foldLeft(nel.head)(f))
     }
   }
 
@@ -158,19 +172,19 @@ class OneAndSuite extends CatsSuite {
       val got = nel.reduceRight(f).value
       val last :: rev = nel.unwrap.toList.reverse
       val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-      got should === (expected)
+      got should ===(expected)
     }
   }
 
   test("reduce consistent with fold") {
     forAll { (nel: NonEmptyStream[Int]) =>
-      nel.reduce should === (nel.fold)
+      nel.reduce should ===(nel.fold)
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nel: NonEmptyStream[Option[Int]]) =>
-      nel.reduce(SemigroupK[Option].algebra[Int]) should === (nel.reduceK)
+      nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK)
     }
   }
 
@@ -179,7 +193,7 @@ class OneAndSuite extends CatsSuite {
       val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      nel.reduceLeftToOption(f)(g) should === (expected)
+      nel.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
 
@@ -190,7 +204,7 @@ class OneAndSuite extends CatsSuite {
       val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      got should === (expected)
+      got should ===(expected)
     }
   }
 

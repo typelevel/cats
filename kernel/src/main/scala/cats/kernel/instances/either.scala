@@ -9,14 +9,16 @@ trait EitherInstances extends EitherInstances0 {
     new Order[Either[A, B]] {
       def compare(x: Either[A, B], y: Either[A, B]): Int =
         x match {
-          case Left(xx) => y match {
-            case Left(yy) => A.compare(xx, yy)
-            case Right(_) => -1
-          }
-          case Right(xx) => y match {
-            case Left(_) => 1
-            case Right(yy) => B.compare(xx, yy)
-          }
+          case Left(xx) =>
+            y match {
+              case Left(yy) => A.compare(xx, yy)
+              case Right(_) => -1
+            }
+          case Right(xx) =>
+            y match {
+              case Left(_)   => 1
+              case Right(yy) => B.compare(xx, yy)
+            }
         }
     }
 
@@ -27,10 +29,11 @@ trait EitherInstances extends EitherInstances0 {
       def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] =
         x match {
           case left @ Left(_) => left
-          case Right(xx) => y match {
-            case left @ Left(_) => left
-            case Right(yy) => Right(B.combine(xx, yy))
-          }
+          case Right(xx) =>
+            y match {
+              case left @ Left(_) => left
+              case Right(yy)      => Right(B.combine(xx, yy))
+            }
         }
     }
 }
@@ -42,25 +45,29 @@ trait EitherInstances0 extends EitherInstances1 {
       def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] =
         x match {
           case left @ Left(_) => left
-          case Right(xx) => y match {
-            case left @ Left(_) => left
-            case Right(yy) => Right(B.combine(xx, yy))
-          }
+          case Right(xx) =>
+            y match {
+              case left @ Left(_) => left
+              case Right(yy)      => Right(B.combine(xx, yy))
+            }
         }
     }
 
-  implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A], B: PartialOrder[B]): PartialOrder[Either[A, B]] =
+  implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A],
+                                                  B: PartialOrder[B]): PartialOrder[Either[A, B]] =
     new PartialOrder[Either[A, B]] {
       def partialCompare(x: Either[A, B], y: Either[A, B]): Double =
         x match {
-          case Left(xx) => y match {
-            case Left(yy) => A.partialCompare(xx, yy)
-            case Right(_) => -1.0
-          }
-          case Right(xx) => y match {
-            case Left(_) => 1.0
-            case Right(yy) => B.partialCompare(xx, yy)
-          }
+          case Left(xx) =>
+            y match {
+              case Left(yy) => A.partialCompare(xx, yy)
+              case Right(_) => -1.0
+            }
+          case Right(xx) =>
+            y match {
+              case Left(_)   => 1.0
+              case Right(yy) => B.partialCompare(xx, yy)
+            }
         }
     }
 
@@ -73,27 +80,27 @@ trait EitherInstances1 {
 
 }
 
-
 // isolated class for inheritance
 class EitherEq[A, B](implicit A: Eq[A], B: Eq[B]) extends Eq[Either[A, B]] {
   def eqv(x: Either[A, B], y: Either[A, B]): Boolean =
     x match {
-      case Left(xx) => y match {
-        case Left(yy) => A.eqv(xx, yy)
-        case Right(_) => false
-      }
-      case Right(xx) => y match {
-        case Left(_) => false
-        case Right(yy) => B.eqv(xx, yy)
-      }
+      case Left(xx) =>
+        y match {
+          case Left(yy) => A.eqv(xx, yy)
+          case Right(_) => false
+        }
+      case Right(xx) =>
+        y match {
+          case Left(_)   => false
+          case Right(yy) => B.eqv(xx, yy)
+        }
     }
 }
 
 class EitherHash[A, B](implicit A: Hash[A], B: Hash[B]) extends EitherEq[A, B] with Hash[Either[A, B]] {
-  def hash(x: Either[A, B]): Int = {
+  def hash(x: Either[A, B]): Int =
     x match {
-      case Left(xx) => StaticMethods.product1Hash(A.hash(xx))
+      case Left(xx)  => StaticMethods.product1Hash(A.hash(xx))
       case Right(xx) => StaticMethods.product1Hash(B.hash(xx))
     }
-  }
 }

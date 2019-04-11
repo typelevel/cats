@@ -1,10 +1,9 @@
 package cats
 package laws
 
-
 /**
-  * Laws that must be obeyed by any `cats.NonEmptyParallel`.
-  */
+ * Laws that must be obeyed by any `cats.NonEmptyParallel`.
+ */
 trait NonEmptyParallelLaws[M[_], F[_]] {
   def P: NonEmptyParallel[M, F]
 

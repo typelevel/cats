@@ -45,15 +45,15 @@ object Show {
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
-    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z show x)
+    implicit def mat[A](x: A)(implicit z: ContravariantShow[A]): Shown = Shown(z.show(x))
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
-    def show(args: Shown*): String = _sc s (args: _*)
+    def show(args: Shown*): String = _sc.s(args: _*)
   }
 
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {
     def contramap[A, B](fa: Show[A])(f: B => A): Show[B] =
-      show[B](fa.show _ compose f)
+      show[B]((fa.show _).compose(f))
   }
 }

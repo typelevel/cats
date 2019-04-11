@@ -23,7 +23,7 @@ def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
 ```
 
 Here `traverse` still has knowledge of `List`, but we could just as easily use
-`Vector` or similar data type. Another example is a binary tree:
+`Vector` or some similar data type. Another example is a binary tree:
 
 ```tut:book:silent
 object tree {
@@ -72,9 +72,7 @@ a `List[Option[A]]`. Since the values themselves are effects, traversing with `i
 will turn the traversable "inside out."
 
 ```tut:reset:book:silent
-import cats.instances.list._
-import cats.instances.option._
-import cats.syntax.traverse._
+import cats.implicits._
 ```
 
 ```tut:book

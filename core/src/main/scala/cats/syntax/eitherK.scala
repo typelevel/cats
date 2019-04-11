@@ -7,7 +7,7 @@ trait EitherKSyntax {
   implicit final def catsSyntaxEitherK[F[_], A](a: F[A]): EitherKOps[F, A] = new EitherKOps(a)
 }
 
-final class EitherKOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class EitherKOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Lift an `F[A]` into a `EitherK[F, G, A]` for any type constructor `G[_]`.

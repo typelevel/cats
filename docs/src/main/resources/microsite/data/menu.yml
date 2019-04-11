@@ -79,6 +79,13 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Alternative
+    url: typeclasses/alternative.html
+    menu_type: typeclasses
+  
+  - title: Bifunctor
+    url: typeclasses/bifunctor.html
+    menu_type: typeclasses
 
   - title: Eq
     url: typeclasses/eq.html
@@ -92,12 +99,12 @@ options:
     url: typeclasses/parallel.html
     menu_type: typeclasses
 
-  - title: MonoidK
-    url: typeclasses/monoidk.html
-    menu_type: typeclasses
-
   - title: SemigroupK
     url: typeclasses/semigroupk.html
+    menu_type: typeclasses
+
+  - title: MonoidK
+    url: typeclasses/monoidk.html
     menu_type: typeclasses
 
   - title: Show
@@ -116,12 +123,20 @@ options:
     url: typeclasses/arrow.html
     menu_type: typeclasses
 
+  - title: Law Testing
+    url: typeclasses/lawtesting.html
+    menu_type: typeclasses
+
   ###########################
   # Data Types Menu Options #
   ###########################
 
   - title: Data Types
     url: datatypes.html
+    menu_type: data
+
+  - title: Chain
+    url: datatypes/chain.html
     menu_type: data
 
   - title: Const
@@ -158,6 +173,10 @@ options:
 
   - title: Kleisli
     url: datatypes/kleisli.html
+    menu_type: data
+
+  - title: Nested
+    url: datatypes/nested.html
     menu_type: data
 
   - title: NonEmptyList

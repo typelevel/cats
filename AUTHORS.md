@@ -25,9 +25,12 @@ possible:
  * Alexey Levan
  * Alissa Pajer
  * Alistair Johnson
+ * Allan Timothy Leong
  * Alonso Dominguez
  * Amir Mohammad Saied
+ * Amitay Horwitz
  * Andrea Fiore
+ * Andrea McAts
  * Andrew Jones
  * Andy Scott
  * Angelo Genovese
@@ -44,6 +47,7 @@ possible:
  * Bobby Rauchenberg
  * Brendan McAdams
  * Brian McKenna
+ * Brian P. Holt
  * Bryan Tan
  * Cary Robbins
  * Chris Birchall
@@ -53,7 +57,9 @@ possible:
  * Colt Frederickson
  * Connie Chen
  * Csongor Kiss
+ * dadepo
  * Dale Wijnand
+ * Daniel Karch
  * Daniel Spiewak
  * Daniel Urban
  * Daniela Sfregola
@@ -62,13 +68,17 @@ possible:
  * David Allsopp
  * David Gregory
  * David R. Bild
+ * Dayyan Lord
  * Denis Mikhaylov
+ * Denis Rosca
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
+ * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
  * Eric Torreborre
+ * ericaovo
  * Erik LaBianca
  * Erik Osheim
  * Eugene Burmako
@@ -77,10 +87,17 @@ possible:
  * Fabian Gutierrez
  * Fabian Schmitthenner
  * Fabio Labella
+ * fantayeneh
  * Feynman Liang
  * Filipe Oliveira
+ * Filippo Mariotti
+ * Francisco Bermejo
+ * Francisco Canedo
+ * Francois Armand
  * Frank S. Thomas
  * Gabriele Petronella
+ * Gavin Bisesi
+ * Giovanni Ruggiero
  * Giulio De Luise
  * Greg Pfeil
  * Guillaume Massé
@@ -91,11 +108,14 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Jack Low
  * Jacob Barber
  * Jakub Kozłowski
  * Jan-Hendrik Zab
  * Jean-Rémi Desjardins
  * Jens
+ * Jens Grassel
+ * Jimin Hsieh
  * Jisoo Park
  * João Ferreira
  * John Sullivan
@@ -104,14 +124,18 @@ possible:
  * Joseph Abrahamson
  * Josh Marcus
  * Juan Pedro Moreno
+ * Juan Valencia
+ * Jules Ivanic
  * Julien Richard-Foy
  * Julien Truffaut
  * Jun Tomioka
  * Kailuo Wang
+ * Keir Lawson
  * kellen
  * Kenji Yoshida
- * Leandro Bolivar
  * Lars Hupel
+ * Leandro Bolivar
+ * Leif Battermann
  * Long Cao
  * Luis Angel Vicente Sanchez
  * Luis Sanchez
@@ -121,8 +145,10 @@ possible:
  * Marc Siegel
  * Marcin Rzeźnicki
  * Marco Battaglia
+ * Mariot Chauvin
  * Mark de Jong
  * Markus Hauck
+ * Martijn Hoekstra
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
@@ -133,6 +159,7 @@ possible:
  * Mike Curry
  * Miles Sabin
  * nigredo-tori
+ * Nikolay Maksimenko
  * n4to4
  * Olivier Blanvillain
  * Olli Helenius
@@ -140,13 +167,19 @@ possible:
  * P. Oscar Boykin
  * Paolo G. Giarrusso
  * Pascal Voitot
+ * Paul Chiusano
  * Paul Phillips
+ * Paulo "JCranky" Siqueira
+ * Pavel Chlupacek
  * Pavkin Vladimir
+ * Paweł Lipski
  * Pepe García
  * Pere Villega
  * Peter Neyens
  * Peter Perhac
+ * phderome
  * Philip Wills
+ * Piotr Gawryś
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
@@ -155,11 +188,14 @@ possible:
  * Richard Miller
  * Rintcius Blok
  * Rob Norris
+ * Rohan Shah
  * Romain Ruetschi
  * Ross A. Baker
- * Rüdiger Klaehn
- * Ryan Case
+ * rsekulski
  * rsoeldner
+ * Rüdiger Klaehn
+ * Rutvik Patel
+ * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
  * Sho Kohara
@@ -167,10 +203,10 @@ possible:
  * Shunsuke Otani
  * Simeon H. K. Fitch
  * Sinisa Louc
+ * Song Kun
  * Stephen Carman
  * Stephen Judkins
  * Stephen Lazaro
- * Stew O'Connor
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee
@@ -179,18 +215,28 @@ possible:
  * Tom Switzer
  * Tomas Mikula
  * Tongfei Chen
+ * Torsten Schmits
  * Travis Brown
  * Trond Bjerkestrand
  * Tya
+ * Valy Diarrassouba
+ * Vasileios Lampridis
  * ven
+ * Viktor Lövgren
  * Vladimir Samoylov
  * Wedens
+ * Wogan
  * Xavier Fernández Salas
+ * XUWE
+ * 杨博 (Yang Bo)
  * Yosef Fertel
  * Yilin Wei
  * Zach Abbott
  * zainab-ali
+ * Zelenya
+ * zhen
  * Ziyang Liu
+ * λoλcat
 
 Cats has been heavily inspired by many libraries, including [Scalaz](https://github.com/scalaz/scalaz),
 Haskell's [Prelude](https://hackage.haskell.org/package/base-4.9.0.0/docs/Prelude.html), and others.

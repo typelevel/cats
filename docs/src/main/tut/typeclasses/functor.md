@@ -57,7 +57,7 @@ function to a single effectful value without needing to "leave" the effect.
 
 ## Functors compose
 
-If you're ever found yourself working with nested data types such as `Option[List[A]]` or a
+If you've ever found yourself working with nested data types such as `Option[List[A]]` or
 `List[Either[String, Future[A]]]` and tried to `map` over it, you've most likely found yourself doing something
 like `_.map(_.map(_.map(f)))`. As it turns out, `Functor`s compose, which means if `F` and `G` have
 `Functor` instances, then so does `F[G[_]]`.
@@ -66,8 +66,7 @@ Such composition can be achieved via the `Functor#compose` method.
 
 ```tut:reset:book:silent
 import cats.Functor
-import cats.instances.list._
-import cats.instances.option._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -96,7 +95,7 @@ We can make this nicer at the cost of boxing with the `Nested` data type.
 
 ```tut:book:silent
 import cats.data.Nested
-import cats.syntax.functor._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -106,7 +105,7 @@ nested.map(_ + 1)
 ```
 
 The `Nested` approach, being a distinct type from its constituents, will resolve the usual way modulo
-possible [SI-2712][si2712] issues (which can be addressed through [partial unification][partial-unification]), 
+possible [SI-2712][si2712] issues (which can be addressed through [partial unification][partial-unification]),
 but requires syntactic and runtime overhead from wrapping and unwrapping.
 
 [partial-unification]: https://github.com/fiadliel/sbt-partial-unification "A sbt plugin for enabling partial unification"

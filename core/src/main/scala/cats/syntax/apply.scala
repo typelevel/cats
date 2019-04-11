@@ -14,7 +14,8 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
     new ApplyOps(fa)
 }
 
-final class ApplyOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
+
   /** Alias for [[Apply.productR]]. */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
   @inline def followedBy[B](fb: F[B])(implicit F: Apply[F]): F[B] =

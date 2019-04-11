@@ -11,28 +11,27 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
   def laws: MonadErrorLaws[F, E]
 
   def monadError[A: Arbitrary: Eq, B: Arbitrary: Eq, C: Arbitrary: Eq](implicit
-    ArbFA: Arbitrary[F[A]],
-    ArbFB: Arbitrary[F[B]],
-    ArbFC: Arbitrary[F[C]],
-    ArbFU: Arbitrary[F[Unit]],
-    ArbFAtoB: Arbitrary[F[A => B]],
-    ArbFBtoC: Arbitrary[F[B => C]],
-    ArbE: Arbitrary[E],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    CogenC: Cogen[C],
-    CogenE: Cogen[E],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]],
-    EqE: Eq[E],
-    EqFEitherEU: Eq[F[Either[E, Unit]]],
-    EqFEitherEA: Eq[F[Either[E, A]]],
-    EqEitherTFEA: Eq[EitherT[F, E, A]],
-    EqFABC: Eq[F[(A, B, C)]],
-    EqFInt: Eq[F[Int]],
-    iso: Isomorphisms[F]
-  ): RuleSet = {
+                                                                       ArbFA: Arbitrary[F[A]],
+                                                                       ArbFB: Arbitrary[F[B]],
+                                                                       ArbFC: Arbitrary[F[C]],
+                                                                       ArbFU: Arbitrary[F[Unit]],
+                                                                       ArbFAtoB: Arbitrary[F[A => B]],
+                                                                       ArbFBtoC: Arbitrary[F[B => C]],
+                                                                       ArbE: Arbitrary[E],
+                                                                       CogenA: Cogen[A],
+                                                                       CogenB: Cogen[B],
+                                                                       CogenC: Cogen[C],
+                                                                       CogenE: Cogen[E],
+                                                                       EqFA: Eq[F[A]],
+                                                                       EqFB: Eq[F[B]],
+                                                                       EqFC: Eq[F[C]],
+                                                                       EqE: Eq[E],
+                                                                       EqFEitherEU: Eq[F[Either[E, Unit]]],
+                                                                       EqFEitherEA: Eq[F[Either[E, A]]],
+                                                                       EqEitherTFEA: Eq[EitherT[F, E, A]],
+                                                                       EqFABC: Eq[F[(A, B, C)]],
+                                                                       EqFInt: Eq[F[Int]],
+                                                                       iso: Isomorphisms[F]): RuleSet =
     new RuleSet {
       def name: String = "monadError"
       def bases: Seq[(String, RuleSet)] = Nil
@@ -46,7 +45,6 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
         "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _)
       )
     }
-  }
 }
 
 object MonadErrorTests {

@@ -5,12 +5,17 @@ import scala.annotation.tailrec
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
-  implicit val catsStdInstancesForOption: Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] =
-    new Traverse[Option] with MonadError[Option, Unit]  with Alternative[Option] with CommutativeMonad[Option] with CoflatMap[Option] {
+  implicit val catsStdInstancesForOption: Traverse[Option]
+    with MonadError[Option, Unit]
+    with Alternative[Option]
+    with CommutativeMonad[Option]
+    with CoflatMap[Option] =
+    new Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option]
+    with CoflatMap[Option] {
 
       def empty[A]: Option[A] = None
 
-      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x orElse y
+      def combineK[A](x: Option[A], y: Option[A]): Option[A] = x.orElse(y)
 
       def pure[A](x: A): Option[A] = Some(x)
 
@@ -23,7 +28,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       @tailrec
       def tailRecM[A, B](a: A)(f: A => Option[Either[A, B]]): Option[B] =
         f(a) match {
-          case None => None
+          case None           => None
           case Some(Left(a1)) => tailRecM(a1)(f)
           case Some(Right(b)) => Some(b)
         }
@@ -33,7 +38,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
-          case None => Now(None)
+          case None    => Now(None)
           case Some(a) => fb.map(_.map(f(a, _)))
         }
 
@@ -42,23 +47,23 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def foldLeft[A, B](fa: Option[A], b: B)(f: (B, A) => B): B =
         fa match {
-          case None => b
+          case None    => b
           case Some(a) => f(b, a)
         }
 
       def foldRight[A, B](fa: Option[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         fa match {
-          case None => lb
+          case None    => lb
           case Some(a) => f(a, lb)
         }
 
       def raiseError[A](e: Unit): Option[A] = None
 
-      def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa orElse f(())
+      def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa.orElse(f(()))
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
         fa match {
-          case None => Applicative[G].pure(None)
+          case None    => Applicative[G].pure(None)
           case Some(a) => Applicative[G].map(f(a))(Some(_))
         }
 
@@ -117,7 +122,34 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     new Show[Option[A]] {
       def show(fa: Option[A]): String = fa match {
         case Some(a) => s"Some(${A.show(a)})"
-        case None => "None"
+        case None    => "None"
       }
     }
+}
+
+trait OptionInstancesBinCompat0 {
+  implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
+    val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
+
+    override def mapFilter[A, B](fa: Option[A])(f: (A) => Option[B]): Option[B] = fa.flatMap(f)
+
+    override def filter[A](fa: Option[A])(f: (A) => Boolean): Option[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Option[A])(f: PartialFunction[A, B]): Option[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Option[Option[A]]): Option[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Option[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Option[B]] =
+      fa match {
+        case None    => G.pure(Option.empty[B])
+        case Some(a) => f(a)
+      }
+
+    override def filterA[G[_], A](fa: Option[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Option[A]] =
+      fa match {
+        case None    => G.pure(Option.empty[A])
+        case Some(a) => G.map(f(a))(b => if (b) Some(a) else None)
+      }
+
+  }
 }

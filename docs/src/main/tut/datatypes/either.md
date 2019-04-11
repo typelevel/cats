@@ -59,7 +59,7 @@ e2.right.map(_ + 1)
 Note the return types are themselves back to `Either`, so if we want to make more calls to
 `flatMap` or `map` then we again must call `right` or `left`.
 
-However, the convention is almost always to right-bias `Either`. Indeed in Scala 2.12.x `Either` will be
+However, the convention is almost always to right-bias `Either`. Indeed in Scala 2.12.x `Either` is
 [right-biased](https://github.com/scala/scala/pull/5135) by default.
 
 More often than not we want to just bias towards one side and call it a day - by convention,
@@ -69,7 +69,7 @@ in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have b
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```tut:book
-import cats.syntax.either._
+import cats.implicits._
 
 val right: Either[String, Int] = Right(5)
 right.map(_ + 1)
