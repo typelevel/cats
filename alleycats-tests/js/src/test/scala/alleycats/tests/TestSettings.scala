@@ -3,7 +3,7 @@ package tests
 
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.Matchers
-import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
+import org.scalatest.prop.Configuration
 
 trait TestSettings extends Configuration with Matchers {
 
