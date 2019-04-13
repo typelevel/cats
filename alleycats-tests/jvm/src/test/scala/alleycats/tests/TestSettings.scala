@@ -16,4 +16,3 @@ trait TestSettings extends Configuration with Matchers {
       workers = PosInt(1)
     )
 }
-
