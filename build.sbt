@@ -595,7 +595,6 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(coverageEnabled := false)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
   .in(file("alleycats-tests"))
   .dependsOn(alleycatsLaws, testkit % "test")
   .settings(moduleName := "alleycats-tests")
