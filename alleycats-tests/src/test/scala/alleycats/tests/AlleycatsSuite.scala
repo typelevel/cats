@@ -2,9 +2,9 @@ package alleycats
 package tests
 
 import alleycats.std.MapInstances
-import catalysts.Platform
 import cats._
 import cats.instances.AllInstances
+import cats.platform.Platform
 import cats.syntax.{AllSyntax, EqOps}
 import cats.tests.StrictCatsEquality
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}

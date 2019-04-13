@@ -1,12 +1,10 @@
 package cats.kernel
 package laws
 
-import catalysts.Platform
-import catalysts.macros.TypeTagM
 import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
+import cats.platform.Platform
 
-import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
@@ -434,14 +432,4 @@ class Tests extends FunSuite with Discipline {
     implicit def hasCogen[A: Cogen]: Cogen[HasHash[A]] =
       Cogen[A].contramap(_.a)
   }
-
-  case class LawChecker[L <: Laws](name: String, laws: L) {
-    def check(f: L => L#RuleSet): Unit = checkAll(name, f(laws))
-  }
-
-  private[laws] def laws[L[_] <: Laws, A](implicit lws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    laws[L, A]("")
-
-  private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    LawChecker("[" + tag.name.toString + (if (extraTag != "") "@@" + extraTag else "") + "]", laws)
 }

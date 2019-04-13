@@ -1,8 +1,8 @@
 package cats
 package tests
 
-import catalysts.Platform
 import cats.instances._
+import cats.platform.Platform
 import cats.syntax._
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.{FunSuite, FunSuiteLike, Matchers}

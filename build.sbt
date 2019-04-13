@@ -151,8 +151,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val catalystsVersion = "0.8"
-
 def scalatestVersion(scalaVersion: String): String =
   if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
 
@@ -166,8 +164,6 @@ lazy val disciplineDependencies = Seq(
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
   libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
 )
 
@@ -503,7 +499,6 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)

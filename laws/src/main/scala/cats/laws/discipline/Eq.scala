@@ -2,8 +2,6 @@ package cats
 package laws
 package discipline
 
-import catalysts.Platform
-
 import cats.data.RepresentableStore
 import cats.Eq
 import cats.data.AndThen
@@ -12,6 +10,7 @@ import cats.instances.int._
 import cats.instances.string._
 import cats.instances.tuple._
 import cats.kernel._
+import cats.platform.Platform
 import cats.syntax.eq._
 import org.scalacheck.Arbitrary
 
