@@ -38,7 +38,7 @@ trait ParallelInstances extends ParallelInstances1 {
       λ[OptionT[M, ?] ~> Nested[F, Option, ?]](optT => Nested(P.parallel(optT.value)))
   }
 
-  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel[List, ZipList] =
+  implicit val catsStdNonEmptyParallelForZipList: NonEmptyParallel[List, ZipList] =
     new NonEmptyParallel[List, ZipList] {
 
       def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
@@ -51,7 +51,7 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[List ~> ZipList](v => new ZipList(v))
     }
 
-  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel[Vector, ZipVector] =
+  implicit val catsStdNonEmptyParallelForZipVector: NonEmptyParallel[Vector, ZipVector] =
     new NonEmptyParallel[Vector, ZipVector] {
 
       def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
@@ -64,7 +64,7 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
 
-  implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
+  implicit val catsStdParallelForZipStream: Parallel[Stream, ZipStream] =
     new Parallel[Stream, ZipStream] {
 
       def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
