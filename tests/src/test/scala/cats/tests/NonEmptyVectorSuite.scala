@@ -16,7 +16,7 @@ import cats.laws.discipline.{
   SerializableTests
 }
 import cats.laws.discipline.arbitrary._
-import cat.platform.Platform
+import cats.platform.Platform
 
 import scala.util.Properties
 
