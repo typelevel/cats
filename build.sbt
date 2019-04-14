@@ -548,6 +548,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -560,6 +561,7 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -601,6 +603,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 // bench is currently JVM-only
 
