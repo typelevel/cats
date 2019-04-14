@@ -65,9 +65,13 @@ private[kernel] class HashCompat {
 
     val it = xs.iterator
     var h = seqSeed
+    // scalastyle:off
     if (!it.hasNext) return finalizeHash(h, 0)
+    // scalastyle:on
     val x0 = it.next()
+    // scalastyle:off
     if (!it.hasNext) return finalizeHash(mix(h, A.hash(x0)), 1)
+    // scalastyle:on
     val x1 = it.next()
 
     val initial = A.hash(x0)
@@ -86,7 +90,9 @@ private[kernel] class HashCompat {
           h = mix(h, A.hash(it.next()))
           i += 1
         }
+        // scalastyle:off
         return finalizeHash(h, i)
+        // scalastyle:on
       }
       prev = hash
       i += 1
