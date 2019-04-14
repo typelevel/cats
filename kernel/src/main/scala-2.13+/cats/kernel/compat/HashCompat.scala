@@ -13,7 +13,7 @@ private[kernel] class HashCompat {
   }
 
   // Adapted from scala.util.hashing.MurmurHash#productHash.
-  private[kernel] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, prefix: String): Int = {
+  private[cats] def product2HashWithPrefix(_1Hash: Int, _2Hash: Int, prefix: String): Int = {
     import scala.util.hashing.MurmurHash3._
     var h = productSeed
     h = mix(h, prefix.hashCode)
@@ -22,7 +22,7 @@ private[kernel] class HashCompat {
     finalizeHash(h, 2)
   }
 
-  private[kernel] def updateMapHashC(c: Int, h: Int): Int = c * (h | 1)
+  private[cats] def updateUnorderedHashC(c: Int, h: Int): Int = c * (h | 1)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.

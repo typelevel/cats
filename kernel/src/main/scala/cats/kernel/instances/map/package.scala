@@ -33,7 +33,7 @@ class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[
         val h = StaticMethods.product2HashWithPrefix(k.hashCode(), V.hash(v), "Tuple2")
         a += h
         b ^= h
-        c = StaticMethods.updateMapHashC(c, h)
+        c = StaticMethods.updateUnorderedHashC(c, h)
         n += 1
     }
     var h = mapSeed
