@@ -1,12 +1,12 @@
 package alleycats.std
 
 import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
-import export._
 
 import scala.annotation.tailrec
 
-@exports
-object SetInstances {
+object set extends SetInstances
+
+trait SetInstances {
   // This method advertises parametricity, but relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
@@ -27,8 +27,7 @@ object SetInstances {
   // contain three. Since `g` is not a function (speaking strictly)
   // this would not be considered a law violation, but it still makes
   // people uncomfortable.
-  @export(Orphan)
-  implicit val setMonad: Monad[Set] =
+  implicit val alleyCatsStdSetMonad: Monad[Set] =
     new Monad[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
@@ -60,8 +59,7 @@ object SetInstances {
   // Since iteration order is not guaranteed for sets, folds and other
   // traversals may produce different results for input sets which
   // appear to be the same.
-  @export(Orphan)
-  implicit val setTraverse: Traverse[Set] =
+  implicit val alleyCatsSetTraverse: Traverse[Set] =
     new Traverse[Set] {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -117,10 +115,9 @@ object SetInstances {
         fa.collectFirst(Function.unlift(f))
     }
 
-  @export(Orphan)
-  implicit val setTraverseFilter: TraverseFilter[Set] =
+  implicit val alleyCatsSetTraverseFilter: TraverseFilter[Set] =
     new TraverseFilter[Set] {
-      val traverse: Traverse[Set] = setTraverse
+      val traverse: Traverse[Set] = alleyCatsSetTraverse
 
       def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
         fa.foldLeft(G.pure(Set.empty[B])) { (gSet, a) =>
@@ -130,18 +127,4 @@ object SetInstances {
           }
         }
     }
-}
-
-@reexports(SetInstances)
-object set extends LegacySetInstances with LegacySetInstancesBinCompat0
-
-// TODO: remove when cats.{ Set, Traverse } support export-hook
-trait LegacySetInstances {
-  implicit def legacySetMonad(implicit e: ExportOrphan[Monad[Set]]): Monad[Set] = e.instance
-
-  implicit def legacySetTraverse(implicit e: ExportOrphan[Traverse[Set]]): Traverse[Set] = e.instance
-}
-
-trait LegacySetInstancesBinCompat0 {
-  implicit def legacySetTraverseFilter(implicit e: ExportOrphan[TraverseFilter[Set]]): TraverseFilter[Set] = e.instance
 }
