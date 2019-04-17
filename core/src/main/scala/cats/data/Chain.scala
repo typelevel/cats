@@ -146,6 +146,23 @@ sealed abstract class Chain[+A] {
     }
 
   /**
+    * Finds the first element of this `Chain` for which the given partial
+    * function is defined, and applies the partial function to it.
+    */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) {
+        result = Some(x.asInstanceOf[B])
+        true
+      } else false
+    }
+    result
+  }
+
+  /**
    * Remove elements not matching the predicate
    */
   final def filter(f: A => Boolean): Chain[A] =

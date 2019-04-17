@@ -240,6 +240,12 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] = toChain.collect(pf)
 
   /**
+    * Finds the first element of this `NonEmptyChain` for which the given partial
+    * function is defined, and applies the partial function to it.
+    */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toChain.collectFirst(pf)
+
+  /**
    * Filters all elements of this chain that do not satisfy the given predicate.
    */
   final def filter(p: A ⇒ Boolean): Chain[A] = toChain.filter(p)
