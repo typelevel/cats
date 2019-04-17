@@ -151,6 +151,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
+
 val scalatestVersion = "3.0.8-RC2"
 
 val scalaCheckVersion = "1.14.0"
