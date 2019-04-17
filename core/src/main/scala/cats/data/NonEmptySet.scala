@@ -407,12 +407,6 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
         fa.toNonEmptyList
     }
 
-  // Left to keep binary compatibility
-  private[data] def catsDataEqForNonEmptySet[A: Order]: Eq[NonEmptySet[A]] =
-    new Eq[NonEmptySet[A]] {
-      def eqv(x: NonEmptySet[A], y: NonEmptySet[A]): Boolean = x === y
-    }
-
   implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
     Show.show[NonEmptySet[A]](_.show)
 
@@ -422,7 +416,7 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
 }
 
 sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {
-  implicit def catsDataOrderForNonEmptySetReal[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
+  implicit def catsDataOrderForNonEmptySet[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
     new NonEmptySetOrder[A] {
       implicit override def A0: Order[A] = A
     }
