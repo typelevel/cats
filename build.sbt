@@ -83,13 +83,13 @@ lazy val catsSettings = Seq(
     "bintray/non".at("http://dl.bintray.com/non/maven")
   ),
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "machinist" % "0.6.6",
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
+    "org.typelevel" %%% "machinist" % "0.6.7",
+    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.15.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.16.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -151,12 +151,11 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-def scalatestVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
+val scalatestVersion = "3.0.8-RC2"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.10.0"
+val disciplineVersion = "0.11.1"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
@@ -164,7 +163,7 @@ lazy val disciplineDependencies = Seq(
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
+  libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion % "test"
 )
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
@@ -549,6 +548,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -558,9 +558,10 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
+  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -596,6 +597,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .settings(noPublishSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 // bench is currently JVM-only
 
@@ -628,7 +630,7 @@ lazy val binCompatTest = project
         else //We are not testing BC on Scala 2.13 yet.
           "org.typelevel" %% "cats-core" % version.value % Provided
       },
-      "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
+      "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
   )
   .dependsOn(core.jvm % Test)

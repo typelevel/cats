@@ -100,7 +100,7 @@ class EitherEq[A, B](implicit A: Eq[A], B: Eq[B]) extends Eq[Either[A, B]] {
 class EitherHash[A, B](implicit A: Hash[A], B: Hash[B]) extends EitherEq[A, B] with Hash[Either[A, B]] {
   def hash(x: Either[A, B]): Int =
     x match {
-      case Left(xx)  => StaticMethods.product1Hash(A.hash(xx))
-      case Right(xx) => StaticMethods.product1Hash(B.hash(xx))
+      case Left(xx)  => StaticMethods.product1HashWithPrefix(A.hash(xx), "Left")
+      case Right(xx) => StaticMethods.product1HashWithPrefix(B.hash(xx), "Right")
     }
 }

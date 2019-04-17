@@ -54,7 +54,7 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
 class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Option[A]] {
   def hash(x: Option[A]): Int = x match {
     case None     => None.hashCode()
-    case Some(xx) => StaticMethods.product1Hash(A.hash(xx))
+    case Some(xx) => StaticMethods.product1HashWithPrefix(A.hash(xx), x.productPrefix)
   }
 }
 
