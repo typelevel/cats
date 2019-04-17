@@ -2,35 +2,17 @@ package alleycats
 package tests
 
 import alleycats.std.MapInstances
-import catalysts.Platform
 import cats._
 import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 import cats.tests.StrictCatsEquality
-import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.{FunSuite, Matchers}
-import org.scalatest.prop.{Configuration, GeneratorDrivenPropertyChecks}
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 import scala.util.{Failure, Success, Try}
-
-trait TestSettings extends Configuration with Matchers {
-
-  lazy val checkConfiguration: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(
-      minSuccessful = if (Platform.isJvm) PosInt(50) else PosInt(5),
-      maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
-      minSize = PosZInt(0),
-      sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
-      workers = PosInt(1)
-    )
-
-  lazy val slowCheckConfiguration: PropertyCheckConfiguration =
-    if (Platform.isJvm) checkConfiguration
-    else PropertyCheckConfiguration(sizeRange = 1, minSuccessful = 1)
-}
 
 /**
  * An opinionated stack of traits to improve consistency and reduce

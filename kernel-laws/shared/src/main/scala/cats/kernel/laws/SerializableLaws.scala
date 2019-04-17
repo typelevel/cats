@@ -1,9 +1,8 @@
 package cats.kernel.laws
 
+import cats.platform.Platform
 import org.scalacheck.Prop
 import org.scalacheck.Prop.{Exception, Proof, Result}
-
-import catalysts.Platform
 
 import scala.util.control.NonFatal
 
@@ -19,14 +18,10 @@ object SerializableLaws {
   // This part is a bit tricky. Basically, we only want to test
   // serializability on the JVM.
   //
-  // The Platform.isJs macro will give us a literal true or false at
-  // compile time, so we rely on scalac to prune away the "other"
-  // branch. Thus, when scala.js look at this method it won't "see"
-  // the branch which was removed, and will avoid an error trying to
-  // support java.io.*.
-  //
-  // This ends up being a lot nicer than having to split the entire
-  // laws project.
+  // `Platform.isJs` is a constant expression, so we can rely on
+  // scalac to prune away the "other" branch. Thus, when Scala.js
+  // looks at this method it won't "see" the branch which was removed,
+  // and will avoid an error trying to support java.io.*.
 
   def serializable[A](a: A): Prop =
     if (Platform.isJs) Prop(_ => Result(status = Proof))

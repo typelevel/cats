@@ -9,8 +9,8 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
+import cats.platform.Platform
 import Helpers.CSemi
-import catalysts.Platform
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
