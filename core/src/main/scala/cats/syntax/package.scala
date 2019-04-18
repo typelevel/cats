@@ -34,7 +34,7 @@ package object syntax {
   object ior extends IorSyntax
   object list extends ListSyntax with ListSyntaxBinCompat0
   object monad extends MonadSyntax
-  object monadError extends MonadErrorSyntax
+  object monadError extends MonadErrorSyntax with MonadErrorSyntaxBinCompat0
   object monoid extends MonoidSyntax
   object nested extends NestedSyntax
   object option extends OptionSyntax

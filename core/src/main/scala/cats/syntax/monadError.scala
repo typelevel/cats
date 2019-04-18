@@ -11,6 +11,13 @@ trait MonadErrorSyntax {
     new MonadErrorRethrowOps(fea)
 }
 
+trait MonadErrorSyntaxBinCompat0 {
+  implicit final def catsSyntaxMonadErrorBinCompat0[F[_], E, A](
+    fa: F[A]
+  )(implicit F: MonadError[F, E]): MonadErrorOps0[F, E, A] =
+    new MonadErrorOps0[F, E, A](fa)
+}
+
 final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def ensure(error: => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensure(fa)(error)(predicate)
@@ -29,6 +36,11 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
+}
+
+final class MonadErrorOps0[F[_], E, A](private val fa: F[A]) extends AnyVal {
+  def attemptTap[B](f: Either[E, A] => F[B])(implicit F: MonadError[F, E]): F[A] =
+    F.flatMap(F.attempt(fa))(ea => F.flatMap(f(ea))(_ => F.fromEither(ea)))
 }
 
 final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {
