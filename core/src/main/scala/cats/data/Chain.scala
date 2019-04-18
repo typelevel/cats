@@ -146,9 +146,9 @@ sealed abstract class Chain[+A] {
     }
 
   /**
-    * Finds the first element of this `Chain` for which the given partial
-    * function is defined, and applies the partial function to it.
-    */
+   * Finds the first element of this `Chain` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
   final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = {
     var result: Option[B] = None
     foreachUntil { a =>
@@ -161,6 +161,13 @@ sealed abstract class Chain[+A] {
     }
     result
   }
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   */
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] =
+    collectFirst(Function.unlift(f))
 
   /**
    * Remove elements not matching the predicate
@@ -577,6 +584,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       override def forall[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.forall(p)
       override def find[A](fa: Chain[A])(f: A => Boolean): Option[A] = fa.find(f)
       override def size[A](fa: Chain[A]): Long = fa.length
+      override def collectFirst[A, B](fa: Chain[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+      override def collectFirstSome[A, B](fa: Chain[A])(f: A => Option[B]): Option[B] = fa.collectFirstSome(f)
 
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =

@@ -240,10 +240,16 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] = toChain.collect(pf)
 
   /**
-    * Finds the first element of this `NonEmptyChain` for which the given partial
-    * function is defined, and applies the partial function to it.
-    */
+   * Finds the first element of this `NonEmptyChain` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
   final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toChain.collectFirst(pf)
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   */
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] = toChain.collectFirstSome(f)
 
   /**
    * Filters all elements of this chain that do not satisfy the given predicate.
@@ -479,6 +485,12 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] =
         fa.toNonEmptyList
+
+      override def collectFirst[A, B](fa: NonEmptyChain[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: NonEmptyChain[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirstSome(f)
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =
