@@ -356,11 +356,10 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
       case (e, r) => R.index(f.run(e))(r)
     }
 
-    def tabulate[A](f: Representation => A): Kleisli[M, E, A] = {
-      def curry[X, Y, Z](f: (X, Y) => Z): X => Y => Z = x => y => f(x, y)
-
-      Kleisli[M, E, A](curry(Function.untupled(f)).andThen(R.tabulate))
-    }
+    def tabulate[A](f: Representation => A): Kleisli[M, E, A] =
+      Kleisli[M, E, A] { e =>
+        R.tabulate(r => f(e -> r))
+      }
   }
 }
 
