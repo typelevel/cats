@@ -316,7 +316,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> val nec = NonEmptyChain(4, 5, 6)
-   * scala> nec.reduceLeftTo(_.toString)((cur, acc) => acc + cur.toString)
+   * scala> nec.reduceRightTo(_.toString)((cur, acc) => acc + cur.toString)
    * res0: String = 654
    * }}}
    */
