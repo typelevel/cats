@@ -450,10 +450,10 @@ sealed abstract private[data] class KleisliInstances8 extends KleisliInstances9 
   implicit def catsDataDistributiveForKleisli[F[_], R](implicit F0: Distributive[F]): Distributive[Kleisli[F, R, ?]] =
     new KleisliDistributive[F, R] with KleisliFunctor[F, R] { implicit def F: Distributive[F] = F0 }
 
-  implicit def catsDataCoflatMapForKleisli[F[_], In](implicit F0: Applicative[F]): CoflatMap[Kleisli[F, In, ?]] =
+  implicit def catsDataCoflatMapForKleisli[F[_], In](implicit F: Functor[F]): CoflatMap[Kleisli[F, In, ?]] =
     new CoflatMap[Kleisli[F, In, ?]] {
       override def coflatMap[A, B](fa: Kleisli[F, In, A])(f: Kleisli[F, In, A] => B): Kleisli[F, In, B] =
-        Kleisli(_ => F0.pure(f(fa)))
+        Kleisli(i => F.as(fa.run(i), f(fa)))
 
       override def map[A, B](fa: Kleisli[F, In, A])(f: A => B): Kleisli[F, In, B] = fa.map(f)
     }
