@@ -1,6 +1,6 @@
 package catsBC
 
-import org.scalatest.suit.AnyFunSuiteLike
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class MimaExceptionsTest extends AnyFunSuiteLike {
   test("is binary compatible") {
