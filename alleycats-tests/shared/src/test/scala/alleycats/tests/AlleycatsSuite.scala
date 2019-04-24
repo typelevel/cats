@@ -6,8 +6,9 @@ import cats._
 import cats.instances.AllInstances
 import cats.syntax.{AllSyntax, EqOps}
 import cats.tests.StrictCatsEquality
-import org.scalatest.{FunSuite, Matchers}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuiteLike
+import org.scalatest.check.ScalaCheckPropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
@@ -19,9 +20,9 @@ import scala.util.{Failure, Success, Try}
  * boilerplate in Alleycats tests. Derived from Cats.
  */
 trait AlleycatsSuite
-    extends FunSuite
+    extends AnyFunSuiteLike
     with Matchers
-    with GeneratorDrivenPropertyChecks
+    with ScalaCheckPropertyChecks
     with Discipline
     with TestSettings
     with AllInstances

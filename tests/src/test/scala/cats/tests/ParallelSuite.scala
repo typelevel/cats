@@ -5,7 +5,7 @@ import cats._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuiteLike
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -471,7 +471,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
 }
 
-trait ApplicativeErrorForEitherTest extends FunSuite with Discipline {
+trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
 
   import cats.instances.either._
   import cats.instances.parallel._
