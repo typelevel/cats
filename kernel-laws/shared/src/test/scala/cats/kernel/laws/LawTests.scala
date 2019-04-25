@@ -9,7 +9,7 @@ import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosInt, PosZInt}
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue}
@@ -110,7 +110,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends FunSuite with Discipline {
+class Tests extends AnyFunSuiteLike with Discipline {
 
   import KernelCheck._
 

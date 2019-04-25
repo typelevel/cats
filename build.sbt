@@ -151,19 +151,24 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.0.8-RC2"
+val scalatestVersion = "3.1.0-SNAP9"
+
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP4"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.11.1"
+val disciplineVersion = "0.11.2-M1"
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion
+  libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+                              "org.typelevel" %%% "discipline" % disciplineVersion)
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion % "test"
+  libraryDependencies ++= Seq(
+    "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
+  )
 )
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
@@ -558,7 +563,10 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion)
+  .settings(
+    libraryDependencies ++= Seq("org.scalatest" %%% "scalatest" % scalatestVersion,
+                                "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion)
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))

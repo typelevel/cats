@@ -1,14 +1,12 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import cats.instances.all._
 import cats.kernel.CommutativeMonoid
 
 sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFString: Arbitrary[F[String]])
-    extends CatsSuite
-    with PropertyChecks {
+    extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: A => B): B
@@ -60,8 +58,7 @@ final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String,
 
 sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(
   implicit ArbFString: Arbitrary[F[String]]
-) extends CatsSuite
-    with PropertyChecks {
+) extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
