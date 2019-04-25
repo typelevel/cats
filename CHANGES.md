@@ -2,7 +2,8 @@
 
 > 2019 April 24
 
-Cats 2.0.0-M1 is a milestone release for Cats 2.0. Cats 2.0.0-M1 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x.
+Cats 2.0.0-M1 is a milestone release for Cats 2.0. It's aavaialble on Scala 2.11, Scala 2.12, Scala 2.13.0-RC1 and Scala.js 0.6.
+Cats 2.0.0-M1 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x. 
 The cats-core 2.0.0-M1 jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0, 1.5.0 and 1.6.0 jars. 
 Cats-core and cats-free 2.0.0 will remain binary compatible with 1.x. 
 Cats 2.0.0-M1 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats. 
