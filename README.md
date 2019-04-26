@@ -78,11 +78,6 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
-*Cats is still under active development. While we don't anticipate any
- major redesigns, changes that are neither source nor binary
- compatible are to be expected in upcoming RC1 and 1.0 releases.*
-
-
 ### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
 
 By sharing the same set of type classes, instances and data types provided by Cats, projects can speak the same "Cats language", and integrate with each other with ease.
