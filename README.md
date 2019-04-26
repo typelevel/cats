@@ -80,10 +80,6 @@ functionality, you can pick-and-choose from amongst these modules
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 
-*Cats is still under active development. While we don't anticipate any
- major redesigns, changes that are neither source nor binary
- compatible are to be expected in upcoming RC1 and 1.0 releases.*
-
 
 ### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
 
@@ -160,7 +156,7 @@ Below are quick html and markdown snippets to use the badge in your own project.
 
 ### How can I contribute to Cats?
 
-We welcome code contributions to Cats and would love for you to help build
+We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
 information about how you can get involved.
 
