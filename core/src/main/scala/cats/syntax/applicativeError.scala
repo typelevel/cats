@@ -99,6 +99,24 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    */
   def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] = F.adaptError(fa)(pf)
 
-  def orElseRaise(other: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+  /**
+   * Handle all errors on this F[A] by raising an error using the given value.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> val fa: Either[String, Int] = Left("wrong")
+   *
+   * scala> fa.orRaise("wronger")
+   * res1: Either[String,Int] = Left(wronger)
+   *
+   * scala> val fb: Either[String, Int] = Right(42)
+   *
+   * scala> fb.orRaise("wrongest")
+   * res2: Either[String,Int] = Right(42)
+   * }}}
+   */
+  def orRaise(other: => E)(implicit F: ApplicativeError[F, E]): F[A] =
     orElse(F.raiseError(other))
 }
