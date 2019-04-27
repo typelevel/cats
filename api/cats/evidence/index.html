@@ -146,6 +146,10 @@
                         <a class="object" href="Is$.html" title=""></a>
                         <a class="class" href="Is.html" title="A value of A Is B is proof that the types A and B are the same."></a>
                         <a href="Is.html" title="A value of A Is B is proof that the types A and B are the same.">Is</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="IsInstances.html" title=""></a>
+                        <a href="IsInstances.html" title="">IsInstances</a>
                       </li><li name="cats.free" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="free"></a><a id="free:free"></a>
       <span class="permalink">
@@ -401,6 +405,22 @@ contexts. This can be a more powerful assertion than <code>A =:= B</code> and is
 easily used in manipulation of types while avoiding (potentially
 erroneous) coercions.</p><p><code>A Is B</code> is also known as Leibniz equality.
 </p></div></div>
+    </li><li name="cats.evidence.IsInstances" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IsInstancesextendsAnyRef"></a><a id="IsInstances:IsInstances"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/index.html#IsInstancesextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IsInstances.html"><span class="name">IsInstances</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      
     </li><li name="cats.evidence.Leibniz" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Leibniz[A,B]=cats.evidence.Is[A,B]"></a><a id="Leibniz[A,B]:Leibniz[A,B]"></a>
       <span class="permalink">
@@ -476,7 +496,7 @@ https://en.wikipedia.org/wiki/Barbara_Liskov
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="Is$.html"><span class="name">Is</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="Is$.html"><span class="name">Is</span></a><span class="result"> extends <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

@@ -657,7 +657,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">StaticMethods</span>
+        <span class="name">StaticMethods</span><span class="result"> extends <span class="extype" name="cats.kernel.compat.HashCompat">HashCompat</span></span>
       </span>
       </h4>
 
@@ -666,7 +666,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.kernel.compat.HashCompat">HashCompat</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -692,7 +692,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.kernel.instances.StaticMethods"><span>StaticMethods</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.kernel.instances.StaticMethods"><span>StaticMethods</span></li><li class="in" name="cats.kernel.compat.HashCompat"><span>HashCompat</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -995,7 +995,7 @@
       </span>
       
       
-    </li><li name="cats.kernel.instances.StaticMethods#listHash" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.kernel.compat.HashCompat#listHash" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="listHash[A](x:List[A])(implicitA:cats.kernel.Hash[A]):Int"></a><a id="listHash[A](List[A])(Hash[A]):Int"></a>
       <span class="permalink">
       <a href="../../../cats/kernel/instances/StaticMethods$.html#listHash[A](x:List[A])(implicitA:cats.kernel.Hash[A]):Int" title="Permalink">
@@ -1007,10 +1007,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listHash</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.kernel.instances.StaticMethods.listHash.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.StaticMethods.listHash.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">listHash</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="x">x: <span class="extype" name="scala.List">List</span>[<span class="extype" name="cats.kernel.compat.HashCompat.listHash.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.compat.HashCompat.listHash.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HashCompat</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1065,7 +1065,7 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="cats.kernel.instances.StaticMethods#orderedHash" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.kernel.compat.HashCompat#orderedHash" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="orderedHash[A](xs:TraversableOnce[A])(implicitA:cats.kernel.Hash[A]):Int"></a><a id="orderedHash[A](TraversableOnce[A])(Hash[A]):Int"></a>
       <span class="permalink">
       <a href="../../../cats/kernel/instances/StaticMethods$.html#orderedHash[A](xs:TraversableOnce[A])(implicitA:cats.kernel.Hash[A]):Int" title="Permalink">
@@ -1077,10 +1077,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orderedHash</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.TraversableOnce">TraversableOnce</span>[<span class="extype" name="cats.kernel.instances.StaticMethods.orderedHash.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.instances.StaticMethods.orderedHash.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">orderedHash</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.TraversableOnce">TraversableOnce</span>[<span class="extype" name="cats.kernel.compat.HashCompat.orderedHash.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../Hash.html" class="extype" name="cats.kernel.Hash">Hash</a>[<span class="extype" name="cats.kernel.compat.HashCompat.orderedHash.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HashCompat</dd></dl></div>
     </li><li name="cats.kernel.instances.StaticMethods#product1Hash" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="product1Hash(_1Hash:Int):Int"></a><a id="product1Hash(Int):Int"></a>
       <span class="permalink">
@@ -1239,7 +1239,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="cats.kernel.compat.HashCompat">
+              <h3>Inherited from <span class="extype" name="cats.kernel.compat.HashCompat">HashCompat</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

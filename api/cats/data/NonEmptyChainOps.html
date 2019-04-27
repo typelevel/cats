@@ -1014,7 +1014,7 @@ res0: <span class="std">Int</span> = <span class="num">15</span></pre></div></di
 with every other value using the given function <code>g</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apply <code>f</code> to the &quot;initial element&quot; of this chain and lazily combine it
 with every other value using the given function <code>g</code>.</p><pre>scala&gt; <span class="kw">import</span> cats.data.NonEmptyChain
 scala&gt; <span class="kw">val</span> nec = NonEmptyChain(<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>)
-scala&gt; nec.reduceLeftTo(_.toString)((cur, acc) <span class="kw">=&gt;</span> acc + cur.toString)
+scala&gt; nec.reduceRightTo(_.toString)((cur, acc) <span class="kw">=&gt;</span> acc + cur.toString)
 res0: <span class="std">String</span> = <span class="num">654</span></pre></div></div>
     </li><li name="cats.data.NonEmptyChainOps#reverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="reverse:cats.data.NonEmptyChain[A]"></a><a id="reverse:NonEmptyChain[A]"></a>

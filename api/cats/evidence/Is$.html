@@ -114,6 +114,10 @@
                         <a class="object" href="" title=""></a>
                         <a class="class" href="Is.html" title="A value of A Is B is proof that the types A and B are the same."></a>
                         <a href="Is.html" title="A value of A Is B is proof that the types A and B are the same.">Is</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="IsInstances.html" title=""></a>
+                        <a href="IsInstances.html" title="">IsInstances</a>
                       </li>
               </ul>
             </div>
@@ -139,7 +143,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Is</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Is</span><span class="result"> extends <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -148,7 +152,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -174,7 +178,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.evidence.Is"><span>Is</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.evidence.Is"><span>Is</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="cats.evidence.IsInstances"><span>IsInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -397,6 +401,23 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.evidence.IsInstances#leibniz" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leibniz:cats.arrow.Category[cats.evidence.Is]"></a><a id="leibniz:Category[Is]"></a>
+      <span class="permalink">
+      <a href="../../cats/evidence/Is$.html#leibniz:cats.arrow.Category[cats.evidence.Is]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leibniz</span><span class="result">: <a href="../arrow/Category.html" class="extype" name="cats.arrow.Category">Category</a>[<a href="Is.html" class="extype" name="cats.evidence.Is">Is</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">The category instance on Leibniz categories.</p><div class="fullcomment"><div class="comment cmt"><p>The category instance on Leibniz categories.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -613,6 +634,8 @@ evidence of <code>A Is B</code> except via a coercion. Use responsibly.
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="cats.evidence.IsInstances">
+              <h3>Inherited from <a href="IsInstances.html" class="extype" name="cats.evidence.IsInstances">IsInstances</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

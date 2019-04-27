@@ -636,7 +636,7 @@ res0: <span class="std">String</span> = bar</pre></div></div>
         <span class="name">bimonad</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="Rep">Rep: <a href="#Aux[F[_],R]=cats.Representable[F]{typeRepresentation=R}" class="extmbr" name="cats.Representable.Aux">Aux</a>[<span class="extype" name="cats.Representable.bimonad.F">F</span>, <span class="extype" name="cats.Representable.bimonad.R">R</span>]</span>, <span name="Mon">Mon: <a href="index.html#Monoid[A]=cats.kernel.Monoid[A]" class="extmbr" name="cats.Monoid">Monoid</a>[<span class="extype" name="cats.Representable.bimonad.R">R</span>]</span>)</span><span class="result">: <a href="Bimonad.html" class="extype" name="cats.Bimonad">Bimonad</a>[<span class="extype" name="cats.Representable.bimonad.F">F</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Derives a <code>Bimonad</code> instance for any <code>Representable</code> functor whos representation
+      <p class="shortcomment cmt">Derives a <code>Bimonad</code> instance for any <code>Representable</code> functor whose representation
 has a <code>Monoid</code> instance.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
@@ -662,6 +662,23 @@ has a <code>Monoid</code> instance.</p>
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="cats.Representable#distributive" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="distributive[F[_]](implicitRep:cats.Representable[F]):cats.Distributive[F]"></a><a id="distributive[F[_]](Representable[F]):Distributive[F]"></a>
+      <span class="permalink">
+      <a href="../cats/Representable$.html#distributive[F[_]](implicitRep:cats.Representable[F]):cats.Distributive[F]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">distributive</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="Rep">Rep: <a href="Representable.html" class="extype" name="cats.Representable">Representable</a>[<span class="extype" name="cats.Representable.distributive.F">F</span>]</span>)</span><span class="result">: <a href="Distributive.html" class="extype" name="cats.Distributive">Distributive</a>[<span class="extype" name="cats.Representable.distributive.F">F</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Derives a <code>Distributive</code> instance for any <code>Representable</code> functor
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">

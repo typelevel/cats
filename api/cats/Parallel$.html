@@ -735,9 +735,9 @@ then you can get <code>ApplicativeError[F, E]</code> from <code>MonadError[M, E]
               
         </dd></dl></div>
     </li><li name="cats.Parallel#identity" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="identity[M[_]](implicitevidence$17:cats.Monad[M]):cats.Parallel[M,M]"></a><a id="identity[M[_]](Monad[M]):Parallel[M,M]"></a>
+      <a id="identity[M[_]](implicitevidence$21:cats.Monad[M]):cats.Parallel[M,M]"></a><a id="identity[M[_]](Monad[M]):Parallel[M,M]"></a>
       <span class="permalink">
-      <a href="../cats/Parallel$.html#identity[M[_]](implicitevidence$17:cats.Monad[M]):cats.Parallel[M,M]" title="Permalink">
+      <a href="../cats/Parallel$.html#identity[M[_]](implicitevidence$21:cats.Monad[M]):cats.Parallel[M,M]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -858,6 +858,40 @@ corresponding to the Parallel instance instead.</p>
       
       <p class="shortcomment cmt">Like <code>Applicative[F].ap2</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
+    </li><li name="cats.Parallel#parBisequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parBisequence[T[_,_],M[_],F[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$18:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[A,B]]"></a><a id="parBisequence[T[_,_],M[_],F[_],A,B](T[M[A],M[B]])(Bitraverse[T],Parallel[M,F]):M[T[A,B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parBisequence[T[_,_],M[_],F[_],A,B](tmamb:T[M[A],M[B]])(implicitevidence$18:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parBisequence</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="tmamb">tmamb: <span class="extype" name="cats.Parallel.parBisequence.T">T</span>[<span class="extype" name="cats.Parallel.parBisequence.M">M</span>[<span class="extype" name="cats.Parallel.parBisequence.A">A</span>], <span class="extype" name="cats.Parallel.parBisequence.M">M</span>[<span class="extype" name="cats.Parallel.parBisequence.B">B</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Parallel.parBisequence.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parBisequence.M">M</span>, <span class="extype" name="cats.Parallel.parBisequence.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parBisequence.M">M</span>[<span class="extype" name="cats.Parallel.parBisequence.T">T</span>[<span class="extype" name="cats.Parallel.parBisequence.A">A</span>, <span class="extype" name="cats.Parallel.parBisequence.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>Bitraverse[A].bisequence</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p>
+    </li><li name="cats.Parallel#parBitraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parBitraverse[T[_,_],M[_],F[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$17:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[C,D]]"></a><a id="parBitraverse[T[_,_],M[_],F[_],A,B,C,D](T[A,B])((A)⇒M[C],(B)⇒M[D])(Bitraverse[T],Parallel[M,F]):M[T[C,D]]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parBitraverse[T[_,_],M[_],F[_],A,B,C,D](tab:T[A,B])(f:A=&gt;M[C],g:B=&gt;M[D])(implicitevidence$17:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[C,D]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parBitraverse</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="tab">tab: <span class="extype" name="cats.Parallel.parBitraverse.T">T</span>[<span class="extype" name="cats.Parallel.parBitraverse.A">A</span>, <span class="extype" name="cats.Parallel.parBitraverse.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Parallel.parBitraverse.A">A</span>) ⇒ <span class="extype" name="cats.Parallel.parBitraverse.M">M</span>[<span class="extype" name="cats.Parallel.parBitraverse.C">C</span>]</span>, <span name="g">g: (<span class="extype" name="cats.Parallel.parBitraverse.B">B</span>) ⇒ <span class="extype" name="cats.Parallel.parBitraverse.M">M</span>[<span class="extype" name="cats.Parallel.parBitraverse.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Parallel.parBitraverse.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parBitraverse.M">M</span>, <span class="extype" name="cats.Parallel.parBitraverse.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parBitraverse.M">M</span>[<span class="extype" name="cats.Parallel.parBitraverse.T">T</span>[<span class="extype" name="cats.Parallel.parBitraverse.C">C</span>, <span class="extype" name="cats.Parallel.parBitraverse.D">D</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>Bitraverse[A].bitraverse</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p>
     </li><li name="cats.Parallel#parFlatSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="parFlatSequence[T[_],M[_],F[_],A](tma:T[M[T[A]]])(implicitevidence$5:cats.Traverse[T],implicitevidence$6:cats.FlatMap[T],implicitP:cats.Parallel[M,F]):M[T[A]]"></a><a id="parFlatSequence[T[_],M[_],F[_],A](T[M[T[A]]])(Traverse[T],FlatMap[T],Parallel[M,F]):M[T[A]]"></a>
       <span class="permalink">
@@ -891,6 +925,40 @@ corresponding to the Parallel instance instead.</p>
       </span>
       
       <p class="shortcomment cmt">Like <code>Traverse[A].flatTraverse</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p>
+    </li><li name="cats.Parallel#parLeftSequence" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parLeftSequence[T[_,_],M[_],F[_],A,B](tmab:T[M[A],B])(implicitevidence$20:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[A,B]]"></a><a id="parLeftSequence[T[_,_],M[_],F[_],A,B](T[M[A],B])(Bitraverse[T],Parallel[M,F]):M[T[A,B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parLeftSequence[T[_,_],M[_],F[_],A,B](tmab:T[M[A],B])(implicitevidence$20:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parLeftSequence</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="tmab">tmab: <span class="extype" name="cats.Parallel.parLeftSequence.T">T</span>[<span class="extype" name="cats.Parallel.parLeftSequence.M">M</span>[<span class="extype" name="cats.Parallel.parLeftSequence.A">A</span>], <span class="extype" name="cats.Parallel.parLeftSequence.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Parallel.parLeftSequence.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parLeftSequence.M">M</span>, <span class="extype" name="cats.Parallel.parLeftSequence.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parLeftSequence.M">M</span>[<span class="extype" name="cats.Parallel.parLeftSequence.T">T</span>[<span class="extype" name="cats.Parallel.parLeftSequence.A">A</span>, <span class="extype" name="cats.Parallel.parLeftSequence.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>Bitraverse[A].leftSequence</code>, but uses the applicative instance
+corresponding to the Parallel instance instead.</p>
+    </li><li name="cats.Parallel#parLeftTraverse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parLeftTraverse[T[_,_],M[_],F[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$19:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[C,B]]"></a><a id="parLeftTraverse[T[_,_],M[_],F[_],A,B,C](T[A,B])((A)⇒M[C])(Bitraverse[T],Parallel[M,F]):M[T[C,B]]"></a>
+      <span class="permalink">
+      <a href="../cats/Parallel$.html#parLeftTraverse[T[_,_],M[_],F[_],A,B,C](tab:T[A,B])(f:A=&gt;M[C])(implicitevidence$19:cats.Bitraverse[T],implicitP:cats.Parallel[M,F]):M[T[C,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parLeftTraverse</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>, <span name="C">C</span>]</span><span class="params">(<span name="tab">tab: <span class="extype" name="cats.Parallel.parLeftTraverse.T">T</span>[<span class="extype" name="cats.Parallel.parLeftTraverse.A">A</span>, <span class="extype" name="cats.Parallel.parLeftTraverse.B">B</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.Parallel.parLeftTraverse.A">A</span>) ⇒ <span class="extype" name="cats.Parallel.parLeftTraverse.M">M</span>[<span class="extype" name="cats.Parallel.parLeftTraverse.C">C</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="Bitraverse.html" class="extype" name="cats.Bitraverse">Bitraverse</a>[<span class="extype" name="cats.Parallel.parLeftTraverse.T">T</span>]</span>, <span name="P">P: <a href="Parallel.html" class="extype" name="cats.Parallel">Parallel</a>[<span class="extype" name="cats.Parallel.parLeftTraverse.M">M</span>, <span class="extype" name="cats.Parallel.parLeftTraverse.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.Parallel.parLeftTraverse.M">M</span>[<span class="extype" name="cats.Parallel.parLeftTraverse.T">T</span>[<span class="extype" name="cats.Parallel.parLeftTraverse.C">C</span>, <span class="extype" name="cats.Parallel.parLeftTraverse.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>Bitraverse[A].leftTraverse</code>, but uses the applicative instance
 corresponding to the Parallel instance instead.</p>
     </li><li name="cats.ParallelArityFunctions#parMap10" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="ParMapArity">
       <a id="parMap10[M[_],F[_],A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,Z](m0:M[A0],m1:M[A1],m2:M[A2],m3:M[A3],m4:M[A4],m5:M[A5],m6:M[A6],m7:M[A7],m8:M[A8],m9:M[A9])(f:(A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)=&gt;Z)(implicitp:cats.NonEmptyParallel[M,F]):M[Z]"></a><a id="parMap10[M[_],F[_],A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,Z](M[A0],M[A1],M[A2],M[A3],M[A4],M[A5],M[A6],M[A7],M[A8],M[A9])((A0,A1,A2,A3,A4,A5,A6,A7,A8,A9)⇒Z)(NonEmptyParallel[M,F]):M[Z]"></a>
