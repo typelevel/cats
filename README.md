@@ -1,6 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
-
+* **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us. 
+* **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 * **Jan 31 2019** Cats 1.6.0 is released.
 * **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
@@ -15,6 +16,7 @@
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
 
+<a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donation-button.png" /></a>
 
 ### Overview
 
@@ -77,6 +79,7 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
 
 Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
+
 
 ### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
 
@@ -156,6 +159,8 @@ Below are quick html and markdown snippets to use the badge in your own project.
 We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
 information about how you can get involved.
+
+You can also support us by talking to your employer about supporting the OSS libraries they are using. We have a [sustainability program](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m) that supports the maintenance and development of Cats. 
 
 ### Community
 
