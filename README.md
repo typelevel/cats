@@ -28,14 +28,9 @@ standard library. Cats strives to provide functional programming abstractions th
 
 For more detail about Cats' motivations, go [here](http://typelevel.org/cats/motivations).
 
-You can read the API Documentation, [here](https://typelevel.org/cats/api/cats/index.html).
-
-We have an exciting [2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md).
-
-
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-M4,  and [Scala.js](http://www.scala-js.org/).
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC1, and [Scala.js](http://www.scala-js.org/).
 
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
@@ -53,7 +48,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.6.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -78,7 +73,20 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
 
-Release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
+Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
+See [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) for our plan for 2019.
+
+### Documentation
+
+Links:
+
+1. Website: [typelevel.org/cats/](https://typelevel.org/cats/)
+2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
+3. Type classes: [typelevel.org/cats/typeclasses](https://typelevel.org/cats/typeclasses.html)
+4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.html)
+5. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
+6. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)
+7. FAQ: [typelevel.org/cats/faq.html](https://typelevel.org/cats/faq.html)
 
 
 ### <a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem
