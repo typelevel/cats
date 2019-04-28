@@ -17,16 +17,15 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
       b |+| f(a)
     }
 
-
   def foldRightLazy[A](fa: F[A]): Boolean = {
     var i = 0
     F.foldRight(fa, Eval.now("empty")) { (_, _) =>
-      i += 1
-      Eval.now("not empty")
-    }.value
+        i += 1
+        Eval.now("not empty")
+      }
+      .value
     i == (if (F.isEmpty(fa)) 0 else 1)
   }
-
 
   def rightFoldConsistentWithFoldMap[A, B](
     fa: F[A],
@@ -122,7 +121,6 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def orderedConsistency[A: Eq](x: F[A], y: F[A])(implicit ev: Eq[F[A]]): IsEq[List[A]] =
     if (x === y) (F.toList(x) <-> F.toList(y))
     else List.empty[A] <-> List.empty[A]
-
 
   def existsLazy[A](fa: F[A]): Boolean = {
     var i = 0
