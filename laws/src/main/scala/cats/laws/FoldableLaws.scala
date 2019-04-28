@@ -125,7 +125,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def existsLazy[A](fa: F[A]): Boolean = {
     var i = 0
     F.exists(fa) { _ =>
-      i = i + 1
+      i += 1
       true
     }
     i == (if (F.isEmpty(fa)) 0 else 1)
@@ -134,7 +134,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def forallLazy[A](fa: F[A]): Boolean = {
     var i = 0
     F.forall(fa) { _ =>
-      i = i + 1
+      i += 1
       false
     }
     i == (if (F.isEmpty(fa)) 0 else 1)
