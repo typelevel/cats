@@ -8,6 +8,16 @@ import scala.collection.mutable
 trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: Foldable[F]
 
+  def foldRightLazy[A](fa: F[A]): Boolean = {
+    var i = 0
+    F.foldRight(fa, Eval.now("empty")) { (_, _) =>
+      i += 1
+      Eval.now("not empty")
+    }
+      .value
+    i == (if (F.isEmpty(fa)) 0 else 1)
+  }
+
   def leftFoldConsistentWithFoldMap[A, B](
     fa: F[A],
     f: A => B
@@ -16,16 +26,6 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
     fa.foldMap(f) <-> fa.foldLeft(M.empty) { (b, a) =>
       b |+| f(a)
     }
-
-  def foldRightLazy[A](fa: F[A]): Boolean = {
-    var i = 0
-    F.foldRight(fa, Eval.now("empty")) { (_, _) =>
-        i += 1
-        Eval.now("not empty")
-      }
-      .value
-    i == (if (F.isEmpty(fa)) 0 else 1)
-  }
 
   def rightFoldConsistentWithFoldMap[A, B](
     fa: F[A],
