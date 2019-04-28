@@ -504,7 +504,7 @@ In the following example a basic console application is shown.
 When the user inputs some text we use a separate `State` monad to track what the user
 typed.
 
-As we can observe in this case `FreeT` offers us a the alternative to delegate denotations to `State`
+As we can observe in this case `FreeT` offers us the alternative to delegate denotations to `State`
 monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
 
 ```tut:book
@@ -558,6 +558,67 @@ import TeletypeOps._
 val state = program.foldMap(interpreter)
 val initialState = Nil
 val (stored, _) = state.run(initialState).value
+```
+
+Another example is more basic usage of `FreeT` with some context `Ctx` for which we provide `Future` interpreter,
+combined with `OptionT` for reducing boilerplate.
+
+```tut:book
+import cats.free._
+import cats._
+import cats.data._
+import cats.implicits._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+sealed trait Ctx[A]
+
+case class Action(value: Int) extends Ctx[Int]
+
+def op1: FreeT[Ctx, Option, Int] =
+  FreeT.liftF[Ctx, Option, Int](Action(7))
+
+def op2: FreeT[Ctx, Option, Int] =
+  FreeT.liftT[Ctx, Option, Int](Some(4))
+
+def op3: FreeT[Ctx, Option, Int] =
+  FreeT.pure[Ctx, Option, Int](1)
+
+val opComplete: FreeT[Ctx, Option, Int] =
+  for {
+    a <- op1
+    b <- op2
+    c <- op3
+  } yield a + b + c
+
+
+/* Our interpreters e.g. for Future, DBIO, Id  */
+
+type OptFut[A] = OptionT[Future, A]
+
+def futureInterpreter: Ctx ~> OptFut = new (Ctx ~> OptFut) {
+  def apply[A](fa: Ctx[A]): OptFut[A] = {
+    fa match {
+      case Action(value) => OptionT.liftF(Future(value))
+    }
+  }
+}
+
+def optFutLift: Option ~> OptFut = new (Option ~> OptFut) {
+  def apply[A](fa: Option[A]): OptFut[A] = {
+    fa match {
+      case Some(value) =>
+        OptionT(Future(Option(value)))
+      case None =>
+        OptionT.none
+    }
+  }
+}
+
+val hoisted = opComplete.hoist(optFutLift)
+val evaluated = hoisted.foldMap(futureInterpreter)
+val future = evaluated.value
 ```
 
 ## Future Work (TODO)
