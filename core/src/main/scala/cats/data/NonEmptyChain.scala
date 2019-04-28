@@ -452,7 +452,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
         fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: NonEmptyChain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
+        Foldable[Chain].foldRight(fa.toChain, lb)(f)
 
       override def foldMap[A, B](fa: NonEmptyChain[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.toChain.iterator.map(f))
