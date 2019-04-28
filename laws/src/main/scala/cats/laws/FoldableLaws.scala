@@ -11,9 +11,9 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def foldRightLazy[A](fa: F[A]): Boolean = {
     var i = 0
     F.foldRight(fa, Eval.now("empty")) { (_, _) =>
-      i += 1
-      Eval.now("not empty")
-    }
+        i += 1
+        Eval.now("not empty")
+      }
       .value
     i == (if (F.isEmpty(fa)) 0 else 1)
   }
