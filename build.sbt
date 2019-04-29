@@ -79,9 +79,6 @@ def macroDependencies(scalaVersion: String) =
 
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
-  resolvers ++= Seq(
-    "bintray/non".at("http://dl.bintray.com/non/maven")
-  ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.7",
     compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
