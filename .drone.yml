@@ -1,0 +1,101 @@
+kind: pipeline
+name: default
+
+scala_version_211: &scala_version_211 2.11.12
+scala_version_212: &scala_version_212 2.12.8
+scala_version_213: &scala_version_213 2.13.0-RC1
+
+steps:
+  - name: linting
+    image: dgregory084/cats-builder
+    commands:
+    - sbt scalastyle fmtCheck
+
+  - name: scalafix
+    image: dgregory084/cats-builder
+    commands:
+    - cd scalafix && sbt tests/test
+
+  - name: bincompat_211
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! validateBC
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+    
+  - name: bincompat_212
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! validateBC
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_212
+
+  - name: coverage
+    image: dgregory084/cats-builder
+    commands:
+    - sbt coverage buildJVM bench/test coverageReport
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
+
+  - name: tests_jvm_211
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
+
+  - name: tests_jvm_212
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_212
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
+
+  - name: tests_jvm_213
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_213
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
+
+  - name: tests_js_211
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
+
+  - name: tests_js_212
+    image: dgregory084/cats-builder
+    commands:
+    - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+    environment:
+      TRAVIS_SCALA_VERSION: *scala_version_212
+    depends_on:
+      - linting
+      - scalafix
+      - bincompat_211
+      - bincompat_212
