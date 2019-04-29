@@ -20,7 +20,6 @@ package data
 import cats.instances.sortedSet._
 import cats.kernel._
 import cats.syntax.order._
-import cats.instances.sortedSet._
 
 import scala.collection.immutable._
 
@@ -407,6 +406,11 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
         fa.toNonEmptyList
     }
 
+  implicit def catsDataOrderForNonEmptySet[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
+    new NonEmptySetOrder[A] {
+      implicit override def A0: Order[A] = A
+    }
+
   implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
     Show.show[NonEmptySet[A]](_.show)
 
@@ -415,15 +419,8 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
   }
 }
 
-sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {
-  implicit def catsDataOrderForNonEmptySet[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
-    new NonEmptySetOrder[A] {
-      implicit override def A0: Order[A] = A
-    }
-}
-
-sealed abstract private[data] class NonEmptySetInstances1 {
-  implicit def catsDataEqForNonEmptySet[A](implicit A: Eq[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
+sealed abstract private[data] class NonEmptySetInstances0 {
+  implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
     implicit override def A0: Eq[A] = A
   }
 }
