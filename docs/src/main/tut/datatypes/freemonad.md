@@ -560,7 +560,7 @@ val initialState = Nil
 val (stored, _) = state.run(initialState).value
 ```
 
-Another example is more basic usage of `FreeT` with some context `Ctx` for which we provide `Future` interpreter,
+Another example is more basic usage of `FreeT` with some context `Ctx` for which we provide `Try` interpreter,
 combined with `OptionT` for reducing boilerplate.
 
 ```tut:book
@@ -568,9 +568,7 @@ import cats.free._
 import cats._
 import cats.data._
 import cats.implicits._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.util.Try
 
 sealed trait Ctx[A]
 
@@ -593,32 +591,33 @@ val opComplete: FreeT[Ctx, Option, Int] =
   } yield a + b + c
 
 
-/* Our interpreters e.g. for Future, DBIO, Id  */
+/*  Our interpreters  */
 
-type OptFut[A] = OptionT[Future, A]
+type OptTry[A] = OptionT[Try, A]
 
-def futureInterpreter: Ctx ~> OptFut = new (Ctx ~> OptFut) {
-  def apply[A](fa: Ctx[A]): OptFut[A] = {
+def tryInterpreter: Ctx ~> OptTry = new (Ctx ~> OptTry) {
+  def apply[A](fa: Ctx[A]): OptTry[A] = {
     fa match {
-      case Action(value) => OptionT.liftF(Future(value))
+      case Action(value) =>
+        OptionT.liftF(Try(value))
     }
   }
 }
 
-def optFutLift: Option ~> OptFut = new (Option ~> OptFut) {
-  def apply[A](fa: Option[A]): OptFut[A] = {
+def optTryLift: Option ~> OptTry = new (Option ~> OptTry) {
+  def apply[A](fa: Option[A]): OptTry[A] = {
     fa match {
       case Some(value) =>
-        OptionT(Future(Option(value)))
+        OptionT(Try(Option(value)))
       case None =>
         OptionT.none
     }
   }
 }
 
-val hoisted = opComplete.hoist(optFutLift)
-val evaluated = hoisted.foldMap(futureInterpreter)
-val future = evaluated.value
+val hoisted = opComplete.hoist(optTryLift)
+val evaluated = hoisted.foldMap(tryInterpreter)
+val result = evaluated.value
 ```
 
 ## Future Work (TODO)
