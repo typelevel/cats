@@ -7,31 +7,31 @@ scala_version_213: &scala_version_213 2.13.0-RC1
 
 steps:
   - name: linting
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt scalastyle fmtCheck
 
   - name: scalafix
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - cd scalafix && sbt tests/test
 
   - name: bincompat_211
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
     
   - name: bincompat_212
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
 
   - name: coverage
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt coverage buildJVM bench/test coverageReport
     depends_on:
@@ -41,7 +41,7 @@ steps:
       - bincompat_212
 
   - name: tests_jvm_211
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
     environment:
@@ -53,7 +53,7 @@ steps:
       - bincompat_212
 
   - name: tests_jvm_212
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
     environment:
@@ -65,7 +65,7 @@ steps:
       - bincompat_212
 
   - name: tests_jvm_213
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM
     environment:
@@ -77,7 +77,7 @@ steps:
       - bincompat_212
 
   - name: tests_js_211
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
     environment:
@@ -89,7 +89,7 @@ steps:
       - bincompat_212
 
   - name: tests_js_212
-    image: dgregory084/cats-builder
+    image: dgregory084/cats-builder:0.1.0
     commands:
     - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
     environment:
