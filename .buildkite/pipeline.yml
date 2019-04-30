@@ -1,0 +1,53 @@
+env:
+  TRAVIS: "true"
+  
+scala_version_211: &scala_version_211 2.11.12
+scala_version_212: &scala_version_212 2.12.8
+scala_version_213: &scala_version_213 2.13.0-RC1
+
+steps:
+  - command: "sbt scalastyle fmtCheck"
+    label: ":scala: Linting"
+
+  - command: "cd scalafix && sbt tests/test"
+    label: ":scala: Scalafix"
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! validateBC"
+    label: ":scala: Bincompat 2.11"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! validateBC"
+    label: ":scala: Bincompat 2.12"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_212
+
+  - wait
+
+  - command: "sbt coverage buildJVM bench/test coverageReport"
+    label: ":codecov: Coverage"
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! buildJVM bench/test"
+    label: ":java: JVM Tests 2.11"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! buildJVM bench/test"
+    label: ":java: JVM Tests 2.12"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_212
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! buildJVM"
+    label: ":java: JVM Tests 2.13"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_213
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! validateJS && sbt ++\\$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++\\$TRAVIS_SCALA_VERSION! validateFreeJS"
+    label: ":javascript: JavaScript Tests 2.11"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_211
+
+  - command: "sbt ++\\$TRAVIS_SCALA_VERSION! validateJS && sbt ++\\$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++\\$TRAVIS_SCALA_VERSION! validateFreeJS"
+    label: ":javascript: JavaScript Tests 2.12"
+    env:
+      TRAVIS_SCALA_VERSION: *scala_version_212
