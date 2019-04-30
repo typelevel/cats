@@ -1,0 +1,60 @@
+version: v1.0
+name: Cats
+agent:
+  machine:
+    type: e1-standard-4
+    os_image: ubuntu1804
+
+scala_version_211: &scala_version_211 2.11.12
+scala_version_212: &scala_version_212 2.12.8
+scala_version_213: &scala_version_213 2.13.0-RC1
+
+blocks:
+  - name: Linting
+    task:
+      jobs:
+        - name: Scalastyle and Scalafmt
+          commands:
+            - sbt scalastyle fmtCheck
+
+        - name: Scalafix
+          commands:
+            - cd scalafix && sbt tests/test
+
+  - name: Bincompat
+    task: 
+      jobs:
+        - name: Check binary compatibility
+          commands:
+            - sbt ++$TRAVIS_SCALA_VERSION! validateBC
+          matrix:
+            - env_var: TRAVIS_SCALA_VERSION
+              values: [*scala_version_211, *scala_version_212]
+
+  - name: Tests
+    task:
+      jobs:
+        - name: Coverage check
+          commands:
+            - sbt coverage buildJVM bench/test coverageReport
+
+        - name: JVM tests
+          commands:
+            - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+          matrix:
+            - env_var: TRAVIS_SCALA_VERSION
+              values: [*scala_version_211, *scala_version_212]
+
+        - name: JVM tests 2.13
+          commands:
+            - sbt ++TRAVIS_SCALA_VERSION! buildJVM
+          env_vars:
+            - name: TRAVIS_SCALA_VERSION
+              value: *scala_version_213
+
+        - name: JS tests
+          commands:
+            - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+          matrix:
+            - env_var: TRAVIS_SCALA_VERSION
+              values: [*scala_version_211, *scala_version_212]
