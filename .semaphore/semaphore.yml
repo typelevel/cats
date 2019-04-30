@@ -46,6 +46,8 @@ blocks:
   - name: Tests
     task:
       env_vars:
+        - name: TRAVIS
+          value: "true"
         - name: scala_version_211
           value: &scala_version_211 2.11.12
         - name: scala_version_212
@@ -71,7 +73,7 @@ blocks:
 
         - name: JVM tests 2.13
           commands:
-            - sbt ++TRAVIS_SCALA_VERSION! buildJVM
+            - sbt ++$TRAVIS_SCALA_VERSION! buildJVM
           env_vars:
             - name: TRAVIS_SCALA_VERSION
               value: *scala_version_213
