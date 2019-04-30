@@ -131,6 +131,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [hammock](https://github.com/pepegar/hammock): Purely functional HTTP client
  * [henkan](https://github.com/kailuowang/henkan): Type safe conversion between case class instances with similar fields
  * [http4s](https://github.com/http4s/http4s): A minimal, idiomatic Scala interface for HTTP
+ * [itto-csv](https://github.com/gekomad/itto-csv): pure functional library for working with CSV
  * [linebacker](https://github.com/ChristopherDavenport/linebacker): functional thread pool management
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
