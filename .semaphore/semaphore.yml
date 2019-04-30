@@ -8,21 +8,6 @@ agent:
 blocks:
   - name: Linting
     task:
-      prologue:
-        commands:
-          - checkout
-
-      jobs:
-        - name: Scalastyle and Scalafmt
-          commands:
-            - sbt scalastyle fmtCheck
-
-        - name: Scalafix
-          commands:
-            - cd scalafix && sbt tests/test
-
-  - name: Bincompat
-    task: 
       env_vars:
         - name: scala_version_211
           value: &scala_version_211 2.11.12
@@ -36,6 +21,14 @@ blocks:
           - checkout
 
       jobs:
+        - name: Scalastyle and Scalafmt
+          commands:
+            - sbt scalastyle fmtCheck
+
+        - name: Scalafix
+          commands:
+            - cd scalafix && sbt tests/test
+
         - name: Check binary compatibility
           commands:
             - sbt ++$TRAVIS_SCALA_VERSION! validateBC
