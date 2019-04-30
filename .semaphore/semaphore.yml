@@ -8,6 +8,10 @@ agent:
 blocks:
   - name: Linting
     task:
+      prologue:
+        commands:
+          - checkout
+
       jobs:
         - name: Scalastyle and Scalafmt
           commands:
@@ -26,6 +30,11 @@ blocks:
           value: &scala_version_212 2.12.8
         - name: scala_version_213
           value: &scala_version_213 2.13.0-RC1
+
+      prologue:
+        commands:
+          - checkout
+
       jobs:
         - name: Check binary compatibility
           commands:
@@ -43,6 +52,11 @@ blocks:
           value: &scala_version_212 2.12.8
         - name: scala_version_213
           value: &scala_version_213 2.13.0-RC1
+
+      prologue:
+        commands:
+          - checkout
+
       jobs:
         - name: Coverage check
           commands:
