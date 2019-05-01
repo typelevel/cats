@@ -166,8 +166,17 @@ sealed abstract class Chain[+A] {
    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
    * instead of `PartialFunction`s.
    */
-  final def collectFirstSome[B](f: A => Option[B]): Option[B] =
-    collectFirst(Function.unlift(f))
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      val x = f(a)
+      if (x.isDefined) {
+        result = x
+        true
+      } else false
+    }
+    result
+  }
 
   /**
    * Remove elements not matching the predicate
