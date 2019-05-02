@@ -10,18 +10,24 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt scalastyle fmtCheck
 
   - name: scalafix
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - cd scalafix && sbt tests/test
 
   - name: bincompat_211
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
@@ -30,6 +36,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
@@ -38,6 +46,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt coverage buildJVM bench/test coverageReport
     depends_on:
       - linting
@@ -49,6 +59,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
@@ -62,6 +74,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
@@ -75,6 +89,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! buildJVM
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_213
@@ -88,6 +104,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
@@ -101,6 +119,8 @@ steps:
     image: dgregory084/cats-builder:0.1.0
     commands:
     - pwd
+    - ls
+    - env
     - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
