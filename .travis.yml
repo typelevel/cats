@@ -28,11 +28,13 @@ stages:
 jobs:
   include:
     # it can speed up the overall build to have the longer-running jobs at the top of this list.
-    - env: TEST="coverage"
+    - stage: test 
+      env: TEST="coverage"
       install: pip install --user codecov
       script: sbt coverage buildJVM bench/test coverageReport && codecov
 
     - &js_tests
+      stage: test
       env: TEST="JS tests"
       # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
       install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
@@ -42,6 +44,7 @@ jobs:
       scala: *scala_version_212
 
     - &jvm_tests
+      stage: test
       env: TEST="JVM tests"
       script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
       scala: *scala_version_211
@@ -51,24 +54,27 @@ jobs:
       scala: *scala_version_213
       # the bench module has dependencies not available in Scala 2.13, so don't test it
       script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM
-
-    - env: TEST="docs"
+      
+    - stage: test
+      env: TEST="docs"
       install: gem install jekyll -v 2.5
       script: sbt makeMicrosite
 
-    - stage: styling
-      env: TEST="linting"
-      script: sbt scalastyle fmtCheck
-
-    - env: TEST="scalafix"
+    - stage: test
+      env: TEST="scalafix"
       script: cd scalafix && sbt tests/test
-
+   
     - &bincompat_check
+      stage: test
       env: TEST="binary compatibility"
       script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
       scala: *scala_version_211
     - <<: *bincompat_check
       scala: *scala_version_212
+
+    - stage: styling
+      env: TEST="linting"
+      script: sbt fmtCheck
 
     - stage: publish snapshot
       script: |
