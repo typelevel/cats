@@ -49,7 +49,7 @@ class ApplicativeSuite extends CatsSuite {
     val optionSemigroupFromApply = Apply.semigroup[Option, Int]
     checkAll("Apply[Option].semigroup", SemigroupTests[Option[Int]](optionSemigroupFromApply).semigroup)
   }
-  
+
   {
     implicit val listwrapperApplicative = ListWrapper.applicative
     implicit val listwrapperCoflatMap = Applicative.coflatMap[ListWrapper]
