@@ -40,9 +40,8 @@ class ApplicativeSuite extends CatsSuite {
   }
 
   {
-    implicit val listwrapperApplicative = ListWrapper.applicative
-    implicit val listwrapperMonoid = Applicative.monoid[ListWrapper, Int]
-    checkAll("Applicative[ListWrapper].monoid", MonoidTests[ListWrapper[Int]].monoid)
+    implicit val optionMonoid = Applicative.monoid[Option, Int]
+    checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](optionMonoid).monoid)
   }
 
   {
