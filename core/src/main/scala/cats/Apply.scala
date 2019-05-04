@@ -218,8 +218,8 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 object Apply {
 
   /**
-   * This semigroup uses a product operation to combine `F`s,
-   * if the `Apply[F].product` result in larger `F` e.g. when `F` is a `List`,
+   * This semigroup uses a product operation to combine `F`s.
+   * If the `Apply[F].product` results in larger `F` (i.e. when `F` is a `List`),
    * accumulative usage of this instance, such as `combineAll`, will result in
    * `F`s with exponentially increasing sizes.
    */
