@@ -21,6 +21,24 @@ trait UnorderedFoldableLaws[F[_]] {
       (F.isEmpty(fa) || F.exists(fa)(p))
     } else true // can't test much in this case
 
+  def existsLazy[A](fa: F[A]): Boolean = {
+    var i = 0
+    F.exists(fa) { _ =>
+      i += 1
+      true
+    }
+    i == (if (F.isEmpty(fa)) 0 else 1)
+  }
+
+  def forallLazy[A](fa: F[A]): Boolean = {
+    var i = 0
+    F.forall(fa) { _ =>
+      i += 1
+      false
+    }
+    i == (if (F.isEmpty(fa)) 0 else 1)
+  }
+
   /**
    * If `F[A]` is empty, forall must return true.
    */
