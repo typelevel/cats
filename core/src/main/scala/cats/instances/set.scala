@@ -32,7 +32,11 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
       override def forall[A](fa: Set[A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
+      override def exists[A](fa: Set[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
       override def isEmpty[A](fa: Set[A]): Boolean = fa.isEmpty
+
     }
 
   implicit def catsStdShowForSet[A: Show]: Show[Set[A]] = new Show[Set[A]] {
