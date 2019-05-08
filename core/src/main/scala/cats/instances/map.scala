@@ -84,6 +84,10 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def unorderedFold[A](fa: Map[K, A])(implicit A: CommutativeMonoid[A]): A =
         A.combineAll(fa.values)
 
+      override def forall[A](fa: Map[K, A])(p: A => Boolean): Boolean = fa.forall(pair => p(pair._2))
+
+      override def exists[A](fa: Map[K, A])(p: A => Boolean): Boolean = fa.exists(pair => p(pair._2))
+
     }
   // scalastyle:on method.length
 

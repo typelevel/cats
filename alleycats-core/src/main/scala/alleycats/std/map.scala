@@ -3,7 +3,7 @@ package std
 
 import cats._
 
-object map extends MapInstances with MapInstancesBinCompat0
+object map extends MapInstances
 
 trait MapInstances {
 
@@ -58,10 +58,8 @@ trait MapInstances {
       override def collectFirstSome[A, B](fa: Map[K, A])(f: A => Option[B]): Option[B] =
         collectFirst(fa)(Function.unlift(f))
     }
-}
 
-trait MapInstancesBinCompat0 extends MapInstances {
-  implicit def mapTraverseFilter[K]: TraverseFilter[Map[K, ?]] =
+  implicit def alleycatsStdMapTraverseFilter[K]: TraverseFilter[Map[K, ?]] =
     new TraverseFilter[Map[K, ?]] {
       def traverse: Traverse[Map[K, ?]] = alleycatsStdInstancesForMap
 

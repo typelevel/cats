@@ -1,13 +1,13 @@
 package cats
 package tests
 
-import catalysts.Platform
 import cats.data._
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline._
 import cats.arrow._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 
 class AndThenSuite extends CatsSuite {
   checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, ?]].semigroupal[Int, Int, Int])

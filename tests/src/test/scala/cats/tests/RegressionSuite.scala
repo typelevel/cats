@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{Const, NonEmptyList}
+import cats.data.{Const, NonEmptyList, StateT}
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
 class RegressionSuite extends CatsSuite {
@@ -157,4 +157,8 @@ class RegressionSuite extends CatsSuite {
 
   }
 
+  test("#2809 MonadErrorOps.reject runs effects only once") {
+    val program = StateT.modify[Either[Throwable, ?], Int](_ + 1).reject { case _ if false => new Throwable }
+    program.runS(0).right.get should ===(1)
+  }
 }

@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import catalysts.Platform
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
 import cats.arrow.Profunctor
@@ -9,6 +8,7 @@ import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 
 class IndexedStateTSuite extends CatsSuite {
 

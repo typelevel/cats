@@ -30,10 +30,10 @@ class MapHash[K, V](implicit V: Hash[V]) extends MapEq[K, V]()(V) with Hash[Map[
     x.foreach {
       case (k, v) =>
         // use the default hash on keys because that's what Scala's Map does
-        val h = StaticMethods.product2Hash(k.hashCode(), V.hash(v))
+        val h = StaticMethods.product2HashWithPrefix(k.hashCode(), V.hash(v), "Tuple2")
         a += h
         b ^= h
-        if (h != 0) c *= h
+        c = StaticMethods.updateUnorderedHashC(c, h)
         n += 1
     }
     var h = mapSeed
