@@ -4,13 +4,15 @@ package instances
 trait OptionInstances extends OptionInstances0 {
   implicit def catsKernelStdOrderForOption[A: Order]: Order[Option[A]] =
     new OptionOrder[A]
-  implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
-    new OptionMonoid[A]
+  implicit def catsKernelStdCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    new OptionCommutativeMonoid[A]
 }
 
 trait OptionInstances0 extends OptionInstances1 {
   implicit def catsKernelStdPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     new OptionPartialOrder[A]
+  implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
+    new OptionMonoid[A]
 }
 
 trait OptionInstances1 extends OptionInstances2 {
@@ -80,3 +82,7 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
         }
     }
 }
+
+class OptionCommutativeMonoid[A](implicit A: CommutativeSemigroup[A])
+  extends OptionMonoid[A]()(A)
+  with CommutativeMonoid[Option[A]]
