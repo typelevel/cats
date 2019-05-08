@@ -251,8 +251,8 @@ import Foldable.sentinel
     if (isEmpty(fa)) None else ev.combineAllOption(toIterator(fa))
 
   def toIterator[A, B](fa: F[A]): Iterator[A] =
-    foldRight[A, Stream[A]](fa, Eval.later(Stream.empty)) {
-      (a, eb) => eb map (Stream.cons(a, _))
+    foldRight[A, Stream[A]](fa, Eval.later(Stream.empty)) { (a, eb) =>
+      eb.map(Stream.cons(a, _))
     }.value.iterator
 
   /**
