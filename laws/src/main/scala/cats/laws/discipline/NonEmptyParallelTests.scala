@@ -9,8 +9,14 @@ import org.typelevel.discipline.Laws
 trait NonEmptyParallelTests[M[_], F[_]] extends Laws {
   def laws: NonEmptyParallelLaws[M, F]
 
-  def nonEmptyParallel[A, B]
-  (implicit ArbA: Arbitrary[A], ArbM: Arbitrary[M[A]], ArbMb: Arbitrary[M[B]], Arbf: Arbitrary[A => B], EqMa: Eq[M[A]], EqMb: Eq[M[B]], ArbF: Arbitrary[F[A]], EqFa: Eq[F[A]]): RuleSet =
+  def nonEmptyParallel[A, B](implicit ArbA: Arbitrary[A],
+                             ArbM: Arbitrary[M[A]],
+                             ArbMb: Arbitrary[M[B]],
+                             Arbf: Arbitrary[A => B],
+                             EqMa: Eq[M[A]],
+                             EqMb: Eq[M[B]],
+                             ArbF: Arbitrary[F[A]],
+                             EqFa: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       "parallel",
       None,

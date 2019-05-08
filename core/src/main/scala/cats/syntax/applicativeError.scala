@@ -8,38 +8,40 @@ trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
 
-  implicit final def catsSyntaxApplicativeError[F[_], E, A](fa: F[A])(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
+  implicit final def catsSyntaxApplicativeError[F[_], E, A](
+    fa: F[A]
+  )(implicit F: ApplicativeError[F, E]): ApplicativeErrorOps[F, E, A] =
     new ApplicativeErrorOps[F, E, A](fa)
 }
 
 /**
-  * Extension to ApplicativeError in a binary compat way
-  */
+ * Extension to ApplicativeError in a binary compat way
+ */
 trait ApplicativeErrorExtension {
-  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](F: ApplicativeError[F, E]):
-    ApplicativeErrorExtensionOps[F, E] =
-      new ApplicativeErrorExtensionOps(F)
+  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](
+    F: ApplicativeError[F, E]
+  ): ApplicativeErrorExtensionOps[F, E] =
+    new ApplicativeErrorExtensionOps(F)
 }
 
 final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
-
   /**
-    * Convert from scala.Option
-    *
-    * Example:
-    * {{{
-    * scala> import cats.implicits._
-    * scala> import cats.ApplicativeError
-    * scala> val F = ApplicativeError[Either[String, ?], String]
-    *
-    * scala> F.fromOption(Some(1), "Empty")
-    * res0: scala.Either[String, Int] = Right(1)
-    *
-    * scala> F.fromOption(Option.empty[Int], "Empty")
-    * res1: scala.Either[String, Int] = Left(Empty)
-    * }}}
-    */
+   * Convert from scala.Option
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   * scala> val F = ApplicativeError[Either[String, ?], String]
+   *
+   * scala> F.fromOption(Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> F.fromOption(Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
   def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
     ApplicativeError.liftFromOption(oa, ifEmpty)(F)
 
@@ -61,17 +63,17 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
   def fromValidated[A](x: Validated[E, A]): F[A] =
     x match {
       case Invalid(e) => F.raiseError(e)
-      case Valid(a) => F.pure(a)
+      case Valid(a)   => F.pure(a)
     }
 
 }
 
-final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
-  def raiseError[F[_], A](implicit F: ApplicativeError[F, E]): F[A] =
+final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {
+  def raiseError[F[_], A](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     F.raiseError(e)
 }
 
-final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
+final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
 
@@ -95,4 +97,31 @@ final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 
   def orElse(other: => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(_ => other)
+
+  /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> "error".asLeft[Int].adaptErr(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> "err".asLeft[Int].adaptErr(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> 1.asRight[String].adaptErr(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   *
+   * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
+   * this would result in ambiguous implicits. `adaptError` will be moved from `MonadError`
+   * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
+   */
+  def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] =
+    F.recoverWith(fa)(pf.andThen(F.raiseError[A] _))
 }

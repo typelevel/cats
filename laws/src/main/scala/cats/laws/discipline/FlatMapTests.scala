@@ -12,20 +12,19 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
   def laws: FlatMapLaws[F]
 
   def flatMap[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-    ArbFA: Arbitrary[F[A]],
-    ArbFB: Arbitrary[F[B]],
-    ArbFC: Arbitrary[F[C]],
-    ArbFAtoB: Arbitrary[F[A => B]],
-    ArbFBtoC: Arbitrary[F[B => C]],
-    CogenA: Cogen[A],
-    CogenB: Cogen[B],
-    CogenC: Cogen[C],
-    EqFA: Eq[F[A]],
-    EqFB: Eq[F[B]],
-    EqFC: Eq[F[C]],
-    EqFABC: Eq[F[(A, B, C)]],
-    iso: Isomorphisms[F]
-  ): RuleSet = {
+                                                        ArbFA: Arbitrary[F[A]],
+                                                        ArbFB: Arbitrary[F[B]],
+                                                        ArbFC: Arbitrary[F[C]],
+                                                        ArbFAtoB: Arbitrary[F[A => B]],
+                                                        ArbFBtoC: Arbitrary[F[B => C]],
+                                                        CogenA: Cogen[A],
+                                                        CogenB: Cogen[B],
+                                                        CogenC: Cogen[C],
+                                                        EqFA: Eq[F[A]],
+                                                        EqFB: Eq[F[B]],
+                                                        EqFC: Eq[F[C]],
+                                                        EqFABC: Eq[F[(A, B, C)]],
+                                                        iso: Isomorphisms[F]): RuleSet = {
     implicit def functorF: Functor[F] = laws.F
     implicit val EqFAB: Eq[F[(A, B)]] =
       ContravariantSemigroupal[Eq].composeFunctor[F].product(EqFA, EqFB)
@@ -37,7 +36,8 @@ trait FlatMapTests[F[_]] extends ApplyTests[F] {
       "flatMap consistent apply" -> forAll(laws.flatMapConsistentApply[A, B] _),
       "flatMap from tailRecM consistency" -> forAll(laws.flatMapFromTailRecMConsistency[A, B] _),
       "mproduct consistent flatMap" -> forAll(laws.mproductConsistency[A, B] _),
-      "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _))
+      "tailRecM consistent flatMap" -> forAll(laws.tailRecMConsistentFlatMap[A] _)
+    )
   }
 }
 

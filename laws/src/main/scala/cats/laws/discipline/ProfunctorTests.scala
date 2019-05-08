@@ -10,7 +10,8 @@ import org.typelevel.discipline.Laws
 trait ProfunctorTests[F[_, _]] extends Laws {
   def laws: ProfunctorLaws[F]
 
-  def profunctor[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def profunctor[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFCD: Arbitrary[F[C, D]],
     CogenA: Cogen[A],
@@ -30,7 +31,8 @@ trait ProfunctorTests[F[_, _]] extends Laws {
       "profunctor lmap identity" -> forAll(laws.profunctorLmapIdentity[A, B] _),
       "profunctor rmap identity" -> forAll(laws.profunctorRmapIdentity[A, B] _),
       "profunctor lmap composition" -> forAll(laws.profunctorLmapComposition[A, B, C, D] _),
-      "profunctor rmap composition" -> forAll(laws.profunctorRmapComposition[A, D, C, B] _))
+      "profunctor rmap composition" -> forAll(laws.profunctorRmapComposition[A, D, C, B] _)
+    )
 }
 
 object ProfunctorTests {

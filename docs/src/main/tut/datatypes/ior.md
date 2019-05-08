@@ -33,7 +33,7 @@ val both = Ior.both("Warning", 3)
 Cats also offers syntax enrichment for `Ior`. The `leftIor` and `rightIor` functions can be imported from `cats.syntax.ior._`:
 
 ```tut
-import cats.syntax.ior._
+import cats.implicits._
 
 val right = 3.rightIor
 
@@ -49,9 +49,9 @@ Here's an example of how we might be able to do that:
 
 ```tut:silent
 import cats.implicits._
-import cats.data.{ NonEmptyList => Nel }
+import cats.data.{ NonEmptyChain => Nec }
 
-type Failures = Nel[String]
+type Failures = Nec[String]
 
 case class Username(value: String) extends AnyVal
 case class Password(value: String) extends AnyVal
@@ -60,18 +60,18 @@ case class User(name: Username, pw: Password)
 
 def validateUsername(u: String): Failures Ior Username = {
   if (u.isEmpty)
-    Nel.one("Can't be empty").leftIor
+    Nec.one("Can't be empty").leftIor
   else if (u.contains("."))
-    Ior.both(Nel.one("Dot in name is deprecated"), Username(u))
+    Ior.both(Nec.one("Dot in name is deprecated"), Username(u))
   else
     Username(u).rightIor
 }
 
 def validatePassword(p: String): Failures Ior Password = {
   if (p.length < 8)
-    Nel.one("Password too short").leftIor
+    Nec.one("Password too short").leftIor
   else if (p.length < 10)
-    Ior.both(Nel.one("Password should be longer"), Password(p))
+    Ior.both(Nec.one("Password should be longer"), Password(p))
   else
     Password(p).rightIor
 }
@@ -98,22 +98,23 @@ To extract the values, we can use the `fold` method, which expects a function fo
 ```tut
 
 validateUser("john.doe", "password").fold(
-  errorNel => s"Error: ${errorNel.head}",
+  errorNec => s"Error: ${errorNec.head}",
   user => s"Success: $user",
   (warnings, user) => s"Warning: ${user.name.value}; The following warnings occurred: ${warnings.show}"
 )
 
 ```
-Similar to [Validated](validated.html), there is also a type alias for using a `NonEmptyList` on the left side.
+Similar to [Validated](validated.html), there is also a type alias for using a `NonEmptyChain` on the left side.
 
 ```tut:silent
-type IorNel[B, A] = Ior[NonEmptyList[B], A]
+type IorNec[B, A] = Ior[NonEmptyChain[B], A]
 ```
 
 
 ```tut
+import cats.implicits._, cats.data.NonEmptyChain
 
-val left: IorNel[String, Int] = Ior.leftNel("Error")
+val left: IorNec[String, Int] = Ior.fromEither("Error".leftNec[Int])
 
 ```
 

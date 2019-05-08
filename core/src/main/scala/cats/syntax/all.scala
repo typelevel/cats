@@ -6,6 +6,9 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
     with AllSyntaxBinCompat2
+    with AllSyntaxBinCompat3
+    with AllSyntaxBinCompat4
+    with AllSyntaxBinCompat5
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -55,13 +58,10 @@ trait AllSyntax
     with VectorSyntax
     with WriterSyntax
 
-trait AllSyntaxBinCompat0
-    extends UnorderedTraverseSyntax
-    with ApplicativeErrorExtension
-    with TrySyntax
+trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
 trait AllSyntaxBinCompat1
-  extends FlatMapOptionSyntax
+    extends FlatMapOptionSyntax
     with ChoiceSyntax
     with NestedSyntax
     with BinestedSyntax
@@ -71,4 +71,22 @@ trait AllSyntaxBinCompat1
     with RepresentableSyntax
 
 trait AllSyntaxBinCompat2
-  extends ParallelTraverseSyntax
+    extends ParallelTraverseSyntax
+    with TraverseFilterSyntax
+    with FunctorFilterSyntax
+    with EitherSyntaxBinCompat0
+    with ListSyntaxBinCompat0
+    with ValidatedSyntaxBincompat0
+
+trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
+
+trait AllSyntaxBinCompat4
+    extends TraverseFilterSyntaxBinCompat0
+    with ApplySyntaxBinCompat0
+    with ParallelApplySyntax
+    with FoldableSyntaxBinCompat0
+    with ReducibleSyntaxBinCompat0
+    with FoldableSyntaxBinCompat1
+    with BitraverseSyntaxBinCompat0
+
+trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax

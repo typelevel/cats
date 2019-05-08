@@ -14,8 +14,8 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error))
 
   /**
-    * Turns a successful value into an error specified by the `error` function if it does not satisfy a given predicate.
-    */
+   * Turns a successful value into an error specified by the `error` function if it does not satisfy a given predicate.
+   */
   def ensureOr[A](fa: F[A])(error: A => E)(predicate: A => Boolean): F[A] =
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error(a)))
 
@@ -38,9 +38,13 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * scala> 1.asRight[String].adaptError(pf)
    * res2: Either[String,Int] = Right(1)
    * }}}
+   *
+   * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same
+   * name because this would result in ambiguous implicits. `adaptError` will be moved from MonadError to
+   * ApplicativeError in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
-    flatMap(attempt(fa))(_.fold(e => raiseError(pf.applyOrElse[E, E](e, _ => e)), pure))
+    recoverWith(fa)(pf.andThen(raiseError[A] _))
 
   /**
    * Inverse of `attempt`

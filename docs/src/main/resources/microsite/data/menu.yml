@@ -40,22 +40,9 @@ options:
        menu_section: applicative
 
   - title: Monads
-    url: typeclasses/functor.html
+    url: typeclasses/monad.html
     menu_type: typeclasses
     menu_section: monads
-
-    nested_options:
-     - title: Functor
-       url: typeclasses/functor.html
-       menu_section: monads
-       menu_section: monads
-     - title: Applicative
-       url: typeclasses/applicative.html
-       menu_section: monads
-     - title: Monad
-       url: typeclasses/monad.html
-       menu_type: typeclasses
-       menu_section: monads
 
   - title: Variance and Functors
     url: typeclasses/functor.html
@@ -79,6 +66,13 @@ options:
        url: typeclasses/invariantmonoidal.html
        menu_section: variance
 
+  - title: Alternative
+    url: typeclasses/alternative.html
+    menu_type: typeclasses
+  
+  - title: Bifunctor
+    url: typeclasses/bifunctor.html
+    menu_type: typeclasses
 
   - title: Eq
     url: typeclasses/eq.html
@@ -92,12 +86,12 @@ options:
     url: typeclasses/parallel.html
     menu_type: typeclasses
 
-  - title: MonoidK
-    url: typeclasses/monoidk.html
-    menu_type: typeclasses
-
   - title: SemigroupK
     url: typeclasses/semigroupk.html
+    menu_type: typeclasses
+
+  - title: MonoidK
+    url: typeclasses/monoidk.html
     menu_type: typeclasses
 
   - title: Show
@@ -126,6 +120,10 @@ options:
 
   - title: Data Types
     url: datatypes.html
+    menu_type: data
+
+  - title: Chain
+    url: datatypes/chain.html
     menu_type: data
 
   - title: Const
@@ -167,7 +165,7 @@ options:
   - title: Nested
     url: datatypes/nested.html
     menu_type: data
-    
+
   - title: NonEmptyList
     url: datatypes/nel.html
     menu_type: data

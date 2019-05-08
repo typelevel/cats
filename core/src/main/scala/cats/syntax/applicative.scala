@@ -8,11 +8,11 @@ trait ApplicativeSyntax {
     new ApplicativeOps[F, A](fa)
 }
 
-final class ApplicativeIdOps[A](val a: A) extends AnyVal {
+final class ApplicativeIdOps[A](private val a: A) extends AnyVal {
   def pure[F[_]](implicit F: Applicative[F]): F[A] = F.pure(a)
 }
 
-final class ApplicativeOps[F[_], A](val fa: F[A]) extends AnyVal {
+final class ApplicativeOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def replicateA(n: Int)(implicit F: Applicative[F]): F[List[A]] = F.replicateA(n, fa)
   def unlessA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.unlessA(cond)(fa)
   def whenA(cond: Boolean)(implicit F: Applicative[F]): F[Unit] = F.whenA(cond)(fa)

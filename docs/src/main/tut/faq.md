@@ -17,6 +17,7 @@ position: 40
  * [Why is some example code not compiling for me?](#example-compile)
  * [How can I turn my List of `<something>` into a `<something>` of a list?](#traverse)
  * [Where is `ListT`?](#listt)
+ * [Where are `Applicative`s for monad transformers?](#applicative-monad-transformers)
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
@@ -26,6 +27,7 @@ position: 40
  * [How can I test instances against their type classes' laws?](#law-testing)
  * [How can I help?](#contributing)
  * [Is there a sbt plugin that facilitate projects based on the Cats ecosystem libraries?](#sbt-catalysts)
+ * [Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?](#monad-transformer-variance)
  * [How to try cats in a REPL?](#ammonite)
 
 ## <a id="what-imports" href="#what-imports"></a>What imports do I need?
@@ -48,7 +50,7 @@ Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html)
 
 Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
-Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [typelevel code of conduct](https://typelevel.org/conduct). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/. It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -122,6 +124,12 @@ def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".i
 ```tut:book
 nl.traverse(even)
 ```
+
+## <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Where are `Applicative`s for monad transformers?</a>
+
+An `Applicative` instance for `OptionT[F, ?]`/`EitherT[F, E, ?]`, built without a corresponding `Monad` instance for `F`, would be unlawful, so it's not included. See [the guidelines](https://typelevel.org/cats/guidelines.html#applicative-monad-transformers) for a more detailed explanation.
+
+As an alternative, using `.toNested` on the monad transformer is recommended, although its `ap` will still be inconsistent with the Monad instance's.`.
 
 ## <a id="task" href="#task"></a>Where is IO/Task?
 
@@ -253,7 +261,7 @@ You can find more information [here](typeclasses/lawtesting.html).
 
 The cats community welcomes and encourages contributions, even if you are completely new to cats and functional programming. Here are a few ways to help out:
 
-- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala]({{ site.sources }}/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
+- Find an undocumented method and write a ScalaDoc entry for it. See [Arrow.scala](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/arrow/Arrow.scala) for some examples of ScalaDoc entries that use [sbt-doctest](https://github.com/tkawachi/sbt-doctest).
 - Look at the [code coverage report](https://codecov.io/github/typelevel/cats?branch=master), find some untested code, and write a test for it. Even simple helper methods and syntax enrichment should be tested.
 - Find an [open issue](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3Aready), leave a comment on it to let people know you are working on it, and submit a pull request. If you are new to cats, you may want to look for items with the [low-hanging-fruit](https://github.com/typelevel/cats/issues?q=is%3Aopen+is%3Aissue+label%3A%22low-hanging+fruit%22) label.
 
@@ -272,4 +280,6 @@ import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
 ```
 Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
 
+## <a id="monad-transformer-variance" href="#monad-transformer-variance"></a>Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
 
+Please see [Variance of Monad Transformers](https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html) on the Typelevel blog.

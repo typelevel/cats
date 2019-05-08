@@ -1,14 +1,13 @@
 package alleycats
 
 import cats.{Applicative, FlatMap, Monad}
-import export.imports
 import simulacrum.typeclass
 
 @typeclass trait Pure[F[_]] {
   def pure[A](a: A): F[A]
 }
 
-object Pure extends Pure0 {
+object Pure {
   // Ideally this would be an exported subclass instance provided by Applicative
   implicit def applicativeIsPure[F[_]](implicit ev: Applicative[F]): Pure[F] =
     new Pure[F] {
@@ -24,6 +23,3 @@ object Pure extends Pure0 {
       def tailRecM[A, B](a: A)(f: (A) => F[Either[A, B]]): F[B] = fm.tailRecM(a)(f)
     }
 }
-
-@imports[Pure]
-trait Pure0

@@ -7,6 +7,6 @@ trait MonoidSyntax extends SemigroupSyntax {
     new MonoidOps[A](a)
 }
 
-final class MonoidOps[A](val lhs: A) extends AnyVal {
+final class MonoidOps[A](private val lhs: A) extends AnyVal {
   def isEmpty(implicit A: Monoid[A], eq: Eq[A]): Boolean = A.isEmpty(lhs)(eq)
 }

@@ -7,30 +7,28 @@ import cats.data.Const
 import scala.annotation.tailrec
 
 /**
-  * Applicative Functor for Free,
-  * implementation inspired by https://github.com/safareli/free/pull/31/
-  */
+ * Applicative Functor for Free,
+ * implementation inspired by https://github.com/safareli/free/pull/31/
+ */
 sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable {
   self =>
   // ap => apply alias needed so we can refer to both
   // FreeApplicative.ap and FreeApplicative#ap
-  import FreeApplicative.{FA, Pure, Ap, lift}
+  import FreeApplicative.{lift, Ap, FA, Pure}
 
-  final def ap[B](b: FA[F, A => B]): FA[F, B] = {
+  final def ap[B](b: FA[F, A => B]): FA[F, B] =
     b match {
       case Pure(f) =>
         this.map(f)
       case _ =>
         Ap(b, this)
     }
-  }
 
-  final def map[B](f: A => B): FA[F, B] = {
+  final def map[B](f: A => B): FA[F, B] =
     this match {
       case Pure(a) => Pure(f(a))
-      case _ => Ap(Pure(f), this)
+      case _       => Ap(Pure(f), this)
     }
-  }
 
   final def map2[B, C](fb: FA[F, B])(f: (A, B) => C): FA[F, C] =
     this match {
@@ -38,13 +36,13 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
       case _ =>
         fb match {
           case Pure(b) => Ap(Pure(f((_: A), b)), this)
-          case _ => Ap(Ap(Pure((a: A) => (b: B) => f(a, b)), this), fb)
+          case _       => Ap(Ap(Pure((a: A) => (b: B) => f(a, b)), this), fb)
         }
     }
 
   /** Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
-    * Tail recursive.
-    */
+   * Tail recursive.
+   */
   // scalastyle:off method.length
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] = {
     import FreeApplicative._
@@ -129,28 +127,26 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   }
   // scalastyle:on method.length
 
-
   /**
-    * Interpret/run the operations using the semantics of `Applicative[F]`.
-    * Stack-safe.
-    */
+   * Interpret/run the operations using the semantics of `Applicative[F]`.
+   * Stack-safe.
+   */
   final def fold(implicit F: Applicative[F]): F[A] =
     foldMap(FunctionK.id[F])
 
   /**
-    * Interpret this algebra into another algebra.
-    * Stack-safe.
-    */
+   * Interpret this algebra into another algebra.
+   * Stack-safe.
+   */
   final def compile[G[_]](f: F ~> G): FA[G, A] =
     foldMap[FA[G, ?]] {
       λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
     }
 
-
   /**
-    * Interpret this algebra into a FreeApplicative over another algebra.
-    * Stack-safe.
-    */
+   * Interpret this algebra into a FreeApplicative over another algebra.
+   * Stack-safe.
+   */
   def flatCompile[G[_]](f: F ~> FA[G, ?]): FA[G, A] =
     foldMap(f)
 
@@ -186,13 +182,13 @@ object FreeApplicative {
    * that has been constructed with chained `ap` calls.
    * Fn#argc denotes the amount of curried params remaining.
    */
-  private final case class Fn[G[_], A, B](gab: G[A => B], argc: Int)
+  final private case class Fn[G[_], A, B](gab: G[A => B], argc: Int)
 
-  private final case class Pure[F[_], A](a: A) extends FA[F, A]
+  final private case class Pure[F[_], A](a: A) extends FA[F, A]
 
-  private final case class Lift[F[_], A](fa: F[A]) extends FA[F, A]
+  final private case class Lift[F[_], A](fa: F[A]) extends FA[F, A]
 
-  private final case class Ap[F[_], P, A](fn: FA[F, P => A], fp: FA[F, P]) extends FA[F, A]
+  final private case class Ap[F[_], P, A](fn: FA[F, P => A], fp: FA[F, P]) extends FA[F, A]
 
   final def pure[F[_], A](a: A): FA[F, A] =
     Pure(a)

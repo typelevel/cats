@@ -4,16 +4,16 @@ package instances
 
 import scala.collection.mutable
 
-object StaticMethods {
+object StaticMethods extends cats.kernel.compat.HashCompat {
 
   def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
     new WrappedMutableMap(m)
 
   private[kernel] class WrappedMutableMap[K, V](m: mutable.Map[K, V])
-    extends kernel.compat.WrappedMutableMapBase[K, V](m) {
-      override def size: Int = m.size
-      def get(k: K): Option[V] = m.get(k)
-      def iterator: Iterator[(K, V)] = m.iterator
+      extends kernel.compat.WrappedMutableMapBase[K, V](m) {
+    override def size: Int = m.size
+    def get(k: K): Option[V] = m.get(k)
+    def iterator: Iterator[(K, V)] = m.iterator
   }
 
   // scalastyle:off return
@@ -96,34 +96,4 @@ object StaticMethods {
     h = mix(h, _2Hash)
     finalizeHash(h, 2)
   }
-
-  // adapted from [[scala.util.hashing.MurmurHash3]],
-  // but modified standard `Any#hashCode` to `ev.hash`.
-  def listHash[A](x: List[A])(implicit A: Hash[A]): Int = {
-    import scala.util.hashing.MurmurHash3._
-    var n = 0
-    var h = seqSeed
-    var elems = x
-    while (!elems.isEmpty) {
-      val head = elems.head
-      val tail = elems.tail
-      h = mix(h, A.hash(head))
-      n += 1
-      elems = tail
-    }
-    finalizeHash(h, n)
-  }
-
-  // adapted from scala.util.hashing.MurmurHash3
-  def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
-    import scala.util.hashing.MurmurHash3._
-    var n = 0
-    var h = seqSeed
-    xs foreach { x =>
-      h = mix(h, A.hash(x))
-      n += 1
-    }
-    finalizeHash(h, n)
-  }
-
 }

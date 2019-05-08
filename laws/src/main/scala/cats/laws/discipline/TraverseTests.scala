@@ -10,8 +10,8 @@ import Prop._
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with UnorderedTraverseTests[F] {
   def laws: TraverseLaws[F]
 
-
-  def traverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: CommutativeApplicative, Y[_]: CommutativeApplicative](implicit
+  def traverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, M: Arbitrary, X[_]: CommutativeApplicative, Y[_]: CommutativeApplicative](
+    implicit
     ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbXB: Arbitrary[X[B]],
@@ -37,7 +37,7 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
     EqYFM: Eq[Y[F[M]]],
     EqOptionA: Eq[Option[A]]
   ): RuleSet = {
-    implicit def EqXFBYFB : Eq[(X[F[B]], Y[F[B]])] = new Eq[(X[F[B]], Y[F[B]])] {
+    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] = new Eq[(X[F[B]], Y[F[B]])] {
       override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
         EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
     }

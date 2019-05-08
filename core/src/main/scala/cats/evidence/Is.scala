@@ -1,6 +1,7 @@
 package cats.evidence
 
 import cats.Id
+import cats.arrow._
 
 /**
  * A value of `A Is B` is proof that the types `A` and `B` are the same. More
@@ -22,31 +23,31 @@ abstract class Is[A, B] extends Serializable {
   def substitute[F[_]](fa: F[A]): F[B]
 
   /**
-    * `Is` is transitive and therefore values of `Is` can be composed in a
-    * chain much like functions. See also `compose`.
-    */
+   * `Is` is transitive and therefore values of `Is` can be composed in a
+   * chain much like functions. See also `compose`.
+   */
   @inline final def andThen[C](next: B Is C): A Is C =
     next.substitute[A Is ?](this)
 
   /**
-    * `Is` is transitive and therefore values of `Is` can be composed in a
-    * chain much like functions. See also `andThen`.
-    */
+   * `Is` is transitive and therefore values of `Is` can be composed in a
+   * chain much like functions. See also `andThen`.
+   */
   @inline final def compose[C](prev: C Is A): C Is B =
-    prev andThen this
+    prev.andThen(this)
 
   /**
-    * `Is` is symmetric and therefore can be flipped around. Flipping is its
-    * own inverse, so `x.flip.flip == x`.
-    */
+   * `Is` is symmetric and therefore can be flipped around. Flipping is its
+   * own inverse, so `x.flip.flip == x`.
+   */
   @inline final def flip: B Is A =
     this.substitute[? Is A](Is.refl)
 
   /**
-    * Sometimes for more complex substitutions it helps the typechecker to
-    * wrap one layer of `F[_]` context around the types you're equating
-    * before substitution.
-    */
+   * Sometimes for more complex substitutions it helps the typechecker to
+   * wrap one layer of `F[_]` context around the types you're equating
+   * before substitution.
+   */
   @inline final def lift[F[_]]: F[A] Is F[B] =
     substitute[λ[α => F[A] Is F[α]]](Is.refl)
 
@@ -58,14 +59,26 @@ abstract class Is[A, B] extends Serializable {
     substitute[Id](a)
 
   /**
-    * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
-    * value.
-    */
+   * A value `A Is B` is always sufficient to produce a similar `Predef.=:=`
+   * value.
+   */
   @inline final def predefEq: A =:= B =
     substitute[A =:= ?](implicitly[A =:= A])
 }
 
-object Is {
+sealed abstract class IsInstances {
+  import Is._
+
+  /**
+   * The category instance on Leibniz categories.
+   */
+  implicit val leibniz: Category[Is] = new Category[Is] {
+    def id[A]: A Is A = refl[A]
+    def compose[A, B, C](bc: B Is C, ab: A Is B): A Is C = bc.compose(ab)
+  }
+}
+
+object Is extends IsInstances {
 
   /**
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
@@ -97,4 +110,3 @@ object Is {
     reflAny.asInstanceOf[A Is B]
 
 }
-

@@ -12,14 +12,16 @@ trait Tuple2InstancesBinCompat0 {
   /**
    * Witness for: (A, A) <-> Boolean => A
    */
-  implicit def catsDataRepresentableForPair(implicit PF: Functor[λ[P => (P, P)]]): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
+  implicit def catsDataRepresentableForPair(
+    implicit PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
     override type Representation = Boolean
     override val F: Functor[λ[P => (P, P)]] = PF
 
     override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
 
     override def index[A](pair: (A, A)): Boolean => A = {
-      case true => pair._1
+      case true  => pair._1
       case false => pair._2
     }
   }
@@ -38,14 +40,14 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
       def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
         g(f(c, fab._1), fab._2)
 
-      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
 
   implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
-    override def show(f: (A, B)): String = {
+    override def show(f: (A, B)): String =
       s"(${aShow.show(f._1)},${bShow.show(f._2)})"
-    }
   }
 
   implicit def catsStdInstancesForTuple2[X]: Traverse[(X, ?)] with Comonad[(X, ?)] with Reducible[(X, ?)] =
@@ -163,10 +165,10 @@ private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, ?
     def loop(x: X, aa: A): (X, B) =
       f(aa) match {
         case (nextX, Left(nextA)) => loop(s.combine(x, nextX), nextA)
-        case (nextX, Right(b)) => (s.combine(x, nextX), b)
+        case (nextX, Right(b))    => (s.combine(x, nextX), b)
       }
     f(a) match {
-      case (x, Right(b)) => (x, b)
+      case (x, Right(b))    => (x, b)
       case (x, Left(nextA)) => loop(x, nextA)
     }
   }

@@ -18,10 +18,10 @@ trait ContravariantMonoidalLaws[F[_]] extends ContravariantSemigroupalLaws[F] {
     (F.trivial[A], fa).contramapN(delta[A]) <-> fa
 
   def contravariantMonoidalContramap2CompatibleContramapLeft[A, B, C](fa: F[A], f: B => (A, C)): IsEq[F[B]] =
-    (fa, F.trivial[C]).contramapN(f) <-> fa.contramap(f andThen (_._1))
+    (fa, F.trivial[C]).contramapN(f) <-> fa.contramap(f.andThen(_._1))
 
   def contravariantMonoidalContramap2CompatibleContramapRight[A, B, C](fa: F[A], f: C => (B, A)): IsEq[F[C]] =
-    (F.trivial[B], fa).contramapN(f) <-> fa.contramap(f andThen (_._2))
+    (F.trivial[B], fa).contramapN(f) <-> fa.contramap(f.andThen(_._2))
 }
 
 object ContravariantMonoidalLaws {

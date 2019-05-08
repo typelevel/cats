@@ -3,19 +3,22 @@ package tests
 
 import cats.arrow.FunctionK
 import cats.free.FreeInvariantMonoidal
-import cats.laws.discipline.{InvariantMonoidalTests, SerializableTests}
+import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Gen}
-import cats.tests.CsvCodecInvariantMonoidalSuite._
+import cats.tests.BinCodecInvariantMonoidalSuite._
 
 class FreeInvariantMonoidalSuite extends CatsSuite {
-  implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Arbitrary[FreeInvariantMonoidal[F, A]] =
+  implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]],
+                                                       A: Arbitrary[A]): Arbitrary[FreeInvariantMonoidal[F, A]] =
     Arbitrary(
-      Gen.oneOf(
-        A.arbitrary.map(FreeInvariantMonoidal.pure[F, A]),
-        F.arbitrary.map(FreeInvariantMonoidal.lift[F, A])))
+      Gen.oneOf(A.arbitrary.map(FreeInvariantMonoidal.pure[F, A]), F.arbitrary.map(FreeInvariantMonoidal.lift[F, A]))
+    )
 
-  implicit def freeInvariantMonoidalEq[S[_]: InvariantMonoidal, A](implicit SA: Eq[S[A]]): Eq[FreeInvariantMonoidal[S, A]] =
+  implicit def freeInvariantMonoidalEq[S[_]: InvariantMonoidal, A](
+    implicit SA: Eq[S[A]]
+  ): Eq[FreeInvariantMonoidal[S, A]] =
     new Eq[FreeInvariantMonoidal[S, A]] {
       def eqv(a: FreeInvariantMonoidal[S, A], b: FreeInvariantMonoidal[S, A]): Boolean = {
         val nt = FunctionK.id[S]
@@ -23,22 +26,25 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
       }
     }
 
-  implicit val isoFreeCsvCodec = Isomorphisms.invariant[FreeInvariantMonoidal[CsvCodec, ?]]
+  implicit val isoFreeBinCodec = Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, ?]]
 
-  checkAll("FreeInvariantMonoidal[CsvCodec, ?]", InvariantMonoidalTests[FreeInvariantMonoidal[CsvCodec, ?]].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[FreeInvariantMonoidal[CsvCodec, ?]]", SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[CsvCodec, ?]]))
+  checkAll("FreeInvariantMonoidal[BinCodec, ?]",
+           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, ?]].invariantMonoidal[MiniInt, Boolean, Boolean])
+  checkAll("InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]",
+           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]))
 
   test("FreeInvariantMonoidal#fold") {
-    val n = 2
-    val i1 = numericSystemCodec(8)
-    val i2 = InvariantMonoidal[CsvCodec].point(n)
-    val iExpr = i1.product(i2.imap(_ * 2)(_ / 2))
+    forAll { i1: BinCodec[MiniInt] =>
+      val n = MiniInt.unsafeFromInt(2)
+      val i2 = InvariantMonoidal[BinCodec].point(n)
+      val iExpr = i1.product(i2.imap(_ * n)(_ / n))
 
-    val f1 = FreeInvariantMonoidal.lift[CsvCodec, Int](i1)
-    val f2 = FreeInvariantMonoidal.pure[CsvCodec, Int](n)
-    val fExpr = f1.product(f2.imap(_ * 2)(_ / 2))
+      val f1 = FreeInvariantMonoidal.lift[BinCodec, MiniInt](i1)
+      val f2 = FreeInvariantMonoidal.pure[BinCodec, MiniInt](n)
+      val fExpr = f1.product(f2.imap(_ * n)(_ / n))
 
-    fExpr.fold should === (iExpr)
+      fExpr.fold should ===(iExpr)
+    }
   }
 
   implicit val idIsInvariantMonoidal: InvariantMonoidal[Id] = new InvariantMonoidal[Id] {
@@ -54,7 +60,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
     val nt = FunctionK.id[Id]
     val r1 = y.product(p)
     val r2 = r1.compile(nt)
-    r1.foldMap(nt) should === (r2.foldMap(nt))
+    r1.foldMap(nt) should ===(r2.foldMap(nt))
   }
 
   test("FreeInvariantMonoidal#analyze") {
@@ -62,9 +68,9 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
     val countingNT = λ[FunctionK[List, G]](la => List(la.length))
 
     val fli1 = FreeInvariantMonoidal.lift[List, Int](List(1, 3, 5, 7))
-    fli1.analyze[G[Int]](countingNT) should === (List(4))
+    fli1.analyze[G[Int]](countingNT) should ===(List(4))
 
     val fli2 = FreeInvariantMonoidal.lift[List, Int](List.empty)
-    fli2.analyze[G[Int]](countingNT) should === (List(0))
+    fli2.analyze[G[Int]](countingNT) should ===(List(0))
   }
 }

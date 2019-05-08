@@ -7,7 +7,8 @@ import cats.syntax.option._
 
 final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
-  def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb, fab))
+  def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C)(implicit F: Functor[F]): F[C] =
+    F.map(value)(_.fold(fa, fb, fab))
 
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
@@ -21,8 +22,8 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def getOrElseF[BB >: B](default: => F[BB])(implicit F: Monad[F]): F[BB] =
     F.flatMap(value) {
-      case Ior.Left(_) => default
-      case Ior.Right(b) => F.pure(b)
+      case Ior.Left(_)    => default
+      case Ior.Right(b)   => F.pure(b)
       case Ior.Both(_, b) => F.pure(b)
     }
 
@@ -61,20 +62,21 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def leftFlatMap[BB >: B, C](f: A => IorT[F, C, BB])(implicit F: Monad[F], BB: Semigroup[BB]): IorT[F, C, BB] =
     IorT(F.flatMap(value) {
-      case Ior.Left(a) => f(a).value
+      case Ior.Left(a)      => f(a).value
       case r @ Ior.Right(_) => F.pure(r.asInstanceOf[Ior[C, BB]])
-      case Ior.Both(a, b) => F.map(f(a).value) {
-        case Ior.Left(c) => Ior.Both(c, b)
-        case Ior.Right(b1) => Ior.Right(BB.combine(b, b1))
-        case Ior.Both(c, b1) => Ior.Both(c, BB.combine(b, b1))
-      }
+      case Ior.Both(a, b) =>
+        F.map(f(a).value) {
+          case Ior.Left(c)     => Ior.Both(c, b)
+          case Ior.Right(b1)   => Ior.Right(BB.combine(b, b1))
+          case Ior.Both(c, b1) => Ior.Both(c, BB.combine(b, b1))
+        }
     })
 
   def leftSemiflatMap[C](f: A => F[C])(implicit F: Monad[F]): IorT[F, C, B] =
     IorT(F.flatMap(value) {
-      case Ior.Left(a) => F.map(f(a))(Ior.Left(_))
+      case Ior.Left(a)      => F.map(f(a))(Ior.Left(_))
       case r @ Ior.Right(_) => F.pure(r.asInstanceOf[Ior[C, B]])
-      case Ior.Both(a, b) => F.map(f(a))(Ior.Both(_, b))
+      case Ior.Both(a, b)   => F.map(f(a))(Ior.Both(_, b))
     })
 
   def transform[C, D](f: Ior[A, B] => Ior[C, D])(implicit F: Functor[F]): IorT[F, C, D] = IorT(F.map(value)(f))
@@ -85,16 +87,17 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
   def flatMap[AA >: A, D](f: B => IorT[F, AA, D])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, D] =
     IorT(F.flatMap(value) {
       case l @ Ior.Left(_) => F.pure(l.asInstanceOf[Ior[AA, D]])
-      case Ior.Right(b) => f(b).value
-      case Ior.Both(a, b) => F.map(f(b).value) {
-        case Ior.Left(a1) => Ior.Left(AA.combine(a, a1))
-        case Ior.Right(d) => Ior.Both(a, d)
-        case Ior.Both(a1, d) => Ior.Both(AA.combine(a, a1), d)
-      }
+      case Ior.Right(b)    => f(b).value
+      case Ior.Both(a, b) =>
+        F.map(f(b).value) {
+          case Ior.Left(a1)    => Ior.Left(AA.combine(a, a1))
+          case Ior.Right(d)    => Ior.Both(a, d)
+          case Ior.Both(a1, d) => Ior.Both(AA.combine(a, a1), d)
+        }
     })
 
   def flatMapF[AA >: A, D](f: B => F[Ior[AA, D]])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, D] =
-    flatMap(f andThen IorT.apply)
+    flatMap(f.andThen(IorT.apply))
 
   def subflatMap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Functor[F], AA: Semigroup[AA]): IorT[F, AA, D] =
     IorT(F.map(value)(_.flatMap(f)))
@@ -102,8 +105,8 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
   def semiflatMap[D](f: B => F[D])(implicit F: Monad[F]): IorT[F, A, D] =
     IorT(F.flatMap(value) {
       case l @ Ior.Left(_) => F.pure(l.asInstanceOf[Ior[A, D]])
-      case Ior.Right(b) => F.map(f(b))(Ior.right)
-      case Ior.Both(a, b) => F.map(f(b))(Ior.both(a, _))
+      case Ior.Right(b)    => F.map(f(b))(Ior.right)
+      case Ior.Both(a, b)  => F.map(f(b))(Ior.both(a, _))
     })
 
   def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[IorT[F, A, D]] =
@@ -119,7 +122,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
     eq.eqv(value, that.value)
 
   def combine(that: IorT[F, A, B])(implicit F: Apply[F], A: Semigroup[A], B: Semigroup[B]): IorT[F, A, B] =
-    IorT(F.map2(this.value, that.value)(_ combine _))
+    IorT(F.map2(this.value, that.value)(_.combine(_)))
 }
 
 object IorT extends IorTInstances {
@@ -127,7 +130,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class LeftPartiallyApplied[B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fa)(Ior.left))
   }
 
@@ -145,7 +148,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class LeftTPartiallyApplied[F[_], B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftTPartiallyApplied[F[_], B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.left(a)))
   }
 
@@ -164,7 +167,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class RightPartiallyApplied[A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class RightPartiallyApplied[A](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fb)(Ior.right))
   }
 
@@ -205,7 +208,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class BothTPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class BothTPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](a: A, b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.Both(a, b)))
   }
 
@@ -223,7 +226,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class PurePartiallyApplied[F[_], A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class PurePartiallyApplied[F[_], A](private val dummy: Boolean = true) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.right(b)))
   }
 
@@ -271,7 +274,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class FromIorPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromIorPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](ior: Ior[A, B])(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(ior))
   }
 
@@ -290,7 +293,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class FromEitherPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromEitherPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): IorT[F, E, A] = IorT(F.pure(either.toIor))
   }
 
@@ -322,7 +325,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](option: Option[A], ifNone: => E)(implicit F: Applicative[F]): IorT[F, E, A] =
       IorT(F.pure(option.toRightIor(ifNone)))
   }
@@ -360,7 +363,7 @@ object IorT extends IorTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[data] final class CondPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class CondPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](test: Boolean, right: => B, left: => A)(implicit F: Applicative[F]): IorT[F, A, B] =
       IorT(F.pure(if (test) Ior.right(right) else Ior.left(left)))
   }
@@ -399,7 +402,7 @@ object IorT extends IorTInstances {
     IorT(if (test) F.map(right)(Ior.right) else F.map(left)(Ior.left))
 }
 
-private[data] abstract class IorTInstances extends IorTInstances1 {
+abstract private[data] class IorTInstances extends IorTInstances1 {
 
   implicit def catsDataShowForIorT[F[_], A, B](implicit sh: Show[F[Ior[A, B]]]): Show[IorT[F, A, B]] =
     Contravariant[Show].contramap(sh)(_.value)
@@ -415,29 +418,30 @@ private[data] abstract class IorTInstances extends IorTInstances1 {
   implicit def catsDataMonoidForIorT[F[_], A, B](implicit F: Monoid[F[Ior[A, B]]]): Monoid[IorT[F, A, B]] =
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }
 
-  implicit def catsDataParallelForIorTWithParallelEffect[M[_], F[_], E]
-    (implicit P: Parallel[M, F], E: Semigroup[E])
-    : Parallel[IorT[M, E, ?], IorT[F, E, ?]] { type Dummy }
-    = new Parallel[IorT[M, E, ?], IorT[F, E, ?]] {
-      type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
+  implicit def catsDataParallelForIorTWithParallelEffect[M[_], F[_], E](
+    implicit P: Parallel[M, F],
+    E: Semigroup[E]
+  ): Parallel[IorT[M, E, ?], IorT[F, E, ?]] { type Dummy } = new Parallel[IorT[M, E, ?], IorT[F, E, ?]] {
+    type Dummy // fix to make this one more specific than the catsDataParallelForIorTWithSequentialEffect, see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
 
-      val parallel: IorT[M, E, ?] ~> IorT[F, E, ?] = λ[IorT[M, E, ?] ~> IorT[F, E, ?]](fm => IorT(P.parallel(fm.value)))
-      val sequential: IorT[F, E, ?] ~> IorT[M, E, ?] = λ[IorT[F, E, ?] ~> IorT[M, E, ?]](ff => IorT(P.sequential(ff.value)))
+    val parallel: IorT[M, E, ?] ~> IorT[F, E, ?] = λ[IorT[M, E, ?] ~> IorT[F, E, ?]](fm => IorT(P.parallel(fm.value)))
+    val sequential: IorT[F, E, ?] ~> IorT[M, E, ?] =
+      λ[IorT[F, E, ?] ~> IorT[M, E, ?]](ff => IorT(P.sequential(ff.value)))
 
-      private[this] val FA: Applicative[F] = P.applicative
-      private[this] val IorA: Applicative[Ior[E, ?]] = Parallel[Ior[E, ?], Ior[E, ?]].applicative
+    private[this] val FA: Applicative[F] = P.applicative
+    private[this] val IorA: Applicative[Ior[E, ?]] = Parallel[Ior[E, ?], Ior[E, ?]].applicative
 
-      val applicative: Applicative[IorT[F, E, ?]] = new Applicative[IorT[F, E, ?]] {
-        def pure[A](a: A): IorT[F, E, A] = IorT.pure(a)(FA)
-        def ap[A, B](ff: IorT[F, E, A => B])(fa: IorT[F, E, A]): IorT[F, E, B] =
-          IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
-      }
-
-      lazy val monad: Monad[IorT[M, E, ?]] = {
-        implicit def underlyingMonadM: Monad[M] = P.monad
-        Monad[IorT[M, E, ?]]
-      }
+    val applicative: Applicative[IorT[F, E, ?]] = new Applicative[IorT[F, E, ?]] {
+      def pure[A](a: A): IorT[F, E, A] = IorT.pure(a)(FA)
+      def ap[A, B](ff: IorT[F, E, A => B])(fa: IorT[F, E, A]): IorT[F, E, B] =
+        IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
     }
+
+    lazy val monad: Monad[IorT[M, E, ?]] = {
+      implicit def underlyingMonadM: Monad[M] = P.monad
+      Monad[IorT[M, E, ?]]
+    }
+  }
 
   implicit def catsDataDeferForIor[F[_], E](implicit F: Defer[F]): Defer[IorT[F, E, ?]] =
     new Defer[IorT[F, E, ?]] {
@@ -446,7 +450,7 @@ private[data] abstract class IorTInstances extends IorTInstances1 {
     }
 }
 
-private[data] abstract class IorTInstances1 extends IorTInstances2 {
+abstract private[data] class IorTInstances1 extends IorTInstances2 {
   implicit def catsDataSemigroupForIorT[F[_], A, B](implicit F: Semigroup[F[Ior[A, B]]]): Semigroup[IorT[F, A, B]] =
     new IorTSemigroup[F, A, B] { val F0: Semigroup[F[Ior[A, B]]] = F }
 
@@ -459,8 +463,10 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
       val F0: Monad[F] = F
     }
 
-  implicit def catsDataParallelForIorTWithSequentialEffect[F[_], E]
-    (implicit F: Monad[F], E: Semigroup[E]): Parallel[IorT[F, E, ?], IorT[F, E, ?]] = new Parallel[IorT[F, E, ?], IorT[F, E, ?]] {
+  implicit def catsDataParallelForIorTWithSequentialEffect[F[_], E](
+    implicit F: Monad[F],
+    E: Semigroup[E]
+  ): Parallel[IorT[F, E, ?], IorT[F, E, ?]] = new Parallel[IorT[F, E, ?], IorT[F, E, ?]] {
     private[this] val identityK: IorT[F, E, ?] ~> IorT[F, E, ?] = FunctionK.id
     private[this] val underlyingParallel: Parallel[Ior[E, ?], Ior[E, ?]] =
       Parallel[Ior[E, ?], Ior[E, ?]]
@@ -479,8 +485,9 @@ private[data] abstract class IorTInstances1 extends IorTInstances2 {
 
 }
 
-private[data] abstract class IorTInstances2 extends IorTInstances3 {
-  implicit def catsDataMonadErrorFForIorT[F[_], A, E](implicit FE: MonadError[F, E], A: Semigroup[A]): MonadError[IorT[F, A, ?], E] =
+abstract private[data] class IorTInstances2 extends IorTInstances3 {
+  implicit def catsDataMonadErrorFForIorT[F[_], A, E](implicit FE: MonadError[F, E],
+                                                      A: Semigroup[A]): MonadError[IorT[F, A, ?], E] =
     new IorTMonadErrorF[F, A, E] {
       val A0: Semigroup[A] = A
       val F0: MonadError[F, E] = FE
@@ -490,55 +497,56 @@ private[data] abstract class IorTInstances2 extends IorTInstances3 {
     new IorTEq[F, A, B] { val F0: Eq[F[Ior[A, B]]] = F }
 }
 
-private[data] abstract class IorTInstances3 {
+abstract private[data] class IorTInstances3 {
   implicit def catsDataFunctorForIorT[F[_], A](implicit F: Functor[F]): Functor[IorT[F, A, ?]] =
     new IorTFunctor[F, A] { val F0: Functor[F] = F }
 }
 
-private[data] sealed trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
+sealed private[data] trait IorTFunctor[F[_], A] extends Functor[IorT[F, A, ?]] {
   implicit def F0: Functor[F]
 
   override def map[B, D](iort: IorT[F, A, B])(f: B => D): IorT[F, A, D] = iort.map(f)
 }
 
-private[data] sealed trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {
+sealed private[data] trait IorTEq[F[_], A, B] extends Eq[IorT[F, A, B]] {
   implicit def F0: Eq[F[Ior[A, B]]]
 
   override def eqv(x: IorT[F, A, B], y: IorT[F, A, B]): Boolean = x === y
 }
 
-private[data] sealed trait IorTMonad[F[_], A] extends Monad[IorT[F, A, ?]] with IorTFunctor[F, A] {
+sealed private[data] trait IorTMonad[F[_], A] extends Monad[IorT[F, A, ?]] with IorTFunctor[F, A] {
   implicit def A0: Semigroup[A]
-  override implicit def F0: Monad[F]
+  implicit override def F0: Monad[F]
 
   override def pure[B](b: B): IorT[F, A, B] = IorT.pure(b)
 
   override def flatMap[B, D](iort: IorT[F, A, B])(f: B => IorT[F, A, D]): IorT[F, A, D] = iort.flatMap(f)
 
   override def tailRecM[B, D](b: B)(f: B => IorT[F, A, Either[B, D]]): IorT[F, A, D] =
-    IorT(F0.tailRecM(Tuple2[B, Option[A]](b, None)) { case (b0, optionA) =>
-      F0.map(f(b0).value) {
-        case Ior.Left(aa)           => Right(Ior.Left(Semigroup.maybeCombine(optionA, aa)))
-        case Ior.Right(Left(b1))    => Left(b1 -> optionA)
-        case Ior.Right(Right(d))    => Right(optionA.fold(Ior.right[A, D](d))(Ior.both(_, d)))
-        case Ior.Both(aa, Right(d)) => Right(Ior.both(Semigroup.maybeCombine(optionA, aa), d))
-        case Ior.Both(aa, Left(b1)) => Left(b1 -> Some(Semigroup.maybeCombine(optionA, aa)))
-      }
+    IorT(F0.tailRecM(Tuple2[B, Option[A]](b, None)) {
+      case (b0, optionA) =>
+        F0.map(f(b0).value) {
+          case Ior.Left(aa)           => Right(Ior.Left(Semigroup.maybeCombine(optionA, aa)))
+          case Ior.Right(Left(b1))    => Left(b1 -> optionA)
+          case Ior.Right(Right(d))    => Right(optionA.fold(Ior.right[A, D](d))(Ior.both(_, d)))
+          case Ior.Both(aa, Right(d)) => Right(Ior.both(Semigroup.maybeCombine(optionA, aa), d))
+          case Ior.Both(aa, Left(b1)) => Left(b1 -> Some(Semigroup.maybeCombine(optionA, aa)))
+        }
     })
 }
 
-private[data] sealed trait IorTMonadError[F[_], A] extends MonadError[IorT[F, A, ?], A] with IorTMonad[F, A] {
+sealed private[data] trait IorTMonadError[F[_], A] extends MonadError[IorT[F, A, ?], A] with IorTMonad[F, A] {
   override def raiseError[B](a: A): IorT[F, A, B] = IorT(F0.pure(Ior.left(a)))
 
   override def handleErrorWith[B](iort: IorT[F, A, B])(f: A => IorT[F, A, B]): IorT[F, A, B] =
     IorT(F0.flatMap(iort.value) {
-      case Ior.Left(a) => f(a).value
-      case r @ (Ior.Right(_) | Ior.Both(_, _))  => F0.pure(r)
+      case Ior.Left(a)                         => f(a).value
+      case r @ (Ior.Right(_) | Ior.Both(_, _)) => F0.pure(r)
     })
 }
 
-private[data] sealed trait IorTMonadErrorF[F[_], A, E] extends MonadError[IorT[F, A, ?], E] with IorTMonad[F, A] {
-  override implicit def F0: MonadError[F, E]
+sealed private[data] trait IorTMonadErrorF[F[_], A, E] extends MonadError[IorT[F, A, ?], E] with IorTMonad[F, A] {
+  implicit override def F0: MonadError[F, E]
 
   override def raiseError[B](e: E): IorT[F, A, B] = IorT(F0.raiseError(e))
 
@@ -546,29 +554,30 @@ private[data] sealed trait IorTMonadErrorF[F[_], A, E] extends MonadError[IorT[F
     IorT(F0.handleErrorWith(iort.value)(f(_).value))
 }
 
-private[data] sealed trait IorTSemigroup[F[_], A, B] extends Semigroup[IorT[F, A, B]] {
+sealed private[data] trait IorTSemigroup[F[_], A, B] extends Semigroup[IorT[F, A, B]] {
   implicit def F0: Semigroup[F[Ior[A, B]]]
 
   override def combine(x: IorT[F, A, B], y: IorT[F, A, B]): IorT[F, A, B] =
     IorT(F0.combine(x.value, y.value))
 }
 
-private[data] sealed trait IorTMonoid[F[_], A, B] extends Monoid[IorT[F, A, B]] with IorTSemigroup[F, A, B] {
-  override implicit def F0: Monoid[F[Ior[A, B]]]
+sealed private[data] trait IorTMonoid[F[_], A, B] extends Monoid[IorT[F, A, B]] with IorTSemigroup[F, A, B] {
+  implicit override def F0: Monoid[F[Ior[A, B]]]
 
   override def empty: IorT[F, A, B] = IorT(F0.empty)
 }
 
-private[data] sealed trait IorTFoldable[F[_], A] extends Foldable[IorT[F, A, ?]] {
+sealed private[data] trait IorTFoldable[F[_], A] extends Foldable[IorT[F, A, ?]] {
   implicit def F0: Foldable[F]
 
   override def foldLeft[B, C](iort: IorT[F, A, B], c: C)(f: (C, B) => C): C = iort.foldLeft(c)(f)
 
-  override def foldRight[B, C](iort: IorT[F, A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = iort.foldRight(lc)(f)
+  override def foldRight[B, C](iort: IorT[F, A, B], lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+    iort.foldRight(lc)(f)
 }
 
-private[data] sealed trait IorTTraverse[F[_], A] extends Traverse[IorT[F, A, ?]] with IorTFoldable[F, A] {
-  override implicit def F0: Traverse[F]
+sealed private[data] trait IorTTraverse[F[_], A] extends Traverse[IorT[F, A, ?]] with IorTFoldable[F, A] {
+  implicit override def F0: Traverse[F]
 
-  override def traverse[G[_] : Applicative, B, D](iort: IorT[F, A, B])(f: B => G[D]): G[IorT[F, A, D]] = iort.traverse(f)
+  override def traverse[G[_]: Applicative, B, D](iort: IorT[F, A, B])(f: B => G[D]): G[IorT[F, A, D]] = iort.traverse(f)
 }

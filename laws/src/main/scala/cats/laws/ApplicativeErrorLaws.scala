@@ -32,7 +32,7 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
     F.handleError(fa)(f) <-> F.recover(fa) { case x => f(x) }
 
   def recoverConsistentWithRecoverWith[A](fa: F[A], pf: PartialFunction[E, A]): IsEq[F[A]] =
-    F.recover(fa)(pf) <-> F.recoverWith(fa)(pf andThen F.pure)
+    F.recover(fa)(pf) <-> F.recoverWith(fa)(pf.andThen(F.pure _))
 
   def attemptConsistentWithAttemptT[A](fa: F[A]): IsEq[EitherT[F, E, A]] =
     EitherT(F.attempt(fa)) <-> F.attemptT(fa)
@@ -44,7 +44,7 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
     F.onError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
 
   def onErrorRaise[A](fa: F[A], e: E, fb: F[Unit]): IsEq[F[A]] =
-    F.onError(F.raiseError[A](e)){case err => fb} <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
+    F.onError(F.raiseError[A](e)) { case err => fb } <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
 }
 
 object ApplicativeErrorLaws {
