@@ -7,197 +7,148 @@ import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import org.scalacheck.Arbitrary
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
+import cats.platform.Platform
 import Helpers.CSemi
-import catalysts.Platform
 
 class KleisliSuite extends CatsSuite {
-  implicit def kleisliEq[F[_], A, B](implicit A: Arbitrary[A], FB: Eq[F[B]]): Eq[Kleisli[F, A, B]] =
+  implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
     Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
-  implicit def readerEq[A, B](implicit A: Arbitrary[A], FB: Eq[Id[B]]): Eq[Reader[A, B]] =
+  implicit def readerEq[A, B](implicit ev: Eq[A => B]): Eq[Reader[A, B]] =
     kleisliEq
 
-  implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, Int, ?], Unit, Int]
-  implicit val eitherTEq2 = EitherT.catsDataEqForEitherT[Reader[Int, ?], Unit, Int]
+  implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, MiniInt, ?], Unit, Int]
+  implicit val eitherTEq2 = EitherT.catsDataEqForEitherT[Reader[MiniInt, ?], Unit, Int]
 
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Kleisli[Option, Int, ?]]
   implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[Reader[Int, ?]]
 
   {
-    implicit val instance: ApplicativeError[Kleisli[Option, Int, ?], Unit] =
-      Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, Int](cats.instances.option.catsStdInstancesForOption)
-    checkAll("Kleisli[Option, Int, Int] with Unit",
-             ApplicativeErrorTests[Kleisli[Option, Int, ?], Unit](instance).applicativeError[Int, Int, Int])
+    implicit val instance: ApplicativeError[Kleisli[Option, MiniInt, ?], Unit] =
+      Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, MiniInt](cats.instances.option.catsStdInstancesForOption)
+    checkAll("Kleisli[Option, MinInt, ?] with Unit",
+             ApplicativeErrorTests[Kleisli[Option, MiniInt, ?], Unit](instance).applicativeError[Int, Int, Int])
     checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(instance))
   }
 
-  checkAll("Kleisli[Eval, Int, ?]", DeferTests[Kleisli[Eval, Int, ?]].defer[Int])
-  checkAll("Kleisli[Option, Int, Int] with Unit",
-           MonadErrorTests[Kleisli[Option, Int, ?], Unit].monadError[Int, Int, Int])
+  checkAll("Kleisli[Eval, MiniInt, ?]", DeferTests[Kleisli[Eval, MiniInt, ?]].defer[Int])
+  checkAll("Kleisli[Option, MiniInt, ?] with Unit",
+           MonadErrorTests[Kleisli[Option, MiniInt, ?], Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]",
            SerializableTests.serializable(MonadError[Kleisli[Option, Int, ?], Unit]))
 
-  checkAll("Kleisli[Option, Int, Int]", SemigroupalTests[Kleisli[Option, Int, ?]].semigroupal[Int, Int, Int])
+  checkAll("Kleisli[Option, MiniInt, ?]", SemigroupalTests[Kleisli[Option, MiniInt, ?]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Semigroupal[Kleisli[Option, Int, ?]]))
 
-  checkAll("Kleisli[(CSemi, ?), Int, ?]",
-           CommutativeFlatMapTests[Kleisli[(CSemi, ?), Int, ?]].commutativeFlatMap[Int, Int, Int])
+  checkAll("Kleisli[(CSemi, ?), MiniInt, ?]",
+           CommutativeFlatMapTests[Kleisli[(CSemi, ?), MiniInt, ?]].commutativeFlatMap[Int, Int, Int])
   checkAll("CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]",
            SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, ?), Int, ?]]))
 
-  checkAll("Kleisli[Option, Int, ?]", CommutativeMonadTests[Kleisli[Option, Int, ?]].commutativeMonad[Int, Int, Int])
+  checkAll("Kleisli[Option, MiniInt, ?]",
+           CommutativeMonadTests[Kleisli[Option, MiniInt, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Option, Int, ?]]",
            SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, ?]]))
 
-  checkAll("Kleisli[Id, Int, ?]", CommutativeMonadTests[Kleisli[Id, Int, ?]].commutativeMonad[Int, Int, Int])
+  checkAll("Kleisli[Id, MiniInt, ?]", CommutativeMonadTests[Kleisli[Id, MiniInt, ?]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Id, Int, ?]]",
            SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, ?]]))
 
-  {
-    implicit val catsDataArrowForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
-    checkAll("Kleisli[List, Int, Int]", ArrowTests[Kleisli[List, ?, ?]].arrow[Int, Int, Int, Int, Int, Int])
-    checkAll("Arrow[Kleisli[List, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[List, ?, ?]]))
-  }
+  checkAll("Kleisli[List, ?, ?]",
+           ArrowTests[Kleisli[List, ?, ?]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+  checkAll("Arrow[Kleisli[List, ?, ?]]", SerializableTests.serializable(Arrow[Kleisli[List, ?, ?]]))
 
-  {
-    implicit val catsDataArrowChoiceForKleisli = Kleisli.catsDataArrowChoiceForKleisli[List]
-    checkAll("Kleisli[List, Int, Int]", ArrowChoiceTests[Kleisli[List, ?, ?]].arrowChoice[Int, Int, Int, Int, Int, Int])
-    checkAll("ArrowChoice[Kleisli[List, ?, ?]]", SerializableTests.serializable(ArrowChoice[Kleisli[List, ?, ?]]))
-  }
+  checkAll("Kleisli[List, ?, ?]",
+           ArrowChoiceTests[Kleisli[List, ?, ?]].arrowChoice[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+  checkAll("ArrowChoice[Kleisli[List, ?, ?]]", SerializableTests.serializable(ArrowChoice[Kleisli[List, ?, ?]]))
 
-  {
-    implicit val catsDataCommutativeArrowForKleisli = Kleisli.catsDataCommutativeArrowForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]",
-             CommutativeArrowTests[Kleisli[Option, ?, ?]].commutativeArrow[Int, Int, Int, Int, Int, Int])
-    checkAll("CommutativeArrow[Kleisli[Option, ?, ?]]",
-             SerializableTests.serializable(CommutativeArrow[Kleisli[Option, ?, ?]]))
-  }
+  checkAll("Kleisli[Option, Int, Int]",
+           CommutativeArrowTests[Kleisli[Option, ?, ?]]
+             .commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+  checkAll("CommutativeArrow[Kleisli[Option, ?, ?]]",
+           SerializableTests.serializable(CommutativeArrow[Kleisli[Option, ?, ?]]))
 
-  {
-    implicit val catsDataChoiceForKleisli = Kleisli.catsDataChoiceForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", ChoiceTests[Kleisli[Option, ?, ?]].choice[Int, Int, Int, Int])
-    checkAll("Choice[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Choice[Kleisli[Option, ?, ?]]))
-  }
+  checkAll("Kleisli[Option, ?, ?]", ChoiceTests[Kleisli[Option, ?, ?]].choice[MiniInt, Boolean, Int, Int])
+  checkAll("Choice[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Choice[Kleisli[Option, ?, ?]]))
 
-  {
-    implicit val catsDataMonadForKleisli = Kleisli.catsDataMonadForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", MonadTests[Kleisli[Option, Int, ?]].monad[Int, Int, Int])
-    checkAll("Monad[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(Monad[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, ?]", MonadTests[Kleisli[Option, MiniInt, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Kleisli[Option, ?, ?], Int]", SerializableTests.serializable(Monad[Kleisli[Option, Int, ?]]))
 
-  {
-    implicit val catsDataMonadForReader = Kleisli.catsDataMonadForKleisliId[Int]
-    checkAll("Reader[Int, Int]", MonadTests[Reader[Int, ?]].monad[Int, Int, Int])
-    checkAll("Monad[Reader[?, ?], Int]", SerializableTests.serializable(Monad[Reader[Int, ?]]))
-  }
+  checkAll("Reader[MiniInt, ?]", MonadTests[Reader[MiniInt, ?]].monad[Int, Int, Int])
+  checkAll("Monad[Reader[?, ?], Int]", SerializableTests.serializable(Monad[Reader[Int, ?]]))
 
-  {
-    implicit val catsDataStrongForKleisli = Kleisli.catsDataStrongForKleisli[Option]
-    checkAll("Kleisli[Option, Int, Int]", StrongTests[Kleisli[Option, ?, ?]].strong[Int, Int, Int, Int, Int, Int])
-    checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
-  }
+  checkAll("Kleisli[Option, ?, ?]",
+           StrongTests[Kleisli[Option, ?, ?]].strong[MiniInt, Boolean, Boolean, Boolean, Boolean, Int])
+  checkAll("Strong[Kleisli[Option, ?, ?]]", SerializableTests.serializable(Strong[Kleisli[Option, ?, ?]]))
 
-  {
-    implicit val catsDataFlatMapForKleisli = Kleisli.catsDataFlatMapForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", FlatMapTests[Kleisli[Option, Int, ?]].flatMap[Int, Int, Int])
-    checkAll("FlatMap[Kleisli[Option, Int, ?]]", SerializableTests.serializable(FlatMap[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, Int]", FlatMapTests[Kleisli[Option, MiniInt, ?]].flatMap[Int, Int, Int])
+  checkAll("FlatMap[Kleisli[Option, Int, ?]]", SerializableTests.serializable(FlatMap[Kleisli[Option, Int, ?]]))
 
-  {
-    implicit val catsDataAlternativeForKleisli = Kleisli.catsDataAlternativeForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", AlternativeTests[Kleisli[Option, Int, ?]].alternative[Int, Int, Int])
-    checkAll("Alternative[Kleisli[Option, Int, ?]]",
-             SerializableTests.serializable(Alternative[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, ?]", AlternativeTests[Kleisli[Option, MiniInt, ?]].alternative[Int, Int, Int])
+  checkAll("Alternative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, ?]]))
 
-  {
-    implicit val catsDataContravariantMonoidalForKleisli =
-      Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, ?], Int]
-    checkAll("Kleisli[Const[String, ?], Int, Int]",
-             ContravariantMonoidalTests[Kleisli[Const[String, ?], Int, ?]].contravariantMonoidal[Int, Int, Int])
-    checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
-             SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
-  }
+  checkAll("Kleisli[Const[String, ?], MiniInt, ?]",
+           ContravariantMonoidalTests[Kleisli[Const[String, ?], MiniInt, ?]].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
+           SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
 
-  {
-    implicit val catsDataApplicativeForKleisli = Kleisli.catsDataApplicativeForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", ApplicativeTests[Kleisli[Option, Int, ?]].applicative[Int, Int, Int])
-    checkAll("Applicative[Kleisli[Option, Int, ?]]",
-             SerializableTests.serializable(Applicative[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, Int]", ApplicativeTests[Kleisli[Option, MiniInt, ?]].applicative[Int, Int, Int])
+  checkAll("Applicative[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, ?]]))
 
-  {
-    implicit val catsDataApplyForKleisli = Kleisli.catsDataApplyForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", ApplyTests[Kleisli[Option, Int, ?]].apply[Int, Int, Int])
-    checkAll("Apply[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Apply[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, Int]", ApplyTests[Kleisli[Option, MiniInt, ?]].apply[Int, Int, Int])
+  checkAll("Apply[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Apply[Kleisli[Option, Int, ?]]))
 
-  {
-    implicit val catsDataFunctorForKleisli = Kleisli.catsDataFunctorForKleisli[Option, Int]
-    checkAll("Kleisli[Option, Int, Int]", FunctorTests[Kleisli[Option, Int, ?]].functor[Int, Int, Int])
-    checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
-  }
+  checkAll("Kleisli[Option, MiniInt, Int]", FunctorTests[Kleisli[Option, MiniInt, ?]].functor[Int, Int, Int])
+  checkAll("Functor[Kleisli[Option, Int, ?]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, ?]]))
 
   {
     implicit val FF = ListWrapper.functorFilter
 
-    checkAll("Kleisli[ListWrapper, Int, ?]",
-             FunctorFilterTests[Kleisli[ListWrapper, Int, ?]].functorFilter[Int, Int, Int])
-    checkAll("FunctorFilter[Kleisli[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, Int, ?]]))
+    checkAll("Kleisli[ListWrapper, MiniInt, ?]",
+             FunctorFilterTests[Kleisli[ListWrapper, MiniInt, ?]].functorFilter[Int, Int, Int])
+    checkAll("FunctorFilter[Kleisli[ListWrapper, MiniInt, ?]]",
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, MiniInt, ?]]))
 
     FunctorFilter[ReaderT[ListWrapper, Int, ?]]
   }
 
-  {
-    checkAll("Kleisli[Function0, Int, ?]",
-             DistributiveTests[Kleisli[Function0, Int, ?]].distributive[Int, Int, Int, Option, Id])
-    checkAll("Distributive[Kleisli[Function0, Int, ?]]",
-             SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
-  }
+  checkAll("Kleisli[Function0, MiniInt, ?]",
+           DistributiveTests[Kleisli[Function0, MiniInt, ?]].distributive[Int, Int, Int, Option, Id])
+  checkAll("Distributive[Kleisli[Function0, Int, ?]]",
+           SerializableTests.serializable(Distributive[Kleisli[Function0, Int, ?]]))
 
-  {
-    implicit val catsDataMonoidForKleisli = Kleisli.catsDataMonoidForKleisli[Option, Int, String]
-    checkAll("Kleisli[Option, Int, String]", MonoidTests[Kleisli[Option, Int, String]].monoid)
-    checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(catsDataMonoidForKleisli))
-  }
+  checkAll("Kleisli[Option, MiniInt, String]", MonoidTests[Kleisli[Option, MiniInt, String]].monoid)
+  checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(Monoid[Kleisli[Option, Int, String]]))
 
-  {
-    implicit val catsDataSemigroupForKleisli = Kleisli.catsDataSemigroupForKleisli[Option, Int, String]
-    checkAll("Kleisli[Option, Int, String]", SemigroupTests[Kleisli[Option, Int, String]].semigroup)
-    checkAll("Semigroup[Kleisli[Option, Int, String]]", SerializableTests.serializable(catsDataSemigroupForKleisli))
-  }
+  checkAll("Kleisli[Option, MiniInt, String]", SemigroupTests[Kleisli[Option, MiniInt, String]].semigroup)
+  checkAll("Semigroup[Kleisli[Option, Int, String]]",
+           SerializableTests.serializable(Semigroup[Kleisli[Option, Int, String]]))
 
   {
     implicit val catsDataMonoidKForKleisli = Kleisli.endoMonoidK[Option]
-    checkAll("Kleisli[Option, Int, Int]", MonoidKTests[λ[α => Kleisli[Option, α, α]]].monoidK[Int])
+    checkAll("Kleisli[Option, MiniInt, MiniInt]", MonoidKTests[λ[α => Kleisli[Option, α, α]]].monoidK[MiniInt])
     checkAll("MonoidK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataMonoidKForKleisli))
   }
 
   {
     implicit val catsDataSemigroupKForKleisli = Kleisli.endoSemigroupK[Option]
-    checkAll("Kleisli[Option, Int, Int]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[Int])
-    checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataSemigroupKForKleisli))
+    checkAll("Kleisli[Option, MiniInt, MiniInt]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[MiniInt])
+    checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]",
+             SerializableTests.serializable(SemigroupK[λ[α => Kleisli[Option, α, α]]]))
   }
 
-  {
-    implicit val semigroupk = Kleisli.catsDataSemigroupKForKleisli[Option, String]
-    checkAll("Kleisli[Option, String, Int]", SemigroupKTests[Kleisli[Option, String, ?]].semigroupK[Int])
-    checkAll("SemigroupK[Kleisli[Option, String, ?]]", SerializableTests.serializable(semigroupk))
-  }
+  checkAll("Kleisli[Option, MiniInt, Int]", SemigroupKTests[Kleisli[Option, MiniInt, ?]].semigroupK[Int])
+  checkAll("SemigroupK[Kleisli[Option, String, ?]]",
+           SerializableTests.serializable(SemigroupK[Kleisli[Option, String, ?]]))
 
-  {
-    implicit val monoidk = Kleisli.catsDataMonoidKForKleisli[Option, String]
-    checkAll("Kleisli[Option, String, Int]", MonoidKTests[Kleisli[Option, String, ?]].monoidK[Int])
-    checkAll("MonoidK[Kleisli[Option, String, ?]]", SerializableTests.serializable(monoidk))
-  }
+  checkAll("Kleisli[Option, MiniInt, ?]", MonoidKTests[Kleisli[Option, MiniInt, ?]].monoidK[Int])
+  checkAll("MonoidK[Kleisli[Option, String, ?]]", SerializableTests.serializable(MonoidK[Kleisli[Option, String, ?]]))
 
-  checkAll("Reader[Int, Int]", FunctorTests[Reader[Int, ?]].functor[Int, Int, Int])
+  checkAll("Reader[MiniInt, Int]", FunctorTests[Reader[MiniInt, ?]].functor[Int, Int, Int])
 
-  checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[Int, Int, Int])
+  checkAll("Kleisli[Option, ?, Int]", ContravariantTests[Kleisli[Option, ?, Int]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Kleisli[Option, ?, Int]]",
            SerializableTests.serializable(Contravariant[Kleisli[Option, ?, Int]]))
 

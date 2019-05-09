@@ -3,7 +3,7 @@ package tests
 
 import Helpers.POrd
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import org.scalatest.Assertion
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -22,7 +22,7 @@ class PartialOrderSuite extends CatsSuite {
     Contravariant[PartialOrder]
   }
 
-  checkAll("PartialOrder[Int]", ContravariantMonoidalTests[PartialOrder].contravariantMonoidal[Int, Int, Int])
+  checkAll("PartialOrder", ContravariantMonoidalTests[PartialOrder].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[PartialOrder]", SerializableTests.serializable(ContravariantMonoidal[PartialOrder]))
 
   test("companion object syntax") {

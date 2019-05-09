@@ -134,10 +134,10 @@ class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K])
     var c = 1
     x.foreach {
       case (k, v) =>
-        val h = StaticMethods.product2Hash(K.hash(k), V.hash(v))
+        val h = StaticMethods.product2HashWithPrefix(K.hash(k), V.hash(v), "Tuple2")
         a += h
         b ^= h
-        if (h != 0) c *= h
+        c = StaticMethods.updateUnorderedHashC(c, h)
         n += 1
     }
     var h = mapSeed

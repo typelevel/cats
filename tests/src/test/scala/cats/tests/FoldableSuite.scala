@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import scala.util.Try
 import scala.collection.immutable._
@@ -11,8 +10,7 @@ import cats.laws.discipline.arbitrary._
 
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
                                                            ArbFString: Arbitrary[F[String]])
-    extends CatsSuite
-    with PropertyChecks {
+    extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
 

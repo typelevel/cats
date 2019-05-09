@@ -357,6 +357,9 @@ sealed private[data] trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] w
   implicit override def F0: FlatMap[F]
   implicit def L0: Monoid[L]
 
+  override def ap[A, B](f: WriterT[F, L, A => B])(fa: WriterT[F, L, A]): WriterT[F, L, B] =
+    super[WriterTApply].ap(f)(fa)
+
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
 

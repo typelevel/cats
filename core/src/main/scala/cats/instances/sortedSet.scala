@@ -103,7 +103,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
       val h = Hash[A].hash(x)
       a += h
       b ^= h
-      if (h != 0) c *= h
+      c = cats.kernel.instances.StaticMethods.updateUnorderedHashC(c, h)
       n += 1
     }
     var h = setSeed
