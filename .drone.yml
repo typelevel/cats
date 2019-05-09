@@ -28,7 +28,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! validateBC
+    - sbt ++$TRAVIS_SCALA_VERSION validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
     
@@ -38,7 +38,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! validateBC
+    - sbt ++$TRAVIS_SCALA_VERSION validateBC
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
 
@@ -61,7 +61,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+    - sbt ++$TRAVIS_SCALA_VERSION buildJVM bench/test
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
     depends_on:
@@ -76,7 +76,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+    - sbt ++$TRAVIS_SCALA_VERSION buildJVM bench/test
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
     depends_on:
@@ -91,7 +91,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! buildJVM
+    - sbt ++$TRAVIS_SCALA_VERSION buildJVM
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_213
     depends_on:
@@ -106,7 +106,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+    - sbt ++$TRAVIS_SCALA_VERSION validateJS && sbt ++$TRAVIS_SCALA_VERSION validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION validateFreeJS
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_211
     depends_on:
@@ -121,7 +121,7 @@ steps:
     - pwd
     - ls
     - env
-    - sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+    - sbt ++$TRAVIS_SCALA_VERSION validateJS && sbt ++$TRAVIS_SCALA_VERSION validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION validateFreeJS
     environment:
       TRAVIS_SCALA_VERSION: *scala_version_212
     depends_on:
