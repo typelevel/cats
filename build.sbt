@@ -414,7 +414,7 @@ lazy val catsJVM = project
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
-  .settings(commonJvmSettings)
+  .settings(commonJvmSettings, crossScalaVersions := Nil)
   .aggregate(macros.jvm,
              kernel.jvm,
              kernelLaws.jvm,
@@ -448,7 +448,7 @@ lazy val catsJS = project
   .settings(moduleName := "cats")
   .settings(noPublishSettings)
   .settings(catsSettings)
-  .settings(commonJsSettings)
+  .settings(commonJsSettings, crossScalaVersions := Nil)
   .aggregate(macros.js,
              kernel.js,
              kernelLaws.js,
