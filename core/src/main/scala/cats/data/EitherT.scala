@@ -23,15 +23,15 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def swap(implicit F: Functor[F]): EitherT[F, B, A] = EitherT(F.map(value)(_.swap))
 
-  def getOrElse[BB >: B](default: => BB)(implicit F: Functor[F]): F[BB] = F.map(value)(_.getOrElse(default))
+  def getOrElse[D >: B](default: => D)(implicit F: Functor[F]): F[D] = F.map(value)(_.getOrElse(default))
 
-  def getOrElseF[BB >: B](default: => F[BB])(implicit F: Monad[F]): F[BB] =
+  def getOrElseF[D >: B](default: => F[D])(implicit F: Monad[F]): F[D] =
     F.flatMap(value) {
       case Left(_)  => default
       case Right(b) => F.pure(b)
     }
 
-  def orElse[AA, BB >: B](default: => EitherT[F, AA, BB])(implicit F: Monad[F]): EitherT[F, AA, BB] =
+  def orElse[C, D >: B](default: => EitherT[F, C, D])(implicit F: Monad[F]): EitherT[F, C, D] =
     EitherT(F.flatMap(value) {
       case Left(_)      => default.value
       case r @ Right(_) => F.pure(r.leftCast)
@@ -52,9 +52,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def rethrowT(implicit F: MonadError[F, A]): F[B] =
     F.rethrow(value)
 
-  def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
+  def valueOr[D >: B](f: A => D)(implicit F: Functor[F]): F[D] = fold(f, identity)
 
-  def valueOrF[BB >: B](f: A => F[BB])(implicit F: Monad[F]): F[BB] =
+  def valueOrF[D >: B](f: A => F[D])(implicit F: Monad[F]): F[D] =
     F.flatMap(value) {
       case Left(a)  => f(a)
       case Right(b) => F.pure(b)
@@ -64,10 +64,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
 
-  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
+  def ensure[C >: A](onFailure: => C)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, C, B] =
     EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
-  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
+  def ensureOr[C >: A](onFailure: B => C)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, C, B] =
     EitherT(F.map(value)(_.ensureOr(onFailure)(f)))
 
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
@@ -85,8 +85,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
                                                          applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
 
-  def biflatMap[AA, BB](fa: A => EitherT[F, AA, BB],
-                        fb: B => EitherT[F, AA, BB])(implicit F: FlatMap[F]): EitherT[F, AA, BB] =
+  def biflatMap[C, D](fa: A => EitherT[F, C, D], fb: B => EitherT[F, C, D])(implicit F: FlatMap[F]): EitherT[F, C, D] =
     EitherT(F.flatMap(value) {
       case Left(a)  => fa(a).value
       case Right(a) => fb(a).value
@@ -95,19 +94,19 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def applyAlt[D](ff: EitherT[F, A, B => D])(implicit F: Apply[F]): EitherT[F, A, D] =
     EitherT[F, A, D](F.map2(this.value, ff.value)((xb, xbd) => Apply[Either[A, ?]].ap(xbd)(xb)))
 
-  def flatMap[AA >: A, D](f: B => EitherT[F, AA, D])(implicit F: Monad[F]): EitherT[F, AA, D] =
+  def flatMap[C >: A, D](f: B => EitherT[F, C, D])(implicit F: Monad[F]): EitherT[F, C, D] =
     EitherT(F.flatMap(value) {
       case l @ Left(_) => F.pure(l.rightCast)
       case Right(b)    => f(b).value
     })
 
-  def flatMapF[AA >: A, D](f: B => F[Either[AA, D]])(implicit F: Monad[F]): EitherT[F, AA, D] =
+  def flatMapF[C >: A, D](f: B => F[Either[C, D]])(implicit F: Monad[F]): EitherT[F, C, D] =
     flatMap(f.andThen(EitherT.apply))
 
   def transform[C, D](f: Either[A, B] => Either[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(f))
 
-  def subflatMap[AA >: A, D](f: B => Either[AA, D])(implicit F: Functor[F]): EitherT[F, AA, D] =
+  def subflatMap[C >: A, D](f: B => Either[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     transform(_.flatMap(f))
 
   def map[D](f: B => D)(implicit F: Functor[F]): EitherT[F, A, D] = bimap(identity, f)
@@ -122,7 +121,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 
-  def leftFlatMap[BB >: B, D](f: A => EitherT[F, D, BB])(implicit F: Monad[F]): EitherT[F, D, BB] =
+  def leftFlatMap[D >: B, C](f: A => EitherT[F, C, D])(implicit F: Monad[F]): EitherT[F, C, D] =
     EitherT(F.flatMap(value) {
       case Left(a)      => f(a).value
       case r @ Right(_) => F.pure(r.leftCast)
@@ -180,7 +179,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C])(implicit F: Foldable[F]): Eval[C] =
     F.foldRight(value, lc)((axb, lc) => axb.foldRight(lc)(f))
 
-  def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F]): F[AA] = F.map(value)(_.fold(identity, ev.apply))
+  def merge[C >: A](implicit ev: B <:< C, F: Functor[F]): F[C] = F.map(value)(_.fold(identity, ev.apply))
 
   /**
    * Similar to `Either#combine` but mapped over an `F` context.
@@ -248,7 +247,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * res0: EitherT[Option, NonEmptyList[Error], Int] = EitherT(Some(Left(NonEmptyList(error 1, error 2, error 3))))
    * }}}
    */
-  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): EitherT[F, AA, BB] =
+  def withValidated[C, D](f: Validated[A, B] => Validated[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(either => f(either.toValidated).toEither))
 
   def show(implicit show: Show[F[Either[A, B]]]): String = show.show(value)
