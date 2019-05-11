@@ -245,6 +245,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
+- [Coya](https://coya.com/)
 - [DriveTribe](https://drivetribe.com/)
 - [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
