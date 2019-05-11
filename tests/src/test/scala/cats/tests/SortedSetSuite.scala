@@ -54,13 +54,17 @@ object SortedSetIsomorphism extends Isomorphisms[SortedSet] {
   ): IsEq[SortedSet[(A, B, C)]] = {
     implicit val ord = Ordering.by[(A, B, C), ((A, B), C)] { case (a, b, c) => ((a, b), c) }(fs._2.ordering)
 
-    SortedSet.empty[(A, B, C)] ++ fs._1.map { case (a, (b, c))   => (a, b, c) } <->
-      SortedSet.empty[(A, B, C)] ++ fs._2.map { case ((a, b), c) => (a, b, c) }
+    fs._1.map { case (a, (b, c))   => (a, b, c) } <->
+      fs._2.map { case ((a, b), c) => (a, b, c) }
   }
 
-  override def leftIdentity[A](fs: (SortedSet[(Unit, A)], SortedSet[A])): IsEq[SortedSet[A]] =
-    SortedSet.empty[A](fs._2.ordering) ++ fs._1.map(_._2) <-> fs._2
+  override def leftIdentity[A](fs: (SortedSet[(Unit, A)], SortedSet[A])): IsEq[SortedSet[A]] = {
+    implicit val ordering = fs._2.ordering
+    fs._1.map(_._2) <-> fs._2
+  }
 
-  override def rightIdentity[A](fs: (SortedSet[(A, Unit)], SortedSet[A])): IsEq[SortedSet[A]] =
-    SortedSet.empty[A](fs._2.ordering) ++ fs._1.map(_._1) <-> fs._2
+  override def rightIdentity[A](fs: (SortedSet[(A, Unit)], SortedSet[A])): IsEq[SortedSet[A]] = {
+    implicit val ordering = fs._2.ordering
+    fs._1.map(_._1) <-> fs._2
+  }
 }
