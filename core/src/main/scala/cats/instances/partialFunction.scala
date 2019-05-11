@@ -1,10 +1,11 @@
 package cats
 package instances
 
-import cats.arrow.ArrowChoice
+import cats.arrow.{ArrowChoice, CommutativeArrow}
 
 trait PartialFunctionInstances {
-  implicit val catsStdInstancesForPartialFunction = new ArrowChoice[PartialFunction] {
+  implicit val catsStdInstancesForPartialFunction = new ArrowChoice[PartialFunction]
+  with CommutativeArrow[PartialFunction] {
     def choose[A, B, C, D](
       f: PartialFunction[A, C]
     )(g: PartialFunction[B, D]): PartialFunction[Either[A, B], Either[C, D]] = {
