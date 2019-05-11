@@ -9,7 +9,6 @@ package object instances {
       with AllInstancesBinCompat3
       with AllInstancesBinCompat4
       with AllInstancesBinCompat5
-
   object bigInt extends BigIntInstances
   object bigDecimal extends BigDecimalInstances
   object bitSet extends BitSetInstances
@@ -39,7 +38,7 @@ package object instances {
   object queue extends QueueInstances
   object set extends SetInstances
   object short extends ShortInstances
-  object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0  with SortedMapInstancesBinCompat1
+  object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
   object stream extends StreamInstances with StreamInstancesBinCompat0
   object string extends StringInstances
