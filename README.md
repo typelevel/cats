@@ -46,6 +46,7 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 <a href="http://47deg.com"><img src="http://typelevel.org/cats/img/sponsors/47_degree.png" style="margin-left: 10px; margin-right: 10px" /></a>
 <a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
+<a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
 <a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
@@ -57,7 +58,7 @@ Gold Sponsors are those who have pledged $2,000 to $5,000.
 
 <a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png"  style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-<a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
+
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
