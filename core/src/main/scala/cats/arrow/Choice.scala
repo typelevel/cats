@@ -3,7 +3,7 @@ package arrow
 
 import simulacrum.typeclass
 
-@typeclass trait Choice[F[_, _]] extends Category[F] {
+@typeclass trait Choice[|==>[_, _]] extends Category[|==>] {
 
   /**
    * Given two `F`s (`f` and `g`) with a common target type, create a new `F`
@@ -25,7 +25,7 @@ import simulacrum.typeclass
    * }}}
    */
   @simulacrum.op("|||", alias = true)
-  def choice[A, B, C](f: F[A, C], g: F[B, C]): F[Either[A, B], C]
+  def choice[A, B, C](f: A |==> C, g: B |==> C): Either[A, B] |==> C
 
   /**
    * An `F` that, given a source `A` on either the right or left side, will
@@ -43,5 +43,5 @@ import simulacrum.typeclass
    * res1: Int = 3
    * }}}
    */
-  def codiagonal[A]: F[Either[A, A], A] = choice(id, id)
+  def codiagonal[A]: Either[A, A] |==> A = choice(id, id)
 }

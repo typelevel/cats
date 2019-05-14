@@ -6,7 +6,7 @@ import simulacrum.typeclass
 /**
  * Must obey the laws defined in cats.laws.ArrowLaws.
  */
-@typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
+@typeclass trait Arrow[ |==>[_, _]] extends Category[|==>] with Strong[|==>] { self =>
 
   /**
    *  Lift a function into the context of an Arrow.
@@ -14,15 +14,15 @@ import simulacrum.typeclass
    * In the reference articles "Arrows are Promiscuous...", and in the corresponding Haskell
    * library `Control.Arrow`, this function is called `arr`.
    */
-  def lift[A, B](f: A => B): F[A, B]
+  def lift[A, B](f: A => B): A |==> B
 
-  override def id[A]: F[A, A] = lift(identity)
+  override def id[A]: A |==> A = lift(identity)
 
-  override def dimap[A, B, C, D](fab: F[A, B])(f: C => A)(g: B => D): F[C, D] =
+  override def dimap[A, B, C, D](fab: A |==> B)(f: C => A)(g: B => D): C |==> D =
     compose(lift(g), andThen(lift(f), fab))
 
-  override def second[A, B, C](fa: F[A, B]): F[(C, A), (C, B)] = {
-    def swap[X, Y]: F[(X, Y), (Y, X)] = lift[(X, Y), (Y, X)] { case (x, y) => (y, x) }
+  override def second[A, B, C](fa: A |==> B): (C, A) |==> (C, B) = {
+    def swap[X, Y]: (X, Y) |==> (Y, X) = lift[(X, Y), (Y, X)] { case (x, y) => (y, x) }
 
     compose(swap, compose(first[A, B, C](fa), swap))
   }
@@ -46,7 +46,7 @@ import simulacrum.typeclass
    * `f` and `g` in the context of F. This means that `f *** g` may not be equivalent to `g *** f`.
    */
   @simulacrum.op("***", alias = true)
-  def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
+  def split[A, B, C, D](f: A |==> B, g: C |==> D): (A, C) |==> (B, D) =
     andThen(first(f), second(g))
 
   /**
@@ -61,11 +61,12 @@ import simulacrum.typeclass
    * scala> f(1)
    * res0: (Int, Double) = (1,1.0)
    * }}}
-   *
+  
+ *
    * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
    *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
    */
   @simulacrum.op("&&&", alias = true)
-  def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =
+  def merge[A, B, C](f: A |==> B, g: A |==> C): A |==> (B, C) =
     andThen(lift((x: A) => (x, x)), split(f, g))
 }

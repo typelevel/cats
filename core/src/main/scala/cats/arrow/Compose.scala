@@ -18,22 +18,22 @@ import simulacrum.typeclass
  * res1: Int = 301
  * }}}
  */
-@typeclass trait Compose[F[_, _]] { self =>
+@typeclass trait Compose[ |==>[_, _]] { self =>
 
   @simulacrum.op("<<<", alias = true)
-  def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
+  def compose[A, B, C](f: B |==> C, g: A |==> B): A |==> C
 
   @simulacrum.op(">>>", alias = true)
-  def andThen[A, B, C](f: F[A, B], g: F[B, C]): F[A, C] =
+  def andThen[A, B, C](f: A |==> B, g: B |==> C): A |==> C =
     compose(g, f)
 
-  def algebraK: SemigroupK[λ[α => F[α, α]]] =
-    new SemigroupK[λ[α => F[α, α]]] {
-      def combineK[A](f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
+  def algebraK: SemigroupK[λ[α => α |==> α]] =
+    new SemigroupK[λ[α => α |==> α]] {
+      def combineK[A](f1: A |==> A, f2: A |==> A): A |==> A = self.compose(f1, f2)
     }
 
-  def algebra[A]: Semigroup[F[A, A]] =
-    new Semigroup[F[A, A]] {
-      def combine(f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
+  def algebra[A]: Semigroup[A |==> A] =
+    new Semigroup[A |==> A] {
+      def combine(f1: A |==> A, f2: A |==> A): A |==> A = self.compose(f1, f2)
     }
 }
