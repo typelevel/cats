@@ -282,6 +282,7 @@ class KleisliSuite extends CatsSuite {
     trait A1
     trait A2
     trait A3
+
     object A123 extends A1 with A2 with A3
 
     val program = for {
@@ -292,6 +293,7 @@ class KleisliSuite extends CatsSuite {
 
     program.run(A123) shouldBe (List((1, "2", true)))
   }
+
   /**
    * Testing that implicit resolution works. If it compiles, the "test" passes.
    */
