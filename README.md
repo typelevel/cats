@@ -45,7 +45,7 @@ We also have a [sustainability program](https://donorbox.org/typelevel-sustainab
 Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 <a href="http://47deg.com"><img src="http://typelevel.org/cats/img/sponsors/47_degree.png" style="margin-left: 10px; margin-right: 10px" /></a>
-<a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
+<a href="https://www.iteratorshq.com"><img src="http://typelevel.org/cats/img/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px"/></a>
 <a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
 <a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
 
