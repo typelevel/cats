@@ -578,6 +578,40 @@ universal equality provided by .equals.
       
       <p class="shortcomment cmt">Collect <code>B</code> from this for which <code>f</code> is defined
 </p>
+    </li><li name="cats.data.Chain#collectFirst" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collectFirst[B](pf:PartialFunction[A,B]):Option[B]"></a><a id="collectFirst[B](PartialFunction[A,B]):Option[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Chain.html#collectFirst[B](pf:PartialFunction[A,B]):Option[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collectFirst</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="pf">pf: <a href="http://www.scala-lang.org/api/2.12.7/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<span class="extype" name="cats.data.Chain.A">A</span>, <span class="extype" name="cats.data.Chain.collectFirst.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.Chain.collectFirst.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Finds the first element of this <code>Chain</code> for which the given partial
+function is defined, and applies the partial function to it.</p>
+    </li><li name="cats.data.Chain#collectFirstSome" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collectFirstSome[B](f:A=&gt;Option[B]):Option[B]"></a><a id="collectFirstSome[B]((A)⇒Option[B]):Option[B]"></a>
+      <span class="permalink">
+      <a href="../../cats/data/Chain.html#collectFirstSome[B](f:A=&gt;Option[B]):Option[B]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collectFirstSome</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.Chain.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.Chain.collectFirstSome.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="cats.data.Chain.collectFirstSome.B">B</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Like <code>collectFirst</code> from <code>scala.collection.Traversable</code> but takes <code>A =&gt; Option[B]</code>
+instead of <code>PartialFunction</code>s.</p>
     </li><li name="cats.data.Chain#concat" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="concat[A2&gt;:A](c:cats.data.Chain[A2]):cats.data.Chain[A2]"></a><a id="concat[A2&gt;:A](Chain[A2]):Chain[A2]"></a>
       <span class="permalink">

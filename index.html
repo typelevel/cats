@@ -8,6 +8,8 @@
 </ul>
 
 <h2 id="cats">Cats</h2>
+<p><a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a></p>
+
 <p><img src="http://plastic-idolatry.com/erik/cats2.png" alt="cats image" /></p>
 
 <p><a href="https://travis-ci.org/typelevel/cats"><img src="https://api.travis-ci.org/typelevel/cats.svg" alt="Build Status" /></a>
@@ -16,8 +18,6 @@
 <a href="http://codecov.io/github/typelevel/cats?branch=master"><img src="http://codecov.io/github/typelevel/cats/coverage.svg?branch=master" alt="codecov.io" /></a>
 <a href="https://index.scala-lang.org/typelevel/cats/cats-core"><img src="https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&amp;v=1" alt="Latest version" /></a>
 <a href="http://scala-js.org"><img src="http://scala-js.org/assets/badges/scalajs-0.6.14.svg" alt="Scala.js" /></a></p>
-
-<p><a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a></p>
 
 <h3 id="overview">Overview</h3>
 
@@ -29,13 +29,37 @@ standard library. Cats strives to provide functional programming abstractions th
 
 <p>For more detail about Cats’ motivations, go <a href="http://typelevel.org/cats/motivations">here</a>.</p>
 
-<p>You can read the API Documentation, <a href="https://typelevel.org/cats/api/cats/index.html">here</a>.</p>
+<h3 id="support-cats">Support Cats</h3>
 
-<p>We have an exciting <a href="https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md">2019 roadmap</a>.</p>
+<p>We welcome contributions to Cats and would love for you to help build
+Cats. See our <a href="https://typelevel.org/cats/contributing.html">contributor guide</a> for more
+information about how you can get involved as a developer.</p>
+
+<p>We also have a <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m">sustainability program</a> for our user community to support Cats through donations. Donations directly support office hour for maintainers, better documentation and strategic initiatives.</p>
+
+<h3 id="gold-sponsors">Gold Sponsors</h3>
+
+<p>Gold Sponsors are those who have pledged $5,000 to $10,000.</p>
+
+<p><a href="http://47deg.com"><img src="http://typelevel.org/cats/img/sponsors/47_degree.png" style="margin-left: 10px; margin-right: 10px" /></a>
+<a href="https://www.iteratorshq.com"><img src="http://typelevel.org/cats/img/sponsors/iterators.png" style="margin-bottom:8px;margin-left: 10px; margin-right: 10px" /></a>
+<a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
+<a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px" /></a></p>
+
+<p><a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;">BECOME A SPONSOR</a></p>
+
+<h3 id="silver-sponsors">Silver Sponsors</h3>
+
+<p>Gold Sponsors are those who have pledged $2,000 to $5,000.</p>
+
+<p><a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
+<a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px" /></a></p>
+
+<p><a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;">BECOME A SPONSOR</a></p>
 
 <h3 id="getting-started">Getting Started</h3>
 
-<p>Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-M4,  and <a href="http://www.scala-js.org/">Scala.js</a>.</p>
+<p>Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC1, and <a href="http://www.scala-js.org/">Scala.js</a>.</p>
 
 <p>Cats relies on improved type inference via the fix for <a href="https://github.com/scala/bug/issues/2712">SI-2712</a>, which is not enabled by default. For <strong>Scala 2.11.9 or later</strong> you should add the following to your <code class="highlighter-rouge">build.sbt</code>:</p>
 
@@ -51,7 +75,7 @@ standard library. Cats strives to provide functional programming abstractions th
 
 <p>And then create the Cats dependency, by adding the following to your <code class="highlighter-rouge">build.sbt</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"1.6.0"</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-core"</span> <span class="o">%</span> <span class="s">"2.0.0-M1"</span>
 </code></pre>
 </div>
 
@@ -81,7 +105,22 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/typelevel/cats-collections"><code class="highlighter-rouge">cats-collections</code></a>: Data structures which facilitate pure functional programming</li>
 </ul>
 
-<p>Release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/master/CHANGES.md">CHANGES.md</a>.</p>
+<p>Past release notes for Cats are available in <a href="https://github.com/typelevel/cats/blob/master/CHANGES.md">CHANGES.md</a>.
+See <a href="https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md">Cats 2019 roadmap</a> for our plan for 2019.</p>
+
+<h3 id="documentation">Documentation</h3>
+
+<p>Links:</p>
+
+<ol>
+  <li>Website: <a href="https://typelevel.org/cats/">typelevel.org/cats/</a></li>
+  <li>ScalaDoc: <a href="https://typelevel.org/cats/api/">typelevel.org/cats/api/</a></li>
+  <li>Type classes: <a href="https://typelevel.org/cats/typeclasses.html">typelevel.org/cats/typeclasses</a></li>
+  <li>Data types: <a href="https://typelevel.org/cats/datatypes.html">typelevel.org/cats/datatypes.html</a></li>
+  <li>Glossary: <a href="https://typelevel.org/cats/nomenclature.html">typelevel.org/cats/nomenclature.html</a></li>
+  <li>Resources for Learners: <a href="https://typelevel.org/cats/resources_for_learners.html">typelevel.org/cats/resources_for_learners.html</a></li>
+  <li>FAQ: <a href="https://typelevel.org/cats/faq.html">typelevel.org/cats/faq.html</a></li>
+</ol>
 
 <h3 id="a-nameecosystem-hrefecosystemathe-cats-ecosystem"><a name="ecosystem" href="#ecosystem"></a>The Cats ecosystem</h3>
 
@@ -128,6 +167,7 @@ functionality, you can pick-and-choose from amongst these modules
   <li><a href="https://github.com/pepegar/hammock">hammock</a>: Purely functional HTTP client</li>
   <li><a href="https://github.com/kailuowang/henkan">henkan</a>: Type safe conversion between case class instances with similar fields</li>
   <li><a href="https://github.com/http4s/http4s">http4s</a>: A minimal, idiomatic Scala interface for HTTP</li>
+  <li><a href="https://github.com/gekomad/itto-csv">itto-csv</a>: pure functional library for working with CSV</li>
   <li><a href="https://github.com/ChristopherDavenport/linebacker">linebacker</a>: functional thread pool management</li>
   <li><a href="https://github.com/ChristopherDavenport/log4cats">log4cats</a>: functional logging</li>
   <li><a href="https://github.com/OlivierBlanvillain/monadic-html">monadic-html</a>: Tiny DOM binding library for Scala.js</li>
@@ -159,14 +199,6 @@ functionality, you can pick-and-choose from amongst these modules
 <div class="language-markdown highlighter-rouge"><pre class="highlight"><code><span class="p">![</span><span class="nv">Cats Friendly Badge</span><span class="p">](</span><span class="sx">https://typelevel.org/cats/img/cats-badge-tiny.png</span><span class="p">)</span> 
 </code></pre>
 </div>
-
-<h3 id="how-can-i-contribute-to-cats">How can I contribute to Cats?</h3>
-
-<p>We welcome contributions to Cats and would love for you to help build
-Cats. See our <a href="https://typelevel.org/cats/contributing.html">contributor guide</a> for more
-information about how you can get involved.</p>
-
-<p>You can also support us by talking to your employer about supporting the OSS libraries they are using. We have a <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m">sustainability program</a> that supports the maintenance and development of Cats.</p>
 
 <h3 id="community">Community</h3>
 
@@ -228,7 +260,7 @@ versioning in the future. But that decision is yet to be made.</p>
 
 <h3 id="adopters">Adopters</h3>
 
-<p>Here’s a (non-exhaustive) list of companies that use Cats in production. Don’t see yours? <a href="https://github.com/typelevel/cats/edit/master/README.md">You can add it in a PR!</a></p>
+<p>Here’s a (non-exhaustive) list of companies that use Cats in production. Don’t see yours? <a href="https://github.com/typelevel/cats/edit/master/README.md">You can add it in a PR!</a>. And if you, consider <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m">supporting us</a>.</p>
 
 <ul>
   <li><a href="https://abacusprotocol.com">Abacus Protocol</a></li>
@@ -243,12 +275,14 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://www.codacy.com/">Codacy</a></li>
   <li><a href="https://codecentric.de">Codecentric</a></li>
   <li><a href="https://www.colisweb.com/">Colisweb</a></li>
+  <li><a href="https://coya.com/">Coya</a></li>
   <li><a href="https://drivetribe.com/">DriveTribe</a></li>
   <li><a href="https://dwolla.com/">Dwolla</a></li>
   <li><a href="https://www.earnest.com">Earnest</a></li>
   <li><a href="https://www.ebay.com">eBay Inc.</a></li>
   <li><a href="https://eloquentix.com">Eloquentix</a></li>
   <li><a href="https://www.esailors.de">eSailors</a></li>
+  <li><a href="https://www.evolutiongaming.com/">Evolution Gaming</a></li>
   <li><a href="https://market.evotor.ru/">Evotor Marketplace</a></li>
   <li><a href="http://enear.co">e.near</a></li>
   <li><a href="https://eon.com">E.ON</a></li>
@@ -260,6 +294,7 @@ versioning in the future. But that decision is yet to be made.</p>
   <li><a href="https://www.itv.com/">ITV</a></li>
   <li><a href="https://www.lookout.com">Lookout</a></li>
   <li><a href="https://www.metacommerce.ru">Metacommerce</a></li>
+  <li><a href="https://jobs.netflix.com">Netflix</a></li>
   <li><a href="https://www.nezasa.com">Nezasa</a></li>
   <li><a href="https://ncredinburgh.com/">NCR Edinburgh</a></li>
   <li><a href="https://ocadotechnology.com">Ocado Technology</a></li>

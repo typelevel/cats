@@ -505,9 +505,9 @@ scala&gt; <span class="kw">val</span> eitherT: EitherT[<span class="std">List</s
 scala&gt; eitherT.biSemiflatMap(string <span class="kw">=&gt;</span> <span class="std">List</span>(string.length), int <span class="kw">=&gt;</span> <span class="std">List</span>(int.toFloat))
 res0: cats.data.EitherT[<span class="std">List</span>,<span class="std">Int</span>,<span class="std">Float</span>] = EitherT(<span class="std">List</span>(Left(<span class="num">3</span>), Right(<span class="num">123.0</span>)))</pre></div></div>
     </li><li name="cats.data.EitherT#biflatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="biflatMap[AA&gt;:A,BB&gt;:B](fa:A=&gt;cats.data.EitherT[F,AA,BB],fb:B=&gt;cats.data.EitherT[F,AA,BB])(implicitF:cats.FlatMap[F]):cats.data.EitherT[F,AA,BB]"></a><a id="biflatMap[AA&gt;:A,BB&gt;:B]((A)⇒EitherT[F,AA,BB],(B)⇒EitherT[F,AA,BB])(FlatMap[F]):EitherT[F,AA,BB]"></a>
+      <a id="biflatMap[C,D](fa:A=&gt;cats.data.EitherT[F,C,D],fb:B=&gt;cats.data.EitherT[F,C,D])(implicitF:cats.FlatMap[F]):cats.data.EitherT[F,C,D]"></a><a id="biflatMap[C,D]((A)⇒EitherT[F,C,D],(B)⇒EitherT[F,C,D])(FlatMap[F]):EitherT[F,C,D]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT.html#biflatMap[AA&gt;:A,BB&gt;:B](fa:A=&gt;cats.data.EitherT[F,AA,BB],fb:B=&gt;cats.data.EitherT[F,AA,BB])(implicitF:cats.FlatMap[F]):cats.data.EitherT[F,AA,BB]" title="Permalink">
+      <a href="../../cats/data/EitherT.html#biflatMap[C,D](fa:A=&gt;cats.data.EitherT[F,C,D],fb:B=&gt;cats.data.EitherT[F,C,D])(implicitF:cats.FlatMap[F]):cats.data.EitherT[F,C,D]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -516,7 +516,7 @@ res0: cats.data.EitherT[<span class="std">List</span>,<span class="std">Int</spa
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">biflatMap</span><span class="tparams">[<span name="AA">AA &gt;: <span class="extype" name="cats.data.EitherT.A">A</span></span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.EitherT.B">B</span></span>]</span><span class="params">(<span name="fa">fa: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.AA">AA</span>, <span class="extype" name="cats.data.EitherT.biflatMap.BB">BB</span>]</span>, <span name="fb">fb: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.AA">AA</span>, <span class="extype" name="cats.data.EitherT.biflatMap.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.AA">AA</span>, <span class="extype" name="cats.data.EitherT.biflatMap.BB">BB</span>]</span>
+        <span class="name">biflatMap</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="fa">fa: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.C">C</span>, <span class="extype" name="cats.data.EitherT.biflatMap.D">D</span>]</span>, <span name="fb">fb: (<span class="extype" name="cats.data.EitherT.B">B</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.C">C</span>, <span class="extype" name="cats.data.EitherT.biflatMap.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../FlatMap.html" class="extype" name="cats.FlatMap">FlatMap</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.biflatMap.C">C</span>, <span class="extype" name="cats.data.EitherT.biflatMap.D">D</span>]</span>
       </span>
       
       
@@ -952,9 +952,9 @@ res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, 
       
       
     </li><li name="cats.data.EitherT#leftFlatMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="leftFlatMap[BB&gt;:B,D](f:A=&gt;cats.data.EitherT[F,D,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,D,BB]"></a><a id="leftFlatMap[BB&gt;:B,D]((A)⇒EitherT[F,D,BB])(Monad[F]):EitherT[F,D,BB]"></a>
+      <a id="leftFlatMap[BB&gt;:B,C](f:A=&gt;cats.data.EitherT[F,C,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,C,BB]"></a><a id="leftFlatMap[BB&gt;:B,C]((A)⇒EitherT[F,C,BB])(Monad[F]):EitherT[F,C,BB]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT.html#leftFlatMap[BB&gt;:B,D](f:A=&gt;cats.data.EitherT[F,D,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,D,BB]" title="Permalink">
+      <a href="../../cats/data/EitherT.html#leftFlatMap[BB&gt;:B,C](f:A=&gt;cats.data.EitherT[F,C,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,C,BB]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -963,7 +963,7 @@ res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">leftFlatMap</span><span class="tparams">[<span name="BB">BB &gt;: <span class="extype" name="cats.data.EitherT.B">B</span></span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.D">D</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.D">D</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.BB">BB</span>]</span>
+        <span class="name">leftFlatMap</span><span class="tparams">[<span name="BB">BB &gt;: <span class="extype" name="cats.data.EitherT.B">B</span></span>, <span name="C">C</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="cats.data.EitherT.A">A</span>) ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.C">C</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.C">C</span>, <span class="extype" name="cats.data.EitherT.leftFlatMap.BB">BB</span>]</span>
       </span>
       
       
@@ -1102,9 +1102,9 @@ res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, 
               
         </dd></dl></div>
     </li><li name="cats.data.EitherT#orElse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="orElse[AA,BB&gt;:B](default:=&gt;cats.data.EitherT[F,AA,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,AA,BB]"></a><a id="orElse[AA,BB&gt;:B](⇒EitherT[F,AA,BB])(Monad[F]):EitherT[F,AA,BB]"></a>
+      <a id="orElse[C,BB&gt;:B](default:=&gt;cats.data.EitherT[F,C,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,C,BB]"></a><a id="orElse[C,BB&gt;:B](⇒EitherT[F,C,BB])(Monad[F]):EitherT[F,C,BB]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT.html#orElse[AA,BB&gt;:B](default:=&gt;cats.data.EitherT[F,AA,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,AA,BB]" title="Permalink">
+      <a href="../../cats/data/EitherT.html#orElse[C,BB&gt;:B](default:=&gt;cats.data.EitherT[F,C,BB])(implicitF:cats.Monad[F]):cats.data.EitherT[F,C,BB]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1113,7 +1113,7 @@ res7: EitherT[<span class="std">Option</span>, <span class="std">String</span>, 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orElse</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.EitherT.B">B</span></span>]</span><span class="params">(<span name="default">default: ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.orElse.AA">AA</span>, <span class="extype" name="cats.data.EitherT.orElse.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.orElse.AA">AA</span>, <span class="extype" name="cats.data.EitherT.orElse.BB">BB</span>]</span>
+        <span class="name">orElse</span><span class="tparams">[<span name="C">C</span>, <span name="BB">BB &gt;: <span class="extype" name="cats.data.EitherT.B">B</span></span>]</span><span class="params">(<span name="default">default: ⇒ <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.orElse.C">C</span>, <span class="extype" name="cats.data.EitherT.orElse.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Monad.html" class="extype" name="cats.Monad">Monad</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.orElse.C">C</span>, <span class="extype" name="cats.data.EitherT.orElse.BB">BB</span>]</span>
       </span>
       
       
@@ -1575,9 +1575,9 @@ res0: cats.data.Nested[<span class="std">Option</span>,ErrorOr,<span class="std"
               
         </dd></dl></div>
     </li><li name="cats.data.EitherT#withValidated" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.EitherT[F,AA,BB]"></a><a id="withValidated[AA,BB]((Validated[A,B])⇒Validated[AA,BB])(Functor[F]):EitherT[F,AA,BB]"></a>
+      <a id="withValidated[C,D](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[C,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]"></a><a id="withValidated[C,D]((Validated[A,B])⇒Validated[C,D])(Functor[F]):EitherT[F,C,D]"></a>
       <span class="permalink">
-      <a href="../../cats/data/EitherT.html#withValidated[AA,BB](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[AA,BB])(implicitF:cats.Functor[F]):cats.data.EitherT[F,AA,BB]" title="Permalink">
+      <a href="../../cats/data/EitherT.html#withValidated[C,D](f:cats.data.Validated[A,B]=&gt;cats.data.Validated[C,D])(implicitF:cats.Functor[F]):cats.data.EitherT[F,C,D]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1586,7 +1586,7 @@ res0: cats.data.Nested[<span class="std">Option</span>,ErrorOr,<span class="std"
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withValidated</span><span class="tparams">[<span name="AA">AA</span>, <span name="BB">BB</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.EitherT.withValidated.BB">BB</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.withValidated.AA">AA</span>, <span class="extype" name="cats.data.EitherT.withValidated.BB">BB</span>]</span>
+        <span class="name">withValidated</span><span class="tparams">[<span name="C">C</span>, <span name="D">D</span>]</span><span class="params">(<span name="f">f: (<a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.A">A</span>, <span class="extype" name="cats.data.EitherT.B">B</span>]) ⇒ <a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a>[<span class="extype" name="cats.data.EitherT.withValidated.C">C</span>, <span class="extype" name="cats.data.EitherT.withValidated.D">D</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="../Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.data.EitherT.F">F</span>]</span>)</span><span class="result">: <a href="" class="extype" name="cats.data.EitherT">EitherT</a>[<span class="extype" name="cats.data.EitherT.F">F</span>, <span class="extype" name="cats.data.EitherT.withValidated.C">C</span>, <span class="extype" name="cats.data.EitherT.withValidated.D">D</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.EitherT">EitherT</a></code>.</p><div class="fullcomment"><div class="comment cmt"><p>Run this value as a <code><a href="Validated.html" class="extype" name="cats.data.Validated">Validated</a></code> against the function and convert it back to an <code><a href="" class="extype" name="cats.data.EitherT">EitherT</a></code>.</p><p>The <a href="../Applicative.html" class="extype" name="cats.Applicative">Applicative</a> instance for <code>EitherT</code> &quot;fails fast&quot; - it is often useful to &quot;momentarily&quot; have

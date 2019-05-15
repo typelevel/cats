@@ -837,7 +837,7 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="cats.Apply#semigroup" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="cats.Apply#semigroup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="semigroup[F[_],A](implicitf:cats.Apply[F],implicitsg:cats.Semigroup[A]):cats.Semigroup[F[A]]"></a><a id="semigroup[F[_],A](Apply[F],Semigroup[A]):Semigroup[F[A]]"></a>
       <span class="permalink">
       <a href="../cats/Apply$.html#semigroup[F[_],A](implicitf:cats.Apply[F],implicitsg:cats.Semigroup[A]):cats.Semigroup[F[A]]" title="Permalink">
@@ -852,7 +852,11 @@
         <span class="name">semigroup</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="f">f: <a href="Apply.html" class="extype" name="cats.Apply">Apply</a>[<span class="extype" name="cats.Apply.semigroup.F">F</span>]</span>, <span name="sg">sg: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Apply.semigroup.A">A</span>]</span>)</span><span class="result">: <a href="index.html#Semigroup[A]=cats.kernel.Semigroup[A]" class="extmbr" name="cats.Semigroup">Semigroup</a>[<span class="extype" name="cats.Apply.semigroup.F">F</span>[<span class="extype" name="cats.Apply.semigroup.A">A</span>]]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">This semigroup uses a product operation to combine <code>F</code>s.</p><div class="fullcomment"><div class="comment cmt"><p>This semigroup uses a product operation to combine <code>F</code>s.
+If the <code>Apply[F].product</code> results in larger <code>F</code> (i.e. when <code>F</code> is a <code>List</code>),
+accumulative usage of this instance, such as <code>combineAll</code>, will result in
+<code>F</code>s with exponentially increasing sizes.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
