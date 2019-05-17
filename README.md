@@ -268,6 +268,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [Basefarm](https://basefarm.com/)
 - [buildo](https://buildo.io)
+- [Chartboost](https://www.chartboost.com/)
 - [Codacy](https://www.codacy.com/)
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
