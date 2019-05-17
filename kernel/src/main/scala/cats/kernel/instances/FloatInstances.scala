@@ -7,8 +7,8 @@ trait FloatInstances {
 }
 
 /**
-  * This is only approximately associative.
-  */
+ * This is only approximately associative.
+ */
 class FloatGroup extends CommutativeGroup[Float] {
   def combine(x: Float, y: Float): Float = x + y
   def empty: Float = 0F
@@ -17,13 +17,13 @@ class FloatGroup extends CommutativeGroup[Float] {
 }
 
 /**
-  * Due to the way floating-point equality works, this instance is not
-  * lawful under equality, but is correct when taken as an
-  * approximation of an exact value.
-  *
-  * If you would prefer an absolutely lawful fractional value, you'll
-  * need to investigate rational numbers or more exotic types.
-  */
+ * Due to the way floating-point equality works, this instance is not
+ * lawful under equality, but is correct when taken as an
+ * approximation of an exact value.
+ *
+ * If you would prefer an absolutely lawful fractional value, you'll
+ * need to investigate rational numbers or more exotic types.
+ */
 class FloatOrder extends Order[Float] with Hash[Float] {
 
   def hash(x: Float): Int = x.hashCode()

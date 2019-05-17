@@ -31,4 +31,3 @@ class BigDecimalOrder extends Order[BigDecimal] with Hash[BigDecimal] {
   override def min(x: BigDecimal, y: BigDecimal): BigDecimal = x.min(y)
   override def max(x: BigDecimal, y: BigDecimal): BigDecimal = x.max(y)
 }
-

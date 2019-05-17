@@ -18,7 +18,7 @@ scala_version_213: &scala_version_213 2.13.0-RC1
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
- - mkdir -p  /home/travis/.triplequote && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license"
+ - mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.config /home/travis/.triplequote/metrics/config/metrics-service.config
 
 stages:
   - name: styling
@@ -89,11 +89,15 @@ notifications:
 
 env:
   global:
+    # Sonatype Credential
     - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
     - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
     - TRAVIS_NODE_VERSION="4"
+    # Hydra License
     - secure: "Nwd0ySmT7BQJcQb/Dyrkv/B1uYLrE5u+Ppz3Q3d6FvEB5z3XzzDai03hjMwwFwMgXGtZ2Aio0KqF2qf3oINPkmSVx1ntvL0JqwRZqxF5YPLp/vb8b4LbvHrzsf5Jh/EFK5JOdN6ApPlhw8u1X1ifvJbG6yVt9qRxCejHOI0ZT4k="
-
+    # Hydra Metrics Credential
+    - secure: "Xbc3y1rTRDj2ThfsT3Pj98T3OgC90aZlVrgAFtOrSTknZAK0jArlvsKg456PvTPcR2uY6c7wvyebSaq+RYReFX2XpCfRjc4ywGCUtnbfcvzO4IA/MIUkFtFQJJqBXHlN5IFqjOZyaX6svD9fNscYg0NP1pqJ6vW54ArvKTALtHM="
+    - secure: "hbKDZntISUgbYAXK8Q6M8XwhjB7l5yHyWIs9RjnEdV0YRfcTZIba8WEaE2JFe3MdyPUhGYAWf1AVFXLdfRSmvNHMEeVPitw5cAVxPMxhfgJnPRBVhgBsr9oMl/QQbLu7/w013m6ChYmZspApzyAfmZM2ZNKsYiX/AvoBVYeGdPQ="
 
 cache:
   directories:

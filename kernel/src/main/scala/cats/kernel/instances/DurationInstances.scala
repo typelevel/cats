@@ -11,11 +11,11 @@ trait DurationInstances {
 // Duration.Undefined, Duration.Inf, Duration.MinusInf
 
 /**
-  * This ordering is valid for all defined durations.
-  *
-  * The value Duration.Undefined breaks our laws, because undefined
-  * values are not equal to themselves.
-  */
+ * This ordering is valid for all defined durations.
+ *
+ * The value Duration.Undefined breaks our laws, because undefined
+ * values are not equal to themselves.
+ */
 class DurationOrder extends Order[Duration] with Hash[Duration] {
   def hash(x: Duration): Int = x.hashCode()
 
@@ -33,12 +33,12 @@ class DurationOrder extends Order[Duration] with Hash[Duration] {
 }
 
 /**
-  * This group models addition, but has a few problematic edge cases.
-  *
-  *   1. finite values can overflow, throwing an exception
-  *   2. inf + (-inf) = undefined, not zero
-  *   3. undefined + zero = undefined
-  */
+ * This group models addition, but has a few problematic edge cases.
+ *
+ *   1. finite values can overflow, throwing an exception
+ *   2. inf + (-inf) = undefined, not zero
+ *   3. undefined + zero = undefined
+ */
 class DurationGroup extends CommutativeGroup[Duration] {
   def empty: Duration = Duration.Zero
   def inverse(x: Duration): Duration = -x

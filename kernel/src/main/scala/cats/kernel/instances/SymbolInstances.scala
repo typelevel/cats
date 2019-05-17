@@ -10,7 +10,7 @@ class SymbolOrder extends Order[Symbol] with Hash[Symbol] {
   def hash(x: Symbol): Int = x.hashCode()
 
   override def eqv(x: Symbol, y: Symbol): Boolean =
-  // Symbols are interned
+    // Symbols are interned
     x eq y
 
   def compare(x: Symbol, y: Symbol): Int =
