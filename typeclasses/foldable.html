@@ -111,7 +111,7 @@ different results.</p>
 <span class="c1">// res23: Option[Boolean] = Some(true)
 </span>
 <span class="k">val</span> <span class="n">prints</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Eval</span><span class="o">.</span><span class="n">always</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="mi">1</span><span class="o">)),</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">always</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="mi">2</span><span class="o">))).</span><span class="n">sequence_</span>
-<span class="c1">// prints: cats.Eval[Unit] = cats.Eval$$anon$9@681431cf
+<span class="c1">// prints: cats.Eval[Unit] = cats.Eval$$anon$9@6de78f55
 </span>
 <span class="n">prints</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// 1
