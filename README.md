@@ -53,7 +53,7 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 ### Silver Sponsors
 
-Gold Sponsors are those who have pledged $2,000 to $5,000.
+Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 
 <a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png"  style="margin-bottom:15px; margin-right: 10px" /></a>
