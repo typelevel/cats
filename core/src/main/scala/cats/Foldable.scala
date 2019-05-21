@@ -303,7 +303,7 @@ import Foldable.sentinel
    * }}}
    */
   def foldMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Monad[G], B: Monoid[B]): G[B] =
-    foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
+    foldLeft(fa, G.pure(B.empty))((acc, a) => G.map2(acc, f(a))(B.combine))
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
