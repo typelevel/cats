@@ -43,6 +43,7 @@ trait CatsSuite
     with AllInstancesBinCompat2
     with AllInstancesBinCompat3
     with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
     with AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
