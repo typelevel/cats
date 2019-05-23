@@ -37,10 +37,11 @@ class NonEmptySetSuite extends CatsSuite {
   checkAll("Semilattice[NonEmptySet]", SerializableTests.serializable(Semilattice[NonEmptySet[String]]))
 
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
-  checkAll("Eq[NonEmptySet[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptySet[ListWrapper[Int]]]))
 
   {
     implicit val A = ListWrapper.order[Int]
+    checkAll("Eq[NonEmptySet[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptySet[ListWrapper[Int]]]))
+
     checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
              SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
