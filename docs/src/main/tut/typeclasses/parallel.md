@@ -86,7 +86,7 @@ def parsePerson(ageString: String, nameString: String) =
 We can also traverse over a `Traverse` using `Parallel`:
 
 ```tut
-List(Either.left(42), Either.right(NonEmptyList.one("Error 1")), Either.right(NonEmptyList.one("Error 2"))).parSequence
+List(Either.right(42), Either.left(NonEmptyList.one("Error 1")), Either.left(NonEmptyList.one("Error 2"))).parSequence
 ```
 
 
