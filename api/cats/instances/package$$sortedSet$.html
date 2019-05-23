@@ -128,6 +128,10 @@
                         <a href="AllInstancesBinCompat4.html" title="">AllInstancesBinCompat4</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="AllInstancesBinCompat5.html" title=""></a>
+                        <a href="AllInstancesBinCompat5.html" title="">AllInstancesBinCompat5</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AnyValInstances.html" title=""></a>
                         <a href="AnyValInstances.html" title="">AnyValInstances</a>
                       </li><li class="current-entities indented2">
@@ -318,6 +322,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="SortedSetInstances1.html" title=""></a>
                         <a href="SortedSetInstances1.html" title="">SortedSetInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SortedSetInstancesBinCompat0.html" title=""></a>
+                        <a href="SortedSetInstancesBinCompat0.html" title="">SortedSetInstancesBinCompat0</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SortedSetOrder.html" title=""></a>
@@ -569,7 +577,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">sortedSet</span><span class="result"> extends <a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a></span>
+        <span class="name">sortedSet</span><span class="result"> extends <a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a> with <a href="SortedSetInstancesBinCompat0.html" class="extype" name="cats.instances.SortedSetInstancesBinCompat0">SortedSetInstancesBinCompat0</a></span>
       </span>
       </h4>
 
@@ -578,7 +586,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a>, <a href="SortedSetInstances1.html" class="extype" name="cats.instances.SortedSetInstances1">SortedSetInstances1</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="SortedSetInstancesBinCompat0.html" class="extype" name="cats.instances.SortedSetInstancesBinCompat0">SortedSetInstancesBinCompat0</a>, <a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a>, <a href="SortedSetInstances1.html" class="extype" name="cats.instances.SortedSetInstances1">SortedSetInstances1</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -604,7 +612,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.instances.sortedSet"><span>sortedSet</span></li><li class="in" name="cats.instances.SortedSetInstances"><span>SortedSetInstances</span></li><li class="in" name="cats.instances.SortedSetInstances1"><span>SortedSetInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.instances.sortedSet"><span>sortedSet</span></li><li class="in" name="cats.instances.SortedSetInstancesBinCompat0"><span>SortedSetInstancesBinCompat0</span></li><li class="in" name="cats.instances.SortedSetInstances"><span>SortedSetInstances</span></li><li class="in" name="cats.instances.SortedSetInstances1"><span>SortedSetInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -759,6 +767,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a></dd></dl></div>
+    </li><li name="cats.instances.SortedSetInstancesBinCompat0#catsStdSemigroupalForSortedSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdSemigroupalForSortedSet:cats.Semigroupal[scala.collection.immutable.SortedSet]"></a><a id="catsStdSemigroupalForSortedSet:Semigroupal[SortedSet]"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$sortedSet$.html#catsStdSemigroupalForSortedSet:cats.Semigroupal[scala.collection.immutable.SortedSet]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdSemigroupalForSortedSet</span><span class="result">: <a href="../Semigroupal.html" class="extype" name="cats.Semigroupal">Semigroupal</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/collection/immutable/SortedSet.html#scala.collection.immutable.SortedSet" class="extype" name="scala.collection.immutable.SortedSet">SortedSet</a>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedSetInstancesBinCompat0.html" class="extype" name="cats.instances.SortedSetInstancesBinCompat0">SortedSetInstancesBinCompat0</a></dd></dl></div>
     </li><li name="cats.instances.SortedSetInstances#catsStdShowForSortedSet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsStdShowForSortedSet[A](implicitevidence$1:cats.Show[A]):cats.Show[scala.collection.immutable.SortedSet[A]]"></a><a id="catsStdShowForSortedSet[A](Show[A]):Show[SortedSet[A]]"></a>
       <span class="permalink">
@@ -1071,7 +1095,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.instances.SortedSetInstances">
+        <div class="parent" name="cats.instances.SortedSetInstancesBinCompat0">
+              <h3>Inherited from <a href="SortedSetInstancesBinCompat0.html" class="extype" name="cats.instances.SortedSetInstancesBinCompat0">SortedSetInstancesBinCompat0</a></h3>
+            </div><div class="parent" name="cats.instances.SortedSetInstances">
               <h3>Inherited from <a href="SortedSetInstances.html" class="extype" name="cats.instances.SortedSetInstances">SortedSetInstances</a></h3>
             </div><div class="parent" name="cats.instances.SortedSetInstances1">
               <h3>Inherited from <a href="SortedSetInstances1.html" class="extype" name="cats.instances.SortedSetInstances1">SortedSetInstances1</a></h3>

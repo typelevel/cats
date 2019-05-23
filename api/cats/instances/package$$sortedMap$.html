@@ -128,6 +128,10 @@
                         <a href="AllInstancesBinCompat4.html" title="">AllInstancesBinCompat4</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="trait" href="AllInstancesBinCompat5.html" title=""></a>
+                        <a href="AllInstancesBinCompat5.html" title="">AllInstancesBinCompat5</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
                         <a class="trait" href="AnyValInstances.html" title=""></a>
                         <a href="AnyValInstances.html" title="">AnyValInstances</a>
                       </li><li class="current-entities indented2">
@@ -318,6 +322,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="SortedSetInstances1.html" title=""></a>
                         <a href="SortedSetInstances1.html" title="">SortedSetInstances1</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="SortedSetInstancesBinCompat0.html" title=""></a>
+                        <a href="SortedSetInstancesBinCompat0.html" title="">SortedSetInstancesBinCompat0</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="SortedSetOrder.html" title=""></a>
@@ -569,7 +577,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">sortedMap</span><span class="result"> extends <a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a></span>
+        <span class="name">sortedMap</span><span class="result"> extends <a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a> with <a href="SortedMapInstancesBinCompat0.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat0">SortedMapInstancesBinCompat0</a> with <a href="SortedMapInstancesBinCompat1.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat1">SortedMapInstancesBinCompat1</a></span>
       </span>
       </h4>
 
@@ -578,7 +586,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a>, <a href="SortedMapInstances2.html" class="extype" name="cats.instances.SortedMapInstances2">SortedMapInstances2</a>, <a href="SortedMapInstances1.html" class="extype" name="cats.instances.SortedMapInstances1">SortedMapInstances1</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="SortedMapInstancesBinCompat1.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat1">SortedMapInstancesBinCompat1</a>, <a href="SortedMapInstancesBinCompat0.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat0">SortedMapInstancesBinCompat0</a>, <a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a>, <a href="SortedMapInstances2.html" class="extype" name="cats.instances.SortedMapInstances2">SortedMapInstances2</a>, <a href="SortedMapInstances1.html" class="extype" name="cats.instances.SortedMapInstances1">SortedMapInstances1</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -604,7 +612,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="cats.instances.sortedMap"><span>sortedMap</span></li><li class="in" name="cats.instances.SortedMapInstances"><span>SortedMapInstances</span></li><li class="in" name="cats.instances.SortedMapInstances2"><span>SortedMapInstances2</span></li><li class="in" name="cats.instances.SortedMapInstances1"><span>SortedMapInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="cats.instances.sortedMap"><span>sortedMap</span></li><li class="in" name="cats.instances.SortedMapInstancesBinCompat1"><span>SortedMapInstancesBinCompat1</span></li><li class="in" name="cats.instances.SortedMapInstancesBinCompat0"><span>SortedMapInstancesBinCompat0</span></li><li class="in" name="cats.instances.SortedMapInstances"><span>SortedMapInstances</span></li><li class="in" name="cats.instances.SortedMapInstances2"><span>SortedMapInstances2</span></li><li class="in" name="cats.instances.SortedMapInstances1"><span>SortedMapInstances1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -775,6 +783,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedMapInstances2.html" class="extype" name="cats.instances.SortedMapInstances2">SortedMapInstances2</a></dd></dl></div>
+    </li><li name="cats.instances.SortedMapInstancesBinCompat1#catsStdMonoidKForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdMonoidKForSortedMap[K](implicitevidence$13:cats.Order[K]):cats.MonoidK[[β$7$]scala.collection.immutable.SortedMap[K,β$7$]]"></a><a id="catsStdMonoidKForSortedMap[K](Order[K]):MonoidK[[β$7$]SortedMap[K,β$7$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$sortedMap$.html#catsStdMonoidKForSortedMap[K](implicitevidence$13:cats.Order[K]):cats.MonoidK[[β$7$]scala.collection.immutable.SortedMap[K,β$7$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdMonoidKForSortedMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.instances.SortedMapInstancesBinCompat1.catsStdMonoidKForSortedMap.K">K</span>]</span>)</span><span class="result">: <a href="../MonoidK.html" class="extype" name="cats.MonoidK">MonoidK</a>[[β$7$]<a href="http://www.scala-lang.org/api/2.12.7/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.instances.SortedMapInstancesBinCompat1.catsStdMonoidKForSortedMap.K">K</span>, <span class="extype" name="cats.instances.SortedMapInstancesBinCompat1.&lt;refinement&gt;.Λ$.β$7$">β$7$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedMapInstancesBinCompat1.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat1">SortedMapInstancesBinCompat1</a></dd></dl></div>
     </li><li name="cats.instances.SortedMapInstances#catsStdShowForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="catsStdShowForSortedMap[A,B](implicitevidence$6:cats.Order[A],implicitshowA:cats.Show[A],implicitshowB:cats.Show[B]):cats.Show[scala.collection.immutable.SortedMap[A,B]]"></a><a id="catsStdShowForSortedMap[A,B](Order[A],Show[A],Show[B]):Show[SortedMap[A,B]]"></a>
       <span class="permalink">
@@ -791,6 +815,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a></dd></dl></div>
+    </li><li name="cats.instances.SortedMapInstancesBinCompat0#catsStdTraverseFilterForSortedMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="catsStdTraverseFilterForSortedMap[K](implicitevidence$12:cats.Order[K]):cats.TraverseFilter[[β$4$]scala.collection.immutable.SortedMap[K,β$4$]]"></a><a id="catsStdTraverseFilterForSortedMap[K](Order[K]):TraverseFilter[[β$4$]SortedMap[K,β$4$]]"></a>
+      <span class="permalink">
+      <a href="../../cats/instances/package$$sortedMap$.html#catsStdTraverseFilterForSortedMap[K](implicitevidence$12:cats.Order[K]):cats.TraverseFilter[[β$4$]scala.collection.immutable.SortedMap[K,β$4$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">catsStdTraverseFilterForSortedMap</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../index.html#Order[A]=cats.kernel.Order[A]" class="extmbr" name="cats.Order">Order</a>[<span class="extype" name="cats.instances.SortedMapInstancesBinCompat0.catsStdTraverseFilterForSortedMap.K">K</span>]</span>)</span><span class="result">: <a href="../TraverseFilter.html" class="extype" name="cats.TraverseFilter">TraverseFilter</a>[[β$4$]<a href="http://www.scala-lang.org/api/2.12.7/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="cats.instances.SortedMapInstancesBinCompat0.catsStdTraverseFilterForSortedMap.K">K</span>, <span class="extype" name="cats.instances.SortedMapInstancesBinCompat0.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SortedMapInstancesBinCompat0.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat0">SortedMapInstancesBinCompat0</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1087,7 +1127,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="cats.instances.SortedMapInstances">
+        <div class="parent" name="cats.instances.SortedMapInstancesBinCompat1">
+              <h3>Inherited from <a href="SortedMapInstancesBinCompat1.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat1">SortedMapInstancesBinCompat1</a></h3>
+            </div><div class="parent" name="cats.instances.SortedMapInstancesBinCompat0">
+              <h3>Inherited from <a href="SortedMapInstancesBinCompat0.html" class="extype" name="cats.instances.SortedMapInstancesBinCompat0">SortedMapInstancesBinCompat0</a></h3>
+            </div><div class="parent" name="cats.instances.SortedMapInstances">
               <h3>Inherited from <a href="SortedMapInstances.html" class="extype" name="cats.instances.SortedMapInstances">SortedMapInstances</a></h3>
             </div><div class="parent" name="cats.instances.SortedMapInstances2">
               <h3>Inherited from <a href="SortedMapInstances2.html" class="extype" name="cats.instances.SortedMapInstances2">SortedMapInstances2</a></h3>

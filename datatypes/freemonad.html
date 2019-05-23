@@ -527,7 +527,7 @@ with calling action in other base monad.</p>
 When the user inputs some text we use a separate <code class="highlighter-rouge">State</code> monad to track what the user
 typed.</p>
 
-<p>As we can observe in this case <code class="highlighter-rouge">FreeT</code> offers us a the alternative to delegate denotations to <code class="highlighter-rouge">State</code>
+<p>As we can observe in this case <code class="highlighter-rouge">FreeT</code> offers us the alternative to delegate denotations to <code class="highlighter-rouge">State</code>
 monad with stronger equational guarantees than if we were emulating the <code class="highlighter-rouge">State</code> ops in our own ADT.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
@@ -596,7 +596,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// import TeletypeOps._
 </span>
 <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@345aaf21
+<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@535de7cd
 </span>
 <span class="k">val</span> <span class="n">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
 <span class="c1">// initialState: scala.collection.immutable.Nil.type = List()
@@ -605,6 +605,88 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// what's up?!
 // thanks, see you soon!
 // stored: List[String] = List(user said : hanging in here)
+</span></code></pre>
+</div>
+
+<p>Another example is more basic usage of <code class="highlighter-rouge">FreeT</code> with some context <code class="highlighter-rouge">Ctx</code> for which we provide <code class="highlighter-rouge">Try</code> interpreter,
+combined with <code class="highlighter-rouge">OptionT</code> for reducing boilerplate.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
+<span class="c1">// import cats.free._
+</span>
+<span class="k">import</span> <span class="nn">cats._</span>
+<span class="c1">// import cats._
+</span>
+<span class="k">import</span> <span class="nn">cats.data._</span>
+<span class="c1">// import cats.data._
+</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
+</span>
+<span class="k">import</span> <span class="nn">scala.util.Try</span>
+<span class="c1">// import scala.util.Try
+</span>
+<span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Ctx</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<span class="c1">// defined trait Ctx
+</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Action</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Ctx</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+<span class="c1">// defined class Action
+</span>
+<span class="k">def</span> <span class="n">op1</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">FreeT</span><span class="o">.</span><span class="n">liftF</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Action</span><span class="o">(</span><span class="mi">7</span><span class="o">))</span>
+<span class="c1">// op1: cats.free.FreeT[Ctx,Option,Int]
+</span>
+<span class="k">def</span> <span class="n">op2</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">FreeT</span><span class="o">.</span><span class="n">liftT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="nc">Some</span><span class="o">(</span><span class="mi">4</span><span class="o">))</span>
+<span class="c1">// op2: cats.free.FreeT[Ctx,Option,Int]
+</span>
+<span class="k">def</span> <span class="n">op3</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="nc">FreeT</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">1</span><span class="o">)</span>
+<span class="c1">// op3: cats.free.FreeT[Ctx,Option,Int]
+</span>
+<span class="k">val</span> <span class="n">opComplete</span><span class="k">:</span> <span class="kt">FreeT</span><span class="o">[</span><span class="kt">Ctx</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">op1</span>
+    <span class="n">b</span> <span class="k">&lt;-</span> <span class="n">op2</span>
+    <span class="n">c</span> <span class="k">&lt;-</span> <span class="n">op3</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+<span class="c1">// opComplete: cats.free.FreeT[Ctx,Option,Int] = FreeT(...)
+</span>
+<span class="cm">/*  Our interpreters  */</span>
+
+<span class="k">type</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">[</span><span class="kt">Try</span>, <span class="kt">A</span><span class="o">]</span>
+<span class="c1">// defined type alias OptTry
+</span>
+<span class="k">def</span> <span class="n">tryInterpreter</span><span class="k">:</span> <span class="kt">Ctx</span> <span class="kt">~&gt;</span> <span class="kt">OptTry</span> <span class="o">=</span> <span class="k">new</span> <span class="o">(</span><span class="nc">Ctx</span> <span class="o">~&gt;</span> <span class="nc">OptTry</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Ctx</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Action</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="nc">OptionT</span><span class="o">.</span><span class="n">liftF</span><span class="o">(</span><span class="nc">Try</span><span class="o">(</span><span class="n">value</span><span class="o">))</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// tryInterpreter: Ctx ~&gt; OptTry
+</span>
+<span class="k">def</span> <span class="n">optTryLift</span><span class="k">:</span> <span class="kt">Option</span> <span class="kt">~&gt;</span> <span class="kt">OptTry</span> <span class="o">=</span> <span class="k">new</span> <span class="o">(</span><span class="nc">Option</span> <span class="o">~&gt;</span> <span class="nc">OptTry</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">OptTry</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="nc">OptionT</span><span class="o">(</span><span class="nc">Try</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="n">value</span><span class="o">)))</span>
+      <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span>
+        <span class="nc">OptionT</span><span class="o">.</span><span class="n">none</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// optTryLift: Option ~&gt; OptTry
+</span>
+<span class="k">val</span> <span class="n">hoisted</span> <span class="k">=</span> <span class="n">opComplete</span><span class="o">.</span><span class="n">hoist</span><span class="o">(</span><span class="n">optTryLift</span><span class="o">)</span>
+<span class="c1">// hoisted: cats.free.FreeT[Ctx,OptTry,Int] = FreeT(...)
+</span>
+<span class="k">val</span> <span class="n">evaluated</span> <span class="k">=</span> <span class="n">hoisted</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">tryInterpreter</span><span class="o">)</span>
+<span class="c1">// evaluated: OptTry[Int] = OptionT(Success(Some(12)))
+</span>
+<span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">evaluated</span><span class="o">.</span><span class="n">value</span>
+<span class="c1">// result: scala.util.Try[Option[Int]] = Success(Some(12))
 </span></code></pre>
 </div>
 
