@@ -148,23 +148,24 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.1.0-SNAP9"
+val scalatestVersion = "3.1.0-SNAP11"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP4"
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP6"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.11.2-M1"
+val disciplineVersion = "0.12.0"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-                              "org.typelevel" %%% "discipline" % disciplineVersion)
+                              "org.typelevel" %%% "discipline-core" % disciplineVersion)
 )
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
+    "org.typelevel" %%% "discipline-scalatest" % disciplineVersion % "test"
   )
 )
 
@@ -561,8 +562,11 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(disciplineDependencies)
   .settings(
-    libraryDependencies ++= Seq("org.scalatest" %%% "scalatest" % scalatestVersion,
-                                "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion)
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % scalatestVersion,
+      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
+      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+    )
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
