@@ -81,12 +81,12 @@ lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.7",
-    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
+    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.1")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.16.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.17.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
