@@ -148,7 +148,7 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.1.0-SNAP9"
+val scalatestVersion = "3.1.0-SNAP10"
 
 val scalatestplusScalaCheckVersion = "1.0.0-SNAP4"
 
