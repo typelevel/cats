@@ -18,7 +18,9 @@ scala_version_213: &scala_version_213 2.13.0-RC1
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
- - mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.conf /home/travis/.triplequote/metrics/config/metrics-service.conf
+ - if [[ ! -z "$HydraLicense" ]]; then
+     mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.conf /home/travis/.triplequote/metrics/config/metrics-service.conf;
+   fi  
 
 stages:
   - name: styling
