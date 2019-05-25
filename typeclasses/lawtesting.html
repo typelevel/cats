@@ -14,17 +14,16 @@ base test class <code class="highlighter-rouge">CatsSuite</code>.</p>
 are using <code class="highlighter-rouge">ScalaTest</code>).
 To make things easier, we’ll also include the <code class="highlighter-rouge">scalacheck-shapeless</code> library in this tutorial, so we don’t have to manually write instances for ScalaCheck’s <code class="highlighter-rouge">Arbitrary</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
   <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.1.0"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span> <span class="c1">//or `cats-testkit` if you are using ScalaTest
 </span>  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.6"</span> <span class="o">%</span> <span class="nc">Test</span>
 <span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="example-testing-a-functor-instance">Example: Testing a Functor instance</h2>
 
 <p>We’ll begin by creating a data type and its Functor instance.</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="c1">// import cats._
 </span>
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>
@@ -47,29 +46,26 @@ To make things easier, we’ll also include the <code class="highlighter-rouge">
 <span class="c1">// defined object Tree
 // warning: previously defined trait Tree is not a companion to object Tree.
 // Companions must be defined together; you may wish to use :paste mode for this.
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Cats defines all type class laws tests in <code class="highlighter-rouge">cats.laws.discipline.*</code> 
 as <code class="highlighter-rouge">discipline</code>’s <code class="highlighter-rouge">RuleSet</code>s. Each <code class="highlighter-rouge">RuleSet</code> provides a <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> through
 <code class="highlighter-rouge">ruleSet.all</code> to represent all the rules that it defines and inherits. For example, 
 the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> for <code class="highlighter-rouge">Functor</code> can be retrieved using</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">cats</span><span class="o">.</span><span class="n">laws</span><span class="o">.</span><span class="n">discipline</span><span class="o">.</span><span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">].</span><span class="n">all</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">cats</span><span class="o">.</span><span class="n">laws</span><span class="o">.</span><span class="n">discipline</span><span class="o">.</span><span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">].</span><span class="n">all</span>
+</code></pre></div>
 
 <p>We will also need to create an <code class="highlighter-rouge">Eq</code> instance, as most laws will need to compare values of a type to properly test for correctness.
 For simplicity we’ll just use <code class="highlighter-rouge">Eq.fromUniversalEquals</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">eqTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Eq</span><span class="o">]</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">eqTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Eq</span><span class="o">]</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
 <span class="c1">// eqTree: [A](implicit evidence$1: cats.Eq[A])cats.Eq[Tree[A]]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 <p>ScalaCheck requires <code class="highlighter-rouge">Arbitrary</code> instances for data types being tested. We have defined an <code class="highlighter-rouge">Arbitrary</code> instance for <code class="highlighter-rouge">Tree</code> here,
 but you won’t need it if you import <code class="highlighter-rouge">org.scalacheck.ScalacheckShapeless._</code>).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code>
 <span class="k">import</span> <span class="nn">org.scalacheck.</span><span class="o">{</span><span class="nc">Arbitrary</span><span class="o">,</span> <span class="nc">Gen</span><span class="o">}</span>
 
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">arbFoo</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Arbitrary</span><span class="o">]</span><span class="k">:</span> <span class="kt">Arbitrary</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span>
@@ -77,8 +73,7 @@ but you won’t need it if you import <code class="highlighter-rouge">org.scalac
       <span class="n">e</span> <span class="k">&lt;-</span> <span class="nc">Arbitrary</span><span class="o">.</span><span class="n">arbitrary</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
     <span class="o">}</span> <span class="k">yield</span> <span class="nc">Node</span><span class="o">(</span><span class="n">e</span><span class="o">,</span> <span class="nc">Leaf</span><span class="o">,</span> <span class="nc">Leaf</span><span class="o">)))</span>
   <span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now we can convert these <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> into tests that the test framework can run.</p>
 
@@ -100,7 +95,7 @@ the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-r
 <p>So here is the Scalatest test for our example, basically we import <code class="highlighter-rouge">cats.laws.discipline.FunctorTests</code> and 
 call the <code class="highlighter-rouge">checkAll</code> helper with it.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.tests.CatsSuite</span>	
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.tests.CatsSuite</span>	
 <span class="c1">// import cats.tests.CatsSuite
 </span>
 <span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
@@ -110,13 +105,12 @@ call the <code class="highlighter-rouge">checkAll</code> helper with it.</p>
   <span class="n">checkAll</span><span class="o">(</span><span class="s">"Tree.FunctorLaws"</span><span class="o">,</span> <span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">])</span>
 <span class="o">}</span>
 <span class="c1">// defined class TreeLawTests
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Now when we run <code class="highlighter-rouge">test</code> in our sbt console, ScalaCheck will test if the <code class="highlighter-rouge">Functor</code> laws hold for our <code class="highlighter-rouge">Tree</code> type.
 You should see something like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[info] TreeLawTests:
+<div class="highlighter-rouge"><pre class="codehilite"><code>[info] TreeLawTests:
 [info] - Tree.FunctorLaws.functor.covariant composition
 [info] - Tree.FunctorLaws.functor.covariant identity
 [info] - Tree.FunctorLaws.functor.invariant composition
@@ -129,8 +123,7 @@ You should see something like this:</p>
 [info] All tests passed.
 [info] Passed: Total 4, Failed 0, Errors 0, Passed 4
 [success] Total time: 1 s, completed Aug 31, 2017 2:19:22 PM
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>And voila, you’ve successfully proven that your data type upholds the Functor laws!</p>
 
@@ -142,7 +135,7 @@ So we have to import from there to test type classes like <code class="highlight
 
 <p>Let’s test it out, by defining a <code class="highlighter-rouge">Semigroup</code> instance for our <code class="highlighter-rouge">Tree</code> type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">semigroupTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="o">{</span>
@@ -154,12 +147,11 @@ So we have to import from there to test type classes like <code class="highlight
   <span class="o">}</span>
 <span class="o">}</span>
 <span class="c1">// semigroupTree: [A](implicit evidence$1: cats.Semigroup[A])cats.Semigroup[Tree[A]]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Then we can again test the instance inside our class extending <code class="highlighter-rouge">CatsSuite</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
 <span class="c1">// import cats.laws.discipline.FunctorTests
 </span>
 <span class="k">import</span> <span class="nn">cats.kernel.laws.discipline.SemigroupTests</span>
@@ -170,8 +162,7 @@ So we have to import from there to test type classes like <code class="highlight
   <span class="n">checkAll</span><span class="o">(</span><span class="s">"Tree.FunctorLaws"</span><span class="o">,</span> <span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">])</span>
 <span class="o">}</span>
 <span class="c1">// defined class TreeLawTests
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

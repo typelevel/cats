@@ -3,7 +3,7 @@
 <p>The <code class="highlighter-rouge">ContravariantMonoidal</code> type class is for <a href="contravariant.html"><code class="highlighter-rouge">Contravariant</code></a> functors that can define a
 <code class="highlighter-rouge">product</code> function and a <code class="highlighter-rouge">unit</code> function.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Contravariant</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Contravariant</span>
 
 <span class="k">trait</span> <span class="nc">ContravariantMonoidal</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Contravariant</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">unit</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
@@ -13,8 +13,7 @@
   <span class="k">def</span> <span class="n">contramap2</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fb</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">],</span> <span class="n">fc</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="o">(</span><span class="n">B</span><span class="o">,</span> <span class="n">C</span><span class="o">))</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
     <span class="n">contramap</span><span class="o">(</span><span class="n">product</span><span class="o">(</span><span class="n">fb</span><span class="o">,</span> <span class="n">fc</span><span class="o">))(</span><span class="n">f</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Notice that this allows us to define the <code class="highlighter-rouge">contramap2</code> function, much like
 the <code class="highlighter-rouge">map2</code> function and the <code class="highlighter-rouge">pure</code> function on the <code class="highlighter-rouge">Applicative</code> typeclass, but in reverse.</p>
@@ -31,18 +30,17 @@ but there are also interesting instances for other types.</p>
 
 <p>An example application would be the case of predicates. Consider the type,</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Predicate</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Boolean</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Then, we can exhibit a <code class="highlighter-rouge">ContravariantMonoidal</code> for <code class="highlighter-rouge">Predicate</code> by basing it on the
 <code class="highlighter-rouge">Monoid</code> for <code class="highlighter-rouge">Boolean</code> via <code class="highlighter-rouge">&amp;&amp;</code> as,</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">contravariantMonoidalPredicate</span><span class="k">:</span> <span class="kt">ContravariantMonoidal</span><span class="o">[</span><span class="kt">Predicate</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">contravariantMonoidalPredicate</span><span class="k">:</span> <span class="kt">ContravariantMonoidal</span><span class="o">[</span><span class="kt">Predicate</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">ContravariantMonoidal</span> <span class="o">[</span><span class="kt">Predicate</span><span class="o">]</span> <span class="o">{</span>
     <span class="k">def</span> <span class="n">unit</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Predicate</span><span class="o">[</span><span class="kt">Unit</span><span class="o">](</span><span class="nc">Function</span><span class="o">.</span><span class="n">const</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
 
@@ -52,8 +50,7 @@ but there are also interesting instances for other types.</p>
     <span class="k">def</span> <span class="n">contramap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
       <span class="nc">Predicate</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">fa</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">x</span><span class="o">)))</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We could have also used <code class="highlighter-rouge">false</code> and <code class="highlighter-rouge">||</code>, but the “and” version
 tends to be a little more convenient for this application.</p>
@@ -61,7 +58,7 @@ tends to be a little more convenient for this application.</p>
 <p>Just like for <code class="highlighter-rouge">Contravariant</code>, we can <code class="highlighter-rouge">contramap</code> to
 pull <code class="highlighter-rouge">Predicates</code> back along functions.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Money</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Money</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
 <span class="c1">// defined class Money
 </span>
 <span class="k">def</span> <span class="n">isEven</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Predicate</span><span class="o">(</span><span class="k">_</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span>
@@ -72,13 +69,12 @@ pull <code class="highlighter-rouge">Predicates</code> back along functions.</p>
 </span>
 <span class="n">isEvenMoney</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">55</span><span class="o">))</span>
 <span class="c1">// res0: Boolean = false
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We can also lift functions contravariantly into
 the context instead of contramapping repeatedly.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">times2Predicate</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Predicate</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">times2Predicate</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Predicate</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span>
   <span class="nc">ContravariantMonoidal</span><span class="o">[</span><span class="kt">Predicate</span><span class="o">].</span><span class="n">liftContravariant</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">)</span>
 <span class="c1">// times2Predicate: Predicate[Long] =&gt; Predicate[Long]
 </span>
@@ -94,13 +90,12 @@ the context instead of contramapping repeatedly.</p>
 </span>
 <span class="n">trivial</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="c1">// res2: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>More interestingly, we can combine multiple predicates using
 a <code class="highlighter-rouge">contramapN</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Transaction</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Money</span><span class="o">,</span> <span class="n">payee</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Transaction</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Money</span><span class="o">,</span> <span class="n">payee</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="c1">// defined class Transaction
 </span>
 <span class="k">def</span> <span class="n">isEvan</span><span class="k">:</span> <span class="kt">Predicate</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Predicate</span><span class="o">(</span><span class="k">_</span> <span class="o">==</span> <span class="s">"Evan"</span><span class="o">)</span>
@@ -116,8 +111,7 @@ a <code class="highlighter-rouge">contramapN</code>.</p>
 </span>
 <span class="n">isEvenPaymentToEvanOfMoreThan50</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Transaction</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">56</span><span class="o">),</span> <span class="s">"Evan"</span><span class="o">))</span>
 <span class="c1">// res3: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

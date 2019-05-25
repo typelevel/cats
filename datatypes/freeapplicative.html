@@ -14,15 +14,14 @@ for the <code class="highlighter-rouge">cats-free</code> module.</p>
 <p>Consider building an EDSL for validating strings - to keep things simple we’ll just have
 a way to check a string is at least a certain size and to ensure the string contains numbers.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ValidationOp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ValidationOp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="nc">case</span> <span class="k">class</span> <span class="nc">Size</span><span class="o">(</span><span class="n">size</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ValidationOp</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>
 <span class="k">case</span> <span class="k">object</span> <span class="nc">HasNumber</span> <span class="k">extends</span> <span class="nc">ValidationOp</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Much like the <code class="highlighter-rouge">Free</code> monad tutorial, we use smart constructors to lift our algebra into the <code class="highlighter-rouge">FreeApplicative</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free.FreeApplicative</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.free.FreeApplicative</span>
 <span class="k">import</span> <span class="nn">cats.free.FreeApplicative.lift</span>
 
 <span class="k">type</span> <span class="kt">Validation</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FreeApplicative</span><span class="o">[</span><span class="kt">ValidationOp</span>, <span class="kt">A</span><span class="o">]</span>
@@ -30,22 +29,20 @@ a way to check a string is at least a certain size and to ensure the string cont
 <span class="k">def</span> <span class="n">size</span><span class="o">(</span><span class="n">size</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Validation</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="n">lift</span><span class="o">(</span><span class="nc">Size</span><span class="o">(</span><span class="n">size</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">hasNumber</span><span class="k">:</span> <span class="kt">Validation</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="n">lift</span><span class="o">(</span><span class="nc">HasNumber</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Because a <code class="highlighter-rouge">FreeApplicative</code> only supports the operations of <code class="highlighter-rouge">Applicative</code>, we do not get the nicety
 of a for-comprehension. We can however still use <code class="highlighter-rouge">Applicative</code> syntax provided by Cats.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">prog</span><span class="k">:</span> <span class="kt">Validation</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">(</span><span class="n">size</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="n">hasNumber</span><span class="o">).</span><span class="n">mapN</span> <span class="o">{</span> <span class="k">case</span> <span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">r</span><span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>As it stands, our program is just an instance of a data structure - nothing has happened
 at this point. To make our program useful we need to interpret it.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Id</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Id</span>
 <span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
@@ -59,19 +56,17 @@ at this point. To make our program useful we need to interpret it.</p>
       <span class="k">case</span> <span class="nc">HasNumber</span>  <span class="k">=&gt;</span> <span class="n">str</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="s">"0123456789"</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="n">c</span><span class="o">))</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">validator</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">FromString</span><span class="o">](</span><span class="n">compiler</span><span class="o">)</span>
-<span class="c1">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$2$$Lambda$14161/481125629@63f0d02d
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">validator</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">FromString</span><span class="o">](</span><span class="n">compiler</span><span class="o">)</span>
+<span class="c1">// validator: FromString[Boolean] = cats.instances.Function1Instances$$anon$2$$Lambda$9512/1263303062@50971ce6
 </span>
 <span class="n">validator</span><span class="o">(</span><span class="s">"1234"</span><span class="o">)</span>
 <span class="c1">// res1: Boolean = false
 </span>
 <span class="n">validator</span><span class="o">(</span><span class="s">"12345"</span><span class="o">)</span>
 <span class="c1">// res2: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="differences-from-free">Differences from <code class="highlighter-rouge">Free</code></h2>
 <p>So far everything we’ve been doing has been not much different from <code class="highlighter-rouge">Free</code> - we’ve built
@@ -89,7 +84,7 @@ computation. Therefore when using <code class="highlighter-rouge">Applicative</c
 <p>Because we have everything we need up front and know there can be no branching, we can easily
 write a validator that validates in parallel.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Kleisli</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Kleisli</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
@@ -107,8 +102,7 @@ write a validator that validates in parallel.</p>
 <span class="o">}</span>
 
 <span class="k">val</span> <span class="n">parValidator</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">ParValidator</span><span class="o">](</span><span class="n">parCompiler</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h3 id="logging">Logging</h3>
 <p>We can also write an interpreter that simply creates a list of strings indicating the filters that
@@ -117,7 +111,7 @@ the rules against a string for this, we simply need to map each rule to some ide
 we can completely ignore the return type of the operation and return just a <code class="highlighter-rouge">List[String]</code> - the
 <code class="highlighter-rouge">Const</code> data type is useful for this.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">type</span> <span class="kt">Log</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
@@ -131,10 +125,9 @@ we can completely ignore the return type of the operation and return just a <cod
 
 <span class="k">def</span> <span class="n">logValidation</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">validation</span><span class="k">:</span> <span class="kt">Validation</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="n">validation</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">Log</span><span class="o">](</span><span class="n">logCompiler</span><span class="o">).</span><span class="n">getConst</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">logValidation</span><span class="o">(</span><span class="n">prog</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">logValidation</span><span class="o">(</span><span class="n">prog</span><span class="o">)</span>
 <span class="c1">// res4: List[String] = List(size &gt;= 5, has number)
 </span>
 <span class="n">logValidation</span><span class="o">(</span><span class="n">size</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span> <span class="o">*&gt;</span> <span class="n">hasNumber</span> <span class="o">*&gt;</span> <span class="n">size</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span>
@@ -142,8 +135,7 @@ we can completely ignore the return type of the operation and return just a <cod
 </span>
 <span class="n">logValidation</span><span class="o">((</span><span class="n">hasNumber</span><span class="o">,</span> <span class="n">size</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="n">mapN</span><span class="o">(</span><span class="k">_</span> <span class="o">||</span> <span class="k">_</span><span class="o">))</span>
 <span class="c1">// res6: List[String] = List(has number, size &gt;= 3)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="why-not-both">Why not both?</h3>
 <p>It is perhaps more plausible and useful to have both the actual validation function and the logging
@@ -157,15 +149,14 @@ case for monads.</p>
 <p>Therefore, we can write an interpreter that uses the product of the <code class="highlighter-rouge">ParValidator</code> and <code class="highlighter-rouge">Log</code> <code class="highlighter-rouge">Applicative</code>s
 to interpret our program in one go. We can create this interpreter easily by using <code class="highlighter-rouge">FunctionK#and</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Tuple2K</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Tuple2K</span>
 
 <span class="k">type</span> <span class="kt">ValidateAndLog</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Tuple2K</span><span class="o">[</span><span class="kt">ParValidator</span>, <span class="kt">Log</span>, <span class="kt">A</span><span class="o">]</span>
 
 <span class="k">val</span> <span class="n">prodCompiler</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">ValidationOp</span>, <span class="kt">ValidateAndLog</span><span class="o">]</span> <span class="k">=</span> <span class="n">parCompiler</span> <span class="n">and</span> <span class="n">logCompiler</span>
 
 <span class="k">val</span> <span class="n">prodValidation</span> <span class="k">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">foldMap</span><span class="o">[</span><span class="kt">ValidateAndLog</span><span class="o">](</span><span class="n">prodCompiler</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h3 id="the-way-freeapplicativefoldmap-works">The way FreeApplicative#foldMap works</h3>
 <p>Despite being an imperative loop, there is a functional intuition behind <code class="highlighter-rouge">FreeApplicative#foldMap</code>.</p>
@@ -186,7 +177,7 @@ Every node in the tree is annotated with an identifying number and the concrete 
 (A -&gt; <code class="highlighter-rouge">Ap</code>, L -&gt; <code class="highlighter-rouge">Lift</code>, P -&gt; <code class="highlighter-rouge">Pure</code>), and an apostrophe to denote where <code class="highlighter-rouge">argF</code> (the current argument) currently
 points; as well the argument and function branches off <code class="highlighter-rouge">Ap</code> nodes are explicitly denoted.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>==&gt; begin.
+<div class="highlighter-rouge"><pre class="codehilite"><code>==&gt; begin.
            '1A
            /  \
        arg/    \fun
@@ -228,8 +219,7 @@ functions: Nil
 args: 6L :: 2A :: Nil
 functions: Fn(gab = foldArg(7L), argc = 2) :: Nil
 ==&gt; finished.
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>At the end of the loop the entire right branch of <code class="highlighter-rouge">Ap</code>s under <code class="highlighter-rouge">argF</code> has been peeled off into a single curried function,
 all of the arguments to that function are on the argument stack and that function itself is on the function stack,
@@ -241,7 +231,7 @@ in which case it applies the function to <code class="highlighter-rouge">argF</c
 back to the function stack, before returning to the main loop.</p>
 
 <p>I’ll continue the example from before here:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>==&gt; loop.
+<div class="highlighter-rouge"><pre class="codehilite"><code>==&gt; loop.
             1A
            /  \
        arg/    \fun
@@ -255,8 +245,7 @@ back to the function stack, before returning to the main loop.</p>
 args: 2A :: Nil
 functions: Fn(gab = foldArg(7L) ap foldArg(6L), argc = 1) :: Nil
 ==&gt; finished.
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>At the end of this loop every function on the top of the function stack with <code class="highlighter-rouge">length == 1</code> (not curried)
 has been applied to a single argument from the argument stack, and the first curried function (<code class="highlighter-rouge">length != 1</code>)

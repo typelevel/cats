@@ -4,20 +4,19 @@
 <code class="highlighter-rouge">Future.traverse</code> and <code class="highlighter-rouge">Future.sequence</code> functions, generalizing <code class="highlighter-rouge">Future</code> to be any
 <code class="highlighter-rouge">F[_]</code> that’s <code class="highlighter-rouge">Applicative</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Applicative</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Applicative</span>
 
 <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
   <span class="n">as</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">pure</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="n">empty</span><span class="o">[</span><span class="kt">B</span><span class="o">]))</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">acc</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]])</span> <span class="k">=&gt;</span>
     <span class="k">val</span> <span class="n">fb</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
     <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">map2</span><span class="o">(</span><span class="n">fb</span><span class="o">,</span> <span class="n">acc</span><span class="o">)(</span><span class="k">_</span> <span class="o">::</span> <span class="k">_</span><span class="o">)</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Here <code class="highlighter-rouge">traverse</code> still has knowledge of <code class="highlighter-rouge">List</code>, but we could just as easily use
 <code class="highlighter-rouge">Vector</code> or some similar data type. Another example is a binary tree:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">tree</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">object</span> <span class="nc">tree</span> <span class="o">{</span>
   <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Product</span> <span class="k">with</span> <span class="nc">Serializable</span> <span class="o">{</span>
     <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span> <span class="k">this</span> <span class="k">match</span> <span class="o">{</span>
       <span class="k">case</span> <span class="nc">Tree</span><span class="o">.</span><span class="nc">Empty</span><span class="o">()</span>         <span class="k">=&gt;</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">pure</span><span class="o">(</span><span class="nc">Tree</span><span class="o">.</span><span class="nc">Empty</span><span class="o">())</span>
@@ -32,12 +31,11 @@
 <span class="o">}</span>
 
 <span class="k">import</span> <span class="nn">tree._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This suggests an abstraction over “things that can be traversed over,” hence <code class="highlighter-rouge">Traverse</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
 <span class="o">}</span>
 
@@ -54,8 +52,7 @@
   <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
     <span class="n">fa</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="a-note-on-sequencing">A note on sequencing</h2>
 
@@ -63,24 +60,21 @@
 a <code class="highlighter-rouge">List[Option[A]]</code>. Since the values themselves are effects, traversing with <code class="highlighter-rouge">identity</code>
 will turn the traversable “inside out.”</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
 <span class="c1">// list: List[Option[Int]] = List(Some(1), Some(2), None)
 </span>
 <span class="k">val</span> <span class="n">traversed</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">identity</span><span class="o">)</span>
 <span class="c1">// traversed: Option[List[Int]] = None
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Cats provides a convenience method for this called <code class="highlighter-rouge">sequence</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">sequenced</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">sequence</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">sequenced</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">sequence</span>
 <span class="c1">// sequenced: Option[List[Int]] = None
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>In general <code class="highlighter-rouge">t.map(f).sequence</code> can be replaced with <code class="highlighter-rouge">t.traverse(f)</code>.</p>
 
@@ -91,13 +85,12 @@ use in <code class="highlighter-rouge">traverse</code> we can implement <code cl
 
 <p>First let’s look at the two signatures.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
 
 <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span> <span class="o">???</span>
 
 <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Both have an <code class="highlighter-rouge">F[A]</code> parameter and a similar <code class="highlighter-rouge">f</code> parameter. <code class="highlighter-rouge">traverse</code> expects the return type
 of <code class="highlighter-rouge">f</code> to be <code class="highlighter-rouge">G[B]</code> whereas <code class="highlighter-rouge">map</code> just wants <code class="highlighter-rouge">B</code>. Similarly the return type of <code class="highlighter-rouge">traverse</code> is
@@ -105,24 +98,22 @@ of <code class="highlighter-rouge">f</code> to be <code class="highlighter-rouge
 <code class="highlighter-rouge">G[A]</code> communicates exactly as much information as <code class="highlighter-rouge">A</code>. We can conjure one up by simply wrapping
 an <code class="highlighter-rouge">A</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
+</code></pre></div>
 
 <p>In order to call <code class="highlighter-rouge">traverse</code> <code class="highlighter-rouge">Id</code> needs to be <code class="highlighter-rouge">Applicative</code> which is straightforward - note that while
 <code class="highlighter-rouge">Id</code> just wraps an <code class="highlighter-rouge">A</code>, it is still a type constructor which matches the shape required by <code class="highlighter-rouge">Applicative</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">applicativeForId</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">applicativeForId</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">ff</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Id</span><span class="o">(</span><span class="n">ff</span><span class="o">.</span><span class="n">value</span><span class="o">(</span><span class="n">fa</span><span class="o">.</span><span class="n">value</span><span class="o">))</span>
 
   <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Id</span><span class="o">(</span><span class="n">a</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now we can implement <code class="highlighter-rouge">map</code> by wrapping and unwrapping <code class="highlighter-rouge">Id</code> as necessary.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
 
 <span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
@@ -130,8 +121,7 @@ an <code class="highlighter-rouge">A</code>.</p>
   <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
     <span class="n">traverse</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nc">Id</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">))).</span><span class="n">value</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p><code class="highlighter-rouge">Id</code> is provided in Cats as a type alias <code class="highlighter-rouge">type Id[A] = A</code>.</p>
 
@@ -148,13 +138,12 @@ of <code class="highlighter-rouge">traverse</code> by using <code class="highlig
 and <code class="highlighter-rouge">foldLeft</code> can then be implemented in terms of <code class="highlighter-rouge">foldRight</code>, though the resulting implementations
 may be slow.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">,</span> <span class="nc">Traverse</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">cats.data.Const</span>
 
 <span class="k">def</span> <span class="n">foldMap</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Traverse</span>, <span class="kt">A</span>, <span class="kt">B:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span>
   <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">traverse</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">?</span><span class="o">]</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="o">)(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nc">Const</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">))).</span><span class="n">getConst</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="further-reading">Further Reading</h2>
 

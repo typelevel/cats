@@ -3,9 +3,8 @@
 <p>Eq is an alternative to the standard Java <code class="highlighter-rouge">equals</code> method.
 It is defined by the single method <code class="highlighter-rouge">eqv</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">eqv</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">eqv</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span>
+</code></pre></div>
 
 <p>In Scala it’s possible to compare any two values using <code class="highlighter-rouge">==</code> (which desugars to Java <code class="highlighter-rouge">equals</code>).
 This is because <code class="highlighter-rouge">equals</code> type signature uses <code class="highlighter-rouge">Any</code> (Java’s <code class="highlighter-rouge">Object</code>) to compare two values.
@@ -13,20 +12,18 @@ This means that we can compare two completely unrelated types without getting a 
 The Scala compiler may warn us in some cases, but not all, which can lead to some weird bugs.
 For example this code will raise a warning at compile time:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="mi">42</span> <span class="o">==</span> <span class="s">"Hello"</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="mi">42</span> <span class="o">==</span> <span class="s">"Hello"</span>
 <span class="c1">// &lt;console&gt;:13: warning: comparing values of types Int and String using `==' will always yield false
 //        42 == "Hello"
 //           ^
 // error: No warnings can be incurred under -Xfatal-warnings.
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>While this code will compile without a hitch:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="s">"Hello"</span> <span class="o">==</span> <span class="mi">42</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="s">"Hello"</span> <span class="o">==</span> <span class="mi">42</span>
 <span class="c1">// res1: Boolean = false
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Ideally, Scala shouldn’t let us compare two types that can never be equal.</p>
 
@@ -35,7 +32,7 @@ eliminating these types of bugs altogether.</p>
 
 <p>The <code class="highlighter-rouge">Eq</code> syntax package also offers some handy symbolic operators:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="mi">1</span> <span class="o">===</span> <span class="mi">1</span>
@@ -43,8 +40,7 @@ eliminating these types of bugs altogether.</p>
 </span>
 <span class="s">"Hello"</span> <span class="o">=!=</span> <span class="s">"World"</span>
 <span class="c1">// res3: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Implementing <code class="highlighter-rouge">Eq</code> instances yourself for every data type might seem like huge drawback compared to only slight gains of typesafety.
 Fortunately for us, we have two great options. One option is to use inbuilt helper functions.
@@ -52,7 +48,7 @@ Another option is to use a small library called <a href="https://github.com/mile
 
 <p>The first option using <code class="highlighter-rouge">Eq.fromUniversalEquals</code> only defers to <code class="highlighter-rouge">==</code> and works like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.kernel.Eq</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.kernel.Eq</span>
 <span class="c1">// import cats.kernel.Eq
 </span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
@@ -62,12 +58,11 @@ Another option is to use a small library called <a href="https://github.com/mile
 <span class="c1">// defined class Foo
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">eqFoo</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
-<span class="c1">// eqFoo: cats.kernel.Eq[Foo] = cats.kernel.Eq$$anon$107@18175705
+<span class="c1">// eqFoo: cats.kernel.Eq[Foo] = cats.kernel.Eq$$anon$107@352ac22a
 </span>
 <span class="nc">Foo</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span> <span class="o">===</span> <span class="nc">Foo</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
 <span class="c1">// res4: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>For an example using Kittens check out the <a href="https://github.com/milessabin/kittens">kittens repo</a>.</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({

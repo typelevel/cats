@@ -6,13 +6,12 @@
 
 <p>Let’s try to make this more concrete with an example. We have this <code class="highlighter-rouge">Robot</code> model:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Robot</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Robot</span><span class="o">(</span>
   <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
   <span class="n">sentient</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">,</span>
   <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
   <span class="n">model</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We would like to generate some random <code class="highlighter-rouge">Robot</code> instances for test data.</p>
 
@@ -20,7 +19,7 @@
 
 <p>Scala’s standard library has a built-in <code class="highlighter-rouge">Random</code> class that provides a (pseudo)random number generator (RNG). Let’s use it to write a method that creates robots.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">rng</span> <span class="k">=</span> <span class="k">new</span> <span class="n">scala</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">Random</span><span class="o">(</span><span class="mi">0L</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">rng</span> <span class="k">=</span> <span class="k">new</span> <span class="n">scala</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">Random</span><span class="o">(</span><span class="mi">0L</span><span class="o">)</span>
 
 <span class="k">def</span> <span class="n">createRobot</span><span class="o">()</span><span class="k">:</span> <span class="kt">Robot</span> <span class="o">=</span> <span class="o">{</span>
   <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">nextLong</span><span class="o">()</span>
@@ -31,17 +30,15 @@
   <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isReplicant</span><span class="o">)</span> <span class="s">"replicant"</span> <span class="k">else</span> <span class="s">"borg"</span>
   <span class="nc">Robot</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">sentient</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">model</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">()</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">()</span>
 <span class="c1">// robot: Robot = Robot(-4962768465676381896,false,Catherine,replicant)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We create a single <code class="highlighter-rouge">Random</code> instance, which is mutated as a side-effect each time that we call <code class="highlighter-rouge">nextLong</code> or <code class="highlighter-rouge">nextBoolean</code> on it. This mutation makes it more difficult to reason about our code. Someone might come along and see that we have <code class="highlighter-rouge">rng.nextBoolean</code> repeated three times within a single method. They might cleverly avoid repeated code and method invocations by extracting the common code into a variable:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">rng</span> <span class="k">=</span> <span class="k">new</span> <span class="n">scala</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">Random</span><span class="o">(</span><span class="mi">0L</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">rng</span> <span class="k">=</span> <span class="k">new</span> <span class="n">scala</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">Random</span><span class="o">(</span><span class="mi">0L</span><span class="o">)</span>
 
 <span class="k">def</span> <span class="n">createRobot</span><span class="o">()</span><span class="k">:</span> <span class="kt">Robot</span> <span class="o">=</span> <span class="o">{</span>
   <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">nextLong</span><span class="o">()</span>
@@ -53,13 +50,11 @@
   <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isReplicant</span><span class="o">)</span> <span class="s">"replicant"</span> <span class="k">else</span> <span class="s">"borg"</span>
   <span class="nc">Robot</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">sentient</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">model</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">()</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">()</span>
 <span class="c1">// robot: Robot = Robot(-4962768465676381896,false,Carlos,borg)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>But now the output of our program has changed! We used to have a replicant robot named Catherine, but now we have a borg robot named Carlos. It might not have been obvious, but the <code class="highlighter-rouge">nextBoolean</code> calls we were making had the side effect of mutating internal RNG state, and we were depending on that behavior.</p>
 
@@ -71,31 +66,28 @@
 
 <p>We’ll use a simple RNG that can generate pseudorandom <code class="highlighter-rouge">Long</code> values based only on the previous “seed” value and some carefully chosen constants. You don’t need to understand the details of this implementation for the purposes of this example, but if you’d like to know more, this is Knuth’s 64-bit <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Seed</span><span class="o">(</span><span class="n">long</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Seed</span><span class="o">(</span><span class="n">long</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">next</span> <span class="k">=</span> <span class="nc">Seed</span><span class="o">(</span><span class="n">long</span> <span class="o">*</span> <span class="mi">6364136223846793005L</span> <span class="o">+</span> <span class="mi">1442695040888963407L</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Instead of mutating the existing <code class="highlighter-rouge">long</code> value, calling <code class="highlighter-rouge">next</code> returns a <em>new</em> <code class="highlighter-rouge">Seed</code> instance with an updated <code class="highlighter-rouge">long</code> value.</p>
 
 <p>Since the RNG isn’t updating state internally, we will need to keep track of state outside of the RNG. When we call <code class="highlighter-rouge">nextBoolean</code> we will want it to return a <code class="highlighter-rouge">Boolean</code> as it did before, but we will also want it to return an updated <code class="highlighter-rouge">Seed</code> that we can use to generate our next random value.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  <span class="k">def</span> <span class="n">nextBoolean</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Seed</span><span class="o">,</span> <span class="kt">Boolean</span><span class="o">)</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code>  <span class="k">def</span> <span class="n">nextBoolean</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Seed</span><span class="o">,</span> <span class="kt">Boolean</span><span class="o">)</span> <span class="k">=</span>
     <span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">next</span><span class="o">,</span> <span class="n">seed</span><span class="o">.</span><span class="n">long</span> <span class="o">&gt;=</span> <span class="mi">0L</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Similarly, <code class="highlighter-rouge">nextLong</code> will return an updated <code class="highlighter-rouge">Seed</code> along with a <code class="highlighter-rouge">Long</code> value.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  <span class="k">def</span> <span class="n">nextLong</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Seed</span><span class="o">,</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code>  <span class="k">def</span> <span class="n">nextLong</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Seed</span><span class="o">,</span> <span class="kt">Long</span><span class="o">)</span> <span class="k">=</span>
     <span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">next</span><span class="o">,</span> <span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now we need to explicitly pass in the updated state as we generate each new value.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">createRobot</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="kt">Robot</span> <span class="o">=</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">createRobot</span><span class="o">(</span><span class="n">seed</span><span class="k">:</span> <span class="kt">Seed</span><span class="o">)</span><span class="k">:</span> <span class="kt">Robot</span> <span class="o">=</span> <span class="o">{</span>
   <span class="k">val</span> <span class="o">(</span><span class="n">seed1</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="k">=</span> <span class="n">nextLong</span><span class="o">(</span><span class="n">seed</span><span class="o">)</span>
   <span class="k">val</span> <span class="o">(</span><span class="n">seed2</span><span class="o">,</span> <span class="n">sentient</span><span class="o">)</span> <span class="k">=</span> <span class="n">nextBoolean</span><span class="o">(</span><span class="n">seed1</span><span class="o">)</span>
   <span class="k">val</span> <span class="o">(</span><span class="n">seed3</span><span class="o">,</span> <span class="n">isCatherine</span><span class="o">)</span> <span class="k">=</span> <span class="n">nextBoolean</span><span class="o">(</span><span class="n">seed2</span><span class="o">)</span>
@@ -106,13 +98,11 @@
 <span class="o">}</span>
 
 <span class="k">val</span> <span class="n">initialSeed</span> <span class="k">=</span> <span class="nc">Seed</span><span class="o">(</span><span class="mi">13L</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">)</span>
 <span class="c1">// robot: Robot = Robot(13,false,Catherine,replicant)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Now it is a bit more obvious that we can’t extract the three <code class="highlighter-rouge">nextBoolean</code> calls into a single variable, because we are passing each one a different seed value.</p>
 
@@ -126,23 +116,21 @@
 
 <p>Let’s write a new version of <code class="highlighter-rouge">nextLong</code> using <code class="highlighter-rouge">State</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.State</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.State</span>
 
 <span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span><span class="o">(</span><span class="n">seed</span> <span class="k">=&gt;</span>
   <span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">next</span><span class="o">,</span> <span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">map</code> method on <code class="highlighter-rouge">State</code> allows us to transform the <code class="highlighter-rouge">A</code> value without affecting the <code class="highlighter-rouge">S</code> (state) value. This is perfect for implementing <code class="highlighter-rouge">nextBoolean</code> in terms of <code class="highlighter-rouge">nextLong</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">nextBoolean</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="n">nextLong</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">long</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">nextBoolean</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="n">nextLong</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">long</span> <span class="k">=&gt;</span>
   <span class="n">long</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">flatMap</code> method on <code class="highlighter-rouge">State[S, A]</code> lets you use the result of one <code class="highlighter-rouge">State</code> in a subsequent <code class="highlighter-rouge">State</code>. The updated state (<code class="highlighter-rouge">S</code>) after the first call is passed into the second call. These <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">map</code> methods allow us to use <code class="highlighter-rouge">State</code> in for-comprehensions:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">createRobot</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Robot</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">createRobot</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Robot</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">for</span> <span class="o">{</span>
     <span class="n">id</span> <span class="k">&lt;-</span> <span class="n">nextLong</span>
     <span class="n">sentient</span> <span class="k">&lt;-</span> <span class="n">nextBoolean</span>
@@ -151,27 +139,24 @@
     <span class="n">isReplicant</span> <span class="k">&lt;-</span> <span class="n">nextBoolean</span>
     <span class="n">model</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isReplicant</span><span class="o">)</span> <span class="s">"replicant"</span> <span class="k">else</span> <span class="s">"borg"</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="nc">Robot</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">sentient</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">model</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>At this point, we have not yet created a robot; we have written instructions for creating a robot. We need to pass in an initial seed value, and then we can call <code class="highlighter-rouge">value</code> to actually create the robot:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="o">(</span><span class="n">finalState</span><span class="o">,</span> <span class="n">robot</span><span class="o">)</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="o">(</span><span class="n">finalState</span><span class="o">,</span> <span class="n">robot</span><span class="o">)</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// finalState: Seed = Seed(2999987205171331217)
 // robot: Robot = Robot(13,false,Catherine,replicant)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>If we only care about the robot and not the final state, then we can use <code class="highlighter-rouge">runA</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">runA</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">runA</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// robot: Robot = Robot(13,false,Catherine,replicant)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>The <code class="highlighter-rouge">createRobot</code> implementation reads much like the imperative code we initially wrote for the mutable RNG. However, this implementation is free of mutation and side-effects. Since this code is referentially transparent, we can perform the refactoring that we tried earlier without affecting the result:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">createRobot</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Robot</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">createRobot</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Seed</span>, <span class="kt">Robot</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">val</span> <span class="n">b</span> <span class="k">=</span> <span class="n">nextBoolean</span>
 
   <span class="k">for</span> <span class="o">{</span>
@@ -183,32 +168,29 @@
     <span class="n">model</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isReplicant</span><span class="o">)</span> <span class="s">"replicant"</span> <span class="k">else</span> <span class="s">"borg"</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="nc">Robot</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">sentient</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">model</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">runA</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">robot</span> <span class="k">=</span> <span class="n">createRobot</span><span class="o">.</span><span class="n">runA</span><span class="o">(</span><span class="n">initialSeed</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// robot: Robot = Robot(13,false,Catherine,replicant)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>This may seem surprising, but keep in mind that <code class="highlighter-rouge">b</code> isn’t simply a <code class="highlighter-rouge">Boolean</code>. It is a function that takes a seed and <em>returns</em> a <code class="highlighter-rouge">Boolean</code>, threading state along the way. Since the seed that is being passed into <code class="highlighter-rouge">b</code> changes from line to line, so do the returned <code class="highlighter-rouge">Boolean</code> values.</p>
 
 <h2 id="interleaving-effects">Interleaving effects</h2>
 
 <p>Let’s expand on the above example; assume that our random number generator works asynchronously by fetching results from a remote server:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">AsyncSeed</span><span class="o">(</span><span class="n">long</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">next</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">AsyncSeed</span><span class="o">(</span><span class="n">long</span> <span class="o">*</span> <span class="mi">6364136223846793005L</span> <span class="o">+</span> <span class="mi">1442695040888963407L</span><span class="o">))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Using a proper <code class="highlighter-rouge">IO</code> data type would be ideal, but <code class="highlighter-rouge">Future</code> serves our purpose here.</p>
 
 <p>We now need to redefine our <code class="highlighter-rouge">nextLong</code> action:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">AsyncSeed</span>, <span class="kt">Future</span><span class="o">[</span><span class="kt">Long</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">seed</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">AsyncSeed</span>, <span class="kt">Future</span><span class="o">[</span><span class="kt">Long</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">seed</span> <span class="k">=&gt;</span>
   <span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">next</span><span class="o">,</span> <span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">)</span>
 <span class="o">}</span>
 <span class="c1">// &lt;console&gt;:18: error: type mismatch;
@@ -221,11 +203,10 @@
 //  required: scala.concurrent.Future[Long]
 //          (seed.next, seed.long)
 //                           ^
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Oops! That doesn’t work: <code class="highlighter-rouge">State[S, A]</code> requires that we return a pure next <code class="highlighter-rouge">S</code> in the <code class="highlighter-rouge">State.apply</code> constructor. We could define <code class="highlighter-rouge">nextLong</code> as <code class="highlighter-rouge">State[Future[AsyncSeed], Future[Long]]</code>, but that would get us into even more trouble:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Future</span><span class="o">[</span><span class="kt">AsyncSeed</span><span class="o">]</span>, <span class="kt">Future</span><span class="o">[</span><span class="kt">Long</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">seedF</span> <span class="k">=&gt;</span> 
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">Future</span><span class="o">[</span><span class="kt">AsyncSeed</span><span class="o">]</span>, <span class="kt">Future</span><span class="o">[</span><span class="kt">Long</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">seedF</span> <span class="k">=&gt;</span> 
   <span class="n">seedF</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">seed</span> <span class="k">=&gt;</span>
     <span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">next</span><span class="o">,</span> <span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">)</span>
   <span class="o">}</span>
@@ -235,29 +216,26 @@
 //  required: (scala.concurrent.Future[AsyncSeed], scala.concurrent.Future[Long])
 //          seedF.map { seed =&gt;
 //                    ^
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>The <code class="highlighter-rouge">seed</code> that <code class="highlighter-rouge">State.apply</code> passes in is now a <code class="highlighter-rouge">Future</code>, so we must map it. But we can’t return a <code class="highlighter-rouge">Future[(Future[S], [A])]</code>; so what do we do?</p>
 
 <p>Luckily, <code class="highlighter-rouge">State[S, A]</code> is an alias for <code class="highlighter-rouge">StateT[Eval, S, A]</code> - a monad transformer defined as <code class="highlighter-rouge">StateT[F[_], S, A]</code>. This data type represents computations of the form <code class="highlighter-rouge">S =&gt; F[(S, A)]</code>.</p>
 
 <p>If we plug in our concrete types, we get <code class="highlighter-rouge">AsyncSeed =&gt; Future[(AsyncSeed, A)]</code>, which is something we can work with:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.StateT</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.StateT</span>
 <span class="k">import</span> <span class="nn">cats.instances.future._</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 
 <span class="k">val</span> <span class="n">nextLong</span><span class="k">:</span> <span class="kt">StateT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">AsyncSeed</span>, <span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nc">StateT</span> <span class="o">{</span> <span class="n">seed</span> <span class="k">=&gt;</span>
   <span class="n">seed</span><span class="o">.</span><span class="n">next</span> <span class="n">zip</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="n">seed</span><span class="o">.</span><span class="n">long</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now, what do we get back if we invoke <code class="highlighter-rouge">run</code> on our <code class="highlighter-rouge">nextLong</code> action?</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">nextLong</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">AsyncSeed</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">nextLong</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">AsyncSeed</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
 <span class="c1">// res0: scala.concurrent.Future[(AsyncSeed, Long)] = Future(&lt;not completed&gt;)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Since every intermediate computation returns a <code class="highlighter-rouge">Future</code>, the composite computation returns a <code class="highlighter-rouge">Future</code> as well. To summarize, <code class="highlighter-rouge">StateT[F[_], S, A]</code> allows us to interleave effects of type <code class="highlighter-rouge">F[_]</code> in the computations wrapped by it.</p>
 
@@ -266,7 +244,7 @@
 <h2 id="changing-states">Changing States</h2>
 
 <p>More complex, stateful computations cannot be easily modeled by a single type. For example, let’s try to model a door’s state:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DoorState</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DoorState</span>
 <span class="k">case</span> <span class="k">object</span> <span class="nc">Open</span> <span class="k">extends</span> <span class="nc">DoorState</span>
 <span class="k">case</span> <span class="k">object</span> <span class="nc">Closed</span> <span class="k">extends</span> <span class="nc">DoorState</span>
 
@@ -274,18 +252,16 @@
 
 <span class="k">def</span> <span class="n">open</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">DoorState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
 <span class="k">def</span> <span class="n">close</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">DoorState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We would naturally expect that <code class="highlighter-rouge">open</code> would only operate on doors that are <code class="highlighter-rouge">Closed</code>, and vice-versa. However, to implement these methods currently, we have to pattern-match on the state:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">open</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">DoorState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">doorState</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">open</span><span class="k">:</span> <span class="kt">State</span><span class="o">[</span><span class="kt">DoorState</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span> <span class="o">{</span> <span class="n">doorState</span> <span class="k">=&gt;</span>
   <span class="n">doorState</span> <span class="k">match</span> <span class="o">{</span>
     <span class="k">case</span> <span class="nc">Closed</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">Open</span><span class="o">,</span> <span class="o">())</span>
     <span class="k">case</span> <span class="nc">Open</span>   <span class="k">=&gt;</span> <span class="o">???</span> <span class="c1">// What now?
 </span>  <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This puts us in the awkward situation of deciding how to handle invalid states; what’s the appropriate behavior? Should we just leave the door open? Should we return a failure? That would mean that our return type needs to be modified.</p>
 
@@ -294,16 +270,15 @@
 <p>This data type models a stateful computation of the form <code class="highlighter-rouge">SA =&gt; F[(SB, A)]</code>; that’s a function that receives an initial state of type <code class="highlighter-rouge">SA</code> and results in a state of type <code class="highlighter-rouge">SB</code> and a result of type <code class="highlighter-rouge">A</code>, using an effect of <code class="highlighter-rouge">F</code>.</p>
 
 <p>So, let’s model our typed door:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
 <span class="k">import</span> <span class="nn">cats.data.IndexedStateT</span>
 
 <span class="k">def</span> <span class="n">open</span><span class="k">:</span> <span class="kt">IndexedStateT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">Closed.</span><span class="k">type</span>, <span class="kt">Open.</span><span class="k">type</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IndexedStateT</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="nc">Open</span><span class="o">)</span>
 <span class="k">def</span> <span class="n">close</span><span class="k">:</span> <span class="kt">IndexedStateT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">Open.</span><span class="k">type</span>, <span class="kt">Closed.</span><span class="k">type</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IndexedStateT</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="nc">Closed</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can now reject, at compile time, sequences of <code class="highlighter-rouge">open</code> and <code class="highlighter-rouge">close</code> that are invalid:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">invalid</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">invalid</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">open</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">close</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">close</span>
@@ -318,34 +293,30 @@
 //  required: Unit =&gt; cats.data.IndexedStateT[cats.Eval,Open.type,SC,B]
 //          _ &lt;- open
 //            ^
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>While valid sequences will be accepted:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">valid</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">valid</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">open</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">close</span>
   <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">open</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span>
-<span class="c1">// valid: cats.data.IndexedStateT[cats.Eval,Closed.type,Open.type,Unit] = cats.data.IndexedStateT@16f7bc53
-</span></code></pre>
-</div>
+<span class="c1">// valid: cats.data.IndexedStateT[cats.Eval,Closed.type,Open.type,Unit] = cats.data.IndexedStateT@77c359de
+</span></code></pre></div>
 
 <p>Note that the inferred type of <code class="highlighter-rouge">valid</code> correctly models that this computation can be executed only with an initial <code class="highlighter-rouge">Closed</code> state.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">valid</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Open</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">valid</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Open</span><span class="o">)</span>
 <span class="c1">// &lt;console&gt;:25: error: type mismatch;
 //  found   : Open.type
 //  required: Closed.type
 //        valid.run(Open)
 //                  ^
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">valid</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Closed</span><span class="o">)</span>
-<span class="c1">// res2: cats.Eval[(Open.type, Unit)] = cats.Eval$$anon$6@4486de85
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">valid</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Closed</span><span class="o">)</span>
+<span class="c1">// res2: cats.Eval[(Open.type, Unit)] = cats.Eval$$anon$6@1a96c8d9
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

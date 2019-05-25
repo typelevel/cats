@@ -4,41 +4,36 @@
 effects, e.g. an integer inside an <code class="highlighter-rouge">Either</code>, which in turn is nested inside
 an <code class="highlighter-rouge">Option</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
 <span class="k">import</span> <span class="nn">cats.data.Validated.Valid</span>
 <span class="k">val</span> <span class="n">x</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="mi">123</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This can be quite annoying to work with, as you have to traverse the nested
 structure every time you want to perform a <code class="highlighter-rouge">map</code> or something similar:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">x</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">x</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">))</span>
 <span class="c1">// res0: Option[cats.data.Validated[String,String]] = Some(Valid(123))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p><code class="highlighter-rouge">Nested</code> can help with this by composing the two <code class="highlighter-rouge">map</code> operations into one:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">val</span> <span class="n">nested</span><span class="k">:</span> <span class="kt">Nested</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">Validated</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">?</span><span class="o">]</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="nc">Valid</span><span class="o">(</span><span class="mi">123</span><span class="o">)))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">nested</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">nested</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// res1: Option[cats.data.Validated[String,String]] = Some(Valid(123))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>In a sense, <code class="highlighter-rouge">Nested</code> is similar to monad transformers like <code class="highlighter-rouge">OptionT</code> and
 <code class="highlighter-rouge">EitherT</code>, as it represents the nesting of effects inside each other. But
 <code class="highlighter-rouge">Nested</code> is more general - it does not place any restriction on the type of the
 two nested effects:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Nested</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Nested</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">value</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span>
+</code></pre></div>
 
 <p>Instead, it provides a set of inference rules based on the properties of <code class="highlighter-rouge">F[_]</code>
 and <code class="highlighter-rouge">G[_]</code>. For example:</p>
@@ -64,20 +59,19 @@ slightly adapted)</p>
 
 <p>Say we have an API for creating users:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">UserInfo</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 
 <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span><span class="n">userInfo</span><span class="k">:</span> <span class="kt">UserInfo</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">User</span><span class="o">]]</span> <span class="k">=</span>
   <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="nc">User</span><span class="o">(</span><span class="s">"user 123"</span><span class="o">,</span> <span class="n">userInfo</span><span class="o">.</span><span class="n">name</span><span class="o">,</span> <span class="n">userInfo</span><span class="o">.</span><span class="n">age</span><span class="o">)))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Using <code class="highlighter-rouge">Nested</code> we can write a function that, given a list of <code class="highlighter-rouge">UserInfo</code>s,
 creates a list of <code class="highlighter-rouge">User</code>s:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
 <span class="k">import</span> <span class="nn">cats.Applicative</span>
@@ -91,26 +85,22 @@ creates a list of <code class="highlighter-rouge">User</code>s:</p>
   <span class="nc">UserInfo</span><span class="o">(</span><span class="s">"Alice"</span><span class="o">,</span> <span class="mi">42</span><span class="o">),</span>
   <span class="nc">UserInfo</span><span class="o">(</span><span class="s">"Bob"</span><span class="o">,</span> <span class="mi">99</span><span class="o">)</span>
 <span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">createUsers</span><span class="o">(</span><span class="n">userInfos</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">createUsers</span><span class="o">(</span><span class="n">userInfos</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
 <span class="c1">// res2: Either[List[String],List[User]] = Right(List(User(user 123,Alice,42), User(user 123,Bob,99)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Note that if we hadn’t used <code class="highlighter-rouge">Nested</code>, the behaviour of our function would have
 been different, resulting in a different return type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">createUsersNotNested</span><span class="o">(</span><span class="n">userInfos</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">UserInfo</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">User</span><span class="o">]]]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">createUsersNotNested</span><span class="o">(</span><span class="n">userInfos</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">UserInfo</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>, <span class="kt">User</span><span class="o">]]]</span> <span class="k">=</span>
   <span class="n">userInfos</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">createUser</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">createUsersNotNested</span><span class="o">(</span><span class="n">userInfos</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">createUsersNotNested</span><span class="o">(</span><span class="n">userInfos</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
 <span class="c1">// res3: List[Either[List[String],User]] = List(Right(User(user 123,Alice,42)), Right(User(user 123,Bob,99)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

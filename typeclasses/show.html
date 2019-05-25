@@ -3,19 +3,17 @@
 <p>Show is an alternative to the Java <code class="highlighter-rouge">toString</code> method.
 It is defined by a single function <code class="highlighter-rouge">show</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">show</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">show</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
+</code></pre></div>
 
 <p>You might be wondering why you would want to use this, considering <code class="highlighter-rouge">toString</code> already serves the same purpose and case classes already provide sensible implementations for <code class="highlighter-rouge">toString</code>.
 The difference is that <code class="highlighter-rouge">toString</code> is defined on <code class="highlighter-rouge">Any</code>(Java’s <code class="highlighter-rouge">Object</code>) and can therefore be called on anything, not just case classes.
 Most often, this is unwanted behaviour, as the standard implementation of <code class="highlighter-rouge">toString</code> on non case classes is mostly gibberish.
 Consider the following example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="k">new</span> <span class="o">{}).</span><span class="n">toString</span>
-<span class="c1">// res0: String = $anon$1@1795e2e5
-</span></code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="o">(</span><span class="k">new</span> <span class="o">{}).</span><span class="n">toString</span>
+<span class="c1">// res0: String = $anon$1@43f8b19a
+</span></code></pre></div>
 
 <p>The fact that this code compiles is a design flaw of the Java API.
 We want to make things like this impossible, by offering the <code class="highlighter-rouge">toString</code> equivalent as a type class, instead of the root of the class hierarchy.
@@ -23,32 +21,30 @@ In short, <code class="highlighter-rouge">Show</code> allows us to only have Str
 
 <p>To make things easier, cats defines a few helper functions to make creating <code class="highlighter-rouge">Show</code> instances easier.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="cm">/** creates an instance of Show using the provided function */</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="cm">/** creates an instance of Show using the provided function */</span>
 <span class="k">def</span> <span class="n">show</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 
 <span class="cm">/** creates an instance of Show using object toString */</span>
 <span class="k">def</span> <span class="n">fromToString</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>These can be used like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Show</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Show</span>
 <span class="c1">// import cats.Show
 </span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Person</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 <span class="c1">// defined class Person
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showPerson</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Person</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">person</span> <span class="k">=&gt;</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
-<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$1@12d4e22d
+<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$1@7beb573f
 </span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Department</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="c1">// defined class Department
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showDep</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Department</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">fromToString</span>
-<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$2@523b0505
-</span></code></pre>
-</div>
+<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$2@c8f2d93
+</span></code></pre></div>
 
 <p>This still may not seem useful to you, because case classes already automatically implement <code class="highlighter-rouge">toString</code>, while <code class="highlighter-rouge">show</code> would have to be implemented manually for each case class.
 Thankfully with the help of a small library called <a href="https://github.com/milessabin/kittens">kittens</a>a lot of type class instances including <code class="highlighter-rouge">Show</code> can be derived automatically!</p>
@@ -56,7 +52,7 @@ Thankfully with the help of a small library called <a href="https://github.com/m
 <p>Cats also offers <code class="highlighter-rouge">Show</code> syntax to make working with it easier.
 This includes the <code class="highlighter-rouge">show</code> method which can be called on anything with a <code class="highlighter-rouge">Show</code> instance in scope:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="k">val</span> <span class="n">john</span> <span class="k">=</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="mi">31</span><span class="o">)</span>
@@ -64,18 +60,16 @@ This includes the <code class="highlighter-rouge">show</code> method which can b
 </span>
 <span class="n">john</span><span class="o">.</span><span class="n">show</span>
 <span class="c1">// res1: String = John
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>It also includes a String interpolator, which works just like the standard <code class="highlighter-rouge">s"..."</code> interpolator, but uses <code class="highlighter-rouge">Show</code> instead of <code class="highlighter-rouge">toString</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">engineering</span> <span class="k">=</span> <span class="nc">Department</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Engineering"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">engineering</span> <span class="k">=</span> <span class="nc">Department</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Engineering"</span><span class="o">)</span>
 <span class="c1">// engineering: Department = Department(2,Engineering)
 </span>
 <span class="n">show</span><span class="s">"$john works at $engineering"</span>
 <span class="c1">// res2: String = John works at Department(2,Engineering)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

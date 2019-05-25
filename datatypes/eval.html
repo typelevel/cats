@@ -18,7 +18,7 @@ A normal <code class="highlighter-rouge">val</code> evaluates eagerly and also m
 
 <p>First of the strategies is eager evaluation, we can construct an <code class="highlighter-rouge">Eval</code> eagerly using <code class="highlighter-rouge">Eval.now</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
 <span class="c1">// import cats.Eval
 </span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
@@ -30,25 +30,23 @@ A normal <code class="highlighter-rouge">val</code> evaluates eagerly and also m
 <span class="o">}</span>
 <span class="c1">// Running expensive calculation...
 // eager: cats.Eval[Int] = Now(7)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We can run the computation using the given evaluation strategy anytime by using the <code class="highlighter-rouge">value</code> method.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">eager</span><span class="o">.</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">eager</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// res0: Int = 7
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h4 id="evallater">Eval.later</h4>
 
 <p>If we want lazy evaluation, we can use <code class="highlighter-rouge">Eval.later</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">lazyEval</span> <span class="k">=</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">lazyEval</span> <span class="k">=</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
   <span class="n">println</span><span class="o">(</span><span class="s">"Running expensive calculation..."</span><span class="o">)</span>
   <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span>
 <span class="o">}</span>
-<span class="c1">// lazyEval: cats.Eval[Int] = cats.Later@4febc3b6
+<span class="c1">// lazyEval: cats.Eval[Int] = cats.Later@7f42f85c
 </span>
 <span class="n">lazyEval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Running expensive calculation...
@@ -56,8 +54,7 @@ A normal <code class="highlighter-rouge">val</code> evaluates eagerly and also m
 </span>
 <span class="n">lazyEval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// res2: Int = 7
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Notice that “Running expensive calculation” is printed only once, since the value was memoized internally.
 <code class="highlighter-rouge">Eval.later</code> is different to using a <code class="highlighter-rouge">lazy val</code> in a few different ways.
@@ -68,11 +65,11 @@ Secondly, when <code class="highlighter-rouge">lazy val</code>s are evaluated, i
 
 <p>If we want lazy evaluation, but without memoization akin to <code class="highlighter-rouge">Function0</code>, we can use <code class="highlighter-rouge">Eval.always</code></p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">always</span> <span class="k">=</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">always</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">always</span> <span class="k">=</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">always</span> <span class="o">{</span>
   <span class="n">println</span><span class="o">(</span><span class="s">"Running expensive calculation..."</span><span class="o">)</span>
   <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span>
 <span class="o">}</span>
-<span class="c1">// always: cats.Eval[Int] = cats.Always@4be106cc
+<span class="c1">// always: cats.Eval[Int] = cats.Always@289caec2
 </span>
 <span class="n">always</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Running expensive calculation...
@@ -81,8 +78,7 @@ Secondly, when <code class="highlighter-rouge">lazy val</code>s are evaluated, i
 <span class="n">always</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Running expensive calculation...
 // res4: Int = 7
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Here we can see, that the expression is evaluated every time we call <code class="highlighter-rouge">.value</code>.</p>
 
@@ -92,7 +88,7 @@ Secondly, when <code class="highlighter-rouge">lazy val</code>s are evaluated, i
 You can see one such usage when looking at the <code class="highlighter-rouge">foldRight</code> method found in <a href="../typeclasses/foldable.html"><code class="highlighter-rouge">Foldable</code></a>.
 Another great example are mutual tail-recursive calls:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">MutualRecursion</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">object</span> <span class="nc">MutualRecursion</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">even</span><span class="o">(</span><span class="n">n</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span>
     <span class="nc">Eval</span><span class="o">.</span><span class="n">always</span><span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="o">).</span><span class="n">flatMap</span> <span class="o">{</span>
       <span class="k">case</span> <span class="kc">true</span> <span class="k">=&gt;</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
@@ -109,8 +105,7 @@ Another great example are mutual tail-recursive calls:</p>
 </span>
 <span class="nc">MutualRecursion</span><span class="o">.</span><span class="n">odd</span><span class="o">(</span><span class="mi">199999</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// res5: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Because <code class="highlighter-rouge">Eval</code> guarantees stack-safety, we can chain a lot of computations together using <code class="highlighter-rouge">flatMap</code> without fear of blowing up the stack.</p>
 

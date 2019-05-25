@@ -5,12 +5,11 @@
 <p>One of the most useful functions when working with <code class="highlighter-rouge">scala.concurrent.Future</code> is <code class="highlighter-rouge">Future.traverse</code>, presented below
 in a simplified form.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">ExecutionContext</span><span class="o">,</span> <span class="nc">Future</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">ExecutionContext</span><span class="o">,</span> <span class="nc">Future</span><span class="o">}</span>
 
 <span class="k">def</span> <span class="n">traverseFuture</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Future</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">ec</span><span class="k">:</span> <span class="kt">ExecutionContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span>
   <span class="nc">Future</span><span class="o">.</span><span class="n">traverse</span><span class="o">(</span><span class="n">as</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p><code class="highlighter-rouge">traverseFuture</code> takes a <code class="highlighter-rouge">List[A]</code> and for each <code class="highlighter-rouge">A</code> in the list applies the function <code class="highlighter-rouge">f</code> to it, gathering results
 as it goes along. <code class="highlighter-rouge">f</code> is often referred to as an <em>effectful</em> function, where the <code class="highlighter-rouge">Future</code> effect is running the computation

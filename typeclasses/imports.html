@@ -2,30 +2,27 @@
 
 <p>The easiest approach to cats imports is to import everything that’s commonly needed:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">cats._</code> import brings in quite a few <a href="http://typelevel.org/cats/typeclasses.html">type classes</a> (similar to interfaces) such as <a href="http://typelevel.org/cats/typeclasses/monad.html">Monad</a>, <a href="http://typelevel.org/cats/typeclasses/semigroup.html">Semigroup</a>, and <a href="http://typelevel.org/cats/typeclasses/foldable.html">Foldable</a>. Instead of the entire <code class="highlighter-rouge">cats</code> package, you can import only the types that you need, for example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
 <span class="k">import</span> <span class="nn">cats.Semigroup</span>
 <span class="k">import</span> <span class="nn">cats.Foldable</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">cats.data._</code>, import brings in data structures such as <a href="http://typelevel.org/cats/datatypes/validated.html">Validated</a> and <a href="http://typelevel.org/cats/datatypes/state.html">State</a>. Instead of the entire <code class="highlighter-rouge">cats.data</code> package, you can import only the types that you need, for example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Validated</span>
 <span class="k">import</span> <span class="nn">cats.data.State</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">cats.implicits._</code> import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have <code class="highlighter-rouge">Monad[List]</code> and <code class="highlighter-rouge">Semigroup[Int]</code> instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods such as right-biased <code class="highlighter-rouge">Either</code> combinators:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// cats adds right-biased combinators to the standard library's Either
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="c1">// cats adds right-biased combinators to the standard library's Either
 </span><span class="k">val</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
 <span class="c1">// e: Either[String,Int] = Right(3)
 </span>
@@ -38,12 +35,11 @@
 </span>
 <span class="n">o</span><span class="o">.</span><span class="n">orEmpty</span>
 <span class="c1">// res3: String = ""
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>If you’d like to import à la carte, you can do so, by importing from <code class="highlighter-rouge">cats.instances</code> for the type class instances and <code class="highlighter-rouge">cats.syntax</code> for syntax enrichment.
 For example, if you’d like to import the <code class="highlighter-rouge">Monoid</code> instance for <code class="highlighter-rouge">String</code> and the corresponding syntax:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.string._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.instances.string._</span>
 <span class="c1">// import cats.instances.string._
 </span>
 <span class="k">import</span> <span class="nn">cats.syntax.monoid._</span>
@@ -51,8 +47,7 @@ For example, if you’d like to import the <code class="highlighter-rouge">Monoi
 </span>
 <span class="s">"Hello, "</span> <span class="o">|+|</span> <span class="s">"World!"</span>
 <span class="c1">// res4: String = Hello, World!
-</span></code></pre>
-</div>
+</span></code></pre></div>
 <p>The first import pulls the <code class="highlighter-rouge">Semigroup</code> instance for String into the scope, while the second import adds the <code class="highlighter-rouge">|+|</code> syntax.</p>
 
 <p>You can also import all syntax or all instances by importing <code class="highlighter-rouge">cats.syntax.all._</code> or <code class="highlighter-rouge">cats.instances.all._</code> respectively.</p>
@@ -60,7 +55,7 @@ For example, if you’d like to import the <code class="highlighter-rouge">Monoi
 <p>For data types included in cats (i.e. data structure from the <code class="highlighter-rouge">cats.data</code> package), all type class instances are bundled with their implementation and therefore do not need to be imported separately.
 For example, if we wanted to import <code class="highlighter-rouge">NonEmptyList</code> from the <code class="highlighter-rouge">cats.data</code> package and use its <code class="highlighter-rouge">SemigroupK</code> instance, we would not need to specifically import the instance:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
 <span class="c1">// import cats.data.NonEmptyList
 </span>
 <span class="k">import</span> <span class="nn">cats.syntax.semigroupk._</span>
@@ -68,21 +63,19 @@ For example, if we wanted to import <code class="highlighter-rouge">NonEmptyList
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span> <span class="o">&lt;+&gt;</span> <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">)</span>
 <span class="c1">// res5: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p><strong>Note</strong>: Beware that if you import a type class instance or its syntax twice, you will receive conflicting implicits with a less than helpful error message.
 This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using <code class="highlighter-rouge">cats.syntax.all._</code> or <code class="highlighter-rouge">cats.implicits._</code> together with a more specific import like <code class="highlighter-rouge">cats.syntax.option._</code> or <code class="highlighter-rouge">cats.instances.either._</code>.
 Below is an example of this phenomenon:</p>
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.instances.all._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.instances.all._</span>
 <span class="k">import</span> <span class="nn">cats.syntax.semigroup._</span>
 <span class="k">val</span> <span class="n">x</span> <span class="k">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">|+|</span> <span class="mi">1</span>
 
 <span class="c1">//now we also need access to isEmpty from Monoid
 </span><span class="k">import</span> <span class="nn">cats.syntax.monoid._</span>
 <span class="o">(</span><span class="n">x</span> <span class="o">|+|</span> <span class="mi">1</span><span class="o">).</span><span class="n">isEmpty</span> <span class="c1">//error: value |+| is not a member of Int
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Compilation fails on the second invocation of <code class="highlighter-rouge">|+|</code> because we now have conflicting implicits from <code class="highlighter-rouge">Monoid</code> and <code class="highlighter-rouge">Semigroup</code>.</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({

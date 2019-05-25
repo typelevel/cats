@@ -18,17 +18,16 @@
 
 <p>Suppose we want to write a function <code class="highlighter-rouge">meanAndVar</code>, that takes a <code class="highlighter-rouge">List[Int]</code> and returns the pair of mean and variance. To do so, we first define a <code class="highlighter-rouge">combine</code> function that combines two arrows into a single arrow, which takes an input and processes two copies of it with two arrows. <code class="highlighter-rouge">combine</code> can be defined in terms of <code class="highlighter-rouge">Arrow</code> operations <code class="highlighter-rouge">lift</code>, <code class="highlighter-rouge">&gt;&gt;&gt;</code> and <code class="highlighter-rouge">***</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.arrow.Arrow</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.arrow.Arrow</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">def</span> <span class="n">combine</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span>, <span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Arrow</span>, <span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fab</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">fac</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">C</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="o">(</span><span class="kt">B</span>, <span class="kt">C</span><span class="o">)]</span> <span class="k">=</span>
   <span class="nc">Arrow</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">lift</span><span class="o">((</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span> <span class="o">&gt;&gt;&gt;</span> <span class="o">(</span><span class="n">fab</span> <span class="o">***</span> <span class="n">fac</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can then create functions <code class="highlighter-rouge">mean: List[Int] =&gt; Double</code>, <code class="highlighter-rouge">variance: List[Int] =&gt; Double</code> and <code class="highlighter-rouge">meanAndVar: List[Int] =&gt; (Double, Double)</code> using the <code class="highlighter-rouge">combine</code> method and <code class="highlighter-rouge">Arrow</code> operations:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">mean</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">mean</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span>
     <span class="n">combine</span><span class="o">((</span><span class="k">_:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]).</span><span class="n">sum</span><span class="o">,</span> <span class="o">(</span><span class="k">_:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]).</span><span class="n">size</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="o">{</span><span class="k">case</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">toDouble</span> <span class="o">/</span> <span class="n">y</span><span class="o">}</span>
 
 <span class="k">val</span> <span class="n">variance</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span>
@@ -36,21 +35,18 @@
 </span>  <span class="n">combine</span><span class="o">(((</span><span class="k">_:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]).</span><span class="n">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">))</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">mean</span><span class="o">,</span> <span class="n">mean</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="o">{</span><span class="k">case</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="o">}</span>
 
 <span class="k">val</span> <span class="n">meanAndVar</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nc">Double</span><span class="o">,</span> <span class="nc">Double</span><span class="o">)</span> <span class="k">=</span> <span class="n">combine</span><span class="o">(</span><span class="n">mean</span><span class="o">,</span> <span class="n">variance</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">meanAndVar</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">meanAndVar</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">))</span>
 <span class="c1">// res0: (Double, Double) = (2.5,1.25)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Of course, a more natural way to implement <code class="highlighter-rouge">mean</code> and <code class="highlighter-rouge">variance</code> would be:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">mean2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="n">xs</span> <span class="k">=&gt;</span> <span class="n">xs</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">toDouble</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">mean2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="n">xs</span> <span class="k">=&gt;</span> <span class="n">xs</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">toDouble</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span>
 
 <span class="k">val</span> <span class="n">variance2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Double</span> <span class="k">=</span> <span class="n">xs</span> <span class="k">=&gt;</span> <span class="n">mean2</span><span class="o">(</span><span class="n">xs</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">))</span> <span class="o">-</span> <span class="n">scala</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="o">(</span><span class="n">mean2</span><span class="o">(</span><span class="n">xs</span><span class="o">),</span> <span class="mf">2.0</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>However, <code class="highlighter-rouge">Arrow</code> methods are more general and provide a common structure for type constructors that have <code class="highlighter-rouge">Arrow</code> instances. They are also a more abstract way of stitching computations together.</p>
 
@@ -60,65 +56,59 @@
 
 <p>Suppose you want to take a <code class="highlighter-rouge">List[Int]</code>, and return the sum of the first and the last element (if exists). To do so, we can create two <code class="highlighter-rouge">Kleisli</code>s that find the <code class="highlighter-rouge">headOption</code> and <code class="highlighter-rouge">lastOption</code> of a <code class="highlighter-rouge">List[Int]</code>, respectively:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Kleisli</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Kleisli</span>
 
 <span class="k">val</span> <span class="n">headK</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">((</span><span class="k">_:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]).</span><span class="n">headOption</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">lastK</span> <span class="k">=</span> <span class="nc">Kleisli</span><span class="o">((</span><span class="k">_:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]).</span><span class="n">lastOption</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>With <code class="highlighter-rouge">headK</code> and <code class="highlighter-rouge">lastK</code>, we can obtain the <code class="highlighter-rouge">Kleisli</code> arrow we want by combining them, and composing it with <code class="highlighter-rouge">_ + _</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">headPlusLast</span> <span class="k">=</span> <span class="n">combine</span><span class="o">(</span><span class="n">headK</span><span class="o">,</span> <span class="n">lastK</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">?</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">lift</span><span class="o">(((</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)).</span><span class="n">tupled</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">headPlusLast</span> <span class="k">=</span> <span class="n">combine</span><span class="o">(</span><span class="n">headK</span><span class="o">,</span> <span class="n">lastK</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">Kleisli</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">?</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">lift</span><span class="o">(((</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="k">_:</span> <span class="kt">Int</span><span class="o">)).</span><span class="n">tupled</span><span class="o">)</span>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">headPlusLast</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">8</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">headPlusLast</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">8</span><span class="o">))</span>
 <span class="c1">// res1: Option[Int] = Some(10)
 </span>
 <span class="n">headPlusLast</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Nil</span><span class="o">)</span>
 <span class="c1">// res2: Option[Int] = None
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="fancyfunction"><code class="highlighter-rouge">FancyFunction</code></h3>
 
 <p>In this example let’s create our own <code class="highlighter-rouge">Arrow</code>. We shall create a fancy version of <code class="highlighter-rouge">Function1</code> called <code class="highlighter-rouge">FancyFunction</code>, that is capable of maintaining states. We then create an <code class="highlighter-rouge">Arrow</code> instance for <code class="highlighter-rouge">FancyFunction</code> and use it to compute the moving average of a list of numbers.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="o">(</span><span class="nc">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">B</span><span class="o">))</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">run</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="o">(</span><span class="nc">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">B</span><span class="o">))</span>
+</code></pre></div>
 
 <p>That is, given an <code class="highlighter-rouge">A</code>, it not only returns a <code class="highlighter-rouge">B</code>, but also returns a new <code class="highlighter-rouge">FancyFunction[A, B]</code>. This sounds similar to the <code class="highlighter-rouge">State</code> monad (which returns a result and a new <code class="highlighter-rouge">State</code> from an initial <code class="highlighter-rouge">State</code>), and indeed, <code class="highlighter-rouge">FancyFunction</code> can be used to perform stateful transformations.</p>
 
 <p>To run a stateful computation using a <code class="highlighter-rouge">FancyFunction</code> on a list of inputs, and collect the output into another list, we can define the following <code class="highlighter-rouge">runList</code> helper function:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">runList</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">ff</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">as</span> <span class="k">match</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">runList</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">ff</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">],</span> <span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">as</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="n">h</span> <span class="o">::</span> <span class="n">t</span> <span class="k">=&gt;</span>
     <span class="k">val</span> <span class="o">(</span><span class="n">ff2</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">h</span><span class="o">)</span>
     <span class="n">b</span> <span class="o">::</span> <span class="n">runList</span><span class="o">(</span><span class="n">ff2</span><span class="o">,</span> <span class="n">t</span><span class="o">)</span>
   <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="nc">List</span><span class="o">()</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>In <code class="highlighter-rouge">runList</code>, the head element in <code class="highlighter-rouge">List[A]</code> is fed to <code class="highlighter-rouge">ff</code>, and each subsequent element is fed to a <code class="highlighter-rouge">FancyFunction</code> which is generated by running the previous <code class="highlighter-rouge">FancyFunction</code> on the previous element. If we have an <code class="highlighter-rouge">as: List[Int]</code>, and an <code class="highlighter-rouge">avg: FancyFunction[Int, Double]</code> which takes an integer and computes the average of all integers it has seen so far, we can call <code class="highlighter-rouge">runList(avg, as)</code> to get the list of moving average of <code class="highlighter-rouge">as</code>.</p>
 
 <p>Next let’s create an <code class="highlighter-rouge">Arrow</code> instance for <code class="highlighter-rouge">FancyFunction</code> and see how to implement the <code class="highlighter-rouge">avg</code> arrow. To create an <code class="highlighter-rouge">Arrow</code> instance for a type <code class="highlighter-rouge">F[A, B]</code>, the following abstract methods need to be implemented:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def lift[A, B](f: A =&gt; B): F[A, B]
+<div class="highlighter-rouge"><pre class="codehilite"><code>def lift[A, B](f: A =&gt; B): F[A, B]
 
 def id[A]: F[A, A]
 
 def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C]
 
 def first[A, B, C](fa: F[A, B]): F[(A, C), (B, C)]
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Thus the <code class="highlighter-rouge">Arrow</code> instance for <code class="highlighter-rouge">FancyFunction</code> would be:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">arrowInstance</span><span class="k">:</span> <span class="kt">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">arrowInstance</span><span class="k">:</span> <span class="kt">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">]</span> <span class="o">{</span>
 
   <span class="k">override</span> <span class="k">def</span> <span class="n">lift</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FancyFunction</span><span class="o">(</span><span class="n">lift</span><span class="o">(</span><span class="n">f</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">f</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
 
@@ -136,45 +126,39 @@ def first[A, B, C](fa: F[A, B]): F[(A, C), (B, C)]
   <span class="o">}</span>
 <span class="o">}</span>
 
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Once we have an <code class="highlighter-rouge">Arrow[FancyFunction]</code>, we can start to do interesting things with it. First, let’s create a method <code class="highlighter-rouge">accum</code> that returns a <code class="highlighter-rouge">FancyFunction</code>, which accumulates values fed to it using the accumulation function <code class="highlighter-rouge">f</code> and the starting value <code class="highlighter-rouge">b</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">accum</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">b</span><span class="k">:</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FancyFunction</span> <span class="o">{</span><span class="n">a</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">accum</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">b</span><span class="k">:</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">FancyFunction</span> <span class="o">{</span><span class="n">a</span> <span class="k">=&gt;</span>
   <span class="k">val</span> <span class="n">b2</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span>
   <span class="o">(</span><span class="n">accum</span><span class="o">(</span><span class="n">b2</span><span class="o">)(</span><span class="n">f</span><span class="o">),</span> <span class="n">b2</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">runList</span><span class="o">(</span><span class="n">accum</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">runList</span><span class="o">(</span><span class="n">accum</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">0</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">))</span>
 <span class="c1">// res3: List[Int] = List(6, 11, 15, 18, 20, 21)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>To make the aformentioned <code class="highlighter-rouge">avg</code> arrow, we need to keep track of both the count and the sum of the numbers we have seen so far. To do so, we will combine several <code class="highlighter-rouge">FancyFunction</code>s to get the <code class="highlighter-rouge">avg</code> arrow we want.</p>
 
 <p>We first define arrow <code class="highlighter-rouge">sum</code> in terms of <code class="highlighter-rouge">accum</code>, and define arrow <code class="highlighter-rouge">count</code> by composing <code class="highlighter-rouge">_ =&gt; 1</code> with <code class="highlighter-rouge">sum</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.kernel.Monoid</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.kernel.Monoid</span>
 
 <span class="k">def</span> <span class="n">sum</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Monoid</span><span class="o">]</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">accum</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="n">empty</span><span class="o">)(</span><span class="k">_</span> <span class="o">|+|</span> <span class="k">_</span><span class="o">)</span>
 <span class="k">def</span> <span class="n">count</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">].</span><span class="n">lift</span><span class="o">((</span><span class="k">_:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">sum</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Finally, we create the <code class="highlighter-rouge">avg</code> arrow in terms of the arrows we have so far:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">avg</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">avg</span><span class="k">:</span> <span class="kt">FancyFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Double</span><span class="o">]</span> <span class="k">=</span>
   <span class="n">combine</span><span class="o">(</span><span class="n">sum</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="n">count</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="o">&gt;&gt;&gt;</span> <span class="nc">Arrow</span><span class="o">[</span><span class="kt">FancyFunction</span><span class="o">].</span><span class="n">lift</span><span class="o">{</span><span class="k">case</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">toDouble</span> <span class="o">/</span> <span class="n">y</span><span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">runList</span><span class="o">(</span><span class="n">avg</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">1000</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">runList</span><span class="o">(</span><span class="n">avg</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">1000</span><span class="o">))</span>
 <span class="c1">// res4: List[Double] = List(1.0, 5.5, 37.0, 277.75)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

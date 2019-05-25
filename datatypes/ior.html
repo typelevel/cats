@@ -7,13 +7,12 @@ Another similarity to <code class="highlighter-rouge">Either</code> is that <cod
 which means that the <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">flatMap</code> functions will work on the right side of the <code class="highlighter-rouge">Ior</code>, in our case the <code class="highlighter-rouge">B</code> value.
 You can see this in the function signature of <code class="highlighter-rouge">map</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">A</span> <span class="kt">Ior</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="kt">Ior</span> <span class="kt">C</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">A</span> <span class="kt">Ior</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="kt">Ior</span> <span class="kt">C</span>
+</code></pre></div>
 
 <p>We can create <code class="highlighter-rouge">Ior</code> values using <code class="highlighter-rouge">Ior.left</code>, <code class="highlighter-rouge">Ior.right</code> and <code class="highlighter-rouge">Ior.both</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.data._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="k">import</span> <span class="nn">cats.data._</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">right</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">right</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">](</span><span class="mi">3</span><span class="o">)</span>
@@ -24,12 +23,11 @@ You can see this in the function signature of <code class="highlighter-rouge">ma
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">both</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="s">"Warning"</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
 <span class="n">both</span><span class="k">:</span> <span class="kt">cats.data.Ior</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Both</span><span class="o">(</span><span class="nc">Warning</span><span class="o">,</span><span class="mi">3</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Cats also offers syntax enrichment for <code class="highlighter-rouge">Ior</code>. The <code class="highlighter-rouge">leftIor</code> and <code class="highlighter-rouge">rightIor</code> functions can be imported from <code class="highlighter-rouge">cats.syntax.ior._</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">right</span> <span class="k">=</span> <span class="mf">3.</span><span class="n">rightIor</span>
@@ -37,8 +35,7 @@ You can see this in the function signature of <code class="highlighter-rouge">ma
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">left</span> <span class="k">=</span> <span class="s">"Error"</span><span class="o">.</span><span class="n">leftIor</span>
 <span class="n">left</span><span class="k">:</span> <span class="kt">cats.data.Ior</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Nothing</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">Error</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>When we look at the <code class="highlighter-rouge">Monad</code> or <code class="highlighter-rouge">Applicative</code> instances of <code class="highlighter-rouge">Ior</code>, we can see that they actually requires a <code class="highlighter-rouge">Semigroup</code> instance on the left side.
 This is because <code class="highlighter-rouge">Ior</code> will actually accumulate failures on the left side, very similar to how the <a href="validated.html"><code class="highlighter-rouge">Validated</code></a> data type does.
@@ -46,7 +43,7 @@ This means we can accumulate data on the left side while also being able to shor
 For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a “hard error”
 Here’s an example of how we might be able to do that:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span> <span class="nc">NonEmptyChain</span> <span class="k">=&gt;</span> <span class="nc">Nec</span> <span class="o">}</span>
 
 <span class="k">type</span> <span class="kt">Failures</span> <span class="o">=</span> <span class="nc">Nec</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
@@ -77,12 +74,11 @@ Here’s an example of how we might be able to do that:</p>
 <span class="k">def</span> <span class="n">validateUser</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Failures</span> <span class="kt">Ior</span> <span class="kt">User</span> <span class="o">=</span>
   <span class="o">(</span><span class="n">validateUsername</span><span class="o">(</span><span class="n">name</span><span class="o">),</span> <span class="n">validatePassword</span><span class="o">(</span><span class="n">password</span><span class="o">)).</span><span class="n">mapN</span><span class="o">(</span><span class="nc">User</span><span class="o">)</span>
 
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now we’re able to validate user data and also accumulate non-fatal warnings:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"password12"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"password12"</span><span class="o">)</span>
 <span class="n">res0</span><span class="k">:</span> <span class="kt">cats.data.Ior</span><span class="o">[</span><span class="kt">Failures</span>,<span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">User</span><span class="o">(</span><span class="nc">Username</span><span class="o">(</span><span class="nc">John</span><span class="o">),</span><span class="nc">Password</span><span class="o">(</span><span class="n">password12</span><span class="o">)))</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"john.doe"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">)</span>
@@ -90,41 +86,36 @@ Here’s an example of how we might be able to do that:</p>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"jane"</span><span class="o">,</span> <span class="s">"short"</span><span class="o">)</span>
 <span class="n">res2</span><span class="k">:</span> <span class="kt">cats.data.Ior</span><span class="o">[</span><span class="kt">Failures</span>,<span class="kt">User</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="nc">Password</span> <span class="n">too</span> <span class="n">short</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>To extract the values, we can use the <code class="highlighter-rouge">fold</code> method, which expects a function for each case the <code class="highlighter-rouge">Ior</code> can represent:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"john.doe"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">).</span><span class="n">fold</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="n">validateUser</span><span class="o">(</span><span class="s">"john.doe"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">).</span><span class="n">fold</span><span class="o">(</span>
      <span class="o">|</span>   <span class="n">errorNec</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"Error: ${errorNec.head}"</span><span class="o">,</span>
      <span class="o">|</span>   <span class="n">user</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"Success: $user"</span><span class="o">,</span>
      <span class="o">|</span>   <span class="o">(</span><span class="n">warnings</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"Warning: ${user.name.value}; The following warnings occurred: ${warnings.show}"</span>
      <span class="o">|</span> <span class="o">)</span>
 <span class="n">res3</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Warning</span><span class="k">:</span> <span class="kt">john.doe</span><span class="o">;</span> <span class="nc">The</span> <span class="n">following</span> <span class="n">warnings</span> <span class="n">occurred</span><span class="k">:</span> <span class="kt">NonEmptyChain</span><span class="o">(</span><span class="kt">Dot</span> <span class="kt">in</span> <span class="kt">name</span> <span class="kt">is</span> <span class="kt">deprecated</span><span class="o">,</span> <span class="kt">Password</span> <span class="kt">should</span> <span class="kt">be</span> <span class="kt">longer</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 <p>Similar to <a href="validated.html">Validated</a>, there is also a type alias for using a <code class="highlighter-rouge">NonEmptyChain</code> on the left side.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">IorNec</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">type</span> <span class="kt">IorNec</span><span class="o">[</span><span class="kt">B</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">[</span><span class="kt">NonEmptyChain</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.implicits._</span><span class="o">,</span> <span class="n">cats</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="nc">NonEmptyChain</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">cats.implicits._</span><span class="o">,</span> <span class="n">cats</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="nc">NonEmptyChain</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">cats.data.NonEmptyChain</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">left</span><span class="k">:</span> <span class="kt">IorNec</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="s">"Error"</span><span class="o">.</span><span class="n">leftNec</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span>
 <span class="n">left</span><span class="k">:</span> <span class="kt">IorNec</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="nc">Error</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can also convert our <code class="highlighter-rouge">Ior</code> to <code class="highlighter-rouge">Either</code>, <code class="highlighter-rouge">Validated</code> or <code class="highlighter-rouge">Option</code>.
 All of these conversions will discard the left side value if both are available:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="s">"Warning"</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="n">toEither</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="s">"Warning"</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="n">toEither</span>
 <span class="n">res4</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">42</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

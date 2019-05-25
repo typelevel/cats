@@ -4,9 +4,8 @@
 of these parameters. It defines a function <code class="highlighter-rouge">bimap</code>, which allows for mapping over both
 arguments at the same time. Its signature is as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">bimap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span>, <span class="kt">D</span><span class="o">](</span><span class="n">fab</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">,</span> <span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">D</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">D</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">bimap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span>, <span class="kt">D</span><span class="o">](</span><span class="n">fab</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">,</span> <span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">D</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">D</span><span class="o">]</span>
+</code></pre></div>
 
 <h2 id="either-as-a-bifunctor">Either as a Bifunctor</h2>
 
@@ -17,7 +16,7 @@ You also want to react to both possibilities - if there was a failure, you want 
 convert it to your own <code class="highlighter-rouge">DomainError</code>, and if the result was a success, you want to
 convert it to an UNIX timestamp.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">java.time._</span>
 
@@ -25,22 +24,19 @@ convert it to an UNIX timestamp.</p>
 
 <span class="k">def</span> <span class="n">dateTimeFromUser</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">ZonedDateTime</span><span class="o">]</span> <span class="k">=</span> 
   <span class="nc">Right</span><span class="o">(</span><span class="nc">ZonedDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">())</span>  <span class="c1">// Example definition
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">dateTimeFromUser</span><span class="o">.</span><span class="n">bimap</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">dateTimeFromUser</span><span class="o">.</span><span class="n">bimap</span><span class="o">(</span>
   <span class="n">error</span> <span class="k">=&gt;</span> <span class="nc">DomainError</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="n">getMessage</span><span class="o">),</span>
   <span class="n">dateTime</span> <span class="k">=&gt;</span> <span class="n">dateTime</span><span class="o">.</span><span class="n">toEpochSecond</span>
 <span class="o">)</span>
-<span class="c1">// res0: Either[DomainError,Long] = Right(1558635089)
-</span></code></pre>
-</div>
+<span class="c1">// res0: Either[DomainError,Long] = Right(1558812423)
+</span></code></pre></div>
 
 <p><code class="highlighter-rouge">Bifunctor</code> also defines a convenience function called <code class="highlighter-rouge">leftMap</code>, which is defined as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">leftMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fab</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">bimap</span><span class="o">(</span><span class="n">fab</span><span class="o">)(</span><span class="n">f</span><span class="o">,</span> <span class="n">identity</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">leftMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">fab</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">C</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">bimap</span><span class="o">(</span><span class="n">fab</span><span class="o">)(</span><span class="n">f</span><span class="o">,</span> <span class="n">identity</span><span class="o">)</span>
+</code></pre></div>
 
 <p>There is no <code class="highlighter-rouge">rightMap</code> however - use <code class="highlighter-rouge">map</code> instead. The reasoning behind this is that in Cats, the instances of
 <code class="highlighter-rouge">Bifunctor</code> are also mostly instances of <code class="highlighter-rouge">Functor</code>, as it is the case with <code class="highlighter-rouge">Either</code>.</p>
@@ -52,7 +48,7 @@ convert it to an UNIX timestamp.</p>
 <p>Let’s say we have a list of balances and want divide them by the number of months in the lifetime of the account holder. The balances are given in cents.
 A bit contrived, but we want an average contribution per month to the given account. We want the result in dollars per month. The lifetime is given in the number of years the account has been active.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">records</span><span class="k">:</span> <span class="kt">List</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">((</span><span class="mi">450000</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="o">(</span><span class="mi">770000</span><span class="o">,</span> <span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">990000</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">2100</span><span class="o">,</span> <span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">43300</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">records</span><span class="k">:</span> <span class="kt">List</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">((</span><span class="mi">450000</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="o">(</span><span class="mi">770000</span><span class="o">,</span> <span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">990000</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">2100</span><span class="o">,</span> <span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">43300</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="c1">// records: List[(Int, Int)] = List((450000,3), (770000,4), (990000,2), (2100,4), (43300,3))
 </span>
 <span class="k">def</span> <span class="n">calculateContributionPerMonth</span><span class="o">(</span><span class="n">balance</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">lifetime</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">balance</span> <span class="o">/</span> <span class="n">lifetime</span>
@@ -66,8 +62,7 @@ A bit contrived, but we want an average contribution per month to the given acco
       <span class="o">)</span>
     <span class="o">).</span><span class="n">map</span><span class="o">((</span><span class="n">calculateContributionPerMonth</span> <span class="k">_</span><span class="o">).</span><span class="n">tupled</span><span class="o">)</span>
 <span class="c1">// result: List[Int] = List(125, 160, 412, 0, 12)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>As you can see, this instance makes it convenient to process two related pieces of data in independent ways, especially when there is no state relationship between the two until processing is complete.</p>
 

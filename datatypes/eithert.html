@@ -5,7 +5,7 @@
 amount of boilerplate is required to handle errors. For example, consider the
 following program:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.util.Try</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.util.Try</span>
 <span class="c1">// import scala.util.Try
 </span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
@@ -32,8 +32,7 @@ following program:</p>
 </span>
 <span class="n">divisionProgram</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">)</span> <span class="c1">// Left("a is not a number")
 // res1: Either[String,Double] = Left(a is not a number)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Suppose <code class="highlighter-rouge">parseDouble</code> and <code class="highlighter-rouge">divide</code> are rewritten to be asynchronous and return
 <code class="highlighter-rouge">Future[Either[String, Double]]</code> instead. The for-comprehension can no longer be
@@ -41,7 +40,7 @@ used since <code class="highlighter-rouge">divisionProgram</code> must now compo
 which means that the error handling must be performed explicitly to ensure that
 the proper types are returned:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 
 <span class="k">def</span> <span class="n">parseDoubleAsync</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Double</span><span class="o">]]</span> <span class="k">=</span>
@@ -59,8 +58,7 @@ the proper types are returned:</p>
       <span class="o">}</span>
     <span class="o">}</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Clearly, the updated code is less readable and more verbose: the details of the
 program are now mixed with the error handling. In addition, as more <code class="highlighter-rouge">Either</code>s
@@ -75,7 +73,7 @@ it easy to compose <code class="highlighter-rouge">Either</code>s and <code clas
 resulting <code class="highlighter-rouge">EitherT</code> values are then composed using combinators. For example, the
 asynchronous division program can be rewritten as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherT</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.EitherT</span>
 <span class="c1">// import cats.data.EitherT
 </span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
@@ -94,8 +92,7 @@ asynchronous division program can be rewritten as follows:</p>
 </span>
 <span class="n">divisionProgramAsync</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// res3: scala.concurrent.Future[Either[String,Double]] = Future(&lt;not completed&gt;)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Note that when <code class="highlighter-rouge">F</code> is a monad, then <code class="highlighter-rouge">EitherT</code> will also form a monad, allowing
 monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be used in composing <code class="highlighter-rouge">EitherT</code> values.</p>
@@ -106,10 +103,9 @@ monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be
 <code class="highlighter-rouge">B</code>, use <code class="highlighter-rouge">EitherT.leftT</code> and <code class="highlighter-rouge">EitherT.rightT</code> (which is an alias for
 <code class="highlighter-rouge">EitherT.pure</code>), respectively.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">rightT</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">rightT</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-fa-or-fb-to-eithertf-a-b">From <code class="highlighter-rouge">F[A]</code> or <code class="highlighter-rouge">F[B]</code> to <code class="highlighter-rouge">EitherT[F, A, B]</code></h2>
 
@@ -117,28 +113,26 @@ monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be
 into an <code class="highlighter-rouge">EitherT</code>. It is also possible to use <code class="highlighter-rouge">EitherT.liftF</code> as an alias for
 <code class="highlighter-rouge">EitherT.right</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberO</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberO</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorO</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">numberO</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="n">errorO</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-eithera-b-or-feithera-b-to-eithertf-a-b">From <code class="highlighter-rouge">Either[A, B]</code> or <code class="highlighter-rouge">F[Either[A, B]]</code> to <code class="highlighter-rouge">EitherT[F, A, B]</code></h2>
 
 <p>Use <code class="highlighter-rouge">EitherT.fromEither</code> to lift a value of <code class="highlighter-rouge">Either[A, B]</code> into <code class="highlighter-rouge">EitherT[F, A, B]</code>.
 An <code class="highlighter-rouge">F[Either[A, B]]</code> can be converted into <code class="highlighter-rouge">EitherT</code> using the <code class="highlighter-rouge">EitherT</code> constructor.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberE</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberE</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorE</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberFE</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="mi">250</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">numberET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">numberE</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">errorE</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberFET</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">(</span><span class="n">numberFE</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-optionb-or-foptionb-to-eithertf-a-b">From <code class="highlighter-rouge">Option[B]</code> or <code class="highlighter-rouge">F[Option[B]]</code> to <code class="highlighter-rouge">EitherT[F, A, B]</code></h2>
 
@@ -146,7 +140,7 @@ An <code class="highlighter-rouge">F[Either[A, B]]</code> can be converted into 
 <code class="highlighter-rouge">EitherT.fromOption</code> and <code class="highlighter-rouge">EitherT.fromOptionF</code>, respectively, to produce an
 <code class="highlighter-rouge">EitherT</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">myOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">myOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
 <span class="c1">// myOption: Option[Int] = None
 </span>
 <span class="k">val</span> <span class="n">myOptionList</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">3</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
@@ -157,20 +151,18 @@ An <code class="highlighter-rouge">F[Either[A, B]]</code> can be converted into 
 </span>
 <span class="k">val</span> <span class="n">myOptionListET</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">fromOptionF</span><span class="o">(</span><span class="n">myOptionList</span><span class="o">,</span> <span class="s">"option not defined"</span><span class="o">)</span>
 <span class="c1">// myOptionListET: cats.data.EitherT[List,String,Int] = EitherT(List(Left(option not defined), Right(2), Right(3), Left(option not defined), Right(5)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="extracting-an-feithera-b-from-an-eithertf-a-b">Extracting an <code class="highlighter-rouge">F[Either[A, B]]</code> from an <code class="highlighter-rouge">EitherT[F, A, B]</code></h2>
 
 <p>Use the <code class="highlighter-rouge">value</code> method defined on <code class="highlighter-rouge">EitherT</code> to retrieve the underlying <code class="highlighter-rouge">F[Either[A, B]]</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">errorT</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"foo"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">errorT</span><span class="k">:</span> <span class="kt">EitherT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"foo"</span><span class="o">)</span>
 <span class="c1">// errorT: cats.data.EitherT[scala.concurrent.Future,String,Int] = EitherT(Future(Success(Left(foo))))
 </span>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">errorT</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// error: scala.concurrent.Future[Either[String,Int]] = Future(Success(Left(foo)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

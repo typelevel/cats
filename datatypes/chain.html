@@ -25,18 +25,17 @@ This makes its <code class="highlighter-rouge">Monoid</code> instance super perf
 
 <p>To get a good idea of the performance improvements, here are some benchmarks that test monoidal append (higher score is better):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[info] Benchmark                                  Mode  Cnt   Score   Error  Units
+<div class="highlighter-rouge"><pre class="codehilite"><code>[info] Benchmark                                  Mode  Cnt   Score   Error  Units
 [info] CollectionMonoidBench.accumulateChain     thrpt   20  51.911 ± 7.453  ops/s
 [info] CollectionMonoidBench.accumulateList      thrpt   20   6.973 ± 0.781  ops/s
 [info] CollectionMonoidBench.accumulateVector    thrpt   20   6.304 ± 0.129  ops/s
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>As you can see accumulating things with <code class="highlighter-rouge">Chain</code> is more than 7 times faster than <code class="highlighter-rouge">List</code> and over 8 times faster than <code class="highlighter-rouge">Vector</code>.
 So appending is a lot more performant than the standard library collections, but what about operations like <code class="highlighter-rouge">map</code> or <code class="highlighter-rouge">fold</code>?
 Fortunately we’ve also benchmarked these (again, higher score is better):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[info] Benchmark                           Mode  Cnt          Score         Error  Units
+<div class="highlighter-rouge"><pre class="codehilite"><code>[info] Benchmark                           Mode  Cnt          Score         Error  Units
 [info] ChainBench.foldLeftLargeChain      thrpt   20        117.267 ±       1.815  ops/s
 [info] ChainBench.foldLeftLargeList       thrpt   20        135.954 ±       3.340  ops/s
 [info] ChainBench.foldLeftLargeVector     thrpt   20         61.613 ±       1.326  ops/s
@@ -44,8 +43,7 @@ Fortunately we’ve also benchmarked these (again, higher score is better):</p>
 [info] ChainBench.mapLargeChain           thrpt   20         59.379 ±       0.866  ops/s
 [info] ChainBench.mapLargeList            thrpt   20         66.729 ±       7.165  ops/s
 [info] ChainBench.mapLargeVector          thrpt   20         61.374 ±       2.004  ops/s
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>While not as dominant, <code class="highlighter-rouge">Chain</code> holds its ground fairly well.
 It won’t have the random access performance of something like <code class="highlighter-rouge">Vector</code>, but in a lot of other cases, <code class="highlighter-rouge">Chain</code> seems to outperform it quite handily.
@@ -62,7 +60,7 @@ It is either an empty <code class="highlighter-rouge">Chain</code> with no eleme
 ion.
 In code it looks like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>
 <span class="c1">// defined class Chain
 </span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">object</span> <span class="nc">Empty</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">Nothing</span><span class="o">]</span>
@@ -76,8 +74,7 @@ In code it looks like this:</p>
 </span>
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Wrap</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">seq</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="c1">// defined class Wrap
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>The <code class="highlighter-rouge">Append</code> constructor is what gives us the fast concatenation ability.
 Concatenating two existing <code class="highlighter-rouge">Chain</code>s, is just a call to the <code class="highlighter-rouge">Append</code> constructor, which is always constant time <code class="highlighter-rouge">O(1)</code>.</p>
@@ -92,21 +89,19 @@ This can be useful for concatenating already created collections that don’t ha
 <p><code class="highlighter-rouge">Chain</code> doesn’t directly expose the <code class="highlighter-rouge">Append</code> and <code class="highlighter-rouge">Wrap</code> constructors, because the arguments might refer to an empty <code class="highlighter-rouge">Chain</code> or <code class="highlighter-rouge">Seq</code>.
 Instead of calling <code class="highlighter-rouge">Append</code> directly you can simply use <code class="highlighter-rouge">Chain.concat</code> or <code class="highlighter-rouge">++</code>, which will check if one of the arguments is empty:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">concat</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">c2</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">concat</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">c2</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">c2</span>
   <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">c2</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">c</span>
   <span class="k">else</span> <span class="nc">Append</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">c2</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>To construct a <code class="highlighter-rouge">Chain</code> from a <code class="highlighter-rouge">Seq</code> you should use <code class="highlighter-rouge">Chain.fromSeq</code> which will also check for emptiness:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">fromSeq</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">fromSeq</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Chain</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="n">nil</span>
   <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">lengthCompare</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">head</span><span class="o">)</span>
   <span class="k">else</span> <span class="nc">Wrap</span><span class="o">(</span><span class="n">s</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>In conclusion <code class="highlighter-rouge">Chain</code> supports constant time appending and prepending, because it builds an unbalance tree of <code class="highlighter-rouge">Append</code>s.
 This unbalanced tree will always allow iteration in linear time.</p>
@@ -118,7 +113,7 @@ Likewise, it defines a <code class="highlighter-rouge">NonEmptyTraverse</code> i
 
 <p>There are numerous ways to construct a <code class="highlighter-rouge">NonEmptyChain</code>, e.g. you can create one from a single element, a <code class="highlighter-rouge">NonEmptyList</code> or a <code class="highlighter-rouge">NonEmptyVector</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="c1">// import cats.data._
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
@@ -132,12 +127,11 @@ Likewise, it defines a <code class="highlighter-rouge">NonEmptyTraverse</code> i
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res3: cats.data.NonEmptyChain[Int] = Chain(1)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>You can also create an <code class="highlighter-rouge">Option</code> of <code class="highlighter-rouge">NonEmptyChain</code> from a <code class="highlighter-rouge">Chain</code> or any other collection type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="c1">// import cats.data._
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChain</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
@@ -148,12 +142,11 @@ Likewise, it defines a <code class="highlighter-rouge">NonEmptyTraverse</code> i
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromSeq</span><span class="o">(</span><span class="nc">Vector</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="c1">// res6: Option[cats.data.NonEmptyChain[Int]] = Some(Chain(1, 2, 3))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Sometimes, you’ll want to prepend or append a single element to a chain and return the result as a <code class="highlighter-rouge">NonEmptyChain</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="c1">// import cats.data._
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChainAppend</span><span class="o">(</span><span class="nc">Chain</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="mi">4</span><span class="o">)</span>
@@ -164,8 +157,7 @@ Likewise, it defines a <code class="highlighter-rouge">NonEmptyTraverse</code> i
 </span>
 <span class="nc">NonEmptyChain</span><span class="o">.</span><span class="n">fromChainPrepend</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">Chain</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="c1">// res9: cats.data.NonEmptyChain[Int] = Chain(1, 2, 3)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

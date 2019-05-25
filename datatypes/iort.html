@@ -10,7 +10,7 @@ directly.</p>
 <p>Consider the following program that uses <code class="highlighter-rouge">Ior</code> to propagate log messages when
 validating an address:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Ior</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Ior</span>
 <span class="k">import</span> <span class="nn">cats.data.</span><span class="o">{</span> <span class="nc">NonEmptyChain</span> <span class="k">=&gt;</span> <span class="nc">Nec</span> <span class="o">}</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">}</span>
@@ -43,15 +43,14 @@ validating an address:</p>
     <span class="n">street</span> <span class="k">&lt;-</span> <span class="n">parseStreet</span><span class="o">(</span><span class="n">streetInput</span><span class="o">)</span>
     <span class="n">sNumber</span> <span class="k">&lt;-</span> <span class="n">numberToString</span><span class="o">(</span><span class="n">number</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="n">s</span><span class="s">"$sNumber, $street"</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Due to the monadic nature of <code class="highlighter-rouge">Ior</code> combining the results of <code class="highlighter-rouge">parseNumber</code>,
 <code class="highlighter-rouge">parseStreet</code>, and <code class="highlighter-rouge">numberToString</code> can be as concise as a for-comprehension.
 As the following examples demonstrate, log messages of the different processing
 steps are combined when using <code class="highlighter-rouge">flatMap</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">addressProgram</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">addressProgram</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
 <span class="c1">// res0: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
 </span>
 <span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">)</span>
@@ -59,8 +58,7 @@ steps are combined when using <code class="highlighter-rouge">flatMap</code>.</p
 </span>
 <span class="n">addressProgram</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
 <span class="c1">// res2: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Suppose <code class="highlighter-rouge">parseNumber</code>, <code class="highlighter-rouge">parseStreet</code>, and <code class="highlighter-rouge">numberToString</code> are rewritten to be
 asynchronous and return <code class="highlighter-rouge">Future[Ior[Logs, ?]]</code> instead. The for-comprehension
@@ -68,7 +66,7 @@ can no longer be used since <code class="highlighter-rouge">addressProgram</code
 <code class="highlighter-rouge">Ior</code> together, which means that the error handling must be performed
 explicitly to ensure that the proper types are returned:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 
 <span class="k">def</span> <span class="n">parseNumberAsync</span><span class="o">(</span><span class="n">input</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">Logs</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]]</span> <span class="k">=</span>
@@ -96,15 +94,14 @@ explicitly to ensure that the proper types are returned:</p>
     <span class="k">case</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="n">number</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">programHelper</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="n">streetInput</span><span class="o">)</span>
     <span class="k">case</span> <span class="n">b</span> <span class="k">@</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Both</span><span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="n">number</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">programHelper</span><span class="o">(</span><span class="n">number</span><span class="o">,</span> <span class="n">streetInput</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">s</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="o">))</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>To keep some readability the program was split in two parts, otherwise code
 would be repeated. Note that when <code class="highlighter-rouge">parseNumberAsync</code> returns an <code class="highlighter-rouge">Ior.Both</code> it
 is necessary to combine it with the result of <code class="highlighter-rouge">programHelper</code>, otherwise some
 log messages would be lost.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
 <span class="c1">// import scala.concurrent.Await
 </span>
 <span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
@@ -118,14 +115,13 @@ log messages would be lost.</p>
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">),</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
 <span class="c1">// res5: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="iort-to-the-rescue">IorT to the rescue</h2>
 
 <p>The program of the previous section can be re-written using <code class="highlighter-rouge">IorT</code> as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.IorT</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.IorT</span>
 
 <span class="k">def</span> <span class="n">addressProgramAsync</span><span class="o">(</span><span class="n">numberInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">streetInput</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">Logs</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="k">for</span> <span class="o">{</span>
@@ -133,15 +129,14 @@ log messages would be lost.</p>
     <span class="n">street</span> <span class="k">&lt;-</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">parseStreetAsync</span><span class="o">(</span><span class="n">streetInput</span><span class="o">))</span>
     <span class="n">sNumber</span> <span class="k">&lt;-</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">numberToStringAsync</span><span class="o">(</span><span class="n">number</span><span class="o">))</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="n">s</span><span class="s">"$sNumber, $street"</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This version of <code class="highlighter-rouge">addressProgramAsync</code> is almost as concise as the
 non-asynchronous version. Note that when <code class="highlighter-rouge">F</code> is a monad, then <code class="highlighter-rouge">IorT</code> will also
 form a monad, allowing monadic combinators such as <code class="highlighter-rouge">flatMap</code> to be used in
 composing <code class="highlighter-rouge">IorT</code> values.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
 <span class="c1">// res6: cats.data.Ior[Logs,String] = Right(7, Buckingham Palace Rd)
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">"Buckingham Palace Rd"</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
@@ -149,8 +144,7 @@ composing <code class="highlighter-rouge">IorT</code> values.</p>
 </span>
 <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">addressProgramAsync</span><span class="o">(</span><span class="s">"SW1W"</span><span class="o">,</span> <span class="s">""</span><span class="o">).</span><span class="n">value</span><span class="o">,</span> <span class="mf">1.</span><span class="n">second</span><span class="o">)</span>
 <span class="c1">// res8: cats.data.Ior[Logs,String] = Left(Chain('SW1W' is not a number, '' is not a street))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Looking back at the implementation of <code class="highlighter-rouge">parseStreet</code> the return type could be
 <code class="highlighter-rouge">Either[Logs, String]</code> instead. Thinking of situations like this, where not all
@@ -174,7 +168,7 @@ is an alias for <code class="highlighter-rouge">IorT.pure</code>). Given both an
 three expressions only specify not inferable types, while the last expression
 specifies all types.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">number</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">rightT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span><span class="o">](</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">number</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">rightT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span><span class="o">](</span><span class="mi">5</span><span class="o">)</span>
 <span class="c1">// number: cats.data.IorT[Option,String,Int] = IorT(Some(Right(5)))
 </span>
 <span class="k">val</span> <span class="n">error</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">leftT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">Int</span><span class="o">](</span><span class="s">"Not a number"</span><span class="o">)</span>
@@ -185,8 +179,7 @@ specifies all types.</p>
 </span>
 <span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="c1">// number: cats.data.IorT[Option,String,Int] = IorT(Some(Right(5)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="from-fa-andor-fb-to-iortf-a-b">From <code class="highlighter-rouge">F[A]</code> and/or <code class="highlighter-rouge">F[B]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
 
@@ -194,7 +187,7 @@ specifies all types.</p>
 and/or <code class="highlighter-rouge">F[B]</code> into an <code class="highlighter-rouge">IorT</code>. It is also possible to use <code class="highlighter-rouge">IorT.liftF</code> as an
 alias for <code class="highlighter-rouge">IorT.right</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">warningF</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Not positive"</span><span class="o">)</span>
@@ -203,15 +196,14 @@ alias for <code class="highlighter-rouge">IorT.right</code>.</p>
 <span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="n">numberF</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="n">errorF</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">weirdNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="n">warningF</span><span class="o">,</span> <span class="n">weirdNumberF</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-iora-b-or-fiora-b-to-iortf-a-b">From <code class="highlighter-rouge">Ior[A, B]</code> or <code class="highlighter-rouge">F[Ior[A, B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
 
 <p>Use <code class="highlighter-rouge">IorT.fromIor</code> to a lift a value of <code class="highlighter-rouge">Ior[A, B]</code> into <code class="highlighter-rouge">IorT[F, A, B]</code>. An
 <code class="highlighter-rouge">F[Ior[A, B]]</code> can be converted into <code class="highlighter-rouge">IorT</code> using the <code class="highlighter-rouge">IorT</code> constructor.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">weirdNumberIor</span><span class="k">:</span> <span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ior</span><span class="o">.</span><span class="n">both</span><span class="o">(</span><span class="s">"Not positive"</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberFIor</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">Ior</span><span class="o">.</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
@@ -220,23 +212,21 @@ alias for <code class="highlighter-rouge">IorT.right</code>.</p>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromIor</span><span class="o">(</span><span class="n">errorIor</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">weirdNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromIor</span><span class="o">(</span><span class="n">weirdNumberIor</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">(</span><span class="n">numberFIor</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-eithera-b-or-feithera-b-to-iortf-a-b">From <code class="highlighter-rouge">Either[A, B]</code> or <code class="highlighter-rouge">F[Either[A, B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
 
 <p>Use <code class="highlighter-rouge">IorT.fromEither</code> or <code class="highlighter-rouge">IorT.fromEitherF</code> to create a value of
 <code class="highlighter-rouge">IorT[F, A, B]</code> from an <code class="highlighter-rouge">Either[A, B]</code> or a <code class="highlighter-rouge">F[Either[A, B]]</code>, respectively.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberEither</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberEither</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">errorEither</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberFEither</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">numberEither</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEither</span><span class="o">(</span><span class="n">errorEither</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberF</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromEitherF</span><span class="o">(</span><span class="n">numberFEither</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-optionb-or-foptionb-to-iortf-a-b">From <code class="highlighter-rouge">Option[B]</code> or <code class="highlighter-rouge">F[Option[B]]</code> to <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
 
@@ -244,35 +234,32 @@ alias for <code class="highlighter-rouge">IorT.right</code>.</p>
 to <code class="highlighter-rouge">IorT.fromOption</code> and <code class="highlighter-rouge">IorT.fromOptionF</code>, respectively, to produce an
 <code class="highlighter-rouge">IorT</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">numberOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">numberOption</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
 <span class="k">val</span> <span class="n">numberFOption</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">number</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromOption</span><span class="o">[</span><span class="kt">List</span><span class="o">](</span><span class="n">numberOption</span><span class="o">,</span> <span class="s">"Not defined"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">numberF</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">fromOptionF</span><span class="o">(</span><span class="n">numberFOption</span><span class="o">,</span> <span class="s">"Not defined"</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="creating-an-iortf-a-b-from-a-boolean-test">Creating an <code class="highlighter-rouge">IorT[F, A, B]</code> from a <code class="highlighter-rouge">Boolean</code> test</h2>
 
 <p><code class="highlighter-rouge">IorT.cond</code> allows concise creation of an <code class="highlighter-rouge">IorT[F, A, B]</code> based on a <code class="highlighter-rouge">Boolean</code>
 test, an <code class="highlighter-rouge">A</code> and a <code class="highlighter-rouge">B</code>. Similarly, <code class="highlighter-rouge">IorT.condF</code> uses <code class="highlighter-rouge">F[A]</code> and <code class="highlighter-rouge">F[B]</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">number</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="k">val</span> <span class="n">informedNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">cond</span><span class="o">(</span><span class="n">number</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">number</span><span class="o">,</span> <span class="s">"Number is multiple of 10"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">uninformedNumber</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">condF</span><span class="o">(</span><span class="n">number</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">number</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="extracting-an-fiora-b-from-an-iortf-a-b">Extracting an <code class="highlighter-rouge">F[Ior[A, B]]</code> from an <code class="highlighter-rouge">IorT[F, A, B]</code></h2>
 
 <p>Use the <code class="highlighter-rouge">value</code> method defined on <code class="highlighter-rouge">IorT</code> to retrieve the underlying
 <code class="highlighter-rouge">F[Ior[A, B]]</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">errorT</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">errorT</span><span class="k">:</span> <span class="kt">IorT</span><span class="o">[</span><span class="kt">Option</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IorT</span><span class="o">.</span><span class="n">leftT</span><span class="o">(</span><span class="s">"Not a number"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">error</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Ior</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">errorT</span><span class="o">.</span><span class="n">value</span>
-</code></pre>
-</div>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

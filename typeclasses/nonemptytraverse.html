@@ -4,11 +4,10 @@
 As such, it extends both <code class="highlighter-rouge">Reducible</code> and <code class="highlighter-rouge">Traverse</code> in the type class hierarchy.
 It provides the <code class="highlighter-rouge">nonEmptyTraverse</code> and <code class="highlighter-rouge">nonEmptySequence</code> methods that require an instance of <code class="highlighter-rouge">Apply</code> instead of <code class="highlighter-rouge">Applicative</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">nonEmptyTraverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Apply</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">nonEmptyTraverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Apply</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
 
 <span class="k">def</span> <span class="n">nonEmptySequence</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Apply</span>, <span class="kt">A</span><span class="o">](</span><span class="n">fga</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>In the <a href="applicative.html">Applicative tutorial</a> we learned of <code class="highlighter-rouge">Apply</code> as a weakened <code class="highlighter-rouge">Applicative</code> lacking the <code class="highlighter-rouge">pure</code> method.
 One example type lacking an <code class="highlighter-rouge">Applicative</code> instance is <code class="highlighter-rouge">Map[K, ?]</code>, it’s impossible to implement a <code class="highlighter-rouge">pure</code> method for it.</p>
@@ -17,7 +16,7 @@ One example type lacking an <code class="highlighter-rouge">Applicative</code> i
 One example application one could think of is, when we have a list of text snippets,
 count the occurrence of each word in each snippet and return all the common words and their occurrences in each snippet:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
@@ -32,15 +31,13 @@ count the occurrence of each word in each snippet and return all the common word
 </span>
 <span class="n">snippets</span><span class="o">.</span><span class="n">nonEmptyTraverse</span><span class="o">(</span><span class="n">countWords</span><span class="o">)</span>
 <span class="c1">// res0: Map[String,cats.data.NonEmptyList[Int]] = Map(you -&gt; NonEmptyList(1, 1), What -&gt; NonEmptyList(1, 1))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Note that, just like <code class="highlighter-rouge">traverse</code>, <code class="highlighter-rouge">nonEmptyTraverse(f)</code> is equivalent to <code class="highlighter-rouge">map(f).nonEmptySequence</code>, so the above could be rewritten as:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">snippets</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">countWords</span><span class="o">).</span><span class="n">nonEmptySequence</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">snippets</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">countWords</span><span class="o">).</span><span class="n">nonEmptySequence</span>
 <span class="c1">// res1: Map[String,cats.data.NonEmptyList[Int]] = Map(you -&gt; NonEmptyList(1, 1), What -&gt; NonEmptyList(1, 1))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p><code class="highlighter-rouge">NonEmptyTraverse</code> also offers <code class="highlighter-rouge">flatNonEmptyTraverse</code> and <code class="highlighter-rouge">flatNonEmptySequence</code> methods that are analogous to <code class="highlighter-rouge">flatTraverse</code> and <code class="highlighter-rouge">flatSequence</code> in <code class="highlighter-rouge">Traverse</code>.
 Just like with <code class="highlighter-rouge">nonEmptyTraverse</code> these methods don’t require a <code class="highlighter-rouge">Monad</code> instance, but only a <code class="highlighter-rouge">FlatMap</code>, which is the weakened version of <code class="highlighter-rouge">Monad</code> without <code class="highlighter-rouge">pure</code>.</p>

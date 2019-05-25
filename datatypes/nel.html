@@ -31,23 +31,21 @@ e.g., <code class="highlighter-rouge">List</code>.</p>
 
 <p>Let’s take as an example a method that calculates the <code class="highlighter-rouge">average</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">average</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">average</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">{</span>
   <span class="n">xs</span><span class="o">.</span><span class="n">sum</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">toDouble</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Clearly, this is not a valid definition for <em>empty</em> lists, because
 division by zero will throw an exception.  To fix this, one way is to
 return an <code class="highlighter-rouge">Option</code> instead of a <code class="highlighter-rouge">Double</code> right away:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">average</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">xs</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">average</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">xs</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span> <span class="o">{</span>
   <span class="nc">None</span>
 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
   <span class="nc">Some</span><span class="o">(</span><span class="n">xs</span><span class="o">.</span><span class="n">sum</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">toDouble</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>That works and is safe, but this only masks the problem of <em>accepting
 invalid input</em>.  By using <code class="highlighter-rouge">Option</code>, we extend the <code class="highlighter-rouge">average</code> function
@@ -63,12 +61,11 @@ can be sure that there is at least one <code class="highlighter-rouge">A</code> 
 
 <p>Let’s see how that impacts your <code class="highlighter-rouge">average</code> method:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
 <span class="k">def</span> <span class="n">average</span><span class="o">(</span><span class="n">xs</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="o">{</span>
   <span class="n">xs</span><span class="o">.</span><span class="n">reduceLeft</span><span class="o">(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">toDouble</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>With that, <code class="highlighter-rouge">average</code> is free of any “domain invariant validation” and
 instead can focus on the actual logic of computing the average of the
@@ -80,11 +77,10 @@ your system.</p>
 
 <p><code class="highlighter-rouge">NonEmptyList</code> is defined as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">NonEmptyList</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">head</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">tail</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">NonEmptyList</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">head</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">tail</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="o">{</span>
   <span class="c1">// Implementation elided
 </span><span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">head</code> of the <code class="highlighter-rouge">NonEmptyList</code> will be <em>non-empty</em>. Meanwhile, the
 <code class="highlighter-rouge">tail</code> can have zero or more elements contained in a <code class="highlighter-rouge">List</code>.</p>
@@ -108,23 +104,21 @@ has at least one element.</p>
 <p>If you want to construct a collection with only one argument, use
 <code class="highlighter-rouge">NonEmptyList.one</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="mi">42</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="mi">42</span><span class="o">)</span>
 <span class="c1">// res0: cats.data.NonEmptyList[Int] = NonEmptyList(42)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="using-of">Using <code class="highlighter-rouge">of</code></h3>
 
 <p>The <code class="highlighter-rouge">NonEmptyList.of</code> method on the companion of <code class="highlighter-rouge">NonEmptyList</code> as the signature:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">of</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">head</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">tail</span><span class="k">:</span> <span class="kt">A*</span><span class="o">)</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">of</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">head</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">tail</span><span class="k">:</span> <span class="kt">A*</span><span class="o">)</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+</code></pre></div>
 
 <p>It accepts an argument list with at least one <code class="highlighter-rouge">A</code> followed by a
 <em>varargs</em> argument for the <code class="highlighter-rouge">tail</code>.  Call it like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res1: cats.data.NonEmptyList[Int] = NonEmptyList(1)
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
@@ -132,43 +126,39 @@ has at least one element.</p>
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
 <span class="c1">// res3: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>There also is <code class="highlighter-rouge">ofInitLast</code> which takes a normal <code class="highlighter-rouge">List[A]</code> for the
 prefix and a last element:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">ofInitLast</span><span class="o">(</span><span class="nc">List</span><span class="o">(),</span> <span class="mi">4</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">ofInitLast</span><span class="o">(</span><span class="nc">List</span><span class="o">(),</span> <span class="mi">4</span><span class="o">)</span>
 <span class="c1">// res4: cats.data.NonEmptyList[Int] = NonEmptyList(4)
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">ofInitLast</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="mi">4</span><span class="o">)</span>
 <span class="c1">// res5: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3, 4)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="using-fromlist">Using <code class="highlighter-rouge">fromList</code></h3>
 
 <p>There is also <code class="highlighter-rouge">NonEmptyList.fromList</code> which returns an
 <code class="highlighter-rouge">Option[NonEmptyList[A]]</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">fromList</span><span class="o">(</span><span class="nc">List</span><span class="o">())</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">fromList</span><span class="o">(</span><span class="nc">List</span><span class="o">())</span>
 <span class="c1">// res6: Option[cats.data.NonEmptyList[Nothing]] = None
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">fromList</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">))</span>
 <span class="c1">// res7: Option[cats.data.NonEmptyList[Int]] = Some(NonEmptyList(1, 2, 3))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Last but not least, there is <code class="highlighter-rouge">.toNel</code> if you import the syntax for
 <code class="highlighter-rouge">list</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.syntax.list._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.syntax.list._</span>
 <span class="c1">// import cats.syntax.list._
 </span>
 <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">).</span><span class="n">toNel</span>
 <span class="c1">// res8: Option[cats.data.NonEmptyList[Int]] = Some(NonEmptyList(1, 2, 3))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="using-fromfoldable-and-fromreducible">Using <code class="highlighter-rouge">fromFoldable</code> and <code class="highlighter-rouge">fromReducible</code></h3>
 
@@ -179,7 +169,7 @@ is only available for non-empty datastructures.</p>
 
 <p>Here are some examples:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">fromFoldable</span><span class="o">(</span><span class="nc">List</span><span class="o">())</span>
@@ -207,8 +197,7 @@ is only available for non-empty datastructures.</p>
 </span>
 <span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">fromReducible</span><span class="o">(</span><span class="nc">NonEmptyVector</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="c1">// res17: cats.data.NonEmptyList[Int] = NonEmptyList(1, 2, 3)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -7,14 +7,13 @@ computation of the final result.</p>
 
 <p>For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 <span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">UserUpdateResult</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Succeeded</span><span class="o">(</span><span class="n">updatedUserId</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">UserUpdateResult</span>
 <span class="k">case</span> <span class="k">object</span> <span class="nc">Failed</span> <span class="k">extends</span> <span class="nc">UserUpdateResult</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Eval</span>
 <span class="c1">// import cats.Eval
 </span>
 <span class="k">def</span> <span class="n">updateUser</span><span class="o">(</span><span class="n">persistToDatabase</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">Eval</span><span class="o">[</span><span class="kt">UserUpdateResult</span><span class="o">])</span>
@@ -26,8 +25,7 @@ computation of the final result.</p>
   <span class="n">persistToDatabase</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
 <span class="o">}</span>
 <span class="c1">// updateUser: (persistToDatabase: User =&gt; cats.Eval[UserUpdateResult])(existingUser: User, newName: String, newAge: Int)cats.Eval[UserUpdateResult]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>(Note: We will be using <code class="highlighter-rouge">Eval</code> throughout the examples on this page. If you are not
 familiar with <code class="highlighter-rouge">Eval</code>, it’s worth reading <a href="eval.html">the Eval documentation</a> first.)</p>
@@ -51,7 +49,7 @@ passed in (<code class="highlighter-rouge">persistToDatabase</code>) is known as
 
 <p>In Cats we can encode this pattern using the <code class="highlighter-rouge">ContT</code> data type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.ContT</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.ContT</span>
 <span class="c1">// import cats.data.ContT
 </span>
 <span class="k">def</span> <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="k">:</span> <span class="kt">User</span><span class="o">,</span>
@@ -65,39 +63,35 @@ passed in (<code class="highlighter-rouge">persistToDatabase</code>) is known as
     <span class="n">next</span><span class="o">(</span><span class="n">updatedUser</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="c1">// updateUserCont: (existingUser: User, newName: String, newAge: Int)cats.data.ContT[cats.Eval,UserUpdateResult,User]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We can construct a computation as follows:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">existingUser</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">existingUser</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
 <span class="c1">// existingUser: User = User(100,Alice,42)
 </span>
 <span class="k">val</span> <span class="n">computation</span> <span class="k">=</span> <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">)</span>
-<span class="c1">// computation: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$354234941)
-</span></code></pre>
-</div>
+<span class="c1">// computation: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$1569916782)
+</span></code></pre></div>
 
 <p>And then call <code class="highlighter-rouge">run</code> on it, passing in a function of type <code class="highlighter-rouge">User =&gt;
 Eval[UserUpdateResult]</code> as the continuation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">eval</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">eval</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
   <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
     <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Persisting updated user to the DB: $user"</span><span class="o">)</span>
     <span class="nc">Succeeded</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Later@2a9f7bd4
-</span></code></pre>
-</div>
+<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Later@59df0635
+</span></code></pre></div>
 
 <p>Finally we can run the resulting <code class="highlighter-rouge">Eval</code> to actually execute the computation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">eval</span><span class="o">.</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">eval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Persisting updated user to the DB: User(100,Bob,150)
 // res0: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="composition">Composition</h2>
 
@@ -110,14 +104,14 @@ in a slightly different way.</p>
 
 <p>For example we can <code class="highlighter-rouge">map</code> over a <code class="highlighter-rouge">ContT</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">anotherComputation</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">anotherComputation</span> <span class="k">=</span> <span class="n">computation</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">user</span> <span class="k">=&gt;</span>
   <span class="nc">Map</span><span class="o">(</span>
     <span class="s">"id"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">toString</span><span class="o">,</span>
     <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="o">,</span>
     <span class="s">"age"</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">toString</span>
   <span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// anotherComputation: cats.data.ContT[cats.Eval,UserUpdateResult,scala.collection.immutable.Map[String,String]] = FromFn(AndThen$1703175621)
+<span class="c1">// anotherComputation: cats.data.ContT[cats.Eval,UserUpdateResult,scala.collection.immutable.Map[String,String]] = FromFn(AndThen$534555120)
 </span>
 <span class="k">val</span> <span class="n">anotherEval</span> <span class="k">=</span> <span class="n">anotherComputation</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">userFields</span> <span class="k">=&gt;</span>
   <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
@@ -125,13 +119,12 @@ in a slightly different way.</p>
     <span class="nc">Succeeded</span><span class="o">(</span><span class="n">userFields</span><span class="o">(</span><span class="s">"id"</span><span class="o">).</span><span class="n">toInt</span><span class="o">)</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// anotherEval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$10@7975bbed
+<span class="c1">// anotherEval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$10@46fc1e5c
 </span>
 <span class="n">anotherEval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Persisting these fields to the DB: Map(id -&gt; 100, name -&gt; Bob, age -&gt; 150)
 // res1: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>And we can use <code class="highlighter-rouge">flatMap</code> to chain multiple <code class="highlighter-rouge">ContT</code>s together.</p>
 
@@ -140,12 +133,12 @@ update the user model, one to persist the updated user to the database, and one
 to publish a message saying the user was updated. It then chains them together
 in continuation-passing style using <code class="highlighter-rouge">flatMap</code> and runs the whole computation.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">updateUserModel</span><span class="k">:</span> <span class="kt">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">updateUserModel</span><span class="k">:</span> <span class="kt">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">User</span><span class="o">]</span> <span class="k">=</span>
   <span class="n">updateUserCont</span><span class="o">(</span><span class="n">existingUser</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="mi">200</span><span class="o">).</span><span class="n">map</span> <span class="o">{</span> <span class="n">updatedUser</span> <span class="k">=&gt;</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"Updated user model"</span><span class="o">)</span>
     <span class="n">updatedUser</span>
   <span class="o">}</span>
-<span class="c1">// updateUserModel: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$1744134507)
+<span class="c1">// updateUserModel: cats.data.ContT[cats.Eval,UserUpdateResult,User] = FromFn(AndThen$504080255)
 </span>
 <span class="k">val</span> <span class="n">persistToDb</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="n">user</span> <span class="k">=&gt;</span>
@@ -155,7 +148,7 @@ in continuation-passing style using <code class="highlighter-rouge">flatMap</cod
       <span class="n">next</span><span class="o">(</span><span class="nc">Succeeded</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="o">))</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// persistToDb: User =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$13547/1963110884@22bbc385
+<span class="c1">// persistToDb: User =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$9192/764968987@9c99921
 </span>
 <span class="k">val</span> <span class="n">publishEvent</span><span class="k">:</span> <span class="kt">UserUpdateResult</span> <span class="o">=&gt;</span> <span class="nc">ContT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">UserUpdateResult</span>, <span class="kt">UserUpdateResult</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="n">userUpdateResult</span> <span class="k">=&gt;</span>
@@ -170,11 +163,11 @@ in continuation-passing style using <code class="highlighter-rouge">flatMap</cod
       <span class="n">next</span><span class="o">(</span><span class="n">userUpdateResult</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// publishEvent: UserUpdateResult =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$13548/2118251025@1d427bcd
+<span class="c1">// publishEvent: UserUpdateResult =&gt; cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = $$Lambda$9193/476340507@2ede453b
 </span>
 <span class="k">val</span> <span class="n">chainOfContinuations</span> <span class="k">=</span>
   <span class="n">updateUserModel</span> <span class="n">flatMap</span> <span class="n">persistToDb</span> <span class="n">flatMap</span> <span class="n">publishEvent</span>
-<span class="c1">// chainOfContinuations: cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = FromFn(AndThen$1977989301)
+<span class="c1">// chainOfContinuations: cats.data.ContT[cats.Eval,UserUpdateResult,UserUpdateResult] = FromFn(AndThen$1599005492)
 </span>
 <span class="k">val</span> <span class="n">eval</span> <span class="k">=</span> <span class="n">chainOfContinuations</span><span class="o">.</span><span class="n">run</span> <span class="o">{</span> <span class="n">finalResult</span> <span class="k">=&gt;</span>
   <span class="nc">Eval</span><span class="o">.</span><span class="n">later</span> <span class="o">{</span>
@@ -182,7 +175,7 @@ in continuation-passing style using <code class="highlighter-rouge">flatMap</cod
     <span class="n">finalResult</span>
   <span class="o">}</span>
 <span class="o">}</span>
-<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$10@7cda8f6b
+<span class="c1">// eval: cats.Eval[UserUpdateResult] = cats.Eval$$anon$10@57dde7c0
 </span>
 <span class="n">eval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Updated user model
@@ -190,8 +183,7 @@ in continuation-passing style using <code class="highlighter-rouge">flatMap</cod
 // Publishing 'user updated' event for user ID 100
 // Finished!
 // res2: UserUpdateResult = Succeeded(100)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="why-eval">Why Eval?</h2>
 

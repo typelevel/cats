@@ -6,15 +6,13 @@ have its uses, which serve as a nice example of the consistency and elegance of 
 <h2 id="thinking-about-const">Thinking about <code class="highlighter-rouge">Const</code></h2>
 <p>The <code class="highlighter-rouge">Const</code> data type can be thought of similarly to the <code class="highlighter-rouge">const</code> function, but as a data type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">const</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">b</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">a</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">const</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)(</span><span class="n">b</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">a</span>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">const</code> function takes two arguments and simply returns the first argument, ignoring the second.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Const</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">getConst</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Const</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">getConst</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
+</code></pre></div>
 
 <p>The <code class="highlighter-rouge">Const</code> data type takes two type parameters, but only ever stores a value of the first type parameter.
 Because the second type parameter is not used in the data type, the type parameter is referred to as a
@@ -37,7 +35,7 @@ to use a lens.</p>
 <p>A lens can be thought of as a first class getter/setter. A <code class="highlighter-rouge">Lens[S, A]</code> is a data type that knows how to get
 an <code class="highlighter-rouge">A</code> out of an <code class="highlighter-rouge">S</code>, or set an <code class="highlighter-rouge">A</code> in an <code class="highlighter-rouge">S</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
 
   <span class="k">def</span> <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">,</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">S</span>
@@ -45,13 +43,12 @@ an <code class="highlighter-rouge">A</code> out of an <code class="highlighter-r
   <span class="k">def</span> <span class="n">modify</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">S</span> <span class="o">=</span>
     <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">f</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="o">)))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>It can be useful to have effectful modifications as well - perhaps our modification can fail (<code class="highlighter-rouge">Option</code>) or
 can return several values (<code class="highlighter-rouge">List</code>).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
 
   <span class="k">def</span> <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">,</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">S</span>
@@ -65,13 +62,12 @@ can return several values (<code class="highlighter-rouge">List</code>).</p>
   <span class="k">def</span> <span class="n">modifyList</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span> <span class="k">=</span>
     <span class="n">f</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="o">)).</span><span class="n">map</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Note that both <code class="highlighter-rouge">modifyOption</code> and <code class="highlighter-rouge">modifyList</code> share the <em>exact</em> same implementation. If we look closely, the
 only thing we need is a <code class="highlighter-rouge">map</code> operation on the data type. Being good functional programmers, we abstract.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
@@ -85,14 +81,13 @@ only thing we need is a <code class="highlighter-rouge">map</code> operation on 
   <span class="k">def</span> <span class="n">modifyF</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Functor</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span> <span class="k">=</span>
     <span class="n">f</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="o">)).</span><span class="n">map</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can redefine <code class="highlighter-rouge">modify</code> in terms of <code class="highlighter-rouge">modifyF</code> by using <code class="highlighter-rouge">cats.Id</code>. We can also treat <code class="highlighter-rouge">set</code> as a modification
 that simply ignores the current value. Due to these modifications however, we must leave <code class="highlighter-rouge">modifyF</code> abstract
 since having it defined in terms of <code class="highlighter-rouge">set</code> would lead to infinite circular calls.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Id</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Id</span>
 
 <span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">modifyF</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Functor</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span>
@@ -103,8 +98,7 @@ since having it defined in terms of <code class="highlighter-rouge">set</code> w
 
   <span class="k">def</span> <span class="n">get</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>What about <code class="highlighter-rouge">get</code>? Certainly we can’t define <code class="highlighter-rouge">get</code> in terms of the others.. the others are to modify an existing
 value, whereas <code class="highlighter-rouge">get</code> is to retrieve it. Let’s give it a shot anyways.</p>
@@ -129,7 +123,7 @@ define a <code class="highlighter-rouge">Functor</code> instance for <code class
 
 <p><em>Note</em>: the example below assumes usage of the <a href="https://github.com/non/kind-projector">kind-projector compiler plugin</a> and will not compile if it is not being used in a project.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
 
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">constFunctor</span><span class="o">[</span><span class="kt">X</span><span class="o">]</span><span class="k">:</span> <span class="kt">Functor</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">X</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">X</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
@@ -137,12 +131,11 @@ define a <code class="highlighter-rouge">Functor</code> instance for <code class
 </span>    <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">X</span>, <span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">X</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
       <span class="nc">Const</span><span class="o">(</span><span class="n">fa</span><span class="o">.</span><span class="n">getConst</span><span class="o">)</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now that that’s taken care of, let’s substitute and see what happens.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Lens</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">modifyF</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Functor</span><span class="o">](</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">S</span><span class="o">]</span>
 
   <span class="k">def</span> <span class="n">set</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">S</span><span class="o">,</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">S</span> <span class="o">=</span> <span class="n">modify</span><span class="o">(</span><span class="n">s</span><span class="o">)(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">)</span>
@@ -154,8 +147,7 @@ define a <code class="highlighter-rouge">Functor</code> instance for <code class
     <span class="n">storedValue</span><span class="o">.</span><span class="n">getConst</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>It works! We get a <code class="highlighter-rouge">Const[A, S]</code> out on the other side, and we simply just retrieve the <code class="highlighter-rouge">A</code> value stored inside.</p>
 
@@ -169,7 +161,7 @@ value and we’re done!</p>
 paper, Jeremy Gibbons and Bruno C. d. S. Oliveria describe a functional approach to iterating over a collection of
 data. Among the abstractions presented are <code class="highlighter-rouge">Foldable</code> and <code class="highlighter-rouge">Traverse</code>, replicated below (also available in Cats).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">}</span>
 
 <span class="k">trait</span> <span class="nc">Foldable</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="c1">// Given a collection of data F[A], and a function mapping each A to a B where B has a Monoid instance,
@@ -182,20 +174,18 @@ data. Among the abstractions presented are <code class="highlighter-rouge">Folda
 </span>  <span class="c1">// value. The result of traverse is the composition of all these effectful values.
 </span>  <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>These two type classes seem unrelated - one reduces a collection down to a single value, the other traverses
 a collection with an effectful function, collecting results. It may be surprising to see that in fact <code class="highlighter-rouge">Traverse</code>
 subsumes <code class="highlighter-rouge">Foldable</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Foldable</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Foldable</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">X</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">X</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">X</span><span class="o">]]</span>
 
   <span class="k">def</span> <span class="n">foldMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>To start, we observe that if we are to implement <code class="highlighter-rouge">foldMap</code> in terms of <code class="highlighter-rouge">traverse</code>, we will want a <code class="highlighter-rouge">B</code> out
 at some point. However, <code class="highlighter-rouge">traverse</code> returns a <code class="highlighter-rouge">G[F[X]]</code>. It would seem there is no way to unify these two.
@@ -206,7 +196,7 @@ However, if we imagine <code class="highlighter-rouge">G[_]</code> to be a sort 
 <code class="highlighter-rouge">F[X]</code> is the value we want to ignore, we treat it as the second type parameter and hence, leave it as the free
 one.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Const</span>
 
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">constApplicative</span><span class="o">[</span><span class="kt">Z</span><span class="o">]</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
@@ -214,8 +204,7 @@ one.</p>
 
     <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Recall that <code class="highlighter-rouge">Const[Z, A]</code> means we have a <code class="highlighter-rouge">Z</code> value in hand, and don’t really care about the <code class="highlighter-rouge">A</code> type parameter.
 Therefore we can more or less treat the type <code class="highlighter-rouge">Const[Z, A]</code> as just <code class="highlighter-rouge">Z</code>.</p>
@@ -230,15 +219,14 @@ should try to do something more useful. This suggests composition of <code class
 <p>So now we need a constant <code class="highlighter-rouge">Z</code> value, and a binary function that takes two <code class="highlighter-rouge">Z</code>s and produces a <code class="highlighter-rouge">Z</code>. Sound familiar?
 We want <code class="highlighter-rouge">Z</code> to have a <code class="highlighter-rouge">Monoid</code> instance!</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">constApplicative</span><span class="o">[</span><span class="kt">Z</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">]</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">constApplicative</span><span class="o">[</span><span class="kt">Z</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">]</span><span class="k">:</span> <span class="kt">Applicative</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">new</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">?</span><span class="o">]]</span> <span class="o">{</span>
     <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">Z</span><span class="o">].</span><span class="n">empty</span><span class="o">)</span>
 
     <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Const</span><span class="o">[</span><span class="kt">Z</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
       <span class="nc">Const</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">Z</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">fa</span><span class="o">.</span><span class="n">getConst</span><span class="o">,</span> <span class="n">f</span><span class="o">.</span><span class="n">getConst</span><span class="o">))</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We have our <code class="highlighter-rouge">Applicative</code>!</p>
 
@@ -256,7 +244,7 @@ the type that has no values.</p>
 that <code class="highlighter-rouge">Const[B, Z]</code> (for any <code class="highlighter-rouge">Z</code>) is the moral equivalent of just <code class="highlighter-rouge">B</code>, so <code class="highlighter-rouge">A =&gt; Const[B, Nothing]</code> is equivalent
 to <code class="highlighter-rouge">A =&gt; B</code>, which is exactly what we have, we just need to wrap it.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Foldable</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Traverse</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Foldable</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">traverse</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="kt">:</span> <span class="kt">Applicative</span>, <span class="kt">A</span>, <span class="kt">X</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">X</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">X</span><span class="o">]]</span>
 
   <span class="k">def</span> <span class="n">foldMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span> <span class="kt">:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="o">{</span>
@@ -264,8 +252,7 @@ to <code class="highlighter-rouge">A =&gt; B</code>, which is exactly what we ha
     <span class="n">const</span><span class="o">.</span><span class="n">getConst</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Hurrah!</p>
 

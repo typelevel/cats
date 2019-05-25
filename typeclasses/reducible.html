@@ -21,15 +21,14 @@ This makes <code class="highlighter-rouge">Reducible</code> very useful for abst
 
 <p>First some standard imports.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="k">import</span> <span class="nn">cats.data._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>And examples.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Reducible</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">reduce</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Reducible</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">reduce</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">))</span>
 <span class="c1">// res0: String = abc
 </span>
 <span class="nc">Reducible</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">reduceMap</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">))(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">)</span>
@@ -64,15 +63,13 @@ This makes <code class="highlighter-rouge">Reducible</code> very useful for abst
 </span>
 <span class="nc">Reducible</span><span class="o">[</span><span class="kt">NonEmptyList</span><span class="o">].</span><span class="n">nonEmptySequence_</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="sc">'o'</span><span class="o">),</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="sc">'o'</span><span class="o">)))</span>
 <span class="c1">// res10: scala.collection.immutable.Map[Int,Unit] = Map(1 -&gt; ())
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>In addition to <code class="highlighter-rouge">reduce</code> requiring a <code class="highlighter-rouge">Semigroup</code> instead of a <code class="highlighter-rouge">Monoid</code>, <code class="highlighter-rouge">nonEmptyTraverse_</code> and <code class="highlighter-rouge">nonEmptySequence_</code> require <code class="highlighter-rouge">Apply</code> instead of <code class="highlighter-rouge">Applicative</code>.
 Also, <code class="highlighter-rouge">Reducible</code> offers a <code class="highlighter-rouge">reduceLeftM</code> method, that is just like <code class="highlighter-rouge">foldM</code>, but requires a <code class="highlighter-rouge">FlatMap</code> instance of a <code class="highlighter-rouge">Monad</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">reduceLeftM</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">FlatMap</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">g</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">,</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">reduceLeftM</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">FlatMap</span>, <span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">g</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">,</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">G</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

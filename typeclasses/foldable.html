@@ -28,14 +28,13 @@ different results.</p>
 
 <p>First some standard imports.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>And examples.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Foldable</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">fold</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Foldable</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">fold</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">))</span>
 <span class="c1">// res0: String = abc
 </span>
 <span class="nc">Foldable</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">foldMap</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">))(</span><span class="k">_</span><span class="o">.</span><span class="n">toString</span><span class="o">)</span>
@@ -111,7 +110,7 @@ different results.</p>
 <span class="c1">// res23: Option[Boolean] = Some(true)
 </span>
 <span class="k">val</span> <span class="n">prints</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Eval</span><span class="o">.</span><span class="n">always</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="mi">1</span><span class="o">)),</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">always</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="mi">2</span><span class="o">))).</span><span class="n">sequence_</span>
-<span class="c1">// prints: cats.Eval[Unit] = cats.Eval$$anon$9@7ef9ac3e
+<span class="c1">// prints: cats.Eval[Unit] = cats.Eval$$anon$9@d58dd8c
 </span>
 <span class="n">prints</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// 1
@@ -137,8 +136,7 @@ different results.</p>
 </span>
 <span class="nc">Foldable</span><span class="o">[</span><span class="kt">Nested</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span>, <span class="kt">?</span><span class="o">]].</span><span class="n">fold</span><span class="o">(</span><span class="n">listOption1</span><span class="o">)</span>
 <span class="c1">// res28: Int = 3
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Hence when defining some new data structure, if we can define a <code class="highlighter-rouge">foldLeft</code> and
 <code class="highlighter-rouge">foldRight</code> we are able to provide many other useful operations, if not always
@@ -150,25 +148,22 @@ different results.</p>
 <p>Note that, in order to support laziness, the signature of <code class="highlighter-rouge">Foldable</code>’s 
 <code class="highlighter-rouge">foldRight</code> is</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">foldRight</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">lb</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="nc">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">foldRight</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">lb</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="nc">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Eval</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 
 <p>as opposed to</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">foldRight</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">z</span><span class="k">:</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">foldRight</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">z</span><span class="k">:</span> <span class="kt">B</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="o">(</span><span class="kt">A</span><span class="o">,</span> <span class="kt">B</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span>
+</code></pre></div>
 
 <p>which someone familiar with the <code class="highlighter-rouge">foldRight</code> from the collections in
 Scala’s standard library might expect. This will prevent operations
 which are lazy in their right hand argument to traverse the entire
 structure unnecessarily. For example, if you have:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">allFalse</span> <span class="k">=</span> <span class="nc">Stream</span><span class="o">.</span><span class="n">continually</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">allFalse</span> <span class="k">=</span> <span class="nc">Stream</span><span class="o">.</span><span class="n">continually</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
 <span class="c1">// allFalse: scala.collection.immutable.Stream[Boolean] = Stream(false, ?)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>which is an infinite stream of <code class="highlighter-rouge">false</code> values, and if you wanted to
 reduce this to a single false value using the logical and (<code class="highlighter-rouge">&amp;&amp;</code>). You
@@ -179,23 +174,21 @@ value. Using <code class="highlighter-rouge">foldRight</code> from the standard 
 consider the entire stream, and thus will eventually cause a stack
 overflow:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">try</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">try</span> <span class="o">{</span>
   <span class="n">allFalse</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="kc">true</span><span class="o">)(</span><span class="k">_</span> <span class="o">&amp;&amp;</span> <span class="k">_</span><span class="o">)</span>
 <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
   <span class="k">case</span> <span class="n">e</span><span class="k">:</span><span class="kt">StackOverflowError</span> <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>
 <span class="o">}</span>
 <span class="c1">// java.lang.StackOverflowError
 // res29: AnyVal = ()
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>With the lazy <code class="highlighter-rouge">foldRight</code> on <code class="highlighter-rouge">Foldable</code>, the calculation terminates
 after looking at only one value:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Foldable</span><span class="o">[</span><span class="kt">Stream</span><span class="o">].</span><span class="n">foldRight</span><span class="o">(</span><span class="n">allFalse</span><span class="o">,</span> <span class="nc">Eval</span><span class="o">.</span><span class="nc">True</span><span class="o">)((</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="n">b</span> <span class="k">else</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="kc">false</span><span class="o">)).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Foldable</span><span class="o">[</span><span class="kt">Stream</span><span class="o">].</span><span class="n">foldRight</span><span class="o">(</span><span class="n">allFalse</span><span class="o">,</span> <span class="nc">Eval</span><span class="o">.</span><span class="nc">True</span><span class="o">)((</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="n">b</span> <span class="k">else</span> <span class="nc">Eval</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="kc">false</span><span class="o">)).</span><span class="n">value</span>
 <span class="c1">// res30: Boolean = false
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -8,54 +8,47 @@ first step back and talk about ordinary functions.</p>
 <h2 id="ordinary-functions">Ordinary Functions</h2>
 <p>Consider the following scala method:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">first</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">first</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
+</code></pre></div>
 
 <p>This isn’t a particularly helpful method, but it will work as an example. Instead of writing this as a
 method, we could have written this as a function <em>value</em>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span> <span class="k">=&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span> <span class="k">=&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
+</code></pre></div>
 
 <p>And here, <code class="highlighter-rouge">=&gt;</code> is really just some syntactic sugar for <code class="highlighter-rouge">Function1</code>, so we could also write that as:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">l</span> <span class="k">=&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="n">l</span> <span class="k">=&gt;</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
+</code></pre></div>
 
 <p>Let’s cut through the syntactic sugar even a little bit further. <code class="highlighter-rouge">Function1</code> isn’t really a special type.
 It’s just a trait that looks something like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// we are calling this `MyFunction1` so we don't collide with the actual `Function1`
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="c1">// we are calling this `MyFunction1` so we don't collide with the actual `Function1`
 </span><span class="k">trait</span> <span class="nc">MyFunction1</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">B</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>So if we didn’t mind being a bit verbose, we could have written our function as:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Function1</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>, <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="abstracting-via-generics">Abstracting via Generics</h2>
 
 <p>Recall our <code class="highlighter-rouge">first</code> method:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">first</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">first</span><span class="o">(</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
+</code></pre></div>
 
 <p>The astute reader may have noticed that there’s really no reason that this method needs to be tied directly to <code class="highlighter-rouge">Int</code>. We could use generics to make this a bit more general:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def first[A](l: List[A]): Option[A] = l.headOption
-</code></pre>
-</div>
+<div class="highlighter-rouge"><pre class="codehilite"><code>def first[A](l: List[A]): Option[A] = l.headOption
+</code></pre></div>
 
 <p>But how would we represent this new <code class="highlighter-rouge">first</code> method as a <code class="highlighter-rouge">=&gt;</code>/<code class="highlighter-rouge">Function1</code> value? We are looking for something like a type of <code class="highlighter-rouge">List[A] =&gt; Option[A] forAll A</code>, but this isn’t valid scala syntax. <code class="highlighter-rouge">Function1</code> isn’t quite the right fit, because its <code class="highlighter-rouge">apply</code> method doesn’t take a generic type parameter.</p>
 
@@ -64,21 +57,19 @@ It’s just a trait that looks something like this:</p>
 <p>It turns out that we can represent our universal <code class="highlighter-rouge">List</code> to <code class="highlighter-rouge">Option</code> transformation with something that looks a bit like <code class="highlighter-rouge">Function1</code> but
 that adds a type parameter to the <code class="highlighter-rouge">apply</code> method and utilizes higher kinds:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">MyFunctionK</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">MyFunctionK</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Cats provides this type as <code class="highlighter-rouge">FunctionK</code> (we used <code class="highlighter-rouge">MyFunctionK</code> for our example type to avoid confusion). So now we can write <code class="highlighter-rouge">first</code> as a <code class="highlighter-rouge">FunctionK[List, Option]</code> value:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
 
 <span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">l</span><span class="o">.</span><span class="n">headOption</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="syntactic-sugar">Syntactic Sugar</h2>
 
@@ -86,17 +77,15 @@ that adds a type parameter to the <code class="highlighter-rouge">apply</code> m
 compiler plugin <a href="https://github.com/non/kind-projector#polymorphic-lambda-values">provides</a> a more concise syntax.
 After adding the plugin to your project, you could write the <code class="highlighter-rouge">first</code> example as:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]</span> <span class="k">=</span> <span class="n">λ</span><span class="o">[</span><span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]](</span><span class="k">_</span><span class="o">.</span><span class="n">headOption</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]</span> <span class="k">=</span> <span class="n">λ</span><span class="o">[</span><span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span><span class="o">]](</span><span class="k">_</span><span class="o">.</span><span class="n">headOption</span><span class="o">)</span>
+</code></pre></div>
 
 <p>Cats also provides a <code class="highlighter-rouge">~&gt;</code> type alias for <code class="highlighter-rouge">FunctionK</code>, so an even more concise version would be:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">~&gt;</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">~&gt;</span>
 
 <span class="k">val</span> <span class="n">first</span><span class="k">:</span> <span class="kt">List</span> <span class="kt">~&gt;</span> <span class="kt">Option</span> <span class="o">=</span> <span class="n">λ</span><span class="o">[</span><span class="kt">List</span> <span class="kt">~&gt;</span> <span class="kt">Option</span><span class="o">](</span><span class="k">_</span><span class="o">.</span><span class="n">headOption</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Being able to use <code class="highlighter-rouge">~&gt;</code> as an alias for <code class="highlighter-rouge">FunctionK</code> parallels being able to use <code class="highlighter-rouge">=&gt;</code> as an alias for <code class="highlighter-rouge">Function1</code>.</p>
 
@@ -108,12 +97,11 @@ After adding the plugin to your project, you could write the <code class="highli
 
 <p>Earlier it was mentioned that <code class="highlighter-rouge">FunctionK</code> operates on first-order-kinded types (types that take a single type parameter such as <code class="highlighter-rouge">List</code> or <code class="highlighter-rouge">Option</code>). It’s still possible to use <code class="highlighter-rouge">FunctionK</code> with types that would normally take more than one type parameter (such as <code class="highlighter-rouge">Either</code>) if we fix all of the type parameters except for one. For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">ErrorOr</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">type</span> <span class="kt">ErrorOr</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">A</span><span class="o">]</span>
 
 <span class="k">val</span> <span class="n">errorOrFirst</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">ErrorOr</span><span class="o">]</span> <span class="k">=</span>
   <span class="n">λ</span><span class="o">[</span><span class="kt">FunctionK</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">ErrorOr</span><span class="o">]](</span><span class="k">_</span><span class="o">.</span><span class="n">headOption</span><span class="o">.</span><span class="n">toRight</span><span class="o">(</span><span class="s">"ERROR: the list was empty!"</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="natural-transformation">Natural Transformation</h2>
 

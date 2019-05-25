@@ -2,26 +2,24 @@
 
 <p><code class="highlighter-rouge">Monoid</code> extends the power of <code class="highlighter-rouge">Semigroup</code> by providing an additional <code class="highlighter-rouge">empty</code> value.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">y</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span>
 <span class="o">}</span>
 
 <span class="k">trait</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">empty</span><span class="k">:</span> <span class="kt">A</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This <code class="highlighter-rouge">empty</code> value should be an identity for the <code class="highlighter-rouge">combine</code> operation, which means the following equalities hold
 for any choice of <code class="highlighter-rouge">x</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>combine(x, empty) = combine(empty, x) = x
-</code></pre>
-</div>
+<div class="highlighter-rouge"><pre class="codehilite"><code>combine(x, empty) = combine(empty, x) = x
+</code></pre></div>
 
 <p>Many types that form a <code class="highlighter-rouge">Semigroup</code> also form a <code class="highlighter-rouge">Monoid</code>, such as <code class="highlighter-rouge">Int</code>s (with <code class="highlighter-rouge">0</code>) and <code class="highlighter-rouge">Strings</code> (with <code class="highlighter-rouge">""</code>).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
 
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">intAdditionMonoid</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">empty</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -29,34 +27,30 @@ for any choice of <code class="highlighter-rouge">x</code>.</p>
 <span class="o">}</span>
 
 <span class="k">val</span> <span class="n">x</span> <span class="k">=</span> <span class="mi">1</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">empty</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">empty</span><span class="o">)</span>
 <span class="c1">// res0: Int = 1
 </span>
 <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">Int</span><span class="o">].</span><span class="n">empty</span><span class="o">,</span> <span class="n">x</span><span class="o">)</span>
 <span class="c1">// res1: Int = 1
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h1 id="example-usage-collapsing-a-list">Example usage: Collapsing a list</h1>
 
 <p>In the <code class="highlighter-rouge">Semigroup</code> section we had trouble writing a generic <code class="highlighter-rouge">combineAll</code> function because we had nothing
 to give if the list was empty. With <code class="highlighter-rouge">Monoid</code> we can return <code class="highlighter-rouge">empty</code>, giving us</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">combineAll</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">combineAll</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Monoid</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
   <span class="n">as</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="n">empty</span><span class="o">)(</span><span class="nc">Monoid</span><span class="o">[</span><span class="kt">A</span><span class="o">].</span><span class="n">combine</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>which can be used for any type that has a <code class="highlighter-rouge">Monoid</code> instance.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">combineAll</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">combineAll</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="c1">// res2: Int = 6
 </span>
 <span class="n">combineAll</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"hello"</span><span class="o">,</span> <span class="s">" "</span><span class="o">,</span> <span class="s">"world"</span><span class="o">))</span>
@@ -67,8 +61,7 @@ to give if the list was empty. With <code class="highlighter-rouge">Monoid</code
 </span>
 <span class="n">combineAll</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="nc">Set</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="nc">Set</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)))</span>
 <span class="c1">// res5: scala.collection.immutable.Set[Int] = Set(5, 1, 2, 3, 4)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>This function is provided in Cats as <code class="highlighter-rouge">Monoid.combineAll</code>.</p>
 
@@ -78,7 +71,7 @@ to give if the list was empty. With <code class="highlighter-rouge">Monoid</code
 following <code class="highlighter-rouge">NonEmptyList</code> type forms a semigroup through <code class="highlighter-rouge">++</code>, but has no corresponding
 identity element to form a monoid.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Semigroup</span>
 
 <span class="k">final</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">head</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">tail</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="o">++(</span><span class="n">other</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">NonEmptyList</span><span class="o">(</span><span class="n">head</span><span class="o">,</span> <span class="n">tail</span> <span class="o">++</span> <span class="n">other</span><span class="o">.</span><span class="n">toList</span><span class="o">)</span>
@@ -92,13 +85,12 @@ identity element to form a monoid.</p>
       <span class="k">def</span> <span class="n">combine</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">x</span> <span class="o">++</span> <span class="n">y</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>How then can we collapse a <code class="highlighter-rouge">List[NonEmptyList[A]]</code> ? For such types that only have a <code class="highlighter-rouge">Semigroup</code> we can
 lift into <code class="highlighter-rouge">Option</code> to get a <code class="highlighter-rouge">Monoid</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">optionMonoid</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Monoid</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Monoid</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">empty</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
@@ -113,26 +105,23 @@ lift into <code class="highlighter-rouge">Option</code> to get a <code class="hi
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This is the <code class="highlighter-rouge">Monoid</code> for <code class="highlighter-rouge">Option</code>: for any <code class="highlighter-rouge">Semigroup[A]</code>, there is a <code class="highlighter-rouge">Monoid[Option[A]]</code>.</p>
 
 <p>Thus:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Monoid</span>
 <span class="k">import</span> <span class="nn">cats.data.NonEmptyList</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">list</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)),</span> <span class="nc">NonEmptyList</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)))</span>
 <span class="k">val</span> <span class="n">lifted</span> <span class="k">=</span> <span class="n">list</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">nel</span> <span class="k">=&gt;</span> <span class="nc">Option</span><span class="o">(</span><span class="n">nel</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Monoid</span><span class="o">.</span><span class="n">combineAll</span><span class="o">(</span><span class="n">lifted</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Monoid</span><span class="o">.</span><span class="n">combineAll</span><span class="o">(</span><span class="n">lifted</span><span class="o">)</span>
 <span class="c1">// res0: Option[cats.data.NonEmptyList[Int]] = Some(NonEmptyList(1, 2, 3, 4, 5, 6))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>This lifting and combining of <code class="highlighter-rouge">Semigroup</code>s into <code class="highlighter-rouge">Option</code> is provided by Cats as <code class="highlighter-rouge">Semigroup.combineAllOption</code>.</p>
 

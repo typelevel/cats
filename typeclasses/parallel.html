@@ -12,7 +12,7 @@ In the example of <code class="highlighter-rouge">Either</code> and <code class=
 Below is a short example of a situation where we might run into this.
 For simplicity, we’ll use <code class="highlighter-rouge">String</code> as our type to represent errors.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="k">import</span> <span class="nn">cats.data._</span>
@@ -44,12 +44,11 @@ For simplicity, we’ll use <code class="highlighter-rouge">String</code> as our
   <span class="k">else</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="n">s</span><span class="s">"$n Does not have enough characters"</span><span class="o">))</span>
 <span class="o">}</span>
 <span class="c1">// validateName: (n: String)Either[cats.data.NonEmptyList[String],Name]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Now we want to parse two Strings into a value of <code class="highlighter-rouge">Person</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
   <span class="k">for</span> <span class="o">{</span>
     <span class="n">age</span> <span class="k">&lt;-</span> <span class="n">parse</span><span class="o">(</span><span class="n">ageString</span><span class="o">)</span>
     <span class="n">person</span> <span class="k">&lt;-</span> <span class="o">(</span><span class="n">validateName</span><span class="o">(</span><span class="n">nameString</span><span class="o">).</span><span class="n">toValidated</span><span class="o">,</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">).</span><span class="n">toValidated</span><span class="o">)</span>
@@ -57,8 +56,7 @@ For simplicity, we’ll use <code class="highlighter-rouge">String</code> as our
        <span class="o">.</span><span class="n">toEither</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="n">person</span>
 <span class="c1">// parsePerson: (ageString: String, nameString: String)scala.util.Either[cats.data.NonEmptyList[String],Person]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We had to convert to and from <code class="highlighter-rouge">Validated</code> manually.
 While this is still manageble, it get’s worse the more <code class="highlighter-rouge">Eithers</code> we want to combine in parallel.</p>
@@ -66,49 +64,44 @@ While this is still manageble, it get’s worse the more <code class="highlighte
 <p>To mitigate this pain, cats introduces a type class <code class="highlighter-rouge">Parallel</code> that abstracts over <code class="highlighter-rouge">Monads</code> which also support parallel composition.
 It is simply defined in terms of conversion functions between the two data types:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Parallel</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Parallel</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">sequential</span><span class="k">:</span> <span class="kt">F</span> <span class="kt">~&gt;</span> <span class="kt">M</span>
 
   <span class="k">def</span> <span class="n">parallel</span><span class="k">:</span> <span class="kt">M</span> <span class="kt">~&gt;</span> <span class="kt">F</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 <p>Where <code class="highlighter-rouge">M[_]</code> has to have an instance of <code class="highlighter-rouge">Monad</code> and <code class="highlighter-rouge">F[_]</code> an instance of <code class="highlighter-rouge">Applicative</code>.</p>
 
 <p>Recall that <code class="highlighter-rouge">~&gt;</code> is just an alias for <a href="../datatypes/functionk.html"><code class="highlighter-rouge">FunctionK</code></a>.
 This allows us to get rid of most of our boilerplate from earlier:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">parsePerson</span><span class="o">(</span><span class="n">ageString</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">nameString</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
   <span class="k">for</span> <span class="o">{</span>
     <span class="n">age</span> <span class="k">&lt;-</span> <span class="n">parse</span><span class="o">(</span><span class="n">ageString</span><span class="o">)</span>
     <span class="n">person</span> <span class="k">&lt;-</span> <span class="o">(</span><span class="n">validateName</span><span class="o">(</span><span class="n">nameString</span><span class="o">),</span> <span class="n">validateAge</span><span class="o">(</span><span class="n">age</span><span class="o">)).</span><span class="n">parMapN</span><span class="o">(</span><span class="nc">Person</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="n">person</span>
 <span class="c1">// parsePerson: (ageString: String, nameString: String)scala.util.Either[cats.data.NonEmptyList[String],Person]
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>We can also traverse over a <code class="highlighter-rouge">Traverse</code> using <code class="highlighter-rouge">Parallel</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="mi">42</span><span class="o">),</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"Error 1"</span><span class="o">)),</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"Error 2"</span><span class="o">))).</span><span class="n">parSequence</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Either</span><span class="o">.</span><span class="n">right</span><span class="o">(</span><span class="mi">42</span><span class="o">),</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"Error 1"</span><span class="o">)),</span> <span class="nc">Either</span><span class="o">.</span><span class="n">left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">.</span><span class="n">one</span><span class="o">(</span><span class="s">"Error 2"</span><span class="o">))).</span><span class="n">parSequence</span>
 <span class="n">res0</span><span class="k">:</span> <span class="kt">scala.util.Either</span><span class="o">[</span><span class="kt">cats.data.NonEmptyList</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>,<span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Left</span><span class="o">(</span><span class="nc">NonEmptyList</span><span class="o">(</span><span class="nc">Error</span> <span class="mi">1</span><span class="o">,</span> <span class="nc">Error</span> <span class="mi">2</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Parallel is also really useful for <code class="highlighter-rouge">zipping</code> collections. The standard <code class="highlighter-rouge">Applicative</code> instance for <code class="highlighter-rouge">List</code>, <code class="highlighter-rouge">Vector</code>, etc.
 behaves like the cartesian product of the individual collections:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="n">mapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="n">mapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
 <span class="n">res1</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>However often we will want to <code class="highlighter-rouge">zip</code> two or more collections together.
 We can define a different <code class="highlighter-rouge">ap</code> for most of them and use the <code class="highlighter-rouge">parMapN</code> syntax for that:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="n">parMapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">)).</span><span class="n">parMapN</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">)</span>
 <span class="n">res2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">9</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="nonemptyparallel---a-weakened-parallel">NonEmptyParallel - a weakened Parallel</h2>
 

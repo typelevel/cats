@@ -6,20 +6,18 @@ second part that is wrapped inside an higher kinded type constructor
 <code class="highlighter-rouge">F[_]</code>.  By choosing the <code class="highlighter-rouge">F</code> parameter, you can model for example
 non-empty lists by choosing <code class="highlighter-rouge">List</code> for <code class="highlighter-rouge">F</code>, giving:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.OneAnd</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.OneAnd</span>
 
 <span class="k">type</span> <span class="kt">NonEmptyList</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OneAnd</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>which used to be the implementation of non-empty lists in cats but has
 been replaced by the <code class="highlighter-rouge">cats.data.NonEmptyList</code> data type. By
 having the higher kinded type parameter <code class="highlighter-rouge">F[_]</code>, <code class="highlighter-rouge">OneAnd</code> is also able
 to represent other “non-empty” data structures e.g.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">NonEmptyStream</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OneAnd</span><span class="o">[</span><span class="kt">Stream</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">type</span> <span class="kt">NonEmptyStream</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OneAnd</span><span class="o">[</span><span class="kt">Stream</span>, <span class="kt">A</span><span class="o">]</span>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -2,7 +2,7 @@
 <p><code class="highlighter-rouge">Functor</code> is a type class that abstracts over type constructors that can be <code class="highlighter-rouge">map</code>‘ed over. Examples of such
 type constructors are <code class="highlighter-rouge">List</code>, <code class="highlighter-rouge">Option</code>, and <code class="highlighter-rouge">Future</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
 <span class="o">}</span>
 
@@ -13,8 +13,7 @@ type constructors are <code class="highlighter-rouge">List</code>, <code class="
     <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">))</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>A <code class="highlighter-rouge">Functor</code> instance must obey two laws:</p>
 
@@ -36,14 +35,13 @@ type constructors are <code class="highlighter-rouge">List</code>, <code class="
 <p>Another way of viewing a <code class="highlighter-rouge">Functor[F]</code> is that <code class="highlighter-rouge">F</code> allows the lifting of a pure function <code class="highlighter-rouge">A =&gt; B</code> into the effectful
 function <code class="highlighter-rouge">F[A] =&gt; F[B]</code>. We can see this if we re-order the <code class="highlighter-rouge">map</code> signature above.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
 
   <span class="k">def</span> <span class="n">lift</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="n">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span>
     <span class="n">fa</span> <span class="k">=&gt;</span> <span class="n">map</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="n">f</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="functors-for-effect-management">Functors for effect management</h2>
 
@@ -64,49 +62,44 @@ like <code class="highlighter-rouge">_.map(_.map(_.map(f)))</code>. As it turns 
 
 <p>Such composition can be achieved via the <code class="highlighter-rouge">Functor#compose</code> method.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">listOption</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">listOption</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
 <span class="c1">// listOption: List[Option[Int]] = List(Some(1), None, Some(2))
 </span>
 <span class="c1">// Through Functor#compose
 </span><span class="nc">Functor</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">compose</span><span class="o">[</span><span class="kt">Option</span><span class="o">].</span><span class="n">map</span><span class="o">(</span><span class="n">listOption</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res1: List[Option[Int]] = List(Some(2), None, Some(3))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>This approach will allow us to use composition without wrapping the value in question, but can
 introduce complications in more complex use cases. For example, if we need to call another function which
 requires a <code class="highlighter-rouge">Functor</code> and we want to use the composed <code class="highlighter-rouge">Functor</code>, we would have to explicitly pass in the
 composed instance during the function call or create a local implicit.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">needsFunctor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Functor</span>, <span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">map</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="o">())</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">needsFunctor</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Functor</span>, <span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">map</span><span class="o">(</span><span class="n">fa</span><span class="o">)(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="o">())</span>
 
 <span class="k">def</span> <span class="n">foo</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">val</span> <span class="n">listOptionFunctor</span> <span class="k">=</span> <span class="nc">Functor</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">compose</span><span class="o">[</span><span class="kt">Option</span><span class="o">]</span>
   <span class="k">type</span> <span class="kt">ListOption</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span>
   <span class="n">needsFunctor</span><span class="o">[</span><span class="kt">ListOption</span>, <span class="kt">Int</span><span class="o">](</span><span class="n">listOption</span><span class="o">)(</span><span class="n">listOptionFunctor</span><span class="o">)</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can make this nicer at the cost of boxing with the <code class="highlighter-rouge">Nested</code> data type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.Nested</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">nested</span><span class="k">:</span> <span class="kt">Nested</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">listOption</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">nested</span><span class="k">:</span> <span class="kt">Nested</span><span class="o">[</span><span class="kt">List</span>, <span class="kt">Option</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nested</span><span class="o">(</span><span class="n">listOption</span><span class="o">)</span>
 <span class="c1">// nested: cats.data.Nested[List,Option,Int] = Nested(List(Some(1), None, Some(2)))
 </span>
 <span class="n">nested</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res2: cats.data.Nested[List,Option,Int] = Nested(List(Some(2), None, Some(3)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>The <code class="highlighter-rouge">Nested</code> approach, being a distinct type from its constituents, will resolve the usual way modulo
 possible <a href="https://issues.scala-lang.org/browse/SI-2712" title="SI-2712: implement higher-order unification for type constructor inference">SI-2712</a> issues (which can be addressed through <a href="https://github.com/fiadliel/sbt-partial-unification" title="A sbt plugin for enabling partial unification">partial unification</a>),

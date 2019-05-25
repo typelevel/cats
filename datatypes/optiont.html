@@ -6,30 +6,28 @@
 
 <p>Consider the following scenario:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">scala.concurrent.Future</span>
 <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
 
 <span class="k">val</span> <span class="n">customGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"welcome back, Lola"</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We want to try out various forms of our greetings.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">excitedGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">excitedGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">hasWelcome</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">)))</span>
 
 <span class="k">val</span> <span class="n">noWelcome</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">filterNot</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">)))</span>
 
 <span class="k">val</span> <span class="n">withFallback</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">"hello, there!"</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>As you can see, the implementations of all of these variations are very similar. We want to call the <code class="highlighter-rouge">Option</code> operation (<code class="highlighter-rouge">map</code>, <code class="highlighter-rouge">filter</code>, <code class="highlighter-rouge">filterNot</code>, <code class="highlighter-rouge">getOrElse</code>), but since our <code class="highlighter-rouge">Option</code> is wrapped in a <code class="highlighter-rouge">Future</code>, we first need to <code class="highlighter-rouge">map</code> over the <code class="highlighter-rouge">Future</code>.</p>
 
 <p><code class="highlighter-rouge">OptionT</code> can help remove some of this boilerplate. It exposes methods that look like those on <code class="highlighter-rouge">Option</code>, but it handles the outer <code class="highlighter-rouge">map</code> call on the <code class="highlighter-rouge">Future</code> so we don’t have to:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.OptionT</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.OptionT</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">customGreetingT</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">(</span><span class="n">customGreeting</span><span class="o">)</span>
@@ -41,14 +39,13 @@
 <span class="k">val</span> <span class="n">noWelcome</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">filterNot</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">withFallback</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">"hello, there!"</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-optiona-andor-fa-to-optiontf-a">From <code class="highlighter-rouge">Option[A]</code> and/or <code class="highlighter-rouge">F[A]</code> to <code class="highlighter-rouge">OptionT[F, A]</code></h2>
 
 <p>Sometimes you may have an <code class="highlighter-rouge">Option[A]</code> and/or <code class="highlighter-rouge">F[A]</code> and want to <em>lift</em> them into an <code class="highlighter-rouge">OptionT[F, A]</code>. For this purpose <code class="highlighter-rouge">OptionT</code> exposes two useful methods, namely <code class="highlighter-rouge">fromOption</code> and <code class="highlighter-rouge">liftF</code>, respectively. E.g.:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">greetingFO</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">greetingFO</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">))</span>
 
 <span class="k">val</span> <span class="n">firstnameF</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="s">"Jane"</span><span class="o">)</span>
 
@@ -62,46 +59,41 @@
 
 <span class="k">val</span> <span class="n">result</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">value</span> <span class="c1">// Future(Some("Hello Jane Doe"))
 </span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="from-a-to-optiontfa">From <code class="highlighter-rouge">A</code> to <code class="highlighter-rouge">OptionT[F,A]</code></h2>
 
 <p>If you have only an <code class="highlighter-rouge">A</code> and you wish to <em>lift</em> it into an <code class="highlighter-rouge">OptionT[F,A]</code> assuming you have an <a href="/cats/typeclasses/applicative.html"><code class="highlighter-rouge">Applicative</code></a> instance for <code class="highlighter-rouge">F</code> you can use <code class="highlighter-rouge">some</code> which is an alias for <code class="highlighter-rouge">pure</code>. There also exists a <code class="highlighter-rouge">none</code> method which can be used to create an <code class="highlighter-rouge">OptionT[F,A]</code>, where the <code class="highlighter-rouge">Option</code> wrapped <code class="highlighter-rouge">A</code> type is actually a <code class="highlighter-rouge">None</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">greet</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>,<span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="s">"Hola!"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">greet</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>,<span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">.</span><span class="n">pure</span><span class="o">(</span><span class="s">"Hola!"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">greetAlt</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>,<span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">.</span><span class="n">some</span><span class="o">(</span><span class="s">"Hi!"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">failedGreet</span><span class="k">:</span> <span class="kt">OptionT</span><span class="o">[</span><span class="kt">Future</span>,<span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">OptionT</span><span class="o">.</span><span class="n">none</span>
 
-</code></pre>
-</div>
+</code></pre></div>
 
 <h2 id="beyond-map">Beyond map</h2>
 
 <p>Sometimes the operation you want to perform on an <code class="highlighter-rouge">Future[Option[String]]</code> might not be as simple as just wrapping the <code class="highlighter-rouge">Option</code> method in a <code class="highlighter-rouge">Future.map</code> call. For example, what if we want to greet the customer with their custom greeting if it exists but otherwise fall back to a default <code class="highlighter-rouge">Future[String]</code> greeting? Without <code class="highlighter-rouge">OptionT</code>, this implementation might look like:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">defaultGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="s">"hello, there"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">defaultGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">(</span><span class="s">"hello, there"</span><span class="o">)</span>
 
 <span class="k">val</span> <span class="n">greeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreeting</span><span class="o">.</span><span class="n">flatMap</span><span class="o">(</span><span class="n">custom</span> <span class="k">=&gt;</span>
   <span class="n">custom</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="nc">Future</span><span class="o">.</span><span class="n">successful</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">defaultGreeting</span><span class="o">))</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can’t quite turn to the <code class="highlighter-rouge">getOrElse</code> method on <code class="highlighter-rouge">OptionT</code>, because it takes a <code class="highlighter-rouge">default</code> value of type <code class="highlighter-rouge">A</code> instead of <code class="highlighter-rouge">Future[A]</code>. However, the <code class="highlighter-rouge">getOrElseF</code> method is exactly what we want:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">greeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">getOrElseF</span><span class="o">(</span><span class="n">defaultGreeting</span><span class="o">)</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">greeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">getOrElseF</span><span class="o">(</span><span class="n">defaultGreeting</span><span class="o">)</span>
+</code></pre></div>
 
 <h2 id="getting-to-the-underlying-instance">Getting to the underlying instance</h2>
 
 <p>If you want to get the <code class="highlighter-rouge">F[Option[A]]</code> value (in this case <code class="highlighter-rouge">Future[Option[String]]</code>) out of an <code class="highlighter-rouge">OptionT</code> instance, you can simply call  <code class="highlighter-rouge">value</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">customGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">value</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">customGreeting</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="n">customGreetingT</span><span class="o">.</span><span class="n">value</span>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

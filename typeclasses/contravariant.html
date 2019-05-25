@@ -3,9 +3,8 @@
 <p>The <code class="highlighter-rouge">Contravariant</code> type class is for functors that define a <code class="highlighter-rouge">contramap</code>
 function with the following type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">contramap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">contramap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 
 <p>It looks like regular (also called <code class="highlighter-rouge">Covariant</code>) <a href="functor.html"><code class="highlighter-rouge">Functor</code></a>’s <code class="highlighter-rouge">map</code>,
 but with the <code class="highlighter-rouge">f</code> transformation reversed.</p>
@@ -19,7 +18,7 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 
 <p>Say we have a class <code class="highlighter-rouge">Money</code> with a <code class="highlighter-rouge">Show</code> instance, and a <code class="highlighter-rouge">Salary</code> class:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 
@@ -27,20 +26,18 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Salary</span><span class="o">(</span><span class="n">size</span><span class="k">:</span> <span class="kt">Money</span><span class="o">)</span>
 
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showMoney</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">m</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="s">"$$${m.amount}"</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>If we want to show a <code class="highlighter-rouge">Salary</code> instance, we can just convert it to a <code class="highlighter-rouge">Money</code> instance and show that instead.</p>
 
 <p>Let’s use <code class="highlighter-rouge">Show</code>’s <code class="highlighter-rouge">Contravariant</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">showSalary</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Salary</span><span class="o">]</span> <span class="k">=</span> <span class="n">showMoney</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">size</span><span class="o">)</span>
-<span class="c1">// showSalary: cats.Show[Salary] = cats.Show$$anon$1@21ce4270
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">showSalary</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Salary</span><span class="o">]</span> <span class="k">=</span> <span class="n">showMoney</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">size</span><span class="o">)</span>
+<span class="c1">// showSalary: cats.Show[Salary] = cats.Show$$anon$1@bf6fe91
 </span>
 <span class="nc">Salary</span><span class="o">(</span><span class="nc">Money</span><span class="o">(</span><span class="mi">1000</span><span class="o">)).</span><span class="n">show</span>
 <span class="c1">// res0: String = $1000
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="contravariant-instance-for-scalamathordering">Contravariant instance for scala.math.Ordering.</h2>
 
@@ -48,65 +45,61 @@ and you can get an <code class="highlighter-rouge">A</code> value out of a <code
 
 <p>The <code class="highlighter-rouge">scala.math.Ordering</code> type class defines comparison operations, e.g. <code class="highlighter-rouge">compare</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Ordering</span><span class="o">.</span><span class="nc">Int</span><span class="o">.</span><span class="n">compare</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Ordering</span><span class="o">.</span><span class="nc">Int</span><span class="o">.</span><span class="n">compare</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res1: Int = 1
 </span>
 <span class="nc">Ordering</span><span class="o">.</span><span class="nc">Int</span><span class="o">.</span><span class="n">compare</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
 <span class="c1">// res2: Int = -1
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>There’s also a method, called <code class="highlighter-rouge">by</code>, that creates new <code class="highlighter-rouge">Orderings</code> out of existing ones:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">by</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">S</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="n">S</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ord</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">S</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">by</span><span class="o">[</span><span class="kt">T</span>, <span class="kt">S</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=&gt;</span> <span class="n">S</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ord</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">S</span><span class="o">])</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</code></pre></div>
 
 <p>In fact, it is just <code class="highlighter-rouge">contramap</code>, defined in a slightly different way! We supply <code class="highlighter-rouge">T =&gt; S</code> to receive <code class="highlighter-rouge">F[S] =&gt; F[T]</code> back.</p>
 
 <p>So let’s use it to our advantage and get <code class="highlighter-rouge">Ordering[Money]</code> for free:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// we need this for `&lt;` to work
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="c1">// we need this for `&lt;` to work
 </span><span class="k">import</span> <span class="nn">scala.math.Ordered._</span>
 <span class="c1">// import scala.math.Ordered._
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">moneyOrdering</span><span class="k">:</span> <span class="kt">Ordering</span><span class="o">[</span><span class="kt">Money</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Ordering</span><span class="o">.</span><span class="n">by</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">amount</span><span class="o">)</span>
-<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$10@1a75e991
+<span class="c1">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$10@51cb1a9d
 </span>
 <span class="nc">Money</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nc">Money</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
 <span class="c1">// res4: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="subtyping">Subtyping</h2>
 
 <p>Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">class</span> <span class="nc">A</span>
 <span class="c1">// defined class A
 </span>
 <span class="k">class</span> <span class="nc">B</span> <span class="k">extends</span> <span class="n">A</span>
 <span class="c1">// defined class B
 </span>
 <span class="k">val</span> <span class="n">b</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span>
-<span class="c1">// b: B = B@19144537
+<span class="c1">// b: B = B@1cda1e33
 </span>
 <span class="k">val</span> <span class="n">a</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span> <span class="n">b</span>
-<span class="c1">// a: A = B@19144537
+<span class="c1">// a: A = B@1cda1e33
 </span>
 <span class="k">val</span> <span class="n">showA</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="s">"a!"</span><span class="o">)</span>
-<span class="c1">// showA: cats.Show[A] = cats.Show$$anon$1@63d590fa
+<span class="c1">// showA: cats.Show[A] = cats.Show$$anon$1@3c4d2605
 </span>
 <span class="k">val</span> <span class="n">showB1</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">b</span> <span class="k">=&gt;</span> <span class="n">b</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span>
-<span class="c1">// showB1: cats.Show[B] = cats.Show$$anon$1@29f4f807
+<span class="c1">// showB1: cats.Show[B] = cats.Show$$anon$1@54e946e8
 </span>
 <span class="k">val</span> <span class="n">showB2</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="n">showA</span><span class="o">.</span><span class="n">contramap</span><span class="o">(</span><span class="n">identity</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span>
-<span class="c1">// showB2: cats.Show[B] = cats.Show$$anon$1@68d178a6
+<span class="c1">// showB2: cats.Show[B] = cats.Show$$anon$1@43cae94c
 </span>
 <span class="k">val</span> <span class="n">showB3</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Contravariant</span><span class="o">[</span><span class="kt">Show</span><span class="o">].</span><span class="n">narrow</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">showA</span><span class="o">)</span>
-<span class="c1">// showB3: cats.Show[B] = cats.Show$$anon$1@63d590fa
-</span></code></pre>
-</div>
+<span class="c1">// showB3: cats.Show[B] = cats.Show$$anon$1@3c4d2605
+</span></code></pre></div>
 
 <p>Subtyping relationships are “lifted backwards” by contravariant functors, such that if <code class="highlighter-rouge">F</code> is a
 lawful contravariant functor and <code class="highlighter-rouge">B &lt;: A</code> then <code class="highlighter-rouge">F[A] &lt;: F[B]</code>, which is expressed by <code class="highlighter-rouge">Contravariant.narrow</code>.</p>

@@ -6,15 +6,14 @@ values are values of <code class="highlighter-rouge">Id</code>.</p>
 
 <p>It is encoded as:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">A</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">type</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">A</span>
+</code></pre></div>
 
 <p>That is to say that the type <code class="highlighter-rouge">Id[A]</code> is just a synonym for <code class="highlighter-rouge">A</code>.  We can
 freely treat values of type <code class="highlighter-rouge">A</code> as values of type <code class="highlighter-rouge">Id[A]</code>, and
 vice-versa.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="c1">// import cats._
 </span>
 <span class="k">val</span> <span class="n">x</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="mi">1</span>
@@ -22,8 +21,7 @@ vice-versa.</p>
 </span>
 <span class="k">val</span> <span class="n">y</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="n">x</span>
 <span class="c1">// y: Int = 1
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Using this type declaration, we can treat our Id type constructor as a
 <a href="monad.html"><code class="highlighter-rouge">Monad</code></a> and as a <a href="comonad.html"><code class="highlighter-rouge">Comonad</code></a>. The <code class="highlighter-rouge">pure</code>
@@ -31,7 +29,7 @@ method, which has type <code class="highlighter-rouge">A =&gt; Id[A]</code> just
 function.  The <code class="highlighter-rouge">map</code> method from <code class="highlighter-rouge">Functor</code> just becomes function
 application:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Functor</span>
 <span class="c1">// import cats.Functor
 </span>
 <span class="k">val</span> <span class="n">one</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
@@ -39,16 +37,14 @@ application:</p>
 </span>
 <span class="nc">Functor</span><span class="o">[</span><span class="kt">Id</span><span class="o">].</span><span class="n">map</span><span class="o">(</span><span class="n">one</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res0: cats.Id[Int] = 2
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Compare the signatures of <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">flatMap</code> and <code class="highlighter-rouge">coflatMap</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code>  <span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
   <span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="nc">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
   <span class="k">def</span> <span class="n">coflatMap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>You’ll notice that in the flatMap signature, since <code class="highlighter-rouge">Id[B]</code> is the same
 as <code class="highlighter-rouge">B</code> for all <code class="highlighter-rouge">B</code>, we can rewrite the type of the <code class="highlighter-rouge">f</code> parameter to be
@@ -57,7 +53,7 @@ two functions the same, and, in fact, they can have the same
 implementation, meaning that for <code class="highlighter-rouge">Id</code>, <code class="highlighter-rouge">flatMap</code> is also just function
 application:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Monad</span>
 <span class="c1">// import cats.Monad
 </span>
 <span class="k">val</span> <span class="n">one</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
@@ -68,18 +64,16 @@ application:</p>
 </span>
 <span class="nc">Monad</span><span class="o">[</span><span class="kt">Id</span><span class="o">].</span><span class="n">flatMap</span><span class="o">(</span><span class="n">one</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res2: cats.Id[Int] = 2
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>And that similarly, <code class="highlighter-rouge">coflatMap</code> is just function application:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Comonad</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Comonad</span>
 <span class="c1">// import cats.Comonad
 </span>
 <span class="nc">Comonad</span><span class="o">[</span><span class="kt">Id</span><span class="o">].</span><span class="n">coflatMap</span><span class="o">(</span><span class="n">one</span><span class="o">)(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
 <span class="c1">// res3: cats.Id[Int] = 2
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

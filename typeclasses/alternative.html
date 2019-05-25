@@ -2,7 +2,7 @@
 <p>Alternative extends <a href="`applicative.html`"><code class="highlighter-rouge">Applicative</code></a> with a <a href="`monoidk.html`"><code class="highlighter-rouge">MonoidK</code></a>.
 Let’s stub out all the operations just to remind ourselves what that gets us.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">MonoidK</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Applicative</span><span class="o">,</span> <span class="nc">MonoidK</span><span class="o">}</span>
 
 <span class="k">trait</span> <span class="nc">Alternative</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="nc">extends</span> <span class="nc">Applicative</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">with</span> <span class="nc">MonoidK</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">ap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">ff</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span> <span class="k">=&gt;</span> <span class="kt">B</span><span class="o">])(</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
@@ -13,8 +13,7 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 
   <span class="k">def</span> <span class="n">combineK</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">x</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">],</span> <span class="n">y</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>As you might recall, <code class="highlighter-rouge">pure</code> wraps values in the context; <code class="highlighter-rouge">ap</code> allows us to do calculations in the context; <code class="highlighter-rouge">combineK</code> allows us to combine, for any given type <code class="highlighter-rouge">A</code>, any two contextual values <code class="highlighter-rouge">F[A]</code>; and <code class="highlighter-rouge">empty</code> provides the identity element for the combine operation.</p>
 
@@ -46,14 +45,13 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 
 <p>The relevant imports:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.Alternative</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.Alternative</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>And what we can do with them:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">empty</span> <span class="k">=</span> <span class="nc">Alternative</span><span class="o">[</span><span class="kt">Vector</span><span class="o">].</span><span class="n">empty</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">empty</span> <span class="k">=</span> <span class="nc">Alternative</span><span class="o">[</span><span class="kt">Vector</span><span class="o">].</span><span class="n">empty</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
 <span class="c1">// empty: Vector[Int] = Vector()
 </span>
 <span class="k">val</span> <span class="n">pureOfFive</span> <span class="k">=</span> <span class="mf">5.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">]</span>
@@ -63,15 +61,14 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 <span class="c1">// concatenated: Vector[Int] = Vector(7, 8)
 </span>
 <span class="k">val</span> <span class="n">double</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="k">_</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="c1">// double: Int =&gt; Int = $$Lambda$15242/972930101@3524d9a6
+<span class="c1">// double: Int =&gt; Int = $$Lambda$10745/1778609039@1aa9a844
 </span>
 <span class="k">val</span> <span class="n">addFive</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="k">_</span> <span class="o">+</span> <span class="mi">5</span>
-<span class="c1">// addFive: Int =&gt; Int = $$Lambda$15243/717571201@373406bd
+<span class="c1">// addFive: Int =&gt; Int = $$Lambda$10746/1030428021@641446bc
 </span>
 <span class="k">val</span> <span class="n">apForVectors</span> <span class="k">=</span> <span class="o">(</span><span class="n">double</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">]</span> <span class="o">&lt;+&gt;</span> <span class="n">addFive</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">])</span> <span class="n">ap</span> <span class="n">concatenated</span>
 <span class="c1">// apForVectors: Vector[Int] = Vector(14, 16, 12, 13)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="making-choices-with-alternative">Making choices with <code class="highlighter-rouge">Alternative</code></h2>
 
@@ -79,7 +76,7 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 
 <p>Suppose we have a simple parser library with an interface something like:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Decoder</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">trait</span> <span class="nc">Decoder</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">decode</span><span class="o">(</span><span class="n">in</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="o">}</span>
 <span class="k">object</span> <span class="nc">Decoder</span> <span class="o">{</span>
@@ -88,12 +85,11 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
       <span class="k">def</span> <span class="n">decode</span><span class="o">(</span><span class="n">in</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="n">in</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Then, we can implement an <code class="highlighter-rouge">Alternative</code> instance for this type like so:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">decoderAlternative</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alternative</span><span class="o">[</span><span class="kt">Decoder</span><span class="o">]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">val</span> <span class="n">decoderAlternative</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alternative</span><span class="o">[</span><span class="kt">Decoder</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">pure</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=</span> <span class="nc">Decoder</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Function</span><span class="o">.</span><span class="n">const</span><span class="o">(</span><span class="nc">Right</span><span class="o">(</span><span class="n">a</span><span class="o">)))</span>
 
   <span class="k">def</span> <span class="n">empty</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Decoder</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Function</span><span class="o">.</span><span class="n">const</span><span class="o">(</span><span class="nc">Left</span><span class="o">(</span><span class="k">new</span> <span class="nc">Error</span><span class="o">(</span><span class="s">"No dice."</span><span class="o">))))</span>
@@ -108,28 +104,25 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
       <span class="k">def</span> <span class="n">decode</span><span class="o">(</span><span class="n">in</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="n">fa</span><span class="o">.</span><span class="n">decode</span><span class="o">(</span><span class="n">in</span><span class="o">)</span> <span class="n">ap</span> <span class="n">ff</span><span class="o">.</span><span class="n">decode</span><span class="o">(</span><span class="n">in</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The addition of the <code class="highlighter-rouge">Alternative</code> methods allows us to prioritize multiple strategies, compensating for inconsistencies in the source data.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">parseInt</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">.</span><span class="n">catchNonFatal</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">parseInt</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">.</span><span class="n">catchNonFatal</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
 <span class="k">def</span> <span class="n">parseIntFirstChar</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Either</span><span class="o">.</span><span class="n">catchNonFatal</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nc">Character</span><span class="o">.</span><span class="n">digit</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="n">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="mi">10</span><span class="o">))</span>
 
 <span class="c1">// Try first parsing the whole, then just the first character.
 </span><span class="k">val</span> <span class="n">decoder</span><span class="k">:</span> <span class="kt">Decoder</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Decoder</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="n">parseInt</span> <span class="k">_</span><span class="o">)</span> <span class="o">&lt;+&gt;</span> <span class="nc">Decoder</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="n">parseIntFirstChar</span> <span class="k">_</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This decoder correctly attempts each strategy in turn, as you can see:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="o">(</span><span class="s">"555"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="o">(</span><span class="s">"555"</span><span class="o">)</span>
 <span class="c1">// res1: Either[Throwable,Int] = Right(555)
 </span>
 <span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="o">(</span><span class="s">"5a"</span><span class="o">)</span>
 <span class="c1">// res2: Either[Throwable,Int] = Right(10)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h3 id="partitioning-results">Partitioning Results</h3>
 
@@ -139,26 +132,24 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 
 <p>Let’s imagine that we’re trying to make a bunch of independent possibly failure-prone calls with a bunch of different <code class="highlighter-rouge">Int</code> inputs (say it’s the id of a resource), each returning <code class="highlighter-rouge">Either[String, Int]</code> where a left <code class="highlighter-rouge">String</code> is the code modeling the failure we’re given (say it’s the HTTP code returned by a remote API we’re calling), while right of an integer is the output of the calculation.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Resource holder returns (Request, Status)
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="c1">// Resource holder returns (Request, Status)
 </span><span class="k">def</span> <span class="n">requestResource</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Either</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">String</span><span class="o">)</span>, <span class="o">(</span><span class="kt">Int</span>, <span class="kt">Long</span><span class="o">)]</span> <span class="k">=</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Left</span><span class="o">((</span><span class="n">a</span><span class="o">,</span> <span class="s">"Bad request"</span><span class="o">))</span>
   <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Left</span><span class="o">((</span><span class="n">a</span><span class="o">,</span> <span class="s">"Server error"</span><span class="o">))</span>
   <span class="k">else</span> <span class="nc">Right</span><span class="o">((</span><span class="n">a</span><span class="o">,</span> <span class="mi">200L</span><span class="o">))</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>We can use <code class="highlighter-rouge">separate</code> to pull apart the failures and successes zipped with the input, letting us log failures and proceed with successes intelligently. <code class="highlighter-rouge">separate</code> will pull the two different outcomes into different sides of a tuple.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">partitionedResults</span> <span class="k">=</span> 
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">partitionedResults</span> <span class="k">=</span> 
   <span class="o">((</span><span class="n">requestResource</span> <span class="k">_</span><span class="o">).</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">]</span> <span class="n">ap</span> <span class="nc">Vector</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">99</span><span class="o">,</span> <span class="mi">1200</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">22</span><span class="o">)).</span><span class="n">separate</span>
 <span class="c1">// partitionedResults: (Vector[(Int, String)], Vector[(Int, Long)]) = (Vector((6,Server error), (99,Server error), (1200,Bad request), (8,Bad request)),Vector((5,200), (7,200), (22,200)))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Alternatively (no pun intended), in a totally different version of the same idea, we can lean on the instance of <code class="highlighter-rouge">Bitraverse</code> for <code class="highlighter-rouge">Tuple2</code> to try and partition cleanly the outcomes of two different calculations that each depend pairwise on the same input (maybe we have a primary key and we want to select both the remote id of the resources with that key, and those that are linked via the foreign key to the input key).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Surprising regularity in this politico-geographical data model!
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="c1">// Surprising regularity in this politico-geographical data model!
 </span><span class="k">def</span> <span class="n">getRegionAndDistrict</span><span class="o">(</span><span class="n">pkey</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Vector</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">pkey</span><span class="o">,</span> <span class="o">(</span><span class="n">double</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">]</span> <span class="o">&lt;+&gt;</span> <span class="n">addFive</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">])</span> <span class="n">ap</span> <span class="n">pkey</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">])</span>
 <span class="c1">// getRegionAndDistrict: (pkey: Int)(Int, Vector[Int])
 </span>
@@ -170,8 +161,7 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 </span>
 <span class="k">val</span> <span class="n">districtIds</span> <span class="k">=</span> <span class="n">regionsWithDistricts</span><span class="o">.</span><span class="n">separate</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">flatten</span>
 <span class="c1">// districtIds: scala.collection.immutable.Vector[Int] = Vector(10, 10, 12, 11, 14, 12, 194, 102, 2400, 1205, 16, 13, 50, 30)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

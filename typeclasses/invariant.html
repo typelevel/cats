@@ -3,9 +3,8 @@
 <p>The <code class="highlighter-rouge">Invariant</code> type class is for functors that define an <code class="highlighter-rouge">imap</code>
 function with the following type:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">imap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)(</span><span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">imap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)(</span><span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 
 <p>Every covariant (as well as <a href="contravariant.html">contravariant</a>) functor gives rise to an invariant
 functor, by ignoring the <code class="highlighter-rouge">g</code> (or in case of contravariance, <code class="highlighter-rouge">f</code>) function.</p>
@@ -25,10 +24,9 @@ timestamp.  Let’s say that we want to create a <code class="highlighter-rouge"
 <p>If <code class="highlighter-rouge">Semigroup</code> had an instance for the standard covariant <a href="functor.html"><code class="highlighter-rouge">Functor</code></a>
 type class, we could use <code class="highlighter-rouge">map</code> to apply a function <code class="highlighter-rouge">longToDate</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
 <span class="k">def</span> <span class="n">longToDate</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=&gt;</span> <span class="nc">Date</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="k">_</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>But is this enough to give us a <code class="highlighter-rouge">Semigroup[Date]</code>?  The answer is no,
 unfortunately.  A <code class="highlighter-rouge">Semigroup[Date]</code> should be able to combine two
@@ -43,10 +41,9 @@ like we can’t have an <code class="highlighter-rouge">Functor</code> instance 
 by having an instance for <a href="contravariant.html"><code class="highlighter-rouge">Contravariant</code></a>, we could make use of
 <code class="highlighter-rouge">contramap</code> to apply a function <code class="highlighter-rouge">dateToLong</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
 <span class="k">def</span> <span class="n">dateToLong</span><span class="k">:</span> <span class="kt">Date</span> <span class="o">=&gt;</span> <span class="nc">Long</span> <span class="k">=</span> <span class="k">_</span><span class="o">.</span><span class="n">getTime</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Again we are faced with a problem when trying to get a
 <code class="highlighter-rouge">Semigroup[Date]</code> based on a <code class="highlighter-rouge">Semigroup[Long]</code>.  As before consider
@@ -62,9 +59,8 @@ from (covariant) <code class="highlighter-rouge">Functor</code> and <code class=
 There already is a type class for this and it is called <code class="highlighter-rouge">Invariant</code>.
 Instances of the <code class="highlighter-rouge">Invariant</code> type class provide the <code class="highlighter-rouge">imap</code> function:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">imap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)(</span><span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">imap</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&gt;</span> <span class="n">B</span><span class="o">)(</span><span class="n">g</span><span class="k">:</span> <span class="kt">B</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 
 <p>Reusing the example of turning <code class="highlighter-rouge">Semigroup[Long]</code> into
 <code class="highlighter-rouge">Semigroup[Date]</code>, we can use the <code class="highlighter-rouge">g</code> parameter to turn <code class="highlighter-rouge">Date</code> into a
@@ -72,7 +68,7 @@ Instances of the <code class="highlighter-rouge">Invariant</code> type class pro
 convert the result back into a <code class="highlighter-rouge">Date</code> using the <code class="highlighter-rouge">f</code> parameter of
 <code class="highlighter-rouge">imap</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">java.util.Date</span>
 
 <span class="c1">// import everything for simplicity:
 </span><span class="k">import</span> <span class="nn">cats._</span>
@@ -86,13 +82,11 @@ convert the result back into a <code class="highlighter-rouge">Date</code> using
 
 <span class="k">val</span> <span class="n">today</span><span class="k">:</span> <span class="kt">Date</span> <span class="o">=</span> <span class="n">longToDate</span><span class="o">(</span><span class="mi">1449088684104</span><span class="n">l</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">timeLeft</span><span class="k">:</span> <span class="kt">Date</span> <span class="o">=</span> <span class="n">longToDate</span><span class="o">(</span><span class="mi">1900918893</span><span class="n">l</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">today</span> <span class="o">|+|</span> <span class="n">timeLeft</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">today</span> <span class="o">|+|</span> <span class="n">timeLeft</span>
 <span class="c1">// res1: java.util.Date = Thu Dec 24 15:40:02 EST 2015
-</span></code></pre>
-</div>
+</span></code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

@@ -49,11 +49,10 @@ DSL as a “program”, compile the “program”, and finally execute the
 
 <p>For example:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">put</span><span class="o">(</span><span class="s">"toto"</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">put</span><span class="o">(</span><span class="s">"toto"</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
 <span class="n">get</span><span class="o">(</span><span class="s">"toto"</span><span class="o">)</span> <span class="c1">// returns 3
 </span><span class="n">delete</span><span class="o">(</span><span class="s">"toto"</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>But we want:</p>
 
@@ -81,12 +80,11 @@ recursive values.</p>
 
 <p>We need to create an ADT to represent our key-value operations:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">sealed</span> <span class="k">trait</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="nc">case</span> <span class="k">class</span> <span class="nc">Put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">value</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">KVStoreA</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h3 id="free-your-adt">Free your ADT</h3>
 
@@ -102,11 +100,10 @@ recursive values.</p>
 
 <h4 id="create-a-free-type-based-on-your-adt">1. Create a <code class="highlighter-rouge">Free</code> type based on your ADT</h4>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free.Free</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.free.Free</span>
 
 <span class="k">type</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">KVStoreA</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h4 id="create-smart-constructors-using-liftf">2. Create smart constructors using <code class="highlighter-rouge">liftF</code></h4>
 
@@ -114,7 +111,7 @@ recursive values.</p>
 lift <code class="highlighter-rouge">KVStoreA[_]</code> values into our <code class="highlighter-rouge">KVStore[_]</code> monad (note the
 missing “A” in the second type).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free.Free.liftF</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.free.Free.liftF</span>
 
 <span class="c1">// Put returns nothing (i.e. Unit).
 </span><span class="k">def</span> <span class="n">put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">value</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
@@ -134,15 +131,14 @@ missing “A” in the second type).</p>
     <span class="n">vMaybe</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">)</span>
     <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">vMaybe</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">v</span> <span class="k">=&gt;</span> <span class="n">put</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">key</span><span class="o">,</span> <span class="n">f</span><span class="o">(</span><span class="n">v</span><span class="o">))).</span><span class="n">getOrElse</span><span class="o">(</span><span class="nc">Free</span><span class="o">.</span><span class="n">pure</span><span class="o">(()))</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h4 id="build-a-program">3. Build a program</h4>
 
 <p>Now that we can construct <code class="highlighter-rouge">KVStore[_]</code> values we can use our DSL to
 write “programs” using a <em>for-comprehension</em>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">program</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">program</span><span class="k">:</span> <span class="kt">KVStore</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span>
   <span class="k">for</span> <span class="o">{</span>
     <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">put</span><span class="o">(</span><span class="s">"wild-cats"</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
     <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">update</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"wild-cats"</span><span class="o">,</span> <span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">12</span><span class="o">))</span>
@@ -150,8 +146,7 @@ write “programs” using a <em>for-comprehension</em>:</p>
     <span class="n">n</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"wild-cats"</span><span class="o">)</span>
     <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">delete</span><span class="o">(</span><span class="s">"tame-cats"</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="n">n</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This looks like a monadic flow. However, it just builds a recursive
 data structure representing the sequence of operations.</p>
@@ -176,7 +171,7 @@ alternative as <code class="highlighter-rouge">F ~&gt; G</code>).</p>
 <p>In our case, we will use a simple mutable map to represent our key
 value store:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.arrow.FunctionK</span>
 <span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="o">~&gt;}</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable</span>
 
@@ -203,8 +198,7 @@ value store:</p>
           <span class="o">()</span>
       <span class="o">}</span>
   <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Please note this <code class="highlighter-rouge">impureCompiler</code> is impure – it mutates <code class="highlighter-rouge">kvs</code> and
 also produces logging output using <code class="highlighter-rouge">println</code>.  The whole purpose of
@@ -251,16 +245,15 @@ recursive structure by:</p>
 
 <p>This operation is called <code class="highlighter-rouge">Free.foldMap</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">final</span> <span class="k">def</span> <span class="n">foldMap</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="n">f</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">S</span>,<span class="kt">M</span><span class="o">])(</span><span class="n">M</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">M</span><span class="o">])</span><span class="k">:</span> <span class="kt">M</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">final</span> <span class="k">def</span> <span class="n">foldMap</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="n">f</span><span class="k">:</span> <span class="kt">FunctionK</span><span class="o">[</span><span class="kt">S</span>,<span class="kt">M</span><span class="o">])(</span><span class="n">M</span><span class="k">:</span> <span class="kt">Monad</span><span class="o">[</span><span class="kt">M</span><span class="o">])</span><span class="k">:</span> <span class="kt">M</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+</code></pre></div>
 
 <p><code class="highlighter-rouge">M</code> must be a <code class="highlighter-rouge">Monad</code> to be flattenable (the famous monoid aspect
 under <code class="highlighter-rouge">Monad</code>). As <code class="highlighter-rouge">Id</code> is a <code class="highlighter-rouge">Monad</code>, we can use <code class="highlighter-rouge">foldMap</code>.</p>
 
 <p>To run your <code class="highlighter-rouge">Free</code> with previous <code class="highlighter-rouge">impureCompiler</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">result</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">impureCompiler</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">result</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">impureCompiler</span><span class="o">)</span>
 <span class="c1">// put(wild-cats, 2)
 // get(wild-cats)
 // put(wild-cats, 14)
@@ -268,8 +261,7 @@ under <code class="highlighter-rouge">Monad</code>). As <code class="highlighter
 // get(wild-cats)
 // delete(tame-cats)
 // result: Option[Int] = Some(14)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>An important aspect of <code class="highlighter-rouge">foldMap</code> is its <strong>stack-safety</strong>. It evaluates
 each step of computation on the stack then unstack and restart. This
@@ -287,7 +279,7 @@ works, but you might prefer folding your <code class="highlighter-rouge">Free</c
 <a href="state.html">State</a> data structure can be used to keep track of the program
 state in an immutable map, avoiding mutation altogether.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.State</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.State</span>
 
 <span class="k">type</span> <span class="kt">KVStoreState</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">State</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="k">val</span> <span class="n">pureCompiler</span><span class="k">:</span> <span class="kt">KVStoreA</span> <span class="kt">~&gt;</span> <span class="kt">KVStoreState</span> <span class="o">=</span> <span class="k">new</span> <span class="o">(</span><span class="nc">KVStoreA</span> <span class="o">~&gt;</span> <span class="nc">KVStoreState</span><span class="o">)</span> <span class="o">{</span>
@@ -299,17 +291,15 @@ state in an immutable map, avoiding mutation altogether.</p>
       <span class="k">case</span> <span class="nc">Delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">State</span><span class="o">.</span><span class="n">modify</span><span class="o">(</span><span class="k">_</span> <span class="o">-</span> <span class="n">key</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>(You can see that we are again running into some places where Scala’s
 support for pattern matching is limited by the JVM’s type erasure, but
 it’s not too hard to get around.)</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">result</span><span class="k">:</span> <span class="o">(</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">],</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">pureCompiler</span><span class="o">).</span><span class="n">run</span><span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="n">empty</span><span class="o">).</span><span class="n">value</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">result</span><span class="k">:</span> <span class="o">(</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">],</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">pureCompiler</span><span class="o">).</span><span class="n">run</span><span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="n">empty</span><span class="o">).</span><span class="n">value</span>
 <span class="c1">// result: (Map[String,Any], Option[Int]) = (Map(wild-cats -&gt; 14),Some(14))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="composing-free-monads-adts">Composing Free monads ADTs.</h2>
 
@@ -319,14 +309,13 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 
 <p>Let’s see a trivial example of unrelated ADT’s getting composed as a <code class="highlighter-rouge">EitherK</code> that can form a more complex program.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.data.EitherK</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.data.EitherK</span>
 <span class="k">import</span> <span class="nn">cats.free.Free</span>
 <span class="k">import</span> <span class="nn">cats.</span><span class="o">{</span><span class="nc">Id</span><span class="o">,</span> <span class="nc">InjectK</span><span class="o">,</span> <span class="o">~&gt;}</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
-</code></pre>
-</div>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="cm">/* Handles user interaction */</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="cm">/* Handles user interaction */</span>
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="nc">case</span> <span class="k">class</span> <span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Interact</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
@@ -335,18 +324,16 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 <span class="nc">case</span> <span class="k">class</span> <span class="nc">AddCat</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">GetAllCats</span><span class="o">()</span> <span class="k">extends</span> <span class="nc">DataOp</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the EitherK of it’s Algebras.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
+</code></pre></div>
 
 <p>In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the <code class="highlighter-rouge">Free</code> context.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">class</span> <span class="nc">Interacts</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">tell</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Tell</span><span class="o">(</span><span class="n">msg</span><span class="o">))</span>
   <span class="k">def</span> <span class="n">ask</span><span class="o">(</span><span class="n">prompt</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">Interact</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">))</span>
 <span class="o">}</span>
@@ -363,12 +350,11 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 <span class="k">object</span> <span class="nc">DataSource</span> <span class="o">{</span>
   <span class="k">implicit</span> <span class="k">def</span> <span class="n">dataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">InjectK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DataSource</span><span class="o">[</span><span class="kt">F</span><span class="o">]</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>ADTs are now easily composed and trivially intertwined inside monadic contexts.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">program</span><span class="o">(</span><span class="k">implicit</span> <span class="n">I</span> <span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">],</span> <span class="n">D</span> <span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">])</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">CatsApp</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">def</span> <span class="n">program</span><span class="o">(</span><span class="k">implicit</span> <span class="n">I</span> <span class="k">:</span> <span class="kt">Interacts</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">],</span> <span class="n">D</span> <span class="k">:</span> <span class="kt">DataSource</span><span class="o">[</span><span class="kt">CatsApp</span><span class="o">])</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">CatsApp</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
 
   <span class="k">import</span> <span class="nn">I._</span><span class="o">,</span> <span class="n">D</span><span class="o">.</span><span class="k">_</span>
 
@@ -379,13 +365,12 @@ lets us compose different algebras in the context of <code class="highlighter-ro
     <span class="k">_</span> <span class="k">&lt;-</span> <span class="n">tell</span><span class="o">(</span><span class="n">cats</span><span class="o">.</span><span class="n">toString</span><span class="o">)</span>
   <span class="o">}</span> <span class="k">yield</span> <span class="o">()</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Finally we write one interpreter per ADT and combine them with a <code class="highlighter-rouge">FunctionK</code> to <code class="highlighter-rouge">EitherK</code> so they can be
 compiled and applied to our <code class="highlighter-rouge">Free</code> program.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ConsoleCatsInterpreter</span> <span class="k">extends</span> <span class="o">(</span><span class="nc">Interact</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">object</span> <span class="nc">ConsoleCatsInterpreter</span> <span class="k">extends</span> <span class="o">(</span><span class="nc">Interact</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">i</span><span class="k">:</span> <span class="kt">Interact</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span> <span class="k">=</span> <span class="n">i</span> <span class="k">match</span> <span class="o">{</span>
     <span class="k">case</span> <span class="nc">Ask</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span> <span class="k">=&gt;</span>
       <span class="n">println</span><span class="o">(</span><span class="n">prompt</span><span class="o">)</span>
@@ -406,21 +391,18 @@ compiled and applied to our <code class="highlighter-rouge">Free</code> program.
 <span class="o">}</span>
 
 <span class="k">val</span> <span class="n">interpreter</span><span class="k">:</span> <span class="kt">CatsApp</span> <span class="kt">~&gt;</span> <span class="kt">Id</span> <span class="o">=</span> <span class="nc">InMemoryDatasourceInterpreter</span> <span class="n">or</span> <span class="nc">ConsoleCatsInterpreter</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Now if we run our program and type in “snuggles” when prompted, we see something like this:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">DataSource._</span><span class="o">,</span> <span class="nc">Interacts</span><span class="o">.</span><span class="k">_</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">DataSource._</span><span class="o">,</span> <span class="nc">Interacts</span><span class="o">.</span><span class="k">_</span>
+</code></pre></div>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">evaled</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">val</span> <span class="n">evaled</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
 <span class="c1">// What's the kitty's name?
 // List(snuggles)
 // evaled: Unit = ()
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="a-namewhat-is-free-in-theoryafor-the-curious-ones-what-is-free-in-theory"><a name="what-is-free-in-theory"></a>For the curious ones: what is Free in theory?</h2>
 
@@ -452,11 +434,10 @@ free monad is basically a construction that:</p>
 <p>In terms of implementation, to build a <em>monad</em> from a <em>functor</em> we use
 the following classic inductive definition:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">sealed</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="nc">case</span> <span class="k">class</span> <span class="nc">Pure</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Suspend</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]])</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">A</span><span class="o">]</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>(<em>This generalizes the concept of fixed point functor</em>.)</p>
 
@@ -471,9 +452,8 @@ the following classic inductive definition:</p>
 
 <p>So a typical <code class="highlighter-rouge">Free</code> structure might look like:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(....(</span><span class="nc">Pure</span><span class="o">(</span><span class="n">a</span><span class="o">))))))))</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(</span><span class="nc">Suspend</span><span class="o">(</span><span class="n">F</span><span class="o">(....(</span><span class="nc">Pure</span><span class="o">(</span><span class="n">a</span><span class="o">))))))))</span>
+</code></pre></div>
 
 <p><code class="highlighter-rouge">Free</code> is a recursive structure. It uses <code class="highlighter-rouge">A</code> in <code class="highlighter-rouge">F[A]</code> as the
 recursion “carrier” with a terminal element <code class="highlighter-rouge">Pure</code>.</p>
@@ -499,9 +479,8 @@ earlier, allowing very large <code class="highlighter-rouge">Free</code> structu
 <p>If you look at implementation in cats, you will see another member of
 the <code class="highlighter-rouge">Free[_]</code> ADT:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">FlatMapped</span><span class="o">[</span><span class="kt">S</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">C</span><span class="o">],</span> <span class="n">f</span><span class="k">:</span> <span class="kt">C</span> <span class="o">=&gt;</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">]</span>
-</code></pre>
-</div>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">FlatMapped</span><span class="o">[</span><span class="kt">S</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">B</span>, <span class="kt">C</span><span class="o">](</span><span class="n">c</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">C</span><span class="o">],</span> <span class="n">f</span><span class="k">:</span> <span class="kt">C</span> <span class="o">=&gt;</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">Free</span><span class="o">[</span><span class="kt">S</span>, <span class="kt">B</span><span class="o">]</span>
+</code></pre></div>
 
 <p><code class="highlighter-rouge">FlatMapped</code> represents a call to a subroutine <code class="highlighter-rouge">c</code> and when <code class="highlighter-rouge">c</code> is
 finished, it continues the computation by calling the function <code class="highlighter-rouge">f</code>
@@ -530,7 +509,7 @@ typed.</p>
 <p>As we can observe in this case <code class="highlighter-rouge">FreeT</code> offers us the alternative to delegate denotations to <code class="highlighter-rouge">State</code>
 monad with stronger equational guarantees than if we were emulating the <code class="highlighter-rouge">State</code> ops in our own ADT.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.free._</span>
 <span class="c1">// import cats.free._
 </span>
 <span class="k">import</span> <span class="nn">cats._</span>
@@ -596,7 +575,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// import TeletypeOps._
 </span>
 <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@535de7cd
+<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@84850db
 </span>
 <span class="k">val</span> <span class="n">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
 <span class="c1">// initialState: scala.collection.immutable.Nil.type = List()
@@ -605,13 +584,12 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// what's up?!
 // thanks, see you soon!
 // stored: List[String] = List(user said : hanging in here)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>Another example is more basic usage of <code class="highlighter-rouge">FreeT</code> with some context <code class="highlighter-rouge">Ctx</code> for which we provide <code class="highlighter-rouge">Try</code> interpreter,
 combined with <code class="highlighter-rouge">OptionT</code> for reducing boilerplate.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.free._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.free._</span>
 <span class="c1">// import cats.free._
 </span>
 <span class="k">import</span> <span class="nn">cats._</span>
@@ -687,8 +665,7 @@ combined with <code class="highlighter-rouge">OptionT</code> for reducing boiler
 </span>
 <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">evaluated</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// result: scala.util.Try[Option[Int]] = Success(Some(12))
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <h2 id="future-work-todo">Future Work (TODO)</h2>
 

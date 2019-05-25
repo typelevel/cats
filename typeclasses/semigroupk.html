@@ -14,18 +14,16 @@ and, in fact, the <code class="highlighter-rouge">K</code> in <code class="highl
 
 <p>First some imports.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>For <code class="highlighter-rouge">List</code>, the <code class="highlighter-rouge">Semigroup</code> instance’s <code class="highlighter-rouge">combine</code> operation and the <code class="highlighter-rouge">SemigroupK</code>
 instance’s <code class="highlighter-rouge">combineK</code> operation are both list concatenation:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">combineK</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span> <span class="o">==</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">List</span><span class="o">].</span><span class="n">combineK</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span> <span class="o">==</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span> <span class="nc">List</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
 <span class="c1">// res0: Boolean = true
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>However for <code class="highlighter-rouge">Option</code>, the <code class="highlighter-rouge">Semigroup</code>’s <code class="highlighter-rouge">combine</code> and the <code class="highlighter-rouge">SemigroupK</code>’s
 <code class="highlighter-rouge">combineK</code> operation differ. Since <code class="highlighter-rouge">Semigroup</code> operates on fully specified
@@ -40,7 +38,7 @@ two of them. Therefore, in the case of <code class="highlighter-rouge">Option</c
 <code class="highlighter-rouge">SemigroupK[Option].combineK</code> method has no choice but to use the
 <code class="highlighter-rouge">orElse</code> method of Option:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">combine</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
 <span class="c1">// res1: Option[Int] = Some(3)
 </span>
 <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">Option</span><span class="o">].</span><span class="n">combineK</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
@@ -51,25 +49,23 @@ two of them. Therefore, in the case of <code class="highlighter-rouge">Option</c
 </span>
 <span class="nc">SemigroupK</span><span class="o">[</span><span class="kt">Option</span><span class="o">].</span><span class="n">combineK</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
 <span class="c1">// res4: Option[Int] = Some(2)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>There is inline syntax available for both <code class="highlighter-rouge">Semigroup</code> and
 <code class="highlighter-rouge">SemigroupK</code>. Here we are following the convention from scalaz, that
 <code class="highlighter-rouge">|+|</code> is the operator from semigroup and that <code class="highlighter-rouge">&lt;+&gt;</code> is the operator
 from <code class="highlighter-rouge">SemigroupK</code> (called <code class="highlighter-rouge">Plus</code> in scalaz).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 
 <span class="k">val</span> <span class="n">one</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">two</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">n</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Thus.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">one</span> <span class="o">|+|</span> <span class="n">two</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">one</span> <span class="o">|+|</span> <span class="n">two</span>
 <span class="c1">// res5: Option[Int] = Some(3)
 </span>
 <span class="n">one</span> <span class="o">&lt;+&gt;</span> <span class="n">two</span>
@@ -92,23 +88,21 @@ from <code class="highlighter-rouge">SemigroupK</code> (called <code class="high
 </span>
 <span class="n">two</span> <span class="o">&lt;+&gt;</span> <span class="n">n</span>
 <span class="c1">// res12: Option[Int] = Some(2)
-</span></code></pre>
-</div>
+</span></code></pre></div>
 
 <p>You’ll notice that instead of declaring <code class="highlighter-rouge">one</code> as <code class="highlighter-rouge">Some(1)</code>, we chose
 <code class="highlighter-rouge">Option(1)</code>, and we added an explicit type declaration for <code class="highlighter-rouge">n</code>. This is
 because the <code class="highlighter-rouge">SemigroupK</code> type class instances is defined for <code class="highlighter-rouge">Option</code>,
 not <code class="highlighter-rouge">Some</code> or <code class="highlighter-rouge">None</code>. If we try to use <code class="highlighter-rouge">Some</code> or <code class="highlighter-rouge">None</code>, we’ll get errors:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">&lt;+&gt;</span> <span class="nc">None</span>
+<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">&lt;+&gt;</span> <span class="nc">None</span>
 <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">22</span><span class="k">:</span> <span class="kt">error:</span> <span class="kt">value</span> <span class="kt">&lt;+&gt;</span> <span class="kt">is</span> <span class="kt">not</span> <span class="kt">a</span> <span class="kt">member</span> <span class="kt">of</span> <span class="kt">Some</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
        <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">&lt;+&gt;</span> <span class="nc">None</span>
                <span class="o">^</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="nc">None</span> <span class="o">&lt;+&gt;</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
 <span class="n">res14</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });
