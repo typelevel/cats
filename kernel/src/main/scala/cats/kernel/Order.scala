@@ -38,12 +38,12 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
   def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
   /**
-   * If x <= y, return x, else return y.
+   * If x < y, return x, else return y.
    */
   def min(x: A, y: A): A = if (lt(x, y)) x else y
 
   /**
-   * If x >= y, return x, else return y.
+   * If x > y, return x, else return y.
    */
   def max(x: A, y: A): A = if (gt(x, y)) x else y
 
