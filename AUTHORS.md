@@ -16,6 +16,7 @@ possible:
  * Aaron Levin
  * Adam Fisher
  * Adelbert Chang
+ * Adrian Ramirez Fornell
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
@@ -35,12 +36,14 @@ possible:
  * Andy Scott
  * Angelo Genovese
  * Antoine Comte
+ * Arulselvan Madhavan
  * Arya Irani
  * Ash Pook
  * Aλ
  * Ben Fradet
  * Ben Hutchison
  * Ben Kirwin
+ * Ben Plommer
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -59,6 +62,7 @@ possible:
  * Csongor Kiss
  * dadepo
  * Dale Wijnand
+ * Dan Di Spaltro
  * Daniel Karch
  * Daniel Spiewak
  * Daniel Urban
@@ -99,6 +103,7 @@ possible:
  * Gavin Bisesi
  * Giovanni Ruggiero
  * Giulio De Luise
+ * Giuseppe Cannella
  * Greg Pfeil
  * Guillaume Massé
  * Hamish Dickson
@@ -112,12 +117,14 @@ possible:
  * Jacob Barber
  * Jakub Kozłowski
  * Jan-Hendrik Zab
+ * Jasper Moeys
  * Jean-Rémi Desjardins
  * Jens
  * Jens Grassel
  * Jimin Hsieh
  * Jisoo Park
  * João Ferreira
+ * Joan Goyeau
  * John Sullivan
  * Jon Hanson
  * Jose Emilio Labra Gayo
@@ -129,6 +136,7 @@ possible:
  * Julien Richard-Foy
  * Julien Truffaut
  * Jun Tomioka
+ * jurisk
  * Kailuo Wang
  * Keir Lawson
  * kellen
@@ -149,6 +157,7 @@ possible:
  * Mark de Jong
  * Markus Hauck
  * Martijn Hoekstra
+ * Mateusz Sokół
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
@@ -158,6 +167,7 @@ possible:
  * Michael Pilquist
  * Mike Curry
  * Miles Sabin
+ * Mirco Dotta
  * nigredo-tori
  * Nikolay Maksimenko
  * n4to4
@@ -222,8 +232,10 @@ possible:
  * Valy Diarrassouba
  * Vasileios Lampridis
  * ven
+ * Viktor Dychko
  * Viktor Lövgren
  * Vladimir Samoylov
+ * Vladislav Gutov
  * Wedens
  * Wogan
  * Xavier Fernández Salas
@@ -231,6 +243,7 @@ possible:
  * 杨博 (Yang Bo)
  * Yosef Fertel
  * Yilin Wei
+ * Yuriy Badalyantc
  * Zach Abbott
  * zainab-ali
  * Zelenya

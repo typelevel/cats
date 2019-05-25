@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us. 
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
@@ -64,7 +65,7 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC1, and [Scala.js](http://www.scala-js.org/).
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC2, and [Scala.js](http://www.scala-js.org/).
 
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
@@ -82,7 +83,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M2"
 ```
 
 This will pull in the cats-core module. If you require some other

@@ -1,3 +1,58 @@
+## Version 2.0.0-M2
+
+> 2019 May 25
+
+Cats 2.0.0-M2 is a milestone release for Cats 2.0. It's available on Scala 2.11, Scala 2.12, Scala 2.13.0-RC2 and Scala.js 0.6.
+Cats 2.0.0-M2 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x.
+Their 2.0.0-M2 jars are drop-in replacements for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0, 1.5.0, 1.6.0, and 2.0.0-M1 jars.
+cats-kernel, cats-core and cats-free 2.0.0 will remain binary compatible with 1.x.
+Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats.
+
+### 1 breaking change
+
+* [#2817](https://github.com/typelevel/cats/pull/2817) Added a new foldRight lazy law, move forallLazy and existLazy laws  by @kailuowang
+
+### 15 documentation additions/fixes
+
+* [#2811](https://github.com/typelevel/cats/pull/2811) Added availability information  by @kailuowang and @LukaJCB
+* [#2813](https://github.com/typelevel/cats/pull/2813) Remove 'cats experimental' clause from README.md  by @kamilkloch
+* [#2814](https://github.com/typelevel/cats/pull/2814) Added sustainability program related info  by @kailuowang
+* [#2816](https://github.com/typelevel/cats/pull/2816) Fix button URL  by @kailuowang
+* [#2815](https://github.com/typelevel/cats/pull/2815) Add navigation links to readme  by @kailuowang
+* [#2822](https://github.com/typelevel/cats/pull/2822) Add Netflix as users of Cats  by @joan38
+* [#2826](https://github.com/typelevel/cats/pull/2826) Add itto-csv as Cats library  by @gekomad
+* [#2833](https://github.com/typelevel/cats/pull/2833) Add Evolution Gaming to Cats Adopters  by @jurisk
+* [#2841](https://github.com/typelevel/cats/pull/2841) Add Coya to Cats adopters  by @dychko
+* [#2844](https://github.com/typelevel/cats/pull/2844) Added sponsors  by @kailuowang
+* [#2846](https://github.com/typelevel/cats/pull/2846) Minor fix to adopters  by @kailuowang
+* [#2847](https://github.com/typelevel/cats/pull/2847) Add Chartboost to list of adopters  by @ArulselvanMadhavan
+* [#2850](https://github.com/typelevel/cats/pull/2850) Gold -> Silver for the silver section  by @dispalt
+* [#2819](https://github.com/typelevel/cats/pull/2819) Added FreeT basic example  by @mtsokol
+* [#2855](https://github.com/typelevel/cats/pull/2855) Edit example in Parallel docs  by @Jasper-M
+
+### 3 API/feature enhancements
+
+* [#2796](https://github.com/typelevel/cats/pull/2796) Added collectFirst to Chain and NonEmptyChain  by @LMnet
+* [#2837](https://github.com/typelevel/cats/pull/2837) Added collectFirst to Chain and NonEmptyChain  by @AdrianRaFo
+* [#2840](https://github.com/typelevel/cats/pull/2840) Add Semigroupal instance for SortedSet  by @vladislavGutov
+
+### 5 build improvements
+
+* [#2821](https://github.com/typelevel/cats/pull/2821) Remove unused resolver  by @kailuowang
+* [#2856](https://github.com/typelevel/cats/pull/2856) Update sbt-scalajs to 0.6.28  by @scala-steward
+* [#2848](https://github.com/typelevel/cats/pull/2848) Enables Hydra on cats build  by @kailuowang
+* [#2858](https://github.com/typelevel/cats/pull/2858) Don't create the hydra.license if $HydraLicense is empty  by @dotta
+* [#2857](https://github.com/typelevel/cats/pull/2857) Updtes for 2.13.0-RC2  by @travisbrown and @larsrh
+
+### 2 test improvments
+
+* [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
+* [#2833](https://github.com/typelevel/cats/pull/2833) Fixed applicative monoid test  by @kailuowang
+
+### 1 bug fix
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
+
 ## Version 2.0.0-M1
 
 > 2019 April 24
