@@ -80,13 +80,13 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "machinist" % "0.6.7",
-    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
+    "org.typelevel" %%% "machinist" % "0.6.8",
+    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.1")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.16.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.17.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -148,23 +148,24 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.1.0-SNAP9"
+val scalatestVersion = "3.1.0-SNAP11"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP4"
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP6"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.11.2-M1"
+val disciplineVersion = "0.12.0-M1"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-                              "org.typelevel" %%% "discipline" % disciplineVersion)
+                              "org.typelevel" %%% "discipline-core" % disciplineVersion)
 )
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
+    "org.typelevel" %%% "discipline-scalatest" % disciplineVersion % "test"
   )
 )
 
@@ -561,8 +562,11 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(disciplineDependencies)
   .settings(
-    libraryDependencies ++= Seq("org.scalatest" %%% "scalatest" % scalatestVersion,
-                                "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion)
+    libraryDependencies ++= Seq(
+      "org.scalatest" %%% "scalatest" % scalatestVersion,
+      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
+      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+    )
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
