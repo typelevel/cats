@@ -154,7 +154,7 @@ val scalatestplusScalaCheckVersion = "1.0.0-SNAP6"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.12.0"
+val disciplineVersion = "0.12.0-M1"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
