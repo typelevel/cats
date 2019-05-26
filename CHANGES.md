@@ -33,7 +33,7 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 ### 3 API/feature enhancements
 
 * [#2796](https://github.com/typelevel/cats/pull/2796) Added collectFirst to Chain and NonEmptyChain  by @LMnet
-* [#2837](https://github.com/typelevel/cats/pull/2837) Added collectFirst to Chain and NonEmptyChain  by @AdrianRaFo
+* [#2837](https://github.com/typelevel/cats/pull/2837) Delete unnecessary restriction on biFlatMap  by @AdrianRaFo
 * [#2840](https://github.com/typelevel/cats/pull/2840) Add Semigroupal instance for SortedSet  by @vladislavGutov
 
 ### 5 build improvements
@@ -42,7 +42,7 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 * [#2856](https://github.com/typelevel/cats/pull/2856) Update sbt-scalajs to 0.6.28  by @scala-steward
 * [#2848](https://github.com/typelevel/cats/pull/2848) Enables Hydra on cats build  by @kailuowang
 * [#2858](https://github.com/typelevel/cats/pull/2858) Don't create the hydra.license if $HydraLicense is empty  by @dotta
-* [#2857](https://github.com/typelevel/cats/pull/2857) Updtes for 2.13.0-RC2  by @travisbrown and @larsrh
+* [#2857](https://github.com/typelevel/cats/pull/2857) Updates for 2.13.0-RC2  by @travisbrown and @larsrh
 
 ### 2 test improvments
 
