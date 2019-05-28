@@ -84,5 +84,5 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
 }
 
 class OptionCommutativeMonoid[A](implicit A: CommutativeSemigroup[A])
-  extends OptionMonoid[A]()(A)
-  with CommutativeMonoid[Option[A]]
+    extends OptionMonoid[A]()(A)
+    with CommutativeMonoid[Option[A]]
