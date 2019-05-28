@@ -7,9 +7,9 @@ import cats.arrow._
 /**
  * Represents a function `A => F[B]`.
  */
-final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
+final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
 
-  def ap[C](f: Kleisli[F, A, B => C])(implicit F: Apply[F]): Kleisli[F, A, C] =
+  def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
 
   /**
@@ -39,7 +39,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
     Kleisli[G, A, B](run.andThen(f.apply))
 
-  def flatMap[C](f: B => Kleisli[F, A, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+  def flatMap[C, AA <: A](f: B => Kleisli[F, AA, C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
     Kleisli.shift(a => F.flatMap[B, C](run(a))((b: B) => f(b).run(a)))
 
   def flatMapF[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
@@ -65,13 +65,13 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     this.andThen(k.run)
 
-  def compose[Z](f: Z => F[A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+  def compose[Z, AA <: A](f: Z => F[AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
 
-  def compose[Z](k: Kleisli[F, Z, A])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+  def compose[Z, AA <: A](k: Kleisli[F, Z, AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     this.compose(k.run)
 
-  def traverse[G[_]](f: G[A])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
+  def traverse[G[_], AA <: A](f: G[AA])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
     G.traverse(f)(run)
 
   def lift[G[_]](implicit G: Applicative[G]): Kleisli[λ[α => G[F[α]]], A, B] =
@@ -104,17 +104,17 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) { self =>
     Kleisli { case (c, a) => F.map(run(a))(c -> _) }
 
   /** Discard computed B and yield the input value. */
-  def tap(implicit F: Functor[F]): Kleisli[F, A, A] =
+  def tap[AA <: A](implicit F: Functor[F]): Kleisli[F, AA, AA] =
     Kleisli(a => F.as(run(a), a))
 
   /** Yield computed B combined with input value. */
-  def tapWith[C](f: (A, B) => C)(implicit F: Functor[F]): Kleisli[F, A, C] =
+  def tapWith[C, AA <: A](f: (AA, B) => C)(implicit F: Functor[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
 
-  def tapWithF[C](f: (A, B) => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+  def tapWithF[C, AA <: A](f: (AA, B) => F[C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.flatMap(run(a))(b => f(a, b)))
 
-  def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
+  def toReader[AA <: A]: Reader[AA, F[B]] = Kleisli[Id, AA, F[B]](run)
 
   def apply(a: A): F[B] = run(a)
 }
