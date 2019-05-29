@@ -46,12 +46,6 @@ class NonEmptySetSuite extends CatsSuite {
     checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
              SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
 
-    // NOTE: Order[NonEmptySet[A]] instance depends on Order[SortedSet[A]]. SortedSet only has Order instance which depends on Order[A] instance
-    //       and thus the only way we can get PartialOrder[NonEmptySet[A]] is via construction of Order[NonEmptySet[A]]
-    checkAll("NonEmptySet[ListWrapper[Int]]", PartialOrderTests[NonEmptySet[ListWrapper[Int]]].partialOrder)
-    checkAll("PartialOrder[NonEmptySet[ListWrapper[Int]]]",
-             SerializableTests.serializable(PartialOrder[NonEmptySet[ListWrapper[Int]]]))
-
     Eq[NonEmptySet[ListWrapper[Int]]]
     PartialOrder[NonEmptySet[ListWrapper[Int]]]
   }
