@@ -23,6 +23,21 @@ class ApplicativeErrorSuite extends CatsSuite {
     failed.attempt should ===(Option(Left(())))
   }
 
+  test("attemptCase[EE] syntax creates an F[Either[EE, A]]") {
+    trait Err
+    case class ErrA() extends Err
+    case class ErrB() extends Err
+
+    implicit val eqForErr: Eq[Err] = Eq.fromUniversalEquals[Err]
+    implicit val eqForErrA: Eq[ErrA] = Eq.fromUniversalEquals[ErrA]
+    implicit val eqForErrB: Eq[ErrB] = Eq.fromUniversalEquals[ErrB]
+
+    val failed: Either[Err, Int] = ErrA().raiseError[Either[Err, ?], Int]
+
+    failed.attemptCase[ErrA] should ===(ErrA().asLeft[Int].asRight[Err])
+    failed.attemptCase[ErrB] should ===(Either.left[Err, Either[ErrB, Int]](ErrA()))
+  }
+
   test("attemptT syntax creates an EitherT") {
     failed.attemptT should ===(EitherT[Option, Unit, Int](Option(Left(()))))
   }
