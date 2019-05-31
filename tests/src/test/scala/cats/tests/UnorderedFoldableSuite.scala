@@ -44,6 +44,14 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
       fa.count(Function.const(true)) should ===(fa.size)
     }
   }
+
+  test(s"UnorderedFoldable[$name].contains_") {
+    forAll { (fa: F[String], s: String) =>
+      implicit val F: UnorderedFoldable[F] = instance
+      fa.contains_(s) ===(iterator(fa).contains(s))
+    }
+  }
+
   checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
 }
 
