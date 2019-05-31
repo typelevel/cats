@@ -88,6 +88,5 @@ trait AllSyntaxBinCompat4
     with ReducibleSyntaxBinCompat0
     with FoldableSyntaxBinCompat1
     with BitraverseSyntaxBinCompat0
-    with UnorderedFoldableSyntaxBinCompat0
 
-trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
+trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax with UnorderedFoldableSyntaxBinCompat0

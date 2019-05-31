@@ -9,7 +9,9 @@ trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
 }
 
 trait UnorderedFoldableSyntaxBinCompat0 {
-  implicit final def catsSyntaxUnorderedFoldableOps0[F[_]: UnorderedFoldable, A](fa: F[A]): UnorderedFoldableOps0[F, A] =
+  implicit final def catsSyntaxUnorderedFoldableOps0[F[_]: UnorderedFoldable, A](
+    fa: F[A]
+  ): UnorderedFoldableOps0[F, A] =
     new UnorderedFoldableOps0[F, A](fa)
 }
 
