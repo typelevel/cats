@@ -24,4 +24,4 @@ resolvers += Resolver.url(
   url("https://repo.triplequote.com/artifactory/sbt-plugins-release/")
 )(Resolver.ivyStylePatterns)
 
-addSbtPlugin("com.triplequote" % "sbt-hydra" % "2.1.4")
+addSbtPlugin("com.triplequote" % "sbt-hydra" % "2.1.5")
