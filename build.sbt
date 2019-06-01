@@ -81,7 +81,7 @@ lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.8",
-    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.1")
+    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.2")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
