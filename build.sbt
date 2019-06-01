@@ -148,13 +148,13 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.1.0-SNAP11"
+val scalatestVersion = "3.1.0-SNAP12"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP6"
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP7"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.12.0-M1"
+val disciplineVersion = "0.12.0-M2"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
