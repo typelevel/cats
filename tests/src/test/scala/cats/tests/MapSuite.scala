@@ -11,6 +11,7 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.arrow.Compose
+import cats.kernel.instances.StaticMethods.wrapMutableMap
 
 class MapSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms.invariant[Map[Int, ?]]
@@ -37,5 +38,10 @@ class MapSuite extends CatsSuite {
       map.show.startsWith("Map(") should ===(true)
       map.show should ===(implicitly[Show[Map[Int, String]]].show(map))
     }
+  }
+
+  {
+    val m = wrapMutableMap(scala.collection.mutable.Map(1 -> "one", 2 -> "two"))
+    checkAll("WrappedMutableMap", SerializableTests.serializable(m))
   }
 }
