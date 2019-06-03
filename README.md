@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Jun  3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backports from the 2.x series
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us. 
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.

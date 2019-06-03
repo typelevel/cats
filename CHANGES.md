@@ -1,3 +1,22 @@
+## Version 1.6.1
+
+> 2019 June 3
+
+Cats 1.6.1 is binary compatible with all previous 1.x Cats releases.
+
+### 2 API/Feature enhancements
+
+* [#2784](https://github.com/typelevel/cats/pull/2784) Make WrappedMutableMapBase extend Serializable  by @ceedubs
+* [#2728](https://github.com/typelevel/cats/pull/2728) Optimize productR in Apply  by @maphi
+
+### 1 documentation addition/fix
+
+* [#2842](https://github.com/typelevel/cats/pull/2842) Fix Order.max and Oder.min description comments  by @orvi
+
+### 1 bug fixes
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
+
 ## Version 2.0.0-M1
 
 > 2019 April 24
