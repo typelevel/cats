@@ -56,12 +56,12 @@ lazy val commonSettings = Seq(
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
+  // TODO: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
   },
-  //todo: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
+  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
   sources in (Compile, doc) := {
     val docSource = (sources in (Compile, doc)).value
     if (priorTo2_13(scalaVersion.value)) docSource else Nil
@@ -118,7 +118,7 @@ lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
-  // batch mode decreases the amount of memory needed to compile scala.js code
+  // batch mode decreases the amount of memory needed to compile Scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
@@ -135,7 +135,7 @@ lazy val commonJvmSettings = Seq(
 )
 
 lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.11.12", //TODO load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
+  scalaVersion := "2.11.12", // TODO: load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
   crossScalaVersions := Seq("2.11.12")
 )
 
@@ -806,7 +806,7 @@ def commonScalacOptions(scalaVersion: String) =
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
-            "-Xfatal-warnings", //todo: add the following two back to 2.13
+            "-Xfatal-warnings", // TODO: add the following two back to 2.13
             "-deprecation"
           )
         else

@@ -15,12 +15,12 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
  */
 object arbitrary extends ArbitraryInstances0 {
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val catsLawsCogenForThrowable: Cogen[Throwable] =
     Cogen[String].contramap(_.toString)
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForTry[A](implicit A: Cogen[A]): Cogen[Try[A]] =
     Cogen(
@@ -31,7 +31,7 @@ object arbitrary extends ArbitraryInstances0 {
       }
     )
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForFunction0[A](implicit A: Cogen[A]): Cogen[Function0[A]] =
     A.contramap(_())
@@ -175,7 +175,7 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForWriter[L: Cogen, V: Cogen]: Cogen[Writer[L, V]] =
     Cogen[(L, V)].contramap(_.run)
 
-  // until this is provided by scalacheck
+  // until this is provided by ScalaCheck
   implicit def catsLawsArbitraryForPartialFunction[A, B](
     implicit F: Arbitrary[A => Option[B]]
   ): Arbitrary[PartialFunction[A, B]] =

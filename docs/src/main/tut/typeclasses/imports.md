@@ -5,7 +5,7 @@ section: "imports"
 ---
 # Imports
 
-The easiest approach to cats imports is to import everything that's commonly needed:
+The easiest approach to Сats imports is to import everything that's commonly needed:
 
 ```tut:silent
 import cats._
@@ -31,7 +31,7 @@ import cats.data.State
 The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods such as right-biased `Either` combinators:
 
 ```tut:book
-// cats adds right-biased combinators to the standard library's Either
+// Сats adds right-biased combinators to the standard library's Either
 val e: Either[String, Int] = Right(3)
 e.map(_ + 1)
 
@@ -71,7 +71,7 @@ import cats.instances.all._
 import cats.syntax.semigroup._
 val x = -2 |+| 1
 
-//now we also need access to isEmpty from Monoid
+// now we also need access to isEmpty from Monoid
 import cats.syntax.monoid._
 (x |+| 1).isEmpty //error: value |+| is not a member of Int
 ```

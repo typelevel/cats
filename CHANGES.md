@@ -10,7 +10,7 @@ Cats 2.0.0-M1 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 
 ### Breaking changes 
 
-* cats-laws and cats-kernel-laws now depend on Scalacheck 1.14.0 which is not binary compatible with Scalacheck 1.13.
+* cats-laws and cats-kernel-laws now depend on ScalaCheck 1.14.0 which is not binary compatible with ScalaCheck 1.13.
 * cats-testkit now depends on Scalatest 3.1.0-SNAP9 whics is not backward compatible with Scalatest 3.0.x.
 * alleycats no longer supports export-hook.
 * [#2672](https://github.com/typelevel/cats/pull/2672) Alter from Reflexitivity to Reflexivity   by @mattkohl
@@ -683,7 +683,7 @@ This is the only planned release candidate release prior to 1.0.0.
 
 To migrate from 1.0.0-MF.
 
-* The rename of `Cartesian` to `Semigroupal` and `EitherT.liftT` to `EitherT.liftF` can be done automatically through scalafix we provide. See instructions [here](https://github.com/typelevel/cats/blob/master/scalafix/README.md).
+* The rename of `Cartesian` to `Semigroupal` and `EitherT.liftT` to `EitherT.liftF` can be done automatically through Scalafix we provide. See instructions [here](https://github.com/typelevel/cats/blob/master/scalafix/README.md).
 * For `FlatMap`'s `>>` and `<<`, use `Apply`'s `*>` and `<*` instead.
 * `Profunctor` and `Strong` were moved to the `cats.arrow` package,  `Bifunctor`, `Invariant` and `Contravariant` were moved to the `cats` root package.
 * `SemigroupK[λ[α => Kleisli[F, α, α]]]` and `MonoidK[λ[α => Kleisli[F, α, α]]]` are no longer implicitly available, Use `Kleisli.endoSemigroupK` and `Kleisli.endoMonoidK` to get them explicitly.
@@ -1534,7 +1534,7 @@ published under the `org.typelevel` group from the
 [Typelevel](https://github.com/typelevel) organization on GitHub (previous
 releases had been published to `org.spire-math` from `non/cats`). This means
 that users will need to change the `groupId` for their Cats dependencies when
-updating. If you have a line like this in your SBT build configuration, for
+updating. If you have a line like this in your `sbt` build configuration, for
 example:
 
 ```scala
@@ -1884,7 +1884,7 @@ Version 0.2.0 is the second release of the Cats library.
 
 The most exciting feature of this release is Scala.js support, which
 comes courtesy of much hard work by the Scala.js community (especially
-Alistair Johnson). The SBT build configuration and project layout were
+Alistair Johnson). The `sbt` build configuration and project layout were
 updated to support building for both the JVM and JS platforms.
 
 Since the 0.1.2 release there was wide agreement that the split

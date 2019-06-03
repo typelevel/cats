@@ -254,7 +254,7 @@ Let's see what changed here:
 4. `.validNec` and `.invalidNec` combinators lets you _lift_ the success or failure in their respective container (either a `Valid` or `Invalid[NonEmptyChain[A]]`).
 5. The [applicative](../typeclasses/applicative.html) syntax `(a, b, c, ...).mapN(...)` provides us a way to accumulatively apply the validation functions and yield a product with their successful result or the accumulated errors in the `NonEmptyChain`. Then, we transform that product with `mapN` into a valid instance of `RegistrationData`.
 
-**Deprecation notice:** since cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
+**Deprecation notice:** since Cats `1.0.0-MF` the cartesian syntax `|@|` for applicatives is deprecated. If you're using `0.9.0` or less, you can use the syntax: `(a |@| b |@| ...).map(...)`.
 
 Note that, at the end, we expect to lift the result of the validation functions in a `RegistrationData` instance. If the process fails, we'll get our `NonEmptyChain` detailing what went wrong.
 

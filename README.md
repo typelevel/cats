@@ -55,17 +55,14 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 Silver Sponsors are those who have pledged $2,000 to $5,000.
 
-
-<a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png"  style="margin-bottom:15px; margin-right: 10px" /></a>
+<a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC1, and [Scala.js](http://www.scala-js.org/).
-
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13.0-RC1, and [Scala.js](http://www.scala-js.org/).
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
 
@@ -140,12 +137,12 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
  * [origami](https://github.com/atnos-org/origami): monadic folds
  * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
- * [shims](https://github.com/djspiewak/shims): seamless interoperability for cats and scalaz typeclasses and datatypes
+ * [shims](https://github.com/djspiewak/shims): seamless interoperability for Cats and scalaz typeclasses and datatypes
 
 #### Libraries with more specific uses
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
- * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
+ * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): Cats typeclass instances for ScalaCheck
  * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [circe](https://github.com/circe/circe): pure functional JSON library
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
@@ -180,8 +177,8 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
-  
-Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
+
+Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
 
@@ -244,7 +241,7 @@ with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replaceme
 the old one. This is critical when your application has a diamond
 dependency on Cats - depending on two or more libraries that all depend on Cats. 
 If one library upgrades to the new `1.1.0` Cats before the other one does, your 
-application still runs thanks to this backward binary compatibility.  
+application still runs thanks to this backward binary compatibility.
 
 Also worth noting is that according to semantic versioning, 
 *MINOR* version Y (x.Y.z | x > 0) MUST be incremented 

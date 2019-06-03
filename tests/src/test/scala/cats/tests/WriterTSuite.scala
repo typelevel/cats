@@ -12,7 +12,7 @@ class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
 
   // we have a lot of generated lists of lists in these tests. We have to tell
-  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration.copy(sizeRange = 5)

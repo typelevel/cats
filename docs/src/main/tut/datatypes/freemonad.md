@@ -21,11 +21,11 @@ In particular, *free monads* provide a practical way to:
  - build an embedded DSL (domain-specific language)
  - retarget a computation to another interpreter using natural transformations
 
-> (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
+> (In Cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
 
-If you'd like to use cats' free monad, you'll need to add a library dependency
+If you'd like to use Cats' free monad, you'll need to add a library dependency
 for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
