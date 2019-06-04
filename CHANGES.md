@@ -33,7 +33,7 @@ Their 2.0.0-M2 jars are drop-in replacements for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4
 cats-kernel, cats-core and cats-free 2.0.0 will remain binary compatible with 1.x.
 Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats.
 
-### 1 Binary breaking change in cats-laws
+### 1 breaking change in cats-laws
 
 * [#2817](https://github.com/typelevel/cats/pull/2817) Added a new foldRight lazy law, move forallLazy and existLazy laws  by @kailuowang
 
