@@ -37,15 +37,11 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 
 * [#2817](https://github.com/typelevel/cats/pull/2817) Added a new foldRight lazy law, move forallLazy and existLazy laws  by @kailuowang
 
-### 1 Source breaking change (remains binary compatible)
 
-* [#2843](https://github.com/typelevel/cats/pull/2843) Kleisli contravariant on input type `A` by @jcouyang
-
-### 7 documentation additions/fixes
+### 6 documentation additions/fixes
 
 * [#2855](https://github.com/typelevel/cats/pull/2855) Edit example in Parallel docs  by @Jasper-M
 * [#2850](https://github.com/typelevel/cats/pull/2850) Small Readme fix  by @dispalt
-* [#2842](https://github.com/typelevel/cats/pull/2842) Fix Order.max and Oder.min description comments  by @orvi
 * [#2819](https://github.com/typelevel/cats/pull/2819) added FreeT basic example  by @mtsokol
 * [#2815](https://github.com/typelevel/cats/pull/2815) added navigation links to readme  by @kailuowang
 * [#2813](https://github.com/typelevel/cats/pull/2813) Remove 'cats experimental' clause from README.md.  by @kamilkloch
@@ -68,10 +64,9 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 * [#2821](https://github.com/typelevel/cats/pull/2821) removing unused resolver  by @kailuowang
         
 
-### 3 test improvments
+### 2 test improvments
 
 * [#2831](https://github.com/typelevel/cats/pull/2831) fixed applicative monoid test  by @kailuowang
-* [#2830](https://github.com/typelevel/cats/pull/2830) remove deprecated eq instances from scope  by @kailuowang
 * [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
         
 
