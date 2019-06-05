@@ -70,7 +70,7 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 * [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
         
 
-### 1 bug fixe
+### 1 bug fix
 
 * [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
 
@@ -314,7 +314,7 @@ Cats 1.5.0-RC0 is binary compatible with all previous 1.x Cats releases, i.e. it
 * [#2475](https://github.com/typelevel/cats/pull/2475) Add Either#toEitherNel extension and friends  by @kubukoz
         
         
-### 1 bug fixes
+### 1 bug fix
 
 * [#2586](https://github.com/typelevel/cats/pull/2586) UnorderedFoldable#isEmpty default implementation is incorrect  by @barambani
 
