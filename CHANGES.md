@@ -64,13 +64,13 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 * [#2821](https://github.com/typelevel/cats/pull/2821) removing unused resolver  by @kailuowang
         
 
-### 2 test improvments
+### 2 test improvements
 
 * [#2831](https://github.com/typelevel/cats/pull/2831) fixed applicative monoid test  by @kailuowang
 * [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
         
 
-### 1 bug fixes
+### 1 bug fixe
 
 * [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
 
