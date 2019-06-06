@@ -77,7 +77,6 @@ After the release occurs, you will need to update the
 documentation. Here is a list of the places that will definitely need
 to be updated:
 
- * `docs/src/site/index.md`: update version numbers
  * `README.md`: update version numbers
  * `AUTHORS.md`: add new contributors
  * `CHANGES.md`: summarize changes since last release
