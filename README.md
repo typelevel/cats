@@ -342,9 +342,9 @@ The current maintainers (people who can merge pull requests) are:
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
 
 We are currently following a practice of requiring at least two
-sign-offs to merge PRs (and for large or contentious issues we may
-wait for more). For typos or other small fixes to documentation we
-relax this to a single sign-off.
+sign-offs to merge code PRs (and for large or contentious issues we may
+wait for more). For typos, documentation improvements or minor build fix we
+relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/master/PROCESS.md). 
 
 
 ### Copyright and License
