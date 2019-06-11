@@ -1,3 +1,24 @@
+
+## Version 2.0.0-M4
+
+> 2019 June 11
+
+Cats 2.0.0-M4 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13.0 and Scala.js 0.6.
+Cats 2.0.0-M4 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 2 documentation additions/fixes
+
+* [#2868](https://github.com/typelevel/cats/pull/2868) mention cats by example  by @TomTriple
+* [#2860](https://github.com/typelevel/cats/pull/2860) Remove index.md from post-release process  by @rossabaker
+
+
+### 1 build improvements
+
+* [#2884](https://github.com/typelevel/cats/pull/2884) Upgrade Scala to 2.13.0  by @kailuowang
+
+
+
+
 ## Version 2.0.0-M3
 
 > 2019 June 1
