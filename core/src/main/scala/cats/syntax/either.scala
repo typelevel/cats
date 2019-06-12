@@ -442,7 +442,8 @@ final class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends A
 }
 
 trait EitherSyntaxBinCompat1 {
-  implicit final def catsSyntaxForEffectEither[F[_], A, B](feab: F[Either[A, B]]): EffectEitherOps[F, A, B] = new EffectEitherOps(feab)
+  implicit final def catsSyntaxForEffectEither[F[_], A, B](feab: F[Either[A, B]]): EffectEitherOps[F, A, B] =
+    new EffectEitherOps(feab)
 }
 final class EffectEitherOps[F[_], A, B](private val value: F[Either[A, B]]) extends AnyVal {
 

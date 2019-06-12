@@ -11,7 +11,8 @@ trait OptionSyntax {
 }
 
 trait OptionSyntaxBinCompat0 {
-  implicit final def catsSyntaxEffectOption[F[_], A](foa: F[Option[A]]): EffectOptionOps[F, A] = new EffectOptionOps(foa)
+  implicit final def catsSyntaxEffectOption[F[_], A](foa: F[Option[A]]): EffectOptionOps[F, A] =
+    new EffectOptionOps(foa)
 }
 
 final class OptionIdOps[A](private val a: A) extends AnyVal {
