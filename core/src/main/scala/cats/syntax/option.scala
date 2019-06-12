@@ -10,6 +10,10 @@ trait OptionSyntax {
   implicit final def catsSyntaxOption[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
 }
 
+trait OptionSyntaxBinCompat0 {
+  implicit final def catsSyntaxEffectOption[F[_], A](foa: F[Option[A]]): EffectOptionOps[F, A] = new EffectOptionOps(foa)
+}
+
 final class OptionIdOps[A](private val a: A) extends AnyVal {
 
   /**
@@ -26,6 +30,20 @@ final class OptionIdOps[A](private val a: A) extends AnyVal {
    * }}}
    */
   def some: Option[A] = Some(a)
+}
+
+final class EffectOptionOps[F[_], A](private val foa: F[Option[A]]) extends AnyVal {
+
+  /** Converts an `F[Option[A]]` to an `OptionT[F, A]`
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> List(42.some).asOptionT
+   * res0: cats.data.OptionT[List, Int] = OptionT(List(Some(42)))
+   * }}}
+   */
+  def asOptionT: OptionT[F, A] = OptionT(foa)
 }
 
 final class OptionOps[A](private val oa: Option[A]) extends AnyVal {

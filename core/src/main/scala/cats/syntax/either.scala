@@ -441,6 +441,23 @@ final class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends A
   }
 }
 
+trait EitherSyntaxBinCompat1 {
+  implicit final def catsSyntaxForEffectEither[F[_], A, B](feab: F[Either[A, B]]): EffectEitherOps[F, A, B] = new EffectEitherOps(feab)
+}
+final class EffectEitherOps[F[_], A, B](private val value: F[Either[A, B]]) extends AnyVal {
+
+  /** Converts an `F[Either[A, B]]` to an `EitherT[F, A, B]`
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> List(42.asRight[String]).asEitherT
+   * res0: cats.data.EitherT[List, String, Int] = EitherT(List(Right(42)))
+   * }}}
+   */
+  def asEitherT: EitherT[F, A, B] = EitherT(value)
+}
+
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
 private[cats] object EitherUtil {
   def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
