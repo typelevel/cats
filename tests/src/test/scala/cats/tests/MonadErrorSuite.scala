@@ -63,4 +63,12 @@ class MonadErrorSuite extends CatsSuite {
   test("rethrow returns the successful value, when applied to a Right of a successful value") {
     successful.attempt.rethrow should ===(successful)
   }
+
+  test("rethrow returns the failure, when applied to a Left of a specialized failure") {
+    failed.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow should ===(failed)
+  }
+
+  test("rethrow returns the successful value, when applied to a Right of a specialized successful value") {
+    successful.attempt.asInstanceOf[Try[Either[IllegalArgumentException, Int]]].rethrow should ===(successful)
+  }
 }
