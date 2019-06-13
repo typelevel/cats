@@ -13,7 +13,82 @@ Cats 1.6.1 is binary compatible with all previous 1.x Cats releases.
 
 * [#2842](https://github.com/typelevel/cats/pull/2842) Fix Order.max and Oder.min description comments  by @orvi
 
-### 1 bug fixes
+### 1 bug fix
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
+
+## Version 2.0.0-M3
+
+> 2019 June 1
+
+Cats 2.0.0-M3 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13.0-RC3 and Scala.js 0.6.
+Cats 2.0.0-M3 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 1 breaking change
+
+* [#2830](https://github.com/typelevel/cats/pull/2830) Remove deprecated `cats.laws.discipline.eq` methods (by @kailuowang).
+
+### 1 source-breaking change
+
+* [#2843](https://github.com/typelevel/cats/pull/2843) `Kleisli` is now covariant in the input type (by @jcouyang).
+
+### 1 documentation fix
+
+* [#2842](https://github.com/typelevel/cats/pull/2842) Fixes for API docs for `Order` methods (by @orvi).
+
+### 3 build improvements
+
+* [#2869](https://github.com/typelevel/cats/pull/2869) Updates for 2.13.0-RC3 (by @travisbrown).
+* [#2865](https://github.com/typelevel/cats/pull/2865) Update sbt-hydra plugin (by @scala-steward).
+* [#2871](https://github.com/typelevel/cats/pull/2871) Remove closed-source sbt-hydra plugin (by @travisbrown).
+
+## Version 2.0.0-M2
+
+> 2019 May 25
+
+Cats 2.0.0-M2 is a milestone release for Cats 2.0. It's available on Scala 2.11, Scala 2.12, Scala 2.13.0-RC2 and Scala.js 0.6.
+Cats 2.0.0-M2 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x.
+Their 2.0.0-M2 jars are drop-in replacements for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0, 1.5.0, 1.6.0, and 2.0.0-M1 jars.
+cats-kernel, cats-core and cats-free 2.0.0 will remain binary compatible with 1.x.
+Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats.
+
+### 1 breaking change in cats-laws
+
+* [#2817](https://github.com/typelevel/cats/pull/2817) Added a new foldRight lazy law, move forallLazy and existLazy laws  by @kailuowang
+
+
+### 6 documentation additions/fixes
+
+* [#2855](https://github.com/typelevel/cats/pull/2855) Edit example in Parallel docs  by @Jasper-M
+* [#2850](https://github.com/typelevel/cats/pull/2850) Small Readme fix  by @dispalt
+* [#2819](https://github.com/typelevel/cats/pull/2819) added FreeT basic example  by @mtsokol
+* [#2815](https://github.com/typelevel/cats/pull/2815) added navigation links to readme  by @kailuowang
+* [#2813](https://github.com/typelevel/cats/pull/2813) Remove 'cats experimental' clause from README.md.  by @kamilkloch
+* [#2811](https://github.com/typelevel/cats/pull/2811) added availability information  by @kailuowang
+        
+
+### 3 API/Feature enhancements
+
+* [#2840](https://github.com/typelevel/cats/pull/2840) 2708 sorted set semigroupal  by @vladislavGutov
+* [#2837](https://github.com/typelevel/cats/pull/2837) Delete unnecessary restriction on biFlatMap  by @AdrianRaFo
+* [#2796](https://github.com/typelevel/cats/pull/2796) Added collectFirst to Chain and NonEmptyChain  by @LMnet
+        
+
+### 5 build improvements
+
+* [#2858](https://github.com/typelevel/cats/pull/2858) Don't create the hydra.license if $HydraLicense is empty  by @dotta
+* [#2857](https://github.com/typelevel/cats/pull/2857) Updates for 2.13.0-RC2  by @travisbrown
+* [#2856](https://github.com/typelevel/cats/pull/2856) Update sbt-scalajs to 0.6.28  by @scala-steward
+* [#2848](https://github.com/typelevel/cats/pull/2848) Enables Hydra on cats build  by @kailuowang
+* [#2821](https://github.com/typelevel/cats/pull/2821) removing unused resolver  by @kailuowang
+        
+
+### 2 test improvements
+
+* [#2831](https://github.com/typelevel/cats/pull/2831) fixed applicative monoid test  by @kailuowang
+* [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
+        
+### 1 bug fix
 
 * [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
 
@@ -257,7 +332,7 @@ Cats 1.5.0-RC0 is binary compatible with all previous 1.x Cats releases, i.e. it
 * [#2475](https://github.com/typelevel/cats/pull/2475) Add Either#toEitherNel extension and friends  by @kubukoz
         
         
-### 1 bug fixes
+### 1 bug fix
 
 * [#2586](https://github.com/typelevel/cats/pull/2586) UnorderedFoldable#isEmpty default implementation is incorrect  by @barambani
 

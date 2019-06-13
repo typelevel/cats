@@ -19,6 +19,7 @@ package data
 
 import cats.instances.sortedSet._
 import cats.kernel._
+import cats.syntax.order._
 
 import scala.collection.immutable._
 
@@ -358,7 +359,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     }
 }
 
-sealed abstract private[data] class NonEmptySetInstances {
+sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInstances0 {
   implicit val catsDataInstancesForNonEmptySet: SemigroupK[NonEmptySet] with Reducible[NonEmptySet] =
     new SemigroupK[NonEmptySet] with Reducible[NonEmptySet] {
 
@@ -405,9 +406,9 @@ sealed abstract private[data] class NonEmptySetInstances {
         fa.toNonEmptyList
     }
 
-  implicit def catsDataEqForNonEmptySet[A: Order]: Eq[NonEmptySet[A]] =
-    new Eq[NonEmptySet[A]] {
-      def eqv(x: NonEmptySet[A], y: NonEmptySet[A]): Boolean = x === y
+  implicit def catsDataOrderForNonEmptySet[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
+    new NonEmptySetOrder[A] {
+      implicit override def A0: Order[A] = A
     }
 
   implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
@@ -416,4 +417,23 @@ sealed abstract private[data] class NonEmptySetInstances {
   implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] = new Semilattice[NonEmptySet[A]] {
     def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x | y
   }
+}
+
+sealed abstract private[data] class NonEmptySetInstances0 {
+  implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
+    implicit override def A0: Eq[A] = A
+  }
+}
+
+sealed abstract private[data] class NonEmptySetOrder[A] extends Order[NonEmptySet[A]] with NonEmptySetEq[A] {
+  implicit override def A0: Order[A]
+
+  override def compare(x: NonEmptySet[A], y: NonEmptySet[A]): Int =
+    x.toSortedSet.compare(y.toSortedSet)
+}
+
+sealed private[data] trait NonEmptySetEq[A] extends Eq[NonEmptySet[A]] {
+  implicit def A0: Eq[A]
+
+  override def eqv(x: NonEmptySet[A], y: NonEmptySet[A]): Boolean = x === y
 }
