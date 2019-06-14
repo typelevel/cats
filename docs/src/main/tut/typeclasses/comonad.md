@@ -7,13 +7,11 @@ scaladoc: "#cats.Comonad"
 ---
 # Comonad
 
-Given any type class we can create a "Co" type class for which its functions
-are the "dual" of the other. A dual to a function has the same types but the 
-direction of the arrows are reversed. Whether or not that is useful even possible 
-depends on the particular type.
-
 `Comonad` is a `Functor` and provides duals of the [`Monad`](monad.html) `pure`
-and `flatMap` functions.
+and `flatMap` functions.  A dual to a function has the same types but the 
+direction of the arrows are reversed. Whether or not that is useful even possible 
+depends on the particular type. For a more formal definition of duality, please 
+refer to [https://ncatlab.org/nlab/show/duality](https://ncatlab.org/nlab/show/duality).
 
 ### extract
 
