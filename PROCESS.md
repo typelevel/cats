@@ -14,8 +14,9 @@ maintainers. Community member sign-offs are appreciated as votes of
 confidence but don't usually count toward this total unless the
 commenter has already been involved with the area of code in question.
 
-When fixing typos or improving documentation only one sign-off is
-required (although for major edits waiting for two may be preferable).
+When fixing typos, improving documentation or minor build fix only 
+one sign-off is required (although for major edits waiting for two
+ may be preferable).
 
 For serious emergencies or work on the build which can't easily be
 reviewed or tested, pushing directly to master may be OK (but is
@@ -24,22 +25,42 @@ Gitter or elsewhere about what happened and what was done.
 
 ### Versioning
 
-If a release is simply a bug fix, increment the patch version number
-(e.g. 1.2.3 becomes 1.2.4). These releases may happen quite quickly in
-response to reported bugs or problems, and should usually be source
-and binary compatible.
+Since `1.0.0` release, Cats adopted the *MAJOR.MINOR.PATCH* 
+[Semantic Versioning 2.0.0](http://semver.org/). In semantic versioning,
+Backward binary compatibility is maintained between *PATCH* AND *MINOR* versions.
 
-If the major version is 0, then the minor version should be updated
-(e.g. 0.2.3 becomes 0.3.0). There are no compatibility guarantees for
-this type of change.
+The main rules are:  
+* *PATCH* version Z (x.y.Z | x > 0) MUST be incremented if only backwards compatible bug fixes are introduced. 
+* *MINOR* version Y (x.Y.z | x > 0) MUST be incremented if new, binary backwards compatible functionality is introduced to the public API. It MUST be incremented if any public API functionality is marked as deprecated. 
+* Source breaking but binary compatible changes are allowed between *MINOR* versions.  
+* Binary backward breaking changes are **ONLY** allowed between *MAJOR* versions. 
+* For other scenarios, refer to [Semantic Versioning 2.0.0](http://semver.org/).
 
-If the major version is 1 or greater, then significant additions
-should increment the minor version number (e.g. 1.2.3 becomes 1.3.0)
-and breaking or incompatible changes should increment the major number
-(e.g. 1.2.3 becomes 2.0.0). These major version bumps should only
-occur after substantial review, warning, and with proper deprecation
-cycles.
 
+For a new *MINOR* version release, it's preferred to release a Release Candidate for public testing. If there are no regressions or new bugs discovered, the new *MINOR* version should be released within a couple of weeks, with no significant changes in between.    
+
+ 
+### Pre-release
+
+Before the actual release, we need to make sure all merged PRs are properly assigned with the correct Github Milestone and labels. 
+
+1. Make sure a milestone corresponding to the to-be released version exists on Github. 
+
+2. Then use the following search to gather all merged PRs to be released: 
+https://github.com/typelevel/cats/pulls?utf8=%E2%9C%93&q=merged%3A%3E2019-05-29+
+replace `2019-05-29` with the last release date.
+
+3. For PRs that add no value to the code or documentation or build, for example, community announcements or additions to adopter list, we do not include them in the release notes. Assign these PRs a special milestone: `Excluded from release notes` 
+
+4. Assign the rest PRs with the target milestone and one or more of the following labels: `testing`, `bug`, `build`, `documentation`, `enhancement`, `Source Breaking` and `Binary Breaking`.
+
+#### Release branch
+
+For non-milestone releases (e.g. 2.0.0-M1), we shall release from a release branch. For each *MINOR* version, we shall have a corresponding branch, e.g. `2.1.x`. There are 2 main benefits for this: 
+1. Since we need to go through at least 1 release candidate release, having a release branch makes it easier to incorporate potential fixes and release the official release later. 
+2. The master branch of Cats is protected. This means sbt-release cannot push post release commits and more importantly tags directly to master. It can with a release branch, and a PR can be submitted to merge the release branch back into master. 
+
+  
 ### Releasing
 
 Before the release, the tests and other validation must be passing.
@@ -77,17 +98,18 @@ After the release occurs, you will need to update the
 documentation. Here is a list of the places that will definitely need
 to be updated:
 
- * `docs/src/site/index.md`: update version numbers
  * `README.md`: update version numbers
  * `AUTHORS.md`: add new contributors
  * `CHANGES.md`: summarize changes since last release
 
 (Other changes may be necessary, especially for large releases.)
 
-You can get a list of changes between release tags `v0.1.2` and
+If the [Pre-release](#pre-release) step is properly done, meaning all released PRs are properly assigned with label and milestone, you can use a [script](
+https://github.com/typelevel/cats/blob/master/scripts/releaseNotes.scala) to generate the release note. Follow the doc in the script for instructions.  
+
+Alternatively, you can get a list of changes between release tags `v0.1.2` and
 `v0.2.0` via `git log v0.1.2..v0.2.0`. Scanning this list of commit
-messages is a good way to get a summary of what happened, although it
-does not account for conversations that occurred on Github.
+messages is a good way to get a summary of what happened, and manually write it up.
 
 Once the relevant documentation changes have been committed, new
 [release notes](https://github.com/typelevel/cats/releases) should be
@@ -97,7 +119,7 @@ on that page, or if the relevant release already exists, you can click
 
 The website should then be updated via [sbt-microsites](https://47deg.github.io/sbt-microsites/)
 using `sbt docs/publishMicrosite`. 
-Please check the [prerequisites](https://47deg.github.io/sbt-microsites/docs/) of sbt-microsites.
+Please check the [prerequisites](https://47deg.github.io/sbt-microsites/docs/) of `sbt-microsites`.
 
 ### Conclusion
 

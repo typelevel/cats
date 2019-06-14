@@ -81,12 +81,12 @@ lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.8",
-    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.2")
+    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.18.0" % Provided,
+  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided,
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -148,13 +148,13 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val scalatestVersion = "3.1.0-SNAP12"
+val scalatestVersion = "3.1.0-SNAP13"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP7"
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.12.0-M2"
+val disciplineVersion = "0.12.0-M3"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
