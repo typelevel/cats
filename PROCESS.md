@@ -65,7 +65,7 @@ For non-milestone releases (e.g. 2.0.0-M1), we shall release from a release bran
 
 Before the release, the tests and other validation must be passing.
 
-Currently, the best way to release cats is:
+Currently, the best way to release Cats is:
 
  1. Run `+ clean` to ensure a clean start.
  2. Run `+ package` to ensure everything builds.

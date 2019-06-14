@@ -38,7 +38,7 @@ class SortedSetSuite extends CatsSuite {
   checkAll("Hash[SortedSet[Int]]", HashTests[SortedSet[Int]].hash)
 
   test("show keeps separate entries for items that map to identical strings") {
-    //note: this val name has to be the same to shadow the cats.instances instance
+    // note: this val name has to be the same to shadow the cats.instances instance
     implicit val catsStdShowForInt: Show[Int] = Show.show(_ => "1")
     // an implementation implemented as set.map(_.show).mkString(", ") would
     // only show one entry in the result instead of 3, because SortedSet.map combines

@@ -3,7 +3,7 @@ package laws
 package discipline
 
 /**
- * An `ExhuastiveCheck[A]` instance can be used similarly to a Scalacheck
+ * An `ExhuastiveCheck[A]` instance can be used similarly to a ScalaCheck
  * `Gen[A]` instance, but differs in that it generates a `Stream` of the entire
  * domain of values as opposed to generating a random sampling of values.
  */

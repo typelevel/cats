@@ -27,7 +27,7 @@ The fact that this code compiles is a design flaw of the Java API.
 We want to make things like this impossible, by offering the `toString` equivalent as a type class, instead of the root of the class hierarchy.
 In short, `Show` allows us to only have String-conversions defined for the data types we actually want.
 
-To make things easier, cats defines a few helper functions to make creating `Show` instances easier.
+To make things easier, Cats defines a few helper functions to make creating `Show` instances easier.
 
 ```scala
 /** creates an instance of Show using the provided function */

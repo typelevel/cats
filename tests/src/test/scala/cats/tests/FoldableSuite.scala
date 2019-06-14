@@ -326,7 +326,7 @@ class FoldableSuiteAdditional extends CatsSuite {
 
       eval.value should ===(fa.sum)
 
-      //Repeat here so the result is evaluated again
+      // Repeat here so the result is evaluated again
       eval.value should ===(fa.sum)
     }
   }

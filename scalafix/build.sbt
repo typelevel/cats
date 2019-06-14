@@ -1,4 +1,4 @@
-// Use a scala version supported by scalafix.
+// Use a scala version supported by Scalafix.
 val V = _root_.scalafix.Versions
 scalaVersion in ThisBuild := V.scala212
 

@@ -63,12 +63,12 @@ object KernelCheck {
     )
   }
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
     Cogen[Long].contramap(_.toLong)
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigDecimal: Cogen[BigDecimal] =
     Cogen[Double].contramap(_.toDouble)
@@ -114,7 +114,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
 
   import KernelCheck._
 
-  // The scalacheck defaults (100,100) are too high for scala-js.
+  // The ScalaCheck defaults (100,100) are too high for Scala.js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
   final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
