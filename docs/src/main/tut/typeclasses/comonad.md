@@ -49,7 +49,7 @@ NonEmptyList.of(1,2,3).extract
 ### coflatMap
 
 `coflatMap` is the dual of Monad's `flatMap`.  While `flatMap` allows us to chain 
-together operations in a monadic context, `CoflatMap` takes a value in some context
+together operations in a monadic context, `coflatMap` takes a value in some context
  `F[A]` and a function `F[A] => B` and returns a new value in a context `F[B]`.
 
 The default implementation of `coflatMap` for `NonEmptyList` will pass the supplied
@@ -76,7 +76,7 @@ def extract[A](fa : Option[A]): A = fa match {
 }
 ```
 
-Another example is `list`. Remember we cannot write `extract` for list because lists
+Another example is `List`. Remember we cannot write `extract` for list because lists
 can be empty, but we can implement the `coflatMap` and it works identically to the
 one shown above for `NonEmptyList`.
 
