@@ -140,11 +140,11 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test(s"Foldable[$name] partial summation") {
-    forAll { (fa: F[String], f: String ⇒ Boolean) ⇒
+    forAll { (fa: F[String], f: String => Boolean) ⇒
       val m: Monoid[String] = Monoid[String]
 
       val pf: PartialFunction[String, String] = {
-        case n if f(n) ⇒ n
+        case n if f(n) => n
       }
       fa.collectFold(pf) should ===(fa.toList.collect(pf).fold(m.empty)(m.combine))
 
