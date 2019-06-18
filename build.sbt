@@ -269,7 +269,7 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[Module
   lazy val excludedVersions: List[String] = List()
 
   // Safety Net for Inclusions
-  lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.0")
+  lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
   if (priorTo2_13(scalaVer)) {
     (mimaVersions ++ extraVersions)

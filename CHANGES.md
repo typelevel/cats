@@ -1,4 +1,3 @@
-
 ## Version 2.0.0-M4
 
 > 2019 June 11
@@ -17,6 +16,24 @@ Cats 2.0.0-M4 (like the upcoming 2.0.0 release) maintains binary compatibility w
 * [#2884](https://github.com/typelevel/cats/pull/2884) Upgrade Scala to 2.13.0  by @kailuowang
 
 
+## Version 1.6.1
+
+> 2019 June 3
+
+Cats 1.6.1 is binary compatible with all previous 1.x Cats releases.
+
+### 2 API/Feature enhancements
+
+* [#2784](https://github.com/typelevel/cats/pull/2784) Make WrappedMutableMapBase extend Serializable  by @ceedubs
+* [#2728](https://github.com/typelevel/cats/pull/2728) Optimize productR in Apply  by @maphi
+
+### 1 documentation addition/fix
+
+* [#2842](https://github.com/typelevel/cats/pull/2842) Fix Order.max and Oder.min description comments  by @orvi
+
+### 1 bug fix
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
 
 
 ## Version 2.0.0-M3
@@ -90,7 +107,6 @@ Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-t
 * [#2831](https://github.com/typelevel/cats/pull/2831) fixed applicative monoid test  by @kailuowang
 * [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
         
-
 ### 1 bug fix
 
 * [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
