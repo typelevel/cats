@@ -17,7 +17,7 @@ in
     buildInputs = [
       sbt
       git # used by sbt-buildinfo
-      nodejs # used by scala.js
+      nodejs # used by Scala.js
       jekyll # used by sbt-microsites
       gawk # used by scripts/parse-test-durations.awk
       graphviz # used for ScalaDoc diagrams

@@ -56,7 +56,7 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 
 ### flatMap
 
-`flatMap` is often considered to be the core function of `Monad`, and cats
+`flatMap` is often considered to be the core function of `Monad`, and Cats
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 

@@ -1,9 +1,10 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
-* **Jun  3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backports from the 2.x series
+* **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13.0
+* **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
 * **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
 * **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with support for Scala 2.13.0-RC2
-* **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us. 
+* **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 * **Jan 31 2019** Cats 1.6.0 is released.
@@ -16,7 +17,6 @@
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 [![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
-[![Workflow](https://badge.waffle.io/typelevel/cats.svg?label=ready&title=Ready)](https://waffle.io/typelevel/cats)
 [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
@@ -58,17 +58,14 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 Silver Sponsors are those who have pledged $2,000 to $5,000.
 
-
-<a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png"  style="margin-bottom:15px; margin-right: 10px" /></a>
+<a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
-
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11,  2.12, 2.13.0-RC3, and [Scala.js](http://www.scala-js.org/).
-
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13.0, and [Scala.js](http://www.scala-js.org/).
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
 
@@ -85,7 +82,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M3"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M4"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -143,12 +140,12 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [newts](https://github.com/julien-truffaut/newts): Defines newtypes compatible with Cats type classes
  * [origami](https://github.com/atnos-org/origami): monadic folds
  * [refined](https://github.com/fthomas/refined): simple refinement types for Scala
- * [shims](https://github.com/djspiewak/shims): seamless interoperability for cats and scalaz typeclasses and datatypes
+ * [shims](https://github.com/djspiewak/shims): seamless interoperability for Cats and scalaz typeclasses and datatypes
 
 #### Libraries with more specific uses
 
  * [atto](https://github.com/tpolecat/atto): friendly little text parsers
- * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): cats typeclass instances for scalacheck
+ * [cats-scalacheck](https://github.com/ChristopherDavenport/cats-scalacheck): Cats typeclass instances for ScalaCheck
  * [cats-time](https://github.com/ChristopherDavenport/cats-time): cats typeclass instances for java time
  * [circe](https://github.com/circe/circe): pure functional JSON library
  * [Ciris](https://github.com/vlovgr/ciris): Lightweight, extensible, and validated configuration loading in Scala
@@ -183,8 +180,8 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
-  
-Your project talks cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
+
+Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
 
@@ -247,7 +244,7 @@ with the previous `1.0.x` versions. I.E. the new JAR will be a drop-in replaceme
 the old one. This is critical when your application has a diamond
 dependency on Cats - depending on two or more libraries that all depend on Cats. 
 If one library upgrades to the new `1.1.0` Cats before the other one does, your 
-application still runs thanks to this backward binary compatibility.  
+application still runs thanks to this backward binary compatibility.
 
 Also worth noting is that according to semantic versioning, 
 *MINOR* version Y (x.Y.z | x > 0) MUST be incremented 
@@ -293,6 +290,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
 - [ITV](https://www.itv.com/)
 - [Lookout](https://www.lookout.com)
+- [Merit](https://merits.com)
 - [Metacommerce](https://www.metacommerce.ru)
 - [Netflix](https://jobs.netflix.com)
 - [Nezasa](https://www.nezasa.com)
@@ -306,7 +304,6 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
-- [Sigma](https://try.sig.ma)
 - [Snowplow Analytics](https://snowplowanalytics.com/)
 - [Spiceworks](https://www.spiceworks.com/)
 - [Spotahome](https://spotahome.com)
@@ -345,9 +342,9 @@ The current maintainers (people who can merge pull requests) are:
  * [kailuowang](https://github.com/kailuowang) Kailuo Wang
 
 We are currently following a practice of requiring at least two
-sign-offs to merge PRs (and for large or contentious issues we may
-wait for more). For typos or other small fixes to documentation we
-relax this to a single sign-off.
+sign-offs to merge code PRs (and for large or contentious issues we may
+wait for more). For typos, documentation improvements or minor build fix we
+relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/master/PROCESS.md).
 
 
 ### Copyright and License
