@@ -134,7 +134,7 @@ private[arrow] object FunctionKMacros {
 
     private[this] def unblock(tree: Tree): Tree = tree match {
       case Block(Nil, expr) => expr
-      case _ => tree
+      case _                => tree
     }
 
     private[this] def punchHole(tpe: Type): Tree = tpe match {

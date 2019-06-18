@@ -200,17 +200,17 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
    * Tests whether a predicate holds for all elements of this set.
    */
-  def forall(p: A ⇒ Boolean): Boolean = toSortedSet.forall(p)
+  def forall(p: A => Boolean): Boolean = toSortedSet.forall(p)
 
   /**
    * Tests whether a predicate holds for at least one element of this set.
    */
-  def exists(f: A ⇒ Boolean): Boolean = toSortedSet.exists(f)
+  def exists(f: A => Boolean): Boolean = toSortedSet.exists(f)
 
   /**
    * Returns the first value that matches the given predicate.
    */
-  def find(f: A ⇒ Boolean): Option[A] = toSortedSet.find(f)
+  def find(f: A => Boolean): Option[A] = toSortedSet.find(f)
 
   /**
    * Returns a new `SortedSet` containing all elements where the result of `pf` is defined.
@@ -223,12 +223,12 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
    * Filters all elements of this set that do not satisfy the given predicate.
    */
-  def filter(p: A ⇒ Boolean): SortedSet[A] = toSortedSet.filter(p)
+  def filter(p: A => Boolean): SortedSet[A] = toSortedSet.filter(p)
 
   /**
    * Filters all elements of this set that satisfy the given predicate.
    */
-  def filterNot(p: A ⇒ Boolean): SortedSet[A] = filter(t => !p(t))
+  def filterNot(p: A => Boolean): SortedSet[A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.
