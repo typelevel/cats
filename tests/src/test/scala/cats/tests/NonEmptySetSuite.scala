@@ -21,7 +21,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data.NonEmptySet
 import cats.kernel.Semilattice
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemilatticeTests}
+import cats.kernel.laws.discipline.{EqTests, OrderTests, SemilatticeTests}
 
 import scala.collection.immutable.SortedSet
 
