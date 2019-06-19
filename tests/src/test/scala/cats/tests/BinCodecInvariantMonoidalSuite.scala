@@ -51,8 +51,8 @@ object BinCodecInvariantMonoidalSuite {
     implicit val exhaustiveCheckForMiniListBoolean: ExhaustiveCheck[MiniList[Boolean]] =
       ExhaustiveCheck.instance(
         for {
-          length <- (0 to maxLength).toStream
-          boolList <- List(false, true).replicateA(length).toStream
+          length <- (0 to maxLength).toList
+          boolList <- List(false, true).replicateA(length)
         } yield MiniList.unsafe(boolList)
       )
   }

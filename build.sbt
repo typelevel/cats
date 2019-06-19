@@ -38,21 +38,23 @@ crossScalaVersionsFromTravis in Global := {
   }
 }
 
+def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
+  def extraDirs(suffix: String) =
+    CrossType.Pure.sharedSrcDir(srcBaseDir, "main").toList.map(f => file(f.getPath + suffix))
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, y)) if y <= 12 =>
+      extraDirs("-2.12-")
+    case Some((2, y)) if y >= 13 =>
+      extraDirs("-2.13+")
+    case _ => Nil
+  }
+}
+
 lazy val commonSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
-  Compile / unmanagedSourceDirectories ++= {
-    val bd = baseDirectory.value
-    def extraDirs(suffix: String) =
-      CrossType.Pure.sharedSrcDir(bd, "main").toList.map(f => file(f.getPath + suffix))
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, y)) if y <= 12 =>
-        extraDirs("-2.12-")
-      case Some((2, y)) if y >= 13 =>
-        extraDirs("-2.13+")
-      case _ => Nil
-    }
-  },
+  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
+  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
@@ -801,13 +803,13 @@ def commonScalacOptions(scalaVersion: String) =
     "-unchecked",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    "-Xfuture"
+    "-Ywarn-value-discard"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
             "-Xfatal-warnings", // TODO: add the following two back to 2.13
-            "-deprecation"
+            "-deprecation",
+            "-Xfuture"
           )
         else
           Seq(
