@@ -18,6 +18,8 @@ class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", AlternativeTests[Stream].alternative[Int, Int, Int])
   checkAll("Alternative[Stream]", SerializableTests.serializable(Alternative[Stream]))
 
+
+  checkAll("Stream[Int]", MonadTests[Stream].monad[Int, Int, Int])
   checkAll("Monad[Stream]", SerializableTests.serializable(Monad[Stream]))
 
   checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Set[Int], Option, Option])

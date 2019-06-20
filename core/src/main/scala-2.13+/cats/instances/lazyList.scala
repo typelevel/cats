@@ -1,12 +1,21 @@
 package cats
 package instances
+import cats.kernel
 import cats.syntax.show._
 
 import scala.annotation.tailrec
 
-trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
+//For cross compile with backward compatibility
+trait StreamInstancesBinCompat0
+
+//For cross compile with backward compatibility
+trait StreamInstances extends LazyListInstances {
+  val catsStdInstancesForStream = catsStdInstancesForLazyList
+}
+
+trait LazyListInstances extends cats.kernel.instances.StreamInstances {
   implicit val catsStdInstancesForLazyList
-    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
+  : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
     new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
@@ -46,9 +55,9 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: LazyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[LazyList[B]] =
-        // We use foldRight to avoid possible stack overflows. Since
-        // we don't want to return a Eval[_] instance, we call .value
-        // at the end.
+      // We use foldRight to avoid possible stack overflows. Since
+      // we don't want to return a Eval[_] instance, we call .value
+      // at the end.
         foldRight(fa, Always(G.pure(LazyList.empty[B]))) { (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
@@ -138,10 +147,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
           if (s.isEmpty)
             G.pure(Right(b))
           else {
-            val h = s.head
-            val t = s.tail
-            G.map(f(b, h)) { bnext =>
-              Left((t, bnext))
+            G.map(f(b, s.head)) { bnext =>
+              Left((s.tail, bnext))
             }
           }
         }
@@ -158,7 +165,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def find[A](fa: LazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.LazyListMonoid[A]
+      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.StreamMonoid[A]
 
       override def collectFirst[A, B](fa: LazyList[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
@@ -166,15 +173,13 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForStream[A: Show]: Show[LazyList[A]] =
+  implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
     new Show[LazyList[A]] {
       def show(fa: LazyList[A]): String = if (fa.isEmpty) "LazyList()" else s"LazyList(${fa.head.show}, ?)"
     }
-}
 
-trait StreamInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForLazyList: TraverseFilter[LazyList] = new TraverseFilter[LazyList] {
-    val traverse: Traverse[LazyList] = cats.instances.stream.catsStdInstancesForLazyList
+    val traverse: Traverse[LazyList] = catsStdInstancesForLazyList
 
     override def mapFilter[A, B](fa: LazyList[A])(f: (A) => Option[B]): LazyList[B] =
       fa.collect(Function.unlift(f))
@@ -187,14 +192,14 @@ trait StreamInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: LazyList[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
       fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
+        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+      )
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
       fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
-        )
+        (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+      )
         .value
 
   }

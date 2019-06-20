@@ -25,7 +25,7 @@ trait AllInstances
     with SetInstances
     with SortedMapInstances
     with SortedSetInstances
-    with LazyListInstances
+    with StreamInstances
     with StringInstances
     with SymbolInstances
     with TryInstances

@@ -401,16 +401,16 @@ class FoldableSuiteAdditional extends CatsSuite {
 
   }
 
-  def foldableStreamWithDefaultImpl = new Foldable[Stream] {
+  def foldableLazyListWithDefaultImpl = new Foldable[Stream] {
     def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
-      instances.stream.catsStdInstancesForLazyList.foldLeft(fa, b)(f)
+      instances.lazyList.catsStdInstancesForLazyList.foldLeft(fa, b)(f)
 
     def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      instances.stream.catsStdInstancesForLazyList.foldRight(fa, lb)(f)
+      instances.lazyList.catsStdInstancesForLazyList.foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F = foldableLazyListWithDefaultImpl
     val ns = Stream.continually(1)
     val res = F.foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
@@ -419,7 +419,7 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test(".foldLeftM short-circuiting optimality") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F = foldableLazyListWithDefaultImpl
 
     // test that no more elements are evaluated than absolutely necessary
 
@@ -435,14 +435,14 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test(".existsM/.forallM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F = foldableLazyListWithDefaultImpl
     def boom: Stream[Boolean] = sys.error("boom") #:: Stream.empty
     assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
   }
 
   test(".findM/.collectFirstSomeM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F = foldableLazyListWithDefaultImpl
     def boom: Stream[Int] = sys.error("boom") #:: Stream.empty
     assert((1 #:: boom).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boom).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
