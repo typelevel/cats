@@ -8,7 +8,7 @@ import cats.implicits._
 import cats.Eq
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
-import kernel.compat.Stream
+import kernel.compat.lazyList._
 
 
 object BinCodecInvariantMonoidalSuite {
@@ -124,7 +124,7 @@ object BinCodecInvariantMonoidalSuite {
       bitCount <- Gen.oneOf(1, 2, 3)
       shuffleSeed <- Gen.choose(Long.MinValue, Long.MaxValue)
     } yield {
-      val binValues: Stream[Bin] = Stream(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
+      val binValues: LazyList[Bin] = LazyList(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
       val pairs: List[(A, Bin)] = new scala.util.Random(seed = shuffleSeed).shuffle(exA.allValues).toList.zip(binValues)
       val aToBin: Map[A, Bin] = pairs.toMap
       val binToA: Map[Bin, A] = pairs.map(_.swap).toMap

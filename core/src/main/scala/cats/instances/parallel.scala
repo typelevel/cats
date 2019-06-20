@@ -5,7 +5,7 @@ import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
 import cats.{~>, Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel}
-import kernel.compat.Stream
+import kernel.compat.lazyList._
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, ?], Validated[E, ?]] =
@@ -66,17 +66,17 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
 
-  implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
-    new Parallel[Stream, ZipStream] {
+  implicit def catsStdParallelForZipStream[A]: Parallel[LazyList, ZipStream] =
+    new Parallel[LazyList, ZipStream] {
 
-      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def monad: Monad[LazyList] = cats.instances.stream.catsStdInstancesForStream
       def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
 
-      def sequential: ZipStream ~> Stream =
-        λ[ZipStream ~> Stream](_.value)
+      def sequential: ZipStream ~> LazyList =
+        λ[ZipStream ~> LazyList](_.value)
 
-      def parallel: Stream ~> ZipStream =
-        λ[Stream ~> ZipStream](v => new ZipStream(v))
+      def parallel: LazyList ~> ZipStream =
+        λ[LazyList ~> ZipStream](v => new ZipStream(v))
     }
 
   implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_], E: Semigroup](

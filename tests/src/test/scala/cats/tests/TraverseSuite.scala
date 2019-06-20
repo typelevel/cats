@@ -4,8 +4,8 @@ package tests
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
-import kernel.compat.Stream
-import compat.StreamOps.toStream
+import kernel.compat.lazyList._
+import compat.lazyList.toLazyList
 
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
@@ -49,11 +49,11 @@ object TraverseSuite {
 }
 
 class TraverseListSuite extends TraverseSuite[List]("List")
-class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")
+class TraverseStreamSuite extends TraverseSuite[LazyList]("Stream")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
 
 class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
-class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
+class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[LazyList]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
 class TraverseSuiteAdditional extends CatsSuite {
@@ -68,7 +68,7 @@ class TraverseSuiteAdditional extends CatsSuite {
   }
 
   test("Traverse[Stream].zipWithIndex stack safety") {
-    checkZipWithIndexedStackSafety[Stream](toStream)
+    checkZipWithIndexedStackSafety[LazyList](toLazyList)
   }
 
   test("Traverse[Vector].zipWithIndex stack safety") {

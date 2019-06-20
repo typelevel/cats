@@ -5,7 +5,7 @@ import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
 import cats.implicits._
-import compat.StreamOps._
+import compat.lazyList._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -93,13 +93,13 @@ trait SortedSetInstancesBinCompat0 {
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     Order[Int].compare(a1.size, a2.size) match {
-      case 0 => Order.compare(toStream(a1), toStream(a2))
+      case 0 => Order.compare(toLazyList(a1), toLazyList(a2))
       case x => x
     }
 
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
-    toStream(s1).corresponds(toStream(s2))(Order[A].eqv)
+    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
   }
 }
 
@@ -126,7 +126,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
   }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
-    toStream(s1).corresponds(toStream(s2))(Order[A].eqv)
+    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
   }
 }
 
