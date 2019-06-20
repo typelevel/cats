@@ -19,7 +19,8 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-
+import kernel.compat.Stream
+import compat.StreamOps.toStream
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
@@ -87,7 +88,7 @@ class OneAndSuite extends CatsSuite {
 
   implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[OneAnd[Stream, ?]]
 
-  checkAll("NonEmptyStream[Int]", MonadTests[NonEmptyStream].monad[Int, Int, Int])
+
   checkAll("Monad[NonEmptyStream[A]]", SerializableTests.serializable(Monad[NonEmptyStream]))
 
   checkAll("NonEmptyStream[Int]", ComonadTests[NonEmptyStream].comonad[Int, Int, Int])
@@ -110,7 +111,7 @@ class OneAndSuite extends CatsSuite {
 
   test("Show is formatted correctly") {
     val oneAnd = NonEmptyStream("Test")
-    oneAnd.show should ===("OneAnd(Test, Stream())")
+    oneAnd.show should ===(s"OneAnd(Test, ${compat.StreamOps.streamString}())")
   }
 
   test("Creating OneAnd + unwrap is identity") {
@@ -224,6 +225,6 @@ class ReducibleNonEmptyStreamSuite extends ReducibleSuite[NonEmptyStream]("NonEm
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyStream(start, (tailStart).to(endInclusive).toStream)
+    NonEmptyStream(start, toStream(tailStart.to(endInclusive)))
   }
 }

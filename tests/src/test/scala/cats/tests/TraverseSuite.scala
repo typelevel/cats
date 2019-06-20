@@ -4,6 +4,8 @@ package tests
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
+import kernel.compat.Stream
+import compat.StreamOps.toStream
 
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
@@ -66,7 +68,7 @@ class TraverseSuiteAdditional extends CatsSuite {
   }
 
   test("Traverse[Stream].zipWithIndex stack safety") {
-    checkZipWithIndexedStackSafety[Stream](_.toStream)
+    checkZipWithIndexedStackSafety[Stream](toStream)
   }
 
   test("Traverse[Vector].zipWithIndex stack safety") {

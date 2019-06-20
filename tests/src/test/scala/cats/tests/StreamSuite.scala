@@ -1,18 +1,12 @@
 package cats
 package tests
 
-import cats.laws.discipline.{
-  AlternativeTests,
-  CoflatMapTests,
-  CommutativeApplyTests,
-  MonadTests,
-  SemigroupalTests,
-  SerializableTests,
-  TraverseFilterTests,
-  TraverseTests
-}
+import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
+import kernel.compat.Stream
+import compat.StreamOps.streamString
+
 
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
@@ -24,7 +18,6 @@ class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", AlternativeTests[Stream].alternative[Int, Int, Int])
   checkAll("Alternative[Stream]", SerializableTests.serializable(Alternative[Stream]))
 
-  checkAll("Stream[Int]", MonadTests[Stream].monad[Int, Int, Int])
   checkAll("Monad[Stream]", SerializableTests.serializable(Monad[Stream]))
 
   checkAll("Stream[Int] with Option", TraverseTests[Stream].traverse[Int, Int, Int, Set[Int], Option, Option])
@@ -37,8 +30,8 @@ class StreamSuite extends CatsSuite {
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
 
   test("show") {
-    Stream(1, 2, 3).show should ===("Stream(1, ?)")
-    Stream.empty[Int].show should ===("Stream()")
+    Stream(1, 2, 3).show should ===(s"$streamString(1, ?)")
+    Stream.empty[Int].show should ===(s"$streamString()")
   }
 
   test("Show[Stream] is referentially transparent, unlike Stream.toString") {

@@ -4,6 +4,8 @@ package tests
 import cats.data.{Const, NonEmptyList, StateT}
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
+import kernel.compat.Stream
+
 class RegressionSuite extends CatsSuite {
 
   // toy state class

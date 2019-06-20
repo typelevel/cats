@@ -1,6 +1,7 @@
 package cats
 package instances
-
+import kernel.compat.Stream
+import compat.StreamOps._
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -10,9 +11,9 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
     : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
-      def empty[A]: Stream[A] = Stream.Empty
+      def empty[A]: Stream[A] = emptyStream
 
-      def combineK[A](x: Stream[A], y: Stream[A]): Stream[A] = x #::: y
+      def combineK[A](x: Stream[A], y: Stream[A]): Stream[A]  = x lazyAppendedAll y
 
       def pure[A](x: A): Stream[A] = Stream(x)
 
@@ -31,7 +32,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         else fb.map(fb => map2(fa, fb)(f))
 
       def coflatMap[A, B](fa: Stream[A])(f: Stream[A] => B): Stream[B] =
-        fa.tails.toStream.init.map(f)
+        toStream(fa.tails).init.map(f)
 
       def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -71,7 +72,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
               stack = tail
               state = Right(Some(b))
             case Left(a) #:: tail =>
-              stack = fn(a) #::: tail
+              stack = (fn(a) #::: tail).force
               advance()
             case empty =>
               state = Right(None)
@@ -98,7 +99,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           }
         }
 
-        it.toStream
+        toStream(it)
       }
 
       override def exists[A](fa: Stream[A])(p: A => Boolean): Boolean =
@@ -153,7 +154,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
     new Show[Stream[A]] {
-      def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
+      def show(fa: Stream[A]): String = if (fa.isEmpty) s"$streamString()" else s"$streamString(${fa.head.show}, ?)"
     }
 }
 
@@ -171,13 +172,13 @@ trait StreamInstancesBinCompat0 {
     override def flattenOption[A](fa: Stream[Option[A]]): Stream[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
-      fa.foldRight(Eval.now(G.pure(Stream.empty[B])))(
+      fa.foldRight(Eval.now(G.pure(emptyStream[B])))(
           (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
         )
         .value
 
     override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] =
-      fa.foldRight(Eval.now(G.pure(Stream.empty[A])))(
+      fa.foldRight(Eval.now(G.pure(emptyStream[A])))(
           (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
         )
         .value

@@ -7,6 +7,8 @@ import scala.collection.immutable._
 import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
+import kernel.compat.Stream
+import compat.StreamOps.toStream
 
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
                                                            ArbFString: Arbitrary[F[String]])
@@ -336,7 +338,7 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test("Foldable[Stream].foldM stack safety") {
-    checkMonadicFoldsStackSafety[Stream](_.toStream)
+    checkMonadicFoldsStackSafety[Stream](toStream)
   }
 
   test("Foldable[Vector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
@@ -365,32 +367,36 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
-  test("Foldable[Stream]") {
-    val F = Foldable[Stream]
+  val F = Foldable[Stream]
+  def bomb[A]: A = sys.error("boom")
+  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
 
-    def bomb[A]: A = sys.error("boom")
-    val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
+  test("Foldable[Stream] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
     assert(contains(dangerous, 2).value)
+  }
 
-    // lazy results don't blow up unless you call .value on them.
+  test("lazy results don't blow up unless you call .value on them") {
     val doom: Eval[Boolean] = contains(dangerous, -1)
+  }
 
-    // ensure that the Lazy[B] param to foldRight is actually being
-    // handled lazily. it only needs to be evaluated if we reach the
+  test("Lazy[B] param to foldRight is actually being handled lazily") {
+    // ensure that the . it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Eval.later(bomb[Boolean])
     val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
       if (n == 2) Now(true) else lb
     }
     assert(result.value)
+  }
 
-    // test trampolining
+  test("trampolining") {
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
+  }
 
-    // test laziness of foldM
+  test("laziness of foldM"){
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
 
   }

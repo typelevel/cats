@@ -1,5 +1,6 @@
 package cats.kernel
 package instances
+import compat.Stream
 
 trait StreamInstances extends StreamInstances1 {
   implicit def catsKernelStdOrderForStream[A: Order]: Order[Stream[A]] =

@@ -1,7 +1,8 @@
-package cats.data
+package cats
+package data
 
-import cats.{Alternative, CommutativeApplicative, Eq}
-import cats.instances.stream._
+import instances.stream._
+import kernel.compat.Stream
 
 class ZipStream[A](val value: Stream[A]) extends AnyVal
 

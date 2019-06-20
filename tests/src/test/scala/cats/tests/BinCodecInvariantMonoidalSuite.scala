@@ -8,6 +8,8 @@ import cats.implicits._
 import cats.Eq
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
+import kernel.compat.Stream
+
 
 object BinCodecInvariantMonoidalSuite {
   final case class MiniList[+A] private (val toList: List[A]) extends AnyVal {

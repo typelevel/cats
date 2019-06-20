@@ -11,6 +11,7 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.typelevel.discipline.scalatest.Discipline
 import scala.collection.immutable.SortedSet
+import kernel.compat.Stream
 
 class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
