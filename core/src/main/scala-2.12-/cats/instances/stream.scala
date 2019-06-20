@@ -5,7 +5,9 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 
-//For cross compile with backward compatibility
+/**
+ * For cross compile with backward compatibility
+ */
 trait LazyListInstances extends StreamInstances with StreamInstancesBinCompat0 {
   val catsStdInstancesForLazyList = catsStdInstancesForStream
 }
