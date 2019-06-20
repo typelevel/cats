@@ -337,7 +337,7 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[List](_.toList)
   }
 
-  test("Foldable[Stream].foldM stack safety") {
+  test("Foldable[LazyList].foldM stack safety") {
     checkMonadicFoldsStackSafety[LazyList](toLazyList)
   }
 
@@ -372,17 +372,17 @@ class FoldableSuiteAdditional extends CatsSuite {
   val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: LazyList.empty
   def boom[A]: LazyList[A] =
     bomb[A] #:: LazyList.empty
-  test("Foldable[Stream] doesn't blow up") {
+  test("Foldable[LazyList] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
     assert(contains(dangerous, 2).value)
   }
 
-  test("lazy results don't blow up unless you call .value on them") {
+  test("Foldable[LazyList] lazy results don't blow up unless you call .value on them") {
     contains(dangerous, -1)
   }
 
-  test("Lazy[B] param to foldRight is actually being handled lazily") {
+  test("Foldable[LazyList] param to foldRight is actually being handled lazily") {
     // ensure that the . it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Eval.later(bomb[Boolean])
@@ -392,12 +392,12 @@ class FoldableSuiteAdditional extends CatsSuite {
     assert(result.value)
   }
 
-  test("trampolining") {
+  test("Foldable[LazyList]  trampolining") {
     val large = LazyList((1 to 10000): _*)
     assert(contains(large, 10000).value)
   }
 
-  test("laziness of foldM") {
+  test("Foldable[LazyList] laziness of foldM") {
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
@@ -464,8 +464,8 @@ class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
   def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
 }
 
-class FoldableStreamSuite extends FoldableSuite[LazyList]("stream") {
-  def iterator[T](stream: LazyList[T]): Iterator[T] = stream.iterator
+class FoldableLazyListSuite extends FoldableSuite[LazyList]("lazyList") {
+  def iterator[T](list: LazyList[T]): Iterator[T] = list.iterator
 }
 
 class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, ?]]("sortedMap") {
