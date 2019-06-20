@@ -69,7 +69,7 @@ trait ParallelInstances extends ParallelInstances1 {
   implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
     new Parallel[Stream, ZipStream] {
 
-      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForLazyList
       def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
 
       def sequential: ZipStream ~> Stream =

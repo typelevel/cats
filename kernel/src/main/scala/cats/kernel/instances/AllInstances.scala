@@ -25,7 +25,7 @@ trait AllInstances
     with QueueInstances
     with SetInstances
     with ShortInstances
-    with StreamInstances
+    with LazyListInstances
     with StringInstances
     with SymbolInstances
     with TupleInstances

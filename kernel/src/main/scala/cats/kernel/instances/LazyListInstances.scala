@@ -2,11 +2,11 @@ package cats.kernel
 package instances
 import compat.Stream
 
-trait StreamInstances extends StreamInstances1 {
+trait LazyListInstances extends StreamInstances1 {
   implicit def catsKernelStdOrderForStream[A: Order]: Order[Stream[A]] =
     new StreamOrder[A]
   implicit def catsKernelStdMonoidForStream[A]: Monoid[Stream[A]] =
-    new StreamMonoid[A]
+    new LazyListMonoid[A]
 }
 
 trait StreamInstances1 extends StreamInstances2 {
@@ -44,7 +44,7 @@ class StreamEq[A](implicit ev: Eq[A]) extends Eq[Stream[A]] {
     else StaticMethods.iteratorEq(xs.iterator, ys.iterator)
 }
 
-class StreamMonoid[A] extends Monoid[Stream[A]] {
+class LazyListMonoid[A] extends Monoid[Stream[A]] {
   def empty: Stream[A] = Stream.empty
   def combine(x: Stream[A], y: Stream[A]): Stream[A] = x ++ y
 

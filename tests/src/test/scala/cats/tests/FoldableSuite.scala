@@ -403,10 +403,10 @@ class FoldableSuiteAdditional extends CatsSuite {
 
   def foldableStreamWithDefaultImpl = new Foldable[Stream] {
     def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
-      instances.stream.catsStdInstancesForStream.foldLeft(fa, b)(f)
+      instances.stream.catsStdInstancesForLazyList.foldLeft(fa, b)(f)
 
     def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      instances.stream.catsStdInstancesForStream.foldRight(fa, lb)(f)
+      instances.stream.catsStdInstancesForLazyList.foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {
