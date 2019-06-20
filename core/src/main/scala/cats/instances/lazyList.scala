@@ -61,24 +61,35 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       def tailRecM[A, B](a: A)(fn: A => LazyList[Either[A, B]]): LazyList[B] = {
         val it: Iterator[B] = new Iterator[B] {
-          var stack: LazyList[Either[A, B]] = fn(a)
-          var state: Either[Unit, Option[B]] = Left(())
+          var stack: List[Iterator[Either[A, B]]] = Nil
+          var state: Either[A, Option[B]] = Left(a)
 
           @tailrec
           def advance(): Unit = stack match {
-            case Right(b) #:: tail =>
-              stack = tail
-              state = Right(Some(b))
-            case Left(a) #:: tail =>
-              stack = (fn(a) #::: tail).force
-              advance()
-            case empty =>
+            case head :: tail =>
+              if (head.hasNext) {
+                head.next match {
+                  case Right(b) =>
+                    state = Right(Some(b))
+                  case Left(a) =>
+                    val nextFront = fn(a).iterator
+                    stack = nextFront :: stack
+                    advance()
+                }
+              }
+              else {
+                stack = tail
+                advance()
+              }
+            case Nil =>
               state = Right(None)
           }
 
           @tailrec
           def hasNext: Boolean = state match {
-            case Left(()) =>
+            case Left(a) =>
+              // this is the first run
+              stack = fn(a).iterator :: Nil
               advance()
               hasNext
             case Right(o) =>
@@ -87,7 +98,9 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
           @tailrec
           def next(): B = state match {
-            case Left(()) =>
+            case Left(a) =>
+              // this is the first run
+              stack = fn(a).iterator :: Nil
               advance()
               next()
             case Right(o) =>
@@ -97,7 +110,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
           }
         }
 
-        it.to(LazyList)
+        LazyList.from(it)
       }
 
       override def exists[A](fa: LazyList[A])(p: A => Boolean): Boolean =
@@ -124,10 +137,13 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
           val (s, b) = in
           if (s.isEmpty)
             G.pure(Right(b))
-          else
-            G.map(f(b, s.head)) { bnext =>
-              Left((s.tail, bnext))
+          else {
+            val h = s.head
+            val t = s.tail
+            G.map(f(b, h)) { bnext =>
+              Left((t, bnext))
             }
+          }
         }
 
         G.tailRecM((fa, z))(step)

@@ -369,7 +369,7 @@ class FoldableSuiteAdditional extends CatsSuite {
 
   val F = Foldable[Stream]
   def bomb[A]: A = sys.error("boom")
-  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
+  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: Stream.empty
 
   test("Foldable[Stream] doesn't blow up") {
 
@@ -428,7 +428,7 @@ class FoldableSuiteAdditional extends CatsSuite {
         if (s == stop) Left(acc) else Right(acc + s)
       }
 
-    def boom: Stream[String] = sys.error("boom")
+    def boom: Stream[String] = sys.error("boom") #:: Stream.empty
     assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
     assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
     assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
@@ -436,14 +436,14 @@ class FoldableSuiteAdditional extends CatsSuite {
 
   test(".existsM/.forallM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
-    def boom: Stream[Boolean] = sys.error("boom")
+    def boom: Stream[Boolean] = sys.error("boom") #:: Stream.empty
     assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
   }
 
   test(".findM/.collectFirstSomeM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
-    def boom: Stream[Int] = sys.error("boom")
+    def boom: Stream[Int] = sys.error("boom") #:: Stream.empty
     assert((1 #:: boom).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boom).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
