@@ -13,7 +13,7 @@ trait LazyListInstances extends StreamInstances with StreamInstancesBinCompat0 {
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit val catsStdInstancesForStream
-  : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
@@ -53,9 +53,9 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Stream[A])(f: A => G[B])(implicit G: Applicative[G]): G[Stream[B]] =
-      // We use foldRight to avoid possible stack overflows. Since
-      // we don't want to return a Eval[_] instance, we call .value
-      // at the end.
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Eval[_] instance, we call .value
+        // at the end.
         foldRight(fa, Always(G.pure(Stream.empty[B]))) { (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
@@ -179,14 +179,14 @@ trait StreamInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
       fa.foldRight(Eval.now(G.pure(Stream.empty[B])))(
-        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] =
       fa.foldRight(Eval.now(G.pure(Stream.empty[A])))(
-        (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+        )
         .value
 
   }

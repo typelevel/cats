@@ -1,12 +1,20 @@
 package cats
 package tests
 
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  AlternativeTests,
+  CoflatMapTests,
+  CommutativeApplyTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
 import kernel.compat.lazyList._
 import compat.lazyList.lazyListString
-
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -17,7 +25,6 @@ class LazyListSuite extends CatsSuite {
 
   checkAll("LazyList[Int]", AlternativeTests[LazyList].alternative[Int, Int, Int])
   checkAll("Alternative[LazyList]", SerializableTests.serializable(Alternative[LazyList]))
-
 
   checkAll("LazyList[Int]", MonadTests[LazyList].monad[Int, Int, Int])
   checkAll("Monad[LazyList]", SerializableTests.serializable(Monad[LazyList]))

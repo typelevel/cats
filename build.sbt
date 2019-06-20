@@ -50,7 +50,8 @@ crossScalaVersionsFromTravis in Global := {
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
-    List(CrossType.Pure, CrossType.Full).flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
+    List(CrossType.Pure, CrossType.Full)
+      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
     case Some((2, y)) if y <= 12 =>
       extraDirs("-2.12-")
@@ -162,8 +163,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
     }
   }
 }
-
-
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,

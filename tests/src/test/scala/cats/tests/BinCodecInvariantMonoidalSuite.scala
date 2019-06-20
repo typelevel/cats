@@ -10,7 +10,6 @@ import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
 import kernel.compat.lazyList._
 
-
 object BinCodecInvariantMonoidalSuite {
   final case class MiniList[+A] private (val toList: List[A]) extends AnyVal {
     import MiniList.truncated

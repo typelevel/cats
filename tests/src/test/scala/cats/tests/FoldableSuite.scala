@@ -3,7 +3,7 @@ package tests
 
 import org.scalacheck.Arbitrary
 import scala.util.Try
-import scala.collection.immutable.{SortedSet, SortedMap}
+import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
@@ -370,9 +370,8 @@ class FoldableSuiteAdditional extends CatsSuite {
   val F = Foldable[LazyList]
   def bomb[A]: A = sys.error("boom")
   val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: LazyList.empty
-  def boom[A]: LazyList[A] = {
+  def boom[A]: LazyList[A] =
     bomb[A] #:: LazyList.empty
-  }
   test("Foldable[Stream] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
@@ -398,7 +397,7 @@ class FoldableSuiteAdditional extends CatsSuite {
     assert(contains(large, 10000).value)
   }
 
-  test("laziness of foldM"){
+  test("laziness of foldM") {
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
@@ -418,7 +417,6 @@ class FoldableSuiteAdditional extends CatsSuite {
     }
     assert(res == Left(100000))
   }
-
 
   test(".foldLeftM short-circuiting optimality") {
     implicit val F = foldableLazyListWithDefaultImpl
