@@ -26,6 +26,16 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
+val scalatestVersion = "3.1.0-SNAP13"
+
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
+
+val scalaCheckVersion = "1.14.0"
+
+val disciplineVersion = "0.12.0-M3"
+
+val kindProjectorVersion = "0.10.3"
+
 crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
   import collection.JavaConverters._
@@ -40,7 +50,8 @@ crossScalaVersionsFromTravis in Global := {
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
-    CrossType.Pure.sharedSrcDir(srcBaseDir, "main").toList.map(f => file(f.getPath + suffix))
+    List(CrossType.Pure, CrossType.Full)
+      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
     case Some((2, y)) if y <= 12 =>
       extraDirs("-2.12-")
@@ -49,9 +60,12 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     case _ => Nil
   }
 }
-
-lazy val commonSettings = Seq(
+lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
+  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
+)
+
+lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
   Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
@@ -83,7 +97,7 @@ lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.8",
-    compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+    compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
   ) ++ macroDependencies(scalaVersion.value),
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
@@ -149,14 +163,6 @@ lazy val includeGeneratedSrc: Setting[_] = {
     }
   }
 }
-
-val scalatestVersion = "3.1.0-SNAP13"
-
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
-
-val scalaCheckVersion = "1.14.0"
-
-val disciplineVersion = "0.12.0-M3"
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
@@ -632,8 +638,8 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
-    crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
+    commonScalaVersionSettings,
+    addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))

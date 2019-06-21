@@ -5,7 +5,15 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 
+/**
+ * For cross compile with backward compatibility
+ */
+trait LazyListInstances extends StreamInstances with StreamInstancesBinCompat0 {
+  val catsStdInstancesForLazyList = catsStdInstancesForStream
+}
+
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
+
   implicit val catsStdInstancesForStream
     : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
@@ -155,6 +163,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
     new Show[Stream[A]] {
       def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
+
 }
 
 trait StreamInstancesBinCompat0 {

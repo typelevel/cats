@@ -1,7 +1,9 @@
 package cats
-
+import kernel.compat.lazyList._
+import compat.lazyList.toLazyList
 package object data {
-  type NonEmptyStream[A] = OneAnd[Stream, A]
+
+  type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
   type IorNel[+B, +A] = Ior[NonEmptyList[B], A]
   type IorNec[+B, +A] = Ior[NonEmptyChain[B], A]
@@ -11,10 +13,10 @@ package object data {
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
 
-  def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
+  def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
-    OneAnd(head, tail.toStream)
+    OneAnd(head, toLazyList(tail))
 
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
@@ -83,4 +85,7 @@ package object data {
     def apply[S, A](f: S => A, s: S): Store[S, A] =
       RepresentableStore[S => ?, S, A](f, s)
   }
+
+  type ZipLazyList[A] = ZipStream[A]
+  val ZipLazyList = ZipStream
 }

@@ -13,7 +13,7 @@ jdk:
   - oraclejdk8
 
 scala_version_211: &scala_version_211 2.11.12
-scala_version_212: &scala_version_212 2.12.7
+scala_version_212: &scala_version_212 2.12.8
 scala_version_213: &scala_version_213 2.13.0
 
 before_install:

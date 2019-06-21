@@ -41,6 +41,7 @@ package object instances {
   object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
   object stream extends StreamInstances with StreamInstancesBinCompat0
+  object lazyList extends LazyListInstances
   object string extends StringInstances
   object try_ extends TryInstances
   object tuple extends TupleInstances with Tuple2InstancesBinCompat0
