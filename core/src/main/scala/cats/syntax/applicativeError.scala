@@ -85,7 +85,7 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
   def attempt(implicit F: ApplicativeError[F, E]): F[Either[E, A]] =
     F.attempt(fa)
 
-  def attemptCase[EE](implicit F: ApplicativeError[F, E], tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+  def attemptNarrow[EE](implicit F: ApplicativeError[F, E], tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
     F.recover(F.map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
 
   def attemptT(implicit F: ApplicativeError[F, E]): EitherT[F, E, A] =
