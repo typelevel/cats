@@ -13,20 +13,16 @@ class NonEmptyStreamSuite extends CatsSuite {
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
   checkAll("NonEmptyStream[Int]", EqTests[NonEmptyStream[Int]].eqv)
-  
+
   checkAll("NonEmptyStream[Int] with Option",
            NonEmptyTraverseTests[NonEmptyStream].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyStream[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyStream[?]]))
 
-
   checkAll("NonEmptyStream[Int]", ReducibleTests[NonEmptyStream].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyStream]", SerializableTests.serializable(Reducible[NonEmptyStream]))
 
-
-
   checkAll("NonEmptyStream[Int]", SemigroupTests[NonEmptyStream[Int]].semigroup)
   checkAll("Semigroup[NonEmptyStream[Int]]", SerializableTests.serializable(Semigroup[NonEmptyStream[Int]]))
-
 
   {
     // Test functor and subclasses don't have implicit conflicts
