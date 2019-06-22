@@ -1,4 +1,4 @@
-val V = _root_.scalafix.Versions
+val V = _root_.scalafix.sbt.BuildInfo
 
 inThisBuild(
   List(
@@ -8,14 +8,10 @@ inThisBuild(
   ))
 
 lazy val rules = project.settings(
-  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.version
+  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion
 )
 
 lazy val input = project.settings(
-  scalacOptions += {
-    val sourceroot = sourceDirectory.in(Compile).value / "scala"
-    s"-P:semanticdb:sourceroot:$sourceroot"
-  },
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats" % "0.9.0"
   ),
@@ -32,7 +28,9 @@ lazy val output = project.settings(
 
 lazy val tests = project
   .settings(
-    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.version % Test cross CrossVersion.full,
+    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.scalafixVersion % Test cross CrossVersion.full,
+    compile.in(Compile) :=
+      compile.in(Compile).dependsOn(compile.in(input, Compile)).value,
     scalafixTestkitOutputSourceDirectories :=
       sourceDirectories.in(output, Compile).value,
     scalafixTestkitInputSourceDirectories :=
