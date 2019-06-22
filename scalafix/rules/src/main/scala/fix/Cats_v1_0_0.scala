@@ -1,9 +1,8 @@
 package fix
 package v1_0_0
 
-import scalafix._
+import scalafix.v0._
 import scalafix.syntax._
-import scalafix.util.SymbolMatcher
 import scala.meta._
 import scala.meta.contrib._
 
