@@ -481,7 +481,7 @@ private[data] trait KleisliArrowChoice[F[_]]
         fe match {
           case Left(a)  => F.map(f(a))(Left.apply _)
           case Right(b) => F.map(g(b))(Right.apply _)
-      }
+        }
     )
 }
 

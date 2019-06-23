@@ -200,7 +200,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
         f(a) match {
           case Some(x) => M.combine(acc, x)
           case None    => acc
-      }
+        }
     )
 }
 
@@ -356,7 +356,7 @@ final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
       a =>
         M.map(f(a)) {
           H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
-      }
+        }
     )
   }
 
