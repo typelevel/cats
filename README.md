@@ -132,7 +132,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
  * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
- * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
+ * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
