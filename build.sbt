@@ -98,7 +98,7 @@ lazy val catsSettings = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "machinist" % "0.6.8",
     compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
-  ) ++ macroDependencies(scalaVersion.value),
+  ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
@@ -304,7 +304,7 @@ def mimaSettings(moduleName: String) =
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT")
       ) ++
         //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
         //provide any value. Making them private because of issues like #2514 and #2613.

@@ -112,7 +112,11 @@ object Boilerplate {
         ""
       }
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)
@@ -188,7 +192,12 @@ object Boilerplate {
           "a" + n + ":A" + n
         }
         .mkString(",")
-      def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
+      def apN(n: Int) =
+        if (n == 1) {
+          "ap"
+        } else {
+          s"ap$n"
+        }
       def allArgs = (0 until arity).map { "a" + _ }.mkString(",")
 
       val apply =
@@ -381,7 +390,11 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val parMap =
         if (arity == 1)
@@ -428,7 +441,11 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)
