@@ -372,7 +372,9 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     }
 
     def checkMarker[A](f: => A): Option[String] =
-      try { f; None } catch {
+      try {
+        f; None
+      } catch {
         case marker: Marker => marker.value.some
         case _: Throwable   => None
       }

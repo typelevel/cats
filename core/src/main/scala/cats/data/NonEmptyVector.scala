@@ -197,7 +197,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
     val buf = Vector.newBuilder[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+      if (elementsSoFar(a)) elementsSoFar
+      else {
+        buf += a; elementsSoFar + a
+      }
     }
 
     NonEmptyVector(head, buf.result())
@@ -315,7 +318,7 @@ sealed abstract private[data] class NonEmptyVectorInstances {
               case (Right(c), _)           => ior.map(_ :+ c)
               case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
               case (Left(b), _)            => ior.leftMap(_ :+ b)
-          }
+            }
         ).bimap(_.toNonEmptyList, _.toNonEmptyList)
 
       }

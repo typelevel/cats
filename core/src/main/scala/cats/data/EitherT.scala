@@ -646,7 +646,7 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
             case Left(l)         => Right(Left(l))
             case Right(Left(a1)) => Left(a1)
             case Right(Right(b)) => Right(Right(b))
-        }
+          }
       )
     )
 }
