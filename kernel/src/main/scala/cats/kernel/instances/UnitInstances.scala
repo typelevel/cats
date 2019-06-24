@@ -2,14 +2,14 @@ package cats.kernel
 package instances
 
 trait UnitInstances {
-  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] =
+  implicit val catsKernelStdOrderForUnit: Order[Unit] with Bounded[Unit] with Hash[Unit] =
     new UnitOrder
 
   implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
 }
 
-class UnitOrder extends Order[Unit] with Hash[Unit] {
+class UnitOrder extends Order[Unit] with Bounded[Unit] with Hash[Unit] {
   def compare(x: Unit, y: Unit): Int = 0
 
   def hash(x: Unit): Int = 0 // ().hashCode() == 0
@@ -23,6 +23,9 @@ class UnitOrder extends Order[Unit] with Hash[Unit] {
 
   override def min(x: Unit, y: Unit): Unit = ()
   override def max(x: Unit, y: Unit): Unit = ()
+
+  override def minBound: Unit = ()
+  override def maxBound: Unit = ()
 }
 
 class UnitAlgebra extends BoundedSemilattice[Unit] with CommutativeGroup[Unit] {

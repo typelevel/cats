@@ -2,11 +2,11 @@ package cats.kernel
 package instances
 
 trait BooleanInstances {
-  implicit val catsKernelStdOrderForBoolean: Order[Boolean] with Hash[Boolean] =
+  implicit val catsKernelStdOrderForBoolean: Order[Boolean] with Bounded[Boolean] with Hash[Boolean] =
     new BooleanOrder
 }
 
-class BooleanOrder extends Order[Boolean] with Hash[Boolean] {
+class BooleanOrder extends Order[Boolean] with Bounded[Boolean] with Hash[Boolean] {
 
   def hash(x: Boolean): Int = x.hashCode()
   def compare(x: Boolean, y: Boolean): Int =
@@ -21,4 +21,7 @@ class BooleanOrder extends Order[Boolean] with Hash[Boolean] {
 
   override def min(x: Boolean, y: Boolean): Boolean = x && y
   override def max(x: Boolean, y: Boolean): Boolean = x || y
+
+  override def minBound: Boolean = false
+  override def maxBound: Boolean = true
 }
