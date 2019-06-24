@@ -6,6 +6,7 @@ import scala.{specialized => sp}
  * A type class used to name the lower limit of a type.
  */
 trait LowerBounded[@sp A] extends PartialOrder[A] {
+
   /**
    * Returns the lower limit of a type.
    */
@@ -24,6 +25,7 @@ object LowerBounded extends LowerBoundedFunctions[LowerBounded] {
  * A type class used to name the upper limit of a type.
  */
 trait UpperBounded[@sp A] extends PartialOrder[A] {
+
   /**
    * Returns the upper limit of a type.
    */
