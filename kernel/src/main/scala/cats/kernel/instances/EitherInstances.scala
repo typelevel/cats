@@ -34,6 +34,20 @@ trait EitherInstances extends EitherInstances0 {
             }
         }
     }
+
+  implicit def catsStdUpperBoundedForEither[A, B](implicit A: PartialOrder[A],
+                                                  B: UpperBounded[B]): UpperBounded[Either[A, B]] =
+    new UpperBounded[Either[A, B]] {
+      override def maxBound: Either[A, B] = Right(B.maxBound)
+      override def partialOrder: PartialOrder[Either[A, B]] = catsStdPartialOrderForEither(A, B.partialOrder)
+    }
+
+  implicit def catsStdLowerBoundedForEither[A, B](implicit A: LowerBounded[A],
+                                                  B: PartialOrder[B]): LowerBounded[Either[A, B]] =
+    new LowerBounded[Either[A, B]] {
+      override def minBound: Either[A, B] = Left(A.minBound)
+      override def partialOrder: PartialOrder[Either[A, B]] = catsStdPartialOrderForEither(A.partialOrder, B)
+    }
 }
 
 trait EitherInstances0 extends EitherInstances1 {

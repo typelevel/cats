@@ -6,6 +6,10 @@ trait VectorInstances extends VectorInstances1 {
     new VectorOrder[A]
   implicit def catsKernelStdMonoidForVector[A]: Monoid[Vector[A]] =
     new VectorMonoid[A]
+  implicit def catsKernelStdLowerBoundedForVector[A: PartialOrder]: LowerBounded[Vector[A]] =
+    new VectorLowerBounded[A] {
+      override val partialOrder: PartialOrder[Vector[A]] = catsKernelStdPartialOrderForVector
+    }
 }
 
 trait VectorInstances1 extends VectorInstances2 {
@@ -19,6 +23,10 @@ trait VectorInstances1 extends VectorInstances2 {
 trait VectorInstances2 {
   implicit def catsKernelStdEqForVector[A: Eq]: Eq[Vector[A]] =
     new VectorEq[A]
+}
+
+trait VectorLowerBounded[A] extends LowerBounded[Vector[A]] {
+  override def minBound: Vector[A] = Vector.empty
 }
 
 class VectorOrder[A](implicit ev: Order[A]) extends Order[Vector[A]] {

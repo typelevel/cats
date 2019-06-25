@@ -4,8 +4,13 @@ package instances
 import scala.concurrent.duration.Duration
 
 trait DurationInstances {
-  implicit val catsKernelStdOrderForDuration: Order[Duration] with Hash[Duration] = new DurationOrder
+  implicit val catsKernelStdOrderForDuration: Order[Duration] with Hash[Duration] =
+    new DurationOrder
   implicit val catsKernelStdGroupForDuration: CommutativeGroup[Duration] = new DurationGroup
+  implicit val catsKernelStdBoundedForDuration: LowerBounded[Duration] with UpperBounded[Duration] =
+    new DurationBounded {
+      override val partialOrder: PartialOrder[Duration] = catsKernelStdOrderForDuration
+    }
 }
 
 // Duration.Undefined, Duration.Inf, Duration.MinusInf
@@ -44,4 +49,9 @@ class DurationGroup extends CommutativeGroup[Duration] {
   def inverse(x: Duration): Duration = -x
   def combine(x: Duration, y: Duration): Duration = x + y
   override def remove(x: Duration, y: Duration): Duration = x - y
+}
+
+trait DurationBounded extends LowerBounded[Duration] with UpperBounded[Duration] {
+  override def minBound: Duration = Duration.MinusInf
+  override def maxBound: Duration = Duration.Inf
 }

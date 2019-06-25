@@ -8,6 +8,10 @@ trait ListInstances extends ListInstances1 {
     new ListOrder[A]
   implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
     new ListMonoid[A]
+  implicit def catsKernelStdLowerBoundedForList[A: PartialOrder]: LowerBounded[List[A]] =
+    new ListLowerBounded[A] {
+      override val partialOrder: PartialOrder[List[A]] = catsKernelStdPartialOrderForList
+    }
 }
 
 trait ListInstances1 extends ListInstances2 {
@@ -21,6 +25,10 @@ trait ListInstances1 extends ListInstances2 {
 trait ListInstances2 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
+}
+
+trait ListLowerBounded[A] extends LowerBounded[List[A]] {
+  override def minBound: List[A] = Nil
 }
 
 class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {

@@ -8,6 +8,10 @@ trait QueueInstances extends QueueInstances1 {
     new QueueOrder[A]
   implicit def catsKernelStdMonoidForQueue[A]: Monoid[Queue[A]] =
     new QueueMonoid[A]
+  implicit def catsKernelStdLowerBoundedForQueue[A: PartialOrder]: LowerBounded[Queue[A]] =
+    new QueueLowerBounded[A] {
+      override val partialOrder: PartialOrder[Queue[A]] = catsKernelStdPartialOrderForQueue
+    }
 }
 
 trait QueueInstances1 extends QueueInstances2 {
@@ -21,6 +25,10 @@ trait QueueInstances1 extends QueueInstances2 {
 trait QueueInstances2 {
   implicit def catsKernelStdEqForQueue[A: Eq]: Eq[Queue[A]] =
     new QueueEq[A]
+}
+
+trait QueueLowerBounded[A] extends LowerBounded[Queue[A]] {
+  override def minBound: Queue[A] = Queue.empty
 }
 
 class QueueOrder[A](implicit ev: Order[A]) extends Order[Queue[A]] {

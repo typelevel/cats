@@ -165,6 +165,24 @@ object KernelBoiler {
                     def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
+
+                implicit def catsKernelStdUpperBoundedForTuple${arity}[${`A..N`}](implicit ${constraints(
+                  "UpperBounded"
+                )}): UpperBounded[${`(A..N)`}] =
+                  new UpperBounded[${`(A..N)`}] {
+                    def maxBound: ${`(A..N)`} = ${tuple(synTypes.map(t => s"UpperBounded[${t}].maxBound"))}
+                    def partialOrder: PartialOrder[${`(A..N)`}] = catsKernelStdPartialOrderForTuple${arity}(
+                      ${synTypes.map(t => s"UpperBounded[${t}].partialOrder").mkString(", ")})
+                  }
+
+                implicit def catsKernelStdLowerBoundedForTuple${arity}[${`A..N`}](implicit ${constraints(
+                  "LowerBounded"
+                )}): LowerBounded[${`(A..N)`}] =
+                  new LowerBounded[${`(A..N)`}] {
+                    def minBound: ${`(A..N)`} = ${tuple(synTypes.map(t => s"LowerBounded[${t}].minBound"))}
+                    def partialOrder: PartialOrder[${`(A..N)`}] = catsKernelStdPartialOrderForTuple${arity}(
+                      ${synTypes.map(t => s"LowerBounded[${t}].partialOrder").mkString(", ")})
+                  }
               """
             }
         ),

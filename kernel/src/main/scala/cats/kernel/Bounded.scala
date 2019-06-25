@@ -5,7 +5,8 @@ import scala.{specialized => sp}
 /**
  * A type class used to name the lower limit of a type.
  */
-trait LowerBounded[@sp A] extends PartialOrder[A] {
+trait LowerBounded[@sp A] {
+  def partialOrder: PartialOrder[A]
 
   /**
    * Returns the lower limit of a type.
@@ -24,7 +25,8 @@ object LowerBounded extends LowerBoundedFunctions[LowerBounded] {
 /**
  * A type class used to name the upper limit of a type.
  */
-trait UpperBounded[@sp A] extends PartialOrder[A] {
+trait UpperBounded[@sp A] {
+  def partialOrder: PartialOrder[A]
 
   /**
    * Returns the upper limit of a type.
@@ -38,13 +40,4 @@ trait UpperBoundedFunctions[U[T] <: UpperBounded[T]] {
 
 object UpperBounded extends UpperBoundedFunctions[UpperBounded] {
   @inline def apply[A](implicit u: UpperBounded[A]): UpperBounded[A] = u
-}
-
-/**
- * A type class used to name both the upper and lower limits of a type.
- */
-trait Bounded[@sp A] extends LowerBounded[A] with UpperBounded[A]
-
-object Bounded extends LowerBoundedFunctions[Bounded] with UpperBoundedFunctions[Bounded] {
-  @inline def apply[A](implicit b: Bounded[A]): Bounded[A] = b
 }

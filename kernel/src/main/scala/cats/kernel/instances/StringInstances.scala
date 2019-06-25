@@ -4,6 +4,11 @@ package instances
 trait StringInstances {
   implicit val catsKernelStdOrderForString: Order[String] with Hash[String] = new StringOrder
   implicit val catsKernelStdMonoidForString: Monoid[String] = new StringMonoid
+  implicit val catsKernelStdLowerBoundedForString: LowerBounded[String] =
+    new LowerBounded[String] {
+      override def minBound: String = ""
+      override val partialOrder: PartialOrder[String] = catsKernelStdOrderForString
+    }
 }
 
 class StringOrder extends Order[String] with Hash[String] {

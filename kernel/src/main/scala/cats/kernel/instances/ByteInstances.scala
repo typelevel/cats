@@ -2,8 +2,12 @@ package cats.kernel
 package instances
 
 trait ByteInstances {
-  implicit val catsKernelStdOrderForByte: Order[Byte] with Bounded[Byte] with Hash[Byte] = new ByteOrder
+  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] = new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
+  implicit val catsKernelStdBoundedForByte: LowerBounded[Byte] with UpperBounded[Byte] =
+    new ByteBounded {
+      override val partialOrder: PartialOrder[Byte] = catsKernelStdOrderForByte
+    }
 }
 
 class ByteGroup extends CommutativeGroup[Byte] {
@@ -13,7 +17,7 @@ class ByteGroup extends CommutativeGroup[Byte] {
   override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
-class ByteOrder extends Order[Byte] with Bounded[Byte] with Hash[Byte] {
+class ByteOrder extends Order[Byte] with Hash[Byte] {
 
   def hash(x: Byte): Int = x.hashCode()
 
@@ -31,7 +35,9 @@ class ByteOrder extends Order[Byte] with Bounded[Byte] with Hash[Byte] {
     java.lang.Math.min(x.toInt, y.toInt).toByte
   override def max(x: Byte, y: Byte): Byte =
     java.lang.Math.max(x.toInt, y.toInt).toByte
+}
 
+trait ByteBounded extends LowerBounded[Byte] with UpperBounded[Byte] {
   override def minBound: Byte = Byte.MinValue
   override def maxBound: Byte = Byte.MaxValue
 }

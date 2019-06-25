@@ -3,6 +3,11 @@ package instances
 
 trait SymbolInstances {
   implicit val catsKernelStdOrderForSymbol: Order[Symbol] with Hash[Symbol] = new SymbolOrder
+  implicit val catsKernelStdLowerBoundedForSymbol: LowerBounded[Symbol] =
+    new LowerBounded[Symbol] {
+      override def minBound: Symbol = Symbol("")
+      override val partialOrder: PartialOrder[Symbol] = catsKernelStdOrderForSymbol
+    }
 }
 
 class SymbolOrder extends Order[Symbol] with Hash[Symbol] {

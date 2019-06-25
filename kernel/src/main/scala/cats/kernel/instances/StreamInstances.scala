@@ -7,6 +7,10 @@ trait StreamInstances extends StreamInstances1 {
     new StreamOrder[A]
   implicit def catsKernelStdMonoidForStream[A]: Monoid[LazyList[A]] =
     new StreamMonoid[A]
+  implicit def catsKernelStdLowerBoundedForStream[A: PartialOrder]: LowerBounded[Stream[A]] =
+    new StreamLowerBounded[A] {
+      override val partialOrder: PartialOrder[Stream[A]] = catsKernelStdPartialOrderForStream
+    }
 }
 
 trait StreamInstances1 extends StreamInstances2 {
@@ -20,6 +24,10 @@ trait StreamInstances1 extends StreamInstances2 {
 trait StreamInstances2 {
   implicit def catsKernelStdEqForStream[A: Eq]: Eq[LazyList[A]] =
     new StreamEq[A]
+}
+
+trait StreamLowerBounded[A] extends LowerBounded[Stream[A]] {
+  override def minBound: Stream[A] = Stream.empty
 }
 
 class StreamOrder[A](implicit ev: Order[A]) extends Order[LazyList[A]] {

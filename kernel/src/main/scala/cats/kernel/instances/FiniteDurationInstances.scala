@@ -1,12 +1,18 @@
 package cats.kernel
 package instances
 
+import java.util.concurrent.TimeUnit
+
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait FiniteDurationInstances {
   implicit val catsKernelStdOrderForFiniteDuration: Order[FiniteDuration] with Hash[FiniteDuration] =
     new FiniteDurationOrder
   implicit val catsKernelStdGroupForFiniteDuration: CommutativeGroup[FiniteDuration] = new FiniteDurationGroup
+  implicit val catsKernelStdBoundedForFiniteDuration: LowerBounded[FiniteDuration] with UpperBounded[FiniteDuration] =
+    new FiniteDurationBounded {
+      override val partialOrder: PartialOrder[FiniteDuration] = catsKernelStdOrderForFiniteDuration
+    }
 }
 class FiniteDurationOrder extends Order[FiniteDuration] with Hash[FiniteDuration] {
   def hash(x: FiniteDuration): Int = x.hashCode()
@@ -29,4 +35,9 @@ class FiniteDurationGroup extends CommutativeGroup[FiniteDuration] {
   def inverse(x: FiniteDuration): FiniteDuration = -x
   def combine(x: FiniteDuration, y: FiniteDuration): FiniteDuration = x + y
   override def remove(x: FiniteDuration, y: FiniteDuration): FiniteDuration = x - y
+}
+
+trait FiniteDurationBounded extends LowerBounded[FiniteDuration] with UpperBounded[FiniteDuration] {
+  override def minBound: FiniteDuration = FiniteDuration(-Long.MaxValue, TimeUnit.NANOSECONDS)
+  override def maxBound: FiniteDuration = FiniteDuration(Long.MaxValue, TimeUnit.NANOSECONDS)
 }
