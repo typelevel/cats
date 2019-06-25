@@ -153,3 +153,5 @@ trait OptionInstancesBinCompat0 {
 
   }
 }
+
+trait OptionInstancesBinCompat1 extends cats.kernel.instances.OptionInstancesBinCompat0

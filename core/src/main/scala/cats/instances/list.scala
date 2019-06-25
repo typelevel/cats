@@ -177,3 +177,5 @@ trait ListInstancesBinCompat0 {
         .value
   }
 }
+
+trait ListInstancesBinCompat1 extends cats.kernel.instances.ListInstancesBinCompat0

@@ -4,7 +4,10 @@ package instances
 trait SetInstances extends SetInstances1 {
   implicit def catsKernelStdHashForSet[A]: Hash[Set[A]] =
     new SetHash[A]
-  implicit def catsKernelStdLowerBoundedForSet[A]: LowerBounded[Set[A]] =
+}
+
+trait SetInstancesBinCompat0 extends SetInstances1 {
+  implicit def catsKernelStdLowerBoundedForSet[A: PartialOrder]: LowerBounded[Set[A]] =
     new SetLowerBounded[A] {
       override val partialOrder: PartialOrder[Set[A]] = catsKernelStdPartialOrderForSet
     }

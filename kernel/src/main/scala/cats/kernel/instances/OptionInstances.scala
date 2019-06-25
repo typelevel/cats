@@ -6,10 +6,14 @@ trait OptionInstances extends OptionInstances0 {
     new OptionOrder[A]
   implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     new OptionMonoid[A]
+}
+
+trait OptionInstancesBinCompat0 extends OptionInstances0 {
   implicit def catsKernelStdUpperBoundedForOption[A](implicit A: UpperBounded[A]): UpperBounded[Option[A]] =
     new OptionUpperBounded[A] {
       override val partialOrder: PartialOrder[Option[A]] = catsKernelStdPartialOrderForOption(A.partialOrder)
     }
+
   implicit def catsKernelStdLowerBoundedForOption[A: PartialOrder]: LowerBounded[Option[A]] =
     new OptionLowerBounded[A] {
       override val partialOrder: PartialOrder[Option[A]] = catsKernelStdPartialOrderForOption

@@ -7,6 +7,8 @@ import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
 
+trait TupleInstancesBinCompat0 extends cats.kernel.instances.TupleInstancesBinCompat0
+
 trait Tuple2InstancesBinCompat0 {
 
   /**

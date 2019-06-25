@@ -34,7 +34,9 @@ trait EitherInstances extends EitherInstances0 {
             }
         }
     }
+}
 
+trait EitherInstancesBinCompat0 extends EitherInstances0 {
   implicit def catsStdUpperBoundedForEither[A, B](implicit A: PartialOrder[A],
                                                   B: UpperBounded[B]): UpperBounded[Either[A, B]] =
     new UpperBounded[Either[A, B]] {

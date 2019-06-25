@@ -4,16 +4,17 @@ package instances
 import scala.concurrent.duration.Duration
 
 trait DurationInstances {
-  implicit val catsKernelStdOrderForDuration: Order[Duration] with Hash[Duration] =
-    new DurationOrder
+  implicit val catsKernelStdOrderForDuration
+    : Order[Duration] with Hash[Duration] with LowerBounded[Duration] with UpperBounded[Duration] = new DurationOrder
   implicit val catsKernelStdGroupForDuration: CommutativeGroup[Duration] = new DurationGroup
-  implicit val catsKernelStdBoundedForDuration: LowerBounded[Duration] with UpperBounded[Duration] =
-    new DurationBounded {
-      override val partialOrder: PartialOrder[Duration] = catsKernelStdOrderForDuration
-    }
 }
 
 // Duration.Undefined, Duration.Inf, Duration.MinusInf
+
+trait DurationBounded extends LowerBounded[Duration] with UpperBounded[Duration] {
+  override def minBound: Duration = Duration.MinusInf
+  override def maxBound: Duration = Duration.Inf
+}
 
 /**
  * This ordering is valid for all defined durations.
@@ -21,7 +22,7 @@ trait DurationInstances {
  * The value Duration.Undefined breaks our laws, because undefined
  * values are not equal to themselves.
  */
-class DurationOrder extends Order[Duration] with Hash[Duration] {
+class DurationOrder extends Order[Duration] with Hash[Duration] with DurationBounded { self =>
   def hash(x: Duration): Int = x.hashCode()
 
   def compare(x: Duration, y: Duration): Int = x.compare(y)
@@ -35,6 +36,8 @@ class DurationOrder extends Order[Duration] with Hash[Duration] {
 
   override def min(x: Duration, y: Duration): Duration = x.min(y)
   override def max(x: Duration, y: Duration): Duration = x.max(y)
+
+  override val partialOrder: PartialOrder[Duration] = self
 }
 
 /**
@@ -49,9 +52,4 @@ class DurationGroup extends CommutativeGroup[Duration] {
   def inverse(x: Duration): Duration = -x
   def combine(x: Duration, y: Duration): Duration = x + y
   override def remove(x: Duration, y: Duration): Duration = x - y
-}
-
-trait DurationBounded extends LowerBounded[Duration] with UpperBounded[Duration] {
-  override def minBound: Duration = Duration.MinusInf
-  override def maxBound: Duration = Duration.Inf
 }

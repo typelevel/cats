@@ -193,3 +193,5 @@ trait StreamInstancesBinCompat0 {
 
   }
 }
+
+trait StreamInstancesBinCompat1 extends cats.kernel.instances.StreamInstancesBinCompat0

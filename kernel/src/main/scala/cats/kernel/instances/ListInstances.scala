@@ -8,6 +8,9 @@ trait ListInstances extends ListInstances1 {
     new ListOrder[A]
   implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
     new ListMonoid[A]
+}
+
+trait ListInstancesBinCompat0 extends ListInstances1 {
   implicit def catsKernelStdLowerBoundedForList[A: PartialOrder]: LowerBounded[List[A]] =
     new ListLowerBounded[A] {
       override val partialOrder: PartialOrder[List[A]] = catsKernelStdPartialOrderForList

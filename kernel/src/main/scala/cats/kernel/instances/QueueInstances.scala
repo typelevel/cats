@@ -8,6 +8,9 @@ trait QueueInstances extends QueueInstances1 {
     new QueueOrder[A]
   implicit def catsKernelStdMonoidForQueue[A]: Monoid[Queue[A]] =
     new QueueMonoid[A]
+}
+
+trait QueueInstancesBinCompat0 extends QueueInstances1 {
   implicit def catsKernelStdLowerBoundedForQueue[A: PartialOrder]: LowerBounded[Queue[A]] =
     new QueueLowerBounded[A] {
       override val partialOrder: PartialOrder[Queue[A]] = catsKernelStdPartialOrderForQueue

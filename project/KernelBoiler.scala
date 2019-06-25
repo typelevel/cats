@@ -165,7 +165,16 @@ object KernelBoiler {
                     def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
-
+              """
+            }
+        ),
+        InstanceDef(
+          "trait TupleInstancesBinCompat0 extends TupleInstances1 {",
+          tv =>
+            new TemplatedBlock(tv) {
+              import tv._
+              def content =
+                block"""
                 implicit def catsKernelStdUpperBoundedForTuple${arity}[${`A..N`}](implicit ${constraints(
                   "UpperBounded"
                 )}): UpperBounded[${`(A..N)`}] =

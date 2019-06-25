@@ -44,3 +44,5 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
       fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
   }
 }
+
+trait SetInstancesBinCompat0 extends cats.kernel.instances.SetInstancesBinCompat0

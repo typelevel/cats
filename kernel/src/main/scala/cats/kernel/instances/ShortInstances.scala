@@ -2,12 +2,9 @@ package cats.kernel
 package instances
 
 trait ShortInstances {
-  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] = new ShortOrder
+  implicit val catsKernelStdOrderForShort
+    : Order[Short] with Hash[Short] with LowerBounded[Short] with UpperBounded[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
-  implicit val catsKernelStdBoundedForShort: LowerBounded[Short] with UpperBounded[Short] =
-    new ShortBounded {
-      override val partialOrder: PartialOrder[Short] = catsKernelStdOrderForShort
-    }
 }
 
 class ShortGroup extends CommutativeGroup[Short] {
@@ -17,7 +14,12 @@ class ShortGroup extends CommutativeGroup[Short] {
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
-class ShortOrder extends Order[Short] with Hash[Short] {
+trait ShortBounded extends LowerBounded[Short] with UpperBounded[Short] {
+  override def minBound: Short = Short.MinValue
+  override def maxBound: Short = Short.MaxValue
+}
+
+class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self =>
 
   def hash(x: Short): Int = x.hashCode()
   // use java.lang.Short.compare if we can rely on java >= 1.7
@@ -35,9 +37,6 @@ class ShortOrder extends Order[Short] with Hash[Short] {
     java.lang.Math.min(x.toInt, y.toInt).toShort
   override def max(x: Short, y: Short): Short =
     java.lang.Math.max(x.toInt, y.toInt).toShort
-}
 
-trait ShortBounded extends LowerBounded[Short] with UpperBounded[Short] {
-  override def minBound: Short = Short.MinValue
-  override def maxBound: Short = Short.MaxValue
+  override val partialOrder: PartialOrder[Short] = self
 }

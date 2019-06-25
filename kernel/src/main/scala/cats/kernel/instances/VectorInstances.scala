@@ -6,6 +6,9 @@ trait VectorInstances extends VectorInstances1 {
     new VectorOrder[A]
   implicit def catsKernelStdMonoidForVector[A]: Monoid[Vector[A]] =
     new VectorMonoid[A]
+}
+
+trait VectorInstancesBinCompat0 extends VectorInstances1 {
   implicit def catsKernelStdLowerBoundedForVector[A: PartialOrder]: LowerBounded[Vector[A]] =
     new VectorLowerBounded[A] {
       override val partialOrder: PartialOrder[Vector[A]] = catsKernelStdPartialOrderForVector

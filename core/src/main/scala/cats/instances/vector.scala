@@ -148,3 +148,5 @@ trait VectorInstancesBinCompat0 {
         .value
   }
 }
+
+trait VectorInstancesBinCompat1 extends cats.kernel.instances.VectorInstancesBinCompat0

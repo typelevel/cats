@@ -34,3 +34,14 @@ trait AllInstances
     with VectorInstances
 
 trait AllInstancesBinCompat0 extends FiniteDurationInstances
+
+trait AllInstancesBinCompat1
+    extends EitherInstancesBinCompat0
+    with ListInstancesBinCompat0
+    with OptionInstancesBinCompat0
+    with QueueInstancesBinCompat0
+    with SetInstancesBinCompat0
+    with StreamInstancesBinCompat0
+    with TupleInstancesBinCompat0
+    with UUIDInstancesBinCompat0
+    with VectorInstancesBinCompat0

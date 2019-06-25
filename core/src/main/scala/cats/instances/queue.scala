@@ -153,3 +153,5 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
     }
 }
+
+trait QueueInstancesBinCompat0 extends cats.kernel.instances.QueueInstancesBinCompat0

@@ -159,3 +159,5 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         }
     }
 }
+
+trait EitherInstancesBinCompat0 extends cats.kernel.instances.EitherInstancesBinCompat0

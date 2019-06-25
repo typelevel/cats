@@ -50,3 +50,14 @@ trait AllInstancesBinCompat3 extends AllCoreDurationInstances
 trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstancesBinCompat1
 
 trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
+
+trait AllInstancesBinCompat6
+    extends EitherInstancesBinCompat0
+    with ListInstancesBinCompat1
+    with OptionInstancesBinCompat1
+    with QueueInstancesBinCompat0
+    with SetInstancesBinCompat0
+    with StreamInstancesBinCompat1
+    with TupleInstancesBinCompat0
+    with VectorInstancesBinCompat1
+    with UUIDInstancesBinCompat0

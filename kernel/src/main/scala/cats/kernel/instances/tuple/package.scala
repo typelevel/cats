@@ -1,4 +1,4 @@
 package cats.kernel
 package instances
 
-package object tuple extends TupleInstances
+package object tuple extends TupleInstances with TupleInstancesBinCompat0
