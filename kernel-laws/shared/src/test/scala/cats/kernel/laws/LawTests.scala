@@ -193,7 +193,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("LowerBounded[List[Int]]", LowerBoundedTests[List[Int]].lowerBounded)
   checkAll("LowerBounded[Queue[Int]]", LowerBoundedTests[Queue[Int]].lowerBounded)
   checkAll("LowerBounded[Set[Int]]", LowerBoundedTests[Set[Int]].lowerBounded)
-  checkAll("LowerBounded[Stream[Int]]", LowerBoundedTests[Stream[Int]].lowerBounded)
+  checkAll("LowerBounded[Stream[Int]]", LowerBoundedTests[LazyList[Int]].lowerBounded)
   checkAll("LowerBounded[Vector[Int]]", LowerBoundedTests[Vector[Int]].lowerBounded)
 
   checkAll("UpperBounded[Unit]", UpperBoundedTests[Unit].upperBounded)

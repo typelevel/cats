@@ -29,8 +29,8 @@ trait StreamInstances2 {
     new StreamEq[A]
 }
 
-trait StreamLowerBounded[A] extends LowerBounded[Stream[A]] {
-  override def minBound: Stream[A] = Stream.empty
+trait StreamLowerBounded[A] extends LowerBounded[LazyList[A]] {
+  override def minBound: LazyList[A] = LazyList.empty
 }
 
 class StreamOrder[A](implicit ev: Order[A]) extends Order[LazyList[A]] {

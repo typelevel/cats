@@ -12,6 +12,9 @@ trait LazyListInstances extends StreamInstances with StreamInstancesBinCompat0 {
   val catsStdInstancesForLazyList = catsStdInstancesForStream
 }
 
+// For cross compile with backward compatibility
+trait LazyListInstancesBinCompat0
+
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit val catsStdInstancesForStream

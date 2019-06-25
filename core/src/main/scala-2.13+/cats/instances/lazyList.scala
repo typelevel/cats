@@ -7,6 +7,7 @@ import scala.annotation.tailrec
 
 //For cross compile with backward compatibility
 trait StreamInstancesBinCompat0
+trait StreamInstancesBinCompat1
 
 //For cross compile with backward compatibility
 trait StreamInstances extends LazyListInstances {
@@ -204,3 +205,5 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
 
   }
 }
+
+trait LazyListInstancesBinCompat0 extends cats.kernel.instances.StreamInstancesBinCompat0
