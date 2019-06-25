@@ -2,6 +2,7 @@ package cats.kernel
 package instances
 
 import scala.collection.immutable.Queue
+import compat.scalaVersionSpecific._
 
 trait QueueInstances extends QueueInstances1 {
   implicit def catsKernelStdOrderForQueue[A: Order]: Order[Queue[A]] =
@@ -52,6 +53,6 @@ class QueueMonoid[A] extends Monoid[Queue[A]] {
   override def combineN(x: Queue[A], n: Int): Queue[A] =
     StaticMethods.combineNIterable(Queue.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[Queue[A]]): Queue[A] =
+  override def combineAll(xs: IterableOnce[Queue[A]]): Queue[A] =
     StaticMethods.combineAllIterable(Queue.newBuilder[A], xs)
 }

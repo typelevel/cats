@@ -33,7 +33,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: SortedSet[A]): Long = fa.size.toLong
@@ -64,7 +64,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
     def show(fa: SortedSet[A]): String =
-      fa.toIterator.map(_.show).mkString("SortedSet(", ", ", ")")
+      fa.iterator.map(_.show).mkString("SortedSet(", ", ", ")")
   }
 
   implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =

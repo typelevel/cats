@@ -4,7 +4,7 @@ package tests
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {

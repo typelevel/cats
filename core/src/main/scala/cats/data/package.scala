@@ -1,5 +1,5 @@
 package cats
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 package object data {
 

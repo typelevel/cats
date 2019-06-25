@@ -1,6 +1,6 @@
 package cats.kernel
 package instances
-import compat.lazyList._
+import compat.scalaVersionSpecific._
 
 trait StreamInstances extends StreamInstances1 {
   implicit def catsKernelStdOrderForStream[A: Order]: Order[LazyList[A]] =
@@ -50,6 +50,6 @@ class StreamMonoid[A] extends Monoid[LazyList[A]] {
   override def combineN(x: LazyList[A], n: Int): LazyList[A] =
     StaticMethods.combineNIterable(LazyList.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[LazyList[A]]): LazyList[A] =
+  override def combineAll(xs: IterableOnce[LazyList[A]]): LazyList[A] =
     StaticMethods.combineAllIterable(LazyList.newBuilder[A], xs)
 }

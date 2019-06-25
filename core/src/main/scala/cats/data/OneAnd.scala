@@ -4,7 +4,7 @@ package data
 import scala.annotation.tailrec
 import scala.collection.mutable.Builder
 import cats.instances.stream._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a single element (head) and some other

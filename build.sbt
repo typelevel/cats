@@ -60,10 +60,13 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     case _ => Nil
   }
 }
+
 lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
+  scalaVersion := crossScalaVersions.value.find(_.contains("2.13")).get
 )
+
+commonScalaVersionSettings
 
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
@@ -407,7 +410,7 @@ lazy val docs = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(docSettings)
-  .settings(commonJvmSettings)
+  .settings(commonJvmSettings, scalaVersion := "2.12.8") // temporarily fix the version to 2.12 due to https://github.com/47deg/sbt-microsites/issues/305
   .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm, testkit.jvm)
 
 lazy val cats = project
@@ -435,8 +438,8 @@ lazy val catsJVM = project
              alleycatsCore.jvm,
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
-             jvm,
-             docs)
+             jvm)
+  //docs)  Temporarily disable docs from aggregating because of https://github.com/47deg/sbt-microsites/issues/305 and I would like to set the default scala version to 2.13
   .dependsOn(
     macros.jvm,
     kernel.jvm,
@@ -626,11 +629,15 @@ lazy val bench = project
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(
-    libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.2.23",
-      "org.spire-math" %% "chain" % "0.3.0",
-      "co.fs2" %% "fs2-core" % "0.10.4"
-    )
+    libraryDependencies ++= {
+      if (priorTo2_13(scalaVersion.value))
+        Seq(
+          "org.scalaz" %% "scalaz-core" % "7.2.23",
+          "org.spire-math" %% "chain" % "0.3.0",
+          "co.fs2" %% "fs2-core" % "0.10.4"
+        )
+      else Nil
+    }
   )
   .enablePlugins(JmhPlugin)
 
@@ -645,7 +652,7 @@ lazy val binCompatTest = project
         if (priorTo2_13(scalaVersion.value))
           mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
         else //We are not testing BC on Scala 2.13 yet.
-          "org.typelevel" %% "cats-core" % version.value % Provided
+          "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
       },
       "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )

@@ -1,5 +1,6 @@
 package cats.kernel
 package instances
+import compat.scalaVersionSpecific._
 
 trait StringInstances {
   implicit val catsKernelStdOrderForString: Order[String] with Hash[String] = new StringOrder
@@ -20,7 +21,7 @@ class StringMonoid extends Monoid[String] {
   def empty: String = ""
   def combine(x: String, y: String): String = x + y
 
-  override def combineAll(xs: TraversableOnce[String]): String = {
+  override def combineAll(xs: IterableOnce[String]): String = {
     val sb = new StringBuilder
     xs.foreach(sb.append)
     sb.toString

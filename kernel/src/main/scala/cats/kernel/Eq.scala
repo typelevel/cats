@@ -3,6 +3,7 @@ package cats.kernel
 import scala.{specialized => sp}
 
 import scala.math.Equiv
+import compat.scalaVersionSpecific._
 
 /**
  * A type class used to determine equality between 2 instances of the same
@@ -110,7 +111,7 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
   def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
     def empty = allEqual[A]
     def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
-    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
+    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
       if (es.isEmpty) None
       else {
         val materialized = es.toVector
@@ -126,7 +127,7 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
    */
   def anyEqualSemilattice[A]: Semilattice[Eq[A]] = new Semilattice[Eq[A]] {
     def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
-    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
+    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
       if (es.isEmpty) None
       else {
         val materialized = es.toVector

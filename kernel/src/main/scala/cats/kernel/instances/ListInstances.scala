@@ -2,6 +2,7 @@ package cats.kernel
 package instances
 
 import scala.annotation.tailrec
+import compat.scalaVersionSpecific._
 
 trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
@@ -88,6 +89,6 @@ class ListMonoid[A] extends Monoid[List[A]] {
   override def combineN(x: List[A], n: Int): List[A] =
     StaticMethods.combineNIterable(List.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[List[A]]): List[A] =
+  override def combineAll(xs: IterableOnce[List[A]]): List[A] =
     StaticMethods.combineAllIterable(List.newBuilder[A], xs)
 }

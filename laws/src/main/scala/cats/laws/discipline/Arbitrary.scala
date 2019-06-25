@@ -1,7 +1,7 @@
 package cats
 package laws
 package discipline
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.util.{Failure, Success, Try}

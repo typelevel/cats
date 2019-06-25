@@ -57,7 +57,7 @@ jobs:
 
     - env: TEST="docs"
       install: gem install jekyll -v 2.5
-      script: sbt makeMicrosite
+      script: sbt docs/makeMicrosite
 
     - stage: styling
       env: TEST="linting"

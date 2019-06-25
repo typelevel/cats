@@ -7,7 +7,7 @@ import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
