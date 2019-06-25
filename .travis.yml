@@ -61,7 +61,7 @@ jobs:
 
     - stage: styling
       env: TEST="linting"
-      script: sbt scalastyle fmtCheck
+      script: sbt fmtCheck
 
     - env: TEST="scalafix"
       script: cd scalafix && sbt tests/test

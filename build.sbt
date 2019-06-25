@@ -773,7 +773,7 @@ addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
-addCommandAlias("validateJVM", ";scalastyle;fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
+addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
