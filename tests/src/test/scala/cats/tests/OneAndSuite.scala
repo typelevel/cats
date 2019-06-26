@@ -19,7 +19,7 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit

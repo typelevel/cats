@@ -4,7 +4,7 @@ package tests
 import cats.data.{Const, NonEmptyList, StateT}
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 
 class RegressionSuite extends CatsSuite {
 

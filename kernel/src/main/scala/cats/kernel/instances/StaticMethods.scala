@@ -3,6 +3,7 @@ package kernel
 package instances
 
 import scala.collection.mutable
+import compat.scalaVersionSpecific._
 
 object StaticMethods extends cats.kernel.compat.HashCompat {
 
@@ -75,7 +76,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
     b.result
   }
 
-  def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: TraversableOnce[Iterable[A]]): R = {
+  def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: IterableOnce[Iterable[A]]): R = {
     xs.foreach(b ++= _)
     b.result
   }

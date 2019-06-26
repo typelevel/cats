@@ -15,12 +15,12 @@ trait StreamInstances extends LazyListInstances {
 
 trait LazyListInstances extends cats.kernel.instances.StreamInstances {
   implicit val catsStdInstancesForLazyList
-  : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
+    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
     new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
 
-      def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A]  = x lazyAppendedAll y
+      def combineK[A](x: LazyList[A], y: LazyList[A]): LazyList[A] = x.lazyAppendedAll(y)
 
       def pure[A](x: A): LazyList[A] = LazyList(x)
 
@@ -55,9 +55,9 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: LazyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[LazyList[B]] =
-      // We use foldRight to avoid possible stack overflows. Since
-      // we don't want to return a Eval[_] instance, we call .value
-      // at the end.
+        // We use foldRight to avoid possible stack overflows. Since
+        // we don't want to return a Eval[_] instance, we call .value
+        // at the end.
         foldRight(fa, Always(G.pure(LazyList.empty[B]))) { (a, lgsb) =>
           G.map2Eval(f(a), lgsb)(_ #:: _)
         }.value
@@ -85,8 +85,7 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
                     stack = nextFront :: stack
                     advance()
                 }
-              }
-              else {
+              } else {
                 stack = tail
                 advance()
               }
@@ -190,16 +189,18 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
 
     override def flattenOption[A](fa: LazyList[Option[A]]): LazyList[A] = fa.flatten
 
-    def traverseFilter[G[_], A, B](fa: LazyList[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
+    def traverseFilter[G[_], A, B](
+      fa: LazyList[A]
+    )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
       fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))(
-        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
       fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))(
-        (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+        )
         .value
 
   }

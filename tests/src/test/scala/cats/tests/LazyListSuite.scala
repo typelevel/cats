@@ -13,7 +13,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.lazyListString
 
 class LazyListSuite extends CatsSuite {

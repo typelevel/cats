@@ -1,5 +1,6 @@
 package cats.kernel
 package instances
+import compat.scalaVersionSpecific._
 
 trait VectorInstances extends VectorInstances1 {
   implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
@@ -50,6 +51,6 @@ class VectorMonoid[A] extends Monoid[Vector[A]] {
   override def combineN(x: Vector[A], n: Int): Vector[A] =
     StaticMethods.combineNIterable(Vector.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[Vector[A]]): Vector[A] =
+  override def combineAll(xs: IterableOnce[Vector[A]]): Vector[A] =
     StaticMethods.combineAllIterable(Vector.newBuilder[A], xs)
 }

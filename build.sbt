@@ -60,10 +60,13 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     case _ => Nil
   }
 }
+
 lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
   scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
 )
+
+commonScalaVersionSettings
 
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
@@ -626,11 +629,15 @@ lazy val bench = project
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(
-    libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.2.23",
-      "org.spire-math" %% "chain" % "0.3.0",
-      "co.fs2" %% "fs2-core" % "0.10.4"
-    )
+    libraryDependencies ++= {
+      if (priorTo2_13(scalaVersion.value))
+        Seq(
+          "org.scalaz" %% "scalaz-core" % "7.2.23",
+          "org.spire-math" %% "chain" % "0.3.0",
+          "co.fs2" %% "fs2-core" % "0.10.4"
+        )
+      else Nil
+    }
   )
   .enablePlugins(JmhPlugin)
 
@@ -645,7 +652,7 @@ lazy val binCompatTest = project
         if (priorTo2_13(scalaVersion.value))
           mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
         else //We are not testing BC on Scala 2.13 yet.
-          "org.typelevel" %% "cats-core" % version.value % Provided
+          "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
       },
       "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
@@ -766,7 +773,7 @@ addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
-addCommandAlias("validateJVM", ";scalastyle;fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
+addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis

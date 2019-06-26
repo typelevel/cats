@@ -1,6 +1,7 @@
 package cats.kernel
 
 import scala.{specialized => sp}
+import compat.scalaVersionSpecific._
 
 /**
  * A monoid is a semigroup with an identity. A monoid is a specialization of a
@@ -77,10 +78,10 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    * res1: String = ""
    * }}}
    */
-  def combineAll(as: TraversableOnce[A]): A =
+  def combineAll(as: IterableOnce[A]): A =
     as.foldLeft(empty)(combine)
 
-  override def combineAllOption(as: TraversableOnce[A]): Option[A] =
+  override def combineAllOption(as: IterableOnce[A]): Option[A] =
     if (as.isEmpty) None else Some(combineAll(as))
 }
 
@@ -91,7 +92,7 @@ abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] 
   def isEmpty[@sp(Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
     m.isEmpty(a)
 
-  def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
+  def combineAll[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)
 }
 

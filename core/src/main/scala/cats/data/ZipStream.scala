@@ -2,7 +2,7 @@ package cats
 package data
 
 import instances.stream._
-import kernel.compat.lazyList._
+import kernel.compat.scalaVersionSpecific._
 
 class ZipStream[A](val value: LazyList[A]) extends AnyVal
 
