@@ -51,7 +51,7 @@ sealed abstract private[cats] class InjectKInstances {
     new InjectK[F, EitherK[H, G, ?]] {
       val inj = λ[FunctionK[G, EitherK[H, G, ?]]](EitherK.rightc(_)).compose(I.inj)
 
-      val prj = λ[FunctionK[EitherK[H, G, ?], λ[α => Option[F[α]]]]](_.run.right.toOption.flatMap(I.prj(_)))
+      val prj = λ[FunctionK[EitherK[H, G, ?], λ[α => Option[F[α]]]]](_.run.toOption.flatMap(I.prj(_)))
     }
 }
 

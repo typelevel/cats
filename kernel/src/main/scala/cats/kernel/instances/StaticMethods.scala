@@ -77,7 +77,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
   }
 
   def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: IterableOnce[Iterable[A]]): R = {
-    xs.foreach(b ++= _)
+    xs.iterator.foreach(b ++= _)
     b.result
   }
 

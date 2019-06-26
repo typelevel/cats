@@ -75,7 +75,7 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]] {
 
   override def combineAll(xss: IterableOnce[Map[K, V]]): Map[K, V] = {
     val acc = mutable.Map.empty[K, V]
-    xss.foreach { m =>
+    xss.iterator.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
         val (k, v) = it.next

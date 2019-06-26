@@ -1,6 +1,8 @@
 package cats
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
+
+
 package object data {
 
   type NonEmptyStream[A] = OneAnd[LazyList, A]
@@ -15,6 +17,8 @@ package object data {
 
   def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
+
+  @suppressUnusedImportWarningForScalaVersionSpecific
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
     OneAnd(head, toLazyList(tail))
 

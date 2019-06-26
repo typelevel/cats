@@ -22,6 +22,7 @@ import cats.kernel._
 import cats.syntax.order._
 
 import scala.collection.immutable._
+import kernel.compat.scalaVersionSpecific._
 
 private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
@@ -48,6 +49,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
     new NonEmptySetOps(value)
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
 
   implicit private val ordering: Ordering[A] = toSortedSet.ordering
@@ -335,7 +337,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    */
   def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
     implicit val cOrdering = C.toOrdering
-    NonEmptySetImpl.create((toSortedSet, b.toSortedSet).zipped.map(f))
+    NonEmptySetImpl.create((toSortedSet.lazyZip(b.toSortedSet)).map(f))
   }
 
   /**

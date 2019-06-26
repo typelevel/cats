@@ -21,6 +21,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.arbitrary._
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
+
+@suppressUnusedImportWarningForScalaVersionSpecific
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
@@ -172,9 +174,13 @@ class OneAndSuite extends CatsSuite {
   test("reduceRight consistent with foldRight") {
     forAll { (nel: NonEmptyStream[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
       val got = nel.reduceRight(f).value
-      val last :: rev = nel.unwrap.toList.reverse
-      val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-      got should ===(expected)
+      nel.unwrap.toList.reverse match {
+        case last :: rev =>
+          val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
+          got should ===(expected)
+        case _ => fail("nonempty turns out to be empty")
+      }
+
     }
   }
 
@@ -202,11 +208,14 @@ class OneAndSuite extends CatsSuite {
   test("reduceRightToOption consistent with foldRight + Option") {
     forAll { (nel: NonEmptyStream[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
       val got = nel.reduceRightToOption(f)(g).value
-      val last :: rev = nel.unwrap.toList.reverse
-      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
-        opt.map(s => g(i, Now(s)).value)
+      nel.unwrap.toList.reverse match {
+        case last :: rev =>
+          val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
+            opt.map(s => g(i, Now(s)).value)
+          }
+          got should ===(expected)
+        case _ => fail("nonempty turns out to be empty")
       }
-      got should ===(expected)
     }
   }
 

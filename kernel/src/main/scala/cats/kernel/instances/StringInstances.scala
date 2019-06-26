@@ -23,7 +23,7 @@ class StringMonoid extends Monoid[String] {
 
   override def combineAll(xs: IterableOnce[String]): String = {
     val sb = new StringBuilder
-    xs.foreach(sb.append)
+    xs.iterator.foreach(sb.append)
     sb.toString
   }
 }

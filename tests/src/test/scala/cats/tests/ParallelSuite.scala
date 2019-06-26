@@ -13,6 +13,7 @@ import org.typelevel.discipline.scalatest.Discipline
 import scala.collection.immutable.SortedSet
 import kernel.compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
   test("ParSequence Either should accumulate errors") {

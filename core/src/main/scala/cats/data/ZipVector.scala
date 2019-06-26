@@ -1,10 +1,13 @@
-package cats.data
+package cats
+package data
 
-import cats.{CommutativeApply, Eq}
-import cats.instances.vector._
+import instances.vector._
+import kernel.compat.scalaVersionSpecific._
+
 
 class ZipVector[A](val value: Vector[A]) extends AnyVal
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object ZipVector {
 
   def apply[A](value: Vector[A]): ZipVector[A] = new ZipVector(value)
@@ -14,7 +17,7 @@ object ZipVector {
     override def map[A, B](fa: ZipVector[A])(f: (A) => B): ZipVector[B] =
       ZipVector(fa.value.map(f))
     def ap[A, B](ff: ZipVector[A => B])(fa: ZipVector[A]): ZipVector[B] =
-      ZipVector((ff.value, fa.value).zipped.map(_.apply(_)))
+      ZipVector(ff.value.lazyZip(fa.value).map(_.apply(_)))
 
   }
 

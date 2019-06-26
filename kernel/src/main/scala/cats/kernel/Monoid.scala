@@ -79,10 +79,10 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    * }}}
    */
   def combineAll(as: IterableOnce[A]): A =
-    as.foldLeft(empty)(combine)
+    as.iterator.foldLeft(empty)(combine)
 
   override def combineAllOption(as: IterableOnce[A]): Option[A] =
-    if (as.isEmpty) None else Some(combineAll(as))
+    if (as.iterator.isEmpty) None else Some(combineAll(as))
 }
 
 abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {

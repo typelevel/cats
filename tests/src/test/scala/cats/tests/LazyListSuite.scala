@@ -16,6 +16,7 @@ import cats.laws.discipline.arbitrary._
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.lazyListString
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[LazyList]", SerializableTests.serializable(Semigroupal[LazyList]))

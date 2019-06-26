@@ -6,6 +6,7 @@ import kernel.compat.scalaVersionSpecific._
 
 class ZipStream[A](val value: LazyList[A]) extends AnyVal
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object ZipStream {
 
   def apply[A](value: LazyList[A]): ZipStream[A] = new ZipStream(value)
@@ -18,7 +19,7 @@ object ZipStream {
         ZipStream(fa.value.map(f))
 
       def ap[A, B](ff: ZipStream[A => B])(fa: ZipStream[A]): ZipStream[B] =
-        ZipStream((ff.value, fa.value).zipped.map(_.apply(_)))
+        ZipStream(ff.value.lazyZip(fa.value).map(_.apply(_)))
 
       override def product[A, B](fa: ZipStream[A], fb: ZipStream[B]): ZipStream[(A, B)] =
         ZipStream(fa.value.zip(fb.value))
