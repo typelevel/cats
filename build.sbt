@@ -63,7 +63,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 
 lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.13")).get
+  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
 )
 
 commonScalaVersionSettings
@@ -410,7 +410,7 @@ lazy val docs = project
   .settings(catsSettings)
   .settings(noPublishSettings)
   .settings(docSettings)
-  .settings(commonJvmSettings, scalaVersion := "2.12.8") // temporarily fix the version to 2.12 due to https://github.com/47deg/sbt-microsites/issues/305
+  .settings(commonJvmSettings)
   .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm, testkit.jvm)
 
 lazy val cats = project
@@ -438,8 +438,8 @@ lazy val catsJVM = project
              alleycatsCore.jvm,
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
-             jvm)
-  //docs)  Temporarily disable docs from aggregating because of https://github.com/47deg/sbt-microsites/issues/305 and I would like to set the default scala version to 2.13
+             jvm,
+             docs)
   .dependsOn(
     macros.jvm,
     kernel.jvm,
