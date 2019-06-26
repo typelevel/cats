@@ -4,8 +4,6 @@ package instances
 
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
-
-
 @suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
 

@@ -153,7 +153,8 @@ class NonEmptyListSuite extends CatsSuite {
     forAll { (nel: NonEmptyList[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
       val got = nel.reduceRight(f).value
       nel.toList.reverse match {
-        case last :: rev => val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
+        case last :: rev =>
+          val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
           got should ===(expected)
         case _ => fail("nonempty turns out to be empty")
       }

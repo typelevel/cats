@@ -4,12 +4,10 @@ package data
 import instances.list.catsKernelStdEqForList
 import kernel.compat.scalaVersionSpecific._
 
-
 class ZipList[A](val value: List[A]) extends AnyVal
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object ZipList {
-
 
   def apply[A](value: List[A]): ZipList[A] = new ZipList(value)
 
@@ -28,5 +26,3 @@ object ZipList {
 
   implicit def catsDataEqForZipList[A: Eq]: Eq[ZipList[A]] = Eq.by(_.value)
 }
-
-

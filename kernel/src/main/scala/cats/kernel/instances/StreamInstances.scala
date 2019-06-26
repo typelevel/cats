@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
 import compat.scalaVersionSpecific._
-
-
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait StreamInstances extends StreamInstances1 {
   implicit def catsKernelStdOrderForStream[A: Order]: Order[LazyList[A]] =

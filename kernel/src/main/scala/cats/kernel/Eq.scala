@@ -32,6 +32,7 @@ abstract class EqFunctions[E[T] <: Eq[T]] {
 }
 
 trait EqToEquivConversion {
+
   /**
    * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
    * instance.

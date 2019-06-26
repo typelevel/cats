@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
 import compat.scalaVersionSpecific._
-
-
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait StringInstances {
   implicit val catsKernelStdOrderForString: Order[String] with Hash[String] = new StringOrder

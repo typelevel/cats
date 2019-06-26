@@ -6,6 +6,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
 import kernel.compat.scalaVersionSpecific._
+
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
  * <br/>
