@@ -1,9 +1,9 @@
 package cats.kernel
 
 import scala.{specialized => sp}
-
 import scala.math.Equiv
-//import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific._
+
 /**
  * A type class used to determine equality between 2 instances of the same
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
@@ -31,7 +31,6 @@ abstract class EqFunctions[E[T] <: Eq[T]] {
 
 }
 
-//@suppressUnusedImportWarning
 trait EqToEquivConversion {
   /**
    * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
@@ -42,6 +41,7 @@ trait EqToEquivConversion {
   }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Eq extends EqFunctions[Eq] with EqToEquivConversion {
 
   /**

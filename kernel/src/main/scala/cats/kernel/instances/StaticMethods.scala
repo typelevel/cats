@@ -5,6 +5,8 @@ package instances
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
 
+
+@suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
 
   def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =

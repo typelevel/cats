@@ -11,8 +11,6 @@ private[cats] object scalaVersionSpecific {
    */
   class suppressUnusedImportWarningForScalaVersionSpecific extends Annotation with StaticAnnotation
 
-  type IterableOnce[+A] = scala.IterableOnce[A] //this is needed only to avoid unused import warnings on Scala 2.13
-
   implicit class iterableOnceExtension[A](private val io: IterableOnce[A]) extends AnyVal {
     def reduceOption(f: (A, A) => A): Option[A] = io.iterator.reduceOption(f)
   }

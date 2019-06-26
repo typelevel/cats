@@ -2,6 +2,7 @@ package cats.kernel
 package instances
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait UnitInstances {
   implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] =
     new UnitOrder

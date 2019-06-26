@@ -3,7 +3,9 @@ import scala.annotation.{Annotation, StaticAnnotation}
 import scala.collection.{IterableLike, TraversableLike}
 
 private[cats] object scalaVersionSpecific {
-
+  /**
+   * a trick to suppress unused import warning for this object
+   */
   class suppressUnusedImportWarningForScalaVersionSpecific extends Annotation with StaticAnnotation
 
   type LazyList[+A] = Stream[A]

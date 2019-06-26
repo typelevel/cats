@@ -4,6 +4,7 @@ package instances
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait MapInstances extends MapInstances1 {
   implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     new MapHash[K, V]
