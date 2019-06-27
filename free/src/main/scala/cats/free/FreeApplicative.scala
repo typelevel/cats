@@ -170,12 +170,10 @@ object FreeApplicative {
 
   // Internal helper function for foldMap, it folds only Pure and Lift nodes
   private[free] def foldArg[F[_], G[_], A](node: FA[F, A], f: F ~> G)(implicit G: Applicative[G]): G[A] =
-    if (node.isInstanceOf[Pure[F, A]]) {
-      val Pure(x) = node
-      G.pure(x)
-    } else {
-      val Lift(fa) = node
-      f(fa)
+    node match {
+      case Pure(x) => G.pure(x)
+      case Lift(fa) => f(fa)
+      case x => throw new RuntimeException(s"Impossible for a $x to reach here")
     }
 
   /** Represents a curried function `F[A => B => C => ...]`
