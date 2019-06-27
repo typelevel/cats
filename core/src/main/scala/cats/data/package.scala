@@ -34,6 +34,8 @@ package object data {
 
   object Reader {
     def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
+
+    def local[A, R](f: R => R)(fa: Reader[R, A]): Reader[R, A] = Kleisli.local(f)(fa)
   }
 
   type Writer[L, V] = WriterT[Id, L, V]

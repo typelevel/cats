@@ -260,6 +260,20 @@ class KleisliSuite extends CatsSuite {
     kconfig1.run(config) should ===(kconfig2.run(config))
   }
 
+  test("local for Reader") {
+    val rint1 = Reader { (x: Int) =>
+      x.toDouble
+    }
+    val rint1local = Reader.local((i: Int) => i * 2)(rint1)
+    val rint2 = Reader { (i: Int) =>
+      (i * 2).toDouble
+    }
+
+    val config = 10
+    rint1local.run(config) should ===(rint2.run(config))
+
+  }
+
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
     val count = if (Platform.isJvm) 10000 else 100
