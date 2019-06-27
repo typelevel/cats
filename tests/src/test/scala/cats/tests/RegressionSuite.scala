@@ -6,6 +6,7 @@ import scala.collection.mutable
 import scala.collection.immutable.SortedMap
 import kernel.compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 class RegressionSuite extends CatsSuite {
 
   // toy state class
@@ -161,6 +162,6 @@ class RegressionSuite extends CatsSuite {
 
   test("#2809 MonadErrorOps.reject runs effects only once") {
     val program = StateT.modify[Either[Throwable, ?], Int](_ + 1).reject { case _ if false => new Throwable }
-    program.runS(0).right.get should ===(1)
+    program.runS(0).toOption should ===(Some(1))
   }
 }

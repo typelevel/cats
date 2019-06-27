@@ -14,10 +14,11 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
-import compat.scalaVersionSpecific._
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
@@ -319,19 +320,19 @@ class Tests extends AnyFunSuiteLike with Discipline {
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
-  test("signum . toInt . comparison = signum . compare") {
+  test("sign . toInt . comparison = sign . compare") {
     check { (i: Int, j: Int) =>
       val found = Order[Int].comparison(i, j)
       val expected = Order[Int].compare(i, j)
-      Eq[Int].eqv(found.toInt.signum, expected.signum)
+      Eq[Int].eqv(found.toInt.sign, expected.sign)
     }
   }
 
-  test("signum . toDouble . partialComparison = signum . partialCompare") {
+  test("sign . toDouble . partialComparison = sign . partialCompare") {
     check { (x: Set[Int], y: Set[Int]) =>
-      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.signum)
-      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.signum)
-      Eq[Option[Int]].eqv(found, expected)
+      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.sign)
+      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.sign)
+      Eq[Option[Double]].eqv(found, expected)
     }
   }
 

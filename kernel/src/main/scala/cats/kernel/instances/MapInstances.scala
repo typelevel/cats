@@ -4,6 +4,7 @@ package instances
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait MapInstances extends MapInstances1 {
   implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     new MapHash[K, V]
@@ -75,7 +76,7 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]] {
 
   override def combineAll(xss: IterableOnce[Map[K, V]]): Map[K, V] = {
     val acc = mutable.Map.empty[K, V]
-    xss.foreach { m =>
+    xss.iterator.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
         val (k, v) = it.next

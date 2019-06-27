@@ -445,7 +445,7 @@ class EitherTSuite extends CatsSuite {
 
   test("toEither consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      x.value.map(_.right.toOption) should ===(x.toOption.value)
+      x.value.map(_.toOption) should ===(x.toOption.value)
     }
   }
 

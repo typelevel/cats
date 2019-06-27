@@ -816,12 +816,12 @@ def commonScalacOptions(scalaVersion: String) =
     "-unchecked",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard"
+    "-Ywarn-value-discard",
+    "-Xfatal-warnings",
+    "-deprecation"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
-            "-Xfatal-warnings", // TODO: add the following two back to 2.13
-            "-deprecation",
             "-Xfuture"
           )
         else

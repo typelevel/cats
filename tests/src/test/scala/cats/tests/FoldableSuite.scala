@@ -10,6 +10,7 @@ import cats.laws.discipline.arbitrary._
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
                                                            ArbFString: Arbitrary[F[String]])
     extends CatsSuite {
@@ -477,7 +478,7 @@ class FoldableOptionSuite extends FoldableSuite[Option]("option") {
 }
 
 class FoldableEitherSuite extends FoldableSuite[Either[Int, ?]]("either") {
-  def iterator[T](either: Either[Int, T]): Iterator[T] = either.right.toOption.iterator
+  def iterator[T](either: Either[Int, T]): Iterator[T] = either.toOption.iterator
 }
 
 class FoldableValidatedSuite extends FoldableSuite[Validated[String, ?]]("validated") {

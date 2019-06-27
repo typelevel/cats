@@ -4,7 +4,7 @@ package instances
 
 import scala.collection.mutable
 import compat.scalaVersionSpecific._
-
+@suppressUnusedImportWarningForScalaVersionSpecific
 object StaticMethods extends cats.kernel.compat.HashCompat {
 
   def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
@@ -77,7 +77,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
   }
 
   def combineAllIterable[A, R](b: mutable.Builder[A, R], xs: IterableOnce[Iterable[A]]): R = {
-    xs.foreach(b ++= _)
+    xs.iterator.foreach(b ++= _)
     b.result
   }
 

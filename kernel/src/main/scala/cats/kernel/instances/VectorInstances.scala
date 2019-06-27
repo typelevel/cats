@@ -2,6 +2,7 @@ package cats.kernel
 package instances
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait VectorInstances extends VectorInstances1 {
   implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
     new VectorOrder[A]

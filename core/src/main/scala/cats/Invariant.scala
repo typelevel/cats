@@ -44,6 +44,7 @@ import cats.kernel.compat.scalaVersionSpecific._
     }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Invariant {
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

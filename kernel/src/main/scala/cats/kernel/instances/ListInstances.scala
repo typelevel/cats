@@ -4,6 +4,7 @@ package instances
 import scala.annotation.tailrec
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
     new ListOrder[A]

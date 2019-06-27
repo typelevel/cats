@@ -4,6 +4,7 @@ package instances
 import scala.collection.immutable.Queue
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait QueueInstances extends QueueInstances1 {
   implicit def catsKernelStdOrderForQueue[A: Order]: Order[Queue[A]] =
     new QueueOrder[A]
