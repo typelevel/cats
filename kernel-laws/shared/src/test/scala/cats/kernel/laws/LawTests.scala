@@ -14,11 +14,11 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
-import compat.scalaVersionSpecific._
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
 import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
