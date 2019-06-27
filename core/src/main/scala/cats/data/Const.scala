@@ -1,8 +1,7 @@
 package cats
 package data
 
-import cats.Contravariant
-import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, LowerBounded, UpperBounded}
 
 /**
  * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
@@ -58,6 +57,18 @@ object Const extends ConstInstances {
 }
 
 sealed abstract private[data] class ConstInstances extends ConstInstances0 {
+  implicit def catsDataUpperBoundedForConst[A, B](implicit A: UpperBounded[A]): UpperBounded[Const[A, B]] =
+    new UpperBounded[Const[A, B]] {
+      override def partialOrder: PartialOrder[Const[A, B]] = catsDataPartialOrderForConst(A.partialOrder)
+      override def maxBound: Const[A, B] = Const(A.maxBound)
+    }
+
+  implicit def catsDataLowerBoundedForConst[A, B](implicit A: LowerBounded[A]): LowerBounded[Const[A, B]] =
+    new LowerBounded[Const[A, B]] {
+      override def partialOrder: PartialOrder[Const[A, B]] = catsDataPartialOrderForConst(A.partialOrder)
+      override def minBound: Const[A, B] = Const(A.minBound)
+    }
+
   implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
     def compare(x: Const[A, B], y: Const[A, B]): Int =
       x.compare(y)
