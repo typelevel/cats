@@ -1,4 +1,3 @@
-
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 
 import cats.data.OneAnd
