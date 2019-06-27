@@ -48,6 +48,9 @@ package object data {
     def value[L: Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
 
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
+
+    def listen[L, V](writer: Writer[L, V]): Writer[L, (V, L)] =
+      WriterT.listen(writer)
   }
 
   type IndexedState[S1, S2, A] = IndexedStateT[Eval, S1, S2, A]
