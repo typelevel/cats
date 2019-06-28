@@ -1,510 +1,340 @@
 package cats.data
 
-import cats.data.NonEmptyLazyList.ZipNonEmptyLazyList
-import cats.instances.lazyList._
-import cats.syntax.order._
+import NonEmptyLazyListImpl.{NonEmptyLazyList, create, unwrap}
+import cats.{Apply, Bimonad, Eval, Foldable, Monad, NonEmptyReducible, NonEmptyTraverse, Order, Reducible, SemigroupK, Show}
+import cats.kernel.{Order, _}
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
-import scala.collection.mutable
+import scala.collection.immutable._
 import scala.collection.mutable.ListBuffer
 
-// TODO *** will handle mutable builders later - input appreciated
-// TODO *** 2.13 compiler reports matching empty cases on LazyList() - not Empty because of new `State` impl. Better way?
-/**
-  * A data type which represents a non empty lazy list of A, with
-  * single element (head) and optional structure (tail).
-  */
-// TODO *** considering implementing as non-case class so that head can be call-by-name and match LazyList impl: https://github.com/scala/scala/blob/6b4d32c3f518d21a798e8d3cf4a8c35866afa8e2/src/library/scala/collection/immutable/LazyList.scala#L1096
-final case class NonEmptyLazyList[+A](head: A, tail: LazyList[A]) {
-  /**
-    * Return the head and tail into a single list
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.toLazyList
-    * res0: scala.collection.immutable.LazyList[Int] = LazyList(1, 2, 3, 4, 5)
-    * }}}
-    */
-  def toLazyList: LazyList[A] = head #:: tail
+private[data] object NonEmptyLazyListImpl extends NonEmptyLazyListInstances {
+  // TODO belongs in package object:
+  type NonEmptyLazyList[+A] = NonEmptyLazyListImpl.Type[A]
+  //val NonEmptyLazyList = NonEmptyChainImpl
+
+  private[data] type Base
+  private[data] trait Tag extends Any
+  type Type[+A] <: Base with Tag
+
+  private[cats] def create[A](s: LazyList[A]): Type[A] =
+    s.asInstanceOf[Type[A]]
+
+  private[cats] def unwrap[A](s: Type[A]): LazyList[A] =
+    s.asInstanceOf[LazyList[A]]
+
+  def fromLazyList[A](as: LazyList[A]): Option[NonEmptyLazyList[A]] =
+    if (as.nonEmpty) Option(create(as)) else None
+
+  def fromLazyListUnsafe[A](ll: LazyList[A]): NonEmptyLazyList[A] =
+    if (ll.nonEmpty) create(ll)
+    else throw new IllegalArgumentException("Cannot create NonEmptyLazyList from empty LazyList")
+
+  def fromNonEmptyList[A](as: NonEmptyList[A]): NonEmptyLazyList[A] =
+    create(LazyList.from(as.toList))
+
+  def fromNonEmptyVector[A](as: NonEmptyVector[A]): NonEmptyLazyList[A] =
+    create(LazyList.from(as.toVector))
+
+  def fromSeq[A](as: Seq[A]): Option[NonEmptyLazyList[A]] =
+    if (as.nonEmpty) Option(create(LazyList.from(as))) else None
+
+  def fromLazyListPrepend[A](a: A, ca: LazyList[A]): NonEmptyLazyList[A] =
+    create(a +: ca)
+
+  def fromLazyListAppend[A](ca: LazyList[A], a: A): NonEmptyLazyList[A] =
+    create(ca :+ a)
+
+  def apply[A](a: => A, as: A*): NonEmptyLazyList[A] =
+    create(LazyList.concat(LazyList(a), LazyList.from(as)))
+
+  implicit def catsNonEmptyLazyListOps[A](value: NonEmptyLazyList[A]): NonEmptyLazyListOps[A] =
+    new NonEmptyLazyListOps(value)
+}
+
+class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends AnyVal {
 
   /**
-    * Selects the last element
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.last
-    * res0: Int = 5
-    * }}}
+    * Converts this NonEmptyLazyList to a `LazyList`
     */
-  def last: A = tail.lastOption match {
-    case None    => head
-    case Some(a) => a
-  }
+  final def toLazyList: LazyList[A] = NonEmptyLazyListImpl.unwrap(value)
 
   /**
-    * Selects all elements except the last
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.init
-    * res0: scala.collection.immutable.LazyList[Int] = LazyList(1, 2, 3, 4)
-    * }}}
+    * Returns the last element
     */
-  def init: LazyList[A] = tail match {
-    case LazyList() => LazyList.empty
-    case t          => head #:: t.init
-  }
+  final def last: A = toLazyList.last
 
   /**
-    * The size of this NonEmptyLazyList
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.size
-    * res0: Int = 5
-    * }}}
+    * Returns all elements but the last
     */
-  def size: Int = 1 + tail.size
-
-  def length: Int = size
+  final def init: LazyList[A] = toLazyList.init
 
   /**
-    *  Applies f to all the elements of the structure
+    * Returns the size of this NonEmptyLazyList
     */
-  def map[B](f: A => B): NonEmptyLazyList[B] =
-    NonEmptyLazyList(f(head), tail.map(f))
-
-  def ++[AA >: A](l: LazyList[AA]): NonEmptyLazyList[AA] =
-    concat(l)
-
-  def concat[AA >: A](other: LazyList[AA]): NonEmptyLazyList[AA] =
-    NonEmptyLazyList(head, tail #::: other)
+  final def size: Int = toLazyList.size
 
   /**
-    * Append another NonEmptyLazyList
+    * Returns the length of this NonEmptyLazyList
     */
-  def concatNel[AA >: A](other: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
-    NonEmptyLazyList(head, tail #::: other.toLazyList)
+  final def length: Int = size
 
-  def flatMap[B](f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-    f(head) ++ tail.flatMap(f.andThen(_.toLazyList))
+  /**
+    * Returns a new NonEmptyLazyList consisting of `a` followed by this
+    */
+  final def prepend[AA >: A](a: AA): NonEmptyLazyList[AA] =
+    create(a #:: toLazyList)
 
-  def #::[AA >: A](a: AA): NonEmptyLazyList[AA] =
+  /**
+    * Alias for [[prepend]].
+    */
+  final def +:[AA >: A](a: AA): NonEmptyLazyList[AA] =
     prepend(a)
 
-  def prepend[AA >: A](a: AA): NonEmptyLazyList[AA] =
-    NonEmptyLazyList(a, head #:: tail)
+  /**
+    * Alias for [[prepend]].
+    */
+  final def #::[AA >: A](a: AA): NonEmptyLazyList[AA] =
+    prepend(a)
 
   /**
-    * Alias for append
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3)
-    * scala> nell :+ 4
-    * res0: cats.data.NonEmptyLazyList[Int] = NonEmptyLazyList(1, 2, 3, 4)
-    * }}}
+    * Returns a new NonEmptyLazyList consisting of this followed by `a`
     */
-  def :+[AA >: A](a: AA): NonEmptyLazyList[AA] =
+  final def append[AA >: A](a: AA): NonEmptyLazyList[AA] =
+    create(toLazyList :+ a)
+
+  /**
+    * Alias for [[append]].
+    */
+  final def :+[AA >: A](a: AA): NonEmptyLazyList[AA] =
     append(a)
 
-  def append[AA >: A](a: AA): NonEmptyLazyList[AA] =
-    NonEmptyLazyList(head, tail :+ a)
+  /**
+    * concatenates this with `ll`
+    */
+  final def concat[AA >: A](ll: LazyList[AA]): NonEmptyLazyList[AA] =
+    create(toLazyList ++ ll)
+
+  /**
+    * Concatenates this with `nell`
+    */
+  final def concatNell[AA >: A](nell: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    create(toLazyList ++ nell.toLazyList)
 
   /**
     * Alias for concatNell
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3)
-    * scala> nell #::: NonEmptyLazyList.of(4, 5)
-    * res0: cats.data.NonEmptyLazyList[Int] = NonEmptyLazyList(1, 2, 3, 4, 5)
-    * }}}
     */
-  def #:::[AA >: A](other: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
-    other.concatNel(this)
+  final def ++[AA >: A](nell: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    concatNell(nell)
 
   /**
-    * Remove elements not matching the predicate
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.filter(_ < 3)
-    * res0: scala.collection.immutable.LazyList[Int] = LazyList(1, 2)
-    * }}}
+    * Appends the given LazyList
     */
-  def filter(p: A => Boolean): LazyList[A] = {
-    val ftail = tail.filter(p)
-    if (p(head)) head #:: ftail
-    else ftail
-  }
+  final def appendLazyList[AA >: A](nell: LazyList[AA]): NonEmptyLazyList[AA] =
+    if (nell.isEmpty) value
+    else create(toLazyList ++ nell)
 
   /**
-    * Remove elements matching the predicate
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.filterNot(_ < 3)
-    * res0: scala.collection.immutable.LazyList[Int] = LazyList(3, 4, 5)
-    * }}}
+    * Alias for `appendLazyList`
     */
-  def filterNot(p: A => Boolean): LazyList[A] = {
-    val ftail = tail.filterNot(p)
-    if (p(head)) ftail
-    else head #:: ftail
-  }
+  final def :++[AA >: A](c: LazyList[AA]): NonEmptyLazyList[AA] =
+    appendLazyList(c)
 
   /**
-    * Builds a new `LazyList` by applying a partial function to
-    * all the elements from this `NonEmptyLazyList` on which the function is defined
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3, 4, 5)
-    * scala> nell.collect { case v if v < 3 => v }
-    * res0: scala.collection.immutable.LazyList[Int] = LazyList(1, 2)
-    * scala> nell.collect {
-    *      |  case v if v % 2 == 0 => "even"
-    *      |  case _ => "odd"
-    *      | }
-    * res1: scala.collection.immutable.LazyList[String] = LazyList(odd, even, odd, even, odd)
-    * }}}
+    * Prepends the given LazyList
     */
-  def collect[B](pf: PartialFunction[A, B]): LazyList[B] =
-    if (pf.isDefinedAt(head)) {
-      pf.apply(head) #:: tail.collect(pf)
-    } else {
-      tail.collect(pf)
-    }
+  final def prependLazyList[AA >: A](c: LazyList[AA]): NonEmptyLazyList[AA] =
+    if (c.isEmpty) value
+    else create(c ++ toLazyList)
 
   /**
-    * Find the first element matching the predicate, if one exists
+    * Prepends the given NonEmptyLazyList
     */
-  def find(p: A => Boolean): Option[A] =
-    if (p(head)) Some(head)
-    else tail.find(p)
+  final def prependNell[AA >: A](c: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    create(c.toLazyList ++ toLazyList)
 
   /**
-    * Check whether at least one element satisfies the predicate
+    * Alias for `prependNell`
     */
-  def exists(p: A => Boolean): Boolean =
-    p(head) || tail.exists(p)
+  final def ++:[AA >: A](c: NonEmptyLazyList[AA]): NonEmptyLazyList[AA] =
+    prependNell(c)
 
   /**
-    * Check whether all elements satisfy the predicate
-    */
-  def forall(p: A => Boolean): Boolean =
-    p(head) && tail.forall(p)
+    * Converts this NonEmptyLazyList to a `NonEmptyList`.
+    */ // TODO also add toNonEmptyLazyList to NonEmptyList?
+  final def toNonEmptyList: NonEmptyList[A] =
+    NonEmptyList.fromListUnsafe(toLazyList.toList)
 
   /**
-    * Left-associative fold on the structure using f.
+    * Converts this LazyList to a `NonEmptyVector`.
     */
-  def foldLeft[B](b: B)(f: (B, A) => B): B =
-    tail.foldLeft(f(b, head))(f)
+  final def toNonEmptyVector: NonEmptyVector[A] =
+    NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
 
   /**
-    * Right-associative fold on the structure using f.
+    * Returns the head and tail of this NonEmptyLazyList
     */
-  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable[LazyList].foldRight(toLazyList, lb)(f)
+  final def uncons: (A, LazyList[A]) =
+    (head, tail)
+
+  /**
+    * Returns the first element
+    */
+  final def head: A = uncons._1
+
+  /**
+    * Returns all but the first element
+    */
+  final def tail: LazyList[A] = uncons._2
+
+  /**
+    * Tests if some element is contained in this NonEmptyLazyList
+    */
+  final def contains(a: A)(implicit A: Eq[A]): Boolean =
+    toLazyList.contains(a)
+
+  /**
+    * Tests whether a predicate holds for all elements
+    */
+  final def forall(p: A => Boolean): Boolean =
+    toLazyList.forall(p)
+
+  /**
+    * Tests whether a predicate holds for at least one element of this LazyList
+    */
+  final def exists(f: A => Boolean): Boolean =
+    toLazyList.exists(f)
+
+  /**
+    * Returns the first value that matches the given predicate.
+    */
+  final def find(f: A => Boolean): Option[A] =
+    toLazyList.find(f)
+
+  /**
+    * Returns a new `LazyList` containing all elements where the result of `pf` is final defined.
+    */
+  final def collect[B](pf: PartialFunction[A, B]): LazyList[B] =
+    toLazyList.collect(pf)
+
+  /**
+    * Finds the first element of this `NonEmptyLazyList` for which the given partial
+    * function is defined, and applies the partial function to it.
+    */
+  final def collectLazyList[B](pf: PartialFunction[A, B]): Option[B] = toLazyList.collectFirst(pf)
+
+  /**
+    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+    * instead of `PartialFunction`s.
+    */ // TODO manually implemented because LazyList doesn't have collectFirstSome
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] =
+    collectLazyList(PartialFunction[A, B] {
+      case a: A if f(a).isDefined => f(a).get
+    })
+
+  /**
+    * Filters all elements of this NonEmptyLazyList that do not satisfy the given predicate.
+    */
+  final def filter(p: A => Boolean): LazyList[A] = toLazyList.filter(p)
+
+  /**
+    * Filters all elements of this NonEmptyLazyList that satisfy the given predicate.
+    */
+  final def filterNot(p: A => Boolean): LazyList[A] = filter(t => !p(t))
+
+  /**
+    * Left-associative fold using f.
+    */
+  final def foldLeft[B](b: B)(f: (B, A) => B): B =
+    toLazyList.foldLeft(b)(f)
+
+  /**
+    * Right-associative fold using f.
+    */
+  final def foldRight[B](z: B)(f: (A, B) => B): B =
+    toLazyList.foldRight(z)(f)
 
   /**
     * Left-associative reduce using f.
     */
-  def reduceLeft[AA >: A](f: (AA, AA) => AA): AA =
-    tail.foldLeft[AA](head)(f)
+  final def reduceLeft(f: (A, A) => A): A =
+    toLazyList.reduceLeft(f)
 
   /**
-    * Reduce using the `Semigroup` of `AA`.
+    * Apply `f` to the "initial element" of this LazyList and lazily combine it
+    * with every other value using the given function `g`.
+    */ // TODO not implemented in LazyList
+  final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
+    toLazyList.reduceLeftTo(f)(g)
+
+
+  /**
+    * Right-associative reduce using f.
     */
-  def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
-    S.combineAllOption(toLazyList).get
-
-  def traverse[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyLazyList[B]] =
-    G.map2Eval(f(head), Always(Traverse[List].traverse(tail)(f)))(NonEmptyLazyList(_, _)).value
-
-  // TODO *** Builder
-  def coflatMap[B](f: NonEmptyLazyList[A] => B): NonEmptyLazyList[B] = {
-    val buf = ListBuffer.empty[B]
-    @tailrec def consume(as: List[A]): List[B] =
-      as match {
-        case Nil => buf.toList
-        case a :: as =>
-          buf += f(NonEmptyLazyList(a, as))
-          consume(as)
-      }
-    NonEmptyLazyList(f(this), consume(tail))
-  }
-
-  def ===[AA >: A](o: NonEmptyLazyList[AA])(implicit AA: Eq[AA]): Boolean =
-    ((this.head: AA) === o.head) && (this.tail: LazyList[AA]) === o.tail
-
-  def show[AA >: A](implicit AA: Show[AA]): String =
-    toLazyList.iterator.map(AA.show).mkString("NonEmptyLazyList(", ", ", ")")
-
-  override def toString: String = s"NonEmpty$toLazyList"
+  final def reduceRight[AA >: A](f: (A, AA) => AA): AA =
+    toLazyList.reduceRight(f)
 
   /**
-    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+    * Apply `f` to the "initial element" of this NonEmptyLazyList and
+    * lazily combine it with every other value using the given function `g`.
+    */ // TODO not implemented in LazyList
+  final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B =
+    toLazyList.reduceRightTo(f)(g)
+
+  /**
+    * Reduce using the Semigroup of A
     */
-  //TODO *** Builder
-  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyLazyList[AA] = {
-    implicit val ord = O.toOrdering
-
-    val buf = ListBuffer.empty[AA]
-    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
-      if (elementsSoFar(b)) elementsSoFar
-      else {
-        buf += b; elementsSoFar + b
-      }
-    }
-
-    NonEmptyLazyList(head, buf.toList)
-  }
+  final def reduce[AA >: A](implicit S: Semigroup[AA]): AA =
+    S.combineAllOption(iterator).get
 
   /**
-    * Reverse this `NonEmptyLazyList`.
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of(1, 2, 3)
-    * scala> nell.reverse
-    * res0: cats.data.NonEmptyLazyList[Int] = NonEmptyLazyList(3, 2, 1)
-    * }}}
+    * Applies the supplied function to each element and returns a new NonEmptyLazyList from the concatenated results
     */
-  def reverse: NonEmptyLazyList[A] = {
-    @tailrec
-    def go(h: A, rest: LazyList[A], acc: LazyList[A]): NonEmptyLazyList[A] =
-      rest match {
-        case LazyList() => NonEmptyLazyList(h, acc)
-        case h1 #:: t1  => go(h1, t1, h #:: acc)
-      }
-    go(head, tail, LazyList())
-  }
+  final def flatMap[B](f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
+    create(toLazyList.flatMap(f.andThen(_.toLazyList)))
 
   /**
-    * Zips this `NonEmptyLazyList` with another `NonEmptyLazyList` and applies a function for each pair of elements.
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val as = NonEmptyLazyList.of(1, 2, 3)
-    * scala> val bs = NonEmptyLazyList.of("A", "B", "C")
-    * scala> as.zipWith(bs)(_ + _)
-    * res0: cats.data.NonEmptyLazyList[String] = NonEmptyLazyList(1A, 2B, 3C)
-    * }}}
+    * Returns the number of elements
     */
-  def zipWith[B, C](b: NonEmptyLazyList[B])(f: (A, B) => C): NonEmptyLazyList[C] = {
-    @tailrec
-    def zwRev(as: LazyList[A], bs: LazyList[B], acc: LazyList[C]): LazyList[C] = (as, bs) match {
-      case (LazyList(), _)          => acc
-      case (_,          LazyList()) => acc
-      case (x #:: xs,   y #:: ys)   => zwRev(xs, ys, f(x, y) #:: acc)
-    }
-
-    NonEmptyLazyList(f(head, b.head), zwRev(tail, b.tail, LazyList()).reverse)
-  }
+  final def length: Long = toLazyList.size
 
   /**
-    * Zips each element of this `NonEmptyLazyList` with its index.
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> val nell = NonEmptyLazyList.of("a", "b", "c")
-    * scala> nell.zipWithIndex
-    * res0: cats.data.NonEmptyLazyList[(String, Int)] = NonEmptyLazyList((a,0), (b,1), (c,2))
-    * }}}
-    */ // TODO *** Builder
-  def zipWithIndex: NonEmptyLazyList[(A, Int)] = {
-    val bldr = List.newBuilder[(A, Int)]
-    var idx = 1
-    val it = tail.iterator
-    while (it.hasNext) {
-      bldr += ((it.next, idx))
-      idx += 1
-    }
-    NonEmptyLazyList((head, 0), bldr.result)
-  }
+    * Zips this `NonEmptyLazyList` with another `NonEmptyLazyList` and applies a function for each pair of elements
+    */ // TODO manually implemented
+  final def zipWith[B, C](b: NonEmptyLazyList[B])(f: (A, B) => C): NonEmptyLazyList[C] =
+    create(toLazyList.zip(b.toLazyList).map { case (a, b) => f(a, b) })
 
   /**
-    * Sorts this `NonEmptyLazyList` according to an `Order` on transformed `B` from `A`
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> import cats.instances.int._
-    * scala> val nell = NonEmptyLazyList.of(('a', 4), ('z', 1), ('e', 22))
-    * scala> nell.sortBy(_._2)
-    * res0: cats.data.NonEmptyLazyList[(Char, Int)] = NonEmptyLazyList((z,1), (a,4), (e,22))
-    * }}}
+    * Zips each element of this `NonEmptyLazyList` with its index
     */
-  def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyLazyList[A] =
-  // safe: sorting a NonEmptyLazyList cannot produce an empty LazyList
-    NonEmptyLazyList.fromLazyListUnsafe(toLazyList.sortBy(f)(B.toOrdering))
-
-  /**
-    * Sorts this `NonEmptyLazyList` according to an `Order`
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> import cats.instances.int._
-    * scala> val nell = NonEmptyLazyList.of(12, 4, 3, 9)
-    * scala> nell.sorted
-    * res0: cats.data.NonEmptyLazyList[Int] = NonEmptyLazyList(3, 4, 9, 12)
-    * }}}
-    */
-  def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyLazyList[AA] =
-  // safe: sorting a NonEmptyLazyList cannot produce an empty LazyList
-    NonEmptyLazyList.fromLazyListUnsafe(toLazyList.sorted(AA.toOrdering))
+  final def zipWithIndex: NonEmptyLazyList[(A, Int)] =
+    create(toLazyList.zipWithIndex)
 
   /**
     * Groups elements inside this `NonEmptyLazyList` according to the `Order`
     * of the keys produced by the given mapping function.
-    *
-    * {{{
-    * scala> import scala.collection.immutable.SortedMap
-    * scala> import cats.data.NonEmptyLazyList
-    * scala> import cats.instances.boolean._
-    * scala> val nell = NonEmptyLazyList.of(12, -2, 3, -5)
-    * scala> nell.groupBy(_ >= 0)
-    * res0: SortedMap[Boolean, cats.data.NonEmptyLazyList[Int]] = Map(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
-    * }}}
-    */ // TODO *** Builder
-  def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyLazyList[A]] = {
-    implicit val ordering: Ordering[B] = B.toOrdering
-    var m = TreeMap.empty[B, mutable.Builder[A, LazyList[A]]]
+    */
+  final def groupBy[B](f: A => B): NonEmptyMap[B, NonEmptyLazyList[A]] =
+    toLazyList.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyLazyList[A]]]
 
-    for { elem <- toLazyList } {
-      val k = f(elem)
+  final def iterator: Iterator[A] = toLazyList.iterator
 
-      m.get(k) match {
-        case None          => m += ((k, List.newBuilder[A] += elem))
-        case Some(builder) => builder += elem
-      }
-    }
-
-    m.map {
-      case (k, v) => (k, NonEmptyLazyList.fromListUnsafe(v.result))
-    }: TreeMap[B, NonEmptyLazyList[A]]
-  }
+  final def reverseIterator: Iterator[A] = toLazyList.reverseIterator
 
   /**
-    * Groups elements inside this `NonEmptyLazyList` according to the `Order`
-    * of the keys produced by the given mapping function.
-    *
-    * {{{
-    * scala> import cats.data._
-    * scala> import cats.instances.boolean._
-    * scala> val nell = NonEmptyLazyList.of(12, -2, 3, -5)
-    * scala> nell.groupByNem(_ >= 0)
-    * res0: NonEmptyMap[Boolean, NonEmptyLazyList[Int]] = Map(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
-    * }}}
+    * Reverses this `NonEmptyLazyList`
     */
-  def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyLazyList[A]] =
-    NonEmptyMap.fromMapUnsafe(groupBy(f))
+  final def reverse: NonEmptyLazyList[A] =
+    create(toLazyList.reverse)
 
   /**
-    * Creates new `NonEmptyMap`, similarly to LazyList#toMap from scala standard library.
-    *{{{
-    * scala> import cats.data._
-    * scala> import cats.instances.int._
-    * scala> val nell = NonEmptyLazyList((0, "a"), LazyList((1, "b"),(0, "c"), (2, "d")))
-    * scala> nell.toNem
-    * res0: NonEmptyMap[Int,String] = Map(0 -> c, 1 -> b, 2 -> d)
-    *}}}
-    *
+    * Remove duplicates.
     */
-  def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
-
-  /**
-    * Creates new `NonEmptySet`, similarly to LazyList#toSet from scala standard library.
-    *{{{
-    * scala> import cats.data._
-    * scala> import cats.instances.int._
-    * scala> val nell = NonEmptyLazyList(1, LazyList(2,2,3,4))
-    * scala> nell.toNes
-    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-    *}}}
-    */
-  def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail: _*)
+  final def distinct: NonEmptyLazyList[A] =
+    create(toLazyList.distinct)
 }
 
-object NonEmptyLazyList extends NonEmptyLazyListInstances {
-
-  def of[A](head: A, tail: A*): NonEmptyLazyList[A] = NonEmptyLazyList(head, tail.toLazyList)
-
-  def ofInitLast[A](init: LazyList[A], last: A): NonEmptyLazyList[A] =
-    init match {
-      case LazyList() => NonEmptyLazyList(last, LazyList())
-      case h #:: t    => NonEmptyLazyList(h, t :+ last)
-    }
-
-  def one[A](head: A): NonEmptyLazyList[A] = NonEmptyLazyList(head, LazyList())
-
-  /**
-    * Create a `NonEmptyLazyList` from a `LazyList`.
-    *
-    * The result will be `None` if the input list is empty and `Some` wrapping a
-    * `NonEmptyLazyList` otherwise.
-    *
-    * @see [[fromListUnsafe]] for an unsafe version that throws an exception if
-    * the input list is empty.
-    */
-  def fromLazyList[A](l: LazyList[A]): Option[NonEmptyLazyList[A]] =
-    l match {
-      case LazyList() => None
-      case h #:: t    => Some(NonEmptyLazyList(h, t))
-    }
-
-  /**
-    * Create a `NonEmptyLazyList` from a `LazyList`, or throw an
-    * `IllegalArgumentException` if the input list is empty.
-    *
-    * @see [[fromLazyList]] for a safe version that returns `None` if the input list
-    * is empty.
-    */
-  def fromLazyListUnsafe[A](l: LazyList[A]): NonEmptyLazyList[A] =
-    l match {
-      case LazyList() => throw new IllegalArgumentException("Cannot create NonEmptyLazyList from empty LazyList")
-      case h #:: t    => NonEmptyLazyList(h, t)
-    }
-
-  // TODO *** will Foldable have a toLazyList???
-  def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Option[NonEmptyLazyList[A]] =
-    fromLazyList(F.toLazyList(fa))
-
-  def fromReducible[F[_], A](fa: F[A])(implicit F: Reducible[F]): NonEmptyLazyList[A] =
-    F.toNonEmptyLazyList(fa)
-
-  class ZipNonEmptyLazyList[A](val value: NonEmptyLazyList[A]) extends AnyVal
-
-  object ZipNonEmptyLazyList {
-
-    def apply[A](nev: NonEmptyLazyList[A]): ZipNonEmptyLazyList[A] =
-      new ZipNonEmptyLazyList(nev)
-
-    implicit val catsDataCommutativeApplyForZipNonEmptyLazyList: CommutativeApply[ZipNonEmptyLazyList] =
-      new CommutativeApply[ZipNonEmptyLazyList] {
-        def ap[A, B](ff: ZipNonEmptyLazyList[A => B])(fa: ZipNonEmptyLazyList[A]): ZipNonEmptyLazyList[B] =
-          ZipNonEmptyLazyList(ff.value.zipWith(fa.value)(_.apply(_)))
-
-        override def map[A, B](fa: ZipNonEmptyLazyList[A])(f: (A) => B): ZipNonEmptyLazyList[B] =
-          ZipNonEmptyLazyList(fa.value.map(f))
-
-        override def product[A, B](fa: ZipNonEmptyLazyList[A], fb: ZipNonEmptyLazyList[B]): ZipNonEmptyLazyList[(A, B)] =
-          ZipNonEmptyLazyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
-      }
-
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyLazyList[A]] = Eq.by(_.value)
-  }
-}
-
-sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances0 {
+sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
 
   implicit val catsDataInstancesForNonEmptyLazyList: SemigroupK[NonEmptyLazyList]
     with Reducible[NonEmptyLazyList]
@@ -514,9 +344,44 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       with NonEmptyTraverse[NonEmptyLazyList] {
 
       def combineK[A](a: NonEmptyLazyList[A], b: NonEmptyLazyList[A]): NonEmptyLazyList[A] =
-        a.concatNel(b)
+        a ++ b
 
-      override def split[A](fa: NonEmptyLazyList[A]): (A, LazyList[A]) = (fa.head, fa.tail)
+      def pure[A](x: A): NonEmptyLazyList[A] = NonEmptyLazyList(x)
+
+      def flatMap[A, B](fa: NonEmptyLazyList[A])(f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
+        fa.flatMap(f)
+
+      // TODO does this work?
+      def tailRecM[A, B](a: A)(f: A => NonEmptyLazyList[Either[A, B]]): NonEmptyLazyList[B] =
+        create(Monad[LazyList].tailRecM(a)(a => unwrap(f(a))))
+
+      def extract[A](x: NonEmptyLazyList[A]): A = x.head
+
+      // TODO preserve laziness
+      def coflatMap[A, B](fa: NonEmptyLazyList[A])(f: NonEmptyLazyList[A] => B): NonEmptyLazyList[B] = {
+        @tailrec def go(as: LazyList[A], res: ListBuffer[B]): LazyList[B] =
+          as.uncons match {
+            case Some((h, t)) => go(t, res += f(NonEmptyLazyList.fromLazyListPrepend(h, t)))
+            case None         => LazyList.fromSeq(res.result())
+          }
+        NonEmptyLazyList.fromLazyListPrepend(f(fa), go(fa.tail, ListBuffer.empty))
+      }
+
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
+        Foldable[LazyList]
+          .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(Lazylist.one)) { (a, lglb) =>
+          Apply[G].map2Eval(f(a), lglb)(_ +: _)
+        }
+          .map {
+            case None        => Apply[G].map(f(fa.head))(NonEmptyLazyList.apply)
+            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(NonEmptyLazyList(h) ++ t))
+          }
+          .value
+
+      override def map[A, B](fa: NonEmptyLazyList[A])(f: A => B): NonEmptyLazyList[B] =
+        create(fa.toLazyList.map(f))
+
+      override def size[A](fa: NonEmptyLazyList[A]): Long = fa.length
 
       override def reduceLeft[A](fa: NonEmptyLazyList[A])(f: (A, A) => A): A =
         fa.reduceLeft(f)
@@ -524,79 +389,24 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       override def reduce[A](fa: NonEmptyLazyList[A])(implicit A: Semigroup[A]): A =
         fa.reduce
 
-      override def map[A, B](fa: NonEmptyLazyList[A])(f: A => B): NonEmptyLazyList[B] =
-        fa.map(f)
+      def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-      def pure[A](x: A): NonEmptyLazyList[A] =
-        NonEmptyLazyList.one(x)
-
-      def flatMap[A, B](fa: NonEmptyLazyList[A])(f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-        fa.flatMap(f)
-
-      def coflatMap[A, B](fa: NonEmptyLazyList[A])(f: NonEmptyLazyList[A] => B): NonEmptyLazyList[B] =
-        fa.coflatMap(f)
-
-      def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
-
-      def nonEmptyTraverse[G[_], A, B](nell: NonEmptyLazyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyLazyList[B]] =
-        Foldable[List]
-          .reduceRightToOption[A, G[List[B]]](nell.tail)(a => G.map(f(a))(_ #:: LazyList())) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ #:: _)
-        }
-          .map {
-            case None        => G.map(f(nell.head))(NonEmptyLazyList(_, LazyList()))
-            case Some(gtail) => G.map2(f(nell.head), gtail)(NonEmptyLazyList(_, _))
-          }
-          .value
-
-      override def traverse[G[_], A, B](fa: NonEmptyLazyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyLazyList[B]] =
-        fa.traverse(f)
+      def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+          Eval.defer(g(a, b))
+        })
 
       override def foldLeft[A, B](fa: NonEmptyLazyList[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: NonEmptyLazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
+        Foldable[LazyList].foldRight(fa.toLazyList, lb)(f)
 
       override def foldMap[A, B](fa: NonEmptyLazyList[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.toLazyList.iterator.map(f))
 
-      // TODO *** Builder
-      def tailRecM[A, B](a: A)(f: A => NonEmptyLazyList[Either[A, B]]): NonEmptyLazyList[B] = {
-        val buf = new ListBuffer[B]
-        @tailrec def go(v: NonEmptyLazyList[Either[A, B]]): Unit = v.head match {
-          case Right(b) =>
-            buf += b
-            NonEmptyLazyList.fromList(v.tail) match {
-              case Some(t) => go(t)
-              case None    => ()
-            }
-          case Left(a) => go(f(a) ++ v.tail)
-        }
-        go(f(a))
-        NonEmptyLazyList.fromListUnsafe(buf.result())
-      }
-
       override def fold[A](fa: NonEmptyLazyList[A])(implicit A: Monoid[A]): A =
         fa.reduce
-
-      override def nonEmptyPartition[A, B, C](fa: NonEmptyLazyList[A])(f: (A) => Either[B, C]): Ior[NonEmptyLazyList[B], NonEmptyLazyList[C]] = {
-        import cats.syntax.either._
-
-        val reversed = fa.reverse
-        val lastIor = f(reversed.head).bimap(NonEmptyLazyList.one, NonEmptyLazyList.one).toIor
-
-        reversed.tail.foldLeft(lastIor)(
-          (ior, a) =>
-            (f(a), ior) match {
-              case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyLazyList.one(c))
-              case (Right(c), _)           => ior.map(c #:: _)
-              case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-              case (Left(b), _)            => ior.leftMap(b #:: _)
-            }
-        )
-
-      }
 
       override def find[A](fa: NonEmptyLazyList[A])(f: A => Boolean): Option[A] =
         fa.find(f)
@@ -609,72 +419,36 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
       override def toList[A](fa: NonEmptyLazyList[A]): List[A] = fa.toLazyList.toList
 
-      override def toNonEmptyLazyList[A](fa: NonEmptyLazyList[A]): NonEmptyLazyList[A] = fa
+      override def toNonEmptyList[A](fa: NonEmptyLazyList[A]): NonEmptyList[A] =
+        fa.toNonEmptyList
 
-      override def get[A](fa: NonEmptyLazyList[A])(idx: Long): Option[A] =
-        if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
+      override def collectFirst[A, B](fa: NonEmptyLazyList[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: NonEmptyLazyList[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirstSome(f)
     }
+
+  implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
+    Order.by[NonEmptyLazyList[A], LazyList[A]](_.toLazyList)
 
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
-    Show.show[NonEmptyLazyList[A]](_.show)
+    Show.show[NonEmptyLazyList[A]](nec => s"NonEmpty${Show[LazyList[A]].show(nec.toLazyList)}")
 
-  implicit def catsDataSemigroupForNonEmptyLazyList[A]: Semigroup[NonEmptyLazyList[A]] =
-    SemigroupK[NonEmptyLazyList].algebra[A]
+  implicit def catsDataSemigroupForNonEmptyLazyList[A]: Semigroup[NonEmptyLazyList[A]] = new Semigroup[NonEmptyLazyList[A]] {
+    def combine(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): NonEmptyLazyList[A] = x ++ y
+  }
+}
 
-  implicit def catsDataOrderForNonEmptyLazyList[A](implicit A: Order[A]): Order[NonEmptyLazyList[A]] =
-    new NonEmptyLazyListOrder[A] {
-      val A0 = A
+sealed abstract private[data] class NonEmptyLazyListInstances1 extends NonEmptyLazyListInstances2 {
+  implicit def catsDataPartialOrderForNonEmptyLazyList[A: PartialOrder]: PartialOrder[NonEmptyLazyList[A]] =
+    PartialOrder.by[NonEmptyLazyList[A], LazyList[A]](_.toLazyList)
+}
+
+sealed abstract private[data] class NonEmptyLazyListInstances2 {
+  implicit def catsDataEqForNonEmptyLazyList[A: Eq]: Eq[NonEmptyLazyList[A]] =
+    new Eq[NonEmptyLazyList[A]] {
+      def eqv(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): Boolean = x.toLazyList === y.toLazyList
     }
-
-  implicit def catsDataNonEmptyParallelForNonEmptyLazyList[A]: NonEmptyParallel[NonEmptyLazyList, ZipNonEmptyLazyList] =
-    new NonEmptyParallel[NonEmptyLazyList, ZipNonEmptyLazyList] {
-
-      def flatMap: FlatMap[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
-
-      def apply: Apply[ZipNonEmptyLazyList] = ZipNonEmptyLazyList.catsDataCommutativeApplyForZipNonEmptyLazyList
-
-      def sequential: ZipNonEmptyLazyList ~> NonEmptyLazyList =
-        λ[ZipNonEmptyLazyList ~> NonEmptyLazyList](_.value)
-
-      def parallel: NonEmptyLazyList ~> ZipNonEmptyLazyList =
-        λ[NonEmptyLazyList ~> ZipNonEmptyLazyList](nell => new ZipNonEmptyLazyList(nell))
-    }
-}
-
-sealed abstract private[data] class NonEmptyLazyListInstances0 extends NonEmptyLazyListInstances1 {
-  implicit def catsDataPartialOrderForNonEmptyLazyList[A](implicit A: PartialOrder[A]): PartialOrder[NonEmptyLazyList[A]] =
-    new NonEmptyLazyListPartialOrder[A] {
-      val A0 = A
-    }
-}
-
-sealed abstract private[data] class NonEmptyLazyListInstances1 {
-
-  implicit def catsDataEqForNonEmptyLazyList[A](implicit A: Eq[A]): Eq[NonEmptyLazyList[A]] =
-    new NonEmptyLazyListEq[A] {
-      val A0 = A
-    }
-}
-
-sealed private[data] trait NonEmptyLazyListEq[A] extends Eq[NonEmptyLazyList[A]] {
-  implicit def A0: Eq[A]
-
-  override def eqv(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): Boolean = x === y
-}
-
-sealed private[data] trait NonEmptyLazyListPartialOrder[A] extends PartialOrder[NonEmptyLazyList[A]] with NonEmptyLazyListEq[A] {
-  implicit override def A0: PartialOrder[A]
-
-  override def partialCompare(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): Double =
-    x.toLazyList.partialCompare(y.toLazyList)
-}
-
-sealed abstract private[data] class NonEmptyLazyListOrder[A]
-  extends Order[NonEmptyLazyList[A]]
-    with NonEmptyLazyListPartialOrder[A] {
-  implicit override def A0: Order[A]
-
-  override def compare(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): Int =
-    x.toLazyList.compare(y.toLazyList)
 }
 
