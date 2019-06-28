@@ -255,9 +255,13 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
   /**
     * Apply `f` to the "initial element" of this LazyList and lazily combine it
     * with every other value using the given function `g`.
-    */ // TODO not implemented in LazyList
-  final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
-    toLazyList.reduceLeftTo(f)(g)
+    */
+  final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
+    val iter = toLazyList.iterator
+    var result = f(iter.next)
+    while (iter.hasNext) { result = g(result, iter.next) }
+    result
+  }
 
 
   /**
@@ -269,9 +273,13 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
   /**
     * Apply `f` to the "initial element" of this NonEmptyLazyList and
     * lazily combine it with every other value using the given function `g`.
-    */ // TODO not implemented in LazyList
-  final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B =
-    toLazyList.reduceRightTo(f)(g)
+    */
+  final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
+    val iter = toLazyList.reverseIterator
+    var result = f(iter.next)
+    while (iter.hasNext) { result = g(iter.next, result) }
+    result
+  }
 
   /**
     * Reduce using the Semigroup of A
