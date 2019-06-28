@@ -334,121 +334,34 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
     create(toLazyList.distinct)
 }
 
-sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
+sealed abstract private[data] class NonEmptyLazyListInstances  extends NonEmptyLazyListInstances1  {
 
-  implicit val catsDataInstancesForNonEmptyLazyList: SemigroupK[NonEmptyLazyList]
-    with Reducible[NonEmptyLazyList]
-    with Bimonad[NonEmptyLazyList]
-    with NonEmptyTraverse[NonEmptyLazyList] =
-    new NonEmptyReducible[NonEmptyLazyList, LazyList] with SemigroupK[NonEmptyLazyList] with Bimonad[NonEmptyLazyList]
-      with NonEmptyTraverse[NonEmptyLazyList] {
+  implicit val catsDataBimonadForNonEmptyLazyList: Bimonad[NonEmptyLazyList] = Bimonad[LazyList].asInstanceOf[Bimonad[NonEmptyLazyList]]
 
-      def combineK[A](a: NonEmptyLazyList[A], b: NonEmptyLazyList[A]): NonEmptyLazyList[A] =
-        a ++ b
-
-      def pure[A](x: A): NonEmptyLazyList[A] = NonEmptyLazyList(x)
-
-      def flatMap[A, B](fa: NonEmptyLazyList[A])(f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-        fa.flatMap(f)
-
-      // TODO does this work?
-      def tailRecM[A, B](a: A)(f: A => NonEmptyLazyList[Either[A, B]]): NonEmptyLazyList[B] =
-        create(Monad[LazyList].tailRecM(a)(a => unwrap(f(a))))
-
-      def extract[A](x: NonEmptyLazyList[A]): A = x.head
-
-      // TODO preserve laziness
-      def coflatMap[A, B](fa: NonEmptyLazyList[A])(f: NonEmptyLazyList[A] => B): NonEmptyLazyList[B] = {
-        @tailrec def go(as: LazyList[A], res: ListBuffer[B]): LazyList[B] =
-          as.uncons match {
-            case Some((h, t)) => go(t, res += f(NonEmptyLazyList.fromLazyListPrepend(h, t)))
-            case None         => LazyList.fromSeq(res.result())
-          }
-        NonEmptyLazyList.fromLazyListPrepend(f(fa), go(fa.tail, ListBuffer.empty))
-      }
-
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
-        Foldable[LazyList]
-          .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(Lazylist.one)) { (a, lglb) =>
-          Apply[G].map2Eval(f(a), lglb)(_ +: _)
-        }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(NonEmptyLazyList.apply)
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(NonEmptyLazyList(h) ++ t))
-          }
-          .value
-
-      override def map[A, B](fa: NonEmptyLazyList[A])(f: A => B): NonEmptyLazyList[B] =
-        create(fa.toLazyList.map(f))
-
-      override def size[A](fa: NonEmptyLazyList[A]): Long = fa.length
-
-      override def reduceLeft[A](fa: NonEmptyLazyList[A])(f: (A, A) => A): A =
-        fa.reduceLeft(f)
-
-      override def reduce[A](fa: NonEmptyLazyList[A])(implicit A: Semigroup[A]): A =
-        fa.reduce
-
-      def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
-
-      def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-          Eval.defer(g(a, b))
-        })
-
-      override def foldLeft[A, B](fa: NonEmptyLazyList[A], b: B)(f: (B, A) => B): B =
-        fa.foldLeft(b)(f)
-
-      override def foldRight[A, B](fa: NonEmptyLazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Foldable[LazyList].foldRight(fa.toLazyList, lb)(f)
-
-      override def foldMap[A, B](fa: NonEmptyLazyList[A])(f: A => B)(implicit B: Monoid[B]): B =
-        B.combineAll(fa.toLazyList.iterator.map(f))
-
-      override def fold[A](fa: NonEmptyLazyList[A])(implicit A: Monoid[A]): A =
-        fa.reduce
-
-      override def find[A](fa: NonEmptyLazyList[A])(f: A => Boolean): Option[A] =
-        fa.find(f)
-
-      override def forall[A](fa: NonEmptyLazyList[A])(p: A => Boolean): Boolean =
-        fa.forall(p)
-
-      override def exists[A](fa: NonEmptyLazyList[A])(p: A => Boolean): Boolean =
-        fa.exists(p)
-
-      override def toList[A](fa: NonEmptyLazyList[A]): List[A] = fa.toLazyList.toList
-
-      override def toNonEmptyList[A](fa: NonEmptyLazyList[A]): NonEmptyList[A] =
-        fa.toNonEmptyList
-
-      override def collectFirst[A, B](fa: NonEmptyLazyList[A])(pf: PartialFunction[A, B]): Option[B] =
-        fa.collectFirst(pf)
-
-      override def collectFirstSome[A, B](fa: NonEmptyLazyList[A])(f: A => Option[B]): Option[B] =
-        fa.collectFirstSome(f)
-    }
-
-  implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
-    Order.by[NonEmptyLazyList[A], LazyList[A]](_.toLazyList)
-
-  implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
-    Show.show[NonEmptyLazyList[A]](nec => s"NonEmpty${Show[LazyList[A]].show(nec.toLazyList)}")
-
-  implicit def catsDataSemigroupForNonEmptyLazyList[A]: Semigroup[NonEmptyLazyList[A]] = new Semigroup[NonEmptyLazyList[A]] {
-    def combine(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): NonEmptyLazyList[A] = x ++ y
-  }
 }
 
-sealed abstract private[data] class NonEmptyLazyListInstances1 extends NonEmptyLazyListInstances2 {
+sealed abstract private[data] class NonEmptyLazyListInstances1  extends NonEmptyLazyListInstances2  {
+
+  implicit val catsDataSemigroupKForNonEmptyLazyList: SemigroupK[NonEmptyLazyList] = SemigroupK[LazyList].asInstanceOf[SemigroupK[NonEmptyLazyList]]
+
   implicit def catsDataPartialOrderForNonEmptyLazyList[A: PartialOrder]: PartialOrder[NonEmptyLazyList[A]] =
-    PartialOrder.by[NonEmptyLazyList[A], LazyList[A]](_.toLazyList)
+    PartialOrder[LazyList[A]].asInstanceOf[PartialOrder[NonEmptyLazyList[A]]]
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances2 {
-  implicit def catsDataEqForNonEmptyLazyList[A: Eq]: Eq[NonEmptyLazyList[A]] =
-    new Eq[NonEmptyLazyList[A]] {
-      def eqv(x: NonEmptyLazyList[A], y: NonEmptyLazyList[A]): Boolean = x.toLazyList === y.toLazyList
-    }
+  implicit val catsDataNonEmptyTraverseForNonEmptyLazyList:  NonEmptyTraverse[LazyList] = new NonEmptyTraverse[LazyList] {
+    val  traverseInstance = Traverse[LazyList].asInstanceOf[Traverse[NonEmptyLazyList]]
+    //delegate all traverse methods to traverseInstance
+
+    def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
+      Foldable[LazyList].reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(Lazylist.apply(_))) { (a, lglb) =>
+        Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      }.map {
+        case None        => Apply[G].map(f(fa.head))(NonEmptyLazyList.apply)
+        case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(NonEmptyLazyList(h) ++ t))
+      } .value
+  }
+
+  implicit def catsDataEqForNonEmptyLazyList[A: Eq]: Eq[NonEmptyLazyList[A]] = Eq[LazyList[A]].asInstanceOf[PartialOrder[NonEmptyLazyList]]
 }
 
