@@ -114,7 +114,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   def tapWithF[C, AA <: A](f: (AA, B) => F[C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.flatMap(run(a))(b => f(a, b)))
 
-  def toReader[AA <: A]: Reader[AA, F[B]] = Kleisli[Id, AA, F[B]](run)
+  def toReader: Reader[A, F[B]] = Kleisli[Id, A, F[B]](run)
 
   def apply(a: A): F[B] = run(a)
 }
