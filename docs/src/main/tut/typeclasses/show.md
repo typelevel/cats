@@ -53,7 +53,7 @@ implicit val showDep: Show[Department] = Show.fromToString
 
 
 This still may not seem useful to you, because case classes already automatically implement `toString`, while `show` would have to be implemented manually for each case class.
-Thankfully with the help of a small library called [kittens](https://github.com/milessabin/kittens)a lot of type class instances including `Show` can be derived automatically!
+Thankfully with the help of a small library called [kittens](https://github.com/milessabin/kittens) a lot of type class instances including `Show` can be derived automatically!
 
 Cats also offers `Show` syntax to make working with it easier.
 This includes the `show` method which can be called on anything with a `Show` instance in scope:
