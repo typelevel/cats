@@ -225,15 +225,6 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
   final def collectLazyList[B](pf: PartialFunction[A, B]): Option[B] = toLazyList.collectFirst(pf)
 
   /**
-    * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
-    * instead of `PartialFunction`s.
-    */ // TODO manually implemented because LazyList doesn't have collectFirstSome
-  final def collectFirstSome[B](f: A => Option[B]): Option[B] =
-    collectLazyList(PartialFunction[A, B] {
-      case a: A if f(a).isDefined => f(a).get
-    })
-
-  /**
     * Filters all elements of this NonEmptyLazyList that do not satisfy the given predicate.
     */
   final def filter(p: A => Boolean): LazyList[A] = toLazyList.filter(p)
