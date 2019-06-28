@@ -3,7 +3,8 @@ package cats.data
 import NonEmptyLazyListImpl.{NonEmptyLazyList, create, unwrap}
 import cats.{Apply, Bimonad, Eval, Foldable, Monad, NonEmptyReducible, NonEmptyTraverse, Order, Reducible, SemigroupK, Show}
 import cats.kernel.{Order, _}
-
+import cats.instances.lazyList._
+import cats.instances.order._
 import scala.annotation.tailrec
 import scala.collection.immutable._
 import scala.collection.mutable.ListBuffer
