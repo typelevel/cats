@@ -392,15 +392,17 @@ object IndexedReaderWriterStateT extends IRWSTInstances with CommonIRWSTConstruc
     IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, _, ())))
 
   /**
-    * Internal API — shifts the execution of `run` in the `F` context.
-    *
-    * Used to build IndexedReaderWriterStateT values for `F[_]` data types that implement `Monad`,
-    * in which case it is safer to trigger the `F[_]` context earlier.
-    *
-    * This is needed for [[IndexedReaderWriterStateT.flatMap]] to be stack-safe when the underlying F[_] is,
-    * for further explanation see [[Kleisli.shift]].
-    */
-  private[data] def shift[F[_], E, L, SA, SB, A](runF: F[(E, SA) => F[(L, SB, A)]])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+   * Internal API — shifts the execution of `run` in the `F` context.
+   *
+   * Used to build IndexedReaderWriterStateT values for `F[_]` data types that implement `Monad`,
+   * in which case it is safer to trigger the `F[_]` context earlier.
+   *
+   * This is needed for [[IndexedReaderWriterStateT.flatMap]] to be stack-safe when the underlying F[_] is,
+   * for further explanation see [[Kleisli.shift]].
+   */
+  private[data] def shift[F[_], E, L, SA, SB, A](
+    runF: F[(E, SA) => F[(L, SB, A)]]
+  )(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
     F match {
       case ap: Applicative[F] @unchecked =>
         IndexedReaderWriterStateT.apply[F, E, L, SA, SB, A]((e: E, sa: SA) => F.flatMap(runF)(f => f(e, sa)))(ap)
