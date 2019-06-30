@@ -398,7 +398,10 @@ def mimaSettings(moduleName: String) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
-          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
+          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros"),
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros$Lifter"),
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros$")
         )
     }
   )
