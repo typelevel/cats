@@ -263,6 +263,15 @@ class IndexedStateTSuite extends CatsSuite {
   private val stackSafeTestSize =
     if (Platform.isJvm) 100000 else 100
 
+  test("repeated map is stack safe") {
+    val unit = StateT.pure[Eval, Unit, Int](0)
+    val count = stackSafeTestSize
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      acc.map(_ + 1)
+    }
+    result.run(()).value should ===(((), count))
+  }
+
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
     val count = stackSafeTestSize
