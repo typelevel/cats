@@ -2,7 +2,7 @@
 
 ## Try this!
 
-[Install the scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
+[Install the Scalafix sbt plugin](https://scalacenter.github.io/scalafix/docs/users/installation)
 
 To run all rules that apply to version `1.0.0-RC1` run
 

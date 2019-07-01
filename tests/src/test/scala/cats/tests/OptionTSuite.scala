@@ -16,7 +16,7 @@ class OptionTSuite extends CatsSuite {
   checkAll("OptionT[Eval, ?]", FunctorFilterTests[OptionT[Eval, ?]].functorFilter[Int, Int, Int])
 
   {
-    //If a Functor for F is defined
+    // if a Functor for F is defined
     implicit val F = ListWrapper.functor
 
     checkAll("OptionT[ListWrapper, ?]", FunctorFilterTests[OptionT[ListWrapper, ?]].functorFilter[Int, Int, Int])
@@ -26,7 +26,7 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
-    //If a Traverse for F is defined
+    // if a Traverse for F is defined
     implicit val F = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, ?]", TraverseFilterTests[OptionT[ListWrapper, ?]].traverseFilter[Int, Int, Int])

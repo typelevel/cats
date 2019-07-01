@@ -12,7 +12,7 @@ class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]
 
   // we have a lot of generated lists of lists in these tests. We have to tell
-  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration.copy(sizeRange = 5)
@@ -67,6 +67,18 @@ class WriterTSuite extends CatsSuite {
     }
   }
 
+  test("value + listen + map(_._1) + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.value[Id, Int, Int](i).listen.map(_._1).value should ===(i)
+    }
+  }
+
+  test("tell + listen + map(_._2) + value is identity") {
+    forAll { (i: Int) =>
+      WriterT.tell[Id, Int](i).listen.map(_._2).value should ===(i)
+    }
+  }
+
   test("Writer.pure and WriterT.liftF are consistent") {
     forAll { (i: Int) =>
       val writer: Writer[String, Int] = Writer.value(i)
@@ -89,6 +101,11 @@ class WriterTSuite extends CatsSuite {
 
   test("tell instantiates a Writer") {
     Writer.tell("foo").written should ===("foo")
+  }
+
+  test("listen returns a tuple of value and log") {
+    val w: Writer[String, Int] = Writer("foo", 3)
+    w.listen should ===(Writer("foo", (3, "foo")))
   }
 
   test("mapK consistent with f(value)+pure") {

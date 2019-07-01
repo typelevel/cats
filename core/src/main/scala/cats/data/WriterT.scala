@@ -16,6 +16,11 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
   def value(implicit functorF: Functor[F]): F[V] =
     functorF.map(run)(_._2)
 
+  def listen(implicit F: Functor[F]): WriterT[F, L, (V, L)] =
+    WriterT(F.map(run) {
+      case (l, v) => (l, (v, l))
+    })
+
   def ap[Z](f: WriterT[F, L, V => Z])(implicit F: Apply[F], L: Semigroup[L]): WriterT[F, L, Z] =
     WriterT(F.map2(f.run, run) {
       case ((l1, fvz), (l2, v)) => (L.combine(l1, l2), fvz(v))
@@ -84,7 +89,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
     )(WriterT.apply)
 }
 
-object WriterT extends WriterTInstances with WriterTFunctions {
+object WriterT extends WriterTInstances with WriterTFunctions with WriterTFunctions0 {
 
   def liftF[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
     WriterT(F.map(fv)(v => (monoidL.empty, v)))
@@ -479,7 +484,7 @@ sealed private[data] trait WriterTContravariantMonoidal[F[_], L] extends Contrav
         (t: (L, (A, B))) =>
           t match {
             case (l, (a, b)) => ((l, a), (l, b))
-        }
+          }
       )
     )
 }
@@ -525,6 +530,12 @@ sealed private[data] trait WriterTComonad[F[_], L] extends Comonad[WriterT[F, L,
   implicit override def F0: Comonad[F]
 
   def extract[A](fa: WriterT[F, L, A]): A = F0.extract(F0.map(fa.run)(_._2))
+}
+
+// new trait for binary compatibility
+private[data] trait WriterTFunctions0 {
+  def listen[F[_], L, V](writerTFLV: WriterT[F, L, V])(implicit functorF: Functor[F]): WriterT[F, L, (V, L)] =
+    writerTFLV.listen
 }
 
 private[data] trait WriterTFunctions {

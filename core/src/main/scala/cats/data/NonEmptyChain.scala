@@ -215,17 +215,17 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Tests whether a predicate holds for all elements of this chain.
    */
-  final def forall(p: A ⇒ Boolean): Boolean = toChain.forall(p)
+  final def forall(p: A => Boolean): Boolean = toChain.forall(p)
 
   /**
    * Tests whether a predicate holds for at least one element of this chain.
    */
-  final def exists(f: A ⇒ Boolean): Boolean = toChain.exists(f)
+  final def exists(f: A => Boolean): Boolean = toChain.exists(f)
 
   /**
    * Returns the first value that matches the given predicate.
    */
-  final def find(f: A ⇒ Boolean): Option[A] = toChain.find(f)
+  final def find(f: A => Boolean): Option[A] = toChain.find(f)
 
   /**
    * Returns a new `Chain` containing all elements where the result of `pf` is final defined.
@@ -254,12 +254,12 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Filters all elements of this chain that do not satisfy the given predicate.
    */
-  final def filter(p: A ⇒ Boolean): Chain[A] = toChain.filter(p)
+  final def filter(p: A => Boolean): Chain[A] = toChain.filter(p)
 
   /**
    * Filters all elements of this chain that satisfy the given predicate.
    */
-  final def filterNot(p: A ⇒ Boolean): Chain[A] = filter(t => !p(t))
+  final def filterNot(p: A => Boolean): Chain[A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.
@@ -464,7 +464,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
         fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: NonEmptyChain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
+        Foldable[Chain].foldRight(fa.toChain, lb)(f)
 
       override def foldMap[A, B](fa: NonEmptyChain[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.toChain.iterator.map(f))

@@ -7,7 +7,7 @@ position: 70
 
 # Guidelines
 
-All guidelines in cats should have clear justifications. There is no room for tribal wisdom in a simple library.
+All guidelines in Сats should have clear justifications. There is no room for tribal wisdom in a simple library.
 
 ## Syntax
 
@@ -42,8 +42,8 @@ pure[List, Int](1)
 ```
 
 Note that the type `A` should've been given by the `a: A` argument, but since scalac cannot infer `F[_]`, the user still has to specify all type params.
-In cats, we use a technique described in
- Rob Norris’s [Kinda-Curried Type Parameters](https://tpolecat.github.io/2015/07/30/infer.html) to overcome this restriction of scala inference. Here is a version of the `pure` using this technique in cats.
+In Сats, we use a technique described in
+ Rob Norris’s [Kinda-Curried Type Parameters](https://tpolecat.github.io/2015/07/30/infer.html) to overcome this restriction of scala inference. Here is a version of the `pure` using this technique in Сats.
 
 ```scala
 package cats.data
