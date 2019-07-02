@@ -35,7 +35,7 @@ final case class Const[A, B](getConst: A) {
     s"Const(${A.show(getConst)})"
 }
 
-object Const extends ConstInstances with ConstInstancesBinCompat0 {
+object Const extends ConstInstances {
   def empty[A, B](implicit A: Monoid[A]): Const[A, B] =
     Const(A.empty)
 
@@ -57,7 +57,7 @@ object Const extends ConstInstances with ConstInstancesBinCompat0 {
   def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
 }
 
-sealed abstract private[data] class ConstInstances extends ConstInstances0 {
+sealed abstract private[data] class ConstInstances extends ConstInstancesBinCompat0 {
   implicit def catsDataOrderForConst[A: Order, B]: Order[Const[A, B]] = new Order[Const[A, B]] {
     def compare(x: Const[A, B], y: Const[A, B]): Int =
       x.compare(y)
@@ -178,7 +178,7 @@ sealed abstract private[data] class ConstInstances4 {
     new ConstContravariant[C] {}
 }
 
-trait ConstInstancesBinCompat0 {
+trait ConstInstancesBinCompat0 extends ConstInstances0 {
   implicit def catsDataDecideableForConst[D: Monoid]: Decideable[Const[D, ?]] =
     new Decideable[Const[D, ?]] {
       override def unit = Const.empty[D, Unit]
