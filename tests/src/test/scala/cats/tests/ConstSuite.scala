@@ -17,29 +17,29 @@ import cats.tests.Helpers.{CMono, CSemi}
 
 class ConstSuite extends CatsSuite {
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[String, ?]](Const.catsDataTraverseForConst)
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[String, *]](Const.catsDataTraverseForConst)
 
-  checkAll("Const[String, Int]", SemigroupalTests[Const[String, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[Const[String, ?]]", SerializableTests.serializable(Semigroupal[Const[String, ?]]))
+  checkAll("Const[String, Int]", SemigroupalTests[Const[String, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Const[String, *]]", SerializableTests.serializable(Semigroupal[Const[String, *]]))
 
-  checkAll("Const[String, Int]", ApplicativeTests[Const[String, ?]].applicative[Int, Int, Int])
-  checkAll("Applicative[Const[String, ?]]", SerializableTests.serializable(Applicative[Const[String, ?]]))
+  checkAll("Const[String, Int]", ApplicativeTests[Const[String, *]].applicative[Int, Int, Int])
+  checkAll("Applicative[Const[String, *]]", SerializableTests.serializable(Applicative[Const[String, *]]))
 
   checkAll("Const[String, Int] with Option",
-           TraverseTests[Const[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[Const[String, ?]]", SerializableTests.serializable(Traverse[Const[String, ?]]))
+           TraverseTests[Const[String, *]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Const[String, *]]", SerializableTests.serializable(Traverse[Const[String, *]]))
 
-  checkAll("Const[String, Int]", TraverseFilterTests[Const[String, ?]].traverseFilter[Int, Int, Int])
-  checkAll("TraverseFilter[Const[String, ?]]", SerializableTests.serializable(TraverseFilter[Const[String, ?]]))
+  checkAll("Const[String, Int]", TraverseFilterTests[Const[String, *]].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Const[String, *]]", SerializableTests.serializable(TraverseFilter[Const[String, *]]))
 
-  // Get Apply[Const[C : Semigroup, ?]], not Applicative[Const[C : Monoid, ?]]
+  // Get Apply[Const[C : Semigroup, *]], not Applicative[Const[C : Monoid, *]]
   {
     implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = SemigroupK[NonEmptyList].algebra
     implicit val iso =
-      SemigroupalTests.Isomorphisms.invariant[Const[NonEmptyList[String], ?]](Const.catsDataContravariantForConst)
-    checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], ?]].apply[Int, Int, Int])
-    checkAll("Apply[Const[NonEmptyList[String], ?]]",
-             SerializableTests.serializable(Apply[Const[NonEmptyList[String], ?]]))
+      SemigroupalTests.Isomorphisms.invariant[Const[NonEmptyList[String], *]](Const.catsDataContravariantForConst)
+    checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], *]].apply[Int, Int, Int])
+    checkAll("Apply[Const[NonEmptyList[String], *]]",
+             SerializableTests.serializable(Apply[Const[NonEmptyList[String], *]]))
   }
 
   // Algebra checks for Serializability of instances as part of the laws
@@ -58,26 +58,26 @@ class ConstSuite extends CatsSuite {
   checkAll("UpperBounded[Const[Int, String]]", UpperBoundedTests[Const[Int, String]].upperBounded)
 
   {
-    implicitly[Invariant[Const[String, ?]]]
-    Invariant[Const[String, ?]]
+    implicitly[Invariant[Const[String, *]]]
+    Invariant[Const[String, *]]
 
-    checkAll("Const[String, Int]", InvariantTests[Const[String, ?]].invariant[Int, Int, Int])
-    checkAll("Invariant[Const[String, ?]]", SerializableTests.serializable(Invariant[Const[String, ?]]))
+    checkAll("Const[String, Int]", InvariantTests[Const[String, *]].invariant[Int, Int, Int])
+    checkAll("Invariant[Const[String, *]]", SerializableTests.serializable(Invariant[Const[String, *]]))
   }
 
-  checkAll("Const[String, Int]", ContravariantTests[Const[String, ?]].contravariant[Int, Int, Int])
-  checkAll("Contravariant[Const[String, ?]]", SerializableTests.serializable(Contravariant[Const[String, ?]]))
+  checkAll("Const[String, Int]", ContravariantTests[Const[String, *]].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Const[String, *]]", SerializableTests.serializable(Contravariant[Const[String, *]]))
 
-  checkAll("Const[String, Int]", ContravariantMonoidalTests[Const[String, ?]].contravariantMonoidal[Int, Int, Int])
-  checkAll("ContravariantMonoidal[Const[String, ?]]",
-           SerializableTests.serializable(ContravariantMonoidal[Const[String, ?]]))
+  checkAll("Const[String, Int]", ContravariantMonoidalTests[Const[String, *]].contravariantMonoidal[Int, Int, Int])
+  checkAll("ContravariantMonoidal[Const[String, *]]",
+           SerializableTests.serializable(ContravariantMonoidal[Const[String, *]]))
 
-  checkAll("Const[?, ?]", BifoldableTests[Const].bifoldable[Int, Int, Int])
+  checkAll("Const[*, *]", BifoldableTests[Const].bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Const]", SerializableTests.serializable(Bifoldable[Const]))
 
-  checkAll("InvariantMonoidal[Const[String, ?]]",
-           InvariantMonoidalTests[Const[String, ?]].invariantMonoidal[Int, Int, Int])
-  checkAll("InvariantMonoidal[Const[String, ?]]", SerializableTests.serializable(InvariantMonoidal[Const[String, ?]]))
+  checkAll("InvariantMonoidal[Const[String, *]]",
+           InvariantMonoidalTests[Const[String, *]].invariantMonoidal[Int, Int, Int])
+  checkAll("InvariantMonoidal[Const[String, *]]", SerializableTests.serializable(InvariantMonoidal[Const[String, *]]))
 
   test("show") {
 
@@ -91,16 +91,16 @@ class ConstSuite extends CatsSuite {
     }
   }
 
-  checkAll("Const[String, Int]", FunctorTests[Const[String, ?]].functor[Int, Int, Int])
-  checkAll("Functor[Const[String, ?]]", SerializableTests.serializable(Functor[Const[String, ?]]))
+  checkAll("Const[String, Int]", FunctorTests[Const[String, *]].functor[Int, Int, Int])
+  checkAll("Functor[Const[String, *]]", SerializableTests.serializable(Functor[Const[String, *]]))
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CMono, ?]](Const.catsDataFunctorForConst)
-    checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, ?]].commutativeApplicative[Int, Int, Int])
-    checkAll("CommutativeApplicative[Const[CMono, ?]]",
-             SerializableTests.serializable(CommutativeApplicative[Const[CMono, ?]]))
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CMono, *]](Const.catsDataFunctorForConst)
+    checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, *]].commutativeApplicative[Int, Int, Int])
+    checkAll("CommutativeApplicative[Const[CMono, *]]",
+             SerializableTests.serializable(CommutativeApplicative[Const[CMono, *]]))
   }
 
-  checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, ?]].commutativeApply[Int, Int, Int])
-  checkAll("CommutativeApply[Const[CSemi, ?]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, ?]]))
+  checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, *]].commutativeApply[Int, Int, Int])
+  checkAll("CommutativeApply[Const[CSemi, *]]", SerializableTests.serializable(CommutativeApply[Const[CSemi, *]]))
 }

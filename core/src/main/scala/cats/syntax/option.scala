@@ -227,10 +227,10 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> Some(1).liftTo[Either[CharSequence, ?]]("Empty")
+   * scala> Some(1).liftTo[Either[CharSequence, *]]("Empty")
    * res0: scala.Either[CharSequence, Int] = Right(1)
    *
-   * scala> Option.empty[Int].liftTo[Either[CharSequence, ?]]("Empty")
+   * scala> Option.empty[Int].liftTo[Either[CharSequence, *]]("Empty")
    * res1: scala.Either[CharSequence, Int] = Left(Empty)
    * }}}
    */

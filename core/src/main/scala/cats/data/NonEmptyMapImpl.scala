@@ -86,7 +86,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * Applies f to all the elements
    */
   def map[B](f: A => B): NonEmptyMap[K, B] =
-    NonEmptyMapImpl.create(Functor[SortedMap[K, ?]].map(toSortedMap)(f))
+    NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
 
   /**
    * Optionally returns the value associated with the given key.
@@ -167,7 +167,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * Right-associative fold using f.
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable[SortedMap[K, ?]].foldRight(toSortedMap, lb)(f)
+    Foldable[SortedMap[K, *]].foldRight(toSortedMap, lb)(f)
 
   /**
    * Left-associative reduce using f.
@@ -195,7 +195,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     Always((head, tail)).flatMap {
       case ((_, a), ga) =>
-        Foldable[SortedMap[K, ?]].reduceRightToOption(ga)(f)(g).flatMap {
+        Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
           case Some(b) => g(a, Now(b))
           case None    => Later(f(a))
         }
@@ -268,8 +268,8 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
 sealed abstract private[data] class NonEmptyMapInstances {
 
   implicit def catsDataInstancesForNonEmptyMap[K: Order]
-    : SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] =
-    new SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] {
+    : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] =
+    new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] {
 
       override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
         fa.map(f)

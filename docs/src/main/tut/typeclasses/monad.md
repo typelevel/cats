@@ -135,7 +135,7 @@ example).
 case class OptionT[F[_], A](value: F[Option[A]])
 
 implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
-  new Monad[OptionT[F, ?]] {
+  new Monad[OptionT[F, *]] {
     def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
     def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
       OptionT {
@@ -176,9 +176,9 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
 The laws for `FlatMap` are just the laws of `Monad` that don't mention `pure`.
 
 One of the motivations for `FlatMap`'s existence is that some types have `FlatMap` instances but not
-`Monad` - one example is `Map[K, ?]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+`Monad` - one example is `Map[K, *]`. Consider the behavior of `pure` for `Map[K, A]`. Given
 a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
 
 However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
-pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has an `FlatMap` instance.
+pair up (or apply functions to) values with the same key. Hence `Map[K, *]` has an `FlatMap` instance.
 

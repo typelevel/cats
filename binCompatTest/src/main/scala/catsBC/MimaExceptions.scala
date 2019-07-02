@@ -8,7 +8,7 @@ object MimaExceptions {
   import cats.arrow.FunctionK // needs to be imported because of a hygiene problem
 
   def isBinaryCompatible = (
-    cats.Monad[cats.data.OptionT[List, ?]],
+    cats.Monad[cats.data.OptionT[List, *]],
     cats.data.OptionT.catsDataTraverseForOptionT[List],
     cats.data.Kleisli.catsDataCommutativeArrowForKleisliId,
     cats.data.OptionT.catsDataMonoidKForOptionT[List],
@@ -19,8 +19,8 @@ object MimaExceptions {
     cats.data.IRWST.catsDataStrongForIRWST[List, Int, Int, Int],
     cats.data.OptionT.catsDataMonadErrorMonadForOptionT[List],
     FunctionK.lift(headOption),
-    cats.data.OptionT.catsDataMonadErrorForOptionT[Either[String, ?], String],
-    cats.data.OptionT[Either[String, ?], Int](Right(Some(17))).ensure("error")(_ => true),
+    cats.data.OptionT.catsDataMonadErrorForOptionT[Either[String, *], String],
+    cats.data.OptionT[Either[String, *], Int](Right(Some(17))).ensure("error")(_ => true),
     "blah".leftNec[Int],
     List(Some(4), None).nested,
     cats.data.EitherT.left[Int](Option("err")),
