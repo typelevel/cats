@@ -2,26 +2,26 @@ package cats
 package tests
 
 import cats.data.{Chain, NonEmptyChain}
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.kernel.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+import cats.instances.all._
 
-class NonEmptyChainSuite extends CatsSuite {
-  checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
-  checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
+class NonEmptyChainSuite extends NonEmptyDataTypeSuite[NonEmptyChain]("Chain") {
 
-  checkAll("NonEmptyChain[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
-  checkAll("NonEmptyTraverse[NonEmptyChain]", SerializableTests.serializable(Traverse[NonEmptyChain]))
+  implicit def arbitraryFA[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
+    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap { chain =>
+      NonEmptyChain.fromChain(chain) match {
+        case None     => A.arbitrary.map(NonEmptyChain.one)
+        case Some(ne) => Gen.const(ne)
+      }
+    })
 
-  checkAll("NonEmptyChain[Int]", BimonadTests[NonEmptyChain].bimonad[Int, Int, Int])
-  checkAll("Bimonad[NonEmptyChain]", SerializableTests.serializable(Bimonad[NonEmptyChain]))
+  implicit def cogenFA[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
+    Cogen[Chain[A]].contramap(_.toChain)
 
-  checkAll("NonEmptyChain[Int]", SemigroupTests[NonEmptyChain[Int]].semigroup)
-  checkAll("Monoid[NonEmptyChain]", SerializableTests.serializable(Semigroup[NonEmptyChain[Int]]))
-
-  checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
-  checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
+  checkAll(s"NonEmptyChain[Int]", HashTests[NonEmptyChain[Int]].hash)
+  checkAll(s"Hash[NonEmptyChain[Int]]", SerializableTests.serializable(Hash[NonEmptyChain[Int]]))
 
   {
     implicit val partialOrder = ListWrapper.partialOrder[Int]

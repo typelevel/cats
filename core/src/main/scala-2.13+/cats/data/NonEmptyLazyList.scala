@@ -343,21 +343,21 @@ sealed abstract private[data] class NonEmptyLazyListInstances  extends NonEmptyL
       })
     }
 
-  implicit val catsDataTraverseFilterForNonEmptyLazyList: TraverseFilter[NonEmptyLazyList] =
-    TraverseFilter[LazyList].asInstanceOf[TraverseFilter[NonEmptyLazyList]]
-
-
   implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
     Order[LazyList[A]].asInstanceOf[Order[NonEmptyLazyList[A]]]
 
-  implicit def catsDataMonoidForNonEmptyLazyList[A]: Monoid[NonEmptyLazyList[A]] =
-    Monoid[LazyList[A]].asInstanceOf[Monoid[NonEmptyLazyList[A]]]
+  implicit def catsDataSemigroupForNonEmptyLazyList[A]: Semigroup[NonEmptyLazyList[A]] =
+    Semigroup[LazyList[A]].asInstanceOf[Semigroup[NonEmptyLazyList[A]]]
+
+  implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
+    Show.show[NonEmptyLazyList[A]](nec => s"NonEmpty${Show[LazyList[A]].show(nec.toLazyList)}")
+
 
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances1  extends NonEmptyLazyListInstances2  {
-  implicit val catsDataAlternativeForNonEmptyLazyList: Alternative[NonEmptyLazyList] =
-    Alternative[LazyList].asInstanceOf[Alternative[NonEmptyLazyList]]
+  implicit val catsDataSemigroupKForNonEmptyLazyList: SemigroupK[NonEmptyLazyList] =
+    SemigroupK[LazyList].asInstanceOf[SemigroupK[NonEmptyLazyList]]
 
   implicit def catsDataHashForNonEmptyLazyList[A: Hash]: Hash[NonEmptyLazyList[A]] =
     Hash[LazyList[A]].asInstanceOf[Hash[NonEmptyLazyList[A]]]
