@@ -1,15 +1,13 @@
 package cats
 package data
 
-import NonEmptyLazyListImpl.{create, NonEmptyLazyList}
+import NonEmptyLazyListImpl.create
 import kernel.PartialOrder
 import instances.lazyList._
 
 
 
 private[data] object NonEmptyLazyListImpl extends NonEmptyLazyListInstances {
-  // TODO belongs in package object:
-  type NonEmptyLazyList[+A] = NonEmptyLazyListImpl.Type[A]
 
   private[data] type Base
   private[data] trait Tag extends Any
@@ -172,20 +170,14 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
     NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
 
   /**
-    * Returns the head and tail of this NonEmptyLazyList
-    */
-  final def uncons: (A, LazyList[A]) =
-    (head, tail)
-
-  /**
     * Returns the first element
     */
-  final def head: A = uncons._1
+  final def head: A = toLazyList.head
 
   /**
     * Returns all but the first element
     */
-  final def tail: LazyList[A] = uncons._2
+  final def tail: LazyList[A] = toLazyList.tail
 
   /**
     * Tests if some element is contained in this NonEmptyLazyList
@@ -330,44 +322,10 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
 sealed abstract private[data] class NonEmptyLazyListInstances  extends NonEmptyLazyListInstances1  {
 
-  implicit val catsDataBimonadForNonEmptyLazyList: Bimonad[NonEmptyLazyList] = new Bimonad[NonEmptyLazyList] {
-    val monadInstance = Monad[LazyList].asInstanceOf[Monad[NonEmptyLazyList]]
-    val coflatMapInstance = CoflatMap[LazyList].asInstanceOf[CoflatMap[NonEmptyLazyList]]
-    
+  implicit val catsDataBimonadForNonEmptyLazyList: Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] =
+    new AbstractNonEmptyBimonadTraverse[LazyList, NonEmptyLazyList] {
+
     def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
-    
-    def pure[A](x: A): NonEmptyLazyList[A] = monadInstance.pure(x)
-    
-    override def map[A, B](fa: NonEmptyLazyList[A])(f: A => B): NonEmptyLazyList[B] = fa.map(f)
-
-    def flatMap[A, B](fa: NonEmptyLazyList[A])(f: A => NonEmptyLazyList[B]): NonEmptyLazyList[B] =
-      fa.flatMap(f)
-
-    override def map2[A, B, Z](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B])(f: (A, B) => Z): NonEmptyLazyList[Z] =
-      monadInstance.map2(fa, fb)(f)
-
-    override def map2Eval[A, B, Z](fa: NonEmptyLazyList[A], fb: Eval[NonEmptyLazyList[B]])(f: (A, B) => Z): Eval[NonEmptyLazyList[Z]] =
-      monadInstance.map2Eval(fa, fb)(f)
-
-    def coflatMap[A, B](fa: NonEmptyLazyList[A])(f: NonEmptyLazyList[A] => B): NonEmptyLazyList[B] =
-      coflatMapInstance.coflatMap(fa)(f)
-
-    def tailRecM[A, B](a: A)(f: A => NonEmptyLazyList[Either[A,B]]): NonEmptyLazyList[B] = monadInstance.tailRecM(a)(f)
-  }
-
-}
-
-sealed abstract private[data] class NonEmptyLazyListInstances1  extends NonEmptyLazyListInstances2  {
-
-  implicit val catsDataSemigroupKForNonEmptyLazyList: SemigroupK[NonEmptyLazyList] = SemigroupK[LazyList].asInstanceOf[SemigroupK[NonEmptyLazyList]]
-
-  implicit def catsDataPartialOrderForNonEmptyLazyList[A: PartialOrder]: PartialOrder[NonEmptyLazyList[A]] =
-    PartialOrder[LazyList[A]].asInstanceOf[PartialOrder[NonEmptyLazyList[A]]]
-}
-
-sealed abstract private[data] class NonEmptyLazyListInstances2 {
-  implicit val catsDataNonEmptyTraverseForNonEmptyLazyList:  NonEmptyTraverse[NonEmptyLazyList] = new NonEmptyTraverse[NonEmptyLazyList] {
-    val  traverseInstance = Traverse[LazyList].asInstanceOf[Traverse[NonEmptyLazyList]]
 
     def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
       Foldable[LazyList].reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(LazyList.apply(_))) { (a, lglb) =>
@@ -377,48 +335,42 @@ sealed abstract private[data] class NonEmptyLazyListInstances2 {
         case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(LazyList(h) ++ t))
       } .value
 
-    def foldLeft[A, B](fa: NonEmptyLazyList[A], b: B)(f: (B, A) => B): B = traverseInstance.foldLeft(fa, b)(f)
-
-    def foldRight[A, B](fa: NonEmptyLazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = traverseInstance.foldRight(fa, lb)(f)
-
     def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
     def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
       Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
         Eval.defer(g(a, b))
       })
+    }
 
-    override def foldMap[A, B](fa: NonEmptyLazyList[A])(f: A => B)(implicit B: Monoid[B]): B = traverseInstance.foldMap(fa)(f)
+  implicit val catsDataTraverseFilterForNonEmptyLazyList: TraverseFilter[NonEmptyLazyList] =
+    TraverseFilter[LazyList].asInstanceOf[TraverseFilter[NonEmptyLazyList]]
 
-    override def traverse[G[_], A, B](fa: NonEmptyLazyList[A])(f: A => G[B])(implicit G: Applicative[G]): G[NonEmptyLazyList[B]] = traverseInstance.traverse(fa)(f)
 
-    override def mapWithIndex[A, B](fa: NonEmptyLazyList[A])(f: (A, Int) => B): NonEmptyLazyList[B] = traverseInstance.mapWithIndex(fa)(f)
-      
-    override def zipWithIndex[A](fa: NonEmptyLazyList[A]): NonEmptyLazyList[(A, Int)] = fa.zipWithIndex
+  implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
+    Order[LazyList[A]].asInstanceOf[Order[NonEmptyLazyList[A]]]
 
-    override def exists[A](fa: NonEmptyLazyList[A])(p: A => Boolean): Boolean = fa.exists(p)
+  implicit def catsDataMonoidForNonEmptyLazyList[A]: Monoid[NonEmptyLazyList[A]] =
+    Monoid[LazyList[A]].asInstanceOf[Monoid[NonEmptyLazyList[A]]]
 
-    override def forall[A](fa: NonEmptyLazyList[A])(p: A => Boolean): Boolean = fa.forall(p)
+}
 
-    override def get[A](fa: NonEmptyLazyList[A])(idx: Long): Option[A] = traverseInstance.get(fa)(idx)
+sealed abstract private[data] class NonEmptyLazyListInstances1  extends NonEmptyLazyListInstances2  {
+  implicit val catsDataAlternativeForNonEmptyLazyList: Alternative[NonEmptyLazyList] =
+    Alternative[LazyList].asInstanceOf[Alternative[NonEmptyLazyList]]
 
-    override def isEmpty[A](fa: NonEmptyLazyList[A]): Boolean = false
-    
-    override def foldM[G[_], A, B](fa: NonEmptyLazyList[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = traverseInstance.foldM(fa, z)(f)
+  implicit def catsDataHashForNonEmptyLazyList[A: Hash]: Hash[NonEmptyLazyList[A]] =
+    Hash[LazyList[A]].asInstanceOf[Hash[NonEmptyLazyList[A]]]
 
-    override def fold[A](fa: NonEmptyLazyList[A])(implicit A: Monoid[A]): A = traverseInstance.fold(fa)
+}
 
-    override def toList[A](fa: NonEmptyLazyList[A]): List[A] = traverseInstance.toList(fa)
+sealed abstract private[data] class NonEmptyLazyListInstances2 extends NonEmptyLazyListInstances3 {
+  implicit def catsDataPartialOrderForNonEmptyLazyList[A: PartialOrder]: PartialOrder[NonEmptyLazyList[A]] =
+    PartialOrder[LazyList[A]].asInstanceOf[PartialOrder[NonEmptyLazyList[A]]]
+}
 
-    override def reduceLeftOption[A](fa: NonEmptyLazyList[A])(f: (A, A) => A): Option[A] = traverseInstance.reduceLeftOption(fa)(f)
-
-    override def find[A](fa: NonEmptyLazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
-
-    override def collectFirst[A, B](fa: NonEmptyLazyList[A])(pf: PartialFunction[A, B]): Option[B] = traverseInstance.collectFirst(fa)(pf)
-
-    override def collectFirstSome[A, B](fa: NonEmptyLazyList[A])(f: A => Option[B]): Option[B] = traverseInstance.collectFirstSome(fa)(f)
-  }
-
-  implicit def catsDataEqForNonEmptyLazyList[A: Eq]: Eq[NonEmptyLazyList[A]] = Eq[LazyList[A]].asInstanceOf[PartialOrder[NonEmptyLazyList[A]]]
+sealed abstract private[data] class NonEmptyLazyListInstances3 {
+  implicit def catsDataEqForNonEmptyLazyList[A: Eq]: Eq[NonEmptyLazyList[A]] =
+    Eq[LazyList[A]].asInstanceOf[Eq[NonEmptyLazyList[A]]]
 }
 

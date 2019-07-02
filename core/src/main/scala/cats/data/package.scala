@@ -1,9 +1,8 @@
 package cats
-import cats.data.NonEmptyLazyListImpl
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 
-package object data {
+package object data extends VersionSpecificPackage {
 
   type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
@@ -14,10 +13,6 @@ package object data {
   type EitherNec[+E, +A] = Either[NonEmptyChain[E], A]
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
-
-
-  type NonEmptyLazyList[+A] = NonEmptyLazyListImpl.Type[A]
-  val NonEmptyLazyList = NonEmptyLazyListImpl
 
   def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
