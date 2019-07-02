@@ -1,7 +1,6 @@
 package cats
 package instances
 
-import cats.Contravariant
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
 
 import annotation.tailrec
@@ -65,9 +64,7 @@ trait FunctionInstancesBinCompat0 {
       def unit: Unit => Boolean = Function.const(true)
       def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
         fa.compose(f)
-      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean =
-        (ab: (A, B)) =>
-          ab match {
+      def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = {
             case (a, b) => fa(a) && fb(b)
         }
       def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
