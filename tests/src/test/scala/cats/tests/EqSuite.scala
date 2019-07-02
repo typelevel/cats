@@ -5,7 +5,6 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 
-
 class EqSuite extends CatsSuite {
   Invariant[Eq]
   Contravariant[Eq]

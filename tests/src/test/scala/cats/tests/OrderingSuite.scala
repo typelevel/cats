@@ -14,7 +14,6 @@ class OrderingSuite extends CatsSuite {
   ContravariantMonoidal[Ordering]
   Decideable[Ordering]
 
-
   checkAll("Contravariant[Ordering]", ContravariantTests[Ordering].contravariant[MiniInt, Int, Boolean])
   checkAll("Semigroupal[Ordering]", SemigroupalTests[Ordering].semigroupal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Ordering]",

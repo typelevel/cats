@@ -94,7 +94,8 @@ class KleisliSuite extends CatsSuite {
       Kleisli.catsDataDecideableForKleisli[Const[String, ?], Int]
     checkAll("Kleisli[Const[String, ?], Int, Int]",
              DecideableTests[Kleisli[Const[String, ?], MiniInt, ?]].decideable[Int, Int, Int])
-    checkAll("Decideable[Kleisli[Option, Int, ?]]",
+    checkAll(
+      "Decideable[Kleisli[Option, Int, ?]]",
       SerializableTests.serializable[Decideable[Kleisli[Const[String, ?], Int, ?]]](catsDataDecideableForKleisli)
     )
   }
@@ -103,9 +104,9 @@ class KleisliSuite extends CatsSuite {
     implicit val catsDataContravariantMonoidalForKleisli =
       Kleisli.catsDataContravariantMonoidalForKleisli[Const[String, ?], Int]
     checkAll("Kleisli[Const[String, ?], MiniInt, ?]",
-      ContravariantMonoidalTests[Kleisli[Const[String, ?], MiniInt, ?]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[Kleisli[Const[String, ?], MiniInt, ?]].contravariantMonoidal[Int, Int, Int])
     checkAll("ContravariantMonoidal[Kleisli[Option, Int, ?]]",
-      SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
+             SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, ?], Int, ?]]))
   }
 
   checkAll("Kleisli[Option, MiniInt, Int]", ApplicativeTests[Kleisli[Option, MiniInt, ?]].applicative[Int, Int, Int])

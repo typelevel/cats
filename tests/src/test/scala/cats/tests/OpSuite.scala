@@ -39,7 +39,8 @@ class OpSuite extends CatsSuite {
 
   {
     implicit val catsDataContravariantForOp = Op.catsDataContravariantForOp[Function1, Unit]
-    checkAll("Op[Function1, Unit, ?]", ContravariantTests[Op[Function1, Unit, ?]].contravariant[MiniInt, MiniInt, MiniInt])
+    checkAll("Op[Function1, Unit, ?]",
+             ContravariantTests[Op[Function1, Unit, ?]].contravariant[MiniInt, MiniInt, MiniInt])
     checkAll("Contravariant[Op[Function1, Unit, ?]]",
              SerializableTests.serializable(Contravariant[Op[Function1, Int, ?]]))
 

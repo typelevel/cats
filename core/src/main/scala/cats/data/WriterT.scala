@@ -489,7 +489,7 @@ sealed private[data] trait WriterTDecideable[F[_], L]
           e match {
             case (l, Right(b)) => Right((l, b))
             case (l, Left(a))  => Left((l, a))
-        }
+          }
       )
     )
 }

@@ -403,7 +403,7 @@ private trait OptionTDecideable[F[_]] extends Decideable[OptionT[F, ?]] with Opt
             case Some(Right(b)) => Right(Option(b))
             case Some(Left(a))  => Left(Option(a))
             case None           => Left(None)
-        }
+          }
       )
     )
 }

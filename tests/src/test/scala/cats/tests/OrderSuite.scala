@@ -1,12 +1,11 @@
 package cats
 package tests
 
-import Helpers.Ord
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
-import cats.laws.discipline.DecideableTests
-import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
+import cats.laws.discipline.{DecideableTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.tests.Helpers.Ord
 
 class OrderSuite extends CatsSuite {
   {
