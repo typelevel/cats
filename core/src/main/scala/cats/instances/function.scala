@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
+import cats.data.AndThen
 
 import annotation.tailrec
 
@@ -109,6 +110,17 @@ sealed private[instances] trait Function0Instances0 {
 }
 
 sealed private[instances] trait Function1Instances extends Function1Instances0 {
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
+    new ContravariantMonoidal[? => R] {
+      def unit: Unit => R = Function.const(Monoid[R].empty)
+      def contramap[A, B](fa: A => R)(f: B => A): B => R =
+        fa.compose(f)
+      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
+        (ab: (A, B)) =>
+          ab match {
+            case (a, b) => Monoid[R].combine(fa(a), fb(b))
+          }
+    }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
     new Monad[T1 => ?] {
@@ -152,20 +164,15 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
       def compose[A, B, C](f: B => C, g: A => B): A => C = f.compose(g)
     }
 
-  implicit val catsStdMonoidKForFunction1: MonoidK[Endo] =
-    Category[Function1].algebraK
+  implicit val catsStdMonoidKForFunction1: MonoidK[Endo] = new MonoidK[Endo] {
 
-  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
-    new ContravariantMonoidal[? => R] {
-      def unit: Unit => R = Function.const(Monoid[R].empty)
-      def contramap[A, B](fa: A => R)(f: B => A): B => R =
-        fa.compose(f)
-      def product[A, B](fa: A => R, fb: B => R): ((A, B)) => R =
-        (ab: (A, B)) =>
-          ab match {
-            case (a, b) => Monoid[R].combine(fa(a), fb(b))
-        }
-    }
+    val category: Category[Function] = Category[Function1]
+
+    override def empty[A]: Endo[A] = category.id
+
+    override def combineK[A](x: Endo[A], y: Endo[A]): Endo[A] =
+      AndThen(category.compose(x, y))
+  }
 }
 
 sealed private[instances] trait Function1Instances0 {

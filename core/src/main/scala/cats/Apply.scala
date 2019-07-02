@@ -72,7 +72,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    */
   def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
-    map2(fa, fb)((_, b) => b)
+    ap(map(fa)(_ => (b: B) => b))(fb)
 
   /**
    * Compose two actions, discarding any value produced by the second.
@@ -216,6 +216,13 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 }
 
 object Apply {
+
+  /**
+   * This semigroup uses a product operation to combine `F`s.
+   * If the `Apply[F].product` results in larger `F` (i.e. when `F` is a `List`),
+   * accumulative usage of this instance, such as `combineAll`, will result in
+   * `F`s with exponentially increasing sizes.
+   */
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)
 }

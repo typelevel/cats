@@ -10,7 +10,7 @@ import cats.laws.discipline.eq._
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
-  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
@@ -28,13 +28,17 @@ class BinestedSuite extends CatsSuite {
 
   {
     // Profunctor + Functor + Functor = Profunctor
-    implicit val instance = ListWrapper.functor
+    implicit val instance = OptionWrapper.functor
+    Eq[OptionWrapper[MiniInt] => Option[Int]]
     checkAll(
-      "Binested[Function1, ListWrapper, Option, ?, ?]",
-      ProfunctorTests[Binested[Function1, ListWrapper, Option, ?, ?]].profunctor[Int, Int, Int, String, String, String]
+      "Binested[Function1, OptionWrapper, Option, ?, ?]",
+      ProfunctorTests[Binested[Function1, OptionWrapper, Option, ?, ?]]
+        .profunctor[MiniInt, Int, Int, String, String, String]
     )
-    checkAll("Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]",
-             SerializableTests.serializable(Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]))
+    checkAll(
+      "Profunctor[Binested[Function1, OptionWrapper, Option, ?, ?]]",
+      SerializableTests.serializable(Profunctor[Binested[Function1, OptionWrapper, Option, ?, ?]])
+    )
   }
 
   {

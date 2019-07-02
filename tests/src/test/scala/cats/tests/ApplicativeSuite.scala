@@ -40,16 +40,15 @@ class ApplicativeSuite extends CatsSuite {
   }
 
   {
-    implicit val listwrapperApplicative = ListWrapper.applicative
-    implicit val listwrapperMonoid = Applicative.monoid[ListWrapper, Int]
-    checkAll("Applicative[ListWrapper].monoid", MonoidTests[ListWrapper[Int]].monoid)
+    implicit val optionMonoid = Applicative.monoid[Option, Int]
+    checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](optionMonoid).monoid)
   }
 
   {
-    implicit val listwrapperApply = ListWrapper.applyInstance
-    implicit val listwrapperSemigroup = Apply.semigroup[ListWrapper, Int]
-    checkAll("Apply[ListWrapper].semigroup", SemigroupTests[ListWrapper[Int]].semigroup)
+    val optionSemigroupFromApply = Apply.semigroup[Option, Int]
+    checkAll("Apply[Option].semigroup", SemigroupTests[Option[Int]](optionSemigroupFromApply).semigroup)
   }
+
   {
     implicit val listwrapperApplicative = ListWrapper.applicative
     implicit val listwrapperCoflatMap = Applicative.coflatMap[ListWrapper]

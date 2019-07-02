@@ -7,6 +7,7 @@ import cats.data.EitherT
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms
@@ -30,7 +31,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a Functor for F is defined
+    // if a Functor for F is defined
     implicit val F = ListWrapper.functor
 
     checkAll("EitherT[ListWrapper, ?, ?]",
@@ -43,7 +44,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a Traverse for F is defined
+    // if a Traverse for F is defined
     implicit val F = ListWrapper.traverse
 
     checkAll("EitherT[ListWrapper, Int, ?]",
@@ -58,7 +59,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
 
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
@@ -94,7 +95,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
     implicit val F = ListWrapper.monad
 
     Functor[EitherT[ListWrapper, String, ?]]
@@ -107,7 +108,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a foldable is defined
+    // if a foldable is defined
     implicit val F = ListWrapper.foldable
 
     checkAll("EitherT[ListWrapper, Int, ?]", FoldableTests[EitherT[ListWrapper, Int, ?]].foldable[Int, Int])
@@ -270,6 +271,20 @@ class EitherTSuite extends CatsSuite {
     eithert.recoverWith { case "noteithert" => EitherT.pure[Id, String](5) } should ===(eithert)
   }
 
+  test("rethrowT is inverse of attemptT when applied to a successful value") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val success: Try[Int] = Success(42)
+
+    success.attemptT.rethrowT should ===(success)
+  }
+
+  test("rethrowT is inverse of attemptT when applied to a failed value") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val failed: Try[Int] = Failure(new IllegalArgumentException("error"))
+
+    failed.attemptT.rethrowT should ===(failed)
+  }
+
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should ===(EitherT(eithert.value.map(f)))
@@ -307,6 +322,12 @@ class EitherTSuite extends CatsSuite {
   test("fold with Id consistent with Either fold") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
       eithert.fold(f, g) should ===(eithert.value.fold(f, g))
+    }
+  }
+
+  test("foldF with Id consistent with Either fold") {
+    forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
+      eithert.foldF(f, g) should ===(eithert.value.fold(f, g))
     }
   }
 
@@ -424,7 +445,7 @@ class EitherTSuite extends CatsSuite {
 
   test("toEither consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      x.value.map(_.right.toOption) should ===(x.toOption.value)
+      x.value.map(_.toOption) should ===(x.toOption.value)
     }
   }
 
@@ -523,28 +544,28 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
-  test("biFlatMap consistent with flatMap") {
+  test("biflatMap consistent with flatMap") {
     forAll { (eithert: EitherT[List, String, Int], fb: Int => EitherT[List, String, Int]) =>
       val noChangeLeft = (s: String) => EitherT.left[Int](List(s))
 
-      eithert.biFlatMap(noChangeLeft, fb) should ===(eithert.flatMap(fb))
+      eithert.biflatMap(noChangeLeft, fb) should ===(eithert.flatMap(fb))
     }
   }
 
-  test("biFlatMap consistent with leftFlatMap") {
+  test("biflatMap consistent with leftFlatMap") {
     forAll { (eithert: EitherT[List, String, Int], fa: String => EitherT[List, String, Int]) =>
       val noChangeRight = (i: Int) => EitherT.right[String](List(i))
 
-      eithert.biFlatMap(fa, noChangeRight) should ===(eithert.leftFlatMap(fa))
+      eithert.biflatMap(fa, noChangeRight) should ===(eithert.leftFlatMap(fa))
     }
   }
 
-  test("biFlatMap with Left and Right consistent with leftFlatMap and then flatMap") {
+  test("biflatMap with Left and Right consistent with leftFlatMap and then flatMap") {
     forAll { (eithert: EitherT[List, String, Int], string: String, int: Int) =>
       val leftFun = (_: String) => EitherT.left[Int](List(string))
       val rightFun = (_: Int) => EitherT.right[String](List(int))
 
-      eithert.biFlatMap(leftFun, rightFun) should ===(eithert.leftFlatMap(leftFun).flatMap(rightFun))
+      eithert.biflatMap(leftFun, rightFun) should ===(eithert.leftFlatMap(leftFun).flatMap(rightFun))
     }
   }
 

@@ -33,7 +33,7 @@ import simulacrum.typeclass
             }
           },
           ifFalse = pure(Right(xs))
-      )
+        )
     )
   }
 
@@ -53,7 +53,7 @@ import simulacrum.typeclass
             map(b.value)(_ => continue)
           },
           ifFalse = stop
-      )
+        )
     )
   }
 

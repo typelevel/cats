@@ -502,7 +502,7 @@ import Foldable.sentinel
         f(a) match {
           case Right(c) => (A.empty[B], A.pure(c))
           case Left(b)  => (A.pure(b), A.empty[C])
-      }
+        }
     )
   }
 

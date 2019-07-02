@@ -144,12 +144,13 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    * }}}
    */
   def transformS[R](f: R => SA, g: (R, SB) => R)(implicit F: Functor[F]): IndexedStateT[F, R, R, A] =
-    StateT.applyF(F.map(runF) { sfsa =>
-      { r: R =>
-        val sa = f(r)
-        val fsba = sfsa(sa)
-        F.map(fsba) { case (sb, a) => (g(r, sb), a) }
-      }
+    StateT.applyF(F.map(runF) {
+      sfsa =>
+        { r: R =>
+          val sa = f(r)
+          val fsba = sfsa(sa)
+          F.map(fsba) { case (sb, a) => (g(r, sb), a) }
+        }
     })
 
   /**
@@ -262,6 +263,16 @@ sealed abstract private[data] class IndexedStateTInstances extends IndexedStateT
       def defer[A](fa: => IndexedStateT[F, SA, SB, A]): IndexedStateT[F, SA, SB, A] =
         IndexedStateT.applyF(F.defer(fa.runF))
     }
+
+  implicit def catsDataFunctorFilterForIndexedStateT[F[_], SA, SB](
+    implicit
+    ev1: Monad[F],
+    ev2: FunctorFilter[F]
+  ): FunctorFilter[IndexedStateT[F, SA, SB, ?]] =
+    new IndexedStateTFunctorFilter[F, SA, SB] {
+      val F0 = ev1
+      val FF = ev2
+    }
 }
 
 sealed abstract private[data] class IndexedStateTInstances1 extends IndexedStateTInstances2 {
@@ -307,6 +318,24 @@ sealed abstract private[data] class IndexedStateTInstances3 extends IndexedState
 sealed abstract private[data] class IndexedStateTInstances4 {
   implicit def catsDataStrongForIndexedStateT[F[_], V](implicit F0: Monad[F]): Strong[IndexedStateT[F, ?, ?, V]] =
     new IndexedStateTStrong[F, V] { implicit def F = F0 }
+}
+
+abstract private[data] class IndexedStateFunctions {
+
+  /**
+   * Instantiate an `IndexedState[S1, S2, A]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.IndexedState
+   *
+   * scala> val is = IndexedState[Int, Long, String](i => (i + 1L, "Here is " + i))
+   * scala> is.run(3).value
+   * res0: (Long, String) = (4,Here is 3)
+   * }}}
+   */
+  def apply[S1, S2, A](f: S1 => (S2, A)): IndexedState[S1, S2, A] =
+    IndexedStateT.applyF(Now((s: S1) => Now(f(s))))
 }
 
 // To workaround SI-7139 `object State` needs to be defined inside the package object
@@ -410,7 +439,7 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
       s =>
         F.tailRecM[(S, A), (S, B)]((s, a)) {
           case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
-      }
+        }
     )
 }
 
@@ -447,7 +476,7 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
             (tup: (S, A)) =>
               f(tup._2) match {
                 case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
-            }
+              }
           )(G, F)
       )
     )
@@ -474,4 +503,16 @@ sealed abstract private[data] class IndexedStateTMonadError[F[_], S, E]
 
   def handleErrorWith[A](fa: IndexedStateT[F, S, S, A])(f: E => IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
     IndexedStateT(s => F.handleErrorWith(fa.run(s))(e => f(e).run(s)))
+}
+
+private[this] trait IndexedStateTFunctorFilter[F[_], SA, SB] extends FunctorFilter[IndexedStateT[F, SA, SB, ?]] {
+
+  implicit def F0: Monad[F]
+  def FF: FunctorFilter[F]
+
+  def functor: Functor[IndexedStateT[F, SA, SB, ?]] =
+    IndexedStateT.catsDataFunctorForIndexedStateT(FF.functor)
+
+  def mapFilter[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => Option[B]): IndexedStateT[F, SA, SB, B] =
+    fa.flatMapF(a => FF.mapFilter(F0.pure(a))(f))
 }

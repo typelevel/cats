@@ -10,7 +10,7 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests}
+import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.arbitrary._
 
 class ChainSuite extends CatsSuite {
@@ -48,11 +48,23 @@ class ChainSuite extends CatsSuite {
     checkAll("Eq[Chain[ListWrapper[Int]]", SerializableTests.serializable(Eq[Chain[ListWrapper[Int]]]))
   }
 
+  {
+    implicit val hash = ListWrapper.hash[Int]
+    checkAll("Chain[ListWrapper[Int]]", HashTests[Chain[ListWrapper[Int]]].hash)
+    checkAll("Hash[Chain[ListWrapper[Int]]", SerializableTests.serializable(Hash[Chain[ListWrapper[Int]]]))
+  }
+
   test("show") {
     Show[Chain[Int]].show(Chain(1, 2, 3)) should ===("Chain(1, 2, 3)")
     Chain.empty[Int].show should ===("Chain()")
     forAll { l: Chain[String] =>
       l.show should ===(l.toString)
+    }
+  }
+
+  test("headOption") {
+    forAll { (s: Seq[Int]) =>
+      Chain.fromSeq(s).headOption should ===(s.headOption)
     }
   }
 
@@ -172,6 +184,38 @@ class ChainSuite extends CatsSuite {
       intercept[java.util.NoSuchElementException] {
         rit.next
       }
+    }
+  }
+
+  test("Chain#distinct is consistent with List#distinct") {
+    forAll { a: Chain[Int] =>
+      a.distinct.toList should ===(a.toList.distinct)
+    }
+  }
+
+  test("=== is consistent with == (issue #2540)") {
+    (Chain.one(1) |+| Chain.one(2) |+| Chain.one(3)) should be(Chain.fromSeq(List(1, 2, 3)))
+
+    forAll { (a: Chain[Int], b: Chain[Int]) =>
+      (a === b) should ===(a == b)
+    }
+  }
+
+  test("== returns false for non-Chains") {
+    forAll { (a: Chain[Int], b: Int) =>
+      (a == b) should ===(false)
+    }
+  }
+
+  test("== returns false for Chains of different element types") {
+    forAll { (a: Chain[Option[String]], b: Chain[String]) =>
+      (a == b) should ===(a.isEmpty && b.isEmpty)
+    }
+  }
+
+  test("Chain#hashCode is consistent with List#hashCode") {
+    forAll { (x: Chain[Int]) =>
+      x.hashCode should ===(x.toList.hashCode)
     }
   }
 }

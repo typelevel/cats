@@ -4,6 +4,7 @@ package data
 import scala.annotation.tailrec
 import scala.collection.mutable.Builder
 import cats.instances.stream._
+import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a single element (head) and some other
@@ -103,6 +104,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
   implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F[_]: Alternative](
@@ -191,22 +193,22 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 }
 
 sealed abstract private[data] class OneAndLowPriority4 {
-  implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, ?]] =
-    new Comonad[OneAnd[Stream, ?]] {
-      def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
-        @tailrec def consume(as: Stream[A], buf: Builder[B, Stream[B]]): Stream[B] =
+  implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[LazyList, ?]] =
+    new Comonad[OneAnd[LazyList, ?]] {
+      def coflatMap[A, B](fa: OneAnd[LazyList, A])(f: OneAnd[LazyList, A] => B): OneAnd[LazyList, B] = {
+        @tailrec def consume(as: LazyList[A], buf: Builder[B, LazyList[B]]): LazyList[B] =
           if (as.isEmpty) buf.result
           else {
             val tail = as.tail
             consume(tail, buf += f(OneAnd(as.head, tail)))
           }
-        OneAnd(f(fa), consume(fa.tail, Stream.newBuilder))
+        OneAnd(f(fa), consume(fa.tail, LazyList.newBuilder))
       }
 
-      def extract[A](fa: OneAnd[Stream, A]): A =
+      def extract[A](fa: OneAnd[LazyList, A]): A =
         fa.head
 
-      def map[A, B](fa: OneAnd[Stream, A])(f: A => B): OneAnd[Stream, B] =
+      def map[A, B](fa: OneAnd[LazyList, A])(f: A => B): OneAnd[LazyList, B] =
         fa.map(f)
     }
 }

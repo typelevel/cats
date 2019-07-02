@@ -68,7 +68,7 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
     new NonEmptyChainOps(value)
 }
 
-class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
+class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
 
   /**
    * Converts this chain to a `Chain`
@@ -215,17 +215,17 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Tests whether a predicate holds for all elements of this chain.
    */
-  final def forall(p: A ⇒ Boolean): Boolean = toChain.forall(p)
+  final def forall(p: A => Boolean): Boolean = toChain.forall(p)
 
   /**
    * Tests whether a predicate holds for at least one element of this chain.
    */
-  final def exists(f: A ⇒ Boolean): Boolean = toChain.exists(f)
+  final def exists(f: A => Boolean): Boolean = toChain.exists(f)
 
   /**
    * Returns the first value that matches the given predicate.
    */
-  final def find(f: A ⇒ Boolean): Option[A] = toChain.find(f)
+  final def find(f: A => Boolean): Option[A] = toChain.find(f)
 
   /**
    * Returns a new `Chain` containing all elements where the result of `pf` is final defined.
@@ -240,14 +240,26 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] = toChain.collect(pf)
 
   /**
+   * Finds the first element of this `NonEmptyChain` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toChain.collectFirst(pf)
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   */
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] = toChain.collectFirstSome(f)
+
+  /**
    * Filters all elements of this chain that do not satisfy the given predicate.
    */
-  final def filter(p: A ⇒ Boolean): Chain[A] = toChain.filter(p)
+  final def filter(p: A => Boolean): Chain[A] = toChain.filter(p)
 
   /**
    * Filters all elements of this chain that satisfy the given predicate.
    */
-  final def filterNot(p: A ⇒ Boolean): Chain[A] = filter(t => !p(t))
+  final def filterNot(p: A => Boolean): Chain[A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.
@@ -316,7 +328,7 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> val nec = NonEmptyChain(4, 5, 6)
-   * scala> nec.reduceLeftTo(_.toString)((cur, acc) => acc + cur.toString)
+   * scala> nec.reduceRightTo(_.toString)((cur, acc) => acc + cur.toString)
    * res0: String = 654
    * }}}
    */
@@ -372,6 +384,24 @@ class NonEmptyChainOps[A](val value: NonEmptyChain[A]) extends AnyVal {
   /** Reverses this `NonEmptyChain` */
   final def reverse: NonEmptyChain[A] =
     create(toChain.reverse)
+
+  /**
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] = {
+    implicit val ord = O.toOrdering
+
+    var alreadyIn = TreeSet(head: AA)
+
+    foldLeft(NonEmptyChain(head: AA)) { (elementsSoFar, b) =>
+      if (alreadyIn.contains(b)) {
+        elementsSoFar
+      } else {
+        alreadyIn += b
+        elementsSoFar :+ b
+      }
+    }
+  }
 }
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
@@ -434,7 +464,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
         fa.foldLeft(b)(f)
 
       override def foldRight[A, B](fa: NonEmptyChain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        fa.foldRight(lb)(f)
+        Foldable[Chain].foldRight(fa.toChain, lb)(f)
 
       override def foldMap[A, B](fa: NonEmptyChain[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.toChain.iterator.map(f))
@@ -455,6 +485,12 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] =
         fa.toNonEmptyList
+
+      override def collectFirst[A, B](fa: NonEmptyChain[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: NonEmptyChain[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirstSome(f)
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =

@@ -209,4 +209,22 @@ class NonEmptyMapSuite extends CatsSuite {
       nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
     }
   }
+
+  test("NonEmptyMap#updateWith identity should be a no-op") {
+    forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
+      nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
+    }
+  }
+
+  test("NonEmptyMap#updateWith on existing value should behave like Option#map on the same value") {
+    forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
+      nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
+    }
+  }
+
+  test("NonEmptyMap#updateWith should not act when key is missing") {
+    val single = NonEmptyMap[String, Int](("here", 1), SortedMap())
+    single.lookup("notHere") should ===(single.updateWith("notHere")(_ => 1).lookup("notHere"))
+  }
+
 }

@@ -1,7 +1,10 @@
 package cats
+import kernel.compat.scalaVersionSpecific._
+import compat.lazyList.toLazyList
 
 package object data {
-  type NonEmptyStream[A] = OneAnd[Stream, A]
+
+  type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
   type IorNel[+B, +A] = Ior[NonEmptyList[B], A]
   type IorNec[+B, +A] = Ior[NonEmptyChain[B], A]
@@ -11,10 +14,12 @@ package object data {
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
 
-  def NonEmptyStream[A](head: A, tail: Stream[A] = Stream.empty): NonEmptyStream[A] =
+  def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
     OneAnd(head, tail)
+
+  @suppressUnusedImportWarningForScalaVersionSpecific
   def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
-    OneAnd(head, tail.toStream)
+    OneAnd(head, toLazyList(tail))
 
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
@@ -25,13 +30,15 @@ package object data {
   type NonEmptyChain[+A] = NonEmptyChainImpl.Type[A]
   val NonEmptyChain = NonEmptyChainImpl
 
-  type ReaderT[F[_], A, B] = Kleisli[F, A, B]
+  type ReaderT[F[_], -A, B] = Kleisli[F, A, B]
   val ReaderT = Kleisli
 
-  type Reader[A, B] = ReaderT[Id, A, B]
+  type Reader[-A, B] = ReaderT[Id, A, B]
 
   object Reader {
     def apply[A, B](f: A => B): Reader[A, B] = ReaderT[Id, A, B](f)
+
+    def local[A, R](f: R => R)(fa: Reader[R, A]): Reader[R, A] = Kleisli.local(f)(fa)
   }
 
   type Writer[L, V] = WriterT[Id, L, V]
@@ -41,7 +48,13 @@ package object data {
     def value[L: Monoid, V](v: V): Writer[L, V] = WriterT.value(v)
 
     def tell[L](l: L): Writer[L, Unit] = WriterT.tell(l)
+
+    def listen[L, V](writer: Writer[L, V]): Writer[L, (V, L)] =
+      WriterT.listen(writer)
   }
+
+  type IndexedState[S1, S2, A] = IndexedStateT[Eval, S1, S2, A]
+  object IndexedState extends IndexedStateFunctions
 
   /**
    * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
@@ -80,4 +93,7 @@ package object data {
     def apply[S, A](f: S => A, s: S): Store[S, A] =
       RepresentableStore[S => ?, S, A](f, s)
   }
+
+  type ZipLazyList[A] = ZipStream[A]
+  val ZipLazyList = ZipStream
 }

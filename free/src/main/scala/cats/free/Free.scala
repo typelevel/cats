@@ -30,7 +30,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def mapK[T[_]](f: S ~> T): Free[T, A] =
     foldMap[Free[T, ?]] { // this is safe because Free is stack safe
       λ[FunctionK[S, Free[T, ?]]](fa => Suspend(f(fa)))
-    }(Free.catsFreeMonadForFree)
+    }
 
   /**
    * Bind the given continuation to the result of this computation.
@@ -183,6 +183,9 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
     mapK(λ[S ~> G](ev.inj(_)))
 
+  final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
+    foldMap[FreeT[S, G, ?]](λ[S ~> FreeT[S, G, ?]](FreeT.liftF(_)))
+
   override def toString: String =
     "Free(...)"
 }
@@ -255,14 +258,14 @@ object Free extends FreeInstances {
    * This method exists to allow the `F` and `G` parameters to be
    * bound independently of the `A` parameter below.
    */
-  // TODO to be deprecated / removed in cats 2.0
+  // TODO: to be deprecated / removed in cats 2.0
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }
@@ -281,7 +284,7 @@ object Free extends FreeInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
       Free.liftF(I.inj(fa))
   }

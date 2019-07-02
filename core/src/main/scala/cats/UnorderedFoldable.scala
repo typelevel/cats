@@ -29,7 +29,7 @@ import cats.instances.long._
    * If there are no elements, the result is `false`.
    */
   def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.commutativeMonoidEval(UnorderedFoldable.orMonoid)).value
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.orEvalMonoid).value
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -37,7 +37,7 @@ import cats.instances.long._
    * If there are no elements, the result is `true`.
    */
   def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.commutativeMonoidEval(UnorderedFoldable.andMonoid)).value
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.andEvalMonoid).value
 
   /**
    * The size of this UnorderedFoldable.
@@ -51,19 +51,23 @@ import cats.instances.long._
 }
 
 object UnorderedFoldable {
-  private val orMonoid: CommutativeMonoid[Boolean] = new CommutativeMonoid[Boolean] {
-    val empty: Boolean = false
+  private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
+    val empty: Eval[Boolean] = Eval.False
 
-    def combine(x: Boolean, y: Boolean): Boolean = x || y
+    def combine(lx: Eval[Boolean], ly: Eval[Boolean]): Eval[Boolean] =
+      lx.flatMap {
+        case true  => Eval.True
+        case false => ly
+      }
   }
 
-  private val andMonoid: CommutativeMonoid[Boolean] = new CommutativeMonoid[Boolean] {
-    val empty: Boolean = true
+  private val andEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
+    val empty: Eval[Boolean] = Eval.True
 
-    def combine(x: Boolean, y: Boolean): Boolean = x && y
+    def combine(lx: Eval[Boolean], ly: Eval[Boolean]): Eval[Boolean] =
+      lx.flatMap {
+        case true  => ly
+        case false => Eval.False
+      }
   }
-
-  private def commutativeMonoidEval[A: CommutativeMonoid]: CommutativeMonoid[Eval[A]] =
-    new EvalMonoid[A] with CommutativeMonoid[Eval[A]] { val algebra = Monoid[A] }
-
 }

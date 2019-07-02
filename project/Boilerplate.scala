@@ -12,7 +12,7 @@ import sbt._
 object Boilerplate {
   import scala.StringContext._
 
-  implicit final class BlockHelper(val sc: StringContext) extends AnyVal {
+  implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
@@ -112,7 +112,11 @@ object Boilerplate {
         ""
       }
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)
@@ -188,7 +192,12 @@ object Boilerplate {
           "a" + n + ":A" + n
         }
         .mkString(",")
-      def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
+      def apN(n: Int) =
+        if (n == 1) {
+          "ap"
+        } else {
+          s"ap$n"
+        }
       def allArgs = (0 until arity).map { "a" + _ }.mkString(",")
 
       val apply =
@@ -381,7 +390,11 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val parMap =
         if (arity == 1)
@@ -404,7 +417,7 @@ object Boilerplate {
          -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
       |}
       |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}]($tupleTpe) {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) {
          -  $parMap
          -  $parTupled
          -}
@@ -428,7 +441,11 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)
@@ -470,7 +487,7 @@ object Boilerplate {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
       |
-        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}]($tupleTpe) {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) {
         -  $map
         -  $contramap
         -  $imap

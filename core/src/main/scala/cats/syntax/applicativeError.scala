@@ -68,12 +68,12 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
 }
 
-final class ApplicativeErrorIdOps[E](val e: E) extends AnyVal {
+final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {
   def raiseError[F[_], A](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     F.raiseError(e)
 }
 
-final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
+final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
   def handleError(f: E => A)(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleError(fa)(f)
 
@@ -97,4 +97,31 @@ final class ApplicativeErrorOps[F[_], E, A](val fa: F[A]) extends AnyVal {
 
   def orElse(other: => F[A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.handleErrorWith(fa)(_ => other)
+
+  /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> "error".asLeft[Int].adaptErr(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> "err".asLeft[Int].adaptErr(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> 1.asRight[String].adaptErr(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   *
+   * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
+   * this would result in ambiguous implicits. `adaptError` will be moved from `MonadError`
+   * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
+   */
+  def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] =
+    F.recoverWith(fa)(pf.andThen(F.raiseError[A] _))
 }

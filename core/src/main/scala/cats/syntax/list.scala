@@ -8,7 +8,7 @@ trait ListSyntax {
   implicit final def catsSyntaxList[A](la: List[A]): ListOps[A] = new ListOps(la)
 }
 
-final class ListOps[A](val la: List[A]) extends AnyVal {
+final class ListOps[A](private val la: List[A]) extends AnyVal {
 
   /**
    * Returns an Option of NonEmptyList from a List
@@ -54,7 +54,7 @@ trait ListSyntaxBinCompat0 {
   implicit final def catsSyntaxListBinCompat0[A](la: List[A]): ListOpsBinCompat0[A] = new ListOpsBinCompat0(la)
 }
 
-final class ListOpsBinCompat0[A](val la: List[A]) extends AnyVal {
+final class ListOpsBinCompat0[A](private val la: List[A]) extends AnyVal {
 
   /**
    * Groups elements inside this `List` according to the `Order` of the keys

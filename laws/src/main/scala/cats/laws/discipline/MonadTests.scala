@@ -2,8 +2,8 @@ package cats
 package laws
 package discipline
 
-import catalysts.Platform
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.platform.Platform
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import Prop._
 

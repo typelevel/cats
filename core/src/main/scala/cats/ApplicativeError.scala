@@ -82,7 +82,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(pure)).applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => (pf.andThen(pure _)).applyOrElse(e, raiseError _))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -183,7 +183,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
 object ApplicativeError {
   def apply[F[_], E](implicit F: ApplicativeError[F, E]): ApplicativeError[F, E] = F
 
-  final private[cats] class LiftFromOptionPartially[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[cats] class LiftFromOptionPartially[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       oa match {
         case Some(a) => F.pure(a)

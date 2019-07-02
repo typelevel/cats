@@ -1,14 +1,14 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
+import kernel.compat.scalaVersionSpecific._
+import compat.lazyList.toLazyList
 
-abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]])
-    extends CatsSuite
-    with PropertyChecks {
+@suppressUnusedImportWarningForScalaVersionSpecific
+abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>
@@ -50,11 +50,11 @@ object TraverseSuite {
 }
 
 class TraverseListSuite extends TraverseSuite[List]("List")
-class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")
+class TraverseStreamSuite extends TraverseSuite[LazyList]("Stream")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
 
 class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
-class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
+class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[LazyList]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
 class TraverseSuiteAdditional extends CatsSuite {
@@ -69,7 +69,7 @@ class TraverseSuiteAdditional extends CatsSuite {
   }
 
   test("Traverse[Stream].zipWithIndex stack safety") {
-    checkZipWithIndexedStackSafety[Stream](_.toStream)
+    checkZipWithIndexedStackSafety[LazyList](toLazyList)
   }
 
   test("Traverse[Vector].zipWithIndex stack safety") {

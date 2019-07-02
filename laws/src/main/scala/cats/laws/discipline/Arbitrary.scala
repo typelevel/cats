@@ -1,7 +1,7 @@
 package cats
 package laws
 package discipline
-
+import kernel.compat.scalaVersionSpecific._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.util.{Failure, Success, Try}
@@ -13,14 +13,15 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 /**
  * Arbitrary instances for cats.data
  */
+@suppressUnusedImportWarningForScalaVersionSpecific
 object arbitrary extends ArbitraryInstances0 {
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val catsLawsCogenForThrowable: Cogen[Throwable] =
     Cogen[String].contramap(_.toString)
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForTry[A](implicit A: Cogen[A]): Cogen[Try[A]] =
     Cogen(
@@ -28,10 +29,10 @@ object arbitrary extends ArbitraryInstances0 {
         x match {
           case Success(a) => A.perturb(seed, a)
           case Failure(e) => Cogen[Throwable].perturb(seed, e)
-      }
+        }
     )
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForFunction0[A](implicit A: Cogen[A]): Cogen[Function0[A]] =
     A.contramap(_())
@@ -68,7 +69,7 @@ object arbitrary extends ArbitraryInstances0 {
     Arbitrary(implicitly[Arbitrary[List[A]]].arbitrary.map(v => new ZipList(v)))
 
   implicit def catsLawsArbitraryForZipStream[A](implicit A: Arbitrary[A]): Arbitrary[ZipStream[A]] =
-    Arbitrary(implicitly[Arbitrary[Stream[A]]].arbitrary.map(v => new ZipStream(v)))
+    Arbitrary(implicitly[Arbitrary[LazyList[A]]].arbitrary.map(v => new ZipStream(v)))
 
   implicit def catsLawsArbitraryForZipNonEmptyVector[A](implicit A: Arbitrary[A]): Arbitrary[ZipNonEmptyVector[A]] =
     Arbitrary(implicitly[Arbitrary[NonEmptyVector[A]]].arbitrary.map(nev => new ZipNonEmptyVector(nev)))
@@ -175,7 +176,7 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForWriter[L: Cogen, V: Cogen]: Cogen[Writer[L, V]] =
     Cogen[(L, V)].contramap(_.run)
 
-  // until this is provided by scalacheck
+  // until this is provided by ScalaCheck
   implicit def catsLawsArbitraryForPartialFunction[A, B](
     implicit F: Arbitrary[A => Option[B]]
   ): Arbitrary[PartialFunction[A, B]] =
@@ -208,7 +209,7 @@ object arbitrary extends ArbitraryInstances0 {
         f =>
           new Eq[A] {
             def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-        }
+          }
       )
     )
 
@@ -222,7 +223,7 @@ object arbitrary extends ArbitraryInstances0 {
           new PartialOrder[A] {
             def partialCompare(x: A, y: A): Double =
               if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-        }
+          }
       )
     )
 
@@ -235,7 +236,7 @@ object arbitrary extends ArbitraryInstances0 {
         f =>
           new Order[A] {
             def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
-        }
+          }
       )
     )
 
@@ -349,6 +350,11 @@ object arbitrary extends ArbitraryInstances0 {
   implicit def catsLawsCogenForChain[A](implicit A: Cogen[A]): Cogen[Chain[A]] =
     Cogen[List[A]].contramap(_.toList)
 
+  implicit val catsLawsCogenForMiniInt: Cogen[MiniInt] =
+    Cogen[Int].contramap(_.toInt)
+
+  implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
+    Arbitrary(Gen.oneOf(MiniInt.allValues))
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {

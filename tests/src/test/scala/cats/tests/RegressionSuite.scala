@@ -1,9 +1,12 @@
 package cats
 package tests
 
-import cats.data.{Const, NonEmptyList}
+import cats.data.{Const, NonEmptyList, StateT}
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
+import kernel.compat.scalaVersionSpecific._
+
+@suppressUnusedImportWarningForScalaVersionSpecific
 class RegressionSuite extends CatsSuite {
 
   // toy state class
@@ -112,7 +115,7 @@ class RegressionSuite extends CatsSuite {
     // shouldn't have ever evaluted validate(8)
     checkAndResetCount(3)
 
-    Stream(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
+    LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     type StringMap[A] = SortedMap[String, A]
@@ -132,7 +135,7 @@ class RegressionSuite extends CatsSuite {
     List(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    Stream(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
+    LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     Vector(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
@@ -157,4 +160,8 @@ class RegressionSuite extends CatsSuite {
 
   }
 
+  test("#2809 MonadErrorOps.reject runs effects only once") {
+    val program = StateT.modify[Either[Throwable, ?], Int](_ + 1).reject { case _ if false => new Throwable }
+    program.runS(0).toOption should ===(Some(1))
+  }
 }

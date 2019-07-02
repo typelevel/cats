@@ -7,11 +7,11 @@ import cats.data._
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq.catsLawsEqForShow
+import cats.laws.discipline.eq._
 
 class NestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
-  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
@@ -59,8 +59,8 @@ class NestedSuite extends CatsSuite {
   {
     // Invariant + Contravariant = Invariant
     val instance = Nested.catsDataInvariantForNestedContravariant(ListWrapper.invariant, Contravariant[Show])
-    checkAll("Nested[ListWrapper, Show]",
-             InvariantTests[Nested[ListWrapper, Show, ?]](instance).invariant[Int, Int, Int])
+    checkAll("Nested[ListWrapper, Show, ?]",
+             InvariantTests[Nested[ListWrapper, Show, ?]](instance).invariant[MiniInt, Int, Boolean])
     checkAll("Invariant[Nested[ListWrapper, Show, ?]]", SerializableTests.serializable(instance))
   }
 
@@ -74,7 +74,8 @@ class NestedSuite extends CatsSuite {
 
   {
     // Covariant + contravariant functor composition
-    checkAll("Nested[Option, Show, ?]", ContravariantTests[Nested[Option, Show, ?]].contravariant[Int, Int, Int])
+    checkAll("Nested[Option, Show, ?]",
+             ContravariantTests[Nested[Option, Show, ?]].contravariant[MiniInt, Int, Boolean])
     checkAll("Contravariant[Nested[Option, Show, ?]]",
              SerializableTests.serializable(Contravariant[Nested[Option, Show, ?]]))
   }
@@ -115,7 +116,8 @@ class NestedSuite extends CatsSuite {
 
   {
     // Contravariant + Functor = Contravariant
-    checkAll("Nested[Show, Option, ?]", ContravariantTests[Nested[Show, Option, ?]].contravariant[Int, Int, Int])
+    checkAll("Nested[Show, Option, ?]",
+             ContravariantTests[Nested[Show, Option, ?]].contravariant[MiniInt, Int, Boolean])
     checkAll("Contravariant[Nested[Show, Option, ?]]",
              SerializableTests.serializable(Contravariant[Nested[Show, Option, ?]]))
   }
@@ -155,7 +157,7 @@ class NestedSuite extends CatsSuite {
   }
 
   {
-    //ApplicativeError composition
+    // ApplicativeError composition
     implicit val instance = ListWrapper.applicative
 
     checkAll(
@@ -203,7 +205,7 @@ class NestedSuite extends CatsSuite {
   }
 
   {
-    //NonEmptyTraverse composition
+    // NonEmptyTraverse composition
     checkAll(
       "Nested[NonEmptyList, NonEmptyVector, ?]",
       NonEmptyTraverseTests[Nested[NonEmptyList, NonEmptyVector, ?]]
@@ -231,9 +233,11 @@ class NestedSuite extends CatsSuite {
 
   {
     import cats.laws.discipline.eq._
-    //Distributive composition
-    checkAll("Nested[Function1[Int, ?], Function0, ?]",
-             DistributiveTests[Nested[Function1[Int, ?], Function0, ?]].distributive[Int, Int, Int, Option, Function0])
+    // Distributive composition
+    checkAll(
+      "Nested[Function1[MiniInt, ?], Function0, ?]",
+      DistributiveTests[Nested[Function1[MiniInt, ?], Function0, ?]].distributive[Int, Int, Int, Option, Function0]
+    )
     checkAll("Distributive[Nested[Function1[Int,?], Function0, ?]]",
              SerializableTests.serializable(Distributive[Nested[Function1[Int, ?], Function0, ?]]))
   }

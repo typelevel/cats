@@ -16,7 +16,7 @@ class OptionTSuite extends CatsSuite {
   checkAll("OptionT[Eval, ?]", FunctorFilterTests[OptionT[Eval, ?]].functorFilter[Int, Int, Int])
 
   {
-    //If a Functor for F is defined
+    // if a Functor for F is defined
     implicit val F = ListWrapper.functor
 
     checkAll("OptionT[ListWrapper, ?]", FunctorFilterTests[OptionT[ListWrapper, ?]].functorFilter[Int, Int, Int])
@@ -26,7 +26,7 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
-    //If a Traverse for F is defined
+    // if a Traverse for F is defined
     implicit val F = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, ?]", TraverseFilterTests[OptionT[ListWrapper, ?]].traverseFilter[Int, Int, Int])
@@ -85,7 +85,7 @@ class OptionTSuite extends CatsSuite {
     Contravariant[Show]
     Contravariant[OptionT[Show, ?]]
 
-    checkAll("OptionT[Show, ?]", ContravariantTests[OptionT[Show, ?]].contravariant[Int, Int, Int])
+    checkAll("OptionT[Show, ?]", ContravariantTests[OptionT[Show, ?]].contravariant[MiniInt, Int, Boolean])
     checkAll("Contravariant[OptionT[Show, ?]]", SerializableTests.serializable(Contravariant[OptionT[Show, ?]]))
   }
 
@@ -183,6 +183,12 @@ class OptionTSuite extends CatsSuite {
     implicit val F = ListWrapper.monad
     checkAll("OptionT[ListWrapper, Int]", MonadErrorTests[OptionT[ListWrapper, ?], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[OptionT[List, ?]]", SerializableTests.serializable(MonadError[OptionT[ListWrapper, ?], Unit]))
+  }
+
+  test("MonadError[OptionT[F, ?], E] instance has higher priority than MonadError[OptionT[F, ?], Unit]") {
+
+    def shouldCompile[F[_]: MonadError[?[_], E], E](x: OptionT[F, Int], e: E): OptionT[F, Int] =
+      x.ensure(e)(_ => true)
   }
 
   test("fold and cata consistent") {

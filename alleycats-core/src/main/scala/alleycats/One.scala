@@ -1,8 +1,7 @@
 package alleycats
 
-import cats.{Eq, Monoid}
+import cats.Eq
 import cats.syntax.eq._
-import export.imports
 import simulacrum.typeclass
 
 @typeclass trait One[A] {
@@ -15,10 +14,7 @@ import simulacrum.typeclass
     one =!= a
 }
 
-object One extends One0 {
+object One {
   def apply[A](a: => A): One[A] =
     new One[A] { lazy val one: A = a }
 }
-
-@imports[One]
-trait One0

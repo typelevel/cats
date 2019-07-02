@@ -47,7 +47,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     flatMap(a => OptionT.liftF(f(a)))
 
   def mapFilter[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
-    OptionT(F.map(value)(_.flatMap(f)))
+    subflatMap(f)
 
   def flatMap[B](f: A => OptionT[F, B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMapF(a => f(a).value)
@@ -156,7 +156,7 @@ object OptionT extends OptionTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class PurePartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class PurePartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: A)(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(Some(value)))
   }
@@ -201,7 +201,7 @@ object OptionT extends OptionTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
       OptionT(F.pure(value))
   }
@@ -270,8 +270,15 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
-  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
-    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
+  // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
+  // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
+  implicit def catsDataMonadErrorForOptionT[F[_], E](
+    implicit F0: MonadError[F, E]
+  ): MonadError[OptionT[F, ?], E] { type Dummy } =
+    new OptionTMonadError[F, E] {
+      type Dummy
+      implicit val F = F0
+    }
 
   implicit def catsDataDecideableForOptionT[F[_]](implicit F0: Decideable[F]): Decideable[OptionT[F, ?]] =
     new OptionTDecideable[F] { implicit val F = F0 }
@@ -301,14 +308,13 @@ sealed abstract private[data] class OptionTInstances1 extends OptionTInstances2 
   implicit def catsDataEqForOptionT[F[_], A](implicit F0: Eq[F[Option[A]]]): Eq[OptionT[F, A]] =
     new OptionTEq[F, A] { implicit val F = F0 }
 
-  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit F0: MonadError[F, E]): MonadError[OptionT[F, ?], E] =
-    new OptionTMonadError[F, E] { implicit val F = F0 }
+  implicit def catsDataMonadErrorMonadForOptionT[F[_]](implicit F0: Monad[F]): MonadError[OptionT[F, ?], Unit] =
+    new OptionTMonadErrorMonad[F] { implicit val F = F0 }
 
   implicit def catsDataContravariantMonoidalForOptionT[F[_]](
     implicit F0: ContravariantMonoidal[F]
   ): ContravariantMonoidal[OptionT[F, ?]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
-
 }
 
 sealed abstract private[data] class OptionTInstances2 extends OptionTInstances3 {
@@ -359,7 +365,7 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, ?]] {
         a0 =>
           F.map(f(a0).value)(
             _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
-        )
+          )
       )
     )
 }
@@ -417,7 +423,7 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
           t match {
             case Some((x, y)) => (Some(x), Some(y))
             case None         => (None, None)
-        }
+          }
       )
     )
 }

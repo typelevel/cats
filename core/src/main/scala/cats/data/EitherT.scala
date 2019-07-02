@@ -15,6 +15,8 @@ import cats.syntax.either._
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 
+  def foldF[C](fa: A => F[C], fb: B => F[C])(implicit F: FlatMap[F]): F[C] = F.flatMap(value)(_.fold(fa, fb))
+
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
   def isRight(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isRight)
@@ -29,7 +31,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Right(b) => F.pure(b)
     }
 
-  def orElse[AA, BB >: B](default: => EitherT[F, AA, BB])(implicit F: Monad[F]): EitherT[F, AA, BB] =
+  def orElse[C, BB >: B](default: => EitherT[F, C, BB])(implicit F: Monad[F]): EitherT[F, C, BB] =
     EitherT(F.flatMap(value) {
       case Left(_)      => default.value
       case r @ Right(_) => F.pure(r.leftCast)
@@ -43,6 +45,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Left(a) if pf.isDefinedAt(a) => pf(a).value
       case other                        => F.pure(other)
     })
+
+  /**
+   * Inverse of `MonadError#attemptT`
+   */
+  def rethrowT(implicit F: MonadError[F, A]): F[B] =
+    F.rethrow(value)
 
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
@@ -77,8 +85,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
                                                          applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
 
-  def biFlatMap[AA >: A, BB >: B](fa: A => EitherT[F, AA, BB],
-                                  fb: B => EitherT[F, AA, BB])(implicit F: FlatMap[F]): EitherT[F, AA, BB] =
+  def biflatMap[C, D](fa: A => EitherT[F, C, D], fb: B => EitherT[F, C, D])(implicit F: FlatMap[F]): EitherT[F, C, D] =
     EitherT(F.flatMap(value) {
       case Left(a)  => fa(a).value
       case Right(a) => fb(a).value
@@ -114,7 +121,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   def leftMap[C](f: A => C)(implicit F: Functor[F]): EitherT[F, C, B] = bimap(f, identity)
 
-  def leftFlatMap[BB >: B, D](f: A => EitherT[F, D, BB])(implicit F: Monad[F]): EitherT[F, D, BB] =
+  def leftFlatMap[BB >: B, C](f: A => EitherT[F, C, BB])(implicit F: Monad[F]): EitherT[F, C, BB] =
     EitherT(F.flatMap(value) {
       case Left(a)      => f(a).value
       case r @ Right(_) => F.pure(r.leftCast)
@@ -240,7 +247,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * res0: EitherT[Option, NonEmptyList[Error], Int] = EitherT(Some(Left(NonEmptyList(error 1, error 2, error 3))))
    * }}}
    */
-  def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB])(implicit F: Functor[F]): EitherT[F, AA, BB] =
+  def withValidated[C, D](f: Validated[A, B] => Validated[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(either => f(either.toValidated).toEither))
 
   def show(implicit show: Show[F[Either[A, B]]]): String = show.show(value)
@@ -306,7 +313,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class LeftPartiallyApplied[B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
   }
 
@@ -324,7 +331,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class LeftTPartiallyApplied[F[_], B](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class LeftTPartiallyApplied[F[_], B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
   }
 
@@ -342,7 +349,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class RightPartiallyApplied[A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class RightPartiallyApplied[A](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
   }
 
@@ -360,7 +367,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class PurePartiallyApplied[F[_], A](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class PurePartiallyApplied[F[_], A](private val dummy: Boolean = true) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): EitherT[F, A, B] = right(F.pure(b))
   }
 
@@ -435,7 +442,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromEitherPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromEitherPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(either))
   }
@@ -456,7 +463,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class FromOptionPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](opt: Option[A], ifNone: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.fromOption(opt, ifNone)))
   }
@@ -494,7 +501,7 @@ object EitherT extends EitherTInstances {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  final private[data] class CondPartiallyApplied[F[_]](val dummy: Boolean = true) extends AnyVal {
+  final private[data] class CondPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](test: Boolean, right: => A, left: => E)(implicit F: Applicative[F]): EitherT[F, E, A] =
       EitherT(F.pure(Either.cond(test, right, left)))
   }
@@ -639,7 +646,7 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, ?]] with E
             case Left(l)         => Right(Left(l))
             case Right(Left(a1)) => Left(a1)
             case Right(Right(b)) => Right(Right(b))
-        }
+          }
       )
     )
 }

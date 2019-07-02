@@ -84,6 +84,10 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def unorderedFold[A](fa: Map[K, A])(implicit A: CommutativeMonoid[A]): A =
         A.combineAll(fa.values)
 
+      override def forall[A](fa: Map[K, A])(p: A => Boolean): Boolean = fa.forall(pair => p(pair._2))
+
+      override def exists[A](fa: Map[K, A])(p: A => Boolean): Boolean = fa.exists(pair => p(pair._2))
+
     }
   // scalastyle:on method.length
 
@@ -133,4 +137,12 @@ trait MapInstancesBinCompat0 {
 
     }
 
+}
+
+trait MapInstancesBinCompat1 {
+  implicit def catsStdMonoidKForMap[K]: MonoidK[Map[K, ?]] = new MonoidK[Map[K, ?]] {
+    override def empty[A]: Map[K, A] = Map.empty
+
+    override def combineK[A](x: Map[K, A], y: Map[K, A]): Map[K, A] = x ++ y
+  }
 }

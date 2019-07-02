@@ -5,8 +5,8 @@ import scala.collection.immutable.SortedSet
 import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
 import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
-import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
+import cats.instances.{AllInstances, AllInstancesBinCompat0, AllInstancesBinCompat1, AllInstancesBinCompat2}
+import cats.syntax.AllSyntaxBinCompat
 
 /**
  * Test that our syntax implicits are working.
@@ -26,7 +26,12 @@ import cats.syntax.{AllSyntax, AllSyntaxBinCompat}
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
+object SyntaxSuite
+    extends AllSyntaxBinCompat
+    with AllInstances
+    with AllInstancesBinCompat0
+    with AllInstancesBinCompat1
+    with AllInstancesBinCompat2 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -178,6 +183,9 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     val mb2: M[B] = ma &> mb
     val ma2: M[A] = ma <& mb
+
+    val mab = mock[M[A => B]]
+    val mb3: M[B] = mab <&> ma
   }
 
   def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
@@ -198,6 +206,20 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     tfabc.parMapN(f)
     (fa, fb, fc).parMapN(f)
+  }
+
+  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel[M, F]): Unit = {
+    val tab = mock[T[A, B]]
+    val f = mock[A => M[C]]
+    val g = mock[B => M[D]]
+    val mtcd = tab.parBitraverse(f, g)
+    val mtcb = tab.parLeftTraverse(f)
+
+    val tmamb = mock[T[M[A], M[B]]]
+    val mtab1 = tmamb.parBisequence
+
+    val tmab = mock[T[M[A], B]]
+    val mtab2 = tmab.parLeftSequence
   }
 
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
@@ -299,9 +321,13 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
 
     val fab = mock[F[A, B]]
     val gfcd = fab.bitraverse(f, g)
+    val gfcb = fab.leftTraverse(f)
 
     val fgagb = mock[F[G[A], G[B]]]
     val gfab = fgagb.bisequence
+
+    val fgab = mock[F[G[A], B]]
+    val gfab2 = fgab.leftSequence
   }
 
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
@@ -387,4 +413,9 @@ object SyntaxSuite extends AllSyntaxBinCompat with AllInstances with AllSyntax {
     val grouped: SortedMap[B, NonEmptyChain[A]] = list.groupByNec(f)
   }
 
+  def testSequenceFilter[A, B]: Unit = {
+    val f = mock[List[Either[A, Option[B]]]]
+
+    val result: Either[A, List[B]] = f.sequenceFilter
+  }
 }

@@ -14,9 +14,11 @@ class OrderingSuite extends CatsSuite {
   ContravariantMonoidal[Ordering]
   Decideable[Ordering]
 
-  checkAll("Contravariant[Ordering]", ContravariantTests[Ordering].contravariant[Int, Int, Int])
-  checkAll("Semigroupal[Ordering]", SemigroupalTests[Ordering].semigroupal[Int, Int, Int])
-  checkAll("ContravariantMonoidal[Ordering]", ContravariantMonoidalTests[Ordering].contravariantMonoidal[Int, Int, Int])
-  checkAll("Decideable[Ordering]", DecideableTests[Ordering].decideable[Int, Int, Int])
-  checkAll("ContravariantMonoidal[Ordering]", SerializableTests.serializable(Decideable[Ordering]))
+
+  checkAll("Contravariant[Ordering]", ContravariantTests[Ordering].contravariant[MiniInt, Int, Boolean])
+  checkAll("Semigroupal[Ordering]", SemigroupalTests[Ordering].semigroupal[MiniInt, Boolean, Boolean])
+  checkAll("ContravariantMonoidal[Ordering]",
+           ContravariantMonoidalTests[Ordering].contravariantMonoidal[MiniInt, Boolean, Boolean])
+  checkAll("Decideable[Ordering]", DecideableTests[Ordering].decideable[MiniInt, Boolean, Boolean])
+  checkAll("Decideable[Ordering]", SerializableTests.serializable(Decideable[Ordering]))
 }

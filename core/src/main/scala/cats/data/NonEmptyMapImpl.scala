@@ -85,13 +85,22 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
    * Applies f to all the elements
    */
-  def map[B](f: A ⇒ B): NonEmptyMap[K, B] =
+  def map[B](f: A => B): NonEmptyMap[K, B] =
     NonEmptyMapImpl.create(Functor[SortedMap[K, ?]].map(toSortedMap)(f))
 
   /**
    * Optionally returns the value associated with the given key.
    */
   def lookup(k: K): Option[A] = toSortedMap.get(k)
+
+  /**
+   * Applies f to the value stored at k. If lookup misses, does nothing.
+   */
+  def updateWith(k: K)(f: A => A): NonEmptyMap[K, A] =
+    lookup(k) match {
+      case Some(v) => add((k, f(v)))
+      case None    => value
+    }
 
   /**
    * Returns a `SortedSet` containing all the keys of this map.
@@ -126,27 +135,27 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
    * Tests whether a predicate holds for all elements of this map.
    */
-  def forall(p: A ⇒ Boolean): Boolean = toSortedMap.forall { case (_, a) => p(a) }
+  def forall(p: A => Boolean): Boolean = toSortedMap.forall { case (_, a) => p(a) }
 
   /**
    * Tests whether a predicate holds for at least one element of this map.
    */
-  def exists(f: A ⇒ Boolean): Boolean = toSortedMap.exists { case (_, a) => f(a) }
+  def exists(f: A => Boolean): Boolean = toSortedMap.exists { case (_, a) => f(a) }
 
   /**
    * Returns the first value along with its key, that matches the given predicate.
    */
-  def find(f: A ⇒ Boolean): Option[(K, A)] = toSortedMap.find { case (_, a) => f(a) }
+  def find(f: A => Boolean): Option[(K, A)] = toSortedMap.find { case (_, a) => f(a) }
 
   /**
    * Filters all elements of this map that do not satisfy the given predicate.
    */
-  def filter(p: A ⇒ Boolean): SortedMap[K, A] = toSortedMap.filter { case (_, a) => p(a) }
+  def filter(p: A => Boolean): SortedMap[K, A] = toSortedMap.filter { case (_, a) => p(a) }
 
   /**
    * Filters all elements of this map that satisfy the given predicate.
    */
-  def filterNot(p: A ⇒ Boolean): SortedMap[K, A] = filter(t => !p(t))
+  def filterNot(p: A => Boolean): SortedMap[K, A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.

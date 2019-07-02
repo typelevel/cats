@@ -72,7 +72,7 @@ class CofreeSuite extends CatsSuite {
           } else {
             spooky.increment()
             Some(spooky.counter)
-        }
+          }
       )
     spooky.counter should ===(0)
     incrementor.forceAll
@@ -163,7 +163,7 @@ sealed trait CofreeSuiteInstances {
           (l.head, l.tail) match {
             case (h, Nil) => nelToCofNel(NonEmptyList(h, Nil))
             case (h, t)   => nelToCofNel(NonEmptyList(h, t))
-        }
+          }
       )
     }
   }

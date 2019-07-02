@@ -25,7 +25,9 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
       "unorderedFold consistent with unorderedFoldMap" -> forAll(laws.unorderedFoldConsistentWithUnorderedFoldMap[A] _),
       "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
-      "nonEmpty reference" -> forAll(laws.nonEmptyRef[A] _)
+      "nonEmpty reference" -> forAll(laws.nonEmptyRef[A] _),
+      "exists is lazy" -> forAll(laws.existsLazy[A] _),
+      "forall is lazy" -> forAll(laws.forallLazy[A] _)
     )
 }
 
