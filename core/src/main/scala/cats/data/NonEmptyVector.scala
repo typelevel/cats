@@ -5,6 +5,7 @@ import cats.data.NonEmptyVector.ZipNonEmptyVector
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
 import cats.instances.vector._
+import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -197,7 +198,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
     val buf = Vector.newBuilder[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+      if (elementsSoFar(a)) elementsSoFar
+      else {
+        buf += a; elementsSoFar + a
+      }
     }
 
     NonEmptyVector(head, buf.result())
@@ -215,7 +219,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
    * }}}
    */
   def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
-    NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
+    NonEmptyVector.fromVectorUnsafe(toVector.lazyZip(b.toVector).map(f))
 
   def reverse: NonEmptyVector[A] =
     new NonEmptyVector(toVector.reverse)
@@ -230,6 +234,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     new NonEmptyVector(toVector.sorted(AA.toOrdering))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
@@ -315,7 +320,7 @@ sealed abstract private[data] class NonEmptyVectorInstances {
               case (Right(c), _)           => ior.map(_ :+ c)
               case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
               case (Left(b), _)            => ior.leftMap(_ :+ b)
-          }
+            }
         ).bimap(_.toNonEmptyList, _.toNonEmptyList)
 
       }

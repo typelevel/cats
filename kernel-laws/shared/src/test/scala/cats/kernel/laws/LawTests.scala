@@ -14,10 +14,11 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue}
 import scala.util.Random
-
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
@@ -63,12 +64,12 @@ object KernelCheck {
     )
   }
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
     Cogen[Long].contramap(_.toLong)
 
-  // this instance is not available in scalacheck 1.13.2.
+  // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigDecimal: Cogen[BigDecimal] =
     Cogen[Double].contramap(_.toDouble)
@@ -114,7 +115,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
 
   import KernelCheck._
 
-  // The scalacheck defaults (100,100) are too high for scala-js.
+  // The ScalaCheck defaults (100,100) are too high for Scala.js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
   final val PropWorkers: PosInt = if (Platform.isJvm) PosInt(2) else PosInt(1)
@@ -131,7 +132,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Eq[List[HasEq[Int]]]", EqTests[List[HasEq[Int]]].eqv)
   checkAll("Eq[Option[HasEq[Int]]]", EqTests[Option[HasEq[Int]]].eqv)
   checkAll("Eq[Vector[HasEq[Int]]]", EqTests[Vector[HasEq[Int]]].eqv)
-  checkAll("Eq[Stream[HasEq[Int]]]", EqTests[Stream[HasEq[Int]]].eqv)
+  checkAll("Eq[Stream[HasEq[Int]]]", EqTests[LazyList[HasEq[Int]]].eqv)
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
@@ -144,7 +145,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
-  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[LazyList[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
            PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
@@ -169,12 +170,36 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
   checkAll("Order[List[String]", OrderTests[List[String]].order)
   checkAll("Order[Vector[Int]]", OrderTests[Vector[Int]].order)
-  checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
+  checkAll("Order[Stream[Int]]", OrderTests[LazyList[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
+
+  checkAll("LowerBounded[Unit]", LowerBoundedTests[Unit].lowerBounded)
+  checkAll("LowerBounded[Boolean]", LowerBoundedTests[Boolean].lowerBounded)
+  checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
+  checkAll("LowerBounded[Short]", LowerBoundedTests[Short].lowerBounded)
+  checkAll("LowerBounded[Char]", LowerBoundedTests[Char].lowerBounded)
+  checkAll("LowerBounded[Int]", LowerBoundedTests[Int].lowerBounded)
+  checkAll("LowerBounded[Long]", LowerBoundedTests[Long].lowerBounded)
+  checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
+  checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
+  checkAll("LowerBounded[UUID]", LowerBoundedTests[UUID].lowerBounded)
+  checkAll("LowerBounded[String]", LowerBoundedTests[String].lowerBounded)
+  checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
+
+  checkAll("UpperBounded[Unit]", UpperBoundedTests[Unit].upperBounded)
+  checkAll("UpperBounded[Boolean]", UpperBoundedTests[Boolean].upperBounded)
+  checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
+  checkAll("UpperBounded[Short]", UpperBoundedTests[Short].upperBounded)
+  checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
+  checkAll("UpperBounded[Int]", UpperBoundedTests[Int].upperBounded)
+  checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
+  checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
+  checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
+  checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
@@ -186,8 +211,8 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Monoid[List[Int]]", SerializableTests.serializable(Monoid[List[Int]]))
   checkAll("Monoid[Vector[Int]]", MonoidTests[Vector[Int]].monoid)
   checkAll("Monoid[Vector[Int]]", SerializableTests.serializable(Monoid[Vector[Int]]))
-  checkAll("Monoid[Stream[Int]]", MonoidTests[Stream[Int]].monoid)
-  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
+  checkAll("Monoid[Stream[Int]]", MonoidTests[LazyList[Int]].monoid)
+  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[LazyList[Int]]))
   checkAll("Monoid[List[String]]", MonoidTests[List[String]].monoid)
   checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
   checkAll("Monoid[Map[String, String]]", MonoidTests[Map[String, String]].monoid)
@@ -245,7 +270,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Hash[Option[String]]", HashTests[Option[String]].hash)
   checkAll("Hash[List[String]]", HashTests[List[String]].hash)
   checkAll("Hash[Vector[Int]]", HashTests[Vector[Int]].hash)
-  checkAll("Hash[Stream[Int]]", HashTests[Stream[Int]].hash)
+  checkAll("Hash[Stream[Int]]", HashTests[LazyList[Int]].hash)
   checkAll("Hash[Set[Int]]", HashTests[Set[Int]].hash)
   checkAll("Hash[(Int, String)]", HashTests[(Int, String)].hash)
   checkAll("Hash[Either[Int, String]]", HashTests[Either[Int, String]].hash)
@@ -319,19 +344,19 @@ class Tests extends AnyFunSuiteLike with Discipline {
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
-  test("signum . toInt . comparison = signum . compare") {
+  test("sign . toInt . comparison = sign . compare") {
     check { (i: Int, j: Int) =>
       val found = Order[Int].comparison(i, j)
       val expected = Order[Int].compare(i, j)
-      Eq[Int].eqv(found.toInt.signum, expected.signum)
+      Eq[Int].eqv(found.toInt.sign, expected.sign)
     }
   }
 
-  test("signum . toDouble . partialComparison = signum . partialCompare") {
+  test("sign . toDouble . partialComparison = sign . partialCompare") {
     check { (x: Set[Int], y: Set[Int]) =>
-      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.signum)
-      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.signum)
-      Eq[Option[Int]].eqv(found, expected)
+      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.sign)
+      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.sign)
+      Eq[Option[Double]].eqv(found, expected)
     }
   }
 

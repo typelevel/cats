@@ -31,7 +31,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a Functor for F is defined
+    // if a Functor for F is defined
     implicit val F = ListWrapper.functor
 
     checkAll("EitherT[ListWrapper, ?, ?]",
@@ -44,7 +44,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a Traverse for F is defined
+    // if a Traverse for F is defined
     implicit val F = ListWrapper.traverse
 
     checkAll("EitherT[ListWrapper, Int, ?]",
@@ -59,7 +59,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
 
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
@@ -95,7 +95,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
     implicit val F = ListWrapper.monad
 
     Functor[EitherT[ListWrapper, String, ?]]
@@ -108,7 +108,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a foldable is defined
+    // if a foldable is defined
     implicit val F = ListWrapper.foldable
 
     checkAll("EitherT[ListWrapper, Int, ?]", FoldableTests[EitherT[ListWrapper, Int, ?]].foldable[Int, Int])
@@ -445,7 +445,7 @@ class EitherTSuite extends CatsSuite {
 
   test("toEither consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      x.value.map(_.right.toOption) should ===(x.toOption.value)
+      x.value.map(_.toOption) should ===(x.toOption.value)
     }
   }
 

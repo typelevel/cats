@@ -3,23 +3,23 @@ package laws
 package discipline
 
 /**
- * An `ExhuastiveCheck[A]` instance can be used similarly to a Scalacheck
+ * An `ExhuastiveCheck[A]` instance can be used similarly to a ScalaCheck
  * `Gen[A]` instance, but differs in that it generates a `Stream` of the entire
  * domain of values as opposed to generating a random sampling of values.
  */
 trait ExhaustiveCheck[A] extends Serializable { self =>
-  def allValues: Stream[A]
+  def allValues: List[A]
 }
 
 object ExhaustiveCheck {
   def apply[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[A] = A
 
-  def instance[A](values: Stream[A]): ExhaustiveCheck[A] = new ExhaustiveCheck[A] {
-    val allValues: Stream[A] = values
+  def instance[A](values: List[A]): ExhaustiveCheck[A] = new ExhaustiveCheck[A] {
+    val allValues: List[A] = values
   }
 
   implicit val catsLawsExhaustiveCheckForBoolean: ExhaustiveCheck[Boolean] =
-    instance(Stream(false, true))
+    instance(List(false, true))
 
   implicit val catsLawsExhaustiveCheckForSetBoolean: ExhaustiveCheck[Set[Boolean]] =
     forSet[Boolean]
@@ -50,7 +50,7 @@ object ExhaustiveCheck {
     instance(A.allValues.map(Left(_)) ++ B.allValues.map(Right(_)))
 
   implicit def catsLawsExhaustiveCheckForOption[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Option[A]] =
-    instance(Stream.cons(None, A.allValues.map(Some(_))))
+    instance(None :: A.allValues.map(Some(_)))
 
   /**
    * Creates an `ExhaustiveCheck[Set[A]]` given an `ExhaustiveCheck[A]` by computing the powerset of
@@ -58,5 +58,5 @@ object ExhaustiveCheck {
    * in the domain of `Set[A]`, so use this only on small domains.
    */
   def forSet[A](implicit A: ExhaustiveCheck[A]): ExhaustiveCheck[Set[A]] =
-    instance(A.allValues.toSet.subsets.toStream)
+    instance(A.allValues.toSet.subsets.toList)
 }

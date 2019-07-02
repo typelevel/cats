@@ -7,7 +7,7 @@ scaladoc: "#cats.Parallel"
 ---
 # Parallel
 
-When browsing the various `Monads` included in cats,
+When browsing the various `Monads` included in Cats,
 you may have noticed that some of them have data types that are actually of the same structure,
 but instead have instances of `Applicative`. E.g. `Either` and `Validated`.
 
@@ -60,7 +60,7 @@ def parsePerson(ageString: String, nameString: String) =
 We had to convert to and from `Validated` manually.
 While this is still manageble, it get's worse the more `Eithers` we want to combine in parallel.
 
-To mitigate this pain, cats introduces a type class `Parallel` that abstracts over `Monads` which also support parallel composition.
+To mitigate this pain, Cats introduces a type class `Parallel` that abstracts over `Monads` which also support parallel composition.
 It is simply defined in terms of conversion functions between the two data types:
 
 ```scala
@@ -86,7 +86,7 @@ def parsePerson(ageString: String, nameString: String) =
 We can also traverse over a `Traverse` using `Parallel`:
 
 ```tut
-List(Either.left(42), Either.right(NonEmptyList.one("Error 1")), Either.right(NonEmptyList.one("Error 2"))).parSequence
+List(Either.right(42), Either.left(NonEmptyList.one("Error 1")), Either.left(NonEmptyList.one("Error 2"))).parSequence
 ```
 
 

@@ -5,6 +5,7 @@ import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
 import cats.implicits._
+import compat.lazyList._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -32,7 +33,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: SortedSet[A]): Long = fa.size.toLong
@@ -63,7 +64,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
     def show(fa: SortedSet[A]): String =
-      fa.toIterator.map(_.show).mkString("SortedSet(", ", ", ")")
+      fa.iterator.map(_.show).mkString("SortedSet(", ", ", ")")
   }
 
   implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
@@ -78,16 +79,27 @@ trait SortedSetInstances1 {
     new SortedSetSemilattice[A]
 }
 
+trait SortedSetInstancesBinCompat0 {
+  implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
+    override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
+      implicit val orderingA = fa.ordering
+      implicit val orderingB = fb.ordering
+
+      fa.flatMap(a => fb.map(b => a -> b))
+    }
+  }
+}
+
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     Order[Int].compare(a1.size, a2.size) match {
-      case 0 => Order.compare(a1.toStream, a2.toStream)
+      case 0 => Order.compare(toLazyList(a1), toLazyList(a2))
       case x => x
     }
 
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
-    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
+    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
   }
 }
 
@@ -114,7 +126,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
   }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
     implicit val x = Order[A].toOrdering
-    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
+    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
   }
 }
 

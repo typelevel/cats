@@ -1,8 +1,15 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.Contravariant
+import cats.kernel.laws.discipline.{
+  EqTests,
+  LowerBoundedTests,
+  MonoidTests,
+  OrderTests,
+  PartialOrderTests,
+  SemigroupTests,
+  UpperBoundedTests
+}
 import cats.data.{Const, NonEmptyList}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -47,6 +54,8 @@ class ConstSuite extends CatsSuite {
   checkAll("Const[Map[Int, Int], String]", EqTests[Const[Map[Int, Int], String]].eqv)
   checkAll("PartialOrder[Const[Set[Int], String]]", PartialOrderTests[Const[Set[Int], String]].partialOrder)
   checkAll("Order[Const[Int, String]]", OrderTests[Const[Int, String]].order)
+  checkAll("LowerBounded[Const[Int, String]]", LowerBoundedTests[Const[Int, String]].lowerBounded)
+  checkAll("UpperBounded[Const[Int, String]]", UpperBoundedTests[Const[Int, String]].upperBounded)
 
   {
     implicitly[Invariant[Const[String, ?]]]

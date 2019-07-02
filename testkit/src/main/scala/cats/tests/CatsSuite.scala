@@ -6,9 +6,9 @@ import cats.platform.Platform
 import cats.syntax._
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatest.check.ScalaCheckPropertyChecks
 import org.scalatest.Matchers
 import org.scalatest.prop.Configuration
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
 
 trait TestSettings extends Configuration with Matchers {
@@ -34,7 +34,7 @@ trait TestSettings extends Configuration with Matchers {
 trait CatsSuite
     extends AnyFunSuiteLike
     with Matchers
-    with ScalaCheckPropertyChecks
+    with ScalaCheckDrivenPropertyChecks
     with Discipline
     with TestSettings
     with AllInstances
@@ -43,6 +43,7 @@ trait CatsSuite
     with AllInstancesBinCompat2
     with AllInstancesBinCompat3
     with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
     with AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1

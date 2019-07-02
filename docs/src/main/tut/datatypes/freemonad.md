@@ -21,11 +21,11 @@ In particular, *free monads* provide a practical way to:
  - build an embedded DSL (domain-specific language)
  - retarget a computation to another interpreter using natural transformations
 
-> (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
+> (In Cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
 
-If you'd like to use cats' free monad, you'll need to add a library dependency
+If you'd like to use Cats' free monad, you'll need to add a library dependency
 for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
@@ -504,7 +504,7 @@ In the following example a basic console application is shown.
 When the user inputs some text we use a separate `State` monad to track what the user
 typed.
 
-As we can observe in this case `FreeT` offers us a the alternative to delegate denotations to `State`
+As we can observe in this case `FreeT` offers us the alternative to delegate denotations to `State`
 monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
 
 ```tut:book
@@ -558,6 +558,66 @@ import TeletypeOps._
 val state = program.foldMap(interpreter)
 val initialState = Nil
 val (stored, _) = state.run(initialState).value
+```
+
+Another example is more basic usage of `FreeT` with some context `Ctx` for which we provide `Try` interpreter,
+combined with `OptionT` for reducing boilerplate.
+
+```tut:book
+import cats.free._
+import cats._
+import cats.data._
+import cats.implicits._
+import scala.util.Try
+
+sealed trait Ctx[A]
+
+case class Action(value: Int) extends Ctx[Int]
+
+def op1: FreeT[Ctx, Option, Int] =
+  FreeT.liftF[Ctx, Option, Int](Action(7))
+
+def op2: FreeT[Ctx, Option, Int] =
+  FreeT.liftT[Ctx, Option, Int](Some(4))
+
+def op3: FreeT[Ctx, Option, Int] =
+  FreeT.pure[Ctx, Option, Int](1)
+
+val opComplete: FreeT[Ctx, Option, Int] =
+  for {
+    a <- op1
+    b <- op2
+    c <- op3
+  } yield a + b + c
+
+
+/*  Our interpreters  */
+
+type OptTry[A] = OptionT[Try, A]
+
+def tryInterpreter: Ctx ~> OptTry = new (Ctx ~> OptTry) {
+  def apply[A](fa: Ctx[A]): OptTry[A] = {
+    fa match {
+      case Action(value) =>
+        OptionT.liftF(Try(value))
+    }
+  }
+}
+
+def optTryLift: Option ~> OptTry = new (Option ~> OptTry) {
+  def apply[A](fa: Option[A]): OptTry[A] = {
+    fa match {
+      case Some(value) =>
+        OptionT(Try(Option(value)))
+      case None =>
+        OptionT.none
+    }
+  }
+}
+
+val hoisted = opComplete.hoist(optTryLift)
+val evaluated = hoisted.foldMap(tryInterpreter)
+val result = evaluated.value
 ```
 
 ## Future Work (TODO)

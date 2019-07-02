@@ -199,7 +199,7 @@ import simulacrum.typeclass
             case (Right(c), _)           => ior.map(c :: _)
             case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
             case (Left(b), _)            => ior.leftMap(b :: _)
-        }
+          }
       )
 
     reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value

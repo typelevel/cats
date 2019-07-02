@@ -44,7 +44,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[MiniInt, Int]", SemigroupalTests[Function1[MiniInt, ?]].semigroupal[Int, Int, Int])
 
   // TODO: make an binary compatible way to do this
-  //checkAll("Function1[Int => ?]", DeferTests[Function1[Int, ?]].defer[Int])
+  // checkAll("Function1[Int => ?]", DeferTests[Function1[Int, ?]].defer[Int])
 
   checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
 

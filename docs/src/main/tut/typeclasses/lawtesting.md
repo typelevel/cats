@@ -135,7 +135,7 @@ And voila, you've successfully proven that your data type upholds the Functor la
 
 ### Testing cats.kernel instances
 
-For most of the type classes included in cats, the above will work great.
+For most of the type classes included in Cats, the above will work great.
 However, the law tests for the type classes inside `cats.kernel` are located in `cats.kernel.laws.discipline.*` instead.
 So we have to import from there to test type classes like `Semigroup`, `Monoid`, `Group` or `Semilattice`.
 

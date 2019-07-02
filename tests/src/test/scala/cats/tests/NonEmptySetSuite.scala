@@ -20,16 +20,35 @@ package tests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data.NonEmptySet
-import cats.kernel.laws.discipline.{EqTests, SemilatticeTests}
+import cats.kernel.Semilattice
+import cats.kernel.laws.discipline.{EqTests, OrderTests, SemilatticeTests}
 
 import scala.collection.immutable.SortedSet
 
 class NonEmptySetSuite extends CatsSuite {
 
   checkAll("NonEmptySet[Int]", SemigroupKTests[NonEmptySet].semigroupK[Int])
+  checkAll("SemigroupK[NonEmptySet[A]]", SerializableTests.serializable(SemigroupK[NonEmptySet]))
+
   checkAll("NonEmptySet[Int]", ReducibleTests[NonEmptySet].reducible[Option, Int, Int])
+  checkAll("Reducible[NonEmptySet]", SerializableTests.serializable(Reducible[NonEmptySet]))
+
   checkAll("NonEmptySet[String]", SemilatticeTests[NonEmptySet[String]].band)
+  checkAll("Semilattice[NonEmptySet]", SerializableTests.serializable(Semilattice[NonEmptySet[String]]))
+
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
+
+  {
+    implicit val A = ListWrapper.order[Int]
+    checkAll("Eq[NonEmptySet[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptySet[ListWrapper[Int]]]))
+
+    checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
+    checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
+             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
+
+    Eq[NonEmptySet[ListWrapper[Int]]]
+    PartialOrder[NonEmptySet[ListWrapper[Int]]]
+  }
 
   test("First element is always the smallest") {
     forAll { (nes: NonEmptySet[Int]) =>

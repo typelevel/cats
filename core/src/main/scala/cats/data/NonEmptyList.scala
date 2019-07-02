@@ -258,7 +258,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
     val buf = ListBuffer.empty[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
-      if (elementsSoFar(b)) elementsSoFar else { buf += b; elementsSoFar + b }
+      if (elementsSoFar(b)) elementsSoFar
+      else {
+        buf += b; elementsSoFar + b
+      }
     }
 
     NonEmptyList(head, buf.toList)
@@ -592,7 +595,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
               case (Right(c), _)           => ior.map(c :: _)
               case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
               case (Left(b), _)            => ior.leftMap(b :: _)
-          }
+            }
         )
 
       }
