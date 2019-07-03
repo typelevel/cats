@@ -4,6 +4,7 @@ package discipline
 import kernel.compat.scalaVersionSpecific._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+
 import scala.util.{Failure, Success, Try}
 import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.data._

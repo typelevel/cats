@@ -272,14 +272,6 @@ class NonEmptyVectorSuite extends CatsSuite {
     }
   }
 
-  test("NonEmptyVector#toString produces correct output") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.toString should ===(s"NonEmpty${nonEmptyVector.toVector.toString}")
-    }
-    NonEmptyVector(1, Vector.empty).toString should ===("NonEmptyVector(1)")
-    NonEmptyVector(1, Vector.empty).toVector.toString should ===("Vector(1)")
-  }
-
   test("NonEmptyVector.unapply supports pattern matching") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       nonEmptyVector match {

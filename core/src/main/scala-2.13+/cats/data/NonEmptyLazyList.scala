@@ -322,7 +322,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
 sealed abstract private[data] class NonEmptyLazyListInstances  extends NonEmptyLazyListInstances1  {
 
-  implicit val catsDataBimonadForNonEmptyLazyList: Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] =
+  implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] =
     new AbstractNonEmptyBimonadTraverse[LazyList, NonEmptyLazyList] {
 
     def extract[A](fa: NonEmptyLazyList[A]): A = fa.head

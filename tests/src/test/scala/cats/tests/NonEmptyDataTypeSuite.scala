@@ -38,7 +38,6 @@ abstract class NonEmptyDataTypeSuite[F[_]: Bimonad : NonEmptyTraverse : Semigrou
     NonEmptyTraverseTests[F].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll(s"NonEmptyTraverse[NonEmpty$name[A]]", SerializableTests.serializable(NonEmptyTraverse[F]))
 
-
   implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[F](Bimonad[F])
   checkAll(s"NonEmpty$name[Int]", SemigroupKTests[F].semigroupK[Int])
   checkAll(s"SemigroupK[NonEmpty$name[Int]]", SerializableTests.serializable(SemigroupK[F]))

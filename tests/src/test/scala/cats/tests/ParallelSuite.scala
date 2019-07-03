@@ -447,10 +447,13 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList].nonEmptyParallel[Int, String])
   // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
   checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[LazyList, ZipStream].nonEmptyParallel[Int, String])
+
   checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]",
            NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector].nonEmptyParallel[Int, String])
+
   checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]",
            NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList].nonEmptyParallel[Int, String])
+
   checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]",
            ParallelTests[NonEmptyStream, OneAnd[ZipStream, ?]].parallel[Int, String])
 
