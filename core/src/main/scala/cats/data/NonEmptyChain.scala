@@ -17,8 +17,8 @@
 package cats
 package data
 
-import NonEmptyChainImpl.{create}
-import cats.Order
+import NonEmptyChainImpl.create
+import cats.{Order, Semigroup}
 import cats.kernel._
 
 import scala.collection.immutable._
@@ -392,7 +392,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
-  implicit val catsDataBimonadForNonEmptyChain: Bimonad[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] =
+  implicit val catsDataNewInstancesForNonEmptyChain: Bimonad[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] =
     new AbstractNonEmptyBimonadTraverse[Chain, NonEmptyChain] {
 
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
@@ -425,6 +425,78 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
   implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
     Show.show[NonEmptyChain[A]](nec => s"NonEmpty${Show[Chain[A]].show(nec.toChain)}")
 
+  @deprecated("2.0.0-RC1", "replaced by catsDataNewInstancesForNonEmptyChain, this is kept for BC")
+  val catsDataInstancesForNonEmptyChain
+    : SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] =
+    new SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] {
+
+      def combineK[A](a: NonEmptyChain[A], b: NonEmptyChain[A]): NonEmptyChain[A] =
+        a ++ b
+
+      def pure[A](x: A): NonEmptyChain[A] = NonEmptyChain.one(x)
+
+      def flatMap[A, B](fa: NonEmptyChain[A])(f: A => NonEmptyChain[B]): NonEmptyChain[B] =
+        fa.flatMap(f)
+
+      def tailRecM[A, B](a: A)(f: A => NonEmptyChain[Either[A, B]]): NonEmptyChain[B] =
+        catsDataNewInstancesForNonEmptyChain.tailRecM(a)(f)
+
+      def extract[A](x: NonEmptyChain[A]): A = x.head
+
+      def coflatMap[A, B](fa: NonEmptyChain[A])(f: NonEmptyChain[A] => B): NonEmptyChain[B] =
+        catsDataNewInstancesForNonEmptyChain.coflatMap(fa)(f)
+
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
+        catsDataNewInstancesForNonEmptyChain.nonEmptyTraverse(fa)(f)
+
+      override def map[A, B](fa: NonEmptyChain[A])(f: A => B): NonEmptyChain[B] =
+        create(fa.toChain.map(f))
+
+      override def size[A](fa: NonEmptyChain[A]): Long = fa.length
+
+      override def reduceLeft[A](fa: NonEmptyChain[A])(f: (A, A) => A): A =
+        fa.reduceLeft(f)
+
+      override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
+        fa.reduce
+
+      def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+
+      def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        catsDataNewInstancesForNonEmptyChain.reduceRightTo(fa)(f)(g)
+
+      override def foldLeft[A, B](fa: NonEmptyChain[A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+
+      override def foldRight[A, B](fa: NonEmptyChain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable[Chain].foldRight(fa.toChain, lb)(f)
+
+      override def foldMap[A, B](fa: NonEmptyChain[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.toChain.iterator.map(f))
+
+      override def fold[A](fa: NonEmptyChain[A])(implicit A: Monoid[A]): A =
+        fa.reduce
+
+      override def find[A](fa: NonEmptyChain[A])(f: A => Boolean): Option[A] =
+        fa.find(f)
+
+      override def forall[A](fa: NonEmptyChain[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def exists[A](fa: NonEmptyChain[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def toList[A](fa: NonEmptyChain[A]): List[A] = fa.toChain.toList
+
+      override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] =
+        fa.toNonEmptyList
+
+      override def collectFirst[A, B](fa: NonEmptyChain[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: NonEmptyChain[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirstSome(f)
+    }
 }
 
 sealed abstract private[data] class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {
