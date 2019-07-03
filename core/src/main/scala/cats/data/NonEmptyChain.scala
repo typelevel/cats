@@ -23,7 +23,10 @@ import cats.kernel._
 
 import scala.collection.immutable._
 
-private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with NewtypeCovariant {
+private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
+  private[data] type Base
+  private[data] trait Tag extends Any
+  type Type[+A] <: Base with Tag
 
   private[cats] def create[A](s: Chain[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -382,20 +385,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
-  final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] = {
-    implicit val ord = O.toOrdering
+  final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] =
+    create(toChain.distinct[AA])
 
-    var alreadyIn = TreeSet(head: AA)
-
-    foldLeft(NonEmptyChain(head: AA)) { (elementsSoFar, b) =>
-      if (alreadyIn.contains(b)) {
-        elementsSoFar
-      } else {
-        alreadyIn += b
-        elementsSoFar :+ b
-      }
-    }
-  }
 }
 
 

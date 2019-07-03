@@ -7,7 +7,10 @@ import scala.collection.immutable.TreeSet
 import NonEmptyVector.create
 import instances.vector._
 
-object NonEmptyVector extends NonEmptyVectorInstances with NewtypeCovariant {
+object NonEmptyVector extends NonEmptyVectorInstances {
+  private[data] type Base
+  private[data] trait Tag extends Any
+  type Type[+A] <: Base with Tag
 
   private[cats] def create[A](s: Vector[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -296,14 +299,14 @@ class NonEmptyVectorOps[+A] (private val value: NonEmptyVector[A]) extends AnyVa
     implicit val ord = O.toOrdering
 
     val buf = Vector.newBuilder[AA]
-    tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
+    toVector.foldLeft(TreeSet.empty[AA]) { (elementsSoFar, a) =>
       if (elementsSoFar(a)) elementsSoFar
       else {
         buf += a; elementsSoFar + a
       }
     }
 
-    NonEmptyVector(head, buf.result())
+    create(buf.result())
   }
 
   /**

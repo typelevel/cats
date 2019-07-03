@@ -41,6 +41,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
   def of[A](a: A, as: A*)(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(a +: as: _*)(A.toOrdering))
+
   def apply[A](head: A, tail: SortedSet[A])(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(head)(A.toOrdering) ++ tail)
   def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(A.toOrdering))

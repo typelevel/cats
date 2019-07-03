@@ -5,7 +5,13 @@ import NonEmptyLazyList.create
 import kernel.PartialOrder
 import instances.lazyList._
 
-object NonEmptyLazyList extends NonEmptyLazyListInstances with NewtypeCovariant {
+import scala.collection.immutable.TreeSet
+
+object NonEmptyLazyList extends NonEmptyLazyListInstances {
+  private[data] type Base
+  private[data] trait Tag extends Any
+  type Type[+A] <: Base with Tag
+
 
   private[cats] def create[A](s: LazyList[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -301,10 +307,21 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
     create(toLazyList.reverse)
 
   /**
-    * Remove duplicates.
-    */
-  final def distinct: NonEmptyLazyList[A] =
-    create(toLazyList.distinct)
+   * Remove duplicates. Duplicates are checked using `Order[_]` instance.
+   */
+  def distinct[AA >: A](implicit O: Order[AA]): NonEmptyLazyList[AA] = {
+    implicit val ord = O.toOrdering
+
+    val buf = LazyList.newBuilder[AA]
+    toLazyList.foldLeft(TreeSet.empty[AA]) { (elementsSoFar, a) =>
+      if (elementsSoFar(a)) elementsSoFar
+      else {
+        buf += a; elementsSoFar + a
+      }
+    }
+
+    create(buf.result())
+  }
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances  extends NonEmptyLazyListInstances1  {

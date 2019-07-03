@@ -275,7 +275,7 @@ class NonEmptyListSuite extends CatsSuite {
 
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { nel: NonEmptyList[Int] =>
-      nel.size should ===(nel.toList.size)
+      nel.size.toLong should ===(nel.toList.size.toLong)
       nel.length should ===(nel.toList.size)
     }
   }
@@ -346,15 +346,6 @@ class NonEmptyListSuite extends CatsSuite {
   }
 }
 
-@deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
-class DeprecatedNonEmptyListSuite extends CatsSuite {
-
-  test("Deprecated NonEmptyList#concat is consistent with List#:::") {
-    forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
-      nel.concat(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
-    }
-  }
-}
 
 class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyList") {
   def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
