@@ -1,7 +1,6 @@
 package cats
 package tests
 
-
 import cats.data.NonEmptyVector
 
 import cats.laws.discipline.arbitrary._
@@ -12,7 +11,6 @@ import cats.laws.discipline.arbitrary._
 class LegacyNonEmptyVectorSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
-
 
   test("NonEmptyVector#toString produces correct output") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>

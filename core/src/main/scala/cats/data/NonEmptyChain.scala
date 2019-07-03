@@ -390,8 +390,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
 
 }
 
-
-sealed abstract private[data] class NonEmptyChainInstances  extends NonEmptyChainInstances1  {
+sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
   implicit val catsDataBimonadForNonEmptyChain: Bimonad[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] =
     new AbstractNonEmptyBimonadTraverse[Chain, NonEmptyChain] {
@@ -401,8 +400,8 @@ sealed abstract private[data] class NonEmptyChainInstances  extends NonEmptyChai
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
         Foldable[Chain]
           .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-          Apply[G].map2Eval(f(a), lglb)(_ +: _)
-        }
+            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+          }
           .map {
             case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
             case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
@@ -428,7 +427,7 @@ sealed abstract private[data] class NonEmptyChainInstances  extends NonEmptyChai
 
 }
 
-sealed abstract private[data] class NonEmptyChainInstances1  extends NonEmptyChainInstances2  {
+sealed abstract private[data] class NonEmptyChainInstances1 extends NonEmptyChainInstances2 {
   implicit val catsDataSemigroupKForNonEmptyChain: SemigroupK[NonEmptyChain] =
     SemigroupK[Chain].asInstanceOf[SemigroupK[NonEmptyChain]]
 

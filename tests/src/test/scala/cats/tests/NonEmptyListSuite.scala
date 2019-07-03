@@ -346,7 +346,6 @@ class NonEmptyListSuite extends CatsSuite {
   }
 }
 
-
 class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyList") {
   def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
 

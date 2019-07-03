@@ -2,7 +2,7 @@ package cats
 
 package data
 
-private[data] abstract class VersionSpecificPackage {
+abstract private[data] class VersionSpecificPackage {
   type NonEmptyLazyList[+A] = NonEmptyLazyList.Type[A]
 
   type NonEmptyList[+A] = NonEmptyList.Type[A]

@@ -33,7 +33,6 @@ object NonEmptyVector extends NonEmptyVectorInstances {
   def fromVectorAppend[A](ca: Vector[A], a: A): NonEmptyVector[A] =
     create(ca :+ a)
 
-
   def apply[A](head: A, tail: Vector[A]): NonEmptyVector[A] =
     create(head +: tail)
 
@@ -85,7 +84,7 @@ object NonEmptyVector extends NonEmptyVectorInstances {
  * `NonEmptyVector`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
  * Scala 2.10, this may be bypassed due to a compiler bug.
  */
-class NonEmptyVectorOps[+A] (private val value: NonEmptyVector[A]) extends AnyVal {
+class NonEmptyVectorOps[+A](private val value: NonEmptyVector[A]) extends AnyVal {
 
   final def toVector: Vector[A] = NonEmptyVector.unwrap(value)
 
@@ -336,7 +335,7 @@ class NonEmptyVectorOps[+A] (private val value: NonEmptyVector[A]) extends AnyVa
     create(toVector.sorted(AA.toOrdering))
 }
 
-sealed abstract private[data] class NonEmptyVectorInstances  extends NonEmptyVectorInstances1  {
+sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVectorInstances1 {
 
   implicit val catsDataInstancesForNonEmptyVector: Bimonad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] =
     new AbstractNonEmptyBimonadTraverse[Vector, NonEmptyVector] {
@@ -344,14 +343,14 @@ sealed abstract private[data] class NonEmptyVectorInstances  extends NonEmptyVec
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
       def nonEmptyTraverse[G[_], A, B](
-                                        nel: NonEmptyVector[A]
-                                      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
+        nel: NonEmptyVector[A]
+      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
         Foldable[Vector]
           .reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }
+            G.map2Eval(f(a), lglb)(_ +: _)
+          }
           .map {
-            case None => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
+            case None        => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
             case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
           }
           .value
@@ -363,23 +362,21 @@ sealed abstract private[data] class NonEmptyVectorInstances  extends NonEmptyVec
           Eval.defer(g(a, b))
         })
 
-
       override def toNonEmptyList[A](fa: NonEmptyVector[A]): NonEmptyList[A] =
         fa.toNonEmptyList
 
-
       override def nonEmptyPartition[A, B, C](
-                                               fa: NonEmptyVector[A]
-                                             )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+        fa: NonEmptyVector[A]
+      )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
         import cats.syntax.either._
 
         reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)(
           (ior, a) =>
             (f(a), ior) match {
               case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
-              case (Right(c), _) => ior.map(_ :+ c)
+              case (Right(c), _)           => ior.map(_ :+ c)
               case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
-              case (Left(b), _) => ior.leftMap(_ :+ b)
+              case (Left(b), _)            => ior.leftMap(_ :+ b)
             }
         ).bimap(_.toNonEmptyList, _.toNonEmptyList)
 
@@ -408,10 +405,9 @@ sealed abstract private[data] class NonEmptyVectorInstances  extends NonEmptyVec
   implicit def catsDataShowForNonEmptyVector[A](implicit A: Show[A]): Show[NonEmptyVector[A]] =
     Show.show[NonEmptyVector[A]](_.show)
 
-
 }
 
-sealed abstract private[data] class NonEmptyVectorInstances1  extends NonEmptyVectorInstances2  {
+sealed abstract private[data] class NonEmptyVectorInstances1 extends NonEmptyVectorInstances2 {
   implicit val catsDataSemigroupKForNonEmptyVector: SemigroupK[NonEmptyVector] =
     SemigroupK[Vector].asInstanceOf[SemigroupK[NonEmptyVector]]
 

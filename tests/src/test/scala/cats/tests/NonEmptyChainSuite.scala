@@ -11,7 +11,7 @@ class NonEmptyChainSuite extends CatsSuite {
   checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int] with Option",
-    NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyChain]", SerializableTests.serializable(Traverse[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int]", BimonadTests[NonEmptyChain].bimonad[Int, Int, Int])
@@ -27,7 +27,7 @@ class NonEmptyChainSuite extends CatsSuite {
     implicit val partialOrder = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", PartialOrderTests[NonEmptyChain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyChain[ListWrapper[Int]]",
-      SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
   }
 
   {
@@ -141,7 +141,6 @@ class NonEmptyChainSuite extends CatsSuite {
   }
 }
 
-
 class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
   def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
 
@@ -149,6 +148,6 @@ class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmpt
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyChain(start, (tailStart).to(endInclusive):_*)
+    NonEmptyChain(start, (tailStart).to(endInclusive): _*)
   }
 }

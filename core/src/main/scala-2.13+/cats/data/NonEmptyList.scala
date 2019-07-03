@@ -10,6 +10,7 @@ import scala.collection.mutable.ListBuffer
 import NonEmptyList.create
 
 import scala.annotation.tailrec
+
 /**
  * A data type which represents a non empty list of A, with
  * single element (head) and optional structure (tail).
@@ -48,8 +49,8 @@ object NonEmptyList extends NonEmptyListInstances {
    */
   def fromList[A](l: List[A]): Option[NonEmptyList[A]] =
     l match {
-      case Nil    => None
-      case _ => Some(create(l))
+      case Nil => None
+      case _   => Some(create(l))
     }
 
   /**
@@ -61,8 +62,8 @@ object NonEmptyList extends NonEmptyListInstances {
    */
   def fromListUnsafe[A](l: List[A]): NonEmptyList[A] =
     l match {
-      case Nil    => throw new IllegalArgumentException("Cannot create NonEmptyList from empty list")
-      case _ => create(l)
+      case Nil => throw new IllegalArgumentException("Cannot create NonEmptyList from empty list")
+      case _   => create(l)
     }
 
   def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Option[NonEmptyList[A]] =
@@ -147,7 +148,7 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
    * res0: Int = 5
    * }}}
    */
-  def size: Int =  toList.size
+  def size: Int = toList.size
 
   def length: Int = size
 
@@ -170,7 +171,6 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
 
   def flatMap[B](f: A => NonEmptyList[B]): NonEmptyList[B] =
     create(toList.flatMap(f.andThen(_.toList)))
-
 
   def ::[AA >: A](a: AA): NonEmptyList[AA] =
     prepend(a)
@@ -306,7 +306,7 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
   def show[AA >: A](implicit AA: Show[AA]): String =
     s"NonEmpty${Show[List[AA]].show(toList)}"
 
-    /**
+  /**
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
   def distinct[AA >: A](implicit O: Order[AA]): NonEmptyList[AA] = {
@@ -323,7 +323,6 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
     create(buf.toList)
   }
 
-
   /**
    * Apply `f` to the "initial element" of this LazyList and lazily combine it
    * with every other value using the given function `g`.
@@ -334,7 +333,6 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
     while (iter.hasNext) { result = g(result, iter.next) }
     result
   }
-
 
   /**
    * Right-associative reduce using f.
@@ -380,8 +378,8 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
   def zipWith[B, C](b: NonEmptyList[B])(f: (A, B) => C): NonEmptyList[C] = {
     @tailrec
     def zwRev(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
-      case (Nil, _) => acc
-      case (_, Nil) => acc
+      case (Nil, _)           => acc
+      case (_, Nil)           => acc
       case (x :: xs, y :: ys) => zwRev(xs, ys, f(x, y) :: acc)
     }
 
@@ -413,7 +411,7 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
    * }}}
    */
   def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
-  // safe: sorting a NonEmptyList cannot produce an empty List
+    // safe: sorting a NonEmptyList cannot produce an empty List
     NonEmptyList.fromListUnsafe(toList.sortBy(f)(B.toOrdering))
 
   /**
@@ -428,7 +426,7 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
    * }}}
    */
   def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
-  // safe: sorting a NonEmptyList cannot produce an empty List
+    // safe: sorting a NonEmptyList cannot produce an empty List
     NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
 
   /**
@@ -505,8 +503,7 @@ class NonEmptyListOps[A](private val value: NonEmptyList[A]) extends AnyVal {
     NonEmptySet.fromSetUnsafe(SortedSet[B](toList: _*)(order.toOrdering))
 }
 
-
-sealed abstract private[data] class NonEmptyListInstances  extends NonEmptyListInstances1  {
+sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances1 {
 
   implicit val catsDataInstancesForNonEmptyList: Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] =
     new AbstractNonEmptyBimonadTraverse[List, NonEmptyList] {
@@ -514,12 +511,15 @@ sealed abstract private[data] class NonEmptyListInstances  extends NonEmptyListI
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyList[A])(f: A => G[B]): G[NonEmptyList[B]] =
-        Foldable[List].reduceRightToOption[A, G[List[B]]](fa.tail)(a => Apply[G].map(f(a))(List.apply(_))) { (a, lglb) =>
-          Apply[G].map2Eval(f(a), lglb)(_ +: _)
-        }.map {
-          case None        => Apply[G].map(f(fa.head))(h => create(List(h)))
-          case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(List(h) ++ t))
-        } .value
+        Foldable[List]
+          .reduceRightToOption[A, G[List[B]]](fa.tail)(a => Apply[G].map(f(a))(List.apply(_))) { (a, lglb) =>
+            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+          }
+          .map {
+            case None        => Apply[G].map(f(fa.head))(h => create(List(h)))
+            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(List(h) ++ t))
+          }
+          .value
 
       def reduceLeftTo[A, B](fa: NonEmptyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
@@ -555,7 +555,7 @@ sealed abstract private[data] class NonEmptyListInstances  extends NonEmptyListI
 
 }
 
-sealed abstract private[data] class NonEmptyListInstances1  extends NonEmptyListInstances2  {
+sealed abstract private[data] class NonEmptyListInstances1 extends NonEmptyListInstances2 {
   implicit val catsDataSemigroupKForNonEmptyList: SemigroupK[NonEmptyList] =
     SemigroupK[List].asInstanceOf[SemigroupK[NonEmptyList]]
 
@@ -573,5 +573,3 @@ sealed abstract private[data] class NonEmptyListInstances3 {
   implicit def catsDataEqForNonEmptyList[A: Eq]: Eq[NonEmptyList[A]] =
     Eq[List[A]].asInstanceOf[Eq[NonEmptyList[A]]]
 }
-
-

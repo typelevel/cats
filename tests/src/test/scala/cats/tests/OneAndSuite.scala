@@ -10,14 +10,12 @@ class OneAndSuite extends CatsSuite {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
-
   {
     implicit val traverse = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)
     checkAll("OneAnd[ListWrapper, Int] with Option",
-      TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, ?]]))
   }
-
 
   implicit val iso = SemigroupalTests.Isomorphisms
     .invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))

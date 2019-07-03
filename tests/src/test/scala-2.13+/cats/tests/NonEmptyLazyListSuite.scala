@@ -6,12 +6,10 @@ import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrder
 import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-
 class NonEmptyLazyListSuite extends CatsSuite {
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))
-
 
   checkAll(s"NonEmptyLazyList[Int]", HashTests[NonEmptyLazyList[Int]].hash)
   checkAll(s"Hash[NonEmptyLazyList[Int]]", SerializableTests.serializable(Hash[NonEmptyLazyList[Int]]))
@@ -20,7 +18,7 @@ class NonEmptyLazyListSuite extends CatsSuite {
   checkAll("SemigroupK[NonEmptyLazyList]", SerializableTests.serializable(SemigroupK[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int] with Option",
-    NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyLazyList]", SerializableTests.serializable(Traverse[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int]", BimonadTests[NonEmptyLazyList].bimonad[Int, Int, Int])
@@ -38,13 +36,14 @@ class NonEmptyLazyListSuite extends CatsSuite {
     implicit val partialOrder = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyLazyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyLazyList[ListWrapper[Int]]",
-      SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
   }
 
   {
     implicit val eqv = ListWrapper.eqv[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", EqTests[NonEmptyLazyList[ListWrapper[Int]]].eqv)
-    checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]", SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
+    checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]",
+             SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
   }
 
   test("size is consistent with toLazyList.size") {
@@ -76,7 +75,6 @@ class NonEmptyLazyListSuite extends CatsSuite {
       ci.filterNot(_ === i).contains(i) should ===(false)
     }
   }
-
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
@@ -131,7 +129,6 @@ class NonEmptyLazyListSuite extends CatsSuite {
   }
 }
 
-
 class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("NonEmptyLazyList") {
   def iterator[T](nel: NonEmptyLazyList[T]): Iterator[T] = nel.toLazyList.iterator
 
@@ -139,6 +136,6 @@ class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("N
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyLazyList(start, (tailStart).to(endInclusive):_*)
+    NonEmptyLazyList(start, (tailStart).to(endInclusive): _*)
   }
 }
