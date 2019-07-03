@@ -2,32 +2,32 @@ package cats
 package tests
 
 import cats.data.{Chain, NonEmptyChain}
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
+import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.{Arbitrary, Cogen, Gen}
-import cats.instances.all._
 
-class NonEmptyChainSuite extends NonEmptyDataTypeSuite[NonEmptyChain]("Chain") {
+class NonEmptyChainSuite extends CatsSuite {
+  checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
+  checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
 
-  implicit def arbitraryFA[A](implicit A: Arbitrary[A]): Arbitrary[NonEmptyChain[A]] =
-    Arbitrary(implicitly[Arbitrary[Chain[A]]].arbitrary.flatMap { chain =>
-      NonEmptyChain.fromChain(chain) match {
-        case None     => A.arbitrary.map(NonEmptyChain.one)
-        case Some(ne) => Gen.const(ne)
-      }
-    })
+  checkAll("NonEmptyChain[Int] with Option",
+    NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[NonEmptyChain]", SerializableTests.serializable(Traverse[NonEmptyChain]))
 
-  implicit def cogenFA[A](implicit A: Cogen[A]): Cogen[NonEmptyChain[A]] =
-    Cogen[Chain[A]].contramap(_.toChain)
+  checkAll("NonEmptyChain[Int]", BimonadTests[NonEmptyChain].bimonad[Int, Int, Int])
+  checkAll("Bimonad[NonEmptyChain]", SerializableTests.serializable(Bimonad[NonEmptyChain]))
 
-  checkAll(s"NonEmptyChain[Int]", HashTests[NonEmptyChain[Int]].hash)
-  checkAll(s"Hash[NonEmptyChain[Int]]", SerializableTests.serializable(Hash[NonEmptyChain[Int]]))
+  checkAll("NonEmptyChain[Int]", SemigroupTests[NonEmptyChain[Int]].semigroup)
+  checkAll("Monoid[NonEmptyChain]", SerializableTests.serializable(Semigroup[NonEmptyChain[Int]]))
+
+  checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
+  checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
 
   {
     implicit val partialOrder = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", PartialOrderTests[NonEmptyChain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyChain[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
+      SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
   }
 
   {
@@ -138,5 +138,17 @@ class NonEmptyChainSuite extends NonEmptyDataTypeSuite[NonEmptyChain]("Chain") {
     forAll { ci: NonEmptyChain[Int] =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
+  }
+}
+
+
+class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
+  def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyChain[Long] = {
+    // if we inline this we get a bewildering implicit numeric widening
+    // error message in Scala 2.10
+    val tailStart: Long = start + 1L
+    NonEmptyChain(start, (tailStart).to(endInclusive):_*)
   }
 }

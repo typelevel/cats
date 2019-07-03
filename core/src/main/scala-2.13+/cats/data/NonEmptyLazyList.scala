@@ -1,13 +1,11 @@
 package cats
 package data
 
-import NonEmptyLazyListImpl.create
+import NonEmptyLazyList.create
 import kernel.PartialOrder
 import instances.lazyList._
 
-
-
-private[data] object NonEmptyLazyListImpl extends NonEmptyLazyListInstances {
+object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
   private[data] type Base
   private[data] trait Tag extends Any
@@ -53,7 +51,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
   /**
     * Converts this NonEmptyLazyList to a `LazyList`
     */
-  final def toLazyList: LazyList[A] = NonEmptyLazyListImpl.unwrap(value)
+  final def toLazyList: LazyList[A] = NonEmptyLazyList.unwrap(value)
 
   final def map[B](f: A => B): NonEmptyLazyList[B] = create(toLazyList.map(f))
 
@@ -286,7 +284,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
   /**
     * Zips this `NonEmptyLazyList` with another `NonEmptyLazyList` and applies a function for each pair of elements
-    */ // TODO manually implemented
+    */
   final def zipWith[B, C](b: NonEmptyLazyList[B])(f: (A, B) => C): NonEmptyLazyList[C] =
     create(toLazyList.zip(b.toLazyList).map { case (a, b) => f(a, b) })
 
@@ -295,13 +293,6 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
     */
   final def zipWithIndex: NonEmptyLazyList[(A, Int)] =
     create(toLazyList.zipWithIndex)
-
-  /**
-    * Groups elements inside this `NonEmptyLazyList` according to the `Order`
-    * of the keys produced by the given mapping function.
-    */
-  final def groupBy[B](f: A => B): NonEmptyMap[B, NonEmptyLazyList[A]] =
-    toLazyList.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyLazyList[A]]]
 
   final def iterator: Iterator[A] = toLazyList.iterator
 

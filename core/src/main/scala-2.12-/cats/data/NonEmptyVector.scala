@@ -218,7 +218,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
    * }}}
    */
   def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
-    NonEmptyVector.fromVectorUnsafe(toVector.lazyZip(b.toVector).map(f))
+    NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
 
   def reverse: NonEmptyVector[A] =
     new NonEmptyVector(toVector.reverse)

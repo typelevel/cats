@@ -29,10 +29,7 @@ abstract class NonEmptyDataTypeSuite[F[_]: Bimonad : NonEmptyTraverse : Semigrou
   checkAll(s"NonEmpty$name[Int]", OrderTests[F[Int]].order)
   checkAll(s"Order[NonEmpty$name]", SerializableTests.serializable(Order[F[Int]]))
 
-  checkAll(s"NonEmpty$name[Int]", SemigroupTests[F[Int]].semigroup)
-  checkAll(s"Semigroup[NonEmpty$name]", SerializableTests.serializable(Semigroup[F[Int]]))
 
-  checkAll(s"Show[NonEmpty$name]", SerializableTests.serializable(Show[F[Int]]))
 
   checkAll(s"NonEmpty$name[Int] with Option",
     NonEmptyTraverseTests[F].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])

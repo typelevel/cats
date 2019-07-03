@@ -7,8 +7,6 @@ import cats.data.NonEmptyVector
 import cats.laws.discipline.arbitrary._
 
 
-import scala.util.Properties
-
 class LegacyNonEmptyVectorSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
