@@ -7,11 +7,7 @@ import scala.collection.immutable.TreeSet
 import NonEmptyVector.create
 import instances.vector._
 
-object NonEmptyVector extends NonEmptyVectorInstances {
-
-  private[data] type Base
-  private[data] trait Tag extends Any
-  type Type[+A] <: Base with Tag
+object NonEmptyVector extends NonEmptyVectorInstances with NewtypeCovariant {
 
   private[cats] def create[A](s: Vector[A]): Type[A] =
     s.asInstanceOf[Type[A]]

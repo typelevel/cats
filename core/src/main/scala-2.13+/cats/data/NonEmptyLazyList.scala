@@ -5,11 +5,7 @@ import NonEmptyLazyList.create
 import kernel.PartialOrder
 import instances.lazyList._
 
-object NonEmptyLazyList extends NonEmptyLazyListInstances {
-
-  private[data] type Base
-  private[data] trait Tag extends Any
-  type Type[+A] <: Base with Tag
+object NonEmptyLazyList extends NonEmptyLazyListInstances with NewtypeCovariant {
 
   private[cats] def create[A](s: LazyList[A]): Type[A] =
     s.asInstanceOf[Type[A]]

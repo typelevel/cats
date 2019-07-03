@@ -23,11 +23,7 @@ import cats.kernel._
 
 import scala.collection.immutable._
 
-private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
-
-  private[data] type Base
-  private[data] trait Tag extends Any
-  type Type[+A] <: Base with Tag
+private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with NewtypeCovariant {
 
   private[cats] def create[A](s: Chain[A]): Type[A] =
     s.asInstanceOf[Type[A]]
