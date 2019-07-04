@@ -17,27 +17,27 @@ class CokleisliSuite extends SlowCatsSuite {
   implicit def cokleisliEq[F[_], A, B](implicit ev: Eq[F[A] => B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cokleisli[Option, Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cokleisli[Option, Int, *]]
 
   checkAll("Cokleisli[Option, MiniInt, Int]",
-           SemigroupalTests[Cokleisli[Option, MiniInt, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[Cokleisli[Option, Int, ?]]",
-           SerializableTests.serializable(Semigroupal[Cokleisli[Option, Int, ?]]))
+           SemigroupalTests[Cokleisli[Option, MiniInt, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Cokleisli[Option, Int, *]]",
+           SerializableTests.serializable(Semigroupal[Cokleisli[Option, Int, *]]))
 
-  checkAll("Cokleisli[Option, MiniInt, Int]", MonadTests[Cokleisli[Option, MiniInt, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Cokleisli[Option, Int, ?]]", SerializableTests.serializable(Monad[Cokleisli[Option, Int, ?]]))
+  checkAll("Cokleisli[Option, MiniInt, Int]", MonadTests[Cokleisli[Option, MiniInt, *]].monad[Int, Int, Int])
+  checkAll("Monad[Cokleisli[Option, Int, *]]", SerializableTests.serializable(Monad[Cokleisli[Option, Int, *]]))
 
   checkAll("Cokleisli[Option, MiniInt, Int]",
-           ProfunctorTests[Cokleisli[Option, ?, ?]].profunctor[MiniInt, Int, Int, Int, Int, Int])
-  checkAll("Profunctor[Cokleisli[Option, ?, ?]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, ?, ?]]))
+           ProfunctorTests[Cokleisli[Option, *, *]].profunctor[MiniInt, Int, Int, Int, Int, Int])
+  checkAll("Profunctor[Cokleisli[Option, *, *]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, *, *]]))
 
   checkAll("Cokleisli[Option, MiniInt, MiniInt]",
-           ContravariantTests[Cokleisli[Option, ?, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt])
-  checkAll("Contravariant[Cokleisli[Option, ?, MiniInt]]",
-           SerializableTests.serializable(Contravariant[Cokleisli[Option, ?, Int]]))
+           ContravariantTests[Cokleisli[Option, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt])
+  checkAll("Contravariant[Cokleisli[Option, *, MiniInt]]",
+           SerializableTests.serializable(Contravariant[Cokleisli[Option, *, Int]]))
 
-  checkAll("Cokleisli[(Boolean, ?), MiniInt, MiniInt]",
-           MonoidKTests[λ[α => Cokleisli[(Boolean, ?), α, α]]].monoidK[MiniInt])
+  checkAll("Cokleisli[(Boolean, *), MiniInt, MiniInt]",
+           MonoidKTests[λ[α => Cokleisli[(Boolean, *), α, α]]].monoidK[MiniInt])
   checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]",
            SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))
 
@@ -45,9 +45,9 @@ class CokleisliSuite extends SlowCatsSuite {
   checkAll("SemigroupK[λ[α => Cokleisli[List, α, α]]]",
            SerializableTests.serializable(SemigroupK[λ[α => Cokleisli[List, α, α]]]))
 
-  checkAll("Cokleisli[(Boolean, ?), MiniInt, MiniInt]",
-           ArrowTests[Cokleisli[(Boolean, ?), ?, ?]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt])
-  checkAll("Arrow[Cokleisli[NonEmptyList, ?, ?]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, ?, ?]]))
+  checkAll("Cokleisli[(Boolean, *), MiniInt, MiniInt]",
+           ArrowTests[Cokleisli[(Boolean, *), *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt])
+  checkAll("Arrow[Cokleisli[NonEmptyList, *, *]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, *, *]]))
 
   {
     implicit def cokleisliIdEq[A, B](implicit evidence: Eq[A => B]): Eq[Cokleisli[Id, A, B]] =
@@ -55,10 +55,10 @@ class CokleisliSuite extends SlowCatsSuite {
 
     checkAll(
       "Cokleisli[Id, MiniInt, MiniInt]",
-      CommutativeArrowTests[Cokleisli[Id, ?, ?]].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
+      CommutativeArrowTests[Cokleisli[Id, *, *]].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
     )
-    checkAll("CommutativeArrow[Cokleisli[Id, ?, ?]]",
-             SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, ?, ?]]))
+    checkAll("CommutativeArrow[Cokleisli[Id, *, *]]",
+             SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, *, *]]))
   }
 
   test("contramapValue with Id consistent with lmap") {

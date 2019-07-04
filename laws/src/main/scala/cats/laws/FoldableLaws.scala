@@ -70,7 +70,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def getRef[A](fa: F[A], idx: Long): IsEq[Option[A]] =
     F.get(fa)(idx) <-> (if (idx < 0L) None
                         else
-                          F.foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
+                          F.foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
                             if (i == idx) Left(a) else Right(i + 1L)
                           } match {
                             case Left(a)  => Some(a)

@@ -17,8 +17,8 @@ class OpSuite extends CatsSuite {
 
   {
     implicit val catsDataCategoryForOp = Op.catsDataCategoryForOp[Function1]
-    checkAll("Op[Function1, ?, ?]", CategoryTests[Op[Function1, ?, ?]].category[Char, MiniInt, Char, Boolean])
-    checkAll("Category[Op[Function1, ?, ?]]", SerializableTests.serializable(Category[Op[Function1, ?, ?]]))
+    checkAll("Op[Function1, *, *]", CategoryTests[Op[Function1, *, *]].category[Char, MiniInt, Char, Boolean])
+    checkAll("Category[Op[Function1, *, *]]", SerializableTests.serializable(Category[Op[Function1, *, *]]))
   }
 
   /**
@@ -26,12 +26,12 @@ class OpSuite extends CatsSuite {
    */
   object ImplicitResolution {
     // Arr is Function1
-    Category[Op[Function1, ?, ?]]
-    Compose[Op[Function1, ?, ?]]
+    Category[Op[Function1, *, *]]
+    Compose[Op[Function1, *, *]]
     Eq[Op[Function1, Char, MiniInt]]
 
-    // Arr is Kleisli[Option, ?, ?]
-    Category[Op[Kleisli[Option, ?, ?], ?, ?]]
-    Compose[Op[Kleisli[Option, ?, ?], ?, ?]]
+    // Arr is Kleisli[Option, *, *]
+    Category[Op[Kleisli[Option, *, *], *, *]]
+    Compose[Op[Kleisli[Option, *, *], *, *]]
   }
 }

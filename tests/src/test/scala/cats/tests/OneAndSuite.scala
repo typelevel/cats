@@ -31,54 +31,54 @@ class OneAndSuite extends CatsSuite {
   checkAll("OneAnd[Stream, Int]", EqTests[OneAnd[LazyList, Int]].eqv)
 
   checkAll("OneAnd[Stream, Int] with Option",
-           NonEmptyTraverseTests[OneAnd[LazyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
-  checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[LazyList, ?]]))
+           NonEmptyTraverseTests[OneAnd[LazyList, *]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyTraverse[OneAnd[Stream, A]]", SerializableTests.serializable(NonEmptyTraverse[OneAnd[LazyList, *]]))
 
   {
     implicit val traverse = OneAnd.catsDataTraverseForOneAnd(ListWrapper.traverse)
     checkAll("OneAnd[ListWrapper, Int] with Option",
-             TraverseTests[OneAnd[ListWrapper, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, ?]]))
+             TraverseTests[OneAnd[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Traverse[OneAnd[ListWrapper, *]]))
   }
 
-  checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[LazyList, ?]].reducible[Option, Int, Int])
-  checkAll("Reducible[OneAnd[Stream, ?]]", SerializableTests.serializable(Reducible[OneAnd[LazyList, ?]]))
+  checkAll("OneAnd[Stream, Int]", ReducibleTests[OneAnd[LazyList, *]].reducible[Option, Int, Int])
+  checkAll("Reducible[OneAnd[Stream, *]]", SerializableTests.serializable(Reducible[OneAnd[LazyList, *]]))
 
   implicit val iso = SemigroupalTests.Isomorphisms
-    .invariant[OneAnd[ListWrapper, ?]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
+    .invariant[OneAnd[ListWrapper, *]](OneAnd.catsDataFunctorForOneAnd(ListWrapper.functor))
 
   // Test instances that have more general constraints
   {
     implicit val monad = ListWrapper.monad
     implicit val alt = ListWrapper.alternative
-    checkAll("OneAnd[ListWrapper, Int]", MonadTests[OneAnd[ListWrapper, ?]].monad[Int, Int, Int])
-    checkAll("MonadTests[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monad[OneAnd[ListWrapper, ?]]))
+    checkAll("OneAnd[ListWrapper, Int]", MonadTests[OneAnd[ListWrapper, *]].monad[Int, Int, Int])
+    checkAll("MonadTests[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Monad[OneAnd[ListWrapper, *]]))
   }
 
   {
     implicit val alternative = ListWrapper.alternative
-    checkAll("OneAnd[ListWrapper, Int]", ApplicativeTests[OneAnd[ListWrapper, ?]].applicative[Int, Int, Int])
-    checkAll("Applicative[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Applicative[OneAnd[ListWrapper, ?]]))
+    checkAll("OneAnd[ListWrapper, Int]", ApplicativeTests[OneAnd[ListWrapper, *]].applicative[Int, Int, Int])
+    checkAll("Applicative[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Applicative[OneAnd[ListWrapper, *]]))
   }
 
   {
     implicit val functor = ListWrapper.functor
-    checkAll("OneAnd[ListWrapper, Int]", FunctorTests[OneAnd[ListWrapper, ?]].functor[Int, Int, Int])
-    checkAll("Functor[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Functor[OneAnd[ListWrapper, ?]]))
+    checkAll("OneAnd[ListWrapper, Int]", FunctorTests[OneAnd[ListWrapper, *]].functor[Int, Int, Int])
+    checkAll("Functor[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Functor[OneAnd[ListWrapper, *]]))
   }
 
   {
     implicit val alternative = ListWrapper.alternative
-    checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, ?]].semigroupK[Int])
+    checkAll("OneAnd[ListWrapper, Int]", SemigroupKTests[OneAnd[ListWrapper, *]].semigroupK[Int])
     checkAll("OneAnd[Stream, Int]", SemigroupTests[OneAnd[LazyList, Int]].semigroup)
-    checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, ?]]))
+    checkAll("SemigroupK[OneAnd[ListWrapper, A]]", SerializableTests.serializable(SemigroupK[OneAnd[ListWrapper, *]]))
     checkAll("Semigroup[NonEmptyStream[Int]]", SerializableTests.serializable(Semigroup[OneAnd[LazyList, Int]]))
   }
 
   {
     implicit val foldable = ListWrapper.foldable
-    checkAll("OneAnd[ListWrapper, Int]", FoldableTests[OneAnd[ListWrapper, ?]].foldable[Int, Int])
-    checkAll("Foldable[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Foldable[OneAnd[ListWrapper, ?]]))
+    checkAll("OneAnd[ListWrapper, Int]", FoldableTests[OneAnd[ListWrapper, *]].foldable[Int, Int])
+    checkAll("Foldable[OneAnd[ListWrapper, A]]", SerializableTests.serializable(Foldable[OneAnd[ListWrapper, *]]))
   }
 
   {
@@ -88,7 +88,7 @@ class OneAndSuite extends CatsSuite {
     implicitly[Comonad[NonEmptyStream]]
   }
 
-  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[OneAnd[LazyList, ?]]
+  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[OneAnd[LazyList, *]]
 
   //OneAnd's tailRecM fails on LazyList due to the fact that. todo: replace NonEmptyStream with NonEmptyLazyList using newtype https://github.com/typelevel/cats/issues/2903
   checkAll("NonEmptyStream[Int]", MonadTests[NonEmptyStream].stackUnsafeMonad[Int, Int, Int])

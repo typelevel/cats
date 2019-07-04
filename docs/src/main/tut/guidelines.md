@@ -103,11 +103,11 @@ trait Monad[F[_]] extends Functor
 object Kleisli extends KleisliInstance0
 
 abstract class KleisliInstance0 extends KleisliInstance1 {
-  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, ?]] = ...
+  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, *]] = ...
 }
 
 abstract class KleisliInstance1 {
-  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, ?]] = ...
+  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, *]] = ...
 }
 ```
 
@@ -118,9 +118,9 @@ We can introduce new type classes for the sake of adding laws that don't apply t
 
 ### <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a>
 
-We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, ?]` given an `Applicative[F]`.
+We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, *]` given an `Applicative[F]`.
 An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance
-for `EitherT[F, String, ?]`. Such an instance will be derived if you use `Nested` instead:
+for `EitherT[F, String, *]`. Such an instance will be derived if you use `Nested` instead:
 
 ```scala
 import cats._, cats.data._, cats.implicits._

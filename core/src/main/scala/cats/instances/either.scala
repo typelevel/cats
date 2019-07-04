@@ -30,8 +30,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] =
-    new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, *], A] with Traverse[Either[A, *]] =
+    new MonadError[Either[A, *], A] with Traverse[Either[A, *]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
@@ -142,8 +142,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
   // scalastyle:on method.length
 
-  implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
-    new SemigroupK[Either[L, ?]] {
+  implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
+    new SemigroupK[Either[L, *]] {
       def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
         case Left(_)  => y
         case Right(_) => x

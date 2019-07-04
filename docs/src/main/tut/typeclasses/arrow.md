@@ -76,7 +76,7 @@ val lastK = Kleisli((_: List[Int]).lastOption)
 With `headK` and `lastK`, we can obtain the `Kleisli` arrow we want by combining them, and composing it with `_ + _`:
 
 ```tut:book:silent
-val headPlusLast = combine(headK, lastK) >>> Arrow[Kleisli[Option, ?, ?]].lift(((_: Int) + (_: Int)).tupled)
+val headPlusLast = combine(headK, lastK) >>> Arrow[Kleisli[Option, *, *]].lift(((_: Int) + (_: Int)).tupled)
 ```
 
 ```tut:book

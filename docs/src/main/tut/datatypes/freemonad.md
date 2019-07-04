@@ -218,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Either[E, ?]` to support failure
+ - `Either[E, *]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
