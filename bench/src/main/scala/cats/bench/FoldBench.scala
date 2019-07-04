@@ -23,7 +23,7 @@ class FoldBench {
   /** Benchmark fold using traverse with Const */
   @Benchmark
   def traverseConst(): String =
-    Traverse[List].traverse[Const[String, ?], String, String](chars)(Const(_)).getConst
+    Traverse[List].traverse[Const[String, *], String, String](chars)(Const(_)).getConst
 
   @Benchmark
   def vectorToListFoldM(): Option[String] =

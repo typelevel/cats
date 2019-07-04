@@ -349,7 +349,7 @@ object SyntaxSuite
     val done = a.tailRecM[F, B](a => returnValue)
   }
 
-  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, *], E]): Unit = {
     type G[X] = F[E, X]
 
     val e = mock[E]

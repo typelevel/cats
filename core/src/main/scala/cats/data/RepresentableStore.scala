@@ -48,8 +48,8 @@ object RepresentableStore {
 
   implicit def catsDataRepresentableStoreComonad[F[_], S](
     implicit R: Representable[F]
-  ): Comonad[RepresentableStore[F, S, ?]] =
-    new Comonad[RepresentableStore[F, S, ?]] {
+  ): Comonad[RepresentableStore[F, S, *]] =
+    new Comonad[RepresentableStore[F, S, *]] {
       override def extract[B](x: RepresentableStore[F, S, B]): B =
         x.extract
 

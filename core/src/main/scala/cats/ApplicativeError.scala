@@ -108,7 +108,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * scala> case class Err(msg: String)
    *
-   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   * scala> type F[A] = EitherT[State[String, *], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
    *      |   case Err("one") => EitherT.liftF(State.set("one"))
@@ -199,10 +199,10 @@ object ApplicativeError {
    * scala> import cats.implicits._
    * scala> import cats.ApplicativeError
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Some(1), "Empty")
    * res0: scala.Either[String, Int] = Right(1)
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Option.empty[Int], "Empty")
    * res1: scala.Either[String, Int] = Left(Empty)
    * }}}
    */

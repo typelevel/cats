@@ -243,17 +243,17 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("Kleisli with Either should accumulate errors") {
-    val k1: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Right(s.length))
-    val k2: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Boo"))
-    val k3: Kleisli[Either[String, ?], String, Int] = Kleisli(s => Left("Nope"))
+    val k1: Kleisli[Either[String, *], String, Int] = Kleisli(s => Right(s.length))
+    val k2: Kleisli[Either[String, *], String, Int] = Kleisli(s => Left("Boo"))
+    val k3: Kleisli[Either[String, *], String, Int] = Kleisli(s => Left("Nope"))
 
     (List(k1, k2, k3).parSequence.run("Hello")) should ===(Left("BooNope"))
 
   }
 
   test("WriterT with Either should accumulate errors") {
-    val w1: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("Too "))
-    val w2: WriterT[Either[String, ?], String, Int] = WriterT.liftF(Left("bad."))
+    val w1: WriterT[Either[String, *], String, Int] = WriterT.liftF(Left("Too "))
+    val w2: WriterT[Either[String, *], String, Int] = WriterT.liftF(Left("bad."))
 
     ((w1, w2).parMapN(_ + _).value) should ===(Left("Too bad."))
 
@@ -415,32 +415,32 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
     resultWithInstance should ===("parallel".some)
   }
 
-  checkAll("Parallel[Either[String, ?], Validated[String, ?]]",
-           ParallelTests[Either[String, ?], Validated[String, ?]].parallel[Int, String])
-  checkAll("Parallel[Ior[String, ?], Ior[String, ?]]",
-           ParallelTests[Ior[String, ?], Ior[String, ?]].parallel[Int, String])
+  checkAll("Parallel[Either[String, *], Validated[String, *]]",
+           ParallelTests[Either[String, *], Validated[String, *]].parallel[Int, String])
+  checkAll("Parallel[Ior[String, *], Ior[String, *]]",
+           ParallelTests[Ior[String, *], Ior[String, *]].parallel[Int, String])
   checkAll(
-    "Parallel[IorT[F, String, ?], IorT[F, String, ?]] with parallel effect",
-    ParallelTests[IorT[Either[String, ?], String, ?], IorT[Validated[String, ?], String, ?]].parallel[Int, String]
+    "Parallel[IorT[F, String, *], IorT[F, String, *]] with parallel effect",
+    ParallelTests[IorT[Either[String, *], String, *], IorT[Validated[String, *], String, *]].parallel[Int, String]
   )
   checkAll(
-    "Parallel[IorT[F, String, ?], IorT[F, String, ?]] with sequential effect",
-    ParallelTests[IorT[Option, String, ?], IorT[Option, String, ?]].parallel[Int, String]
+    "Parallel[IorT[F, String, *], IorT[F, String, *]] with sequential effect",
+    ParallelTests[IorT[Option, String, *], IorT[Option, String, *]].parallel[Int, String]
   )
-  checkAll("Parallel[OptionT[M, ?], Nested[F, Option, ?]]",
-           ParallelTests[OptionT[Either[String, ?], ?], Nested[Validated[String, ?], Option, ?]].parallel[Int, String])
+  checkAll("Parallel[OptionT[M, *], Nested[F, Option, *]]",
+           ParallelTests[OptionT[Either[String, *], *], Nested[Validated[String, *], Option, *]].parallel[Int, String])
   checkAll(
-    "Parallel[EitherT[M, String, ?], Nested[F, Validated[String, ?], ?]]",
-    ParallelTests[EitherT[Either[String, ?], String, ?], Nested[Validated[String, ?], Validated[String, ?], ?]]
+    "Parallel[EitherT[M, String, *], Nested[F, Validated[String, *], *]]",
+    ParallelTests[EitherT[Either[String, *], String, *], Nested[Validated[String, *], Validated[String, *], *]]
       .parallel[Int, String]
   )
   checkAll(
-    "Parallel[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]]",
-    ParallelTests[EitherT[Option, String, ?], Nested[Option, Validated[String, ?], ?]].parallel[Int, String]
+    "Parallel[EitherT[Option, String, *], Nested[Option, Validated[String, *], *]]",
+    ParallelTests[EitherT[Option, String, *], Nested[Option, Validated[String, *], *]].parallel[Int, String]
   )
   checkAll(
-    "Parallel[WriterT[M, Int, ?], WriterT[F, Int, ?]]",
-    ParallelTests[WriterT[Either[String, ?], Int, ?], WriterT[Validated[String, ?], Int, ?]].parallel[Int, String]
+    "Parallel[WriterT[M, Int, *], WriterT[F, Int, *]]",
+    ParallelTests[WriterT[Either[String, *], Int, *], WriterT[Validated[String, *], Int, *]].parallel[Int, String]
   )
   checkAll("NonEmptyParallel[Vector, ZipVector]",
            NonEmptyParallelTests[Vector, ZipVector].nonEmptyParallel[Int, String])
@@ -454,24 +454,24 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]",
            NonEmptyParallelTests[NonEmptyList, ZipNonEmptyList].nonEmptyParallel[Int, String])
 
-  checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, ?]",
-           ParallelTests[NonEmptyStream, OneAnd[ZipStream, ?]].parallel[Int, String])
+  checkAll("Parallel[NonEmptyStream, OneAnd[ZipStream, *]",
+           ParallelTests[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
 
   checkAll("Parallel[Id, Id]", ParallelTests[Id, Id].parallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyList, ZipNonEmptyList]",
            SerializableTests.serializable(NonEmptyParallel[NonEmptyList, ZipNonEmptyList]))
 
-  checkAll("Parallel[Either[String, ?], Validated[String, ?]]",
-           SerializableTests.serializable(Parallel[Either[String, ?], Validated[String, ?]]))
+  checkAll("Parallel[Either[String, *], Validated[String, *]]",
+           SerializableTests.serializable(Parallel[Either[String, *], Validated[String, *]]))
 
   {
     implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
     checkAll(
-      "Parallel[KlesliT[M, A, ?], Kleisli[F, A, ?]]",
-      ParallelTests[Kleisli[Either[String, ?], MiniInt, ?], Kleisli[Validated[String, ?], MiniInt, ?]]
+      "Parallel[KlesliT[M, A, *], Kleisli[F, A, *]]",
+      ParallelTests[Kleisli[Either[String, *], MiniInt, *], Kleisli[Validated[String, *], MiniInt, *]]
         .parallel[Int, String]
     )
   }
@@ -490,9 +490,9 @@ trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
   {
-    implicit val parVal = Parallel.applicativeError[Either[String, ?], Validated[String, ?], String]
+    implicit val parVal = Parallel.applicativeError[Either[String, *], Validated[String, *], String]
 
     checkAll("ApplicativeError[Validated[String, Int]]",
-             ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+             ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
   }
 }

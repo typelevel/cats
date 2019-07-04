@@ -11,20 +11,20 @@ class CofreeSuite extends CatsSuite {
 
   import CofreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, *]]
 
-  checkAll("Cofree[Option, ?]", ComonadTests[Cofree[Option, ?]].comonad[Int, Int, Int])
+  checkAll("Cofree[Option, *]", ComonadTests[Cofree[Option, *]].comonad[Int, Int, Int])
   locally {
     implicit val instance = Cofree.catsTraverseForCofree[Option]
-    checkAll("Cofree[Option, ?]", TraverseTests[Cofree[Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[Cofree[Option, ?]]", SerializableTests.serializable(Traverse[Cofree[Option, ?]]))
+    checkAll("Cofree[Option, *]", TraverseTests[Cofree[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Cofree[Option, *]]", SerializableTests.serializable(Traverse[Cofree[Option, *]]))
   }
   locally {
     implicit val instance = Cofree.catsReducibleForCofree[Option]
-    checkAll("Cofree[Option, ?]", ReducibleTests[Cofree[Option, ?]].reducible[Option, Int, Int])
-    checkAll("Reducible[Cofree[Option, ?]]", SerializableTests.serializable(Reducible[Cofree[Option, ?]]))
+    checkAll("Cofree[Option, *]", ReducibleTests[Cofree[Option, *]].reducible[Option, Int, Int])
+    checkAll("Reducible[Cofree[Option, *]]", SerializableTests.serializable(Reducible[Cofree[Option, *]]))
   }
-  checkAll("Comonad[Cofree[Option, ?]]", SerializableTests.serializable(Comonad[Cofree[Option, ?]]))
+  checkAll("Comonad[Cofree[Option, *]]", SerializableTests.serializable(Comonad[Cofree[Option, *]]))
 
   test("Cofree.unfold") {
     val unfoldedHundred: CofreeNel[Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))

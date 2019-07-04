@@ -350,8 +350,8 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[SortedSet](s => SortedSet(s: _*))
   }
 
-  test("Foldable[SortedMap[String, ?]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[SortedMap[String, ?]](
+  test("Foldable[SortedMap[String, *]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[SortedMap[String, *]](
       xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap
     )
   }
@@ -413,7 +413,7 @@ class FoldableSuiteAdditional extends CatsSuite {
   test(".foldLeftM short-circuiting") {
     implicit val F = foldableLazyListWithDefaultImpl
     val ns = LazyList.continually(1)
-    val res = F.foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+    val res = F.foldLeftM[Either[Int, *], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
     }
     assert(res == Left(100000))
@@ -425,7 +425,7 @@ class FoldableSuiteAdditional extends CatsSuite {
     // test that no more elements are evaluated than absolutely necessary
 
     def concatUntil(ss: LazyList[String], stop: String): Either[String, String] =
-      F.foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
+      F.foldLeftM[Either[String, *], String, String](ss, "") { (acc, s) =>
         if (s == stop) Left(acc) else Right(acc + s)
       }
 
@@ -469,7 +469,7 @@ class FoldableLazyListSuite extends FoldableSuite[LazyList]("lazyList") {
   def iterator[T](list: LazyList[T]): Iterator[T] = list.iterator
 }
 
-class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, ?]]("sortedMap") {
+class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, *]]("sortedMap") {
   def iterator[T](map: SortedMap[Int, T]): Iterator[T] = map.valuesIterator
 }
 
@@ -477,11 +477,11 @@ class FoldableOptionSuite extends FoldableSuite[Option]("option") {
   def iterator[T](option: Option[T]): Iterator[T] = option.iterator
 }
 
-class FoldableEitherSuite extends FoldableSuite[Either[Int, ?]]("either") {
+class FoldableEitherSuite extends FoldableSuite[Either[Int, *]]("either") {
   def iterator[T](either: Either[Int, T]): Iterator[T] = either.toOption.iterator
 }
 
-class FoldableValidatedSuite extends FoldableSuite[Validated[String, ?]]("validated") {
+class FoldableValidatedSuite extends FoldableSuite[Validated[String, *]]("validated") {
   def iterator[T](validated: Validated[String, T]): Iterator[T] = validated.toOption.iterator
 }
 
@@ -489,36 +489,36 @@ class FoldableTrySuite extends FoldableSuite[Try]("try") {
   def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
 }
 
-class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, ?]]("eitherK") {
+class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, *]]("eitherK") {
   def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
 }
 
-class FoldableIorSuite extends FoldableSuite[Int Ior ?]("ior") {
+class FoldableIorSuite extends FoldableSuite[Int Ior *]("ior") {
   def iterator[T](ior: Int Ior T) =
     ior.fold(_ => None.iterator, b => Some(b).iterator, (_, b) => Some(b).iterator)
 }
 
-class FoldableIdSuite extends FoldableSuite[Id[?]]("id") {
+class FoldableIdSuite extends FoldableSuite[Id[*]]("id") {
   def iterator[T](id: Id[T]) = Some(id).iterator
 }
 
-class FoldableIdTSuite extends FoldableSuite[IdT[Option, ?]]("idT") {
+class FoldableIdTSuite extends FoldableSuite[IdT[Option, *]]("idT") {
   def iterator[T](idT: IdT[Option, T]) = idT.value.iterator
 }
 
-class FoldableConstSuite extends FoldableSuite[Const[Int, ?]]("const") {
+class FoldableConstSuite extends FoldableSuite[Const[Int, *]]("const") {
   def iterator[T](const: Const[Int, T]) = None.iterator
 }
 
-class FoldableTuple2Suite extends FoldableSuite[(Int, ?)]("tuple2") {
+class FoldableTuple2Suite extends FoldableSuite[(Int, *)]("tuple2") {
   def iterator[T](tuple: (Int, T)) = Some(tuple._2).iterator
 }
 
-class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, ?]]("oneAnd") {
+class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, *]]("oneAnd") {
   def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
 }
 
-class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, ?]]("nested") {
+class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, *]]("nested") {
   def iterator[T](nested: Nested[List, Option, T]) =
     nested.value.collect {
       case Some(t) => t
