@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats._
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.data._
@@ -79,6 +78,21 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
     forAll { es: NonEmptyList[Either[String, Int]] =>
       Parallel.parNonEmptyTraverse_(es)(identity) should ===(Parallel.parNonEmptySequence_(es))
+    }
+  }
+
+  test("ParUnorderedSequence Either should accumulate errors") {
+    val f: PartialFunction[Either[Set[String], Int], Set[String]] = { case Left(e) => e }
+    forAll { es: Map[String, Either[Set[String], Int]] =>
+      val lefts = es.values.toSet.collect(f).flatten
+
+      es.parUnorderedSequence.fold(identity, _ => Monoid[Set[String]].empty) should ===(lefts)
+    }
+  }
+
+  test("ParUnorderedTraverse identity should be equivalent to parUnorderedSequence") {
+    forAll { es: Map[String, Either[Set[String], Int]] =>
+      es.parUnorderedTraverse(identity) should ===(es.parUnorderedSequence)
     }
   }
 

@@ -282,6 +282,28 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
+   * Like `UnorderedTraverse[A].unorderedSequence`, but uses the CommutativeApplicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parUnorderedSequence[T[_]: UnorderedTraverse, M[_], F[_], A](
+    tma: T[M[A]]
+  )(implicit P: Parallel[M, F], C: CommutativeApplicative[F]): M[T[A]] = {
+    val fta: F[T[A]] = UnorderedTraverse[T].unorderedTraverse(tma)(P.parallel.apply)(C)
+    P.sequential(fta)
+  }
+
+  /**
+   * Like `UnorderedTraverse[A].unorderedTraverse`, but uses the CommutativeApplicative instance
+   * corresponding to the Parallel instance instead.
+   */
+  def parUnorderedTraverse[T[_]: UnorderedTraverse, M[_], F[_], A, B](
+    ta: T[A]
+  )(f: A => M[B])(implicit P: Parallel[M, F], C: CommutativeApplicative[F]): M[T[B]] = {
+    val gtb: F[T[B]] = UnorderedTraverse[T].unorderedTraverse(ta)(f.andThen(P.parallel.apply))(C)
+    P.sequential(gtb)
+  }
+
+  /**
    * Like `Applicative[F].ap`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */

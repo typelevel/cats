@@ -1,6 +1,6 @@
 package cats.syntax
 
-import cats.{Bitraverse, FlatMap, Foldable, Monad, Parallel, Traverse}
+import cats.{Bitraverse, CommutativeApplicative, FlatMap, Foldable, Monad, Parallel, Traverse, UnorderedTraverse}
 
 trait ParallelSyntax extends TupleParallelSyntax {
 
@@ -14,6 +14,17 @@ trait ParallelSyntax extends TupleParallelSyntax {
   implicit final def catsSyntaxParallelAp[M[_]: FlatMap, A](ma: M[A]): ParallelApOps[M, A] =
     new ParallelApOps[M, A](ma)
 
+}
+
+trait ParallelUnorderedTraverseSyntax {
+  implicit final def catsSyntaxParallelUnorderedTraverse[T[_]: UnorderedTraverse, A](
+    ta: T[A]
+  ): ParallelUnorderedTraversableOps[T, A] =
+    new ParallelUnorderedTraversableOps[T, A](ta)
+
+  implicit final def catsSyntaxParallelUnorderedSequence[T[_]: UnorderedTraverse, M[_]: Monad, A](
+    tma: T[M[A]]
+  ): ParallelUnorderedSequenceOps[T, M, A] = new ParallelUnorderedSequenceOps[T, M, A](tma)
 }
 
 trait ParallelApplySyntax {
@@ -64,7 +75,13 @@ trait ParallelBitraverseSyntax {
 final class ParallelTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
   def parTraverse[M[_]: Monad, F[_], B](f: A => M[B])(implicit T: Traverse[T], P: Parallel[M, F]): M[T[B]] =
     Parallel.parTraverse(ta)(f)
+}
 
+final class ParallelUnorderedTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
+  def parUnorderedTraverse[M[_]: Monad, F[_], B](
+    f: A => M[B]
+  )(implicit T: UnorderedTraverse[T], P: Parallel[M, F], C: CommutativeApplicative[F]): M[T[B]] =
+    Parallel.parUnorderedTraverse(ta)(f)
 }
 
 final class ParallelTraversable_Ops[T[_], A](private val ta: T[A]) extends AnyVal {
@@ -82,6 +99,14 @@ final class ParallelFlatTraversableOps[T[_], A](private val ta: T[A]) extends An
 final class ParallelSequenceOps[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
   def parSequence[F[_]](implicit M: Monad[M], T: Traverse[T], P: Parallel[M, F]): M[T[A]] =
     Parallel.parSequence(tma)
+}
+
+final class ParallelUnorderedSequenceOps[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
+  def parUnorderedSequence[F[_]](implicit M: Monad[M],
+                                 T: UnorderedTraverse[T],
+                                 P: Parallel[M, F],
+                                 C: CommutativeApplicative[F]): M[T[A]] =
+    Parallel.parUnorderedSequence(tma)
 }
 
 final class ParallelSequence_Ops[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {

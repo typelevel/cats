@@ -222,6 +222,18 @@ object SyntaxSuite
     val mtab2 = tmab.parLeftSequence
   }
 
+  def testParallelUnorderedTraverse[M[_]: Monad, F[_], T[_]: UnorderedTraverse, A, B](
+    implicit P: Parallel[M, F],
+    C: CommutativeApplicative[F]
+  ): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parUnorderedTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parUnorderedSequence
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]
