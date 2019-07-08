@@ -2,6 +2,6 @@ package cats
 package laws
 package discipline
 
-object VersionSpecific {
+object ScalaVersionSpecific {
   trait ArbitraryInstances
 }

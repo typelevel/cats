@@ -2,4 +2,4 @@ package cats
 
 package data
 
-abstract private[data] class VersionSpecificPackage
+abstract private[data] class ScalaVersionSpecificPackage

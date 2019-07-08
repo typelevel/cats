@@ -15,7 +15,7 @@ import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
  * Arbitrary instances for cats.data
  */
 @suppressUnusedImportWarningForScalaVersionSpecific
-object arbitrary extends ArbitraryInstances0 with VersionSpecific.ArbitraryInstances {
+object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.ArbitraryInstances {
 
   // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.

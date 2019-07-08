@@ -3,7 +3,7 @@ package cats.laws.discipline
 import cats.data.NonEmptyLazyList
 import org.scalacheck.{Arbitrary, Cogen}
 
-object VersionSpecific {
+object ScalaVersionSpecific {
 
   trait ArbitraryInstances {
 

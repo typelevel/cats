@@ -2,7 +2,7 @@ package cats
 import kernel.compat.scalaVersionSpecific._
 import compat.lazyList.toLazyList
 
-package object data extends VersionSpecificPackage {
+package object data extends ScalaVersionSpecificPackage {
 
   type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
