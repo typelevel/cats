@@ -235,6 +235,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     new NonEmptyVector(toVector.sorted(AA.toOrdering))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]

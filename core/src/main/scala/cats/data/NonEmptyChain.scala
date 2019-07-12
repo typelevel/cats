@@ -393,7 +393,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
   implicit val catsDataInstancesForNonEmptyChain
-    : Bimonad[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with SemigroupK[NonEmptyChain] =
+    : SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] =
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
