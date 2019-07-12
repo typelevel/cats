@@ -3,12 +3,18 @@ package data
 
 abstract private[data] class AbstractNonEmptyBimonadTraverse[F[_], NonEmptyF[_]](implicit MF: Monad[F],
                                                                                  CF: CoflatMap[F],
-                                                                                 TF: Traverse[F])
+                                                                                 TF: Traverse[F],
+                                                                                 SF: SemigroupK[F]
+                                                                                )
     extends Bimonad[NonEmptyF]
-    with NonEmptyTraverse[NonEmptyF] {
+    with NonEmptyTraverse[NonEmptyF] with SemigroupK[NonEmptyF] {
   val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
   val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
   val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
+  val semiGroupKInstance = SemigroupK[F].asInstanceOf[SemigroupK[NonEmptyF]]
+
+  def combineK[A](a: NonEmptyF[A], b: NonEmptyF[A]): NonEmptyF[A] =
+    semiGroupKInstance.combineK(a, b)
 
   def pure[A](x: A): NonEmptyF[A] = monadInstance.pure(x)
 
