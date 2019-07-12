@@ -26,10 +26,10 @@ import kernel.compat.scalaVersionSpecific._
 
 private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
-  private[cats] def create[A](s: SortedSet[A]): Type[A] =
+  private[data] def create[A](s: SortedSet[A]): Type[A] =
     s.asInstanceOf[Type[A]]
 
-  private[cats] def unwrap[A](s: Type[A]): SortedSet[A] =
+  private[data] def unwrap[A](s: Type[A]): SortedSet[A] =
     s.asInstanceOf[SortedSet[A]]
 
   def fromSet[A](as: SortedSet[A]): Option[NonEmptySet[A]] =
