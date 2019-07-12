@@ -80,7 +80,7 @@ object Cofree extends CofreeInstances {
    * A stack-safe algebraic recursive fold out of the cofree comonad.
    */
   def cata[F[_], A, B](cof: Cofree[F, A])(folder: (A, F[B]) => Eval[B])(implicit F: Traverse[F]): Eval[B] =
-    F.traverse(cof.tailForced)(cata(_)(folder)).flatMap(folder(cof.head, _))
+    F.traverse(cof.tailForced)(c => Eval.defer(cata(c)(folder))).flatMap(folder(cof.head, _))
 
   /**
    * A monadic recursive fold out of the cofree comonad into a monad which can express Eval's stack-safety.

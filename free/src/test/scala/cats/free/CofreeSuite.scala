@@ -108,6 +108,19 @@ class CofreeSuite extends CatsSuite {
     cata should ===(nelUnfoldedHundred)
   }
 
+  test("Cofree.cata is stack-safe") {
+    val unfolded = Cofree.unfold[Option, Int](0)(i => if (i == 50000) None else Some(i + 1))
+    val sum = List.tabulate(50000)(identity).sum
+    val cata =
+      Cofree
+        .cata[Option, Int, Int](unfolded)(
+          (i, lb) => Eval.now(lb.fold(0)(_ + i))
+        )
+        .value
+
+    cata should ===(sum)
+  }
+
   test("Cofree.cataM") {
 
     type EvalOption[A] = OptionT[Eval, A]
