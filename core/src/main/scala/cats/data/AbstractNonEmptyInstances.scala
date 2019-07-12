@@ -1,10 +1,10 @@
 package cats
 package data
 
-abstract private[data] class AbstractNonEmptyBimonadTraverse[F[_], NonEmptyF[_]](implicit MF: Monad[F],
-                                                                                 CF: CoflatMap[F],
-                                                                                 TF: Traverse[F],
-                                                                                 SF: SemigroupK[F])
+abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](implicit MF: Monad[F],
+                                                                           CF: CoflatMap[F],
+                                                                           TF: Traverse[F],
+                                                                           SF: SemigroupK[F])
     extends Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
     with SemigroupK[NonEmptyF] {

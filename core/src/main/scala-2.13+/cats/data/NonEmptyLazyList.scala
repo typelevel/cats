@@ -326,7 +326,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
   implicit val catsDataInstancesForNonEmptyLazyList
     : Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] with SemigroupK[NonEmptyLazyList] =
-    new AbstractNonEmptyBimonadTraverse[LazyList, NonEmptyLazyList] {
+    new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] {
 
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 

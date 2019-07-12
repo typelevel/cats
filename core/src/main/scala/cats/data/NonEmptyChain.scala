@@ -394,7 +394,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
   implicit val catsDataInstancesForNonEmptyChain
     : Bimonad[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with SemigroupK[NonEmptyChain] =
-    new AbstractNonEmptyBimonadTraverse[Chain, NonEmptyChain] {
+    new AbstractNonEmptyInstances[Chain, NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
