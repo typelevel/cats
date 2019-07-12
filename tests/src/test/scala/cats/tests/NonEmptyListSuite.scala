@@ -275,7 +275,7 @@ class NonEmptyListSuite extends CatsSuite {
 
   test("NonEmptyList#size and length is consistent with List#size") {
     forAll { nel: NonEmptyList[Int] =>
-      nel.size.toLong should ===(nel.toList.size.toLong)
+      nel.size should ===(nel.toList.size)
       nel.length should ===(nel.toList.size)
     }
   }
@@ -342,6 +342,16 @@ class NonEmptyListSuite extends CatsSuite {
   test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
     forAll { nel: NonEmptyList[Int] =>
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
+    }
+  }
+}
+
+@deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
+class DeprecatedNonEmptyListSuite extends CatsSuite {
+
+  test("Deprecated NonEmptyList#concat is consistent with List#:::") {
+    forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
+      nel.concat(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
     }
   }
 }
