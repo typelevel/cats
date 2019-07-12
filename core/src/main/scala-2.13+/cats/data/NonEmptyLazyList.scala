@@ -12,10 +12,10 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   private[data] trait Tag extends Any
   type Type[+A] <: Base with Tag
 
-  private[cats] def create[A](s: LazyList[A]): Type[A] =
+  private[data] def create[A](s: LazyList[A]): Type[A] =
     s.asInstanceOf[Type[A]]
 
-  private[cats] def unwrap[A](s: Type[A]): LazyList[A] =
+  private[data] def unwrap[A](s: Type[A]): LazyList[A] =
     s.asInstanceOf[LazyList[A]]
 
   def fromLazyList[A](as: LazyList[A]): Option[NonEmptyLazyList[A]] =

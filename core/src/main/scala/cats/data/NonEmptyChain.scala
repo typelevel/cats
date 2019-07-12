@@ -28,10 +28,10 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
   private[data] trait Tag extends Any
   type Type[+A] <: Base with Tag
 
-  private[cats] def create[A](s: Chain[A]): Type[A] =
+  private[data] def create[A](s: Chain[A]): Type[A] =
     s.asInstanceOf[Type[A]]
 
-  private[cats] def unwrap[A](s: Type[A]): Chain[A] =
+  private[data] def unwrap[A](s: Type[A]): Chain[A] =
     s.asInstanceOf[Chain[A]]
 
   def fromChain[A](as: Chain[A]): Option[NonEmptyChain[A]] =
