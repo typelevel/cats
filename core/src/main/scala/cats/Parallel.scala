@@ -169,6 +169,26 @@ object Parallel extends ParallelArityFunctions2 {
     P.sequential(gtb)
   }
 
+  def parUnorderedTraverse[T[_]: UnorderedTraverse, M[_], F[_]: CommutativeApplicative, A, B](
+    ta: T[A]
+  )(f: A => M[B])(implicit P: Parallel[M, F]): M[T[B]] =
+    P.sequential(UnorderedTraverse[T].unorderedTraverse(ta)(a => P.parallel(f(a))))
+
+  def parUnorderedSequence[T[_]: UnorderedTraverse, M[_], F[_]: CommutativeApplicative, A](
+    ta: T[M[A]]
+  )(implicit P: Parallel[M, F]): M[T[A]] =
+    parUnorderedTraverse[T, M, F, M[A], A](ta)(Predef.identity)
+
+  def parUnorderedFlatTraverse[T[_]: UnorderedTraverse: FlatMap, M[_], F[_]: CommutativeApplicative, A, B](
+    ta: T[A]
+  )(f: A => M[T[B]])(implicit P: Parallel[M, F]): M[T[B]] =
+    P.monad.map(parUnorderedTraverse[T, M, F, A, T[B]](ta)(f))(FlatMap[T].flatten)
+
+  def parUnorderedFlatSequence[T[_]: UnorderedTraverse: FlatMap, M[_], F[_]: CommutativeApplicative, A](
+    ta: T[M[T[A]]]
+  )(implicit P: Parallel[M, F]): M[T[A]] =
+    parUnorderedFlatTraverse[T, M, F, M[T[A]], A](ta)(Predef.identity)
+
   /**
    * Like `NonEmptyTraverse[A].nonEmptySequence`, but uses the apply instance
    * corresponding to the Parallel instance instead.
