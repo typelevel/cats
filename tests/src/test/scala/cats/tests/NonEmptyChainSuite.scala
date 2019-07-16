@@ -145,9 +145,6 @@ class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmpt
   def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyChain[Long] = {
-    // if we inline this we get a bewildering implicit numeric widening
-    // error message in Scala 2.10
-    val tailStart: Long = start + 1L
-    NonEmptyChain(start, (tailStart).to(endInclusive): _*)
+    NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
   }
 }
