@@ -133,9 +133,6 @@ class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("N
   def iterator[T](nel: NonEmptyLazyList[T]): Iterator[T] = nel.toLazyList.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyLazyList[Long] = {
-    // if we inline this we get a bewildering implicit numeric widening
-    // error message in Scala 2.10
-    val tailStart: Long = start + 1L
-    NonEmptyLazyList(start, (tailStart).to(endInclusive): _*)
+    NonEmptyLazyList(start, (start + 1L).to(endInclusive): _*)
   }
 }
