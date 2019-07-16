@@ -24,6 +24,10 @@ import cats.kernel._
 import scala.collection.immutable._
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
+  // The following 3 types are components of a technique to
+  // create a no-boxing newtype. It's coped from the
+  // newtypes lib by @alexknvl
+  // For more detail see https://github.com/alexknvl/newtypes
   private[data] type Base
   private[data] trait Tag extends Any
   type Type[+A] <: Base with Tag
