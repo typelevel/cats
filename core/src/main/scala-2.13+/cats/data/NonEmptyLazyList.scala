@@ -15,6 +15,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   // For more detail see https://github.com/alexknvl/newtypes
   private[data] type Base
   private[data] trait Tag extends Any
+  /* aliased in data package as NonEmptyLazyList */
   type Type[+A] <: Base with Tag
 
   private[data] def create[A](s: LazyList[A]): Type[A] =
