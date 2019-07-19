@@ -4,6 +4,7 @@ package data
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
 import scala.collection.mutable
