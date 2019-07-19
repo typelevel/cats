@@ -90,7 +90,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   def flatMap[SC, B](
     f: A => IndexedReaderWriterStateT[F, E, L, SB, SC, B]
   )(implicit F: FlatMap[F], L: Semigroup[L]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =
-    IndexedReaderWriterStateT.applyF {
+    IndexedReaderWriterStateT.shift {
       F.map(runF) { rwsfa => (e: E, sa: SA) =>
         F.flatMap(rwsfa(e, sa)) {
           case (la, sb, a) =>
@@ -108,7 +108,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Like [[map]], but allows the mapping function to return an effectful value.
    */
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
-    IndexedReaderWriterStateT.applyF {
+    IndexedReaderWriterStateT.shift {
       F.map(runF) { rwsfa => (e: E, sa: SA) =>
         F.flatMap(rwsfa(e, sa)) {
           case (l, sb, a) =>
@@ -390,6 +390,25 @@ object IndexedReaderWriterStateT extends IRWSTInstances with CommonIRWSTConstruc
   def modifyF[F[_], E, L, SA, SB](f: SA => F[SB])(implicit F: Applicative[F],
                                                   L: Monoid[L]): IndexedReaderWriterStateT[F, E, L, SA, SB, Unit] =
     IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, _, ())))
+
+  /**
+   * Internal API — shifts the execution of `run` in the `F` context.
+   *
+   * Used to build IndexedReaderWriterStateT values for `F[_]` data types that implement `Monad`,
+   * in which case it is safer to trigger the `F[_]` context earlier.
+   *
+   * This is needed for [[IndexedReaderWriterStateT.flatMap]] to be stack-safe when the underlying F[_] is,
+   * for further explanation see [[Kleisli.shift]].
+   */
+  private[data] def shift[F[_], E, L, SA, SB, A](
+    runF: F[(E, SA) => F[(L, SB, A)]]
+  )(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
+    F match {
+      case ap: Applicative[F] @unchecked =>
+        IndexedReaderWriterStateT.apply[F, E, L, SA, SB, A]((e: E, sa: SA) => F.flatMap(runF)(f => f(e, sa)))(ap)
+      case _ =>
+        IndexedReaderWriterStateT.applyF(runF)
+    }
 }
 
 abstract private[data] class RWSTFunctions extends CommonIRWSTConstructors {

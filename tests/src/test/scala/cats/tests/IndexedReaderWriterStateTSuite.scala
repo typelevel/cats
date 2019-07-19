@@ -29,6 +29,22 @@ class ReaderWriterStateTSuite extends CatsSuite {
     rws.runS("context", 0).value should ===(70001)
   }
 
+  test("flatMap is stack-safe on repeated left binds when F is") {
+    val ns = (0 to 70000).toList
+    val one = addLogUnit(1)
+    val rws = ns.foldLeft(one)((acc, _) => acc.flatMap(_ => one))
+
+    rws.runS("context", 0).value should ===(70002)
+  }
+
+  test("flatMap is stack-safe on repeated right binds when F is") {
+    val ns = (0 to 70000).toList
+    val one = addLogUnit(1)
+    val rws = ns.foldLeft(one)((acc, _) => one.flatMap(_ => acc))
+
+    rws.runS("context", 0).value should ===(70002)
+  }
+
   test("map2 combines logs") {
     forAll {
       (rwsa: ReaderWriterState[String, Vector[Int], Int, Int],
