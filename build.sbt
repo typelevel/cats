@@ -84,7 +84,8 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   sources in (Compile, doc) := {
     val docSource = (sources in (Compile, doc)).value
     if (priorTo2_13(scalaVersion.value)) docSource else Nil
-  }
+  },
+  mimaFailOnNoPrevious := false
 ) ++ warnUnusedImport ++ update2_12 ++ xlint
 
 def macroDependencies(scalaVersion: String) =
