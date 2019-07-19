@@ -139,4 +139,16 @@ class NonEmptyChainSuite extends CatsSuite {
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
+
+  test("init") {
+    forAll { ci: NonEmptyChain[Int] =>
+      ci.init.toList should ===(ci.toList.init)
+    }
+  }
+
+  test("last") {
+    forAll { ci: NonEmptyChain[Int] =>
+      ci.last should ===(ci.toList.last)
+    }
+  }
 }
