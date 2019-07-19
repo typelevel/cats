@@ -400,7 +400,11 @@ def mimaSettings(moduleName: String) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
-          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
+          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
+          exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
+        ) ++ // Only narrowing of types allowed here
+        Seq(
+          exclude[IncompatibleSignatureProblem]("*")
         )
     }
   )
