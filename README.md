@@ -67,11 +67,13 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13.0, and [Scala.js](http://www.scala-js.org/).
 
-Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
 
 ```scala
 scalacOptions += "-Ypartial-unification"
 ```
+
+(Partial unification is on by default since Scala 2.13, the compiler no longer accepts `-Ypartial-unification`)
 
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
 
