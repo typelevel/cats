@@ -191,14 +191,29 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def uncons: (A, Chain[A]) = toChain.uncons.get
 
   /**
-   * Returns the first element of this chain.
+   * Returns the init and last of this NonEmptyChain. Amortized O(1).
+   */
+  final def initLast: (Chain[A], A) = toChain.initLast.get
+
+  /**
+   * Returns the first element of this NonEmptyChain. Amortized O(1).
    */
   final def head: A = uncons._1
 
   /**
-   * Returns all but the first element of this chain.
+   * Returns all but the first element of this NonEmptyChain. Amortized O(1).
    */
   final def tail: Chain[A] = uncons._2
+
+  /**
+   * Returns all but the last element of this NonEmptyChain. Amortized O(1).
+   */
+  final def init: Chain[A] = initLast._1
+
+  /**
+   * Returns the last element of this NonEmptyChain. Amortized O(1).
+   */
+  final def last: A = initLast._2
 
   /**
    * Tests if some element is contained in this chain.

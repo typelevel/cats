@@ -68,6 +68,12 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("lastOption") {
+    forAll { (c: Chain[Int]) =>
+      c.lastOption should ===(c.toList.lastOption)
+    }
+  }
+
   test("size is consistent with toList.size") {
     forAll { (ci: Chain[Int]) =>
       ci.size.toInt should ===(ci.toList.size)
