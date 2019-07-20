@@ -25,10 +25,10 @@ import scala.collection.immutable._
 
 private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
-  private[cats] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
+  private[data] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
     m.asInstanceOf[Type[K, A]]
 
-  private[cats] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
+  private[data] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
     m.asInstanceOf[SortedMap[K, A]]
 
   def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =

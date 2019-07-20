@@ -48,9 +48,45 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Returns the init and last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def initLast: Option[(Chain[A], A)] = {
+    var c: Chain[A] = this
+    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    // scalastyle:off null
+    var result: Option[(Chain[A], A)] = null
+    while (result eq null) {
+      c match {
+        case Singleton(a) =>
+          val pre =
+            if (lefts.isEmpty) nil
+            else lefts.reduceLeft((x, y) => Append(x, y))
+          result = Some(pre -> a)
+        case Append(l, r) => c = r; lefts += l
+        case Wrap(seq) =>
+          val init = fromSeq(seq.init)
+          val pre =
+            if (lefts.isEmpty) init
+            else lefts.reduceLeft((x, y) => Append(x, y)) ++ init
+          result = Some((pre, seq.last))
+        case Empty =>
+          // Empty is only top level, it is never internal to an Append
+          result = None
+      }
+    }
+    // scalastyle:on null
+    result
+  }
+
+  /**
    * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
    */
   def headOption: Option[A] = uncons.map(_._1)
+
+  /**
+   * Returns the last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def lastOption: Option[A] = initLast.map(_._2)
 
   /**
    * Returns true if there are no elements in this collection.

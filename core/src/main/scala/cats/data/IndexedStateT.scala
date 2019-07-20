@@ -101,7 +101,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    */
   def transform[B, SC](f: (SB, A) => (SC, B))(implicit F: Functor[F]): IndexedStateT[F, SA, SC, B] =
     IndexedStateT.applyF(F.map(runF) { sfsa =>
-      sfsa.andThen { fsa =>
+      AndThen(sfsa).andThen { fsa =>
         F.map(fsa) { case (s, a) => f(s, a) }
       }
     })

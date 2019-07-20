@@ -2,9 +2,10 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.vector._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
-import cats.instances.vector._
 import kernel.compat.scalaVersionSpecific._
 
 /**
