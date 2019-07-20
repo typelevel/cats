@@ -169,7 +169,7 @@ sealed abstract class Chain[+A] {
     var result = Chain.empty[A]
     foreachUntil { a =>
       val pr = p(a)
-      if(pr) result = result :+ a
+      if (pr) result = result :+ a
       !pr
     }
     result
