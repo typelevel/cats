@@ -161,6 +161,40 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Takes longest prefix of elements that satisfy a predicate.
+   * @param p The predicate used to test elements.
+   * @return the longest prefix of this chain whose elements all satisfy the predicate p.
+   */
+  final def takeWhile(p: A => Boolean): Chain[A] = {
+    var result = Chain.empty[A]
+    foreachUntil { a =>
+      val pr = p(a)
+      if(pr) result = result :+ a
+      !pr
+    }
+    result
+  }
+
+  /**
+   * Drops longest prefix of elements that satisfy a predicate.
+   *
+   * @param p The predicate used to test elements.
+   * @return the longest suffix of this sequence whose first element does not satisfy the predicate p.
+   */
+  final def dropWhile(p: A => Boolean): Chain[A] = {
+    @tailrec
+    def go(rem: Chain[A]): Chain[A] =
+      rem.uncons match {
+        case Some((a, tail)) =>
+          if (p(a)) go(tail)
+          else rem
+
+        case None => nil
+      }
+    go(this)
+  }
+
+  /**
    * Folds over the elements from right to left using the supplied initial value and function.
    */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {

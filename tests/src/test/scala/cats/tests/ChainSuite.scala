@@ -224,4 +224,17 @@ class ChainSuite extends CatsSuite {
       x.hashCode should ===(x.toList.hashCode)
     }
   }
+
+  test("Chain#takeWhile is consistent with List#takeWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.takeWhile(p).toList should ===(x.toList.takeWhile(p))
+    }
+  }
+
+  test("Chain#dropWhile is consistent with List#dropWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.dropWhile(p).toList should ===(x.toList.dropWhile(p))
+    }
+  }
+
 }
