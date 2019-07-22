@@ -363,6 +363,12 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
     S.combineAllOption(iterator).get
 
   /**
+   * Applies the supplied function to each element and returns a new NonEmptyChain.
+   */
+  final def map[B](f: A => B): NonEmptyChain[B] =
+    create(toChain.map(f))
+
+  /**
    * Applies the supplied function to each element and returns a new NonEmptyChain from the concatenated results
    */
   final def flatMap[B](f: A => NonEmptyChain[B]): NonEmptyChain[B] =
