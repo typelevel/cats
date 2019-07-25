@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.instances.tuple.catsKernelStdMonoidForTuple2
 
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
@@ -19,6 +20,9 @@ import simulacrum.typeclass
       (c: C, a: A) => C.combine(c, f(a)),
       (c: C, b: B) => C.combine(c, g(b))
     )
+
+  def bifold[A: Monoid, B: Monoid](fab: F[A, B]): (A, B) =
+    bifoldMap(fab)((_, Monoid[B].empty), (Monoid[A].empty, _))
 
   def compose[G[_, _]](implicit ev: Bifoldable[G]): Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBifoldable[F, G] {
