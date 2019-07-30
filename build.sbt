@@ -394,7 +394,8 @@ def mimaSettings(moduleName: String) =
           exclude[DirectMissingMethodProblem]("cats.syntax.ValidatedIdOpsBinCompat0.a"),
           exclude[DirectMissingMethodProblem]("cats.syntax.ValidatedIdSyntax.a"),
           exclude[DirectMissingMethodProblem]("cats.syntax.VectorOps.va"),
-          exclude[DirectMissingMethodProblem]("cats.syntax.WriterIdSyntax.a")
+          exclude[DirectMissingMethodProblem]("cats.syntax.WriterIdSyntax.a"),
+          exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances.catsDateTraverseFilterForOptionT")
         ) ++ // Only compile-time abstractions (macros) allowed here
         Seq(
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
