@@ -134,6 +134,10 @@ options:
   - title: Const
     url: datatypes/const.html
     menu_type: data
+    
+  - title: ContT
+    url: datatypes/contt.html
+    menu_type: data
 
   - title: Either
     url: datatypes/either.html
