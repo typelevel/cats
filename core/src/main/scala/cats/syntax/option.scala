@@ -249,7 +249,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    *
    * scala> val result2: Option[Int] = None
    * scala> result2.toRightNec("error!")
-   * res1: EitherNec[String, Int] = Left(NonEmptyChain(error!))
+   * res1: EitherNec[String, Int] = Left(Chain(error!))
    * }}}
    */
   def toRightNec[B](b: => B): EitherNec[B, A] = oa.toRight(NonEmptyChain.one(b))
@@ -290,7 +290,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    *
    * scala> val error1: Option[String] = Some("error!")
    * scala> error1.toLeftNec(3)
-   * res0: EitherNec[String, Int] = Left(NonEmptyChain(error!))
+   * res0: EitherNec[String, Int] = Left(Chain(error!))
    *
    * scala> val error2: Option[String] = None
    * scala> error2.toLeftNec(3)
