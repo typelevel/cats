@@ -213,9 +213,9 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toLeftIor[B](b: => B): Ior[A, B] = oa.fold[Ior[A, B]](Ior.Right(b))(Ior.Left(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[Right]].
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
    * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyList]]
-   * and return the result in a [[Left]].
+   * and return the result in a [[scala.Left]].
    *
    * Example:
    * {{{
@@ -234,9 +234,9 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toRightNel[B](b: => B): EitherNel[B, A] = oa.toRight(NonEmptyList.one(b))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[Right]].
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
    * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyChain]]
-   * and return the result in a [[Left]].
+   * and return the result in a [[scala.Left]].
    *
    * Example:
    * {{{
@@ -256,9 +256,9 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
 
   /**
    * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]]
-   * and return it in a [[Left]].
+   * and return it in a [[scala.Left]].
    * If the `Option` is `None`, return the provided `B` value in a
-   * [[Right]].
+   * [[scala.Right]].
    *
    * Example:
    * {{{
@@ -279,9 +279,9 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
 
   /**
    * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyChain]]
-   * and return it in a [[Left]].
+   * and return it in a [[scala.Left]].
    * If the `Option` is `None`, return the provided `B` value in a
-   * [[Right]].
+   * [[scala.Right]].
    *
    * Example:
    * {{{
