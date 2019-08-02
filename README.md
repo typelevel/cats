@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
 * **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13.0
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
 * **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
@@ -7,8 +8,6 @@
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
-* **Jan 31 2019** Cats 1.6.0 is released.
-* **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
 
 ## Cats
 <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a>
@@ -84,7 +83,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M4"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-RC1"
 ```
 
 This will pull in the cats-core module. If you require some other
