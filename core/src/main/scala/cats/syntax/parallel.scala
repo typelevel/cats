@@ -72,11 +72,6 @@ trait ParallelUnorderedTraverseSyntax {
   ): ParallelUnorderedSequenceOps[T, M, A] =
     new ParallelUnorderedSequenceOps[T, M, A](tma)
 
-  implicit final def catsSyntaxParallelUnorderedFlatTraverse[T[_], A](
-    ta: T[A]
-  ): ParallelUnorderedFlatTraverseOps[T, A] =
-    new ParallelUnorderedFlatTraverseOps[T, A](ta)
-
   implicit final def catsSyntaxParallelUnorderedFlatSequence[T[_], M[_], A](
     tmta: T[M[T[A]]]
   ): ParallelUnorderedFlatSequenceOps[T, M, A] =
@@ -129,6 +124,14 @@ final class ParallelUnorderedTraverseOps[T[_], A](private val ta: T[A]) extends 
     f: A => M[B]
   )(implicit P: Parallel[M, F], F: CommutativeApplicative[F], Tutraverse: UnorderedTraverse[T]): M[T[B]] =
     Parallel.parUnorderedTraverse(ta)(f)
+
+  def parUnorderedFlatTraverse[M[_], F[_], B](
+    f: A => M[T[B]]
+  )(implicit P: Parallel[M, F],
+    F: CommutativeApplicative[F],
+    Tflatmap: FlatMap[T],
+    Tutraverse: UnorderedTraverse[T]): M[T[B]] =
+    Parallel.parUnorderedFlatTraverse(ta)(f)
 }
 
 final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[M[T[A]]]) extends AnyVal {
@@ -137,16 +140,6 @@ final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[
                                      F: CommutativeApplicative[F],
                                      Tutraverse: UnorderedTraverse[T]): M[T[A]] =
     Parallel.parUnorderedFlatSequence(tmta)
-}
-
-final class ParallelUnorderedFlatTraverseOps[T[_], A](private val ta: T[A]) extends AnyVal {
-  def parUnorderedFlatTraverse[M[_], F[_], B](
-    f: A => M[T[B]]
-  )(implicit P: Parallel[M, F],
-    F: CommutativeApplicative[F],
-    Tflatmap: FlatMap[T],
-    Tutraverse: UnorderedTraverse[T]): M[T[B]] =
-    Parallel.parUnorderedFlatTraverse(ta)(f)
 }
 
 final class ParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal {
