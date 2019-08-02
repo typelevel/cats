@@ -118,29 +118,34 @@ final class ParallelFlatSequenceOps[T[_], M[_], A](private val tmta: T[M[T[A]]])
 }
 
 final class ParallelUnorderedSequenceOps[T[_], M[_], A](private val tmta: T[M[A]]) extends AnyVal {
-  def parUnorderedFlatSequence[F[_]: CommutativeApplicative](implicit P: Parallel[M, F],
-                                                             Tutraverse: UnorderedTraverse[T]): M[T[A]] =
+  def parUnorderedSequence[F[_]](implicit P: Parallel[M, F],
+                                 F: CommutativeApplicative[F],
+                                 Tutraverse: UnorderedTraverse[T]): M[T[A]] =
     Parallel.parUnorderedSequence(tmta)
 }
 
 final class ParallelUnorderedTraverseOps[T[_], A](private val ta: T[A]) extends AnyVal {
-  def parUnorderedFlatTraverse[M[_], F[_]: CommutativeApplicative, B](
+  def parUnorderedTraverse[M[_], F[_], B](
     f: A => M[B]
-  )(implicit P: Parallel[M, F], Tutraverse: UnorderedTraverse[T]): M[T[B]] =
+  )(implicit P: Parallel[M, F], F: CommutativeApplicative[F], Tutraverse: UnorderedTraverse[T]): M[T[B]] =
     Parallel.parUnorderedTraverse(ta)(f)
 }
 
 final class ParallelUnorderedFlatSequenceOps[T[_], M[_], A](private val tmta: T[M[T[A]]]) extends AnyVal {
-  def parUnorderedFlatSequence[F[_]: CommutativeApplicative](implicit P: Parallel[M, F],
-                                                             Tflatmap: FlatMap[T],
-                                                             Tutraverse: UnorderedTraverse[T]): M[T[A]] =
+  def parUnorderedFlatSequence[F[_]](implicit P: Parallel[M, F],
+                                     Tflatmap: FlatMap[T],
+                                     F: CommutativeApplicative[F],
+                                     Tutraverse: UnorderedTraverse[T]): M[T[A]] =
     Parallel.parUnorderedFlatSequence(tmta)
 }
 
 final class ParallelUnorderedFlatTraverseOps[T[_], A](private val ta: T[A]) extends AnyVal {
-  def parUnorderedFlatTraverse[M[_], F[_]: CommutativeApplicative, B](
+  def parUnorderedFlatTraverse[M[_], F[_], B](
     f: A => M[T[B]]
-  )(implicit P: Parallel[M, F], Tflatmap: FlatMap[T], Tutraverse: UnorderedTraverse[T]): M[T[B]] =
+  )(implicit P: Parallel[M, F],
+    F: CommutativeApplicative[F],
+    Tflatmap: FlatMap[T],
+    Tutraverse: UnorderedTraverse[T]): M[T[B]] =
     Parallel.parUnorderedFlatTraverse(ta)(f)
 }
 
