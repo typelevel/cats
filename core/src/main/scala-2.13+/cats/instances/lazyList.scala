@@ -69,56 +69,14 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
         fa.zipWithIndex
 
       def tailRecM[A, B](a: A)(fn: A => LazyList[Either[A, B]]): LazyList[B] = {
-        val it: Iterator[B] = new Iterator[B] {
-          var stack: List[Iterator[Either[A, B]]] = Nil
-          var state: Either[A, Option[B]] = Left(a)
-
-          @tailrec
-          def advance(): Unit = stack match {
-            case head :: tail =>
-              if (head.hasNext) {
-                head.next match {
-                  case Right(b) =>
-                    state = Right(Some(b))
-                  case Left(a) =>
-                    val nextFront = fn(a).iterator
-                    stack = nextFront :: stack
-                    advance()
-                }
-              } else {
-                stack = tail
-                advance()
-              }
-            case Nil =>
-              state = Right(None)
-          }
-
-          @tailrec
-          def hasNext: Boolean = state match {
-            case Left(a) =>
-              // this is the first run
-              stack = fn(a).iterator :: Nil
-              advance()
-              hasNext
-            case Right(o) =>
-              o.isDefined
-          }
-
-          @tailrec
-          def next(): B = state match {
-            case Left(a) =>
-              // this is the first run
-              stack = fn(a).iterator :: Nil
-              advance()
-              next()
-            case Right(o) =>
-              val b = o.get
-              advance()
-              b
+        val kernel = Iterator.unfold[Option[B], Iterator[Either[A, B]]](Iterator(Left(a))) { it =>
+          if (!it.hasNext) None
+          else it.next match {
+            case Left(a) => Some((None, fn(a).iterator ++ it))
+            case Right(b) => Some((Some(b), it))
           }
         }
-
-        LazyList.from(it)
+        LazyList.from(kernel.collect { case Some(v) => v })
       }
 
       override def exists[A](fa: LazyList[A])(p: A => Boolean): Boolean =
