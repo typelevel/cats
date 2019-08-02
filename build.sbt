@@ -413,7 +413,12 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm, testkit.jvm)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+    )
+  )
+  .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
 
 lazy val cats = project
   .in(file("."))
@@ -562,6 +567,12 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
+      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+    )
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
@@ -576,9 +587,7 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(disciplineDependencies)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %%% "scalatest" % scalatestVersion,
-      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
-      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion
     )
   )
   .jsSettings(commonJsSettings)
@@ -613,7 +622,7 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
   .in(file("alleycats-tests"))
-  .dependsOn(alleycatsLaws, testkit % "test")
+  .dependsOn(alleycatsLaws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
