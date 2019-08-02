@@ -32,7 +32,7 @@ val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.12.0-M3"
+val disciplineVersion = "1.0.0"
 
 val kindProjectorVersion = "0.10.3"
 
