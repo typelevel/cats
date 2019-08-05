@@ -1,29 +1,27 @@
-<html><head><title>Cats: Law Testing</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Law Testing" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Law Testing" /><meta name="twitter:image" content="http://typelevel.org/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li> <li><a href="/cats/typeclasses.html" class="">Type Classes</a></li> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroups and Monoids</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li> <li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li></ul></li> <li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li></ul></li> <li><a href="/cats/typeclasses/monad.html" class="">Monads</a></li> <li><a href="/cats/typeclasses/functor.html" class="">Variance and Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li> <li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">ContravariantMonoidal</a></li> <li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li> <li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li></ul></li> <li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li> <li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li> <li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li> <li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li> <li><a href="/cats/typeclasses/parallel.html" class="">Parallel</a></li> <li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li> <li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li> <li><a href="/cats/typeclasses/show.html" class="">Show</a></li> <li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li> <li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li> <li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li> <li><a href="/cats/typeclasses/lawtesting.html" class=" active ">Law Testing</a></li>                   </ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="law-testing">Law testing</h1>
+<html><head><title>Cats: Law Testing</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Cats contributors" /><meta name="description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="og:image" content="/cats/img/poster.png" /><meta name="image" property="og:image" content="/cats/img/poster.png" /><meta name="og:title" content="Cats: Law Testing" /><meta name="title" property="og:title" content="Cats: Law Testing" /><meta name="og:site_name" content="Cats" /><meta name="og:url" content="http://typelevel.org/cats/" /><meta name="og:type" content="website" /><meta name="og:description" content="Lightweight, modular, and extensible library for functional programming" /><link rel="icon" type="image/png" href="/cats/img/favicon.png" /><meta name="twitter:title" content="Cats: Law Testing" /><meta name="twitter:image" content="/cats/img/poster.png" /><meta name="twitter:description" content="Lightweight, modular, and extensible library for functional programming" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/cats/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/cats/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/cats/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/cats/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/cats/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/cats/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/cats/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/cats/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/cats/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/cats/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/cats/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/cats/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/cats/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/cats/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/cats/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/cats/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/cats/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/cats/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/cats/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/cats/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/cats/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/cats/css/style.css" /><link rel="stylesheet" href="/cats/css/palette.css" /><link rel="stylesheet" href="/cats/css/codemirror.css" /><link rel="stylesheet" href="/cats/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/cats/" class="brand"><div class="brand-wrapper"><span>Cats</span></div></a></li> <li><a href="/cats/typeclasses.html" class="">Type Classes</a></li> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroups and Monoids</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/semigroup.html" class="">Semigroup</a></li> <li><a href="/cats/typeclasses/monoid.html" class="">Monoid</a></li></ul></li> <li><a href="/cats/typeclasses/applicativetraverse.html" class="">Applicative and Traversable Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/applicative.html" class="">Applicative</a></li> <li><a href="/cats/typeclasses/traverse.html" class="">Traverse</a></li></ul></li> <li><a href="/cats/typeclasses/monad.html" class="">Monads</a></li> <li><a href="/cats/typeclasses/comonad.html" class="">Comonads</a></li> <li><a href="/cats/typeclasses/functor.html" class="">Variance and Functors</a> <ul class="sub_section"> <li><a href="/cats/typeclasses/functor.html" class="">Functor</a></li> <li><a href="/cats/typeclasses/contravariant.html" class="">Contravariant</a></li> <li><a href="/cats/typeclasses/contravariantmonoidal.html" class="">ContravariantMonoidal</a></li> <li><a href="/cats/typeclasses/invariant.html" class="">Invariant</a></li> <li><a href="/cats/typeclasses/invariantmonoidal.html" class="">InvariantMonoidal</a></li></ul></li> <li><a href="/cats/typeclasses/alternative.html" class="">Alternative</a></li> <li><a href="/cats/typeclasses/bifunctor.html" class="">Bifunctor</a></li> <li><a href="/cats/typeclasses/eq.html" class="">Eq</a></li> <li><a href="/cats/typeclasses/foldable.html" class="">Foldable</a></li> <li><a href="/cats/typeclasses/parallel.html" class="">Parallel</a></li> <li><a href="/cats/typeclasses/semigroupk.html" class="">SemigroupK</a></li> <li><a href="/cats/typeclasses/monoidk.html" class="">MonoidK</a></li> <li><a href="/cats/typeclasses/show.html" class="">Show</a></li> <li><a href="/cats/typeclasses/reducible.html" class="">Reducible</a></li> <li><a href="/cats/typeclasses/nonemptytraverse.html" class="">NonEmptyTraverse</a></li> <li><a href="/cats/typeclasses/arrow.html" class="">Arrow</a></li> <li><a href="/cats/typeclasses/lawtesting.html" class=" active ">Law Testing</a></li>                    </ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/typelevel/cats"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('Cats Lightweight, modular, and extensible library for functional programming');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="typelevel" data-github-repo="cats"><div class="content-wrapper"><section><h1 id="law-testing">Law testing</h1>
 
 <p><a href="https://typelevel.org/cats/typeclasses.html#laws">Laws</a> are an important part of cats.
-Cats uses <a href="https://github.com/typelevel/discipline">discipline</a> to define type class laws and 
+Cats uses <a href="https://github.com/typelevel/discipline">discipline</a> to define type class laws and
 the <a href="https://github.com/rickynils/scalacheck">ScalaCheck</a> tests based on them.</p>
 
-<p>To test type class laws from Cats against your instances, you need to add a <code class="highlighter-rouge">cats-laws</code> dependency. 
-If you are using <code class="highlighter-rouge">ScalaTest</code>, Cats also ships with optional <code class="highlighter-rouge">cats-testkit</code>, which provites a convenient
-base test class <code class="highlighter-rouge">CatsSuite</code>.</p>
+<p>To test type class laws from Cats against your instances, you need to add a <code class="highlighter-rouge">cats-laws</code> dependency.</p>
 
 <h2 id="getting-started">Getting started</h2>
 
-<p>First up, you will need to specify dependencies on <code class="highlighter-rouge">cats-laws</code> in your <code class="highlighter-rouge">build.sbt</code> file (or <code class="highlighter-rouge">cats-testkit</code> if you 
-are using <code class="highlighter-rouge">ScalaTest</code>).
+<p>First up, you will need to specify dependencies on <code class="highlighter-rouge">cats-laws</code> in your <code class="highlighter-rouge">build.sbt</code> file.
 To make things easier, we’ll also include the <code class="highlighter-rouge">scalacheck-shapeless</code> library in this tutorial, so we don’t have to manually write instances for ScalaCheck’s <code class="highlighter-rouge">Arbitrary</code>.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.1.0"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span> <span class="c1">//or `cats-testkit` if you are using ScalaTest
-</span>  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.6"</span> <span class="o">%</span> <span class="nc">Test</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.1.0"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
+  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.6"</span> <span class="o">%</span> <span class="nc">Test</span>
 <span class="o">)</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h2 id="example-testing-a-functor-instance">Example: Testing a Functor instance</h2>
 
 <p>We’ll begin by creating a data type and its Functor instance.</p>
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats._</span>
 <span class="c1">// import cats._
 </span>
 <span class="k">sealed</span> <span class="k">trait</span> <span class="nc">Tree</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>
@@ -46,96 +44,119 @@ To make things easier, we’ll also include the <code class="highlighter-rouge">
 <span class="c1">// defined object Tree
 // warning: previously defined trait Tree is not a companion to object Tree.
 // Companions must be defined together; you may wish to use :paste mode for this.
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
-<p>Cats defines all type class laws tests in <code class="highlighter-rouge">cats.laws.discipline.*</code> 
+<p>Cats defines all type class laws tests in <code class="highlighter-rouge">cats.laws.discipline.*</code>
 as <code class="highlighter-rouge">discipline</code>’s <code class="highlighter-rouge">RuleSet</code>s. Each <code class="highlighter-rouge">RuleSet</code> provides a <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> through
-<code class="highlighter-rouge">ruleSet.all</code> to represent all the rules that it defines and inherits. For example, 
+<code class="highlighter-rouge">ruleSet.all</code> to represent all the rules that it defines and inherits. For example,
 the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> for <code class="highlighter-rouge">Functor</code> can be retrieved using</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="n">cats</span><span class="o">.</span><span class="n">laws</span><span class="o">.</span><span class="n">discipline</span><span class="o">.</span><span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">].</span><span class="n">all</span>
-</code></pre></div>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">cats</span><span class="o">.</span><span class="n">laws</span><span class="o">.</span><span class="n">discipline</span><span class="o">.</span><span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">].</span><span class="n">all</span>
+</code></pre>
+</div>
 
 <p>We will also need to create an <code class="highlighter-rouge">Eq</code> instance, as most laws will need to compare values of a type to properly test for correctness.
 For simplicity we’ll just use <code class="highlighter-rouge">Eq.fromUniversalEquals</code>:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">eqTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Eq</span><span class="o">]</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">implicit</span> <span class="k">def</span> <span class="n">eqTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Eq</span><span class="o">]</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
 <span class="c1">// eqTree: [A](implicit evidence$1: cats.Eq[A])cats.Eq[Tree[A]]
-</span></code></pre></div>
+</span></code></pre>
+</div>
 <p>ScalaCheck requires <code class="highlighter-rouge">Arbitrary</code> instances for data types being tested. We have defined an <code class="highlighter-rouge">Arbitrary</code> instance for <code class="highlighter-rouge">Tree</code> here,
 but you won’t need it if you import <code class="highlighter-rouge">org.scalacheck.ScalacheckShapeless._</code>).</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">org.scalacheck.</span><span class="o">{</span><span class="nc">Arbitrary</span><span class="o">,</span> <span class="nc">Gen</span><span class="o">}</span>
 
-<span class="k">implicit</span> <span class="k">def</span> <span class="n">arbFoo</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Arbitrary</span><span class="o">]</span><span class="k">:</span> <span class="kt">Arbitrary</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="nc">Arbitrary</span><span class="o">(</span><span class="nc">Gen</span><span class="o">.</span><span class="n">oneOf</span><span class="o">(</span><span class="nc">Gen</span><span class="o">.</span><span class="n">const</span><span class="o">(</span><span class="nc">Leaf</span><span class="o">),</span> <span class="o">(</span><span class="k">for</span> <span class="o">{</span>
+<span class="k">object</span> <span class="nc">arbitraries</span> <span class="o">{</span>
+  <span class="k">implicit</span> <span class="k">def</span> <span class="n">arbTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Arbitrary</span><span class="o">]</span><span class="k">:</span> <span class="kt">Arbitrary</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span>
+    <span class="nc">Arbitrary</span><span class="o">(</span><span class="nc">Gen</span><span class="o">.</span><span class="n">oneOf</span><span class="o">(</span><span class="nc">Gen</span><span class="o">.</span><span class="n">const</span><span class="o">(</span><span class="nc">Leaf</span><span class="o">),</span> <span class="o">(</span><span class="k">for</span> <span class="o">{</span>
       <span class="n">e</span> <span class="k">&lt;-</span> <span class="nc">Arbitrary</span><span class="o">.</span><span class="n">arbitrary</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
     <span class="o">}</span> <span class="k">yield</span> <span class="nc">Node</span><span class="o">(</span><span class="n">e</span><span class="o">,</span> <span class="nc">Leaf</span><span class="o">,</span> <span class="nc">Leaf</span><span class="o">)))</span>
   <span class="o">)</span>
-</code></pre></div>
+<span class="o">}</span>
+</code></pre>
+</div>
 
-<p>Now we can convert these <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> into tests that the test framework can run.</p>
+<p>Now we can convert these <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> into tests that the test framework can run.  <a href="https://github.com/typelevel/discipline">discipline</a> provides a helper <code class="highlighter-rouge">checkAll</code> function that performs
+this conversion for two test frameworks: <code class="highlighter-rouge">ScalaTest</code> and <code class="highlighter-rouge">Specs2</code>.</p>
 
-<p><a href="https://github.com/typelevel/discipline">discipline</a> provides two helper <code class="highlighter-rouge">checkAll</code> functions that perform 
-this conversion for two test frameworks: <code class="highlighter-rouge">ScalaTest</code> and <code class="highlighter-rouge">Spec2</code>.</p>
-
-<p>If you are using <code class="highlighter-rouge">Specs2</code>, let the test class extend <code class="highlighter-rouge">org.typelevel.discipline.specs2.Discipline</code>
-which provides the <code class="highlighter-rouge">checkAll</code> function.</p>
-
-<p>If you are using <code class="highlighter-rouge">ScalaTest</code>, let the test class extend <code class="highlighter-rouge">org.typelevel.discipline.scalatest.Discipline</code>, or 
-inherit from the more convenient <code class="highlighter-rouge">cats.tests.CatsSuite</code> from <code class="highlighter-rouge">cats-testkit</code>. 
-<code class="highlighter-rouge">CatsSuite</code> extends the standard ScalaTest <code class="highlighter-rouge">FunSuite</code>, <code class="highlighter-rouge">Matchers</code> together with
-<code class="highlighter-rouge">org.typelevel.discipline.scalatest.Discipline</code>. Furthermore it also pulls in all of cats instances and syntax,
-so there’s no need to import from <code class="highlighter-rouge">cats.implicits._</code>.</p>
-
-<p>For other test frameworks, you need to resort to their integration with <code class="highlighter-rouge">ScalaCheck</code> to test
+<ul>
+  <li>
+    <p>If you are using <code class="highlighter-rouge">Specs2</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.specs2.Discipline</code>.</p>
+  </li>
+  <li>
+    <p>If you are using <code class="highlighter-rouge">ScalaTest</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.scalatest.Discipline</code> and <code class="highlighter-rouge">org.scalatest.funsuite.AnyFunSuiteLike</code>.</p>
+  </li>
+  <li>
+    <p>For other test frameworks, you need to resort to their integration with <code class="highlighter-rouge">ScalaCheck</code> to test
 the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> provided by cats-laws.</p>
+  </li>
+</ul>
 
-<p>So here is the Scalatest test for our example, basically we import <code class="highlighter-rouge">cats.laws.discipline.FunctorTests</code> and 
-call the <code class="highlighter-rouge">checkAll</code> helper with it.</p>
+<p>The following example is for ScalaTest.  If not using</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.tests.CatsSuite</span>	
-<span class="c1">// import cats.tests.CatsSuite
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
 </span>
 <span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
 <span class="c1">// import cats.laws.discipline.FunctorTests
 </span>
-<span class="k">class</span> <span class="nc">TreeLawTests</span> <span class="k">extends</span> <span class="nc">CatsSuite</span> <span class="o">{</span>
+<span class="k">import</span> <span class="nn">org.scalatest.funsuite.AnyFunSuite</span>
+<span class="c1">// import org.scalatest.funsuite.AnyFunSuite
+</span>
+<span class="k">import</span> <span class="nn">org.typelevel.discipline.scalatest.Discipline</span>
+<span class="c1">// import org.typelevel.discipline.scalatest.Discipline
+</span>
+<span class="k">import</span> <span class="nn">arbitraries._</span>
+<span class="c1">// import arbitraries._
+</span>
+<span class="k">class</span> <span class="nc">TreeLawTests</span> <span class="k">extends</span> <span class="nc">AnyFunSuite</span> <span class="k">with</span> <span class="nc">Discipline</span> <span class="o">{</span>
   <span class="n">checkAll</span><span class="o">(</span><span class="s">"Tree.FunctorLaws"</span><span class="o">,</span> <span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">])</span>
 <span class="o">}</span>
 <span class="c1">// defined class TreeLawTests
-</span></code></pre></div>
+</span></code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">cats.implicits._</code> imports the instances we need for <code class="highlighter-rouge">Eq[Tree[Int]]</code>, which the laws use to compare trees.</li>
+  <li><code class="highlighter-rouge">FunctorTests</code> contains the functor laws.</li>
+  <li><code class="highlighter-rouge">AnyFunSuite</code> defines the style of ScalaTest.</li>
+  <li><code class="highlighter-rouge">Discipline</code> provides <code class="highlighter-rouge">checkAll</code>, and must be mixed into <code class="highlighter-rouge">AnyFunSuite</code></li>
+  <li><code class="highlighter-rouge">arbitraries._</code> imports the <code class="highlighter-rouge">Arbitrary[Tree[_]]</code> instances needed to check the laws.</li>
+</ul>
 
 <p>Now when we run <code class="highlighter-rouge">test</code> in our sbt console, ScalaCheck will test if the <code class="highlighter-rouge">Functor</code> laws hold for our <code class="highlighter-rouge">Tree</code> type.
 You should see something like this:</p>
 
-<div class="highlighter-rouge"><pre class="codehilite"><code>[info] TreeLawTests:
-[info] - Tree.FunctorLaws.functor.covariant composition
-[info] - Tree.FunctorLaws.functor.covariant identity
-[info] - Tree.FunctorLaws.functor.invariant composition
-[info] - Tree.FunctorLaws.functor.invariant identity
+<div class="highlighter-rouge"><pre class="highlight"><code>[info] TreeLawTests:
+[info] - Tree.FunctorLaws.functor.covariant composition (58 milliseconds)
+[info] - Tree.FunctorLaws.functor.covariant identity (3 milliseconds)
+[info] - Tree.FunctorLaws.functor.invariant composition (19 milliseconds)
+[info] - Tree.FunctorLaws.functor.invariant identity (3 milliseconds)
 [info] ScalaTest
-[info] Run completed in 537 milliseconds.
+[info] Run completed in 1 second, 362 milliseconds.
 [info] Total number of tests run: 4
 [info] Suites: completed 1, aborted 0
 [info] Tests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0
 [info] All tests passed.
 [info] Passed: Total 4, Failed 0, Errors 0, Passed 4
-[success] Total time: 1 s, completed Aug 31, 2017 2:19:22 PM
-</code></pre></div>
+[success] Total time: 2 s, completed Aug 2, 2019 12:01:17 AM
+</code></pre>
+</div>
 
 <p>And voila, you’ve successfully proven that your data type upholds the Functor laws!</p>
 
-<h3 id="testing-catskernel-instances">Testing cats.kernel instances</h3>
+<h3 id="testing-catskernel-instances">Testing <code class="highlighter-rouge">cats.kernel</code> instances</h3>
 
-<p>For most of the type classes included in cats, the above will work great.
+<p>For most of the type classes included in Cats, the above will work great.
 However, the law tests for the type classes inside <code class="highlighter-rouge">cats.kernel</code> are located in <code class="highlighter-rouge">cats.kernel.laws.discipline.*</code> instead.
 So we have to import from there to test type classes like <code class="highlighter-rouge">Semigroup</code>, <code class="highlighter-rouge">Monoid</code>, <code class="highlighter-rouge">Group</code> or <code class="highlighter-rouge">Semilattice</code>.</p>
 
-<p>Let’s test it out, by defining a <code class="highlighter-rouge">Semigroup</code> instance for our <code class="highlighter-rouge">Tree</code> type.</p>
+<p>Let’s test it out by defining a <code class="highlighter-rouge">Semigroup</code> instance for our <code class="highlighter-rouge">Tree</code> type.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
 </span>
 <span class="k">implicit</span> <span class="k">def</span> <span class="n">semigroupTree</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">Semigroup</span><span class="o">]</span><span class="k">:</span> <span class="kt">Semigroup</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Semigroup</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="o">{</span>
@@ -147,25 +168,37 @@ So we have to import from there to test type classes like <code class="highlight
   <span class="o">}</span>
 <span class="o">}</span>
 <span class="c1">// semigroupTree: [A](implicit evidence$1: cats.Semigroup[A])cats.Semigroup[Tree[A]]
-</span></code></pre></div>
+</span></code></pre>
+</div>
 
-<p>Then we can again test the instance inside our class extending <code class="highlighter-rouge">CatsSuite</code>:</p>
+<p>Then we can add the Semigroup tests to our suite:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="codehilite"><code><span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
-<span class="c1">// import cats.laws.discipline.FunctorTests
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="c1">// import cats.implicits._
 </span>
 <span class="k">import</span> <span class="nn">cats.kernel.laws.discipline.SemigroupTests</span>
 <span class="c1">// import cats.kernel.laws.discipline.SemigroupTests
 </span>
-<span class="k">class</span> <span class="nc">TreeLawTests</span> <span class="k">extends</span> <span class="nc">CatsSuite</span> <span class="o">{</span>
+<span class="k">import</span> <span class="nn">cats.laws.discipline.FunctorTests</span>
+<span class="c1">// import cats.laws.discipline.FunctorTests
+</span>
+<span class="k">import</span> <span class="nn">org.scalatest.funsuite.AnyFunSuite</span>
+<span class="c1">// import org.scalatest.funsuite.AnyFunSuite
+</span>
+<span class="k">import</span> <span class="nn">org.typelevel.discipline.scalatest.Discipline</span>
+<span class="c1">// import org.typelevel.discipline.scalatest.Discipline
+</span>
+<span class="k">import</span> <span class="nn">arbitraries._</span>
+<span class="c1">// import arbitraries._
+</span>
+<span class="k">class</span> <span class="nc">TreeLawTests</span> <span class="k">extends</span> <span class="nc">AnyFunSuite</span> <span class="k">with</span> <span class="nc">Discipline</span> <span class="o">{</span>
   <span class="n">checkAll</span><span class="o">(</span><span class="s">"Tree[Int].SemigroupLaws"</span><span class="o">,</span> <span class="nc">SemigroupTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">[</span><span class="kt">Int</span><span class="o">]].</span><span class="n">semigroup</span><span class="o">)</span>
   <span class="n">checkAll</span><span class="o">(</span><span class="s">"Tree.FunctorLaws"</span><span class="o">,</span> <span class="nc">FunctorTests</span><span class="o">[</span><span class="kt">Tree</span><span class="o">].</span><span class="n">functor</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span>, <span class="kt">String</span><span class="o">])</span>
 <span class="o">}</span>
 <span class="c1">// defined class TreeLawTests
-</span></code></pre></div>
-</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({
-languages:['scala','java','bash']
-});
+</span></code></pre>
+</div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({languages:['scala','java','bash']});
 hljs.initHighlighting();
-             </script><script>((window.gitter = {}).chat = {}).options = {
+              </script><script>((window.gitter = {}).chat = {}).options = {
 room: 'typelevel/cats'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/cats/js/main.js"></script></body></html>

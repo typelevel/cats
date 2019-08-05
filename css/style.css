@@ -6048,6 +6048,9 @@ table th, table td {
           z-index: 30;
           white-space: nowrap; }
 
+.edit-button {
+  padding: 0 30px 10px; }
+
 @media (min-width: 768px) {
   #wrapper {
     padding-left: 250px; }

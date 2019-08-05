@@ -239,7 +239,7 @@ type class instances easy.
 
 You can find out more about law testing [here](typeclasses/lawtesting.html).
 
-## Type classes in cats
+## Type classes in Cats
 
 <img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
