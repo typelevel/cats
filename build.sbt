@@ -32,7 +32,9 @@ val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
 
 val scalaCheckVersion = "1.14.0"
 
-val disciplineVersion = "0.12.0-M3"
+val disciplineVersion = "1.0.0"
+
+val disciplineScalatestVersion = "1.0.0-M1"
 
 val kindProjectorVersion = "0.10.3"
 
@@ -178,7 +180,7 @@ lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
     "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
-    "org.typelevel" %%% "discipline-scalatest" % disciplineVersion % "test"
+    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test"
   )
 )
 
@@ -415,7 +417,7 @@ lazy val docs = project
   .settings(commonJvmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
     )
   )
   .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
@@ -570,7 +572,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
-      "org.typelevel" %%% "discipline-scalatest" % disciplineVersion
+      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
     )
   )
   .jsSettings(commonJsSettings)
