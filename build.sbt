@@ -868,7 +868,8 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    releaseStepCommandAndRemaining("+validate"),
+    runClean,
+    runTest, //temporarily only run test in current scala verison because docs won't build in 2.13 yet
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
