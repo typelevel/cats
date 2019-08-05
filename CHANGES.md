@@ -14,7 +14,6 @@ Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility 
 ### 1 bug fix
 
 * [#2942](https://github.com/typelevel/cats/pull/2942) fix Cofree.cata stack-safety #2940  by @road21
-* [#2896](https://github.com/typelevel/cats/pull/2896) replace `Stream` in ExhaustiveCheck with `List`  by @kailuowang        
 
 ### 21 API/feature enhancements
 
