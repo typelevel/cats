@@ -188,6 +188,23 @@ object SyntaxSuite
     val mb3: M[B] = mab <&> ma
   }
 
+  def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
+    implicit P: Parallel[M, F]
+  ): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parUnorderedTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parUnorderedSequence
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta2 = tmta.parUnorderedFlatSequence
+
+    val g = mock[A => M[T[B]]]
+    val mtb2 = ta.parUnorderedFlatTraverse(g)
+  }
+
   def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[T[B]]]
