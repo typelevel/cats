@@ -10,6 +10,8 @@ trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F]
 
   def bitraverse[G[_], A, B, C, D, E, H](implicit
                                          G: Applicative[G],
+                                         A: Monoid[A],
+                                         B: Monoid[B],
                                          C: Monoid[C],
                                          ArbFAB: Arbitrary[F[A, B]],
                                          ArbFAD: Arbitrary[F[A, D]],
@@ -28,6 +30,7 @@ trait BitraverseTests[F[_, _]] extends BifoldableTests[F] with BifunctorTests[F]
                                          CogenD: Cogen[D],
                                          CogenE: Cogen[E],
                                          EqFAB: Eq[F[A, B]],
+                                         EqAB: Eq[(A, B)],
                                          EqFAD: Eq[F[A, D]],
                                          EqFAH: Eq[F[A, H]],
                                          EqFCD: Eq[F[C, D]],

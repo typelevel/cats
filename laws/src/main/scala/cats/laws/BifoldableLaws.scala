@@ -1,6 +1,8 @@
 package cats
 package laws
 
+import cats.instances.tuple.catsKernelStdMonoidForTuple2
+
 trait BifoldableLaws[F[_, _]] {
   implicit def F: Bifoldable[F]
 
@@ -20,6 +22,14 @@ trait BifoldableLaws[F[_, _]] {
       (b: B, ec: Eval[C]) => ec.map(c => C.combine(g(b), c))
     )
     expected.value <-> F.bifoldMap(fab)(f, g)
+  }
+
+  def bifoldConsistentWithBifoldMap[A, B](fab: F[A, B])(
+    implicit A: Monoid[A],
+    B: Monoid[B]
+  ): IsEq[(A, B)] = {
+    val expected = F.bifoldMap(fab)((_, Monoid[B].empty), (Monoid[A].empty, _))
+    expected <-> F.bifold(fab)
   }
 }
 
