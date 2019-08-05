@@ -294,6 +294,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Lookout](https://www.lookout.com)
 - [Merit](https://merits.com)
 - [Metacommerce](https://www.metacommerce.ru)
+- [MYOB](https://www.myob.com)
 - [Netflix](https://jobs.netflix.com)
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)
