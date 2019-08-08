@@ -248,7 +248,7 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
         OptionT(F.defer(fa.value))
     }
 
-  implicit def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
+  implicit def catsDataTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
     new OptionTFunctorFilter[F] with TraverseFilter[OptionT[F, *]] {
       implicit def F: Functor[F] = F0
 
@@ -267,6 +267,10 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
         G.map(Traverse[F].traverse(fa.value)(TraverseFilter[Option].filterA[G, A](_)(f)))(OptionT[F, A])
 
     }
+
+  @deprecated("renamed to catsDataTraverseFilterForOptionT", "2.0.0")
+  def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
+    catsDataTraverseFilterForOptionT
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
