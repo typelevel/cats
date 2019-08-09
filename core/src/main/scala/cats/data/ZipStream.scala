@@ -1,7 +1,7 @@
 package cats
 package data
 
-import instances.stream._
+import instances.{crossVersionEqForLazyList, crossVersionInstancesForLazyList}
 import kernel.compat.scalaVersionSpecific._
 
 class ZipStream[A](val value: LazyList[A]) extends AnyVal
@@ -27,8 +27,9 @@ object ZipStream {
       def empty[A]: ZipStream[A] = ZipStream(LazyList.empty[A])
 
       def combineK[A](x: ZipStream[A], y: ZipStream[A]): ZipStream[A] =
-        ZipStream(Alternative[LazyList].combineK(x.value, y.value))
+        ZipStream(crossVersionInstancesForLazyList.combineK(x.value, y.value))
     }
 
-  implicit def catsDataEqForZipStream[A: Eq]: Eq[ZipStream[A]] = Eq.by(_.value)
+  implicit def catsDataEqForZipStream[A: Eq]: Eq[ZipStream[A]] =
+    Eq.by((_: ZipStream[A]).value)(crossVersionEqForLazyList[A])
 }

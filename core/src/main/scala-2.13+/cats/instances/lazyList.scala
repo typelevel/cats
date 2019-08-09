@@ -5,15 +5,13 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 
-//For cross compile with backward compatibility
-trait StreamInstancesBinCompat0
+/**
+ * Needed only to avoid some version-specific code in `cats.instances.all`.
+ */
+private[instances] trait StreamInstances
+private[instances] trait StreamInstancesBinCompat0
 
-//For cross compile with backward compatibility
-trait StreamInstances extends LazyListInstances {
-  val catsStdInstancesForStream = catsStdInstancesForLazyList
-}
-
-trait LazyListInstances extends cats.kernel.instances.StreamInstances {
+trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
   implicit val catsStdInstancesForLazyList
     : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
     new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
@@ -71,10 +69,11 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
       def tailRecM[A, B](a: A)(fn: A => LazyList[Either[A, B]]): LazyList[B] = {
         val kernel = Iterator.unfold[Option[B], Iterator[Either[A, B]]](Iterator(Left(a))) { it =>
           if (!it.hasNext) None
-          else it.next match {
-            case Left(a) => Some((None, fn(a).iterator ++ it))
-            case Right(b) => Some((Some(b), it))
-          }
+          else
+            it.next match {
+              case Left(a)  => Some((None, fn(a).iterator ++ it))
+              case Right(b) => Some((Some(b), it))
+            }
         }
         LazyList.from(kernel.collect { case Some(v) => v })
       }
@@ -122,7 +121,7 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
 
       override def find[A](fa: LazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.StreamMonoid[A]
+      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.LazyListMonoid[A]
 
       override def collectFirst[A, B](fa: LazyList[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
