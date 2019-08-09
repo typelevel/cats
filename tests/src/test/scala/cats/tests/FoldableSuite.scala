@@ -404,10 +404,10 @@ class FoldableSuiteAdditional extends CatsSuite {
 
   def foldableLazyListWithDefaultImpl = new Foldable[LazyList] {
     def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
-      instances.lazyList.catsStdInstancesForLazyList.foldLeft(fa, b)(f)
+      Foldable[LazyList].foldLeft(fa, b)(f)
 
     def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      instances.lazyList.catsStdInstancesForLazyList.foldRight(fa, lb)(f)
+      Foldable[LazyList].foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {

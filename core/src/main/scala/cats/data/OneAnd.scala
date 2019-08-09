@@ -3,7 +3,7 @@ package data
 
 import scala.annotation.tailrec
 import scala.collection.mutable.Builder
-import cats.instances.stream._
+import cats.instances.crossVersionInstancesForLazyList
 import kernel.compat.scalaVersionSpecific._
 
 /**
@@ -209,7 +209,7 @@ sealed abstract private[data] class OneAndLowPriority4 {
         fa.head
 
       def map[A, B](fa: OneAnd[LazyList, A])(f: A => B): OneAnd[LazyList, B] =
-        fa.map(f)
+        fa.map(f)(crossVersionInstancesForLazyList)
     }
 }
 

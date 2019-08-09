@@ -41,11 +41,22 @@ package object instances {
   object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
   object stream extends StreamInstances with StreamInstancesBinCompat0
-  object lazyList extends LazyListInstances
   object string extends StringInstances
   object try_ extends TryInstances
   object tuple extends TupleInstances with Tuple2InstancesBinCompat0
   object unit extends UnitInstances
   object uuid extends UUIDInstances
   object vector extends VectorInstances with VectorInstancesBinCompat0
+
+  /**
+   * Used internally for avoiding version-specific code.
+   */
+  private[cats] def crossVersionInstancesForLazyList: Monad[Stream] with Alternative[Stream] =
+    stream.catsStdInstancesForStream
+
+  /**
+   * Used internally for avoiding version-specific code.
+   */
+  private[cats] def crossVersionEqForLazyList[A: Eq]: Eq[Stream[A]] =
+    stream.catsKernelStdEqForStream[A]
 }
