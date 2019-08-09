@@ -1,11 +1,8 @@
-import java.time.LocalDateTime
-
 import microsites._
 import ReleaseTransformations._
 import sbt.io.Using
 
 import scala.xml.transform.{RewriteRule, RuleTransformer}
-import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
