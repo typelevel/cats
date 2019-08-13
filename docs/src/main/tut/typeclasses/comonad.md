@@ -22,7 +22,7 @@ able to implement extract we must have a type of which we are certain
 we can get an `A` from an `F[A]`. For example we cannot always get an `A` 
 from a `List[A]` because if the list is empty there is nothing to get.
 
-For the same reason, `Option` doesn't have a Comand instance, because we 
+For the same reason, `Option` doesn't have a `Comonad` instance, because we 
 cannot always get an `A` from an Option, it may be empty too.
 
 Some examples that we can implement `Comonad` for include `OneAnd`, `Tuple2` 
