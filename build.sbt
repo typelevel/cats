@@ -39,11 +39,9 @@ crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
   import collection.JavaConverters._
   Using.fileInputStream(manifest) { fis =>
-    List(new org.yaml.snakeyaml.Yaml().load(fis))
-      .collect { case map: java.util.Map[_, _] => map.asScala.toList }
-      .flatMap(_.collect {
-        case (k: String, v: String) if k.contains("scala_version_") => v
-      })
+    new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
+      case (k: String, v: String) if k.contains("scala_version_") => v
+    }
   }
 }
 
