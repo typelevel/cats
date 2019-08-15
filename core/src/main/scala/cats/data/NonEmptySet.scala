@@ -422,7 +422,12 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
   }
 }
 
-sealed abstract private[data] class NonEmptySetInstances0 {
+sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {
+  implicit def catsDataHashForNonEmptySet[A: Order: Hash]: Hash[NonEmptySet[A]] =
+    Hash[SortedSet[A]].asInstanceOf[Hash[NonEmptySet[A]]]
+}
+
+sealed abstract private[data] class NonEmptySetInstances1 {
   implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
     implicit override def A0: Eq[A] = A
   }
