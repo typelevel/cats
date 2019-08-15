@@ -33,6 +33,7 @@ class NonEmptyMapSuite extends CatsSuite {
   )
   checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
+  checkAll("NonEmptyMap[String, Int]", HashTests[NonEmptyMap[String, Int]].hash)
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
