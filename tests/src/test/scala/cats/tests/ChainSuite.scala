@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data.Chain
+import cats.data.Chain.==:
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
@@ -72,6 +73,17 @@ class ChainSuite extends CatsSuite {
     forAll { (c: Chain[Int]) =>
       c.lastOption should ===(c.toList.lastOption)
     }
+  }
+
+  test("list-like pattern match") {
+    Chain(1, 2, 3) match {
+      case Chain(a, b, c) => (a, b, c) should ===((1, 2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case h ==: t => (h, t) should ===(1 -> Chain(2, 3))
+    }
+
   }
 
   test("size is consistent with toList.size") {
