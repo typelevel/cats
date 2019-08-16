@@ -314,4 +314,13 @@ class ValidatedSuite extends CatsSuite {
       v.liftTo[Option] shouldBe v.toOption
     }
   }
+
+  test("liftTo works with specialized errors") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val ex: IllegalArgumentException = new IllegalArgumentException()
+    val validated: Validated[IllegalArgumentException, Int] = Validated.Invalid(ex)
+    val lifted: Either[Throwable, Int] = validated.liftTo[Either[Throwable, *]]
+
+    lifted should ===(Left[Throwable, Int](ex))
+  }
 }
