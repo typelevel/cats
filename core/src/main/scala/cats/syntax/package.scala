@@ -2,7 +2,7 @@ package cats
 
 package object syntax {
   object all extends AllSyntaxBinCompat
-  object alternative extends AlternativeSyntax
+  object alternative extends AlternativeSyntax with AlternativeSyntaxBinCompat0
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
   object apply extends ApplySyntax

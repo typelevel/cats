@@ -13,6 +13,11 @@ trait AlternativeSyntax {
     new GuardOps(b)
 }
 
+trait AlternativeSyntaxBinCompat0 {
+  implicit final def catsSyntaxAlternativeGuarded[A](a: A): GuardedOps[A] =
+    new GuardedOps(a)
+}
+
 final class UniteOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
 
   /**
@@ -67,4 +72,22 @@ final class GuardOps(private val condition: Boolean) extends AnyVal {
    * }}}
    */
   def guard[F[_]](implicit F: Alternative[F]): F[Unit] = F.guard(condition)
+}
+
+final class GuardedOps[A](private val a: A) extends AnyVal {
+
+  /**
+   * Special case optimization for [[Alternative.guard]]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> def even(i: Int): Option[Int] = i.guarded[Option](_ % 2 == 0)
+   * scala> even(2)
+   * res0: Option[Int] = Some(2)
+   * scala> even(3)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def guarded[F[_]](guard: A => Boolean)(implicit F: Alternative[F]): F[A] = F.as(F.guard(guard(a)), a)
 }
