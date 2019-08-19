@@ -9,8 +9,6 @@ private[cats] object scalaVersionSpecific {
    */
   class suppressUnusedImportWarningForScalaVersionSpecific extends Annotation with StaticAnnotation
 
-  type LazyList[+A] = Stream[A]
-  val LazyList = Stream
   type IterableOnce[+A] = TraversableOnce[A]
 
   implicit class traversableOnceExtension[A](private val to: TraversableOnce[A]) extends AnyVal {

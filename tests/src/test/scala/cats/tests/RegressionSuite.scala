@@ -115,7 +115,7 @@ class RegressionSuite extends CatsSuite {
     // shouldn't have ever evaluted validate(8)
     checkAndResetCount(3)
 
-    LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
+    Stream(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     type StringMap[A] = SortedMap[String, A]
@@ -135,7 +135,7 @@ class RegressionSuite extends CatsSuite {
     List(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
-    LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
+    Stream(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
     checkAndResetCount(3)
 
     Vector(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
