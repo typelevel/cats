@@ -285,6 +285,15 @@ class EitherTSuite extends CatsSuite {
     failed.attemptT.rethrowT should ===(failed)
   }
 
+  test("rethrowT works with specialized failures") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val failed: Try[Int] = Failure(new IllegalArgumentException("error"))
+
+    val t: EitherT[Try, IllegalArgumentException, Int] =
+      failed.attemptT.leftMap(_.asInstanceOf[IllegalArgumentException])
+    t.rethrowT should ===(failed)
+  }
+
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should ===(EitherT(eithert.value.map(f)))

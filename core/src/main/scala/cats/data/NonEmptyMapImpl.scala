@@ -265,7 +265,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   def toNel: NonEmptyList[(K, A)] = NonEmptyList.fromListUnsafe(toSortedMap.toList)
 }
 
-sealed abstract private[data] class NonEmptyMapInstances {
+sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInstances0 {
 
   implicit def catsDataInstancesForNonEmptyMap[K: Order]
     : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] =
@@ -318,10 +318,8 @@ sealed abstract private[data] class NonEmptyMapInstances {
         NonEmptyList(fa.head._2, fa.tail.toList.map(_._2))
     }
 
-  implicit def catsDataEqForNonEmptyMap[K: Order, A: Eq]: Eq[NonEmptyMap[K, A]] =
-    new Eq[NonEmptyMap[K, A]] {
-      def eqv(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): Boolean = x === y
-    }
+  implicit def catsDataHashForNonEmptyMap[K: Hash: Order, A: Hash]: Hash[NonEmptyMap[K, A]] =
+    Hash[SortedMap[K, A]].asInstanceOf[Hash[NonEmptyMap[K, A]]]
 
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
@@ -329,4 +327,11 @@ sealed abstract private[data] class NonEmptyMapInstances {
   implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] = new Band[NonEmptyMap[K, A]] {
     def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
   }
+}
+
+sealed abstract private[data] class NonEmptyMapInstances0 {
+  implicit def catsDataEqForNonEmptyMap[K: Order, A: Eq]: Eq[NonEmptyMap[K, A]] =
+    new Eq[NonEmptyMap[K, A]] {
+      def eqv(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): Boolean = x === y
+    }
 }

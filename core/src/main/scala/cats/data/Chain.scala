@@ -531,6 +531,14 @@ object Chain extends ChainInstances {
       false // b/c `fromSeq` constructor doesn't allow either branch to be empty
   }
 
+  def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
+    Some(chain.toList)
+
+  object ==: {
+    def unapply[T](c: Chain[T]): Option[(T, Chain[T])] =
+      c.uncons
+  }
+
   /** Empty Chain. */
   val nil: Chain[Nothing] = Empty
 
