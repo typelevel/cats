@@ -2,10 +2,10 @@ package cats
 package instances
 
 import cats.kernel.{BoundedSemilattice, Hash, Order}
+import cats.kernel.instances.StaticMethods
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
 import cats.implicits._
-import compat.lazyList._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -93,14 +93,12 @@ trait SortedSetInstancesBinCompat0 {
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
   def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
     Order[Int].compare(a1.size, a2.size) match {
-      case 0 => Order.compare(toLazyList(a1), toLazyList(a2))
+      case 0 => StaticMethods.iteratorCompare(a1.iterator, a2.iterator)
       case x => x
     }
 
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
-  }
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
+    StaticMethods.iteratorEq(s1.iterator, s2.iterator)
 }
 
 class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
@@ -124,10 +122,8 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
     h = mixLast(h, c)
     finalizeHash(h, n)
   }
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
-  }
+  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
+    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Order[A])
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {

@@ -11,12 +11,9 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.data.ZipStream
+import cats.data.ZipLazyList
 import cats.laws.discipline.arbitrary._
-import kernel.compat.scalaVersionSpecific._
-import compat.lazyList.lazyListString
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[LazyList]", SerializableTests.serializable(Semigroupal[LazyList]))
@@ -37,21 +34,21 @@ class LazyListSuite extends CatsSuite {
   checkAll("TraverseFilter[LazyList]", SerializableTests.serializable(TraverseFilter[LazyList]))
 
   // Can't test applicative laws as they don't terminate
-  checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
+  checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {
-    LazyList(1, 2, 3).show should ===(s"$lazyListString(1, ?)")
-    LazyList.empty[Int].show should ===(s"$lazyListString()")
+    LazyList(1, 2, 3).show should ===(s"LazyList(1, ?)")
+    LazyList.empty[Int].show should ===(s"LazyList()")
   }
 
-  test("Show[Stream] is referentially transparent, unlike Stream.toString") {
+  test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
     forAll { lazyList: LazyList[Int] =>
       if (!lazyList.isEmpty) {
         val unevaluatedLL = lazyList.map(identity)
         val initialShow = unevaluatedLL.show
 
-        // Evaluating the tail can cause Stream.toString to return different values,
-        // depending on the internal state of the Stream. Show[Stream] should return
+        // Evaluating the tail can cause LazyList.toString to return different values,
+        // depending on the internal state of the LazyList. Show[LazyList] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
         initialShow should ===(unevaluatedLL.show)

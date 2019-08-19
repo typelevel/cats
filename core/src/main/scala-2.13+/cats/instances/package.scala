@@ -40,6 +40,8 @@ package object instances {
   object short extends ShortInstances
   object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
+
+  @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
   object stream extends StreamInstances with StreamInstancesBinCompat0
   object lazyList extends LazyListInstances
   object string extends StringInstances
@@ -48,16 +50,4 @@ package object instances {
   object unit extends UnitInstances
   object uuid extends UUIDInstances
   object vector extends VectorInstances with VectorInstancesBinCompat0
-
-  /**
-   * Used internally for avoiding version-specific code.
-   */
-  private[cats] def crossVersionInstancesForLazyList: Monad[LazyList] with Alternative[LazyList] =
-    lazyList.catsStdInstancesForLazyList
-
-  /**
-   * Used internally for avoiding version-specific code.
-   */
-  private[cats] def crossVersionEqForLazyList[A: Eq]: Eq[LazyList[A]] =
-    lazyList.catsKernelStdEqForLazyList[A]
 }

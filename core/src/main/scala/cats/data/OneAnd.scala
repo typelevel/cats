@@ -2,8 +2,6 @@ package cats
 package data
 
 import scala.annotation.tailrec
-import scala.collection.mutable.Builder
-import cats.instances.crossVersionInstancesForLazyList
 import kernel.compat.scalaVersionSpecific._
 
 /**
@@ -189,27 +187,6 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
         go(a, Nil)
       }
-    }
-}
-
-sealed abstract private[data] class OneAndLowPriority4 {
-  implicit val catsDataComonadForNonEmptyStream: Comonad[OneAnd[LazyList, *]] =
-    new Comonad[OneAnd[LazyList, *]] {
-      def coflatMap[A, B](fa: OneAnd[LazyList, A])(f: OneAnd[LazyList, A] => B): OneAnd[LazyList, B] = {
-        @tailrec def consume(as: LazyList[A], buf: Builder[B, LazyList[B]]): LazyList[B] =
-          if (as.isEmpty) buf.result
-          else {
-            val tail = as.tail
-            consume(tail, buf += f(OneAnd(as.head, tail)))
-          }
-        OneAnd(f(fa), consume(fa.tail, LazyList.newBuilder))
-      }
-
-      def extract[A](fa: OneAnd[LazyList, A]): A =
-        fa.head
-
-      def map[A, B](fa: OneAnd[LazyList, A])(f: A => B): OneAnd[LazyList, B] =
-        fa.map(f)(crossVersionInstancesForLazyList)
     }
 }
 

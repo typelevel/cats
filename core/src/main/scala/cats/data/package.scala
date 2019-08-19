@@ -1,10 +1,7 @@
 package cats
-import kernel.compat.scalaVersionSpecific._
-import compat.lazyList.toLazyList
 
 package object data extends ScalaVersionSpecificPackage {
 
-  type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
   type IorNel[+B, +A] = Ior[NonEmptyList[B], A]
   type IorNec[+B, +A] = Ior[NonEmptyChain[B], A]
@@ -13,13 +10,6 @@ package object data extends ScalaVersionSpecificPackage {
   type EitherNec[+E, +A] = Either[NonEmptyChain[E], A]
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
-
-  def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
-    OneAnd(head, tail)
-
-  @suppressUnusedImportWarningForScalaVersionSpecific
-  def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
-    OneAnd(head, toLazyList(tail))
 
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
@@ -93,7 +83,4 @@ package object data extends ScalaVersionSpecificPackage {
     def apply[S, A](f: S => A, s: S): Store[S, A] =
       RepresentableStore[S => *, S, A](f, s)
   }
-
-  type ZipLazyList[A] = ZipStream[A]
-  val ZipLazyList = ZipStream
 }
