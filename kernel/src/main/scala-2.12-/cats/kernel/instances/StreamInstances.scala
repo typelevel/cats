@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
-import compat.scalaVersionSpecific._
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 trait StreamInstances extends StreamInstances1 {
   implicit def catsKernelStdOrderForStream[A: Order]: Order[Stream[A]] =
     new StreamOrder[A]
@@ -51,6 +49,6 @@ class StreamMonoid[A] extends Monoid[Stream[A]] {
   override def combineN(x: Stream[A], n: Int): Stream[A] =
     StaticMethods.combineNIterable(Stream.newBuilder[A], x, n)
 
-  override def combineAll(xs: IterableOnce[Stream[A]]): Stream[A] =
+  override def combineAll(xs: TraversableOnce[Stream[A]]): Stream[A] =
     StaticMethods.combineAllIterable(Stream.newBuilder[A], xs)
 }

@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
-import compat.scalaVersionSpecific._
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 trait StreamInstances extends StreamInstances1 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.lazyList")
   implicit def catsKernelStdOrderForStream[A: Order]: Order[Stream[A]] =
