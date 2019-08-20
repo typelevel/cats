@@ -1,7 +1,6 @@
 package cats.laws.discipline
 
 import cats.data.{NonEmptyLazyList, ZipLazyList, ZipStream}
-import cats.data.NonEmptyLazyList.ZipNonEmptyLazyList
 import org.scalacheck.{Arbitrary, Cogen}
 
 private[discipline] object ScalaVersionSpecific {
@@ -22,11 +21,5 @@ private[discipline] object ScalaVersionSpecific {
 
     implicit def catsLawsCogenForNonEmptyLazyList[A](implicit A: Cogen[A]): Cogen[NonEmptyLazyList[A]] =
       Cogen[LazyList[A]].contramap(_.toLazyList)
-
-    implicit def catsLawsArbitraryForZipNonEmptyLazyList[A](
-      implicit A: Arbitrary[A]
-    ): Arbitrary[ZipNonEmptyLazyList[A]] =
-      Arbitrary(implicitly[Arbitrary[NonEmptyLazyList[A]]].arbitrary.map(nev => new ZipNonEmptyLazyList(nev)))
-
   }
 }

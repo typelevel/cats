@@ -51,29 +51,6 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
   implicit def catsNonEmptyLazyListOps[A](value: NonEmptyLazyList[A]): NonEmptyLazyListOps[A] =
     new NonEmptyLazyListOps(value)
-
-  class ZipNonEmptyLazyList[A](val value: NonEmptyLazyList[A]) extends Serializable
-
-  object ZipNonEmptyLazyList {
-
-    def apply[A](nell: NonEmptyLazyList[A]): ZipNonEmptyLazyList[A] =
-      new ZipNonEmptyLazyList(nell)
-
-    implicit val catsDataCommutativeApplyForZipNonEmptyLazyList: CommutativeApply[ZipNonEmptyLazyList] =
-      new CommutativeApply[ZipNonEmptyLazyList] {
-        def ap[A, B](ff: ZipNonEmptyLazyList[A => B])(fa: ZipNonEmptyLazyList[A]): ZipNonEmptyLazyList[B] =
-          ZipNonEmptyLazyList(ff.value.zipWith(fa.value)(_.apply(_)))
-
-        override def map[A, B](fa: ZipNonEmptyLazyList[A])(f: (A) => B): ZipNonEmptyLazyList[B] =
-          ZipNonEmptyLazyList(fa.value.map(f))
-
-        override def product[A, B](fa: ZipNonEmptyLazyList[A],
-                                   fb: ZipNonEmptyLazyList[B]): ZipNonEmptyLazyList[(A, B)] =
-          ZipNonEmptyLazyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
-      }
-
-    implicit def catsDataEqForZipNonEmptyLazyList[A: Eq]: Eq[ZipNonEmptyLazyList[A]] = Eq.by(_.value)
-  }
 }
 
 class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends AnyVal {
@@ -387,21 +364,21 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
     Show.show[NonEmptyLazyList[A]](nell => s"NonEmpty${Show[LazyList[A]].show(nell.toLazyList)}")
 
-  import NonEmptyLazyList.ZipNonEmptyLazyList
+  implicit def catsDataParallelForNonEmptyLazyList: Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
+    new Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] {
 
-  implicit def catsDataParallelForNonEmptyLazyList: NonEmptyParallel[NonEmptyLazyList, ZipNonEmptyLazyList] =
-    new NonEmptyParallel[NonEmptyLazyList, ZipNonEmptyLazyList] {
+      def applicative: Applicative[OneAnd[ZipLazyList, *]] =
+        OneAnd.catsDataApplicativeForOneAnd(ZipLazyList.catsDataAlternativeForZipLazyList)
+      def monad: Monad[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
 
-      def apply: Apply[ZipNonEmptyLazyList] = ZipNonEmptyLazyList.catsDataCommutativeApplyForZipNonEmptyLazyList
-      def flatMap: FlatMap[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
+      def sequential: OneAnd[ZipLazyList, *] ~> NonEmptyLazyList =
+        λ[OneAnd[ZipLazyList, *] ~> NonEmptyLazyList](
+          znell => NonEmptyLazyList.fromLazyListPrepend(znell.head, znell.tail.value)
+        )
 
-      def sequential: ZipNonEmptyLazyList ~> NonEmptyLazyList =
-        λ[ZipNonEmptyLazyList ~> NonEmptyLazyList](_.value)
-
-      def parallel: NonEmptyLazyList ~> ZipNonEmptyLazyList =
-        λ[NonEmptyLazyList ~> ZipNonEmptyLazyList](nell => new ZipNonEmptyLazyList(nell))
+      def parallel: NonEmptyLazyList ~> OneAnd[ZipLazyList, *] =
+        λ[NonEmptyLazyList ~> OneAnd[ZipLazyList, *]](nell => OneAnd(nell.head, ZipLazyList(nell.tail)))
     }
-
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances1 extends NonEmptyLazyListInstances2 {

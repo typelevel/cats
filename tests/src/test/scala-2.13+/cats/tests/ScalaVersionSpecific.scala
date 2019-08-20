@@ -1,9 +1,9 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyLazyList, ZipLazyList}
+import cats.data.{NonEmptyLazyList, OneAnd, ZipLazyList}
 import cats.instances.lazyList._
-import cats.laws.discipline.{ParallelTests, NonEmptyParallelTests}
+import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
@@ -126,10 +126,8 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
   checkAll("Parallel[LazyList, ZipLazyList]",
            NonEmptyParallelTests[LazyList, ZipLazyList].nonEmptyParallel[Int, String])
 
-  import NonEmptyLazyList.ZipNonEmptyLazyList
-
-  checkAll("Parallel[NonEmptyLazyList, ZipNonEmptyLazyList]",
-           ParallelTests[NonEmptyLazyList, ZipNonEmptyLazyList].parallel[Int, String])
+  checkAll("Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]]",
+           ParallelTests[NonEmptyLazyList, OneAnd[ZipLazyList, *]].parallel[Int, String])
 }
 
 trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
