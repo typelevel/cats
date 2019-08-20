@@ -3,6 +3,7 @@ package tests
 
 import cats.data.Chain
 import cats.data.Chain.==:
+import cats.data.Chain.`:==`
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
@@ -75,13 +76,17 @@ class ChainSuite extends CatsSuite {
     }
   }
 
-  test("list-like pattern match") {
+  test("seq-like pattern match") {
     Chain(1, 2, 3) match {
       case Chain(a, b, c) => (a, b, c) should ===((1, 2, 3))
     }
 
     Chain(1, 2, 3) match {
       case h ==: t => (h, t) should ===(1 -> Chain(2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case init :== last => (init, last) should ===(Chain(1, 2) -> 3)
     }
 
   }

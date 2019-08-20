@@ -541,6 +541,11 @@ object Chain extends ChainInstances {
       c.uncons
   }
 
+  object :== {
+    def unapply[T](c: Chain[T]): Option[(Chain[T], T)] =
+      c.initLast
+  }
+
   /** Empty Chain. */
   val nil: Chain[Nothing] = Empty
 
