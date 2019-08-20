@@ -1,8 +1,6 @@
 package cats.kernel
 package instances
-import compat.scalaVersionSpecific._
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 trait LazyListInstances extends LazyListInstances1 {
   implicit def catsKernelStdOrderForLazyList[A: Order]: Order[LazyList[A]] =
     new LazyListOrder[A]

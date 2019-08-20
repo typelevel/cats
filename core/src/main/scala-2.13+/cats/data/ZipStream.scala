@@ -1,12 +1,9 @@
 package cats
 package data
 
-import kernel.compat.scalaVersionSpecific._
-
 @deprecated("2.0.0-RC2", "Use ZipLazyList")
 class ZipStream[A](val value: Stream[A]) extends AnyVal
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 @deprecated("2.0.0-RC2", "Use ZipLazyList")
 object ZipStream {
 

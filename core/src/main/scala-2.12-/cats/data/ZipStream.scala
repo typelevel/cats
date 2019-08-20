@@ -1,11 +1,8 @@
 package cats
 package data
 
-import kernel.compat.scalaVersionSpecific._
-
 class ZipStream[A](val value: Stream[A]) extends AnyVal
 
-@suppressUnusedImportWarningForScalaVersionSpecific
 object ZipStream {
 
   def apply[A](value: Stream[A]): ZipStream[A] = new ZipStream(value)
@@ -18,7 +15,7 @@ object ZipStream {
         ZipStream(fa.value.map(f))
 
       def ap[A, B](ff: ZipStream[A => B])(fa: ZipStream[A]): ZipStream[B] =
-        ZipStream(ff.value.lazyZip(fa.value).map(_.apply(_)))
+        ZipStream((ff.value, fa.value).zipped.map(_.apply(_)))
 
       override def product[A, B](fa: ZipStream[A], fb: ZipStream[B]): ZipStream[(A, B)] =
         ZipStream(fa.value.zip(fb.value))
