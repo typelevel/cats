@@ -86,7 +86,7 @@ class ChainSuite extends CatsSuite {
     }
 
     Chain(1, 2, 3) match {
-      case h :== t => (h, t) should ===(Chain(1, 2) -> 3)
+      case init :== last => (init, last) should ===(Chain(1, 2) -> 3)
     }
 
   }
