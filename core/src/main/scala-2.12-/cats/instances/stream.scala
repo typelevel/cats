@@ -5,11 +5,6 @@ import cats.syntax.show._
 
 import scala.annotation.tailrec
 
-/**
- * Needed only to avoid some version-specific code in `cats.instances.all`.
- */
-private[instances] trait LazyListInstances
-
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit val catsStdInstancesForStream
