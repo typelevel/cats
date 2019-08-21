@@ -137,8 +137,10 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element and returns a new Chain.
    */
-  final def map[B](f: A => B): Chain[B] =
-    fromSeq(iterator.map(f).toVector)
+  final def map[B](f: A => B): Chain[B] = this match {
+    case Wrap(seq) => Wrap(seq.map(f))
+    case _         => fromSeq(iterator.map(f).toVector)
+  }
 
   /**
    * Applies the supplied function to each element and returns a new Chain from the concatenated results
@@ -537,6 +539,11 @@ object Chain extends ChainInstances {
   object ==: {
     def unapply[T](c: Chain[T]): Option[(T, Chain[T])] =
       c.uncons
+  }
+
+  object :== {
+    def unapply[T](c: Chain[T]): Option[(Chain[T], T)] =
+      c.initLast
   }
 
   /** Empty Chain. */
