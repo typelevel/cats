@@ -70,7 +70,7 @@ jobs:
     - &bincompat_check
       stage: test
       env: TEST="binary compatibility"
-      script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
+      script: sbt ++$TRAVIS_SCALA_VERSION! kernelJVM/compile validateBC
       scala: *scala_version_211
     - <<: *bincompat_check
       scala: *scala_version_212
