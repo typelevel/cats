@@ -512,6 +512,23 @@ sealed abstract class Chain[+A] {
     else false
 
   override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
+
+  final def get(idx: Long): Option[A] =
+    if (idx < 0) None
+    else {
+      var result: Option[A] = None
+      var i = 0L
+      foreachUntil { a =>
+        if (idx == i) {
+          result = Some(a)
+          true
+        } else {
+          i += 1
+          false
+        }
+      }
+      result
+    }
 }
 
 object Chain extends ChainInstances {
@@ -724,6 +741,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         go(f(a) :: Nil)
         acc
       }
+
+      override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
     }
 
   implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =
