@@ -2,7 +2,7 @@ language: scala
 
 sudo: required
 
-dist: xenial
+dist: trusty
 
 group: edge
 
@@ -10,7 +10,7 @@ git:
   depth: 9999
 
 jdk:
-  - openjdk8
+  - oraclejdk8
 
 scala_version_211: &scala_version_211 2.11.12
 scala_version_212: &scala_version_212 2.12.9
