@@ -254,4 +254,10 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("Chain#get is consistent with List#lift") {
+    forAll { (x: Chain[Int], idx: Int) =>
+      x.get(idx) should ===(x.toList.lift(idx))
+    }
+  }
+
 }
