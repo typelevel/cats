@@ -71,7 +71,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
     new SortedSetOrder[A]
 }
 
-trait SortedSetInstances1 {
+private[instances] trait SortedSetInstances1 {
   implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     new SortedSetHash[A]
 
@@ -79,7 +79,7 @@ trait SortedSetInstances1 {
     new SortedSetSemilattice[A]
 }
 
-trait SortedSetInstancesBinCompat0 {
+private[instances] trait SortedSetInstancesBinCompat0 {
   implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
     override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
       implicit val orderingA = fa.ordering

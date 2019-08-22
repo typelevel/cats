@@ -152,7 +152,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 }
 
-trait ListInstancesBinCompat0 {
+private[instances] trait ListInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList
 

@@ -169,7 +169,7 @@ object KernelBoiler {
             }
         ),
         InstanceDef(
-          "trait TupleInstances1 extends TupleInstances2 {",
+          "private[instances] trait TupleInstances1 extends TupleInstances2 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -211,7 +211,7 @@ object KernelBoiler {
             }
         ),
         InstanceDef(
-          "trait TupleInstances2 extends TupleInstances3 {",
+          "private[instances] trait TupleInstances2 extends TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -238,7 +238,7 @@ object KernelBoiler {
             }
         ),
         InstanceDef(
-          "trait TupleInstances3 {",
+          "private[instances] trait TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
