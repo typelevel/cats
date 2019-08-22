@@ -448,6 +448,9 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
         Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
+
+      override def get[A](fa: NonEmptyChain[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else fa.tail.get(idx - 1)
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =
