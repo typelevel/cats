@@ -55,7 +55,13 @@ object Hash extends HashFunctions[Hash] {
 }
 
 trait HashToHashingConversion {
-  implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] = new Hashing[A] {
+  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.hash.catsKernelHashingForHash")
+  private[kernel] def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] =
+    cats.kernel.instances.hash.catsKernelHashingForHash[A]
+}
+
+private[kernel] trait HashToHashingConversionBinCompat0 {
+  implicit def catsKernelHashingForHash[A](implicit ev: Hash[A]): Hashing[A] = new Hashing[A] {
     override def hash(x: A): Int = ev.hash(x)
   }
 }

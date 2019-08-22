@@ -13,7 +13,6 @@ trait EitherInstances extends EitherInstances0 {
 }
 
 private[instances] trait EitherInstancesBinCompat0 extends EitherInstances0BinCompat0 {
-
   implicit def catsKernelStdOrderForEither[A, B](implicit A: Order[A], B: Order[B]): Order[Either[A, B]] =
     new Order[Either[A, B]] {
       def compare(x: Either[A, B], y: Either[A, B]): Int =
@@ -48,7 +47,6 @@ private[instances] trait EitherInstancesBinCompat0 extends EitherInstances0BinCo
 }
 
 trait EitherInstances0 extends EitherInstances1 {
-
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.either.catsKernelStdMonoidForEither")
   private[instances] def catsDataSemigroupForEither[A, B](implicit B: Semigroup[B]): Semigroup[Either[A, B]] =
     cats.kernel.instances.either.catsKernelStdSemigroupForEither[A, B]
