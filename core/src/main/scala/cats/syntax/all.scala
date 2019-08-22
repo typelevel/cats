@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-abstract private[syntax] class AllSyntaxBinCompat
+abstract private[cats] class AllSyntaxBinCompat
     extends AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
