@@ -130,6 +130,28 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
            ParallelTests[NonEmptyLazyList, OneAnd[ZipLazyList, *]].parallel[Int, String])
 }
 
+trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
+  test("#513: traverse short circuits - Either (for LazyList)") {
+    var count = 0
+    def validate(i: Int): Either[String, Int] = {
+      count = count + 1
+      if (i < 5) Either.right(i) else Either.left(s"$i is greater than 5")
+    }
+
+    def checkAndResetCount(expected: Int): Unit = {
+      count should ===(expected)
+      count = 0
+    }
+
+    LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
+    // shouldn't have ever evaluted validate(8)
+    checkAndResetCount(3)
+
+    LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
+    checkAndResetCount(3)
+  }
+}
+
 trait ScalaVersionSpecificTraverseSuite { self: TraverseSuiteAdditional =>
   test("Traverse[LazyList].zipWithIndex stack safety") {
     checkZipWithIndexedStackSafety[LazyList](_.to(LazyList))

@@ -7,7 +7,7 @@ import scala.collection.immutable.SortedMap
 import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-class RegressionSuite extends CatsSuite {
+class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite {
 
   // toy state class
   // not stack safe, very minimal, not for actual use
