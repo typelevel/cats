@@ -18,7 +18,7 @@ package object instances {
   object char extends CharInstances
   object double extends DoubleInstances
   object duration extends CoreDurationInstances with DurationInstances
-  object either extends EitherInstances
+  object either extends EitherInstances with cats.kernel.instances.EitherInstancesBinCompat0
   object eq extends EqInstances
   object equiv extends EquivInstances
   object float extends FloatInstances

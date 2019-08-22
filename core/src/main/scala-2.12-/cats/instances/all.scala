@@ -55,3 +55,4 @@ private[cats] trait AllInstancesBinCompat6
     extends SortedSetInstancesBinCompat1
     with SortedMapInstancesBinCompat2
     with FunctionInstancesBinCompat1
+    with cats.kernel.instances.EitherInstancesBinCompat0
