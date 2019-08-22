@@ -34,7 +34,7 @@ class EitherSuite extends CatsSuite {
   checkAll("Semigroup[Either[ListWrapper[String], Int]]",
            SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
-  val partialOrder = catsStdPartialOrderForEither[Int, String]
+  val partialOrder = catsKernelStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
   val monad = implicitly[Monad[Either[Int, *]]]
   val show = implicitly[Show[Either[Int, String]]]
@@ -72,7 +72,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("implicit instances resolve specifically") {
-    val eq = catsStdEqForEither[Int, String]
+    val eq = catsKernelStdEqForEither[Int, String]
     assert(!eq.isInstanceOf[PartialOrder[_]])
     assert(!eq.isInstanceOf[Order[_]])
     assert(!partialOrder.isInstanceOf[Order[_]])
