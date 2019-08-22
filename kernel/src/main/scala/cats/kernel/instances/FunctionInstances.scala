@@ -37,7 +37,7 @@ private[instances] trait FunctionInstancesBinCompat0 extends FunctionInstances0B
     new Function1Group[A, B] with CommutativeGroup[A => B] { def B: Group[B] = G }
 }
 
-trait FunctionInstances0 extends FunctionInstances1 {
+private[instances] trait FunctionInstances0 extends FunctionInstances1 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.function.catsKernelStdHashForFunction0")
   private[instances] def catsKernelHashForFunction0[A](implicit ev: Hash[A]): Hash[() => A] =
@@ -96,7 +96,7 @@ private[instances] trait FunctionInstances0BinCompat0 extends FunctionInstances1
     new Function1Monoid[A, B] with BoundedSemilattice[A => B] { def B: Monoid[B] = G }
 }
 
-trait FunctionInstances1 extends FunctionInstances2 {
+private[instances] trait FunctionInstances1 extends FunctionInstances2 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.function.catsKernelStdEqForFunction0")
   private[instances] def catsKernelEqForFunction0[A](implicit ev: Eq[A]): Eq[() => A] =
@@ -144,7 +144,7 @@ private[instances] trait FunctionInstances1BinCompat0 extends FunctionInstances2
     new Function1Semigroup[A, B] with Semilattice[A => B] { def B: Semigroup[B] = M }
 }
 
-trait FunctionInstances2 extends FunctionInstances3 {
+private[instances] trait FunctionInstances2 extends FunctionInstances3 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.function.catsKernelStdMonoidForFunction0")
   private[instances] def catsKernelMonoidForFunction0[A](implicit M: Monoid[A]): Monoid[() => A] =
@@ -178,7 +178,7 @@ private[instances] trait FunctionInstances2BinCompat0 extends FunctionInstances3
     new Function1Semigroup[A, B] with Band[A => B] { def B: Semigroup[B] = S }
 }
 
-trait FunctionInstances3 extends FunctionInstances4 {
+private[instances] trait FunctionInstances3 extends FunctionInstances4 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.function.catsKernelStdCommutativeSemigroupForFunction0")
   private[instances] def catsKernelCommutativeSemigroupForFunction0[A](
@@ -205,7 +205,7 @@ private[instances] trait FunctionInstances3BinCompat0 extends FunctionInstances4
     new Function1Semigroup[A, B] with CommutativeSemigroup[A => B] { def B: Semigroup[B] = S }
 }
 
-trait FunctionInstances4 {
+private[instances] trait FunctionInstances4 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.function.catsKernelStdSemigroupForFunction0")
   private[instances] def catsKernelSemigroupForFunction0[A](implicit S: Semigroup[A]): Semigroup[() => A] =

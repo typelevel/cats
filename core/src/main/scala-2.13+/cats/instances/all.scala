@@ -34,9 +34,9 @@ trait AllInstances
     with UUIDInstances
     with VectorInstances
 
-trait AllInstancesBinCompat0 extends FunctionInstancesBinCompat0 with Tuple2InstancesBinCompat0
+private[cats] trait AllInstancesBinCompat0 extends FunctionInstancesBinCompat0 with Tuple2InstancesBinCompat0
 
-trait AllInstancesBinCompat1
+private[cats] trait AllInstancesBinCompat1
     extends OptionInstancesBinCompat0
     with ListInstancesBinCompat0
     with VectorInstancesBinCompat0
@@ -44,12 +44,15 @@ trait AllInstancesBinCompat1
     with MapInstancesBinCompat0
     with SortedMapInstancesBinCompat0
 
-trait AllInstancesBinCompat2 extends DurationInstances with FiniteDurationInstances
+private[cats] trait AllInstancesBinCompat2 extends DurationInstances with FiniteDurationInstances
 
-trait AllInstancesBinCompat3 extends AllCoreDurationInstances
+private[cats] trait AllInstancesBinCompat3 extends AllCoreDurationInstances
 
-trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstancesBinCompat1
+private[cats] trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstancesBinCompat1
 
-trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
+private[cats] trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
 
-trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2 with FunctionInstancesBinCompat1
+private[cats] trait AllInstancesBinCompat6
+    extends SortedSetInstancesBinCompat1
+    with SortedMapInstancesBinCompat2
+    with FunctionInstancesBinCompat1

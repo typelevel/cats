@@ -12,7 +12,7 @@ trait ListInstances extends ListInstances1 {
     new ListMonoid[A]
 }
 
-trait ListInstances1 extends ListInstances2 {
+private[instances] trait ListInstances1 extends ListInstances2 {
   implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     new ListPartialOrder[A]
 
@@ -20,7 +20,7 @@ trait ListInstances1 extends ListInstances2 {
     new ListHash[A]
 }
 
-trait ListInstances2 {
+private[instances] trait ListInstances2 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
 }

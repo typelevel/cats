@@ -44,10 +44,7 @@ package object instances {
       with SortedMapInstancesBinCompat0
       with SortedMapInstancesBinCompat1
       with SortedMapInstancesBinCompat2
-  object sortedSet
-      extends SortedSetInstances
-      with SortedSetInstancesBinCompat0
-      with SortedSetInstancesBinCompat1
+  object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0 with SortedSetInstancesBinCompat1
 
   @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
   object stream extends StreamInstances with StreamInstancesBinCompat0

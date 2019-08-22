@@ -70,7 +70,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
     cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 }
 
-trait SortedSetInstances1 {
+private[instances] trait SortedSetInstances1 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet")
   private[instances] def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]
@@ -80,7 +80,7 @@ trait SortedSetInstances1 {
     cats.kernel.instances.sortedSet.catsKernelStdBoundedSemilatticeForSortedSet[A]
 }
 
-trait SortedSetInstancesBinCompat0 {
+private[instances] trait SortedSetInstancesBinCompat0 {
   implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
     override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
       implicit val orderingA = fa.ordering
@@ -91,7 +91,7 @@ trait SortedSetInstancesBinCompat0 {
   }
 }
 
-trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
+private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
   // TODO: Remove when this is no longer necessary for binary compatibility.
   implicit override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]

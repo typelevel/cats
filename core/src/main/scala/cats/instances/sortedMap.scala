@@ -147,7 +147,7 @@ class SortedMapCommutativeMonoid[K, V](implicit V: CommutativeSemigroup[V], O: O
 @deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedMapMonoid")
 class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends cats.kernel.instances.SortedMapMonoid[K, V]
 
-trait SortedMapInstancesBinCompat0 {
+private[instances] trait SortedMapInstancesBinCompat0 {
   implicit def catsStdTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, *]] =
     new TraverseFilter[SortedMap[K, *]] {
 
@@ -187,7 +187,7 @@ trait SortedMapInstancesBinCompat0 {
     }
 }
 
-trait SortedMapInstancesBinCompat1 {
+private[instances] trait SortedMapInstancesBinCompat1 {
   implicit def catsStdMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] = new MonoidK[SortedMap[K, *]] {
     override def empty[A]: SortedMap[K, A] = SortedMap.empty[K, A](Order[K].toOrdering)
 
@@ -195,4 +195,4 @@ trait SortedMapInstancesBinCompat1 {
   }
 }
 
-trait SortedMapInstancesBinCompat2 extends cats.kernel.instances.SortedMapInstances
+private[instances] trait SortedMapInstancesBinCompat2 extends cats.kernel.instances.SortedMapInstances
