@@ -9,6 +9,7 @@ package object instances {
       with AllInstancesBinCompat3
       with AllInstancesBinCompat4
       with AllInstancesBinCompat5
+      with AllInstancesBinCompat6
   object bigInt extends BigIntInstances
   object bigDecimal extends BigDecimalInstances
   object bitSet extends BitSetInstances
@@ -38,8 +39,12 @@ package object instances {
   object queue extends QueueInstances
   object set extends SetInstances
   object short extends ShortInstances
-  object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
-  object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0
+  object sortedMap
+      extends SortedMapInstances
+      with SortedMapInstancesBinCompat0
+      with SortedMapInstancesBinCompat1
+      with SortedMapInstancesBinCompat2
+  object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0 with SortedSetInstancesBinCompat1
 
   @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
   object stream extends StreamInstances with StreamInstancesBinCompat0
