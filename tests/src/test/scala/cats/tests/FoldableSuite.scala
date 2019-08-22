@@ -8,7 +8,6 @@ import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
 import kernel.compat.scalaVersionSpecific._
-import compat.lazyList.toLazyList
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
@@ -238,7 +237,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 }
 
-class FoldableSuiteAdditional extends CatsSuite {
+class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldableSuite {
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
@@ -338,8 +337,8 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[List](_.toList)
   }
 
-  test("Foldable[LazyList].foldM stack safety") {
-    checkMonadicFoldsStackSafety[LazyList](toLazyList)
+  test("Foldable[Stream].foldM stack safety") {
+    checkMonadicFoldsStackSafety[Stream](_.toStream)
   }
 
   test("Foldable[Vector].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
@@ -368,51 +367,51 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
-  val F = Foldable[LazyList]
+  val F = Foldable[Stream]
   def bomb[A]: A = sys.error("boom")
-  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: LazyList.empty
-  def boom[A]: LazyList[A] =
-    bomb[A] #:: LazyList.empty
-  test("Foldable[LazyList] doesn't blow up") {
+  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: Stream.empty
+  def boom[A]: Stream[A] =
+    bomb[A] #:: Stream.empty
+  test("Foldable[Stream] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
     assert(contains(dangerous, 2).value)
   }
 
-  test("Foldable[LazyList] lazy results don't blow up unless you call .value on them") {
+  test("Foldable[Stream] lazy results don't blow up unless you call .value on them") {
     contains(dangerous, -1)
   }
 
-  test("Foldable[LazyList] param to foldRight is actually being handled lazily") {
+  test("Foldable[Stream] param to foldRight is actually being handled lazily") {
     // ensure that the . it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Eval.later(bomb[Boolean])
-    val result = F.foldRight(1 #:: 2 #:: LazyList.empty, trap) { (n, lb) =>
+    val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
       if (n == 2) Now(true) else lb
     }
     assert(result.value)
   }
 
-  test("Foldable[LazyList]  trampolining") {
-    val large = LazyList((1 to 10000): _*)
+  test("Foldable[Stream]  trampolining") {
+    val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
   }
 
-  test("Foldable[LazyList] laziness of foldM") {
+  test("Foldable[Stream] laziness of foldM") {
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
-  def foldableLazyListWithDefaultImpl = new Foldable[LazyList] {
-    def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
-      instances.lazyList.catsStdInstancesForLazyList.foldLeft(fa, b)(f)
+  def foldableStreamWithDefaultImpl = new Foldable[Stream] {
+    def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
+      Foldable[Stream].foldLeft(fa, b)(f)
 
-    def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      instances.lazyList.catsStdInstancesForLazyList.foldRight(fa, lb)(f)
+    def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      Foldable[Stream].foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
-    val ns = LazyList.continually(1)
+    implicit val F = foldableStreamWithDefaultImpl
+    val ns = Stream.continually(1)
     val res = F.foldLeftM[Either[Int, *], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
     }
@@ -420,11 +419,11 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test(".foldLeftM short-circuiting optimality") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F = foldableStreamWithDefaultImpl
 
     // test that no more elements are evaluated than absolutely necessary
 
-    def concatUntil(ss: LazyList[String], stop: String): Either[String, String] =
+    def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
       F.foldLeftM[Either[String, *], String, String](ss, "") { (acc, s) =>
         if (s == stop) Left(acc) else Right(acc + s)
       }
@@ -435,13 +434,13 @@ class FoldableSuiteAdditional extends CatsSuite {
   }
 
   test(".existsM/.forallM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F = foldableStreamWithDefaultImpl
     assert(F.existsM[Id, Boolean](true #:: boom[Boolean])(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boom[Boolean])(identity) == false)
   }
 
   test(".findM/.collectFirstSomeM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F = foldableStreamWithDefaultImpl
     assert((1 #:: boom[Int]).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boom[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
@@ -465,8 +464,8 @@ class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
   def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
 }
 
-class FoldableLazyListSuite extends FoldableSuite[LazyList]("lazyList") {
-  def iterator[T](list: LazyList[T]): Iterator[T] = list.iterator
+class FoldableStreamSuite extends FoldableSuite[Stream]("lazyList") {
+  def iterator[T](list: Stream[T]): Iterator[T] = list.iterator
 }
 
 class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, *]]("sortedMap") {

@@ -362,8 +362,23 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
     Semigroup[LazyList[A]].asInstanceOf[Semigroup[NonEmptyLazyList[A]]]
 
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
-    Show.show[NonEmptyLazyList[A]](nec => s"NonEmpty${Show[LazyList[A]].show(nec.toLazyList)}")
+    Show.show[NonEmptyLazyList[A]](nell => s"NonEmpty${Show[LazyList[A]].show(nell.toLazyList)}")
 
+  implicit def catsDataParallelForNonEmptyLazyList: Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
+    new Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] {
+
+      def applicative: Applicative[OneAnd[ZipLazyList, *]] =
+        OneAnd.catsDataApplicativeForOneAnd(ZipLazyList.catsDataAlternativeForZipLazyList)
+      def monad: Monad[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
+
+      def sequential: OneAnd[ZipLazyList, *] ~> NonEmptyLazyList =
+        λ[OneAnd[ZipLazyList, *] ~> NonEmptyLazyList](
+          znell => NonEmptyLazyList.fromLazyListPrepend(znell.head, znell.tail.value)
+        )
+
+      def parallel: NonEmptyLazyList ~> OneAnd[ZipLazyList, *] =
+        λ[NonEmptyLazyList ~> OneAnd[ZipLazyList, *]](nell => OneAnd(nell.head, ZipLazyList(nell.tail)))
+    }
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances1 extends NonEmptyLazyListInstances2 {

@@ -14,7 +14,7 @@ import scala.collection.immutable.SortedSet
 import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
+class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with ScalaVersionSpecificParallelSuite {
 
   test("ParSequence Either should accumulate errors") {
     forAll { es: List[Either[String, Int]] =>
@@ -304,7 +304,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("ParMap over Stream should be consistent with zip") {
-    forAll { (as: LazyList[Int], bs: LazyList[Int], cs: LazyList[Int]) =>
+    forAll { (as: Stream[Int], bs: Stream[Int], cs: Stream[Int]) =>
       val zipped = as
         .zip(bs)
         .map {
@@ -344,7 +344,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
-    forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
       (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
     }
   }
@@ -362,7 +362,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
   }
 
   test("ParTupled of Stream should be consistent with zip") {
-    forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
+    forAll { (fa: Stream[Int], fb: Stream[Int], fc: Stream[Int], fd: Stream[Int]) =>
       (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
@@ -446,7 +446,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
            NonEmptyParallelTests[Vector, ZipVector].nonEmptyParallel[Int, String])
   checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList].nonEmptyParallel[Int, String])
   // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
-  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[LazyList, ZipStream].nonEmptyParallel[Int, String])
+  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[Stream, ZipStream].nonEmptyParallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]",
            NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector].nonEmptyParallel[Int, String])
