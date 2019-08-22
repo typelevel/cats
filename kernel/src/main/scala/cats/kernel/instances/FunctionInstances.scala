@@ -19,7 +19,7 @@ trait FunctionInstances extends FunctionInstances0 {
 
 }
 
-private[instances] trait FunctionInstancesBinCompat0 extends FunctionInstances0BinCompat0 {
+private[cats] trait FunctionInstancesBinCompat0 extends FunctionInstances0BinCompat0 {
 
   implicit def catsKernelStdOrderForFunction0[A](implicit ev: Order[A]): Order[() => A] =
     new Order[() => A] {

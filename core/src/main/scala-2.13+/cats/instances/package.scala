@@ -23,7 +23,11 @@ package object instances {
   object equiv extends EquivInstances
   object float extends FloatInstances
   object finiteDuration extends CoreFiniteDurationInstances with FiniteDurationInstances
-  object function extends FunctionInstances with FunctionInstancesBinCompat0 with FunctionInstancesBinCompat1
+  object function
+      extends FunctionInstances
+      with FunctionInstancesBinCompat0
+      with FunctionInstancesBinCompat1
+      with cats.kernel.instances.FunctionInstancesBinCompat0
   object future extends FutureInstances
   object int extends IntInstances
   object invariant extends InvariantMonoidalInstances

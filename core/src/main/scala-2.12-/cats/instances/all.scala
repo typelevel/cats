@@ -56,3 +56,4 @@ private[cats] trait AllInstancesBinCompat6
     with SortedMapInstancesBinCompat2
     with FunctionInstancesBinCompat1
     with cats.kernel.instances.EitherInstancesBinCompat0
+    with cats.kernel.instances.FunctionInstancesBinCompat0
