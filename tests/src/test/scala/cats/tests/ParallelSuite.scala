@@ -303,6 +303,22 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  test("ParMap over Stream should be consistent with zip") {
+    forAll { (as: LazyList[Int], bs: LazyList[Int], cs: LazyList[Int]) =>
+      val zipped = as
+        .zip(bs)
+        .map {
+          case (a, b) => a + b
+        }
+        .zip(cs)
+        .map {
+          case (a, b) => a + b
+        }
+
+      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+    }
+  }
+
   test("ParTupled of NonEmptyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: NonEmptyList[Int], fb: NonEmptyList[Int], fc: NonEmptyList[Int], fd: NonEmptyList[Int]) =>
       (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
@@ -327,6 +343,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  test("ParTupled of Stream should be consistent with ParMap of Tuple.apply") {
+    forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+    }
+  }
+
   test("ParTupled of List should be consistent with zip") {
     forAll { (fa: List[Int], fb: List[Int], fc: List[Int], fd: List[Int]) =>
       (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
@@ -335,6 +357,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParTupled of Vector should be consistent with zip") {
     forAll { (fa: Vector[Int], fb: Vector[Int], fc: Vector[Int], fd: Vector[Int]) =>
+      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+    }
+  }
+
+  test("ParTupled of Stream should be consistent with zip") {
+    forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
       (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
     }
   }
@@ -417,6 +445,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   checkAll("NonEmptyParallel[Vector, ZipVector]",
            NonEmptyParallelTests[Vector, ZipVector].nonEmptyParallel[Int, String])
   checkAll("NonEmptyParallel[List, ZipList]", NonEmptyParallelTests[List, ZipList].nonEmptyParallel[Int, String])
+  // Can't test Parallel here, as Applicative[ZipStream].pure doesn't terminate
+  checkAll("Parallel[Stream, ZipStream]", NonEmptyParallelTests[LazyList, ZipStream].nonEmptyParallel[Int, String])
 
   checkAll("NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector]",
            NonEmptyParallelTests[NonEmptyVector, ZipNonEmptyVector].nonEmptyParallel[Int, String])
