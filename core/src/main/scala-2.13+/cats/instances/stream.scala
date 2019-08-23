@@ -161,7 +161,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
 }
 
-trait StreamInstancesBinCompat0 {
+private[instances] trait StreamInstancesBinCompat0 {
   @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
   implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
     val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream

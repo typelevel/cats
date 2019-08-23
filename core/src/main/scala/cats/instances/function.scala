@@ -9,7 +9,7 @@ import annotation.tailrec
 
 trait FunctionInstances extends cats.kernel.instances.FunctionInstances with Function0Instances with Function1Instances
 
-trait FunctionInstancesBinCompat0 {
+private[instances] trait FunctionInstancesBinCompat0 {
 
   /**
    * Witness for: E => A <-> E => A

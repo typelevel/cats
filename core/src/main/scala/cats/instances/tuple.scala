@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
 
-trait Tuple2InstancesBinCompat0 {
+private[instances] trait Tuple2InstancesBinCompat0 {
 
   /**
    * Witness for: (A, A) <-> Boolean => A
@@ -31,7 +31,7 @@ trait Tuple2InstancesBinCompat0 {
   }
 }
 
-sealed trait Tuple2Instances extends Tuple2Instances1 {
+sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
   implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
@@ -103,26 +103,26 @@ sealed trait Tuple2Instances extends Tuple2Instances1 {
     }
 }
 
-sealed trait Tuple2Instances1 extends Tuple2Instances2 {
+sealed private[instances] trait Tuple2Instances1 extends Tuple2Instances2 {
   implicit def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeMonad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances2 extends Tuple2Instances3 {
+sealed private[instances] trait Tuple2Instances2 extends Tuple2Instances3 {
   implicit def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, *)]
 }
 
-sealed trait Tuple2Instances3 extends Tuple2Instances4 {
+sealed private[instances] trait Tuple2Instances3 extends Tuple2Instances4 {
   implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, *)] =
     new FlatMapTuple2[X](MX) with Monad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
-sealed trait Tuple2Instances4 {
+sealed private[instances] trait Tuple2Instances4 {
   implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, *)] =
     new FlatMapTuple2[X](SX)
 }
