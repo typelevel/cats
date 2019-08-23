@@ -9,7 +9,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
     new SortedSetHash[A]
 }
 
-trait SortedSetInstances1 {
+private[instances] trait SortedSetInstances1 {
   implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
     new SortedSetOrder[A]
 

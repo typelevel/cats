@@ -12,12 +12,12 @@ trait SortedMapInstances extends SortedMapInstances2 {
     new SortedMapCommutativeMonoid[K, V]
 }
 
-trait SortedMapInstances1 {
+private[instances] trait SortedMapInstances1 {
   implicit def catsKernelStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 }
 
-trait SortedMapInstances2 extends SortedMapInstances1 {
+private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
   implicit def catsKernelStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 }
