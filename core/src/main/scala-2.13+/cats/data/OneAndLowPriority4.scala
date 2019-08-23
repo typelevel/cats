@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable.Builder
 
 abstract private[data] class OneAndLowPriority4 {
-  @deprecated("2.0.0-RC2", "Use catsDataComonadForNonEmptyLazyList")
+  @deprecated("Use catsDataComonadForNonEmptyLazyList", "2.0.0-RC2")
   implicit def catsDataComonadForNonEmptyStream: Comonad[OneAnd[Stream, *]] =
     new Comonad[OneAnd[Stream, *]] {
       def coflatMap[A, B](fa: OneAnd[Stream, A])(f: OneAnd[Stream, A] => B): OneAnd[Stream, B] = {
