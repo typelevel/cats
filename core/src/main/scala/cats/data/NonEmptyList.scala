@@ -500,7 +500,7 @@ object NonEmptyList extends NonEmptyListInstances {
           ZipNonEmptyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    @deprecated("2.0.0-RC2", "Use catsDataEqForZipNonEmptyList")
+    @deprecated("Use catsDataEqForZipNonEmptyList", "2.0.0-RC2")
     private[data] def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = catsDataEqForZipNonEmptyList[A]
 
     implicit def catsDataEqForZipNonEmptyList[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
