@@ -1,10 +1,10 @@
 package cats
 package data
 
-@deprecated("2.0.0-RC2", "Use ZipLazyList")
+@deprecated("Use ZipLazyList", "2.0.0-RC2")
 class ZipStream[A](val value: Stream[A]) extends AnyVal
 
-@deprecated("2.0.0-RC2", "Use ZipLazyList")
+@deprecated("Use ZipLazyList", "2.0.0-RC2")
 object ZipStream {
 
   def apply[A](value: Stream[A]): ZipStream[A] = new ZipStream(value)

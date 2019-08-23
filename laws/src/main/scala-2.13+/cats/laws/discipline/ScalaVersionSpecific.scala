@@ -6,7 +6,7 @@ import org.scalacheck.{Arbitrary, Cogen}
 private[discipline] object ScalaVersionSpecific {
 
   trait ArbitraryInstances {
-    @deprecated("2.0.0-RC2", "Use catsLawsArbitraryForZipLazyList")
+    @deprecated("Use catsLawsArbitraryForZipLazyList", "2.0.0-RC2")
     implicit def catsLawsArbitraryForZipStream[A](implicit A: Arbitrary[A]): Arbitrary[ZipStream[A]] =
       Arbitrary(implicitly[Arbitrary[Stream[A]]].arbitrary.map(v => new ZipStream(v)))
 

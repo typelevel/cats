@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
-  @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
+  @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit val catsStdInstancesForStream
     : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
@@ -153,7 +153,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         fa.collectFirst(Function.unlift(f))
     }
 
-  @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
+  @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
     new Show[Stream[A]] {
       def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
@@ -162,7 +162,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 }
 
 private[instances] trait StreamInstancesBinCompat0 {
-  @deprecated("2.0.0-RC2", "Use cats.instances.lazyList")
+  @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
     val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream
 

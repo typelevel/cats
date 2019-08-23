@@ -65,7 +65,7 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
 
-  @deprecated("2.0.0-RC2", "Use catsStdParallelForZipLazyList")
+  @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
   implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
     new Parallel[Stream, ZipStream] {
 
