@@ -113,12 +113,12 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
 }
 
-trait SortedMapInstances1 {
+private[instances] trait SortedMapInstances1 {
   implicit def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 }
 
-trait SortedMapInstances2 extends SortedMapInstances1 {
+private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
   implicit def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 }
@@ -184,7 +184,7 @@ class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends Monoi
 
 }
 
-trait SortedMapInstancesBinCompat0 {
+private[instances] trait SortedMapInstancesBinCompat0 {
   implicit def catsStdTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, *]] =
     new TraverseFilter[SortedMap[K, *]] {
 
@@ -224,7 +224,7 @@ trait SortedMapInstancesBinCompat0 {
     }
 }
 
-trait SortedMapInstancesBinCompat1 {
+private[instances] trait SortedMapInstancesBinCompat1 {
   implicit def catsStdMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] = new MonoidK[SortedMap[K, *]] {
     override def empty[A]: SortedMap[K, A] = SortedMap.empty[K, A](Order[K].toOrdering)
 

@@ -8,7 +8,7 @@ trait LazyListInstances extends LazyListInstances1 {
     new LazyListMonoid[A]
 }
 
-trait LazyListInstances1 extends LazyListInstances2 {
+private[instances] trait LazyListInstances1 extends LazyListInstances2 {
   implicit def catsKernelStdPartialOrderForLazyList[A: PartialOrder]: PartialOrder[LazyList[A]] =
     new LazyListPartialOrder[A]
 
@@ -16,7 +16,7 @@ trait LazyListInstances1 extends LazyListInstances2 {
     new LazyListHash[A]
 }
 
-trait LazyListInstances2 {
+private[instances] trait LazyListInstances2 {
   implicit def catsKernelStdEqForLazyList[A: Eq]: Eq[LazyList[A]] =
     new LazyListEq[A]
 }

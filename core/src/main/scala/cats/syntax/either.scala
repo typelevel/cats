@@ -397,7 +397,7 @@ final class EitherIdOps[A](private val obj: A) extends AnyVal {
 
 }
 
-trait EitherSyntaxBinCompat0 {
+private[syntax] trait EitherSyntaxBinCompat0 {
   implicit final def catsSyntaxEitherBinCompat0[A, B](eab: Either[A, B]): EitherOpsBinCompat0[A, B] =
     new EitherOpsBinCompat0(eab)
 
@@ -405,7 +405,7 @@ trait EitherSyntaxBinCompat0 {
     new EitherIdOpsBinCompat0(a)
 }
 
-final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
+final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
 
   /**
    * Wrap a value to a left EitherNec
@@ -432,7 +432,7 @@ final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
   def rightNec[B]: Either[NonEmptyChain[B], A] = Right(value)
 }
 
-final class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
+final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
 
   /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
