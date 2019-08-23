@@ -51,3 +51,5 @@ private[cats] trait AllInstancesBinCompat3 extends AllCoreDurationInstances
 private[cats] trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstancesBinCompat1
 
 private[cats] trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
+
+private[cats] trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2

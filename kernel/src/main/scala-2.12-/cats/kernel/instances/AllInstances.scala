@@ -34,3 +34,5 @@ trait AllInstances
     with VectorInstances
 
 private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
+
+private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
