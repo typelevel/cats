@@ -10,7 +10,7 @@ trait StreamInstances extends StreamInstances1 {
     new StreamMonoid[A]
 }
 
-trait StreamInstances1 extends StreamInstances2 {
+private[instances] trait StreamInstances1 extends StreamInstances2 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.lazyList")
   implicit def catsKernelStdPartialOrderForStream[A: PartialOrder]: PartialOrder[Stream[A]] =
     new StreamPartialOrder[A]
@@ -20,7 +20,7 @@ trait StreamInstances1 extends StreamInstances2 {
     new StreamHash[A]
 }
 
-trait StreamInstances2 {
+private[instances] trait StreamInstances2 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.lazyList")
   implicit def catsKernelStdEqForStream[A: Eq]: Eq[Stream[A]] =
     new StreamEq[A]

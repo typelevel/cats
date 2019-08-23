@@ -13,7 +13,7 @@ trait MapInstances extends MapInstances1 {
     new MapMonoid[K, V] with CommutativeMonoid[Map[K, V]]
 }
 
-trait MapInstances1 {
+private[instances] trait MapInstances1 {
   implicit def catsKernelStdEqForMap[K, V: Eq]: Eq[Map[K, V]] =
     new MapEq[K, V]
   implicit def catsKernelStdMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =

@@ -8,7 +8,7 @@ trait StreamInstances extends StreamInstances1 {
     new StreamMonoid[A]
 }
 
-trait StreamInstances1 extends StreamInstances2 {
+private[instances] trait StreamInstances1 extends StreamInstances2 {
   implicit def catsKernelStdPartialOrderForStream[A: PartialOrder]: PartialOrder[Stream[A]] =
     new StreamPartialOrder[A]
 
@@ -16,7 +16,7 @@ trait StreamInstances1 extends StreamInstances2 {
     new StreamHash[A]
 }
 
-trait StreamInstances2 {
+private[instances] trait StreamInstances2 {
   implicit def catsKernelStdEqForStream[A: Eq]: Eq[Stream[A]] =
     new StreamEq[A]
 }

@@ -6,7 +6,7 @@ trait SetInstances extends SetInstances1 {
     new SetHash[A]
 }
 
-trait SetInstances1 {
+private[instances] trait SetInstances1 {
   implicit def catsKernelStdPartialOrderForSet[A]: PartialOrder[Set[A]] =
     new SetPartialOrder[A]
 

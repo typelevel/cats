@@ -33,6 +33,6 @@ trait AllInstances
     with UUIDInstances
     with VectorInstances
 
-trait AllInstancesBinCompat0 extends FiniteDurationInstances
+private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
 
-trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
+private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances

@@ -51,7 +51,7 @@ trait BinestedInstances extends BinestedInstances0 {
     }
 }
 
-trait BinestedInstances0 {
+private[data] trait BinestedInstances0 {
   implicit def catsDataBifoldableForBinested[F[_, _], G[_], H[_]](
     implicit F0: Bifoldable[F],
     G0: Foldable[G],

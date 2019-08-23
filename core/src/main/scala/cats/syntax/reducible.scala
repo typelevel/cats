@@ -10,7 +10,7 @@ final class NestedReducibleOps[F[_], G[_], A](private val fga: F[G[A]]) extends 
   def reduceK(implicit F: Reducible[F], G: SemigroupK[G]): G[A] = F.reduceK(fga)
 }
 
-trait ReducibleSyntaxBinCompat0 {
+private[syntax] trait ReducibleSyntaxBinCompat0 {
   implicit final def catsSyntaxReducibleOps0[F[_], A](fa: F[A]): ReducibleOps0[F, A] =
     new ReducibleOps0[F, A](fa)
 }

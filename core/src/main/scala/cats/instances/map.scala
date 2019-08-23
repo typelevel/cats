@@ -93,7 +93,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
 }
 
-trait MapInstancesBinCompat0 {
+private[instances] trait MapInstancesBinCompat0 {
 
   implicit val catsStdComposeForMap: Compose[Map] = new Compose[Map] {
 
@@ -139,7 +139,7 @@ trait MapInstancesBinCompat0 {
 
 }
 
-trait MapInstancesBinCompat1 {
+private[instances] trait MapInstancesBinCompat1 {
   implicit def catsStdMonoidKForMap[K]: MonoidK[Map[K, *]] = new MonoidK[Map[K, *]] {
     override def empty[A]: Map[K, A] = Map.empty
 

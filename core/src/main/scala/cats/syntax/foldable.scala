@@ -9,12 +9,12 @@ trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUno
     new FoldableOps[F, A](fa)
 }
 
-trait FoldableSyntaxBinCompat0 {
+private[syntax] trait FoldableSyntaxBinCompat0 {
   implicit final def catsSyntaxFoldableOps0[F[_], A](fa: F[A]): FoldableOps0[F, A] =
     new FoldableOps0[F, A](fa)
 }
 
-trait FoldableSyntaxBinCompat1 {
+private[syntax] trait FoldableSyntaxBinCompat1 {
   implicit final def catsSyntaxFoldableBinCompat0[F[_]](fa: Foldable[F]): FoldableOps1[F] =
     new FoldableOps1(fa)
 }
@@ -305,7 +305,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   }
 }
 
-final class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
+final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   /**
    * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`

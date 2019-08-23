@@ -159,7 +159,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
 }
 
-trait StreamInstancesBinCompat0 {
+private[instances] trait StreamInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForStream: TraverseFilter[Stream] = new TraverseFilter[Stream] {
     val traverse: Traverse[Stream] = cats.instances.stream.catsStdInstancesForStream
 
