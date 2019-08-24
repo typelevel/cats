@@ -50,6 +50,7 @@ trait AllSyntax
     with ReducibleSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
+    with SeqSyntax
     with ShowSyntax
     with StrongSyntax
     with TraverseSyntax

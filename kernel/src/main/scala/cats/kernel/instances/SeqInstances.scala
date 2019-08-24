@@ -1,78 +1,81 @@
-package cats.kernel.instances
+package cats.kernel
+package instances
 
+import scala.collection.immutable.Seq
 import scala.annotation.tailrec
 
-trait ListInstances extends ListInstances1 {
-  implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
-    new ListOrder[A]
-  implicit def catsKernelStdMonoidForList[A]: Monoid[List[A]] =
-    new ListMonoid[A]
+trait SeqInstances extends SeqInstances1 {
+  implicit def catsKernelStdOrderForSeq[A: Order]: Order[Seq[A]] =
+    new SeqOrder[A]
+
+  implicit def catsKernelStdMonoidForSeq[A]: Monoid[Seq[A]] =
+    new SeqMonoid[A]
 }
 
-trait ListInstances1 extends ListInstances2 {
-  implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
-    new ListPartialOrder[A]
+trait SeqInstances1 extends SeqInstances2 {
+  implicit def catsKernelStdPartialOrderForSeq[A: PartialOrder]: PartialOrder[Seq[A]] =
+    new SeqPartialOrder[A]
 
-  implicit def catsKernelStdHashForList[A: Hash]: Hash[List[A]] =
-    new ListHash[A]
+  implicit def catsKernelStdHashForSeq[A: Hash]: Hash[Seq[A]] =
+    new SeqHash[A]
 }
 
-trait ListInstances2 {
-  implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
-    new ListEq[A]
+trait SeqInstances2 {
+  implicit def catsKernelStdEqForSeq[A: Eq]: Eq[Seq[A]] =
+    new SeqEq[A]
 }
 
-class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
-  def compare(xs: List[A], ys: List[A]): Int = {
-    @tailrec def loop(xs: List[A], ys: List[A]): Int =
+class SeqOrder[A](implicit ev: Order[A]) extends Order[Seq[A]] {
+  def compare(xs: Seq[A], ys: Seq[A]): Int = {
+    @tailrec def loop(xs: Seq[A], ys: Seq[A]): Int =
       xs match {
-        case Nil =>
+        case Seq() =>
           if (ys.isEmpty) 0 else -1
-        case x :: xs =>
+        case x +: xs1 =>
           ys match {
-            case Nil => 1
-            case y :: ys =>
+            case Seq() => 1
+            case y +: ys1 =>
               val n = ev.compare(x, y)
-              if (n != 0) n else loop(xs, ys)
+              if (n != 0) n else loop(xs1, ys1)
           }
       }
     if (xs eq ys) 0 else loop(xs, ys)
   }
 }
 
-class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[List[A]] {
-  def partialCompare(xs: List[A], ys: List[A]): Double = {
-    @tailrec def loop(xs: List[A], ys: List[A]): Double =
+class SeqPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Seq[A]] {
+  def partialCompare(xs: Seq[A], ys: Seq[A]): Double = {
+    @tailrec def loop(xs: Seq[A], ys: Seq[A]): Double =
       xs match {
-        case Nil =>
+        case Seq() =>
           if (ys.isEmpty) 0.0 else -1.0
-        case x :: xs =>
+        case x +: xs1 =>
           ys match {
-            case Nil => 1.0
-            case y :: ys =>
+            case Seq() => 1.0
+            case y +: ys1 =>
               val n = ev.partialCompare(x, y)
-              if (n != 0.0) n else loop(xs, ys)
+              if (n != 0.0) n else loop(xs1, ys1)
           }
       }
     if (xs eq ys) 0.0 else loop(xs, ys)
   }
 }
 
-class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(ev) with Hash[List[A]] {
-  def hash(x: List[A]): Int = StaticMethods.listHash(x)(ev)
+class SeqHash[A](implicit ev: Hash[A]) extends SeqEq[A]()(ev) with Hash[Seq[A]] {
+  def hash(x: Seq[A]): Int = StaticMethods.seqHash(x)(ev)
 }
 
-class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
-  def eqv(xs: List[A], ys: List[A]): Boolean = {
-    def loop(xs: List[A], ys: List[A]): Boolean =
+class SeqEq[A](implicit ev: Eq[A]) extends Eq[Seq[A]] {
+  def eqv(xs: Seq[A], ys: Seq[A]): Boolean = {
+    def loop(xs: Seq[A], ys: Seq[A]): Boolean =
       xs match {
-        case Nil =>
+        case Seq() =>
           ys.isEmpty
-        case x :: xs =>
+        case x +: xs1 =>
           ys match {
-            case y :: ys =>
-              if (ev.eqv(x, y)) loop(xs, ys) else false
-            case Nil =>
+            case y +: ys1 =>
+              if (ev.eqv(x, y)) loop(xs1, ys1) else false
+            case Seq() =>
               false
           }
       }
@@ -80,13 +83,13 @@ class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
   }
 }
 
-class ListMonoid[A] extends Monoid[List[A]] {
-  def empty: List[A] = Nil
-  def combine(x: List[A], y: List[A]): List[A] = x ::: y
+class SeqMonoid[A] extends Monoid[Seq[A]] {
+  def empty: Seq[A] = Seq.empty
+  def combine(x: Seq[A], y: Seq[A]): Seq[A] = x ++ y
 
-  override def combineN(x: List[A], n: Int): List[A] =
-    StaticMethods.combineNIterable(List.newBuilder[A], x, n)
+  override def combineN(x: Seq[A], n: Int): Seq[A] =
+    StaticMethods.combineNIterable(Seq.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[List[A]]): List[A] =
-    StaticMethods.combineAllIterable(List.newBuilder[A], xs)
+  override def combineAll(xs: TraversableOnce[Seq[A]]): Seq[A] =
+    StaticMethods.combineAllIterable(Seq.newBuilder[A], xs)
 }

@@ -37,6 +37,7 @@ package object instances {
   object partialOrdering extends PartialOrderingInstances
   object queue extends QueueInstances
   object set extends SetInstances
+  object seq extends SeqInstances
   object short extends ShortInstances
   object sortedMap extends SortedMapInstances with SortedMapInstancesBinCompat0 with SortedMapInstancesBinCompat1
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0

@@ -39,6 +39,21 @@ private[kernel] class HashCompat {
     finalizeHash(h, n)
   }
 
+  def seqHash[A](x: scala.collection.immutable.Seq[A])(implicit A: Hash[A]): Int = {
+    import scala.util.hashing.MurmurHash3._
+    var n = 0
+    var h = seqSeed
+    var elems = x
+    while (elems.nonEmpty) {
+      val head = elems.head
+      val tail = elems.tail
+      h = mix(h, A.hash(head))
+      n += 1
+      elems = tail
+    }
+    finalizeHash(h, n)
+  }
+
   // adapted from scala.util.hashing.MurmurHash3
   def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
     import scala.util.hashing.MurmurHash3._

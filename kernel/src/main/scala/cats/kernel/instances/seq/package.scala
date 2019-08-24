@@ -1,3 +1,4 @@
-package cats.kernel.instances package object seq {
+package cats.kernel
+package instances
 
-}
+package object seq extends SeqInstances
