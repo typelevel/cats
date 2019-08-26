@@ -53,6 +53,7 @@ possible:
  * Brian P. Holt
  * Bryan Tan
  * Cary Robbins
+ * Changwoo Park
  * Chris Birchall
  * Christopher Davenport
  * Cody Allen
@@ -100,6 +101,7 @@ possible:
  * Francois Armand
  * Frank S. Thomas
  * Gabriele Petronella
+ * Gagandeep Kalra
  * Gavin Bisesi
  * Giovanni Ruggiero
  * Giulio De Luise
@@ -224,6 +226,7 @@ possible:
  * sullis
  * Sumedh Mungee
  * Takayuki Sakai
+ * Tanaka Takaya
  * Taylor Brown
  * Tom Switzer
  * Tomas Mikula
@@ -234,6 +237,7 @@ possible:
  * Tya
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasiliy Bondarenko
  * ven
  * Viktor Dychko
  * Viktor Lövgren

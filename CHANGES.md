@@ -1,3 +1,46 @@
+## Version 2.0.0-RC2
+
+> 2019 August 26
+
+Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 4 source breaking changes
+
+* [#3012](https://github.com/typelevel/cats/pull/3012) Make Parallel's F a type member  by @travisbrown
+* [#3003](https://github.com/typelevel/cats/pull/3003) Make bincompat and prioritization traits package-private  by @travisbrown
+* [#3001](https://github.com/typelevel/cats/pull/3001) Move appropriate SortedSet and SortedMap instances to kernel  by @travisbrown
+* [#2983](https://github.com/typelevel/cats/pull/2983) Treat Stream and LazyList as different types  by @travisbrown
+
+### 2 bug fixes
+
+* [#3010](https://github.com/typelevel/cats/pull/3010) Fix a few issues related to bin-compat traits  by @travisbrown
+* [#3004](https://github.com/typelevel/cats/pull/3004) Fix argument order in deprecations  by @travisbrown
+
+### 9 API/feature enhancements
+
+* [#3002](https://github.com/typelevel/cats/pull/3002) Fix easy typos  by @travisbrown
+* [#2999](https://github.com/typelevel/cats/pull/2999) optimize chain's get.  by @takayahilton
+* [#2996](https://github.com/typelevel/cats/pull/2996) Add :== unapply to Chain.  by @takayahilton
+* [#2995](https://github.com/typelevel/cats/pull/2995) Chain optimize map method  by @gagandeepkalra
+* [#2990](https://github.com/typelevel/cats/pull/2990) unapplySeq in Chain (issue #2960)  by @vasiliybondarenko
+* [#2989](https://github.com/typelevel/cats/pull/2989) Add Hash instance for NonEmptyMap.  by @takayahilton
+* [#2984](https://github.com/typelevel/cats/pull/2984) improve liftTo/rethrowT/raiseOrPure syntax to be more flexible  by @bpholt
+* [#2981](https://github.com/typelevel/cats/pull/2981) Add Hash instance for NonEmptySet.  by @takayahilton
+* [#2980](https://github.com/typelevel/cats/pull/2980) Remove redundant type annotation.  by @takayahilton
+
+### 2 documentation improvements
+
+* [#2993](https://github.com/typelevel/cats/pull/2993) add missing parenthese in faq.md  by @xuwei-k
+* [#2985](https://github.com/typelevel/cats/pull/2985) fix a typo in `comonad.md`  by @pismute
+
+### 4 build improvements
+
+* [#2987](https://github.com/typelevel/cats/pull/2987) Update snakeyaml to 1.25  by @scala-steward
+* [#2986](https://github.com/typelevel/cats/pull/2986) Update scalafmt to 2.0.1  by @scala-steward
+* [#2979](https://github.com/typelevel/cats/pull/2979) Update sbt-scalafmt to 2.0.3  by @scala-steward
+* [#2978](https://github.com/typelevel/cats/pull/2978) Update Scala 2.12 to 2.12.9  by @jhnsmth
+
+
 ## Version 2.0.0-RC1
 
 > 2019 August 5
@@ -38,7 +81,6 @@ Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility 
 * [#2889](https://github.com/typelevel/cats/pull/2889) Add missing factories similar to existing factories  by @morgen-peschke
 * [#2880](https://github.com/typelevel/cats/pull/2880) Improve MonadError rethrow syntax to be more flexible  by @bpholt
 * [#2787](https://github.com/typelevel/cats/pull/2787) Add Order instance for NonEmptySet (#2779)  by @jatcwang
-        
 
 ### 7 documentation improvements
 
