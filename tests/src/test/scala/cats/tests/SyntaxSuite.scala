@@ -183,7 +183,7 @@ object SyntaxSuite
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
+  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
@@ -202,7 +202,7 @@ object SyntaxSuite
   }
 
   def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
-    implicit P: Parallel[M, F]
+    implicit P: Parallel.Aux[M, F]
   ): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
@@ -218,7 +218,7 @@ object SyntaxSuite
     val mtb2 = ta.parUnorderedFlatTraverse(g)
   }
 
-  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
+  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[T[B]]]
     val mtb = ta.parFlatTraverse(f)
@@ -227,7 +227,7 @@ object SyntaxSuite
     val mta = tmta.parFlatSequence
   }
 
-  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
+  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel.Aux[M, F]) = {
     val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]
     val fb = mock[M[B]]
@@ -238,7 +238,7 @@ object SyntaxSuite
     (fa, fb, fc).parMapN(f)
   }
 
-  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel[M, F]): Unit = {
+  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
     val tab = mock[T[A, B]]
     val f = mock[A => M[C]]
     val g = mock[B => M[D]]

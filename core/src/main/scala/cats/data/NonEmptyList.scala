@@ -627,8 +627,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       val A0 = A
     }
 
-  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
-    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList] {
+      type F[x] = ZipNonEmptyList[x]
 
       def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 

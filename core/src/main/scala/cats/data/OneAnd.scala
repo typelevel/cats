@@ -105,19 +105,20 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
-  implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F[_]: Alternative](
-    implicit P: Parallel[M, F]
-  ): Parallel[OneAnd[M, *], OneAnd[F, *]] =
-    new Parallel[OneAnd[M, *], OneAnd[F, *]] {
+  implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F0[_]: Alternative](
+    implicit P: Parallel.Aux[M, F0]
+  ): Parallel.Aux[OneAnd[M, *], OneAnd[F0, *]] =
+    new Parallel[OneAnd[M, *]] {
+      type F[x] = OneAnd[F0, x]
       def monad: Monad[OneAnd[M, *]] = catsDataMonadForOneAnd(P.monad, Alternative[M])
 
-      def applicative: Applicative[OneAnd[F, *]] = catsDataApplicativeForOneAnd(Alternative[F])
+      def applicative: Applicative[OneAnd[F0, *]] = catsDataApplicativeForOneAnd(Alternative[F0])
 
-      def sequential: OneAnd[F, *] ~> OneAnd[M, *] =
-        λ[OneAnd[F, *] ~> OneAnd[M, *]](ofa => OneAnd(ofa.head, P.sequential(ofa.tail)))
+      def sequential: OneAnd[F0, *] ~> OneAnd[M, *] =
+        λ[OneAnd[F0, *] ~> OneAnd[M, *]](ofa => OneAnd(ofa.head, P.sequential(ofa.tail)))
 
-      def parallel: OneAnd[M, *] ~> OneAnd[F, *] =
-        λ[OneAnd[M, *] ~> OneAnd[F, *]](ofa => OneAnd(ofa.head, P.parallel(ofa.tail)))
+      def parallel: OneAnd[M, *] ~> OneAnd[F0, *] =
+        λ[OneAnd[M, *] ~> OneAnd[F0, *]](ofa => OneAnd(ofa.head, P.parallel(ofa.tail)))
 
     }
 

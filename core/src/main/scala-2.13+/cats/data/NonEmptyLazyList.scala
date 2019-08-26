@@ -364,8 +364,9 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
     Show.show[NonEmptyLazyList[A]](nell => s"NonEmpty${Show[LazyList[A]].show(nell.toLazyList)}")
 
-  implicit def catsDataParallelForNonEmptyLazyList: Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
-    new Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]] {
+  implicit def catsDataParallelForNonEmptyLazyList: Parallel.Aux[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
+    new Parallel[NonEmptyLazyList] {
+      type F[x] = OneAnd[ZipLazyList, x]
 
       def applicative: Applicative[OneAnd[ZipLazyList, *]] =
         OneAnd.catsDataApplicativeForOneAnd(ZipLazyList.catsDataAlternativeForZipLazyList)

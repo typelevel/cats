@@ -242,8 +242,9 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
     }
 
   // scalastyle:off cyclomatic.complexity
-  implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel[Ior[E, *], Ior[E, *]] =
-    new Parallel[Ior[E, *], Ior[E, *]] {
+  implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel.Aux[Ior[E, *], Ior[E, *]] =
+    new Parallel[Ior[E, *]] {
+      type F[x] = Ior[E, x]
 
       private[this] val identityK: Ior[E, *] ~> Ior[E, *] = FunctionK.id
 
