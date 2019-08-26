@@ -4,6 +4,7 @@ package data
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
 import scala.collection.mutable
@@ -258,7 +259,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
     val buf = ListBuffer.empty[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
-      if (elementsSoFar(b)) elementsSoFar else { buf += b; elementsSoFar + b }
+      if (elementsSoFar(b)) elementsSoFar
+      else {
+        buf += b; elementsSoFar + b
+      }
     }
 
     NonEmptyList(head, buf.toList)
@@ -496,16 +500,17 @@ object NonEmptyList extends NonEmptyListInstances {
           ZipNonEmptyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyList", "2.0.0-RC2")
+    private[data] def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = catsDataEqForZipNonEmptyList[A]
+
+    implicit def catsDataEqForZipNonEmptyList[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
 }
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
-  implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList]
-    with Reducible[NonEmptyList]
-    with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Bimonad[NonEmptyList]
     with NonEmptyTraverse[NonEmptyList] {
 
@@ -592,7 +597,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
               case (Right(c), _)           => ior.map(c :: _)
               case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
               case (Left(b), _)            => ior.leftMap(b :: _)
-          }
+            }
         )
 
       }
@@ -625,8 +630,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       val A0 = A
     }
 
-  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
-    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList] {
+      type F[x] = ZipNonEmptyList[x]
 
       def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 

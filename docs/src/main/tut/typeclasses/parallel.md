@@ -64,7 +64,9 @@ To mitigate this pain, Cats introduces a type class `Parallel` that abstracts ov
 It is simply defined in terms of conversion functions between the two data types:
 
 ```scala
-trait Parallel[M[_], F[_]] {
+trait Parallel[M[_]] {
+  type F[_]
+
   def sequential: F ~> M
 
   def parallel: M ~> F

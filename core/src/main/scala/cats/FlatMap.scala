@@ -10,7 +10,7 @@ import simulacrum.noop
  *
  * One motivation for separating this out from Monad is that there are
  * situations where we can implement flatMap but not pure.  For example,
- * we can implement map or flatMap that transforms the values of Map[K, ?],
+ * we can implement map or flatMap that transforms the values of Map[K, *],
  * but we can't implement pure (because we wouldn't know what key to use
  * when instantiating the new Map).
  *

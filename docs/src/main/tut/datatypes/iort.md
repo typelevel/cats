@@ -65,7 +65,7 @@ addressProgram("SW1W", "")
 ```
 
 Suppose `parseNumber`, `parseStreet`, and `numberToString` are rewritten to be
-asynchronous and return `Future[Ior[Logs, ?]]` instead. The for-comprehension
+asynchronous and return `Future[Ior[Logs, *]]` instead. The for-comprehension
 can no longer be used since `addressProgram` must now compose `Future` and
 `Ior` together, which means that the error handling must be performed
 explicitly to ensure that the proper types are returned:

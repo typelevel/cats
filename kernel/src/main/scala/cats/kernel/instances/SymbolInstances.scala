@@ -2,10 +2,14 @@ package cats.kernel
 package instances
 
 trait SymbolInstances {
-  implicit val catsKernelStdOrderForSymbol: Order[Symbol] with Hash[Symbol] = new SymbolOrder
+  implicit val catsKernelStdOrderForSymbol: Order[Symbol] with Hash[Symbol] with LowerBounded[Symbol] = new SymbolOrder
 }
 
-class SymbolOrder extends Order[Symbol] with Hash[Symbol] {
+trait SymbolLowerBounded extends LowerBounded[Symbol] {
+  override def minBound: Symbol = Symbol("")
+}
+
+class SymbolOrder extends Order[Symbol] with Hash[Symbol] with SymbolLowerBounded { self =>
 
   def hash(x: Symbol): Int = x.hashCode()
 
@@ -15,4 +19,6 @@ class SymbolOrder extends Order[Symbol] with Hash[Symbol] {
 
   def compare(x: Symbol, y: Symbol): Int =
     if (x eq y) 0 else x.name.compareTo(y.name)
+
+  override val partialOrder: PartialOrder[Symbol] = self
 }

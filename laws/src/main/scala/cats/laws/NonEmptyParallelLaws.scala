@@ -5,7 +5,7 @@ package laws
  * Laws that must be obeyed by any `cats.NonEmptyParallel`.
  */
 trait NonEmptyParallelLaws[M[_], F[_]] {
-  def P: NonEmptyParallel[M, F]
+  def P: NonEmptyParallel.Aux[M, F]
 
   def parallelRoundTrip[A](ma: M[A]): IsEq[M[A]] =
     P.sequential(P.parallel(ma)) <-> ma
@@ -18,6 +18,6 @@ trait NonEmptyParallelLaws[M[_], F[_]] {
 }
 
 object NonEmptyParallelLaws {
-  def apply[M[_], F[_]](implicit ev: NonEmptyParallel[M, F]): NonEmptyParallelLaws[M, F] =
-    new NonEmptyParallelLaws[M, F] { def P: NonEmptyParallel[M, F] = ev }
+  def apply[M[_], F[_]](implicit ev: NonEmptyParallel.Aux[M, F]): NonEmptyParallelLaws[M, F] =
+    new NonEmptyParallelLaws[M, F] { def P: NonEmptyParallel.Aux[M, F] = ev }
 }

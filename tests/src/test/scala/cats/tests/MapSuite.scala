@@ -16,24 +16,24 @@ import cats.kernel.instances.StaticMethods.wrapMutableMap
 
 class MapSuite extends CatsSuite {
 
-  checkAll("Map[Int, Int]", SemigroupalTests[Map[Int, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[Map[Int, ?]]", SerializableTests.serializable(Semigroupal[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", SemigroupalTests[Map[Int, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Map[Int, *]]", SerializableTests.serializable(Semigroupal[Map[Int, *]]))
 
-  checkAll("Map[Int, Int]", FlatMapTests[Map[Int, ?]].flatMap[Int, Int, Int])
-  checkAll("FlatMap[Map[Int, ?]]", SerializableTests.serializable(FlatMap[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", FlatMapTests[Map[Int, *]].flatMap[Int, Int, Int])
+  checkAll("FlatMap[Map[Int, *]]", SerializableTests.serializable(FlatMap[Map[Int, *]]))
 
   checkAll("Map[Int, Int] with Option",
-           UnorderedTraverseTests[Map[Int, ?]].unorderedTraverse[Int, Int, Int, Option, Option])
-  checkAll("UnorderedTraverse[Map[Int, ?]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, ?]]))
+           UnorderedTraverseTests[Map[Int, *]].unorderedTraverse[Int, Int, Int, Option, Option])
+  checkAll("UnorderedTraverse[Map[Int, *]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, *]]))
 
-  checkAll("Map[Int, Int]", FunctorFilterTests[Map[Int, ?]].functorFilter[Int, Int, Int])
-  checkAll("FunctorFilter[Map[Int, ?]]", SerializableTests.serializable(FunctorFilter[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", FunctorFilterTests[Map[Int, *]].functorFilter[Int, Int, Int])
+  checkAll("FunctorFilter[Map[Int, *]]", SerializableTests.serializable(FunctorFilter[Map[Int, *]]))
 
   checkAll("Map[Int, Long]", ComposeTests[Map].compose[Int, Long, String, Double])
   checkAll("Compose[Map]", SerializableTests.serializable(Compose[Map]))
 
-  checkAll("Map[Int, Int]", MonoidKTests[Map[Int, ?]].monoidK[Int])
-  checkAll("MonoidK[Map[Int, ?]]", SerializableTests.serializable(MonoidK[Map[Int, ?]]))
+  checkAll("Map[Int, Int]", MonoidKTests[Map[Int, *]].monoidK[Int])
+  checkAll("MonoidK[Map[Int, *]]", SerializableTests.serializable(MonoidK[Map[Int, *]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>

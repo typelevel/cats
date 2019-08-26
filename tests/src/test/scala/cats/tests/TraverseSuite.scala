@@ -4,7 +4,9 @@ package tests
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
+import kernel.compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
@@ -54,7 +56,7 @@ class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
 class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
-class TraverseSuiteAdditional extends CatsSuite {
+class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTraverseSuite {
 
   def checkZipWithIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
     F.zipWithIndex(fromRange(1 to 70000))

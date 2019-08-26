@@ -22,10 +22,10 @@ import simulacrum.typeclass
    */
   def bimap[A, B, C, D](fab: F[A, B])(f: A => C, g: B => D): F[C, D]
 
-  def rightFunctor[X]: Functor[F[X, ?]] =
+  def rightFunctor[X]: Functor[F[X, *]] =
     new RightFunctor[F, X] { val F = self }
 
-  def leftFunctor[X]: Functor[F[?, X]] =
+  def leftFunctor[X]: Functor[F[*, X]] =
     new LeftFunctor[F, X] { val F = self }
 
   // derived methods
@@ -65,14 +65,14 @@ private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A,
   }
 }
 
-abstract private class LeftFunctor[F[_, _], X] extends Functor[F[?, X]] {
+abstract private class LeftFunctor[F[_, _], X] extends Functor[F[*, X]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fax: F[A, X])(f: A => C): F[C, X] =
     F.bimap(fax)(f, identity)
 }
 
-abstract private class RightFunctor[F[_, _], X] extends Functor[F[X, ?]] {
+abstract private class RightFunctor[F[_, _], X] extends Functor[F[X, *]] {
   implicit val F: Bifunctor[F]
 
   override def map[A, C](fxa: F[X, A])(f: A => C): F[X, C] =

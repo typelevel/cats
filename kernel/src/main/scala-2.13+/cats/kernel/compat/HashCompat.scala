@@ -60,7 +60,7 @@ private[kernel] class HashCompat {
   }
 
   // adapted from scala.util.hashing.MurmurHash3
-  def orderedHash[A](xs: TraversableOnce[A])(implicit A: Hash[A]): Int = {
+  def orderedHash[A](xs: IterableOnce[A])(implicit A: Hash[A]): Int = {
     import scala.util.hashing.MurmurHash3.{finalizeHash, mix, seqSeed}
 
     val it = xs.iterator

@@ -20,16 +20,16 @@ trait ValidatedExtensionSyntax {
 }
 
 final class ValidatedExtension[E, A](private val self: Validated[E, A]) extends AnyVal {
-  def liftTo[F[_]](implicit F: ApplicativeError[F, E]): F[A] =
+  def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: E]): F[A] =
     new ApplicativeErrorExtensionOps(F).fromValidated(self)
 }
 
-trait ValidatedSyntaxBincompat0 {
+private[syntax] trait ValidatedSyntaxBincompat0 {
   implicit final def catsSyntaxValidatedIdBinCompat0[A](a: A): ValidatedIdOpsBinCompat0[A] =
     new ValidatedIdOpsBinCompat0(a)
 }
 
-final class ValidatedIdOpsBinCompat0[A](private val a: A) extends AnyVal {
+final private[syntax] class ValidatedIdOpsBinCompat0[A](private val a: A) extends AnyVal {
 
   /**
    * Wrap a value to a valid ValidatedNec

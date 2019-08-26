@@ -2,7 +2,8 @@ package cats.kernel
 package instances
 
 trait LongInstances {
-  implicit val catsKernelStdOrderForLong: Order[Long] with Hash[Long] = new LongOrder
+  implicit val catsKernelStdOrderForLong: Order[Long] with Hash[Long] with LowerBounded[Long] with UpperBounded[Long] =
+    new LongOrder
   implicit val catsKernelStdGroupForLong: CommutativeGroup[Long] = new LongGroup
 }
 
@@ -13,7 +14,12 @@ class LongGroup extends CommutativeGroup[Long] {
   override def remove(x: Long, y: Long): Long = x - y
 }
 
-class LongOrder extends Order[Long] with Hash[Long] {
+trait LongBounded extends LowerBounded[Long] with UpperBounded[Long] {
+  override def minBound: Long = Long.MinValue
+  override def maxBound: Long = Long.MaxValue
+}
+
+class LongOrder extends Order[Long] with Hash[Long] with LongBounded { self =>
 
   def hash(x: Long): Int = x.hashCode()
 
@@ -32,4 +38,6 @@ class LongOrder extends Order[Long] with Hash[Long] {
     java.lang.Math.min(x, y)
   override def max(x: Long, y: Long): Long =
     java.lang.Math.max(x, y)
+
+  override val partialOrder: PartialOrder[Long] = self
 }

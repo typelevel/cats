@@ -194,8 +194,8 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
     def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
   }
 
-  implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, ?], A] =
-    new MonadError[Ior[A, ?], A] {
+  implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
+    new MonadError[Ior[A, *], A] {
 
       def raiseError[B](e: A): Ior[A, B] = Ior.left(e)
 
@@ -242,15 +242,16 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
     }
 
   // scalastyle:off cyclomatic.complexity
-  implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel[Ior[E, ?], Ior[E, ?]] =
-    new Parallel[Ior[E, ?], Ior[E, ?]] {
+  implicit def catsDataParallelForIor[E](implicit E: Semigroup[E]): Parallel.Aux[Ior[E, *], Ior[E, *]] =
+    new Parallel[Ior[E, *]] {
+      type F[x] = Ior[E, x]
 
-      private[this] val identityK: Ior[E, ?] ~> Ior[E, ?] = FunctionK.id
+      private[this] val identityK: Ior[E, *] ~> Ior[E, *] = FunctionK.id
 
-      def parallel: Ior[E, ?] ~> Ior[E, ?] = identityK
-      def sequential: Ior[E, ?] ~> Ior[E, ?] = identityK
+      def parallel: Ior[E, *] ~> Ior[E, *] = identityK
+      def sequential: Ior[E, *] ~> Ior[E, *] = identityK
 
-      val applicative: Applicative[Ior[E, ?]] = new Applicative[Ior[E, ?]] {
+      val applicative: Applicative[Ior[E, *]] = new Applicative[Ior[E, *]] {
         def pure[A](a: A): Ior[E, A] = Ior.right(a)
         def ap[A, B](ff: Ior[E, A => B])(fa: Ior[E, A]): Ior[E, B] =
           fa match {
@@ -275,7 +276,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
           }
       }
 
-      lazy val monad: Monad[Ior[E, ?]] = Monad[Ior[E, ?]]
+      lazy val monad: Monad[Ior[E, *]] = Monad[Ior[E, *]]
     }
   // scalastyle:on cyclomatic.complexity
 
@@ -283,7 +284,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
 sealed abstract private[data] class IorInstances0 {
 
-  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior ?] = new Traverse[A Ior ?] {
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior *] = new Traverse[A Ior *] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
       fa.traverse(f)
     def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =

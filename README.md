@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
 * **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13.0
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
 * **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
@@ -7,8 +8,6 @@
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
-* **Jan 31 2019** Cats 1.6.0 is released.
-* **Jan 31 2019** [Cats ecosystem community survey 2018 results](https://typelevel.org/blog/2019/01/30/cats-ecosystem-community-survey-results.html) is published
 
 ## Cats
 <a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a>
@@ -58,7 +57,7 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 
 Silver Sponsors are those who have pledged $2,000 to $5,000.
 
-<a href="https://ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
+<a href="https://www.ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
@@ -67,11 +66,13 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13.0, and [Scala.js](http://www.scala-js.org/).
 
-Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9 or later** you should add the following to your `build.sbt`:
+Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
 
 ```scala
 scalacOptions += "-Ypartial-unification"
 ```
+
+(Partial unification is on by default since Scala 2.13, the compiler no longer accepts `-Ypartial-unification`)
 
 **Or**, if you need to support older versions of Scala you can use the [sbt-partial-unification](https://github.com/fiadliel/sbt-partial-unification#sbt-partial-unification) plugin which extends support back through **Scala 2.10.6 or later**, to add it, simply add this line to your `plugins.sbt`:
 
@@ -82,7 +83,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-M4"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-RC1"
 ```
 
 This will pull in the cats-core module. If you require some other
@@ -132,7 +133,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [cats-par](https://github.com/ChristopherDavenport/cats-par): Abstract type member Parallel instances
  * [cats-retry](https://github.com/cb372/cats-retry): composable retry logic for Cats and Cats Effect
  * [droste](https://github.com/andyscott/droste): recursion schemes for Cats
- * [Dsl.scala](https://github.com/ThoughtWorksInc/Dsl.scala): The `!`-notation for creating Cats monadic expressions
+ * [dsl-domains-cats](https://github.com/ThoughtWorksInc/dsl-domains-cats): The `!`-notation for creating Cats monadic expressions
  * [eff](https://github.com/atnos-org/eff): functional effects and effect handlers (alternative to monad transformers)
  * [Freestyle](https://github.com/frees-io/freestyle): pure functional framework for Free and Tagless Final apps & libs
  * [iota](https://github.com/frees-io/iota): Fast [co]product types with a clean syntax
@@ -170,6 +171,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [log4cats](https://github.com/ChristopherDavenport/log4cats): functional logging
  * [monadic-html](https://github.com/OlivierBlanvillain/monadic-html): Tiny DOM binding library for Scala.js
  * [Monix](https://github.com/monix/monix): high-performance library for composing asynchronous and event-based programs
+ * [phony](https://github.com/alirezameskin/phony): Fake data generator
  * [pureconfig](https://github.com/pureconfig/pureconfig): A boilerplate-free library for loading configuration files
  * [rainier](https://github.com/stripe/rainier): Bayesian inference in Scala
  * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
@@ -292,6 +294,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Lookout](https://www.lookout.com)
 - [Merit](https://merits.com)
 - [Metacommerce](https://www.metacommerce.ru)
+- [MYOB](https://www.myob.com)
 - [Netflix](https://jobs.netflix.com)
 - [Nezasa](https://www.nezasa.com)
 - [NCR Edinburgh](https://ncredinburgh.com/)

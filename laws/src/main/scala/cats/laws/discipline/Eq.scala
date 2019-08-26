@@ -72,7 +72,7 @@ object eq {
             f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
               f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
               f.inverse(f.empty) == f.empty
-      )
+          )
     )
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] = new Eq[Monoid[A]] {
@@ -243,8 +243,8 @@ object eq {
               f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
                 f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
                 f.inverse(f.empty) == f.empty
-          )
-      )
+            )
+        )
     )(catsLawsEqForFn1[(A, A), (A, Boolean)])
 
     Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))

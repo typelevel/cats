@@ -43,8 +43,8 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * This transformation will be used to transform left `F` values while
    * `h` will be used to transform right `H` values.
    */
-  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, ?], G] =
-    λ[FunctionK[EitherK[F, H, ?], G]](fa => fa.fold(self, h))
+  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, *], G] =
+    λ[FunctionK[EitherK[F, H, *], G]](fa => fa.fold(self, h))
 
   /**
    * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
@@ -59,8 +59,8 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * res0: cats.data.Tuple2K[Option,Vector,Int] = Tuple2K(Some(1),Vector(1, 2, 3))
    * }}}
    */
-  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, ?]] =
-    λ[FunctionK[F, Tuple2K[G, H, ?]]](fa => Tuple2K(self(fa), h(fa)))
+  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
+    λ[FunctionK[F, Tuple2K[G, H, *]]](fa => Tuple2K(self(fa), h(fa)))
 }
 
 object FunctionK {

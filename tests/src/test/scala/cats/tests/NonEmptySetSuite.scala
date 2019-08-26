@@ -21,7 +21,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data.NonEmptySet
 import cats.kernel.Semilattice
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemilatticeTests}
+import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, SemilatticeTests}
 
 import scala.collection.immutable.SortedSet
 
@@ -37,6 +37,7 @@ class NonEmptySetSuite extends CatsSuite {
   checkAll("Semilattice[NonEmptySet]", SerializableTests.serializable(Semilattice[NonEmptySet[String]]))
 
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
+  checkAll("NonEmptySet[String]", HashTests[NonEmptySet[String]].hash)
 
   {
     implicit val A = ListWrapper.order[Int]

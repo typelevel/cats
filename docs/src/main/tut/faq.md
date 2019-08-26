@@ -21,7 +21,6 @@ position: 40
  * [Where is `IO`/`Task`?](#task)
  * [What does `@typeclass` mean?](#simulacrum)
  * [What do types like `?` and `λ` mean?](#kind-projector)
- * [What does `macro Ops` do? What is `cats.macros.Ops`?](#machinist)
  * [What is `tailRecM`?](#tailrecm)
  * [What does this symbol mean?](#symbol)
  * [How can I test instances against their type classes' laws?](#law-testing)
@@ -50,7 +49,7 @@ Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html)
 
 Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
-Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/. It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -155,12 +154,6 @@ Cats defines a wealth of type classes and type class instances. For a number of 
 
 **Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
 
-## <a id="machinist" href="#machinist"></a>What does `macro Ops` do? What is `cats.macros.Ops`?
-
-`macro Ops` invokes the [Machinist](https://github.com/typelevel/machinist) Ops macro, and is used in Cats in a number of places to enrich types with operations with the minimal possible cost when those operations are called in code. Machinist supports an extension mechanism where users of the macro can provide a mapping between symbolic operator names and method names. The `cats.macros.Ops` class uses this extension mechanism to supply the set of mappings that the Cats project is interested in.
-
-More about the history of machinist and how it works can be discovered at the [project page](https://github.com/typelevel/machinist), or [this article on the typelevel blog](http://typelevel.org/blog/2013/10/13/spires-ops-macros.html).
-
 ## <a id="tailrecm" href="#tailrecm"></a>What is `tailRecM`?
 
 The `FlatMap` type class has a `tailRecM` method with the following signature:
@@ -246,8 +239,8 @@ All other symbols can be imported with `import cats.implicits._`
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
-| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
-| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_]]`      | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_]]`      | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
 | `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
 | `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
 | `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |

@@ -127,7 +127,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     }
 }
 
-trait OptionInstancesBinCompat0 {
+private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
 
