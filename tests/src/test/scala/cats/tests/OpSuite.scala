@@ -10,7 +10,7 @@ import cats.kernel.laws.discipline.EqTests
 
 class OpSuite extends CatsSuite {
   {
-    implicit val catsKernelEqForOp = Op.catsKernelEqForOp[Function1, Int, MiniInt]
+    implicit val catsDataEqForOp = Op.catsDataEqForOp[Function1, Int, MiniInt]
     checkAll("Op[Function1, Int, MiniInt]", EqTests[Op[Function1, Int, MiniInt]].eqv)
     checkAll("Eq[Op[Function1, Int, MiniInt]]", SerializableTests.serializable(Eq[Op[Function1, Int, MiniInt]]))
   }

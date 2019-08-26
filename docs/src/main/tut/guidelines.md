@@ -80,7 +80,7 @@ therefore name our implicits according to the following rules:
 - If the instance is for multiple type classes, use `InstancesFor` instead of a type class name.
 - If the instance is for a standard library type add `Std` after the package. i.e. `catsStdShowForVector` and `catsKernelStdGroupForTuple`.
 
-As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelMonoidForList`.
+As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelStdMonoidForList`.
 
 This rule is relatively flexible. Use what you see appropriate. The goal is to maintain uniqueness and avoid conflicts.
 

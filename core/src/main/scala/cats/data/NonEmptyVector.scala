@@ -429,6 +429,9 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
           ZipNonEmptyVector(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyVector", "2.0.0-RC2")
+    private[data] def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = catsDataEqForZipNonEmptyVector[A]
+
+    implicit def catsDataEqForZipNonEmptyVector[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
   }
 }
