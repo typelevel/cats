@@ -1,7 +1,7 @@
 package cats
 package syntax
 
-abstract private[cats] class AllSyntaxBinCompat
+abstract class AllSyntaxBinCompat
     extends AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
@@ -59,9 +59,9 @@ trait AllSyntax
     with VectorSyntax
     with WriterSyntax
 
-private[cats] trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
+trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
-private[cats] trait AllSyntaxBinCompat1
+trait AllSyntaxBinCompat1
     extends FlatMapOptionSyntax
     with ChoiceSyntax
     with NestedSyntax
@@ -71,7 +71,7 @@ private[cats] trait AllSyntaxBinCompat1
     with ValidatedExtensionSyntax
     with RepresentableSyntax
 
-private[cats] trait AllSyntaxBinCompat2
+trait AllSyntaxBinCompat2
     extends ParallelTraverseSyntax
     with TraverseFilterSyntax
     with FunctorFilterSyntax
@@ -79,9 +79,9 @@ private[cats] trait AllSyntaxBinCompat2
     with ListSyntaxBinCompat0
     with ValidatedSyntaxBincompat0
 
-private[cats] trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
+trait AllSyntaxBinCompat3 extends UnorderedFoldableSyntax with Function1Syntax
 
-private[cats] trait AllSyntaxBinCompat4
+trait AllSyntaxBinCompat4
     extends TraverseFilterSyntaxBinCompat0
     with ApplySyntaxBinCompat0
     with ParallelApplySyntax
@@ -90,6 +90,6 @@ private[cats] trait AllSyntaxBinCompat4
     with FoldableSyntaxBinCompat1
     with BitraverseSyntaxBinCompat0
 
-private[cats] trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
+trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
-private[cats] trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
+trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
