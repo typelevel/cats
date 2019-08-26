@@ -1,15 +1,7 @@
 package cats
 
 package object instances {
-  object all
-      extends AllInstances
-      with AllInstancesBinCompat0
-      with AllInstancesBinCompat1
-      with AllInstancesBinCompat2
-      with AllInstancesBinCompat3
-      with AllInstancesBinCompat4
-      with AllInstancesBinCompat5
-      with AllInstancesBinCompat6
+  object all extends AllInstancesBinCompat
   object bigInt extends BigIntInstances
   object bigDecimal extends BigDecimalInstances
   object bitSet extends BitSetInstances

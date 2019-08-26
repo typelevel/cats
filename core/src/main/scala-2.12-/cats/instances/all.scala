@@ -1,6 +1,16 @@
 package cats
 package instances
 
+abstract class AllInstancesBinCompat
+    extends AllInstances
+    with AllInstancesBinCompat0
+    with AllInstancesBinCompat1
+    with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
+    with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
+    with AllInstancesBinCompat6
+
 trait AllInstances
     extends AnyValInstances
     with BigIntInstances
