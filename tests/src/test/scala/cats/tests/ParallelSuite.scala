@@ -386,7 +386,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
       def flatMap[A, B](fa: Effect[A])(f: A => Effect[B]): Effect[B] = throw Marker("sequential")
       def tailRecM[A, B](a: A)(f: A => Effect[Either[A, B]]): Effect[B] = ???
     }
-    val parallelInstance: Parallel[Effect, Effect] = new Parallel[Effect, Effect] {
+    val parallelInstance: Parallel.Aux[Effect, Effect] = new Parallel[Effect] {
+      type F[x] = Effect[x]
       def parallel: Effect ~> Effect = arrow.FunctionK.id
       def sequential: Effect ~> Effect = arrow.FunctionK.id
 

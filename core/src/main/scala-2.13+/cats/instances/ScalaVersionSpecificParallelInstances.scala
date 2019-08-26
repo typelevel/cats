@@ -7,8 +7,9 @@ import cats.syntax.either._
 import cats.{~>, Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel}
 
 trait ParallelInstances extends ParallelInstances1 {
-  implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel[Either[E, *], Validated[E, *]] =
-    new Parallel[Either[E, *], Validated[E, *]] {
+  implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
+    new Parallel[Either[E, *]] {
+      type F[x] = Validated[E, x]
 
       def applicative: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
       def monad: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
@@ -20,27 +21,29 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Either[E, *] ~> Validated[E, *]](_.toValidated)
     }
 
-  implicit def catsParallelForOptionTNestedOption[F[_], M[_]](
-    implicit P: Parallel[M, F]
-  ): Parallel[OptionT[M, *], Nested[F, Option, *]] = new Parallel[OptionT[M, *], Nested[F, Option, *]] {
+  implicit def catsParallelForOptionTNestedOption[F0[_], M[_]](
+    implicit P: Parallel.Aux[M, F0]
+  ): Parallel.Aux[OptionT[M, *], Nested[F0, Option, *]] = new Parallel[OptionT[M, *]] {
+    type F[x] = Nested[F0, Option, x]
 
-    implicit val appF: Applicative[F] = P.applicative
+    implicit val appF: Applicative[F0] = P.applicative
     implicit val monadM: Monad[M] = P.monad
     implicit val appOption: Applicative[Option] = cats.instances.option.catsStdInstancesForOption
 
-    def applicative: Applicative[Nested[F, Option, *]] = cats.data.Nested.catsDataApplicativeForNested[F, Option]
+    def applicative: Applicative[Nested[F0, Option, *]] = cats.data.Nested.catsDataApplicativeForNested[F0, Option]
 
     def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
-    def sequential: Nested[F, Option, *] ~> OptionT[M, *] =
-      λ[Nested[F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
+    def sequential: Nested[F0, Option, *] ~> OptionT[M, *] =
+      λ[Nested[F0, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
 
-    def parallel: OptionT[M, *] ~> Nested[F, Option, *] =
-      λ[OptionT[M, *] ~> Nested[F, Option, *]](optT => Nested(P.parallel(optT.value)))
+    def parallel: OptionT[M, *] ~> Nested[F0, Option, *] =
+      λ[OptionT[M, *] ~> Nested[F0, Option, *]](optT => Nested(P.parallel(optT.value)))
   }
 
-  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel[List, ZipList] =
-    new NonEmptyParallel[List, ZipList] {
+  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel.Aux[List, ZipList] =
+    new NonEmptyParallel[List] {
+      type F[x] = ZipList[x]
 
       def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
       def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
@@ -52,8 +55,9 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[List ~> ZipList](v => new ZipList(v))
     }
 
-  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel[Vector, ZipVector] =
-    new NonEmptyParallel[Vector, ZipVector] {
+  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel.Aux[Vector, ZipVector] =
+    new NonEmptyParallel[Vector] {
+      type F[x] = ZipVector[x]
 
       def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
       def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
@@ -66,8 +70,9 @@ trait ParallelInstances extends ParallelInstances1 {
     }
 
   @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
-  implicit def catsStdParallelForZipStream[A]: Parallel[Stream, ZipStream] =
-    new Parallel[Stream, ZipStream] {
+  implicit def catsStdParallelForZipStream[A]: Parallel.Aux[Stream, ZipStream] =
+    new Parallel[Stream] {
+      type F[x] = ZipStream[x]
 
       def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
       def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
@@ -79,8 +84,9 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Stream ~> ZipStream](v => new ZipStream(v))
     }
 
-  implicit def catsStdParallelForZipLazyList[A]: Parallel[LazyList, ZipLazyList] =
-    new Parallel[LazyList, ZipLazyList] {
+  implicit def catsStdParallelForZipLazyList[A]: Parallel.Aux[LazyList, ZipLazyList] =
+    new Parallel[LazyList] {
+      type F[x] = ZipLazyList[x]
 
       def monad: Monad[LazyList] = cats.instances.lazyList.catsStdInstancesForLazyList
       def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
@@ -92,31 +98,32 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
     }
 
-  implicit def catsParallelForEitherTNestedParallelValidated[F[_], M[_], E: Semigroup](
-    implicit P: Parallel[M, F]
-  ): Parallel[EitherT[M, E, *], Nested[F, Validated[E, *], *]] =
-    new Parallel[EitherT[M, E, *], Nested[F, Validated[E, *], *]] {
+  implicit def catsParallelForEitherTNestedParallelValidated[F0[_], M[_], E: Semigroup](
+    implicit P: Parallel.Aux[M, F0]
+  ): Parallel.Aux[EitherT[M, E, *], Nested[F0, Validated[E, *], *]] =
+    new Parallel[EitherT[M, E, *]] {
+      type F[x] = Nested[F0, Validated[E, *], x]
 
-      implicit val appF: Applicative[F] = P.applicative
+      implicit val appF: Applicative[F0] = P.applicative
       implicit val monadM: Monad[M] = P.monad
       implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
       implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
-      def applicative: Applicative[Nested[F, Validated[E, *], *]] =
-        cats.data.Nested.catsDataApplicativeForNested[F, Validated[E, *]]
+      def applicative: Applicative[Nested[F0, Validated[E, *], *]] =
+        cats.data.Nested.catsDataApplicativeForNested[F0, Validated[E, *]]
 
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
-      def sequential: Nested[F, Validated[E, *], *] ~> EitherT[M, E, *] =
-        λ[Nested[F, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
+      def sequential: Nested[F0, Validated[E, *], *] ~> EitherT[M, E, *] =
+        λ[Nested[F0, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
           val mva = P.sequential(nested.value)
           EitherT(Functor[M].map(mva)(_.toEither))
         }
 
-      def parallel: EitherT[M, E, *] ~> Nested[F, Validated[E, *], *] =
-        λ[EitherT[M, E, *] ~> Nested[F, Validated[E, *], *]] { eitherT =>
+      def parallel: EitherT[M, E, *] ~> Nested[F0, Validated[E, *], *] =
+        λ[EitherT[M, E, *] ~> Nested[F0, Validated[E, *], *]] { eitherT =>
           val fea = P.parallel(eitherT.value)
-          Nested(Functor[F].map(fea)(_.toValidated))
+          Nested(Functor[F0].map(fea)(_.toValidated))
         }
     }
 }

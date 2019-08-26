@@ -24,6 +24,6 @@ trait ParallelTests[M[_], F[_]] extends NonEmptyParallelTests[M, F] {
 }
 
 object ParallelTests {
-  def apply[M[_], F[_]](implicit ev: Parallel[M, F]): ParallelTests[M, F] =
+  def apply[M[_], F[_]](implicit ev: Parallel.Aux[M, F]): ParallelTests[M, F] =
     new ParallelTests[M, F] { val laws: ParallelLaws[M, F] = ParallelLaws[M, F] }
 }

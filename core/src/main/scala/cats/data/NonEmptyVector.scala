@@ -371,8 +371,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
-  implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
-    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
+  implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel.Aux[NonEmptyVector, ZipNonEmptyVector] =
+    new NonEmptyParallel[NonEmptyVector] {
+      type F[x] = ZipNonEmptyVector[x]
 
       def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector

@@ -8,8 +8,9 @@ import cats.{~>, Applicative, Monad, Parallel}
 
 private[instances] trait ParallelInstances1 {
   implicit def catsParallelForEitherTNestedValidated[M[_]: Monad, E: Semigroup]
-    : Parallel[EitherT[M, E, *], Nested[M, Validated[E, *], *]] =
-    new Parallel[EitherT[M, E, *], Nested[M, Validated[E, *], *]] {
+    : Parallel.Aux[EitherT[M, E, *], Nested[M, Validated[E, *], *]] =
+    new Parallel[EitherT[M, E, *]] {
+      type F[x] = Nested[M, Validated[E, *], x]
 
       implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
       implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither

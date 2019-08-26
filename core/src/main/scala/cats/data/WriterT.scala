@@ -152,20 +152,21 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
       implicit val L0: Monoid[L] = L
     }
 
-  implicit def catsDataParallelForWriterT[F[_], M[_], L: Monoid](
-    implicit P: Parallel[M, F]
-  ): Parallel[WriterT[M, L, *], WriterT[F, L, *]] = new Parallel[WriterT[M, L, *], WriterT[F, L, *]] {
-    implicit val appF = P.applicative
-    implicit val monadM = P.monad
+  implicit def catsDataParallelForWriterT[F0[_], M[_], L: Monoid](
+    implicit P: Parallel.Aux[M, F0]
+  ): Parallel.Aux[WriterT[M, L, *], WriterT[F0, L, *]] = new Parallel[WriterT[M, L, *]] {
+    type F[x] = WriterT[F0, L, x]
+    implicit val appF: Applicative[F0] = P.applicative
+    implicit val monadM: Monad[M] = P.monad
 
-    def applicative: Applicative[WriterT[F, L, *]] = catsDataApplicativeForWriterT
+    def applicative: Applicative[WriterT[F0, L, *]] = catsDataApplicativeForWriterT
     def monad: Monad[WriterT[M, L, *]] = catsDataMonadForWriterT
 
-    def sequential: WriterT[F, L, *] ~> WriterT[M, L, *] =
-      λ[WriterT[F, L, *] ~> WriterT[M, L, *]](wfl => WriterT(P.sequential(wfl.run)))
+    def sequential: WriterT[F0, L, *] ~> WriterT[M, L, *] =
+      λ[WriterT[F0, L, *] ~> WriterT[M, L, *]](wfl => WriterT(P.sequential(wfl.run)))
 
-    def parallel: WriterT[M, L, *] ~> WriterT[F, L, *] =
-      λ[WriterT[M, L, *] ~> WriterT[F, L, *]](wml => WriterT(P.parallel(wml.run)))
+    def parallel: WriterT[M, L, *] ~> WriterT[F0, L, *] =
+      λ[WriterT[M, L, *] ~> WriterT[F0, L, *]](wml => WriterT(P.parallel(wml.run)))
   }
 
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =
