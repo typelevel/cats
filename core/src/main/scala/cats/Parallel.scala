@@ -339,7 +339,7 @@ object Parallel extends ParallelArityFunctions2 {
    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
-  def applicativeError[M[_], F[_], E](implicit P: Parallel.Aux[M, F], E: MonadError[M, E]): ApplicativeError[F, E] =
+  def applicativeError[M[_], E](implicit P: Parallel[M], E: MonadError[M, E]): ApplicativeError[P.F, E] =
     P.applicativeError[E]
 
   /**

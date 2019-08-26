@@ -21,24 +21,23 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Either[E, *] ~> Validated[E, *]](_.toValidated)
     }
 
-  implicit def catsParallelForOptionTNestedOption[F0[_], M[_]](
-    implicit P: Parallel.Aux[M, F0]
-  ): Parallel.Aux[OptionT[M, *], Nested[F0, Option, *]] = new Parallel[OptionT[M, *]] {
-    type F[x] = Nested[F0, Option, x]
+  implicit def catsParallelForOptionTNestedOption[M[_]](
+    implicit P: Parallel[M]
+  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = new Parallel[OptionT[M, *]] {
+    type F[x] = Nested[P.F, Option, x]
 
-    implicit val appF: Applicative[F0] = P.applicative
     implicit val monadM: Monad[M] = P.monad
-    implicit val appOption: Applicative[Option] = cats.instances.option.catsStdInstancesForOption
 
-    def applicative: Applicative[Nested[F0, Option, *]] = cats.data.Nested.catsDataApplicativeForNested[F0, Option]
+    def applicative: Applicative[Nested[P.F, Option, *]] =
+      cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
 
     def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
-    def sequential: Nested[F0, Option, *] ~> OptionT[M, *] =
-      λ[Nested[F0, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
+    def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
+      λ[Nested[P.F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
 
-    def parallel: OptionT[M, *] ~> Nested[F0, Option, *] =
-      λ[OptionT[M, *] ~> Nested[F0, Option, *]](optT => Nested(P.parallel(optT.value)))
+    def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
+      λ[OptionT[M, *] ~> Nested[P.F, Option, *]](optT => Nested(P.parallel(optT.value)))
   }
 
   implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel.Aux[List, ZipList] =
@@ -98,32 +97,30 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
     }
 
-  implicit def catsParallelForEitherTNestedParallelValidated[F0[_], M[_], E: Semigroup](
-    implicit P: Parallel.Aux[M, F0]
-  ): Parallel.Aux[EitherT[M, E, *], Nested[F0, Validated[E, *], *]] =
+  implicit def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
+    implicit P: Parallel[M]
+  ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
-      type F[x] = Nested[F0, Validated[E, *], x]
+      type F[x] = Nested[P.F, Validated[E, *], x]
 
-      implicit val appF: Applicative[F0] = P.applicative
       implicit val monadM: Monad[M] = P.monad
-      implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
       implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
 
-      def applicative: Applicative[Nested[F0, Validated[E, *], *]] =
-        cats.data.Nested.catsDataApplicativeForNested[F0, Validated[E, *]]
+      def applicative: Applicative[Nested[P.F, Validated[E, *], *]] =
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataApplicativeErrorForValidated)
 
       def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
 
-      def sequential: Nested[F0, Validated[E, *], *] ~> EitherT[M, E, *] =
-        λ[Nested[F0, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
+      def sequential: Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *] =
+        λ[Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
           val mva = P.sequential(nested.value)
           EitherT(Functor[M].map(mva)(_.toEither))
         }
 
-      def parallel: EitherT[M, E, *] ~> Nested[F0, Validated[E, *], *] =
-        λ[EitherT[M, E, *] ~> Nested[F0, Validated[E, *], *]] { eitherT =>
+      def parallel: EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] =
+        λ[EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *]] { eitherT =>
           val fea = P.parallel(eitherT.value)
-          Nested(Functor[F0].map(fea)(_.toValidated))
+          Nested(P.applicative.map(fea)(_.toValidated))
         }
     }
 }

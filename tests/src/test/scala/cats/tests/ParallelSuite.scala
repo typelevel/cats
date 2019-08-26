@@ -491,7 +491,7 @@ trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
   {
-    implicit val parVal = Parallel.applicativeError[Either[String, *], Validated[String, *], String]
+    implicit val parVal = Parallel.applicativeError[Either[String, *], String]
 
     checkAll("ApplicativeError[Validated[String, Int]]",
              ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
