@@ -22,8 +22,8 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Id[String] <-> Unit => String", RepresentableTests[Id, Unit].representable[String])
   checkAll("Representable[Id]", SerializableTests.serializable(Representable[Id]))
 
-  checkAll("MiniInt => Int <-> MiniInt => Int", RepresentableTests[MiniInt => ?, MiniInt].representable[Int])
-  checkAll("Representable[String => ?]", SerializableTests.serializable(Representable[String => ?]))
+  checkAll("MiniInt => Int <-> MiniInt => Int", RepresentableTests[MiniInt => *, MiniInt].representable[Int])
+  checkAll("Representable[String => *]", SerializableTests.serializable(Representable[String => *]))
 
   checkAll("Pair[String, String] <-> Boolean => String", RepresentableTests[Pair, Boolean].representable[String])
   checkAll("Representable[Pair]", SerializableTests.serializable(Representable[Pair]))
@@ -40,7 +40,7 @@ class RepresentableSuite extends CatsSuite {
     checkAll(
       "Kleisli[Pair, MiniInt, Int] <-> (MiniInt, Boolean) => Int",
       // Have to summon all implicits using 'implicitly' otherwise we get a diverging implicits error
-      RepresentableTests[Kleisli[Pair, MiniInt, ?], (MiniInt, Boolean)].representable[Int](
+      RepresentableTests[Kleisli[Pair, MiniInt, *], (MiniInt, Boolean)].representable[Int](
         implicitly[Arbitrary[Int]],
         implicitly[Arbitrary[Kleisli[Pair, MiniInt, Int]]],
         implicitly[Arbitrary[(MiniInt, Boolean)]],
@@ -50,8 +50,8 @@ class RepresentableSuite extends CatsSuite {
       )
     )
 
-    checkAll("Representable[Kleisli[Pair, MiniInt, ?]]",
-             SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, ?]]))
+    checkAll("Representable[Kleisli[Pair, MiniInt, *]]",
+             SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, *]]))
   }
 
   {
@@ -68,16 +68,16 @@ class RepresentableSuite extends CatsSuite {
 
   {
     // the monadInstance below made a conflict to resolve this one.
-    // TODO: ceedubs is this needed?
-    implicit val isoFun1: Isomorphisms[MiniInt => ?] = Isomorphisms.invariant[MiniInt => ?]
+    // TODO: ceedubs is this needed*
+    implicit val isoFun1: Isomorphisms[MiniInt => *] = Isomorphisms.invariant[MiniInt => *]
 
-    implicit val monadInstance = Representable.monad[MiniInt => ?]
-    checkAll("MiniInt => ?", MonadTests[MiniInt => ?].monad[String, String, String])
+    implicit val monadInstance = Representable.monad[MiniInt => *]
+    checkAll("MiniInt => *", MonadTests[MiniInt => *].monad[String, String, String])
   }
 
   {
     implicit val distributiveInstance = Representable.distributive[Pair]
-    checkAll("Pair[Int]", DistributiveTests[Pair].distributive[Int, Int, Int, Option, MiniInt => ?])
+    checkAll("Pair[Int]", DistributiveTests[Pair].distributive[Int, Int, Int, Option, MiniInt => *])
   }
 
   // Syntax tests. If it compiles is "passes"

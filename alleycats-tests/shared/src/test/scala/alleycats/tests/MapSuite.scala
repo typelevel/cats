@@ -5,7 +5,7 @@ import cats.laws.discipline.{SerializableTests, TraverseFilterTests}
 import cats.Traverse
 
 class MapSuite extends AlleycatsSuite {
-  checkAll("Traverse[Map[Int, ?]]", SerializableTests.serializable(Traverse[Map[Int, ?]]))
+  checkAll("Traverse[Map[Int, *]]", SerializableTests.serializable(Traverse[Map[Int, *]]))
 
-  checkAll("TraverseFilter[Map[Int, ?]]", TraverseFilterTests[Map[Int, ?]].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Map[Int, *]]", TraverseFilterTests[Map[Int, *]].traverseFilter[Int, Int, Int])
 }

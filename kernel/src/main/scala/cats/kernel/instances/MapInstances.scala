@@ -2,7 +2,9 @@ package cats.kernel
 package instances
 
 import scala.collection.mutable
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait MapInstances extends MapInstances1 {
   implicit def catsKernelStdHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     new MapHash[K, V]
@@ -11,7 +13,7 @@ trait MapInstances extends MapInstances1 {
     new MapMonoid[K, V] with CommutativeMonoid[Map[K, V]]
 }
 
-trait MapInstances1 {
+private[instances] trait MapInstances1 {
   implicit def catsKernelStdEqForMap[K, V: Eq]: Eq[Map[K, V]] =
     new MapEq[K, V]
   implicit def catsKernelStdMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
@@ -72,9 +74,9 @@ class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]] {
       }
     }
 
-  override def combineAll(xss: TraversableOnce[Map[K, V]]): Map[K, V] = {
+  override def combineAll(xss: IterableOnce[Map[K, V]]): Map[K, V] = {
     val acc = mutable.Map.empty[K, V]
-    xss.foreach { m =>
+    xss.iterator.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
         val (k, v) = it.next

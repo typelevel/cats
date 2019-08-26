@@ -30,12 +30,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] =
-    new MonadError[Either[A, ?], A] with Traverse[Either[A, ?]] {
+  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, *], A] with Traverse[Either[A, *]] =
+    new MonadError[Either[A, *], A] with Traverse[Either[A, *]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
-        fa.right.flatMap(f)
+        fa.flatMap(f)
 
       def handleErrorWith[B](fea: Either[A, B])(f: A => Either[A, B]): Either[A, B] =
         fea match {
@@ -46,7 +46,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       def raiseError[B](e: A): Either[A, B] = Left(e)
 
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
-        fa.right.map(f)
+        fa.map(f)
 
       @tailrec
       def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
@@ -63,7 +63,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def map2Eval[B, C, Z](fb: Either[A, B], fc: Eval[Either[A, C]])(f: (B, C) => Z): Eval[Either[A, Z]] =
         fb match {
           case l @ Left(_) => Now(EitherUtil.rightCast(l))
-          case Right(b)    => fc.map(_.right.map(f(b, _)))
+          case Right(b)    => fc.map(_.map(f(b, _)))
         }
 
       def traverse[F[_], B, C](fa: Either[A, B])(f: B => F[C])(implicit F: Applicative[F]): F[Either[A, C]] =
@@ -103,18 +103,18 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         fab.ensureOr(error)(predicate)
 
       override def reduceLeftToOption[B, C](fab: Either[A, B])(f: B => C)(g: (C, B) => C): Option[C] =
-        fab.right.map(f).toOption
+        fab.map(f).toOption
 
       override def reduceRightToOption[B, C](
         fab: Either[A, B]
       )(f: B => C)(g: (B, Eval[C]) => Eval[C]): Eval[Option[C]] =
-        Now(fab.right.map(f).toOption)
+        Now(fab.map(f).toOption)
 
       override def reduceLeftOption[B](fab: Either[A, B])(f: (B, B) => B): Option[B] =
-        fab.right.toOption
+        fab.toOption
 
       override def reduceRightOption[B](fab: Either[A, B])(f: (B, Eval[B]) => Eval[B]): Eval[Option[B]] =
-        Now(fab.right.toOption)
+        Now(fab.toOption)
 
       override def size[B](fab: Either[A, B]): Long =
         fab.fold(_ => 0L, _ => 1L)
@@ -129,10 +129,10 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
         fab.fold(_ => None, r => if (f(r)) Some(r) else None)
 
       override def exists[B](fab: Either[A, B])(p: B => Boolean): Boolean =
-        fab.right.exists(p)
+        fab.exists(p)
 
       override def forall[B](fab: Either[A, B])(p: B => Boolean): Boolean =
-        fab.right.forall(p)
+        fab.forall(p)
 
       override def toList[B](fab: Either[A, B]): List[B] =
         fab.fold(_ => Nil, _ :: Nil)
@@ -142,8 +142,8 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
   // scalastyle:on method.length
 
-  implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, ?]] =
-    new SemigroupK[Either[L, ?]] {
+  implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
+    new SemigroupK[Either[L, *]] {
       def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
         case Left(_)  => y
         case Right(_) => x

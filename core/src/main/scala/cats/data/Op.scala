@@ -17,25 +17,29 @@ final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
 object Op extends OpInstances
 
 sealed abstract private[data] class OpInstances extends OpInstances0 {
-  implicit def catsDataCategoryForOp[Arr[_, _]](implicit ArrC: Category[Arr]): Category[Op[Arr, ?, ?]] =
+  implicit def catsDataCategoryForOp[Arr[_, _]](implicit ArrC: Category[Arr]): Category[Op[Arr, *, *]] =
     new OpCategory[Arr] { def Arr: Category[Arr] = ArrC }
 
-  implicit def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
+  implicit def catsDataEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
     new OpEq[Arr, A, B] { def Arr: Eq[Arr[B, A]] = ArrEq }
+
+  @deprecated("Use catsDataEqForOp", "2.0.0-RC2")
+  private[data] def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
+    catsDataEqForOp[Arr, A, B]
 }
 
 sealed abstract private[data] class OpInstances0 {
-  implicit def catsDataComposeForOp[Arr[_, _]](implicit ArrC: Compose[Arr]): Compose[Op[Arr, ?, ?]] =
+  implicit def catsDataComposeForOp[Arr[_, _]](implicit ArrC: Compose[Arr]): Compose[Op[Arr, *, *]] =
     new OpCompose[Arr] { def Arr: Compose[Arr] = ArrC }
 }
 
-private[data] trait OpCategory[Arr[_, _]] extends Category[Op[Arr, ?, ?]] with OpCompose[Arr] {
+private[data] trait OpCategory[Arr[_, _]] extends Category[Op[Arr, *, *]] with OpCompose[Arr] {
   implicit def Arr: Category[Arr]
 
   override def id[A]: Op[Arr, A, A] = Op(Arr.id)
 }
 
-private[data] trait OpCompose[Arr[_, _]] extends Compose[Op[Arr, ?, ?]] {
+private[data] trait OpCompose[Arr[_, _]] extends Compose[Op[Arr, *, *]] {
   implicit def Arr: Compose[Arr]
 
   def compose[A, B, C](f: Op[Arr, B, C], g: Op[Arr, A, B]): Op[Arr, A, C] =

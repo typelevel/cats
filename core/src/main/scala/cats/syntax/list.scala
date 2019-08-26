@@ -50,11 +50,11 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   }
 }
 
-trait ListSyntaxBinCompat0 {
+private[syntax] trait ListSyntaxBinCompat0 {
   implicit final def catsSyntaxListBinCompat0[A](la: List[A]): ListOpsBinCompat0[A] = new ListOpsBinCompat0(la)
 }
 
-final class ListOpsBinCompat0[A](private val la: List[A]) extends AnyVal {
+final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extends AnyVal {
 
   /**
    * Groups elements inside this `List` according to the `Order` of the keys

@@ -2,7 +2,9 @@ package cats.kernel
 package instances
 
 import scala.annotation.tailrec
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait ListInstances extends ListInstances1 {
   implicit def catsKernelStdOrderForList[A: Order]: Order[List[A]] =
     new ListOrder[A]
@@ -10,7 +12,7 @@ trait ListInstances extends ListInstances1 {
     new ListMonoid[A]
 }
 
-trait ListInstances1 extends ListInstances2 {
+private[instances] trait ListInstances1 extends ListInstances2 {
   implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     new ListPartialOrder[A]
 
@@ -18,7 +20,7 @@ trait ListInstances1 extends ListInstances2 {
     new ListHash[A]
 }
 
-trait ListInstances2 {
+private[instances] trait ListInstances2 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
 }
@@ -88,6 +90,6 @@ class ListMonoid[A] extends Monoid[List[A]] {
   override def combineN(x: List[A], n: Int): List[A] =
     StaticMethods.combineNIterable(List.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[List[A]]): List[A] =
+  override def combineAll(xs: IterableOnce[List[A]]): List[A] =
     StaticMethods.combineAllIterable(List.newBuilder[A], xs)
 }

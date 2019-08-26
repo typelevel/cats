@@ -3,11 +3,13 @@ package tests
 
 import org.scalacheck.Arbitrary
 import scala.util.Try
-import scala.collection.immutable._
+import scala.collection.immutable.{SortedMap, SortedSet}
 import cats.instances.all._
 import cats.data._
 import cats.laws.discipline.arbitrary._
+import kernel.compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
                                                            ArbFString: Arbitrary[F[String]])
     extends CatsSuite {
@@ -235,7 +237,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 }
 
-class FoldableSuiteAdditional extends CatsSuite {
+class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldableSuite {
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
@@ -347,8 +349,8 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[SortedSet](s => SortedSet(s: _*))
   }
 
-  test("Foldable[SortedMap[String, ?]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[SortedMap[String, ?]](
+  test("Foldable[SortedMap[String, *]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
+    checkMonadicFoldsStackSafety[SortedMap[String, *]](
       xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap
     )
   }
@@ -365,48 +367,52 @@ class FoldableSuiteAdditional extends CatsSuite {
     checkMonadicFoldsStackSafety[NonEmptyStream](xs => NonEmptyStream(xs.head, xs.tail: _*))
   }
 
-  test("Foldable[Stream]") {
-    val F = Foldable[Stream]
-
-    def bomb[A]: A = sys.error("boom")
-    val dangerous = 0 #:: 1 #:: 2 #:: bomb[Stream[Int]]
+  val F = Foldable[Stream]
+  def bomb[A]: A = sys.error("boom")
+  val dangerous = 0 #:: 1 #:: 2 #:: bomb[Int] #:: Stream.empty
+  def boom[A]: Stream[A] =
+    bomb[A] #:: Stream.empty
+  test("Foldable[Stream] doesn't blow up") {
 
     // doesn't blow up - this also ensures it works for infinite streams.
     assert(contains(dangerous, 2).value)
+  }
 
-    // lazy results don't blow up unless you call .value on them.
-    val doom: Eval[Boolean] = contains(dangerous, -1)
+  test("Foldable[Stream] lazy results don't blow up unless you call .value on them") {
+    contains(dangerous, -1)
+  }
 
-    // ensure that the Lazy[B] param to foldRight is actually being
-    // handled lazily. it only needs to be evaluated if we reach the
+  test("Foldable[Stream] param to foldRight is actually being handled lazily") {
+    // ensure that the . it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Eval.later(bomb[Boolean])
     val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
       if (n == 2) Now(true) else lb
     }
     assert(result.value)
+  }
 
-    // test trampolining
+  test("Foldable[Stream]  trampolining") {
     val large = Stream((1 to 10000): _*)
     assert(contains(large, 10000).value)
+  }
 
-    // test laziness of foldM
+  test("Foldable[Stream] laziness of foldM") {
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
-
   }
 
   def foldableStreamWithDefaultImpl = new Foldable[Stream] {
     def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
-      instances.stream.catsStdInstancesForStream.foldLeft(fa, b)(f)
+      Foldable[Stream].foldLeft(fa, b)(f)
 
     def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      instances.stream.catsStdInstancesForStream.foldRight(fa, lb)(f)
+      Foldable[Stream].foldRight(fa, lb)(f)
   }
 
   test(".foldLeftM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
     val ns = Stream.continually(1)
-    val res = F.foldLeftM[Either[Int, ?], Int, Int](ns, 0) { (sum, n) =>
+    val res = F.foldLeftM[Either[Int, *], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
     }
     assert(res == Left(100000))
@@ -418,28 +424,25 @@ class FoldableSuiteAdditional extends CatsSuite {
     // test that no more elements are evaluated than absolutely necessary
 
     def concatUntil(ss: Stream[String], stop: String): Either[String, String] =
-      F.foldLeftM[Either[String, ?], String, String](ss, "") { (acc, s) =>
+      F.foldLeftM[Either[String, *], String, String](ss, "") { (acc, s) =>
         if (s == stop) Left(acc) else Right(acc + s)
       }
 
-    def boom: Stream[String] = sys.error("boom")
-    assert(concatUntil("STOP" #:: boom, "STOP") == Left(""))
-    assert(concatUntil("Zero" #:: "STOP" #:: boom, "STOP") == Left("Zero"))
-    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom, "STOP") == Left("ZeroOne"))
+    assert(concatUntil("STOP" #:: boom[String], "STOP") == Left(""))
+    assert(concatUntil("Zero" #:: "STOP" #:: boom[String], "STOP") == Left("Zero"))
+    assert(concatUntil("Zero" #:: "One" #:: "STOP" #:: boom[String], "STOP") == Left("ZeroOne"))
   }
 
   test(".existsM/.forallM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
-    def boom: Stream[Boolean] = sys.error("boom")
-    assert(F.existsM[Id, Boolean](true #:: boom)(identity) == true)
-    assert(F.forallM[Id, Boolean](false #:: boom)(identity) == false)
+    assert(F.existsM[Id, Boolean](true #:: boom[Boolean])(identity) == true)
+    assert(F.forallM[Id, Boolean](false #:: boom[Boolean])(identity) == false)
   }
 
   test(".findM/.collectFirstSomeM short-circuiting") {
     implicit val F = foldableStreamWithDefaultImpl
-    def boom: Stream[Int] = sys.error("boom")
-    assert((1 #:: boom).findM[Id](_ > 0) == Some(1))
-    assert((1 #:: boom).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
+    assert((1 #:: boom[Int]).findM[Id](_ > 0) == Some(1))
+    assert((1 #:: boom[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
 
   test("Foldable[List] doesn't break substitution") {
@@ -461,11 +464,11 @@ class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
   def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
 }
 
-class FoldableStreamSuite extends FoldableSuite[Stream]("stream") {
-  def iterator[T](stream: Stream[T]): Iterator[T] = stream.iterator
+class FoldableStreamSuite extends FoldableSuite[Stream]("lazyList") {
+  def iterator[T](list: Stream[T]): Iterator[T] = list.iterator
 }
 
-class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, ?]]("sortedMap") {
+class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, *]]("sortedMap") {
   def iterator[T](map: SortedMap[Int, T]): Iterator[T] = map.valuesIterator
 }
 
@@ -473,11 +476,11 @@ class FoldableOptionSuite extends FoldableSuite[Option]("option") {
   def iterator[T](option: Option[T]): Iterator[T] = option.iterator
 }
 
-class FoldableEitherSuite extends FoldableSuite[Either[Int, ?]]("either") {
-  def iterator[T](either: Either[Int, T]): Iterator[T] = either.right.toOption.iterator
+class FoldableEitherSuite extends FoldableSuite[Either[Int, *]]("either") {
+  def iterator[T](either: Either[Int, T]): Iterator[T] = either.toOption.iterator
 }
 
-class FoldableValidatedSuite extends FoldableSuite[Validated[String, ?]]("validated") {
+class FoldableValidatedSuite extends FoldableSuite[Validated[String, *]]("validated") {
   def iterator[T](validated: Validated[String, T]): Iterator[T] = validated.toOption.iterator
 }
 
@@ -485,36 +488,36 @@ class FoldableTrySuite extends FoldableSuite[Try]("try") {
   def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
 }
 
-class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, ?]]("eitherK") {
+class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, *]]("eitherK") {
   def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
 }
 
-class FoldableIorSuite extends FoldableSuite[Int Ior ?]("ior") {
+class FoldableIorSuite extends FoldableSuite[Int Ior *]("ior") {
   def iterator[T](ior: Int Ior T) =
     ior.fold(_ => None.iterator, b => Some(b).iterator, (_, b) => Some(b).iterator)
 }
 
-class FoldableIdSuite extends FoldableSuite[Id[?]]("id") {
+class FoldableIdSuite extends FoldableSuite[Id[*]]("id") {
   def iterator[T](id: Id[T]) = Some(id).iterator
 }
 
-class FoldableIdTSuite extends FoldableSuite[IdT[Option, ?]]("idT") {
+class FoldableIdTSuite extends FoldableSuite[IdT[Option, *]]("idT") {
   def iterator[T](idT: IdT[Option, T]) = idT.value.iterator
 }
 
-class FoldableConstSuite extends FoldableSuite[Const[Int, ?]]("const") {
+class FoldableConstSuite extends FoldableSuite[Const[Int, *]]("const") {
   def iterator[T](const: Const[Int, T]) = None.iterator
 }
 
-class FoldableTuple2Suite extends FoldableSuite[(Int, ?)]("tuple2") {
+class FoldableTuple2Suite extends FoldableSuite[(Int, *)]("tuple2") {
   def iterator[T](tuple: (Int, T)) = Some(tuple._2).iterator
 }
 
-class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, ?]]("oneAnd") {
+class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, *]]("oneAnd") {
   def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
 }
 
-class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, ?]]("nested") {
+class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, *]]("nested") {
   def iterator[T](nested: Nested[List, Option, T]) =
     nested.value.collect {
       case Some(t) => t

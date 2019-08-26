@@ -65,9 +65,9 @@ object ContravariantCoyoneda {
       val fi = fa
     }
 
-  /** `ContravariantCoyoneda[F, ?]` provides a contravariant functor for any `F`. */
-  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, ?]] =
-    new Contravariant[ContravariantCoyoneda[F, ?]] {
+  /** `ContravariantCoyoneda[F, *]` provides a contravariant functor for any `F`. */
+  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, *]] =
+    new Contravariant[ContravariantCoyoneda[F, *]] {
       def contramap[A, B](cfa: ContravariantCoyoneda[F, A])(f: B => A): ContravariantCoyoneda[F, B] =
         cfa.contramap(f)
     }

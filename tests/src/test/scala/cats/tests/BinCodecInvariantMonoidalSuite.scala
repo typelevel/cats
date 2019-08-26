@@ -8,7 +8,9 @@ import cats.implicits._
 import cats.Eq
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
+import kernel.compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object BinCodecInvariantMonoidalSuite {
   final case class MiniList[+A] private (val toList: List[A]) extends AnyVal {
     import MiniList.truncated
@@ -51,8 +53,8 @@ object BinCodecInvariantMonoidalSuite {
     implicit val exhaustiveCheckForMiniListBoolean: ExhaustiveCheck[MiniList[Boolean]] =
       ExhaustiveCheck.instance(
         for {
-          length <- (0 to maxLength).toStream
-          boolList <- List(false, true).replicateA(length).toStream
+          length <- (0 to maxLength).toList
+          boolList <- List(false, true).replicateA(length)
         } yield MiniList.unsafe(boolList)
       )
   }
@@ -122,7 +124,7 @@ object BinCodecInvariantMonoidalSuite {
       bitCount <- Gen.oneOf(1, 2, 3)
       shuffleSeed <- Gen.choose(Long.MinValue, Long.MaxValue)
     } yield {
-      val binValues: Stream[Bin] = Stream(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
+      val binValues: List[Bin] = List(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
       val pairs: List[(A, Bin)] = new scala.util.Random(seed = shuffleSeed).shuffle(exA.allValues).toList.zip(binValues)
       val aToBin: Map[A, Bin] = pairs.toMap
       val binToA: Map[Bin, A] = pairs.map(_.swap).toMap

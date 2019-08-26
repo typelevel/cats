@@ -84,7 +84,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
               type Start = A
               val start = () => c.run(s)
               val run = f
-          }
+            }
         }
       case c: Eval.Defer[A] =>
         new Eval.FlatMap[B] {

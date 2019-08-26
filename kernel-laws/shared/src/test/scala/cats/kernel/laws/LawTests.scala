@@ -12,12 +12,13 @@ import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.collection.immutable.{BitSet, Queue}
+import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
-
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
@@ -61,6 +62,28 @@ object KernelCheck {
         Gen.choose(-n * 86400000000000L, n * 86400000000000L).map(FiniteDuration(_, NANOSECONDS))
       )
     )
+  }
+
+  // Copied from cats-laws.
+  implicit def arbitrarySortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
+    Arbitrary(arbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
+
+  // Copied from cats-laws.
+  implicit def cogenSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
+    implicit val orderingK = Order[K].toOrdering
+
+    implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
+  }
+
+  // Copied from cats-laws.
+  implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] =
+    Arbitrary(arbitrary[Set[A]].map(s => SortedSet.empty[A](implicitly[Order[A]].toOrdering) ++ s))
+
+  // Copied from cats-laws.
+  implicit def cogenSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
+    implicit val orderingA = Order[A].toOrdering
+
+    implicitly[Cogen[Set[A]]].contramap(_.toSet)
   }
 
   // this instance is not available in ScalaCheck 1.13.2.
@@ -110,7 +133,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline {
+class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
 
   import KernelCheck._
 
@@ -126,6 +149,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
+    checkAll("Eq[SortedMap[String, HasEq[Int]]]", EqTests[SortedMap[String, HasEq[Int]]].eqv)
   }
 
   checkAll("Eq[List[HasEq[Int]]]", EqTests[List[HasEq[Int]]].eqv)
@@ -171,10 +195,35 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Order[Vector[Int]]", OrderTests[Vector[Int]].order)
   checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
+  checkAll("Order[SortedSet[String]", OrderTests[SortedSet[String]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
+
+  checkAll("LowerBounded[Unit]", LowerBoundedTests[Unit].lowerBounded)
+  checkAll("LowerBounded[Boolean]", LowerBoundedTests[Boolean].lowerBounded)
+  checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
+  checkAll("LowerBounded[Short]", LowerBoundedTests[Short].lowerBounded)
+  checkAll("LowerBounded[Char]", LowerBoundedTests[Char].lowerBounded)
+  checkAll("LowerBounded[Int]", LowerBoundedTests[Int].lowerBounded)
+  checkAll("LowerBounded[Long]", LowerBoundedTests[Long].lowerBounded)
+  checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
+  checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
+  checkAll("LowerBounded[UUID]", LowerBoundedTests[UUID].lowerBounded)
+  checkAll("LowerBounded[String]", LowerBoundedTests[String].lowerBounded)
+  checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
+
+  checkAll("UpperBounded[Unit]", UpperBoundedTests[Unit].upperBounded)
+  checkAll("UpperBounded[Boolean]", UpperBoundedTests[Boolean].upperBounded)
+  checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
+  checkAll("UpperBounded[Short]", UpperBoundedTests[Short].upperBounded)
+  checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
+  checkAll("UpperBounded[Int]", UpperBoundedTests[Int].upperBounded)
+  checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
+  checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
+  checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
+  checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
@@ -192,16 +241,24 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
   checkAll("Monoid[Map[String, String]]", MonoidTests[Map[String, String]].monoid)
   checkAll("Monoid[Map[String, String]]", SerializableTests.serializable(Monoid[Map[String, String]]))
+  checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
+  checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
   checkAll("Monoid[Queue[Int]]", MonoidTests[Queue[Int]].monoid)
   checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
 
   checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
   checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
   checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
   checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]].boundedSemilattice)
   checkAll("BoundedSemilattice[Set[Int]]", SerializableTests.serializable(BoundedSemilattice[Set[Int]]))
+  checkAll("BoundedSemilattice[SortedSet[Int]]", BoundedSemilatticeTests[SortedSet[Int]].boundedSemilattice)
+  checkAll("BoundedSemilattice[SortedSet[Int]]", SerializableTests.serializable(BoundedSemilattice[SortedSet[Int]]))
 
   checkAll("CommutativeGroup[Unit]", CommutativeGroupTests[Unit].commutativeGroup)
   checkAll("CommutativeGroup[Unit]", SerializableTests.serializable(CommutativeGroup[Unit]))
@@ -250,6 +307,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Hash[(Int, String)]", HashTests[(Int, String)].hash)
   checkAll("Hash[Either[Int, String]]", HashTests[Either[Int, String]].hash)
   checkAll("Hash[Map[Int, String]]", HashTests[Map[Int, String]].hash)
+  checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
   {
@@ -319,19 +377,19 @@ class Tests extends AnyFunSuiteLike with Discipline {
     eqv.eqv(po.partialComparison(Set(1, 2), Set(2, 3)), None)
   }
 
-  test("signum . toInt . comparison = signum . compare") {
+  test("sign . toInt . comparison = sign . compare") {
     check { (i: Int, j: Int) =>
       val found = Order[Int].comparison(i, j)
       val expected = Order[Int].compare(i, j)
-      Eq[Int].eqv(found.toInt.signum, expected.signum)
+      Eq[Int].eqv(found.toInt.sign, expected.sign)
     }
   }
 
-  test("signum . toDouble . partialComparison = signum . partialCompare") {
+  test("sign . toDouble . partialComparison = sign . partialCompare") {
     check { (x: Set[Int], y: Set[Int]) =>
-      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.signum)
-      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.signum)
-      Eq[Option[Int]].eqv(found, expected)
+      val found = subsetPartialOrder[Int].partialComparison(x, y).map(_.toDouble.sign)
+      val expected = Some(subsetPartialOrder[Int].partialCompare(x, y)).filter(d => !d.isNaN).map(_.sign)
+      Eq[Option[Double]].eqv(found, expected)
     }
   }
 
