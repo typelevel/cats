@@ -37,7 +37,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
           case (ab +: abs) +: tail =>
             ab match {
               case Right(b) => buf += b; go(abs +: tail)
-              case Left(a1)  => go(f(a1) +: abs +: tail)
+              case Left(a1) => go(f(a1) +: abs +: tail)
             }
           case Seq() +: tail => go(tail)
           case Seq()         => ()
@@ -49,7 +49,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def coflatMap[A, B](fa: Seq[A])(f: Seq[A] => B): Seq[B] = {
         @tailrec def loop(buf: ListBuffer[B], as: Seq[A]): Seq[B] =
           as match {
-            case Seq()       => buf.toList
+            case Seq()     => buf.toList
             case _ +: rest => loop(buf += f(as), rest)
           }
         loop(ListBuffer.empty[B], fa)
@@ -61,7 +61,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def foldRight[A, B](fa: Seq[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Seq[A]): Eval[B] =
           as match {
-            case Seq()    => lb
+            case Seq()  => lb
             case h +: t => f(h, Eval.defer(loop(t)))
           }
         Eval.defer(loop(fa))
@@ -151,7 +151,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       def show(fa: Seq[A]): String =
         fa.iterator.map(_.show).mkString("Seq(", ", ", ")")
     }
-  
+
   implicit val catsStdTraverseFilterForSeq: TraverseFilter[Seq] = new TraverseFilter[Seq] {
     val traverse: Traverse[Seq] = catsStdInstancesForSeq
 
@@ -165,14 +165,14 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
       fa.foldRight(Eval.now(G.pure(Seq.empty[B])))(
-        (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Seq[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Seq[A]] =
       fa.foldRight(Eval.now(G.pure(Seq.empty[A])))(
-        (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x +: list else list)
-      )
+          (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x +: list else list)
+        )
         .value
   }
 }

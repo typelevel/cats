@@ -2,7 +2,15 @@ package cats.tests
 
 import cats.data.NonEmptyList
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  AlternativeTests,
+  CoflatMapTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.{Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 
 import scala.collection.immutable.Seq
