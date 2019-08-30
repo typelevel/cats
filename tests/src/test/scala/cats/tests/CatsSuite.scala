@@ -45,6 +45,7 @@ trait CatsSuite
     with AllInstancesBinCompat4
     with AllInstancesBinCompat5
     with AllInstancesBinCompat6
+    with AllInstancesBinCompat7
     with AllSyntax
     with AllSyntaxBinCompat0
     with AllSyntaxBinCompat1
@@ -53,6 +54,7 @@ trait CatsSuite
     with AllSyntaxBinCompat4
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
+    with AllSyntaxBinCompat7
     with StrictCatsEquality {
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =

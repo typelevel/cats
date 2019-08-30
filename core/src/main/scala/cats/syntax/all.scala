@@ -10,6 +10,7 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat4
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
+    with AllSyntaxBinCompat7
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -51,7 +52,6 @@ trait AllSyntax
     with ReducibleSyntax
     with SemigroupSyntax
     with SemigroupKSyntax
-    with SeqSyntax
     with ShowSyntax
     with StrongSyntax
     with TraverseSyntax
@@ -94,3 +94,5 @@ trait AllSyntaxBinCompat4
 trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
 trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
+
+trait AllSyntaxBinCompat7 extends SeqSyntax

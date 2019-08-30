@@ -24,7 +24,6 @@ trait AllInstances
     with PartialOrderInstances
     with QueueInstances
     with SetInstances
-    with SeqInstances
     with ShortInstances
     with StreamInstances
     with StringInstances
@@ -34,6 +33,6 @@ trait AllInstances
     with UUIDInstances
     with VectorInstances
 
-private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
+private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances /*with SeqInstances*/
 
 private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances

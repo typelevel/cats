@@ -10,6 +10,7 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat4
     with AllInstancesBinCompat5
     with AllInstancesBinCompat6
+    with AllInstancesBinCompat7
 
 trait AllInstances
     extends AnyValInstances
