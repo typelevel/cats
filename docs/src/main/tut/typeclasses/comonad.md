@@ -15,7 +15,7 @@ refer to [https://ncatlab.org/nlab/show/duality](https://ncatlab.org/nlab/show/d
 
 ### extract
 
-Monad's have `pure` from `Applicative` which gives you the ability to wrap 
+Monads have `pure` from `Applicative` which gives you the ability to wrap 
 a value `A` using the type constructor giving an `F[A]`. Comonad has 
 `extract` which instead takes an `F[A]` and extracts the `A`. Therefore, to be 
 able to implement extract we must have a type of which we are certain
