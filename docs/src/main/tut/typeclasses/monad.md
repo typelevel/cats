@@ -158,7 +158,7 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 
 This sort of construction is called a monad transformer.
 
-Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+Cats has an [`OptionT`](../datatypes/optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
 
 ## FlatMap - a weakened Monad
 A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`
