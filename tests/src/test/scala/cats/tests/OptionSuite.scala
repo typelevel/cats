@@ -95,4 +95,9 @@ class OptionSuite extends CatsSuite {
     List(false) should ===(1.some.toOptionT[List].isEmpty)
     List(true) should ===(Option.empty[Int].toOptionT[List].isEmpty)
   }
+
+  test("catchNonFatal catches non-fatal exceptions") {
+    assert(Option.catchNonFatal { "foo".toInt }.isEmpty)
+    assert(Option.catchNonFatal { throw new Throwable("blargh") }.isEmpty)
+  }
 }

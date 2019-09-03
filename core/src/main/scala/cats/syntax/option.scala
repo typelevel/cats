@@ -16,8 +16,20 @@ import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
+  implicit final def catsSyntaxOptionObject(o: Option.type): OptionObjectOps = new OptionObjectOps(o)
   implicit final def catsSyntaxOptionId[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
   implicit final def catsSyntaxOption[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
+}
+
+final class OptionObjectOps(private val o: Option.type) extends AnyVal {
+
+  def catchNonFatal[A](f: => A): Option[A] =
+    try {
+      Option(f)
+    } catch {
+      case scala.util.control.NonFatal(_) => None
+    }
+
 }
 
 final class OptionIdOps[A](private val a: A) extends AnyVal {
