@@ -82,7 +82,7 @@ In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
-as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+as opposed to just a subset. All functions requiring monadic recursion in Cats do so via
 `tailRecM`.
 
 An example `Monad` implementation for `Option` is shown below. Note the tail recursive
