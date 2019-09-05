@@ -60,6 +60,15 @@ import simulacrum.typeclass
     */
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
 
+  /**
+   * Uncozip pushes an `Either` inside of an `F`
+   */
+  def uncozip[A, B](feither: Either[F[A], F[B]]): F[Either[A, B]] =
+    feither.fold[F[Either[A, B]]](
+      lift(Left.apply[A, B]),
+      lift(Right.apply[A, B])
+    )
+
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
     new ComposedFunctor[F, G] {
       val F = self
