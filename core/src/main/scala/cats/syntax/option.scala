@@ -14,14 +14,19 @@ import cats.data.{
 }
 import cats.syntax.OptionOps.LiftToPartiallyApplied
 
+import scala.reflect.ClassTag
+
 trait OptionSyntax {
   final def none[A]: Option[A] = Option.empty[A]
-  implicit final def catsSyntaxOptionObject(o: Option.type): OptionObjectOps = new OptionObjectOps(o)
   implicit final def catsSyntaxOptionId[A](a: A): OptionIdOps[A] = new OptionIdOps(a)
   implicit final def catsSyntaxOption[A](oa: Option[A]): OptionOps[A] = new OptionOps(oa)
 }
 
-final class OptionObjectOps(private val o: Option.type) extends AnyVal {
+private[syntax] trait OptionSyntaxBinCompat0 {
+  implicit final def catsSyntaxOptionObject(o: Option.type): OptionObjectOpsBinCompat0 = new OptionObjectOpsBinCompat0(o)
+}
+
+final class OptionObjectOpsBinCompat0(private val o: Option.type) extends AnyVal {
 
   def catchNonFatal[A](f: => A): Option[A] =
     try {
@@ -29,6 +34,9 @@ final class OptionObjectOps(private val o: Option.type) extends AnyVal {
     } catch {
       case scala.util.control.NonFatal(_) => None
     }
+
+  def catchOnly[T >: Null <: Throwable]: OptionSyntax.CatchOnlyPartiallyApplied[T] =
+    new OptionSyntax.CatchOnlyPartiallyApplied[T]
 
 }
 
@@ -363,5 +371,16 @@ object OptionOps {
   final private[syntax] class LiftToPartiallyApplied[F[_], A](oa: Option[A]) {
     def apply[E](ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       ApplicativeError.liftFromOption(oa, ifEmpty)
+  }
+}
+
+object OptionSyntax {
+  final private[syntax] class CatchOnlyPartiallyApplied[T](private val dummy: Boolean = true) extends AnyVal {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Option[A] =
+      try {
+        Option(f)
+      } catch {
+        case t if CT.runtimeClass.isInstance(t) => None
+      }
   }
 }

@@ -96,6 +96,12 @@ class OptionSuite extends CatsSuite {
     List(true) should ===(Option.empty[Int].toOptionT[List].isEmpty)
   }
 
+  test("catchOnly lets non-matching exceptions escape") {
+    val _ = intercept[NumberFormatException] {
+      Option.catchOnly[IndexOutOfBoundsException] { "foo".toInt }
+    }
+  }
+
   test("catchNonFatal catches non-fatal exceptions") {
     assert(Option.catchNonFatal { "foo".toInt }.isEmpty)
     assert(Option.catchNonFatal { throw new Throwable("blargh") }.isEmpty)

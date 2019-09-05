@@ -37,7 +37,7 @@ package object syntax {
   object monadError extends MonadErrorSyntax
   object monoid extends MonoidSyntax
   object nested extends NestedSyntax
-  object option extends OptionSyntax
+  object option extends OptionSyntax with OptionSyntaxBinCompat0
   object order extends OrderSyntax
   object parallel
       extends ParallelSyntax
