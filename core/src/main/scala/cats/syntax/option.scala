@@ -23,7 +23,8 @@ trait OptionSyntax {
 }
 
 private[syntax] trait OptionSyntaxBinCompat0 {
-  implicit final def catsSyntaxOptionObject(o: Option.type): OptionObjectOpsBinCompat0 = new OptionObjectOpsBinCompat0(o)
+  implicit final def catsSyntaxOptionObject(o: Option.type): OptionObjectOpsBinCompat0 =
+    new OptionObjectOpsBinCompat0(o)
 }
 
 final class OptionObjectOpsBinCompat0(private val o: Option.type) extends AnyVal {
