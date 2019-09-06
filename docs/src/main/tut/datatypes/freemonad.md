@@ -322,7 +322,7 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the EitherK of it's Algebras.
+Once the ADTs are defined we can formally state that a `Free` program is the EitherK of its Algebras.
 
 ```tut:silent
 type CatsApp[A] = EitherK[DataOp, Interact, A]
