@@ -651,7 +651,6 @@ lazy val bench = project
   .enablePlugins(JmhPlugin)
 
 lazy val binCompatTest = project
-  .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
     commonScalaVersionSettings,
