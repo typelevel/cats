@@ -666,7 +666,7 @@ lazy val binCompatTest = project
       "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
   )
-  .dependsOn(core.jvm % Test)
+  .dependsOn(core.jvm % "compile->compile;test->test")
 
 // cats-js is JS-only
 lazy val js = project
