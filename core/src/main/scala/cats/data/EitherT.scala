@@ -537,7 +537,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  implicit def catsDataParallelForEitherT[M[_], E: Semigroup](
+  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](
     implicit P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {

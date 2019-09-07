@@ -83,9 +83,9 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
     }
 
-  @deprecated("Use EitherT.catsDataParallelForEitherT", "2.0.0")
+  @deprecated("Use EitherT.catsDataParallelForEitherTWithParallelEffect", "2.0.0")
   private[instances] def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
     implicit P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
-    EitherT.catsDataParallelForEitherT[M, E]
+    EitherT.catsDataParallelForEitherTWithParallelEffect[M, E]
 }
