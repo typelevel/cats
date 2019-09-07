@@ -4,7 +4,7 @@ package instances
 import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
-import cats.{~>, Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel}
+import cats.{~>, Applicative, Apply, FlatMap, Monad, NonEmptyParallel, Parallel}
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
