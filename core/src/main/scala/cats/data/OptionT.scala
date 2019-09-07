@@ -271,6 +271,25 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
   @deprecated("renamed to catsDataTraverseFilterForOptionT", "2.0.0")
   def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
     catsDataTraverseFilterForOptionT
+
+  implicit def catsDataParallelForOptionT[M[_]](
+    implicit P: Parallel[M]
+  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = new Parallel[OptionT[M, *]] {
+    type F[x] = Nested[P.F, Option, x]
+
+    implicit val monadM: Monad[M] = P.monad
+
+    def applicative: Applicative[Nested[P.F, Option, *]] =
+      cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
+
+    def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
+
+    def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
+      λ[Nested[P.F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
+
+    def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
+      λ[OptionT[M, *] ~> Nested[P.F, Option, *]](optT => Nested(P.parallel(optT.value)))
+  }
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
