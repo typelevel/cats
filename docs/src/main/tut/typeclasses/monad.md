@@ -82,7 +82,7 @@ In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
-as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+as opposed to just a subset. All functions requiring monadic recursion in Cats do so via
 `tailRecM`.
 
 An example `Monad` implementation for `Option` is shown below. Note the tail recursive
@@ -158,7 +158,7 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 
 This sort of construction is called a monad transformer.
 
-Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+Cats has an [`OptionT`](../datatypes/optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
 
 ## FlatMap - a weakened Monad
 A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`

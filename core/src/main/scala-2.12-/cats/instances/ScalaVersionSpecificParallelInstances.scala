@@ -4,7 +4,7 @@ package instances
 import cats.data._
 import cats.kernel.Semigroup
 import cats.syntax.either._
-import cats.{~>, Applicative, Apply, FlatMap, Functor, Monad, NonEmptyParallel, Parallel}
+import cats.{~>, Applicative, Apply, FlatMap, Monad, NonEmptyParallel, Parallel}
 
 trait ParallelInstances extends ParallelInstances1 {
   implicit def catsParallelForEitherValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
@@ -21,24 +21,10 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Either[E, *] ~> Validated[E, *]](_.toValidated)
     }
 
-  implicit def catsParallelForOptionTNestedOption[M[_]](
+  @deprecated("Use OptionT.catsDataParallelForOptionT", "2.0.0")
+  private[instances] def catsParallelForOptionTNestedOption[M[_]](
     implicit P: Parallel[M]
-  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = new Parallel[OptionT[M, *]] {
-    type F[x] = Nested[P.F, Option, x]
-
-    implicit val monadM: Monad[M] = P.monad
-
-    def applicative: Applicative[Nested[P.F, Option, *]] =
-      cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
-
-    def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
-
-    def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-      λ[Nested[P.F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
-
-    def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-      λ[OptionT[M, *] ~> Nested[P.F, Option, *]](optT => Nested(P.parallel(optT.value)))
-  }
+  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = OptionT.catsDataParallelForOptionT[M]
 
   implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel.Aux[List, ZipList] =
     new NonEmptyParallel[List] {
@@ -82,30 +68,9 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[Stream ~> ZipStream](v => new ZipStream(v))
     }
 
-  implicit def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
+  @deprecated("Use EitherT.catsDataParallelForEitherTWithParallelEffect", "2.0.0")
+  private[instances] def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
     implicit P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
-    new Parallel[EitherT[M, E, *]] {
-      type F[x] = Nested[P.F, Validated[E, *], x]
-
-      implicit val monadM: Monad[M] = P.monad
-      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
-
-      def applicative: Applicative[Nested[P.F, Validated[E, *], *]] =
-        cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataApplicativeErrorForValidated)
-
-      def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
-
-      def sequential: Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *] =
-        λ[Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
-          val mva = P.sequential(nested.value)
-          EitherT(Functor[M].map(mva)(_.toEither))
-        }
-
-      def parallel: EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] =
-        λ[EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *]] { eitherT =>
-          val fea = P.parallel(eitherT.value)
-          Nested(P.applicative.map(fea)(_.toValidated))
-        }
-    }
+    EitherT.catsDataParallelForEitherTWithParallelEffect[M, E]
 }
