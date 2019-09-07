@@ -110,12 +110,14 @@ object NonEmptyParallel {
   type Aux[M[_], F0[_]] = NonEmptyParallel[M] { type F[x] = F0[x] }
 
   def apply[M[_], F[_]](implicit P: NonEmptyParallel.Aux[M, F]): NonEmptyParallel.Aux[M, F] = P
+  def apply[M[_]](implicit P: NonEmptyParallel[M], D: DummyImplicit): NonEmptyParallel.Aux[M, P.F] = P
 }
 
 object Parallel extends ParallelArityFunctions2 {
   type Aux[M[_], F0[_]] = Parallel[M] { type F[x] = F0[x] }
 
   def apply[M[_], F[_]](implicit P: Parallel.Aux[M, F]): Parallel.Aux[M, F] = P
+  def apply[M[_]](implicit P: Parallel[M], D: DummyImplicit): Parallel.Aux[M, P.F] = P
 
   /**
    * Like `Traverse[A].sequence`, but uses the applicative instance
