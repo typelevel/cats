@@ -1,3 +1,30 @@
+## Version 2.0.0-RC3
+
+> 2019 September 7
+
+Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 2 source breaking changes
+
+* [#3033](https://github.com/typelevel/cats/pull/3033) Move Parallel instances for EitherT and OptionT into implicit scope  by @travisbrown
+* [#3031](https://github.com/typelevel/cats/pull/3031) Add Parallel.apply overload with one type parameter  by @travisbrown
+
+
+### 3 documentation improvements
+
+* [#3028](https://github.com/typelevel/cats/pull/3028) Doc fixes  by @mebubo
+* [#3020](https://github.com/typelevel/cats/pull/3020) [DOC] Fix optionT link in monad documentation  by @CucumisSativus
+* [#3019](https://github.com/typelevel/cats/pull/3019) Fix typo in Comonad documentation  by @chiller
+
+
+### 4 build improvements
+
+* [#3027](https://github.com/typelevel/cats/pull/3027) Update sbt-sonatype to 2.6  by @scala-steward
+* [#3021](https://github.com/typelevel/cats/pull/3021) Update sbt-microsites to 0.9.4  by @scala-steward
+* [#3017](https://github.com/typelevel/cats/pull/3017) Update sbt-microsites to 0.9.3  by @scala-steward
+* [#3014](https://github.com/typelevel/cats/pull/3014) Update sbt-scalafmt to 2.0.4  by @scala-steward
+
+
 ## Version 2.0.0-RC2
 
 > 2019 August 26
