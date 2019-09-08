@@ -82,6 +82,7 @@ possible:
  * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
+ * Endre Galaczi
  * Eric Torreborre
  * ericaovo
  * Erik LaBianca
@@ -167,6 +168,7 @@ possible:
  * Matthias Lüneberg
  * Max Worgan
  * Merlin Göttlinger
+ * Michał Gutowski
  * Michael Ledin
  * Michael Pilquist
  * Mike Curry
@@ -213,6 +215,7 @@ possible:
  * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
+ * Sergei Dolgov
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
