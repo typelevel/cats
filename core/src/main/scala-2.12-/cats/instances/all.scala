@@ -61,4 +61,4 @@ trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstan
 
 trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
 
-trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2
+trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2 with TailRecInstances
