@@ -471,7 +471,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
 
     checkAll(
-      "Parallel[KlesliT[M, A, *], Kleisli[F, A, *]]",
+      "Parallel[KleisliT[M, A, *], Kleisli[F, A, *]]",
       ParallelTests[Kleisli[Either[String, *], MiniInt, *], Kleisli[Validated[String, *], MiniInt, *]]
         .parallel[Int, String]
     )
