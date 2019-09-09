@@ -31,8 +31,8 @@ object NonEmptyParallelTests {
   type Aux[M[_], F0[_]] = NonEmptyParallelTests[M] { type F[A] = F0[A]; val laws: NonEmptyParallelLaws.Aux[M, F0] }
 
   def apply[M[_]](implicit ev: NonEmptyParallel[M]): NonEmptyParallelTests.Aux[M, ev.F] =
-    Aux[M, ev.F](ev)
+    apply[M, ev.F](ev, implicitly)
 
-  def Aux[M[_], F[_]](implicit ev: NonEmptyParallel.Aux[M, F]): NonEmptyParallelTests.Aux[M, F] =
+  def apply[M[_], F[_]](implicit ev: NonEmptyParallel.Aux[M, F], D: DummyImplicit): NonEmptyParallelTests.Aux[M, F] =
     new NonEmptyParallelTests[M] { val laws = NonEmptyParallelLaws[M] }
 }

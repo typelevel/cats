@@ -449,7 +449,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   checkAll("NonEmptyParallel[NonEmptyList]", NonEmptyParallelTests[NonEmptyList].nonEmptyParallel[Int, String])
 
   // TODO this doesn't infer?
-  checkAll("Parallel[NonEmptyStream]", ParallelTests.Aux[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
+  checkAll("Parallel[NonEmptyStream]", ParallelTests[NonEmptyStream, OneAnd[ZipStream, *]].parallel[Int, String])
 
   checkAll("Parallel[Id]", ParallelTests[Id].parallel[Int, String])
 
