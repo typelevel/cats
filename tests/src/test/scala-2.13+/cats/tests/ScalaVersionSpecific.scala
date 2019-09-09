@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{NonEmptyLazyList, OneAnd, ZipLazyList}
+import cats.data.NonEmptyLazyList
 import cats.instances.lazyList._
 import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
@@ -123,11 +123,11 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
   }
 
   // Can't test Parallel here, as Applicative[ZipLazyList].pure doesn't terminate
-  checkAll("Parallel[LazyList, ZipLazyList]",
-           NonEmptyParallelTests[LazyList, ZipLazyList].nonEmptyParallel[Int, String])
+  checkAll("Parallel[LazyList]",
+           NonEmptyParallelTests[LazyList].nonEmptyParallel[Int, String])
 
-  checkAll("Parallel[NonEmptyLazyList, OneAnd[ZipLazyList, *]]",
-           ParallelTests[NonEmptyLazyList, OneAnd[ZipLazyList, *]].parallel[Int, String])
+  checkAll("Parallel[NonEmptyLazyList]",
+           ParallelTests[NonEmptyLazyList].parallel[Int, String])
 }
 
 trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
