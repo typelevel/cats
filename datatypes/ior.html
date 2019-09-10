@@ -42,7 +42,7 @@ You can see this in the function signature of <code class="highlighter-rouge">ma
 
 <p>When we look at the <code class="highlighter-rouge">Monad</code> or <code class="highlighter-rouge">Applicative</code> instances of <code class="highlighter-rouge">Ior</code>, we can see that they actually requires a <code class="highlighter-rouge">Semigroup</code> instance on the left side.
 This is because <code class="highlighter-rouge">Ior</code> will actually accumulate failures on the left side, very similar to how the <a href="validated.html"><code class="highlighter-rouge">Validated</code></a> data type does.
-This means we can accumulate data on the left side while also being able to short-circuit upon the first right-side-only value.
+This means we can accumulate data on the left side while also being able to short-circuit upon the first left-side-only value.
 For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a “hard error”
 Here’s an example of how we might be able to do that:</p>
 

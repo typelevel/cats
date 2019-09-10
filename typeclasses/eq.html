@@ -48,7 +48,7 @@ eliminating these types of bugs altogether.</p>
 
 <p>Implementing <code class="highlighter-rouge">Eq</code> instances yourself for every data type might seem like huge drawback compared to only slight gains of typesafety.
 Fortunately for us, we have two great options. One option is to use inbuilt helper functions.
-Another option is to use a small library called <a href="https://github.com/milessabin/kittens">kittens</a>, which can derive a lot of type class instances for our data types including <code class="highlighter-rouge">Eq</code>.</p>
+Another option is to use a small library called <a href="https://github.com/typelevel/kittens">kittens</a>, which can derive a lot of type class instances for our data types including <code class="highlighter-rouge">Eq</code>.</p>
 
 <p>The first option using <code class="highlighter-rouge">Eq.fromUniversalEquals</code> only defers to <code class="highlighter-rouge">==</code> and works like this:</p>
 
@@ -62,14 +62,14 @@ Another option is to use a small library called <a href="https://github.com/mile
 <span class="c1">// defined class Foo
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">eqFoo</span><span class="k">:</span> <span class="kt">Eq</span><span class="o">[</span><span class="kt">Foo</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Eq</span><span class="o">.</span><span class="n">fromUniversalEquals</span>
-<span class="c1">// eqFoo: cats.kernel.Eq[Foo] = cats.kernel.Eq$$anon$6@f5025ff
+<span class="c1">// eqFoo: cats.kernel.Eq[Foo] = cats.kernel.Eq$$anon$6@54451d18
 </span>
 <span class="nc">Foo</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span> <span class="o">===</span> <span class="nc">Foo</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
 <span class="c1">// res4: Boolean = true
 </span></code></pre>
 </div>
 
-<p>For an example using Kittens check out the <a href="https://github.com/milessabin/kittens">kittens repo</a>.</p>
+<p>For an example using Kittens check out the <a href="https://github.com/typelevel/kittens">kittens repo</a>.</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/cats/highlight/highlight.pack.js"></script><script>hljs.configure({languages:['scala','java','bash']});
 hljs.initHighlighting();
               </script><script>((window.gitter = {}).chat = {}).options = {

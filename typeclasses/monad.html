@@ -82,7 +82,7 @@ in a monadic context.</p>
 <a href="http://functorial.com/stack-safety-for-free/index.pdf">Stack Safety for Free</a> by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
-as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+as opposed to just a subset. All functions requiring monadic recursion in Cats do so via
 <code class="highlighter-rouge">tailRecM</code>.</p>
 
 <p>An example <code class="highlighter-rouge">Monad</code> implementation for <code class="highlighter-rouge">Option</code> is shown below. Note the tail recursive
@@ -159,7 +159,7 @@ example).</p>
 
 <p>This sort of construction is called a monad transformer.</p>
 
-<p>Cats has an <a href="optiont.html"><code class="highlighter-rouge">OptionT</code></a> monad transformer, which adds a lot of useful functions to the simple implementation above.</p>
+<p>Cats has an <a href="../datatypes/optiont.html"><code class="highlighter-rouge">OptionT</code></a> monad transformer, which adds a lot of useful functions to the simple implementation above.</p>
 
 <h2 id="flatmap---a-weakened-monad">FlatMap - a weakened Monad</h2>
 <p>A closely related type class is <code class="highlighter-rouge">FlatMap</code> which is identical to <code class="highlighter-rouge">Monad</code>, minus the <code class="highlighter-rouge">pure</code>

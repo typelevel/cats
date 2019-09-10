@@ -61,12 +61,14 @@ For simplicity, we’ll use <code class="highlighter-rouge">String</code> as our
 </div>
 
 <p>We had to convert to and from <code class="highlighter-rouge">Validated</code> manually.
-While this is still manageble, it get’s worse the more <code class="highlighter-rouge">Eithers</code> we want to combine in parallel.</p>
+While this is still manageble, it gets worse the more <code class="highlighter-rouge">Eithers</code> we want to combine in parallel.</p>
 
 <p>To mitigate this pain, Cats introduces a type class <code class="highlighter-rouge">Parallel</code> that abstracts over <code class="highlighter-rouge">Monads</code> which also support parallel composition.
 It is simply defined in terms of conversion functions between the two data types:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Parallel</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Parallel</span><span class="o">[</span><span class="kt">M</span><span class="o">[</span><span class="k">_</span><span class="o">]]</span> <span class="o">{</span>
+  <span class="k">type</span> <span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>
+
   <span class="k">def</span> <span class="n">sequential</span><span class="k">:</span> <span class="kt">F</span> <span class="kt">~&gt;</span> <span class="kt">M</span>
 
   <span class="k">def</span> <span class="n">parallel</span><span class="k">:</span> <span class="kt">M</span> <span class="kt">~&gt;</span> <span class="kt">F</span>

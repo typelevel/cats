@@ -77,7 +77,7 @@ therefore name our implicits according to the following rules:</p>
   <li>If the instance is for a standard library type add <code class="highlighter-rouge">Std</code> after the package. i.e. <code class="highlighter-rouge">catsStdShowForVector</code> and <code class="highlighter-rouge">catsKernelStdGroupForTuple</code>.</li>
 </ul>
 
-<p>As an example, an implicit instance of <code class="highlighter-rouge">Monoid</code> for <code class="highlighter-rouge">List</code> defined in the package <code class="highlighter-rouge">Kernel</code> should be named <code class="highlighter-rouge">catsKernelMonoidForList</code>.</p>
+<p>As an example, an implicit instance of <code class="highlighter-rouge">Monoid</code> for <code class="highlighter-rouge">List</code> defined in the package <code class="highlighter-rouge">Kernel</code> should be named <code class="highlighter-rouge">catsKernelStdMonoidForList</code>.</p>
 
 <p>This rule is relatively flexible. Use what you see appropriate. The goal is to maintain uniqueness and avoid conflicts.</p>
 

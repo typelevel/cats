@@ -338,7 +338,7 @@ lets us compose different algebras in the context of <code class="highlighter-ro
 </code></pre>
 </div>
 
-<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the EitherK of it’s Algebras.</p>
+<p>Once the ADTs are defined we can formally state that a <code class="highlighter-rouge">Free</code> program is the EitherK of its Algebras.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">CatsApp</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">EitherK</span><span class="o">[</span><span class="kt">DataOp</span>, <span class="kt">Interact</span>, <span class="kt">A</span><span class="o">]</span>
 </code></pre>
@@ -596,7 +596,7 @@ monad with stronger equational guarantees than if we were emulating the <code cl
 <span class="c1">// import TeletypeOps._
 </span>
 <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">program</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="n">interpreter</span><span class="o">)</span>
-<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@efdcab4
+<span class="c1">// state: TeletypeState[Unit] = cats.data.IndexedStateT@54a563f7
 </span>
 <span class="k">val</span> <span class="n">initialState</span> <span class="k">=</span> <span class="nc">Nil</span>
 <span class="c1">// initialState: scala.collection.immutable.Nil.type = List()

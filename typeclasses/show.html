@@ -13,7 +13,7 @@ Most often, this is unwanted behaviour, as the standard implementation of <code 
 Consider the following example:</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="o">(</span><span class="k">new</span> <span class="o">{}).</span><span class="n">toString</span>
-<span class="c1">// res0: String = $anon$1@8932960
+<span class="c1">// res0: String = $anon$1@6dbeb417
 </span></code></pre>
 </div>
 
@@ -40,18 +40,18 @@ In short, <code class="highlighter-rouge">Show</code> allows us to only have Str
 <span class="c1">// defined class Person
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showPerson</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Person</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">show</span><span class="o">(</span><span class="n">person</span> <span class="k">=&gt;</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
-<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$2@6dfaa2a4
+<span class="c1">// showPerson: cats.Show[Person] = cats.Show$$anon$2@42b6a03e
 </span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Department</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="c1">// defined class Department
 </span>
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">showDep</span><span class="k">:</span> <span class="kt">Show</span><span class="o">[</span><span class="kt">Department</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Show</span><span class="o">.</span><span class="n">fromToString</span>
-<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$3@7789333a
+<span class="c1">// showDep: cats.Show[Department] = cats.Show$$anon$3@3eae735c
 </span></code></pre>
 </div>
 
 <p>This still may not seem useful to you, because case classes already automatically implement <code class="highlighter-rouge">toString</code>, while <code class="highlighter-rouge">show</code> would have to be implemented manually for each case class.
-Thankfully with the help of a small library called <a href="https://github.com/milessabin/kittens">kittens</a> a lot of type class instances including <code class="highlighter-rouge">Show</code> can be derived automatically!</p>
+Thankfully with the help of a small library called <a href="https://github.com/typelevel/kittens">kittens</a> a lot of type class instances including <code class="highlighter-rouge">Show</code> can be derived automatically!</p>
 
 <p>Cats also offers <code class="highlighter-rouge">Show</code> syntax to make working with it easier.
 This includes the <code class="highlighter-rouge">show</code> method which can be called on anything with a <code class="highlighter-rouge">Show</code> instance in scope:</p>

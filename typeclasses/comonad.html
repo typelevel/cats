@@ -8,14 +8,14 @@ refer to <a href="https://ncatlab.org/nlab/show/duality">https://ncatlab.org/nla
 
 <h3 id="extract">extract</h3>
 
-<p>Monad’s have <code class="highlighter-rouge">pure</code> from <code class="highlighter-rouge">Applicative</code> which gives you the ability to wrap 
+<p>Monads have <code class="highlighter-rouge">pure</code> from <code class="highlighter-rouge">Applicative</code> which gives you the ability to wrap 
 a value <code class="highlighter-rouge">A</code> using the type constructor giving an <code class="highlighter-rouge">F[A]</code>. Comonad has 
 <code class="highlighter-rouge">extract</code> which instead takes an <code class="highlighter-rouge">F[A]</code> and extracts the <code class="highlighter-rouge">A</code>. Therefore, to be 
 able to implement extract we must have a type of which we are certain
 we can get an <code class="highlighter-rouge">A</code> from an <code class="highlighter-rouge">F[A]</code>. For example we cannot always get an <code class="highlighter-rouge">A</code> 
 from a <code class="highlighter-rouge">List[A]</code> because if the list is empty there is nothing to get.</p>
 
-<p>For the same reason, <code class="highlighter-rouge">Option</code> doesn’t have a Comand instance, because we 
+<p>For the same reason, <code class="highlighter-rouge">Option</code> doesn’t have a <code class="highlighter-rouge">Comonad</code> instance, because we 
 cannot always get an <code class="highlighter-rouge">A</code> from an Option, it may be empty too.</p>
 
 <p>Some examples that we can implement <code class="highlighter-rouge">Comonad</code> for include <code class="highlighter-rouge">OneAnd</code>, <code class="highlighter-rouge">Tuple2</code> 
