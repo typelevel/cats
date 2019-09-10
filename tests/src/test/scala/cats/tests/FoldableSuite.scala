@@ -237,7 +237,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 }
 
-class FoldableSuiteAdditional extends CatsSuite  {
+class FoldableSuiteAdditional extends CatsSuite {
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
