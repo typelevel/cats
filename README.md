@@ -304,6 +304,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
 - [Reality Games](https://wearerealitygames.com)
+- [RBC Capital Markets](https://www.rbccm.com)
 - [Rudder](https://rudder.io)
 - [Scalac](https://scalac.io)
 - [Scala Center](https://scala.epfl.ch)
