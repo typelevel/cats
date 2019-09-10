@@ -110,6 +110,7 @@ functionality, you can pick-and-choose from amongst these modules
  * [`kittens`](https://github.com/typelevel/kittens): automatic type class instance derivation for Cats and generic utility functions
  * [`cats-tagless`](https://github.com/typelevel/cats-tagless): Utilities for tagless final encoded algebras
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
+ * [`cats-testkit-scalatest`](https://github.com/typelevel/cats-testkit-scalatest): Cats testkit integration with Scalatest
 
 Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
 See [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) for our plan for 2019.

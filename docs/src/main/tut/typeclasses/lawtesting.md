@@ -19,8 +19,8 @@ To make things easier, we'll also include the `scalacheck-shapeless` library in 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-laws" % "1.1.0" % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % "1.1.6" % Test
+  "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test
 )
 ```
 
@@ -108,6 +108,9 @@ class TreeLawTests extends AnyFunSuite with Discipline {
 * `AnyFunSuite` defines the style of ScalaTest.
 * `Discipline` provides `checkAll`, and must be mixed into `AnyFunSuite`
 * `arbitraries._` imports the `Arbitrary[Tree[_]]` instances needed to check the laws.
+
+Alternatively, you can use the `CatsSuite` provided by [Cats-testkit-scalatest](https://github.com/typelevel/cats-testkit-scalatest), 
+which is the same `CatsSuite` used in Cats to test all instances.  
 
 Now when we run `test` in our sbt console, ScalaCheck will test if the `Functor` laws hold for our `Tree` type.
 You should see something like this:
