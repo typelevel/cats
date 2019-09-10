@@ -88,7 +88,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             f(a) match {
               case Left(b)  => (b :: acc._1, acc._2)
               case Right(c) => (acc._1, c :: acc._2)
-          }
+            }
         )
 
       @tailrec
@@ -152,7 +152,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
     }
 }
 
-trait ListInstancesBinCompat0 {
+private[instances] trait ListInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList
 

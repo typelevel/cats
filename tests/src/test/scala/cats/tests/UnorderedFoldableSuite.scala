@@ -1,14 +1,14 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import cats.instances.all._
 import cats.kernel.CommutativeMonoid
+import cats.laws.discipline.UnorderedFoldableTests
 
-sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFString: Arbitrary[F[String]])
-    extends CatsSuite
-    with PropertyChecks {
+sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFString: Arbitrary[F[String]],
+                                                                 ArbFInt: Arbitrary[F[Int]])
+    extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: A => B): B
@@ -44,6 +44,7 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
       fa.count(Function.const(true)) should ===(fa.size)
     }
   }
+  checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
 }
 
 final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set") {
@@ -52,7 +53,7 @@ final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set")
     catsStdInstancesForSet.unorderedFoldMap(fa)(f)
 }
 
-final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String, ?]]("map") {
+final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String, *]]("map") {
   def iterator[T](map: Map[String, T]): Iterator[T] = map.valuesIterator
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: Map[String, A])(f: A => B): B =
     catsStdInstancesForMap[String].unorderedFoldMap(fa)(f)
@@ -60,8 +61,7 @@ final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String,
 
 sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(
   implicit ArbFString: Arbitrary[F[String]]
-) extends CatsSuite
-    with PropertyChecks {
+) extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
@@ -76,6 +76,6 @@ final class SpecializedUnorderedFoldableSetSuite extends SpecializedUnorderedFol
   def iterator[T](set: Set[T]): Iterator[T] = set.iterator
 }
 
-final class SpecializedUnorderedFoldableMapSuite extends SpecializedUnorderedFoldableSuite[Map[String, ?]]("map") {
+final class SpecializedUnorderedFoldableMapSuite extends SpecializedUnorderedFoldableSuite[Map[String, *]]("map") {
   def iterator[T](map: Map[String, T]): Iterator[T] = map.valuesIterator
 }

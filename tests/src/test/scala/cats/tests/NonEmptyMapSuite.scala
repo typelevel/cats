@@ -26,13 +26,14 @@ import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {
 
-  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, ?]].semigroupK[Int])
+  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, *]].semigroupK[Int])
   checkAll(
     "NonEmptyMap[String, Int]",
-    NonEmptyTraverseTests[NonEmptyMap[String, ?]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
+    NonEmptyTraverseTests[NonEmptyMap[String, *]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
   )
   checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
+  checkAll("NonEmptyMap[String, Int]", HashTests[NonEmptyMap[String, Int]].hash)
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
@@ -104,7 +105,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nem: NonEmptyMap[String, Int], f: (Int, Int) => Int) =>
-      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, ?]].foldLeft(nem.tail, nem.head._2)(f))
+      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, *]].foldLeft(nem.tail, nem.head._2)(f))
     }
   }
 
@@ -113,7 +114,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val got = nem.reduceRight(f).value
       val last = nem.last
       val rev = nem - last._1
-      val expected = Foldable[SortedMap[String, ?]]
+      val expected = Foldable[SortedMap[String, *]]
         .foldRight(rev, Now(last._2))((a, b) => f(a, b))
         .value
       got should ===(expected)

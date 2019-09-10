@@ -276,6 +276,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
 
   def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
 
+  @deprecated("use liftTo instead", "2.0.0")
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
@@ -286,7 +287,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    * scala> import cats.implicits._
    * scala> import cats.data.EitherT
    * scala> val e: Either[String, Int] = Right(3)
-   * scala> e.liftTo[EitherT[Option, CharSequence, ?]]
+   * scala> e.liftTo[EitherT[Option, CharSequence, *]]
    * res0: cats.data.EitherT[Option, CharSequence, Int] = EitherT(Some(Right(3)))
    * }}}
    */
@@ -396,7 +397,7 @@ final class EitherIdOps[A](private val obj: A) extends AnyVal {
 
 }
 
-trait EitherSyntaxBinCompat0 {
+private[syntax] trait EitherSyntaxBinCompat0 {
   implicit final def catsSyntaxEitherBinCompat0[A, B](eab: Either[A, B]): EitherOpsBinCompat0[A, B] =
     new EitherOpsBinCompat0(eab)
 
@@ -404,7 +405,7 @@ trait EitherSyntaxBinCompat0 {
     new EitherIdOpsBinCompat0(a)
 }
 
-final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
+final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
 
   /**
    * Wrap a value to a left EitherNec
@@ -431,7 +432,7 @@ final class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
   def rightNec[B]: Either[NonEmptyChain[B], A] = Right(value)
 }
 
-final class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
+final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
 
   /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */

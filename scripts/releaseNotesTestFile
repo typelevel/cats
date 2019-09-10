@@ -1,0 +1,15 @@
+Kleisli contravariant on input type A  Source Breaking enhancement
+#2843 by jcouyang was merged 8 days ago • Approved   2.0.0-M3
+ 12
+Fix Order.max and Oder.min description comments  Binary Breaking documentation
+#2842 by orvi was merged 11 days ago • Approved   2.0.0-M3
+ 2
+Fix Order.max and should be binary breaking  Binary Breaking Source Breaking documentation
+#2842 by orvi was merged 11 days ago • Approved   2.0.0-M3
+ 2
+remove deprecated eq instances from scope  testing
+#2830 by kailuowang was merged 11 days ago • Approved   2.0.0-M3
+ 1
+redddddmove deprecated eq instances from scope  testing
+#2830 by kailuowang was merged 11 days ago • Approved   2.0.0-M3
+ 1

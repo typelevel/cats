@@ -15,8 +15,8 @@ class YonedaSuite extends CatsSuite {
       def eqv(a: Yoneda[F, A], b: Yoneda[F, A]): Boolean = FA.eqv(a.run, b.run)
     }
 
-  checkAll("Yoneda[Option, ?]", FunctorTests[Yoneda[Option, ?]].functor[Int, Int, Int])
-  checkAll("Functor[Yoneda[Option, ?]]", SerializableTests.serializable(Functor[Yoneda[Option, ?]]))
+  checkAll("Yoneda[Option, *]", FunctorTests[Yoneda[Option, *]].functor[Int, Int, Int])
+  checkAll("Functor[Yoneda[Option, *]]", SerializableTests.serializable(Functor[Yoneda[Option, *]]))
 
   test("toCoyoneda and then toYoneda is identity") {
     forAll { (y: Yoneda[Option, Int]) =>

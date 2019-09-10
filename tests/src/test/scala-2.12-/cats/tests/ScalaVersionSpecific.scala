@@ -1,0 +1,7 @@
+package cats
+package tests
+
+trait ScalaVersionSpecificFoldableSuite
+trait ScalaVersionSpecificParallelSuite
+trait ScalaVersionSpecificRegressionSuite
+trait ScalaVersionSpecificTraverseSuite

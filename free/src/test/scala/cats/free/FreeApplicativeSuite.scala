@@ -11,11 +11,11 @@ import org.scalacheck.{Arbitrary, Gen}
 class FreeApplicativeSuite extends CatsSuite {
   import FreeApplicativeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[FreeApplicative[Option, *]]
 
-  checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
-  checkAll("Applicative[FreeApplicative[Option, ?]]",
-           SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
+  checkAll("FreeApplicative[Option, *]", ApplicativeTests[FreeApplicative[Option, *]].applicative[Int, Int, Int])
+  checkAll("Applicative[FreeApplicative[Option, *]]",
+           SerializableTests.serializable(Applicative[FreeApplicative[Option, *]]))
 
   test("toString is stack-safe") {
     val r = FreeApplicative.pure[List, Int](333)
@@ -51,9 +51,9 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#flatCompile") {
     forAll { (x: FreeApplicative[Option, Int]) =>
-      val nt = λ[FunctionK[Option, FreeApplicative[Option, ?]]](FreeApplicative.lift(_))
+      val nt = λ[FunctionK[Option, FreeApplicative[Option, *]]](FreeApplicative.lift(_))
 
-      x.foldMap[FreeApplicative[Option, ?]](nt).fold should ===(x.flatCompile[Option](nt).fold)
+      x.foldMap[FreeApplicative[Option, *]](nt).fold should ===(x.flatCompile[Option](nt).fold)
     }
   }
 

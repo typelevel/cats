@@ -1,8 +1,8 @@
 package cats.kernel
 
 import scala.{specialized => sp}
-
 import scala.math.Equiv
+import compat.scalaVersionSpecific._
 
 /**
  * A type class used to determine equality between 2 instances of the same
@@ -23,7 +23,6 @@ trait Eq[@sp A] extends Any with Serializable { self =>
 }
 
 abstract class EqFunctions[E[T] <: Eq[T]] {
-
   def eqv[@sp A](x: A, y: A)(implicit ev: E[A]): Boolean =
     ev.eqv(x, y)
 
@@ -43,6 +42,7 @@ trait EqToEquivConversion {
   }
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object Eq extends EqFunctions[Eq] with EqToEquivConversion {
 
   /**
@@ -110,10 +110,10 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
   def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
     def empty = allEqual[A]
     def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
-    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.isEmpty) None
+    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+      if (es.iterator.isEmpty) None
       else {
-        val materialized = es.toVector
+        val materialized = es.iterator.toVector
         Some(new Eq[A] {
           def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
         })
@@ -126,10 +126,10 @@ object Eq extends EqFunctions[Eq] with EqToEquivConversion {
    */
   def anyEqualSemilattice[A]: Semilattice[Eq[A]] = new Semilattice[Eq[A]] {
     def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
-    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.isEmpty) None
+    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+      if (es.iterator.isEmpty) None
       else {
-        val materialized = es.toVector
+        val materialized = es.iterator.toVector
         Some(new Eq[A] {
           def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
         })

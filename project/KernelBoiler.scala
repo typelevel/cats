@@ -166,10 +166,10 @@ object KernelBoiler {
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
               """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances1 extends TupleInstances2 {",
+          "private[instances] trait TupleInstances1 extends TupleInstances2 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -208,10 +208,10 @@ object KernelBoiler {
                       ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
                 }
         """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances2 extends TupleInstances3 {",
+          "private[instances] trait TupleInstances2 extends TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -235,10 +235,10 @@ object KernelBoiler {
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
               """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances3 {",
+          "private[instances] trait TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -254,7 +254,7 @@ object KernelBoiler {
                     def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
                   }
               """
-          }
+            }
         )
       )
   }

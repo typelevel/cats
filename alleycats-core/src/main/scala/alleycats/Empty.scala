@@ -2,9 +2,8 @@ package alleycats
 
 import cats.{Eq, Monoid}
 import cats.syntax.eq._
-import export.imports
+
 import simulacrum.typeclass
-import scala.collection.generic.CanBuildFrom
 
 @typeclass trait Empty[A] {
   def empty: A
@@ -19,15 +18,14 @@ import scala.collection.generic.CanBuildFrom
 object Empty extends EmptyInstances0 {
   def apply[A](a: => A): Empty[A] =
     new Empty[A] { lazy val empty: A = a }
+
+  def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
 }
 
-trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1
+private[alleycats] trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1
 
-trait EmptyInstances1 extends EmptyInstances2 {
+private[alleycats] trait EmptyInstances1 {
   // If Monoid extended Empty then this could be an exported subclass instance provided by Monoid
   implicit def monoidIsEmpty[A: Monoid]: Empty[A] =
     Empty(Monoid[A].empty)
 }
-
-@imports[Empty]
-trait EmptyInstances2

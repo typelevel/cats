@@ -199,7 +199,7 @@ import Foldable.sentinel
   def get[A](fa: F[A])(idx: Long): Option[A] =
     if (idx < 0L) None
     else
-      foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
+      foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
         if (i == idx) Left(a) else Right(i + 1L)
       } match {
         case Left(a)  => Some(a)
@@ -502,7 +502,7 @@ import Foldable.sentinel
         f(a) match {
           case Right(c) => (A.empty[B], A.pure(c))
           case Left(b)  => (A.pure(b), A.empty[C])
-      }
+        }
     )
   }
 

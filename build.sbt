@@ -1,11 +1,8 @@
-import java.time.LocalDateTime
-
 import microsites._
 import ReleaseTransformations._
 import sbt.io.Using
 
 import scala.xml.transform.{RewriteRule, RuleTransformer}
-import sbtcrossproject.CrossProject
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
@@ -26,42 +23,61 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
+val scalatestVersion = "3.1.0-SNAP13"
+
+val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
+
+val scalaCheckVersion = "1.14.0"
+
+val disciplineVersion = "1.0.0"
+
+val disciplineScalatestVersion = "1.0.0-M1"
+
+val kindProjectorVersion = "0.10.3"
+
 crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
   import collection.JavaConverters._
   Using.fileInputStream(manifest) { fis =>
-    List(new org.yaml.snakeyaml.Yaml().load(fis))
-      .collect { case map: java.util.Map[_, _] => map.asScala.toList }
-      .flatMap(_.collect {
-        case (k: String, v: String) if k.contains("scala_version_") => v
-      })
+    new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
+      case (k: String, v: String) if k.contains("scala_version_") => v
+    }
   }
 }
 
-lazy val commonSettings = Seq(
+def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
+  def extraDirs(suffix: String) =
+    List(CrossType.Pure, CrossType.Full)
+      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, y)) if y <= 12 =>
+      extraDirs("-2.12-")
+    case Some((2, y)) if y >= 13 =>
+      extraDirs("-2.13+")
+    case _ => Nil
+  }
+}
+
+lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
+  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
+)
+
+commonScalaVersionSettings
+
+lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
-  Compile / unmanagedSourceDirectories ++= {
-    val bd = baseDirectory.value
-    def extraDirs(suffix: String) =
-      CrossType.Pure.sharedSrcDir(bd, "main").toList.map(f => file(f.getPath + suffix))
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, y)) if y <= 12 =>
-        extraDirs("-2.12-")
-      case Some((2, y)) if y >= 13 =>
-        extraDirs("-2.13+")
-      case _ => Nil
-    }
-  },
+  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
+  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
   scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  //todo: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
+  // TODO: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
   },
-  //todo: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
+  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
   sources in (Compile, doc) := {
     val docSource = (sources in (Compile, doc)).value
     if (priorTo2_13(scalaVersion.value)) docSource else Nil
@@ -79,17 +95,16 @@ def macroDependencies(scalaVersion: String) =
 
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
-  resolvers ++= Seq(
-    "bintray/non".at("http://dl.bintray.com/non/maven")
-  ),
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "machinist" % "0.6.6",
-    compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
-  ) ++ macroDependencies(scalaVersion.value),
+    compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
+  ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
-  libraryDependencies += "com.github.mpilquist" %%% "simulacrum" % "0.15.0" % Provided,
+  libraryDependencies ++= Seq(
+    scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
+    "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided
+  ),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
@@ -121,7 +136,7 @@ lazy val commonJsSettings = Seq(
   scalaJSStage in Global := FastOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
-  // batch mode decreases the amount of memory needed to compile scala.js code
+  // batch mode decreases the amount of memory needed to compile Scala.js code
   scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
@@ -138,7 +153,7 @@ lazy val commonJvmSettings = Seq(
 )
 
 lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.11.12", //TODO load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
+  scalaVersion := "2.11.12", // TODO: load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
   crossScalaVersions := Seq("2.11.12")
 )
 
@@ -151,24 +166,17 @@ lazy val includeGeneratedSrc: Setting[_] = {
   }
 }
 
-val catalystsVersion = "0.8"
-
-def scalatestVersion(scalaVersion: String): String =
-  if (priorTo2_13(scalaVersion)) "3.0.5" else "3.0.6-SNAP5"
-
-val scalaCheckVersion = "1.14.0"
-
-val disciplineVersion = "0.10.0"
-
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-  libraryDependencies += "org.typelevel" %%% "discipline" % disciplineVersion
+  libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+                              "org.typelevel" %%% "discipline-core" % disciplineVersion)
 )
 
 lazy val testingDependencies = Seq(
-  libraryDependencies += "org.typelevel" %%% "catalysts-platform" % catalystsVersion,
-  libraryDependencies += "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % "test"
+  libraryDependencies ++= Seq(
+    "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
+    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test"
+  )
 )
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
@@ -271,7 +279,7 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[Module
   lazy val excludedVersions: List[String] = List()
 
   // Safety Net for Inclusions
-  lazy val extraVersions: List[String] = List()
+  lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
   if (priorTo2_13(scalaVer)) {
     (mimaVersions ++ extraVersions)
@@ -298,7 +306,7 @@ def mimaSettings(moduleName: String) =
         exclude[DirectMissingMethodProblem]("cats.data.KleisliInstances4.catsDataCommutativeFlatMapForKleisli"),
         exclude[DirectMissingMethodProblem]("cats.data.IRWSTInstances1.catsDataStrongForIRWST"),
         exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorMonadForOptionT"),
-        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT"),
+        exclude[DirectMissingMethodProblem]("cats.data.OptionTInstances1.catsDataMonadErrorForOptionT")
       ) ++
         //These things are Ops classes that shouldn't have the `value` exposed. These should have never been public because they don't
         //provide any value. Making them private because of issues like #2514 and #2613.
@@ -402,7 +410,12 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm, testkit.jvm)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
+    )
+  )
+  .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
 
 lazy val cats = project
   .in(file("."))
@@ -503,7 +516,6 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
   .in(file("kernel-laws"))
   .settings(moduleName := "cats-kernel-laws", name := "Cats kernel laws")
   .settings(commonSettings)
@@ -511,6 +523,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(scoverageSettings)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(coverageEnabled := false)
@@ -552,8 +565,15 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
+      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
+    )
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -563,27 +583,26 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(libraryDependencies += "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value))
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion
+    )
+  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("alleycats-core"))
   .dependsOn(core)
   .settings(moduleName := "alleycats-core", name := "Alleycats core")
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.typelevel" %% "export-hook" % "1.2.0"
-    )
-  )
   .settings(catsSettings)
   .settings(publishSettings)
   .settings(scoverageSettings)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
-  .settings(scalacOptions ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) }) //export-hook triggers unused import
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -600,14 +619,14 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(coverageEnabled := false)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
   .in(file("alleycats-tests"))
-  .dependsOn(alleycatsLaws, testkit % "test")
+  .dependsOn(alleycatsLaws, tests % "test-internal -> test")
   .settings(moduleName := "alleycats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
+  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
 
 // bench is currently JVM-only
 
@@ -619,11 +638,15 @@ lazy val bench = project
   .settings(commonJvmSettings)
   .settings(coverageEnabled := false)
   .settings(
-    libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.2.23",
-      "org.spire-math" %% "chain" % "0.3.0",
-      "co.fs2" %% "fs2-core" % "0.10.4"
-    )
+    libraryDependencies ++= {
+      if (priorTo2_13(scalaVersion.value))
+        Seq(
+          "org.scalaz" %% "scalaz-core" % "7.2.23",
+          "org.spire-math" %% "chain" % "0.3.0",
+          "co.fs2" %% "fs2-core" % "0.10.4"
+        )
+      else Nil
+    }
   )
   .enablePlugins(JmhPlugin)
 
@@ -631,16 +654,16 @@ lazy val binCompatTest = project
   .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
-    crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
+    commonScalaVersionSettings,
+    addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))
           mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
         else //We are not testing BC on Scala 2.13 yet.
-          "org.typelevel" %% "cats-core" % version.value % Provided
+          "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
       },
-      "org.scalatest" %%% "scalatest" % scalatestVersion(scalaVersion.value) % Test
+      "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
   )
   .dependsOn(core.jvm % Test)
@@ -759,7 +782,7 @@ addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
 addCommandAlias("buildJVM", ";buildKernelJVM;buildCoreJVM;buildTestsJVM;buildFreeJVM;buildAlleycatsJVM")
 addCommandAlias("validateBC", ";binCompatTest/test;mimaReportBinaryIssues")
-addCommandAlias("validateJVM", ";scalastyle;fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
+addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMicrosite")
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
@@ -803,12 +826,12 @@ def commonScalacOptions(scalaVersion: String) =
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
-    "-Xfuture"
+    "-Xfatal-warnings",
+    "-deprecation"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
-            "-Xfatal-warnings", //todo: add the following two back to 2.13
-            "-deprecation"
+            "-Xfuture"
           )
         else
           Seq(
@@ -841,7 +864,8 @@ lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
-    releaseStepCommandAndRemaining("+validate"),
+    runClean,
+    runTest, //temporarily only run test in current scala verison because docs won't build in 2.13 yet
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,

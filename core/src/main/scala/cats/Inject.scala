@@ -1,5 +1,7 @@
 package cats
 
+import kernel.compat.scalaVersionMoreSpecific._
+
 /**
  * Inject is a type class providing an injection from type `A` into
  * type `B`. An injection is a function `inj` which does not destroy
@@ -25,6 +27,7 @@ abstract class Inject[A, B] {
   final def unapply(b: B): Option[A] = prj(b)
 }
 
+@suppressUnusedImportWarningForScalaVersionMoreSpecific
 sealed abstract private[cats] class InjectInstances {
   implicit def catsReflexiveInjectInstance[A]: Inject[A, A] =
     new Inject[A, A] {
@@ -44,7 +47,7 @@ sealed abstract private[cats] class InjectInstances {
     new Inject[A, Either[C, B]] {
       val inj = (a: A) => Right(I.inj(a))
 
-      val prj = (_: Either[C, B]).right.toOption.flatMap(I.prj)
+      val prj = (_: Either[C, B]).toOption.flatMap(I.prj)
     }
 
 }

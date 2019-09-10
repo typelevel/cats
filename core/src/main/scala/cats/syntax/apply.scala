@@ -14,7 +14,7 @@ trait ApplySyntax extends TupleSemigroupalSyntax {
     new ApplyOps(fa)
 }
 
-trait ApplySyntaxBinCompat0 {
+private[syntax] trait ApplySyntaxBinCompat0 {
   implicit final def catsSyntaxIfApplyOps[F[_]](fa: F[Boolean]): IfApplyOps[F] =
     new IfApplyOps[F](fa)
 }

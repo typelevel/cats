@@ -31,7 +31,7 @@ skip these steps and jump straight to submitting a pull request.
  7. [Write examples](#write-examples)
  8. [Submit pull request](#submit-a-pull-request)
 
-### Find something that belongs in cats
+### Find something that belongs in Cats
 
 Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
 
@@ -41,14 +41,14 @@ Make sure that it's not already assigned to someone and that nobody has left a c
 working on and offer to collaborate.)
 
 Have an idea for something new? That's great! We recommend that you
-make sure it belongs in cats before you put effort into creating a
+make sure it belongs in Cats before you put effort into creating a
 pull request. The preferred ways to do that are to either:
 
  * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
  * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
 
-Things that belong in cats generally have the following characteristics:
+Things that belong in Cats generally have the following characteristics:
 
  * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
  * They provide general abstractions.
@@ -75,7 +75,7 @@ depends on Cats is probably the best plan.
 Cats has other _companion_ projects, described next:
 
 * [cats-effect](https://github.com/typelevel/cats-effect): a project aimed to provide a standard IO type for the Cats ecosystem, as well as a set of typeclasses (and associated laws) which characterize general effect types.
-* [cats-mtl](https://github.com/typelevel/cats-mtl): provides transformer typeclasses for cats' Monads, Applicatives and Functors.
+* [cats-mtl](https://github.com/typelevel/cats-mtl): provides transformer typeclasses for Cats' Monads, Applicatives and Functors.
 * [mouse](https://github.com/typelevel/mouse): a small companion to the Cats functional programming library for Scala. It includes convenience extension methods for Scala standard library classes, including some found in scalaz that are not in Cats.
 
 
@@ -161,7 +161,7 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
 - It is also a goal that, for every combination of data type and supported type class instance:
  - Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.
  - A serializability test for that combination is also included, such that we know that frameworks which
- rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
+ rely heavily on serialization, such as `Spark`, will have strong compatibility with `Cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
 - For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
@@ -285,7 +285,7 @@ immediately so that we can support you.
 
 ## Nix Cats Development Environment
 
-Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (SBT, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a `shell.nix` for anyone using the [Nix package manager](https://nixos.org/nix/).
+Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (sbt, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a `shell.nix` for anyone using the [Nix package manager](https://nixos.org/nix/).
 
 To use the Nix-based Cats development environment:
 

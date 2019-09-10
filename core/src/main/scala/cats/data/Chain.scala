@@ -48,9 +48,45 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Returns the init and last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def initLast: Option[(Chain[A], A)] = {
+    var c: Chain[A] = this
+    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    // scalastyle:off null
+    var result: Option[(Chain[A], A)] = null
+    while (result eq null) {
+      c match {
+        case Singleton(a) =>
+          val pre =
+            if (lefts.isEmpty) nil
+            else lefts.reduceLeft((x, y) => Append(x, y))
+          result = Some(pre -> a)
+        case Append(l, r) => c = r; lefts += l
+        case Wrap(seq) =>
+          val init = fromSeq(seq.init)
+          val pre =
+            if (lefts.isEmpty) init
+            else lefts.reduceLeft((x, y) => Append(x, y)) ++ init
+          result = Some((pre, seq.last))
+        case Empty =>
+          // Empty is only top level, it is never internal to an Append
+          result = None
+      }
+    }
+    // scalastyle:on null
+    result
+  }
+
+  /**
    * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
    */
   def headOption: Option[A] = uncons.map(_._1)
+
+  /**
+   * Returns the last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def lastOption: Option[A] = initLast.map(_._2)
 
   /**
    * Returns true if there are no elements in this collection.
@@ -101,8 +137,10 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element and returns a new Chain.
    */
-  final def map[B](f: A => B): Chain[B] =
-    fromSeq(iterator.map(f).toVector)
+  final def map[B](f: A => B): Chain[B] = this match {
+    case Wrap(seq) => Wrap(seq.map(f))
+    case _         => fromSeq(iterator.map(f).toVector)
+  }
 
   /**
    * Applies the supplied function to each element and returns a new Chain from the concatenated results
@@ -125,6 +163,40 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Takes longest prefix of elements that satisfy a predicate.
+   * @param p The predicate used to test elements.
+   * @return the longest prefix of this chain whose elements all satisfy the predicate p.
+   */
+  final def takeWhile(p: A => Boolean): Chain[A] = {
+    var result = Chain.empty[A]
+    foreachUntil { a =>
+      val pr = p(a)
+      if (pr) result = result :+ a
+      !pr
+    }
+    result
+  }
+
+  /**
+   * Drops longest prefix of elements that satisfy a predicate.
+   *
+   * @param p The predicate used to test elements.
+   * @return the longest suffix of this sequence whose first element does not satisfy the predicate p.
+   */
+  final def dropWhile(p: A => Boolean): Chain[A] = {
+    @tailrec
+    def go(rem: Chain[A]): Chain[A] =
+      rem.uncons match {
+        case Some((a, tail)) =>
+          if (p(a)) go(tail)
+          else rem
+
+        case None => nil
+      }
+    go(this)
+  }
+
+  /**
    * Folds over the elements from right to left using the supplied initial value and function.
    */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
@@ -144,6 +216,39 @@ sealed abstract class Chain[+A] {
       if (x.asInstanceOf[AnyRef] ne sentinel) acc :+ x.asInstanceOf[B]
       else acc
     }
+
+  /**
+   * Finds the first element of this `Chain` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) {
+        result = Some(x.asInstanceOf[B])
+        true
+      } else false
+    }
+    result
+  }
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   */
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      val x = f(a)
+      if (x.isDefined) {
+        result = x
+        true
+      } else false
+    }
+    result
+  }
 
   /**
    * Remove elements not matching the predicate
@@ -388,7 +493,9 @@ sealed abstract class Chain[+A] {
     var first = true
 
     foreach { a =>
-      if (first) { builder ++= AA.show(a); first = false } else builder ++= ", " + AA.show(a)
+      if (first) {
+        builder ++= AA.show(a); first = false
+      } else builder ++= ", " + AA.show(a)
       ()
     }
     builder += ')'
@@ -405,6 +512,23 @@ sealed abstract class Chain[+A] {
     else false
 
   override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
+
+  final def get(idx: Long): Option[A] =
+    if (idx < 0) None
+    else {
+      var result: Option[A] = None
+      var i = 0L
+      foreachUntil { a =>
+        if (idx == i) {
+          result = Some(a)
+          true
+        } else {
+          i += 1
+          false
+        }
+      }
+      result
+    }
 }
 
 object Chain extends ChainInstances {
@@ -424,6 +548,19 @@ object Chain extends ChainInstances {
   final private[data] case class Wrap[A](seq: Seq[A]) extends Chain[A] {
     override def isEmpty: Boolean =
       false // b/c `fromSeq` constructor doesn't allow either branch to be empty
+  }
+
+  def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
+    Some(chain.toList)
+
+  object ==: {
+    def unapply[T](c: Chain[T]): Option[(T, Chain[T])] =
+      c.uncons
+  }
+
+  object :== {
+    def unapply[T](c: Chain[T]): Option[(Chain[T], T)] =
+      c.initLast
   }
 
   /** Empty Chain. */
@@ -560,6 +697,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       override def forall[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.forall(p)
       override def find[A](fa: Chain[A])(f: A => Boolean): Option[A] = fa.find(f)
       override def size[A](fa: Chain[A]): Long = fa.length
+      override def collectFirst[A, B](fa: Chain[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+      override def collectFirstSome[A, B](fa: Chain[A])(f: A => Option[B]): Option[B] = fa.collectFirstSome(f)
 
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
@@ -602,6 +741,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         go(f(a) :: Nil)
         acc
       }
+
+      override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
     }
 
   implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =

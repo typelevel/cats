@@ -1,13 +1,17 @@
-// Use a scala version supported by scalafix.
-val V = _root_.scalafix.Versions
-scalaVersion in ThisBuild := V.scala212
+val V = _root_.scalafix.sbt.BuildInfo
+
+inThisBuild(
+  List(
+    scalaVersion in ThisBuild := V.scala212,
+    addCompilerPlugin(scalafixSemanticdb),
+    scalacOptions += "-Yrangepos"
+  ))
 
 lazy val rules = project.settings(
-  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.version
+  libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion
 )
 
 lazy val input = project.settings(
-  scalafixSourceroot := sourceDirectory.in(Compile).value,
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats" % "0.9.0"
   ),
@@ -24,16 +28,15 @@ lazy val output = project.settings(
 
 lazy val tests = project
   .settings(
-    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.version % Test cross CrossVersion.full,
-    buildInfoPackage := "fix",
-    buildInfoKeys := Seq[BuildInfoKey](
-      "inputSourceroot" ->
-        sourceDirectory.in(input, Compile).value,
-      "outputSourceroot" ->
-        sourceDirectory.in(output, Compile).value,
-      "inputClassdirectory" ->
-        classDirectory.in(input, Compile).value
-    )
+    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.scalafixVersion % Test cross CrossVersion.full,
+    compile.in(Compile) :=
+      compile.in(Compile).dependsOn(compile.in(input, Compile)).value,
+    scalafixTestkitOutputSourceDirectories :=
+      sourceDirectories.in(output, Compile).value,
+    scalafixTestkitInputSourceDirectories :=
+      sourceDirectories.in(input, Compile).value,
+    scalafixTestkitInputClasspath :=
+      fullClasspath.in(input, Compile).value
   )
   .dependsOn(input, rules)
-  .enablePlugins(BuildInfoPlugin)
+  .enablePlugins(ScalafixTestkitPlugin)

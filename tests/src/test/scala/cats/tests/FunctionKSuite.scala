@@ -92,7 +92,7 @@ class FunctionKSuite extends CatsSuite {
   }
 
   test("lift compound unary") {
-    val fNelFromList = FunctionK.lift[List, λ[α ⇒ Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
+    val fNelFromList = FunctionK.lift[List, λ[α => Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
     forAll { (a: List[String]) =>
       fNelFromList(a) should ===(NonEmptyList.fromList(a))
     }
