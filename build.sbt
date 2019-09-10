@@ -50,8 +50,6 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     List(CrossType.Pure, CrossType.Full)
       .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) if y <= 12 =>
-      extraDirs("-2.12-")
     case Some((2, y)) if y >= 13 =>
       extraDirs("-2.13+")
     case _ => Nil
@@ -82,7 +80,7 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
     val docSource = (sources in (Compile, doc)).value
     if (priorTo2_13(scalaVersion.value)) docSource else Nil
   }
-) ++ warnUnusedImport ++ update2_12 ++ xlint
+) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
   CrossVersion.partialVersion(scalaVersion) match {
@@ -150,11 +148,6 @@ lazy val commonJvmSettings = Seq(
   },
   Test / fork := true,
   Test / javaOptions := Seq("-Xmx3G")
-)
-
-lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.11.12", // TODO: load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
-  crossScalaVersions := Seq("2.11.12")
 )
 
 lazy val includeGeneratedSrc: Setting[_] = {
@@ -788,7 +781,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;++2.11.12 mimaReportBinaryIssues")
+addCommandAlias("prePR", "fmt")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -827,7 +820,8 @@ def commonScalacOptions(scalaVersion: String) =
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfatal-warnings",
-    "-deprecation"
+    "-deprecation",
+    "-Xlint:-unused,_"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
@@ -878,15 +872,7 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 11)) =>
-        Seq("-Ywarn-unused-import")
-      case Some((2, n)) if n >= 12 =>
-        Seq("-Ywarn-unused:imports")
-
-    }
-  },
+  scalacOptions ++= Seq("-Ywarn-unused:imports"),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
@@ -897,22 +883,4 @@ lazy val credentialSettings = Seq(
     username <- Option(System.getenv().get("SONATYPE_USERNAME"))
     password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
   } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
-)
-
-lazy val update2_12 = Seq(
-  scalacOptions -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Yinline-warnings"
-      case _                                         => ""
-    }
-  }
-)
-
-lazy val xlint = Seq(
-  scalacOptions += {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Xlint:-unused,_"
-      case _                                         => "-Xlint"
-    }
-  }
 )
