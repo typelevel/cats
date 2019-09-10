@@ -2,7 +2,6 @@ package cats
 package laws
 package discipline
 
-import cats.data.ZipStream
 import org.scalacheck.Arbitrary
 
 private[discipline] object ScalaVersionSpecific {
