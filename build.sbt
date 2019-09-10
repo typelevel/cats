@@ -6,12 +6,6 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
-  },
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -35,54 +29,14 @@ val disciplineScalatestVersion = "1.0.0-M1"
 
 val kindProjectorVersion = "0.10.3"
 
-crossScalaVersionsFromTravis in Global := {
-  val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
-  import collection.JavaConverters._
-  Using.fileInputStream(manifest) { fis =>
-    new org.yaml.snakeyaml.Yaml().loadAs(fis, classOf[java.util.Map[_, _]]).asScala.toList.collect {
-      case (k: String, v: String) if k.contains("scala_version_") => v
-    }
-  }
-}
-
-def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
-  def extraDirs(suffix: String) =
-    List(CrossType.Pure, CrossType.Full)
-      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) if y <= 12 =>
-      extraDirs("-2.12-")
-    case Some((2, y)) if y >= 13 =>
-      extraDirs("-2.13+")
-    case _ => Nil
-  }
-}
-
-lazy val commonScalaVersionSettings = Seq(
-  crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
-)
-
-commonScalaVersionSettings
+lazy val commonScalaVersionSettings = Seq(scalaVersion := "2.11.12")
 
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
-  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
-  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test", baseDirectory.value, scalaVersion.value),
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots")),
   parallelExecution in Test := false,
-  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings"),
-  // TODO: reenable doctests on 2.13 once it's officially released. it's disabled for now due to changes to the `toString` impl of collections
-  doctestGenTests := {
-    val unchanged = doctestGenTests.value
-    if (priorTo2_13(scalaVersion.value)) unchanged else Nil
-  },
-  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
-  sources in (Compile, doc) := {
-    val docSource = (sources in (Compile, doc)).value
-    if (priorTo2_13(scalaVersion.value)) docSource else Nil
-  }
-) ++ warnUnusedImport ++ update2_12 ++ xlint
+  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
+) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
   CrossVersion.partialVersion(scalaVersion) match {
@@ -234,11 +188,9 @@ lazy val docSettings = Seq(
     scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
     "-sourcepath",
     baseDirectory.in(LocalRootProject).value.getAbsolutePath,
-    "-diagrams"
-  ) ++ (if (priorTo2_13(scalaVersion.value))
-          Seq("-Yno-adapted-args")
-        else
-          Seq("-Ymacro-annotations")),
+    "-diagrams",
+    "-Yno-adapted-args"
+  ),
   scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports", "-Ywarn-dead-code"))),
   git.remoteRepo := "git@github.com:typelevel/cats.git",
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "*.svg",
@@ -281,11 +233,9 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[Module
   // Safety Net for Inclusions
   lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
-  if (priorTo2_13(scalaVer)) {
-    (mimaVersions ++ extraVersions)
-      .filterNot(excludedVersions.contains(_))
-      .map(v => "org.typelevel" %% moduleName % v)
-  } else List()
+  (mimaVersions ++ extraVersions)
+    .filterNot(excludedVersions.contains(_))
+    .map(v => "org.typelevel" %% moduleName % v)
 
 }
 
@@ -420,7 +370,10 @@ lazy val docs = project
 lazy val cats = project
   .in(file("."))
   .settings(moduleName := "root", crossScalaVersions := Nil)
-  .settings(publishSettings) // these settings are needed to release all aggregated modules under this root module
+  .settings(
+     commonScalaVersionSettings,
+     publishSettings
+   ) // these settings are needed to release all aggregated modules under this root module
   .settings(noPublishSettings) // this is to exclue the root module itself from being published.
   .aggregate(catsJVM, catsJS)
   .dependsOn(catsJVM, catsJS, tests.jvm % "test-internal -> test")
@@ -639,13 +592,12 @@ lazy val bench = project
   .settings(coverageEnabled := false)
   .settings(
     libraryDependencies ++= {
-      if (priorTo2_13(scalaVersion.value))
-        Seq(
-          "org.scalaz" %% "scalaz-core" % "7.2.23",
-          "org.spire-math" %% "chain" % "0.3.0",
-          "co.fs2" %% "fs2-core" % "0.10.4"
-        )
-      else Nil
+      Seq(
+        "org.scalaz" %% "scalaz-core" % "7.2.23",
+        "org.spire-math" %% "chain" % "0.3.0",
+        "co.fs2" %% "fs2-core" % "0.10.4"
+      )
+
     }
   )
   .enablePlugins(JmhPlugin)
@@ -657,12 +609,7 @@ lazy val binCompatTest = project
     commonScalaVersionSettings,
     addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
     libraryDependencies ++= List(
-      {
-        if (priorTo2_13(scalaVersion.value))
-          mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
-        else //We are not testing BC on Scala 2.13 yet.
-          "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
-      },
+      mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
       "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
   )
@@ -788,7 +735,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;++2.11.12 mimaReportBinaryIssues")
+addCommandAlias("prePR", ";fmt;mimaReportBinaryIssues")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -804,15 +751,6 @@ lazy val noPublishSettings = Seq(
   publishArtifact := false
 )
 
-lazy val crossVersionSharedSources: Seq[Setting[_]] =
-  Seq(Compile, Test).map { sc =>
-    (unmanagedSourceDirectories in sc) ++= {
-      (unmanagedSourceDirectories in sc).value.map { dir: File =>
-        new File(dir.getPath + "_" + scalaBinaryVersion.value)
-      }
-    }
-  }
-
 def commonScalacOptions(scalaVersion: String) =
   Seq(
     "-encoding",
@@ -827,22 +765,12 @@ def commonScalacOptions(scalaVersion: String) =
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfatal-warnings",
-    "-deprecation"
-  ) ++ (if (priorTo2_13(scalaVersion))
-          Seq(
-            "-Yno-adapted-args",
-            "-Xfuture"
-          )
-        else
-          Seq(
-            "-Ymacro-annotations"
-          ))
-
-def priorTo2_13(scalaVersion: String): Boolean =
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, minor)) if minor < 13 => true
-    case _                              => false
-  }
+    "-deprecation",
+    "-Yinline-warnings",
+    "-Xlint",
+    "-Yno-adapted-args",
+    "-Xfuture"
+  )
 
 lazy val sharedPublishSettings = Seq(
   releaseTagName := tagName.value,
@@ -897,22 +825,4 @@ lazy val credentialSettings = Seq(
     username <- Option(System.getenv().get("SONATYPE_USERNAME"))
     password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
   } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
-)
-
-lazy val update2_12 = Seq(
-  scalacOptions -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Yinline-warnings"
-      case _                                         => ""
-    }
-  }
-)
-
-lazy val xlint = Seq(
-  scalacOptions += {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Xlint:-unused,_"
-      case _                                         => "-Xlint"
-    }
-  }
 )
