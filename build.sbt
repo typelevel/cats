@@ -395,8 +395,10 @@ def mimaSettings(moduleName: String) =
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
-          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$suppressUnusedImportWarningForScalaVersionMoreSpecific")
-      )
+          exclude[MissingClassProblem](
+            "cats.kernel.compat.scalaVersionMoreSpecific$suppressUnusedImportWarningForScalaVersionMoreSpecific"
+          )
+        )
 
     }
   )
