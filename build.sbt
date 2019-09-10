@@ -391,7 +391,13 @@ def mimaSettings(moduleName: String) =
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
           exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
-        )
+        ) ++ //package private classes no longer needed
+        Seq(
+          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
+          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
+          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$suppressUnusedImportWarningForScalaVersionMoreSpecific")
+      )
+
     }
   )
 
