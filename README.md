@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
 * **Sep 7 2019** [Cats 2.0.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC3)
 * **Aug 26 2019** [Cats 2.0.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC2)
 * **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
@@ -85,7 +86,7 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0-RC3"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0"
 ```
 
 This will pull in the cats-core module. If you require some other
