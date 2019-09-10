@@ -26,7 +26,7 @@ trait ParallelInstances extends ParallelInstances1 {
     implicit P: Parallel[M]
   ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = OptionT.catsDataParallelForOptionT[M]
 
-  implicit def catsStdNonEmptyParallelForZipList[A]: NonEmptyParallel.Aux[List, ZipList] =
+  implicit def catsStdNonEmptyParallelForZipList: NonEmptyParallel.Aux[List, ZipList] =
     new NonEmptyParallel[List] {
       type F[x] = ZipList[x]
 
@@ -40,7 +40,7 @@ trait ParallelInstances extends ParallelInstances1 {
         λ[List ~> ZipList](v => new ZipList(v))
     }
 
-  implicit def catsStdNonEmptyParallelForZipVector[A]: NonEmptyParallel.Aux[Vector, ZipVector] =
+  implicit def catsStdNonEmptyParallelForZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
     new NonEmptyParallel[Vector] {
       type F[x] = ZipVector[x]
 
@@ -55,7 +55,7 @@ trait ParallelInstances extends ParallelInstances1 {
     }
 
   @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
-  implicit def catsStdParallelForZipStream[A]: Parallel.Aux[Stream, ZipStream] =
+  implicit def catsStdParallelForZipStream: Parallel.Aux[Stream, ZipStream] =
     new Parallel[Stream] {
       type F[x] = ZipStream[x]
 
