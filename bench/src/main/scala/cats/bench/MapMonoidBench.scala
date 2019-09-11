@@ -4,6 +4,9 @@ import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 import scalaz.std.anyVal._
 import scalaz.std.list._
 import scalaz.std.map._
+import cats.instances.list._
+import cats.instances.int._
+import cats.instances.map._
 
 @State(Scope.Benchmark)
 class MapMonoidBench {
