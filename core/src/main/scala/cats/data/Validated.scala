@@ -9,17 +9,52 @@ import scala.util.{Failure, Success, Try}
 
 sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1= "error".invalid[Option[String]]
+   * scala> val v2= Some("abc").valid[String]
+   *
+   * scala> v1.fold(identity,_.getOrElse(""))
+   * res0: String = error
+   *
+   * scala> v2.fold(identity,_.getOrElse(""))
+   * res1: String = abc
+   * }}}
+   */
   def fold[B](fe: E => B, fa: A => B): B =
     this match {
       case Invalid(e) => fe(e)
       case Valid(a)   => fa(a)
     }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val validated= "error".invalid[Unit]
+   * scala> validated.isValid
+   * res0: Boolean = false
+   * }}}
+   */
   def isValid: Boolean = this match {
     case Invalid(_) => false
     case _          => true
   }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val validated= "error".invalid[Unit]
+   * scala> validated.isInvalid
+   * res0: Boolean = true
+   * }}}
+   */
   def isInvalid: Boolean = this match {
     case Invalid(_) => true
     case _          => false
@@ -35,6 +70,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Return the Valid value, or the default if Invalid
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1= "error".invalid[Int]
+   * scala> val v2= 123.valid[String]
+   *
+   * scala> v1.getOrElse(456)
+   * res0: Int = 456
+   *
+   * scala> v2.getOrElse(456)
+   * res1: Int = 123
+   * }}}
    */
   def getOrElse[B >: A](default: => B): B = this match {
     case Valid(a) => a
@@ -43,6 +92,19 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Return the Valid value, or the result of f if Invalid
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = Some("exception").invalid[String]
+   * scala> val v2 = "OK".valid[Option[String]]
+   *
+   * scala> v1.valueOr(_.getOrElse(""))
+   * res0: String = exception
+   *
+   * scala> v2.valueOr(_.getOrElse(""))
+   * res1: String = OK
+   * }}}
    */
   def valueOr[B >: A](f: E => B): B = this match {
     case Invalid(e) => f(e)
@@ -51,6 +113,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Is this Valid and matching the given predicate
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = List("error").invalid[Int]
+   * scala> val v2 = 123.valid[List[String]]
+   *
+   * scala> v1.exists(_ > 120)
+   * res0: Boolean = false
+   *
+   * scala> v2.exists(_ > 120)
+   * res1: Boolean = true
+   * }}}
    */
   def exists(predicate: A => Boolean): Boolean = this match {
     case Valid(a) => predicate(a)
@@ -59,6 +135,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Is this Invalid or matching the predicate
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = Some("error").invalid[Int]
+   * scala> val v2 = 123.valid[Option[String]]
+   *
+   * scala> v1.forall(_ > 150)
+   * res0: Boolean = true
+   *
+   * scala> v2.forall(_ > 150)
+   * res1: Boolean = false
+   * }}}
    */
   def forall(f: A => Boolean): Boolean = this match {
     case Valid(a) => f(a)
@@ -69,6 +159,21 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * Return this if it is Valid, or else fall back to the given default.
    * The functionality is similar to that of [[findValid]] except for failure accumulation,
    * where here only the error on the right is preserved and the error on the left is ignored.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = Some("error").invalid[Int]
+   * scala> val v2 = 123.valid[Option[String]]
+   * scala> val defaultValidated = 456.valid[Option[String]]
+   *
+   * scala> v1.orElse(defaultValidated)
+   * res0: Validated[Option[String], Int] = Valid(456)
+   *
+   * scala> v2.orElse(defaultValidated)
+   * res1: Validated[Option[String], Int] = Valid(123)
+   * }}}
    */
   def orElse[EE, AA >: A](default: => Validated[EE, AA]): Validated[EE, AA] =
     this match {
@@ -79,6 +184,25 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * If `this` is valid return `this`, otherwise if `that` is valid return `that`, otherwise combine the failures.
    * This is similar to [[orElse]] except that here failures are accumulated.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = List("error1").invalid[Int]
+   * scala> val v2 = 123.valid[List[String]]
+   * scala> val default1 = List("error2").invalid[Int]
+   * scala> val default2 = 456.valid[List[String]]
+   *
+   * scala> v1.findValid(default1)
+   * res0: Validated[List[String], Int] = Invalid(List(error1, error2))
+   *
+   * scala> v1.findValid(default2)
+   * res1: Validated[List[String], Int] = Valid(456)
+   *
+   * scala> v2.findValid(default1)
+   * res2: Validated[List[String], Int] = Valid(123)
+   * }}}
    */
   def findValid[EE >: E, AA >: A](that: => Validated[EE, AA])(implicit EE: Semigroup[EE]): Validated[EE, AA] =
     this match {
