@@ -216,6 +216,21 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Converts the value to an Either[E, A]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toEither
+   * res0: Either[String, Int] = Left(error)
+   *
+   * scala> v2.toEither
+   * res1: Either[String, Int] = Right(123)
+   * }}}
+   *
    */
   def toEither: Either[E, A] = this match {
     case Invalid(e) => Left(e)
@@ -224,6 +239,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Returns Valid values wrapped in Some, and None for Invalid values
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = List("error").invalid[Int]
+   * scala> val v2 = 123.valid[List[String]]
+   *
+   * scala> v1.toOption
+   * res0: Option[Int] = None
+   *
+   * scala> v2.toOption
+   * res1: Option[Int] = Some(123)
+   * }}}
    */
   def toOption: Option[A] = this match {
     case Valid(a) => Some(a)
@@ -232,6 +261,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Returns Valid values wrapped in Ior.Right, and None for Ior.Left values
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toIor
+   * res0: Ior[String, Int] = Left(error)
+   *
+   * scala> v2.toIor
+   * res1: Ior[String, Int] = Right(123)
+   * }}}
    */
   def toIor: Ior[E, A] = this match {
     case Invalid(e) => Ior.Left(e)
@@ -241,20 +284,66 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Convert this value to a single element List if it is Valid,
    * otherwise return an empty List
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = Some("error").invalid[Int]
+   * scala> val v2 = 123.valid[Option[String]]
+   *
+   * scala> v1.toList
+   * res0: List[Int] = List()
+   *
+   * scala> v2.toList
+   * res1: List[Int] = List(123)
+   * }}}
    */
   def toList: List[A] = this match {
     case Valid(a) => List(a)
     case _        => Nil
   }
 
-  /** Lift the Invalid value into a NonEmptyList. */
+  /**
+   * Lift the Invalid value into a NonEmptyList.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toValidatedNel
+   * res0: ValidatedNel[String, Int] = Invalid(NonEmptyList(error))
+   *
+   * scala> v2.toValidatedNel
+   * res1: ValidatedNel[String, Int] = Valid(123)
+   * }}}
+   */
   def toValidatedNel[EE >: E, AA >: A]: ValidatedNel[EE, AA] =
     this match {
       case v @ Valid(_) => v
       case Invalid(e)   => Validated.invalidNel(e)
     }
 
-  /** Lift the Invalid value into a NonEmptyChain. */
+  /**
+   * Lift the Invalid value into a NonEmptyChain.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.toValidatedNec
+   * res0: ValidatedNec[String, Int] = Invalid(Chain(error))
+   *
+   * scala> v2.toValidatedNec
+   * res1: ValidatedNec[String, Int] = Valid(123)
+   * }}}
+   */
   def toValidatedNec[EE >: E, AA >: A]: ValidatedNec[EE, AA] =
     this match {
       case v @ Valid(_) => v
@@ -264,17 +353,72 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Convert to an Either, apply a function, convert back.  This is handy
    * when you want to use the Monadic properties of the Either type.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.withEither(_.bimap(List(_), Option(_)))
+   * res0: Validated[List[String], Option[Int]] = Invalid(List(error))
+   *
+   * scala> v2.withEither(_.bimap(List(_), Option(_)))
+   * res1: Validated[List[String], Option[Int]] = Valid(Some(123))
+   * }}}
    */
   def withEither[EE, B](f: Either[E, A] => Either[EE, B]): Validated[EE, B] =
     Validated.fromEither(f(toEither))
 
   /**
    * Validated is a [[Bifunctor]], this method applies one of the
-   * given functions.
+   * given functions.]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1: Validated[String, Int] = "error".invalid[Int]
+   * scala> val v2: Validated[String, Int] = 123.valid[String]
+   *
+   * scala> v1.bimap(List(_), Option(_))
+   * res0: Validated[List[String], Option[Int]] = Invalid(List(error))
+   *
+   * scala> v2.bimap(List(_), Option(_))
+   * res1: Validated[List[String] ,Option[Int]] = Valid(Some(123))
+   * }}}
    */
   def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
     fold(fe.andThen(Invalid.apply), fa.andThen(Valid.apply))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = "error2".invalid[Int]
+   * scala> val v3 = 123.valid[String]
+   * scala> val v4 = 456.valid[String]
+   * scala> val v5 = v4
+   *
+   * scala> v1 compare v2
+   * res0: Int = -1
+   *
+   * scala> v1 compare v3
+   * res1: Int = -1
+   *
+   * scala> v3 compare v1
+   * res3: Int = 1
+   *
+   * scala> v3 compare v4
+   * res4: Int = -1
+   *
+   * scala> v4 compare v5
+   * res5: Int = 0
+   * }}}
+   */
   def compare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Order[EE], AA: Order[AA]): Int =
     (this, that) match {
       case (Valid(a), Valid(aa))     => AA.compare(a, aa)
@@ -291,6 +435,26 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     case (Valid(_), _)             => 1
   }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = "error".invalid[Int]
+   * scala> val v3 = 123.valid[String]
+   * scala> val v4 = 456.valid[String]
+   *
+   * scala> v1 === v2
+   * res0: Boolean = true
+   *
+   * scala> v1 === v3
+   * res1: Boolean = false
+   *
+   * scala> v3 === v4
+   * res3: Boolean = false
+   * }}}
+   */
   def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean = (this, that) match {
     case (Invalid(e), Invalid(ee)) => EE.eqv(e, ee)
     case (Valid(a), Valid(aa))     => AA.eqv(a, aa)
@@ -300,6 +464,22 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * From Apply:
    * if both the function and this value are Valid, apply the function
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   * scala> val f: Validated[String, Int => Option[Int]] = (Option.apply[Int] _).valid[String]
+   *
+   * scala> v1.ap(f)
+   * res0: Validated[String, Option[Int]] = Invalid(error)
+   *
+   * scala> v2.ap(f)
+   * res1: Validated[String, Option[Int]] = Valid(Some(123))
+   * }}}
+   *
    */
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE, B] =
     (this, f) match {
@@ -311,6 +491,27 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * From Product
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.ValidatedNec
+   *
+   * scala> val v1 = "error".invalidNec[Int]
+   * scala> val v2 = "error2".invalidNec[Int]
+   * scala> val v3 = 123.validNec[String]
+   * scala> val v4 = 456.validNec[String]
+   *
+   * scala> v1.product(v2)
+   * res0: ValidatedNec[String, (Int, Int)] = Invalid(Chain(error, error2))
+   *
+   * scala> v1.product(v3)
+   * res1: ValidatedNec[String, (Int, Int)] = Invalid(Chain(error))
+   *
+   * scala> v3.product(v4)
+   * res2: ValidatedNec[String, (Int, Int)] = Valid((123,456))
+   *
+   * }}}
    */
   def product[EE >: E, B](fb: Validated[EE, B])(implicit EE: Semigroup[EE]): Validated[EE, (A, B)] =
     (this, fb) match {
@@ -322,6 +523,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
 
   /**
    * Apply a function to a Valid value, returning a new Valid value
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.map(_ * 2)
+   * res0: Validated[String, Int] = Invalid(error)
+   *
+   * scala> v2.map(_ * 2)
+   * res1: Validated[String, Int] = Valid(246)
+   * }}}
    */
   def map[B](f: A => B): Validated[E, B] = this match {
     case i @ Invalid(_) => i
@@ -331,6 +546,21 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Apply a function to an Invalid value, returning a new Invalid value.
    * Or, if the original valid was Valid, return it.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.leftMap(Option.apply)
+   * res0: Validated[Option[String], Int] = Invalid(Some(error))
+   *
+   * scala> v2.leftMap(Option.apply)
+   * res1: Validated[Option[String], Int] = Valid(123)
+   *
+   * }}}
    */
   def leftMap[EE](f: E => EE): Validated[EE, A] = this match {
     case a @ Valid(_) => a
@@ -341,6 +571,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * When Valid, apply the function, marking the result as valid
    * inside the Applicative's context,
    * when Invalid, lift the Error into the Applicative's context
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.traverse(Option.apply[Int])
+   * res0: Option[Validated[String, Int]] = Some(Invalid(error))
+   *
+   * scala> v2.traverse(Option.apply[Int])
+   * res1: Option[Validated[String, Int]] = Some(Valid(123))
+   * }}}
    */
   def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE, B]] = this match {
     case Valid(a)       => F.map(f(a))(Valid.apply)
@@ -350,6 +594,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * apply the given function to the value with the given B when
    * valid, otherwise return the given B
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.foldLeft(456)(_ + _)
+   * res0: Int = 456
+   *
+   * scala> v2.foldLeft(456)(_ + _)
+   * res1: Int = 579
+   * }}}
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B = this match {
     case Valid(a) => f(b, a)
@@ -359,6 +617,22 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   /**
    * Lazily-apply the given function to the value with the given B
    * when valid, otherwise return the given B.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.Eval
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.foldRight(Eval.now(456))((i,e) => e.map(_ + i))
+   * res0: Eval[Int] = Now(456)
+   *
+   * scala> v2.foldRight(Eval.now(456))((i,e) => e.map(_ + i)).value
+   * res1: Int = 579
+   * }}}
+   *
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = this match {
     case Valid(a) => f(a, lb)
@@ -382,6 +656,21 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * with `ap`. This method is not consistent with [[ap]] (or other
    * `Apply`-based methods), because it has "fail-fast" behavior as opposed to
    * accumulating validation failures.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   * scala> val f: Int => Validated[String, List[Int]] = List(_).valid[String]
+   *
+   * scala> v1.andThen(f)
+   * res0: Validated[String, List[Int]] = Invalid(error)
+   *
+   * scala> v2.andThen(f)
+   * res1: Validated[String, List[Int]] = Valid(List(123))
+   * }}}
    */
   def andThen[EE >: E, B](f: A => Validated[EE, B]): Validated[EE, B] =
     this match {
@@ -394,6 +683,25 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * instances of the underlying `E` and `A` instances. The resultant `Validated`
    * will be `Valid`, if, and only if, both this `Validated` instance and the
    * supplied `Validated` instance are also `Valid`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalidNel[List[Int]]
+   * scala> val v2 = "error2".invalidNel[List[Int]]
+   * scala> val v3 = List(123).validNel[String]
+   * scala> val v4 = List(456).validNel[String]
+   *
+   * scala> v1 combine v2
+   * res0: Validated[NonEmptyList[String], List[Int]] = Invalid(NonEmptyList(error, error2))
+   *
+   * scala> v2 combine v3
+   * res1: Validated[NonEmptyList[String], List[Int]] = Invalid(NonEmptyList(error2))
+   *
+   * scala> v3 combine v4
+   * res2: Validated[NonEmptyList[String], List[Int]] = Valid(List(123, 456))
+   * }}}
    */
   def combine[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Semigroup[EE],
                                                          AA: Semigroup[AA]): Validated[EE, AA] =
@@ -404,11 +712,43 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case _                        => that
     }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = "error".invalid[Int]
+   * scala> val v2 = 123.valid[String]
+   *
+   * scala> v1.swap
+   * res0: Validated[Int, String] = Valid(error)
+   *
+   * scala> v2.swap
+   * res1: Validated[Int, String] = Invalid(123)
+   * }}}
+   *
+   */
   def swap: Validated[A, E] = this match {
     case Valid(a)   => Invalid(a)
     case Invalid(e) => Valid(e)
   }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val v1 = Seq("error").invalid[List[String]]
+   * scala> val v2 = List("Ok").valid[Seq[String]]
+   *
+   * scala> v1.merge
+   * res0: Seq[String] = List(error)
+   *
+   * scala> v2.merge
+   * res1: Seq[String] = List(Ok)
+   * }}}
+   *
+   */
   def merge[EE >: E](implicit ev: A <:< EE): EE = this match {
     case Invalid(e) => e
     case Valid(a)   => ev(a)
