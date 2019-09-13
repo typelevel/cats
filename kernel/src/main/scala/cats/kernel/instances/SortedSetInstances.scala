@@ -1,11 +1,14 @@
 package cats.kernel
 package instances
 
-import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 
 trait SortedSetInstances extends SortedSetInstances1 {
-  implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+  @deprecated("Will be removed after dropping Scala 2.11 support", "")
+  def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    new SortedSetHash[A]
+
+  implicit def catsKernelStdHashForSortedSet1[A: Hash]: Hash[SortedSet[A]] =
     new SortedSetHash[A]
 }
 
@@ -28,7 +31,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
     StaticMethods.iteratorEq(s1.iterator, s2.iterator)
 }
 
-class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
+class SortedSetHash[A: Hash] extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3._
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
@@ -50,7 +53,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
     finalizeHash(h, n)
   }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
-    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Order[A])
+    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Eq[A])
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
