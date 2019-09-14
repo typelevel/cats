@@ -29,6 +29,14 @@ class FunctorSuite extends CatsSuite {
     }
   }
 
+  test("unzip preserves structure") {
+    forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
+      Functor[List].unzip(l.map(i => (i, i))) === ((l, l))
+      Functor[Option].unzip(o.map(i => (i, i))) === ((o, o))
+      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }). === ((m, m))
+    }
+  }
+
   test("widen equals map(identity)") {
     forAll { (i: Int) =>
       val list: List[Some[Int]] = List(Some(i))
