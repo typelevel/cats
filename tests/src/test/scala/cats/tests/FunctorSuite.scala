@@ -33,7 +33,7 @@ class FunctorSuite extends CatsSuite {
     forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
       Functor[List].unzip(l.map(i => (i, i))) === ((l, l))
       Functor[Option].unzip(o.map(i => (i, i))) === ((o, o))
-      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }). === ((m, m))
+      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m))
     }
   }
 
