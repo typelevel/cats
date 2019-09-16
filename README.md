@@ -280,6 +280,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
 - [Coya](https://coya.com/)
+- [Datum Brain](https://datumbrain.com/)
 - [DriveTribe](https://drivetribe.com/)
 - [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
