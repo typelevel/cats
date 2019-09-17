@@ -13,7 +13,7 @@ import scala.collection.immutable.SortedSet
 import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with ScalaVersionSpecificParallelSuite {
+class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 
   test("ParSequence Either should accumulate errors") {
     forAll { es: List[Either[String, Int]] =>

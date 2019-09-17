@@ -56,7 +56,7 @@ class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
 class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
-class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTraverseSuite {
+class TraverseSuiteAdditional extends CatsSuite {
 
   def checkZipWithIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
     F.zipWithIndex(fromRange(1 to 70000))
