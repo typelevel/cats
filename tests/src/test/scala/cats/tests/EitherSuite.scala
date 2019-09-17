@@ -343,10 +343,10 @@ class EitherSuite extends CatsSuite {
     }
   }
 
-  test("raiseOrPure syntax consistent with fromEither") {
+  test("liftTo syntax consistent with fromEither") {
     val ev = ApplicativeError[Validated[String, *], String]
     forAll { (fa: Either[String, Int]) =>
-      fa.raiseOrPure[Validated[String, *]] should ===(ev.fromEither(fa))
+      fa.liftTo[Validated[String, *]] should ===(ev.fromEither(fa))
     }
   }
 
@@ -362,4 +362,14 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+}
+
+@deprecated("To test deprecated methods", "2.1.0")
+class DeprecatedEitherSuite extends CatsSuite {
+  test("raiseOrPure syntax consistent with fromEither") {
+    val ev = ApplicativeError[Validated[String, *], String]
+    forAll { (fa: Either[String, Int]) =>
+      fa.raiseOrPure[Validated[String, *]] should ===(ev.fromEither(fa))
+    }
+  }
 }
