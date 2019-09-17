@@ -12,8 +12,8 @@ the <a href="https://github.com/rickynils/scalacheck">ScalaCheck</a> tests based
 To make things easier, we’ll also include the <code class="highlighter-rouge">scalacheck-shapeless</code> library in this tutorial, so we don’t have to manually write instances for ScalaCheck’s <code class="highlighter-rouge">Arbitrary</code>.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"1.1.0"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
-  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.13"</span> <span class="o">%</span> <span class="s">"1.1.6"</span> <span class="o">%</span> <span class="nc">Test</span>
+  <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"cats-laws"</span> <span class="o">%</span> <span class="s">"2.0.0"</span> <span class="o">%</span> <span class="nc">Test</span><span class="o">,</span>
+  <span class="s">"com.github.alexarchambault"</span> <span class="o">%%</span> <span class="s">"scalacheck-shapeless_1.14"</span> <span class="o">%</span> <span class="s">"1.2.3"</span> <span class="o">%</span> <span class="nc">Test</span>
 <span class="o">)</span>
 </code></pre>
 </div>
@@ -126,6 +126,9 @@ the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-r
   <li><code class="highlighter-rouge">Discipline</code> provides <code class="highlighter-rouge">checkAll</code>, and must be mixed into <code class="highlighter-rouge">AnyFunSuite</code></li>
   <li><code class="highlighter-rouge">arbitraries._</code> imports the <code class="highlighter-rouge">Arbitrary[Tree[_]]</code> instances needed to check the laws.</li>
 </ul>
+
+<p>Alternatively, you can use the <code class="highlighter-rouge">CatsSuite</code> provided by <a href="https://github.com/typelevel/cats-testkit-scalatest">Cats-testkit-scalatest</a>, 
+which is the same <code class="highlighter-rouge">CatsSuite</code> used in Cats to test all instances.</p>
 
 <p>Now when we run <code class="highlighter-rouge">test</code> in our sbt console, ScalaCheck will test if the <code class="highlighter-rouge">Functor</code> laws hold for our <code class="highlighter-rouge">Tree</code> type.
 You should see something like this:</p>

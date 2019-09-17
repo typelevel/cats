@@ -63,10 +63,10 @@ Let’s stub out all the operations just to remind ourselves what that gets us.<
 <span class="c1">// concatenated: Vector[Int] = Vector(7, 8)
 </span>
 <span class="k">val</span> <span class="n">double</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="k">_</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="c1">// double: Int =&gt; Int = $$Lambda$12041/501119266@41b36ef5
+<span class="c1">// double: Int =&gt; Int = $$Lambda$15313/833889187@6d6279bc
 </span>
 <span class="k">val</span> <span class="n">addFive</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="k">_</span> <span class="o">+</span> <span class="mi">5</span>
-<span class="c1">// addFive: Int =&gt; Int = $$Lambda$12042/1785255013@306578f4
+<span class="c1">// addFive: Int =&gt; Int = $$Lambda$15314/925434486@6ca83c88
 </span>
 <span class="k">val</span> <span class="n">apForVectors</span> <span class="k">=</span> <span class="o">(</span><span class="n">double</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">]</span> <span class="o">&lt;+&gt;</span> <span class="n">addFive</span><span class="o">.</span><span class="n">pure</span><span class="o">[</span><span class="kt">Vector</span><span class="o">])</span> <span class="n">ap</span> <span class="n">concatenated</span>
 <span class="c1">// apForVectors: Vector[Int] = Vector(14, 16, 12, 13)
