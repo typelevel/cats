@@ -3,6 +3,7 @@ package tests
 
 import cats.data.{NonEmptyVector, ZipVector}
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -32,6 +33,9 @@ class VectorSuite extends CatsSuite {
 
   checkAll("Vector[Int]", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
+
+  checkAll("Vector[Int]", AlignTests[Vector].align[Int, Int, Int, Int])
+  checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
 
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 

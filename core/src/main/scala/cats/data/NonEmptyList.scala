@@ -510,9 +510,9 @@ object NonEmptyList extends NonEmptyListInstances {
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
   implicit val catsDataInstancesForNonEmptyList
-    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] =
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
     new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] {
+    with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
@@ -617,6 +617,25 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
         if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
+
+      def functor: Functor[NonEmptyList] = this
+
+      def align[A, B](fa: NonEmptyList[A], fb: NonEmptyList[B]): NonEmptyList[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: NonEmptyList[A], fb: NonEmptyList[B])(f: Ior[A, B] => C): NonEmptyList[C] = {
+
+        @tailrec
+        def go(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
+          case (Nil, Nil)         => acc
+          case (Nil, y :: ys)     => go(Nil, ys, f(Ior.right(y)) :: acc)
+          case (x :: xs, Nil)     => go(xs, Nil, f(Ior.left(x)) :: acc)
+          case (x :: xs, y :: ys) => go(xs, ys, f(Ior.both(x, y)) :: acc)
+        }
+
+        NonEmptyList(f(Ior.both(fa.head, fb.head)), go(fa.tail, fb.tail, Nil).reverse)
+      }
+
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =

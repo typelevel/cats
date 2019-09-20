@@ -13,6 +13,7 @@ abstract class AllSyntaxBinCompat
 
 trait AllSyntax
     extends AlternativeSyntax
+    with AlignSyntax
     with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax

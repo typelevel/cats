@@ -330,30 +330,32 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
 sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyLazyList
-    : Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] with SemigroupK[NonEmptyLazyList] =
-    new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] {
+  implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList]
+    with NonEmptyTraverse[NonEmptyLazyList]
+    with SemigroupK[NonEmptyLazyList]
+    with Align[NonEmptyLazyList] =
+  new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] {
 
-      def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
+    def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
-        Foldable[LazyList]
-          .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(LazyList.apply(_))) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
-          }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(h => create(LazyList(h)))
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(LazyList(h) ++ t))
-          }
-          .value
+    def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
+      Foldable[LazyList]
+        .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(LazyList.apply(_))) { (a, lglb) =>
+          Apply[G].map2Eval(f(a), lglb)(_ +: _)
+        }
+        .map {
+          case None        => Apply[G].map(f(fa.head))(h => create(LazyList(h)))
+          case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(LazyList(h) ++ t))
+        }
+        .value
 
-      def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+    def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-          Eval.defer(g(a, b))
-        })
-    }
+    def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+        Eval.defer(g(a, b))
+      })
+  }
 
   implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
     Order[LazyList[A]].asInstanceOf[Order[NonEmptyLazyList[A]]]

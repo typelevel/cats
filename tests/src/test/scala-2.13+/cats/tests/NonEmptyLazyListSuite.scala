@@ -3,7 +3,7 @@ package tests
 
 import cats.data.NonEmptyLazyList
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{AlignTests,BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyLazyListSuite extends CatsSuite {
@@ -26,6 +26,9 @@ class NonEmptyLazyListSuite extends CatsSuite {
 
   checkAll("NonEmptyLazyList[Int]", OrderTests[NonEmptyLazyList[Int]].order)
   checkAll("Order[NonEmptyLazyList[Int]", SerializableTests.serializable(Order[NonEmptyLazyList[Int]]))
+
+  checkAll("NonEmptyLazyList[Int]", AlignTests[NonEmptyLazyList].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyLazyList]", SerializableTests.serializable(Align[NonEmptyLazyList]))
 
   test("show") {
     Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) should ===("NonEmptyLazyList(1, ?)")
