@@ -422,38 +422,38 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     with NonEmptyTraverse[NonEmptyChain]
     with Bimonad[NonEmptyChain]
     with Align[NonEmptyChain] =
-  new AbstractNonEmptyInstances[Chain, NonEmptyChain] {
-    def extract[A](fa: NonEmptyChain[A]): A = fa.head
+    new AbstractNonEmptyInstances[Chain, NonEmptyChain] {
+      def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
-    def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
-      Foldable[Chain]
-        .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-          Apply[G].map2Eval(f(a), lglb)(_ +: _)
-        }
-        .map {
-          case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
-          case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
-        }
-        .value
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
+        Foldable[Chain]
+          .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
+            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+          }
+          .map {
+            case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
+            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
+          }
+          .value
 
-    override def size[A](fa: NonEmptyChain[A]): Long = fa.length
+      override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 
-    override def reduceLeft[A](fa: NonEmptyChain[A])(f: (A, A) => A): A =
-      fa.reduceLeft(f)
+      override def reduceLeft[A](fa: NonEmptyChain[A])(f: (A, A) => A): A =
+        fa.reduceLeft(f)
 
-    override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
-      fa.reduce
+      override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
+        fa.reduce
 
-    def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-    def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-      Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-        Eval.defer(g(a, b))
-      })
+      def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
+          Eval.defer(g(a, b))
+        })
 
-    override def get[A](fa: NonEmptyChain[A])(idx: Long): Option[A] =
-      if (idx == 0) Some(fa.head) else fa.tail.get(idx - 1)
-  }
+      override def get[A](fa: NonEmptyChain[A])(idx: Long): Option[A] =
+        if (idx == 0) Some(fa.head) else fa.tail.get(idx - 1)
+    }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =
     Order[Chain[A]].asInstanceOf[Order[NonEmptyChain[A]]]

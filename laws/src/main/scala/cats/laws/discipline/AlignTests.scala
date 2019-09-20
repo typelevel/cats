@@ -28,17 +28,17 @@ trait AlignTests[F[_]] extends Laws {
     EqFIorAB: Eq[F[A Ior B]],
     EqFIorCD: Eq[F[C Ior D]],
     EqFAssoc: Eq[F[Ior[Ior[A, B], C]]]
-  ): RuleSet = new DefaultRuleSet(
-    name = "align",
-    parent = None,
-    "align associativity" -> forAll(laws.alignAssociativity[A, B, C] _),
-    "align self both" -> forAll(laws.alignSelfBoth[A] _),
-    "align homomorphism" -> forAll { (fa: F[A], fb: F[B], f: A => C, g: B => D) =>
-      laws.alignHomomorphism[A, B, C, D](fa, fb, f, g)
-    },
-    "alignWith consistent" -> forAll { (fa: F[A], fb: F[B], f: A Ior B => C) =>
-      laws.alignWithConsistent[A, B, C](fa, fb, f)
-    })
+  ): RuleSet =
+    new DefaultRuleSet(name = "align",
+                       parent = None,
+                       "align associativity" -> forAll(laws.alignAssociativity[A, B, C] _),
+                       "align self both" -> forAll(laws.alignSelfBoth[A] _),
+                       "align homomorphism" -> forAll { (fa: F[A], fb: F[B], f: A => C, g: B => D) =>
+                         laws.alignHomomorphism[A, B, C, D](fa, fb, f, g)
+                       },
+                       "alignWith consistent" -> forAll { (fa: F[A], fb: F[B], f: A Ior B => C) =>
+                         laws.alignWithConsistent[A, B, C](fa, fb, f)
+                       })
 }
 
 object AlignTests {

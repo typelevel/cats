@@ -5,7 +5,7 @@ import cats.syntax.align._
 import cats.syntax.functor._
 
 import cats.data.Ior
-import cats.data.Ior.{Left, Right, Both}
+import cats.data.Ior.{Both, Left, Right}
 
 /**
  * Laws that must be obeyed by any `Align`.
@@ -29,16 +29,18 @@ trait AlignLaws[F[_]] {
 
   private def assoc[A, B, C](x: Ior[A, Ior[B, C]]): Ior[Ior[A, B], C] = x match {
     case Left(a) => Left(Left(a))
-    case Right(bc) => bc match {
-      case Left(b) => Left(Right(b))
-      case Right(c) => Right(c)
-      case Both(b, c) => Both(Right(b), c)
-    }
-    case Both(a, bc) => bc match {
-      case Left(b) => Left(Both(a, b))
-      case Right(c) => Both(Left(a), c)
-      case Both(b, c) => Both(Both(a, b), c)
-    }
+    case Right(bc) =>
+      bc match {
+        case Left(b)    => Left(Right(b))
+        case Right(c)   => Right(c)
+        case Both(b, c) => Both(Right(b), c)
+      }
+    case Both(a, bc) =>
+      bc match {
+        case Left(b)    => Left(Both(a, b))
+        case Right(c)   => Both(Left(a), c)
+        case Both(b, c) => Both(Both(a, b), c)
+      }
   }
 }
 
