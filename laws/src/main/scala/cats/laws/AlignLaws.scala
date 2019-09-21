@@ -18,10 +18,7 @@ trait AlignLaws[F[_]] {
   def alignAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[Ior[Ior[A, B], C]]] =
     fa.align(fb).align(fc) <-> fa.align(fb.align(fc)).map(assoc)
 
-  def alignSelfBoth[A](fa: F[A]): IsEq[F[A Ior A]] =
-    fa.align(fa) <-> fa.map(a => Ior.both(a, a))
-
-  def alignHomomorphism[A, B, C, D](fa: F[A], fb: F[B], f: A => C, g: B => D): IsEq[F[C Ior D]] =
+  def alignHomomorphism[A, B, C, D](fa: F[A], fb: F[B], f: A => C, g: B => D): IsEq[F[Ior[C, D]]] =
     fa.map(f).align(fb.map(g)) <-> fa.align(fb).map(_.bimap(f, g))
 
   def alignWithConsistent[A, B, C](fa: F[A], fb: F[B], f: A Ior B => C): IsEq[F[C]] =

@@ -32,7 +32,6 @@ trait AlignTests[F[_]] extends Laws {
     new DefaultRuleSet(name = "align",
                        parent = None,
                        "align associativity" -> forAll(laws.alignAssociativity[A, B, C] _),
-                       "align self both" -> forAll(laws.alignSelfBoth[A] _),
                        "align homomorphism" -> forAll { (fa: F[A], fb: F[B], f: A => C, g: B => D) =>
                          laws.alignHomomorphism[A, B, C, D](fa, fb, f, g)
                        },

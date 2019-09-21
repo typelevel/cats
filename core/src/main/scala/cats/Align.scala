@@ -45,3 +45,9 @@ import cats.data.Ior
   def padZipWith[A, B, C](fa: F[A], fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
     alignWith(fa, fb)(ior => Function.tupled(f)(ior.pad))
 }
+
+object Align {
+  def semigroup[F[_]: Align, A: Semigroup]: Semigroup[F[A]] = new Semigroup[F[A]] {
+    def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
+  }
+}
