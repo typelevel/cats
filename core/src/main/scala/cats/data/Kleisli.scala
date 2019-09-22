@@ -7,7 +7,7 @@ import cats.arrow._
 /**
  * Represents a function `A => F[B]`.
  */
-final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
+final case class Kleisli[F[_], -A, B](run: A => F[B]) extends AnyVal { self =>
 
   def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.ap(f.run(a))(run(a)))
@@ -48,7 +48,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   /**
    * Composes [[run]] with a function `B => F[C]` not lifted into Kleisli.
    */
-  def andThen[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
+  def andThenRun[C](f: B => F[C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
     Kleisli.shift(a => F.flatMap(run(a))(f))
 
   /**
@@ -63,13 +63,13 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def andThen[C](k: Kleisli[F, B, C])(implicit F: FlatMap[F]): Kleisli[F, A, C] =
-    this.andThen(k.run)
+    this.andThenRun(k.run)
 
-  def compose[Z, AA <: A](f: Z => F[AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
+  def composeRun[Z, AA <: A](f: Z => F[AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     Kleisli.shift((z: Z) => F.flatMap(f(z))(run))
 
   def compose[Z, AA <: A](k: Kleisli[F, Z, AA])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
-    this.compose(k.run)
+    this.composeRun(k.run)
 
   def traverse[G[_], AA <: A](f: G[AA])(implicit F: Applicative[F], G: Traverse[G]): F[G[B]] =
     G.traverse(f)(run)
