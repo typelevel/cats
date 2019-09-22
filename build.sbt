@@ -653,6 +653,7 @@ lazy val bench = project
 lazy val binCompatTest = project
   .settings(noPublishSettings)
   .settings(
+    useCoursier := false,
     commonScalaVersionSettings,
     addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
     libraryDependencies ++= List(
@@ -665,7 +666,7 @@ lazy val binCompatTest = project
       "org.scalatest" %%% "scalatest" % scalatestVersion % Test
     )
   )
-  .dependsOn(core.jvm % "compile->compile;test->test")
+  .dependsOn(core.jvm % Test)
 
 // cats-js is JS-only
 lazy val js = project
