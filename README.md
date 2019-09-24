@@ -62,6 +62,7 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 <a href="https://www.ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
+<a href="https://evolutiongaming.com/"><img src="http://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
