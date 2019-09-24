@@ -157,6 +157,22 @@ import simulacrum.typeclass
     reduceLeft(fa)(A.max)
 
   /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[maximumBy]] for maximum instead of minimum.
+   */
+  def minimumBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Reducible[F]): A =
+    F.minimum(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[minimumBy]] for minimum instead of maximum.
+   */
+  def maximumBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Reducible[F]): A =
+    F.maximum(fa)(Order.by(f))
+
+  /**
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
