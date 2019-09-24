@@ -8,7 +8,7 @@ import cats.{~>, Applicative, Monad, Parallel}
 
 private[instances] trait ParallelInstances1 {
   @deprecated("Use EitherT.catsDataParallelForEitherTWithSequentialEffect", "2.0.0")
-  private[instances] def catsParallelForEitherTNestedValidated[M[_]: Monad, E: Semigroup]
+  def catsParallelForEitherTNestedValidated[M[_]: Monad, E: Semigroup]
     : Parallel.Aux[EitherT[M, E, *], Nested[M, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
       type F[x] = Nested[M, Validated[E, *], x]
