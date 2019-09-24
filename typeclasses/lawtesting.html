@@ -84,18 +84,18 @@ this conversion for two test frameworks: <code class="highlighter-rouge">ScalaTe
 
 <ul>
   <li>
-    <p>If you are using <code class="highlighter-rouge">Specs2</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.specs2.Discipline</code>.</p>
+    <p>If you are using <code class="highlighter-rouge">Specs2</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.specs2.Discipline</code> (provided by <code class="highlighter-rouge">discipline-specs2</code>).</p>
   </li>
   <li>
-    <p>If you are using <code class="highlighter-rouge">ScalaTest</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.scalatest.Discipline</code> and <code class="highlighter-rouge">org.scalatest.funsuite.AnyFunSuiteLike</code>.</p>
+    <p>If you are using <code class="highlighter-rouge">ScalaTest</code>, extend your test class with <code class="highlighter-rouge">org.typelevel.discipline.scalatest.Discipline</code> (provided by <code class="highlighter-rouge">discipline-scalatest</code>) and <code class="highlighter-rouge">org.scalatest.funsuite.AnyFunSuiteLike</code>.</p>
   </li>
   <li>
     <p>For other test frameworks, you need to resort to their integration with <code class="highlighter-rouge">ScalaCheck</code> to test
-the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> provided by cats-laws.</p>
+the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-rouge">Properties</code> provided by <code class="highlighter-rouge">cats-laws</code>.</p>
   </li>
 </ul>
 
-<p>The following example is for ScalaTest.  If not using</p>
+<p>The following example is for ScalaTest.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="c1">// import cats.implicits._
@@ -127,7 +127,7 @@ the <code class="highlighter-rouge">ScalaCheck</code> <code class="highlighter-r
   <li><code class="highlighter-rouge">arbitraries._</code> imports the <code class="highlighter-rouge">Arbitrary[Tree[_]]</code> instances needed to check the laws.</li>
 </ul>
 
-<p>Alternatively, you can use the <code class="highlighter-rouge">CatsSuite</code> provided by <a href="https://github.com/typelevel/cats-testkit-scalatest">Cats-testkit-scalatest</a>, 
+<p>Alternatively, you can use the <code class="highlighter-rouge">CatsSuite</code> provided by <a href="https://github.com/typelevel/cats-testkit-scalatest">Cats-testkit-scalatest</a>,
 which is the same <code class="highlighter-rouge">CatsSuite</code> used in Cats to test all instances.</p>
 
 <p>Now when we run <code class="highlighter-rouge">test</code> in our sbt console, ScalaCheck will test if the <code class="highlighter-rouge">Functor</code> laws hold for our <code class="highlighter-rouge">Tree</code> type.

@@ -48,7 +48,7 @@ A normal <code class="highlighter-rouge">val</code> evaluates eagerly and also m
   <span class="n">println</span><span class="o">(</span><span class="s">"Running expensive calculation..."</span><span class="o">)</span>
   <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span>
 <span class="o">}</span>
-<span class="c1">// lazyEval: cats.Eval[Int] = cats.Later@1f8a92bf
+<span class="c1">// lazyEval: cats.Eval[Int] = cats.Later@4ce59407
 </span>
 <span class="n">lazyEval</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Running expensive calculation...
@@ -72,7 +72,7 @@ Secondly, when <code class="highlighter-rouge">lazy val</code>s are evaluated, i
   <span class="n">println</span><span class="o">(</span><span class="s">"Running expensive calculation..."</span><span class="o">)</span>
   <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span>
 <span class="o">}</span>
-<span class="c1">// always: cats.Eval[Int] = cats.Always@4bfcd8fc
+<span class="c1">// always: cats.Eval[Int] = cats.Always@36f0d7ac
 </span>
 <span class="n">always</span><span class="o">.</span><span class="n">value</span>
 <span class="c1">// Running expensive calculation...
