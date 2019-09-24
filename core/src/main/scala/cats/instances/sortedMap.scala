@@ -9,11 +9,11 @@ import scala.collection.immutable.SortedMap
 trait SortedMapInstances extends SortedMapInstances2 {
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap")
-  private[instances] def catsStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
+  def catsStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap[K, V]
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap")
-  private[instances] def catsStdCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup] =
+  def catsStdCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup] =
     cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap[K, V]
 
   implicit def catsStdShowForSortedMap[A: Order, B](implicit showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
@@ -115,13 +115,13 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
 private[instances] trait SortedMapInstances1 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap")
-  private[instances] def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
+  def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 }
 
 private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap")
-  private[instances] def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
+  def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 }
 

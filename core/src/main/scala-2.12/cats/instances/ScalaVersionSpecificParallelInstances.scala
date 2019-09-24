@@ -22,7 +22,7 @@ trait ParallelInstances extends ParallelInstances1 {
     }
 
   @deprecated("Use OptionT.catsDataParallelForOptionT", "2.0.0")
-  private[instances] def catsParallelForOptionTNestedOption[M[_]](
+  def catsParallelForOptionTNestedOption[M[_]](
     implicit P: Parallel[M]
   ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = OptionT.catsDataParallelForOptionT[M]
 
@@ -69,7 +69,7 @@ trait ParallelInstances extends ParallelInstances1 {
     }
 
   @deprecated("Use EitherT.catsDataParallelForEitherTWithParallelEffect", "2.0.0")
-  private[instances] def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
+  def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
     implicit P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     EitherT.catsDataParallelForEitherTWithParallelEffect[M, E]

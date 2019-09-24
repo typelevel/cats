@@ -1,8 +1,7 @@
-addSbtCoursier
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.2")
 addSbtPlugin("com.github.gseitz" %% "sbt-release" % "1.0.11")
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1-M3")
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.3.0")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0-M2")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.6.1")
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.3.7")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "1.0.0")
@@ -13,9 +12,9 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.6.12")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.1")
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.1")
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.28")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.29")
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.3.9")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.5")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")
 
 /* Temporarily disabling sbt-hydra, see #2870.
