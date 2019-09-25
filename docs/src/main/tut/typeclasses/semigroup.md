@@ -58,7 +58,7 @@ for `Map`s.
 ```tut:book:silent
 import cats.implicits._
 
-val map1 = Map("hello" -> 0, "world" -> 1)
+val map1 = Map("hello" -> 1, "world" -> 1)
 val map2 = Map("hello" -> 2, "cats"  -> 3)
 ```
 

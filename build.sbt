@@ -63,6 +63,8 @@ lazy val commonScalaVersionSettings = Seq(
 
 commonScalaVersionSettings
 
+ThisBuild / mimaFailOnNoPrevious := false
+
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
@@ -101,7 +103,7 @@ lazy val catsSettings = Seq(
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
-    "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided
+    "org.typelevel" %%% "simulacrum" % "1.0.0" % Provided
   ),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
@@ -390,7 +392,8 @@ def mimaSettings(moduleName: String) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
-          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
+          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
+          exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
         ) ++ //package private classes no longer needed
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
@@ -401,8 +404,10 @@ def mimaSettings(moduleName: String) =
         ) ++ //abstract package private classes
         Seq(
           exclude[DirectMissingMethodProblem]("cats.data.AbstractNonEmptyInstances.this")
+        ) ++ // Only narrowing of types allowed here
+        Seq(
+          exclude[IncompatibleSignatureProblem]("*")
         )
-
     }
   )
 
@@ -655,9 +660,12 @@ lazy val bench = project
   .enablePlugins(JmhPlugin)
 
 lazy val binCompatTest = project
-  .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
+    // workaround because coursier doesn't understand dependsOn(core.jvm % Test)
+    // see https://github.com/typelevel/cats/pull/3079#discussion_r327181584
+    // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
+    useCoursier := false,
     commonScalaVersionSettings,
     addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
     libraryDependencies ++= List(
