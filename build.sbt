@@ -103,7 +103,7 @@ lazy val catsSettings = Seq(
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
-    "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided
+    "org.typelevel" %%% "simulacrum" % "1.0.0" % Provided
   ),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
