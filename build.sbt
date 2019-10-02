@@ -72,11 +72,7 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
   },
-  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
-  sources in (Compile, doc) := {
-    val docSource = (sources in (Compile, doc)).value
-    if (priorTo2_13(scalaVersion.value)) docSource else Nil
-  }
+  sources in (Compile, doc) := (sources in (Compile, doc)).value
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
