@@ -6,12 +6,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
-  },
+  coverageEnabled := coverageEnabled.value,
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
