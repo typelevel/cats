@@ -27,7 +27,7 @@ val scalatestVersion = "3.1.0-SNAP13"
 
 val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
 
-val scalaCheckVersion = "1.14.0"
+val scalaCheckVersion = "1.14.2"
 
 val disciplineVersion = "1.0.0"
 
