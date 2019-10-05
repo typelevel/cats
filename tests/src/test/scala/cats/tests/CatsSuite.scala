@@ -6,7 +6,7 @@ import cats.platform.Platform
 import cats.syntax._
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.Configuration
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.typelevel.discipline.scalatest.Discipline
