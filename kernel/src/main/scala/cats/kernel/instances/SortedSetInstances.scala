@@ -31,8 +31,12 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
     StaticMethods.iteratorEq(s1.iterator, s2.iterator)
 }
 
-class SortedSetHash[A: Hash] extends Hash[SortedSet[A]] {
+// FIXME use context bound in 3.x
+class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3._
+
+  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.0.1")
+  def this(o: Order[A], h: Hash[A]) = this()(h)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
