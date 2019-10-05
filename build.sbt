@@ -23,17 +23,15 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
-val scalatestVersion = "3.1.0-SNAP13"
-
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
-
 val scalaCheckVersion = "1.14.2"
 
-val disciplineVersion = "1.0.0"
+val scalatestplusScalaCheckVersion = "3.1.0.0-RC2"
 
-val disciplineScalatestVersion = "1.0.0-M1"
+val disciplineVersion = "1.0.1"
 
-val kindProjectorVersion = "0.10.3"
+val disciplineScalatestVersion = "1.0.0-RC1"
+
+val kindProjectorVersion = "0.11.0"
 
 crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
@@ -96,7 +94,7 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
-    compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
+    compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
   ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
@@ -168,9 +166,8 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
-    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test"
+    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test",
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
   )
 )
 
@@ -571,12 +568,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
-      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
-    )
-  )
+  .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
@@ -589,11 +581,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion
-    )
-  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
@@ -664,17 +651,17 @@ lazy val binCompatTest = project
     // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
     useCoursier := false,
     commonScalaVersionSettings,
-    addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
+    addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))
           mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
         else //We are not testing BC on Scala 2.13 yet.
           "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
-      },
-      "org.scalatest" %%% "scalatest" % scalatestVersion % Test
+      }
     )
   )
+  .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
 // cats-js is JS-only
@@ -857,7 +844,6 @@ def priorTo2_13(scalaVersion: String): Boolean =
 lazy val sharedPublishSettings = Seq(
   releaseTagName := tagName.value,
   releaseVcsSign := true,
-  useGpg := true, // bouncycastle has bugs with subkeys, so we use gpg instead
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := Function.const(false),
