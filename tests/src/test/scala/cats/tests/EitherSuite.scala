@@ -4,7 +4,6 @@ package tests
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import org.scalatest.Matchers
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.util.Try
@@ -366,7 +365,7 @@ class EitherSuite extends CatsSuite {
   }
 }
 
-final class EitherInstancesSuite extends AnyFunSuiteLike with Matchers {
+final class EitherInstancesSuite extends AnyFunSuiteLike {
 
   test("parallel instance in cats.instances.either") {
     import cats.instances.either._

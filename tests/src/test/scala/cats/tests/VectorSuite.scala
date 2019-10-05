@@ -13,7 +13,6 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import org.scalatest.Matchers
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 class VectorSuite extends CatsSuite {
@@ -58,7 +57,7 @@ class VectorSuite extends CatsSuite {
   }
 }
 
-final class VectorInstancesSuite extends AnyFunSuiteLike with Matchers {
+final class VectorInstancesSuite extends AnyFunSuiteLike {
 
   test("NonEmptyParallel instance in cats.instances.vector") {
     import cats.instances.vector._

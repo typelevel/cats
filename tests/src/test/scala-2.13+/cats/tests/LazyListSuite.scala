@@ -4,7 +4,6 @@ package tests
 import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
 import cats.data.ZipLazyList
 import cats.laws.discipline.arbitrary._
-import org.scalatest.Matchers
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 class LazyListSuite extends CatsSuite {
@@ -53,7 +52,7 @@ class LazyListSuite extends CatsSuite {
 
 }
 
-final class LazyListInstancesSuite extends AnyFunSuiteLike with Matchers {
+final class LazyListInstancesSuite extends AnyFunSuiteLike {
 
   test("parallel instance in cats.instances.lazyList") {
     import cats.instances.lazyList._

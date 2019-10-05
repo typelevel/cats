@@ -13,7 +13,6 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
-import org.scalatest.Matchers
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 class StreamSuite extends CatsSuite {
@@ -62,7 +61,7 @@ class StreamSuite extends CatsSuite {
 
 }
 
-final class StreamInstancesSuite extends AnyFunSuiteLike with Matchers {
+final class StreamInstancesSuite extends AnyFunSuiteLike {
 
   test("parallel instance in cats.instances.stream") {
     import cats.instances.stream._
