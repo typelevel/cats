@@ -123,11 +123,9 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
   }
 
   // Can't test Parallel here, as Applicative[ZipLazyList].pure doesn't terminate
-  checkAll("Parallel[LazyList]",
-           NonEmptyParallelTests[LazyList].nonEmptyParallel[Int, String])
+  checkAll("Parallel[LazyList]", NonEmptyParallelTests[LazyList].nonEmptyParallel[Int, String])
 
-  checkAll("Parallel[NonEmptyLazyList]",
-           ParallelTests[NonEmptyLazyList].parallel[Int, String])
+  checkAll("Parallel[NonEmptyLazyList]", ParallelTests[NonEmptyLazyList].parallel[Int, String])
 }
 
 trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>

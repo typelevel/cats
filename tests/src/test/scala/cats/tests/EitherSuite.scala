@@ -4,6 +4,9 @@ package tests
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import org.scalatest.Matchers
+import org.scalatest.funsuite.AnyFunSuiteLike
+
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
@@ -361,7 +364,18 @@ class EitherSuite extends CatsSuite {
       either.leftFlatMap(f) should ===(either.swap.flatMap(a => f(a).swap).swap)
     }
   }
+}
 
+final class EitherInstancesSuite extends AnyFunSuiteLike with Matchers {
+
+  test("parallel instance in cats.instances.either") {
+    import cats.instances.either._
+    import cats.instances.string._
+    import cats.syntax.parallel._
+
+    def either: Either[String, Int] = Left("Test")
+    (either, either).parTupled
+  }
 }
 
 @deprecated("To test deprecated methods", "2.1.0")
