@@ -32,4 +32,15 @@ class QueueSuite extends CatsSuite {
     Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")
     Queue.empty[Int].show should ===("Queue()")
   }
+
+  test("the instance for `Eq[Queue[A]]` is not ambiguous when A has a Hash and a PartialOrder") {
+
+    import cats.kernel.{Hash, PartialOrder}
+
+    trait A
+    implicit def po: PartialOrder[A] = ???
+    implicit def ho: Hash[A] = ???
+
+    lazy val _ = implicitly[Eq[Queue[A]]]
+  }
 }

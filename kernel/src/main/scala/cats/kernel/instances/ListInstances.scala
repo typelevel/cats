@@ -13,14 +13,16 @@ trait ListInstances extends ListInstances1 {
 }
 
 private[instances] trait ListInstances1 extends ListInstances2 {
-  implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
-    new ListPartialOrder[A]
-
   implicit def catsKernelStdHashForList[A: Hash]: Hash[List[A]] =
     new ListHash[A]
 }
 
-private[instances] trait ListInstances2 {
+private[instances] trait ListInstances2 extends ListInstances3 {
+  implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
+    new ListPartialOrder[A]
+}
+
+private[instances] trait ListInstances3 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
 }
