@@ -1,13 +1,14 @@
 package cats
 package instances
+
 import cats.kernel
 import cats.syntax.show._
+import cats.data.ZipLazyList
 
 import scala.annotation.tailrec
 
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
-  implicit val catsStdInstancesForLazyList
-    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
+  implicit val catsStdInstancesForLazyList: Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
     new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
@@ -155,4 +156,18 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         .value
 
   }
+
+  implicit def catsStdParallelForLazyListZipLazyList[A]: Parallel.Aux[LazyList, ZipLazyList] =
+    new Parallel[LazyList] {
+      type F[x] = ZipLazyList[x]
+
+      def monad: Monad[LazyList] = cats.instances.lazyList.catsStdInstancesForLazyList
+      def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
+
+      def sequential: ZipLazyList ~> LazyList =
+        λ[ZipLazyList ~> LazyList](_.value)
+
+      def parallel: LazyList ~> ZipLazyList =
+        λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
+    }
 }
