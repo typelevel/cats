@@ -108,7 +108,7 @@ lazy val simulacrumSettings = Seq(
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
         case e: xml.Elem
             if e.label == "dependency" &&
-              e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
+              e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
               e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) =>
           Nil
         case _ => Seq(node)
