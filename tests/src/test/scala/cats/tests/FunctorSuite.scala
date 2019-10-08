@@ -37,4 +37,12 @@ class FunctorSuite extends CatsSuite {
       assert(widened eq list)
     }
   }
+
+  test("ifF equals map(if(_) ifTrue else ifFalse)") {
+    forAll { (l: List[Boolean], o: Option[Boolean], m: Map[String, Boolean]) =>
+      Functor[List].ifF(l)(1, 0) should ===(l.map(if (_) 1 else 0))
+      Functor[Option].ifF(o)(1, 0) should ===(o.map(if (_) 1 else 0))
+    }
+  }
+
 }
