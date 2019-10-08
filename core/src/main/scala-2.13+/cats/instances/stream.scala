@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.ZipStream
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -8,8 +9,7 @@ import scala.annotation.tailrec
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
-  implicit val catsStdInstancesForStream
-    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+  implicit val catsStdInstancesForStream: Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
@@ -159,6 +159,20 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
 
+  @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
+  implicit val catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =
+    new Parallel[Stream] {
+      type F[x] = ZipStream[x]
+
+      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
+
+      def sequential: ZipStream ~> Stream =
+        λ[ZipStream ~> Stream](_.value)
+
+      def parallel: Stream ~> ZipStream =
+        λ[Stream ~> ZipStream](v => new ZipStream(v))
+    }
 }
 
 private[instances] trait StreamInstancesBinCompat0 {

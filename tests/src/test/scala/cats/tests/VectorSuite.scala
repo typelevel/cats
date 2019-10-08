@@ -14,6 +14,7 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
@@ -57,5 +58,15 @@ class VectorSuite extends CatsSuite {
 
   test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
+  }
+}
+
+final class VectorInstancesSuite extends AnyFunSuiteLike {
+
+  test("NonEmptyParallel instance in cats.instances.vector") {
+    import cats.instances.vector._
+    import cats.syntax.parallel._
+
+    (Vector(1, 2, 3), Vector("A", "B", "C")).parTupled
   }
 }
