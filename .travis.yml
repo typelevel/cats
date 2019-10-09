@@ -40,10 +40,13 @@ jobs:
       stage: test
       env: TEST="JVM tests"
       install: pip install --user codecov
-      script: sbt ++$TRAVIS_SCALA_VERSION! coverage buildJVM bench/test coverageReport && codecov
+      script: sbt ++$TRAVIS_SCALA_VERSION! coverage buildJVM bench/test coverageReport
       scala: *scala_version_212
+      after_success: codecov -F scala_version_212
     - <<: *jvm_tests
       scala: *scala_version_213
+      after_success: codecov -F scala_version_213
+
 
     - stage: test
       env: TEST="docs"
