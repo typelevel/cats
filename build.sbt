@@ -6,7 +6,6 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
-  coverageEnabled := coverageEnabled.value,
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -71,8 +70,7 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
-  },
-  sources in (Compile, doc) := (sources in (Compile, doc)).value
+  }
 ) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
