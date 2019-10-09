@@ -8,7 +8,8 @@ import cats.data.ZipLazyList
 import scala.annotation.tailrec
 
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
-  implicit val catsStdInstancesForLazyList: Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
+  implicit val catsStdInstancesForLazyList
+    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
     new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty

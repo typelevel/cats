@@ -1,7 +1,16 @@
 package cats
 package tests
 
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, CommutativeApplyTests, MonadTests, SemigroupalTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  AlternativeTests,
+  CoflatMapTests,
+  CommutativeApplyTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.data.ZipLazyList
 import cats.laws.discipline.arbitrary._
 import org.scalatest.funsuite.AnyFunSuiteLike
