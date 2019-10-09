@@ -9,7 +9,8 @@ import scala.annotation.tailrec
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
-  implicit val catsStdInstancesForStream: Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
+  implicit val catsStdInstancesForStream
+    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty

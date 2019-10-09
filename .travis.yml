@@ -70,7 +70,7 @@ jobs:
 
     - stage: styling
       env: TEST="linting"
-      script: sbt fmtCheck
+      script: sbt +fmtCheck
 
     - stage: publish snapshot
       script: |
