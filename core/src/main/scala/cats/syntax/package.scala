@@ -32,6 +32,7 @@ package object syntax {
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
+  object kleisli extends KleisliSyntax
   object list extends ListSyntax with ListSyntaxBinCompat0
   object monad extends MonadSyntax
   object monadError extends MonadErrorSyntax

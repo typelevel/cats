@@ -39,6 +39,7 @@ trait AllSyntax
     with HashSyntax
     with InvariantSyntax
     with IorSyntax
+    with KleisliSyntax
     with ListSyntax
     with MonadErrorSyntax
     with MonadSyntax
