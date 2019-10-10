@@ -12,8 +12,12 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     with CommutativeMonad[Option]
     with CoflatMap[Option]
     with Align[Option] =
-    new Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option]
-    with CoflatMap[Option] with Align[Option] {
+    new Traverse[Option]
+      with MonadError[Option, Unit]
+      with Alternative[Option]
+      with CommutativeMonad[Option]
+      with CoflatMap[Option]
+      with Align[Option] {
 
       def empty[A]: Option[A] = None
 

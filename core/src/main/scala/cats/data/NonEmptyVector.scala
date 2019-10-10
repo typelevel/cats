@@ -238,14 +238,15 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
-
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
     with Bimonad[NonEmptyVector]
     with NonEmptyTraverse[NonEmptyVector]
     with Align[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector] with Align[NonEmptyVector] {
-
+    new NonEmptyReducible[NonEmptyVector, Vector]
+      with SemigroupK[NonEmptyVector]
+      with Bimonad[NonEmptyVector]
+      with NonEmptyTraverse[NonEmptyVector]
+      with Align[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
