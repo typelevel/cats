@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.{Contravariant, Id}
 import cats.arrow._
 
 /**
@@ -107,10 +106,27 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   def tap[AA <: A](implicit F: Functor[F]): Kleisli[F, AA, AA] =
     Kleisli(a => F.as(run(a), a))
 
-  /** Yield computed B combined with input value. */
+  /**
+   * Yield computed B combined with input value.
+   *
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val base = Kleisli((i: Int) => (i + 1).pure[Option])
+   * scala> base.tapWith[String, Int]((a, b) => (a, b).toString).run(42)
+   * res0: Option[String] = Some((42,43))
+   * }}}
+   */
   def tapWith[C, AA <: A](f: (AA, B) => C)(implicit F: Functor[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
 
+  /**
+   * {{{
+   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> val base = Kleisli((i: Int) => (i + 1).pure[Option])
+   * scala> base.tapWithF[String, Int]((a, b) => Option((a, b).toString)).run(42)
+   * res0: Option[String] = Some((42,43))
+   * }}}
+   */
   def tapWithF[C, AA <: A](f: (AA, B) => F[C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.flatMap(run(a))(b => f(a, b)))
 
@@ -252,7 +268,7 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * Lifts a natural transformation of effects within a Kleisli
    * to a transformation of Kleislis.
    *
-   * Equivalent to running `mapK(f) on a Kleisli.
+   * Equivalent to running `mapK(f)` on a Kleisli.
    *
    * {{{
    * scala> import cats._, data._
@@ -266,7 +282,7 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * scala> k2.run("foo")
    * res1: Option[Char] = Some(f)
    * }}}
-   * */
+   */
   def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, *] ~> Kleisli[G, A, *] =
     λ[Kleisli[F, A, *] ~> Kleisli[G, A, *]](_.mapK(f))
 }
