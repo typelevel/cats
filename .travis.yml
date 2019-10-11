@@ -18,7 +18,7 @@ before_install:
  - export PATH=${PATH}:./vendor/bundle
  - if [[ ! -z "$HydraLicense" ]]; then
      mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.conf /home/travis/.triplequote/metrics/config/metrics-service.conf;
-   fi  
+   fi
 
 stages:
   - name: styling
@@ -29,11 +29,6 @@ stages:
 jobs:
   include:
     # it can speed up the overall build to have the longer-running jobs at the top of this list.
-    - stage: test
-      env: TEST="coverage"
-      install: pip install --user codecov
-      script: sbt coverage buildJVM bench/test coverageReport && codecov
-
     - &js_tests
       stage: test
       env: TEST="JS tests"
@@ -47,13 +42,15 @@ jobs:
     - &jvm_tests
       stage: test
       env: TEST="JVM tests"
-      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
+      install: pip install --user codecov
+      script: sbt ++$TRAVIS_SCALA_VERSION! coverage buildJVM bench/test coverageReport
       scala: *scala_version_212
+      after_success: codecov -F scala_version_212
     - <<: *jvm_tests
       scala: *scala_version_213
-      # the bench module has dependencies not available in Scala 2.13, so don't test it
-      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM
-      
+      after_success: codecov -F scala_version_213
+
+
     - stage: test
       env: TEST="docs"
       install: gem install jekyll -v 2.5
@@ -62,7 +59,7 @@ jobs:
     - stage: test
       env: TEST="scalafix"
       script: cd scalafix && sbt tests/test
-   
+
     - stage: test
       env: TEST="binary compatibility"
       script: sbt ++$TRAVIS_SCALA_VERSION! validateBC

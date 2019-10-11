@@ -6,12 +6,6 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
-  },
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -74,11 +68,6 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
-  },
-  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
-  sources in (Compile, doc) := {
-    val docSource = (sources in (Compile, doc)).value
-    if (priorTo2_13(scalaVersion.value)) docSource else Nil
   }
 ) ++ warnUnusedImport
 
