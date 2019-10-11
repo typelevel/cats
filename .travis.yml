@@ -11,7 +11,7 @@ jdk:
   - openjdk8
 
 
-scala_version_212: &scala_version_212 2.12.9
+scala_version_212: &scala_version_212 2.12.10
 scala_version_213: &scala_version_213 2.13.0
 
 before_install:
@@ -29,12 +29,15 @@ stages:
 jobs:
   include:
     # it can speed up the overall build to have the longer-running jobs at the top of this list.
-    - stage: test
+    - &js_tests
+      stage: test
       env: TEST="JS tests"
       # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
       install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
       script: sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
       scala: *scala_version_212
+    - <<: *js_tests
+      scala: *scala_version_213
 
     - &jvm_tests
       stage: test
@@ -64,7 +67,7 @@ jobs:
 
     - stage: styling
       env: TEST="linting"
-      script: sbt fmtCheck
+      script: sbt +fmtCheck
 
     - stage: publish snapshot
       script: |
