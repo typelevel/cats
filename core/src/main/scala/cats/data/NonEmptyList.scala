@@ -511,8 +511,10 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
   implicit val catsDataInstancesForNonEmptyList
     : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] =
-    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] {
+    new NonEmptyReducible[NonEmptyList, List]
+      with SemigroupK[NonEmptyList]
+      with Bimonad[NonEmptyList]
+      with NonEmptyTraverse[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)

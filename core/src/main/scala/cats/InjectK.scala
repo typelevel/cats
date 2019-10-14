@@ -2,7 +2,6 @@ package cats
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import kernel.compat.scalaVersionMoreSpecific._
 
 /**
  * InjectK is a type class providing an injection from type
@@ -33,7 +32,6 @@ abstract class InjectK[F[_], G[_]] {
   final def unapply[A](ga: G[A]): Option[F[A]] = prj(ga)
 }
 
-@suppressUnusedImportWarningForScalaVersionMoreSpecific
 sealed abstract private[cats] class InjectKInstances {
   implicit def catsReflexiveInjectKInstance[F[_]]: InjectK[F, F] =
     new InjectK[F, F] {

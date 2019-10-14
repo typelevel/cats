@@ -1,8 +1,11 @@
 package cats
 package instances
 
+import cats.data.Validated
+import cats.kernel.Semigroup
 import cats.syntax.EitherUtil
 import cats.syntax.either._
+
 import scala.annotation.tailrec
 
 trait EitherInstances extends cats.kernel.instances.EitherInstances {
@@ -157,5 +160,19 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Left(a)  => "Left(" + A.show(a) + ")"
           case Right(b) => "Right(" + B.show(b) + ")"
         }
+    }
+
+  implicit def catsParallelForEitherAndValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
+    new Parallel[Either[E, *]] {
+      type F[x] = Validated[E, x]
+
+      def applicative: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
+      def monad: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
+
+      def sequential: Validated[E, *] ~> Either[E, *] =
+        λ[Validated[E, *] ~> Either[E, *]](_.toEither)
+
+      def parallel: Either[E, *] ~> Validated[E, *] =
+        λ[Either[E, *] ~> Validated[E, *]](_.toValidated)
     }
 }

@@ -24,7 +24,7 @@ sealed abstract private[data] class OpInstances extends OpInstances0 {
     new OpEq[Arr, A, B] { def Arr: Eq[Arr[B, A]] = ArrEq }
 
   @deprecated("Use catsDataEqForOp", "2.0.0-RC2")
-  private[data] def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
+  def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
     catsDataEqForOp[Arr, A, B]
 }
 

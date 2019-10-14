@@ -3,7 +3,6 @@ package instances
 
 import cats.data._
 import cats.kernel.Semigroup
-import cats.data.ZipLazyList
 import cats.{NonEmptyParallel, Parallel}
 
 trait ParallelInstances extends ParallelInstances1 {
@@ -25,13 +24,9 @@ trait ParallelInstances extends ParallelInstances1 {
   def catsStdNonEmptyParallelForZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
     cats.instances.vector.catsStdNonEmptyParallelForVectorZipVector
 
-  @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
+  @deprecated("Use cats.instances.stream.catsStdParallelForStreamZipStream", "2.1.0")
   def catsStdParallelForZipStream: Parallel.Aux[Stream, ZipStream] =
     cats.instances.stream.catsStdParallelForStreamZipStream
-
-  @deprecated("Use cats.instances.lazyList.catsStdParallelForLazyListZipLazyList", "2.1.0")
-  def catsStdParallelForZipLazyList[A]: Parallel.Aux[LazyList, ZipLazyList] =
-    cats.instances.lazyList.catsStdParallelForLazyListZipLazyList[A]
 
   @deprecated("Use EitherT.catsDataParallelForEitherTWithParallelEffect", "2.0.0")
   def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](

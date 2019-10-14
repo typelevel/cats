@@ -62,6 +62,7 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 
 <a href="https://www.ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
+<a href="https://evolutiongaming.com/"><img src="http://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 
 <a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
@@ -182,6 +183,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [scala-forex](https://github.com/snowplow/scala-forex): exchange rate lookups
  * [scala-maxmind-ip-lookups](https://github.com/snowplow/scala-maxmind-iplookups): IP geolocation through [the Maxmind database](https://www.maxmind.com/en/home)
  * [scala-referer-parser](https://github.com/snowplow-referer-parser/scala-referer-parser): referer parsing
+ * [scala-rl](https://github.com/sritchie/scala-rl): Functional, monadic reinforcement learning in Scala
  * [scala-weather](https://github.com/snowplow/scala-weather): weather lookups
  * [scanamo](https://github.com/guardian/scanamo): simpler DynamoDB access for Scala
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
@@ -280,6 +282,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Codecentric](https://codecentric.de)
 - [Colisweb](https://www.colisweb.com/)
 - [Coya](https://coya.com/)
+- [Datum Brain](https://datumbrain.com/)
 - [DriveTribe](https://drivetribe.com/)
 - [Dwolla](https://dwolla.com/)
 - [Earnest](https://www.earnest.com)
