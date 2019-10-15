@@ -3,7 +3,7 @@ package tests
 
 import cats.data.NonEmptyLazyList
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{AlignTests,BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyLazyListSuite extends CatsSuite {

@@ -6,15 +6,17 @@ import cats.syntax.show._
 import cats.data.Ior
 import cats.data.ZipLazyList
 
-
 import scala.annotation.tailrec
 
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
   implicit val catsStdInstancesForLazyList
     : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] with Align[LazyList] =
-    new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList]
-    with Align[LazyList] {
+    new Traverse[LazyList]
+      with Alternative[LazyList]
+      with Monad[LazyList]
+      with CoflatMap[LazyList]
+      with Align[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
 
@@ -134,19 +136,20 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         alignWith(fa, fb)(identity)
 
       override def alignWith[A, B, C](fa: LazyList[A], fb: LazyList[B])(f: Ior[A, B] => C): LazyList[C] = {
-        val iterA = fa.iterator
-        val iterB = fb.iterator
 
-        var result: LazyList[C] = LazyList.empty
-
-        while (iterA.hasNext || iterB.hasNext) {
-          val ior =
-            if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
-            else if (iterA.hasNext) Ior.left(iterA.next())
-            else Ior.right(iterB.next())
-          result = result :+ f(ior)
+        val alignIterator = new Iterator[C] {
+          val iterA = fa.iterator
+          val iterB = fb.iterator
+          def hasNext: Boolean = iterA.hasNext || iterB.hasNext
+          def next(): C =
+            f(
+              if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
+              else if (iterA.hasNext) Ior.left(iterA.next())
+              else Ior.right(iterB.next())
+            )
         }
-        result
+
+        LazyList.from(alignIterator)
       }
     }
 
