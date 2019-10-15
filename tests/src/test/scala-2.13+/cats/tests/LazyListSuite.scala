@@ -1,7 +1,6 @@
 package cats
 package tests
 
-
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
