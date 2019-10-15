@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.{noop, typeclass}
+import simulacrum.typeclass
 
 /**
  * Functor.
@@ -158,8 +158,7 @@ import simulacrum.{noop, typeclass}
    * }}}
    *
    */
-  @noop
-  def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
+  def unzip[A, A1, A2](fab: F[A])(implicit asPair: A => (A1, A2)): (F[A1], F[A2]) = (map(fab)(_._1), map(fab)(_._2))
 
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
     new ComposedFunctor[F, G] {
