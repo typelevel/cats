@@ -1,6 +1,8 @@
 package cats.kernel
 package instances
+import compat.scalaVersionSpecific._
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait VectorInstances extends VectorInstances1 {
   implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
     new VectorOrder[A]
@@ -8,7 +10,7 @@ trait VectorInstances extends VectorInstances1 {
     new VectorMonoid[A]
 }
 
-trait VectorInstances1 extends VectorInstances2 {
+private[instances] trait VectorInstances1 extends VectorInstances2 {
   implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
     new VectorPartialOrder[A]
 
@@ -16,7 +18,7 @@ trait VectorInstances1 extends VectorInstances2 {
     new VectorHash[A]
 }
 
-trait VectorInstances2 {
+private[instances] trait VectorInstances2 {
   implicit def catsKernelStdEqForVector[A: Eq]: Eq[Vector[A]] =
     new VectorEq[A]
 }
@@ -50,6 +52,6 @@ class VectorMonoid[A] extends Monoid[Vector[A]] {
   override def combineN(x: Vector[A], n: Int): Vector[A] =
     StaticMethods.combineNIterable(Vector.newBuilder[A], x, n)
 
-  override def combineAll(xs: TraversableOnce[Vector[A]]): Vector[A] =
+  override def combineAll(xs: IterableOnce[Vector[A]]): Vector[A] =
     StaticMethods.combineAllIterable(Vector.newBuilder[A], xs)
 }

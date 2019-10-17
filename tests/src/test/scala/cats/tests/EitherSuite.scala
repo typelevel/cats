@@ -4,31 +4,33 @@ package tests
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import org.scalatest.funsuite.AnyFunSuiteLike
+
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Either[Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Either[Int, *]]
 
   checkAll("Either[String, Int]", MonoidTests[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))
 
-  checkAll("Either[Int, Int]", SemigroupalTests[Either[Int, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[Either[Int, ?]]", SerializableTests.serializable(Semigroupal[Either[Int, ?]]))
+  checkAll("Either[Int, Int]", SemigroupalTests[Either[Int, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Either[Int, *]]", SerializableTests.serializable(Semigroupal[Either[Int, *]]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, ?], Int, Int]
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, *], Int, Int]
 
-  checkAll("Either[Int, Int]", MonadErrorTests[Either[Int, ?], Int].monadError[Int, Int, Int])
-  checkAll("MonadError[Either[Int, ?]]", SerializableTests.serializable(MonadError[Either[Int, ?], Int]))
+  checkAll("Either[Int, Int]", MonadErrorTests[Either[Int, *], Int].monadError[Int, Int, Int])
+  checkAll("MonadError[Either[Int, *]]", SerializableTests.serializable(MonadError[Either[Int, *], Int]))
 
-  checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[Either[Int, ?]", SerializableTests.serializable(Traverse[Either[Int, ?]]))
+  checkAll("Either[Int, Int] with Option", TraverseTests[Either[Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Either[Int, *]", SerializableTests.serializable(Traverse[Either[Int, *]]))
 
-  checkAll("Either[?, ?]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Either[*, *]", BitraverseTests[Either].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Either]", SerializableTests.serializable(Bitraverse[Either]))
 
-  checkAll("Either[ListWrapper[String], ?]", SemigroupKTests[Either[ListWrapper[String], ?]].semigroupK[Int])
-  checkAll("SemigroupK[Either[ListWrapper[String], ?]]",
-           SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], ?]]))
+  checkAll("Either[ListWrapper[String], *]", SemigroupKTests[Either[ListWrapper[String], *]].semigroupK[Int])
+  checkAll("SemigroupK[Either[ListWrapper[String], *]]",
+           SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], *]]))
 
   checkAll("Either[ListWrapper[String], Int]", SemigroupTests[Either[ListWrapper[String], Int]].semigroup)
   checkAll("Semigroup[Either[ListWrapper[String], Int]]",
@@ -36,7 +38,7 @@ class EitherSuite extends CatsSuite {
 
   val partialOrder = catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
-  val monad = implicitly[Monad[Either[Int, ?]]]
+  val monad = implicitly[Monad[Either[Int, *]]]
   val show = implicitly[Show[Either[Int, String]]]
 
   {
@@ -337,16 +339,16 @@ class EitherSuite extends CatsSuite {
   }
 
   test("ap consistent with Applicative") {
-    val fab = implicitly[Applicative[Either[String, ?]]]
+    val fab = implicitly[Applicative[Either[String, *]]]
     forAll { (fa: Either[String, Int], f: Int => String) =>
       fa.ap(Either.right(f)) should ===(fab.map(fa)(f))
     }
   }
 
-  test("raiseOrPure syntax consistent with fromEither") {
-    val ev = ApplicativeError[Validated[String, ?], String]
+  test("liftTo syntax consistent with fromEither") {
+    val ev = ApplicativeError[Validated[String, *], String]
     forAll { (fa: Either[String, Int]) =>
-      fa.raiseOrPure[Validated[String, ?]] should ===(ev.fromEither(fa))
+      fa.liftTo[Validated[String, *]] should ===(ev.fromEither(fa))
     }
   }
 
@@ -361,5 +363,26 @@ class EitherSuite extends CatsSuite {
       either.leftFlatMap(f) should ===(either.swap.flatMap(a => f(a).swap).swap)
     }
   }
+}
 
+final class EitherInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.either") {
+    import cats.instances.either._
+    import cats.instances.string._
+    import cats.syntax.parallel._
+
+    def either: Either[String, Int] = Left("Test")
+    (either, either).parTupled
+  }
+}
+
+@deprecated("To test deprecated methods", "2.1.0")
+class DeprecatedEitherSuite extends CatsSuite {
+  test("raiseOrPure syntax consistent with fromEither") {
+    val ev = ApplicativeError[Validated[String, *], String]
+    forAll { (fa: Either[String, Int]) =>
+      fa.raiseOrPure[Validated[String, *]] should ===(ev.fromEither(fa))
+    }
+  }
 }

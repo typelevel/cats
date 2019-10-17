@@ -10,7 +10,7 @@ position: 60
 > - How do I make a computation `F[A]` fail by checking a condition on the value?
 
 
-This is a catalogue of the major functions, type classes, and data types in `cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `cats` users, who may not recall the answer to questions like the ones above.
+This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like the ones above.
 
 The signatures and type-classes have been simplified, are described [below](#simplifications). If you want a printable version, you can also check out this [cats-cheatsheet](https://arosien.github.io/cats-cheatsheets/typeclasses.pdf).
 
@@ -72,7 +72,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 
 ### ApplicativeError
 
-The source code of `cats` uses the `E` type variable for the error type.
+The source code of `Cats` uses the `E` type variable for the error type.
 
 | Type         | Method Name  | Notes |
 |--------------|--------------|-------|
@@ -274,7 +274,7 @@ Here, we use `Ki` as a short-hand for `Kleisli`.
 
 ## Simplifications
 
-Because `cats` is a Scala library and Scala has many knobs and switches, the actual definitions and the implementations of the functions and type-classes in `cats` can be a bit obfuscated at first. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:
+Because `Сats` is a Scala library and Scala has many knobs and switches, the actual definitions and the implementations of the functions and type-classes in `Сats` can be a bit obfuscated at first. To alleviate this, in this glossary we focus on the plain type signatures of the method, and ignore many of the details from Scala. In particular, in our type signatures:
 
 - We use `A,B,C` for type variables of kind `*`, and `F, G, H` for type variables of a higher kind.
 - We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow `=>` operation. In Scala, a method's parameters may be split in several comma-separated lists.

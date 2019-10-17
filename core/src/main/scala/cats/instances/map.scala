@@ -17,8 +17,8 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, ?]] with FlatMap[Map[K, ?]] =
-    new UnorderedTraverse[Map[K, ?]] with FlatMap[Map[K, ?]] {
+  implicit def catsStdInstancesForMap[K]: UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] =
+    new UnorderedTraverse[Map[K, *]] with FlatMap[Map[K, *]] {
 
       def unorderedTraverse[G[_], A, B](
         fa: Map[K, A]
@@ -93,7 +93,7 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
 
 }
 
-trait MapInstancesBinCompat0 {
+private[instances] trait MapInstancesBinCompat0 {
 
   implicit val catsStdComposeForMap: Compose[Map] = new Compose[Map] {
 
@@ -118,10 +118,10 @@ trait MapInstancesBinCompat0 {
       }
   }
 
-  implicit def catsStdFunctorFilterForMap[K]: FunctorFilter[Map[K, ?]] =
-    new FunctorFilter[Map[K, ?]] {
+  implicit def catsStdFunctorFilterForMap[K]: FunctorFilter[Map[K, *]] =
+    new FunctorFilter[Map[K, *]] {
 
-      val functor: Functor[Map[K, ?]] = cats.instances.map.catsStdInstancesForMap[K]
+      val functor: Functor[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
 
       def mapFilter[A, B](fa: Map[K, A])(f: A => Option[B]) =
         fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
@@ -139,8 +139,8 @@ trait MapInstancesBinCompat0 {
 
 }
 
-trait MapInstancesBinCompat1 {
-  implicit def catsStdMonoidKForMap[K]: MonoidK[Map[K, ?]] = new MonoidK[Map[K, ?]] {
+private[instances] trait MapInstancesBinCompat1 {
+  implicit def catsStdMonoidKForMap[K]: MonoidK[Map[K, *]] = new MonoidK[Map[K, *]] {
     override def empty[A]: Map[K, A] = Map.empty
 
     override def combineK[A](x: Map[K, A], y: Map[K, A]): Map[K, A] = x ++ y

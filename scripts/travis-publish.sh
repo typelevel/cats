@@ -8,8 +8,8 @@
 #   b. Builds and tests for the JVM using the validateJVM target, and then
 #   c. Produces the coverage report, and then
 #   d. Clean is run (as part of coverageReport), to clear down the built artifacts
-# 2. The scalafix subdirectory is run, executing the tests inside.
-# 3. The scala js build is executed, compiling the application and testing it for scala js.
+# 2. The Scalafix subdirectory is run, executing the tests inside.
+# 3. The Scala.js build is executed, compiling the application and testing it.
 # 4. The validateJVM target is executed again, due to the fact that producing coverage with the
 #    code coverage tool causes the byte code to be instrumented/modified to record the coverage
 #    metrics when the tests are executing. This causes the full JVM build to be run a second time.

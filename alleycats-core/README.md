@@ -13,7 +13,7 @@ other cases, type classes which lack laws or constraints may still be
 useful in some cases (e.g. `Empty[_]`, a type class which provides
 some notion of "emptiness").
 
-Rather than argue about whether to permit these types in cats proper, we
+Rather than argue about whether to permit these types in Cats proper, we
 provide a (slightly disreputable) home for them here.
 
 ### Type classes
@@ -106,7 +106,7 @@ values of a map as a `Foldable` collection. Alleycats provides a `Foldable[Itera
 import cats.implicits._
 import alleycats.std.iterable._
 
-//Result "AppleOrange"
+// Result "AppleOrange"
 Map(1 -> "Apple", 2 -> "Orange").values.combineAll
 ```
 
@@ -114,5 +114,5 @@ Map(1 -> "Apple", 2 -> "Orange").values.combineAll
 
 This module's goal is to be very liberal about accepting type class
 instances, but to only provide instances which are absent from
-cats proper. Law-abiding instances will end up in cats, and everything else will
+Cats proper. Law-abiding instances will end up in Cats, and everything else will
 end up here.

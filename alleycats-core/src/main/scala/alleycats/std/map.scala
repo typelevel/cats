@@ -8,8 +8,8 @@ object map extends MapInstances
 trait MapInstances {
 
   // toList is inconsistent. See https://github.com/typelevel/cats/issues/1831
-  implicit def alleycatsStdInstancesForMap[K]: Traverse[Map[K, ?]] =
-    new Traverse[Map[K, ?]] {
+  implicit def alleycatsStdInstancesForMap[K]: Traverse[Map[K, *]] =
+    new Traverse[Map[K, *]] {
 
       def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
@@ -59,9 +59,9 @@ trait MapInstances {
         collectFirst(fa)(Function.unlift(f))
     }
 
-  implicit def alleycatsStdMapTraverseFilter[K]: TraverseFilter[Map[K, ?]] =
-    new TraverseFilter[Map[K, ?]] {
-      def traverse: Traverse[Map[K, ?]] = alleycatsStdInstancesForMap
+  implicit def alleycatsStdMapTraverseFilter[K]: TraverseFilter[Map[K, *]] =
+    new TraverseFilter[Map[K, *]] {
+      def traverse: Traverse[Map[K, *]] = alleycatsStdInstancesForMap
 
       def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))

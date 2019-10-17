@@ -192,11 +192,11 @@ object FreeT extends FreeTInstances {
   def roll[S[_], M[_], A](value: S[FreeT[S, M, A]])(implicit M: Applicative[M]): FreeT[S, M, A] =
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
-  def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]] =
-    λ[FunctionK[FreeT[S, M, ?], FreeT[T, M, ?]]](f => f.compile(st))
+  def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, *], FreeT[T, M, *]] =
+    λ[FunctionK[FreeT[S, M, *], FreeT[T, M, *]]](f => f.compile(st))
 
-  def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, ?], M] =
-    λ[FunctionK[FreeT[S, M, ?], M]](f => f.foldMap(fk))
+  def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, *], M] =
+    λ[FunctionK[FreeT[S, M, *], M]](f => f.foldMap(fk))
 
   /**
    * This method is used to defer the application of an InjectK[F, G]
@@ -220,8 +220,8 @@ object FreeT extends FreeTInstances {
 }
 
 sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
-  implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, ?], E] =
-    new MonadError[FreeT[S, M, ?], E] with FreeTMonad[S, M] {
+  implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, *], E] =
+    new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
         FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
@@ -231,36 +231,36 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
 }
 
 sealed abstract private[free] class FreeTInstances0 extends FreeTInstances1 {
-  implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, ?]] =
+  implicit def catsFreeMonadForFreeT[S[_], M[_]](implicit M0: Applicative[M]): Monad[FreeT[S, M, *]] =
     new FreeTMonad[S, M] {
       def M = M0
     }
 }
 
 sealed abstract private[free] class FreeTInstances1 extends FreeTInstances2 {
-  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, ?]] =
+  implicit def catsFreeFlatMapForFreeT[S[_], M[_]](implicit M0: Applicative[M]): FlatMap[FreeT[S, M, *]] =
     new FreeTFlatMap[S, M] {
       implicit def M: Applicative[M] = M0
     }
 }
 
 sealed abstract private[free] class FreeTInstances2 extends FreeTInstances3 {
-  implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, ?]] =
-    new Alternative[FreeT[S, M, ?]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
+  implicit def catsFreeAlternativeForFreeT[S[_], M[_]: Alternative: Monad]: Alternative[FreeT[S, M, *]] =
+    new Alternative[FreeT[S, M, *]] with FreeTMonad[S, M] with FreeTMonoidK[S, M] {
       override def M = Alternative[M]
       override def M1 = Alternative[M]
     }
 }
 
 sealed abstract private[free] class FreeTInstances3 {
-  implicit def catsFreeSemigroupKForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, ?]] =
+  implicit def catsFreeSemigroupKForFreeT[S[_], M[_]: Applicative: SemigroupK]: SemigroupK[FreeT[S, M, *]] =
     new FreeTSemigroupK[S, M] {
       override def M = Applicative[M]
       override def M1 = SemigroupK[M]
     }
 }
 
-sealed private[free] trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, ?]] {
+sealed private[free] trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, *]] {
   implicit def M: Applicative[M]
 
   final override def map[A, B](fa: FreeT[S, M, A])(f: A => B): FreeT[S, M, B] = fa.map(f)
@@ -269,20 +269,20 @@ sealed private[free] trait FreeTFlatMap[S[_], M[_]] extends FlatMap[FreeT[S, M, 
     FreeT.tailRecM(a)(f)
 }
 
-sealed private[free] trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, ?]] with FreeTFlatMap[S, M] {
+sealed private[free] trait FreeTMonad[S[_], M[_]] extends Monad[FreeT[S, M, *]] with FreeTFlatMap[S, M] {
   implicit def M: Applicative[M]
 
   final override def pure[A](a: A): FreeT[S, M, A] =
     FreeT.pure[S, M, A](a)
 }
 
-sealed private[free] trait FreeTMonoidK[S[_], M[_]] extends MonoidK[FreeT[S, M, ?]] with FreeTSemigroupK[S, M] {
+sealed private[free] trait FreeTMonoidK[S[_], M[_]] extends MonoidK[FreeT[S, M, *]] with FreeTSemigroupK[S, M] {
   implicit def M: Applicative[M]
   def M1: MonoidK[M]
   final override def empty[A]: FreeT[S, M, A] = FreeT.liftT[S, M, A](M1.empty[A])(M)
 }
 
-sealed private[free] trait FreeTSemigroupK[S[_], M[_]] extends SemigroupK[FreeT[S, M, ?]] {
+sealed private[free] trait FreeTSemigroupK[S[_], M[_]] extends SemigroupK[FreeT[S, M, *]] {
   implicit def M: Applicative[M]
   def M1: SemigroupK[M]
   final override def combineK[A](a: FreeT[S, M, A], b: FreeT[S, M, A]): FreeT[S, M, A] =

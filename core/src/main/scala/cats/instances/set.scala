@@ -41,6 +41,6 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
 
   implicit def catsStdShowForSet[A: Show]: Show[Set[A]] = new Show[Set[A]] {
     def show(fa: Set[A]): String =
-      fa.toIterator.map(_.show).mkString("Set(", ", ", ")")
+      fa.iterator.map(_.show).mkString("Set(", ", ", ")")
   }
 }

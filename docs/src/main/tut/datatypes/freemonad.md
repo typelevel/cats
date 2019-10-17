@@ -21,11 +21,11 @@ In particular, *free monads* provide a practical way to:
  - build an embedded DSL (domain-specific language)
  - retarget a computation to another interpreter using natural transformations
 
-> (In cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
+> (In Cats, the type representing a *free monad* is abbreviated as `Free[_]`.)
 
 ## Using Free Monads
 
-If you'd like to use cats' free monad, you'll need to add a library dependency
+If you'd like to use Cats' free monad, you'll need to add a library dependency
 for the `cats-free` module.
 
 A good way to get a sense for how *free monads* work is to see them in
@@ -218,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Either[E, ?]` to support failure
+ - `Either[E, *]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
@@ -322,7 +322,7 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the EitherK of it's Algebras.
+Once the ADTs are defined we can formally state that a `Free` program is the EitherK of its Algebras.
 
 ```tut:silent
 type CatsApp[A] = EitherK[DataOp, Interact, A]

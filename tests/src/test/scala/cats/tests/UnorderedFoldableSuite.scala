@@ -53,7 +53,7 @@ final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set")
     catsStdInstancesForSet.unorderedFoldMap(fa)(f)
 }
 
-final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String, ?]]("map") {
+final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String, *]]("map") {
   def iterator[T](map: Map[String, T]): Iterator[T] = map.valuesIterator
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: Map[String, A])(f: A => B): B =
     catsStdInstancesForMap[String].unorderedFoldMap(fa)(f)
@@ -76,6 +76,6 @@ final class SpecializedUnorderedFoldableSetSuite extends SpecializedUnorderedFol
   def iterator[T](set: Set[T]): Iterator[T] = set.iterator
 }
 
-final class SpecializedUnorderedFoldableMapSuite extends SpecializedUnorderedFoldableSuite[Map[String, ?]]("map") {
+final class SpecializedUnorderedFoldableMapSuite extends SpecializedUnorderedFoldableSuite[Map[String, *]]("map") {
   def iterator[T](map: Map[String, T]): Iterator[T] = map.valuesIterator
 }

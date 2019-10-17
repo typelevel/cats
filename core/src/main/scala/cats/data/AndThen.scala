@@ -168,8 +168,8 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.Monad]] instance for [[AndThen]].
    */
-  implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, ?]] =
-    new Monad[AndThen[T, ?]] {
+  implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, *]] =
+    new Monad[AndThen[T, *]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdMonadForFunction1[T]
 
@@ -189,8 +189,8 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.ContravariantMonoidal]] instance for [[AndThen]].
    */
-  implicit def catsDataContravariantMonoidalForAndThen[R: Monoid]: ContravariantMonoidal[AndThen[?, R]] =
-    new ContravariantMonoidal[AndThen[?, R]] {
+  implicit def catsDataContravariantMonoidalForAndThen[R: Monoid]: ContravariantMonoidal[AndThen[*, R]] =
+    new ContravariantMonoidal[AndThen[*, R]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdContravariantMonoidalForFunction1[R]
 
@@ -236,8 +236,8 @@ abstract private[data] class AndThenInstances1 {
   /**
    * [[cats.Contravariant]] instance for [[AndThen]].
    */
-  implicit def catsDataContravariantForAndThen[R]: Contravariant[AndThen[?, R]] =
-    new Contravariant[AndThen[?, R]] {
+  implicit def catsDataContravariantForAndThen[R]: Contravariant[AndThen[*, R]] =
+    new Contravariant[AndThen[*, R]] {
       def contramap[T1, T0](fa: AndThen[T1, R])(f: T0 => T1): AndThen[T0, R] =
         fa.compose(f)
     }

@@ -36,7 +36,7 @@ trait EitherInstances extends EitherInstances0 {
     }
 }
 
-trait EitherInstances0 extends EitherInstances1 {
+private[instances] trait EitherInstances0 extends EitherInstances1 {
 
   implicit def catsDataSemigroupForEither[A, B](implicit B: Semigroup[B]): Semigroup[Either[A, B]] =
     new Semigroup[Either[A, B]] {
@@ -72,7 +72,7 @@ trait EitherInstances0 extends EitherInstances1 {
   implicit def catsStdHashForEither[A, B](implicit A: Hash[A], B: Hash[B]): Hash[Either[A, B]] = new EitherHash[A, B]
 }
 
-trait EitherInstances1 {
+private[instances] trait EitherInstances1 {
 
   implicit def catsStdEqForEither[A, B](implicit A: Eq[A], B: Eq[B]): Eq[Either[A, B]] = new EitherEq[A, B]
 

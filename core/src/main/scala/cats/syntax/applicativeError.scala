@@ -33,7 +33,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
    * {{{
    * scala> import cats.implicits._
    * scala> import cats.ApplicativeError
-   * scala> val F = ApplicativeError[Either[String, ?], String]
+   * scala> val F = ApplicativeError[Either[String, *], String]
    *
    * scala> F.fromOption(Some(1), "Empty")
    * res0: scala.Either[String, Int] = Right(1)

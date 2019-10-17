@@ -8,19 +8,19 @@ trait OptionInstances extends OptionInstances0 {
     new OptionCommutativeMonoid[A]
 }
 
-trait OptionInstances0 extends OptionInstances1 {
+private[instances] trait OptionInstances0 extends OptionInstances1 {
   implicit def catsKernelStdPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     new OptionPartialOrder[A]
   implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     new OptionMonoid[A]
 }
 
-trait OptionInstances1 extends OptionInstances2 {
+private[instances] trait OptionInstances1 extends OptionInstances2 {
   implicit def catsKernelStdHashForOption[A: Hash]: Hash[Option[A]] =
     new OptionHash[A]
 }
 
-trait OptionInstances2 {
+private[instances] trait OptionInstances2 {
   implicit def catsKernelStdEqForOption[A: Eq]: Eq[Option[A]] =
     new OptionEq[A]
 }

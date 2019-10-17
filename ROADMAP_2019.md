@@ -5,19 +5,19 @@ A Cats 2.0 is released earlier in the year **without any breaking changes on mos
 
 The followings are the steps in each quarter. 
 
-## Q1    
+## Q1
 #### Release 1.6 [already done]
 #### Release 2.0: This is not the Cats 2.0 we’ve been discussing in the past. Most modules remain fully binary compatible with Cats 1.x on all Scala versions. The only breaking changes are: 
-* Scalacheck 1.13, update to Scalacheck 1.14
+* ScalaCheck 1.13, update to ScalaCheck 1.14
 * breaking changes for Cats-laws
 						
-## Q2 
+## Q2
 Start a Scala 2.11 dedicated branching scheme: 
 * Branch master - drops Scala 2.11, maintains is BC with 1.x
 * Branch scala2_11 - Scala 2.11 code
 New changes to master have to be ported to branch scala2_11 in a 2.11 BC compatible way and try to maintain as use site source compatible as possible - e.g. a new type class method added to master is added to a syntax trait method in scala2_11 branch.
 ### Release Cats 2.1 RC1 on both Scala 2.11 and Scala 2.12+
-   Note that 2.11 and 2.12+ code are NOT source compatible with each other, however, they will still maintain source compatibility with 2.0 and 1.x.
+Note that 2.11 and 2.12+ code are NOT source compatible with each other, however, they will still maintain source compatibility with 2.0 and 1.x.
 ### Release Cats 2.1 RC2
 ### Release Cats 2.1
 
@@ -26,7 +26,7 @@ New changes to master have to be ported to branch scala2_11 in a 2.11 BC compati
 ### Release Cats 2.2
 ### Release Cats 2.3
 
-## Q4 
+## Q4
 ### Release Cats 2.4 - last release on Scala 2.11
 ### Stops actively maintaining scala2_11 branch 
 ### Release Cats 2.5 without scala 2.11

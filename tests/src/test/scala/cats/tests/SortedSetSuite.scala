@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, PartialOrderTests}
+import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, OrderTests, PartialOrderTests}
 import cats.kernel.{BoundedSemilattice, Semilattice}
 import cats.laws._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -19,6 +19,8 @@ class SortedSetSuite extends CatsSuite {
   checkAll("Semigroupal[SortedSet]", SerializableTests.serializable(Semigroupal[SortedSet]))
 
   checkAll("SortedSet[Int]", FoldableTests[SortedSet].foldable[Int, Int])
+  checkAll("Order[SortedSet[Int]]", OrderTests[SortedSet[Int]].order)
+  checkAll("Order.reverse(Order[SortedSet[Int]])", OrderTests(Order.reverse(Order[SortedSet[Int]])).order)
   checkAll("PartialOrder[SortedSet[Int]]", PartialOrderTests[SortedSet[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[SortedSet[Int]])",
            PartialOrderTests(PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder)
@@ -38,7 +40,7 @@ class SortedSetSuite extends CatsSuite {
   checkAll("Hash[SortedSet[Int]]", HashTests[SortedSet[Int]].hash)
 
   test("show keeps separate entries for items that map to identical strings") {
-    //note: this val name has to be the same to shadow the cats.instances instance
+    // note: this val name has to be the same to shadow the cats.instances instance
     implicit val catsStdShowForInt: Show[Int] = Show.show(_ => "1")
     // an implementation implemented as set.map(_.show).mkString(", ") would
     // only show one entry in the result instead of 3, because SortedSet.map combines
