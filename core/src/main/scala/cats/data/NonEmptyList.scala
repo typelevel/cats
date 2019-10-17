@@ -4,6 +4,7 @@ package data
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
 import scala.collection.mutable
@@ -499,18 +500,21 @@ object NonEmptyList extends NonEmptyListInstances {
           ZipNonEmptyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyList", "2.0.0-RC2")
+    private[data] def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = catsDataEqForZipNonEmptyList[A]
+
+    implicit def catsDataEqForZipNonEmptyList[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
 }
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
-  implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList]
-    with Reducible[NonEmptyList]
-    with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] =
-    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] {
+  implicit val catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] =
+    new NonEmptyReducible[NonEmptyList, List]
+      with SemigroupK[NonEmptyList]
+      with Bimonad[NonEmptyList]
+      with NonEmptyTraverse[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
@@ -628,8 +632,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       val A0 = A
     }
 
-  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
-    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList] {
+      type F[x] = ZipNonEmptyList[x]
 
       def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 

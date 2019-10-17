@@ -90,7 +90,7 @@ package object cats {
     override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
   }
 
-  implicit val catsParallelForId: Parallel[Id, Id] = Parallel.identity
+  implicit val catsParallelForId: Parallel.Aux[Id, Id] = Parallel.identity
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]

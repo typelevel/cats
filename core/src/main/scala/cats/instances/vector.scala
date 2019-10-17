@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.ZipVector
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -120,9 +121,23 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def show(fa: Vector[A]): String =
         fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
     }
+
+  implicit def catsStdNonEmptyParallelForVectorZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
+    new NonEmptyParallel[Vector] {
+      type F[x] = ZipVector[x]
+
+      def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
+      def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
+
+      def sequential: ZipVector ~> Vector =
+        λ[ZipVector ~> Vector](_.value)
+
+      def parallel: Vector ~> ZipVector =
+        λ[Vector ~> ZipVector](v => new ZipVector(v))
+    }
 }
 
-trait VectorInstancesBinCompat0 {
+private[instances] trait VectorInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForVector: TraverseFilter[Vector] = new TraverseFilter[Vector] {
     val traverse: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
 

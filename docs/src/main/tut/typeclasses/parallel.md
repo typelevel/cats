@@ -58,13 +58,15 @@ def parsePerson(ageString: String, nameString: String) =
 ```
 
 We had to convert to and from `Validated` manually.
-While this is still manageble, it get's worse the more `Eithers` we want to combine in parallel.
+While this is still manageble, it gets worse the more `Eithers` we want to combine in parallel.
 
 To mitigate this pain, Cats introduces a type class `Parallel` that abstracts over `Monads` which also support parallel composition.
 It is simply defined in terms of conversion functions between the two data types:
 
 ```scala
-trait Parallel[M[_], F[_]] {
+trait Parallel[M[_]] {
+  type F[_]
+
   def sequential: F ~> M
 
   def parallel: M ~> F

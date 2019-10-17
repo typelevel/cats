@@ -10,7 +10,7 @@ trait VectorInstances extends VectorInstances1 {
     new VectorMonoid[A]
 }
 
-trait VectorInstances1 extends VectorInstances2 {
+private[instances] trait VectorInstances1 extends VectorInstances2 {
   implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
     new VectorPartialOrder[A]
 
@@ -18,7 +18,7 @@ trait VectorInstances1 extends VectorInstances2 {
     new VectorHash[A]
 }
 
-trait VectorInstances2 {
+private[instances] trait VectorInstances2 {
   implicit def catsKernelStdEqForVector[A: Eq]: Eq[Vector[A]] =
     new VectorEq[A]
 }

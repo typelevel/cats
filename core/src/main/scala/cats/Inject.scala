@@ -1,7 +1,5 @@
 package cats
 
-import kernel.compat.scalaVersionMoreSpecific._
-
 /**
  * Inject is a type class providing an injection from type `A` into
  * type `B`. An injection is a function `inj` which does not destroy
@@ -27,7 +25,6 @@ abstract class Inject[A, B] {
   final def unapply(b: B): Option[A] = prj(b)
 }
 
-@suppressUnusedImportWarningForScalaVersionMoreSpecific
 sealed abstract private[cats] class InjectInstances {
   implicit def catsReflexiveInjectInstance[A]: Inject[A, A] =
     new Inject[A, A] {

@@ -218,7 +218,7 @@ behavior, such as:
  - `Future[_]` for asynchronous computation
  - `List[_]` for gathering multiple results
  - `Option[_]` to support optional results
- - `Either[E, ?]` to support failure
+ - `Either[E, *]` to support failure
  - a pseudo-random monad to support non-determinism
  - and so on...
 
@@ -322,7 +322,7 @@ case class AddCat(a: String) extends DataOp[Unit]
 case class GetAllCats() extends DataOp[List[String]]
 ```
 
-Once the ADTs are defined we can formally state that a `Free` program is the EitherK of it's Algebras.
+Once the ADTs are defined we can formally state that a `Free` program is the EitherK of its Algebras.
 
 ```tut:silent
 type CatsApp[A] = EitherK[DataOp, Interact, A]

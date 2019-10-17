@@ -82,7 +82,7 @@ In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
-as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+as opposed to just a subset. All functions requiring monadic recursion in Cats do so via
 `tailRecM`.
 
 An example `Monad` implementation for `Option` is shown below. Note the tail recursive
@@ -135,7 +135,7 @@ example).
 case class OptionT[F[_], A](value: F[Option[A]])
 
 implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
-  new Monad[OptionT[F, ?]] {
+  new Monad[OptionT[F, *]] {
     def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
     def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
       OptionT {
@@ -158,7 +158,7 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 
 This sort of construction is called a monad transformer.
 
-Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+Cats has an [`OptionT`](../datatypes/optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
 
 ## FlatMap - a weakened Monad
 A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`
@@ -176,9 +176,9 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
 The laws for `FlatMap` are just the laws of `Monad` that don't mention `pure`.
 
 One of the motivations for `FlatMap`'s existence is that some types have `FlatMap` instances but not
-`Monad` - one example is `Map[K, ?]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+`Monad` - one example is `Map[K, *]`. Consider the behavior of `pure` for `Map[K, A]`. Given
 a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
 
 However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
-pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has an `FlatMap` instance.
+pair up (or apply functions to) values with the same key. Hence `Map[K, *]` has an `FlatMap` instance.
 

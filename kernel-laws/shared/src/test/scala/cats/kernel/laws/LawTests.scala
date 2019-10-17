@@ -12,7 +12,7 @@ import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.collection.immutable.{BitSet, Queue}
+import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.util.Random
 import java.util.UUID
 import java.util.concurrent.TimeUnit.{DAYS, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS}
@@ -64,6 +64,28 @@ object KernelCheck {
     )
   }
 
+  // Copied from cats-laws.
+  implicit def arbitrarySortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
+    Arbitrary(arbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
+
+  // Copied from cats-laws.
+  implicit def cogenSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
+    implicit val orderingK = Order[K].toOrdering
+
+    implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
+  }
+
+  // Copied from cats-laws.
+  implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] =
+    Arbitrary(arbitrary[Set[A]].map(s => SortedSet.empty[A](implicitly[Order[A]].toOrdering) ++ s))
+
+  // Copied from cats-laws.
+  implicit def cogenSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
+    implicit val orderingA = Order[A].toOrdering
+
+    implicitly[Cogen[Set[A]]].contramap(_.toSet)
+  }
+
   // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit val cogenBigInt: Cogen[BigInt] =
@@ -111,7 +133,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline {
+class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
 
   import KernelCheck._
 
@@ -127,12 +149,13 @@ class Tests extends AnyFunSuiteLike with Discipline {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
     checkAll("Eq[Map[String, HasEq[Int]]]", EqTests[Map[String, HasEq[Int]]].eqv)
+    checkAll("Eq[SortedMap[String, HasEq[Int]]]", EqTests[SortedMap[String, HasEq[Int]]].eqv)
   }
 
   checkAll("Eq[List[HasEq[Int]]]", EqTests[List[HasEq[Int]]].eqv)
   checkAll("Eq[Option[HasEq[Int]]]", EqTests[Option[HasEq[Int]]].eqv)
   checkAll("Eq[Vector[HasEq[Int]]]", EqTests[Vector[HasEq[Int]]].eqv)
-  checkAll("Eq[Stream[HasEq[Int]]]", EqTests[LazyList[HasEq[Int]]].eqv)
+  checkAll("Eq[Stream[HasEq[Int]]]", EqTests[Stream[HasEq[Int]]].eqv)
   checkAll("Eq[Queue[HasEq[Int]]]", EqTests[Queue[HasEq[Int]]].eqv)
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
@@ -145,7 +168,7 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Vector[HasPartialOrder[Int]]]", PartialOrderTests[Vector[HasPartialOrder[Int]]].partialOrder)
-  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[LazyList[HasPartialOrder[Int]]].partialOrder)
+  checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
            PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
@@ -170,8 +193,9 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Order[Option[String]]", OrderTests[Option[String]].order)
   checkAll("Order[List[String]", OrderTests[List[String]].order)
   checkAll("Order[Vector[Int]]", OrderTests[Vector[Int]].order)
-  checkAll("Order[Stream[Int]]", OrderTests[LazyList[Int]].order)
+  checkAll("Order[Stream[Int]]", OrderTests[Stream[Int]].order)
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
+  checkAll("Order[SortedSet[String]", OrderTests[SortedSet[String]].order)
   checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
   checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
@@ -211,22 +235,30 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Monoid[List[Int]]", SerializableTests.serializable(Monoid[List[Int]]))
   checkAll("Monoid[Vector[Int]]", MonoidTests[Vector[Int]].monoid)
   checkAll("Monoid[Vector[Int]]", SerializableTests.serializable(Monoid[Vector[Int]]))
-  checkAll("Monoid[Stream[Int]]", MonoidTests[LazyList[Int]].monoid)
-  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[LazyList[Int]]))
+  checkAll("Monoid[Stream[Int]]", MonoidTests[Stream[Int]].monoid)
+  checkAll("Monoid[Stream[Int]]", SerializableTests.serializable(Monoid[Stream[Int]]))
   checkAll("Monoid[List[String]]", MonoidTests[List[String]].monoid)
   checkAll("Monoid[List[String]]", SerializableTests.serializable(Monoid[List[String]]))
   checkAll("Monoid[Map[String, String]]", MonoidTests[Map[String, String]].monoid)
   checkAll("Monoid[Map[String, String]]", SerializableTests.serializable(Monoid[Map[String, String]]))
+  checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
+  checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
   checkAll("Monoid[Queue[Int]]", MonoidTests[Queue[Int]].monoid)
   checkAll("Monoid[Queue[Int]]", SerializableTests.serializable(Monoid[Queue[Int]]))
 
   checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
   checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[SortedMap[String, Int]]",
+           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
   checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
   checkAll("BoundedSemilattice[Set[Int]]", BoundedSemilatticeTests[Set[Int]].boundedSemilattice)
   checkAll("BoundedSemilattice[Set[Int]]", SerializableTests.serializable(BoundedSemilattice[Set[Int]]))
+  checkAll("BoundedSemilattice[SortedSet[Int]]", BoundedSemilatticeTests[SortedSet[Int]].boundedSemilattice)
+  checkAll("BoundedSemilattice[SortedSet[Int]]", SerializableTests.serializable(BoundedSemilattice[SortedSet[Int]]))
 
   checkAll("CommutativeGroup[Unit]", CommutativeGroupTests[Unit].commutativeGroup)
   checkAll("CommutativeGroup[Unit]", SerializableTests.serializable(CommutativeGroup[Unit]))
@@ -270,11 +302,12 @@ class Tests extends AnyFunSuiteLike with Discipline {
   checkAll("Hash[Option[String]]", HashTests[Option[String]].hash)
   checkAll("Hash[List[String]]", HashTests[List[String]].hash)
   checkAll("Hash[Vector[Int]]", HashTests[Vector[Int]].hash)
-  checkAll("Hash[Stream[Int]]", HashTests[LazyList[Int]].hash)
+  checkAll("Hash[Stream[Int]]", HashTests[Stream[Int]].hash)
   checkAll("Hash[Set[Int]]", HashTests[Set[Int]].hash)
   checkAll("Hash[(Int, String)]", HashTests[(Int, String)].hash)
   checkAll("Hash[Either[Int, String]]", HashTests[Either[Int, String]].hash)
   checkAll("Hash[Map[Int, String]]", HashTests[Map[Int, String]].hash)
+  checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
   {

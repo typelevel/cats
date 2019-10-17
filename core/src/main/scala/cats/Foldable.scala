@@ -194,12 +194,40 @@ import Foldable.sentinel
     reduceLeftOption(fa)(A.max)
 
   /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#minimum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumOptionBy]] for maximum instead of minimum.
+   */
+  def minimumOptionBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Foldable[F]): Option[A] =
+    F.minimumOption(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#maximum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumOptionBy]] for minimum instead of maximum.
+   */
+  def maximumOptionBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Foldable[F]): Option[A] =
+    F.maximumOption(fa)(Order.by(f))
+
+  /**
    * Get the element at the index of the `Foldable`.
    */
   def get[A](fa: F[A])(idx: Long): Option[A] =
     if (idx < 0L) None
     else
-      foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
+      foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
         if (i == idx) Left(a) else Right(i + 1L)
       } match {
         case Left(a)  => Some(a)

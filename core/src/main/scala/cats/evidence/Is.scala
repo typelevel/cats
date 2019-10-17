@@ -27,7 +27,7 @@ abstract class Is[A, B] extends Serializable {
    * chain much like functions. See also `compose`.
    */
   @inline final def andThen[C](next: B Is C): A Is C =
-    next.substitute[A Is ?](this)
+    next.substitute[A Is *](this)
 
   /**
    * `Is` is transitive and therefore values of `Is` can be composed in a
@@ -41,7 +41,7 @@ abstract class Is[A, B] extends Serializable {
    * own inverse, so `x.flip.flip == x`.
    */
   @inline final def flip: B Is A =
-    this.substitute[? Is A](Is.refl)
+    this.substitute[* Is A](Is.refl)
 
   /**
    * Sometimes for more complex substitutions it helps the typechecker to
@@ -63,7 +63,7 @@ abstract class Is[A, B] extends Serializable {
    * value.
    */
   @inline final def predefEq: A =:= B =
-    substitute[A =:= ?](implicitly[A =:= A])
+    substitute[A =:= *](implicitly[A =:= A])
 }
 
 sealed abstract class IsInstances {

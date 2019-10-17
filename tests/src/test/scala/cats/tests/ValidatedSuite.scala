@@ -12,23 +12,23 @@ import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrd
 import scala.util.Try
 
 class ValidatedSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Validated[String, ?]]
-  checkAll("Validated[String, Int]", SemigroupalTests[Validated[String, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[Validated[String,?]]", SerializableTests.serializable(Semigroupal[Validated[String, ?]]))
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Validated[String, *]]
+  checkAll("Validated[String, Int]", SemigroupalTests[Validated[String, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[Validated[String,*]]", SerializableTests.serializable(Semigroupal[Validated[String, *]]))
 
-  checkAll("Validated[?, ?]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Validated[*, *]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Validated[String, ?], String, Int]
+  implicit val eq0 = EitherT.catsDataEqForEitherT[Validated[String, *], String, Int]
 
   checkAll("Validated[String, Int]",
-           ApplicativeErrorTests[Validated[String, ?], String].applicativeError[Int, Int, Int])
+           ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
   checkAll("ApplicativeError[Validated, String]",
-           SerializableTests.serializable(ApplicativeError[Validated[String, ?], String]))
+           SerializableTests.serializable(ApplicativeError[Validated[String, *], String]))
 
   checkAll("Validated[String, Int] with Option",
-           TraverseTests[Validated[String, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[Validated[String, ?]]", SerializableTests.serializable(Traverse[Validated[String, ?]]))
+           TraverseTests[Validated[String, *]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Validated[String, *]]", SerializableTests.serializable(Traverse[Validated[String, *]]))
 
   checkAll("Validated[String, Int]", OrderTests[Validated[String, Int]].order)
   checkAll("Order[Validated[String, Int]]", SerializableTests.serializable(Order[Validated[String, Int]]))
@@ -37,15 +37,15 @@ class ValidatedSuite extends CatsSuite {
 
   checkAll("Validated[String, NonEmptyList[Int]]", SemigroupTests[Validated[String, NonEmptyList[Int]]].semigroup)
 
-  checkAll("Validated[Int, Int]", CommutativeApplicativeTests[Validated[Int, ?]].commutativeApplicative[Int, Int, Int])
-  checkAll("CommutativeApplicative[Validated[Int, ?]]",
-           SerializableTests.serializable(CommutativeApplicative[Validated[Int, ?]]))
+  checkAll("Validated[Int, Int]", CommutativeApplicativeTests[Validated[Int, *]].commutativeApplicative[Int, Int, Int])
+  checkAll("CommutativeApplicative[Validated[Int, *]]",
+           SerializableTests.serializable(CommutativeApplicative[Validated[Int, *]]))
 
   {
     implicit val L = ListWrapper.semigroup[String]
-    checkAll("Validated[ListWrapper[String], ?]", SemigroupKTests[Validated[ListWrapper[String], ?]].semigroupK[Int])
-    checkAll("SemigroupK[Validated[ListWrapper[String], ?]]",
-             SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], ?]]))
+    checkAll("Validated[ListWrapper[String], *]", SemigroupKTests[Validated[ListWrapper[String], *]].semigroupK[Int])
+    checkAll("SemigroupK[Validated[ListWrapper[String], *]]",
+             SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], *]]))
   }
 
   {
@@ -70,7 +70,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("ap2 combines failures in order") {
     val plus = (_: Int) + (_: Int)
-    Applicative[Validated[String, ?]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) should ===(Invalid("12"))
+    Applicative[Validated[String, *]].ap2(Valid(plus))(Invalid("1"), Invalid("2")) should ===(Invalid("12"))
   }
 
   test("catchOnly catches matching exceptions") {
@@ -313,5 +313,14 @@ class ValidatedSuite extends CatsSuite {
     forAll { (v: Validated[Unit, Int]) =>
       v.liftTo[Option] shouldBe v.toOption
     }
+  }
+
+  test("liftTo works with specialized errors") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val ex: IllegalArgumentException = new IllegalArgumentException()
+    val validated: Validated[IllegalArgumentException, Int] = Validated.Invalid(ex)
+    val lifted: Either[Throwable, Int] = validated.liftTo[Either[Throwable, *]]
+
+    lifted should ===(Left[Throwable, Int](ex))
   }
 }

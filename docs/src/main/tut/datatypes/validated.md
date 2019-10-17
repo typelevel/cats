@@ -504,8 +504,8 @@ Can we perhaps define an `Apply` instance for `Validated`? Better yet, can we de
 ```tut:silent
 import cats.Applicative
 
-implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, ?]] =
-  new Applicative[Validated[E, ?]] {
+implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, *]] =
+  new Applicative[Validated[E, *]] {
     def ap[A, B](f: Validated[E, A => B])(fa: Validated[E, A]): Validated[E, B] =
       (fa, f) match {
         case (Valid(a), Valid(fab)) => Valid(fab(a))
@@ -540,7 +540,7 @@ Thus.
 
 ```tut:book
 val personFromConfig: ValidatedNec[ConfigError, Person] =
-  Apply[ValidatedNec[ConfigError, ?]].map4(config.parse[String]("name").toValidatedNec,
+  Apply[ValidatedNec[ConfigError, *]].map4(config.parse[String]("name").toValidatedNec,
                                            config.parse[Int]("age").toValidatedNec,
                                            config.parse[Int]("house_number").toValidatedNec,
                                            config.parse[String]("street").toValidatedNec) {
@@ -555,8 +555,8 @@ let's implement the `Monad` type class.
 ```tut:silent
 import cats.Monad
 
-implicit def validatedMonad[E]: Monad[Validated[E, ?]] =
-  new Monad[Validated[E, ?]] {
+implicit def validatedMonad[E]: Monad[Validated[E, *]] =
+  new Monad[Validated[E, *]] {
     def flatMap[A, B](fa: Validated[E, A])(f: A => Validated[E, B]): Validated[E, B] =
       fa match {
         case Valid(a)     => f(a)

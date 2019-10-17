@@ -139,4 +139,23 @@ class NonEmptyChainSuite extends CatsSuite {
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
+
+  test("init") {
+    forAll { ci: NonEmptyChain[Int] =>
+      ci.init.toList should ===(ci.toList.init)
+    }
+  }
+
+  test("last") {
+    forAll { ci: NonEmptyChain[Int] =>
+      ci.last should ===(ci.toList.last)
+    }
+  }
+}
+
+class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
+  def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
+    NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
 }

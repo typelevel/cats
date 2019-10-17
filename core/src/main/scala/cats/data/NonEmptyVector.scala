@@ -2,9 +2,10 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.vector._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
-import cats.instances.vector._
 import kernel.compat.scalaVersionSpecific._
 
 /**
@@ -237,12 +238,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
-  implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
-    with Reducible[NonEmptyVector]
-    with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector] {
+  implicit val catsDataInstancesForNonEmptyVector
+    : SemigroupK[NonEmptyVector] with Bimonad[NonEmptyVector] with NonEmptyTraverse[NonEmptyVector] =
+    new NonEmptyReducible[NonEmptyVector, Vector]
+      with SemigroupK[NonEmptyVector]
+      with Bimonad[NonEmptyVector]
+      with NonEmptyTraverse[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
@@ -372,8 +373,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
-  implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
-    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
+  implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel.Aux[NonEmptyVector, ZipNonEmptyVector] =
+    new NonEmptyParallel[NonEmptyVector] {
+      type F[x] = ZipNonEmptyVector[x]
 
       def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
@@ -429,6 +431,9 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
           ZipNonEmptyVector(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyVector", "2.0.0-RC2")
+    private[data] def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = catsDataEqForZipNonEmptyVector[A]
+
+    implicit def catsDataEqForZipNonEmptyVector[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
   }
 }

@@ -10,8 +10,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     with Alternative[Option]
     with CommutativeMonad[Option]
     with CoflatMap[Option] =
-    new Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option]
-    with CoflatMap[Option] {
+    new Traverse[Option]
+      with MonadError[Option, Unit]
+      with Alternative[Option]
+      with CommutativeMonad[Option]
+      with CoflatMap[Option] {
 
       def empty[A]: Option[A] = None
 
@@ -127,7 +130,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     }
 }
 
-trait OptionInstancesBinCompat0 {
+private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
 

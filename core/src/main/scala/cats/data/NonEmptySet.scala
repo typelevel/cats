@@ -26,10 +26,10 @@ import kernel.compat.scalaVersionSpecific._
 
 private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
-  private[cats] def create[A](s: SortedSet[A]): Type[A] =
+  private[data] def create[A](s: SortedSet[A]): Type[A] =
     s.asInstanceOf[Type[A]]
 
-  private[cats] def unwrap[A](s: Type[A]): SortedSet[A] =
+  private[data] def unwrap[A](s: Type[A]): SortedSet[A] =
     s.asInstanceOf[SortedSet[A]]
 
   def fromSet[A](as: SortedSet[A]): Option[NonEmptySet[A]] =
@@ -41,6 +41,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
   def of[A](a: A, as: A*)(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(a +: as: _*)(A.toOrdering))
+
   def apply[A](head: A, tail: SortedSet[A])(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(head)(A.toOrdering) ++ tail)
   def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(A.toOrdering))
@@ -421,7 +422,12 @@ sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInst
   }
 }
 
-sealed abstract private[data] class NonEmptySetInstances0 {
+sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {
+  implicit def catsDataHashForNonEmptySet[A: Order: Hash]: Hash[NonEmptySet[A]] =
+    Hash[SortedSet[A]].asInstanceOf[Hash[NonEmptySet[A]]]
+}
+
+sealed abstract private[data] class NonEmptySetInstances1 {
   implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
     implicit override def A0: Eq[A] = A
   }

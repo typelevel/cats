@@ -1,3 +1,171 @@
+## Version 2.0.0
+
+> 2019 September 9
+
+Cats 2.0.0 is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+
+### 2 source breaking changes
+
+* [#3046](https://github.com/typelevel/cats/pull/3046) Infer dependent parameter in NonEmpty/ParallelTests/Laws  by @djspiewak
+* [#3042](https://github.com/typelevel/cats/pull/3042) Remove unused type parameter for Parallel instances  by @travisbrown
+        
+
+### 1 bug fix
+
+* [#3037](https://github.com/typelevel/cats/pull/3037) Add cats.kernel.instances.finiteDuration package  by @travisbrown
+        
+
+### 1 documentation improvement
+
+* [#3034](https://github.com/typelevel/cats/pull/3034) minor typo fixed  by @ikr0m
+
+
+
+## Version 2.0.0-RC3
+
+> 2019 September 7
+
+Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 2 source breaking changes
+
+* [#3033](https://github.com/typelevel/cats/pull/3033) Move Parallel instances for EitherT and OptionT into implicit scope  by @travisbrown
+* [#3031](https://github.com/typelevel/cats/pull/3031) Add Parallel.apply overload with one type parameter  by @travisbrown
+
+
+### 3 documentation improvements
+
+* [#3028](https://github.com/typelevel/cats/pull/3028) Doc fixes  by @mebubo
+* [#3020](https://github.com/typelevel/cats/pull/3020) [DOC] Fix optionT link in monad documentation  by @CucumisSativus
+* [#3019](https://github.com/typelevel/cats/pull/3019) Fix typo in Comonad documentation  by @chiller
+
+
+### 4 build improvements
+
+* [#3027](https://github.com/typelevel/cats/pull/3027) Update sbt-sonatype to 2.6  by @scala-steward
+* [#3021](https://github.com/typelevel/cats/pull/3021) Update sbt-microsites to 0.9.4  by @scala-steward
+* [#3017](https://github.com/typelevel/cats/pull/3017) Update sbt-microsites to 0.9.3  by @scala-steward
+* [#3014](https://github.com/typelevel/cats/pull/3014) Update sbt-scalafmt to 2.0.4  by @scala-steward
+
+
+## Version 2.0.0-RC2
+
+> 2019 August 26
+
+Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 4 source breaking changes
+
+* [#3012](https://github.com/typelevel/cats/pull/3012) Make Parallel's F a type member  by @travisbrown
+* [#3003](https://github.com/typelevel/cats/pull/3003) Make bincompat and prioritization traits package-private  by @travisbrown
+* [#3001](https://github.com/typelevel/cats/pull/3001) Move appropriate SortedSet and SortedMap instances to kernel  by @travisbrown
+* [#2983](https://github.com/typelevel/cats/pull/2983) Treat Stream and LazyList as different types  by @travisbrown
+
+### 2 bug fixes
+
+* [#3010](https://github.com/typelevel/cats/pull/3010) Fix a few issues related to bin-compat traits  by @travisbrown
+* [#3004](https://github.com/typelevel/cats/pull/3004) Fix argument order in deprecations  by @travisbrown
+
+### 9 API/feature enhancements
+
+* [#3002](https://github.com/typelevel/cats/pull/3002) Fix easy typos  by @travisbrown
+* [#2999](https://github.com/typelevel/cats/pull/2999) optimize chain's get.  by @takayahilton
+* [#2996](https://github.com/typelevel/cats/pull/2996) Add :== unapply to Chain.  by @takayahilton
+* [#2995](https://github.com/typelevel/cats/pull/2995) Chain optimize map method  by @gagandeepkalra
+* [#2990](https://github.com/typelevel/cats/pull/2990) unapplySeq in Chain (issue #2960)  by @vasiliybondarenko
+* [#2989](https://github.com/typelevel/cats/pull/2989) Add Hash instance for NonEmptyMap.  by @takayahilton
+* [#2984](https://github.com/typelevel/cats/pull/2984) improve liftTo/rethrowT/raiseOrPure syntax to be more flexible  by @bpholt
+* [#2981](https://github.com/typelevel/cats/pull/2981) Add Hash instance for NonEmptySet.  by @takayahilton
+* [#2980](https://github.com/typelevel/cats/pull/2980) Remove redundant type annotation.  by @takayahilton
+
+### 2 documentation improvements
+
+* [#2993](https://github.com/typelevel/cats/pull/2993) add missing parenthese in faq.md  by @xuwei-k
+* [#2985](https://github.com/typelevel/cats/pull/2985) fix a typo in `comonad.md`  by @pismute
+
+### 4 build improvements
+
+* [#2987](https://github.com/typelevel/cats/pull/2987) Update snakeyaml to 1.25  by @scala-steward
+* [#2986](https://github.com/typelevel/cats/pull/2986) Update scalafmt to 2.0.1  by @scala-steward
+* [#2979](https://github.com/typelevel/cats/pull/2979) Update sbt-scalafmt to 2.0.3  by @scala-steward
+* [#2978](https://github.com/typelevel/cats/pull/2978) Update Scala 2.12 to 2.12.9  by @jhnsmth
+
+
+## Version 2.0.0-RC1
+
+> 2019 August 5
+
+Cats 2.0.0-RC1 is the first release candidate for Cats 2.0, It's available on Scala 2.11, 2.12, 2.13.0 and Scala.js 0.6.
+Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats. 
+
+### 2 breaking changes
+
+* [#2970](https://github.com/typelevel/cats/pull/2970) Decouple published modules from scalatest  by @rossabaker
+* [#2896](https://github.com/typelevel/cats/pull/2896) replace `Stream` in ExhaustiveCheck with `List`  by @kailuowang
+
+
+### 1 bug fix
+
+* [#2942](https://github.com/typelevel/cats/pull/2942) fix Cofree.cata stack-safety #2940  by @road21
+
+### 21 API/feature enhancements
+
+* [#2969](https://github.com/typelevel/cats/pull/2969) Add syntax to option.  by @takayahilton
+* [#2964](https://github.com/typelevel/cats/pull/2964) Implement LazyList tailRecM using Iterator.unfold  by @andyscott
+* [#2956](https://github.com/typelevel/cats/pull/2956) added Chain#takeWhile and Chain#dropWhile  by @kailuowang
+* [#2953](https://github.com/typelevel/cats/pull/2953) Add method init and last to NonEmptyChain like NonEmptyList.  by @takayahilton
+* [#2946](https://github.com/typelevel/cats/pull/2946) add unordered parallel variants of (flat)traverse and (flat)sequence  by @mberndt123
+* [#2941](https://github.com/typelevel/cats/pull/2941) Added `NonEmptyLazyList` to replace `NonEmptyStream`  by @kailuowang
+* [#2939](https://github.com/typelevel/cats/pull/2939) add map to NonEmptyChain.  by @takayahilton
+* [#2929](https://github.com/typelevel/cats/pull/2929) Migrate to new kind-projector symbol  by @LukaJCB
+* [#2925](https://github.com/typelevel/cats/pull/2925) Replace machinist macros by plain forwarders  by @smarter
+* [#2924](https://github.com/typelevel/cats/pull/2924) More stack safety for IndexedReaderWriterStateT & IndexedStateT  by @ybasket
+* [#2922](https://github.com/typelevel/cats/pull/2922) Reader contravariant on input type A  by @kklorenzotesta
+* [#2917](https://github.com/typelevel/cats/pull/2917) Implement local for Reader  by @jooohn
+* [#2916](https://github.com/typelevel/cats/pull/2916) Add listen for Writer and WriterT  by @jooohn
+* [#2914](https://github.com/typelevel/cats/pull/2914) Fixed all 2.13 warnings, reenabled fatalWarning on 2.13  by @kailuowang
+* [#2913](https://github.com/typelevel/cats/pull/2913) Add LowerBounded and UpperBounded typeclasses  by @izeigerman
+* [#2911](https://github.com/typelevel/cats/pull/2911) fixed more warnings on 2.13  by @kailuowang
+* [#2904](https://github.com/typelevel/cats/pull/2904) Cross compile replace Stream with LazyList on Scala 2.13  by @kailuowang
+* [#2895](https://github.com/typelevel/cats/pull/2895) Replace ⇒ with => to avoid Scala 2.13 warnings  by @travisbrown
+* [#2889](https://github.com/typelevel/cats/pull/2889) Add missing factories similar to existing factories  by @morgen-peschke
+* [#2880](https://github.com/typelevel/cats/pull/2880) Improve MonadError rethrow syntax to be more flexible  by @bpholt
+* [#2787](https://github.com/typelevel/cats/pull/2787) Add Order instance for NonEmptySet (#2779)  by @jatcwang
+
+### 7 documentation improvements
+
+* [#2967](https://github.com/typelevel/cats/pull/2967) Fix FunctorFilter mapFilter doc example  by @regadas
+* [#2966](https://github.com/typelevel/cats/pull/2966) add ContT to Data Types menu  by @Jasper-M
+* [#2949](https://github.com/typelevel/cats/pull/2949) Update "README.md" for Scala 2.13.0 compiler specification changing(a… by @SeanDaru
+* [#2921](https://github.com/typelevel/cats/pull/2921) Fix typo in show.md  by @ollyw
+* [#2888](https://github.com/typelevel/cats/pull/2888) Comonad documentation  by @justinhj
+* [#2881](https://github.com/typelevel/cats/pull/2881) improve process document and release notes script  by @kailuowang
+* [#2876](https://github.com/typelevel/cats/pull/2876) Fix typo  by @asakaev
+        
+
+### 1 test improvement
+
+* [#2915](https://github.com/typelevel/cats/pull/2915) Add OrderTests for SortedSet  by @jooohn
+        
+
+### 14 build improvements
+
+* [#2923](https://github.com/typelevel/cats/pull/2923) Update sbt-scalafmt to 2.0.2  by @scala-steward
+* [#2918](https://github.com/typelevel/cats/pull/2918) Update sbt-scala-native-crossproject, ... to 0.6.1  by @scala-steward
+* [#2912](https://github.com/typelevel/cats/pull/2912) Update sbt-microsites to 0.9.2  by @scala-steward
+* [#2908](https://github.com/typelevel/cats/pull/2908) Update sbt-scalafmt to 2.0.1  by @fthomas
+* [#2907](https://github.com/typelevel/cats/pull/2907) Update sbt-scalafix to 0.9.5  by @fthomas
+* [#2906](https://github.com/typelevel/cats/pull/2906) Update sbt-microsites to 0.9.1  by @scala-steward
+* [#2902](https://github.com/typelevel/cats/pull/2902) Update sbt-sonatype to 2.5  by @scala-steward
+* [#2901](https://github.com/typelevel/cats/pull/2901) Update sbt-scoverage to 1.6.0  by @scala-steward
+* [#2900](https://github.com/typelevel/cats/pull/2900) Update sbt-doctest to 0.9.5  by @scala-steward
+* [#2899](https://github.com/typelevel/cats/pull/2899) Update sbt-microsites to 0.7.27  by @scala-steward
+* [#2897](https://github.com/typelevel/cats/pull/2897) Update sbt-jmh to 0.3.7  by @scala-steward
+* [#2882](https://github.com/typelevel/cats/pull/2882) Update tut-plugin to 0.6.12  by @scala-steward
+* [#2828](https://github.com/typelevel/cats/pull/2828) make stage more explicit  by @kailuowang
+
+
 ## Version 2.0.0-M4
 
 > 2019 June 11
