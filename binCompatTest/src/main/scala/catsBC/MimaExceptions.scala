@@ -1,4 +1,5 @@
 package catsBC
+import cats.InjectK
 import cats.implicits._
 
 object MimaExceptions {
@@ -27,6 +28,7 @@ object MimaExceptions {
     true.iterateUntilM(Option(_))(identity _),
     Either.catchOnly[NumberFormatException] { "foo".toInt },
     (1.validNel[String], 2.validNel[String], 3.validNel[String]) mapN (_ + _ + _),
-    (1.asRight[String], 2.asRight[String], 3.asRight[String]) parMapN (_ + _ + _)
+    (1.asRight[String], 2.asRight[String], 3.asRight[String]) parMapN (_ + _ + _),
+    InjectK.catsReflexiveInjectKInstance[Option]
   )
 }

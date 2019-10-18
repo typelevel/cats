@@ -13,6 +13,7 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class ListSuite extends CatsSuite {
 
@@ -58,5 +59,26 @@ class ListSuite extends CatsSuite {
     forAll { l: List[String] =>
       l.show should ===(l.toString)
     }
+  }
+
+  test("the instance for `Eq[List[A]]` is not ambiguous when A has a Hash and a PartialOrder") {
+
+    import cats.kernel.{Hash, PartialOrder}
+
+    trait A
+    implicit def po: PartialOrder[A] = ???
+    implicit def ho: Hash[A] = ???
+
+    lazy val _ = implicitly[Eq[List[A]]]
+  }
+}
+
+final class ListInstancesSuite extends AnyFunSuiteLike {
+
+  test("NonEmptyParallel instance in cats.instances.list") {
+    import cats.instances.list._
+    import cats.syntax.parallel._
+
+    (List(1, 2, 3), List("A", "B", "C")).parTupled
   }
 }

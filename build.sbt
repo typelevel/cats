@@ -6,12 +6,6 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val scoverageSettings = Seq(
-  coverageEnabled := {
-    if (priorTo2_13(scalaVersion.value))
-      coverageEnabled.value
-    else
-      false
-  },
   coverageMinimum := 60,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
@@ -23,17 +17,15 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
-val scalatestVersion = "3.1.0-SNAP13"
+val scalaCheckVersion = "1.14.2"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
+val scalatestplusScalaCheckVersion = "3.1.0.0-RC2"
 
-val scalaCheckVersion = "1.14.0"
+val disciplineVersion = "1.0.1"
 
-val disciplineVersion = "1.0.0"
+val disciplineScalatestVersion = "1.0.0-RC1"
 
-val disciplineScalatestVersion = "1.0.0-M1"
-
-val kindProjectorVersion = "0.10.3"
+val kindProjectorVersion = "0.11.0"
 
 crossScalaVersionsFromTravis in Global := {
   val manifest = (baseDirectory in ThisBuild).value / ".travis.yml"
@@ -50,8 +42,6 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
     List(CrossType.Pure, CrossType.Full)
       .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
   CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y)) if y <= 12 =>
-      extraDirs("-2.12-")
     case Some((2, y)) if y >= 13 =>
       extraDirs("-2.13+")
     case _ => Nil
@@ -65,6 +55,8 @@ lazy val commonScalaVersionSettings = Seq(
 
 commonScalaVersionSettings
 
+ThisBuild / mimaFailOnNoPrevious := false
+
 lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   scalacOptions ++= commonScalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main", baseDirectory.value, scalaVersion.value),
@@ -76,13 +68,8 @@ lazy val commonSettings = commonScalaVersionSettings ++ Seq(
   doctestGenTests := {
     val unchanged = doctestGenTests.value
     if (priorTo2_13(scalaVersion.value)) unchanged else Nil
-  },
-  // TODO: re-enable disable scaladoc on 2.13 due to https://github.com/scala/bug/issues/11045
-  sources in (Compile, doc) := {
-    val docSource = (sources in (Compile, doc)).value
-    if (priorTo2_13(scalaVersion.value)) docSource else Nil
   }
-) ++ warnUnusedImport ++ update2_12 ++ xlint
+) ++ warnUnusedImport
 
 def macroDependencies(scalaVersion: String) =
   CrossVersion.partialVersion(scalaVersion) match {
@@ -96,21 +83,21 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
-    compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
+    compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
   ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
-    "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided
+    "org.typelevel" %%% "simulacrum" % "1.0.0" % Provided
   ),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
         case e: xml.Elem
             if e.label == "dependency" &&
-              e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
+              e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
               e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) =>
           Nil
         case _ => Seq(node)
@@ -152,11 +139,6 @@ lazy val commonJvmSettings = Seq(
   Test / javaOptions := Seq("-Xmx3G")
 )
 
-lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.11.12", // TODO: load scala version form .travis.yml: https://github.com/dwijnand/sbt-travisci/issues/11
-  crossScalaVersions := Seq("2.11.12")
-)
-
 lazy val includeGeneratedSrc: Setting[_] = {
   mappings in (Compile, packageSrc) ++= {
     val base = (sourceManaged in Compile).value
@@ -173,9 +155,8 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
-    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test"
+    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test",
+    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
   )
 )
 
@@ -397,7 +378,18 @@ def mimaSettings(moduleName: String) =
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
           exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
           exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
-          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c")
+          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
+          exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
+        ) ++ //package private classes no longer needed
+        Seq(
+          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
+          exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific"),
+          exclude[MissingClassProblem](
+            "cats.kernel.compat.scalaVersionMoreSpecific$suppressUnusedImportWarningForScalaVersionMoreSpecific"
+          )
+        ) ++ // Only narrowing of types allowed here
+        Seq(
+          exclude[IncompatibleSignatureProblem]("*")
         )
     }
   )
@@ -565,12 +557,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion,
-      "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
-    )
-  )
+  .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
@@ -583,11 +570,6 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "cats-testkit")
   .settings(catsSettings)
   .settings(disciplineDependencies)
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion
-    )
-  )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
@@ -651,21 +633,24 @@ lazy val bench = project
   .enablePlugins(JmhPlugin)
 
 lazy val binCompatTest = project
-  .disablePlugins(CoursierPlugin)
   .settings(noPublishSettings)
   .settings(
+    // workaround because coursier doesn't understand dependsOn(core.jvm % Test)
+    // see https://github.com/typelevel/cats/pull/3079#discussion_r327181584
+    // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
+    useCoursier := false,
     commonScalaVersionSettings,
-    addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
+    addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
     libraryDependencies ++= List(
       {
         if (priorTo2_13(scalaVersion.value))
           mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
         else //We are not testing BC on Scala 2.13 yet.
           "org.typelevel" %% "cats-core" % "2.0.0-M4" % Provided
-      },
-      "org.scalatest" %%% "scalatest" % scalatestVersion % Test
+      }
     )
   )
+  .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
 
 // cats-js is JS-only
@@ -788,7 +773,7 @@ addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
 addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
 
-addCommandAlias("prePR", ";fmt;++2.11.12 mimaReportBinaryIssues")
+addCommandAlias("prePR", "fmt")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Base Build Settings - Should not need to edit below this line.
@@ -827,7 +812,8 @@ def commonScalacOptions(scalaVersion: String) =
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfatal-warnings",
-    "-deprecation"
+    "-deprecation",
+    "-Xlint:-unused,_"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
@@ -847,7 +833,6 @@ def priorTo2_13(scalaVersion: String): Boolean =
 lazy val sharedPublishSettings = Seq(
   releaseTagName := tagName.value,
   releaseVcsSign := true,
-  useGpg := true, // bouncycastle has bugs with subkeys, so we use gpg instead
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := Function.const(false),
@@ -878,15 +863,7 @@ lazy val sharedReleaseProcess = Seq(
 )
 
 lazy val warnUnusedImport = Seq(
-  scalacOptions ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 11)) =>
-        Seq("-Ywarn-unused-import")
-      case Some((2, n)) if n >= 12 =>
-        Seq("-Ywarn-unused:imports")
-
-    }
-  },
+  scalacOptions ++= Seq("-Ywarn-unused:imports"),
   scalacOptions in (Compile, console) ~= { _.filterNot(Set("-Ywarn-unused-import", "-Ywarn-unused:imports")) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
@@ -897,22 +874,4 @@ lazy val credentialSettings = Seq(
     username <- Option(System.getenv().get("SONATYPE_USERNAME"))
     password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
   } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
-)
-
-lazy val update2_12 = Seq(
-  scalacOptions -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Yinline-warnings"
-      case _                                         => ""
-    }
-  }
-)
-
-lazy val xlint = Seq(
-  scalacOptions += {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 12 => "-Xlint:-unused,_"
-      case _                                         => "-Xlint"
-    }
-  }
 )

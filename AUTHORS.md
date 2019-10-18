@@ -53,6 +53,7 @@ possible:
  * Brian P. Holt
  * Bryan Tan
  * Cary Robbins
+ * Changwoo Park
  * Chris Birchall
  * Christopher Davenport
  * Cody Allen
@@ -81,6 +82,7 @@ possible:
  * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
+ * Endre Galaczi
  * Eric Torreborre
  * ericaovo
  * Erik LaBianca
@@ -100,15 +102,18 @@ possible:
  * Francois Armand
  * Frank S. Thomas
  * Gabriele Petronella
+ * Gagandeep Kalra
  * Gavin Bisesi
  * Giovanni Ruggiero
  * Giulio De Luise
  * Giuseppe Cannella
  * Greg Pfeil
  * Guillaume Massé
+ * Hamed Nourhani
  * Hamish Dickson
  * Harrison Houghton
  * Ian McIntosh
+ * Ikrom
  * ImLiar
  * Ionuț G. Stan
  * Israel Pérez González
@@ -165,6 +170,7 @@ possible:
  * Matthias Lüneberg
  * Max Worgan
  * Merlin Göttlinger
+ * Michał Gutowski
  * Michael Ledin
  * Michael Pilquist
  * Mike Curry
@@ -211,6 +217,7 @@ possible:
  * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
+ * Sergei Dolgov
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
@@ -224,6 +231,7 @@ possible:
  * sullis
  * Sumedh Mungee
  * Takayuki Sakai
+ * Tanaka Takaya
  * Taylor Brown
  * Tom Switzer
  * Tomas Mikula
@@ -234,6 +242,7 @@ possible:
  * Tya
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasiliy Bondarenko
  * ven
  * Viktor Dychko
  * Viktor Lövgren
