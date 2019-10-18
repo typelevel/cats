@@ -38,6 +38,7 @@ trait AllInstances
     with StreamInstances
     with StringInstances
     with SymbolInstances
+    with TailRecInstances
     with TryInstances
     with TupleInstances
     with UUIDInstances
@@ -61,7 +62,4 @@ trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstan
 
 trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
 
-trait AllInstancesBinCompat6
-    extends SortedSetInstancesBinCompat1
-    with SortedMapInstancesBinCompat2
-    with TailRecInstances
+trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2
