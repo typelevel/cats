@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.Bifunctor
 import cats.instances.either._
 import cats.syntax.either._
 
@@ -13,33 +12,155 @@ import cats.syntax.either._
  * and lifted in to a `EitherT[F, C, B]` via `EitherT.left`.
  */
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
+
+  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Left("456"), Right(123)))
+   * scala> eitherT.fold(string => string.toInt, int => int)
+   * res0: List[Int] = List(456, 123)
+   * }}}
+   */
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 
+  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123),Left("abc")))
+   * scala> eitherT.foldF(string => string.split("").toList, _ => List("123"))
+   * res0: List[String] = List(123, a, b, c)
+   * }}}
+   */
   def foldF[C](fa: A => F[C], fb: B => F[C])(implicit F: FlatMap[F]): F[C] = F.flatMap(value)(_.fold(fa, fb))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> eitherT.isLeft
+   * res0: List[Boolean] = List(false, true)
+   * }}}
+   */
   def isLeft(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isLeft)
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> eitherT.isRight
+   * res0: List[Boolean] = List(true, false)
+   * }}}
+   */
   def isRight(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.isRight)
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> eitherT.swap
+   * res0: EitherT[List,Int,String] = EitherT(List(Left(123), Right(abc)))
+   * }}}
+   */
   def swap(implicit F: Functor[F]): EitherT[F, B, A] = EitherT(F.map(value)(_.swap))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> eitherT.getOrElse(456)
+   * res0: List[Int] = List(123, 456)
+   * }}}
+   */
   def getOrElse[BB >: B](default: => BB)(implicit F: Functor[F]): F[BB] = F.map(value)(_.getOrElse(default))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] = EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> eitherT.getOrElseF(List(456))
+   * res0: List[Int] = List(123, 456)
+   * }}}
+   */
   def getOrElseF[BB >: B](default: => F[BB])(implicit F: Monad[F]): F[BB] =
     F.flatMap(value) {
       case Left(_)  => default
       case Right(b) => F.pure(b)
     }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val e1: EitherT[Option,String,Int] = EitherT[Option, String,Int](Some(Right(123)))
+   * scala> e1.orElse(EitherT[Option,Boolean,Int](Some(Right(456))))
+   * res0: EitherT[Option, Boolean, Int] = EitherT(Some(Right(123)))
+   *
+   * scala> val e2: EitherT[Option,String,Int] = EitherT[Option, String,Int](Some(Left("abc")))
+   * scala> e2.orElse(EitherT[Option,Boolean,Int](Some(Left(true))))
+   * res1: EitherT[Option, Boolean, Int] = EitherT(Some(Left(true)))
+   * }}}
+   */
   def orElse[C, BB >: B](default: => EitherT[F, C, BB])(implicit F: Monad[F]): EitherT[F, C, BB] =
     EitherT(F.flatMap(value) {
       case Left(_)      => default.value
       case r @ Right(_) => F.pure(r.leftCast)
     })
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] =
+   *      |   EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> val pf: PartialFunction[String, Int] = {case "abc" => 456}
+   * scala> eitherT.recover(pf)
+   * res0: EitherT[List, String, Int] = EitherT(List(Right(123), Right(456)))
+   * }}}
+   */
   def recover(pf: PartialFunction[A, B])(implicit F: Functor[F]): EitherT[F, A, B] =
     EitherT(F.map(value)(_.recover(pf)))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List,String,Int] =
+   *      |   EitherT[List, String,Int](List(Right(123),Left("abc")))
+   * scala> val pf: PartialFunction[String, EitherT[List, String, Int]] =
+   *      |   {case "abc" => EitherT[List, String, Int](List(Right(456)))}
+   * scala> eitherT.recoverWith(pf)
+   * res0: EitherT[List, String, Int] = EitherT(List(Right(123), Right(456)))
+   * }}}
+   */
   def recoverWith(pf: PartialFunction[A, EitherT[F, A, B]])(implicit F: Monad[F]): EitherT[F, A, B] =
     EitherT(F.flatMap(value) {
       case Left(a) if pf.isDefinedAt(a) => pf(a).value
@@ -48,36 +169,170 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
   /**
    * Inverse of `MonadError#attemptT`
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val e1: EitherT[Option, Unit, Int] = EitherT[Option, Unit, Int](Some(Right(123)))
+   * scala> e1.rethrowT
+   * res0: Option[Int] = Some(123)
+   *
+   * scala> val e2: EitherT[Option, Unit, Int] = EitherT[Option, Unit, Int](Some(Left(())))
+   * scala> e2.rethrowT
+   * res1: Option[Int] = None
+   * }}}
    */
   def rethrowT(implicit F: MonadError[F, _ >: A]): F[B] =
     F.rethrow(value)
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.valueOr(_.length)
+   * res0: List[Int] = List(123, 3)
+   * }}}
+   */
   def valueOr[BB >: B](f: A => BB)(implicit F: Functor[F]): F[BB] = fold(f, identity)
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.valueOrF(string => List(string.length))
+   * res0: List[Int] = List(123, 3)
+   * }}}
+   */
   def valueOrF[BB >: B](f: A => F[BB])(implicit F: Monad[F]): F[BB] =
     F.flatMap(value) {
       case Left(a)  => f(a)
       case Right(b) => F.pure(b)
     }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.forall(_ > 100)
+   * res0: List[Boolean] = List(true, true)
+   * }}}
+   */
   def forall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.forall(f))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.exists(_ > 100)
+   * res0: List[Boolean] = List(true, false)
+   * }}}
+   */
   def exists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] = F.map(value)(_.exists(f))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val e1: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> e1.ensure("error")(_ > 150)
+   * res0: EitherT[List, String, Int] = EitherT(List(Left(error), Left(abc)))
+   *
+   * scala> val e2: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> e2.ensure("error")(_ > 100)
+   * res1: EitherT[List, String, Int] = EitherT(List(Right(123), Left(abc)))
+   * }}}
+   */
   def ensure[AA >: A](onFailure: => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
     EitherT(F.map(value)(_.ensure(onFailure)(f)))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val e1: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> e1.ensureOr(_ => "error")(_ > 100)
+   * res0: EitherT[List, String, Int] = EitherT(List(Right(123), Left(abc)))
+   *
+   * scala> val e2: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> e2.ensureOr(_ => "error")(_ > 150)
+   * res1: EitherT[List, String, Int] = EitherT(List(Left(error), Left(abc)))
+   * }}}
+   */
   def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean)(implicit F: Functor[F]): EitherT[F, AA, B] =
     EitherT(F.map(value)(_.ensureOr(onFailure)(f)))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.toOption
+   * res0: OptionT[List, Int] = OptionT(List(Some(123), None))
+   * }}}
+   */
   def toOption(implicit F: Functor[F]): OptionT[F, B] = OptionT(F.map(value)(_.toOption))
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] = EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.to[Option]
+   * res0: List[Option[Int]] = List(Some(123), None)
+   * }}}
+   */
   def to[G[_]](implicit F: Functor[F], G: Alternative[G]): F[G[B]] =
     F.map(value)(_.to[G])
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] =
+   *      |   EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.collectRight
+   * res0: List[Int] = List(123)
+   * }}}
+   */
   def collectRight(implicit FA: Alternative[F], FM: Monad[F]): F[B] =
     FM.flatMap(value)(_.to[F])
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   *
+   * scala> val eitherT: EitherT[List, String, Int] =
+   *      |   EitherT[List, String, Int](List(Right(123), Left("abc")))
+   * scala> eitherT.bimap(string => string.length, int => int % 100)
+   * res0: EitherT[List, Int, Int] = EitherT(List(Right(23), Left(3)))
+   * }}}
+   */
   def bimap[C, D](fa: A => C, fb: B => D)(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(_.bimap(fa, fb)))
 
@@ -536,6 +791,33 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       def defer[A](fa: => EitherT[F, L, A]): EitherT[F, L, A] =
         EitherT(F.defer(fa.value))
     }
+
+  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](
+    implicit P: Parallel[M]
+  ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
+    new Parallel[EitherT[M, E, *]] {
+      type F[x] = Nested[P.F, Validated[E, *], x]
+
+      implicit val monadM: Monad[M] = P.monad
+      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
+
+      def applicative: Applicative[Nested[P.F, Validated[E, *], *]] =
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, Validated.catsDataApplicativeErrorForValidated)
+
+      def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
+
+      def sequential: Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *] =
+        λ[Nested[P.F, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
+          val mva = P.sequential(nested.value)
+          EitherT(Functor[M].map(mva)(_.toEither))
+        }
+
+      def parallel: EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] =
+        λ[EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *]] { eitherT =>
+          val fea = P.parallel(eitherT.value)
+          Nested(P.applicative.map(fea)(_.toValidated))
+        }
+    }
 }
 
 abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
@@ -570,6 +852,30 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
       override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
         fa.ensureOr(error)(predicate)(F)
+    }
+
+  implicit def catsDataParallelForEitherTWithSequentialEffect[M[_]: Monad, E: Semigroup]
+    : Parallel.Aux[EitherT[M, E, *], Nested[M, Validated[E, *], *]] =
+    new Parallel[EitherT[M, E, *]] {
+      type F[x] = Nested[M, Validated[E, *], x]
+
+      implicit val appValidated: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
+      implicit val monadEither: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
+
+      def applicative: Applicative[Nested[M, Validated[E, *], *]] =
+        cats.data.Nested.catsDataApplicativeForNested[M, Validated[E, *]]
+
+      def monad: Monad[EitherT[M, E, *]] = cats.data.EitherT.catsDataMonadErrorForEitherT
+
+      def sequential: Nested[M, Validated[E, *], *] ~> EitherT[M, E, *] =
+        λ[Nested[M, Validated[E, *], *] ~> EitherT[M, E, *]] { nested =>
+          EitherT(Monad[M].map(nested.value)(_.toEither))
+        }
+
+      def parallel: EitherT[M, E, *] ~> Nested[M, Validated[E, *], *] =
+        λ[EitherT[M, E, *] ~> Nested[M, Validated[E, *], *]] { eitherT =>
+          Nested(Monad[M].map(eitherT.value)(_.toValidated))
+        }
     }
 }
 

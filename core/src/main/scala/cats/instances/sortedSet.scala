@@ -76,7 +76,7 @@ private[instances] trait SortedSetInstances1 {
     cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]
 
   @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedSet.catsKernelStdSemilatticeForSortedSet")
-  private[instances] def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
+  def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdBoundedSemilatticeForSortedSet[A]
 }
 

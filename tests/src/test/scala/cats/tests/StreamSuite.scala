@@ -13,6 +13,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
@@ -58,4 +59,14 @@ class StreamSuite extends CatsSuite {
     }
   }
 
+}
+
+final class StreamInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.stream") {
+    import cats.instances.stream._
+    import cats.syntax.parallel._
+
+    (Stream(1, 2, 3), Stream("A", "B", "C")).parTupled
+  }
 }

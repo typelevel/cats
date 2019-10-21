@@ -160,6 +160,8 @@ def foldMap[F[_]: Traverse, A, B: Monoid](fa: F[A])(f: A => B): B =
   Traverse[F].traverse[Const[B, *], A, B](fa)(a => Const(f(a))).getConst
 ```
 
+This works because `Const[B, *]` is an `Applicative` if `B` is a `Monoid`, as explained in [the documentation of `Const`](const.html#example-2-traverse).
+
 ## Further Reading
 
 * [The Essence of the Iterator Pattern][iterator] - Gibbons, Oliveira. JFP 2009.

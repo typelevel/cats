@@ -13,6 +13,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipLazyList
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -58,4 +59,14 @@ class LazyListSuite extends CatsSuite {
     }
   }
 
+}
+
+final class LazyListInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.lazyList") {
+    import cats.instances.lazyList._
+    import cats.syntax.parallel._
+
+    (LazyList(1, 2, 3), LazyList("A", "B", "C")).parTupled
+  }
 }

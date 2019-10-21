@@ -13,14 +13,16 @@ trait QueueInstances extends QueueInstances1 {
 }
 
 private[instances] trait QueueInstances1 extends QueueInstances2 {
-  implicit def catsKernelStdPartialOrderForQueue[A: PartialOrder]: PartialOrder[Queue[A]] =
-    new QueuePartialOrder[A]
-
   implicit def catsKernelStdHashForQueue[A: Hash]: Hash[Queue[A]] =
     new QueueHash[A]
 }
 
-private[instances] trait QueueInstances2 {
+private[instances] trait QueueInstances2 extends QueueInstances3 {
+  implicit def catsKernelStdPartialOrderForQueue[A: PartialOrder]: PartialOrder[Queue[A]] =
+    new QueuePartialOrder[A]
+}
+
+private[instances] trait QueueInstances3 {
   implicit def catsKernelStdEqForQueue[A: Eq]: Eq[Queue[A]] =
     new QueueEq[A]
 }
