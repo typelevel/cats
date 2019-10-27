@@ -160,6 +160,20 @@ import simulacrum.typeclass
    */
   def unzip[A, A1, A2](fab: F[A])(implicit asPair: A => (A1, A2)): (F[A1], F[A2]) = (map(fab)(_._1), map(fab)(_._2))
 
+  /**
+   * Lifts `if` to Functor
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Functor
+   * scala> import cats.implicits.catsStdInstancesForList
+   *
+   * scala> Functor[List].ifF(List(true, false, false))(1, 0)
+   * res0: List[Int] = List(1, 0, 0)
+   * }}}
+   */
+  def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = map(fb)(x => if (x) ifTrue else ifFalse)
+
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
     new ComposedFunctor[F, G] {
       val F = self

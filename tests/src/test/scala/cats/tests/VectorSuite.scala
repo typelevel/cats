@@ -55,6 +55,17 @@ class VectorSuite extends CatsSuite {
   test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
   }
+
+  test("the instance for `Eq[Vector[A]]` is not ambiguous when A has a Hash and a PartialOrder") {
+
+    import cats.kernel.{Hash, PartialOrder}
+
+    trait A
+    implicit def po: PartialOrder[A] = ???
+    implicit def ho: Hash[A] = ???
+
+    lazy val _ = implicitly[Eq[Vector[A]]]
+  }
 }
 
 final class VectorInstancesSuite extends AnyFunSuiteLike {

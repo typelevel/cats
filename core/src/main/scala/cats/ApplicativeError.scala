@@ -1,6 +1,8 @@
 package cats
 
 import cats.data.EitherT
+
+import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
@@ -72,6 +74,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * convenience.
    */
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
+
+  /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+    recover(map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
 
   /**
    * Recover from certain errors by mapping them to an `A` value.
