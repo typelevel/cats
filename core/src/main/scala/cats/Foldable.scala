@@ -204,8 +204,8 @@ import Foldable.sentinel
    *
    * @see [[maximumOptionBy]] for maximum instead of minimum.
    */
-  def minimumOptionBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Foldable[F]): Option[A] =
-    F.minimumOption(fa)(Order.by(f))
+  def minimumOptionBy[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    minimumOption(fa)(Order.by(f))
 
   /**
    * Find the maximum `A` item in this structure according to an `Order.by(f)`.
@@ -218,8 +218,8 @@ import Foldable.sentinel
    *
    * @see [[minimumOptionBy]] for minimum instead of maximum.
    */
-  def maximumOptionBy[A, B: Order](fa: F[A])(f: A => B)(implicit F: Foldable[F]): Option[A] =
-    F.maximumOption(fa)(Order.by(f))
+  def maximumOptionBy[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    maximumOption(fa)(Order.by(f))
 
   /**
    * Get the element at the index of the `Foldable`.
