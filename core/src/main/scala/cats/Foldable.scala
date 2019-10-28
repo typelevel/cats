@@ -199,7 +199,7 @@ import Foldable.sentinel
    * @return `None` if the structure is empty, otherwise the minimum element
    * wrapped in a `Some`.
    *
-   * @see [[Reducible#minimum]] for a version that doesn't need to return an
+   * @see [[Reducible#minimumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
    * @see [[maximumOptionBy]] for maximum instead of minimum.
@@ -213,7 +213,7 @@ import Foldable.sentinel
    * @return `None` if the structure is empty, otherwise the maximum element
    * wrapped in a `Some`.
    *
-   * @see [[Reducible#maximum]] for a version that doesn't need to return an
+   * @see [[Reducible#maximumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
    * @see [[minimumOptionBy]] for minimum instead of maximum.
