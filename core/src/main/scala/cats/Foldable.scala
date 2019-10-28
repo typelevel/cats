@@ -202,9 +202,9 @@ import Foldable.sentinel
    * @see [[Reducible#minimumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
-   * @see [[maximumOptionBy]] for maximum instead of minimum.
+   * @see [[maximumByOption]] for maximum instead of minimum.
    */
-  def minimumOptionBy[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+  def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     minimumOption(fa)(Order.by(f))
 
   /**
@@ -216,9 +216,9 @@ import Foldable.sentinel
    * @see [[Reducible#maximumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
-   * @see [[minimumOptionBy]] for minimum instead of maximum.
+   * @see [[minimumByOption]] for minimum instead of maximum.
    */
-  def maximumOptionBy[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+  def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     maximumOption(fa)(Order.by(f))
 
   /**
