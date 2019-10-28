@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Functor.
@@ -158,7 +158,8 @@ import simulacrum.typeclass
    * }}}
    *
    */
-  def unzip[A, A1, A2](fab: F[A])(implicit asPair: A => (A1, A2)): (F[A1], F[A2]) = (map(fab)(_._1), map(fab)(_._2))
+  @noop
+  def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
 
   /**
    * Lifts `if` to Functor
