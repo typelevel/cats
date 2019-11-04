@@ -67,4 +67,7 @@ import simulacrum.typeclass
     new ComposedSemigroupK[F, G] {
       val F = self
     }
+
+  def sum[F[_]: SemigroupK : Functor, A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A,B]] =
+    combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
 }
