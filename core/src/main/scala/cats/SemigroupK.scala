@@ -73,10 +73,10 @@ import simulacrum.typeclass
    *
    * Example:
    * {{{
-   * scala> import cats.implicits._
+   * scala> import cats.SemigroupK
    * scala> import cats.data.NonEmptyList
    * scala> SemigroupK[NonEmptyList].sum(NonEmptyList.one(1), NonEmptyList.one(2))
-   * res0: cats.data.NonEmptyList[Either[Int,Int]] = NonEmptyList(Left(1), Right(2))
+   * res0: NonEmptyList[Either[Int,Int]] = NonEmptyList(Left(1), Right(2))
    * }}}
    */
   def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] =
