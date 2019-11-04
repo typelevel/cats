@@ -69,15 +69,15 @@ import simulacrum.typeclass
     }
 
   /**
-    * Combines `F[A]` and `F[B]` into a `F[Either[A,B]]]`.
-    *
-    * Example:
-    * {{{
-    * scala> import cats.SemigroupK
-    * scala> SemigroupK[NonEmptyList].sum(NonEmptyList.one(1), NonEmptyList.one(2))
-    * res0: cats.data.NonEmptyList[Either[Int,Int]] = NonEmptyList(Left(1), Right(2))
-    * }}}
-    */
-  def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A,B]] =
+   * Combines `F[A]` and `F[B]` into a `F[Either[A,B]]]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.SemigroupK
+   * scala> SemigroupK[NonEmptyList].sum(NonEmptyList.one(1), NonEmptyList.one(2))
+   * res0: cats.data.NonEmptyList[Either[Int,Int]] = NonEmptyList(Left(1), Right(2))
+   * }}}
+   */
+  def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] =
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
 }
