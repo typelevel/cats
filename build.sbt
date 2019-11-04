@@ -387,9 +387,6 @@ def mimaSettings(moduleName: String) =
           exclude[MissingClassProblem](
             "cats.kernel.compat.scalaVersionMoreSpecific$suppressUnusedImportWarningForScalaVersionMoreSpecific"
           )
-        ) ++ //abstract package private classes
-        Seq(
-          exclude[DirectMissingMethodProblem]("cats.data.AbstractNonEmptyInstances.this")
         ) ++ // Only narrowing of types allowed here
         Seq(
           exclude[IncompatibleSignatureProblem]("*")

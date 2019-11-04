@@ -4,17 +4,14 @@ package data
 abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](implicit MF: Monad[F],
                                                                            CF: CoflatMap[F],
                                                                            TF: Traverse[F],
-                                                                           SF: SemigroupK[F],
-                                                                           AF: Align[F])
+                                                                           SF: SemigroupK[F])
     extends Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
-    with SemigroupK[NonEmptyF]
-    with Align[NonEmptyF] {
+    with SemigroupK[NonEmptyF] {
   val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
   val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
   val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
   val semiGroupKInstance = SemigroupK[F].asInstanceOf[SemigroupK[NonEmptyF]]
-  val alignInstance = Align[F].asInstanceOf[Align[NonEmptyF]]
 
   def combineK[A](a: NonEmptyF[A], b: NonEmptyF[A]): NonEmptyF[A] =
     semiGroupKInstance.combineK(a, b)
@@ -80,12 +77,4 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
 
   override def collectFirstSome[A, B](fa: NonEmptyF[A])(f: A => Option[B]): Option[B] =
     traverseInstance.collectFirstSome(fa)(f)
-
-  def align[A, B](fa: NonEmptyF[A], fb: NonEmptyF[B]): NonEmptyF[Ior[A, B]] =
-    alignInstance.align(fa, fb)
-
-  override def functor: Functor[NonEmptyF] = alignInstance.functor
-
-  override def alignWith[A, B, C](fa: NonEmptyF[A], fb: NonEmptyF[B])(f: Ior[A, B] => C): NonEmptyF[C] =
-    alignInstance.alignWith(fa, fb)(f)
 }
