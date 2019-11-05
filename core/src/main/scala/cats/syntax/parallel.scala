@@ -80,9 +80,12 @@ trait ParallelUnorderedTraverseSyntax {
 }
 
 final class ParallelTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
-  def parTraverse[M[_]: Monad, B](f: A => M[B])(implicit T: Traverse[T], P: Parallel[M]): M[T[B]] =
+  @deprecated("Use parTraverse override with no Monad constraint", "2.1.0")
+  private[syntax] def parTraverse[M[_]: Monad, B](f: A => M[B])(implicit T: Traverse[T], P: Parallel[M]): M[T[B]] =
     Parallel.parTraverse(ta)(f)
 
+  def parTraverse[M[_], B](f: A => M[B])(implicit T: Traverse[T], P: Parallel[M]): M[T[B]] =
+    Parallel.parTraverse(ta)(f)
 }
 
 final class ParallelTraversable_Ops[T[_], A](private val ta: T[A]) extends AnyVal {
@@ -98,7 +101,11 @@ final class ParallelFlatTraversableOps[T[_], A](private val ta: T[A]) extends An
 }
 
 final class ParallelSequenceOps[T[_], M[_], A](private val tma: T[M[A]]) extends AnyVal {
-  def parSequence(implicit M: Monad[M], T: Traverse[T], P: Parallel[M]): M[T[A]] =
+  @deprecated("Use parTraverse override with no Monad constraint", "2.1.0")
+  private[syntax] def parSequence(implicit M: Monad[M], T: Traverse[T], P: Parallel[M]): M[T[A]] =
+    Parallel.parSequence(tma)
+
+  def parSequence(implicit T: Traverse[T], P: Parallel[M]): M[T[A]] =
     Parallel.parSequence(tma)
 }
 
