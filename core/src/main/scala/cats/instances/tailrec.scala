@@ -4,7 +4,12 @@ package instances
 import scala.util.control.TailCalls.{done, tailcall, TailRec}
 
 trait TailRecInstances {
-  implicit val catsInstancesForTailRec: StackSafeMonad[TailRec] with Defer[TailRec] =
+  implicit def catsInstancesForTailRec: StackSafeMonad[TailRec] with Defer[TailRec] =
+    TailRecInstances.catsInstancesForTailRec
+}
+
+private object TailRecInstances {
+  val catsInstancesForTailRec: StackSafeMonad[TailRec] with Defer[TailRec] =
     new StackSafeMonad[TailRec] with Defer[TailRec] {
       def defer[A](fa: => TailRec[A]): TailRec[A] = tailcall(fa)
 
