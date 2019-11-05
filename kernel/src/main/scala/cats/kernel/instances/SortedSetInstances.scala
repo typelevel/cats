@@ -36,7 +36,7 @@ class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3._
 
   @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.1.0")
-  def this(o: Order[A], h: Hash[A]) = this()(h)
+  private[instances] def this(o: Order[A], h: Hash[A]) = this()(h)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
