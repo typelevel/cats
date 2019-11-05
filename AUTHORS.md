@@ -191,6 +191,7 @@ possible:
  * Paulo "JCranky" Siqueira
  * Pavel Chlupacek
  * Pavkin Vladimir
+ * Paweł Kiersznowski
  * Paweł Lipski
  * Pepe García
  * Pere Villega

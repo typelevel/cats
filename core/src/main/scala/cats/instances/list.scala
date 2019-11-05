@@ -7,10 +7,13 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
+import cats.data.Ior
+
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] =
-    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList
+    : Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] =
+    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
@@ -74,6 +77,22 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))) { (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value
+
+      def functor: Functor[List] = this
+
+      def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: List[A], fb: List[B])(f: Ior[A, B] => C): List[C] = {
+        @tailrec def loop(buf: ListBuffer[C], as: List[A], bs: List[B]): List[C] =
+          (as, bs) match {
+            case (a :: atail, b :: btail) => loop(buf += f(Ior.Both(a, b)), atail, btail)
+            case (Nil, Nil)               => buf.toList
+            case (arest, Nil)             => (buf ++= arest.map(a => f(Ior.left(a)))).toList
+            case (Nil, brest)             => (buf ++= brest.map(b => f(Ior.right(b)))).toList
+          }
+        loop(ListBuffer.empty[C], fa, fb)
+      }
 
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toList
@@ -143,7 +162,6 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
-
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =

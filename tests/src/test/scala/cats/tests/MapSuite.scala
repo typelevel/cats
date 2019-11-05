@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{
+  AlignTests,
   ComposeTests,
   FlatMapTests,
   FunctorFilterTests,
@@ -34,6 +35,9 @@ class MapSuite extends CatsSuite {
 
   checkAll("Map[Int, Int]", MonoidKTests[Map[Int, *]].monoidK[Int])
   checkAll("MonoidK[Map[Int, *]]", SerializableTests.serializable(MonoidK[Map[Int, *]]))
+
+  checkAll("Map[Int, Int]", AlignTests[Map[Int, ?]].align[Int, Int, Int, Int])
+  checkAll("Align[Map]", SerializableTests.serializable(Align[Map[Int, ?]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>
