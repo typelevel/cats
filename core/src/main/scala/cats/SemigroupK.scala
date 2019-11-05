@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.data.Ior
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -67,4 +68,12 @@ import simulacrum.typeclass
     new ComposedSemigroupK[F, G] {
       val F = self
     }
+}
+
+object SemigroupK {
+  def align[F[_]: SemigroupK: Functor]: Align[F] = new Align[F] {
+    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
+      SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
+    def functor: Functor[F] = Functor[F]
+  }
 }

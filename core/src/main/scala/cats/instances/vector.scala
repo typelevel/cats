@@ -7,11 +7,12 @@ import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
+import cats.data.Ior
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector
-    : Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
-    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] {
+    : Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] with Align[Vector] =
+    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] with Align[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -109,6 +110,17 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       override def find[A](fa: Vector[A])(f: A => Boolean): Option[A] = fa.find(f)
 
       override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
+
+      def functor: Functor[Vector] = this
+
+      def align[A, B](fa: Vector[A], fb: Vector[B]): Vector[A Ior B] = {
+        val aLarger = fa.size >= fb.size
+        if (aLarger) {
+          cats.compat.Vector.zipWith(fa, fb)(Ior.both) ++ fa.drop(fb.size).map(Ior.left)
+        } else {
+          cats.compat.Vector.zipWith(fa, fb)(Ior.both) ++ fb.drop(fa.size).map(Ior.right)
+        }
+      }
 
       override def collectFirst[A, B](fa: Vector[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 

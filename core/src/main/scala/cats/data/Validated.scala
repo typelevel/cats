@@ -835,6 +835,27 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       }
     }
 
+  implicit def catsDataAlignForValidated[E: Semigroup]: Align[Validated[E, *]] =
+    new Align[Validated[E, *]] {
+      def functor: Functor[Validated[E, *]] = catsDataTraverseFunctorForValidated
+      def align[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Validated[E, A], fb: Validated[E, B])(f: Ior[A, B] => C): Validated[E, C] =
+        fa match {
+          case Invalid(e) =>
+            fb match {
+              case Invalid(e2) => Invalid(Semigroup[E].combine(e, e2))
+              case Valid(b)    => Valid(f(Ior.right(b)))
+            }
+          case Valid(a) =>
+            fb match {
+              case Invalid(e) => Valid(f(Ior.left(a)))
+              case Valid(b)   => Valid(f(Ior.both(a, b)))
+            }
+        }
+    }
+
   implicit def catsDataMonoidForValidated[A, B](implicit A: Semigroup[A], B: Monoid[B]): Monoid[Validated[A, B]] =
     new Monoid[Validated[A, B]] {
       def empty: Validated[A, B] = Valid(B.empty)

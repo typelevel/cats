@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -33,6 +34,9 @@ class LazyListSuite extends CatsSuite {
 
   checkAll("LazyList[Int]", TraverseFilterTests[LazyList].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[LazyList]", SerializableTests.serializable(TraverseFilter[LazyList]))
+
+  checkAll("LazyList[Int]", AlignTests[LazyList].align[Int, Int, Int, Int])
+  checkAll("Align[LazyList]", SerializableTests.serializable(Align[LazyList]))
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])

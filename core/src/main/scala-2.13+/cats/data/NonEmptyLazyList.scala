@@ -330,9 +330,11 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
 sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyLazyList
-    : Bimonad[NonEmptyLazyList] with NonEmptyTraverse[NonEmptyLazyList] with SemigroupK[NonEmptyLazyList] =
-    new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] {
+  implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList]
+    with NonEmptyTraverse[NonEmptyLazyList]
+    with SemigroupK[NonEmptyLazyList]
+    with Align[NonEmptyLazyList] =
+    new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
 
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
@@ -353,6 +355,17 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
         Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })
+
+      private val alignInstance = Align[LazyList].asInstanceOf[Align[NonEmptyLazyList]]
+
+      def functor: Functor[NonEmptyLazyList] = alignInstance.functor
+
+      def align[A, B](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B]): NonEmptyLazyList[Ior[A, B]] =
+        alignInstance.align(fa, fb)
+
+      override def alignWith[A, B, C](fa: NonEmptyLazyList[A],
+                                      fb: NonEmptyLazyList[B])(f: Ior[A, B] => C): NonEmptyLazyList[C] =
+        alignInstance.alignWith(fa, fb)(f)
     }
 
   implicit def catsDataOrderForNonEmptyLazyList[A: Order]: Order[NonEmptyLazyList[A]] =
