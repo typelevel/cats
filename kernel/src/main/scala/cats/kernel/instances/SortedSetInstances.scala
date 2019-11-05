@@ -4,11 +4,11 @@ package instances
 import scala.collection.immutable.SortedSet
 
 trait SortedSetInstances extends SortedSetInstances1 {
-  @deprecated("Will be removed after dropping Scala 2.11 support", "")
+  @deprecated("Use catsKernelStdHashForSortedSet override without Order", "2.1.0")
   def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     new SortedSetHash[A]
 
-  implicit def catsKernelStdHashForSortedSet1[A: Hash]: Hash[SortedSet[A]] =
+  implicit def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
     new SortedSetHash[A]
 }
 
@@ -35,7 +35,7 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
 class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3._
 
-  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.0.1")
+  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.1.0")
   def this(o: Order[A], h: Hash[A]) = this()(h)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
