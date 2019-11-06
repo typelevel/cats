@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Functor.
@@ -143,6 +143,23 @@ import simulacrum.typeclass
    * }}}
    */
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
+
+  /**
+   * Un-zips an `F[(A, B)]` consisting of element pairs or Tuple2 into two separate F's tupled.
+   *
+   * NOTE: Check for effect duplication, possibly memoize before
+   *
+   * {{{
+   * scala> import cats.Functor
+   * scala> import cats.implicits.catsStdInstancesForList
+   *
+   * scala> Functor[List].unzip(List((1,2), (3, 4)))
+   * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
+   * }}}
+   *
+   */
+  @noop
+  def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
 
   /**
    * Lifts `if` to Functor
