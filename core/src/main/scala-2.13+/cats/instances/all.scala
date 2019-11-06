@@ -39,6 +39,7 @@ trait AllInstances
     with StreamInstances
     with StringInstances
     with SymbolInstances
+    with TailRecInstances
     with TryInstances
     with TupleInstances
     with UUIDInstances
