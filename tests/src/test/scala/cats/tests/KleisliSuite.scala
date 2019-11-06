@@ -219,6 +219,13 @@ class KleisliSuite extends CatsSuite {
     }
   }
 
+  test("tapWithMapF") {
+    forAll { (f: Kleisli[List, Int, Int], t: List[(Int, Int)] => Option[(Int, Int)], i: Int) =>
+      f.tapWithIdentity().mapF(t).run(i) should ===(f.tapWithMapF(t).run(i))
+      t(f.tapWithIdentity().run(i)) should ===(f.tapWithMapF(t).run(i))
+    }
+  }
+
   test("toReader") {
     forAll { (f: Kleisli[List, Int, String], i: Int) =>
       f.run(i) should ===(f.toReader.run(i))
