@@ -199,7 +199,7 @@ lazy val docSettings = Seq(
   includeFilter in Jekyll := (includeFilter in makeSite).value
 )
 
-def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[ModuleID] = {
+def mimaPrevious(moduleName: String, scalaVer: String, ver: String, includeCats1: Boolean = true): List[ModuleID] = {
   import sbtrelease.Version
 
   def semverBinCompatVersions(major: Int, minor: Int, patch: Int): List[(Int, Int, Int)] = {
@@ -235,15 +235,15 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[Module
   // Safety Net for Inclusions
   lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
-  (mimaVersions ++ extraVersions)
+  (mimaVersions ++ (if (includeCats1) extraVersions else Nil))
     .filterNot(excludedVersions.contains(_))
     .map(v => "org.typelevel" %% moduleName % v)
 
 }
 
-def mimaSettings(moduleName: String) =
+def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
   Seq(
-    mimaPreviousArtifacts := mimaPrevious(moduleName, scalaVersion.value, version.value).toSet,
+    mimaPreviousArtifacts := mimaPrevious(moduleName, scalaVersion.value, version.value, includeCats1).toSet,
     mimaBinaryIssueFilters ++= {
       import com.typesafe.tools.mima.core._
       import com.typesafe.tools.mima.core.ProblemFilters._
@@ -491,7 +491,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
   .dependsOn(kernel)
 
@@ -514,7 +514,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
 
 lazy val free = crossProject(JSPlatform, JVMPlatform)
@@ -555,7 +555,7 @@ lazy val testkit = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("cats-testkit", includeCats1 = false))
   .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
@@ -568,7 +568,7 @@ lazy val alleycatsCore = crossProject(JSPlatform, JVMPlatform)
   .settings(scoverageSettings)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-core", includeCats1 = false))
 
 lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -581,7 +581,7 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform)
   .settings(disciplineDependencies)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings ++ mimaSettings("alleycats-laws", includeCats1 = false))
   .jsSettings(coverageEnabled := false)
 
 lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
