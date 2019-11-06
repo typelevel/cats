@@ -262,12 +262,9 @@ def mimaPrevious(moduleName: String, scalaVer: String, ver: String): List[Module
   // Safety Net for Inclusions
   lazy val extraVersions: List[String] = List("1.0.1", "1.1.0", "1.2.0", "1.3.1", "1.4.0", "1.5.0", "1.6.1")
 
-  if (priorTo2_13(scalaVer)) {
-    (mimaVersions ++ extraVersions)
-      .filterNot(excludedVersions.contains(_))
-      .map(v => "org.typelevel" %% moduleName % v)
-  } else List()
-
+  (mimaVersions ++ (if (priorTo2_13(scalaVer)) extraVersions else Nil))
+    .filterNot(excludedVersions.contains(_))
+    .map(v => "org.typelevel" %% moduleName % v)
 }
 
 def mimaSettings(moduleName: String) =
