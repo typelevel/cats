@@ -161,7 +161,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
     }
 
   @deprecated("Use catsStdParallelForZipLazyList", "2.0.0-RC2")
-  implicit val catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =
+  implicit def catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =
     new Parallel[Stream] {
       type F[x] = ZipStream[x]
 
