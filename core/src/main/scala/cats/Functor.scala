@@ -144,7 +144,7 @@ import simulacrum.typeclass
    */
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
 
-    /**
+  /**
    * Lifts `if` to Functor
    *
    * Example:
