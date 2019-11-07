@@ -60,10 +60,13 @@ jobs:
       env: TEST="scalafix"
       script: cd scalafix && sbt tests/test
 
-    - stage: test
+    - &bincompat
+      stage: test
       env: TEST="binary compatibility"
       script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
       scala: *scala_version_212
+    - <<: *bincompat
+      scala: *scala_version_213
 
     - stage: styling
       env: TEST="linting"
