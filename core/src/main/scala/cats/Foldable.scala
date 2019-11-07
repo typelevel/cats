@@ -334,6 +334,14 @@ import Foldable.sentinel
     foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
+   * Equivalent to foldMapM.
+   * The difference is that foldMapA only requires G to be an Applicative
+   * rather than a Monad. It is also slower due to use of Eval.
+   */
+  def foldMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
+    foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
+
+  /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
    * `A` values will be mapped into `G[B]` and combined using
