@@ -112,7 +112,11 @@ object Boilerplate {
         ""
       }
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)
@@ -188,7 +192,12 @@ object Boilerplate {
           "a" + n + ":A" + n
         }
         .mkString(",")
-      def apN(n: Int) = if (n == 1) { "ap" } else { s"ap$n" }
+      def apN(n: Int) =
+        if (n == 1) {
+          "ap"
+        } else {
+          s"ap$n"
+        }
       def allArgs = (0 until arity).map { "a" + _ }.mkString(",")
 
       val apply =
@@ -261,7 +270,7 @@ object Boilerplate {
       | */
       |trait ParallelArityFunctions {
         -  /** @group ParMapArity */
-        -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
+        -  def parMap$arity[M[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] =
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) }
       |}
       """
@@ -294,7 +303,7 @@ object Boilerplate {
       | */
       |abstract class ParallelArityFunctions2 extends ParallelArityFunctions {
         -  /** @group ParTupleArity */
-        -  def parTuple$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
+        -  def parTuple$arity[M[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M]): M[(${`A..N`})] =
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => (${`a..n`}) }
       |}
       """
@@ -381,18 +390,22 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val parMap =
         if (arity == 1)
-          s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
+          s"def parMap[Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] = p.flatMap.map($tupleArgs)(f)"
         else
-          s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
+          s"def parMapN[Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
       val parTupled =
         if (arity == 1) ""
         else
-          s"def parTupled[F[_]](implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] = Parallel.parTuple$arity($tupleArgs)"
+          s"def parTupled(implicit p: NonEmptyParallel[M]): M[(${`A..N`})] = Parallel.parTuple$arity($tupleArgs)"
 
       block"""
       |package cats
@@ -428,7 +441,11 @@ object Boilerplate {
       val tupleTpe = s"t$arity: $tuple"
       val tupleArgs = (1 to arity).map { case n => s"t$arity._$n" }.mkString(", ")
 
-      val n = if (arity == 1) { "" } else { arity.toString }
+      val n = if (arity == 1) {
+        ""
+      } else {
+        arity.toString
+      }
 
       val map =
         if (arity == 1)

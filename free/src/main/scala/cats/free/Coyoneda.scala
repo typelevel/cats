@@ -83,10 +83,10 @@ object Coyoneda {
     }
 
   /**
-   * As the free functor, `Coyoneda[F, ?]` provides a functor for any `F`.
+   * As the free functor, `Coyoneda[F, *]` provides a functor for any `F`.
    */
-  implicit def catsFreeFunctorForCoyoneda[F[_]]: Functor[Coyoneda[F, ?]] =
-    new Functor[Coyoneda[F, ?]] {
+  implicit def catsFreeFunctorForCoyoneda[F[_]]: Functor[Coyoneda[F, *]] =
+    new Functor[Coyoneda[F, *]] {
       def map[A, B](cfa: Coyoneda[F, A])(f: A => B): Coyoneda[F, B] = cfa.map(f)
     }
 

@@ -19,15 +19,17 @@ package data
 
 import cats.instances.sortedSet._
 import cats.kernel._
+import cats.syntax.order._
 
 import scala.collection.immutable._
+import kernel.compat.scalaVersionSpecific._
 
 private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
-  private[cats] def create[A](s: SortedSet[A]): Type[A] =
+  private[data] def create[A](s: SortedSet[A]): Type[A] =
     s.asInstanceOf[Type[A]]
 
-  private[cats] def unwrap[A](s: Type[A]): SortedSet[A] =
+  private[data] def unwrap[A](s: Type[A]): SortedSet[A] =
     s.asInstanceOf[SortedSet[A]]
 
   def fromSet[A](as: SortedSet[A]): Option[NonEmptySet[A]] =
@@ -39,6 +41,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
   def of[A](a: A, as: A*)(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(a +: as: _*)(A.toOrdering))
+
   def apply[A](head: A, tail: SortedSet[A])(implicit A: Order[A]): NonEmptySet[A] =
     create(SortedSet(head)(A.toOrdering) ++ tail)
   def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(A.toOrdering))
@@ -47,6 +50,7 @@ private[data] object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
     new NonEmptySetOps(value)
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
 
   implicit private val ordering: Ordering[A] = toSortedSet.ordering
@@ -199,17 +203,17 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
    * Tests whether a predicate holds for all elements of this set.
    */
-  def forall(p: A ⇒ Boolean): Boolean = toSortedSet.forall(p)
+  def forall(p: A => Boolean): Boolean = toSortedSet.forall(p)
 
   /**
    * Tests whether a predicate holds for at least one element of this set.
    */
-  def exists(f: A ⇒ Boolean): Boolean = toSortedSet.exists(f)
+  def exists(f: A => Boolean): Boolean = toSortedSet.exists(f)
 
   /**
    * Returns the first value that matches the given predicate.
    */
-  def find(f: A ⇒ Boolean): Option[A] = toSortedSet.find(f)
+  def find(f: A => Boolean): Option[A] = toSortedSet.find(f)
 
   /**
    * Returns a new `SortedSet` containing all elements where the result of `pf` is defined.
@@ -222,12 +226,12 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
   /**
    * Filters all elements of this set that do not satisfy the given predicate.
    */
-  def filter(p: A ⇒ Boolean): SortedSet[A] = toSortedSet.filter(p)
+  def filter(p: A => Boolean): SortedSet[A] = toSortedSet.filter(p)
 
   /**
    * Filters all elements of this set that satisfy the given predicate.
    */
-  def filterNot(p: A ⇒ Boolean): SortedSet[A] = filter(t => !p(t))
+  def filterNot(p: A => Boolean): SortedSet[A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.
@@ -334,7 +338,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    */
   def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
     implicit val cOrdering = C.toOrdering
-    NonEmptySetImpl.create((toSortedSet, b.toSortedSet).zipped.map(f))
+    NonEmptySetImpl.create((toSortedSet.lazyZip(b.toSortedSet)).map(f))
   }
 
   /**
@@ -358,7 +362,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
     }
 }
 
-sealed abstract private[data] class NonEmptySetInstances {
+sealed abstract private[data] class NonEmptySetInstances extends NonEmptySetInstances0 {
   implicit val catsDataInstancesForNonEmptySet: SemigroupK[NonEmptySet] with Reducible[NonEmptySet] =
     new SemigroupK[NonEmptySet] with Reducible[NonEmptySet] {
 
@@ -405,9 +409,9 @@ sealed abstract private[data] class NonEmptySetInstances {
         fa.toNonEmptyList
     }
 
-  implicit def catsDataEqForNonEmptySet[A: Order]: Eq[NonEmptySet[A]] =
-    new Eq[NonEmptySet[A]] {
-      def eqv(x: NonEmptySet[A], y: NonEmptySet[A]): Boolean = x === y
+  implicit def catsDataOrderForNonEmptySet[A](implicit A: Order[A]): Order[NonEmptySet[A]] =
+    new NonEmptySetOrder[A] {
+      implicit override def A0: Order[A] = A
     }
 
   implicit def catsDataShowForNonEmptySet[A](implicit A: Show[A]): Show[NonEmptySet[A]] =
@@ -416,4 +420,28 @@ sealed abstract private[data] class NonEmptySetInstances {
   implicit def catsDataSemilatticeForNonEmptySet[A]: Semilattice[NonEmptySet[A]] = new Semilattice[NonEmptySet[A]] {
     def combine(x: NonEmptySet[A], y: NonEmptySet[A]): NonEmptySet[A] = x | y
   }
+}
+
+sealed abstract private[data] class NonEmptySetInstances0 extends NonEmptySetInstances1 {
+  implicit def catsDataHashForNonEmptySet[A: Order: Hash]: Hash[NonEmptySet[A]] =
+    Hash[SortedSet[A]].asInstanceOf[Hash[NonEmptySet[A]]]
+}
+
+sealed abstract private[data] class NonEmptySetInstances1 {
+  implicit def catsDataEqForNonEmptySet[A](implicit A: Order[A]): Eq[NonEmptySet[A]] = new NonEmptySetEq[A] {
+    implicit override def A0: Eq[A] = A
+  }
+}
+
+sealed abstract private[data] class NonEmptySetOrder[A] extends Order[NonEmptySet[A]] with NonEmptySetEq[A] {
+  implicit override def A0: Order[A]
+
+  override def compare(x: NonEmptySet[A], y: NonEmptySet[A]): Int =
+    x.toSortedSet.compare(y.toSortedSet)
+}
+
+sealed private[data] trait NonEmptySetEq[A] extends Eq[NonEmptySet[A]] {
+  implicit def A0: Eq[A]
+
+  override def eqv(x: NonEmptySet[A], y: NonEmptySet[A]): Boolean = x === y
 }

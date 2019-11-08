@@ -15,7 +15,7 @@ trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   ): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(F.unorderedTraverse(fa)(f))(fb => F.unorderedTraverse(fb)(g)))
-    val rhs = F.unorderedTraverse[Nested[M, N, ?], A, C](fa)(a => Nested(M.map(f(a))(g)))
+    val rhs = F.unorderedTraverse[Nested[M, N, *], A, C](fa)(a => Nested(M.map(f(a))(g)))
     lhs <-> rhs
   }
 

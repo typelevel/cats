@@ -66,4 +66,11 @@ object Semilattice extends SemilatticeFunctions[Semilattice] {
    * Access an implicit `Semilattice[A]`.
    */
   @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: Semilattice[A]): Semilattice[A] = ev
+
+  /**
+   * Create a `Semilattice` instance from the given function.
+   */
+  @inline def instance[A](cmb: (A, A) => A): Semilattice[A] = new Semilattice[A] {
+    override def combine(x: A, y: A): A = cmb(x, y)
+  }
 }

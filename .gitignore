@@ -1,3 +1,6 @@
+.hydra
+.bloop
+.metals
 project/boot
 target
 .ensime
@@ -14,6 +17,7 @@ TAGS
 .idea/*
 .idea_modules
 .DS_Store
+.vscode
 .sbtrc
 *.sublime-project
 *.sublime-workspace

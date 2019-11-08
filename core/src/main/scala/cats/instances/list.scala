@@ -1,15 +1,19 @@
 package cats
 package instances
 
+import cats.data.ZipList
 import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
+import cats.data.Ior
+
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
-  implicit val catsStdInstancesForList: Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] =
-    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] {
+  implicit val catsStdInstancesForList
+    : Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] =
+    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ++ y
@@ -74,6 +78,22 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
           G.map2Eval(f(a), lglb)(_ :: _)
         }.value
 
+      def functor: Functor[List] = this
+
+      def align[A, B](fa: List[A], fb: List[B]): List[A Ior B] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: List[A], fb: List[B])(f: Ior[A, B] => C): List[C] = {
+        @tailrec def loop(buf: ListBuffer[C], as: List[A], bs: List[B]): List[C] =
+          (as, bs) match {
+            case (a :: atail, b :: btail) => loop(buf += f(Ior.Both(a, b)), atail, btail)
+            case (Nil, Nil)               => buf.toList
+            case (arest, Nil)             => (buf ++= arest.map(a => f(Ior.left(a)))).toList
+            case (Nil, brest)             => (buf ++= brest.map(b => f(Ior.right(b)))).toList
+          }
+        loop(ListBuffer.empty[C], fa, fb)
+      }
+
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
         fa.iterator.zipWithIndex.map(ai => f(ai._1, ai._2)).toList
 
@@ -88,7 +108,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
             f(a) match {
               case Left(b)  => (b :: acc._1, acc._2)
               case Right(c) => (acc._1, c :: acc._2)
-          }
+            }
         )
 
       @tailrec
@@ -142,7 +162,6 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def collectFirstSome[A, B](fa: List[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
-
     }
 
   implicit def catsStdShowForList[A: Show]: Show[List[A]] =
@@ -150,9 +169,23 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       def show(fa: List[A]): String =
         fa.iterator.map(_.show).mkString("List(", ", ", ")")
     }
+
+  implicit def catsStdNonEmptyParallelForListZipList: NonEmptyParallel.Aux[List, ZipList] =
+    new NonEmptyParallel[List] {
+      type F[x] = ZipList[x]
+
+      def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
+      def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
+
+      def sequential: ZipList ~> List =
+        λ[ZipList ~> List](_.value)
+
+      def parallel: List ~> ZipList =
+        λ[List ~> ZipList](v => new ZipList(v))
+    }
 }
 
-trait ListInstancesBinCompat0 {
+private[instances] trait ListInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForList: TraverseFilter[List] = new TraverseFilter[List] {
     val traverse: Traverse[List] = cats.instances.list.catsStdInstancesForList
 
@@ -165,13 +198,15 @@ trait ListInstancesBinCompat0 {
     override def flattenOption[A](fa: List[Option[A]]): List[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
-      fa.foldRight(Eval.now(G.pure(List.empty[B])))(
+      traverse
+        .foldRight(fa, Eval.now(G.pure(List.empty[B])))(
           (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o))
         )
         .value
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
-      fa.foldRight(Eval.now(G.pure(List.empty[A])))(
+      traverse
+        .foldRight(fa, Eval.now(G.pure(List.empty[A])))(
           (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
         )
         .value

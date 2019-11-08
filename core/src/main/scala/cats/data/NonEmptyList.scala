@@ -4,6 +4,7 @@ package data
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
 import cats.syntax.order._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
 import scala.collection.mutable
@@ -258,7 +259,10 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
 
     val buf = ListBuffer.empty[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, b) =>
-      if (elementsSoFar(b)) elementsSoFar else { buf += b; elementsSoFar + b }
+      if (elementsSoFar(b)) elementsSoFar
+      else {
+        buf += b; elementsSoFar + b
+      }
     }
 
     NonEmptyList(head, buf.toList)
@@ -496,18 +500,22 @@ object NonEmptyList extends NonEmptyListInstances {
           ZipNonEmptyList(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyList", "2.0.0-RC2")
+    private[data] def zipNelEq[A: Eq]: Eq[ZipNonEmptyList[A]] = catsDataEqForZipNonEmptyList[A]
+
+    implicit def catsDataEqForZipNonEmptyList[A: Eq]: Eq[ZipNonEmptyList[A]] = Eq.by(_.value)
   }
 }
 
 sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListInstances0 {
 
-  implicit val catsDataInstancesForNonEmptyList: SemigroupK[NonEmptyList]
-    with Reducible[NonEmptyList]
-    with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] =
-    new NonEmptyReducible[NonEmptyList, List] with SemigroupK[NonEmptyList] with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList] {
+  implicit val catsDataInstancesForNonEmptyList
+    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+    new NonEmptyReducible[NonEmptyList, List]
+      with SemigroupK[NonEmptyList]
+      with Bimonad[NonEmptyList]
+      with NonEmptyTraverse[NonEmptyList]
+      with Align[NonEmptyList] {
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)
@@ -592,7 +600,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
               case (Right(c), _)           => ior.map(c :: _)
               case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
               case (Left(b), _)            => ior.leftMap(b :: _)
-          }
+            }
         )
 
       }
@@ -612,6 +620,25 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       override def get[A](fa: NonEmptyList[A])(idx: Long): Option[A] =
         if (idx == 0) Some(fa.head) else Foldable[List].get(fa.tail)(idx - 1)
+
+      def functor: Functor[NonEmptyList] = this
+
+      def align[A, B](fa: NonEmptyList[A], fb: NonEmptyList[B]): NonEmptyList[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: NonEmptyList[A], fb: NonEmptyList[B])(f: Ior[A, B] => C): NonEmptyList[C] = {
+
+        @tailrec
+        def go(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
+          case (Nil, Nil)         => acc
+          case (Nil, y :: ys)     => go(Nil, ys, f(Ior.right(y)) :: acc)
+          case (x :: xs, Nil)     => go(xs, Nil, f(Ior.left(x)) :: acc)
+          case (x :: xs, y :: ys) => go(xs, ys, f(Ior.both(x, y)) :: acc)
+        }
+
+        NonEmptyList(f(Ior.both(fa.head, fb.head)), go(fa.tail, fb.tail, Nil).reverse)
+      }
+
     }
 
   implicit def catsDataShowForNonEmptyList[A](implicit A: Show[A]): Show[NonEmptyList[A]] =
@@ -625,8 +652,9 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       val A0 = A
     }
 
-  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel[NonEmptyList, ZipNonEmptyList] =
-    new NonEmptyParallel[NonEmptyList, ZipNonEmptyList] {
+  implicit def catsDataNonEmptyParallelForNonEmptyList[A]: NonEmptyParallel.Aux[NonEmptyList, ZipNonEmptyList] =
+    new NonEmptyParallel[NonEmptyList] {
+      type F[x] = ZipNonEmptyList[x]
 
       def flatMap: FlatMap[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 

@@ -3,7 +3,7 @@ package syntax
 
 trait TraverseFilterSyntax extends TraverseFilter.ToTraverseFilterOps
 
-trait TraverseFilterSyntaxBinCompat0 {
+private[syntax] trait TraverseFilterSyntaxBinCompat0 {
   implicit def toSequenceFilterOps[F[_], G[_], A](fgoa: F[G[Option[A]]]): SequenceFilterOps[F, G, A] =
     new SequenceFilterOps(fgoa)
 }

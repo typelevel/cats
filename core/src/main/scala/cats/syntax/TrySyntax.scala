@@ -17,11 +17,11 @@ final class TryOps[A](private val self: Try[A]) extends AnyVal {
    * scala> import util.Try
    *
    * scala> val s: Try[Int] = Try(3)
-   * scala> s.liftTo[Either[Throwable, ?]]
+   * scala> s.liftTo[Either[Throwable, *]]
    * res0: Either[Throwable, Int] = Right(3)
    *
    * scala> val f: Try[Int] = Try(throw new Throwable("boo"))
-   * scala> f.liftTo[Either[Throwable, ?]]
+   * scala> f.liftTo[Either[Throwable, *]]
    * res0: Either[Throwable, Int] = Left(java.lang.Throwable: boo)
    * }}}
    */

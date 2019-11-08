@@ -1,6 +1,8 @@
 package cats
 
 import cats.data.EitherT
+
+import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
@@ -74,6 +76,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
 
   /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+    recover(map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
+
+  /**
    * Recover from certain errors by mapping them to an `A` value.
    *
    * @see [[handleError]] to handle any/all errors.
@@ -108,7 +116,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * scala> case class Err(msg: String)
    *
-   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   * scala> type F[A] = EitherT[State[String, *], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
    *      |   case Err("one") => EitherT.liftF(State.set("one"))
@@ -199,10 +207,10 @@ object ApplicativeError {
    * scala> import cats.implicits._
    * scala> import cats.ApplicativeError
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Some(1), "Empty")
    * res0: scala.Either[String, Int] = Right(1)
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Option.empty[Int], "Empty")
    * res1: scala.Either[String, Int] = Left(Empty)
    * }}}
    */

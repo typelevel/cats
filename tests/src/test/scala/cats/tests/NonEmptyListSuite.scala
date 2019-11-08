@@ -7,6 +7,7 @@ import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
+  AlignTests,
   BimonadTests,
   CommutativeApplyTests,
   NonEmptyTraverseTests,
@@ -42,6 +43,9 @@ class NonEmptyListSuite extends CatsSuite {
 
   checkAll("NonEmptyList[ListWrapper[Int]]", EqTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
+
+  checkAll("NonEmptyList[Int]", AlignTests[NonEmptyList].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyList]", SerializableTests.serializable(Align[NonEmptyList]))
 
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
@@ -152,9 +156,13 @@ class NonEmptyListSuite extends CatsSuite {
   test("reduceRight consistent with foldRight") {
     forAll { (nel: NonEmptyList[Int], f: (Int, Eval[Int]) => Eval[Int]) =>
       val got = nel.reduceRight(f).value
-      val last :: rev = nel.toList.reverse
-      val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
-      got should ===(expected)
+      nel.toList.reverse match {
+        case last :: rev =>
+          val expected = rev.reverse.foldRight(last)((a, b) => f(a, Now(b)).value)
+          got should ===(expected)
+        case _ => fail("nonempty turns out to be empty")
+      }
+
     }
   }
 
@@ -182,11 +190,15 @@ class NonEmptyListSuite extends CatsSuite {
   test("reduceRightToOption consistent with foldRight + Option") {
     forAll { (nel: NonEmptyList[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
       val got = nel.reduceRightToOption(f)(g).value
-      val last :: rev = nel.toList.reverse
-      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
-        opt.map(s => g(i, Now(s)).value)
+      nel.toList.reverse match {
+        case last :: rev =>
+          val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
+            opt.map(s => g(i, Now(s)).value)
+          }
+          got should ===(expected)
+        case _ => fail("nonempty turns out to be empty")
       }
-      got should ===(expected)
+
     }
   }
 

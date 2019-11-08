@@ -20,7 +20,7 @@ trait FunctorFilter[F[_]] extends Serializable {
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Option[String] = m.get(i)
-   * scala> l.mapFilter(i => m.get(i))
+   * scala> l.mapFilter(asString)
    * res0: List[String] = List(one, three)
    * }}}
    */

@@ -4,7 +4,6 @@ package instances
 import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
-import cats.implicits._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -32,7 +31,7 @@ trait SortedSetInstances extends SortedSetInstances1 {
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: SortedSet[A]): Long = fa.size.toLong
@@ -63,62 +62,64 @@ trait SortedSetInstances extends SortedSetInstances1 {
 
   implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
     def show(fa: SortedSet[A]): String =
-      fa.toIterator.map(_.show).mkString("SortedSet(", ", ", ")")
+      fa.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
   }
 
-  implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
-    new SortedSetOrder[A]
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet", "2.0.0-RC2")
+  private[instances] def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 }
 
-trait SortedSetInstances1 {
-  implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
-    new SortedSetHash[A]
+private[instances] trait SortedSetInstances1 {
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
+  private[instances] def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 
-  implicit def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
-    new SortedSetSemilattice[A]
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdSemilatticeForSortedSet", "2.0.0-RC2")
+  def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdBoundedSemilatticeForSortedSet[A]
 }
 
-class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
-  def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
-    Order[Int].compare(a1.size, a2.size) match {
-      case 0 => Order.compare(a1.toStream, a2.toStream)
-      case x => x
+private[instances] trait SortedSetInstancesBinCompat0 {
+  implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
+    override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
+      implicit val orderingA = fa.ordering
+      implicit val orderingB = fb.ordering
+
+      fa.flatMap(a => fb.map(b => a -> b))
     }
-
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
   }
 }
 
-class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
-  import scala.util.hashing.MurmurHash3._
-
-  // adapted from [[scala.util.hashing.MurmurHash3]],
-  // but modified standard `Any#hashCode` to `ev.hash`.
-  def hash(xs: SortedSet[A]): Int = {
-    var a, b, n = 0
-    var c = 1
-    xs.foreach { x =>
-      val h = Hash[A].hash(x)
-      a += h
-      b ^= h
-      c = cats.kernel.instances.StaticMethods.updateUnorderedHashC(c, h)
-      n += 1
-    }
-    var h = setSeed
-    h = mix(h, a)
-    h = mix(h, b)
-    h = mixLast(h, c)
-    finalizeHash(h, n)
-  }
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    s1.toStream.corresponds(s2.toStream)(Order[A].eqv)
-  }
+private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
+  // TODO: Remove when this is no longer necessary for binary compatibility.
+  // Note that the overrides here and below are only necessary because the
+  // definitions in `SortedSetInstances1` conflict with the ones in
+  // `cats.kernel.instances.SortedSetInstances`. Both are inherited here, so
+  // we have to "bubble" the "correct" ones up to the appropriate place.
+  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 
-class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
-  def empty: SortedSet[A] = SortedSet.empty(implicitly[Order[A]].toOrdering)
-  def combine(x: SortedSet[A], y: SortedSet[A]): SortedSet[A] = x | y
+private[instances] trait LowPrioritySortedSetInstancesBinCompat1
+    extends cats.kernel.instances.SortedSetInstances
+    with SortedSetInstances {
+  implicit override def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
+
+  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
+
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
+  override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
+
+@deprecated("Use cats.kernel.instances.SortedSetHash", "2.0.0-RC2")
+class SortedSetHash[A: Order: Hash] extends cats.kernel.instances.SortedSetHash[A]
+
+@deprecated("Use cats.kernel.instances.SortedSetOrder", "2.0.0-RC2")
+class SortedSetOrder[A: Order] extends cats.kernel.instances.SortedSetOrder[A]
+
+@deprecated("Use cats.kernel.instances.SortedSetSemilattice", "2.0.0-RC2")
+class SortedSetSemilattice[A: Order] extends cats.kernel.instances.SortedSetSemilattice[A]
