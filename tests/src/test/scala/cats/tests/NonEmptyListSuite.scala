@@ -361,7 +361,7 @@ class DeprecatedNonEmptyListSuite extends CatsSuite {
 }
 
 class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyList") {
-  def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
+  override def iterator[T](nel: NonEmptyList[T]): Iterator[T] = nel.toList.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyList[Long] = {
     // if we inline this we get a bewildering implicit numeric widening

@@ -15,5 +15,7 @@ trait IterableInstances {
 
       override def foldMap[A, B](fa: Iterable[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
+
+      override def iterator[A](fa: Iterable[A]): Iterator[A] = fa.iterator
     }
 }

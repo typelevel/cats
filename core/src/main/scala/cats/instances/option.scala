@@ -107,6 +107,8 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def toList[A](fa: Option[A]): List[A] = fa.toList
 
+      override def iterator[A](fa: Option[A]): Iterator[A] = fa.iterator
+
       override def filter_[A](fa: Option[A])(p: A => Boolean): List[A] =
         fa.filter(p).toList
 

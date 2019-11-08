@@ -157,7 +157,7 @@ class NonEmptyChainSuite extends CatsSuite {
 }
 
 class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
-  def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
+  override def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
     NonEmptyChain(start, (start + 1L).to(endInclusive): _*)

@@ -276,12 +276,10 @@ import Foldable.sentinel
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
 
   def combineAllOption[A](fa: F[A])(implicit ev: Semigroup[A]): Option[A] =
-    if (isEmpty(fa)) None else ev.combineAllOption(toIterator(fa))
+    if (isEmpty(fa)) None else ev.combineAllOption(iterator(fa))
 
-  def toIterator[A, B](fa: F[A]): Iterator[A] =
-    foldRight[A, Stream[A]](fa, Eval.later(Stream.empty)) { (a, eb) =>
-      eb.map(Stream.cons(a, _))
-    }.value.iterator
+  def iterator[A](fa: F[A]): Iterator[A] =
+    cats.compat.Foldable.iterator(fa)(self)
 
   /**
    * Fold implemented by mapping `A` values into `B` and then

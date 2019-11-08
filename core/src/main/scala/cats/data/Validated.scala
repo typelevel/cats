@@ -997,6 +997,9 @@ sealed abstract private[data] class ValidatedInstances2 {
         case _        => Nil
       }
 
+      override def iterator[A](fa: Validated[E, A]): Iterator[A] =
+        toList(fa).iterator
+
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
   // scalastyle:off method.length

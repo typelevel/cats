@@ -133,7 +133,7 @@ class NonEmptyLazyListSuite extends CatsSuite {
 }
 
 class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("NonEmptyLazyList") {
-  def iterator[T](nel: NonEmptyLazyList[T]): Iterator[T] = nel.toLazyList.iterator
+  override def iterator[T](nel: NonEmptyLazyList[T]): Iterator[T] = nel.toLazyList.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyLazyList[Long] =
     NonEmptyLazyList(start, (start + 1L).to(endInclusive): _*)

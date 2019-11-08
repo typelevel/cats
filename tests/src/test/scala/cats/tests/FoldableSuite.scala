@@ -10,11 +10,14 @@ import cats.laws.discipline.arbitrary._
 import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
-                                                           ArbFString: Arbitrary[F[String]])
-    extends CatsSuite {
+abstract class FoldableSuite[F[_]](name: String)(
+  implicit
+  F: Foldable[F],
+  ArbFInt: Arbitrary[F[Int]],
+  ArbFString: Arbitrary[F[String]]
+) extends CatsSuite {
 
-  def iterator[T](fa: F[T]): Iterator[T]
+  def iterator[T](fa: F[T]): Iterator[T] = F.iterator(fa)
 
   test(s"Foldable[$name].size/get") {
     forAll { (fa: F[Int], n: Int) =>
@@ -473,73 +476,44 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 }
 
-class FoldableListSuite extends FoldableSuite[List]("list") {
-  def iterator[T](list: List[T]): Iterator[T] = list.iterator
-}
-
-class FoldableVectorSuite extends FoldableSuite[Vector]("vector") {
-  def iterator[T](vector: Vector[T]): Iterator[T] = vector.iterator
-}
-
-class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet") {
-  def iterator[T](set: SortedSet[T]): Iterator[T] = set.iterator
-}
-
-class FoldableStreamSuite extends FoldableSuite[Stream]("lazyList") {
-  def iterator[T](list: Stream[T]): Iterator[T] = list.iterator
-}
-
-class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, *]]("sortedMap") {
-  def iterator[T](map: SortedMap[Int, T]): Iterator[T] = map.valuesIterator
-}
-
-class FoldableOptionSuite extends FoldableSuite[Option]("option") {
-  def iterator[T](option: Option[T]): Iterator[T] = option.iterator
-}
-
-class FoldableEitherSuite extends FoldableSuite[Either[Int, *]]("either") {
-  def iterator[T](either: Either[Int, T]): Iterator[T] = either.toOption.iterator
-}
-
-class FoldableValidatedSuite extends FoldableSuite[Validated[String, *]]("validated") {
-  def iterator[T](validated: Validated[String, T]): Iterator[T] = validated.toOption.iterator
-}
-
-class FoldableTrySuite extends FoldableSuite[Try]("try") {
-  def iterator[T](tryt: Try[T]): Iterator[T] = tryt.toOption.iterator
-}
+class FoldableListSuite extends FoldableSuite[List]("list")
+class FoldableVectorSuite extends FoldableSuite[Vector]("vector")
+class FoldableSortedSetSuite extends FoldableSuite[SortedSet]("sortedSet")
+class FoldableStreamSuite extends FoldableSuite[Stream]("lazyList")
+class FoldableSortedMapSuite extends FoldableSuite[SortedMap[Int, *]]("sortedMap")
+class FoldableOptionSuite extends FoldableSuite[Option]("option")
+class FoldableEitherSuite extends FoldableSuite[Either[Int, *]]("either")
+class FoldableValidatedSuite extends FoldableSuite[Validated[String, *]]("validated")
+class FoldableTrySuite extends FoldableSuite[Try]("try")
+class FoldableIdSuite extends FoldableSuite[Id[*]]("id")
 
 class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, *]]("eitherK") {
-  def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
+  override def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
 }
 
 class FoldableIorSuite extends FoldableSuite[Int Ior *]("ior") {
-  def iterator[T](ior: Int Ior T) =
+  override def iterator[T](ior: Int Ior T) =
     ior.fold(_ => None.iterator, b => Some(b).iterator, (_, b) => Some(b).iterator)
 }
 
-class FoldableIdSuite extends FoldableSuite[Id[*]]("id") {
-  def iterator[T](id: Id[T]) = Some(id).iterator
-}
-
 class FoldableIdTSuite extends FoldableSuite[IdT[Option, *]]("idT") {
-  def iterator[T](idT: IdT[Option, T]) = idT.value.iterator
+  override def iterator[T](idT: IdT[Option, T]) = idT.value.iterator
 }
 
 class FoldableConstSuite extends FoldableSuite[Const[Int, *]]("const") {
-  def iterator[T](const: Const[Int, T]) = None.iterator
+  override def iterator[T](const: Const[Int, T]) = None.iterator
 }
 
 class FoldableTuple2Suite extends FoldableSuite[(Int, *)]("tuple2") {
-  def iterator[T](tuple: (Int, T)) = Some(tuple._2).iterator
+  override def iterator[T](tuple: (Int, T)) = Some(tuple._2).iterator
 }
 
 class FoldableOneAndSuite extends FoldableSuite[OneAnd[List, *]]("oneAnd") {
-  def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
+  override def iterator[T](oneAnd: OneAnd[List, T]) = (oneAnd.head :: oneAnd.tail).iterator
 }
 
 class FoldableComposedSuite extends FoldableSuite[Nested[List, Option, *]]("nested") {
-  def iterator[T](nested: Nested[List, Option, T]) =
+  override def iterator[T](nested: Nested[List, Option, T]) =
     nested.value.collect {
       case Some(t) => t
     }.iterator

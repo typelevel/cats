@@ -104,6 +104,8 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def toList[A](fa: Vector[A]): List[A] = fa.toList
 
+      override def iterator[A](fa: Vector[A]): Iterator[A] = fa.iterator
+
       override def reduceLeftOption[A](fa: Vector[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
