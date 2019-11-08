@@ -13,6 +13,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
@@ -37,25 +38,35 @@ class StreamSuite extends CatsSuite {
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
 
   test("show") {
-    Stream(1, 2, 3).show should ===("Stream(1, ?)")
-    Stream.empty[Int].show should ===("Stream()")
+    Stream(1, 2, 3).show should ===(s"Stream(1, ?)")
+    Stream.empty[Int].show should ===(s"Stream()")
   }
 
   test("Show[Stream] is referentially transparent, unlike Stream.toString") {
     forAll { stream: Stream[Int] =>
       if (!stream.isEmpty) {
-        val unevaluatedStream = stream.map(identity)
-        val initialShow = unevaluatedStream.show
+        val unevaluatedLL = stream.map(identity)
+        val initialShow = unevaluatedLL.show
 
         // Evaluating the tail can cause Stream.toString to return different values,
         // depending on the internal state of the Stream. Show[Stream] should return
         // consistent values independent of internal state.
-        unevaluatedStream.tail
-        initialShow should ===(unevaluatedStream.show)
+        unevaluatedLL.tail
+        initialShow should ===(unevaluatedLL.show)
       } else {
         stream.show should ===(stream.toString)
       }
     }
   }
 
+}
+
+final class StreamInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.stream") {
+    import cats.instances.stream._
+    import cats.syntax.parallel._
+
+    (Stream(1, 2, 3), Stream("A", "B", "C")).parTupled
+  }
 }

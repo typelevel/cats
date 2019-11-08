@@ -34,22 +34,22 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[Int]", DeferTests[Function0].defer[Int])
   checkAll("Defer[Function0[Int]]", SerializableTests.serializable(Defer[Function0]))
 
-  checkAll("Function1[MiniInt, Int]", DeferTests[Function1[MiniInt, ?]].defer[Int])
-  checkAll("Defer[Function1[Int, Int]]", SerializableTests.serializable(Defer[Function1[Int, ?]]))
+  checkAll("Function1[MiniInt, Int]", DeferTests[Function1[MiniInt, *]].defer[Int])
+  checkAll("Defer[Function1[Int, Int]]", SerializableTests.serializable(Defer[Function1[Int, *]]))
 
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[MiniInt, ?]]
-  checkAll("Function1[MiniInt, Int]", SemigroupalTests[Function1[MiniInt, ?]].semigroupal[Int, Int, Int])
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[MiniInt, *]]
+  checkAll("Function1[MiniInt, Int]", SemigroupalTests[Function1[MiniInt, *]].semigroupal[Int, Int, Int])
 
   // TODO: make an binary compatible way to do this
-  //checkAll("Function1[Int => ?]", DeferTests[Function1[Int, ?]].defer[Int])
+  // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
-  checkAll("Semigroupal[Function1[Int, ?]]", SerializableTests.serializable(Semigroupal[Function1[Int, ?]]))
+  checkAll("Semigroupal[Function1[Int, *]]", SerializableTests.serializable(Semigroupal[Function1[Int, *]]))
 
-  checkAll("Function1[MiniInt, Int]", MonadTests[MiniInt => ?].monad[Int, Int, Int])
-  checkAll("Monad[Int => ?]", SerializableTests.serializable(Monad[Int => ?]))
+  checkAll("Function1[MiniInt, Int]", MonadTests[MiniInt => *].monad[Int, Int, Int])
+  checkAll("Monad[Int => *]", SerializableTests.serializable(Monad[Int => *]))
 
   checkAll("Function1[MiniInt, MiniInt]",
            CommutativeArrowTests[Function1].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt])
@@ -61,15 +61,15 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1", ArrowChoiceTests[Function1].arrowChoice[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt])
   checkAll("ArrowChoice[Function1]", SerializableTests.serializable(ArrowChoice[Function1]))
 
-  checkAll("Function1", ContravariantTests[? => MiniInt].contravariant[MiniInt, MiniInt, MiniInt])
-  checkAll("Contravariant[? => Int]", SerializableTests.serializable(Contravariant[? => Int]))
+  checkAll("Function1", ContravariantTests[* => MiniInt].contravariant[MiniInt, MiniInt, MiniInt])
+  checkAll("Contravariant[* => Int]", SerializableTests.serializable(Contravariant[* => Int]))
 
   checkAll("Function1", MonoidKTests[λ[α => α => α]].monoidK[MiniInt])
   checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(catsStdMonoidKForFunction1))
 
-  checkAll("Function1[MiniInt, ?]",
-           DistributiveTests[MiniInt => ?].distributive[Int, Int, Int, Id, Function1[MiniInt, ?]])
-  checkAll("Distributive[Int => ?]", SerializableTests.serializable(Distributive[Int => ?]))
+  checkAll("Function1[MiniInt, *]",
+           DistributiveTests[MiniInt => *].distributive[Int, Int, Int, Id, Function1[MiniInt, *]])
+  checkAll("Distributive[Int => *]", SerializableTests.serializable(Distributive[Int => *]))
 
   // law checks for the various Function0-related instances
   checkAll("Function0[Eqed]", EqTests[Function0[Eqed]].eqv)
@@ -93,9 +93,9 @@ class FunctionSuite extends CatsSuite {
   }
 
   // Test for Arrow applicative
-  Applicative[String => ?]
-  checkAll("Function1[MiniInt, ?]",
-           ApplicativeTests[Function1[MiniInt, ?]](Applicative.catsApplicativeForArrow[Function1, MiniInt])
+  Applicative[String => *]
+  checkAll("Function1[MiniInt, *]",
+           ApplicativeTests[Function1[MiniInt, *]](Applicative.catsApplicativeForArrow[Function1, MiniInt])
              .applicative[Int, Int, Int])
 
   // serialization tests for the various Function0-related instances
@@ -124,9 +124,9 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[MiniInt, Grp]", GroupTests[Function1[MiniInt, Grp]].group)
   checkAll("Function1[MiniInt, CGrp]", CommutativeGroupTests[Function1[MiniInt, CGrp]].commutativeGroup)
   // Isos for ContravariantMonoidal
-  implicit val isoCodomain = SemigroupalTests.Isomorphisms.invariant[Function1[?, Long]]
-  checkAll("Function1[?, Monoid]",
-           ContravariantMonoidalTests[Function1[?, Long]].contravariantMonoidal[MiniInt, MiniInt, MiniInt])
+  implicit val isoCodomain = SemigroupalTests.Isomorphisms.invariant[Function1[*, Long]]
+  checkAll("Function1[*, Monoid]",
+           ContravariantMonoidalTests[Function1[*, Long]].contravariantMonoidal[MiniInt, MiniInt, MiniInt])
 
   // serialization tests for the various Function1-related instances
   checkAll("Semigroup[String => Semi]", SerializableTests.serializable(Semigroup[String => Semi]))
@@ -139,8 +139,8 @@ class FunctionSuite extends CatsSuite {
   checkAll("CommutativeMonoid[String => CMono]", SerializableTests.serializable(CommutativeMonoid[String => CMono]))
   checkAll("Group[String => Grp]", SerializableTests.serializable(Group[String => Grp]))
   checkAll("CommutativeGroup[String => CGrp]", SerializableTests.serializable(CommutativeGroup[String => CGrp]))
-  checkAll("ContravariantMonoidal[Function1[?, Monoid]]",
-           SerializableTests.serializable(ContravariantMonoidal[? => Long]))
+  checkAll("ContravariantMonoidal[Function1[*, Monoid]]",
+           SerializableTests.serializable(ContravariantMonoidal[* => Long]))
 
   test("MonoidK[Endo] is stack safe on combineK") {
     def incrementAll(as: Int): Int = as + 1

@@ -25,10 +25,10 @@ import scala.collection.immutable._
 
 private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
-  private[cats] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
+  private[data] def create[K, A](m: SortedMap[K, A]): Type[K, A] =
     m.asInstanceOf[Type[K, A]]
 
-  private[cats] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
+  private[data] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
     m.asInstanceOf[SortedMap[K, A]]
 
   def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
@@ -85,8 +85,8 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
    * Applies f to all the elements
    */
-  def map[B](f: A ⇒ B): NonEmptyMap[K, B] =
-    NonEmptyMapImpl.create(Functor[SortedMap[K, ?]].map(toSortedMap)(f))
+  def map[B](f: A => B): NonEmptyMap[K, B] =
+    NonEmptyMapImpl.create(Functor[SortedMap[K, *]].map(toSortedMap)(f))
 
   /**
    * Optionally returns the value associated with the given key.
@@ -135,27 +135,27 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   /**
    * Tests whether a predicate holds for all elements of this map.
    */
-  def forall(p: A ⇒ Boolean): Boolean = toSortedMap.forall { case (_, a) => p(a) }
+  def forall(p: A => Boolean): Boolean = toSortedMap.forall { case (_, a) => p(a) }
 
   /**
    * Tests whether a predicate holds for at least one element of this map.
    */
-  def exists(f: A ⇒ Boolean): Boolean = toSortedMap.exists { case (_, a) => f(a) }
+  def exists(f: A => Boolean): Boolean = toSortedMap.exists { case (_, a) => f(a) }
 
   /**
    * Returns the first value along with its key, that matches the given predicate.
    */
-  def find(f: A ⇒ Boolean): Option[(K, A)] = toSortedMap.find { case (_, a) => f(a) }
+  def find(f: A => Boolean): Option[(K, A)] = toSortedMap.find { case (_, a) => f(a) }
 
   /**
    * Filters all elements of this map that do not satisfy the given predicate.
    */
-  def filter(p: A ⇒ Boolean): SortedMap[K, A] = toSortedMap.filter { case (_, a) => p(a) }
+  def filter(p: A => Boolean): SortedMap[K, A] = toSortedMap.filter { case (_, a) => p(a) }
 
   /**
    * Filters all elements of this map that satisfy the given predicate.
    */
-  def filterNot(p: A ⇒ Boolean): SortedMap[K, A] = filter(t => !p(t))
+  def filterNot(p: A => Boolean): SortedMap[K, A] = filter(t => !p(t))
 
   /**
    * Left-associative fold using f.
@@ -167,7 +167,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * Right-associative fold using f.
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Foldable[SortedMap[K, ?]].foldRight(toSortedMap, lb)(f)
+    Foldable[SortedMap[K, *]].foldRight(toSortedMap, lb)(f)
 
   /**
    * Left-associative reduce using f.
@@ -195,7 +195,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     Always((head, tail)).flatMap {
       case ((_, a), ga) =>
-        Foldable[SortedMap[K, ?]].reduceRightToOption(ga)(f)(g).flatMap {
+        Foldable[SortedMap[K, *]].reduceRightToOption(ga)(f)(g).flatMap {
           case Some(b) => g(a, Now(b))
           case None    => Later(f(a))
         }
@@ -265,11 +265,11 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
   def toNel: NonEmptyList[(K, A)] = NonEmptyList.fromListUnsafe(toSortedMap.toList)
 }
 
-sealed abstract private[data] class NonEmptyMapInstances {
+sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInstances0 {
 
   implicit def catsDataInstancesForNonEmptyMap[K: Order]
-    : SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] =
-    new SemigroupK[NonEmptyMap[K, ?]] with NonEmptyTraverse[NonEmptyMap[K, ?]] {
+    : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
+    new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] {
 
       override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
         fa.map(f)
@@ -316,12 +316,15 @@ sealed abstract private[data] class NonEmptyMapInstances {
 
       override def toNonEmptyList[A](fa: NonEmptyMap[K, A]): NonEmptyList[A] =
         NonEmptyList(fa.head._2, fa.tail.toList.map(_._2))
+
+      def functor: Functor[NonEmptyMap[K, *]] = this
+
+      def align[A, B](fa: NonEmptyMap[K, A], fb: NonEmptyMap[K, B]): NonEmptyMap[K, Ior[A, B]] =
+        NonEmptyMap.fromMapUnsafe(Align[SortedMap[K, *]].align(fa.toSortedMap, fb.toSortedMap))
     }
 
-  implicit def catsDataEqForNonEmptyMap[K: Order, A: Eq]: Eq[NonEmptyMap[K, A]] =
-    new Eq[NonEmptyMap[K, A]] {
-      def eqv(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): Boolean = x === y
-    }
+  implicit def catsDataHashForNonEmptyMap[K: Hash: Order, A: Hash]: Hash[NonEmptyMap[K, A]] =
+    Hash[SortedMap[K, A]].asInstanceOf[Hash[NonEmptyMap[K, A]]]
 
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
@@ -329,4 +332,11 @@ sealed abstract private[data] class NonEmptyMapInstances {
   implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] = new Band[NonEmptyMap[K, A]] {
     def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
   }
+}
+
+sealed abstract private[data] class NonEmptyMapInstances0 {
+  implicit def catsDataEqForNonEmptyMap[K: Order, A: Eq]: Eq[NonEmptyMap[K, A]] =
+    new Eq[NonEmptyMap[K, A]] {
+      def eqv(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): Boolean = x === y
+    }
 }

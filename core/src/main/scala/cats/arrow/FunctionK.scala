@@ -43,8 +43,8 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * This transformation will be used to transform left `F` values while
    * `h` will be used to transform right `H` values.
    */
-  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, ?], G] =
-    λ[FunctionK[EitherK[F, H, ?], G]](fa => fa.fold(self, h))
+  def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, *], G] =
+    λ[FunctionK[EitherK[F, H, *], G]](fa => fa.fold(self, h))
 
   /**
    * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
@@ -59,8 +59,8 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * res0: cats.data.Tuple2K[Option,Vector,Int] = Tuple2K(Some(1),Vector(1, 2, 3))
    * }}}
    */
-  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, ?]] =
-    λ[FunctionK[F, Tuple2K[G, H, ?]]](fa => Tuple2K(self(fa), h(fa)))
+  def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
+    λ[FunctionK[F, Tuple2K[G, H, *]]](fa => Tuple2K(self(fa), h(fa)))
 }
 
 object FunctionK {
@@ -89,7 +89,7 @@ object FunctionK {
    *
    * Additionally, the type parameters on `f` must not be specified.
    */
-  def lift[F[_], G[_]](f: (F[α] ⇒ G[α]) forSome { type α }): FunctionK[F, G] =
+  def lift[F[_], G[_]](f: (F[α] => G[α]) forSome { type α }): FunctionK[F, G] =
     macro FunctionKMacros.lift[F, G]
 
 }
@@ -97,7 +97,7 @@ object FunctionK {
 private[arrow] object FunctionKMacros {
 
   def lift[F[_], G[_]](c: Context)(
-    f: c.Expr[(F[α] ⇒ G[α]) forSome { type α }]
+    f: c.Expr[(F[α] => G[α]) forSome { type α }]
   )(
     implicit evF: c.WeakTypeTag[F[_]],
     evG: c.WeakTypeTag[G[_]]
@@ -112,7 +112,7 @@ private[arrow] object FunctionKMacros {
       implicit evF: c.WeakTypeTag[F[_]],
       evG: c.WeakTypeTag[G[_]]
     ): Tree = unblock(tree) match {
-      case q"($param) => $trans[..$typeArgs](${arg: Ident})" if param.name == arg.name ⇒
+      case q"($param) => $trans[..$typeArgs](${arg: Ident})" if param.name == arg.name =>
         typeArgs
           .collect { case tt: TypeTree => tt }
           .find(tt => Option(tt.original).isDefined)
@@ -128,17 +128,17 @@ private[arrow] object FunctionKMacros {
           def apply[A](fa: $F[A]): $G[A] = $trans(fa)
         }
        """
-      case other ⇒
+      case other =>
         c.abort(other.pos, s"Unexpected tree $other when lifting to FunctionK")
     }
 
     private[this] def unblock(tree: Tree): Tree = tree match {
-      case Block(Nil, expr) ⇒ expr
-      case _ ⇒ tree
+      case Block(Nil, expr) => expr
+      case _                => tree
     }
 
     private[this] def punchHole(tpe: Type): Tree = tpe match {
-      case PolyType(undet :: Nil, underlying: TypeRef) ⇒
+      case PolyType(undet :: Nil, underlying: TypeRef) =>
         val α = TypeName("α")
         def rebind(typeRef: TypeRef): Tree =
           if (typeRef.sym == undet) tq"$α"
@@ -151,7 +151,7 @@ private[arrow] object FunctionKMacros {
           }
         val rebound = rebind(underlying)
         tq"""({type λ[$α] = $rebound})#λ"""
-      case TypeRef(pre, sym, Nil) ⇒
+      case TypeRef(pre, sym, Nil) =>
         tq"$sym"
       case _ =>
         c.abort(c.enclosingPosition, s"Unexpected type $tpe when lifting to FunctionK")

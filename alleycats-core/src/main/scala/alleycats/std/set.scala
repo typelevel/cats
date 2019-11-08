@@ -1,11 +1,14 @@
-package alleycats.std
+package alleycats
+package std
 
 import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
+import compat.scalaVersionSpecific._
 
 object set extends SetInstances
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
   // This method advertises parametricity, but relies on using
   // universal hash codes and equality, which hurts our ability to
@@ -86,7 +89,7 @@ trait SetInstances {
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: Set[A]): Long = fa.size.toLong

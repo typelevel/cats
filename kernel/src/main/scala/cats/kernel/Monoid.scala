@@ -1,6 +1,7 @@
 package cats.kernel
 
 import scala.{specialized => sp}
+import compat.scalaVersionSpecific._
 
 /**
  * A monoid is a semigroup with an identity. A monoid is a specialization of a
@@ -77,13 +78,14 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
    * res1: String = ""
    * }}}
    */
-  def combineAll(as: TraversableOnce[A]): A =
-    as.foldLeft(empty)(combine)
+  def combineAll(as: IterableOnce[A]): A =
+    as.iterator.foldLeft(empty)(combine)
 
-  override def combineAllOption(as: TraversableOnce[A]): Option[A] =
-    if (as.isEmpty) None else Some(combineAll(as))
+  override def combineAllOption(as: IterableOnce[A]): Option[A] =
+    if (as.iterator.isEmpty) None else Some(combineAll(as))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
   def empty[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.empty
@@ -91,7 +93,7 @@ abstract class MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] 
   def isEmpty[@sp(Int, Long, Float, Double) A](a: A)(implicit m: M[A], ev: Eq[A]): Boolean =
     m.isEmpty(a)
 
-  def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
+  def combineAll[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)
 }
 
@@ -101,4 +103,13 @@ object Monoid extends MonoidFunctions[Monoid] {
    * Access an implicit `Monoid[A]`.
    */
   @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
+
+  /**
+   * Create a `Monoid` instance from the given function and empty value.
+   */
+  @inline def instance[A](emptyValue: A, cmb: (A, A) => A): Monoid[A] = new Monoid[A] {
+    override val empty: A = emptyValue
+
+    override def combine(x: A, y: A): A = cmb(x, y)
+  }
 }

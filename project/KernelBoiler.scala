@@ -166,10 +166,10 @@ object KernelBoiler {
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
               """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances1 extends TupleInstances2 {",
+          "private[instances] trait TupleInstances1 extends TupleInstances2 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -201,22 +201,22 @@ object KernelBoiler {
                   .mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
                     def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
                   }
-
-                implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
-                  new PartialOrder[${`(A..N)`}] {
-                    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-                      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
-                }
         """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances2 extends TupleInstances3 {",
+          "private[instances] trait TupleInstances2 extends TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
               def content =
                 block"""
+                implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
+                  new PartialOrder[${`(A..N)`}] {
+                    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
+                      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
+                }
+
                 implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
                   new Band[${`(A..N)`}] {
                     def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
@@ -235,10 +235,10 @@ object KernelBoiler {
                     def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
                   }
               """
-          }
+            }
         ),
         InstanceDef(
-          "trait TupleInstances3 {",
+          "private[instances] trait TupleInstances3 {",
           tv =>
             new TemplatedBlock(tv) {
               import tv._
@@ -254,7 +254,7 @@ object KernelBoiler {
                     def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
                   }
               """
-          }
+            }
         )
       )
   }

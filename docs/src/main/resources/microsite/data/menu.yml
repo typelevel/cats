@@ -44,6 +44,11 @@ options:
     menu_type: typeclasses
     menu_section: monads
 
+  - title: Comonads
+    url: typeclasses/comonad.html
+    menu_type: typeclasses
+    menu_section: comonads
+
   - title: Variance and Functors
     url: typeclasses/functor.html
     menu_type: typeclasses
@@ -128,6 +133,10 @@ options:
 
   - title: Const
     url: datatypes/const.html
+    menu_type: data
+    
+  - title: ContT
+    url: datatypes/contt.html
     menu_type: data
 
   - title: Either

@@ -10,4 +10,9 @@ class BifoldableSuite extends CatsSuite {
 
   checkAll("Either compose Either", BifoldableTests(eitherComposeEither).bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Either compose Either]", SerializableTests.serializable(eitherComposeEither))
+
+  test("bifold works for 2 monoids") {
+    Bifoldable[Either].bifold(Either.right[Int, String]("something")) should ===((0, "something"))
+    Bifoldable[Either].bifold(Either.left[Int, String](5)) should ===((5, ""))
+  }
 }

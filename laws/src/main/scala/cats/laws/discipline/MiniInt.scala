@@ -49,16 +49,16 @@ object MiniInt {
       new MiniInt(i << intShift >>> intShift)
     } else throw new IllegalArgumentException(s"Expected value between $minIntValue and $maxIntValue but got $i")
 
-  val allValues: Stream[MiniInt] = (minIntValue to maxIntValue).map(unsafeFromInt).toStream
+  val allValues: List[MiniInt] = (minIntValue to maxIntValue).map(unsafeFromInt).toList
 
-  implicit val catsLawsEqInstancesForMiniInt: Order[MiniInt] with Hash[MiniInt] = new Order[MiniInt]
-  with Hash[MiniInt] {
-    def hash(x: MiniInt): Int = Hash[Int].hash(x.intBits)
+  implicit val catsLawsEqInstancesForMiniInt: Order[MiniInt] with Hash[MiniInt] =
+    new Order[MiniInt] with Hash[MiniInt] {
+      def hash(x: MiniInt): Int = Hash[Int].hash(x.intBits)
 
-    def compare(x: MiniInt, y: MiniInt): Int = Order[Int].compare(x.toInt, y.toInt)
-  }
+      def compare(x: MiniInt, y: MiniInt): Int = Order[Int].compare(x.toInt, y.toInt)
+    }
 
-  implicit val catsLawsExhuastiveCheckForMiniInt: ExhaustiveCheck[MiniInt] =
+  implicit val catsLawsExhaustiveCheckForMiniInt: ExhaustiveCheck[MiniInt] =
     ExhaustiveCheck.instance(allValues)
 
   val miniIntAddition: CommutativeGroup[MiniInt] = new CommutativeGroup[MiniInt] {
