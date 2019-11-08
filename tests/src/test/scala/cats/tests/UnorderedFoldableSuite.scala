@@ -44,6 +44,33 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
       fa.count(Function.const(true)) should ===(fa.size)
     }
   }
+
+  test(s"UnorderedFoldable[$name].maximum/minimum") {
+    forAll { (fa: F[Int]) =>
+      val maxOpt = instance.maximumOption(fa)
+      val minOpt = instance.minimumOption(fa)
+      val set = instance.unorderedFoldMap(fa)(Set(_))
+      maxOpt should ===(set.maximumOption)
+      minOpt should ===(set.minimumOption)
+      maxOpt.forall(i => instance.forall(fa)(_ <= i)) should ===(true)
+      minOpt.forall(i => instance.forall(fa)(_ >= i)) should ===(true)
+    }
+  }
+
+  test(s"UnorderedFoldable[$name].maximumBy/minimumBy") {
+    forAll { (fa: F[Int], f: Int => Int) =>
+      val maxOpt = instance.maximumByOption(fa)(f).map(f)
+      val minOpt = instance.minimumByOption(fa)(f).map(f)
+      val nelOpt = instance.unorderedFoldMap(fa)(Set(_)).toList.toNel
+      maxOpt should ===(nelOpt.map(_.maximumBy(f)).map(f))
+      maxOpt should ===(nelOpt.map(_.toList.maxBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.minimumBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.toList.minBy(f)).map(f))
+      maxOpt.forall(i => instance.forall(fa)(f(_) <= i)) should ===(true)
+      minOpt.forall(i => instance.forall(fa)(f(_) >= i)) should ===(true)
+    }
+  }
+
   checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
 }
 

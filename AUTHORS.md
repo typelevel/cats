@@ -169,6 +169,7 @@ possible:
  * Matt Martin
  * Matthias Lüneberg
  * Max Worgan
+ * Maxim Schuwalow
  * Merlin Göttlinger
  * Michał Gutowski
  * Michael Ledin
