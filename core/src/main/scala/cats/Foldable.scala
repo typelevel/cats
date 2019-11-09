@@ -266,9 +266,7 @@ import Foldable.sentinel
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    foldLeft(fa, A.empty) { (acc, a) =>
-      A.combine(acc, a)
-    }
+    A.combineAll(iterable(fa))
 
   /**
    * Alias for [[fold]].
