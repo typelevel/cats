@@ -48,8 +48,6 @@ trait SortedSetInstances extends SortedSetInstances1 {
 
       override def toList[A](fa: SortedSet[A]): List[A] = fa.toList
 
-      override def iterator[A](fa: SortedSet[A]): Iterator[A] = fa.iterator
-
       override def reduceLeftOption[A](fa: SortedSet[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 

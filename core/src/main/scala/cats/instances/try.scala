@@ -128,8 +128,6 @@ trait TryInstances extends TryInstances1 {
           case Success(a) => a :: Nil
         }
 
-      override def iterator[A](fa: Try[A]): Iterator[A] = toList(fa).iterator
-
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
     }
   // scalastyle:on method.length

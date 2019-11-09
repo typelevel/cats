@@ -145,8 +145,6 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       override def toList[A](fa: List[A]): List[A] = fa
 
-      override def iterator[A](fa: List[A]): Iterator[A] = fa.iterator
-
       override def reduceLeftOption[A](fa: List[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 

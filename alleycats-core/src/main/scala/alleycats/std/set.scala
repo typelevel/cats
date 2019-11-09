@@ -106,8 +106,6 @@ trait SetInstances {
 
       override def toList[A](fa: Set[A]): List[A] = fa.toList
 
-      override def iterator[A](fa: Set[A]): Iterator[A] = fa.iterator
-
       override def reduceLeftOption[A](fa: Set[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 

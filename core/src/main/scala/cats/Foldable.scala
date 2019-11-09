@@ -28,7 +28,7 @@ import Foldable.sentinel
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
+@typeclass trait Foldable[F[_]] extends cats.compat.FoldableCompat[F] with UnorderedFoldable[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -276,10 +276,7 @@ import Foldable.sentinel
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
 
   def combineAllOption[A](fa: F[A])(implicit ev: Semigroup[A]): Option[A] =
-    if (isEmpty(fa)) None else ev.combineAllOption(iterator(fa))
-
-  def iterator[A](fa: F[A]): Iterator[A] =
-    cats.compat.Foldable.iterator(fa)(self)
+    if (isEmpty(fa)) None else ev.combineAllOption(iterable(fa))
 
   /**
    * Fold implemented by mapping `A` values into `B` and then

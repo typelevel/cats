@@ -142,9 +142,6 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def toList[B](fab: Either[A, B]): List[B] =
         fab.fold(_ => Nil, _ :: Nil)
 
-      override def iterator[B](fa: Either[A, B]): Iterator[B] =
-        toList(fa).iterator
-
       override def isEmpty[B](fab: Either[A, B]): Boolean =
         fab.isLeft
 

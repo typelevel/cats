@@ -17,7 +17,7 @@ abstract class FoldableSuite[F[_]](name: String)(
   ArbFString: Arbitrary[F[String]]
 ) extends CatsSuite {
 
-  def iterator[T](fa: F[T]): Iterator[T] = F.iterator(fa)
+  def iterator[T](fa: F[T]): Iterator[T] = F.iterable(fa).iterator
 
   test(s"Foldable[$name].size/get") {
     forAll { (fa: F[Int], n: Int) =>
