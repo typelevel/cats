@@ -157,7 +157,7 @@ class NonEmptyStreamSuite extends CatsSuite {
 }
 
 class ReducibleNonEmptyStreamSuite extends ReducibleSuite[NonEmptyStream]("NonEmptyStream") {
-  override def iterator[T](nes: NonEmptyStream[T]): Iterator[T] =
+  def iterator[T](nes: NonEmptyStream[T]): Iterator[T] =
     (nes.head #:: nes.tail).iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyStream[Long] = {

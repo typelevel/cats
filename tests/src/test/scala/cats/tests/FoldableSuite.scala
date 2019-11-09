@@ -216,13 +216,14 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
 
   test(s"Foldable[$name].combineAllOption") {
     forAll { (fa: F[Int]) =>
-      val list = fa.toList
-      fa.combineAllOption should ===(list.combineAllOption)
+      fa.combineAllOption should ===(fa.toList.combineAllOption)
+      fa.combineAllOption should ===(iterator(fa).toList.combineAllOption)
     }
   }
 
   test(s"Foldable[$name].iterable") {
     forAll { (fa: F[Int]) =>
+      fa.iterable.toList should ===(fa.toList)
       fa.iterable.toList should ===(iterator(fa).toList)
     }
   }
