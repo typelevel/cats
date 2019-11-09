@@ -1,7 +1,11 @@
 package cats
 package syntax
 
-trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUnorderedFoldableOps {
+trait FoldableSyntax
+    extends Foldable.ToFoldableOps
+    with cats.compat.FoldableCompat.ToFoldableCompatOps
+    with UnorderedFoldable.ToUnorderedFoldableOps {
+
   implicit final def catsSyntaxNestedFoldable[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
     new NestedFoldableOps[F, G, A](fga)
 

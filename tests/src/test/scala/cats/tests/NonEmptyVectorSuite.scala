@@ -395,7 +395,7 @@ class NonEmptyVectorSuite extends CatsSuite {
 }
 
 class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEmptyVector") {
-  override def iterator[T](nel: NonEmptyVector[T]): Iterator[T] = nel.toVector.iterator
+  def iterator[T](nel: NonEmptyVector[T]): Iterator[T] = nel.toVector.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyVector[Long] = {
     // if we inline this we get a bewildering implicit numeric widening
