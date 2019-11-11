@@ -223,8 +223,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
 
   test(s"Foldable[$name].iterable") {
     forAll { (fa: F[Int]) =>
-      fa.iterable.toList should ===(fa.toList)
-      fa.iterable.toList should ===(iterator(fa).toList)
+      fa.toIterable.toList should ===(fa.toList)
+      fa.toIterable.toList should ===(iterator(fa).toList)
     }
   }
 

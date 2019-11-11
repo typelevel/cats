@@ -28,7 +28,7 @@ import Foldable.sentinel
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
-@typeclass trait Foldable[F[_]] extends cats.compat.FoldableCompat[F] with UnorderedFoldable[F] { self =>
+@typeclass trait Foldable[F[_]] extends UnorderedFoldable[F] { self =>
 
   /**
    * Left associative fold on 'F' using the function 'f'.
@@ -266,7 +266,7 @@ import Foldable.sentinel
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    A.combineAll(iterable(fa))
+    A.combineAll(toIterable(fa))
 
   /**
    * Alias for [[fold]].
@@ -274,7 +274,16 @@ import Foldable.sentinel
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
 
   def combineAllOption[A](fa: F[A])(implicit ev: Semigroup[A]): Option[A] =
-    if (isEmpty(fa)) None else ev.combineAllOption(iterable(fa))
+    if (isEmpty(fa)) None else ev.combineAllOption(toIterable(fa))
+
+  /**
+   * Convert F[A] to an Iterable[A].
+   *
+   * This method may be overridden for the sake of performance, but implementers should take care
+   * not to force a full materialization of the collection.
+   */
+  def toIterable[A](fa: F[A]): Iterable[A] =
+    cats.compat.FoldableCompat.toIterable(fa)(self)
 
   /**
    * Fold implemented by mapping `A` values into `B` and then

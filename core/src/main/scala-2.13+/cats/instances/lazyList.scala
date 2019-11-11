@@ -118,7 +118,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def toList[A](fa: LazyList[A]): List[A] = fa.toList
 
-      override def iterable[A](fa: LazyList[A]): LazyList[A] = fa
+      override def toIterable[A](fa: LazyList[A]): Iterable[A] = fa
 
       override def reduceLeftOption[A](fa: LazyList[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
