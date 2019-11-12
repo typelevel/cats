@@ -22,9 +22,9 @@ class ContTSuite extends CatsSuite {
     }
   }
 
-  checkAll("ContT[Function0, Int, ?]", MonadTests[ContT[Function0, Int, ?]].monad[Int, String, Int])
-  checkAll("ContT[Eval, Int, ?]", MonadTests[ContT[Eval, Int, ?]].monad[Int, String, Int])
-  checkAll("ContT[Function0, Int, ?]", DeferTests[ContT[Function0, Int, ?]].defer[Int])
+  checkAll("ContT[Function0, Int, *]", MonadTests[ContT[Function0, Int, *]].monad[Int, String, Int])
+  checkAll("ContT[Eval, Int, *]", MonadTests[ContT[Eval, Int, *]].monad[Int, String, Int])
+  checkAll("ContT[Function0, Int, *]", DeferTests[ContT[Function0, Int, *]].defer[Int])
 
   /**
    * c.mapCont(f).run(g) == f(c.run(g))

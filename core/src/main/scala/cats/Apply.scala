@@ -2,6 +2,7 @@ package cats
 
 import simulacrum.typeclass
 import simulacrum.noop
+import cats.data.Ior
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
@@ -216,8 +217,20 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 }
 
 object Apply {
+
+  /**
+   * This semigroup uses a product operation to combine `F`s.
+   * If the `Apply[F].product` results in larger `F` (i.e. when `F` is a `List`),
+   * accumulative usage of this instance, such as `combineAll`, will result in
+   * `F`s with exponentially increasing sizes.
+   */
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)
+
+  def align[F[_]: Apply]: Align[F] = new Align[F] {
+    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
+    def functor: Functor[F] = Apply[F]
+  }
 }
 
 private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {

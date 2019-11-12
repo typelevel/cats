@@ -2,9 +2,11 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.vector._
+
 import scala.annotation.tailrec
 import scala.collection.immutable.{TreeSet, VectorBuilder}
-import cats.instances.vector._
+import kernel.compat.scalaVersionSpecific._
 
 /**
  * A data type which represents a `Vector` guaranteed to contain at least one element.
@@ -197,7 +199,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
     val buf = Vector.newBuilder[AA]
     tail.foldLeft(TreeSet(head: AA)) { (elementsSoFar, a) =>
-      if (elementsSoFar(a)) elementsSoFar else { buf += a; elementsSoFar + a }
+      if (elementsSoFar(a)) elementsSoFar
+      else {
+        buf += a; elementsSoFar + a
+      }
     }
 
     NonEmptyVector(head, buf.result())
@@ -215,7 +220,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
    * }}}
    */
   def zipWith[B, C](b: NonEmptyVector[B])(f: (A, B) => C): NonEmptyVector[C] =
-    NonEmptyVector.fromVectorUnsafe((toVector, b.toVector).zipped.map(f))
+    NonEmptyVector.fromVectorUnsafe(toVector.lazyZip(b.toVector).map(f))
 
   def reverse: NonEmptyVector[A] =
     new NonEmptyVector(toVector.reverse)
@@ -230,14 +235,18 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
     new NonEmptyVector(toVector.sorted(AA.toOrdering))
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class NonEmptyVectorInstances {
 
   implicit val catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
-    with Reducible[NonEmptyVector]
     with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector] =
-    new NonEmptyReducible[NonEmptyVector, Vector] with SemigroupK[NonEmptyVector] with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector] {
+    with NonEmptyTraverse[NonEmptyVector]
+    with Align[NonEmptyVector] =
+    new NonEmptyReducible[NonEmptyVector, Vector]
+      with SemigroupK[NonEmptyVector]
+      with Bimonad[NonEmptyVector]
+      with NonEmptyTraverse[NonEmptyVector]
+      with Align[NonEmptyVector] {
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
@@ -315,7 +324,7 @@ sealed abstract private[data] class NonEmptyVectorInstances {
               case (Right(c), _)           => ior.map(_ :+ c)
               case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
               case (Left(b), _)            => ior.leftMap(_ :+ b)
-          }
+            }
         ).bimap(_.toNonEmptyList, _.toNonEmptyList)
 
       }
@@ -354,6 +363,15 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       override def toNonEmptyList[A](fa: NonEmptyVector[A]): NonEmptyList[A] =
         NonEmptyList(fa.head, fa.tail.toList)
+
+      def functor: Functor[NonEmptyVector] = this
+
+      def align[A, B](fa: NonEmptyVector[A], fb: NonEmptyVector[B]): NonEmptyVector[Ior[A, B]] =
+        NonEmptyVector.fromVectorUnsafe(Align[Vector].align(fa.toVector, fb.toVector))
+
+      override def alignWith[A, B, C](fa: NonEmptyVector[A],
+                                      fb: NonEmptyVector[B])(f: Ior[A, B] => C): NonEmptyVector[C] =
+        NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 
   implicit def catsDataEqForNonEmptyVector[A](implicit A: Eq[A]): Eq[NonEmptyVector[A]] =
@@ -367,8 +385,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
   implicit def catsDataSemigroupForNonEmptyVector[A]: Semigroup[NonEmptyVector[A]] =
     catsDataInstancesForNonEmptyVector.algebra
 
-  implicit def catsDataParallelForNonEmptyVector[A]: NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] =
-    new NonEmptyParallel[NonEmptyVector, ZipNonEmptyVector] {
+  implicit def catsDataParallelForNonEmptyVector: NonEmptyParallel.Aux[NonEmptyVector, ZipNonEmptyVector] =
+    new NonEmptyParallel[NonEmptyVector] {
+      type F[x] = ZipNonEmptyVector[x]
 
       def apply: Apply[ZipNonEmptyVector] = ZipNonEmptyVector.catsDataCommutativeApplyForZipNonEmptyVector
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
@@ -424,6 +443,9 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
           ZipNonEmptyVector(fa.value.zipWith(fb.value) { case (a, b) => (a, b) })
       }
 
-    implicit def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
+    @deprecated("Use catsDataEqForZipNonEmptyVector", "2.0.0-RC2")
+    private[data] def zipNevEq[A: Eq]: Eq[ZipNonEmptyVector[A]] = catsDataEqForZipNonEmptyVector[A]
+
+    implicit def catsDataEqForZipNonEmptyVector[A: Eq]: Eq[ZipNonEmptyVector[A]] = Eq.by(_.value)
   }
 }

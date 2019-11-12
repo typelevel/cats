@@ -16,6 +16,7 @@ possible:
  * Aaron Levin
  * Adam Fisher
  * Adelbert Chang
+ * Adrian Ramirez Fornell
  * Aldo Stracquadanio
  * Alejandro Gómez
  * Alessandro Lacava
@@ -35,12 +36,14 @@ possible:
  * Andy Scott
  * Angelo Genovese
  * Antoine Comte
+ * Arulselvan Madhavan
  * Arya Irani
  * Ash Pook
  * Aλ
  * Ben Fradet
  * Ben Hutchison
  * Ben Kirwin
+ * Ben Plommer
  * Benjamin Thuillier
  * Binh Nguyen
  * Bjørn Madsen
@@ -50,6 +53,7 @@ possible:
  * Brian P. Holt
  * Bryan Tan
  * Cary Robbins
+ * Changwoo Park
  * Chris Birchall
  * Christopher Davenport
  * Cody Allen
@@ -59,6 +63,7 @@ possible:
  * Csongor Kiss
  * dadepo
  * Dale Wijnand
+ * Dan Di Spaltro
  * Daniel Karch
  * Daniel Spiewak
  * Daniel Urban
@@ -77,6 +82,7 @@ possible:
  * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
+ * Endre Galaczi
  * Eric Torreborre
  * ericaovo
  * Erik LaBianca
@@ -96,14 +102,18 @@ possible:
  * Francois Armand
  * Frank S. Thomas
  * Gabriele Petronella
+ * Gagandeep Kalra
  * Gavin Bisesi
  * Giovanni Ruggiero
  * Giulio De Luise
+ * Giuseppe Cannella
  * Greg Pfeil
  * Guillaume Massé
+ * Hamed Nourhani
  * Hamish Dickson
  * Harrison Houghton
  * Ian McIntosh
+ * Ikrom
  * ImLiar
  * Ionuț G. Stan
  * Israel Pérez González
@@ -112,11 +122,14 @@ possible:
  * Jacob Barber
  * Jakub Kozłowski
  * Jan-Hendrik Zab
+ * Jasper Moeys
  * Jean-Rémi Desjardins
  * Jens
  * Jens Grassel
+ * Jichao Ouyang
  * Jimin Hsieh
  * Jisoo Park
+ * Joan Goyeau
  * João Ferreira
  * John Sullivan
  * Jon Hanson
@@ -129,7 +142,9 @@ possible:
  * Julien Richard-Foy
  * Julien Truffaut
  * Jun Tomioka
+ * jurisk
  * Kailuo Wang
+ * Kamil Kloch
  * Keir Lawson
  * kellen
  * Kenji Yoshida
@@ -149,20 +164,24 @@ possible:
  * Mark de Jong
  * Markus Hauck
  * Martijn Hoekstra
+ * Mateusz Sokół
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
  * Max Worgan
  * Merlin Göttlinger
+ * Michał Gutowski
  * Michael Ledin
  * Michael Pilquist
  * Mike Curry
  * Miles Sabin
+ * Mirco Dotta
  * nigredo-tori
  * Nikolay Maksimenko
  * n4to4
  * Olivier Blanvillain
  * Olli Helenius
+ * orvi
  * Owen Parry
  * P. Oscar Boykin
  * Paolo G. Giarrusso
@@ -172,6 +191,7 @@ possible:
  * Paulo "JCranky" Siqueira
  * Pavel Chlupacek
  * Pavkin Vladimir
+ * Paweł Kiersznowski
  * Paweł Lipski
  * Pepe García
  * Pere Villega
@@ -198,6 +218,7 @@ possible:
  * Ryan Case
  * Sam Ritchie
  * Sarunas Valaskevicius
+ * Sergei Dolgov
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
@@ -211,6 +232,7 @@ possible:
  * sullis
  * Sumedh Mungee
  * Takayuki Sakai
+ * Tanaka Takaya
  * Taylor Brown
  * Tom Switzer
  * Tomas Mikula
@@ -221,9 +243,12 @@ possible:
  * Tya
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasiliy Bondarenko
  * ven
+ * Viktor Dychko
  * Viktor Lövgren
  * Vladimir Samoylov
+ * Vladislav Gutov
  * Wedens
  * Wogan
  * Xavier Fernández Salas
@@ -231,6 +256,7 @@ possible:
  * 杨博 (Yang Bo)
  * Yosef Fertel
  * Yilin Wei
+ * Yuriy Badalyantc
  * Zach Abbott
  * zainab-ali
  * Zelenya

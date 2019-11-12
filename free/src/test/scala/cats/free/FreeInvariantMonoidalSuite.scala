@@ -26,12 +26,12 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
       }
     }
 
-  implicit val isoFreeBinCodec = Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, ?]]
+  implicit val isoFreeBinCodec = Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, *]]
 
-  checkAll("FreeInvariantMonoidal[BinCodec, ?]",
-           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, ?]].invariantMonoidal[MiniInt, Boolean, Boolean])
-  checkAll("InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]",
-           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, ?]]))
+  checkAll("FreeInvariantMonoidal[BinCodec, *]",
+           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, *]].invariantMonoidal[MiniInt, Boolean, Boolean])
+  checkAll("InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]]",
+           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]]))
 
   test("FreeInvariantMonoidal#fold") {
     forAll { i1: BinCodec[MiniInt] =>

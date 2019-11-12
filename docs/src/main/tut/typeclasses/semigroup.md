@@ -58,7 +58,7 @@ for `Map`s.
 ```tut:book:silent
 import cats.implicits._
 
-val map1 = Map("hello" -> 0, "world" -> 1)
+val map1 = Map("hello" -> 1, "world" -> 1)
 val map2 = Map("hello" -> 2, "cats"  -> 3)
 ```
 
@@ -132,7 +132,7 @@ val y = mergeMap(ym1, ym2)
 ```
 
 It is interesting to note that the type of `mergeMap` satisfies the type of `Semigroup`
-specialized to `Map[K, ?]` and is associative - indeed the `Semigroup` instance for `Map`
+specialized to `Map[K, *]` and is associative - indeed the `Semigroup` instance for `Map`
 uses the same function for its `combine`.
 
 ```tut:book

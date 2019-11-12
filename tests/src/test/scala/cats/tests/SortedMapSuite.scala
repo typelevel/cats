@@ -4,6 +4,7 @@ package tests
 import cats.kernel.CommutativeMonoid
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
+  AlignTests,
   FlatMapTests,
   MonoidKTests,
   SemigroupalTests,
@@ -16,20 +17,23 @@ import cats.laws.discipline.arbitrary._
 import scala.collection.immutable.SortedMap
 
 class SortedMapSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[SortedMap[Int, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[SortedMap[Int, *]]
 
-  checkAll("SortedMap[Int, Int]", SemigroupalTests[SortedMap[Int, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[SortedMap[Int, ?]]", SerializableTests.serializable(Semigroupal[SortedMap[Int, ?]]))
+  checkAll("SortedMap[Int, Int]", SemigroupalTests[SortedMap[Int, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[SortedMap[Int, *]]", SerializableTests.serializable(Semigroupal[SortedMap[Int, *]]))
 
-  checkAll("SortedMap[Int, Int]", FlatMapTests[SortedMap[Int, ?]].flatMap[Int, Int, Int])
-  checkAll("FlatMap[SortedMap[Int, ?]]", SerializableTests.serializable(FlatMap[SortedMap[Int, ?]]))
+  checkAll("SortedMap[Int, Int]", FlatMapTests[SortedMap[Int, *]].flatMap[Int, Int, Int])
+  checkAll("FlatMap[SortedMap[Int, *]]", SerializableTests.serializable(FlatMap[SortedMap[Int, *]]))
 
   checkAll("SortedMap[Int, Int] with Option",
-           TraverseTests[SortedMap[Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[SortedMap[Int, ?]]", SerializableTests.serializable(Traverse[SortedMap[Int, ?]]))
+           TraverseTests[SortedMap[Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[SortedMap[Int, *]]", SerializableTests.serializable(Traverse[SortedMap[Int, *]]))
 
-  checkAll("SortedMap[Int, Int]", TraverseFilterTests[SortedMap[Int, ?]].traverseFilter[Int, Int, Int])
-  checkAll("TraverseFilter[SortedMap[Int, ?]]", SerializableTests.serializable(TraverseFilter[SortedMap[Int, ?]]))
+  checkAll("SortedMap[Int, Int]", TraverseFilterTests[SortedMap[Int, *]].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[SortedMap[Int, *]]", SerializableTests.serializable(TraverseFilter[SortedMap[Int, *]]))
+
+  checkAll("SortedMap[Int, Int]", AlignTests[SortedMap[Int, *]].align[Int, Int, Int, Int])
+  checkAll("Align[SortedMap[Int, *]]", SerializableTests.serializable(Align[SortedMap[Int, *]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>
@@ -47,6 +51,6 @@ class SortedMapSuite extends CatsSuite {
   checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
   checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
 
-  checkAll("SortedMap[String, String]", MonoidKTests[SortedMap[String, ?]].monoidK[String])
-  checkAll("MonoidK[SortedMap[String, ?]]", SerializableTests.serializable(MonoidK[SortedMap[String, ?]]))
+  checkAll("SortedMap[String, String]", MonoidKTests[SortedMap[String, *]].monoidK[String])
+  checkAll("MonoidK[SortedMap[String, *]]", SerializableTests.serializable(MonoidK[SortedMap[String, *]]))
 }

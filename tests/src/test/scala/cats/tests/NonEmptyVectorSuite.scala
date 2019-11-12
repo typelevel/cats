@@ -1,14 +1,13 @@
 package cats
 package tests
 
-import catalysts.Platform
-
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 
 import cats.data.NonEmptyVector
 import cats.laws.discipline.{
+  AlignTests,
   BimonadTests,
   CommutativeApplyTests,
   FoldableTests,
@@ -18,6 +17,7 @@ import cats.laws.discipline.{
   SerializableTests
 }
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 
 import scala.util.Properties
 
@@ -44,6 +44,9 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
   checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
+
+  checkAll("NonEmptyVector[Int]", AlignTests[NonEmptyVector].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyVector]", SerializableTests.serializable(Align[NonEmptyVector]))
 
   checkAll("ZipNonEmptyVector[Int]", CommutativeApplyTests[ZipNonEmptyVector].commutativeApply[Int, Int, Int])
   checkAll("CommutativeApply[ZipNonEmptyVector]", SerializableTests.serializable(CommutativeApply[ZipNonEmptyVector]))

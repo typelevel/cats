@@ -4,6 +4,8 @@ package syntax
 import cats.data.Validated.{Invalid, Valid}
 import cats.data.{EitherT, Validated}
 
+import scala.reflect.ClassTag
+
 trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
@@ -33,7 +35,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
    * {{{
    * scala> import cats.implicits._
    * scala> import cats.ApplicativeError
-   * scala> val F = ApplicativeError[Either[String, ?], String]
+   * scala> val F = ApplicativeError[Either[String, *], String]
    *
    * scala> F.fromOption(Some(1), "Empty")
    * res0: scala.Either[String, Int] = Right(1)
@@ -83,6 +85,9 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
   def attempt(implicit F: ApplicativeError[F, E]): F[Either[E, A]] =
     F.attempt(fa)
 
+  def attemptNarrow[EE](implicit F: ApplicativeError[F, E], tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+    F.attemptNarrow[EE, A](fa)
+
   def attemptT(implicit F: ApplicativeError[F, E]): EitherT[F, E, A] =
     F.attemptT(fa)
 
@@ -123,5 +128,5 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
    */
   def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] =
-    F.recoverWith(fa)(pf.andThen(F.raiseError))
+    F.recoverWith(fa)(pf.andThen(F.raiseError[A] _))
 }

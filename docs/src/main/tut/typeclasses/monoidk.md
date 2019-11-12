@@ -7,12 +7,12 @@ scaladoc: "#cats.MonoidK"
 ---
 # MonoidK
 
-`MonoidK` is a universal monoid which operates on kinds.
- 
+`MonoidK` is a universal monoid which operates on type constructors of one argument.
+
 This type class is useful when its type parameter `F[_]` has a
 structure that can be combined for any particular type, and which
 also has an "empty" representation. Thus, `MonoidK` is like a `Monoid`
-for kinds (i.e. parametrized types).
+for type constructors (i.e. parametrized types).
 
 A `MonoidK[F]` can produce a `Monoid[F[A]]` for any type `A`.
 

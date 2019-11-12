@@ -1,28 +1,28 @@
 package cats
 package tests
 
-import catalysts.Platform
 import cats.data._
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline._
 import cats.arrow._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 
 class AndThenSuite extends CatsSuite {
-  checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, ?]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[AndThen[Int, ?]]", SerializableTests.serializable(Semigroupal[AndThen[Int, ?]]))
+  checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, *]].semigroupal[Int, Int, Int])
+  checkAll("Semigroupal[AndThen[Int, *]]", SerializableTests.serializable(Semigroupal[AndThen[Int, *]]))
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[?, Int]]
-    checkAll("AndThen[?, Int]",
-             ContravariantMonoidalTests[AndThen[?, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean])
-    checkAll("ContravariantMonoidal[AndThen[?, Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[AndThen[?, Int]]))
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[*, Int]]
+    checkAll("AndThen[*, Int]",
+             ContravariantMonoidalTests[AndThen[*, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean])
+    checkAll("ContravariantMonoidal[AndThen[*, Int]]",
+             SerializableTests.serializable(ContravariantMonoidal[AndThen[*, Int]]))
   }
 
-  checkAll("AndThen[MiniInt, Int]", MonadTests[AndThen[MiniInt, ?]].monad[Int, Int, Int])
-  checkAll("Monad[AndThen[Int, ?]]", SerializableTests.serializable(Monad[AndThen[Int, ?]]))
+  checkAll("AndThen[MiniInt, Int]", MonadTests[AndThen[MiniInt, *]].monad[Int, Int, Int])
+  checkAll("Monad[AndThen[Int, *]]", SerializableTests.serializable(Monad[AndThen[Int, *]]))
 
   checkAll("AndThen",
            CommutativeArrowTests[AndThen].commutativeArrow[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean])
@@ -34,8 +34,8 @@ class AndThenSuite extends CatsSuite {
   checkAll("AndThen", ArrowChoiceTests[AndThen].arrowChoice[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean])
   checkAll("ArrowChoice[AndThen]", SerializableTests.serializable(ArrowChoice[AndThen]))
 
-  checkAll("AndThen[?, Int]", ContravariantTests[AndThen[?, Int]].contravariant[MiniInt, Int, Boolean])
-  checkAll("Contravariant[AndThen[?, Int]]", SerializableTests.serializable(Contravariant[AndThen[?, Int]]))
+  checkAll("AndThen[*, Int]", ContravariantTests[AndThen[*, Int]].contravariant[MiniInt, Int, Boolean])
+  checkAll("Contravariant[AndThen[*, Int]]", SerializableTests.serializable(Contravariant[AndThen[*, Int]]))
 
   test("compose a chain of functions with andThen") {
     check { (i: Int, fs: List[Int => Int]) =>
@@ -57,9 +57,7 @@ class AndThenSuite extends CatsSuite {
 
   test("andThen is stack safe") {
     val count = if (Platform.isJvm) 500000 else 1000
-    val fs = (0 until count).map(_ => { i: Int =>
-      i + 1
-    })
+    val fs = (0 until count).map(_ => { i: Int => i + 1 })
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.andThen(_))(42)
 
     result shouldEqual (count + 42)
@@ -67,9 +65,7 @@ class AndThenSuite extends CatsSuite {
 
   test("compose is stack safe") {
     val count = if (Platform.isJvm) 500000 else 1000
-    val fs = (0 until count).map(_ => { i: Int =>
-      i + 1
-    })
+    val fs = (0 until count).map(_ => { i: Int => i + 1 })
     val result = fs.foldLeft(AndThen((x: Int) => x))(_.compose(_))(42)
 
     result shouldEqual (count + 42)

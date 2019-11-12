@@ -1,6 +1,7 @@
 package cats
 
 package object syntax {
+  object align extends AlignSyntax
   object all extends AllSyntaxBinCompat
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
@@ -39,7 +40,13 @@ package object syntax {
   object nested extends NestedSyntax
   object option extends OptionSyntax
   object order extends OrderSyntax
-  object parallel extends ParallelSyntax with ParallelTraverseSyntax with ParallelFlatSyntax with ParallelApplySyntax
+  object parallel
+      extends ParallelSyntax
+      with ParallelTraverseSyntax
+      with ParallelFlatSyntax
+      with ParallelApplySyntax
+      with ParallelBitraverseSyntax
+      with ParallelUnorderedTraverseSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0
