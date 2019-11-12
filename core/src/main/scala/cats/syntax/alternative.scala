@@ -54,9 +54,6 @@ final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) exten
                F: Monad[F],
                A: Alternative[F],
                G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
-}
-
-final class SeparateFoldableOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) extends AnyVal {
 
   /**
    * @see [[Alternative.separateFoldable]]
