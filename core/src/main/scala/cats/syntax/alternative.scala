@@ -9,11 +9,6 @@ trait AlternativeSyntax {
   implicit final def catsSyntaxAlternativeSeparate[F[_], G[_, _], A, B](fgab: F[G[A, B]]): SeparateOps[F, G, A, B] =
     new SeparateOps[F, G, A, B](fgab)
 
-  implicit final def catsSyntaxAlternativeSeparateFoldable[F[_], G[_, _], A, B](
-    fgab: F[G[A, B]]
-  ): SeparateFoldableOps[F, G, A, B] =
-    new SeparateFoldableOps[F, G, A, B](fgab)
-
   implicit final def catsSyntaxAlternativeGuard(b: Boolean): GuardOps =
     new GuardOps(b)
 }
