@@ -8,7 +8,7 @@ import scalaz.std.anyVal._
 import scalaz.std.list._
 import scalaz.std.map._
 
-import org.openjdk.jmh.annotations.{ Benchmark, Scope, State }
+import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Benchmark)
 class MapMonoidBench {
@@ -36,9 +36,10 @@ class MapMonoidBench {
 
   @Benchmark def combineDirect: Map[String, Int] =
     maps.foldLeft(Map.empty[String, Int]) {
-      case (acc, m) => m.foldLeft(acc) {
-        case (m, (k, v)) => m.updated(k, v + m.getOrElse(k, 0))
-      }
+      case (acc, m) =>
+        m.foldLeft(acc) {
+          case (m, (k, v)) => m.updated(k, v + m.getOrElse(k, 0))
+        }
     }
 
   @Benchmark def combineGeneric: Map[String, Int] =
@@ -46,9 +47,10 @@ class MapMonoidBench {
 
   def combineMapsGeneric[K, V](maps: List[Map[K, V]], z: V, f: (V, V) => V): Map[K, V] =
     maps.foldLeft(Map.empty[K, V]) {
-      case (acc, m) => m.foldLeft(acc) {
-        case (m, (k, v)) => m.updated(k, f(v, m.getOrElse(k, z)))
-      }
+      case (acc, m) =>
+        m.foldLeft(acc) {
+          case (m, (k, v)) => m.updated(k, f(v, m.getOrElse(k, z)))
+        }
     }
 
   @Benchmark def foldMapCats: Map[String, Int] =
