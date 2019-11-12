@@ -139,27 +139,27 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
    * Stack-safe.
    */
   final def compile[G[_]](f: F ~> G): FA[G, A] =
-    foldMap[FA[G, ?]] {
-      λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
+    foldMap[FA[G, *]] {
+      λ[FunctionK[F, FA[G, *]]](fa => lift(f(fa)))
     }
 
   /**
    * Interpret this algebra into a FreeApplicative over another algebra.
    * Stack-safe.
    */
-  def flatCompile[G[_]](f: F ~> FA[G, ?]): FA[G, A] =
+  def flatCompile[G[_]](f: F ~> FA[G, *]): FA[G, A] =
     foldMap(f)
 
   /** Interpret this algebra into a Monoid. */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
-    foldMap[Const[M, ?]](
-      λ[FunctionK[F, Const[M, ?]]](x => Const(f(x)))
+    foldMap[Const[M, *]](
+      λ[FunctionK[F, Const[M, *]]](x => Const(f(x)))
     ).getConst
 
   /** Compile this FreeApplicative algebra into a Free algebra. */
   final def monad: Free[F, A] =
-    foldMap[Free[F, ?]] {
-      λ[FunctionK[F, Free[F, ?]]](fa => Free.liftF(fa))
+    foldMap[Free[F, *]] {
+      λ[FunctionK[F, Free[F, *]]](fa => Free.liftF(fa))
     }
 
   override def toString: String = "FreeApplicative(...)"
@@ -170,12 +170,10 @@ object FreeApplicative {
 
   // Internal helper function for foldMap, it folds only Pure and Lift nodes
   private[free] def foldArg[F[_], G[_], A](node: FA[F, A], f: F ~> G)(implicit G: Applicative[G]): G[A] =
-    if (node.isInstanceOf[Pure[F, A]]) {
-      val Pure(x) = node
-      G.pure(x)
-    } else {
-      val Lift(fa) = node
-      f(fa)
+    node match {
+      case Pure(x)  => G.pure(x)
+      case Lift(fa) => f(fa)
+      case x        => throw new RuntimeException(s"Impossible for a $x to reach here")
     }
 
   /** Represents a curried function `F[A => B => C => ...]`
@@ -199,8 +197,8 @@ object FreeApplicative {
   final def lift[F[_], A](fa: F[A]): FA[F, A] =
     Lift(fa)
 
-  implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] =
-    new Applicative[FA[S, ?]] {
+  implicit final def freeApplicative[S[_]]: Applicative[FA[S, *]] =
+    new Applicative[FA[S, *]] {
       override def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] =
         map2(fa, fb)((_, _))
 

@@ -8,6 +8,16 @@ import scala.collection.mutable
 trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: Foldable[F]
 
+  def foldRightLazy[A](fa: F[A]): Boolean = {
+    var i = 0
+    F.foldRight(fa, Eval.now("empty")) { (_, _) =>
+        i += 1
+        Eval.now("not empty")
+      }
+      .value
+    i == (if (F.isEmpty(fa)) 0 else 1)
+  }
+
   def leftFoldConsistentWithFoldMap[A, B](
     fa: F[A],
     f: A => B
@@ -37,6 +47,16 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   ): IsEq[B] =
     F.foldM[Id, A, B](fa, b)(f) <-> F.foldLeft(fa, b)(f)
 
+  def foldRightDeferConsistentWithFoldRight[A, B](
+    fa: F[A],
+    f: (B, A) => B
+  )(implicit
+    M: Monoid[B]): IsEq[B] = {
+    val g: (A, Eval[B]) => Eval[B] = (a, ea) => ea.map(f(_, a))
+
+    F.foldRight(fa, Later(M.empty))(g).value <-> F.foldRightDefer(fa, Later(M.empty): Eval[B])(g).value
+  }
+
   /**
    * `reduceLeftOption` consistent with `reduceLeftToOption`
    */
@@ -60,7 +80,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def getRef[A](fa: F[A], idx: Long): IsEq[Option[A]] =
     F.get(fa)(idx) <-> (if (idx < 0L) None
                         else
-                          F.foldM[Either[A, ?], A, Long](fa, 0L) { (i, a) =>
+                          F.foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
                             if (i == idx) Left(a) else Right(i + 1L)
                           } match {
                             case Left(a)  => Some(a)
@@ -111,6 +131,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def orderedConsistency[A: Eq](x: F[A], y: F[A])(implicit ev: Eq[F[A]]): IsEq[List[A]] =
     if (x === y) (F.toList(x) <-> F.toList(y))
     else List.empty[A] <-> List.empty[A]
+
 }
 
 object FoldableLaws {

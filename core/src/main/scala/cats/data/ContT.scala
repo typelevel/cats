@@ -135,14 +135,14 @@ object ContT {
       go(a)
     }
 
-  implicit def catsDataContTDefer[M[_], B]: Defer[ContT[M, B, ?]] =
-    new Defer[ContT[M, B, ?]] {
+  implicit def catsDataContTDefer[M[_], B]: Defer[ContT[M, B, *]] =
+    new Defer[ContT[M, B, *]] {
       def defer[A](c: => ContT[M, B, A]): ContT[M, B, A] =
         DeferCont(() => c)
     }
 
-  implicit def catsDataContTMonad[M[_]: Defer, A]: Monad[ContT[M, A, ?]] =
-    new Monad[ContT[M, A, ?]] {
+  implicit def catsDataContTMonad[M[_]: Defer, A]: Monad[ContT[M, A, *]] =
+    new Monad[ContT[M, A, *]] {
       def pure[B](b: B): ContT[M, A, B] =
         ContT.pure(b)
 

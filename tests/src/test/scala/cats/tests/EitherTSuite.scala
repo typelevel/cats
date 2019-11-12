@@ -11,15 +11,15 @@ import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {
   implicit val iso = SemigroupalTests.Isomorphisms
-    .invariant[EitherT[ListWrapper, String, ?]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
+    .invariant[EitherT[ListWrapper, String, *]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
-  checkAll("EitherT[Eval, String, ?]", DeferTests[EitherT[Eval, String, ?]].defer[Int])
+  checkAll("EitherT[Eval, String, *]", DeferTests[EitherT[Eval, String, *]].defer[Int])
 
   {
-    checkAll("EitherT[Option, ListWrapper[String], ?]",
-             SemigroupKTests[EitherT[Option, ListWrapper[String], ?]].semigroupK[Int])
-    checkAll("SemigroupK[EitherT[Option, ListWrapper[String], ?]]",
-             SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], ?]]))
+    checkAll("EitherT[Option, ListWrapper[String], *]",
+             SemigroupKTests[EitherT[Option, ListWrapper[String], *]].semigroupK[Int])
+    checkAll("SemigroupK[EitherT[Option, ListWrapper[String], *]]",
+             SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], *]]))
   }
 
   {
@@ -31,48 +31,48 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    //If a Functor for F is defined
+    // if a Functor for F is defined
     implicit val F = ListWrapper.functor
 
-    checkAll("EitherT[ListWrapper, ?, ?]",
-             BifunctorTests[EitherT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
-    checkAll("Bifunctor[EitherT[ListWrapper, ?, ?]]",
-             SerializableTests.serializable(Bifunctor[EitherT[ListWrapper, ?, ?]]))
-    checkAll("EitherT[ListWrapper, Int, ?]", FunctorTests[EitherT[ListWrapper, Int, ?]].functor[Int, Int, Int])
-    checkAll("Functor[EitherT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(Functor[EitherT[ListWrapper, Int, ?]]))
+    checkAll("EitherT[ListWrapper, *, *]",
+             BifunctorTests[EitherT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
+    checkAll("Bifunctor[EitherT[ListWrapper, *, *]]",
+             SerializableTests.serializable(Bifunctor[EitherT[ListWrapper, *, *]]))
+    checkAll("EitherT[ListWrapper, Int, *]", FunctorTests[EitherT[ListWrapper, Int, *]].functor[Int, Int, Int])
+    checkAll("Functor[EitherT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(Functor[EitherT[ListWrapper, Int, *]]))
   }
 
   {
-    //If a Traverse for F is defined
+    // if a Traverse for F is defined
     implicit val F = ListWrapper.traverse
 
-    checkAll("EitherT[ListWrapper, Int, ?]",
-             TraverseTests[EitherT[ListWrapper, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[EitherT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(Traverse[EitherT[ListWrapper, Int, ?]]))
-    checkAll("EitherT[ListWrapper, ?, ?]",
-             BitraverseTests[EitherT[ListWrapper, ?, ?]].bitraverse[Option, Int, Int, Int, String, String, String])
-    checkAll("Bitraverse[EitherT[ListWrapper, ?, ?]]",
-             SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, ?, ?]]))
+    checkAll("EitherT[ListWrapper, Int, *]",
+             TraverseTests[EitherT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[EitherT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(Traverse[EitherT[ListWrapper, Int, *]]))
+    checkAll("EitherT[ListWrapper, *, *]",
+             BitraverseTests[EitherT[ListWrapper, *, *]].bitraverse[Option, Int, Int, Int, String, String, String])
+    checkAll("Bitraverse[EitherT[ListWrapper, *, *]]",
+             SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, *, *]]))
 
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
 
     implicit val F = ListWrapper.monad
     implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
-    implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, ?], String, Int](eq0)
+    implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, *], String, Int](eq0)
 
-    Functor[EitherT[ListWrapper, String, ?]]
-    Applicative[EitherT[ListWrapper, String, ?]]
-    Monad[EitherT[ListWrapper, String, ?]]
+    Functor[EitherT[ListWrapper, String, *]]
+    Applicative[EitherT[ListWrapper, String, *]]
+    Monad[EitherT[ListWrapper, String, *]]
 
     checkAll("EitherT[ListWrapper, String, Int]",
-             MonadErrorTests[EitherT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
-    checkAll("MonadError[EitherT[List, ?, ?]]",
-             SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, ?], String]))
+             MonadErrorTests[EitherT[ListWrapper, String, *], String].monadError[Int, Int, Int])
+    checkAll("MonadError[EitherT[List, *, *]]",
+             SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, *], String]))
 
   }
 
@@ -81,39 +81,39 @@ class EitherTSuite extends CatsSuite {
     // Tests for catsDataMonadErrorFForEitherT instance, for recovery on errors of F.
 
     implicit val eq1 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
-    implicit val eq2 = EitherT.catsDataEqForEitherT[EitherT[Option, String, ?], Unit, String](eq1)
+    implicit val eq2 = EitherT.catsDataEqForEitherT[EitherT[Option, String, *], Unit, String](eq1)
     implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
 
-    Functor[EitherT[Option, String, ?]]
-    Applicative[EitherT[Option, String, ?]]
-    Monad[EitherT[Option, String, ?]]
+    Functor[EitherT[Option, String, *]]
+    Applicative[EitherT[Option, String, *]]
+    Monad[EitherT[Option, String, *]]
 
     checkAll("EitherT[Option, String, String]",
-             MonadErrorTests[EitherT[Option, String, ?], Unit].monadError[String, String, String])
-    checkAll("MonadError[EitherT[Option, ?, ?]]",
-             SerializableTests.serializable(MonadError[EitherT[Option, String, ?], Unit]))
+             MonadErrorTests[EitherT[Option, String, *], Unit].monadError[String, String, String])
+    checkAll("MonadError[EitherT[Option, *, *]]",
+             SerializableTests.serializable(MonadError[EitherT[Option, String, *], Unit]))
   }
 
   {
-    //if a Monad is defined
+    // if a Monad is defined
     implicit val F = ListWrapper.monad
 
-    Functor[EitherT[ListWrapper, String, ?]]
-    Applicative[EitherT[ListWrapper, String, ?]]
-    Monad[EitherT[ListWrapper, String, ?]]
+    Functor[EitherT[ListWrapper, String, *]]
+    Applicative[EitherT[ListWrapper, String, *]]
+    Monad[EitherT[ListWrapper, String, *]]
 
-    checkAll("EitherT[ListWrapper, String, Int]", MonadTests[EitherT[ListWrapper, String, ?]].monad[Int, Int, Int])
-    checkAll("Monad[EitherT[ListWrapper, String, ?]]",
-             SerializableTests.serializable(Monad[EitherT[ListWrapper, String, ?]]))
+    checkAll("EitherT[ListWrapper, String, Int]", MonadTests[EitherT[ListWrapper, String, *]].monad[Int, Int, Int])
+    checkAll("Monad[EitherT[ListWrapper, String, *]]",
+             SerializableTests.serializable(Monad[EitherT[ListWrapper, String, *]]))
   }
 
   {
-    //If a foldable is defined
+    // if a foldable is defined
     implicit val F = ListWrapper.foldable
 
-    checkAll("EitherT[ListWrapper, Int, ?]", FoldableTests[EitherT[ListWrapper, Int, ?]].foldable[Int, Int])
-    checkAll("Foldable[EitherT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(Foldable[EitherT[ListWrapper, Int, ?]]))
+    checkAll("EitherT[ListWrapper, Int, *]", FoldableTests[EitherT[ListWrapper, Int, *]].foldable[Int, Int])
+    checkAll("Foldable[EitherT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(Foldable[EitherT[ListWrapper, Int, *]]))
   }
 
   {
@@ -285,6 +285,15 @@ class EitherTSuite extends CatsSuite {
     failed.attemptT.rethrowT should ===(failed)
   }
 
+  test("rethrowT works with specialized failures") {
+    implicit val eqThrow: Eq[Throwable] = Eq.fromUniversalEquals
+    val failed: Try[Int] = Failure(new IllegalArgumentException("error"))
+
+    val t: EitherT[Try, IllegalArgumentException, Int] =
+      failed.attemptT.leftMap(_.asInstanceOf[IllegalArgumentException])
+    t.rethrowT should ===(failed)
+  }
+
   test("transform consistent with value.map") {
     forAll { (eithert: EitherT[List, String, Int], f: Either[String, Int] => Either[Long, Double]) =>
       eithert.transform(f) should ===(EitherT(eithert.value.map(f)))
@@ -322,6 +331,12 @@ class EitherTSuite extends CatsSuite {
   test("fold with Id consistent with Either fold") {
     forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
       eithert.fold(f, g) should ===(eithert.value.fold(f, g))
+    }
+  }
+
+  test("foldF with Id consistent with Either fold") {
+    forAll { (eithert: EitherT[Id, String, Int], f: String => Long, g: Int => Long) =>
+      eithert.foldF(f, g) should ===(eithert.value.fold(f, g))
     }
   }
 
@@ -439,7 +454,7 @@ class EitherTSuite extends CatsSuite {
 
   test("toEither consistent with toOption") {
     forAll { (x: EitherT[List, String, Int]) =>
-      x.value.map(_.right.toOption) should ===(x.toOption.value)
+      x.value.map(_.toOption) should ===(x.toOption.value)
     }
   }
 

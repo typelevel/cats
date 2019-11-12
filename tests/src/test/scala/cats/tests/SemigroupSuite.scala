@@ -2,9 +2,11 @@ package cats
 package tests
 
 import org.scalatest._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.funsuite._
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class SemigroupSuite extends FunSuite with Matchers with GeneratorDrivenPropertyChecks {
+class SemigroupSuite extends AnyFunSuiteLike with Matchers with ScalaCheckDrivenPropertyChecks {
   {
     import cats.implicits._
     Invariant[Semigroup]

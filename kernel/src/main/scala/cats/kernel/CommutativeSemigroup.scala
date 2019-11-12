@@ -15,4 +15,11 @@ object CommutativeSemigroup extends SemigroupFunctions[CommutativeSemigroup] {
    * Access an implicit `CommutativeSemigroup[A]`.
    */
   @inline final def apply[A](implicit ev: CommutativeSemigroup[A]): CommutativeSemigroup[A] = ev
+
+  /**
+   * Create a `CommutativeSemigroup` instance from the given function.
+   */
+  @inline def instance[A](cmb: (A, A) => A): CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+    override def combine(x: A, y: A): A = cmb(x, y)
+  }
 }

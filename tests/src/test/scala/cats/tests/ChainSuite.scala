@@ -2,7 +2,10 @@ package cats
 package tests
 
 import cats.data.Chain
+import cats.data.Chain.==:
+import cats.data.Chain.`:==`
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   MonadTests,
@@ -31,6 +34,9 @@ class ChainSuite extends CatsSuite {
 
   checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
   checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
+
+  checkAll("Chain[Int]", AlignTests[Chain].align[Int, Int, Int, Int])
+  checkAll("Align[Chain]", SerializableTests.serializable(Align[Chain]))
 
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
@@ -66,6 +72,27 @@ class ChainSuite extends CatsSuite {
     forAll { (s: Seq[Int]) =>
       Chain.fromSeq(s).headOption should ===(s.headOption)
     }
+  }
+
+  test("lastOption") {
+    forAll { (c: Chain[Int]) =>
+      c.lastOption should ===(c.toList.lastOption)
+    }
+  }
+
+  test("seq-like pattern match") {
+    Chain(1, 2, 3) match {
+      case Chain(a, b, c) => (a, b, c) should ===((1, 2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case h ==: t => (h, t) should ===(1 -> Chain(2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case init :== last => (init, last) should ===(Chain(1, 2) -> 3)
+    }
+
   }
 
   test("size is consistent with toList.size") {
@@ -218,4 +245,23 @@ class ChainSuite extends CatsSuite {
       x.hashCode should ===(x.toList.hashCode)
     }
   }
+
+  test("Chain#takeWhile is consistent with List#takeWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.takeWhile(p).toList should ===(x.toList.takeWhile(p))
+    }
+  }
+
+  test("Chain#dropWhile is consistent with List#dropWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.dropWhile(p).toList should ===(x.toList.dropWhile(p))
+    }
+  }
+
+  test("Chain#get is consistent with List#lift") {
+    forAll { (x: Chain[Int], idx: Int) =>
+      x.get(idx.toLong) should ===(x.toList.lift(idx))
+    }
+  }
+
 }

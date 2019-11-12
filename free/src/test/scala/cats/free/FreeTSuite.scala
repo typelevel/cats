@@ -5,7 +5,6 @@ import cats._
 import cats.arrow.FunctionK
 import cats.data._
 import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
 import cats.tests.CatsSuite
 import cats.instances.option._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -17,31 +16,31 @@ class FreeTSuite extends CatsSuite {
   {
     implicit val freeTFlatMap: FlatMap[FreeTOption] = FreeT.catsFreeFlatMapForFreeT[Option, Option]
     checkAll("FreeT[Option, Option, Int]", FlatMapTests[FreeTOption].flatMap[Int, Int, Int])
-    checkAll("FlatMap[FreeT[Option, Option, ?]]", SerializableTests.serializable(FlatMap[FreeTOption]))
+    checkAll("FlatMap[FreeT[Option, Option, *]]", SerializableTests.serializable(FlatMap[FreeTOption]))
   }
 
   {
     implicit val freeTMonad: Monad[FreeTOption] = FreeT.catsFreeMonadForFreeT[Option, Option]
     checkAll("FreeT[Option, Option, Int]", MonadTests[FreeTOption].monad[Int, Int, Int])
-    checkAll("Monad[FreeT[Option, Option, ?]]", SerializableTests.serializable(Monad[FreeTOption]))
+    checkAll("Monad[FreeT[Option, Option, *]]", SerializableTests.serializable(Monad[FreeTOption]))
   }
 
   {
     implicit val freeTSemigroupK: SemigroupK[FreeTOption] = FreeT.catsFreeSemigroupKForFreeT[Option, Option]
     checkAll("FreeT[Option, Option, Int]", SemigroupKTests[FreeTOption].semigroupK[Int])
-    checkAll("SemigroupK[FreeT[Option, Option, ?]]", SerializableTests.serializable(SemigroupK[FreeTOption]))
+    checkAll("SemigroupK[FreeT[Option, Option, *]]", SerializableTests.serializable(SemigroupK[FreeTOption]))
   }
 
   {
     implicit val freeTAlternative: Alternative[FreeTOption] = FreeT.catsFreeAlternativeForFreeT[Option, Option]
     checkAll("FreeT[Option, Option, Int]", AlternativeTests[FreeTOption].alternative[Int, Int, Int])
-    checkAll("Alternative[FreeT[Option, Option, ?]]", SerializableTests.serializable(Alternative[FreeTOption]))
+    checkAll("Alternative[FreeT[Option, Option, *]]", SerializableTests.serializable(Alternative[FreeTOption]))
   }
 
   {
     implicit val eqEitherTFA: Eq[EitherT[FreeTOption, Unit, Int]] = EitherT.catsDataEqForEitherT[FreeTOption, Unit, Int]
     checkAll("FreeT[Option, Option, Int]", MonadErrorTests[FreeTOption, Unit].monadError[Int, Int, Int])
-    checkAll("MonadError[FreeT[Option, Option, ?], Unit]",
+    checkAll("MonadError[FreeT[Option, Option, *], Unit]",
              SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
 
@@ -200,7 +199,7 @@ class FreeTSuite extends CatsSuite {
 
   private[free] def liftTCompilationTests() = {
     val a: Either[String, Int] = Right(42)
-    val b: FreeT[Option, Either[String, ?], Int] = FreeT.liftT(a)
+    val b: FreeT[Option, Either[String, *], Int] = FreeT.liftT(a)
   }
 
 }
@@ -247,7 +246,7 @@ trait FreeTSuiteInstances {
   import cats.tests.IndexedStateTSuite._
   import SemigroupalTests._
 
-  type IntState[A] = State[Int, A]
+  type IntState[A] = State[MiniInt, A]
   type FreeTOption[A] = FreeT[Option, Option, A]
   type FreeTState[A] = FreeT[IntState, IntState, A]
 
@@ -260,16 +259,6 @@ trait FreeTSuiteInstances {
   implicit val jfFunctor: Functor[JustFunctor] = new Functor[JustFunctor] {
     override def map[A, B](fa: JustFunctor[A])(f: A => B): JustFunctor[B] = JustFunctor(f(fa.a))
   }
-
-  implicit val intEq: Eq[Int] = new Eq[Int] {
-    def eqv(a: Int, b: Int) = a == b
-  }
-
-  implicit def evalEq[A: Eq]: Eq[Eval[A]] = Eval.catsEqForEval[A]
-
-  implicit def intStateEq[A: Eq]: Eq[IntState[A]] = stateEq[Int, A]
-
-  implicit def intStateArb[A: Arbitrary]: Arbitrary[IntState[A]] = catsLawArbitraryForState[Int, A]
 
   implicit def freeTOptionEq[A](implicit A: Eq[A], OM: Monad[Option]): Eq[FreeTOption[A]] = new Eq[FreeTOption[A]] {
     def eqv(a: FreeTOption[A], b: FreeTOption[A]) = Eq[Option[A]].eqv(a.runM(identity), b.runM(identity))

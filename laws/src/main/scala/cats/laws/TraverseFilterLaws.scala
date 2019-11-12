@@ -21,7 +21,7 @@ trait TraverseFilterLaws[F[_]] extends FunctorFilterLaws[F] {
   ): IsEq[Nested[M, N, F[C]]] = {
     val lhs = Nested[M, N, F[C]](fa.traverseFilter(f).map(_.traverseFilter(g)))
     val rhs: Nested[M, N, F[C]] =
-      fa.traverseFilter[Nested[M, N, ?], C](a => Nested[M, N, Option[C]](f(a).map(_.traverseFilter(g))))
+      fa.traverseFilter[Nested[M, N, *], C](a => Nested[M, N, Option[C]](f(a).map(_.traverseFilter(g))))
     lhs <-> rhs
   }
 

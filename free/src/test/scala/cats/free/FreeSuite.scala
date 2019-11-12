@@ -13,30 +13,30 @@ import Arbitrary.arbFunction1
 class FreeSuite extends CatsSuite {
   import FreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, *]]
 
-  Monad[Free[Id, ?]]
-  implicitly[Monad[Free[Id, ?]]]
+  Monad[Free[Id, *]]
+  implicitly[Monad[Free[Id, *]]]
 
-  checkAll("Free[Id, ?]", DeferTests[Free[Id, ?]].defer[Int])
-  checkAll("Free[Id, ?]", MonadTests[Free[Id, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Id, ?]]", SerializableTests.serializable(Monad[Free[Id, ?]]))
+  checkAll("Free[Id, *]", DeferTests[Free[Id, *]].defer[Int])
+  checkAll("Free[Id, *]", MonadTests[Free[Id, *]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Id, *]]", SerializableTests.serializable(Monad[Free[Id, *]]))
 
-  checkAll("Free[Option, ?]", DeferTests[Free[Option, ?]].defer[Int])
-  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+  checkAll("Free[Option, *]", DeferTests[Free[Option, *]].defer[Int])
+  checkAll("Free[Option, *]", MonadTests[Free[Option, *]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Option, *]]", SerializableTests.serializable(Monad[Free[Option, *]]))
 
   locally {
     implicit val instance = Free.catsFreeFoldableForFree[Option]
 
-    checkAll("Free[Option, ?]", FoldableTests[Free[Option, ?]].foldable[Int, Int])
-    checkAll("Foldable[Free[Option,?]]", SerializableTests.serializable(Foldable[Free[Option, ?]]))
+    checkAll("Free[Option, *]", FoldableTests[Free[Option, *]].foldable[Int, Int])
+    checkAll("Foldable[Free[Option,*]]", SerializableTests.serializable(Foldable[Free[Option, *]]))
   }
 
   locally {
     implicit val instance = Free.catsFreeTraverseForFree[Option]
-    checkAll("Free[Option,?]", TraverseTests[Free[Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[Free[Option,?]]", SerializableTests.serializable(Traverse[Free[Option, ?]]))
+    checkAll("Free[Option,*]", TraverseTests[Free[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Free[Option,*]]", SerializableTests.serializable(Traverse[Free[Option, *]]))
   }
 
   test("toString is stack-safe") {
@@ -79,7 +79,7 @@ class FreeSuite extends CatsSuite {
   test("tailRecM is stack safe") {
     val n = 50000
     val fa =
-      Monad[Free[Option, ?]].tailRecM(0)(i => Free.pure[Option, Either[Int, Int]](if (i < n) Left(i + 1) else Right(i)))
+      Monad[Free[Option, *]].tailRecM(0)(i => Free.pure[Option, Either[Int, Int]](if (i < n) Left(i + 1) else Right(i)))
     fa should ===(Free.pure[Option, Int](n))
   }
 

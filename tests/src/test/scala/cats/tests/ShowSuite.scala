@@ -5,14 +5,14 @@ import java.util.concurrent.TimeUnit
 
 import cats.Show.ContravariantShow
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{ContravariantTests, SerializableTests}
+import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
 import cats.laws.discipline.eq._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
-  checkAll("Contravariant[Show]", ContravariantTests[Show].contravariant[Int, Int, Int])
+  checkAll("Contravariant[Show]", ContravariantTests[Show].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Show]", SerializableTests.serializable(Contravariant[Show]))
 
   sealed trait TimeOfDay
@@ -51,7 +51,7 @@ class ShowSuite extends CatsSuite {
   }
 }
 
-final class ShowSuite2 extends FunSuite {
+final class ShowSuite2 extends AnyFunSuiteLike {
 
   test(
     "contravariant show for FiniteDuration can be inferred when importing both duration's and finiteDuration's instances"

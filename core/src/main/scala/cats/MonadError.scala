@@ -44,7 +44,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * ApplicativeError in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
-    recoverWith(fa)(pf.andThen(raiseError))
+    recoverWith(fa)(pf.andThen(raiseError[A] _))
 
   /**
    * Inverse of `attempt`
@@ -63,7 +63,7 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * res1: scala.util.Try[Int] = Success(1)
    * }}}
    */
-  def rethrow[A](fa: F[Either[E, A]]): F[A] =
+  def rethrow[A, EE <: E](fa: F[Either[EE, A]]): F[A] =
     flatMap(fa)(_.fold(raiseError, pure))
 }
 

@@ -49,7 +49,7 @@ import cats.implicits._
 
 Implementing `Eq` instances yourself for every data type might seem like huge drawback compared to only slight gains of typesafety.
 Fortunately for us, we have two great options. One option is to use inbuilt helper functions.
-Another option is to use a small library called [kittens](https://github.com/milessabin/kittens), which can derive a lot of type class instances for our data types including `Eq`.
+Another option is to use a small library called [kittens](https://github.com/typelevel/kittens), which can derive a lot of type class instances for our data types including `Eq`.
 
 The first option using `Eq.fromUniversalEquals` only defers to `==` and works like this:
 
@@ -68,4 +68,4 @@ Foo(10, "") === Foo(10, "")
 ```
 
 
-For an example using Kittens check out the [kittens repo](https://github.com/milessabin/kittens).
+For an example using Kittens check out the [kittens repo](https://github.com/typelevel/kittens).

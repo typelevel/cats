@@ -1,16 +1,13 @@
 package alleycats
 package std
 
-import export._
-
 import scala.concurrent.Future
 
-@reexports(FutureInstances)
-object future
+object future extends FutureInstances
 
-object FutureInstances {
-  @export(Orphan)
-  implicit val exportFuturePure: Pure[Future] =
+trait FutureInstances {
+
+  implicit val alleycatsStdFuturePure: Pure[Future] =
     new Pure[Future] {
       override def pure[A](a: A): Future[A] = Future.successful(a)
     }

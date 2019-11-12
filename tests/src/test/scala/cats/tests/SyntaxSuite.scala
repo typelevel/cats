@@ -5,7 +5,16 @@ import scala.collection.immutable.SortedSet
 import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
 import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
-import cats.instances.{AllInstances, AllInstancesBinCompat0, AllInstancesBinCompat1, AllInstancesBinCompat2}
+import cats.instances.{
+  AllInstances,
+  AllInstancesBinCompat0,
+  AllInstancesBinCompat1,
+  AllInstancesBinCompat2,
+  AllInstancesBinCompat3,
+  AllInstancesBinCompat4,
+  AllInstancesBinCompat5,
+  AllInstancesBinCompat6
+}
 import cats.syntax.AllSyntaxBinCompat
 
 /**
@@ -31,7 +40,11 @@ object SyntaxSuite
     with AllInstances
     with AllInstancesBinCompat0
     with AllInstancesBinCompat1
-    with AllInstancesBinCompat2 {
+    with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
+    with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
+    with AllInstancesBinCompat6 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -170,7 +183,7 @@ object SyntaxSuite
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
+  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
@@ -188,7 +201,24 @@ object SyntaxSuite
     val mb3: M[B] = mab <&> ma
   }
 
-  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel[M, F]): Unit = {
+  def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
+    implicit P: Parallel.Aux[M, F]
+  ): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parUnorderedTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parUnorderedSequence
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta2 = tmta.parUnorderedFlatSequence
+
+    val g = mock[A => M[T[B]]]
+    val mtb2 = ta.parUnorderedFlatTraverse(g)
+  }
+
+  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[T[B]]]
     val mtb = ta.parFlatTraverse(f)
@@ -197,7 +227,7 @@ object SyntaxSuite
     val mta = tmta.parFlatSequence
   }
 
-  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
+  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel.Aux[M, F]) = {
     val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]
     val fb = mock[M[B]]
@@ -206,6 +236,20 @@ object SyntaxSuite
 
     tfabc.parMapN(f)
     (fa, fb, fc).parMapN(f)
+  }
+
+  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
+    val tab = mock[T[A, B]]
+    val f = mock[A => M[C]]
+    val g = mock[B => M[D]]
+    val mtcd = tab.parBitraverse(f, g)
+    val mtcb = tab.parLeftTraverse(f)
+
+    val tmamb = mock[T[M[A], M[B]]]
+    val mtab1 = tmamb.parBisequence
+
+    val tmab = mock[T[M[A], B]]
+    val mtab2 = tmab.parLeftSequence
   }
 
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
@@ -340,7 +384,7 @@ object SyntaxSuite
     val done = a.tailRecM[F, B](a => returnValue)
   }
 
-  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, *], E]): Unit = {
     type G[X] = F[E, X]
 
     val e = mock[E]
@@ -387,6 +431,23 @@ object SyntaxSuite
 
     val nes: Option[NonEmptySet[A]] = set.toNes
     val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
+  }
+
+  def testAlign[F[_]: Align, A, B, C]: Unit = {
+    import cats.data.Ior
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[A Ior B => C]
+    val f2 = mock[(Option[A], Option[B]) => C]
+
+    val fab = fa.align(fb)
+    val fc = fa.alignWith(fb)(f)
+
+    val padZipped = fa.padZip(fb)
+    val padZippedWith = fa.padZipWith(fb)(f2)
+
+    implicit val sa = mock[Semigroup[A]]
+    val fa2 = fa.alignCombine(fa)
   }
 
   def testNonEmptyList[A, B: Order]: Unit = {

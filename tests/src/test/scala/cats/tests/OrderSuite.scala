@@ -3,7 +3,7 @@ package tests
 
 import Helpers.Ord
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
-import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
@@ -19,7 +19,7 @@ class OrderSuite extends CatsSuite {
   checkAll("Float", OrderTests[Float].order)
   checkAll("Long", OrderTests[Long].order)
 
-  checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[Int, Int, Int])
+  checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
 
   test("order ops syntax") {

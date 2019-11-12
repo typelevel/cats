@@ -1,10 +1,13 @@
 package cats
 package tests
 
-import cats.data.{Const, NonEmptyList}
+import cats.data.{Const, NonEmptyList, StateT}
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
-class RegressionSuite extends CatsSuite {
+import kernel.compat.scalaVersionSpecific._
+
+@suppressUnusedImportWarningForScalaVersionSpecific
+class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite {
 
   // toy state class
   // not stack safe, very minimal, not for actual use
@@ -20,7 +23,7 @@ class RegressionSuite extends CatsSuite {
   }
 
   object State {
-    implicit def instance[S]: Monad[State[S, ?]] = new Monad[State[S, ?]] with StackSafeMonad[State[S, ?]] { // lies!
+    implicit def instance[S]: Monad[State[S, *]] = new Monad[State[S, *]] with StackSafeMonad[State[S, *]] { // lies!
       def pure[A](a: A): State[S, A] = State(s => (a, s))
       def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
     }
@@ -47,7 +50,7 @@ class RegressionSuite extends CatsSuite {
     // test order of effects using a contrived, unsafe state monad.
     val names = List("Alice", "Bob", "Claire")
     val allocated = names.map(alloc)
-    val state = Traverse[List].sequence[State[Int, ?], Person](allocated)
+    val state = Traverse[List].sequence[State[Int, *], Person](allocated)
     val (people, counter) = state.run(0)
     people should ===(List(Person(0, "Alice"), Person(1, "Bob"), Person(2, "Claire")))
     counter should ===(3)
@@ -57,7 +60,7 @@ class RegressionSuite extends CatsSuite {
   }
 
   test("#167: confirm ap2 order") {
-    val twelve = Apply[State[String, ?]]
+    val twelve = Apply[State[String, *]]
       .ap2(State.instance[String].pure((_: Unit, _: Unit) => ()))(
         State[String, Unit](s => ((), s + "1")),
         State[String, Unit](s => ((), s + "2"))
@@ -68,7 +71,7 @@ class RegressionSuite extends CatsSuite {
   }
 
   test("#167: confirm map2 order") {
-    val twelve = Apply[State[String, ?]]
+    val twelve = Apply[State[String, *]]
       .map2(
         State[String, Unit](s => ((), s + "1")),
         State[String, Unit](s => ((), s + "2"))
@@ -79,7 +82,7 @@ class RegressionSuite extends CatsSuite {
   }
 
   test("#167: confirm map3 order") {
-    val oneTwoThree = Apply[State[String, ?]]
+    val oneTwoThree = Apply[State[String, *]]
       .map3(
         State[String, Unit](s => ((), s + "1")),
         State[String, Unit](s => ((), s + "2")),
@@ -151,10 +154,14 @@ class RegressionSuite extends CatsSuite {
     EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
 
     {
-      implicit val me = MonadError[EitherT[Option, String, ?], Unit]
+      implicit val me = MonadError[EitherT[Option, String, *], Unit]
       EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
     }
 
   }
 
+  test("#2809 MonadErrorOps.reject runs effects only once") {
+    val program = StateT.modify[Either[Throwable, *], Int](_ + 1).reject { case _ if false => new Throwable }
+    program.runS(0).toOption should ===(Some(1))
+  }
 }

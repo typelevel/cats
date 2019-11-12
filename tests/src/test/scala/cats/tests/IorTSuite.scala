@@ -8,50 +8,50 @@ import cats.laws.discipline.arbitrary._
 
 class IorTSuite extends CatsSuite {
 
-  checkAll("IorT[Eval, String, ?]", DeferTests[IorT[Eval, String, ?]].defer[Int])
+  checkAll("IorT[Eval, String, *]", DeferTests[IorT[Eval, String, *]].defer[Int])
 
   {
     implicit val F = ListWrapper.functor
 
-    checkAll("IorT[ListWrapper, ?, ?]",
-             BifunctorTests[IorT[ListWrapper, ?, ?]].bifunctor[Int, Int, Int, String, String, String])
-    checkAll("Bifunctor[IorT[ListWrapper, ?, ?]]", SerializableTests.serializable(Bifunctor[IorT[ListWrapper, ?, ?]]))
+    checkAll("IorT[ListWrapper, *, *]",
+             BifunctorTests[IorT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
+    checkAll("Bifunctor[IorT[ListWrapper, *, *]]", SerializableTests.serializable(Bifunctor[IorT[ListWrapper, *, *]]))
 
-    checkAll("IorT[ListWrapper, Int, ?]", FunctorTests[IorT[ListWrapper, Int, ?]].functor[Int, Int, Int])
-    checkAll("Functor[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Functor[IorT[ListWrapper, Int, ?]]))
+    checkAll("IorT[ListWrapper, Int, *]", FunctorTests[IorT[ListWrapper, Int, *]].functor[Int, Int, Int])
+    checkAll("Functor[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Functor[IorT[ListWrapper, Int, *]]))
   }
 
   {
     implicit val F = ListWrapper.traverse
 
-    checkAll("IorT[ListWrapper, Int, ?]",
-             TraverseTests[IorT[ListWrapper, Int, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Traverse[IorT[ListWrapper, Int, ?]]))
+    checkAll("IorT[ListWrapper, Int, *]",
+             TraverseTests[IorT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Traverse[IorT[ListWrapper, Int, *]]))
   }
 
   {
     implicit val F = ListWrapper.monad
 
     checkAll("IorT[ListWrapper, String, Int]",
-             MonadErrorTests[IorT[ListWrapper, String, ?], String].monadError[Int, Int, Int])
-    checkAll("MonadError[IorT[List, ?, ?]]",
-             SerializableTests.serializable(MonadError[IorT[ListWrapper, String, ?], String]))
+             MonadErrorTests[IorT[ListWrapper, String, *], String].monadError[Int, Int, Int])
+    checkAll("MonadError[IorT[List, *, *]]",
+             SerializableTests.serializable(MonadError[IorT[ListWrapper, String, *], String]))
   }
 
   {
     implicit val F: MonadError[Option, Unit] = catsStdInstancesForOption
 
     checkAll("IorT[Option, String, String]",
-             MonadErrorTests[IorT[Option, String, ?], Unit].monadError[String, String, String])
-    checkAll("MonadError[IorT[Option, ?, ?]]",
-             SerializableTests.serializable(MonadError[IorT[Option, String, ?], Unit]))
+             MonadErrorTests[IorT[Option, String, *], Unit].monadError[String, String, String])
+    checkAll("MonadError[IorT[Option, *, *]]",
+             SerializableTests.serializable(MonadError[IorT[Option, String, *], Unit]))
   }
 
   {
     implicit val F = ListWrapper.foldable
 
-    checkAll("IorT[ListWrapper, Int, ?]", FoldableTests[IorT[ListWrapper, Int, ?]].foldable[Int, Int])
-    checkAll("Foldable[IorT[ListWrapper, Int, ?]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, ?]]))
+    checkAll("IorT[ListWrapper, Int, *]", FoldableTests[IorT[ListWrapper, Int, *]].foldable[Int, Int])
+    checkAll("Foldable[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, *]]))
   }
 
   {

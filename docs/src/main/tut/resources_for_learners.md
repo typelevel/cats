@@ -37,6 +37,7 @@ position: 30
    is in basic Haskell/C++ but the course is designed for programmers of all 
    background to follow. 
 * [Easy and efficient data validation with Cats](https://www.youtube.com/watch?v=P8nGAo3Jp-Q) by [Daniela Sfregola](https://danielasfregola.com/)  this talk introduces Cats, and some of its most interesting components for data validation. In particular, we’ll discuss some options to achieve efficient and expressive data validation. We will also argue that, compared to other options in the language, Cats is particularly suited for the task thanks to its easy-to-use data types and more approachable syntax.
+* [Cats by example](https://www.youtube.com/playlist?list=PLy4hTMY6erDBmvZiEDjtCTP8XCdhaXc2c) by [Thomas Höfer](https://twitter.com/TomTriple) provides a beginner series on various datatypes from Cats. 
 
 # Social network
 * [@impurepics](https://twitter.com/impurepics) regularly tweet informative and kawaii educational pieces about Cats and FP in Scala.  

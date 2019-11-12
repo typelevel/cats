@@ -3,10 +3,11 @@ package tests
 
 import cats.data.Const
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniInt}
 import org.scalactic.CanEqual
 import org.scalacheck.{Arbitrary, Cogen}
 import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary._
 
 class ContravariantSuite extends CatsSuite {
 
@@ -33,22 +34,22 @@ class ContravariantSuite extends CatsSuite {
         Predicate(x => fa.run(f(x)))
     }
 
-  implicit def eqPredicate[A: Arbitrary]: Eq[Predicate[A]] =
+  implicit def eqPredicate[A: ExhaustiveCheck]: Eq[Predicate[A]] =
     Eq.by[Predicate[A], A => Boolean](_.run)
 
   implicit def arbPredicate[A: Cogen]: Arbitrary[Predicate[A]] =
     Arbitrary(implicitly[Arbitrary[A => Boolean]].arbitrary.map(f => Predicate(f)))
 
   checkAll("ContravariantMonoidal[Predicate]",
-           ContravariantMonoidalTests[Predicate].contravariantMonoidal[Int, Int, Int])
+           ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean])
 
   {
-    implicit val predicateMonoid = ContravariantMonoidal.monoid[Predicate, Int]
-    checkAll("ContravariantMonoidal[Predicate].monoid", MonoidTests[Predicate[Int]].monoid)
+    implicit val predicateMonoid = ContravariantMonoidal.monoid[Predicate, MiniInt]
+    checkAll("ContravariantMonoidal[Predicate].monoid", MonoidTests[Predicate[MiniInt]].monoid)
   }
   {
-    implicit val predicateSemigroup = ContravariantSemigroupal.semigroup[Predicate, Int]
-    checkAll("ContravariantSemigroupal[Predicate].semigroup", SemigroupTests[Predicate[Int]].semigroup)
+    implicit val predicateSemigroup = ContravariantSemigroupal.semigroup[Predicate, MiniInt]
+    checkAll("ContravariantSemigroupal[Predicate].semigroup", SemigroupTests[Predicate[MiniInt]].semigroup)
   }
 
 }
