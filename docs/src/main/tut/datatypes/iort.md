@@ -19,22 +19,22 @@ validating an address:
 
 ```tut:silent
 import cats.data.Ior
-import cats.data.{ NonEmptyList => Nel }
+import cats.data.{ NonEmptyChain => Nec }
 import cats.implicits._
 import scala.util.{Success, Try}
 
-type Logs = Nel[String]
+type Logs = Nec[String]
 
 def parseNumber(input: String): Ior[Logs, Option[Int]] =
   Try(input.trim.toInt) match {
     case Success(number) if number > 0 => Ior.Right(Some(number))
-    case Success(_) => Ior.Both(Nel.one(s"'$input' is non-positive number"), None)
-    case _ => Ior.Both(Nel.one(s"'$input' is not a number"), None)
+    case Success(_) => Ior.Both(Nec.one(s"'$input' is non-positive number"), None)
+    case _ => Ior.Both(Nec.one(s"'$input' is not a number"), None)
   }
 
 def parseStreet(input: String): Ior[Logs, String] = {
   if (input.trim.isEmpty)
-    Ior.Left(Nel.one(s"'$input' is not a street"))
+    Ior.Left(Nec.one(s"'$input' is not a street"))
   else
     Ior.Right(input)
 }
@@ -42,7 +42,7 @@ def parseStreet(input: String): Ior[Logs, String] = {
 def numberToString(number: Option[Int]): Ior[Logs, String] =
   number match {
     case Some(n) => Ior.Right(n.toString)
-    case None => Ior.Both(Nel.one("used default address number"), "n/a")
+    case None => Ior.Both(Nec.one("used default address number"), "n/a")
   }
 
 def addressProgram(numberInput: String, streetInput: String): Ior[Logs, String] =
@@ -65,7 +65,7 @@ addressProgram("SW1W", "")
 ```
 
 Suppose `parseNumber`, `parseStreet`, and `numberToString` are rewritten to be
-asynchronous and return `Future[Ior[Logs, ?]]` instead. The for-comprehension
+asynchronous and return `Future[Ior[Logs, *]]` instead. The for-comprehension
 can no longer be used since `addressProgram` must now compose `Future` and
 `Ior` together, which means that the error handling must be performed
 explicitly to ensure that the proper types are returned:

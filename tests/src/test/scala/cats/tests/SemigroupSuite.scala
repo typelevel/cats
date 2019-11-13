@@ -2,10 +2,11 @@ package cats
 package tests
 
 import org.scalatest._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.funsuite._
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-
-class SemigroupSuite extends FunSuite with Matchers with GeneratorDrivenPropertyChecks {
+class SemigroupSuite extends AnyFunSuiteLike with Matchers with ScalaCheckDrivenPropertyChecks {
   {
     import cats.implicits._
     Invariant[Semigroup]
@@ -25,8 +26,8 @@ class SemigroupSuite extends FunSuite with Matchers with GeneratorDrivenProperty
     val add: (Int, Int) => Int = (a, b) => a + b
 
     forAll { (a: Int, b: Int) =>
-      Semigroup.instance(mult).combine(a, b) should === (a * b)
-      Semigroup.instance(add).combine(a, b) should === (a + b)
+      Semigroup.instance(mult).combine(a, b) should ===(a * b)
+      Semigroup.instance(add).combine(a, b) should ===(a + b)
     }
   }
 }

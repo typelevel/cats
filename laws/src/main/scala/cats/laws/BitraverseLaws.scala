@@ -16,13 +16,12 @@ trait BitraverseLaws[F[_, _]] extends BifoldableLaws[F] with BifunctorLaws[F] {
     h: C => G[E],
     i: D => G[H]
   )(implicit
-    G: Applicative[G]
-  ): IsEq[G[G[F[E, H]]]] = {
+    G: Applicative[G]): IsEq[G[G[F[E, H]]]] = {
     val fg = F.bitraverse(fab)(f, g)
     val hi = G.map(fg)(f => F.bitraverse(f)(h, i))
 
     val c =
-      F.bitraverse[Nested[G, G, ?], A, B, E, H](fab)(
+      F.bitraverse[Nested[G, G, *], A, B, E, H](fab)(
         a => Nested(G.map(f(a))(h)),
         b => Nested(G.map(g(b))(i))
       )

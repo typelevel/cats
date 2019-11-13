@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.data.{NonEmptyList, OptionT}
-import cats.laws.discipline.{SemigroupalTests, ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{ComonadTests, ReducibleTests, SemigroupalTests, SerializableTests, TraverseTests}
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -11,20 +11,20 @@ class CofreeSuite extends CatsSuite {
 
   import CofreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, ?]]
+  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, *]]
 
-  checkAll("Cofree[Option, ?]", ComonadTests[Cofree[Option, ?]].comonad[Int, Int, Int])
+  checkAll("Cofree[Option, *]", ComonadTests[Cofree[Option, *]].comonad[Int, Int, Int])
   locally {
     implicit val instance = Cofree.catsTraverseForCofree[Option]
-    checkAll("Cofree[Option, ?]", TraverseTests[Cofree[Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[Cofree[Option, ?]]", SerializableTests.serializable(Traverse[Cofree[Option, ?]]))
+    checkAll("Cofree[Option, *]", TraverseTests[Cofree[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Cofree[Option, *]]", SerializableTests.serializable(Traverse[Cofree[Option, *]]))
   }
   locally {
     implicit val instance = Cofree.catsReducibleForCofree[Option]
-    checkAll("Cofree[Option, ?]", ReducibleTests[Cofree[Option, ?]].reducible[Option, Int, Int])
-    checkAll("Reducible[Cofree[Option, ?]]", SerializableTests.serializable(Reducible[Cofree[Option, ?]]))
+    checkAll("Cofree[Option, *]", ReducibleTests[Cofree[Option, *]].reducible[Option, Int, Int])
+    checkAll("Reducible[Cofree[Option, *]]", SerializableTests.serializable(Reducible[Cofree[Option, *]]))
   }
-  checkAll("Comonad[Cofree[Option, ?]]", SerializableTests.serializable(Comonad[Cofree[Option, ?]]))
+  checkAll("Comonad[Cofree[Option, *]]", SerializableTests.serializable(Comonad[Cofree[Option, *]]))
 
   test("Cofree.unfold") {
     val unfoldedHundred: CofreeNel[Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
@@ -32,10 +32,20 @@ class CofreeSuite extends CatsSuite {
     cofNelToNel(unfoldedHundred) should ===(nelUnfoldedHundred)
   }
 
+  test("Cofree.ana") {
+    val anaHundred: CofreeNel[Int] =
+      Cofree.ana[Option, List[Int], Int](List.tabulate(101)(identity))(l => if (l.tail.isEmpty) None else Some(l.tail),
+                                                                       _.head)
+    val nelUnfoldedHundred: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
+    cofNelToNel(anaHundred) should ===(nelUnfoldedHundred)
+  }
+
   test("Cofree.tailForced") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Id, Int](spooky.counter) { _ => spooky.increment(); spooky.counter }
+      Cofree.unfold[Id, Int](spooky.counter) { _ =>
+        spooky.increment(); spooky.counter
+      }
     spooky.counter should ===(0)
     incrementor.tailForced
     spooky.counter should ===(1)
@@ -44,7 +54,9 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.forceTail") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Id, Int](spooky.counter) { _ => spooky.increment(); spooky.counter }
+      Cofree.unfold[Id, Int](spooky.counter) { _ =>
+        spooky.increment(); spooky.counter
+      }
     spooky.counter should ===(0)
     incrementor.forceTail
     spooky.counter should ===(1)
@@ -53,13 +65,15 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.forceAll") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Option, Int](spooky.counter)(i =>
-        if (i == 5) {
-          None
-        } else {
-          spooky.increment()
-          Some(spooky.counter)
-        })
+      Cofree.unfold[Option, Int](spooky.counter)(
+        i =>
+          if (i == 5) {
+            None
+          } else {
+            spooky.increment()
+            Some(spooky.counter)
+          }
+      )
     spooky.counter should ===(0)
     incrementor.forceAll
     spooky.counter should ===(5)
@@ -86,10 +100,25 @@ class CofreeSuite extends CatsSuite {
 
   test("Cofree.cata") {
     val cata =
-      Cofree.cata[Option, Int, NonEmptyList[Int]](unfoldedHundred)(
-        (i, lb) => Eval.now(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
-      ).value
+      Cofree
+        .cata[Option, Int, NonEmptyList[Int]](unfoldedHundred)(
+          (i, lb) => Eval.now(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
+        )
+        .value
     cata should ===(nelUnfoldedHundred)
+  }
+
+  test("Cofree.cata is stack-safe") {
+    val unfolded = Cofree.unfold[Option, Int](0)(i => if (i == 50000) None else Some(i + 1))
+    val sum = List.tabulate(50000)(identity).sum
+    val cata =
+      Cofree
+        .cata[Option, Int, Int](unfolded)(
+          (i, lb) => Eval.now(lb.fold(0)(_ + i))
+        )
+        .value
+
+    cata should ===(sum)
   }
 
   test("Cofree.cataM") {
@@ -103,9 +132,12 @@ class CofreeSuite extends CatsSuite {
     val cataHundred =
       Cofree.cataM[Option, EvalOption, Int, NonEmptyList[Int]](unfoldedHundred)(folder)(inclusion).value.value
     val cataHundredOne =
-      Cofree.cataM[Option, EvalOption, Int, NonEmptyList[Int]](
-        Cofree[Option, Int](101, Eval.now(Some(unfoldedHundred)))
-      )(folder)(inclusion).value.value
+      Cofree
+        .cataM[Option, EvalOption, Int, NonEmptyList[Int]](
+          Cofree[Option, Int](101, Eval.now(Some(unfoldedHundred)))
+        )(folder)(inclusion)
+        .value
+        .value
     cataHundred should ===(Some(nelUnfoldedHundred))
     cataHundredOne should ===(None)
   }
@@ -124,13 +156,12 @@ sealed trait CofreeSuiteInstances {
       def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
         (a.tailForced, b.tailForced) match {
           case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
-          case (None, None) if e.eqv(a.head, b.head) => true
-          case _ => false
+          case (None, None) if e.eqv(a.head, b.head)         => true
+          case _                                             => false
         }
       tr(a, b)
     }
   }
-
 
   implicit def CofreeOptionCogen[A: Cogen]: Cogen[CofreeNel[A]] =
     implicitly[Cogen[List[A]]].contramap[CofreeNel[A]](cofNelToNel(_).toList)
@@ -140,19 +171,21 @@ sealed trait CofreeSuiteInstances {
       Gen.resize(20, Gen.nonEmptyListOf(implicitly[Arbitrary[A]].arbitrary))
     }
     Arbitrary {
-      arb.arbitrary.map(l => (l.head, l.tail) match {
-        case (h, Nil) => nelToCofNel(NonEmptyList(h, Nil))
-        case (h, t) => nelToCofNel(NonEmptyList(h, t))
-      })
+      arb.arbitrary.map(
+        l =>
+          (l.head, l.tail) match {
+            case (h, Nil) => nelToCofNel(NonEmptyList(h, Nil))
+            case (h, t)   => nelToCofNel(NonEmptyList(h, t))
+          }
+      )
     }
   }
 
-  val nelToCofNel = λ[NonEmptyList ~> CofreeNel](fa =>
-    Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply))))
+  val nelToCofNel = λ[NonEmptyList ~> CofreeNel](fa => Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply))))
 
-  val cofNelToNel = λ[CofreeNel ~> NonEmptyList](fa =>
-    NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil)))
+  val cofNelToNel =
+    λ[CofreeNel ~> NonEmptyList](fa => NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil)))
 
-  val cofRoseTreeToNel = λ[CofreeRoseTree ~> NonEmptyList](fa =>
-      NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList)))
+  val cofRoseTreeToNel =
+    λ[CofreeRoseTree ~> NonEmptyList](fa => NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList)))
 }

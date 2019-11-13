@@ -8,7 +8,8 @@ import scala.util.Try
 
 trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
-  implicit val catsStdInstancesForQueue: Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] =
+  implicit val catsStdInstancesForQueue
+    : Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] =
     new Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] {
       def empty[A]: Queue[A] = Queue.empty
 
@@ -40,7 +41,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
                 val (e, es) = q.dequeue
                 e match {
                   case Right(b) => bldr += b; go(es :: tail)
-                  case Left(a) => go(f(a) :: es :: tail)
+                  case Left(a)  => go(f(a) :: es :: tail)
                 }
               }
             case Nil =>
@@ -78,7 +79,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
-        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))){ (a, lglb) =>
+        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))) { (a, lglb) =>
           G.map2Eval(f(a), lglb)(_ +: _)
         }.value
 
@@ -109,7 +110,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
           if (xs.isEmpty) G.pure(Right(b))
           else {
             val (a, tail) = xs.dequeue
-            G.map(f(b, a)) { bnext => Left((tail, bnext)) }
+            G.map(f(b, a)) { bnext =>
+              Left((tail, bnext))
+            }
           }
         }
 
@@ -140,12 +143,42 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def collectFirst[A, B](fa: Queue[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
-      override def collectFirstSome[A, B](fa: Queue[A])(f: A => Option[B]): Option[B] = fa.collectFirst(Function.unlift(f))
+      override def collectFirstSome[A, B](fa: Queue[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForQueue[A:Show]: Show[Queue[A]] =
+  implicit def catsStdShowForQueue[A: Show]: Show[Queue[A]] =
     new Show[Queue[A]] {
       def show(fa: Queue[A]): String =
         fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
     }
+
+  implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
+}
+
+private object QueueInstances {
+  private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
+    val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+
+    override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: Queue[A])(f: (A) => Boolean): Queue[A] = fa.filter(f)
+
+    override def collect[A, B](fa: Queue[A])(f: PartialFunction[A, B]): Queue[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
+      fa.foldRight(Eval.now(G.pure(Queue.empty[B])))(
+          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
+        .value
+
+    override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
+      fa.foldRight(Eval.now(G.pure(Queue.empty[A])))(
+          (x, xse) => G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        )
+        .value
+  }
 }

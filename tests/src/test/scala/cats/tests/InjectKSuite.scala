@@ -9,7 +9,7 @@ class InjectKSuite extends CatsSuite {
 
   sealed trait Test1Algebra[A]
 
-  case class Test1[A](value : Int, f: Int => A) extends Test1Algebra[A]
+  case class Test1[A](value: Int, f: Int => A) extends Test1Algebra[A]
 
   object Test1Algebra {
     implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
@@ -19,15 +19,16 @@ class InjectKSuite extends CatsSuite {
         }
       }
 
-    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
-      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test1(s, f))
+    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
+                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
+      Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test1(s, f))
 
     implicit def test1AlgebraEq[A](implicit ev: Eq[A]): Eq[Test1Algebra[A]] = Eq.fromUniversalEquals
   }
 
   sealed trait Test2Algebra[A]
 
-  case class Test2[A](value : Int, f: Int => A) extends Test2Algebra[A]
+  case class Test2[A](value: Int, f: Int => A) extends Test2Algebra[A]
 
   object Test2Algebra {
     implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
@@ -37,8 +38,9 @@ class InjectKSuite extends CatsSuite {
         }
       }
 
-    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int], intAArb : Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
-      Arbitrary(for {s <- seqArb.arbitrary; f <- intAArb.arbitrary} yield Test2(s, f))
+    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
+                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
+      Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test2(s, f))
 
     implicit def test2AlgebraEq[A](implicit ev: Eq[A]): Eq[Test2Algebra[A]] = Eq.fromUniversalEquals
   }
@@ -46,17 +48,16 @@ class InjectKSuite extends CatsSuite {
   type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   implicit def tArbitrary[A](
-    implicit arb1: Arbitrary[Test1Algebra[A]], arb2: Arbitrary[Test2Algebra[A]]
-  ): Arbitrary[T[A]] = Arbitrary(Gen.oneOf(
-    arb1.arbitrary.map(EitherK.leftc(_): T[A]),
-    arb2.arbitrary.map(EitherK.rightc(_): T[A])))
+    implicit arb1: Arbitrary[Test1Algebra[A]],
+    arb2: Arbitrary[Test2Algebra[A]]
+  ): Arbitrary[T[A]] =
+    Arbitrary(Gen.oneOf(arb1.arbitrary.map(EitherK.leftc(_): T[A]), arb2.arbitrary.map(EitherK.rightc(_): T[A])))
 
   test("inj & prj") {
-    def distr[F[_], A](f1: F[A], f2: F[A])
-                      (implicit
-                       F: Functor[F],
-                       I0: Test1Algebra :<: F,
-                       I1: Test2Algebra :<: F): Option[Int] =
+    def distr[F[_], A](f1: F[A], f2: F[A])(implicit
+                                           F: Functor[F],
+                                           I0: Test1Algebra :<: F,
+                                           I1: Test2Algebra :<: F): Option[Int] =
       for {
         Test1(x, _) <- I0.prj(f1)
         Test2(y, _) <- I1.prj(f2)
@@ -71,11 +72,10 @@ class InjectKSuite extends CatsSuite {
   }
 
   test("apply & unapply") {
-    def distr[F[_], A](f1: F[A], f2: F[A])
-                      (implicit
-                       F: Functor[F],
-                       I0: Test1Algebra :<: F,
-                       I1: Test2Algebra :<: F): Option[Int] =
+    def distr[F[_], A](f1: F[A], f2: F[A])(implicit
+                                           F: Functor[F],
+                                           I0: Test1Algebra :<: F,
+                                           I1: Test2Algebra :<: F): Option[Int] =
       for {
         Test1(x, _) <- I0.unapply(f1)
         Test2(y, _) <- I1.unapply(f2)

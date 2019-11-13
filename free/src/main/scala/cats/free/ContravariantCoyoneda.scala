@@ -7,7 +7,7 @@ package free
  * `F` is not a contravariant functor. Implemented using a List of functions for stack-safety.
  */
 sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self =>
-  import ContravariantCoyoneda.{Aux, unsafeApply}
+  import ContravariantCoyoneda.{unsafeApply, Aux}
 
   /** The pivot between `fi` and `k`, usually existential. */
   type Pivot
@@ -65,9 +65,9 @@ object ContravariantCoyoneda {
       val fi = fa
     }
 
-  /** `ContravariantCoyoneda[F, ?]` provides a contravariant functor for any `F`. */
-  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, ?]] =
-    new Contravariant[ContravariantCoyoneda[F, ?]] {
+  /** `ContravariantCoyoneda[F, *]` provides a contravariant functor for any `F`. */
+  implicit def catsFreeContravariantFunctorForContravariantCoyoneda[F[_]]: Contravariant[ContravariantCoyoneda[F, *]] =
+    new Contravariant[ContravariantCoyoneda[F, *]] {
       def contramap[A, B](cfa: ContravariantCoyoneda[F, A])(f: B => A): ContravariantCoyoneda[F, B] =
         cfa.contramap(f)
     }

@@ -8,6 +8,7 @@ class BitraverseSuite extends CatsSuite {
   val eitherComposeTuple2: Bitraverse[EitherTuple2] =
     Bitraverse[Either].compose[Tuple2]
 
-  checkAll("Either compose Tuple2", BitraverseTests(eitherComposeTuple2).bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Either compose Tuple2",
+           BitraverseTests(eitherComposeTuple2).bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Either compose Tuple2]", SerializableTests.serializable(eitherComposeTuple2))
 }

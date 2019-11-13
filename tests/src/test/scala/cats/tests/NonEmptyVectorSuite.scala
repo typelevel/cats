@@ -1,15 +1,23 @@
 package cats
 package tests
 
-import catalysts.Platform
-
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
-import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
+import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 
 import cats.data.NonEmptyVector
-import cats.laws.discipline.{CommutativeApplyTests, BimonadTests, SemigroupKTests, FoldableTests, SerializableTests, NonEmptyTraverseTests, ReducibleTests}
+import cats.laws.discipline.{
+  AlignTests,
+  BimonadTests,
+  CommutativeApplyTests,
+  FoldableTests,
+  NonEmptyTraverseTests,
+  ReducibleTests,
+  SemigroupKTests,
+  SerializableTests
+}
 import cats.laws.discipline.arbitrary._
+import cats.platform.Platform
 
 import scala.util.Properties
 
@@ -20,12 +28,12 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   checkAll("NonEmptyVector[Int]", EqTests[NonEmptyVector[Int]].eqv)
 
-  checkAll("NonEmptyVector[Int] with Option", NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("NonEmptyVector[Int] with Option",
+           NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
   checkAll("NonEmptyTraverse[NonEmptyVector[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
   checkAll("Reducible[NonEmptyVector]", SerializableTests.serializable(Reducible[NonEmptyVector]))
-
 
   // Test instances that have more general constraints
 
@@ -34,11 +42,11 @@ class NonEmptyVectorSuite extends CatsSuite {
   checkAll("SemigroupK[NonEmptyVector]", SerializableTests.serializable(SemigroupK[NonEmptyVector]))
   checkAll("Semigroup[NonEmptyVector[Int]]", SerializableTests.serializable(Semigroup[NonEmptyVector[Int]]))
 
-
-
   checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
   checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
 
+  checkAll("NonEmptyVector[Int]", AlignTests[NonEmptyVector].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyVector]", SerializableTests.serializable(Align[NonEmptyVector]))
 
   checkAll("ZipNonEmptyVector[Int]", CommutativeApplyTests[ZipNonEmptyVector].commutativeApply[Int, Int, Int])
   checkAll("CommutativeApply[ZipNonEmptyVector]", SerializableTests.serializable(CommutativeApply[ZipNonEmptyVector]))
@@ -49,89 +57,85 @@ class NonEmptyVectorSuite extends CatsSuite {
   implicitly[Comonad[NonEmptyVector]]
   implicitly[Bimonad[NonEmptyVector]]
 
-
-
   checkAll("NonEmptyVector[Int]", BimonadTests[NonEmptyVector].bimonad[Int, Int, Int])
   checkAll("Bimonad[NonEmptyVector]", SerializableTests.serializable(Bimonad[NonEmptyVector]))
 
-
   test("size is consistent with toList.size") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.size should === (nonEmptyVector.toList.size.toLong)
+      nonEmptyVector.size should ===(nonEmptyVector.toList.size.toLong)
     }
   }
 
-
   test("Show is not empty and is formatted as expected") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.show.nonEmpty should === (true)
-      nonEmptyVector.show.startsWith("NonEmptyVector(") should === (true)
-      nonEmptyVector.show should === (implicitly[Show[NonEmptyVector[Int]]].show(nonEmptyVector))
-      nonEmptyVector.show.contains(nonEmptyVector.head.show) should === (true)
+      nonEmptyVector.show.nonEmpty should ===(true)
+      nonEmptyVector.show.startsWith("NonEmptyVector(") should ===(true)
+      nonEmptyVector.show should ===(implicitly[Show[NonEmptyVector[Int]]].show(nonEmptyVector))
+      nonEmptyVector.show.contains(nonEmptyVector.head.show) should ===(true)
     }
   }
 
   test("Show is formatted correctly") {
     val v1 = NonEmptyVector("Test", Vector.empty)
-    v1.show should === ("NonEmptyVector(Test)")
+    v1.show should ===("NonEmptyVector(Test)")
 
     val v2 = NonEmptyVector.of("foo", "bar", "baz")
-    v2.show should === ("NonEmptyVector(foo, bar, baz)")
+    v2.show should ===("NonEmptyVector(foo, bar, baz)")
   }
 
   test("Creating NonEmptyVector + toVector is identity") {
     forAll { (i: Int, tail: Vector[Int]) =>
       val vector = i +: tail
       val nonEmptyVector = NonEmptyVector(i, tail)
-      vector should === (nonEmptyVector.toVector)
+      vector should ===(nonEmptyVector.toVector)
     }
   }
 
   test("NonEmptyVector#filter is consistent with Vector#filter") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.filter(p) should === (vector.filter(p))
+      nonEmptyVector.filter(p) should ===(vector.filter(p))
     }
   }
 
   test("NonEmptyVector#filterNot is consistent with Vector#filterNot") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.filterNot(p) should === (vector.filterNot(p))
+      nonEmptyVector.filterNot(p) should ===(vector.filterNot(p))
     }
   }
 
   test("NonEmptyVector#find is consistent with Vector#find") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.find(p) should === (vector.find(p))
+      nonEmptyVector.find(p) should ===(vector.find(p))
     }
   }
 
   test("NonEmptyVector#exists is consistent with Vector#exists") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.exists(p) should === (vector.exists(p))
+      nonEmptyVector.exists(p) should ===(vector.exists(p))
     }
   }
 
   test("NonEmptyVector#forall is consistent with Vector#forall") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => Boolean) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.forall(p) should === (vector.forall(p))
+      nonEmptyVector.forall(p) should ===(vector.forall(p))
     }
   }
 
   test("NonEmptyVector#map is consistent with Vector#map") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], p: Int => String) =>
       val vector = nonEmptyVector.toVector
-      nonEmptyVector.map(p).toVector should === (vector.map(p))
+      nonEmptyVector.map(p).toVector should ===(vector.map(p))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], f: (Int, Int) => Int) =>
-      nonEmptyVector.reduceLeft(f) should === (nonEmptyVector.tail.foldLeft(nonEmptyVector.head)(f))
+      nonEmptyVector.reduceLeft(f) should ===(nonEmptyVector.tail.foldLeft(nonEmptyVector.head)(f))
     }
   }
 
@@ -143,19 +147,19 @@ class NonEmptyVectorSuite extends CatsSuite {
       val got = nonEmptyVector.reduceRight(f).value
       val (first, last) = excise(nonEmptyVector.toVector)
       val expected = first.foldRight(last)((a, b) => f(a, Now(b)).value)
-      got should === (expected)
+      got should ===(expected)
     }
   }
 
   test("reduce consistent with fold") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.reduce should === (nonEmptyVector.fold)
+      nonEmptyVector.reduce should ===(nonEmptyVector.fold)
     }
   }
 
   test("reduce consistent with reduceK") {
     forAll { (nonEmptyVector: NonEmptyVector[Option[Int]]) =>
-      nonEmptyVector.reduce(SemigroupK[Option].algebra[Int]) should === (nonEmptyVector.reduceK)
+      nonEmptyVector.reduce(SemigroupK[Option].algebra[Int]) should ===(nonEmptyVector.reduceK)
     }
   }
 
@@ -164,7 +168,7 @@ class NonEmptyVectorSuite extends CatsSuite {
       val expected = nonEmptyVector.tail.foldLeft(Option(f(nonEmptyVector.head))) { (opt, i) =>
         opt.map(s => g(s, i))
       }
-      nonEmptyVector.reduceLeftToOption(f)(g) should === (expected)
+      nonEmptyVector.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
 
@@ -174,12 +178,12 @@ class NonEmptyVectorSuite extends CatsSuite {
       val expected = first.foldRight(Option(f(last))) { (i, opt) =>
         opt.map(s => g(i, Now(s)).value)
       }
-      nonEmptyVector.reduceRightToOption(f)(g).value should === (expected)
+      nonEmptyVector.reduceRightToOption(f)(g).value should ===(expected)
     }
   }
 
   test("fromVector returns None when the input vector is empty") {
-    NonEmptyVector.fromVector(Vector.empty[Int]) should === (Option.empty[NonEmptyVector[Int]])
+    NonEmptyVector.fromVector(Vector.empty[Int]) should ===(Option.empty[NonEmptyVector[Int]])
   }
 
   test("fromVectorUnsafe throws an exception when the input vector is empty") {
@@ -190,53 +194,53 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   test("++ Vector is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], other: NonEmptyVector[Int]) =>
-      nonEmptyVector ++ other.toVector should === (nonEmptyVector.concatNev(other))
+      nonEmptyVector ++ other.toVector should ===(nonEmptyVector.concatNev(other))
     }
   }
 
   test("++ Vector is consistent with concat") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], vector: Vector[Int]) =>
-      nonEmptyVector ++ vector should === (nonEmptyVector.concat(vector))
+      nonEmptyVector ++ vector should ===(nonEmptyVector.concat(vector))
     }
   }
 
   test(":+ is consistent with concat") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      nonEmptyVector :+ i should === (nonEmptyVector.concat(Vector(i)))
+      nonEmptyVector :+ i should ===(nonEmptyVector.concat(Vector(i)))
     }
   }
   test("append is consistent with :+") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      nonEmptyVector append i should === (nonEmptyVector :+ i)
+      nonEmptyVector.append(i) should ===(nonEmptyVector :+ i)
     }
   }
 
   test("+: is consistent with concatNev") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      i +: nonEmptyVector should === (NonEmptyVector.one(i).concatNev(nonEmptyVector))
+      i +: nonEmptyVector should ===(NonEmptyVector.one(i).concatNev(nonEmptyVector))
     }
   }
   test("prepend is consistent with +:") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      nonEmptyVector prepend i should === (i +: nonEmptyVector)
+      nonEmptyVector.prepend(i) should ===(i +: nonEmptyVector)
     }
   }
 
   test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
-      NonEmptyVector.of(head, tail:_*) should === (NonEmptyVector(head, tail))
+      NonEmptyVector.of(head, tail: _*) should ===(NonEmptyVector(head, tail))
     }
   }
 
   test("NonEmptyVector#get returns a None when the element does not exist") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       val size = nonEmptyVector.toVector.size
-      nonEmptyVector.get(size) should === (None)
+      nonEmptyVector.get(size) should ===(None)
     }
   }
 
   test("NonEmptyVector#getUnsafe throws an exception when the element does not exist") {
-    forAll{ (nonEmptyVector: NonEmptyVector[Int]) =>
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       val size = nonEmptyVector.toVector.size
       val _ = intercept[IndexOutOfBoundsException] {
         nonEmptyVector.getUnsafe(size)
@@ -247,7 +251,7 @@ class NonEmptyVectorSuite extends CatsSuite {
   test("NonEmptyVector#updated returns a None when the element does not exist") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], element: Int) =>
       val size = nonEmptyVector.toVector.size
-      nonEmptyVector.updated(size, element) should === (None)
+      nonEmptyVector.updated(size, element) should ===(None)
     }
   }
 
@@ -262,36 +266,36 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   test("NonEmptyVector#hashCode consistent with Vector#hashCode") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.hashCode should === (nonEmptyVector.toVector.hashCode)
+      nonEmptyVector.hashCode should ===(nonEmptyVector.toVector.hashCode)
     }
   }
 
   test("NonEmptyVector#equals consistent with Vector#equals") {
     forAll { (lhs: NonEmptyVector[Int], rhs: NonEmptyVector[Int]) =>
-      lhs.equals(rhs) should === (lhs.toVector.equals(rhs.toVector))
+      lhs.equals(rhs) should ===(lhs.toVector.equals(rhs.toVector))
     }
   }
 
   test("NonEmptyVector#toString produces correct output") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.toString should === (s"NonEmpty${nonEmptyVector.toVector.toString}")
+      nonEmptyVector.toString should ===(s"NonEmpty${nonEmptyVector.toVector.toString}")
     }
-    NonEmptyVector(1, Vector.empty).toString should === ("NonEmptyVector(1)")
-    NonEmptyVector(1, Vector.empty).toVector.toString should === ("Vector(1)")
+    NonEmptyVector(1, Vector.empty).toString should ===("NonEmptyVector(1)")
+    NonEmptyVector(1, Vector.empty).toVector.toString should ===("Vector(1)")
   }
 
   test("NonEmptyVector.unapply supports pattern matching") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       nonEmptyVector match {
         case NonEmptyVector(head, tail) =>
-          head should === (nonEmptyVector.head)
-          tail should === (nonEmptyVector.tail)
+          head should ===(nonEmptyVector.head)
+          tail should ===(nonEmptyVector.tail)
       }
     }
   }
 
   test("Cannot create a new NonEmptyVector from constructor") {
-    if(Platform.isJvm) {
+    if (Platform.isJvm) {
       if (!Properties.versionNumberString.startsWith("2.10")) {
         // A bug in scala 2.10 allows private constructors to be accessed.
         // We should still ensure that on scala 2.11 and up we cannot construct the
@@ -311,7 +315,7 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.distinct.toVector should === (nonEmptyVector.toVector.distinct)
+      nonEmptyVector.distinct.toVector should ===(nonEmptyVector.toVector.distinct)
     }
   }
 
@@ -324,30 +328,29 @@ class NonEmptyVectorSuite extends CatsSuite {
   test("NonEmptyVector#zipWith is consistent with #zipWithIndex") {
     forAll { nev: NonEmptyVector[Int] =>
       val zw = nev.zipWith(NonEmptyVector.fromVectorUnsafe((0 until nev.length).toVector))(Tuple2.apply)
-      nev.zipWithIndex should === (zw)
+      nev.zipWithIndex should ===(zw)
     }
   }
 
   test("NonEmptyVector#nonEmptyPartition remains sorted") {
     forAll { (nev: NonEmptyVector[Int], f: Int => Either[String, String]) =>
-
       val sorted = NonEmptyVector.fromVectorUnsafe(nev.map(f).toVector.sorted)
       val ior = Reducible[NonEmptyVector].nonEmptyPartition(sorted)(identity)
 
-      ior.left.map(xs => xs.sorted should === (xs))
-      ior.right.map(xs => xs.sorted should === (xs))
+      ior.left.map(xs => xs.sorted should ===(xs))
+      ior.right.map(xs => xs.sorted should ===(xs))
     }
   }
 
   test("NonEmptyVector#last is consistent with Vector#last") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.last should === (nonEmptyVector.toVector.last)
+      nonEmptyVector.last should ===(nonEmptyVector.toVector.last)
     }
   }
 
   test("NonEmptyVector#init is consistent with Vector#init") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.init should === (nonEmptyVector.toVector.init)
+      nonEmptyVector.init should ===(nonEmptyVector.toVector.init)
     }
   }
 
@@ -356,35 +359,37 @@ class NonEmptyVectorSuite extends CatsSuite {
       case i if (i % 2 == 0) => i.toDouble
     }
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.collect(pf) should === (nonEmptyVector.toVector.collect(pf))
+      nonEmptyVector.collect(pf) should ===(nonEmptyVector.toVector.collect(pf))
     }
   }
 
   test("NonEmptyVector#length and size is consistent with Vector#length") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.length should === (nonEmptyVector.toVector.length)
-      nonEmptyVector.size should === (nonEmptyVector.toVector.length.toLong)
+      nonEmptyVector.length should ===(nonEmptyVector.toVector.length)
+      nonEmptyVector.size should ===(nonEmptyVector.toVector.length.toLong)
     }
   }
 
   test("NonEmptyVector#reverse is consistent with Vector#reverse") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.reverse should === (NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.reverse))
+      nonEmptyVector.reverse should ===(NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.reverse))
     }
   }
 
   test("NonEmptyVector#zipWithIndex is consistent with Vector#zipWithIndex") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
       val expected = NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.zipWithIndex)
-      nonEmptyVector.zipWithIndex should === (expected)
-      Traverse[NonEmptyVector].zipWithIndex(nonEmptyVector) should === (expected)
+      nonEmptyVector.zipWithIndex should ===(expected)
+      Traverse[NonEmptyVector].zipWithIndex(nonEmptyVector) should ===(expected)
     }
   }
 
   test("NonEmptyVector#sorted and sortBy is consistent with Vector#sorted and sortBy") {
     forAll { nonEmptyVector: NonEmptyVector[Int] =>
-      nonEmptyVector.sorted should === (NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.sorted))
-      nonEmptyVector.sortBy(i => -i) should === (NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.sortBy(i => -i)))
+      nonEmptyVector.sorted should ===(NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.sorted))
+      nonEmptyVector.sortBy(i => -i) should ===(
+        NonEmptyVector.fromVectorUnsafe(nonEmptyVector.toVector.sortBy(i => -i))
+      )
     }
   }
 }

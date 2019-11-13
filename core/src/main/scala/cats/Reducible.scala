@@ -92,7 +92,7 @@ import simulacrum.typeclass
     reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     Some(reduceLeftTo(fa)(f)(g))
@@ -104,7 +104,7 @@ import simulacrum.typeclass
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
   /**
-   * Overriden from [[Foldable]] for efficiency.
+   * Overridden from [[Foldable]] for efficiency.
    */
   override def reduceRightToOption[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
     reduceRightTo(fa)(f)(g).map(Some(_))
@@ -127,7 +127,7 @@ import simulacrum.typeclass
    * the traversal.
    */
   def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-    G.map(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))(_ => ())
+    G.void(reduceLeftTo(fa)(f)((x, y) => G.map2(x, f(y))((_, b) => b)))
 
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
@@ -137,7 +137,7 @@ import simulacrum.typeclass
    * [[nonEmptyTraverse_]] documentation for a description of the differences.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    G.map(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))(_ => ())
+    G.void(reduceLeft(fga)((x, y) => G.map2(x, y)((_, b) => b)))
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
@@ -155,6 +155,22 @@ import simulacrum.typeclass
 
   def maximum[A](fa: F[A])(implicit A: Order[A]): A =
     reduceLeft(fa)(A.max)
+
+  /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[maximumBy]] for maximum instead of minimum.
+   */
+  def minimumBy[A, B: Order](fa: F[A])(f: A => B): A =
+    minimum(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[minimumBy]] for minimum instead of maximum.
+   */
+  def maximumBy[A, B: Order](fa: F[A])(f: A => B): A =
+    maximum(fa)(Order.by(f))
 
   /**
    * Intercalate/insert an element between the existing elements while reducing.
@@ -177,29 +193,30 @@ import simulacrum.typeclass
     }
 
   /**
-    * Partition this Reducible by a separating function `A => Either[B, C]`
-    *
-    * {{{
-    * scala> import cats.data.NonEmptyList
-    * scala> val nel = NonEmptyList.of(1,2,3,4)
-    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
-    * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
-    * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
-    * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
-    * }}}
-    */
+   * Partition this Reducible by a separating function `A => Either[B, C]`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1,2,3,4)
+   * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => if (a % 2 == 0) Left(a.toString) else Right(a))
+   * res0: cats.data.Ior[cats.data.NonEmptyList[String],cats.data.NonEmptyList[Int]] = Both(NonEmptyList(2, 4),NonEmptyList(1, 3))
+   * scala> Reducible[NonEmptyList].nonEmptyPartition(nel)(a => Right(a * 4))
+   * res1: cats.data.Ior[cats.data.NonEmptyList[Nothing],cats.data.NonEmptyList[Int]] = Right(NonEmptyList(4, 8, 12, 16))
+   * }}}
+   */
   def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
     import cats.syntax.either._
 
-    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] = {
-      eval.map(ior =>
-      (f(a), ior) match {
-        case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-        case (Right(c), _) => ior.map(c :: _)
-        case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-        case (Left(b), _) => ior.leftMap(b :: _)
-      })
-    }
+    def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
+      eval.map(
+        ior =>
+          (f(a), ior) match {
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+            case (Right(c), _)           => ior.map(c :: _)
+            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+            case (Left(b), _)            => ior.leftMap(b :: _)
+          }
+      )
 
     reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
   }
@@ -231,8 +248,9 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap { case (a, ga) =>
-      f(a, G.foldRight(ga, lb)(f))
+    Always(split(fa)).flatMap {
+      case (a, ga) =>
+        f(a, G.foldRight(ga, lb)(f))
     }
 
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B = {
@@ -241,11 +259,12 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
   }
 
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
-    Always(split(fa)).flatMap { case (a, ga) =>
-      G.reduceRightToOption(ga)(f)(g).flatMap {
-        case Some(b) => g(a, Now(b))
-        case None => Later(f(a))
-      }
+    Always(split(fa)).flatMap {
+      case (a, ga) =>
+        G.reduceRightToOption(ga)(f)(g).flatMap {
+          case Some(b) => g(a, Now(b))
+          case None    => Later(f(a))
+        }
     }
 
   override def size[A](fa: F[A]): Long = {

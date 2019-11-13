@@ -1,7 +1,9 @@
 package cats
 
 import cats.data.EitherT
-import scala.util.{ Failure, Success, Try }
+
+import scala.reflect.ClassTag
+import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
 /**
@@ -53,7 +55,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * @see [[recover]] to only recover from certain errors.
    */
-  def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f andThen pure)
+  def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f.andThen(pure))
 
   /**
    * Handle errors by turning them into [[scala.util.Either]] values.
@@ -62,15 +64,22 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * All non-fatal errors should be handled by this method.
    */
-  def attempt[A](fa: F[A]): F[Either[E, A]] = handleErrorWith(
-    map(fa)(Right(_): Either[E, A])
-  )(e => pure(Left(e)))
+  def attempt[A](fa: F[A]): F[Either[E, A]] =
+    handleErrorWith(
+      map(fa)(Right(_): Either[E, A])
+    )(e => pure(Left(e)))
 
   /**
    * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for
    * convenience.
    */
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
+
+  /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+    recover(map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
 
   /**
    * Recover from certain errors by mapping them to an `A` value.
@@ -81,8 +90,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e =>
-      (pf andThen pure) applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => (pf.andThen(pure _)).applyOrElse(e, raiseError _))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -93,8 +101,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * values.
    */
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
-    handleErrorWith(fa)(e =>
-      pf applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => pf.applyOrElse(e, raiseError))
 
   /**
    * Execute a callback on certain errors, then rethrow them.
@@ -109,7 +116,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * scala> case class Err(msg: String)
    *
-   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   * scala> type F[A] = EitherT[State[String, *], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
    *      |   case Err("one") => EitherT.liftF(State.set("one"))
@@ -127,8 +134,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    */
   def onError[A](fa: F[A])(pf: PartialFunction[E, F[Unit]]): F[A] =
-    handleErrorWith(fa)(e =>
-      (pf andThen (map2(_, raiseError[A](e))((_, b) => b))) applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => (pf.andThen(map2(_, raiseError[A](e))((_, b) => b))).applyOrElse(e, raiseError))
 
   /**
    * Often E is Throwable. Here we try to call pure or catch
@@ -175,35 +181,38 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    */
   def fromEither[A](x: E Either A): F[A] =
-    x.fold(raiseError, pure)
+    x match {
+      case Right(a) => pure(a)
+      case Left(e)  => raiseError(e)
+    }
+
 }
 
 object ApplicativeError {
   def apply[F[_], E](implicit F: ApplicativeError[F, E]): ApplicativeError[F, E] = F
 
-  private[cats] final class LiftFromOptionPartially[F[_]](val dummy: Boolean = true) extends AnyVal {
-    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, E]): F[A] =
+  final private[cats] class LiftFromOptionPartially[F[_]](private val dummy: Boolean = true) extends AnyVal {
+    def apply[E, A](oa: Option[A], ifEmpty: => E)(implicit F: ApplicativeError[F, _ >: E]): F[A] =
       oa match {
         case Some(a) => F.pure(a)
-        case None => F.raiseError(ifEmpty)
+        case None    => F.raiseError(ifEmpty)
       }
   }
 
-
   /**
-    * lift from scala.Option[A] to a F[A]
-    *
-    * Example:
-    * {{{
-    * scala> import cats.implicits._
-    * scala> import cats.ApplicativeError
-    *
-    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
-    * res0: scala.Either[String, Int] = Right(1)
-    *
-    * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
-    * res1: scala.Either[String, Int] = Left(Empty)
-    * }}}
-    */
+   * lift from scala.Option[A] to a F[A]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   *
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
   def liftFromOption[F[_]]: LiftFromOptionPartially[F] = new LiftFromOptionPartially[F]
 }

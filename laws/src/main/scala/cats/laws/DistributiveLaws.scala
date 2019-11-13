@@ -8,13 +8,11 @@ import cats.syntax.distributive._
 trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
   implicit override def F: Distributive[F]
 
-  def distributeIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] = {
+  def distributeIdentity[A, B](fa: F[A], f: A => B): IsEq[F[B]] =
     fa.distribute[Id, B](f) <-> F.map(fa)(f)
-  }
 
-  def cosequenceIdentity[A](fa: F[A]): IsEq[F[A]] = {
+  def cosequenceIdentity[A](fa: F[A]): IsEq[F[A]] =
     F.cosequence[Id, A](fa) <-> fa
-  }
 
   def cosequenceTwiceIsId[A, M[_]](fma: F[M[A]])(implicit M: Distributive[M]): IsEq[F[M[A]]] = {
     val result = F.cosequence(M.cosequence(fma))
@@ -27,9 +25,8 @@ trait DistributiveLaws[F[_]] extends FunctorLaws[F] {
     g: B => N[C]
   )(implicit
     N: Distributive[N],
-    M: Functor[M]
-  ): IsEq[Nested[F, N, M[C]]] = {
-    val rhs = ma.distribute[Nested[F, N, ?], C](a => Nested(F.map(f(a))(g)))
+    M: Functor[M]): IsEq[Nested[F, N, M[C]]] = {
+    val rhs = ma.distribute[Nested[F, N, *], C](a => Nested(F.map(f(a))(g)))
     val lhs = Nested(F.map(ma.distribute(f))(fb => fb.distribute(g)))
     lhs <-> rhs
   }

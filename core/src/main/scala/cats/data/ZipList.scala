@@ -1,10 +1,12 @@
-package cats.data
+package cats
+package data
 
-import cats.{CommutativeApply, Eq}
-import cats.instances.list.catsKernelStdEqForList
+import instances.list.catsKernelStdEqForList
+import kernel.compat.scalaVersionSpecific._
 
 class ZipList[A](val value: List[A]) extends AnyVal
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object ZipList {
 
   def apply[A](value: List[A]): ZipList[A] = new ZipList(value)
@@ -15,7 +17,7 @@ object ZipList {
       ZipList(fa.value.map(f))
 
     def ap[A, B](ff: ZipList[A => B])(fa: ZipList[A]): ZipList[B] =
-      ZipList((ff.value, fa.value).zipped.map(_ apply _))
+      ZipList(ff.value.lazyZip(fa.value).map(_.apply(_)))
 
     override def product[A, B](fa: ZipList[A], fb: ZipList[B]): ZipList[(A, B)] =
       ZipList(fa.value.zip(fb.value))

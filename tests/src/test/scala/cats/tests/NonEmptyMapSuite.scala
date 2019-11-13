@@ -20,17 +20,23 @@ package tests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.data._
-import cats.kernel.laws.discipline._
+import cats.kernel.laws.discipline.{SerializableTests => _, _}
 
 import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {
 
-
-  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, ?]].semigroupK[Int])
-  checkAll("NonEmptyMap[String, Int]", NonEmptyTraverseTests[NonEmptyMap[String, ?]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option])
+  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, *]].semigroupK[Int])
+  checkAll(
+    "NonEmptyMap[String, Int]",
+    NonEmptyTraverseTests[NonEmptyMap[String, *]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
+  )
   checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
+  checkAll("NonEmptyMap[String, Int]", HashTests[NonEmptyMap[String, Int]].hash)
+
+  checkAll("NonEmptyMap[String, Int]", AlignTests[NonEmptyMap[String, *]].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyMap]", SerializableTests.serializable(Align[NonEmptyMap[String, *]]))
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
@@ -90,19 +96,19 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("lookup is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should === (nem.contains(key))
+      nem(key).isDefined should ===(nem.contains(key))
     }
   }
 
   test("keys.contains is consistent with contains") {
     forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should === (nem.keys.contains(key))
+      nem(key).isDefined should ===(nem.keys.contains(key))
     }
   }
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nem: NonEmptyMap[String, Int], f: (Int, Int) => Int) =>
-      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, ?]].foldLeft(nem.tail, nem.head._2)(f))
+      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, *]].foldLeft(nem.tail, nem.head._2)(f))
     }
   }
 
@@ -111,7 +117,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val got = nem.reduceRight(f).value
       val last = nem.last
       val rev = nem - last._1
-      val expected = Foldable[SortedMap[String, ?]]
+      val expected = Foldable[SortedMap[String, *]]
         .foldRight(rev, Now(last._2))((a, b) => f(a, b))
         .value
       got should ===(expected)
@@ -191,7 +197,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("+ consistent with Map") {
     forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
-      (nem add i).toSortedMap should ===(nem.toSortedMap + i)
+      nem.add(i).toSortedMap should ===(nem.toSortedMap + i)
     }
   }
 
@@ -201,4 +207,28 @@ class NonEmptyMapSuite extends CatsSuite {
       nem.length should ===(nem.toSortedMap.size)
     }
   }
+
+  test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it") {
+    forAll { nem: NonEmptyMap[String, Int] =>
+      nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
+    }
+  }
+
+  test("NonEmptyMap#updateWith identity should be a no-op") {
+    forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
+      nem.add(i) should ===(nem.add(i).updateWith(i._1)(identity))
+    }
+  }
+
+  test("NonEmptyMap#updateWith on existing value should behave like Option#map on the same value") {
+    forAll { (nem: NonEmptyMap[String, Int], i: (String, Int)) =>
+      nem.add(i).lookup(i._1).map(_ + 1) should ===(nem.add(i).updateWith(i._1)(_ + 1).lookup(i._1))
+    }
+  }
+
+  test("NonEmptyMap#updateWith should not act when key is missing") {
+    val single = NonEmptyMap[String, Int](("here", 1), SortedMap())
+    single.lookup("notHere") should ===(single.updateWith("notHere")(_ => 1).lookup("notHere"))
+  }
+
 }

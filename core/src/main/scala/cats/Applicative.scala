@@ -16,8 +16,6 @@ import simulacrum.typeclass
  */
 @typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
-
-
   /**
    * `pure` lifts any value into the Applicative Functor.
    *
@@ -161,7 +159,7 @@ import simulacrum.typeclass
    * }}}
    */
   def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) pure(()) else void(f)
+    if (cond) unit else void(f)
 
   /**
    * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise,
@@ -185,7 +183,7 @@ import simulacrum.typeclass
    * }}}
    */
   def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] =
-    if (cond) void(f) else pure(())
+    if (cond) void(f) else unit
 
 }
 
@@ -208,9 +206,8 @@ object Applicative {
    * res0: (Long, Int) = (3,6)
    * }}}
    */
-  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, ?]] =
+  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
-
 
   /**
    * Creates a CoflatMap for an Applicative `F`.
@@ -234,11 +231,13 @@ object Applicative {
 
 }
 
-private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A]) extends ApplySemigroup(f, monoid) with Monoid[F[A]] {
+private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A])
+    extends ApplySemigroup(f, monoid)
+    with Monoid[F[A]] {
   def empty: F[A] = f.pure(monoid.empty)
 }
 
-private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, ?]] {
+private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, *]] {
   def pure[B](b: B): F[A, B] = F.lift[A, B](_ => b)
   override def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
   def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =

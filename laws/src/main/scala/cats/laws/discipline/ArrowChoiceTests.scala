@@ -10,7 +10,8 @@ import Prop._
 trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
   def laws: ArrowChoiceLaws[F]
 
-  def arrowChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
+  def arrowChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
+    implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFBC: Arbitrary[F[B, C]],
     ArbFAC: Arbitrary[F[A, C]],
@@ -33,10 +34,13 @@ trait ArrowChoiceTests[F[_, _]] extends ArrowTests[F] with ChoiceTests[F] {
     EqFACBD: Eq[F[(A, C), (B, D)]],
     EqFADCD: Eq[F[(A, D), (C, D)]],
     EqFADCG: Eq[F[(A, D), (C, G)]],
-    EqFAEDE: Eq[F[(A, E), (D, E)]],
+    EqFDADB: Eq[F[(D, A), (D, B)]],
+    EqFCADB: Eq[F[(C, A), (D, B)]],
     EqFABC: Eq[F[A, (B, C)]],
-    EqFEAED: Eq[F[(E, A), (E, D)]],
     EqFACDBCD: Eq[F[((A, C), D), (B, (C, D))]],
+    EqFACDBCD2: Eq[F[((A, C), D), ((B, C), D)]],
+    EqFDCADCB: Eq[F[(D, (C, A)), (D, (C, B))]],
+    EqFCAB: Eq[F[(C, A), B]],
     EqFEitherABD: Eq[F[Either[A, B], D]],
     EqFEitherCoABC: Eq[F[A, Either[B, C]]],
     REqFEitherACD: Eq[F[Either[A, D], Either[C, D]]],

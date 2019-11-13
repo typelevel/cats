@@ -10,7 +10,7 @@ import simulacrum.noop
  *
  * One motivation for separating this out from Monad is that there are
  * situations where we can implement flatMap but not pure.  For example,
- * we can implement map or flatMap that transforms the values of Map[K, ?],
+ * we can implement map or flatMap that transforms the values of Map[K, *],
  * but we can't implement pure (because we wouldn't know what key to use
  * when instantiating the new Map).
  *
@@ -40,8 +40,6 @@ import simulacrum.noop
   def flatten[A](ffa: F[F[A]]): F[A] =
     flatMap(ffa)(fa => fa)
 
-
-
   /**
    * Sequentially compose two actions, discarding any value produced by the first. This variant of
    * [[productR]] also lets you define the evaluation strategy of the second action. For instance
@@ -60,8 +58,6 @@ import simulacrum.noop
 
   @deprecated("Use productREval instead.", "1.0.0-RC2")
   @noop def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
-
-
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
@@ -93,6 +89,18 @@ import simulacrum.noop
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     flatMap(fa)(a => map(fb)(b => (a, b)))
 
+  override def ap2[A, B, Z](ff: F[(A, B) => Z])(fa: F[A], fb: F[B]): F[Z] =
+    flatMap(fa)(a => flatMap(fb)(b => map(ff)(_(a, b))))
+
+  override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
+    flatMap(fa)(a => map(fb)(b => f(a, b)))
+
+  override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
+    flatMap(fa)(_ => fb)
+
+  override def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
+    map2(fa, fb)((a, _) => a)
+
   /**
    * Pair `A` with the result of function application.
    *
@@ -123,22 +131,22 @@ import simulacrum.noop
   def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
 
   /**
-    * Apply a monadic function and discard the result while keeping the effect.
-    *
-    * {{{
-    * scala> import cats._, implicits._
-    * scala> Option(1).flatTap(_ => None)
-    * res0: Option[Int] = None
-    * scala> Option(1).flatTap(_ => Some("123"))
-    * res1: Option[Int] = Some(1)
-    * scala> def nCats(n: Int) = List.fill(n)("cat")
-    * nCats: (n: Int)List[String]
-    * scala> List[Int](0).flatTap(nCats)
-    * res2: List[Int] = List()
-    * scala> List[Int](4).flatTap(nCats)
-    * res3: List[Int] = List(4, 4, 4, 4)
-    * }}}
-    */
+   * Apply a monadic function and discard the result while keeping the effect.
+   *
+   * {{{
+   * scala> import cats._, implicits._
+   * scala> Option(1).flatTap(_ => None)
+   * res0: Option[Int] = None
+   * scala> Option(1).flatTap(_ => Some("123"))
+   * res1: Option[Int] = Some(1)
+   * scala> def nCats(n: Int) = List.fill(n)("cat")
+   * nCats: (n: Int)List[String]
+   * scala> List[Int](0).flatTap(nCats)
+   * res2: List[Int] = List()
+   * scala> List[Int](4).flatTap(nCats)
+   * res3: List[Int] = List(4, 4, 4, 4)
+   * }}}
+   */
   def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
-    flatMap(fa)(a => map(f(a))(_ => a))
+    flatMap(fa)(a => as(f(a), a))
 }

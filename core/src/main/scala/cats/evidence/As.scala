@@ -20,6 +20,7 @@ import arrow.Category
  *  The original contribution to scalaz came from Jason Zaugg
  */
 sealed abstract class As[-A, +B] extends Serializable {
+
   /**
    * Use this subtyping relationship to replace B with a value of type
    * A in a contravariant context.  This would commonly be the input
@@ -44,11 +45,12 @@ sealed abstract class AsInstances {
   implicit val liskov: Category[As] = new Category[As] {
     def id[A]: (A As A) = refl[A]
 
-    def compose[A, B, C](bc: B As C, ab: A As B): (A As C) = bc compose ab
+    def compose[A, B, C](bc: B As C, ab: A As B): (A As C) = bc.compose(ab)
   }
 }
 
 object As extends AsInstances {
+
   /**
    * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
    * single value.
@@ -56,6 +58,7 @@ object As extends AsInstances {
   private[this] val reflAny = new (Any As Any) {
     def substitute[F[-_]](fa: F[Any]) = fa
   }
+
   /**
    * Subtyping is reflexive
    */
@@ -66,7 +69,7 @@ object As extends AsInstances {
    * We can witness the relationship by using it to make a substitution *
    */
   implicit def witness[A, B](lt: A As B): A => B =
-    lt.substitute[-? => B](identity)
+    lt.substitute[-* => B](identity)
 
   /**
    * Subtyping is transitive
@@ -80,18 +83,18 @@ object As extends AsInstances {
   @inline def reify[A, B >: A]: (A As B) = refl
 
   /**
-    * It can be convenient to convert a <:< value into a `<~<` value.
-    * This is not strictly valid as while it is almost certainly true that
-    * `A <:< B` implies `A <~< B` it is not the case that you can create
-    * evidence of `A <~< B` except via a coercion. Use responsibly.
-    */
+   * It can be convenient to convert a <:< value into a `<~<` value.
+   * This is not strictly valid as while it is almost certainly true that
+   * `A <:< B` implies `A <~< B` it is not the case that you can create
+   * evidence of `A <~< B` except via a coercion. Use responsibly.
+   */
   def fromPredef[A, B](eq: A <:< B): A As B =
     reflAny.asInstanceOf[A As B]
 
   /**
    * We can lift subtyping into any covariant type constructor
    */
-  def co[T[+_], A, A2] (a: A As A2): (T[A] As T[A2]) =
+  def co[T[+_], A, A2](a: A As A2): (T[A] As T[A2]) =
     a.substitute[λ[`-α` => T[α] As T[A2]]](refl)
 
   // Similarly, we can do this any time we find a covariant type

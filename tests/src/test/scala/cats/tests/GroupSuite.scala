@@ -19,7 +19,7 @@ class GroupSuite extends CatsSuite {
   }
 
   checkAll("Int", GroupTests[Int].group)
-// float and double are *not* associative, and scalacheck knows
+// float and double are *not* associative, and ScalaCheck knows
 //  checkAll("Double", GroupLaws[Double].group)
 //  checkAll("Float", GroupLaws[Float].group)
   checkAll("Long", GroupTests[Long].group)

@@ -9,7 +9,8 @@ class BifunctorSuite extends CatsSuite {
   val tuple2ComposeEither: Bifunctor[Tuple2Either] =
     Bifunctor[Tuple2].compose[Either]
 
-  checkAll("Tuple2 compose Either", BifunctorTests(tuple2ComposeEither).bifunctor[Int, Int, Int, String, String, String])
+  checkAll("Tuple2 compose Either",
+           BifunctorTests(tuple2ComposeEither).bifunctor[Int, Int, Int, String, String, String])
   checkAll("Bifunctor[Tuple2 compose Either]", SerializableTests.serializable(tuple2ComposeEither))
 
   {
