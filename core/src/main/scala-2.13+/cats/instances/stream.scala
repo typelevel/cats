@@ -1,7 +1,7 @@
 package cats
 package instances
 
-import cats.data.ZipStream
+import cats.data.{Ior, ZipStream}
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -10,8 +10,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit val catsStdInstancesForStream
-    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
-    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
+    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] =
+    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -152,6 +152,14 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[Stream] = this
+
+      def align[A, B](fa: Stream[A], fb: Stream[B]): Stream[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Stream[A], fb: Stream[B])(f: Ior[A, B] => C): Stream[C] =
+        Stream.from(Align.alignWithIterator[A, B, C](fa, fb)(f))
     }
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
