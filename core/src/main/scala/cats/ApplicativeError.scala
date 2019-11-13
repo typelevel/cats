@@ -124,8 +124,8 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }}}
    *
    * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same
-   * name because this would result in ambiguous implicits. `adaptError` will be moved from MonadError to
-   * ApplicativeError in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
+   * name because this would result in ambiguous implicits due to `adaptError`
+   * having originally been included in the `MonadError` API and syntax.
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     recoverWith(fa)(pf.andThen(raiseError[A] _))
