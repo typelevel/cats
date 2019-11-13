@@ -313,6 +313,18 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
+   * Like `Foldable[A].foldMapA`, but uses the applicative instance
+   * corresponding to the Parallel instance instead
+   */
+  def parFoldMapA[T[_]: Foldable, M[_], A, B: Monoid](
+    ta: T[A]
+  )(f: A => M[B])(implicit P: Parallel[M]): M[B] = {
+    val fb: P.F[B] =
+      Foldable[T].foldMapA(ta)(a => P.parallel(f(a)))(P.applicative, implicitly)
+    P.sequential(fb)
+  }
+
+  /**
    * Like `Applicative[F].ap`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */

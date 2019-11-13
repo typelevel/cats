@@ -9,6 +9,7 @@ object implicits
     with syntax.AllSyntaxBinCompat4
     with syntax.AllSyntaxBinCompat5
     with syntax.AllSyntaxBinCompat6
+    with syntax.AllSyntaxBinCompat7
     with instances.AllInstances
     with instances.AllInstancesBinCompat0
     with instances.AllInstancesBinCompat1
