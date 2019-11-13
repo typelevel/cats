@@ -17,17 +17,15 @@ val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current bui
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
 isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
-val scalatestVersion = "3.1.0-SNAP13"
+val scalatestplusScalaCheckVersion = "3.1.0.0-RC2"
 
-val scalatestplusScalaCheckVersion = "1.0.0-SNAP8"
+val scalaCheckVersion = "1.14.2"
 
-val scalaCheckVersion = "1.14.0"
+val disciplineVersion = "1.0.1"
 
-val disciplineVersion = "1.0.0"
+val disciplineScalatestVersion = "1.0.0-RC1"
 
-val disciplineScalatestVersion = "1.0.0-M1"
-
-val kindProjectorVersion = "0.10.3"
+val kindProjectorVersion = "0.11.0"
 
 lazy val commonScalaVersionSettings = Seq(scalaVersion := "2.11.12")
 
@@ -52,21 +50,21 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= Seq(
-    compilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion)
+    compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
   ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
 lazy val simulacrumSettings = Seq(
   libraryDependencies ++= Seq(
     scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
-    "com.github.mpilquist" %%% "simulacrum" % "0.19.0" % Provided
+    "org.typelevel" %%% "simulacrum" % "1.0.0" % Provided
   ),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] = node match {
         case e: xml.Elem
             if e.label == "dependency" &&
-              e.child.exists(child => child.label == "groupId" && child.text == "com.github.mpilquist") &&
+              e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
               e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) =>
           Nil
         case _ => Seq(node)
@@ -129,7 +127,6 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % scalatestVersion % "test",
     "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test",
     "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test"
   )
@@ -623,10 +620,10 @@ lazy val binCompatTest = project
     // see https://github.com/typelevel/cats/pull/3026#discussion_r321984342
     useCoursier := false,
     commonScalaVersionSettings,
-    addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorVersion),
+    addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
     libraryDependencies ++= List(
       mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
-      "org.scalatest" %%% "scalatest" % scalatestVersion % Test
+      "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % Test
     )
   )
   .dependsOn(core.jvm % Test)
