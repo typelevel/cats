@@ -124,7 +124,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * Implementations are free to override it in order to optimize
    * error recovery.
    *
-   * @see [[redeemWith]], [[attempt]] and [[handleError]]
+   * @see [[MonadError.redeemWith]], [[attempt]] and [[handleError]]
    *
    * @param fa is the source whose result is going to get transformed
    * @param recover is the function that gets called to recover the source
