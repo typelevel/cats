@@ -68,38 +68,6 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
 
   /**
    * Returns a new value that transforms the result of the source,
-   * given the `recover` or `map` functions, which get executed depending
-   * on whether the result is successful or if it ends in error.
-   *
-   * This is an optimization on usage of [[attempt]] and [[map]],
-   * this equivalence being available:
-   *
-   * {{{
-   *   fa.redeem(fe, fs) <-> fa.attempt.map(_.fold(fe, fs))
-   * }}}
-   *
-   * Usage of `redeem` subsumes [[handleError]] because:
-   *
-   * {{{
-   *   fa.redeem(fe, id) <-> fa.handleError(fe)
-   * }}}
-   *
-   * Implementations are free to override it in order to optimize
-   * error recovery.
-   *
-   * @see [[redeemWith]], [[attempt]] and [[handleError]]
-   *
-   * @param fa is the source whose result is going to get transformed
-   * @param recover is the function that gets called to recover the source
-   *        in case of error
-   * @param map is the function that gets to transform the source
-   *        in case of success
-   */
-  def redeem[A, B](fa: F[A])(recover: E => B, map: A => B): F[B] =
-    redeemWith(fa)(recover.andThen(pure), map.andThen(pure))
-
-  /**
-   * Returns a new value that transforms the result of the source,
    * given the `recover` or `bind` functions, which get executed depending
    * on whether the result is successful or if it ends in error.
    *
