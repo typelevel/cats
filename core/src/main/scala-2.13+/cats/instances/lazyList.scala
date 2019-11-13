@@ -135,22 +135,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
       def align[A, B](fa: LazyList[A], fb: LazyList[B]): LazyList[Ior[A, B]] =
         alignWith(fa, fb)(identity)
 
-      override def alignWith[A, B, C](fa: LazyList[A], fb: LazyList[B])(f: Ior[A, B] => C): LazyList[C] = {
-
-        val alignIterator = new Iterator[C] {
-          val iterA = fa.iterator
-          val iterB = fb.iterator
-          def hasNext: Boolean = iterA.hasNext || iterB.hasNext
-          def next(): C =
-            f(
-              if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
-              else if (iterA.hasNext) Ior.left(iterA.next())
-              else Ior.right(iterB.next())
-            )
-        }
-
-        LazyList.from(alignIterator)
-      }
+      override def alignWith[A, B, C](fa: LazyList[A], fb: LazyList[B])(f: Ior[A, B] => C): LazyList[C] =
+        LazyList.from(Align.alignWithIterator[A, B, C](fa, fb)(f))
     }
 
   implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
