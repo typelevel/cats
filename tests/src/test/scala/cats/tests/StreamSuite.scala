@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -33,6 +34,9 @@ class StreamSuite extends CatsSuite {
 
   checkAll("Stream[Int]", TraverseFilterTests[Stream].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Stream]", SerializableTests.serializable(TraverseFilter[Stream]))
+
+  checkAll("Stream[Int]", AlignTests[Stream].align[Int, Int, Int, Int])
+  checkAll("Align[Stream]", SerializableTests.serializable(Align[Stream]))
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
