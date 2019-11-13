@@ -1,6 +1,11 @@
 <scalastyle>
  <name>Scalastyle standard configuration</name>
  <check level="error" class="org.scalastyle.file.FileTabChecker" enabled="true"></check>
+ <check level="error" class="org.scalastyle.file.FileLengthChecker" enabled="true">
+  <parameters>
+   <parameter name="maxFileLength"><![CDATA[800]]></parameter>
+  </parameters>
+ </check>
  <check level="error" class="org.scalastyle.file.WhitespaceEndOfLineChecker" enabled="true"></check>
  <check level="error" class="org.scalastyle.scalariform.ClassNamesChecker" enabled="true">
   <parameters>

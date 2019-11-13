@@ -1,8 +1,8 @@
 package cats
 package instances
 
-import cats.internals.FutureShims
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 trait FutureInstances extends FutureInstances1 {
 
@@ -19,9 +19,17 @@ trait FutureInstances extends FutureInstances1 {
       override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] =
         fea.recover { case t => f(t) }
       override def attempt[A](fa: Future[A]): Future[Either[Throwable, A]] =
-        FutureShims.attempt(fa)
+        fa.transformWith(r => Future.successful(
+          r match {
+            case Success(a) => Right(a)
+            case Failure(e) => Left(e)
+          }
+        ))
       override def redeemWith[A, B](fa: Future[A])(recover: Throwable => Future[B], bind: A => Future[B]): Future[B] =
-        FutureShims.redeemWith(fa)(recover, bind)
+        fa.transformWith {
+          case Success(a) => bind(a)
+          case Failure(e) => recover(e)
+        }
       override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] =
         fa.recover(pf)
       override def recoverWith[A](fa: Future[A])(pf: PartialFunction[Throwable, Future[A]]): Future[A] =
