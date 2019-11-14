@@ -47,6 +47,7 @@ package object syntax {
       with ParallelApplySyntax
       with ParallelBitraverseSyntax
       with ParallelUnorderedTraverseSyntax
+      with ParallelFoldMapASyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0

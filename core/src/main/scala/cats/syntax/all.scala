@@ -59,6 +59,7 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+    with ParallelFoldMapASyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
