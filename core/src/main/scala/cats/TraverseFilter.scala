@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * `TraverseFilter`, also known as `Witherable`, represents list-like structures
@@ -42,6 +42,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
    * */
+  @noop
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 

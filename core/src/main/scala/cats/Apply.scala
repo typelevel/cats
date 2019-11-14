@@ -1,7 +1,6 @@
 package cats
 
-import simulacrum.typeclass
-import simulacrum.noop
+import simulacrum.{noop, typeclass}
 import cats.data.Ior
 
 /**
@@ -242,6 +241,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    *
    * }}}
    */
+  @noop
   def ifA[A](fcond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
     def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
     ap2(map(fcond)(ite))(ifTrue, ifFalse)

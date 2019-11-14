@@ -2,7 +2,7 @@ package cats
 
 import cats.instances.long._
 import cats.kernel.CommutativeMonoid
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * `UnorderedFoldable` is like a `Foldable` for unordered containers.
@@ -66,6 +66,7 @@ import simulacrum.typeclass
    * res1: Long = 2
    * }}}
    */
+  @noop
   def count[A](fa: F[A])(p: A => Boolean): Long =
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
