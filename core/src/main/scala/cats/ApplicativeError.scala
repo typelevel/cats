@@ -104,6 +104,33 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     handleErrorWith(fa)(e => pf.applyOrElse(e, raiseError))
 
   /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError("error".asLeft[Int])(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError("err".asLeft[Int])(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError(1.asRight[String])(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   *
+   * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same
+   * name because this would result in ambiguous implicits due to `adaptError`
+   * having originally been included in the `MonadError` API and syntax.
+   */
+  def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
+    recoverWith(fa)(pf.andThen(raiseError[A] _))
+
+  /**
    * Returns a new value that transforms the result of the source,
    * given the `recover` or `map` functions, which get executed depending
    * on whether the result is successful or if it ends in error.

@@ -127,9 +127,7 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * }}}
    *
    * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
-   * this would result in ambiguous implicits. `adaptError` will be moved from `MonadError`
-   * to `ApplicativeError` in Cats 2.0: see [[https://github.com/typelevel/cats/issues/2685]]
+   * this would result in ambiguous implicits.
    */
-  def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] =
-    F.recoverWith(fa)(pf.andThen(F.raiseError[A] _))
+  def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] = F.adaptError(fa)(pf)
 }

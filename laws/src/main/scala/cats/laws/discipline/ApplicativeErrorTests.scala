@@ -54,7 +54,9 @@ trait ApplicativeErrorTests[F[_], E] extends ApplicativeTests[F] {
         ),
         "applicativeError onError pure" -> forAll(laws.onErrorPure[A] _),
         "applicativeError onError raise" -> forAll(laws.onErrorRaise[A] _),
-        "monadError redeem is derived from attempt and map" -> forAll(laws.redeemDerivedFromAttemptMap[A, B] _)
+        "applicativeError adaptError pure" -> forAll(laws.adaptErrorPure[A] _),
+        "applicativeError adaptError raise" -> forAll(laws.adaptErrorRaise[A] _),
+        "applicativeError redeem is derived from attempt and map" -> forAll(laws.redeemDerivedFromAttemptMap[A, B] _)
       )
     }
 }
