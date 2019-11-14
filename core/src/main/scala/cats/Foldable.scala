@@ -327,7 +327,7 @@ import Foldable.sentinel
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
-   * scala> Foldable[List].collectSomeFold(xs)(f)
+   * scala> Foldable[List].collectFoldSome(xs)(f)
    * res0: Int = 6
    *}}}
    */
