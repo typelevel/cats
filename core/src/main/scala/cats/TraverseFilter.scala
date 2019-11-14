@@ -35,6 +35,17 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def traverseFilter[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]]
 
   /**
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val a: List[Either[String, Option[Int]]] = List(Right(Some(1)), Right(Some(5)), Right(Some(3)))
+   * scala> val b: Either[String, List[Int]] = TraverseFilter[List].sequenceFilter(a)
+   * b: Either[String, List[Int]] = Right(List(1, 5, 3))
+   * }}}
+   * */
+  def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
+    traverseFilter(fgoa)(identity)
+
+  /**
    *
    * Filter values inside a `G` context.
    *
