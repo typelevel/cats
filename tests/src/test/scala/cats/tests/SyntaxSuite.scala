@@ -417,6 +417,9 @@ object SyntaxSuite
     val eb = mock[E => B]
     val ab = mock[A => B]
     val gb: G[B] = gea.redeem(eb, ab)
+
+    val pfee = mock[PartialFunction[E, E]]
+    val gea5 = gea.adaptErr(pfee)
   }
 
   def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
@@ -454,6 +457,9 @@ object SyntaxSuite
     val efb = mock[E => G[B]]
     val afb = mock[A => G[B]]
     val gb2: G[B] = gea.redeemWith(efb, afb)
+
+    val pfee = mock[PartialFunction[E, E]]
+    val gea5 = gea.adaptError(pfee)
   }
 
   def testNested[F[_], G[_], A]: Unit = {
