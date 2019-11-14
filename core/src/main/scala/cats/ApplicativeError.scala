@@ -113,13 +113,13 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
    *
-   * scala> "error".asLeft[Int].adaptError(pf)
+   * scala> ApplicativeError[Either[String, *], String].adaptError("error".asLeft[Int])(pf)
    * res0: Either[String,Int] = Left(ERROR)
    *
-   * scala> "err".asLeft[Int].adaptError(pf)
+   * scala> ApplicativeError[Either[String, *], String].adaptError("err".asLeft[Int])(pf)
    * res1: Either[String,Int] = Left(err)
    *
-   * scala> 1.asRight[String].adaptError(pf)
+   * scala> ApplicativeError[Either[String, *], String].adaptError(1.asRight[String])(pf)
    * res2: Either[String,Int] = Right(1)
    * }}}
    *
