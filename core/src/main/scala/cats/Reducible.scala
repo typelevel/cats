@@ -67,6 +67,15 @@ import simulacrum.typeclass
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
+    * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
+    * semigroup for `G[_]`.
+    *
+    * This method is a generalization of `reduce`.
+    */
+  def reduceA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Semigroup[A]): G[A] =
+    reduceLeft(fga)((ga1, ga2) => G.map2(ga1, ga2)(A.combine))
+
+  /**
    * Monadic reducing by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `Semigroup[B]` instance.
    *
