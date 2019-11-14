@@ -284,58 +284,17 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 @deprecated("Use methods on Foldable", "2.1.0-RC1")
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
-  /**
-   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`
-   * Equivalent to `Functor#map` and then `Alternative#separate`.
-   *
-   * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
-   * scala> val list = List(1,2,3,4)
-   * scala> Foldable[List].partitionBifold(list)(a => ("value " + a.toString(), if (a % 2 == 0) -a else a))
-   * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
-   * scala> Foldable[List].partitionBifold(list)(a => Const[Int, Nothing with Any](a))
-   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
-   * }}}
-   */
   @deprecated("Use partitionBifold on Foldable", "2.1.0-RC1")
   def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
                                                                    H: Bifoldable[H]): (F[B], F[C]) =
     F.partitionBifold[H, A, B, C](fa)(f)
 
-  /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
-   * Equivalent to `Traverse#traverse` over `Alternative#separate`
-   *
-   * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
-   * scala> val list = List(1,2,3,4)
-   * `Const`'s second parameter is never instantiated, so we can use an impossible type:
-   * scala> Foldable[List].partitionBifoldM(list)(a => Option(Const[Int, Nothing with Any](a)))
-   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
-   * }}}
-   */
   @deprecated("Use partitionBifoldM on Foldable", "2.1.0-RC1")
   def partitionBifoldM[G[_], H[_, _], A, B, C](
     fa: F[A]
   )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] =
     F.partitionBifoldM[G, H, A, B, C](fa)(f)
 
-  /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Traverse#traverse` over `Alternative#separate`
-   *
-   * {{{
-   * scala> import cats.implicits._, cats.Foldable, cats.Eval
-   * scala> val list = List(1,2,3,4)
-   * scala> val partitioned1 = Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
-   * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
-   * scala> partitioned1.value
-   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
-   * scala> val partitioned2 = Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4)))
-   * scala> partitioned2.value
-   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
-   * }}}
-   */
   @deprecated("Use partitionEitherM on Foldable", "2.1.0-RC1")
   def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
                                                                          M: Monad[G]): G[(F[B], F[C])] =
