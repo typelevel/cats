@@ -15,7 +15,8 @@ private[syntax] trait FoldableSyntaxBinCompat0 {
 }
 
 private[syntax] trait FoldableSyntaxBinCompat1 {
-  implicit final def catsSyntaxFoldableBinCompat0[F[_]](fa: Foldable[F]): FoldableOps1[F] =
+  @deprecated("Use methods on Foldable", "2.1.0-RC1")
+  final def catsSyntaxFoldableBinCompat0[F[_]](fa: Foldable[F]): FoldableOps1[F] =
     new FoldableOps1(fa)
 }
 
@@ -239,10 +240,8 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def partitionBifold[H[_, _], B, C](
     f: A => H[B, C]
-  )(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) = {
-    import cats.syntax.foldable._
+  )(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) =
     F.partitionBifold[H, A, B, C](fa)(f)(A, H)
-  }
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
@@ -258,10 +257,8 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def partitionBifoldM[G[_], H[_, _], B, C](
     f: A => G[H[B, C]]
-  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
-    import cats.syntax.foldable._
+  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] =
     F.partitionBifoldM[G, H, A, B, C](fa)(f)(A, M, H)
-  }
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
@@ -281,12 +278,11 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def partitionEitherM[G[_], B, C](
     f: A => G[Either[B, C]]
-  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] = {
-    import cats.syntax.foldable._
+  )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
-  }
 }
 
+@deprecated("Use methods on Foldable", "2.1.0-RC1")
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   /**
@@ -302,17 +298,10 @@ final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) exten
    * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
    * }}}
    */
+  @deprecated("Use partitionBifold on Foldable", "2.1.0-RC1")
   def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
-                                                                   H: Bifoldable[H]): (F[B], F[C]) = {
-    import cats.instances.tuple._
-
-    implicit val mb: Monoid[F[B]] = A.algebra[B]
-    implicit val mc: Monoid[F[C]] = A.algebra[C]
-
-    F.foldMap[A, (F[B], F[C])](fa)(
-      a => H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
-    )
-  }
+                                                                   H: Bifoldable[H]): (F[B], F[C]) =
+    F.partitionBifold[H, A, B, C](fa)(f)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
@@ -326,21 +315,11 @@ final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) exten
    * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
    * }}}
    */
+  @deprecated("Use partitionBifoldM on Foldable", "2.1.0-RC1")
   def partitionBifoldM[G[_], H[_, _], A, B, C](
     fa: F[A]
-  )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
-    import cats.instances.tuple._
-
-    implicit val mb: Monoid[F[B]] = A.algebra[B]
-    implicit val mc: Monoid[F[C]] = A.algebra[C]
-
-    F.foldMapM[G, A, (F[B], F[C])](fa)(
-      a =>
-        M.map(f(a)) {
-          H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
-        }
-    )
-  }
+  )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] =
+    F.partitionBifoldM[G, H, A, B, C](fa)(f)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
@@ -358,9 +337,8 @@ final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) exten
    * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
    * }}}
    */
+  @deprecated("Use partitionEitherM on Foldable", "2.1.0-RC1")
   def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
-                                                                         M: Monad[G]): G[(F[B], F[C])] = {
-    import cats.instances.either._
-    partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
-  }
+                                                                         M: Monad[G]): G[(F[B], F[C])] =
+    F.partitionEitherM[G, A, B, C](fa)(f)
 }
