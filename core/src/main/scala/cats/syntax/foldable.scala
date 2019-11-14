@@ -170,8 +170,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * res0: Int = 6
    *}}}
    */
-  def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M =
-    F.foldLeft(fa, M.empty)((acc, a) => M.combine(acc, f.applyOrElse(a, (_: A) => M.empty)))
+  def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFold[A, M](fa)(f)
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
@@ -183,14 +182,8 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * res0: Int = 6
    *}}}
    */
-  def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M =
-    F.foldLeft(fa, M.empty)(
-      (acc, a) =>
-        f(a) match {
-          case Some(x) => M.combine(acc, x)
-          case None    => acc
-        }
-    )
+  @deprecated("Use collectFoldSome", "2.1.0-RC1")
+  def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFoldSome[A, M](fa)(f)
 }
 
 final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {

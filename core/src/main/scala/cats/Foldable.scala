@@ -309,6 +309,38 @@ import Foldable.sentinel
     })
 
   /**
+   * Tear down a subset of this structure using a `PartialFunction`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
+   * res0: Int = 6
+   *}}}
+   */
+  @noop
+  def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
+    foldLeft(fa, B.empty)((acc, a) => B.combine(acc, f.applyOrElse(a, (_: A) => B.empty)))
+
+  /**
+   * Tear down a subset of this structure using a `A => Option[M]`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
+   * scala> Foldable[List].collectSomeFold(xs)(f)
+   * res0: Int = 6
+   *}}}
+   */
+  def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
+    foldLeft(fa, B.empty)(
+      (acc, a) =>
+        f(a) match {
+          case Some(x) => B.combine(acc, x)
+          case None    => acc
+        }
+    )
+
+  /**
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
