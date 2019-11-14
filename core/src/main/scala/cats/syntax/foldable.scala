@@ -134,14 +134,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * }}}
    */
   def collectFirstSomeM[G[_], B](f: A => G[Option[B]])(implicit F: Foldable[F], G: Monad[G]): G[Option[B]] =
-    G.tailRecM(Foldable.Source.fromFoldable(fa))(_.uncons match {
-      case Some((a, src)) =>
-        G.map(f(a)) {
-          case None => Left(src.value)
-          case s    => Right(s)
-        }
-      case None => G.pure(Right(None))
-    })
+    F.collectFirstSomeM[G, A, B](fa)(f)
 
   /**
    * Find the first element matching the effectful predicate, if one exists.

@@ -270,6 +270,45 @@ import Foldable.sentinel
     }.value
 
   /**
+   * Monadic version of `collectFirstSome`.
+   *
+   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits,
+   * i.e. once a Some element is found, no further effects are produced.
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
+   * scala> val keys1 = List("1", "2", "4", "5")
+   * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
+   * scala> Foldable[List].collectFirstSomeM(keys1)(parseInt(_) map map1.get)
+   * res0: scala.util.Either[String,Option[String]] = Right(Some(Four))
+   *
+   * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+   * scala> Foldable[List].collectFirstSomeM(keys1)(parseInt(_) map map2.get)
+   * res1: scala.util.Either[String,Option[String]] = Right(None)
+   *
+   * scala> val keys2 = List("1", "x", "4", "5")
+   * scala> Foldable[List].collectFirstSomeM(keys2)(parseInt(_) map map1.get)
+   * res2: scala.util.Either[String,Option[String]] = Left(For input string: "x")
+   *
+   * scala> val keys3 = List("1", "2", "4", "x")
+   * scala> Foldable[List].collectFirstSomeM(keys3)(parseInt(_) map map1.get)
+   * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
+   * }}}
+   */
+  @noop
+  def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
+      case Some((a, src)) =>
+        G.map(f(a)) {
+          case None => Left(src.value)
+          case s    => Right(s)
+        }
+      case None => G.pure(Right(None))
+    })
+
+  /**
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
