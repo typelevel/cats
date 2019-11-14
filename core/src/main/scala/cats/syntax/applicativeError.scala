@@ -1,7 +1,6 @@
 package cats
 package syntax
 
-import cats.data.Validated.{Invalid, Valid}
 import cats.data.{EitherT, Validated}
 
 import scala.reflect.ClassTag
@@ -19,14 +18,15 @@ trait ApplicativeErrorSyntax {
 /**
  * Extension to ApplicativeError in a binary compat way
  */
-trait ApplicativeErrorExtension {
-  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](
+private[syntax] trait ApplicativeErrorExtension {
+  @deprecated("Use methods on ApplicativeError", "2.1.0-RC1")
+  final def catsSyntaxApplicativeErrorExtension[F[_], E](
     F: ApplicativeError[F, E]
   ): ApplicativeErrorExtensionOps[F, E] =
     new ApplicativeErrorExtensionOps(F)
 }
 
-final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
+final private[syntax] class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
   /**
    * Convert from scala.Option
@@ -44,8 +44,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
    * res1: scala.Either[String, Int] = Left(Empty)
    * }}}
    */
-  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
-    ApplicativeError.liftFromOption(oa, ifEmpty)(F)
+  private[syntax] def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] = F.fromOption(oa, ifEmpty)
 
   /**
    * Convert from cats.data.Validated
@@ -62,12 +61,7 @@ final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
    * res1: scala.Option[Int] = None
    * }}}
    */
-  def fromValidated[A](x: Validated[E, A]): F[A] =
-    x match {
-      case Invalid(e) => F.raiseError(e)
-      case Valid(a)   => F.pure(a)
-    }
-
+  private[syntax] def fromValidated[A](x: Validated[E, A]): F[A] = F.fromValidated(x)
 }
 
 final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {

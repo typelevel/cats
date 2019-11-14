@@ -1,6 +1,7 @@
 package cats
 
-import cats.data.EitherT
+import cats.data.{EitherT, Validated}
+import cats.data.Validated.{Invalid, Valid}
 
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
@@ -186,6 +187,48 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
       case Left(e)  => raiseError(e)
     }
 
+  /**
+   * Convert from scala.Option
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   * scala> val F = ApplicativeError[Either[String, *], String]
+   *
+   * scala> F.fromOption(Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> F.fromOption(Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
+  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
+    oa match {
+      case Some(a) => pure(a)
+      case None    => raiseError(ifEmpty)
+    }
+
+  /**
+   * Convert from cats.data.Validated
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(().invalid[Int])
+   * res1: scala.Option[Int] = None
+   * }}}
+   */
+  def fromValidated[A](x: Validated[E, A]): F[A] =
+    x match {
+      case Invalid(e) => raiseError(e)
+      case Valid(a)   => pure(a)
+    }
 }
 
 object ApplicativeError {
