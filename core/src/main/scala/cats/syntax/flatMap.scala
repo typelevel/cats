@@ -54,13 +54,7 @@ final class FlatMapOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * allocating single element lists, but if we have a k > 1, we will allocate
    * exponentially increasing memory and very quickly OOM.
    */
-  def foreverM[B](implicit F: FlatMap[F]): F[B] = {
-    // allocate two things once for efficiency.
-    val leftUnit = Left(())
-    val stepResult: F[Either[Unit, B]] = F.map(fa)(_ => leftUnit)
-    F.tailRecM(())(_ => stepResult)
-  }
-
+  def foreverM[B](implicit F: FlatMap[F]): F[B] = F.foreverM[A, B](fa)
 }
 
 final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
@@ -124,10 +118,7 @@ final class FlatMapIdOps[A](private val a: A) extends AnyVal {
    * A may be some state, we may take the current state, run some effect to get
    * a new state and repeat.
    */
-  def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] =
-    tailRecM[F, B](f.andThen { fa =>
-      F.map(fa)(Left(_): Either[A, B])
-    })
+  def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] = F.iterateForeverM[A, B](a)(f)
 }
 
 trait FlatMapOptionSyntax {
@@ -142,12 +133,5 @@ final class FlatMapOptionOps[F[_], A](private val fopta: F[Option[A]]) extends A
    * for polling type operations on State (or RNG) Monads, or in effect
    * monads.
    */
-  def untilDefinedM(implicit F: FlatMap[F]): F[A] = {
-    val leftUnit: Either[Unit, A] = Left(())
-    val feither: F[Either[Unit, A]] = F.map(fopta) {
-      case None    => leftUnit
-      case Some(a) => Right(a)
-    }
-    F.tailRecM(())(_ => feither)
-  }
+  def untilDefinedM(implicit F: FlatMap[F]): F[A] = F.untilDefinedM[A](fopta)
 }
