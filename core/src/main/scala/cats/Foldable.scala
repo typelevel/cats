@@ -279,6 +279,26 @@ import Foldable.sentinel
   }
 
   /**
+    * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
+    *
+    * This method is identical to fold, except that we use `Applicative[G]` and `Monoid[A]`
+    * to combine a's inside an applicative G.
+    *
+    * For example:
+    *
+    * {{{
+    * scala> import cats.implicits._
+    * scala> val F = Foldable[List]
+    * scala> F.foldA(List(Right(1) :: Right(2) :: Nil)
+    * res0: Right[Int] = Right(3)
+    * }}}
+    */
+  def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+    foldLeft(fga, G.pure(A.empty)) { (acc, ga) =>
+      G.map2(acc, ga)(A.combine)
+    }
+
+  /**
    * Alias for [[foldM]].
    */
   final def foldLeftM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
