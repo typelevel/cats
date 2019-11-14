@@ -178,7 +178,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
-   * scala> xs.collectSomeFold(f)
+   * scala> xs.collectFoldSome(f)
    * res0: Int = 6
    *}}}
    */
