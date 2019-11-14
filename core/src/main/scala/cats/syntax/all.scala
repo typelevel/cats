@@ -10,7 +10,6 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat4
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
-    with ParallelFoldMapASyntax
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -60,6 +59,7 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+    with ParallelFoldMapASyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
