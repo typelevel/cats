@@ -1,8 +1,8 @@
 package cats
 package instances
 
-import scala.util.control.NonFatal
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 trait FutureInstances extends FutureInstances1 {
 
@@ -10,28 +10,41 @@ trait FutureInstances extends FutureInstances1 {
     implicit ec: ExecutionContext
   ): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] =
     new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] with StackSafeMonad[Future] {
-      def pure[A](x: A): Future[A] = Future.successful(x)
-
-      def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
-
-      def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] = fea.recoverWith { case t => f(t) }
-
-      def raiseError[A](e: Throwable): Future[A] = Future.failed(e)
-      override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] = fea.recover { case t => f(t) }
-
+      override def pure[A](x: A): Future[A] =
+        Future.successful(x)
+      override def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =
+        fa.flatMap(f)
+      override def handleErrorWith[A](fea: Future[A])(f: Throwable => Future[A]): Future[A] =
+        fea.recoverWith { case t => f(t) }
+      override def raiseError[A](e: Throwable): Future[A] =
+        Future.failed(e)
+      override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] =
+        fea.recover { case t => f(t) }
       override def attempt[A](fa: Future[A]): Future[Either[Throwable, A]] =
-        (fa.map(a => Right[Throwable, A](a))).recover { case NonFatal(t) => Left(t) }
-
-      override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] = fa.recover(pf)
-
+        fa.transformWith(
+          r =>
+            Future.successful(
+              r match {
+                case Success(a) => Right(a)
+                case Failure(e) => Left(e)
+              }
+            )
+        )
+      override def redeemWith[A, B](fa: Future[A])(recover: Throwable => Future[B], bind: A => Future[B]): Future[B] =
+        fa.transformWith {
+          case Success(a) => bind(a)
+          case Failure(e) => recover(e)
+        }
+      override def recover[A](fa: Future[A])(pf: PartialFunction[Throwable, A]): Future[A] =
+        fa.recover(pf)
       override def recoverWith[A](fa: Future[A])(pf: PartialFunction[Throwable, Future[A]]): Future[A] =
         fa.recoverWith(pf)
-
-      override def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
-
-      override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Future[A] = Future(a)
-
-      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Future[A] = Future(a.value)
+      override def map[A, B](fa: Future[A])(f: A => B): Future[B] =
+        fa.map(f)
+      override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Future[A] =
+        Future(a)
+      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Future[A] =
+        Future(a.value)
     }
 }
 

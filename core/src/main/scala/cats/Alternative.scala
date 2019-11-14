@@ -42,6 +42,30 @@ import simulacrum.typeclass
   }
 
   /**
+   * Separate the inner foldable values into the "lefts" and "rights".
+   * A variant of [[separate]] that is specialized
+   * for Fs that have Foldable instances
+   * which allows for a single-pass implementation
+   * (as opposed to {{{separate}}} which is 2-pass).
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
+   * scala> Alternative[List].separate(l)
+   * res0: (List[String], List[Int]) = (List(error),List(1))
+   * }}}
+   */
+  def separateFoldable[G[_, _], A, B](fgab: F[G[A, B]])(implicit G: Bifoldable[G], FF: Foldable[F]): (F[A], F[B]) =
+    FF.foldLeft(fgab, (empty[A], empty[B])) {
+      case (mamb, gab) =>
+        G.bifoldLeft(gab, mamb)(
+          (t, a) => (combineK(t._1, pure(a)), t._2),
+          (t, b) => (t._1, combineK(t._2, pure(b)))
+        )
+    }
+
+  /**
    * Return ().pure[F] if `condition` is true, `empty` otherwise
    *
    * Example:

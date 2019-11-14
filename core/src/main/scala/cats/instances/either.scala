@@ -98,6 +98,13 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
         fab.recoverWith(pf)
 
+      override def redeem[B, R](fab: Either[A, B])(recover: A => R, map: B => R): Either[A, R] =
+        Right(fab.fold(recover, map))
+
+      override def redeemWith[B, R](fab: Either[A, B])(recover: A => Either[A, R],
+                                                       bind: B => Either[A, R]): Either[A, R] =
+        fab.fold(recover, bind)
+
       override def fromEither[B](fab: Either[A, B]): Either[A, B] =
         fab
 

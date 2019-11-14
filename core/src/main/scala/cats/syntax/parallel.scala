@@ -1,6 +1,16 @@
 package cats.syntax
 
-import cats.{Bitraverse, CommutativeApplicative, FlatMap, Foldable, Monad, Parallel, Traverse, UnorderedTraverse}
+import cats.{
+  Bitraverse,
+  CommutativeApplicative,
+  FlatMap,
+  Foldable,
+  Monad,
+  Monoid,
+  Parallel,
+  Traverse,
+  UnorderedTraverse
+}
 
 trait ParallelSyntax extends TupleParallelSyntax {
 
@@ -77,6 +87,11 @@ trait ParallelUnorderedTraverseSyntax {
   ): ParallelUnorderedFlatSequenceOps[T, M, A] =
     new ParallelUnorderedFlatSequenceOps[T, M, A](tmta)
 
+}
+
+trait ParallelFoldMapASyntax {
+  implicit final def catsSyntaxParallelFoldMapA[T[_], A](ta: T[A]): ParallelFoldMapAOps[T, A] =
+    new ParallelFoldMapAOps[T, A](ta)
 }
 
 final class ParallelTraversableOps[T[_], A](private val ta: T[A]) extends AnyVal {
@@ -175,4 +190,9 @@ final class ParallelLeftTraverseOps[T[_, _], A, B](private val tab: T[A, B]) ext
 final class ParallelLeftSequenceOps[T[_, _], M[_], A, B](private val tmab: T[M[A], B]) extends AnyVal {
   def parLeftSequence(implicit T: Bitraverse[T], P: Parallel[M]): M[T[A, B]] =
     Parallel.parLeftSequence(tmab)
+}
+
+final class ParallelFoldMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
+  def parFoldMapA[M[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M], B: Monoid[B]): M[B] =
+    Parallel.parFoldMapA(ma)(f)
 }

@@ -37,12 +37,14 @@ object EitherSyntax {
 }
 
 final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
-  def foreach(f: B => Unit): Unit = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def foreach(f: B => Unit): Unit = eab match {
     case Left(_)  => ()
     case Right(b) => f(b)
   }
 
-  def getOrElse[BB >: B](default: => BB): BB = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def getOrElse[BB >: B](default: => BB): BB = eab match {
     case Left(_)  => default
     case Right(b) => b
   }
@@ -67,12 +69,14 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     case Right(b) => b
   }
 
-  def forall(f: B => Boolean): Boolean = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def forall(f: B => Boolean): Boolean = eab match {
     case Left(_)  => true
     case Right(b) => f(b)
   }
 
-  def exists(f: B => Boolean): Boolean = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def exists(f: B => Boolean): Boolean = eab match {
     case Left(_)  => false
     case Right(b) => f(b)
   }
@@ -89,7 +93,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
 
   def toIor: A Ior B = Ior.fromEither(eab)
 
-  def toOption: Option[B] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def toOption: Option[B] = eab match {
     case Left(_)  => None
     case Right(b) => Some(b)
   }
@@ -99,7 +104,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     case Right(b) => List(b)
   }
 
-  def toTry(implicit ev: A <:< Throwable): Try[B] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def toTry(implicit ev: A <:< Throwable): Try[B] = eab match {
     case Left(a)  => Failure(ev(a))
     case Right(b) => Success(b)
   }
@@ -129,7 +135,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     case Right(b) => Right(fb(b))
   }
 
-  def map[C](f: B => C): Either[A, C] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def map[C](f: B => C): Either[A, C] = eab match {
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => Right(f(b))
   }
@@ -137,7 +144,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   def map2Eval[AA >: A, C, Z](fc: Eval[Either[AA, C]])(f: (B, C) => Z): Eval[Either[AA, Z]] =
     eab match {
       case l @ Left(_) => Now(EitherUtil.rightCast(l))
-      case Right(b)    => fc.map(either => new EitherOps(either).map(f(b, _)))
+      case Right(b)    => fc.map(_.map(f(b, _)))
     }
 
   def leftMap[C](f: A => C): Either[C, B] = eab match {
@@ -145,7 +152,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
-  def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => f(b)
   }
@@ -256,7 +264,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     case Right(b) => s"Right(${BB.show(b)})"
   }
 
-  def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = new EitherOps(that).flatMap(this.map)
+  def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = that.flatMap(eab.map)
 
   /**
    * Transform the `Either` into a [[cats.data.EitherT]] while lifting it into the specified Applicative.

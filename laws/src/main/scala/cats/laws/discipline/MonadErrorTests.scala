@@ -40,7 +40,10 @@ trait MonadErrorTests[F[_], E] extends ApplicativeErrorTests[F, E] with MonadTes
         "monadError left zero" -> forAll(laws.monadErrorLeftZero[A, B] _),
         "monadError ensure consistency" -> forAll(laws.monadErrorEnsureConsistency[A] _),
         "monadError ensureOr consistency" -> forAll(laws.monadErrorEnsureOrConsistency[A] _),
-        "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _)
+        "monadError rethrow attempt" -> forAll(laws.rethrowAttempt[A] _),
+        "monadError redeemWith is derived from attempt and flatMap" -> forAll(
+          laws.redeemWithDerivedFromAttemptFlatMap[A, B] _
+        )
       )
     }
 }

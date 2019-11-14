@@ -109,7 +109,7 @@ class NonEmptyChainSuite extends CatsSuite {
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromSeq(ci.iterator.toList) should ===(Option(ci))
+      NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci))
     }
   }
 

@@ -21,9 +21,7 @@ import NonEmptyChainImpl.create
 import cats.{Order, Semigroup}
 import cats.kernel._
 
-import scala.collection.immutable._
-
-private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
+private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
   // create a no-boxing newtype. It's coped from the
   // newtypes lib by @alexknvl
@@ -52,7 +50,7 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances {
   def fromNonEmptyVector[A](as: NonEmptyVector[A]): NonEmptyChain[A] =
     create(Chain.fromSeq(as.toVector))
 
-  def fromSeq[A](as: Seq[A]): Option[NonEmptyChain[A]] =
+  def fromSeq[A](as: scala.collection.immutable.Seq[A]): Option[NonEmptyChain[A]] =
     if (as.nonEmpty) Option(create(Chain.fromSeq(as))) else None
 
   def fromChainPrepend[A](a: A, ca: Chain[A]): NonEmptyChain[A] =
