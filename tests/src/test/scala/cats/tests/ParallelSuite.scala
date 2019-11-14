@@ -232,8 +232,8 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParFoldMapA should be equivalent to parTraverse map combineAll (where it exists)") {
     forAll { (es: List[Int], f: Int => Either[String, String]) =>
-      es.parFoldMapA(f) should ===(
-        es.parTraverse(f).map(_.combineAll)
+      Parallel.parFoldMapA(es)(f) should ===(
+        Parallel.parTraverse(es)(f).map(_.combineAll)
       )
     }
   }

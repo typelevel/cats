@@ -252,6 +252,12 @@ object SyntaxSuite
     val mtab2 = tmab.parLeftSequence
   }
 
+  def testParallelFoldable[T[_]: Foldable, M[_]: Parallel, A, B: Monoid]: Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mb = ta.parFoldMapA(f)
+  }
+
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
     val f1 = mock[(A, A) => A]

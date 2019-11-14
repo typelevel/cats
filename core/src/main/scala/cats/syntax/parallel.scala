@@ -193,6 +193,6 @@ final class ParallelLeftSequenceOps[T[_, _], M[_], A, B](private val tmab: T[M[A
 }
 
 final class ParallelFoldMapAOps[T[_], A](private val ma: T[A]) extends AnyVal {
-  def parFoldMapA[M[_], B](f: A => M[B])(implicit T: Foldable[T], B: Monoid[B], P: Parallel[M]): M[B] =
+  def parFoldMapA[M[_], B](f: A => M[B])(implicit T: Foldable[T], P: Parallel[M], B: Monoid[B]): M[B] =
     Parallel.parFoldMapA(ma)(f)
 }

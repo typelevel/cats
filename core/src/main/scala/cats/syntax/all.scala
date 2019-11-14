@@ -10,7 +10,7 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat4
     with AllSyntaxBinCompat5
     with AllSyntaxBinCompat6
-    with AllSyntaxBinCompat7
+    with ParallelFoldMapASyntax
 
 trait AllSyntax
     extends AlternativeSyntax
@@ -95,5 +95,3 @@ trait AllSyntaxBinCompat4
 trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
 trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
-
-trait AllSyntaxBinCompat7 extends ParallelFoldMapASyntax
