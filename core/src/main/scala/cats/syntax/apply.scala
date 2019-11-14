@@ -49,10 +49,7 @@ final class IfApplyOps[F[_]](private val fcond: F[Boolean]) extends AnyVal {
    *
    * }}}
    */
-  def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = {
-    def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
-    F.ap2(F.map(fcond)(ite))(ifTrue, ifFalse)
-  }
+  def ifA[A](ifTrue: F[A], ifFalse: F[A])(implicit F: Apply[F]): F[A] = F.ifA(fcond)(ifTrue, ifFalse)
 }
 
 final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
