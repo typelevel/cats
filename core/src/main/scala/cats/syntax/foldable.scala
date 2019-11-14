@@ -166,11 +166,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * res3: Either[String,Option[Int]] = Left(error)
    * }}}
    */
-  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] =
-    G.tailRecM(Foldable.Source.fromFoldable(fa))(_.uncons match {
-      case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
-      case None           => G.pure(Right(None))
-    })
+  def findM[G[_]](p: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[Option[A]] = F.findM[G, A](fa)(p)
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.

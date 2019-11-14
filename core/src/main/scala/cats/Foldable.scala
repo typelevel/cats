@@ -3,7 +3,7 @@ package cats
 import scala.collection.mutable
 import cats.instances.either._
 import cats.kernel.CommutativeMonoid
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 import Foldable.sentinel
 
 /**
@@ -422,6 +422,36 @@ import Foldable.sentinel
     foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
       if (f(a)) Now(Some(a)) else lb
     }.value
+
+  /**
+   * Find the first element matching the effectful predicate, if one exists.
+   *
+   * If there are no elements, the result is `None`. `findM` short-circuits,
+   * i.e. once an element is found, no further effects are produced.
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].findM(list)(n => (n >= 2).asRight[String])
+   * res0: Either[String,Option[Int]] = Right(Some(2))
+   *
+   * scala> Foldable[List].findM(list)(n => (n > 4).asRight[String])
+   * res1: Either[String,Option[Int]] = Right(None)
+   *
+   * scala> Foldable[List].findM(list)(n => Either.cond(n < 3, n >= 2, "error"))
+   * res2: Either[String,Option[Int]] = Right(Some(2))
+   *
+   * scala> Foldable[List].findM(list)(n => Either.cond(n < 3, false, "error"))
+   * res3: Either[String,Option[Int]] = Left(error)
+   * }}}
+   */
+  @noop
+  def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
+      case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
+      case None           => G.pure(Right(None))
+    })
 
   /**
    * Check whether at least one element satisfies the predicate.
