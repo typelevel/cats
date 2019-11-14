@@ -385,6 +385,22 @@ import Foldable.sentinel
   }
 
   /**
+   * Fold implemented by mapping `A` values into `B` in a context `G` and then
+   * combining them using the `MonoidK[G]` instance.
+   *
+   * {{{
+   * scala> import cats._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = Foldable[List].foldMapK(List(1, 2, 3))(f)
+   * scala> val a = x("foo")
+   * a: String = "foo321"
+   * }}}
+   * */
+  @noop
+  def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
+    foldMap(fa)(f)(G.algebra)
+
+  /**
    * Alias for [[foldM]].
    */
   final def foldLeftM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =

@@ -221,8 +221,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * a: String = "foo321"
    * }}}
    * */
-  def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] =
-    F.foldMap(fa)(f)(G.algebra)
+  def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] = F.foldMapK(fa)(f)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => H[B, C]` for some `Bifoldable[H]`
