@@ -273,14 +273,24 @@ import Foldable.sentinel
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    foldLeft(fa, A.empty) { (acc, a) =>
-      A.combine(acc, a)
-    }
+    A.combineAll(toIterable(fa))
 
   /**
    * Alias for [[fold]].
    */
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
+
+  def combineAllOption[A](fa: F[A])(implicit ev: Semigroup[A]): Option[A] =
+    if (isEmpty(fa)) None else ev.combineAllOption(toIterable(fa))
+
+  /**
+   * Convert F[A] to an Iterable[A].
+   *
+   * This method may be overridden for the sake of performance, but implementers should take care
+   * not to force a full materialization of the collection.
+   */
+  def toIterable[A](fa: F[A]): Iterable[A] =
+    cats.compat.FoldableCompat.toIterable(fa)(self)
 
   /**
    * Fold implemented by mapping `A` values into `B` and then
