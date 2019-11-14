@@ -19,7 +19,7 @@
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
 
 [![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
-[![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
+[![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
 [![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
@@ -360,6 +360,36 @@ sign-offs to merge code PRs (and for large or contentious issues we may
 wait for more). For typos, documentation improvements or minor build fix we
 relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/master/PROCESS.md).
 
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/typelevel/cats/graphs/contributors"><img src="https://opencollective.com/typelevel/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/typelevel/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/typelevel"><img src="https://opencollective.com/typelevel/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/typelevel/contribute)]
+
+<a href="https://opencollective.com/typelevel/organization/0/website"><img src="https://opencollective.com/typelevel/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/1/website"><img src="https://opencollective.com/typelevel/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/2/website"><img src="https://opencollective.com/typelevel/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/3/website"><img src="https://opencollective.com/typelevel/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/4/website"><img src="https://opencollective.com/typelevel/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/5/website"><img src="https://opencollective.com/typelevel/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/6/website"><img src="https://opencollective.com/typelevel/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/7/website"><img src="https://opencollective.com/typelevel/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/8/website"><img src="https://opencollective.com/typelevel/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/typelevel/organization/9/website"><img src="https://opencollective.com/typelevel/organization/9/avatar.svg"></a>
 
 ### Copyright and License
 
