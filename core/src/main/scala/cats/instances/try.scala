@@ -69,7 +69,15 @@ trait TryInstances extends TryInstances1 {
         ta.recover { case t => f(t) }
 
       override def attempt[A](ta: Try[A]): Try[Either[Throwable, A]] =
-        (ta.map(a => Right[Throwable, A](a))).recover { case NonFatal(t) => Left(t) }
+        ta match { case Success(a) => Success(Right(a)); case Failure(e) => Success(Left(e)) }
+
+      override def redeem[A, B](ta: Try[A])(recover: Throwable => B, map: A => B): Try[B] =
+        ta match { case Success(a) => Try(map(a)); case Failure(e) => Try(recover(e)) }
+
+      override def redeemWith[A, B](ta: Try[A])(recover: Throwable => Try[B], bind: A => Try[B]): Try[B] =
+        try ta match {
+          case Success(a) => bind(a); case Failure(e) => recover(e)
+        } catch { case NonFatal(e) => Failure(e) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)

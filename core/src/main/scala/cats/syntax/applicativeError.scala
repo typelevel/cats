@@ -97,6 +97,9 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
   def recoverWith(pf: PartialFunction[E, F[A]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.recoverWith(fa)(pf)
 
+  def redeem[B](recover: E => B, f: A => B)(implicit F: ApplicativeError[F, E]): F[B] =
+    F.redeem[A, B](fa)(recover, f)
+
   def onError(pf: PartialFunction[E, F[Unit]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.onError(fa)(pf)
 

@@ -104,6 +104,38 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     handleErrorWith(fa)(e => pf.applyOrElse(e, raiseError))
 
   /**
+   * Returns a new value that transforms the result of the source,
+   * given the `recover` or `map` functions, which get executed depending
+   * on whether the result is successful or if it ends in error.
+   *
+   * This is an optimization on usage of [[attempt]] and [[map]],
+   * this equivalence being available:
+   *
+   * {{{
+   *   fa.redeem(fe, fs) <-> fa.attempt.map(_.fold(fe, fs))
+   * }}}
+   *
+   * Usage of `redeem` subsumes [[handleError]] because:
+   *
+   * {{{
+   *   fa.redeem(fe, id) <-> fa.handleError(fe)
+   * }}}
+   *
+   * Implementations are free to override it in order to optimize
+   * error recovery.
+   *
+   * @see [[MonadError.redeemWith]], [[attempt]] and [[handleError]]
+   *
+   * @param fa is the source whose result is going to get transformed
+   * @param recover is the function that gets called to recover the source
+   *        in case of error
+   * @param map is the function that gets to transform the source
+   *        in case of success
+   */
+  def redeem[A, B](fa: F[A])(recover: E => B, f: A => B): F[B] =
+    handleError(map(fa)(f))(recover)
+
+  /**
    * Execute a callback on certain errors, then rethrow them.
    * Any non matching error is rethrown as well.
    *
