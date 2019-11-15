@@ -215,7 +215,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
    * scala> import cats.data.NonEmptyVector
    * scala> val as = NonEmptyVector.of(1, 2, 3)
    * scala> val bs = NonEmptyVector.of("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptyVector[String] = NonEmptyVector(1A, 2B, 3C)
    * }}}
    */

@@ -72,7 +72,7 @@ final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
    * {{{
    * scala> import cats.implicits._
    * scala> type ErrorOr[A] = Either[String, A]
-   * scala> val x: ErrorOr[ErrorOr[Int]] = Right(Right(3))
+   * scala> val x: ErrorOr[ErrorOr[Int]] = 3.asRight.asRight
    * scala> x.flatten
    * res0: ErrorOr[Int] = Right(3)
    * }}}

@@ -332,7 +332,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * scala> import cats.implicits._
    * scala> val as = NonEmptySet.of(1, 2, 3)
    * scala> val bs = NonEmptySet.of("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptySet[String] = TreeSet(1A, 2B, 3C)
    * }}}
    */

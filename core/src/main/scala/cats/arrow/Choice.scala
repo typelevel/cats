@@ -13,8 +13,8 @@ import simulacrum.typeclass
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> val b: Boolean => String = _ + " is a boolean"
-   * scala> val i: Int => String =  _ + " is an integer"
+   * scala> val b: Boolean => String = _.toString + " is a boolean"
+   * scala> val i: Int => String =  _.toString + " is an integer"
    * scala> val f: (Either[Boolean, Int]) => String = b ||| i
    *
    * scala> f(Right(3))
