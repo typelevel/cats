@@ -355,7 +355,7 @@ class DeprecatedNonEmptyListSuite extends CatsSuite {
 
   test("Deprecated NonEmptyList#concat is consistent with List#:::") {
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
-      nel.concat(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
+      nel.concatNel(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
     }
   }
 }
