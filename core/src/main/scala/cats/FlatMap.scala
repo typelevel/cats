@@ -57,7 +57,7 @@ import simulacrum.noop
   def productREval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = flatMap(fa)(_ => fb.value)
 
   @deprecated("Use productREval instead.", "1.0.0-RC2")
-  @noop def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
+  @noop private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
 
   /**
    * Sequentially compose two actions, discarding any value produced by the second. This variant of
@@ -81,7 +81,7 @@ import simulacrum.noop
   def productLEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = flatMap(fa)(a => map(fb.value)(_ => a))
 
   @deprecated("Use productLEval instead.", "1.0.0-RC2")
-  @noop def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
+  @noop private[cats] def forEffectEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[A] = productLEval(fa)(fb)
 
   override def ap[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     flatMap(ff)(f => map(fa)(f))
