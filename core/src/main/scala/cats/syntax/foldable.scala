@@ -44,6 +44,9 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldr[B](b: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
     F.foldRight(fa, b)(f)
 
+  def foldA[G[_], B](implicit F: Foldable[F], ev: A <:< G[B], G: Applicative[G], B: Monoid[B]): G[B] =
+    F.foldA[G, B](fa.asInstanceOf[F[G[B]]])
+
   /**
    * test if `F[A]` contains an `A`, named contains_ to avoid conflict with existing contains which uses universal equality
    *

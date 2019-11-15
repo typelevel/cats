@@ -1,7 +1,7 @@
 package cats
 
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -67,19 +67,17 @@ import simulacrum.typeclass
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
-    * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
-    * semigroup for `G[_]`.
-    *
-    * This method is a generalization of `reduce`.
-    */
-  def reduceA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Semigroup[A]): G[A] =
-    reduceLeft(fga)((ga1, ga2) => G.map2(ga1, ga2)(A.combine))
+   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
+   * semigroup for `G[_]`.
+   */
+  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+    reduce(fga)(Apply.semigroup)
 
   /**
-    * Apply `f` to each applicative `ga` of `fga` and combine them using the
-    * given `Semigroup[B]`.
-    */
-  def reduceMapA[G[_], A, B](fga: F[G[A]])(f: A => B)(implicit G: Applicative[G], B: Semigroup[B]): G[B] =
+   * Apply `f` to each applicative `ga` of `fga` and combine them using the
+   * given `Semigroup[B]`.
+   */
+  @noop def reduceMapA[G[_], A, B](fga: F[G[A]])(f: A => B)(implicit G: Apply[G], B: Semigroup[B]): G[B] =
     reduceLeftTo(fga)(ga => G.map(ga)(f))((gb, ga) => G.map2(gb, G.map(ga)(f))(B.combine))
 
   /**

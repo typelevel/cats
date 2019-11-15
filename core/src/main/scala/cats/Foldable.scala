@@ -3,7 +3,7 @@ package cats
 import scala.collection.mutable
 import cats.instances.either._
 import cats.kernel.CommutativeMonoid
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 import Foldable.sentinel
 
 /**
@@ -279,24 +279,22 @@ import Foldable.sentinel
   }
 
   /**
-    * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
-    *
-    * This method is identical to fold, except that we use `Applicative[G]` and `Monoid[A]`
-    * to combine a's inside an applicative G.
-    *
-    * For example:
-    *
-    * {{{
-    * scala> import cats.implicits._
-    * scala> val F = Foldable[List]
-    * scala> F.foldA(List(Right(1) :: Right(2) :: Nil)
-    * res0: Right[Int] = Right(3)
-    * }}}
-    */
-  def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
-    foldLeft(fga, G.pure(A.empty)) { (acc, ga) =>
-      G.map2(acc, ga)(A.combine)
-    }
+   * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
+   *
+   * This method is identical to fold, except that we use `Applicative[G]` and `Monoid[A]`
+   * to combine a's inside an applicative G.
+   *
+   * For example:
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val F = Foldable[List]
+   * scala> F.foldA(List(Right(1) :: Right(2) :: Nil)
+   * res0: Right[Int] = Right(3)
+   * }}}
+   */
+  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+    fold(fga)(Applicative.monoid)
 
   /**
    * Alias for [[foldM]].
