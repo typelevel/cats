@@ -1,7 +1,6 @@
 package cats
 package syntax
 
-import cats.data.Validated.{Invalid, Valid}
 import cats.data.{EitherT, Validated}
 
 import scala.reflect.ClassTag
@@ -19,55 +18,22 @@ trait ApplicativeErrorSyntax {
 /**
  * Extension to ApplicativeError in a binary compat way
  */
-trait ApplicativeErrorExtension {
-  implicit final def catsSyntaxApplicativeErrorExtension[F[_], E](
+private[syntax] trait ApplicativeErrorExtension {
+  @deprecated("Use methods on ApplicativeError", "2.1.0-RC1")
+  final def catsSyntaxApplicativeErrorExtension[F[_], E](
     F: ApplicativeError[F, E]
   ): ApplicativeErrorExtensionOps[F, E] =
     new ApplicativeErrorExtensionOps(F)
 }
 
-final class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
+@deprecated("Use methods on ApplicativeError", "2.1.0-RC1")
+final private[syntax] class ApplicativeErrorExtensionOps[F[_], E](F: ApplicativeError[F, E]) {
 
-  /**
-   * Convert from scala.Option
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> import cats.ApplicativeError
-   * scala> val F = ApplicativeError[Either[String, *], String]
-   *
-   * scala> F.fromOption(Some(1), "Empty")
-   * res0: scala.Either[String, Int] = Right(1)
-   *
-   * scala> F.fromOption(Option.empty[Int], "Empty")
-   * res1: scala.Either[String, Int] = Left(Empty)
-   * }}}
-   */
-  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
-    ApplicativeError.liftFromOption(oa, ifEmpty)(F)
+  @deprecated("Use fromOption on ApplicativeError", "2.1.0-RC1")
+  private[syntax] def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] = F.fromOption(oa, ifEmpty)
 
-  /**
-   * Convert from cats.data.Validated
-   *
-   * Example:
-   * {{{
-   * scala> import cats.implicits._
-   * scala> import cats.ApplicativeError
-   *
-   * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
-   * res0: scala.Option[Int] = Some(1)
-   *
-   * scala> ApplicativeError[Option, Unit].fromValidated(().invalid[Int])
-   * res1: scala.Option[Int] = None
-   * }}}
-   */
-  def fromValidated[A](x: Validated[E, A]): F[A] =
-    x match {
-      case Invalid(e) => F.raiseError(e)
-      case Valid(a)   => F.pure(a)
-    }
-
+  @deprecated("Use fromValidated on ApplicativeError", "2.1.0-RC1")
+  private[syntax] def fromValidated[A](x: Validated[E, A]): F[A] = F.fromValidated(x)
 }
 
 final class ApplicativeErrorIdOps[E](private val e: E) extends AnyVal {

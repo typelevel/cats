@@ -149,4 +149,50 @@ import simulacrum.noop
    */
   def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
     flatMap(fa)(a => as(f(a), a))
+
+  /**
+   * Like an infinite loop of >> calls. This is most useful effect loops
+   * that you want to run forever in for instance a server.
+   *
+   * This will be an infinite loop, or it will return an F[Nothing].
+   *
+   * Be careful using this.
+   * For instance, a List of length k will produce a list of length k^n at iteration
+   * n. This means if k = 0, we return an empty list, if k = 1, we loop forever
+   * allocating single element lists, but if we have a k > 1, we will allocate
+   * exponentially increasing memory and very quickly OOM.
+   */
+  @noop
+  def foreverM[A, B](fa: F[A]): F[B] = {
+    // allocate two things once for efficiency.
+    val leftUnit = Left(())
+    val stepResult: F[Either[Unit, B]] = map(fa)(_ => leftUnit)
+    tailRecM(())(_ => stepResult)
+  }
+
+  /**
+   * iterateForeverM is almost exclusively useful for effect types. For instance,
+   * A may be some state, we may take the current state, run some effect to get
+   * a new state and repeat.
+   */
+  @noop
+  def iterateForeverM[A, B](a: A)(f: A => F[A]): F[B] =
+    tailRecM[A, B](a)(f.andThen { fa =>
+      map(fa)(Left(_): Either[A, B])
+    })
+
+  /**
+   * This repeats an F until we get defined values. This can be useful
+   * for polling type operations on State (or RNG) Monads, or in effect
+   * monads.
+   */
+  @noop
+  def untilDefinedM[A](foa: F[Option[A]]): F[A] = {
+    val leftUnit: Either[Unit, A] = Left(())
+    val feither: F[Either[Unit, A]] = map(foa) {
+      case None    => leftUnit
+      case Some(a) => Right(a)
+    }
+    tailRecM(())(_ => feither)
+  }
 }

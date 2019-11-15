@@ -1,7 +1,7 @@
 package cats
 
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -53,6 +53,22 @@ import simulacrum.typeclass
    */
   def reduceMap[A, B](fa: F[A])(f: A => B)(implicit B: Semigroup[B]): B =
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
+
+  /**
+   * Apply `f` to each element of `fa` and combine them using the
+   * given `SemigroupK[G]`.
+   *
+   * {{{
+   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
+   * scala> val a = x("foo")
+   * a: String = "foo321"
+   * }}}
+   * */
+  @noop
+  def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
+    reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
 
   /**
    * Apply `f` to the "initial element" of `fa` and combine it with
