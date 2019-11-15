@@ -289,8 +289,8 @@ import Foldable.sentinel
    * {{{
    * scala> import cats.implicits._
    * scala> val F = Foldable[List]
-   * scala> F.foldA(List(Right(1) :: Right(2) :: Nil)
-   * res0: Right[Int] = Right(3)
+   * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
+   * res0: Either[String, Int] = Right(3)
    * }}}
    *
    * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
