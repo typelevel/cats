@@ -399,4 +399,7 @@ class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEm
     val tailStart: Long = start + 1L
     NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
   }
+
+  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): NonEmptyVector[Either[L, R]] =
+    NonEmptyVector(el, Vector(els: _*))
 }

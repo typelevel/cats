@@ -77,6 +77,7 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
     extends FoldableSuite[F](name) {
 
   def range(start: Long, endInclusive: Long): F[Long]
+  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): F[Either[L, R]]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
@@ -86,6 +87,36 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
     val expected = n * (n + 1) / 2
     val actual = range(1L, n).reduceLeftM(Option.apply)(nonzero)
     actual should ===(Some(expected))
+  }
+
+  test(s"Reducible[$name].reduceA successful case") {
+    val expected = 6
+    val actual = rangeE(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceA
+    actual should ===(expected.asRight[String])
+  }
+
+  test(s"Reducible[$name].reduceA failure case") {
+    val expected = "boom!!!"
+    val actual = rangeE(1.asRight, "boom!!!".asLeft, 3.asRight).reduceA
+    actual should ===(expected.asLeft[Int])
+  }
+
+  test(s"Reducible[$name].reduceMapA successful case") {
+    def intToString(i: Int): String = i.toString
+
+    val expected = "123"
+    val actual =
+      rangeE(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceMapA(intToString)
+
+    actual should ===(expected.asRight[String])
+  }
+
+  test(s"Reducible[$name].reduceMapA failure case") {
+    def intToString(i: Int): String = i.toString
+
+    val expected = "boom!!!"
+    val actual = rangeE(1.asRight, "boom!!!".asLeft, 3.asRight).reduceMapA(intToString)
+    actual should ===(expected.asLeft[String])
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
