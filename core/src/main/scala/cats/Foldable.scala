@@ -292,6 +292,8 @@ import Foldable.sentinel
    * scala> F.foldA(List(Right(1) :: Right(2) :: Nil)
    * res0: Right[Int] = Right(3)
    * }}}
+   *
+   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
    */
   @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     fold(fga)(Applicative.monoid)

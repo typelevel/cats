@@ -69,6 +69,8 @@ import simulacrum.{noop, typeclass}
   /**
    * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
    * semigroup for `G[_]`.
+   *
+   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
    */
   @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
     reduce(fga)(Apply.semigroup)
@@ -76,6 +78,8 @@ import simulacrum.{noop, typeclass}
   /**
    * Apply `f` to each applicative `ga` of `fga` and combine them using the
    * given `Semigroup[B]`.
+   *
+   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
    */
   @noop def reduceMapA[G[_], A, B](fga: F[G[A]])(f: A => B)(implicit G: Apply[G], B: Semigroup[B]): G[B] =
     reduceLeftTo(fga)(ga => G.map(ga)(f))((gb, ga) => G.map2(gb, G.map(ga)(f))(B.combine))
