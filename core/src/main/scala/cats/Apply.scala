@@ -126,12 +126,12 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 
   /** Alias for [[productR]]. */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+  @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /** Alias for [[productL]]. */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+  @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
   /**

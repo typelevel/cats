@@ -91,7 +91,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     Kleisli(f.andThen(run))
 
   @deprecated("Use mapK", "1.0.0-RC2")
-  def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
+  private[cats] def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
     mapK(f)
 
   def lower(implicit F: Applicative[F]): Kleisli[F, A, F[B]] =
@@ -207,7 +207,7 @@ sealed private[data] trait KleisliFunctions {
     λ[F ~> Kleisli[F, A, *]](Kleisli.liftF(_))
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
-  def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
+  private[cats] def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
     Kleisli(_ => x)
 
   /**
