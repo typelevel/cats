@@ -40,6 +40,7 @@ possible:
  * Arya Irani
  * Ash Pook
  * Aλ
+ * Barnabás Oláh
  * Ben Fradet
  * Ben Hutchison
  * Ben Kirwin
@@ -79,6 +80,7 @@ possible:
  * Denis
  * Derek Wickern
  * Diego Esteban Alonso Blas
+ * Dmitry Polienko
  * Donaldo Salas
  * Earl St Sauver
  * Edd Steel
@@ -104,10 +106,12 @@ possible:
  * Gabriele Petronella
  * Gagandeep Kalra
  * Gavin Bisesi
+ * Georgi Krastev
  * Giovanni Ruggiero
  * Giulio De Luise
  * Giuseppe Cannella
  * Greg Pfeil
+ * Gregor Heine
  * Guillaume Massé
  * Hamed Nourhani
  * Hamish Dickson
@@ -151,10 +155,12 @@ possible:
  * Lars Hupel
  * Leandro Bolivar
  * Leif Battermann
+ * Lionel Parreaux
  * Long Cao
  * Luis Angel Vicente Sanchez
  * Luis Sanchez
  * Luka Jacobowitz
+ * Lukáš Voda
  * Luke Wyman
  * Madder
  * Marc Siegel
@@ -169,11 +175,13 @@ possible:
  * Matt Martin
  * Matthias Lüneberg
  * Max Worgan
+ * Maxim Davydov
  * Merlin Göttlinger
  * Michał Gutowski
  * Michael Ledin
  * Michael Pilquist
  * Mike Curry
+ * Miklós Martin
  * Miles Sabin
  * Mirco Dotta
  * nigredo-tori
@@ -210,6 +218,7 @@ possible:
  * Rob Norris
  * Rohan Shah
  * Romain Ruetschi
+ * Roman Tkalenko
  * Ross A. Baker
  * rsekulski
  * rsoeldner
@@ -228,6 +237,7 @@ possible:
  * Stephen Carman
  * Stephen Judkins
  * Stephen Lazaro
+ * Steven Scott
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee
