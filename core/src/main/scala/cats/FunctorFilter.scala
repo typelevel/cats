@@ -66,4 +66,11 @@ trait FunctorFilter[F[_]] extends Serializable {
    */
   def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(a => if (f(a)) Some(a) else None)
+
+  /**
+   * Apply a filter to a structure such that the output structure contains all
+   * `A` elements in the input structure that do not satisfy the predicate `f`.
+   */
+  def filterNot[A](fa: F[A])(f: A => Boolean): F[A] =
+    mapFilter(fa)(Some(_).filterNot(f))
 }

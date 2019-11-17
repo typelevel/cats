@@ -158,6 +158,8 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     override def filter[A](fa: Vector[A])(f: (A) => Boolean): Vector[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Vector[A])(f: A => Boolean): Vector[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Vector[A])(f: PartialFunction[A, B]): Vector[B] = fa.collect(f)
 
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten

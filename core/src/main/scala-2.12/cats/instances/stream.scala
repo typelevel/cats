@@ -192,6 +192,8 @@ private[instances] trait StreamInstancesBinCompat0 {
 
     override def filter[A](fa: Stream[A])(f: (A) => Boolean): Stream[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Stream[A])(f: A => Boolean): Stream[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Stream[A])(f: PartialFunction[A, B]): Stream[B] = fa.collect(f)
 
     override def flattenOption[A](fa: Stream[Option[A]]): Stream[A] = fa.flatten

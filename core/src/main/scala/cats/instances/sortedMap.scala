@@ -205,6 +205,9 @@ private[instances] trait SortedMapInstancesBinCompat0 {
       override def filter[A](fa: SortedMap[K, A])(f: (A) => Boolean): SortedMap[K, A] =
         fa.filter { case (_, v) => f(v) }
 
+      override def filterNot[A](fa: SortedMap[K, A])(f: A => Boolean): SortedMap[K, A] =
+        fa.filterNot { case (_, v) => f(v) }
+
       override def filterA[G[_], A](
         fa: SortedMap[K, A]
       )(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[SortedMap[K, A]] =

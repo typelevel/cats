@@ -165,6 +165,8 @@ private object QueueInstances {
 
     override def filter[A](fa: Queue[A])(f: (A) => Boolean): Queue[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Queue[A])(f: A => Boolean): Queue[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Queue[A])(f: PartialFunction[A, B]): Queue[B] = fa.collect(f)
 
     override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten

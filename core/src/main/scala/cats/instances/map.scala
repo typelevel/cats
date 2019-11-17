@@ -157,6 +157,9 @@ private[instances] trait MapInstancesBinCompat0 {
       override def filter[A](fa: Map[K, A])(f: A => Boolean) =
         fa.filter { case (_, v) => f(v) }
 
+      override def filterNot[A](fa: Map[K, A])(f: A => Boolean): Map[K, A] =
+        fa.filterNot { case (_, v) => f(v) }
+
     }
 
 }
