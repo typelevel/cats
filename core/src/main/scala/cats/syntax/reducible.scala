@@ -35,6 +35,6 @@ final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def reduceA[G[_], B](implicit F: Reducible[F], ev: A <:< G[B], G: Apply[G], B: Semigroup[B]): G[B] =
     F.reduceA[G, B](fa.asInstanceOf[F[G[B]]])
 
-  def reduceMapA[G[_], B, C](f: B => C)(implicit F: Reducible[F], ev: A <:< G[B], G: Apply[G], C: Semigroup[C]): G[C] =
-    F.reduceMapA[G, B, C](fa.asInstanceOf[F[G[B]]])(f)
+  def reduceMapA[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: Apply[G], C: Semigroup[B]): G[B] =
+    F.reduceMapA[G, A, B](fa)(f)
 }

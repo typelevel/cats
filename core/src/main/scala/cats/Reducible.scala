@@ -97,8 +97,8 @@ import simulacrum.{noop, typeclass}
    *
    * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
    */
-  @noop def reduceMapA[G[_], A, B](fga: F[G[A]])(f: A => B)(implicit G: Apply[G], B: Semigroup[B]): G[B] =
-    reduceLeftTo(fga)(ga => G.map(ga)(f))((gb, ga) => G.map2(gb, G.map(ga)(f))(B.combine))
+  @noop def reduceMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
+    reduceLeftTo(fa)(f)((gb, a) => G.map2(gb, f(a))(B.combine))
 
   /**
    * Monadic reducing by mapping the `A` values to `G[B]`. combining

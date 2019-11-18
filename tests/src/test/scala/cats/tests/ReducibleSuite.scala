@@ -102,21 +102,18 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
   }
 
   test(s"Reducible[$name].reduceMapA successful case") {
-    def intToString(i: Int): String = i.toString
-
     val expected = "123"
-    val actual =
-      rangeE(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceMapA(intToString)
+    val actual = range(1, 3).reduceMapA(_.toString.some)
 
-    actual should ===(expected.asRight[String])
+    actual should ===(expected.some)
   }
 
   test(s"Reducible[$name].reduceMapA failure case") {
-    def intToString(i: Int): String = i.toString
+    def intToString(i: Long): Either[String, Int] = if (i == 2) i.toInt.asRight else "boom!!!".asLeft
 
     val expected = "boom!!!"
-    val actual = rangeE(1.asRight, "boom!!!".asLeft, 3.asRight).reduceMapA(intToString)
-    actual should ===(expected.asLeft[String])
+    val actual = range(1, 3).reduceMapA(intToString)
+    actual should ===(expected.asLeft[Int])
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
