@@ -389,8 +389,10 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Validated[List[String] ,Option[Int]] = Valid(Some(123))
    * }}}
    */
-  def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
-    fold(fe.andThen(Invalid.apply), fa.andThen(Valid.apply))
+  def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] = this match {
+    case Valid(a)   => Valid(fa(a))
+    case Invalid(e) => Invalid(fe(e))
+  }
 
   /**
    * Example:
