@@ -93,7 +93,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     NonEmptyList(head, tail ::: other.toList)
 
   def flatMap[B](f: A => NonEmptyList[B]): NonEmptyList[B] =
-    f(head) ++ tail.flatMap(f.andThen(_.toList))
+    f(head) ++ tail.flatMap(a => f(a).toList)
 
   def ::[AA >: A](a: AA): NonEmptyList[AA] =
     prepend(a)

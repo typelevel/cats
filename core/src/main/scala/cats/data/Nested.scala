@@ -250,7 +250,7 @@ abstract private[data] class NestedApplicativeError[F[_], G[_], E]
   def raiseError[A](e: E): Nested[F, G, A] = Nested(AEF.map(AEF.raiseError(e))(G.pure))
 
   def handleErrorWith[A](fa: Nested[F, G, A])(f: E => Nested[F, G, A]): Nested[F, G, A] =
-    Nested(AEF.handleErrorWith(fa.value)(f.andThen(_.value)))
+    Nested(AEF.handleErrorWith(fa.value)(e => f(e).value))
 
 }
 

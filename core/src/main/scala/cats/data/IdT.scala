@@ -16,7 +16,7 @@ final case class IdT[F[_], A](value: F[A]) {
     IdT[G, A](f(value))
 
   def flatMap[B](f: A => IdT[F, B])(implicit F: FlatMap[F]): IdT[F, B] =
-    IdT(F.flatMap(value)(f.andThen(_.value)))
+    IdT(F.flatMap(value)(a => f(a).value))
 
   def flatMapF[B](f: A => F[B])(implicit F: FlatMap[F]): IdT[F, B] =
     IdT(F.flatMap(value)(f))

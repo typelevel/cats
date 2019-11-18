@@ -31,13 +31,13 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     Kleisli(a => F.map(run(a))(f))
 
   def mapF[N[_], C](f: F[B] => N[C]): Kleisli[N, A, C] =
-    Kleisli(run.andThen(f))
+    Kleisli(a => f(run(a)))
 
   /**
    * Modify the context `F` using transformation `f`.
    */
   def mapK[G[_]](f: F ~> G): Kleisli[G, A, B] =
-    Kleisli[G, A, B](run.andThen(f.apply))
+    Kleisli[G, A, B](a => f(run(a)))
 
   def flatMap[C, AA <: A](f: B => Kleisli[F, AA, C])(implicit F: FlatMap[F]): Kleisli[F, AA, C] =
     Kleisli.shift(a => F.flatMap[B, C](run(a))((b: B) => f(b).run(a)))
@@ -88,7 +88,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * }}}
    */
   def local[AA](f: AA => A): Kleisli[F, AA, B] =
-    Kleisli(f.andThen(run))
+    Kleisli(aa => run(f(aa)))
 
   @deprecated("Use mapK", "1.0.0-RC2")
   private[cats] def transform[G[_]](f: FunctionK[F, G]): Kleisli[G, A, B] =
@@ -243,7 +243,7 @@ sealed private[data] trait KleisliFunctions {
    * }}}
    */
   def local[M[_], A, R](f: R => R)(fa: Kleisli[M, R, A]): Kleisli[M, R, A] =
-    Kleisli(f.andThen(fa.run))
+    Kleisli(r => fa.run(f(r)))
 }
 
 sealed private[data] trait KleisliFunctionsBinCompat {
@@ -356,11 +356,8 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
       case (e, r) => R.index(f.run(e))(r)
     }
 
-    def tabulate[A](f: Representation => A): Kleisli[M, E, A] = {
-      def curry[X, Y, Z](f: (X, Y) => Z): X => Y => Z = x => y => f(x, y)
-
-      Kleisli[M, E, A](curry(Function.untupled(f)).andThen(R.tabulate))
-    }
+    def tabulate[A](f: Representation => A): Kleisli[M, E, A] =
+      Kleisli[M, E, A](e => R.tabulate(r => f((e, r))))
   }
 }
 

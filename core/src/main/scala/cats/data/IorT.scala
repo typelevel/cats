@@ -97,7 +97,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
     })
 
   def flatMapF[AA >: A, D](f: B => F[Ior[AA, D]])(implicit F: Monad[F], AA: Semigroup[AA]): IorT[F, AA, D] =
-    flatMap(f.andThen(IorT.apply))
+    flatMap(b => IorT(f(b)))
 
   def subflatMap[AA >: A, D](f: B => Ior[AA, D])(implicit F: Functor[F], AA: Semigroup[AA]): IorT[F, AA, D] =
     IorT(F.map(value)(_.flatMap(f)))
