@@ -14,7 +14,7 @@
 * **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 
 ## Cats
-<a href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a>
+<a href="https://opencollective.com/typelevel" target="_blank"><img src="https://typelevel.org/cats/img/donate-button.png" /></a>
 
 
 ![cats image](http://plastic-idolatry.com/erik/cats2.png)
@@ -44,7 +44,7 @@ We welcome contributions to Cats and would love for you to help build
 Cats. See our [contributor guide](https://typelevel.org/cats/contributing.html) for more
 information about how you can get involved as a developer. 
 
-We also have a [sustainability program](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m) for our user community to support Cats through donations. Donations directly support office hour for maintainers, better documentation and strategic initiatives. 
+We also have a [sustainability program](https://opencollective.com/typelevel) for our user community to support Cats through donations. Donations directly support office hour for maintainers, better documentation and strategic initiatives. 
 
 ### Gold Sponsors 
 
@@ -55,7 +55,7 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 <a href="https://triplequote.com/"><img src="http://typelevel.org/cats/img/sponsors/triplequote.png" style="margin-bottom:9px; margin-right: 10px" /></a>
 <a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
 
-<a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
+
 
 ### Silver Sponsors
 
@@ -65,7 +65,6 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 <a href="https://evolutiongaming.com/"><img src="http://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 
-<a class="dbox-donation-button" href="https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m" style="background:#eee; color: #5B5988; text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 13px;padding: 10px 20px 10px 20px; -webkit-border-radius: 3px; -moz-border-radius: 2px; border-radius: 20px; border: 1px solid#5B5988;"  >BECOME A SPONSOR</a>
 
 ### Getting Started
 
