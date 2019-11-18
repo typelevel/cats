@@ -413,7 +413,7 @@ import Foldable.sentinel
    */
   @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     fold(fga)(Applicative.monoid)
-  
+
   /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
    * combining them using the `MonoidK[G]` instance.
