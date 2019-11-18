@@ -192,11 +192,39 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Foldable[$name].maximumBy/minimumBy") {
+    forAll { (fa: F[Int], f: Int => Int) =>
+      val maxOpt = fa.maximumByOption(f).map(f)
+      val minOpt = fa.minimumByOption(f).map(f)
+      val nelOpt = fa.toList.toNel
+      maxOpt should ===(nelOpt.map(_.maximumBy(f)).map(f))
+      maxOpt should ===(nelOpt.map(_.toList.maxBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.minimumBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.toList.minBy(f)).map(f))
+      maxOpt.forall(i => fa.forall(f(_) <= i)) should ===(true)
+      minOpt.forall(i => fa.forall(f(_) >= i)) should ===(true)
+    }
+  }
+
   test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList
       fa.reduceLeftOption(_ - _) should ===(list.reduceLeftOption(_ - _))
       fa.reduceRightOption((x, ly) => ly.map(x - _)).value should ===(list.reduceRightOption(_ - _))
+    }
+  }
+
+  test(s"Foldable[$name].combineAllOption") {
+    forAll { (fa: F[Int]) =>
+      fa.combineAllOption should ===(fa.toList.combineAllOption)
+      fa.combineAllOption should ===(iterator(fa).toList.combineAllOption)
+    }
+  }
+
+  test(s"Foldable[$name].iterable") {
+    forAll { (fa: F[Int]) =>
+      fa.toIterable.toList should ===(fa.toList)
+      fa.toIterable.toList should ===(iterator(fa).toList)
     }
   }
 
@@ -266,6 +294,18 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
       (Some(x): Option[String])
     }
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
+
+    // foldMapM should short-circuit and not call the function when not necessary
+    val f = (_: String) match {
+      case "Calvin" => None
+      case "Deirdra" =>
+        fail: Unit // : Unit ascription suppresses unreachable code warning
+        None
+      case x => Some(x)
+    }
+    names.foldMapM(f)
+    names.foldMapA(f)
+
     val isNotCalvin: String => Option[String] =
       x => if (x == "Calvin") None else Some(x)
     val notCalvin = F.foldM(names, "") { (acc, x) =>
@@ -282,6 +322,13 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     larger.value should ===(large.map(_ + 1))
+
+    val sum = F.foldRightDefer(large, Eval.later(0))((elem, acc) => acc.map(_ + elem))
+    sum.value should ===(large.sum)
+
+    def boom[A]: Eval[A] = Eval.later(sys.error("boom"))
+    // Ensure that the lazy param is actually handled lazily
+    val lazySum: Eval[Int] = F.foldRightDefer(large, boom[Int])((elem, acc) => acc.map(_ + elem))
   }
 
   def checkMonadicFoldsStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {

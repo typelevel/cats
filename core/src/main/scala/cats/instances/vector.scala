@@ -1,16 +1,18 @@
 package cats
 package instances
 
+import cats.data.ZipVector
 import cats.syntax.show._
 
 import scala.annotation.tailrec
 import scala.collection.+:
 import scala.collection.immutable.VectorBuilder
+import cats.data.Ior
 
 trait VectorInstances extends cats.kernel.instances.VectorInstances {
   implicit val catsStdInstancesForVector
-    : Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] =
-    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] {
+    : Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] with Align[Vector] =
+    new Traverse[Vector] with Monad[Vector] with Alternative[Vector] with CoflatMap[Vector] with Align[Vector] {
 
       def empty[A]: Vector[A] = Vector.empty[A]
 
@@ -109,6 +111,17 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def algebra[A]: Monoid[Vector[A]] = new kernel.instances.VectorMonoid[A]
 
+      def functor: Functor[Vector] = this
+
+      def align[A, B](fa: Vector[A], fb: Vector[B]): Vector[A Ior B] = {
+        val aLarger = fa.size >= fb.size
+        if (aLarger) {
+          cats.compat.Vector.zipWith(fa, fb)(Ior.both) ++ fa.drop(fb.size).map(Ior.left)
+        } else {
+          cats.compat.Vector.zipWith(fa, fb)(Ior.both) ++ fb.drop(fa.size).map(Ior.right)
+        }
+      }
+
       override def collectFirst[A, B](fa: Vector[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
       override def collectFirstSome[A, B](fa: Vector[A])(f: A => Option[B]): Option[B] =
@@ -119,6 +132,20 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
     new Show[Vector[A]] {
       def show(fa: Vector[A]): String =
         fa.iterator.map(_.show).mkString("Vector(", ", ", ")")
+    }
+
+  implicit def catsStdNonEmptyParallelForVectorZipVector: NonEmptyParallel.Aux[Vector, ZipVector] =
+    new NonEmptyParallel[Vector] {
+      type F[x] = ZipVector[x]
+
+      def flatMap: FlatMap[Vector] = cats.instances.vector.catsStdInstancesForVector
+      def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
+
+      def sequential: ZipVector ~> Vector =
+        λ[ZipVector ~> Vector](_.value)
+
+      def parallel: Vector ~> ZipVector =
+        λ[Vector ~> ZipVector](v => new ZipVector(v))
     }
 }
 

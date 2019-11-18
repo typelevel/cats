@@ -5,14 +5,17 @@ import cats.kernel._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
+import cats.Align
+import cats.Functor
+import cats.data.Ior
 
 trait SortedMapInstances extends SortedMapInstances2 {
 
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap")
+  @deprecated("Use cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap", "2.0.0-RC2")
   def catsStdHashForSortedMap[K: Hash: Order, V: Hash]: Hash[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap[K, V]
 
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap")
+  @deprecated("Use cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap", "2.0.0-RC2")
   def catsStdCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup] =
     cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap[K, V]
 
@@ -25,8 +28,9 @@ trait SortedMapInstances extends SortedMapInstances2 {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForSortedMap[K: Order]: Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] =
-    new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] {
+  implicit def catsStdInstancesForSortedMap[K: Order]
+    : Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
+    new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
 
       implicit val orderingK: Ordering[K] = Order[K].toOrdering
 
@@ -109,23 +113,44 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
       override def collectFirstSome[A, B](fa: SortedMap[K, A])(f: A => Option[B]): Option[B] =
         collectFirst(fa)(Function.unlift(f))
+
+      def functor: Functor[SortedMap[K, *]] = this
+
+      def align[A, B](fa: SortedMap[K, A], fb: SortedMap[K, B]): SortedMap[K, Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: SortedMap[K, A], fb: SortedMap[K, B])(f: Ior[A, B] => C): SortedMap[K, C] = {
+        val keys = fa.keySet ++ fb.keySet
+        val builder = SortedMap.newBuilder[K, C]
+        builder.sizeHint(keys.size)
+        keys
+          .foldLeft(builder) { (builder, k) =>
+            (fa.get(k), fb.get(k)) match {
+              case (Some(a), Some(b)) => builder += k -> f(Ior.both(a, b))
+              case (Some(a), None)    => builder += k -> f(Ior.left(a))
+              case (None, Some(b))    => builder += k -> f(Ior.right(b))
+              case (None, None)       => ??? // should not happen
+            }
+          }
+          .result()
+      }
     }
 
 }
 
 private[instances] trait SortedMapInstances1 {
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap")
+  @deprecated("Use cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap", "2.0.0-RC2")
   def catsStdEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 }
 
 private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap")
+  @deprecated("Use cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap", "2.0.0-RC2")
   def catsStdMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     new SortedMapMonoid[K, V]
 }
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedMapHash")
+@deprecated("Use cats.kernel.instances.SortedMapHash", "2.0.0-RC2")
 class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K])
     extends SortedMapEq[K, V]
     with Hash[SortedMap[K, V]] {
@@ -133,10 +158,10 @@ class SortedMapHash[K, V](implicit V: Hash[V], O: Order[K], K: Hash[K])
   def hash(x: SortedMap[K, V]): Int = underlying.hash(x)
 }
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedMapEq")
+@deprecated("Use cats.kernel.instances.SortedMapEq", "2.0.0-RC2")
 class SortedMapEq[K, V](implicit V: Eq[V], O: Order[K]) extends cats.kernel.instances.SortedMapEq[K, V]
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedMapCommutativeMonoid")
+@deprecated("Use cats.kernel.instances.SortedMapCommutativeMonoid", "2.0.0-RC2")
 class SortedMapCommutativeMonoid[K, V](implicit V: CommutativeSemigroup[V], O: Order[K])
     extends SortedMapMonoid[K, V]
     with CommutativeMonoid[SortedMap[K, V]] {
@@ -144,7 +169,7 @@ class SortedMapCommutativeMonoid[K, V](implicit V: CommutativeSemigroup[V], O: O
     new cats.kernel.instances.SortedMapCommutativeMonoid[K, V]
 }
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedMapMonoid")
+@deprecated("Use cats.kernel.instances.SortedMapMonoid", "2.0.0-RC2")
 class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K]) extends cats.kernel.instances.SortedMapMonoid[K, V]
 
 private[instances] trait SortedMapInstancesBinCompat0 {

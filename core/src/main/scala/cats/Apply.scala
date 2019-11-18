@@ -1,7 +1,7 @@
 package cats
 
-import simulacrum.typeclass
-import simulacrum.noop
+import simulacrum.{noop, typeclass}
+import cats.data.Ior
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
@@ -125,12 +125,12 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 
   /** Alias for [[productR]]. */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
-  @noop @inline final def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
+  @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /** Alias for [[productL]]. */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
-  @noop @inline final def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
+  @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
   /**
@@ -213,6 +213,39 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
       val G = Apply[G]
     }
 
+  /**
+   * An `if-then-else` lifted into the `F` context.
+   * This function combines the effects of the `fcond` condition and of the two branches,
+   * in the order in which they are given.
+   *
+   * The value of the result is, depending on the value of the condition,
+   * the value of the first argument, or the value of the second argument.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> val b1: Option[Boolean] = Some(true)
+   * scala> val asInt1: Option[Int] = Apply[Option].ifA(b1)(Some(1), Some(0))
+   * scala> asInt1.get
+   * res0: Int = 1
+   *
+   * scala> val b2: Option[Boolean] = Some(false)
+   * scala> val asInt2: Option[Int] = Apply[Option].ifA(b2)(Some(1), Some(0))
+   * scala> asInt2.get
+   * res1: Int = 0
+   *
+   * scala> val b3: Option[Boolean] = Some(true)
+   * scala> val asInt3: Option[Int] = Apply[Option].ifA(b3)(Some(1), None)
+   * asInt2: Option[Int] = None
+   *
+   * }}}
+   */
+  @noop
+  def ifA[A](fcond: F[Boolean])(ifTrue: F[A], ifFalse: F[A]): F[A] = {
+    def ite(b: Boolean)(ifTrue: A, ifFalse: A) = if (b) ifTrue else ifFalse
+    ap2(map(fcond)(ite))(ifTrue, ifFalse)
+  }
 }
 
 object Apply {
@@ -225,6 +258,11 @@ object Apply {
    */
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)
+
+  def align[F[_]: Apply]: Align[F] = new Align[F] {
+    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
+    def functor: Functor[F] = Apply[F]
+  }
 }
 
 private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {

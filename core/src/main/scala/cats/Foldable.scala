@@ -95,6 +95,13 @@ import Foldable.sentinel
    */
   def foldRight[A, B](fa: F[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B]
 
+  def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
+    Defer[G].defer(
+      this.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
+        Defer[G].defer(acc(fn(elem, z)))
+      }(gb)
+    )
+
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
     foldLeft(fa, Option.empty[B]) {
       case (Some(b), a) => Some(g(b, a))
@@ -194,6 +201,34 @@ import Foldable.sentinel
     reduceLeftOption(fa)(A.max)
 
   /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#minimumBy]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumByOption]] for maximum instead of minimum.
+   */
+  def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    minimumOption(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#maximumBy]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumByOption]] for minimum instead of maximum.
+   */
+  def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    maximumOption(fa)(Order.by(f))
+
+  /**
    * Get the element at the index of the `Foldable`.
    */
   def get[A](fa: F[A])(idx: Long): Option[A] =
@@ -235,17 +270,98 @@ import Foldable.sentinel
     }.value
 
   /**
+   * Monadic version of `collectFirstSome`.
+   *
+   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits,
+   * i.e. once a Some element is found, no further effects are produced.
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> def parseInt(s: String): Either[String, Int] = Either.catchOnly[NumberFormatException](s.toInt).leftMap(_.getMessage)
+   * scala> val keys1 = List("1", "2", "4", "5")
+   * scala> val map1 = Map(4 -> "Four", 5 -> "Five")
+   * scala> Foldable[List].collectFirstSomeM(keys1)(parseInt(_) map map1.get)
+   * res0: scala.util.Either[String,Option[String]] = Right(Some(Four))
+   *
+   * scala> val map2 = Map(6 -> "Six", 7 -> "Seven")
+   * scala> Foldable[List].collectFirstSomeM(keys1)(parseInt(_) map map2.get)
+   * res1: scala.util.Either[String,Option[String]] = Right(None)
+   *
+   * scala> val keys2 = List("1", "x", "4", "5")
+   * scala> Foldable[List].collectFirstSomeM(keys2)(parseInt(_) map map1.get)
+   * res2: scala.util.Either[String,Option[String]] = Left(For input string: "x")
+   *
+   * scala> val keys3 = List("1", "2", "4", "x")
+   * scala> Foldable[List].collectFirstSomeM(keys3)(parseInt(_) map map1.get)
+   * res3: scala.util.Either[String,Option[String]] = Right(Some(Four))
+   * }}}
+   */
+  @noop
+  def collectFirstSomeM[G[_], A, B](fa: F[A])(f: A => G[Option[B]])(implicit G: Monad[G]): G[Option[B]] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
+      case Some((a, src)) =>
+        G.map(f(a)) {
+          case None => Left(src.value)
+          case s    => Right(s)
+        }
+      case None => G.pure(Right(None))
+    })
+
+  /**
+   * Tear down a subset of this structure using a `PartialFunction`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
+   * res0: Int = 6
+   *}}}
+   */
+  @noop
+  def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
+    foldLeft(fa, B.empty)((acc, a) => B.combine(acc, f.applyOrElse(a, (_: A) => B.empty)))
+
+  /**
+   * Tear down a subset of this structure using a `A => Option[M]`.
+   *{{{
+   * scala> import cats.implicits._
+   * scala> val xs = List(1, 2, 3, 4)
+   * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
+   * scala> Foldable[List].collectFoldSome(xs)(f)
+   * res0: Int = 6
+   *}}}
+   */
+  def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
+    foldLeft(fa, B.empty)(
+      (acc, a) =>
+        f(a) match {
+          case Some(x) => B.combine(acc, x)
+          case None    => acc
+        }
+    )
+
+  /**
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    foldLeft(fa, A.empty) { (acc, a) =>
-      A.combine(acc, a)
-    }
+    A.combineAll(toIterable(fa))
 
   /**
    * Alias for [[fold]].
    */
   def combineAll[A: Monoid](fa: F[A]): A = fold(fa)
+
+  def combineAllOption[A](fa: F[A])(implicit ev: Semigroup[A]): Option[A] =
+    if (isEmpty(fa)) None else ev.combineAllOption(toIterable(fa))
+
+  /**
+   * Convert F[A] to an Iterable[A].
+   *
+   * This method may be overridden for the sake of performance, but implementers should take care
+   * not to force a full materialization of the collection.
+   */
+  def toIterable[A](fa: F[A]): Iterable[A] =
+    cats.compat.FoldableCompat.toIterable(fa)(self)
 
   /**
    * Fold implemented by mapping `A` values into `B` and then
@@ -297,6 +413,22 @@ import Foldable.sentinel
    */
   @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     fold(fga)(Applicative.monoid)
+  
+  /**
+   * Fold implemented by mapping `A` values into `B` in a context `G` and then
+   * combining them using the `MonoidK[G]` instance.
+   *
+   * {{{
+   * scala> import cats._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = Foldable[List].foldMapK(List(1, 2, 3))(f)
+   * scala> val a = x("foo")
+   * a: String = "foo321"
+   * }}}
+   * */
+  @noop
+  def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
+    foldMap(fa)(f)(G.algebra)
 
   /**
    * Alias for [[foldM]].
@@ -324,6 +456,14 @@ import Foldable.sentinel
    */
   def foldMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Monad[G], B: Monoid[B]): G[B] =
     foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
+
+  /**
+   * Equivalent to foldMapM.
+   * The difference is that foldMapA only requires G to be an Applicative
+   * rather than a Monad. It is also slower due to use of Eval.
+   */
+  def foldMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
+    foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
@@ -399,6 +539,36 @@ import Foldable.sentinel
     foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
       if (f(a)) Now(Some(a)) else lb
     }.value
+
+  /**
+   * Find the first element matching the effectful predicate, if one exists.
+   *
+   * If there are no elements, the result is `None`. `findM` short-circuits,
+   * i.e. once an element is found, no further effects are produced.
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].findM(list)(n => (n >= 2).asRight[String])
+   * res0: Either[String,Option[Int]] = Right(Some(2))
+   *
+   * scala> Foldable[List].findM(list)(n => (n > 4).asRight[String])
+   * res1: Either[String,Option[Int]] = Right(None)
+   *
+   * scala> Foldable[List].findM(list)(n => Either.cond(n < 3, n >= 2, "error"))
+   * res2: Either[String,Option[Int]] = Right(Some(2))
+   *
+   * scala> Foldable[List].findM(list)(n => Either.cond(n < 3, false, "error"))
+   * res3: Either[String,Option[Int]] = Left(error)
+   * }}}
+   */
+  @noop
+  def findM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Option[A]] =
+    G.tailRecM(Foldable.Source.fromFoldable(fa)(self))(_.uncons match {
+      case Some((a, src)) => G.map(p(a))(if (_) Right(Some(a)) else Left(src.value))
+      case None           => G.pure(Right(None))
+    })
 
   /**
    * Check whether at least one element satisfies the predicate.
@@ -602,6 +772,84 @@ import Foldable.sentinel
 
   override def unorderedFoldMap[A, B: CommutativeMonoid](fa: F[A])(f: (A) => B): B =
     foldMap(fa)(f)
+
+  /**
+   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`
+   * Equivalent to `Functor#map` and then `Alternative#separate`.
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
+   * scala> val list = List(1,2,3,4)
+   * scala> Foldable[List].partitionBifold(list)(a => ("value " + a.toString(), if (a % 2 == 0) -a else a))
+   * res0: (List[String], List[Int]) = (List(value 1, value 2, value 3, value 4),List(1, -2, 3, -4))
+   * scala> Foldable[List].partitionBifold(list)(a => Const[Int, Nothing with Any](a))
+   * res1: (List[Int], List[Nothing with Any]) = (List(1, 2, 3, 4),List())
+   * }}}
+   */
+  @noop
+  def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
+                                                                   H: Bifoldable[H]): (F[B], F[C]) = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    foldMap[A, (F[B], F[C])](fa)(
+      a => H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+    )
+  }
+
+  /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Foldable, cats.data.Const
+   * scala> val list = List(1,2,3,4)
+   * `Const`'s second parameter is never instantiated, so we can use an impossible type:
+   * scala> Foldable[List].partitionBifoldM(list)(a => Option(Const[Int, Nothing with Any](a)))
+   * res0: Option[(List[Int], List[Nothing with Any])] = Some((List(1, 2, 3, 4),List()))
+   * }}}
+   */
+  @noop
+  def partitionBifoldM[G[_], H[_, _], A, B, C](
+    fa: F[A]
+  )(f: A => G[H[B, C]])(implicit A: Alternative[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] = {
+    import cats.instances.tuple._
+
+    implicit val mb: Monoid[F[B]] = A.algebra[B]
+    implicit val mc: Monoid[F[C]] = A.algebra[C]
+
+    foldMapM[G, A, (F[B], F[C])](fa)(
+      a =>
+        M.map(f(a)) {
+          H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+        }
+    )
+  }
+
+  /**
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`
+   *
+   * {{{
+   * scala> import cats.implicits._, cats.Foldable, cats.Eval
+   * scala> val list = List(1,2,3,4)
+   * scala> val partitioned1 = Foldable[List].partitionEitherM(list)(a => if (a % 2 == 0) Eval.now(Either.left[String, Int](a.toString)) else Eval.now(Either.right[String, Int](a)))
+   * Since `Eval.now` yields a lazy computation, we need to force it to inspect the result:
+   * scala> partitioned1.value
+   * res0: (List[String], List[Int]) = (List(2, 4),List(1, 3))
+   * scala> val partitioned2 = Foldable[List].partitionEitherM(list)(a => Eval.later(Either.right(a * 4)))
+   * scala> partitioned2.value
+   * res1: (List[Nothing], List[Int]) = (List(),List(4, 8, 12, 16))
+   * }}}
+   */
+  @noop
+  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
+                                                                         M: Monad[G]): G[(F[B], F[C])] = {
+    import cats.instances.either._
+    partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
+  }
 }
 
 object Foldable {
@@ -612,6 +860,13 @@ object Foldable {
       Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
 
     Eval.always(iterable.iterator).flatMap(loop)
+  }
+
+  def iterateRightDefer[G[_]: Defer, A, B](iterable: Iterable[A], lb: G[B])(f: (A, G[B]) => G[B]): G[B] = {
+    def loop(it: Iterator[A]): G[B] =
+      Defer[G].defer(if (it.hasNext) f(it.next(), Defer[G].defer(loop(it))) else Defer[G].defer(lb))
+
+    Defer[G].defer(loop(iterable.iterator))
   }
 
   /**

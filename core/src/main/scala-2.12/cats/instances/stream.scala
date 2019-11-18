@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.{Ior, ZipStream}
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -8,8 +9,8 @@ import scala.annotation.tailrec
 trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   implicit val catsStdInstancesForStream
-    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] =
-    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] {
+    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] =
+    new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty
 
@@ -139,6 +140,8 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def toList[A](fa: Stream[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: Stream[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: Stream[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -150,6 +153,14 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def collectFirstSome[A, B](fa: Stream[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[Stream] = this
+
+      def align[A, B](fa: Stream[A], fb: Stream[B]): Stream[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Stream[A], fb: Stream[B])(f: Ior[A, B] => C): Stream[C] =
+        Align.alignWithIterator[A, B, C](fa, fb)(f).toStream
     }
 
   implicit def catsStdShowForStream[A: Show]: Show[Stream[A]] =
@@ -157,6 +168,19 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def show(fa: Stream[A]): String = if (fa.isEmpty) "Stream()" else s"Stream(${fa.head.show}, ?)"
     }
 
+  implicit def catsStdParallelForStreamZipStream: Parallel.Aux[Stream, ZipStream] =
+    new Parallel[Stream] {
+      type F[x] = ZipStream[x]
+
+      def monad: Monad[Stream] = cats.instances.stream.catsStdInstancesForStream
+      def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
+
+      def sequential: ZipStream ~> Stream =
+        λ[ZipStream ~> Stream](_.value)
+
+      def parallel: Stream ~> ZipStream =
+        λ[Stream ~> ZipStream](v => new ZipStream(v))
+    }
 }
 
 private[instances] trait StreamInstancesBinCompat0 {

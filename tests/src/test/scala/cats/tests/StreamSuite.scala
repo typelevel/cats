@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -13,6 +14,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipStream
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", SemigroupalTests[Stream].semigroupal[Int, Int, Int])
@@ -32,6 +34,9 @@ class StreamSuite extends CatsSuite {
 
   checkAll("Stream[Int]", TraverseFilterTests[Stream].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Stream]", SerializableTests.serializable(TraverseFilter[Stream]))
+
+  checkAll("Stream[Int]", AlignTests[Stream].align[Int, Int, Int, Int])
+  checkAll("Align[Stream]", SerializableTests.serializable(Align[Stream]))
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
@@ -58,4 +63,14 @@ class StreamSuite extends CatsSuite {
     }
   }
 
+}
+
+final class StreamInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.stream") {
+    import cats.instances.stream._
+    import cats.syntax.parallel._
+
+    (Stream(1, 2, 3), Stream("A", "B", "C")).parTupled
+  }
 }

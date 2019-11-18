@@ -3,7 +3,7 @@ package tests
 
 import cats.data.{Chain, NonEmptyChain}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyChainSuite extends CatsSuite {
@@ -22,6 +22,9 @@ class NonEmptyChainSuite extends CatsSuite {
 
   checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
   checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
+
+  checkAll("NonEmptyChain[Int]", AlignTests[NonEmptyChain].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyChain]", SerializableTests.serializable(Align[NonEmptyChain]))
 
   {
     implicit val partialOrder = ListWrapper.partialOrder[Int]
@@ -106,7 +109,7 @@ class NonEmptyChainSuite extends CatsSuite {
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromSeq(ci.iterator.toList) should ===(Option(ci))
+      NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci))
     }
   }
 

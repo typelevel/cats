@@ -65,17 +65,17 @@ trait SortedSetInstances extends SortedSetInstances1 {
       fa.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
   }
 
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet")
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet", "2.0.0-RC2")
   private[instances] def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 }
 
 private[instances] trait SortedSetInstances1 {
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet")
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
   private[instances] def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
-    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 
-  @deprecated("2.0.0-RC2", "Use cats.kernel.instances.sortedSet.catsKernelStdSemilatticeForSortedSet")
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdSemilatticeForSortedSet", "2.0.0-RC2")
   def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdBoundedSemilatticeForSortedSet[A]
 }
@@ -93,8 +93,12 @@ private[instances] trait SortedSetInstancesBinCompat0 {
 
 private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
   // TODO: Remove when this is no longer necessary for binary compatibility.
-  implicit override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
-    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]
+  // Note that the overrides here and below are only necessary because the
+  // definitions in `SortedSetInstances1` conflict with the ones in
+  // `cats.kernel.instances.SortedSetInstances`. Both are inherited here, so
+  // we have to "bubble" the "correct" ones up to the appropriate place.
+  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 
 private[instances] trait LowPrioritySortedSetInstancesBinCompat1
@@ -103,15 +107,19 @@ private[instances] trait LowPrioritySortedSetInstancesBinCompat1
   implicit override def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 
+  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
+
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
   override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
-    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A]
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedSetHash")
+@deprecated("Use cats.kernel.instances.SortedSetHash", "2.0.0-RC2")
 class SortedSetHash[A: Order: Hash] extends cats.kernel.instances.SortedSetHash[A]
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedSetOrder")
+@deprecated("Use cats.kernel.instances.SortedSetOrder", "2.0.0-RC2")
 class SortedSetOrder[A: Order] extends cats.kernel.instances.SortedSetOrder[A]
 
-@deprecated("2.0.0-RC2", "Use cats.kernel.instances.SortedSetSemilattice")
+@deprecated("Use cats.kernel.instances.SortedSetSemilattice", "2.0.0-RC2")
 class SortedSetSemilattice[A: Order] extends cats.kernel.instances.SortedSetSemilattice[A]

@@ -13,6 +13,7 @@ abstract class AllSyntaxBinCompat
 
 trait AllSyntax
     extends AlternativeSyntax
+    with AlignSyntax
     with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
@@ -58,6 +59,7 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+    with ParallelFoldMapASyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 

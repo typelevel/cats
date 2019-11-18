@@ -230,6 +230,14 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  test("ParFoldMapA should be equivalent to parTraverse map combineAll (where it exists)") {
+    forAll { (es: List[Int], f: Int => Either[String, String]) =>
+      Parallel.parFoldMapA(es)(f) should ===(
+        Parallel.parTraverse(es)(f).map(_.combineAll)
+      )
+    }
+  }
+
   test("parAp accumulates errors in order") {
     val right: Either[String, Int => Int] = Left("Hello")
     Parallel.parAp(right)("World".asLeft) should ===(Left("HelloWorld"))
@@ -493,7 +501,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
 
   import cats.instances.either._
-  import cats.instances.parallel._
   import cats.instances.string._
   import cats.instances.int._
   import cats.instances.unit._

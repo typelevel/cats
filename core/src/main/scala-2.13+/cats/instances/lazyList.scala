@@ -1,14 +1,22 @@
 package cats
 package instances
+
 import cats.kernel
 import cats.syntax.show._
+import cats.data.Ior
+import cats.data.ZipLazyList
 
 import scala.annotation.tailrec
 
 trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
+
   implicit val catsStdInstancesForLazyList
-    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
-    new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
+    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] with Align[LazyList] =
+    new Traverse[LazyList]
+      with Alternative[LazyList]
+      with Monad[LazyList]
+      with CoflatMap[LazyList]
+      with Align[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
 
@@ -110,6 +118,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def toList[A](fa: LazyList[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: LazyList[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: LazyList[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
@@ -121,6 +131,14 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
       override def collectFirstSome[A, B](fa: LazyList[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[LazyList] = this
+
+      def align[A, B](fa: LazyList[A], fb: LazyList[B]): LazyList[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: LazyList[A], fb: LazyList[B])(f: Ior[A, B] => C): LazyList[C] =
+        LazyList.from(Align.alignWithIterator[A, B, C](fa, fb)(f))
     }
 
   implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
@@ -155,4 +173,18 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         .value
 
   }
+
+  implicit def catsStdParallelForLazyListZipLazyList[A]: Parallel.Aux[LazyList, ZipLazyList] =
+    new Parallel[LazyList] {
+      type F[x] = ZipLazyList[x]
+
+      def monad: Monad[LazyList] = cats.instances.lazyList.catsStdInstancesForLazyList
+      def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
+
+      def sequential: ZipLazyList ~> LazyList =
+        λ[ZipLazyList ~> LazyList](_.value)
+
+      def parallel: LazyList ~> ZipLazyList =
+        λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
+    }
 }

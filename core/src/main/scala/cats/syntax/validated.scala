@@ -21,7 +21,7 @@ trait ValidatedExtensionSyntax {
 
 final class ValidatedExtension[E, A](private val self: Validated[E, A]) extends AnyVal {
   def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: E]): F[A] =
-    new ApplicativeErrorExtensionOps(F).fromValidated(self)
+    F.fromValidated(self)
 }
 
 private[syntax] trait ValidatedSyntaxBincompat0 {

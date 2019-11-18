@@ -25,6 +25,11 @@ import simulacrum.typeclass
       val F = self
       val G = ev
     }
+
+  def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B) = {
+    import cats.instances.tuple._
+    bifoldMap(fab)((_, B.empty), (A.empty, _))
+  }
 }
 
 private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {

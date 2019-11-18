@@ -1,9 +1,13 @@
 package cats
 package instances
 
+import cats.data.Validated
+import cats.kernel.Semigroup
 import cats.syntax.EitherUtil
 import cats.syntax.either._
+
 import scala.annotation.tailrec
+import cats.data.Ior
 
 trait EitherInstances extends cats.kernel.instances.EitherInstances {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
@@ -30,8 +34,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForEither[A]: MonadError[Either[A, *], A] with Traverse[Either[A, *]] =
-    new MonadError[Either[A, *], A] with Traverse[Either[A, *]] {
+  implicit def catsStdInstancesForEither[A]
+    : MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] =
+    new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
       def pure[B](b: B): Either[A, B] = Right(b)
 
       def flatMap[B, C](fa: Either[A, B])(f: B => Either[A, C]): Either[A, C] =
@@ -93,6 +98,13 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def recoverWith[B](fab: Either[A, B])(pf: PartialFunction[A, Either[A, B]]): Either[A, B] =
         fab.recoverWith(pf)
 
+      override def redeem[B, R](fab: Either[A, B])(recover: A => R, map: B => R): Either[A, R] =
+        Right(fab.fold(recover, map))
+
+      override def redeemWith[B, R](fab: Either[A, B])(recover: A => Either[A, R],
+                                                       bind: B => Either[A, R]): Either[A, R] =
+        fab.fold(recover, bind)
+
       override def fromEither[B](fab: Either[A, B]): Either[A, B] =
         fab
 
@@ -139,6 +151,25 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def isEmpty[B](fab: Either[A, B]): Boolean =
         fab.isLeft
+
+      def functor: Functor[Either[A, *]] = this
+
+      def align[B, C](fa: Either[A, B], fb: Either[A, C]): Either[A, Ior[B, C]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[B, C, D](fb: Either[A, B], fc: Either[A, C])(f: Ior[B, C] => D): Either[A, D] = fb match {
+        case left @ Left(a) =>
+          fc match {
+            case Left(_)  => left.rightCast[D]
+            case Right(c) => Right(f(Ior.right(c)))
+          }
+        case Right(b) =>
+          fc match {
+            case Left(a)  => Right(f(Ior.left(b)))
+            case Right(c) => Right(f(Ior.both(b, c)))
+          }
+      }
+
     }
   // scalastyle:on method.length
 
@@ -157,5 +188,19 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Left(a)  => "Left(" + A.show(a) + ")"
           case Right(b) => "Right(" + B.show(b) + ")"
         }
+    }
+
+  implicit def catsParallelForEitherAndValidated[E: Semigroup]: Parallel.Aux[Either[E, *], Validated[E, *]] =
+    new Parallel[Either[E, *]] {
+      type F[x] = Validated[E, x]
+
+      def applicative: Applicative[Validated[E, *]] = Validated.catsDataApplicativeErrorForValidated
+      def monad: Monad[Either[E, *]] = cats.instances.either.catsStdInstancesForEither
+
+      def sequential: Validated[E, *] ~> Either[E, *] =
+        λ[Validated[E, *] ~> Either[E, *]](_.toEither)
+
+      def parallel: Either[E, *] ~> Validated[E, *] =
+        λ[Either[E, *] ~> Validated[E, *]](_.toValidated)
     }
 }

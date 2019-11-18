@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -13,6 +14,7 @@ import cats.laws.discipline.{
 }
 import cats.data.ZipLazyList
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", SemigroupalTests[LazyList].semigroupal[Int, Int, Int])
@@ -32,6 +34,9 @@ class LazyListSuite extends CatsSuite {
 
   checkAll("LazyList[Int]", TraverseFilterTests[LazyList].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[LazyList]", SerializableTests.serializable(TraverseFilter[LazyList]))
+
+  checkAll("LazyList[Int]", AlignTests[LazyList].align[Int, Int, Int, Int])
+  checkAll("Align[LazyList]", SerializableTests.serializable(Align[LazyList]))
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
@@ -58,4 +63,14 @@ class LazyListSuite extends CatsSuite {
     }
   }
 
+}
+
+final class LazyListInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.lazyList") {
+    import cats.instances.lazyList._
+    import cats.syntax.parallel._
+
+    (LazyList(1, 2, 3), LazyList("A", "B", "C")).parTupled
+  }
 }

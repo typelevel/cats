@@ -44,7 +44,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     mapK(mn)
 
   @deprecated("Use compile", "0.8.0")
-  def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
+  private[free] def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
 
   /** Change the base functor `S` for a `FreeT` action. */
   def compile[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] =
