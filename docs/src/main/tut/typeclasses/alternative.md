@@ -6,7 +6,7 @@ source: "core/src/main/scala/cats/Alternative.scala"
 scaladoc: "#cats.Alternative"
 ---
 # Alternative
-Alternative extends [`Applicative`](`applicative.html`) with a [`MonoidK`](`monoidk.html`).
+Alternative extends [`Applicative`](applicative.html) with a [`MonoidK`](monoidk.html).
 Let's stub out all the operations just to remind ourselves what that gets us.
 
 ```tut:book:silent

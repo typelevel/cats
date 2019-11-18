@@ -18,5 +18,5 @@ final class SequenceFilterOps[F[_], G[_], A](private val fgoa: F[G[Option[A]]]) 
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
    * */
-  def sequenceFilter(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[A]] = F.traverseFilter(fgoa)(identity)
+  def sequenceFilter(implicit F: TraverseFilter[F], G: Applicative[G]): G[F[A]] = F.sequenceFilter(fgoa)
 }

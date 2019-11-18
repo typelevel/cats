@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Nov 15 2019** [Cats 2.1.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC1)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
 * **Sep 7 2019** [Cats 2.0.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC3)
 * **Aug 26 2019** [Cats 2.0.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC2)
@@ -46,6 +47,7 @@ information about how you can get involved as a developer. If you are looking fo
 [Become a financial contributor](https://opencollective.com/typelevel) and help us sustain our community. Donations directly support office hour for maintainers, better documentation and strategic initiatives. 
 
 
+
 ### Gold Sponsors 
 
 Gold Sponsors are those who have pledged $5,000 to $10,000.
@@ -56,6 +58,7 @@ Gold Sponsors are those who have pledged $5,000 to $10,000.
 <a href="http://underscore.io"><img src="http://typelevel.org/cats/img/sponsors/underscore.png" style="margin-bottom:5px;margin-left: 10px; margin-right: 10px"/></a>
 
 
+
 ### Silver Sponsors
 
 Silver Sponsors are those who have pledged $2,000 to $5,000.
@@ -63,6 +66,7 @@ Silver Sponsors are those who have pledged $2,000 to $5,000.
 <a href="https://www.ebiznext.com/"><img src="http://typelevel.org/cats/img/sponsors/ebiznext.png" style="margin-bottom:15px; margin-right: 10px" /></a>
 <a href="https://www.inner-product.com/"><img src="http://typelevel.org/cats/img/sponsors/inner-product.png" style="margin-bottom:10px; margin-right: 10px"/></a>
 <a href="https://evolutiongaming.com/"><img src="http://typelevel.org/cats/img/sponsors/evolution_gaming_engineering.png" style="margin-bottom:10px; margin-right: 10px"/></a>
+
 
 #### Other Organizations
 
@@ -83,6 +87,7 @@ Support this project with your organization. Your logo will show up here with a 
 #### Individuals
 
 <a href="https://opencollective.com/typelevel"><img src="https://opencollective.com/typelevel/individuals.svg?width=890"></a>
+
 
 
 ### Getting Started

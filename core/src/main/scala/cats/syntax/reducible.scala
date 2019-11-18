@@ -29,6 +29,5 @@ final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * a: String = "foo321"
    * }}}
    * */
-  def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] =
-    F.reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
+  def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] = F.reduceMapK[G, A, B](fa)(f)
 }
