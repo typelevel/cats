@@ -199,6 +199,10 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="cats">cats</a></dd></dl></div>
     </li><li class="current-entities indented1">
+                        <a class="object" href="Align$.html" title=""></a>
+                        <a class="trait" href="Align.html" title="Align supports zipping together structures with different shapes, holding the results from either or both structures in an Ior."></a>
+                        <a href="Align.html" title="Align supports zipping together structures with different shapes, holding the results from either or both structures in an Ior.">Align</a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Alternative$.html" title=""></a>
                         <a class="trait" href="Alternative.html" title=""></a>
                         <a href="Alternative.html" title="">Alternative</a>
@@ -455,7 +459,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SemigroupK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.9/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">SemigroupK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -466,11 +470,17 @@ SemigroupK is like a Semigroup for kinds (i.e. parametrized
 types).</p><p>A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.</p><p>Here's how to distinguish Semigroup and SemigroupK:</p><ul><li>Semigroup[A] allows two A values to be combined.</li><li>SemigroupK[F] allows two F[A] values to be combined, for any A.
    The combination operation just depends on the structure of F,
    but not the structure of A.
-</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/SemigroupK.scala" target="_blank">SemigroupK.scala</a></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="cats.SemigroupK">SemigroupK</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</dd><dt>Annotations</dt><dd>
+                <span class="name">@implicitNotFound</span><span class="args">(<span>
+      
+      <span class="defval" name="&quot;Could not find an instance of SemigroupK for ${F}&quot;">...</span>
+    </span>)</span>
+              
+        </dd><dt>Source</dt><dd><a href="https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/SemigroupK.scala" target="_blank">SemigroupK.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.9/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.9/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -586,7 +596,7 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.9/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -602,7 +612,7 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -618,7 +628,7 @@ res0: <span class="std">List</span>[<span class="std">Int</span>] = <span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.9/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -689,7 +699,7 @@ res0: <span class="std">List</span>[<span class="std">Option</span>[<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.9/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -705,7 +715,7 @@ res0: <span class="std">List</span>[<span class="std">Option</span>[<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -721,10 +731,29 @@ res0: <span class="std">List</span>[<span class="std">Option</span>[<span class=
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.9/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="https://www.scala-lang.org/api/2.12.10/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="cats.SemigroupK#sum" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sum[A,B](fa:F[A],fb:F[B])(implicitF:cats.Functor[F]):F[Either[A,B]]"></a><a id="sum[A,B](F[A],F[B])(Functor[F]):F[Either[A,B]]"></a>
+      <span class="permalink">
+      <a href="../cats/SemigroupK.html#sum[A,B](fa:F[A],fb:F[B])(implicitF:cats.Functor[F]):F[Either[A,B]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sum</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.sum.A">A</span>]</span>, <span name="fb">fb: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="cats.SemigroupK.sum.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="Functor.html" class="extype" name="cats.Functor">Functor</a>[<span class="extype" name="cats.SemigroupK.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.SemigroupK.F">F</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.SemigroupK.sum.A">A</span>, <span class="extype" name="cats.SemigroupK.sum.B">B</span>]]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Combines <code>F[A]</code> and <code>F[B]</code> into a <code>F[Either[A,B]]]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Combines <code>F[A]</code> and <code>F[B]</code> into a <code>F[Either[A,B]]]</code>.</p><p>Example:</p><pre>scala&gt; <span class="kw">import</span> cats.SemigroupK
+scala&gt; <span class="kw">import</span> cats.data.NonEmptyList
+scala&gt; SemigroupK[NonEmptyList].sum(NonEmptyList.one(<span class="lit">"abc"</span>), NonEmptyList.one(<span class="num">2</span>))
+res0: NonEmptyList[Either[<span class="std">String</span>,<span class="std">Int</span>]] = NonEmptyList(Left(abc), Right(<span class="num">2</span>))</pre></div></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
@@ -752,11 +781,11 @@ res0: <span class="std">List</span>[<span class="std">Option</span>[<span class=
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.9/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.9/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+              <h3>Inherited from <a href="https://www.scala-lang.org/api/2.12.10/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>
