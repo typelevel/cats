@@ -76,6 +76,9 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    */
   def redeemWith[A, B](fa: F[A])(recover: E => F[B], bind: A => F[B]): F[B] =
     flatMap(attempt(fa))(_.fold(recover, bind))
+
+  override def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
+    recoverWith(fa)(pf.andThen(raiseError[A] _))
 }
 
 object MonadError {
