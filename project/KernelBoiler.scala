@@ -201,6 +201,12 @@ object KernelBoiler {
                   .mkString(s"$tupleNHeader(", ", ", ")")}.hashCode()
                     def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
                   }
+
+                implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
+                  new PartialOrder[${`(A..N)`}] {
+                    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
+                      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
+                }
         """
             }
         ),
@@ -211,12 +217,6 @@ object KernelBoiler {
               import tv._
               def content =
                 block"""
-                implicit def catsKernelStdPartialOrderForTuple${arity}[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
-                  new PartialOrder[${`(A..N)`}] {
-                    def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-                      ${binMethod("partialCompare").mkString("Array(", ", ", ")")}.find(_ != 0.0).getOrElse(0.0)
-                }
-
                 implicit def catsKernelStdBandForTuple${arity}[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
                   new Band[${`(A..N)`}] {
                     def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
