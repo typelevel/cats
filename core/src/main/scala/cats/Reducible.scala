@@ -94,8 +94,6 @@ import simulacrum.{noop, typeclass}
   /**
    * Apply `f` to each `a` of `fa` and combine the result into Apply[G] using the
    * given `Semigroup[B]`.
-   *
-   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
    */
   def reduceMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
     reduceLeftTo(fa)(f)((gb, a) => G.map2(gb, f(a))(B.combine))
