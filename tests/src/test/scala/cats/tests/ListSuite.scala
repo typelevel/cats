@@ -64,17 +64,6 @@ class ListSuite extends CatsSuite {
       l.show should ===(l.toString)
     }
   }
-
-  test("the instance for `Eq[List[A]]` is not ambiguous when A has a Hash and a PartialOrder") {
-
-    import cats.kernel.{Hash, PartialOrder}
-
-    trait A
-    implicit def po: PartialOrder[A] = ???
-    implicit def ho: Hash[A] = ???
-
-    lazy val _ = implicitly[Eq[List[A]]]
-  }
 }
 
 final class ListInstancesSuite extends AnyFunSuiteLike {
