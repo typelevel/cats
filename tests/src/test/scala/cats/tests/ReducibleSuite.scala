@@ -70,6 +70,35 @@ class ReducibleSuiteAdditional extends CatsSuite {
     assert(contains(large, 10000).value)
   }
 
+  // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.
+  case class NES[A](h: A, t: Stream[A]) {
+    def toStream: Stream[A] = h #:: t
+  }
+
+  object NES {
+    implicit val nesReducible: Reducible[NES] = new Reducible[NES] {
+      def foldLeft[A, B](fa: NES[A], b: B)(f: (B, A) => B): B = fa.toStream.foldLeft(b)(f)
+      def foldRight[A, B](fa: NES[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa match {
+          case NES(h, Stream())  => f(h, lb)
+          case NES(h, th #:: tt) => f(h, Eval.defer(foldRight(NES(th, tt), lb)(f)))
+        }
+
+      def reduceLeftTo[A, B](fa: NES[A])(f: A => B)(g: (B, A) => B): B = fa.t.foldLeft(f(fa.h))(g)
+      def reduceRightTo[A, B](fa: NES[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+        fa match {
+          case NES(h, Stream())  => Eval.now(f(h))
+          case NES(h, th #:: tt) => g(h, Eval.defer(reduceRightTo(NES(th, tt))(f)(g)))
+        }
+    }
+  }
+
+  test("reduceMapM should be stack-safe and short-circuiting if reduceRightTo is sufficiently lazy") {
+    val n = 100000
+    val xs = NES(0, Stream.from(1))
+
+    assert(xs.reduceMapM(i => if (i < n) Right(i) else Left(i)) === Left(n))
+  }
 }
 
 abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
