@@ -99,7 +99,7 @@ This release is currently only available for Scala 2.11 and Scala 2.12. It provi
 
 > 2019 September 9
 
-Cats 2.0.0 is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+Cats 2.0.0 is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
 
 
 ### 2 source breaking changes
@@ -123,7 +123,7 @@ Cats 2.0.0 is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This rel
 
 > 2019 September 7
 
-Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
 
 ### 2 source breaking changes
 
@@ -150,7 +150,7 @@ Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for
 
 > 2019 August 26
 
-Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13.0, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
 
 ### 4 source breaking changes
 
@@ -193,7 +193,7 @@ Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available fo
 
 > 2019 August 5
 
-Cats 2.0.0-RC1 is the first release candidate for Cats 2.0, It's available on Scala 2.11, 2.12, 2.13.0 and Scala.js 0.6.
+Cats 2.0.0-RC1 is the first release candidate for Cats 2.0, It's available on Scala 2.11, 2.12, 2.13 and Scala.js 0.6.
 Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats. 
 
 ### 2 breaking changes
@@ -267,7 +267,7 @@ Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility 
 
 > 2019 June 11
 
-Cats 2.0.0-M4 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13.0 and Scala.js 0.6.
+Cats 2.0.0-M4 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13 and Scala.js 0.6.
 Cats 2.0.0-M4 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
 
 ### 2 documentation additions/fixes

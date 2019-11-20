@@ -5,7 +5,7 @@
 * **Sep 7 2019** [Cats 2.0.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC3)
 * **Aug 26 2019** [Cats 2.0.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC2)
 * **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
-* **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13.0
+* **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
 * **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
 * **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with support for Scala 2.13.0-RC2
@@ -92,7 +92,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ### Getting Started
 
-Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13.0, and [Scala.js](http://www.scala-js.org/).
+Cats is currently available for Scala 2.10 (up to 1.2.x), 2.11, 2.12, 2.13, and [Scala.js](http://www.scala-js.org/).
 
 Cats relies on improved type inference via the fix for [SI-2712](https://github.com/scala/bug/issues/2712), which is not enabled by default. For **Scala 2.11.9+ or 2.12** you should add the following to your `build.sbt`:
 
