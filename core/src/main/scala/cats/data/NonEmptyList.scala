@@ -36,10 +36,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    * res0: Int = 5
    * }}}
    */
-  def last: A = tail.lastOption match {
-    case None    => head
-    case Some(a) => a
-  }
+  def last: A = tail.lastOption.getOrElse(head)
 
   /**
    * Selects all elements except the last
