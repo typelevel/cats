@@ -137,6 +137,10 @@ trait TryInstances extends TryInstances1 {
         }
 
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
+
+      override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
+
+      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
     }
   // scalastyle:on method.length
 
