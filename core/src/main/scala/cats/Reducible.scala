@@ -105,7 +105,7 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def reduceMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
-    reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
+    reduceRightTo(fa)(f)((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 
   /**
    * Overridden from [[Foldable]] for efficiency.
