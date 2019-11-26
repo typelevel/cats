@@ -333,6 +333,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [NCR Edinburgh](https://ncredinburgh.com/)
 - [Ocado Technology](https://ocadotechnology.com)
 - [Packlink](https://packlink.com/)
+- [Permutive](https://permutive.com/)
 - [Raiffeisenbank Russia](https://www.raiffeisen.ru/)
 - [Rakuten](https://www.rakuten.com)
 - [REA Group](https://www.realestate.com.au/)
