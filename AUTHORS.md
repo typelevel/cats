@@ -53,6 +53,7 @@ possible:
  * Brian McKenna
  * Brian P. Holt
  * Bryan Tan
+ * Brian Wignall
  * Cary Robbins
  * Changwoo Park
  * Chris Birchall
