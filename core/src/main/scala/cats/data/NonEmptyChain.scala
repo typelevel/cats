@@ -370,7 +370,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
    * Applies the supplied function to each element and returns a new NonEmptyChain from the concatenated results
    */
   final def flatMap[B](f: A => NonEmptyChain[B]): NonEmptyChain[B] =
-    create(toChain.flatMap(f.andThen(_.toChain)))
+    create(toChain.flatMap(a => f(a).toChain))
 
   /**
    * Returns the number of elements in this chain.

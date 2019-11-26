@@ -356,7 +356,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     })
 
   def flatMapF[AA >: A, D](f: B => F[Either[AA, D]])(implicit F: Monad[F]): EitherT[F, AA, D] =
-    flatMap(f.andThen(EitherT.apply))
+    flatMap(b => EitherT(f(b)))
 
   def transform[C, D](f: Either[A, B] => Either[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
     EitherT(F.map(value)(f))

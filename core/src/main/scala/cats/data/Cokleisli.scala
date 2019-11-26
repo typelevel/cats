@@ -40,7 +40,7 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
     Cokleisli(fc => run(F.map(fc)(f)))
 
   def map[C](f: B => C): Cokleisli[F, A, C] =
-    Cokleisli(f.compose(run))
+    Cokleisli(fa => f(run(fa)))
 
   /**
    * Example:
@@ -53,7 +53,7 @@ final case class Cokleisli[F[_], A, B](run: F[A] => B) { self =>
    * }}}
    */
   def contramapValue[C](f: F[C] => F[A]): Cokleisli[F, C, B] =
-    Cokleisli(run.compose(f))
+    Cokleisli(fc => run(f(fc)))
 
   def flatMap[C](f: B => Cokleisli[F, A, C]): Cokleisli[F, A, C] =
     Cokleisli(fa => f(self.run(fa)).run(fa))

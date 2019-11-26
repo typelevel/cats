@@ -295,7 +295,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    */
   def concatMap[B](f: A => NonEmptySet[B])(implicit B: Order[B]): NonEmptySet[B] = {
     implicit val ordering = B.toOrdering
-    NonEmptySetImpl.create(toSortedSet.flatMap(f.andThen(_.toSortedSet)))
+    NonEmptySetImpl.create(toSortedSet.flatMap(a => f(a).toSortedSet))
   }
 
   /**
