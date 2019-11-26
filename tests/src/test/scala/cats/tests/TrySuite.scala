@@ -61,6 +61,23 @@ class TrySuite extends CatsSuite {
       res should not be (null)
     }
   }
+
+  test("catchOnly works") {
+    forAll { e: Either[String, Int] =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadError[Try, Throwable].catchOnly[NumberFormatException](str.toInt)
+      // the above should just never cause an uncaught exception
+      // this is a somewhat bogus test:
+      res should not be (null)
+    }
+  }
+
+  test("catchOnly catches only a specified type") {
+    a[NumberFormatException] should be thrownBy {
+      MonadError[Try, Throwable].catchOnly[UnsupportedOperationException]("str".toInt)
+    }
+  }
+
   test("fromTry works") {
     forAll { t: Try[Int] =>
       (MonadError[Try, Throwable].fromTry(t)) should ===(t)
