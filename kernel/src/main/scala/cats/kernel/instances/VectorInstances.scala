@@ -6,22 +6,19 @@ import compat.scalaVersionSpecific._
 trait VectorInstances extends VectorInstances1 {
   implicit def catsKernelStdOrderForVector[A: Order]: Order[Vector[A]] =
     new VectorOrder[A]
-
   implicit def catsKernelStdMonoidForVector[A]: Monoid[Vector[A]] =
     new VectorMonoid[A]
 }
 
 private[instances] trait VectorInstances1 extends VectorInstances2 {
+  implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
+    new VectorPartialOrder[A]
+
   implicit def catsKernelStdHashForVector[A: Hash]: Hash[Vector[A]] =
     new VectorHash[A]
 }
 
-private[instances] trait VectorInstances2 extends VectorInstances3 {
-  implicit def catsKernelStdPartialOrderForVector[A: PartialOrder]: PartialOrder[Vector[A]] =
-    new VectorPartialOrder[A]
-}
-
-private[instances] trait VectorInstances3 {
+private[instances] trait VectorInstances2 {
   implicit def catsKernelStdEqForVector[A: Eq]: Eq[Vector[A]] =
     new VectorEq[A]
 }
