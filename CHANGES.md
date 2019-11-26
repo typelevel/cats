@@ -1,3 +1,37 @@
+## Version 2.1.0-RC2
+
+_2019 November 26
+
+This release candidate provides the same binary compatibility guarantees as Cats 2.0.
+
+### 2 bug fixes
+
+* [#3163](https://github.com/typelevel/cats/pull/3163) Fix broken binary compatibility  by @travisbrown
+* [#3162](https://github.com/typelevel/cats/pull/3162) Add adaptError override to MonadError  by @travisbrown
+
+
+### 3 API / feature enhancements
+
+* [#3165](https://github.com/typelevel/cats/pull/3165) Add catchOnly to ApplicativeError by @takayahilton
+* [#3159](https://github.com/typelevel/cats/pull/3159) Some minor optimizations  by @travisbrown
+* [#3167](https://github.com/typelevel/cats/pull/3167) Make default reduceMapM lazy if reduceRightTo is lazy  by @travisbrown
+
+
+### 3 documentation improvements
+
+* [#3172](https://github.com/typelevel/cats/pull/3172) Fix typo  by @bwignall
+* [#3153](https://github.com/typelevel/cats/pull/3153) Activating Open Collective  by @monkeywithacupcake
+* [#3160](https://github.com/typelevel/cats/pull/3160) update links to sustainability program  by @kailuowang
+
+
+### 4 build improvements
+
+* [#3166](https://github.com/typelevel/cats/pull/3166) Update Scala to 2.13.1  by @travisbrown
+* [#3171](https://github.com/typelevel/cats/pull/3171) Update sbt to 1.3.4  by @scala-steward
+* [#3169](https://github.com/typelevel/cats/pull/3169) Update sbt-sonatype to 3.8.1  by @scala-steward
+* [#3170](https://github.com/typelevel/cats/pull/3170) Update sbt-scalajs, scalajs-compiler to 0.6.31  by @scala-steward
+
+
 ## Version 2.1.0-RC1
 
 _2019 November 15_
