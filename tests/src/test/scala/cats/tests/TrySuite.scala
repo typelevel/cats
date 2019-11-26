@@ -72,6 +72,12 @@ class TrySuite extends CatsSuite {
     }
   }
 
+  test("catchOnly catches only a specified type") {
+    a[NumberFormatException] should be thrownBy {
+      MonadError[Try, Throwable].catchOnly[UnsupportedOperationException]("str".toInt)
+    }
+  }
+
   test("fromTry works") {
     forAll { t: Try[Int] =>
       (MonadError[Try, Throwable].fromTry(t)) should ===(t)
