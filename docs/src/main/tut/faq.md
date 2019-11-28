@@ -39,7 +39,7 @@ import cats.data._
 import cats.implicits._
 ```
 
-This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.html).
+This should be all that you need, but if you'd like to learn more about the details of imports than you can check out the [import guide](typeclasses/imports.md).
 
 ## <a id="quick-wins" href="#quick-wins"></a>I am new to pure functional programming, what quick wins can I get from Cats?
 
