@@ -1,6 +1,8 @@
 package cats
 package tests
 
+import cats.FunctorOps._
+
 class FunctorSuite extends CatsSuite {
   test("void replaces values with unit preserving structure") {
     forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
@@ -39,18 +41,21 @@ class FunctorSuite extends CatsSuite {
   }
 
   test("ifF equals map(if(_) ifTrue else ifFalse) for concrete lists and optoins") {
-    Functor[List].ifF(List(true, false, false, true))(1, 0) should ===(List(1, 0, 0, 1))
-    Functor[List].ifF(List.empty[Boolean])(1, 0) should ===(Nil)
-    Functor[Option].ifF(Some(true))(1, 0) should ===(Some(1))
-    Functor[Option].ifF(Some(false))(1, 0) should ===(Some(0))
-    Functor[Option].ifF(None)(1, 0) should ===(None)
+    val testFunctor = new Functor[List] {
+      def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
+    }
+   testFunctor.ifF(List(true, false, false, true))(1, 0) should === (List(1, 0, 0, 1))
+   // Functor[List].ifF(List.empty[Boolean])(1, 0) should ===(Nil)
+   // Functor[Option].ifF(Some(true))(1, 0) should ===(Some(1))
+   // Functor[Option].ifF(Some(false))(1, 0) should ===(Some(0))
+   // Functor[Option].ifF(None)(1, 0) should ===(None)
 
   }
 
-  test("ifF equals map(if(_) ifTrue else ifFalse)") {
+/*  test("ifF equals map(if(_) ifTrue else ifFalse)") {
     forAll { (l: List[Boolean], o: Option[Boolean], m: Map[String, Boolean]) =>
       Functor[List].ifF(l)(1, 0) should ===(l.map(if (_) 1 else 0))
       Functor[Option].ifF(o)(1, 0) should ===(o.map(if (_) 1 else 0))
     }
-  }
+  } */
 }
