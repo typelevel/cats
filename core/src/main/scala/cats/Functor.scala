@@ -159,23 +159,24 @@ import simulacrum.typeclass
 
 object FunctorOps {
   implicit class ifFOps[F[_]](functor: Functor[F]) {
-      /**
+
+    /**
      * Lifts `if` to Functor
      *
      * yExample:
      * {{{
      * scala> import cats.Functor
      * scala> import cats.FunctorOps._
-     * 
+     *
      * scala> val listFunctor = new Functor[List] { def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)}
-     * 
-     * 
-     * 
-     * 
+     *
+     *
+     *
+     *
      * scala> listFunctor.ifF(List(true, false, false))(1, 0)
      * res0: List[Int] = List(1, 0, 0)
      * }}}
      */
-     def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = functor.map(fb)(x => if (x) ifTrue else ifFalse)
+    def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = functor.map(fb)(x => if (x) ifTrue else ifFalse)
   }
 }
