@@ -22,6 +22,7 @@ TAGS
 *.sublime-project
 *.sublime-workspace
 tests.iml
+.semanticdb
 # Auto-copied by sbt-microsites
 docs/src/main/tut/contributing.md
 docs/src/main/tut/index.md
