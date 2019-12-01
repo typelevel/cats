@@ -1,6 +1,6 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Monad.
@@ -22,6 +22,7 @@ import simulacrum.typeclass
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
    */
+  @noop
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs =>
@@ -41,6 +42,7 @@ import simulacrum.typeclass
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
    */
+  @noop
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
