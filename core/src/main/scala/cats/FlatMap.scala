@@ -117,6 +117,7 @@ import simulacrum.noop
   /**
    * `if` lifted into monad.
    */
+  @noop
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
 

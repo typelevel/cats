@@ -173,6 +173,7 @@ import simulacrum.{noop, typeclass}
    * res0: List[Int] = List(1, 0, 0)
    * }}}
    */
+  @noop
   def ifF[A](fb: F[Boolean])(ifTrue: => A, ifFalse: => A): F[A] = map(fb)(x => if (x) ifTrue else ifFalse)
 
   def compose[G[_]: Functor]: Functor[λ[α => F[G[α]]]] =
