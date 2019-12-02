@@ -535,7 +535,7 @@ object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
-  final private[data] case object Empty extends Chain[Nothing] {
+  private[data] case object Empty extends Chain[Nothing] {
     def isEmpty: Boolean = true
   }
   final private[data] case class Singleton[A](a: A) extends Chain[A] {

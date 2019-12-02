@@ -180,7 +180,7 @@ can go wrong in our program.
 object EitherStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
-  final case object NoZeroReciprocal extends Error
+  case object NoZeroReciprocal extends Error
 
   def parse(s: String): Either[Error, Int] =
     if (s.matches("-?[0-9]+")) Either.right(s.toInt)
@@ -261,10 +261,10 @@ We may then be tempted to make our entire application share an error data type.
 
 ```tut:silent
 sealed abstract class AppError
-final case object DatabaseError1 extends AppError
-final case object DatabaseError2 extends AppError
-final case object ServiceError1 extends AppError
-final case object ServiceError2 extends AppError
+case object DatabaseError1 extends AppError
+case object DatabaseError2 extends AppError
+case object ServiceError1 extends AppError
+case object ServiceError2 extends AppError
 
 trait DatabaseValue
 

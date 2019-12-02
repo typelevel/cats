@@ -74,7 +74,7 @@ In code it looks like this:
 ```tut:book
 sealed abstract class Chain[+A]
 
-final case object Empty extends Chain[Nothing]
+case object Empty extends Chain[Nothing]
 final case class Singleton[A](a: A) extends Chain[A]
 final case class Append[A](left: Chain[A], right: Chain[A]) extends Chain[A]
 final case class Wrap[A](seq: Seq[A]) extends Chain[A]
