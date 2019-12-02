@@ -30,7 +30,7 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] 
   def G: Apply[G]
 
   override def ap[A, B](fgf: F[G[A => B]])(fga: F[G[A]]): F[G[B]] =
-    F.ap(F.map(fgf)(gf => G.ap(gf)(_)))(fga)
+    F.ap(F.map(fgf)(gf => (ga: G[A]) => G.ap(gf)(ga)))(fga)
 
   override def product[A, B](fga: F[G[A]], fgb: F[G[B]]): F[G[(A, B)]] =
     F.map2(fga, fgb)(G.product)
