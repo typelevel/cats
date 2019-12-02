@@ -156,7 +156,7 @@ final class Later[A](f: () => A) extends Eval[A] {
 }
 
 object Later {
-  def apply[A](a: => A): Later[A] = new Later(a _)
+  def apply[A](a: => A): Later[A] = new Later(() => a)
 }
 
 /**
@@ -175,7 +175,7 @@ final class Always[A](f: () => A) extends Eval[A] {
 }
 
 object Always {
-  def apply[A](a: => A): Always[A] = new Always(a _)
+  def apply[A](a: => A): Always[A] = new Always(() => a)
 }
 
 object Eval extends EvalInstances {
@@ -188,12 +188,12 @@ object Eval extends EvalInstances {
   /**
    * Construct a lazy Eval[A] value with caching (i.e. Later[A]).
    */
-  def later[A](a: => A): Eval[A] = new Later(a _)
+  def later[A](a: => A): Eval[A] = new Later(() => a)
 
   /**
    * Construct a lazy Eval[A] value without caching (i.e. Always[A]).
    */
-  def always[A](a: => A): Eval[A] = new Always(a _)
+  def always[A](a: => A): Eval[A] = new Always(() => a)
 
   /**
    * Defer a computation which produces an Eval[A] value.
@@ -202,7 +202,7 @@ object Eval extends EvalInstances {
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
-    new Eval.Defer[A](a _) {}
+    new Eval.Defer[A](() => a) {}
 
   /**
    * Static Eval instance for common value `Unit`.
