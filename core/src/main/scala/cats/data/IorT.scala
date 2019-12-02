@@ -472,7 +472,7 @@ abstract private[data] class IorTInstances1 extends IorTInstances2 {
     type F[x] = IorT[F0, E, x]
     private[this] val identityK: IorT[F0, E, *] ~> IorT[F0, E, *] = FunctionK.id
     private[this] val underlyingParallel: Parallel.Aux[Ior[E, *], Ior[E, *]] =
-      Parallel[Ior[E, *], Ior[E, *]]
+      Ior.catsDataParallelForIor[E]
 
     def parallel: IorT[F0, E, *] ~> IorT[F0, E, *] = identityK
     def sequential: IorT[F0, E, *] ~> IorT[F0, E, *] = identityK
