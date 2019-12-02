@@ -45,13 +45,13 @@ class VectorSuite extends CatsSuite {
 
     Vector.empty[Int].show should ===("Vector()")
 
-    forAll { vec: Vector[String] =>
+    forAll { (vec: Vector[String]) =>
       vec.show should ===(vec.toString)
     }
   }
 
   test("nev => vector => nev returns original nev")(
-    forAll { fa: NonEmptyVector[Int] =>
+    forAll { (fa: NonEmptyVector[Int]) =>
       assert(fa.toVector.toNev == Some(fa))
     }
   )

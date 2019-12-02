@@ -42,7 +42,7 @@ class ListSuite extends CatsSuite {
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
   test("nel => list => nel returns original nel")(
-    forAll { fa: NonEmptyList[Int] =>
+    forAll { (fa: NonEmptyList[Int]) =>
       fa.toList.toNel should ===(Some(fa))
     }
   )
@@ -60,7 +60,7 @@ class ListSuite extends CatsSuite {
   test("show") {
     List(1, 2, 3).show should ===("List(1, 2, 3)")
     (Nil: List[Int]).show should ===("List()")
-    forAll { l: List[String] =>
+    forAll { (l: List[String]) =>
       l.show should ===(l.toString)
     }
   }

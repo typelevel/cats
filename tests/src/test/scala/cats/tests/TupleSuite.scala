@@ -49,16 +49,16 @@ class TupleSuite extends CatsSuite {
 
   test("eqv") {
     val eq = Eq[(Int, Long)]
-    forAll { t: (Int, Long) =>
+    forAll { (t: (Int, Long)) =>
       eq.eqv(t, t) should ===(true)
     }
-    forAll { t: (Int, Long) =>
+    forAll { (t: (Int, Long)) =>
       eq.eqv(t, t._1 -> (t._2 + 1)) should ===(false)
     }
   }
 
   test("order") {
-    forAll { t: (Int, Int) =>
+    forAll { (t: (Int, Int)) =>
       val u = t.swap
       Order[(Int, Int)].compare(t, u) should ===(scala.math.Ordering[(Int, Int)].compare(t, u))
     }
@@ -67,7 +67,7 @@ class TupleSuite extends CatsSuite {
   test("show") {
     (1, 2).show should ===("(1,2)")
 
-    forAll { fs: (String, String) =>
+    forAll { (fs: (String, String)) =>
       fs.show should ===(fs.toString)
     }
 

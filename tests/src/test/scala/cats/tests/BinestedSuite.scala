@@ -67,7 +67,7 @@ class BinestedSuite extends CatsSuite {
   }
 
   test("simple syntax-based usage") {
-    forAll { value: (Option[Int], List[Int]) =>
+    forAll { (value: (Option[Int], List[Int])) =>
       value.binested.bimap(_.toString, _.toString).value should ===(value.bimap(_.map(_.toString), _.map(_.toString)))
     }
   }

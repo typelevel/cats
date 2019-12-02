@@ -219,17 +219,17 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("fromList round trip") {
-    forAll { l: List[Int] =>
+    forAll { (l: List[Int]) =>
       NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should ===(l)
     }
 
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       NonEmptyList.fromList(nel.toList) should ===(Some(nel))
     }
   }
 
   test("fromListUnsafe/fromList consistency") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       NonEmptyList.fromList(nel.toList) should ===(Some(NonEmptyList.fromListUnsafe(nel.toList)))
     }
   }
@@ -248,44 +248,44 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#distinct is consistent with List#distinct") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.distinct.toList should ===(nel.toList.distinct)
     }
   }
 
   test("NonEmptyList#reverse is consistent with List#reverse") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.reverse.toList should ===(nel.toList.reverse)
     }
   }
 
   test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.zipWithIndex.toList should ===(nel.toList.zipWithIndex)
     }
   }
 
   test("NonEmptyList#last is consistent with List#last") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.last should ===(nel.toList.last)
     }
   }
 
   test("NonEmptyList#init is consistent with List#init") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.init should ===(nel.toList.init)
     }
   }
 
   test("NonEmptyList#size and length is consistent with List#size") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.size should ===(nel.toList.size)
       nel.length should ===(nel.toList.size)
     }
   }
 
   test("NonEmptyList#sorted is consistent with List#sorted") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.sorted.toList should ===(nel.toList.sorted)
     }
   }
@@ -338,13 +338,13 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#toNem is consistent with List#toMap and creating NonEmptyMap from it") {
-    forAll { nel: NonEmptyList[(Int, String)] =>
+    forAll { (nel: NonEmptyList[(Int, String)]) =>
       nel.toNem should ===(NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap))
     }
   }
 
   test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
     }
   }

@@ -34,7 +34,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
            SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]]))
 
   test("FreeInvariantMonoidal#fold") {
-    forAll { i1: BinCodec[MiniInt] =>
+    forAll { (i1: BinCodec[MiniInt]) =>
       val n = MiniInt.unsafeFromInt(2)
       val i2 = InvariantMonoidal[BinCodec].point(n)
       val iExpr = i1.product(i2.imap(_ * n)(_ / n))

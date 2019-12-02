@@ -70,7 +70,7 @@ private trait RepresentableMonad[F[_], R] extends Monad[F] {
     R.tabulate(a => R.index(f(R.index(fa)(a)))(a))
 
   override def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B] =
-    R.tabulate { r: R =>
+    R.tabulate { (r: R) =>
       @annotation.tailrec
       def loop(a: A): B =
         R.index(f(a))(r) match {

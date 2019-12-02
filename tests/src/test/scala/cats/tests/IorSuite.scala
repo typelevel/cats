@@ -196,7 +196,7 @@ class IorSuite extends CatsSuite {
   }
 
   test("Option roundtrip") {
-    forAll { ior: String Ior Int =>
+    forAll { (ior: String Ior Int) =>
       val iorMaybe = Ior.fromOptions(ior.left, ior.right)
       iorMaybe should ===(Some(ior))
     }

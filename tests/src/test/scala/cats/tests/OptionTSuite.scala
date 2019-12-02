@@ -267,13 +267,13 @@ class OptionTSuite extends CatsSuite {
   }
 
   test("OptionT[Id, A].isDefined consistent with Option.isDefined") {
-    forAll { o: Option[Int] =>
+    forAll { (o: Option[Int]) =>
       o.isDefined should ===(OptionT[Id, Int](o).isDefined)
     }
   }
 
   test("OptionT[Id, A].isEmpty consistent with Option.isEmpty") {
-    forAll { o: Option[Int] =>
+    forAll { (o: Option[Int]) =>
       o.isEmpty should ===(OptionT[Id, Int](o).isEmpty)
     }
   }
@@ -336,7 +336,7 @@ class OptionTSuite extends CatsSuite {
   }
 
   test("implicit Show[OptionT] instance and explicit show method are consistent") {
-    forAll { optionT: OptionT[List, Int] =>
+    forAll { (optionT: OptionT[List, Int]) =>
       optionT.show should ===(implicitly[Show[OptionT[List, Int]]].show(optionT))
     }
   }

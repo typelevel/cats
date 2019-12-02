@@ -325,7 +325,7 @@ object Eval extends EvalInstances {
     type M = Memoize[Any]
     type C = Any => Eval[Any]
 
-    def addToMemo(m: M): C = { a: Any =>
+    def addToMemo(m: M): C = { (a: Any) =>
       m.result = Some(a)
       Now(a)
     }

@@ -291,7 +291,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("untilDefinedM works") {
-    val counter = State { i: Int =>
+    val counter = State { (i: Int) =>
       val res = if (i > stackSafeTestSize) Some(i) else None
       (i + 1, res)
     }

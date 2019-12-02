@@ -580,7 +580,7 @@ private[data] trait KleisliApplicativeError[F[_], A, E]
 
   def raiseError[B](e: E): K[B] = Kleisli(_ => F.raiseError(e))
 
-  def handleErrorWith[B](kb: K[B])(f: E => K[B]): K[B] = Kleisli { a: A =>
+  def handleErrorWith[B](kb: K[B])(f: E => K[B]): K[B] = Kleisli { (a: A) =>
     F.handleErrorWith(kb.run(a))((e: E) => f(e).run(a))
   }
 }

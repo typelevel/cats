@@ -79,7 +79,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("mapK to universal id equivalent to original instance") {
-    forAll { a: FreeTOption[Int] =>
+    forAll { (a: FreeTOption[Int]) =>
       val b = a.mapK(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
     }
@@ -93,7 +93,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("compile to universal id equivalent to original instance") {
-    forAll { a: FreeTOption[Int] =>
+    forAll { (a: FreeTOption[Int]) =>
       val b = a.compile(FunctionK.id)
       Eq[FreeTOption[Int]].eqv(a, b) should ===(true)
       val fk = FreeT.compile[Option, Option, Option](FunctionK.id)
@@ -109,7 +109,7 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("foldMap consistent with runM") {
-    forAll { a: FreeTOption[Int] =>
+    forAll { (a: FreeTOption[Int]) =>
       val x = a.runM(identity)
       val y = a.foldMap(FunctionK.id)
       val fk = FreeT.foldMap[Option, Option](FunctionK.id)

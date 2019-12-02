@@ -37,13 +37,13 @@ class TrySuite extends CatsSuite {
   checkAll("Monoid[Try[Int]]", SerializableTests.serializable(Monoid[Try[Int]]))
 
   test("show") {
-    forAll { fs: Try[String] =>
+    forAll { (fs: Try[String]) =>
       fs.show should ===(fs.toString)
     }
   }
 
   test("catchNonFatal works") {
-    forAll { e: Either[String, Int] =>
+    forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
       val res = MonadError[Try, Throwable].catchNonFatal(str.toInt)
       // the above should just never cause an uncaught exception
@@ -53,7 +53,7 @@ class TrySuite extends CatsSuite {
   }
 
   test("catchNonFatalEval works") {
-    forAll { e: Either[String, Int] =>
+    forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
       val res = MonadError[Try, Throwable].catchNonFatalEval(Eval.later(str.toInt))
       // the above should just never cause an uncaught exception
@@ -63,7 +63,7 @@ class TrySuite extends CatsSuite {
   }
 
   test("catchOnly works") {
-    forAll { e: Either[String, Int] =>
+    forAll { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
       val res = MonadError[Try, Throwable].catchOnly[NumberFormatException](str.toInt)
       // the above should just never cause an uncaught exception
@@ -79,7 +79,7 @@ class TrySuite extends CatsSuite {
   }
 
   test("fromTry works") {
-    forAll { t: Try[Int] =>
+    forAll { (t: Try[Int]) =>
       (MonadError[Try, Throwable].fromTry(t)) should ===(t)
     }
   }

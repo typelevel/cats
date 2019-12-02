@@ -47,7 +47,7 @@ class StreamSuite extends CatsSuite {
   }
 
   test("Show[Stream] is referentially transparent, unlike Stream.toString") {
-    forAll { stream: Stream[Int] =>
+    forAll { (stream: Stream[Int]) =>
       if (!stream.isEmpty) {
         val unevaluatedLL = stream.map(identity)
         val initialShow = unevaluatedLL.show
