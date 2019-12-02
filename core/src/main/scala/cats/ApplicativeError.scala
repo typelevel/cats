@@ -92,7 +92,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(pure _)).applyOrElse(e, raiseError _))
+    handleErrorWith(fa)(e => (pf.andThen(pure(_))).applyOrElse(e, raiseError(_)))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
