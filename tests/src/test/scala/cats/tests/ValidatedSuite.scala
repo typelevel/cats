@@ -92,7 +92,7 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("fromTry is invalid for failed try") {
-    forAll { t: Try[Int] =>
+    forAll { (t: Try[Int]) =>
       t.isFailure should ===(Validated.fromTry(t).isInvalid)
     }
   }

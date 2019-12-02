@@ -108,7 +108,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("fromTry is left for failed Try") {
-    forAll { t: Try[Int] =>
+    forAll { (t: Try[Int]) =>
       t.isFailure should ===(Either.fromTry(t).isLeft)
     }
   }
@@ -120,13 +120,13 @@ class EitherSuite extends CatsSuite {
   }
 
   test("leftNel is consistent with left(NEL)") {
-    forAll { s: String =>
+    forAll { (s: String) =>
       Either.leftNel[String, Int](s) should ===(Either.left[NonEmptyList[String], Int](NonEmptyList.one(s)))
     }
   }
 
   test("rightNel is consistent with right") {
-    forAll { i: Int =>
+    forAll { (i: Int) =>
       Either.rightNel[String, Int](i) should ===(Either.right[NonEmptyList[String], Int](i))
     }
   }
@@ -138,23 +138,23 @@ class EitherSuite extends CatsSuite {
   }
 
   test("leftNec is consistent with left(NEC)") {
-    forAll { s: String =>
+    forAll { (s: String) =>
       Either.leftNec[String, Int](s) should ===(Either.left[NonEmptyChain[String], Int](NonEmptyChain.one(s)))
     }
   }
   test("rightNec is consistent with right") {
-    forAll { i: Int =>
+    forAll { (i: Int) =>
       Either.rightNec[String, Int](i) should ===(Either.right[NonEmptyChain[String], Int](i))
     }
   }
 
   test("leftNes is consistent with left(NES)") {
-    forAll { s: String =>
+    forAll { (s: String) =>
       Either.leftNes[String, Int](s) should ===(Either.left[NonEmptySet[String], Int](NonEmptySet.one(s)))
     }
   }
   test("rightNes is consistent with right") {
-    forAll { i: Int =>
+    forAll { (i: Int) =>
       Either.rightNes[String, Int](i) should ===(Either.right[NonEmptySet[String], Int](i))
     }
   }

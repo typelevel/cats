@@ -174,17 +174,17 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("fromMap round trip") {
-    forAll { l: SortedMap[String, Int] =>
+    forAll { (l: SortedMap[String, Int]) =>
       NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
     }
 
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
     }
   }
 
   test("fromMapUnsafe/fromMap consistency") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap)))
     }
   }
@@ -202,14 +202,14 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("NonEmptyMap#size and length is consistent with Map#size") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       nem.size should ===(nem.toSortedMap.size.toLong)
       nem.length should ===(nem.toSortedMap.size)
     }
   }
 
   test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
     }
   }

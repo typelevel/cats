@@ -125,7 +125,7 @@ object ContT {
     DeferCont(() => FromFn(AndThen(fn)))
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
-    ContT[M, C, B] { cb: (B => M[C]) =>
+    ContT[M, C, B] { (cb: (B => M[C])) =>
       def go(a: A): M[C] =
         fn(a).run {
           case Left(a)  => M.defer(go(a))

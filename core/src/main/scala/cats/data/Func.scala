@@ -100,14 +100,14 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def product[G[_]](g: AppFunc[G, A, B]): AppFunc[λ[α => Tuple2K[F, G, α]], A, B] = {
     implicit val FF: Applicative[F] = self.F
     implicit val GG: Applicative[G] = g.F
-    Func.appFunc[λ[α => Tuple2K[F, G, α]], A, B] { a: A =>
+    Func.appFunc[λ[α => Tuple2K[F, G, α]], A, B] { (a: A) =>
       Tuple2K(self.run(a), g.run(a))
     }
   }
 
   def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, *], C, B] = {
     implicit val gfApplicative: Applicative[Nested[G, F, *]] = Nested.catsDataApplicativeForNested[G, F](g.F, F)
-    Func.appFunc[Nested[G, F, *], C, B]({ c: C =>
+    Func.appFunc[Nested[G, F, *], C, B]({ (c: C) =>
       Nested(g.F.map(g.run(c))(self.run))
     })
   }

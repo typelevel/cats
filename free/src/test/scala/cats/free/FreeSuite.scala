@@ -46,7 +46,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("compile id") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       x.compile(FunctionK.id[List]) should ===(x)
       val fk = Free.compile(FunctionK.id[List])
       fk(x) === x
@@ -54,7 +54,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("defer doesn't change value") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       Free.defer(x) should ===(x)
     }
   }
@@ -66,7 +66,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("compile consistent with foldMap") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should ===(x.foldMap(headOptionU))

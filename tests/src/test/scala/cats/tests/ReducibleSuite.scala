@@ -118,7 +118,7 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
-    forAll { fa: F[Int] =>
+    forAll { (fa: F[Int]) =>
       fa.toList.toNel should ===(Some(fa.toNonEmptyList))
     }
   }

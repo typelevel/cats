@@ -30,13 +30,13 @@ class WriterTSuite extends CatsSuite {
   Eq[Writer[Int, Int]]
 
   test("double swap is a noop") {
-    forAll { w: WriterT[List, Int, Int] =>
+    forAll { (w: WriterT[List, Int, Int]) =>
       w.swap.swap should ===(w)
     }
   }
 
   test("reset on pure is a noop") {
-    forAll { i: Int =>
+    forAll { (i: Int) =>
       val w = Monad[WriterT[List, Int, *]].pure(i)
       w should ===(w.reset)
     }

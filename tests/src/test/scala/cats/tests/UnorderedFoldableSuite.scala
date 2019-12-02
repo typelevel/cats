@@ -20,13 +20,13 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
     }
 
   test(s"UnorderedFoldable[$name].isEmpty") {
-    forAll { fa: F[String] =>
+    forAll { (fa: F[String]) =>
       instance.isEmpty(fa) should ===(instance.size(fa) === 0L)
     }
   }
 
   test(s"UnorderedFoldable[$name].nonEmpty") {
-    forAll { fa: F[String] =>
+    forAll { (fa: F[String]) =>
       instance.nonEmpty(fa) should ===(instance.size(fa) > 0L)
     }
   }
@@ -39,7 +39,7 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
   }
 
   test(s"UnorderedFoldable[$name].size") {
-    forAll { fa: F[String] =>
+    forAll { (fa: F[String]) =>
       implicit val F: UnorderedFoldable[F] = instance
       fa.count(Function.const(true)) should ===(fa.size)
     }

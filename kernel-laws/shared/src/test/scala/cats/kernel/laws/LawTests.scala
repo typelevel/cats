@@ -431,7 +431,7 @@ class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTes
     // The `Eq[Order[N]]` instance enumerates all possible `N` values in a
     // `Vector` and considers two `Order[N]` instances to be equal if they
     // result in the same sorting of that vector.
-    implicit val NOrderEq: Eq[Order[N]] = Eq.by { order: Order[N] =>
+    implicit val NOrderEq: Eq[Order[N]] = Eq.by { (order: Order[N]) =>
       Vector.tabulate(nMax)(N).sorted(order.toOrdering)
     }
     implicit val NEqEq: Eq[Eq[N]] = new Eq[Eq[N]] {

@@ -86,7 +86,7 @@ class ConstSuite extends CatsSuite {
 
     Const(1).show should ===("Const(1)")
 
-    forAll { const: Const[Int, String] =>
+    forAll { (const: Const[Int, String]) =>
       const.show.startsWith("Const(") should ===(true)
       const.show.contains(const.getConst.show)
       const.show should ===(implicitly[Show[Const[Int, String]]].show(const))

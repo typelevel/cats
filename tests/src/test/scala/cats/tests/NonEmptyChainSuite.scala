@@ -138,19 +138,19 @@ class NonEmptyChainSuite extends CatsSuite {
   }
 
   test("NonEmptyChain#distinct is consistent with List#distinct") {
-    forAll { ci: NonEmptyChain[Int] =>
+    forAll { (ci: NonEmptyChain[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
 
   test("init") {
-    forAll { ci: NonEmptyChain[Int] =>
+    forAll { (ci: NonEmptyChain[Int]) =>
       ci.init.toList should ===(ci.toList.init)
     }
   }
 
   test("last") {
-    forAll { ci: NonEmptyChain[Int] =>
+    forAll { (ci: NonEmptyChain[Int]) =>
       ci.last should ===(ci.toList.last)
     }
   }

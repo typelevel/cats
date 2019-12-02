@@ -63,7 +63,7 @@ class ChainSuite extends CatsSuite {
   test("show") {
     Show[Chain[Int]].show(Chain(1, 2, 3)) should ===("Chain(1, 2, 3)")
     Chain.empty[Int].show should ===("Chain()")
-    forAll { l: Chain[String] =>
+    forAll { (l: Chain[String]) =>
       l.show should ===(l.toString)
     }
   }
@@ -215,7 +215,7 @@ class ChainSuite extends CatsSuite {
   }
 
   test("Chain#distinct is consistent with List#distinct") {
-    forAll { a: Chain[Int] =>
+    forAll { (a: Chain[Int]) =>
       a.distinct.toList should ===(a.toList.distinct)
     }
   }
