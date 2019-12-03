@@ -83,8 +83,8 @@ private[instances] trait SortedSetInstances1 {
 private[instances] trait SortedSetInstancesBinCompat0 {
   implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
     override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
-      implicit val orderingA = fa.ordering
-      implicit val orderingB = fb.ordering
+      implicit val orderingA: Ordering[A] = fa.ordering
+      implicit val orderingB: Ordering[B] = fb.ordering
 
       fa.flatMap(a => fb.map(b => a -> b))
     }

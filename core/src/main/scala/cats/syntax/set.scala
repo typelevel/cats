@@ -46,7 +46,7 @@ final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
    * }}}
    */
   def groupByNes[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptySet[A]] = {
-    implicit val ordering = B.toOrdering
+    implicit val ordering: Ordering[B] = B.toOrdering
     toNes.fold(SortedMap.empty[B, NonEmptySet[A]])(_.groupBy(f).toSortedMap)
   }
 }

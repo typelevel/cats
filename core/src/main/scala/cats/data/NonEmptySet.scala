@@ -135,7 +135,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Applies f to all the elements
    */
   def map[B](f: A => B)(implicit B: Order[B]): NonEmptySet[B] = {
-    implicit val bOrdering = B.toOrdering
+    implicit val bOrdering: Ordering[B] = B.toOrdering
     NonEmptySetImpl.create(toSortedSet.map(f))
   }
 
@@ -219,7 +219,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * Returns a new `SortedSet` containing all elements where the result of `pf` is defined.
    */
   def collect[B](pf: PartialFunction[A, B])(implicit B: Order[B]): SortedSet[B] = {
-    implicit val ordering = B.toOrdering
+    implicit val ordering: Ordering[B] = B.toOrdering
     toSortedSet.collect(pf)
   }
 
@@ -294,7 +294,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * }}}
    */
   def concatMap[B](f: A => NonEmptySet[B])(implicit B: Order[B]): NonEmptySet[B] = {
-    implicit val ordering = B.toOrdering
+    implicit val ordering: Ordering[B] = B.toOrdering
     NonEmptySetImpl.create(toSortedSet.flatMap(a => f(a).toSortedSet))
   }
 
@@ -337,7 +337,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * }}}
    */
   def zipWith[B, C](b: NonEmptySet[B])(f: (A, B) => C)(implicit C: Order[C]): NonEmptySet[C] = {
-    implicit val cOrdering = C.toOrdering
+    implicit val cOrdering: Ordering[C] = C.toOrdering
     NonEmptySetImpl.create((toSortedSet.lazyZip(b.toSortedSet)).map(f))
   }
 
