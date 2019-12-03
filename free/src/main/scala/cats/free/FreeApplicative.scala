@@ -64,12 +64,13 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         val lengthInitial = argsFLength
         // reassociate the functions into a single fn,
         // and move the arguments into argsF
-        do {
+        while ({
           val ap = argF.asInstanceOf[Ap[F, Any, Any]]
           argsF ::= ap.fp
           argsFLength += 1
           argF = ap.fn.asInstanceOf[FA[F, Any]]
-        } while (argF.isInstanceOf[Ap[F, _, _]])
+          argF.isInstanceOf[Ap[F, _, _]]
+        }) ()
         // consecutive `ap` calls have been queued as operations;
         // argF is no longer an `Ap` node, so the entire topmost left-associated
         // function application branch has been looped through and we've
