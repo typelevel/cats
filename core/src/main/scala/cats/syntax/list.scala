@@ -45,7 +45,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * }}}
    */
   def groupByNel[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
-    implicit val ordering = B.toOrdering
+    implicit val ordering: Ordering[B] = B.toOrdering
     toNel.fold(SortedMap.empty[B, NonEmptyList[A]])(_.groupBy(f))
   }
 }
@@ -72,7 +72,7 @@ final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extend
    * }}}
    */
   def groupByNec[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {
-    implicit val ordering = B.toOrdering
+    implicit val ordering: Ordering[B] = B.toOrdering
     NonEmptyChain.fromSeq(la).fold(SortedMap.empty[B, NonEmptyChain[A]])(_.groupBy(f).toSortedMap)
   }
 }

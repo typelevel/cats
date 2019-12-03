@@ -474,7 +474,7 @@ sealed abstract class Chain[+A] {
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
   def distinct[AA >: A](implicit O: Order[AA]): Chain[AA] = {
-    implicit val ord = O.toOrdering
+    implicit val ord: Ordering[AA] = O.toOrdering
 
     var alreadyIn = TreeSet.empty[AA]
 

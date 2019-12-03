@@ -70,7 +70,7 @@ object KernelCheck {
 
   // Copied from cats-laws.
   implicit def cogenSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
-    implicit val orderingK = Order[K].toOrdering
+    implicit val orderingK: Ordering[K] = Order[K].toOrdering
 
     implicitly[Cogen[Map[K, V]]].contramap(_.toMap)
   }
@@ -81,7 +81,7 @@ object KernelCheck {
 
   // Copied from cats-laws.
   implicit def cogenSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
-    implicit val orderingA = Order[A].toOrdering
+    implicit val orderingA: Ordering[A] = Order[A].toOrdering
 
     implicitly[Cogen[Set[A]]].contramap(_.toSet)
   }
