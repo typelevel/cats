@@ -54,7 +54,9 @@ object SortedSetIsomorphism extends Isomorphisms[SortedSet] {
   override def associativity[A, B, C](
     fs: (SortedSet[(A, (B, C))], SortedSet[((A, B), C)])
   ): IsEq[SortedSet[(A, B, C)]] = {
-    implicit val ord: Ordering[(A, B, C)] = Ordering.by[(A, B, C), ((A, B), C)] { case (a, b, c) => ((a, b), c) }(fs._2.ordering)
+    implicit val ord: Ordering[(A, B, C)] = Ordering.by[(A, B, C), ((A, B), C)] { case (a, b, c) => ((a, b), c) }(
+      fs._2.ordering
+    )
 
     fs._1.map { case (a, (b, c))   => (a, b, c) } <->
       fs._2.map { case ((a, b), c) => (a, b, c) }
