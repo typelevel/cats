@@ -2,7 +2,7 @@ package cats.kernel
 package instances
 
 trait CharInstances {
-  implicit val catsKernelStdOrderForChar = new CharOrder
+  implicit val catsKernelStdOrderForChar: CharOrder = new CharOrder
 }
 
 trait CharBounded extends LowerBounded[Char] with UpperBounded[Char] {
