@@ -29,7 +29,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def mapK[T[_]](f: S ~> T): Free[T, A] =
     foldMap[Free[T, *]] { // this is safe because Free is stack safe
-      new FunctionK[S, Free[T, *]] { def apply[A](fa: S[A]): Free[T, A] = Suspend(f(fa)) }
+      new FunctionK[S, Free[T, *]] { def apply[B](sb: S[B]): Free[T, B] = Suspend(f(sb)) }
     }
 
   /**
@@ -181,10 +181,10 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    *}}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
-    mapK(new (S ~> G) { def apply[A](a: S[A]): G[A] = ev.inj(a) })
+    mapK(new (S ~> G) { def apply[B](sb: S[B]): G[B] = ev.inj(sb) })
 
   final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
-    foldMap[FreeT[S, G, *]](new (S ~> FreeT[S, G, *]) { def apply[A](a: S[A]): FreeT[S, G, A] = FreeT.liftF(a) })
+    foldMap[FreeT[S, G, *]](new (S ~> FreeT[S, G, *]) { def apply[B](sb: S[B]): FreeT[S, G, B] = FreeT.liftF(sb) })
 
   override def toString: String =
     "Free(...)"
