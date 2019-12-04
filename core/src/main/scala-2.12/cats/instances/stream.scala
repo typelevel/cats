@@ -176,10 +176,10 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
       def applicative: Applicative[ZipStream] = ZipStream.catsDataAlternativeForZipStream
 
       def sequential: ZipStream ~> Stream =
-        λ[ZipStream ~> Stream](_.value)
+        new (ZipStream ~> Stream) { def apply[A](a: ZipStream[A]): Stream[A] = a.value }
 
       def parallel: Stream ~> ZipStream =
-        λ[Stream ~> ZipStream](v => new ZipStream(v))
+        new (Stream ~> ZipStream) { def apply[A](v: Stream[A]): ZipStream[A] = new ZipStream(v) }
     }
 }
 

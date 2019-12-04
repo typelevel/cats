@@ -193,10 +193,10 @@ object FreeT extends FreeTInstances {
     liftF[S, M, FreeT[S, M, A]](value).flatMap(identity)
 
   def compile[S[_], T[_], M[_]: Functor](st: FunctionK[S, T]): FunctionK[FreeT[S, M, *], FreeT[T, M, *]] =
-    λ[FunctionK[FreeT[S, M, *], FreeT[T, M, *]]](f => f.compile(st))
+    new FunctionK[FreeT[S, M, *], FreeT[T, M, *]] { def apply[A](f: FreeT[S, M, A]): FreeT[T, M, A] = f.compile(st) }
 
   def foldMap[S[_], M[_]: Monad](fk: FunctionK[S, M]): FunctionK[FreeT[S, M, *], M] =
-    λ[FunctionK[FreeT[S, M, *], M]](f => f.foldMap(fk))
+    new FunctionK[FreeT[S, M, *], M] { def apply[A](f: FreeT[S, M, A]): M[A] = f.foldMap(fk) }
 
   /**
    * This method is used to defer the application of an InjectK[F, G]

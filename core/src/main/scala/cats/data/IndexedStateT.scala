@@ -190,7 +190,7 @@ private[data] trait CommonStateTConstructors {
    * }}}
    */
   def liftK[F[_], S](implicit F: Applicative[F]): F ~> IndexedStateT[F, S, S, *] =
-    λ[F ~> IndexedStateT[F, S, S, *]](IndexedStateT.liftF(_))
+    new (F ~> IndexedStateT[F, S, S, *]) { def apply[A](a: F[A]): IndexedStateT[F, S, S, A] = IndexedStateT.liftF(a) }
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], S, A](fa: F[A])(implicit F: Applicative[F]): IndexedStateT[F, S, S, A] =

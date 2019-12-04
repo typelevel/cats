@@ -182,9 +182,9 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
       def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
 
       def sequential: ZipLazyList ~> LazyList =
-        λ[ZipLazyList ~> LazyList](_.value)
+        new (ZipLazyList ~> LazyList) { def apply[A](a: ZipLazyList[A]): LazyList[A] = a.value }
 
       def parallel: LazyList ~> ZipLazyList =
-        λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
+        new (LazyList ~> ZipLazyList) { def apply[A](v: LazyList[A]): ZipLazyList[A] = new ZipLazyList(v) }
     }
 }

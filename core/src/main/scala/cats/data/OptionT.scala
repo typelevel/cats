@@ -222,7 +222,7 @@ object OptionT extends OptionTInstances {
    * }}}
    */
   def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, *] =
-    λ[F ~> OptionT[F, *]](OptionT.liftF(_))
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
 }
 
 sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
@@ -285,10 +285,14 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
     def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
     def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-      λ[Nested[P.F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
+      new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
+        def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
+      }
 
     def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-      λ[OptionT[M, *] ~> Nested[P.F, Option, *]](optT => Nested(P.parallel(optT.value)))
+      new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
+        def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
+      }
   }
 }
 

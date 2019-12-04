@@ -29,7 +29,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    */
   final def mapK[T[_]](f: S ~> T): Free[T, A] =
     foldMap[Free[T, *]] { // this is safe because Free is stack safe
-      λ[FunctionK[S, Free[T, *]]](fa => Suspend(f(fa)))
+      new FunctionK[S, Free[T, *]] { def apply[A](fa: S[A]): Free[T, A] = Suspend(f(fa)) }
     }
 
   /**
@@ -181,10 +181,10 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    *}}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
-    mapK(λ[S ~> G](ev.inj(_)))
+    mapK(new (S ~> G) { def apply[A](a: S[A]): G[A] = ev.inj(a) })
 
   final def toFreeT[G[_]: Applicative]: FreeT[S, G, A] =
-    foldMap[FreeT[S, G, *]](λ[S ~> FreeT[S, G, *]](FreeT.liftF(_)))
+    foldMap[FreeT[S, G, *]](new (S ~> FreeT[S, G, *]) { def apply[A](a: S[A]): FreeT[S, G, A] = FreeT.liftF(a) })
 
   override def toString: String =
     "Free(...)"
@@ -236,7 +236,7 @@ object Free extends FreeInstances {
    * a FunctionK, suitable for composition, which calls mapK
    */
   def mapK[F[_], G[_]](fk: FunctionK[F, G]): FunctionK[Free[F, *], Free[G, *]] =
-    λ[FunctionK[Free[F, *], Free[G, *]]](f => f.mapK(fk))
+    new FunctionK[Free[F, *], Free[G, *]] { def apply[A](f: Free[F, A]): Free[G, A] = f.mapK(fk) }
 
   /**
    * a FunctionK, suitable for composition, which calls compile
@@ -248,7 +248,7 @@ object Free extends FreeInstances {
    * a FunctionK, suitable for composition, which calls foldMap
    */
   def foldMap[F[_], M[_]: Monad](fk: FunctionK[F, M]): FunctionK[Free[F, *], M] =
-    λ[FunctionK[Free[F, *], M]](f => f.foldMap(fk))
+    new FunctionK[Free[F, *], M] { def apply[A](f: Free[F, A]): M[A] = f.foldMap(fk) }
 
   /**
    * This method is used to defer the application of an InjectK[F, G]
