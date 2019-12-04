@@ -687,7 +687,10 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Chain[A]): Eval[B] =
-          as match {
+          // In Scala 2 the compiler silently ignores the fact that it can't
+          // prove that this match is exhaustive, but Dotty warns, so we
+          // explicitly mark it as unchecked.
+          (as: @unchecked) match {
             case Chain.nil => lb
             case h ==: t   => f(h, Eval.defer(loop(t)))
           }
