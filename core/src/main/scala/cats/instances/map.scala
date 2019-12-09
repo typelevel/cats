@@ -146,13 +146,13 @@ private[instances] trait MapInstancesBinCompat0 {
       val functor: Functor[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
 
       def mapFilter[A, B](fa: Map[K, A])(f: A => Option[B]) =
-        fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, A)) => f(t._2).map(t._1 -> _)))
 
       override def collect[A, B](fa: Map[K, A])(f: PartialFunction[A, B]) =
-        fa.collect(scala.Function.unlift(t => f.lift(t._2).map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, A)) => f.lift(t._2).map(t._1 -> _)))
 
       override def flattenOption[A](fa: Map[K, Option[A]]) =
-        fa.collect(scala.Function.unlift(t => t._2.map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, Option[A])) => t._2.map(t._1 -> _)))
 
       override def filter[A](fa: Map[K, A])(f: A => Boolean) =
         fa.filter { case (_, v) => f(v) }
