@@ -154,6 +154,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
     override def filter[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filter(f)
 
+    override def filterNot[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: LazyList[A])(f: PartialFunction[A, B]): LazyList[B] = fa.collect(f)
 
     override def flattenOption[A](fa: LazyList[Option[A]]): LazyList[A] = fa.flatten

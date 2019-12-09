@@ -369,6 +369,10 @@ abstract private[data] class NestedFunctorFilter[F[_], G[_]] extends FunctorFilt
 
   override def filter[A](fa: Nested[F, G, A])(f: (A) => Boolean): Nested[F, G, A] =
     Nested[F, G, A](F.map(fa.value)(G.filter(_)(f)))
+
+  override def filterNot[A](fa: Nested[F, G, A])(f: A => Boolean): Nested[F, G, A] =
+    Nested[F, G, A](F.map(fa.value)(G.filterNot(_)(f)))
+
 }
 
 abstract private[data] class NestedTraverseFilter[F[_], G[_]]

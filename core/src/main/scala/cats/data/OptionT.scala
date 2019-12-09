@@ -497,6 +497,8 @@ sealed private[data] trait OptionTFunctorFilter[F[_]] extends FunctorFilter[Opti
   override def flattenOption[A](fa: OptionT[F, Option[A]]): OptionT[F, A] = fa.subflatMap(identity)
 
   override def filter[A](fa: OptionT[F, A])(f: (A) => Boolean): OptionT[F, A] = fa.filter(f)
+
+  override def filterNot[A](fa: OptionT[F, A])(f: A => Boolean): OptionT[F, A] = fa.filterNot(f)
 }
 
 sealed private[data] trait OptionTOrder[F[_], A] extends Order[OptionT[F, A]] with OptionTPartialOrder[F, A] {
