@@ -20,6 +20,8 @@ trait MonadErrorLaws[F[_], E] extends ApplicativeErrorLaws[F, E] with MonadLaws[
   def redeemWithDerivedFromAttemptFlatMap[A, B](fa: F[A], fe: E => F[B], fs: A => F[B]): IsEq[F[B]] =
     F.redeemWith(fa)(fe, fs) <-> F.flatMap(F.attempt(fa))(_.fold(fe, fs))
 
+  // See https://github.com/typelevel/cats/pull/3203 for an explanation of why these two overrides
+  // are needed in 2.x for binary compatibility.
   override def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
     F.adaptError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
 
