@@ -106,7 +106,7 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
     extends FoldableSuite[F](name) {
 
   def range(start: Long, endInclusive: Long): F[Long]
-  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): F[Either[L, R]]
+  def fromValues[A](el: A, els: A*): F[A]
 
   test(s"Reducible[$name].reduceLeftM stack safety") {
     def nonzero(acc: Long, x: Long): Option[Long] =
@@ -120,13 +120,13 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
 
   test(s"Reducible[$name].reduceA successful case") {
     val expected = 6
-    val actual = rangeE(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceA
+    val actual = fromValues(1.asRight[String], 2.asRight[String], 3.asRight[String]).reduceA
     actual should ===(expected.asRight[String])
   }
 
   test(s"Reducible[$name].reduceA failure case") {
     val expected = "boom!!!"
-    val actual = rangeE(1.asRight, "boom!!!".asLeft, 3.asRight).reduceA
+    val actual = fromValues(1.asRight, "boom!!!".asLeft, 3.asRight).reduceA
     actual should ===(expected.asLeft[Int])
   }
 

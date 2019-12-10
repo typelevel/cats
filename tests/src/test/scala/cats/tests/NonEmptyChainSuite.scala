@@ -162,6 +162,5 @@ class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmpt
   def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
     NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
 
-  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): NonEmptyChain[Either[L, R]] =
-    NonEmptyChain(el, els: _*)
+  def fromValues[A](el: A, els: A*): NonEmptyChain[A] = NonEmptyChain(el, els: _*)
 }
