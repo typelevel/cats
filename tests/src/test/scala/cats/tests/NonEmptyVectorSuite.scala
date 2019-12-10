@@ -404,6 +404,5 @@ class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEm
     NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
   }
 
-  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): NonEmptyVector[Either[L, R]] =
-    NonEmptyVector(el, Vector(els: _*))
+  def fromValues[A](el: A, els: A*): NonEmptyVector[A] = NonEmptyVector(el, Vector(els: _*))
 }

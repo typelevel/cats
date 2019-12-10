@@ -370,6 +370,5 @@ class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyL
     NonEmptyList(start, (tailStart).to(endInclusive).toList)
   }
 
-  def rangeE[L, R](el: Either[L, R], els: Either[L, R]*): NonEmptyList[Either[L, R]] =
-    NonEmptyList(el, List(els: _*))
+  def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els: _*))
 }
