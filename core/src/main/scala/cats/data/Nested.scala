@@ -117,10 +117,12 @@ sealed abstract private[data] class NestedInstances3 extends NestedInstances4 {
 }
 
 sealed abstract private[data] class NestedInstances4 extends NestedInstances5 {
-  implicit def catsDataApplicativeErrorForNested[F[_]: ApplicativeError[*[_], E], G[_]: Applicative, E]
-    : ApplicativeError[Nested[F, G, *], E] =
+  implicit def catsDataApplicativeErrorForNested[F[_], G[_], E](
+    implicit F: ApplicativeError[F, E],
+    G0: Applicative[G]
+  ): ApplicativeError[Nested[F, G, *], E] =
     new NestedApplicativeError[F, G, E] {
-      val G: Applicative[G] = Applicative[G]
+      val G: Applicative[G] = G0
 
       val AEF: ApplicativeError[F, E] = ApplicativeError[F, E]
     }

@@ -186,7 +186,7 @@ class OptionTSuite extends CatsSuite {
 
   test("MonadError[OptionT[F, *], E] instance has higher priority than MonadError[OptionT[F, *], Unit]") {
 
-    def shouldCompile[F[_]: MonadError[*[_], E], E](x: OptionT[F, Int], e: E): OptionT[F, Int] =
+    def shouldCompile[F[_], E](x: OptionT[F, Int], e: E)(implicit F: MonadError[F, E]): OptionT[F, Int] =
       x.ensure(e)(_ => true)
   }
 
