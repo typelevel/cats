@@ -19,6 +19,12 @@ trait MonadErrorLaws[F[_], E] extends ApplicativeErrorLaws[F, E] with MonadLaws[
 
   def redeemWithDerivedFromAttemptFlatMap[A, B](fa: F[A], fe: E => F[B], fs: A => F[B]): IsEq[F[B]] =
     F.redeemWith(fa)(fe, fs) <-> F.flatMap(F.attempt(fa))(_.fold(fe, fs))
+
+  override def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
+
+  override def adaptErrorRaise[A](e: E, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.raiseError[A](e)) { case x => f(x) } <-> F.raiseError(f(e))
 }
 
 object MonadErrorLaws {
