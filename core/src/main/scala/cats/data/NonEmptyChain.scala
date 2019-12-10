@@ -384,7 +384,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
    * scala> import cats.data.NonEmptyChain
    * scala> val as = NonEmptyChain(1, 2, 3)
    * scala> val bs = NonEmptyChain("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptyChain[String] = Chain(1A, 2B, 3C)
    * }}}
    */
