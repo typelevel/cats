@@ -83,6 +83,22 @@ import simulacrum.{noop, typeclass}
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
+   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
+   * semigroup for `G[_]`.
+   *
+   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
+   */
+  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+    reduce(fga)(Apply.semigroup)
+
+  /**
+   * Apply `f` to each `a` of `fa` and combine the result into Apply[G] using the
+   * given `Semigroup[B]`.
+   */
+  def reduceMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
+    reduceLeftTo(fa)(f)((gb, a) => G.map2(gb, f(a))(B.combine))
+
+  /**
    * Monadic reducing by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `Semigroup[B]` instance.
    *

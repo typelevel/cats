@@ -395,6 +395,26 @@ import Foldable.sentinel
   }
 
   /**
+   * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
+   *
+   * This method is identical to fold, except that we use `Applicative[G]` and `Monoid[A]`
+   * to combine a's inside an applicative G.
+   *
+   * For example:
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val F = Foldable[List]
+   * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
+   * res0: Either[String, Int] = Right(3)
+   * }}}
+   *
+   * `noop` usage description [[https://github.com/typelevel/simulacrum/issues/162 here]]
+   */
+  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+    fold(fga)(Applicative.monoid)
+
+  /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
    * combining them using the `MonoidK[G]` instance.
    *
