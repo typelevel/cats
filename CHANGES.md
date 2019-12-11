@@ -1,3 +1,45 @@
+## Version 2.1.0-RC3
+
+_2019 December 11_
+
+This release candidate provides the same binary compatibility guarantees as Cats 2.0.
+
+### 1 bug fix
+
+* [#3203](https://github.com/typelevel/cats/pull/3203) Fix more bincompat breakage  by @travisbrown
+
+
+### 14 API / feature enhancements
+
+* [#3199](https://github.com/typelevel/cats/pull/3199) Fix foldA, reduceA, and reduceMapA short-circuiting  by @travisbrown
+* [#3198](https://github.com/typelevel/cats/pull/3198) Rename rangeE for clarity  by @travisbrown
+* [#3150](https://github.com/typelevel/cats/pull/3150) Add foldA, reduceA, and reduceMapA  by @Twizty
+* [#3174](https://github.com/typelevel/cats/pull/3174) Optimize Iterable instances implementation.  by @takayahilton
+* [#3186](https://github.com/typelevel/cats/pull/3186) Avoid unusual kind-projector syntax  by @travisbrown
+* [#3187](https://github.com/typelevel/cats/pull/3187) Helping out Dotty's type inference  by @travisbrown
+* [#3190](https://github.com/typelevel/cats/pull/3190) Mark match that is unchecked by Scala 2 as unchecked  by @travisbrown
+* [#3191](https://github.com/typelevel/cats/pull/3191) Add type for implicit val  by @travisbrown
+* [#3158](https://github.com/typelevel/cats/pull/3158) add `filterNot` to FunctorFilter  by @gagandeepkalra
+* [#3188](https://github.com/typelevel/cats/pull/3188) Add explicit type annotations for implicit Ordering vals  by @travisbrown
+* [#3189](https://github.com/typelevel/cats/pull/3189) Replace do-while  by @travisbrown
+* [#3185](https://github.com/typelevel/cats/pull/3185) Update Function0 syntax  by @travisbrown
+* [#3183](https://github.com/typelevel/cats/pull/3183) Remove redundant final modifiers on objects  by @travisbrown
+* [#3182](https://github.com/typelevel/cats/pull/3182) Parenthesize lambda parameters with type annotations  by @travisbrown
+
+
+### 4 documentation improvements
+
+* [#3155](https://github.com/typelevel/cats/pull/3155) Enable and fix doctests on 2.13  by @travisbrown
+* [#3178](https://github.com/typelevel/cats/pull/3178) Add ApplicativeError for EitherT documentation  by @tg44
+* [#3181](https://github.com/typelevel/cats/pull/3181) Fix typo  by @msinton
+* [#3173](https://github.com/typelevel/cats/pull/3173) Fix typo in Alternative docs  by @SimY4
+
+
+### 1 build improvement
+
+* [#3197](https://github.com/typelevel/cats/pull/3197) Update sbt-scalafmt to 2.3.0  by @scala-steward
+
+
 ## Version 2.1.0-RC2
 
 _2019 November 26
