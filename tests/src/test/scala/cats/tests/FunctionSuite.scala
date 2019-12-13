@@ -47,14 +47,18 @@ class FunctionSuite extends CatsSuite {
   // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
   test("Defer[Function1[Int, *]].fix computing sum") {
-    val sum2 = Defer[Function1[Int, *]].fix[Int] { rec =>
-
-      { n: Int => if (n <= 0) 0 else n * n + rec(n - 1) }
+    val sum2 = Defer[Function1[Int, *]].fix[Int] {
+      rec =>
+        { n: Int =>
+          if (n <= 0) 0 else n * n + rec(n - 1)
+        }
     }
 
     forAll { n0: Int =>
       val n = n0 & 0x3FF // don't let it get too big
-      assert(sum2(n) == (0 to n).map { n => n * n }.sum)
+      assert(sum2(n) == (0 to n).map { n =>
+        n * n
+      }.sum)
     }
   }
 
