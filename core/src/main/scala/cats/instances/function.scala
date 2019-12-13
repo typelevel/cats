@@ -14,10 +14,12 @@ private[instances] trait FunctionInstancesBinCompat0 {
   /**
    * Witness for: E => A <-> E => A
    */
-  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => *]): Representable.Aux[E => *, E] =
-    new Representable[E => *] {
+  implicit def catsStdRepresentableForFunction1[E](
+    implicit EF: Functor[Function1[E, *]]
+  ): Representable.Aux[Function1[E, *], E] =
+    new Representable[Function1[E, *]] {
       override type Representation = E
-      override val F: Functor[E => *] = EF
+      override val F: Functor[Function1[E, *]] = EF
       override def tabulate[A](f: E => A): E => A = f
       override def index[A](f: E => A): E => A = f
     }
@@ -41,8 +43,8 @@ private[instances] trait FunctionInstancesBinCompat0 {
       }
     }
 
-  implicit def catsStdDeferForFunction1[A]: Defer[A => *] =
-    new Defer[A => *] {
+  implicit def catsStdDeferForFunction1[A]: Defer[Function1[A, *]] =
+    new Defer[Function1[A, *]] {
       case class Deferred[B](fa: () => A => B) extends (A => B) {
         def apply(a: A) = {
           @annotation.tailrec
@@ -98,8 +100,8 @@ sealed private[instances] trait Function0Instances0 {
 }
 
 sealed private[instances] trait Function1Instances extends Function1Instances0 {
-  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[* => R] =
-    new ContravariantMonoidal[* => R] {
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[Function1[*, R]] =
+    new ContravariantMonoidal[Function1[*, R]] {
       def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
         fa.compose(f)
@@ -110,8 +112,8 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
           }
     }
 
-  implicit def catsStdMonadForFunction1[T1]: Monad[T1 => *] =
-    new Monad[T1 => *] {
+  implicit def catsStdMonadForFunction1[T1]: Monad[Function1[T1, *]] =
+    new Monad[Function1[T1, *]] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
@@ -165,19 +167,20 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
 }
 
 sealed private[instances] trait Function1Instances0 {
-  implicit def catsStdContravariantForFunction1[R]: Contravariant[* => R] =
-    new Contravariant[* => R] {
+  implicit def catsStdContravariantForFunction1[R]: Contravariant[Function1[*, R]] =
+    new Contravariant[Function1[*, R]] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
         fa.compose(f)
     }
 
-  implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => *] = new Distributive[T1 => *] {
-    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
-      Functor[F].map(fa)(a => f(a)(t1))
-    }
+  implicit def catsStdDistributiveForFunction1[T1]: Distributive[Function1[T1, *]] =
+    new Distributive[Function1[T1, *]] {
+      def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
+        Functor[F].map(fa)(a => f(a)(t1))
+      }
 
-    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
-      f(fa(t1))
+      def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
+        f(fa(t1))
+      }
     }
-  }
 }

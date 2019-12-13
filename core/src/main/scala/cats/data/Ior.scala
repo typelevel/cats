@@ -811,7 +811,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
 sealed abstract private[data] class IorInstances0 {
 
-  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior *] = new Traverse[A Ior *] {
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[Ior[A, *]] = new Traverse[Ior[A, *]] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
       fa.traverse(f)
     def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
