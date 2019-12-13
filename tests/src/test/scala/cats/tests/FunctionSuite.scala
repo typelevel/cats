@@ -46,6 +46,18 @@ class FunctionSuite extends CatsSuite {
   // TODO: make an binary compatible way to do this
   // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
+  test("Defer[Function1[Int, *]].fix computing sum") {
+    val sum2 = Defer[Function1[Int, *]].fix[Int] { rec =>
+
+      { n: Int => if (n <= 0) 0 else n * n + rec(n - 1) }
+    }
+
+    forAll { n0: Int =>
+      val n = n0 & 0x3FF // don't let it get too big
+      assert(sum2(n) == (0 to n).map { n => n * n }.sum)
+    }
+  }
+
   checkAll("Semigroupal[Function1[Int, *]]", SerializableTests.serializable(Semigroupal[Function1[Int, *]]))
 
   checkAll("Function1[MiniInt, Int]", MonadTests[MiniInt => *].monad[Int, Int, Int])
