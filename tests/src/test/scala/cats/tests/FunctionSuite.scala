@@ -23,6 +23,7 @@ import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.{Band, BoundedSemilattice, Semilattice}
+import org.scalacheck.Gen
 
 class FunctionSuite extends CatsSuite {
 
@@ -54,8 +55,8 @@ class FunctionSuite extends CatsSuite {
         }
     }
 
-    forAll { n0: Int =>
-      val n = n0 & 0x3FF // don't let it get too big
+    forAll(Gen.choose(0, 1000)) { n =>
+      // don't let n get too large because this consumes stack
       assert(sum2(n) == (0 to n).map { n =>
         n * n
       }.sum)
