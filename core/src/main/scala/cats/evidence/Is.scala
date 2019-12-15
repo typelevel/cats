@@ -1,6 +1,6 @@
 package cats.evidence
 
-import cats.Id
+import cats.{Id, Iso}
 import cats.arrow._
 
 /**
@@ -64,6 +64,9 @@ abstract class Is[A, B] extends Serializable {
    */
   @inline final def predefEq: A =:= B =
     substitute[A =:= *](implicitly[A =:= A])
+
+  final def toIso: Iso[* => *, A, B] = substitute[Iso[* => *, A, *]](Iso.refl[A])
+
 }
 
 sealed abstract class IsInstances {
