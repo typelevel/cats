@@ -5,7 +5,7 @@ package cats.evidence
 trait NotEq[A, B]
 
 object NotEq {
-  implicit def neq[A, B] : A NotEq B = new NotEq[A, B] {}
-  implicit def neqAmbig1[A] : A NotEq A = sys.error("Unexpected invocation")
-  implicit def neqAmbig2[A] : A NotEq A = sys.error("Unexpected invocation")
+  implicit def neq[A, B]: A NotEq B = new NotEq[A, B] {}
+  implicit def neqAmbig1[A]: A NotEq A = sys.error("Unexpected invocation")
+  implicit def neqAmbig2[A]: A NotEq A = sys.error("Unexpected invocation")
 }

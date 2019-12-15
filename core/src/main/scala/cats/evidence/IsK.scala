@@ -2,7 +2,7 @@ package cats.evidence
 
 /**  A value of IsK[F, G] is proof that F[_] and G[_] are the same.
  * This means that in any context A[_[_] ] we have the equality A[F] === A[B] */
-sealed abstract class IsK[F[_], G[_]] private[IsK]() { ab =>
+sealed abstract class IsK[F[_], G[_]] private[IsK] () { ab =>
   import IsK._
 
   def substitute[Alg[_[_]]](fa: Alg[F]): Alg[G]
@@ -41,7 +41,7 @@ sealed abstract class IsK[F[_], G[_]] private[IsK]() { ab =>
 
 object IsK {
   private[this] type Any1[α] = α => Any
-  private[this] final case class Refl[F[_]]() extends IsK[F, F] {
+  final private[this] case class Refl[F[_]]() extends IsK[F, F] {
     def substitute[A[_[_]]](fa: A[F]): A[F] = fa
   }
 
@@ -62,8 +62,7 @@ object IsK {
   }
 
   /** Given `A =~= B` and `I =~= J` we can prove that `F[A, I] === F[B, J]`. */
-  def lower2[F[_[_], _[_]], A[_], B[_], I[_], J[_]]
-  (ab: A =~= B, ij: I =~= J): F[A, I] === F[B, J] = {
+  def lower2[F[_[_], _[_]], A[_], B[_], I[_], J[_]](ab: A =~= B, ij: I =~= J): F[A, I] === F[B, J] = {
     type f1[a[_]] = F[A, I] === F[a, I]
     type f2[i[_]] = F[A, I] === F[B, i]
     ij.substitute[f2](ab.substitute[f1](Is.refl))
@@ -74,8 +73,7 @@ object IsK {
     ab.substitute[λ[a[_] => F[A, *] =~= F[a, *]]](refl[F[A, *]])
 
   /** Given `A =~= B` and `I =~= J` we can prove that `F[A, I, *] =~= F[B, J, *]`. */
-  def lift2[F[_[_], _[_], _], A[_], B[_], I[_], J[_]]
-  (ab: A =~= B, ij: I =~= J): F[A, I, *] =~= F[B, J, *] = {
+  def lift2[F[_[_], _[_], _], A[_], B[_], I[_], J[_]](ab: A =~= B, ij: I =~= J): F[A, I, *] =~= F[B, J, *] = {
     type f1[a[_]] = F[A, I, *] =~= F[a, I, *]
     type f2[i[_]] = F[A, I, *] =~= F[B, i, *]
     ij.substitute[f2](ab.substitute[f1](refl[F[A, I, *]]))

@@ -7,10 +7,12 @@ package object evidence {
    * type as B.
    */
   type ===[A, B] = A Is B
+
   /** Proof that for all A[_[_] ] we have A[F] === A[G] */
   type =~=[F[_], G[_]] = F IsK G
+
   /** Proof that for all A[_[_,_] ] we have A[F] === A[G] */
-  type =~~=[F[_,_], G[_,_]] = F IsK2 G
+  type =~~=[F[_, _], G[_, _]] = F IsK2 G
 
   type =:!=[A, B] = NotEq[A, B]
 
