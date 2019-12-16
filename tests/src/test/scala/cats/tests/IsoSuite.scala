@@ -5,8 +5,8 @@ import cats.Iso.{<=>, HasIso}
 
 class IsoSuite extends CatsSuite {
 
-  implicit val isoSI: String <=> Int = Iso.unsafe(_.toInt, _.toString)
-  implicit val isoIL: Int <=> Long = Iso.unsafe(_.toLong, _.toInt)
+  implicit val isoSI: String <=> Int = Iso.createUnsafe(_.toInt, _.toString)
+  implicit val isoIL: Int <=> Long = Iso.createUnsafe(_.toLong, _.toInt)
 
   test("HasIso implicit search") {
     implicitly[HasIso[* => *, String, Int]]

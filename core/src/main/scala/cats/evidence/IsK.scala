@@ -9,13 +9,22 @@ sealed abstract class IsK[F[_], G[_]] private[IsK] () { ab =>
 
   final def apply[X](a: F[X]): G[X] = coerce[X](a)
 
-  final def coerce[X](a: F[X]): G[X] = substitute[λ[f[_] => f[X]]](a)
+  final def coerce[X](a: F[X]): G[X] = {
+    type L[f[_]] = f[X]
+    substitute[L](a)
+  }
 
-  final def andThen[H[_]](bc: G =~= H): F =~= H = bc.substitute[F =~= *[_]](ab)
+  final def andThen[H[_]](bc: G =~= H): F =~= H = {
+    type L[f[_]] = F =~= f
+    bc.substitute[L](ab)
+  }
 
   final def compose[E[_]](za: E =~= F): E =~= G = za.andThen(ab)
 
-  final def flip: G =~= F = ab.substitute[*[_] =~= F](refl)
+  final def flip: G =~= F = {
+    type L[f[_]] = f =~= F
+    ab.substitute[L](refl)
+  }
 
   final def lower[A[_[_]]]: A[F] === A[G] = IsK.lower[A, F, G](ab)
 
@@ -36,7 +45,10 @@ sealed abstract class IsK[F[_], G[_]] private[IsK] () { ab =>
       IsK.lift2(ab, ij)
   }
 
-  final def is[A]: F[A] === G[A] = substitute[λ[f[_] => F[A] === f[A]]](Is.refl[F[A]])
+  final def is[A]: F[A] === G[A] = {
+    type L[f[_]] = F[A] === f[A]
+    substitute[L](Is.refl[F[A]])
+  }
 }
 
 object IsK {
@@ -54,7 +66,10 @@ object IsK {
   @inline implicit def refl[F[_]]: F =~= F = reflAny.asInstanceOf[F =~= F]
 
   /** Given `F =~= G` we can prove that `A[F] === A[G]`. */
-  def lower[A[_[_]], F[_], G[_]](ab: F =~= G): A[F] === A[G] = ab.substitute[λ[a[_] => A[F] === A[a]]](Is.refl[A[F]])
+  def lower[A[_[_]], F[_], G[_]](ab: F =~= G): A[F] === A[G] = {
+    type L[a[_]] = A[F] === A[a]
+    ab.substitute[L](Is.refl[A[F]])
+  }
 
   def const[A, B](ab: A === B): λ[x => A] =~= λ[x => B] = {
     type f[a] = λ[x => A] =~= λ[x => a]
@@ -69,8 +84,10 @@ object IsK {
   }
 
   /** Given `A =~= B` we can prove that `F[A, *] =~= F[B, *]`. */
-  def lift[F[_[_], *], A[_], B[_]](ab: A =~= B): F[A, *] =~= F[B, *] =
-    ab.substitute[λ[a[_] => F[A, *] =~= F[a, *]]](refl[F[A, *]])
+  def lift[F[_[_], *], A[_], B[_]](ab: A =~= B): F[A, *] =~= F[B, *] = {
+    type L[f[_]] = F[A, *] =~= F[f, *]
+    ab.substitute[L](refl[F[A, *]])
+  }
 
   /** Given `A =~= B` and `I =~= J` we can prove that `F[A, I, *] =~= F[B, J, *]`. */
   def lift2[F[_[_], _[_], _], A[_], B[_], I[_], J[_]](ab: A =~= B, ij: I =~= J): F[A, I, *] =~= F[B, J, *] = {

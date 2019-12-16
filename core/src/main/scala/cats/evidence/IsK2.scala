@@ -11,13 +11,22 @@ sealed abstract class IsK2[F[_, _], G[_, _]] private[IsK2] () { ab =>
 
   final def apply[X, Y](a: F[X, Y]): G[X, Y] = coerce[X, Y](a)
 
-  final def coerce[X, Y](a: F[X, Y]): G[X, Y] = subst[λ[f[_, _] => f[X, Y]]](a)
+  final def coerce[X, Y](a: F[X, Y]): G[X, Y] = {
+    type L[f[_, _]] = f[X, Y]
+    subst[L](a)
+  }
 
-  final def andThen[H[_, _]](bc: G =~~= H): F =~~= H = bc.subst[F =~~= *[_, _]](ab)
+  final def andThen[H[_, _]](bc: G =~~= H): F =~~= H = {
+    type L[f[_, _]] = F =~~= f
+    bc.subst[L](ab)
+  }
 
   final def compose[E[_, _]](za: E =~~= F): E =~~= G = za.andThen(ab)
 
-  final def flip: G =~~= F = ab.subst[*[_, _] =~~= F](refl)
+  final def flip: G =~~= F = {
+    type L[f[_, _]] = f =~~= F
+    ab.subst[*[_, _] =~~= F](refl)
+  }
 
   final def lower[A[_[_, _]]]: A[F] === A[G] = IsK2.lower[A, F, G](ab)
 

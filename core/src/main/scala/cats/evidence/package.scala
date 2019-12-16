@@ -14,8 +14,6 @@ package object evidence {
   /** Proof that for all A[_[_,_] ] we have A[F] === A[G] */
   type =~~=[F[_, _], G[_, _]] = F IsK2 G
 
-  type =:!=[A, B] = NotEq[A, B]
-
   /**
    * This type level equality represented by `Is` is referred to as
    * "Leibniz equality", and it had the name "Leibniz" in the scalaz
