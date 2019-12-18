@@ -802,6 +802,7 @@ def commonScalacOptions(scalaVersion: String) =
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
             "-Yno-adapted-args",
+            "-Ypartial-unification",
             "-Xfuture"
           )
         else
