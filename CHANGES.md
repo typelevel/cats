@@ -1,3 +1,31 @@
+## Version 2.1.0
+
+_2019 December 18_
+
+This release currently only supports Scala 2.12 and 2.13. It provides the same binary compatibility
+guarantees as Cats 2.0 (note that it is not guaranteed to be binary-compatible with the 2.1.0
+release candidates).
+
+### 3 API / feature enhancements
+
+* [#3208](https://github.com/typelevel/cats/pull/3208) Add Defer.fix  by @johnynek
+* [#3215](https://github.com/typelevel/cats/pull/3215) Replace kind-projector placeholders in infix types  by @travisbrown
+* [#3207](https://github.com/typelevel/cats/pull/3207) Avoid kind-projector syntax with variance annotations  by @travisbrown
+
+
+### 1 documentation improvement
+
+* [#3218](https://github.com/typelevel/cats/pull/3218) Update sbt-microsites  by @travisbrown
+
+
+### 4 build improvements
+
+* [#3217](https://github.com/typelevel/cats/pull/3217) Remove sbt-partial-unification  by @travisbrown
+* [#3216](https://github.com/typelevel/cats/pull/3216) Update sbt-pgp to 2.0.1  by @scala-steward
+* [#3213](https://github.com/typelevel/cats/pull/3213) Update discipline-core to 1.0.2  by @scala-steward
+* [#3212](https://github.com/typelevel/cats/pull/3212) Update sbt-scalafix and sbt versions  by @travisbrown
+
+
 ## Version 2.1.0-RC3
 
 _2019 December 11_
