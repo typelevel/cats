@@ -633,7 +633,8 @@ lazy val binCompatTest = project
     useCoursier := false,
     commonScalaVersionSettings,
     addCompilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full)),
-    libraryDependencies += mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided
+    libraryDependencies += mimaPrevious("cats-core", scalaVersion.value, version.value).last % Provided,
+    scalacOptions ++= (if (priorTo2_13(scalaVersion.value)) Seq("-Ypartial-unification") else Nil)
   )
   .settings(testingDependencies)
   .dependsOn(core.jvm % Test)
