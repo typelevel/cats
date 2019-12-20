@@ -155,7 +155,7 @@ object BinCodecInvariantMonoidalSuite {
 }
 
 class BinCodecInvariantMonoidalSuite extends CatsSuite {
-  // Eveything is defined in a companion object to be serializable.
+  // Everything is defined in a companion object to be serializable.
   import BinCodecInvariantMonoidalSuite._
 
   checkAll("InvariantMonoidal[BinCodec]", InvariantMonoidalTests[BinCodec].invariantMonoidal[MiniInt, MiniInt, MiniInt])
