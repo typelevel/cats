@@ -280,7 +280,7 @@ Because `Сats` is a Scala library and Scala has many knobs and switches, the ac
 - We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow `=>` operation. In Scala, a method's parameters may be split in several comma-separated lists.
 - We do not differentiate between methods from the type-class trait (e.g. `trait Functor`), or the companion object, or the syntax companion (`implicit class`).
 - For functions defined as method of the typeclass trait, we ignore the receiver object.
-- We ignore implicit parameters that represent type-class constraints; and write them on a side column instad.
+- We ignore implicit parameters that represent type-class constraints; and write them on a side column instead.
 - We use `A => B` for both `Function1[A, B]` and `PartialFunction[A, B]` parameters, without distinction. We add a side note when one is  a `PartialFunction`.
 - Some functions are defined through the [Partially Applied Type Params](http://typelevel.org/cats/guidelines.html#partially-applied-type-params) pattern. We ignore this.
 - We ignore the distinction between by-name and by-value input parameters. We use the notation `=> A`, without parameters, to indicate constant functions.

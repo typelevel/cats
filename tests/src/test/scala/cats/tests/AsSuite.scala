@@ -109,7 +109,7 @@ class AsSuite extends CatsSuite {
     val f2: Bottom => Any = As.conF(cAsA)(f)
   }
 
-  test("we can simultaneously narrow the input and widen the ouptut of a Function1") {
+  test("we can simultaneously narrow the input and widen the output of a Function1") {
     val f: Top => Bottom = _ => Bottom()
     val cAsA: Bottom As Top = implicitly
     val f2: Bottom => Top = As.invF(cAsA, cAsA)(f)

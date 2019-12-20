@@ -161,7 +161,7 @@ import Foldable.sentinel
    * {{{
    * scala> import cats.implicits._
    * scala> val l = List(6, 3, 2)
-   * This is eqivalent to 6 - (3 - 2)
+   * This is equivalent to 6 - (3 - 2)
    * scala> Foldable[List].reduceRightOption(l)((current, rest) => rest.map(current - _)).value
    * res0: Option[Int] = Some(5)
    *

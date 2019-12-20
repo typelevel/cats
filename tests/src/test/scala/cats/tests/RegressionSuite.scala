@@ -112,7 +112,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     }
 
     List(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
-    // shouldn't have ever evaluted validate(8)
+    // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
     Stream(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
