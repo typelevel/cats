@@ -15,6 +15,7 @@ import MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
+import cats.laws.discipline.ExhaustiveCheck
 
 class AlgebraInvariantSuite extends CatsSuite {
   // working around https://github.com/typelevel/cats/issues/2701
@@ -152,12 +153,50 @@ class AlgebraInvariantSuite extends CatsSuite {
   implicit private val arbCommutativeGroupInt: Arbitrary[CommutativeGroup[Int]] =
     Arbitrary(genCommutativeGroupInt)
 
+  implicit private val arbNumericMiniInt: Arbitrary[Numeric[MiniInt]] = Arbitrary {
+    Gen.const {
+      new Numeric[MiniInt] {
+        def compare(x: MiniInt, y: MiniInt): Int = Order[MiniInt].compare(x, y)
+        def plus(x: MiniInt, y: MiniInt): MiniInt = x + y
+        def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
+        def times(x: MiniInt, y: MiniInt): MiniInt = x * y
+        def negate(x: MiniInt): MiniInt = -x
+        // I don't like this either
+        def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)
+        def toInt(x: MiniInt): Int = x.toInt
+        def toLong(x: MiniInt): Long = x.toInt.toLong
+        def toFloat(x: MiniInt): Float = x.toInt.toFloat
+        def toDouble(x: MiniInt): Double = x.toInt.toDouble
+      }
+    }
+  }
+
+  // this is horrible, don't do this
+  implicit private def eqNumeric[A: Eq: ExhaustiveCheck]: Eq[Numeric[A]] = Eq.by { numeric =>
+    val fromInt = numeric.fromInt _
+
+    (
+      numeric.compare _,
+      numeric.plus _,
+      numeric.minus _,
+      numeric.times _,
+      numeric.negate _,
+      fromInt.compose((_: MiniInt).toInt),
+      numeric.toInt _,
+      numeric.toLong _,
+      numeric.toFloat _,
+      numeric.toDouble _
+    )
+  }
+
   checkAll("InvariantMonoidal[Semigroup]", SemigroupTests[Int](InvariantMonoidal[Semigroup].point(0)).semigroup)
   checkAll("InvariantMonoidal[CommutativeSemigroup]",
            CommutativeSemigroupTests[Int](InvariantMonoidal[CommutativeSemigroup].point(0)).commutativeSemigroup)
 
   checkAll("InvariantSemigroupal[Monoid]",
            InvariantSemigroupalTests[Monoid].invariantSemigroupal[Option[MiniInt], Option[Boolean], Option[Boolean]])
+
+  checkAll("Invariant[Numeric]", InvariantTests[Numeric].invariant[MiniInt, Boolean, Boolean])
 
   {
     val S: Semigroup[Int] = Semigroup[Int].imap(identity)(identity)
@@ -230,11 +269,12 @@ class AlgebraInvariantSuite extends CatsSuite {
   checkAll("Invariant[Monoid]", InvariantTests[Monoid].invariant[Option[MiniInt], Boolean, Boolean])
   checkAll("Invariant[Monoid]", SerializableTests.serializable(Invariant[Monoid]))
 
-  Eq[Band[Set[Boolean]]]
-  cats.laws.discipline.ExhaustiveCheck[Set[Boolean]]
-  Eq[(Set[Boolean], Boolean)]
-  Eq[(Set[Boolean], Set[Boolean] => (Set[Boolean], Boolean))]
-  Eq[CommutativeSemigroup[Set[Boolean]]]
+  //do we need these?
+  // Eq[Band[Set[Boolean]]]
+  // cats.laws.discipline.ExhaustiveCheck[Set[Boolean]]
+  // Eq[(Set[Boolean], Boolean)]
+  // Eq[(Set[Boolean], Set[Boolean] => (Set[Boolean], Boolean))]
+  // Eq[CommutativeSemigroup[Set[Boolean]]]
   checkAll("Invariant[Semilattice]", InvariantTests[Semilattice].invariant[MiniInt, Set[Boolean], Set[Boolean]])
   checkAll("Invariant[Semilattice]", SerializableTests.serializable(Invariant[Semilattice]))
 
