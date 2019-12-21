@@ -161,7 +161,8 @@ class AlgebraInvariantSuite extends CatsSuite {
         def minus(x: MiniInt, y: MiniInt): MiniInt = x + (-y)
         def times(x: MiniInt, y: MiniInt): MiniInt = x * y
         def negate(x: MiniInt): MiniInt = -x
-        // I don't like this either
+        // I don't like this either.
+        // This is relatively fine though, as `fromInt` in these tests will only be called with an int that comes from `MiniInt#toInt`.
         def fromInt(x: Int): MiniInt = MiniInt.unsafeFromInt(x)
         def toInt(x: MiniInt): Int = x.toInt
         def toLong(x: MiniInt): Long = x.toInt.toLong

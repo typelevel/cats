@@ -45,6 +45,9 @@ trait InvariantMonoidalInstances {
 
       def unit: CommutativeSemigroup[Unit] = implicitly
     }
+}
+
+private[instances] trait InvariantInstances {
 
   implicit val catsInvariantNumeric: Invariant[Numeric] = new Invariant[Numeric] {
     def imap[A, B](fa: Numeric[A])(f: A => B)(g: B => A): Numeric[B] = new Numeric[B] {
