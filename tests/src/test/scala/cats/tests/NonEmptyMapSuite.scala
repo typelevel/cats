@@ -214,7 +214,8 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("NonEmptyMap#updateWith should not act when key is missing") {
-    val single = NonEmptyMap[String, Int](("here", 1), SortedMap())
+    import scala.math.Ordering.{String => StringOrd}
+    val single: NonEmptyMap[String, Int] = NonEmptyMap[String, Int](("here", 1), SortedMap()(StringOrd)) // null: ignored parameter
     single.lookup("notHere") should ===(single.updateWith("notHere")(_ => 1).lookup("notHere"))
   }
 
