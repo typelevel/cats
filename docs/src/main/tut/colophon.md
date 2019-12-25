@@ -13,11 +13,11 @@ We would like to thank the maintainers of these supporting projects,
 and we'd encourage you to check out these projects and consider
 integrating them into your own projects.
 
- * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing type class boilerplate
+ * [simulacrum](https://github.com/typelevel/simulacrum) for minimizing type class boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
- * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
+ * [kind-projector](https://github.com/typelevel/kind-projector) for type lambda syntax
  * [tut](https://github.com/tpolecat/tut) type-checked example code makes sure that our examples stay in sync with the rest of our source
 
 There are other libraries that aim to foster Functional Programming in the Scala programming language which Cats has a relationship to:

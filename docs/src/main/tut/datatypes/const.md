@@ -134,7 +134,7 @@ is to take an `A` and return it right back (lifted into `Const`).
 Before we plug and play however, note that `modifyF` has a `Functor` constraint on `F[_]`. This means we need to
 define a `Functor` instance for `Const`, where the first type parameter is fixed.
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.data.Const

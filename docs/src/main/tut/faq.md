@@ -72,7 +72,7 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 
 ## <a id="example-compile" href="#example-compile"></a>Why is some example code not compiling for me?
 
-A portion of example code requires either the [Kind-projector](https://github.com/non/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+A portion of example code requires either the [Kind-projector](https://github.com/typelevel/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
 
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
@@ -142,7 +142,7 @@ It may be worth keeping in mind that `IO` and `Task` are pretty blunt instrument
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
-Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, [Simulacrum](https://github.com/mpilquist/simulacrum) introduces `@typeclass`, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the [project page](https://github.com/mpilquist/simulacrum).
+Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, [Simulacrum](https://github.com/typelevel/simulacrum) introduces `@typeclass`, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the [project page](https://github.com/typelevel/simulacrum).
 
 Note that the one area where simulacrum is intentionally not used is in the `cats-kernel` module. The `cats-kernel` module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to [typeclassic](https://github.com/typelevel/typeclassic), and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in `cats-kernel`, provides insulation against any potential binary compatibility problems in such a transition.
 
@@ -152,7 +152,7 @@ Cats defines a wealth of type classes and type class instances. For a number of 
 
 **Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation]({{ site.baseurl }}/datatypes/either.html).
 
-**Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
+**Enter [kind-projector](https://github.com/typelevel/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/typelevel/kind-projector).
 
 ## <a id="tailrecm" href="#tailrecm"></a>What is `tailRecM`?
 

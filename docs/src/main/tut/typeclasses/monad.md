@@ -129,7 +129,7 @@ instructions on how to compose any outer monad (`F` in the following
 example) with a specific inner monad (`Option` in the following
 example).
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 case class OptionT[F[_], A](value: F[Option[A]])
