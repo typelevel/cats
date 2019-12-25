@@ -7,11 +7,11 @@ ensure correctness.
 
 Cats will be designed to use modern *best practices*:
 
- * [simulacrum](https://github.com/mpilquist/simulacrum) for minimizing type class boilerplate
+ * [simulacrum](https://github.com/typelevel/simulacrum) for minimizing type class boilerplate
  * [machinist](https://github.com/typelevel/machinist) for optimizing implicit operators
  * [scalacheck](http://scalacheck.org) for property-based testing
  * [discipline](https://github.com/typelevel/discipline) for encoding and testing laws
- * [kind-projector](https://github.com/non/kind-projector) for type lambda syntax
+ * [kind-projector](https://github.com/typelevel/kind-projector) for type lambda syntax
  * [algebra](https://github.com/non/algebra) for shared algebraic structures
  * ...and of course a pure functional subset of the Scala language.
 
