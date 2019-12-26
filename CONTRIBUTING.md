@@ -261,8 +261,7 @@ we'll do our best to improve the process.
 
 Discussion around Cats is currently happening in the
 [Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/typelevel/cats).
+issue and PR pages.
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
