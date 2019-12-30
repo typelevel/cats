@@ -382,11 +382,10 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, *]] {
 
   def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
     OptionT(
-      F.tailRecM(a)(
-        a0 =>
-          F.map(f(a0).value)(
-            _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
-          )
+      F.tailRecM(a)(a0 =>
+        F.map(f(a0).value)(
+          _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
+        )
       )
     )
 }
@@ -423,12 +422,11 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
 
   override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
     OptionT(
-      F.contramap(F.product(fa.value, fb.value))(
-        (t: Option[(A, B)]) =>
-          t match {
-            case Some((x, y)) => (Some(x), Some(y))
-            case None         => (None, None)
-          }
+      F.contramap(F.product(fa.value, fb.value))((t: Option[(A, B)]) =>
+        t match {
+          case Some((x, y)) => (Some(x), Some(y))
+          case None         => (None, None)
+        }
       )
     )
 }

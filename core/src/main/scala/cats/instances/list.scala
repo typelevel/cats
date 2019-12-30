@@ -103,12 +103,11 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def partitionEither[A, B, C](
         fa: List[A]
       )(f: (A) => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =
-        fa.foldRight((List.empty[B], List.empty[C]))(
-          (a, acc) =>
-            f(a) match {
-              case Left(b)  => (b :: acc._1, acc._2)
-              case Right(c) => (acc._1, c :: acc._2)
-            }
+        fa.foldRight((List.empty[B], List.empty[C]))((a, acc) =>
+          f(a) match {
+            case Left(b)  => (b :: acc._1, acc._2)
+            case Right(c) => (acc._1, c :: acc._2)
+          }
         )
 
       @tailrec
@@ -201,15 +200,13 @@ private[instances] trait ListInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(List.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o))
-        )
+        .foldRight(fa, Eval.now(G.pure(List.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o)))
         .value
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(List.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
+        .foldRight(fa, Eval.now(G.pure(List.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
         )
         .value
   }

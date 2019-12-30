@@ -65,14 +65,13 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.forceAll") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Option, Int](spooky.counter)(
-        i =>
-          if (i == 5) {
-            None
-          } else {
-            spooky.increment()
-            Some(spooky.counter)
-          }
+      Cofree.unfold[Option, Int](spooky.counter)(i =>
+        if (i == 5) {
+          None
+        } else {
+          spooky.increment()
+          Some(spooky.counter)
+        }
       )
     spooky.counter should ===(0)
     incrementor.forceAll
@@ -101,8 +100,8 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.cata") {
     val cata =
       Cofree
-        .cata[Option, Int, NonEmptyList[Int]](unfoldedHundred)(
-          (i, lb) => Eval.now(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
+        .cata[Option, Int, NonEmptyList[Int]](unfoldedHundred)((i, lb) =>
+          Eval.now(NonEmptyList(i, lb.fold[List[Int]](Nil)(_.toList)))
         )
         .value
     cata should ===(nelUnfoldedHundred)
@@ -113,9 +112,7 @@ class CofreeSuite extends CatsSuite {
     val sum = List.tabulate(50000)(identity).sum
     val cata =
       Cofree
-        .cata[Option, Int, Int](unfolded)(
-          (i, lb) => Eval.now(lb.fold(0)(_ + i))
-        )
+        .cata[Option, Int, Int](unfolded)((i, lb) => Eval.now(lb.fold(0)(_ + i)))
         .value
 
     cata should ===(sum)
@@ -171,12 +168,11 @@ sealed trait CofreeSuiteInstances {
       Gen.resize(20, Gen.nonEmptyListOf(implicitly[Arbitrary[A]].arbitrary))
     }
     Arbitrary {
-      arb.arbitrary.map(
-        l =>
-          (l.head, l.tail) match {
-            case (h, Nil) => nelToCofNel(NonEmptyList(h, Nil))
-            case (h, t)   => nelToCofNel(NonEmptyList(h, t))
-          }
+      arb.arbitrary.map(l =>
+        (l.head, l.tail) match {
+          case (h, Nil) => nelToCofNel(NonEmptyList(h, Nil))
+          case (h, t)   => nelToCofNel(NonEmptyList(h, t))
+        }
       )
     }
   }

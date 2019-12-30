@@ -332,12 +332,11 @@ import Foldable.sentinel
    *}}}
    */
   def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
-    foldLeft(fa, B.empty)(
-      (acc, a) =>
-        f(a) match {
-          case Some(x) => B.combine(acc, x)
-          case None    => acc
-        }
+    foldLeft(fa, B.empty)((acc, a) =>
+      f(a) match {
+        case Some(x) => B.combine(acc, x)
+        case None    => acc
+      }
     )
 
   /**
@@ -699,12 +698,11 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMap(fa)(
-      a =>
-        f(a) match {
-          case Right(c) => (A.empty[B], A.pure(c))
-          case Left(b)  => (A.pure(b), A.empty[C])
-        }
+    foldMap(fa)(a =>
+      f(a) match {
+        case Right(c) => (A.empty[B], A.pure(c))
+        case Left(b)  => (A.pure(b), A.empty[C])
+      }
     )
   }
 
@@ -806,8 +804,8 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMap[A, (F[B], F[C])](fa)(
-      a => H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+    foldMap[A, (F[B], F[C])](fa)(a =>
+      H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
     )
   }
 
@@ -832,11 +830,10 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMapM[G, A, (F[B], F[C])](fa)(
-      a =>
-        M.map(f(a)) {
-          H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
-        }
+    foldMapM[G, A, (F[B], F[C])](fa)(a =>
+      M.map(f(a)) {
+        H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+      }
     )
   }
 

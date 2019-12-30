@@ -812,15 +812,13 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
         .value
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, chain) => if (b) x +: chain else chain)
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, chain) => if (b) x +: chain else chain)
         )
         .value
 

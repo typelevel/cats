@@ -25,12 +25,11 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
   implicit def catsLawsCogenForTry[A](implicit A: Cogen[A]): Cogen[Try[A]] =
-    Cogen(
-      (seed, x) =>
-        x match {
-          case Success(a) => A.perturb(seed, a)
-          case Failure(e) => Cogen[Throwable].perturb(seed, e)
-        }
+    Cogen((seed, x) =>
+      x match {
+        case Success(a) => A.perturb(seed, a)
+        case Failure(e) => Cogen[Throwable].perturb(seed, e)
+      }
     )
 
   // this instance is not available in ScalaCheck 1.13.2.
@@ -203,11 +202,10 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsArbitraryForEq[A: Arbitrary]: Arbitrary[Eq[A]] =
     Arbitrary(
-      getArbitrary[Int => Int].map(
-        f =>
-          new Eq[A] {
-            def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
-          }
+      getArbitrary[Int => Int].map(f =>
+        new Eq[A] {
+          def eqv(x: A, y: A): Boolean = f(x.##) == f(y.##)
+        }
       )
     )
 
@@ -216,12 +214,11 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsArbitraryForPartialOrder[A: Arbitrary]: Arbitrary[PartialOrder[A]] =
     Arbitrary(
-      getArbitrary[Int => Double].map(
-        f =>
-          new PartialOrder[A] {
-            def partialCompare(x: A, y: A): Double =
-              if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
-          }
+      getArbitrary[Int => Double].map(f =>
+        new PartialOrder[A] {
+          def partialCompare(x: A, y: A): Double =
+            if (x.## == y.##) 0.0 else f(x.##) - f(y.##)
+        }
       )
     )
 
@@ -230,11 +227,10 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit def catsLawsArbitraryForOrder[A: Arbitrary]: Arbitrary[Order[A]] =
     Arbitrary(
-      getArbitrary[Int => Int].map(
-        f =>
-          new Order[A] {
-            def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
-          }
+      getArbitrary[Int => Int].map(f =>
+        new Order[A] {
+          def compare(x: A, y: A): Int = java.lang.Integer.compare(f(x.##), f(y.##))
+        }
       )
     )
 

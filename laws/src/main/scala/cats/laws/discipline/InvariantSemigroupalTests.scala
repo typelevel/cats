@@ -26,8 +26,8 @@ trait InvariantSemigroupalTests[F[_]] extends InvariantTests[F] with Semigroupal
     val parents = Seq(invariant[A, B, C], semigroupal[A, B, C])
     val bases = Nil
     val props = Seq(
-      "invariant semigroupal associativity" -> forAll(
-        (fa: F[A], fb: F[B], fc: F[C]) => laws.invariantSemigroupalAssociativity(fa, fb, fc)
+      "invariant semigroupal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) =>
+        laws.invariantSemigroupalAssociativity(fa, fb, fc)
       )
     )
   }

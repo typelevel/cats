@@ -397,8 +397,8 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test("Foldable[SortedMap[String, *]].foldM/existsM/forallM/findM/collectFirstSomeM stack safety") {
-    checkMonadicFoldsStackSafety[SortedMap[String, *]](
-      xs => SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap
+    checkMonadicFoldsStackSafety[SortedMap[String, *]](xs =>
+      SortedMap.empty[String, Int] ++ xs.map(x => x.toString -> x).toMap
     )
   }
 

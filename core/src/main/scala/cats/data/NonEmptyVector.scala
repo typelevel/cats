@@ -317,14 +317,13 @@ sealed abstract private[data] class NonEmptyVectorInstances {
         import cats.syntax.either._
         import cats.syntax.reducible._
 
-        reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)(
-          (ior, a) =>
-            (f(a), ior) match {
-              case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
-              case (Right(c), _)           => ior.map(_ :+ c)
-              case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
-              case (Left(b), _)            => ior.leftMap(_ :+ b)
-            }
+        reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) =>
+          (f(a), ior) match {
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
+            case (Right(c), _)           => ior.map(_ :+ c)
+            case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
+            case (Left(b), _)            => ior.leftMap(_ :+ b)
+          }
         ).bimap(_.toNonEmptyList, _.toNonEmptyList)
 
       }

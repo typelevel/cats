@@ -473,12 +473,11 @@ private[data] trait KleisliArrowChoice[F[_]]
     Kleisli { case (a, c) => F.flatMap(f.run(a))(b => F.map(g.run(c))(d => (b, d))) }
 
   def choose[A, B, C, D](f: Kleisli[F, A, C])(g: Kleisli[F, B, D]): Kleisli[F, Either[A, B], Either[C, D]] =
-    Kleisli(
-      (fe: Either[A, B]) =>
-        fe match {
-          case Left(a)  => F.map(f(a))(Left.apply _)
-          case Right(b) => F.map(g(b))(Right.apply _)
-        }
+    Kleisli((fe: Either[A, B]) =>
+      fe match {
+        case Left(a)  => F.map(f(a))(Left.apply _)
+        case Right(b) => F.map(g(b))(Right.apply _)
+      }
     )
 }
 

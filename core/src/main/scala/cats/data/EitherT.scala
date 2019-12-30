@@ -946,13 +946,12 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, *]] with E
   def flatMap[A, B](fa: EitherT[F, L, A])(f: A => EitherT[F, L, B]): EitherT[F, L, B] = fa.flatMap(f)
   def tailRecM[A, B](a: A)(f: A => EitherT[F, L, Either[A, B]]): EitherT[F, L, B] =
     EitherT(
-      F.tailRecM(a)(
-        a0 =>
-          F.map(f(a0).value) {
-            case Left(l)         => Right(Left(l))
-            case Right(Left(a1)) => Left(a1)
-            case Right(Right(b)) => Right(Right(b))
-          }
+      F.tailRecM(a)(a0 =>
+        F.map(f(a0).value) {
+          case Left(l)         => Right(Left(l))
+          case Right(Left(a1)) => Left(a1)
+          case Right(Right(b)) => Right(Right(b))
+        }
       )
     )
 }

@@ -260,14 +260,13 @@ import simulacrum.{noop, typeclass}
     import cats.syntax.either._
 
     def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
-      eval.map(
-        ior =>
-          (f(a), ior) match {
-            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-            case (Right(c), _)           => ior.map(c :: _)
-            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-            case (Left(b), _)            => ior.leftMap(b :: _)
-          }
+      eval.map(ior =>
+        (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+          case (Right(c), _)           => ior.map(c :: _)
+          case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+          case (Left(b), _)            => ior.leftMap(b :: _)
+        }
       )
 
     reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
