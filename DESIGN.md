@@ -39,7 +39,6 @@ Cats provides the following modules:
  * `kernel`: Definitions for the basic algebraic type classes 
  * `kernel-laws`: The encoded laws for type classes defined in `kernel`, exported to assist third-party testing.
  * `free`: Free structures such as the free monad, and supporting type classes.
- * `macros`: Macro definitions needed for `core` and other projects.
  * `tests`: Verifies the laws, and runs any other tests. Not published.
  * `bench`: Benchmarking suites. Not published. 
 

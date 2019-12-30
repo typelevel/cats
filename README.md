@@ -121,7 +121,6 @@ This will pull in the cats-core module. If you require some other
 functionality, you can pick-and-choose from amongst these modules
 (used in place of `"cats-core"`):
 
- * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-kernel`: Small set of basic type classes (*required*).
  * `cats-core`: Most core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
