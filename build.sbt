@@ -781,7 +781,6 @@ def commonScalacOptions(scalaVersion: String) =
     "-language:existentials",
     "-language:higherKinds",
     "-language:implicitConversions",
-    "-language:experimental.macros",
     "-unchecked",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",

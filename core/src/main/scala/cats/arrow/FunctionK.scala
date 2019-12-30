@@ -1,6 +1,7 @@
 package cats
 package arrow
 
+import scala.language.experimental.macros
 import scala.reflect.macros.blackbox.Context
 
 import cats.data.{EitherK, Tuple2K}
