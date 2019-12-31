@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{Const, OptionT}
+import cats.data.{Const, IdT, OptionT}
 import cats.kernel.{Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
@@ -275,6 +275,46 @@ class OptionTSuite extends CatsSuite {
   test("OptionT[Id, A].isEmpty consistent with Option.isEmpty") {
     forAll { (o: Option[Int]) =>
       o.isEmpty should ===(OptionT[Id, Int](o).isEmpty)
+    }
+  }
+
+  test("OptionT.when[Id, A] consistent with the same implementation of Option.when") {
+    val when = (c: Boolean, j: Int) => if (c) Some(j) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.when[Id, Int](b)(i).value should ===(when(b, i))
+    }
+  }
+
+  test("OptionT.whenF[F, A] consistent with the same implementation of Option.when") {
+    val when = (c: Boolean, j: Int) => if (c) Some(j) else None
+    forAll { (li: List[Int], b: Boolean) =>
+      OptionT.whenF(b)(li).value should ===(li.map(when(b, _)))
+    }
+  }
+
+  test("OptionT.whenK and OptionT.whenF consistent") {
+    forAll { (li: List[Int], b: Boolean) =>
+      IdT(li).mapK(OptionT.whenK(b)).value should ===(OptionT.whenF(b)(li))
+    }
+  }
+
+  test("OptionT.unless[Id, A] consistent with the same implementation of Option.unless") {
+    val unless = (c: Boolean, j: Int) => if (!c) Some(j) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.unless[Id, Int](b)(i).value should ===(unless(b, i))
+    }
+  }
+
+  test("OptionT.unlessF[F, A] consistent with the same implementation of Option.unless") {
+    val unless = (c: Boolean, j: Int) => if (!c) Some(j) else None
+    forAll { (li: List[Int], b: Boolean) =>
+      OptionT.unlessF(b)(li).value should ===(li.map(unless(b, _)))
+    }
+  }
+
+  test("OptionT.unlessK and OptionT.unlessF consistent") {
+    forAll { (li: List[Int], b: Boolean) =>
+      IdT(li).mapK(OptionT.unlessK(b)).value should ===(OptionT.unlessF(b)(li))
     }
   }
 
