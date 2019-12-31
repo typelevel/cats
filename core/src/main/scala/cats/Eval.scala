@@ -356,7 +356,7 @@ object Eval extends EvalInstances {
                 case Nil     => a
               }
             case None =>
-              loop(eval, addToMemo(m) :: fs)
+              loop(eval, addToMemo(m.asInstanceOf[M]) :: fs)
           }
         case x =>
           fs match {
