@@ -21,8 +21,8 @@ trait SemigroupalTests[F[_]] extends Laws {
     new DefaultRuleSet(
       name = "semigroupal",
       parent = None,
-      "semigroupal associativity" -> forAll(
-        (fa: F[A], fb: F[B], fc: F[C]) => iso.associativity(laws.semigroupalAssociativity(fa, fb, fc))
+      "semigroupal associativity" -> forAll((fa: F[A], fb: F[B], fc: F[C]) =>
+        iso.associativity(laws.semigroupalAssociativity(fa, fb, fc))
       )
     )
 }

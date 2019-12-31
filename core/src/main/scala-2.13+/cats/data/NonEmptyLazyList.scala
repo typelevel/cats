@@ -386,8 +386,8 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def monad: Monad[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
 
       def sequential: OneAnd[ZipLazyList, *] ~> NonEmptyLazyList =
-        λ[OneAnd[ZipLazyList, *] ~> NonEmptyLazyList](
-          znell => NonEmptyLazyList.fromLazyListPrepend(znell.head, znell.tail.value)
+        λ[OneAnd[ZipLazyList, *] ~> NonEmptyLazyList](znell =>
+          NonEmptyLazyList.fromLazyListPrepend(znell.head, znell.tail.value)
         )
 
       def parallel: NonEmptyLazyList ~> OneAnd[ZipLazyList, *] =

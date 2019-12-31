@@ -172,14 +172,12 @@ private object QueueInstances {
     override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
-      fa.foldRight(Eval.now(G.pure(Queue.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
+      fa.foldRight(Eval.now(G.pure(Queue.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
         .value
 
     override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
-      fa.foldRight(Eval.now(G.pure(Queue.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+      fa.foldRight(Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
         )
         .value
   }

@@ -47,12 +47,11 @@ class FreeTSuite extends CatsSuite {
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      Monad[FreeTOption].tailRecM(0)(
-        (i: Int) =>
-          if (i < 50000)
-            Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
-          else
-            Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
+      Monad[FreeTOption].tailRecM(0)((i: Int) =>
+        if (i < 50000)
+          Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
+        else
+          Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
       )
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
@@ -61,8 +60,8 @@ class FreeTSuite extends CatsSuite {
   test("Stack safe with 50k left-associated flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-        (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+      (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+        fu.flatMap(u => Applicative[FreeTOption].pure(u))
       )
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
@@ -71,9 +70,7 @@ class FreeTSuite extends CatsSuite {
   test("Stack safe with flatMap followed by 50k maps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))(
-        (fu, i) => fu.map(identity)
-      )
+      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
   }
@@ -86,8 +83,8 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("mapK stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-      (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+      fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.mapK(FunctionK.id)
   }
@@ -102,8 +99,8 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("compile stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-      (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+      fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.compile(FunctionK.id) // used to overflow
   }
@@ -191,9 +188,7 @@ class FreeTSuite extends CatsSuite {
 
   test("toString is stack-safe") {
     val result =
-      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))(
-        (fu, i) => fu.map(identity)
-      )
+      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
     result.toString.length should be > 0
   }
 

@@ -599,14 +599,13 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         val reversed = fa.reverse
         val lastIor = f(reversed.head).bimap(NonEmptyList.one, NonEmptyList.one).toIor
 
-        reversed.tail.foldLeft(lastIor)(
-          (ior, a) =>
-            (f(a), ior) match {
-              case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-              case (Right(c), _)           => ior.map(c :: _)
-              case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-              case (Left(b), _)            => ior.leftMap(b :: _)
-            }
+        reversed.tail.foldLeft(lastIor)((ior, a) =>
+          (f(a), ior) match {
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+            case (Right(c), _)           => ior.map(c :: _)
+            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+            case (Left(b), _)            => ior.leftMap(b :: _)
+          }
         )
 
       }

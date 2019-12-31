@@ -24,16 +24,15 @@ import simulacrum.typeclass
    */
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
-    tailRecM[G[A], G[A]](G.empty)(
-      xs =>
-        ifM(p)(
-          ifTrue = {
-            map(b.value) { bv =>
-              Left(G.combineK(xs, G.pure(bv)))
-            }
-          },
-          ifFalse = pure(Right(xs))
-        )
+    tailRecM[G[A], G[A]](G.empty)(xs =>
+      ifM(p)(
+        ifTrue = {
+          map(b.value) { bv =>
+            Left(G.combineK(xs, G.pure(bv)))
+          }
+        },
+        ifFalse = pure(Right(xs))
+      )
     )
   }
 
@@ -46,14 +45,13 @@ import simulacrum.typeclass
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
     val b = Eval.later(body)
-    tailRecM(())(
-      _ =>
-        ifM(p)(
-          ifTrue = {
-            map(b.value)(_ => continue)
-          },
-          ifFalse = stop
-        )
+    tailRecM(())(_ =>
+      ifM(p)(
+        ifTrue = {
+          map(b.value)(_ => continue)
+        },
+        ifFalse = stop
+      )
     )
   }
 
