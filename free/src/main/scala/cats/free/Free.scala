@@ -70,9 +70,10 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   }
 
   /**
-   * A combination of step and fold.
+   * A combination of step and fold. May be used to define interpreters with custom
+   * (non-monoidial) control flow.
    */
-  final private[free] def foldStep[B](
+  final def foldStep[B](
     onPure: A => B,
     onSuspend: S[A] => B,
     onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
