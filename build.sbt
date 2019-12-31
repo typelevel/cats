@@ -417,8 +417,7 @@ lazy val catsJVM = project
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJvmSettings)
-  .aggregate(macros.jvm,
-             kernel.jvm,
+  .aggregate(kernel.jvm,
              kernelLaws.jvm,
              core.jvm,
              laws.jvm,
@@ -431,7 +430,6 @@ lazy val catsJVM = project
              jvm,
              docs)
   .dependsOn(
-    macros.jvm,
     kernel.jvm,
     kernelLaws.jvm,
     core.jvm,
@@ -451,8 +449,7 @@ lazy val catsJS = project
   .settings(noPublishSettings)
   .settings(catsSettings)
   .settings(commonJsSettings)
-  .aggregate(macros.js,
-             kernel.js,
+  .aggregate(kernel.js,
              kernelLaws.js,
              core.js,
              laws.js,
@@ -464,7 +461,6 @@ lazy val catsJS = project
              alleycatsTests.js,
              js)
   .dependsOn(
-    macros.js,
     kernel.js,
     kernelLaws.js,
     core.js,
@@ -478,15 +474,6 @@ lazy val catsJS = project
     js
   )
   .enablePlugins(ScalaJSPlugin)
-
-lazy val macros = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .settings(moduleName := "cats-macros", name := "Cats macros")
-  .settings(catsSettings)
-  .jsSettings(commonJsSettings)
-  .jvmSettings(commonJvmSettings)
-  .jsSettings(coverageEnabled := false)
-  .settings(scalacOptions := scalacOptions.value.filter(_ != "-Xfatal-warnings"))
 
 lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -517,7 +504,7 @@ lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros, kernel)
+  .dependsOn(kernel)
   .settings(moduleName := "cats-core", name := "Cats core")
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
@@ -528,7 +515,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 
 lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros, kernel, core, kernelLaws)
+  .dependsOn(kernel, core, kernelLaws)
   .settings(moduleName := "cats-laws", name := "Cats laws")
   .settings(catsSettings)
   .settings(disciplineDependencies)
@@ -539,7 +526,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
 
 lazy val free = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros, core, tests % "test-internal -> test")
+  .dependsOn(core, tests % "test-internal -> test")
   .settings(moduleName := "cats-free", name := "Cats Free")
   .settings(catsSettings)
   .jsSettings(commonJsSettings)
@@ -558,7 +545,7 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros, core, laws)
+  .dependsOn(core, laws)
   .enablePlugins(BuildInfoPlugin)
   .settings(buildInfoKeys := Seq[BuildInfoKey](scalaVersion), buildInfoPackage := "cats.tests")
   .settings(moduleName := "cats-testkit")
@@ -607,7 +594,7 @@ lazy val alleycatsTests = crossProject(JSPlatform, JVMPlatform)
 // bench is currently JVM-only
 
 lazy val bench = project
-  .dependsOn(macros.jvm, core.jvm, free.jvm, laws.jvm)
+  .dependsOn(core.jvm, free.jvm, laws.jvm)
   .settings(moduleName := "cats-bench")
   .settings(catsSettings)
   .settings(noPublishSettings)
@@ -643,7 +630,7 @@ lazy val binCompatTest = project
 
 // cats-js is JS-only
 lazy val js = project
-  .dependsOn(macros.js, core.js, tests.js % "test-internal -> test")
+  .dependsOn(core.js, tests.js % "test-internal -> test")
   .settings(moduleName := "cats-js")
   .settings(catsSettings)
   .settings(commonJsSettings)
@@ -651,7 +638,7 @@ lazy val js = project
 
 // cats-jvm is JVM-only
 lazy val jvm = project
-  .dependsOn(macros.jvm, core.jvm, tests.jvm % "test-internal -> test")
+  .dependsOn(core.jvm, tests.jvm % "test-internal -> test")
   .settings(moduleName := "cats-jvm")
   .settings(catsSettings)
   .settings(commonJvmSettings)
@@ -749,7 +736,7 @@ addCommandAlias("fmtCheck", "; compile:scalafmtCheck; test:scalafmtCheck; scalaf
 
 // These aliases serialise the build for the benefit of Travis-CI.
 addCommandAlias("buildKernelJVM", ";kernelJVM/test;kernelLawsJVM/test")
-addCommandAlias("buildCoreJVM", ";macrosJVM/test;coreJVM/test")
+addCommandAlias("buildCoreJVM", ";coreJVM/test")
 addCommandAlias("buildTestsJVM", ";lawsJVM/test;testkitJVM/test;testsJVM/test;jvm/test")
 addCommandAlias("buildFreeJVM", ";freeJVM/test")
 addCommandAlias("buildAlleycatsJVM", ";alleycatsCoreJVM/test;alleycatsLawsJVM/test;alleycatsTestsJVM/test")
@@ -794,7 +781,6 @@ def commonScalacOptions(scalaVersion: String) =
     "-language:existentials",
     "-language:higherKinds",
     "-language:implicitConversions",
-    "-language:experimental.macros",
     "-unchecked",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
