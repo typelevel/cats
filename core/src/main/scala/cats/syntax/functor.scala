@@ -18,11 +18,11 @@ final class UnzipFunctorOps[F[_], A, B](private val fab: F[(A, B)]) extends AnyV
    * NOTE: Check for effect duplication, possibly memoize before
    *
    * {{{
+   * scala> import cats.Id
+   * scala> import cats.syntax.functor._
    *
-   * import cats.Id
-   * import cats.syntax.functor._
-   *
-   * scala> (5: Id[Int]).map(i => (i, i)).unzip == (5, 5)
+   * scala> (5: Id[Int]).map(i => (i, i)).unzip == ((5, 5))
+   * res0: Boolean = true
    * }}}
    *
    */
