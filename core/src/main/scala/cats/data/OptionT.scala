@@ -225,14 +225,14 @@ object OptionT extends OptionTInstances {
     λ[F ~> OptionT[F, *]](OptionT.liftF(_))
 
   /**
-   * Creates a nonempty `OptionT[F, A]` from an `A` value if the given condition is `true`.
+   * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`.
    * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
    */
   def when[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
     if (cond) OptionT.some[F](a) else OptionT.none[F, A]
 
   /**
-   * Creates a nonempty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`.
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`.
    * Otherwise, the empty `OptionT[F, A]` is returned. Analogous to `Option.when`.
    */
   def whenF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
@@ -245,14 +245,14 @@ object OptionT extends OptionTInstances {
     λ[F ~> OptionT[F, *]](OptionT.whenF(cond)(_))
 
   /**
-   * Creates a nonempty `OptionT[F, A]` from an `A` if the given condition is `false`.
+   * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`.
    * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
    */
   def unless[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT.when(!cond)(a)
 
   /**
-   * Creates an nonempty `OptionT[F, A]` from an `F[A]` if the given condition is `false`.
+   * Creates an non-empty `OptionT[F, A]` from an `F[A]` if the given condition is `false`.
    * Otherwise, the empty `OptionT[F, A]` is returned. Analogous to `Option.unless`.
    */
   def unlessF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
