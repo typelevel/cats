@@ -285,10 +285,14 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.whenF[F, A] consistent with the same implementation of Option.when") {
-    val when = (c: Boolean, j: Int) => if (c) Some(j) else None
-    forAll { (li: List[Int], b: Boolean) =>
-      OptionT.whenF(b)(li).value should ===(li.map(when(b, _)))
+  test("OptionT.whenF[F, A] consistent with Option.when") {
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.whenF[Id, Int](b)(i).value should ===(when(b, i))
+    }
+
+    forAll { (i: List[Int], b: Boolean) =>
+      OptionT.whenF[List, Int](b)(i).value should ===(when(b, i).sequence)
     }
   }
 
@@ -305,10 +309,14 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.unlessF[F, A] consistent with the same implementation of Option.unless") {
-    val unless = (c: Boolean, j: Int) => if (!c) Some(j) else None
-    forAll { (li: List[Int], b: Boolean) =>
-      OptionT.unlessF(b)(li).value should ===(li.map(unless(b, _)))
+  test("OptionT.unlessF[F, A] consistent with Option.unless") {
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.unlessF[Id, Int](b)(i).value should ===(unless(b, i))
+    }
+
+    forAll { (i: List[Int], b: Boolean) =>
+      OptionT.unlessF[List, Int](b)(i).value should ===(unless(b, i).sequence)
     }
   }
 
