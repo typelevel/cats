@@ -278,17 +278,19 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.when[Id, A] consistent with the same implementation of Option.when") {
-    val when = (c: Boolean, j: Int) => if (c) Some(j) else None
+  test("OptionT.when[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
       OptionT.when[Id, Int](b)(i).value should ===(when(b, i))
     }
   }
 
-  test("OptionT.whenF[F, A] consistent with the same implementation of Option.when") {
-    val when = (c: Boolean, j: Int) => if (c) Some(j) else None
-    forAll { (li: List[Int], b: Boolean) =>
-      OptionT.whenF(b)(li).value should ===(li.map(when(b, _)))
+  test("OptionT.whenF[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.whenF[Id, Int](b)(i).value should ===(when(b, i))
     }
   }
 
@@ -298,17 +300,19 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.unless[Id, A] consistent with the same implementation of Option.unless") {
-    val unless = (c: Boolean, j: Int) => if (!c) Some(j) else None
+  test("OptionT.unless[Id, A] consistent with Option.unless") {
+    // Option.unless is inlined here because it is not available before Scala 2.13
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
       OptionT.unless[Id, Int](b)(i).value should ===(unless(b, i))
     }
   }
 
-  test("OptionT.unlessF[F, A] consistent with the same implementation of Option.unless") {
-    val unless = (c: Boolean, j: Int) => if (!c) Some(j) else None
-    forAll { (li: List[Int], b: Boolean) =>
-      OptionT.unlessF(b)(li).value should ===(li.map(unless(b, _)))
+  test("OptionT.unlessF[Id, A] consistent with Option.unless") {
+    // Option.unless is inlined here because it is not available before Scala 2.13
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.unlessF[Id, Int](b)(i).value should ===(unless(b, i))
     }
   }
 

@@ -233,10 +233,10 @@ object OptionT extends OptionTInstances {
 
   /**
    * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`.
-   * Otherwise, the empty `OptionT[F, A]` is returned. Analogous to `Option.when`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
    */
   def whenF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
-    if (cond) OptionT.liftF(fa) else OptionT(F.map(fa)(_ => Option.empty))
+    if (cond) OptionT.liftF(fa) else OptionT.none[F, A]
 
   /**
    * Same as `whenF`, but expressed as a FunctionK for use with mapK.
@@ -253,7 +253,7 @@ object OptionT extends OptionTInstances {
 
   /**
    * Creates an non-empty `OptionT[F, A]` from an `F[A]` if the given condition is `false`.
-   * Otherwise, the empty `OptionT[F, A]` is returned. Analogous to `Option.unless`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
    */
   def unlessF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT.whenF(!cond)(fa)
