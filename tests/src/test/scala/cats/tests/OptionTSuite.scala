@@ -286,15 +286,11 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.whenF[F, A] consistent with Option.when") {
+  test("OptionT.whenF[Id, A] consistent with Option.when") {
     // Option.when is inlined here because it is not available before Scala 2.13
     def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
       OptionT.whenF[Id, Int](b)(i).value should ===(when(b, i))
-    }
-
-    forAll { (i: List[Int], b: Boolean) =>
-      OptionT.whenF[List, Int](b)(i).value should ===(when(b, i).sequence)
     }
   }
 
@@ -312,15 +308,11 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("OptionT.unlessF[F, A] consistent with Option.unless") {
+  test("OptionT.unlessF[Id, A] consistent with Option.unless") {
     // Option.unless is inlined here because it is not available before Scala 2.13
     def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
     forAll { (i: Int, b: Boolean) =>
       OptionT.unlessF[Id, Int](b)(i).value should ===(unless(b, i))
-    }
-
-    forAll { (i: List[Int], b: Boolean) =>
-      OptionT.unlessF[List, Int](b)(i).value should ===(unless(b, i).sequence)
     }
   }
 
