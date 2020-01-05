@@ -373,7 +373,6 @@ lazy val docs = project
   .settings(docSettings)
   .settings(commonJvmSettings)
   .settings(
-    useCoursier := false,
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
     )
