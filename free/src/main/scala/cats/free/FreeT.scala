@@ -222,7 +222,9 @@ object FreeT extends FreeTInstances {
 sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
 
   // retained for binary compatibility. its results are incorrect though and it would fail the laws if we generated things of the form pure(()).flatMap(_ => fa)
-  private[this] def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, *], E] =
+  private[this] def catsFreeMonadErrorForFreeT[S[_], M[_], E](
+    implicit E: MonadError[M, E]
+  ): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
@@ -231,7 +233,8 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
         FreeT.liftT(E.raiseError[A](e))(M)
     }
 
-  implicit def catsFreeMonadErrorForFreeT2[S[_], M[_], E](implicit E: MonadError[M, E], S: Functor[S]): MonadError[FreeT[S, M, *], E] =
+  implicit def catsFreeMonadErrorForFreeT2[S[_], M[_], E](implicit E: MonadError[M, E],
+                                                          S: Functor[S]): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
 
@@ -256,7 +259,7 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
        * Kleisli.
        */
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) = {
-        val ft = FreeT liftT[S, M, FreeT[S, M, A]] {
+        val ft = FreeT.liftT[S, M, FreeT[S, M, A]] {
           val resultsM = E.map(fa.resume) {
             case Left(se) =>
               FreeT.liftF[S, M, FreeT[S, M, A]](S.map(se)(handleErrorWith(_)(f))).flatMap(identity)
@@ -267,7 +270,7 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
 
           E.handleErrorWith(resultsM) { e =>
             E.map(f(e).resume) { eth =>
-              FreeT.defer(E.pure(eth.swap))   // why on earth is defer inconsistent with resume??
+              FreeT.defer(E.pure(eth.swap)) // why on earth is defer inconsistent with resume??
             }
           }
         }
