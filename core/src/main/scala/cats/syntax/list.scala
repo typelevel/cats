@@ -50,6 +50,12 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
     implicit val ordering: Ordering[B] = B.toOrdering
     toNel.fold(SortedMap.empty[B, NonEmptyList[A]])(_.groupBy(f))
   }
+
+  /** Produces a `NonEmptyList` containing cumulative results of applying the
+   *  operator going left to right.
+   */
+  def scanLeftNel[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
+    NonEmptyList.fromListUnsafe(la.scanLeft(b)(f))
 }
 
 private[syntax] trait ListSyntaxBinCompat0 {
