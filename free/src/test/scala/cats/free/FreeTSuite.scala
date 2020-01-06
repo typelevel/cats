@@ -115,6 +115,15 @@ class FreeTSuite extends CatsSuite {
     }
   }
 
+  // NB: this does not analogously cause problems for the SemigroupK implementation as semigroup's effects associate while errors do not
+  test("handle errors in non-head suspensions") {
+    type F[A] = FreeT[Id, Option, A]
+    val F = MonadError[F, Unit]
+
+    val eff = F.flatMap(F.pure(()))(_ => F.raiseError[String](()))
+    F.attempt(eff).runM(Some(_)) should ===(Some(Left(())))
+  }
+
   sealed trait Test1Algebra[A]
 
   case class Test1[A](value: Int, f: Int => A) extends Test1Algebra[A]

@@ -220,11 +220,61 @@ object FreeT extends FreeTInstances {
 }
 
 sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
-  implicit def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, *], E] =
+
+  // retained for binary compatibility. its results are incorrect though and it would fail the laws if we generated things of the form pure(()).flatMap(_ => fa)
+  private[this] def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit E: MonadError[M, E]): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
       override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) =
         FreeT.liftT[S, M, FreeT[S, M, A]](E.handleErrorWith(fa.toM)(f.andThen(_.toM)))(M).flatMap(identity)
+      override def raiseError[A](e: E) =
+        FreeT.liftT(E.raiseError[A](e))(M)
+    }
+
+  implicit def catsFreeMonadErrorForFreeT2[S[_], M[_], E](implicit E: MonadError[M, E], S: Functor[S]): MonadError[FreeT[S, M, *], E] =
+    new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
+      override def M = E
+
+      /*
+       * Quick explanation... The previous version of this function (retained about for
+       * bincompat) was only able to look at the *top* level M[_] suspension in a Free
+       * program. Any suspensions below that in the compute tree were invisible. Thus,
+       * if there were errors in that top level suspension, then they would be handled
+       * by the delegate. Errors buried further in the tree were unhandled. This is most
+       * easily visualized by the following two expressions:
+       *
+       * - fa
+       * - pure(()).flatMap(_ => fa)
+       *
+       * By the monad laws, these *should* be identical in effect, but they do have
+       * different structural representations within FreeT. More specifically, the latter
+       * has a meaningless M[_] suspension which sits in front of the rest of the
+       * computation. The previous iteration of this function would be blind to fa in
+       * the latter encoding, while it would handle it correctly in the former.
+       *
+       * Historical sidebar: this became visible because of the "shift" mechanism in
+       * Kleisli.
+       */
+      override def handleErrorWith[A](fa: FreeT[S, M, A])(f: E => FreeT[S, M, A]) = {
+        val ft = FreeT liftT[S, M, FreeT[S, M, A]] {
+          val resultsM = E.map(fa.resume) {
+            case Left(se) =>
+              FreeT.liftF[S, M, FreeT[S, M, A]](S.map(se)(handleErrorWith(_)(f))).flatMap(identity)
+
+            case Right(a) =>
+              pure(a)
+          }
+
+          E.handleErrorWith(resultsM) { e =>
+            E.map(f(e).resume) { eth =>
+              FreeT.defer(E.pure(eth.swap))   // why on earth is defer inconsistent with resume??
+            }
+          }
+        }
+
+        ft.flatMap(identity)
+      }
+
       override def raiseError[A](e: E) =
         FreeT.liftT(E.raiseError[A](e))(M)
     }
