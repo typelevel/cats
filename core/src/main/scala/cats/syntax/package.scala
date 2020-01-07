@@ -27,7 +27,7 @@ package object syntax {
   object eq extends EqSyntax
   object flatMap extends FlatMapSyntax
   object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0 with FoldableSyntaxBinCompat1
-  object functor extends FunctorSyntax
+  object functor extends FunctorSyntax with FunctorSyntaxBinCompat0
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
   object invariant extends InvariantSyntax
