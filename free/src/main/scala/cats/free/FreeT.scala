@@ -240,7 +240,7 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
       override def M = E
 
       /*
-       * Quick explanation... The previous version of this function (retained about for
+       * Quick explanation... The previous version of this function (retained above for
        * bincompat) was only able to look at the *top* level M[_] suspension in a Free
        * program. Any suspensions below that in the compute tree were invisible. Thus,
        * if there were errors in that top level suspension, then they would be handled
