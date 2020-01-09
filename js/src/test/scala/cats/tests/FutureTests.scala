@@ -8,22 +8,28 @@ import cats.js.instances.Await
 import cats.js.instances.future.futureComonad
 import cats.tests.{CatsSuite, ListWrapper}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
 
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 import cats.laws.discipline.arbitrary._
 
-// https://issues.scala-lang.org/browse/SI-7934
-@deprecated("", "")
-class DeprecatedForwarder {
-  implicit def runNow = scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
-}
-object DeprecatedForwarder extends DeprecatedForwarder
-import DeprecatedForwarder.runNow
-
 class FutureTests extends CatsSuite {
+  // Replaces Scala.js's `JSExecutionContext.runNow`, which is removed in 1.0.
+  // TODO: We shouldn't do this! See: https://github.com/scala-js/scala-js/issues/2102
+  implicit private object RunNowExecutionContext extends ExecutionContextExecutor {
+    def execute(runnable: Runnable): Unit =
+      try {
+        runnable.run()
+      } catch {
+        case t: Throwable => reportFailure(t)
+      }
+
+    def reportFailure(t: Throwable): Unit =
+      t.printStackTrace()
+  }
+
   val timeout = 3.seconds
 
   def futureEither[A](f: Future[A]): Future[Either[Throwable, A]] =
