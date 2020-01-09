@@ -19,11 +19,11 @@ isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
 val scalaCheckVersion = "1.14.3"
 
-val scalatestplusScalaCheckVersion = "3.1.0.0-RC2"
+val scalatestplusScalaCheckVersion = "3.1.0.1"
 
 val disciplineVersion = "1.0.2"
 
-val disciplineScalatestVersion = "1.0.0-RC1"
+val disciplineScalatestVersion = "1.0.0-RC2"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -151,7 +151,7 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
+    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % "test"
   )
 )
 
