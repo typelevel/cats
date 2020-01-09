@@ -62,7 +62,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanLeftNel(100)(_ + _)
-   * res0: NonEmptyList[Int] = NonEmptyList(100, 101, 102)
+   * res0: NonEmptyList[Int] = NonEmptyList(100, 101, 103)
    *
    * scala> val result2: List[Int] = List.empty[Int]
    * scala> result2.scanLeftNel(1)(_ + _)
@@ -82,7 +82,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    *
    * scala> val result1: List[Int] = List(1, 2)
    * scala> result1.scanRightNel(100)(_ + _)
-   * res0: NonEmptyList[Int] = NonEmptyList(102, 101, 100)
+   * res0: NonEmptyList[Int] = NonEmptyList(103, 102, 100)
    *
    * scala> val result2: List[Int] = List.empty[Int]
    * scala> result2.scanRightNel(1)(_ + _)
