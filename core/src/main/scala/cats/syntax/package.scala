@@ -9,7 +9,7 @@ package object syntax {
   object arrow extends ArrowSyntax
   object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
-  object bifoldable extends BifoldableSyntax
+  object bifoldable extends BifoldableSyntax with BiFoldableSyntaxBinCompat0
   object binested extends BinestedSyntax
   object bitraverse extends BitraverseSyntax with BitraverseSyntaxBinCompat0
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
