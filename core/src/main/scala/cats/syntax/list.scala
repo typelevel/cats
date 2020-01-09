@@ -1,8 +1,9 @@
 package cats
 package syntax
 
-import scala.collection.immutable.SortedMap
 import cats.data.{NonEmptyChain, NonEmptyList}
+
+import scala.collection.immutable.SortedMap
 
 trait ListSyntax {
   implicit final def catsSyntaxList[A](la: List[A]): ListOps[A] = new ListOps(la)
@@ -52,10 +53,44 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   }
 
   /** Produces a `NonEmptyList` containing cumulative results of applying the
-   *  operator going left to right.
+   * operator going left to right.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: List[Int] = List(1, 2)
+   * scala> result1.scanLeftNel(100)(_ + _)
+   * res0: NonEmptyList[Int] = NonEmptyList(100, 101, 102)
+   *
+   * scala> val result2: List[Int] = List.empty[Int]
+   * scala> result2.scanLeftNel(1)(_ + _)
+   * res1: NonEmptyList[Int] = NonEmptyList(1)
+   * }}}
    */
   def scanLeftNel[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
     NonEmptyList.fromListUnsafe(la.scanLeft(b)(f))
+
+  /** Produces a `NonEmptyList` containing cumulative results of applying the
+   * operator going right to left.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: List[Int] = List(1, 2)
+   * scala> result1.scanRightNel(100)(_ + _)
+   * res0: NonEmptyList[Int] = NonEmptyList(102, 101, 100)
+   *
+   * scala> val result2: List[Int] = List.empty[Int]
+   * scala> result2.scanRightNel(1)(_ + _)
+   * res1: NonEmptyList[Int] = NonEmptyList(1)
+   * }}}
+   */
+  def scanRightNel[B](b: B)(f: (A, B) => B): NonEmptyList[B] =
+    NonEmptyList.fromListUnsafe(la.scanRight(b)(f))
 }
 
 private[syntax] trait ListSyntaxBinCompat0 {
