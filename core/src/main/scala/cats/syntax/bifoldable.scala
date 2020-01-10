@@ -6,11 +6,11 @@ import scala.language.implicitConversions
 trait BifoldableSyntax extends Bifoldable.ToBifoldableOps
 
 private[syntax] trait BiFoldableSyntaxBinCompat0 {
-  implicit final def catsSyntaxBiFoldOps[F[_, _], A, B](fa: F[A, B]): BifoldBifoldableOps[F, A, B] =
-    new BifoldBifoldableOps[F, A, B](fa)
+  implicit final def catsSyntaxBifoldOps[F[_, _], A, B](fa: F[A, B]): BifoldableOps[F, A, B] =
+    new BifoldableOps[F, A, B](fa)
 }
 
-final class BifoldBifoldableOps[F[_, _], A, B](private val fab: F[A, B]) extends AnyVal {
+final class BifoldableOps[F[_, _], A, B](private val fab: F[A, B]) extends AnyVal {
 
   /**
    * Collapse the structure to a tuple2, given each type has an available [[cats.Monoid]]
