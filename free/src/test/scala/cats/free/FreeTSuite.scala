@@ -44,6 +44,8 @@ class FreeTSuite extends CatsSuite {
              SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
 
+  checkAll("FreeT[Option, Option, Int", DeferTests[FreeTOption].defer[Int])
+
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
