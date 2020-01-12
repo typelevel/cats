@@ -1,11 +1,13 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * A type class abstracting over types that give rise to two independent [[cats.Foldable]]s.
  */
-@typeclass trait Bifoldable[F[_, _]] { self =>
+@implicitNotFound("Could not find an instance of Bifoldable for ${F}")
+@typeclass trait Bifoldable[F[_, _]] extends Serializable { self =>
 
   /** Collapse the structure with a left-associative function */
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
@@ -29,6 +31,49 @@ import simulacrum.typeclass
   def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B) = {
     import cats.instances.tuple._
     bifoldMap(fab)((_, B.empty), (A.empty, _))
+  }
+}
+
+object Bifoldable {
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[Bifoldable]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Bifoldable[F]): Bifoldable[F] = instance
+
+  trait Ops[F[_, _], A, B] {
+    type TypeClassType <: Bifoldable[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+    def bifoldLeft[C](c: C)(f: (C, A) => C, g: (C, B) => C): C = typeClassInstance.bifoldLeft[A, B, C](self, c)(f, g)
+    def bifoldRight[C](c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      typeClassInstance.bifoldRight[A, B, C](self, c)(f, g)
+    def bifoldMap[C](f: A => C, g: B => C)(implicit C: Monoid[C]): C =
+      typeClassInstance.bifoldMap[A, B, C](self)(f, g)(C)
+    def bifold(implicit A: Monoid[A], B: Monoid[B]): (A, B) = typeClassInstance.bifold[A, B](self)(A, B)
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
+  trait ToBifoldableOps {
+    implicit def toBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): Ops[F, A, B] {
+      type TypeClassType = Bifoldable[F]
+    } = new Ops[F, A, B] {
+      type TypeClassType = Bifoldable[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToBifoldableOps
+  object ops {
+    implicit def toAllBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): AllOps[F, A, B] {
+      type TypeClassType = Bifoldable[F]
+    } = new AllOps[F, A, B] {
+      type TypeClassType = Bifoldable[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
 }
 

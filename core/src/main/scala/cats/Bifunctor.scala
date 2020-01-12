@@ -1,11 +1,13 @@
 package cats
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * A type class of types which give rise to two independent, covariant
  * functors.
  */
-@typeclass trait Bifunctor[F[_, _]] { self =>
+@implicitNotFound("Could not find an instance of Bifunctor for ${F}")
+@typeclass trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * The quintessential method of the Bifunctor trait, it applies a
@@ -53,6 +55,46 @@ import simulacrum.typeclass
    * }}}
    */
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
+}
+
+object Bifunctor {
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[Bifunctor]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Bifunctor[F]): Bifunctor[F] = instance
+
+  trait Ops[F[_, _], A, B] {
+    type TypeClassType <: Bifunctor[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+    def bimap[C, D](f: A => C, g: B => D): F[C, D] = typeClassInstance.bimap[A, B, C, D](self)(f, g)
+    def leftMap[C](f: A => C): F[C, B] = typeClassInstance.leftMap[A, B, C](self)(f)
+    def leftWiden[C >: A]: F[C, B] = typeClassInstance.leftWiden[A, B, C](self)
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
+  trait ToBifunctorOps {
+    implicit def toBifunctorOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifunctor[F]): Ops[F, A, B] {
+      type TypeClassType = Bifunctor[F]
+    } = new Ops[F, A, B] {
+      type TypeClassType = Bifunctor[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToBifunctorOps
+  object ops {
+    implicit def toAllBifunctorOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifunctor[F]): AllOps[F, A, B] {
+      type TypeClassType = Bifunctor[F]
+    } = new AllOps[F, A, B] {
+      type TypeClassType = Bifunctor[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
 }
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {

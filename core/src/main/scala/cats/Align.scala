@@ -3,6 +3,7 @@ package cats
 import simulacrum.typeclass
 
 import cats.data.Ior
+import scala.annotation.implicitNotFound
 
 /**
  * `Align` supports zipping together structures with different shapes,
@@ -10,7 +11,8 @@ import cats.data.Ior
  *
  * Must obey the laws in cats.laws.AlignLaws
  */
-@typeclass trait Align[F[_]] {
+@implicitNotFound("Could not find an instance of Align for ${F}")
+@typeclass trait Align[F[_]] extends Serializable {
 
   def functor: Functor[F]
 
@@ -100,4 +102,44 @@ object Align {
           else Ior.right(iterB.next())
         )
     }
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[Align]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Align[F]): Align[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: Align[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def align[B](fb: F[B]): F[Ior[A, B]] = typeClassInstance.align[A, B](self, fb)
+    def alignWith[B, C](fb: F[B])(f: Ior[A, B] => C): F[C] = typeClassInstance.alignWith[A, B, C](self, fb)(f)
+    def alignCombine(fa2: F[A])(implicit ev$1: Semigroup[A]): F[A] = typeClassInstance.alignCombine[A](self, fa2)
+    def padZip[B](fb: F[B]): F[(Option[A], Option[B])] = typeClassInstance.padZip[A, B](self, fb)
+    def padZipWith[B, C](fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
+      typeClassInstance.padZipWith[A, B, C](self, fb)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToAlignOps {
+    implicit def toAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): Ops[F, A] {
+      type TypeClassType = Align[F]
+    } = new Ops[F, A] {
+      type TypeClassType = Align[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToAlignOps
+  object ops {
+    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
+      type TypeClassType = Align[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = Align[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
 }

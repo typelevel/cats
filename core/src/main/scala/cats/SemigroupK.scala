@@ -2,6 +2,7 @@ package cats
 
 import simulacrum.typeclass
 import cats.data.Ior
+import scala.annotation.implicitNotFound
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -21,7 +22,8 @@ import cats.data.Ior
  *    The combination operation just depends on the structure of F,
  *    but not the structure of A.
  */
-@typeclass trait SemigroupK[F[_]] { self =>
+@implicitNotFound("Could not find an instance of SemigroupK for ${F}")
+@typeclass trait SemigroupK[F[_]] extends Serializable { self =>
 
   /**
    * Combine two F[A] values.
@@ -89,5 +91,42 @@ object SemigroupK {
     def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
       SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
     def functor: Functor[F] = Functor[F]
+  }
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[SemigroupK]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: SemigroupK[F]): SemigroupK[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: SemigroupK[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def combineK(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
+    def <+>(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
+    def sum[B](fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)(F)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToSemigroupKOps {
+    implicit def toSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): Ops[F, A] {
+      type TypeClassType = SemigroupK[F]
+    } = new Ops[F, A] {
+      type TypeClassType = SemigroupK[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToSemigroupKOps
+  object ops {
+    implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
+      type TypeClassType = SemigroupK[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = SemigroupK[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
   }
 }

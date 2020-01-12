@@ -2,10 +2,12 @@ package cats
 package arrow
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.StrongLaws.
  */
+@implicitNotFound("Could not find an instance of Strong for ${F}")
 @typeclass trait Strong[F[_, _]] extends Profunctor[F] {
 
   /**
@@ -37,4 +39,45 @@ import simulacrum.typeclass
    * }}}
    */
   def second[A, B, C](fa: F[A, B]): F[(C, A), (C, B)]
+}
+
+object Strong {
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[Strong]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Strong[F]): Strong[F] = instance
+
+  trait Ops[F[_, _], A, B] {
+    type TypeClassType <: Strong[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+    def first[C]: F[(A, C), (B, C)] = typeClassInstance.first[A, B, C](self)
+    def second[C]: F[(C, A), (C, B)] = typeClassInstance.second[A, B, C](self)
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Profunctor.AllOps[F, A, B] {
+    type TypeClassType <: Strong[F]
+  }
+  trait ToStrongOps {
+    implicit def toStrongOps[F[_, _], A, B](target: F[A, B])(implicit tc: Strong[F]): Ops[F, A, B] {
+      type TypeClassType = Strong[F]
+    } = new Ops[F, A, B] {
+      type TypeClassType = Strong[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToStrongOps
+  object ops {
+    implicit def toAllStrongOps[F[_, _], A, B](target: F[A, B])(implicit tc: Strong[F]): AllOps[F, A, B] {
+      type TypeClassType = Strong[F]
+    } = new AllOps[F, A, B] {
+      type TypeClassType = Strong[F]
+      val self: F[A, B] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
 }

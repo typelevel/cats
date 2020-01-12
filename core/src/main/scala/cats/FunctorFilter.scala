@@ -1,10 +1,12 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
+@implicitNotFound("Could not find an instance of FunctorFilter for ${F}")
 @typeclass
 trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
@@ -73,4 +75,47 @@ trait FunctorFilter[F[_]] extends Serializable {
    */
   def filterNot[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(Some(_).filterNot(f))
+}
+
+object FunctorFilter {
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[FunctorFilter]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: FunctorFilter[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def mapFilter[B](f: A => Option[B]): F[B] = typeClassInstance.mapFilter[A, B](self)(f)
+    def collect[B](f: PartialFunction[A, B]): F[B] = typeClassInstance.collect[A, B](self)(f)
+    def flattenOption[B](implicit ev$1: A <:< Option[B]): F[B] =
+      typeClassInstance.flattenOption[B](self.asInstanceOf[F[Option[B]]])
+    def filter(f: A => Boolean): F[A] = typeClassInstance.filter[A](self)(f)
+    def filterNot(f: A => Boolean): F[A] = typeClassInstance.filterNot[A](self)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToFunctorFilterOps {
+    implicit def toFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): Ops[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } = new Ops[F, A] {
+      type TypeClassType = FunctorFilter[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToFunctorFilterOps
+  object ops {
+    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
 }

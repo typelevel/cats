@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * MonoidK is a universal monoid which operates on kinds.
@@ -22,6 +23,7 @@ import simulacrum.typeclass
  *    combination operation and empty value just depend on the
  *    structure of F, but not on the structure of A.
  */
+@implicitNotFound("Could not find an instance of MonoidK for ${F}")
 @typeclass trait MonoidK[F[_]] extends SemigroupK[F] { self =>
 
   /**
@@ -49,4 +51,43 @@ import simulacrum.typeclass
     new ComposedMonoidK[F, G] {
       val F = self
     }
+}
+
+object MonoidK {
+
+  /****************************************************************************
+   * THE REST OF THIS OBJECT IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!! *
+   ****************************************************************************/
+  /**
+   * Summon an instance of [[MonoidK]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: MonoidK[F]): MonoidK[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: MonoidK[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with SemigroupK.AllOps[F, A] {
+    type TypeClassType <: MonoidK[F]
+  }
+  trait ToMonoidKOps {
+    implicit def toMonoidKOps[F[_], A](target: F[A])(implicit tc: MonoidK[F]): Ops[F, A] {
+      type TypeClassType = MonoidK[F]
+    } = new Ops[F, A] {
+      type TypeClassType = MonoidK[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToMonoidKOps
+  object ops {
+    implicit def toAllMonoidKOps[F[_], A](target: F[A])(implicit tc: MonoidK[F]): AllOps[F, A] {
+      type TypeClassType = MonoidK[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = MonoidK[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
 }
