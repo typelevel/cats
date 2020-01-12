@@ -126,7 +126,7 @@ class NonEmptyLazyListSuite extends CatsSuite {
   }
 
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
-    forAll { ci: NonEmptyLazyList[Int] =>
+    forAll { (ci: NonEmptyLazyList[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }

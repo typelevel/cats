@@ -48,7 +48,7 @@ class FunctionSuite extends CatsSuite {
   // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
   test("Defer[Function1[Int, *]].fix computing sum") {
-    val sum2 = Defer[Function1[Int, *]].fix[Int] { rec => n: Int =>
+    val sum2 = Defer[Function1[Int, *]].fix[Int] { rec => (n: Int) =>
       if (n <= 0) 0 else n * n + rec(n - 1)
     }
 
