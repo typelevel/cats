@@ -13,7 +13,8 @@ import cats.instances.{
   AllInstancesBinCompat3,
   AllInstancesBinCompat4,
   AllInstancesBinCompat5,
-  AllInstancesBinCompat6
+  AllInstancesBinCompat6,
+  AllInstancesBinCompat7
 }
 import cats.syntax.AllSyntaxBinCompat
 
@@ -44,7 +45,8 @@ object SyntaxSuite
     with AllInstancesBinCompat3
     with AllInstancesBinCompat4
     with AllInstancesBinCompat5
-    with AllInstancesBinCompat6 {
+    with AllInstancesBinCompat6
+    with AllInstancesBinCompat7 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???

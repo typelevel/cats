@@ -10,7 +10,7 @@ package object instances {
   object char extends CharInstances
   object double extends DoubleInstances
   object duration extends CoreDurationInstances with DurationInstances
-  object either extends EitherInstances
+  object either extends EitherInstances with EitherInstancesBinCompat0
   object eq extends EqInstances
   object equiv extends EquivInstances
   object float extends FloatInstances
@@ -19,7 +19,7 @@ package object instances {
   object future extends FutureInstances
   object int extends IntInstances
   object invariant extends InvariantMonoidalInstances
-  object list extends ListInstances with ListInstancesBinCompat0
+  object list extends ListInstances with ListInstancesBinCompat0 with ListInstancesBinCompat1
   object long extends LongInstances
   object option extends OptionInstances with OptionInstancesBinCompat0
   object map extends MapInstances with MapInstancesBinCompat0 with MapInstancesBinCompat1
@@ -37,11 +37,11 @@ package object instances {
       with SortedMapInstancesBinCompat1
       with SortedMapInstancesBinCompat2
   object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0 with SortedSetInstancesBinCompat1
-  object stream extends StreamInstances with StreamInstancesBinCompat0
+  object stream extends StreamInstances with StreamInstancesBinCompat0 with StreamInstancesBinCompat1
   object string extends StringInstances
   object try_ extends TryInstances
   object tuple extends TupleInstances with Tuple2InstancesBinCompat0
   object unit extends UnitInstances
   object uuid extends UUIDInstances
-  object vector extends VectorInstances with VectorInstancesBinCompat0
+  object vector extends VectorInstances with VectorInstancesBinCompat0 with VectorInstancesBinCompat1
 }

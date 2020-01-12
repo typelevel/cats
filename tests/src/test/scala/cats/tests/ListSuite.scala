@@ -2,6 +2,7 @@ package cats
 package tests
 
 import cats.data.{NonEmptyList, ZipList}
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
@@ -12,7 +13,7 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class ListSuite extends CatsSuite {
 
@@ -58,5 +59,15 @@ class ListSuite extends CatsSuite {
     forAll { l: List[String] =>
       l.show should ===(l.toString)
     }
+  }
+}
+
+final class ListInstancesSuite extends AnyFunSuiteLike {
+
+  test("NonEmptyParallel instance in cats.instances.list") {
+    import cats.instances.list._
+    import cats.syntax.parallel._
+
+    (List(1, 2, 3), List("A", "B", "C")).parTupled
   }
 }
