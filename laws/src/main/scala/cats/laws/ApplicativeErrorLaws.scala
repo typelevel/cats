@@ -54,6 +54,21 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
 
   def redeemDerivedFromAttemptMap[A, B](fa: F[A], fe: E => B, fs: A => B): IsEq[F[B]] =
     F.redeem(fa)(fe, fs) <-> F.map(F.attempt(fa))(_.fold(fe, fs))
+
+  /*
+   * These laws, taken together with applicativeErrorHandle, show that errors dominate in
+   * ap, *and* show that handle has lexical semantics over ap. F.unit is used in both laws
+   * because we don't have another way of expressing "an F[_] which does *not* contain any
+   * errors". We could make these laws considerably stronger if such a thing were
+   * expressible. Specifically, what we're missing here is the ability to say that
+   * raiseError distributes over an *arbitrary* number of aps.
+   */
+
+  def raiseErrorDistributesOverApLeft[A](h: E => F[A], e: E) =
+    F.handleErrorWith(F.ap(F.raiseError[Unit => A](e))(F.unit))(h) <-> h(e)
+
+  def raiseErrorDistributesOverApRight[A](h: E => F[A], e: E) =
+    F.handleErrorWith(F.ap(F.pure((a: A) => a))(F.raiseError[A](e)))(h) <-> h(e)
 }
 
 object ApplicativeErrorLaws {
