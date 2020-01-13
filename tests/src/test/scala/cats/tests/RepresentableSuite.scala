@@ -58,6 +58,7 @@ class RepresentableSuite extends CatsSuite {
   val reprPair = Representable[Pair]
   val reprMiniIntFunc = Representable[MiniInt => *]
   val isoPair: Isomorphisms[Pair] = Isomorphisms.invariant[Pair]
+  val isoMiniIntFunc: Isomorphisms[MiniInt => *] = Isomorphisms.invariant[MiniInt => *]
 
   {
     implicit val andMonoid: Monoid[Boolean] = new Monoid[Boolean] {
@@ -72,6 +73,7 @@ class RepresentableSuite extends CatsSuite {
   }
 
   {
+    implicit val isoFun1: Isomorphisms[MiniInt => *] = isoMiniIntFunc
     implicit val monadInstance: Monad[MiniInt => *] = Representable.monad[MiniInt => *](reprMiniIntFunc)
     checkAll("MiniInt => *", MonadTests[MiniInt => *].monad[String, String, String])
   }
