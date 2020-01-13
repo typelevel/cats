@@ -44,6 +44,8 @@ class FreeTSuite extends CatsSuite {
              SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
 
+  checkAll("FreeT[Option, Option, Int", DeferTests[FreeTOption].defer[Int])
+
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
@@ -113,6 +115,15 @@ class FreeTSuite extends CatsSuite {
       Eq[Option[Int]].eqv(x, y) should ===(true)
       y should ===(fk(a))
     }
+  }
+
+  // NB: this does not analogously cause problems for the SemigroupK implementation as semigroup's effects associate while errors do not
+  test("handle errors in non-head suspensions") {
+    type F[A] = FreeT[Id, Option, A]
+    val F = MonadError[F, Unit]
+
+    val eff = F.flatMap(F.pure(()))(_ => F.raiseError[String](()))
+    F.attempt(eff).runM(Some(_)) should ===(Some(Left(())))
   }
 
   sealed trait Test1Algebra[A]
