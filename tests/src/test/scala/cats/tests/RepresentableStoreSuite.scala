@@ -1,10 +1,11 @@
 package cats.tests
 
 import cats.Comonad
+import cats.data.{RepresentableStore, Store}
+import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
-import cats.data.RepresentableStore
-import cats.data.Store
+import org.scalacheck.{Arbitrary, Cogen}
 
 class RepresentableStoreSuite extends CatsSuite {
 
@@ -12,13 +13,23 @@ class RepresentableStoreSuite extends CatsSuite {
   // checkAll("Comonad[Store[String, *]]", ComonadTests[Store[String, *]].comonad[Int, Int, Int])
 
   {
-    implicit val pairComonad = RepresentableStore.catsDataRepresentableStoreComonad[λ[P => (P, P)], Boolean]
-    implicit val arbStore = catsLawsArbitraryForRepresentableStore[λ[P => (P, P)], Boolean, Int]
-    implicit val cogenStore = catsLawsCogenForRepresentableStore[λ[P => (P, P)], Boolean, Int]
-    implicit val eqStore = cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, Int]
-    implicit val eqStoreStore = cats.laws.discipline.eq
-      .catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
-    implicit val eqStoreStoreStore =
+    implicit val pairComonad: Comonad[RepresentableStore[λ[P => (P, P)], Boolean, *]] =
+      RepresentableStore.catsDataRepresentableStoreComonad[λ[P => (P, P)], Boolean]
+    implicit val arbStore: Arbitrary[RepresentableStore[λ[P => (P, P)], Boolean, Int]] =
+      catsLawsArbitraryForRepresentableStore[λ[P => (P, P)], Boolean, Int]
+    implicit val cogenStore: Cogen[RepresentableStore[λ[P => (P, P)], Boolean, Int]] =
+      catsLawsCogenForRepresentableStore[λ[P => (P, P)], Boolean, Int]
+    implicit val eqStore: Eq[RepresentableStore[λ[P => (P, P)], Boolean, Int]] =
+      cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, Int]
+    implicit val eqStoreStore
+      : Eq[RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]] =
+      cats.laws.discipline.eq
+        .catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
+    implicit val eqStoreStoreStore: Eq[
+      RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)],
+                                                                     Boolean,
+                                                                     RepresentableStore[λ[P => (P, P)], Boolean, Int]]]
+    ] =
       cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[
         P => (P, P)
       ], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]]

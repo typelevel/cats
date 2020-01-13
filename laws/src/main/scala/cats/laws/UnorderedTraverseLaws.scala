@@ -25,7 +25,7 @@ trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   ): IsEq[(M[F[B]], N[F[B]])] = {
 
     type MN[Z] = (M[Z], N[Z])
-    implicit val MN = new CommutativeApplicative[MN] {
+    implicit val MN: CommutativeApplicative[MN] = new CommutativeApplicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
       def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {
         val (fam, fan) = fa

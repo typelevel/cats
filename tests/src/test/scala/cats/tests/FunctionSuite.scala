@@ -21,6 +21,7 @@ import cats.kernel.laws.discipline.{
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.{Band, BoundedSemilattice, Semilattice}
 import org.scalacheck.Gen
@@ -41,7 +42,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[Int]", BimonadTests[Function0].bimonad[Int, Int, Int])
   checkAll("Bimonad[Function0]", SerializableTests.serializable(Bimonad[Function0]))
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Function1[MiniInt, *]]
+  implicit val iso: Isomorphisms[Function1[MiniInt, *]] = Isomorphisms.invariant[Function1[MiniInt, *]]
   checkAll("Function1[MiniInt, Int]", SemigroupalTests[Function1[MiniInt, *]].semigroupal[Int, Int, Int])
 
   // TODO: make an binary compatible way to do this
@@ -138,7 +139,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function1[MiniInt, Grp]", GroupTests[Function1[MiniInt, Grp]].group)
   checkAll("Function1[MiniInt, CGrp]", CommutativeGroupTests[Function1[MiniInt, CGrp]].commutativeGroup)
   // Isos for ContravariantMonoidal
-  implicit val isoCodomain = SemigroupalTests.Isomorphisms.invariant[Function1[*, Long]]
+  implicit val isoCodomain: Isomorphisms[Function1[*, Long]] = Isomorphisms.invariant[Function1[*, Long]]
   checkAll("Function1[*, Monoid]",
            ContravariantMonoidalTests[Function1[*, Long]].contravariantMonoidal[MiniInt, MiniInt, MiniInt])
 

@@ -27,7 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
  *
  * {{{
  * {
- *   implicit val functor = ListWrapper.functor
+ *   implicit val functor: Functor[ListWrapper] = ListWrapper.functor
  *   checkAll(..., ...)
  * }
  * }}}

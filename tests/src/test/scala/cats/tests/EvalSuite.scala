@@ -96,7 +96,8 @@ class EvalSuite extends CatsSuite {
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Eval]
+    implicit val iso: SemigroupalTests.Isomorphisms[Eval] =
+      SemigroupalTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
   }
 
@@ -112,27 +113,27 @@ class EvalSuite extends CatsSuite {
   checkAll("Eval[Int]", GroupTests[Eval[Int]].group)
 
   {
-    implicit val A = ListWrapper.monoid[Int]
+    implicit val A: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     checkAll("Eval[ListWrapper[Int]]", MonoidTests[Eval[ListWrapper[Int]]].monoid)
   }
 
   {
-    implicit val A = ListWrapper.semigroup[Int]
+    implicit val A: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
     checkAll("Eval[ListWrapper[Int]]", SemigroupTests[Eval[ListWrapper[Int]]].semigroup)
   }
 
   {
-    implicit val A = ListWrapper.order[Int]
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("Eval[ListWrapper[Int]]", OrderTests[Eval[ListWrapper[Int]]].order)
   }
 
   {
-    implicit val A = ListWrapper.partialOrder[Int]
+    implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Eval[ListWrapper[Int]]", PartialOrderTests[Eval[ListWrapper[Int]]].partialOrder)
   }
 
   {
-    implicit val A = ListWrapper.eqv[Int]
+    implicit val A: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Eval[ListWrapper[Int]]", EqTests[Eval[ListWrapper[Int]]].eqv)
   }
 

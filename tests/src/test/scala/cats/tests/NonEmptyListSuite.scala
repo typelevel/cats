@@ -50,7 +50,7 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
   {
-    implicit val A = ListWrapper.partialOrder[Int]
+    implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]",
              SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
@@ -59,7 +59,7 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   {
-    implicit val A = ListWrapper.order[Int]
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", OrderTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]",
              SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))

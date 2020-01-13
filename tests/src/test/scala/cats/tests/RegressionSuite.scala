@@ -154,7 +154,12 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
     EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
 
     {
-      implicit val me = MonadError[EitherT[Option, String, *], Unit]
+      MonadError[EitherT[Option, String, *], Unit]
+    }
+
+    {
+      implicit val me: MonadError[EitherT[Option, String, *], Unit] =
+        EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String]
       EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
     }
 

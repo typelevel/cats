@@ -14,7 +14,8 @@ class AndThenSuite extends CatsSuite {
   checkAll("Semigroupal[AndThen[Int, *]]", SerializableTests.serializable(Semigroupal[AndThen[Int, *]]))
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[AndThen[*, Int]]
+    implicit val iso: SemigroupalTests.Isomorphisms[AndThen[*, Int]] =
+      SemigroupalTests.Isomorphisms.invariant[AndThen[*, Int]]
     checkAll("AndThen[*, Int]",
              ContravariantMonoidalTests[AndThen[*, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean])
     checkAll("ContravariantMonoidal[AndThen[*, Int]]",

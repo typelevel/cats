@@ -448,7 +448,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
-  def foldableStreamWithDefaultImpl = new Foldable[Stream] {
+  def foldableStreamWithDefaultImpl: Foldable[Stream] = new Foldable[Stream] {
     def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
       Foldable[Stream].foldLeft(fa, b)(f)
 
@@ -457,28 +457,28 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test(".foldA successful case") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     val ns = Stream.apply[Either[String, Int]](1.asRight, 2.asRight, 7.asRight)
 
     assert(F.foldA(ns) == 10.asRight[String])
   }
 
   test(".foldA failed case") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     val ns = Stream.apply[Either[String, Int]](1.asRight, "boom!!!".asLeft, 7.asRight)
 
     assert(ns.foldA == "boom!!!".asLeft[Int])
   }
 
   test(".foldA short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     val ns = Stream.from(1).map(n => if (n >= 100000) Left(n) else Right(n))
 
     assert(F.foldA(ns) === Left(100000))
   }
 
   test(".foldLeftM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     val ns = Stream.continually(1)
     val res = F.foldLeftM[Either[Int, *], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
@@ -487,7 +487,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test(".foldLeftM short-circuiting optimality") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
 
     // test that no more elements are evaluated than absolutely necessary
 
@@ -502,13 +502,13 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test(".existsM/.forallM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     assert(F.existsM[Id, Boolean](true #:: boom[Boolean])(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boom[Boolean])(identity) == false)
   }
 
   test(".findM/.collectFirstSomeM short-circuiting") {
-    implicit val F = foldableStreamWithDefaultImpl
+    implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl
     assert((1 #:: boom[Int]).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boom[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }

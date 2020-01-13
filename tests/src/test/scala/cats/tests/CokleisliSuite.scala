@@ -7,6 +7,7 @@ import cats.data.{Cokleisli, NonEmptyList}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 
 class CokleisliSuite extends SlowCatsSuite {
 
@@ -17,7 +18,7 @@ class CokleisliSuite extends SlowCatsSuite {
   implicit def cokleisliEq[F[_], A, B](implicit ev: Eq[F[A] => B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cokleisli[Option, Int, *]]
+  implicit val iso: Isomorphisms[Cokleisli[Option, Int, *]] = Isomorphisms.invariant[Cokleisli[Option, Int, *]]
 
   checkAll("Cokleisli[Option, MiniInt, Int]",
            SemigroupalTests[Cokleisli[Option, MiniInt, *]].semigroupal[Int, Int, Int])

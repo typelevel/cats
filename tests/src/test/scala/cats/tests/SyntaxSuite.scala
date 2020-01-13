@@ -63,7 +63,7 @@ object SyntaxSuite
 
   def testMonoid[A: Monoid]: Unit = {
     val x = mock[A]
-    implicit val y = mock[Eq[A]]
+    implicit val y: Eq[A] = mock[Eq[A]]
     val z: Boolean = x.isEmpty
   }
 
@@ -495,7 +495,7 @@ object SyntaxSuite
     val padZipped = fa.padZip(fb)
     val padZippedWith = fa.padZipWith(fb)(f2)
 
-    implicit val sa = mock[Semigroup[A]]
+    implicit val sa: Semigroup[A] = mock[Semigroup[A]]
     val fa2 = fa.alignCombine(fa)
   }
 

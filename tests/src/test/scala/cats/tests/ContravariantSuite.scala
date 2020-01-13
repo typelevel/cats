@@ -12,7 +12,7 @@ import cats.laws.discipline.arbitrary._
 class ContravariantSuite extends CatsSuite {
 
   test("narrow equals contramap(identity)") {
-    implicit val constInst = Const.catsDataContravariantForConst[Int]
+    implicit val constInst: Contravariant[Const[Int, *]] = Const.catsDataContravariantForConst[Int]
     implicit val canEqual: CanEqual[cats.data.Const[Int, Some[Int]], cats.data.Const[Int, Some[Int]]] =
       StrictCatsEquality.lowPriorityConversionCheckedConstraint
     forAll { (i: Int) =>
@@ -44,11 +44,12 @@ class ContravariantSuite extends CatsSuite {
            ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean])
 
   {
-    implicit val predicateMonoid = ContravariantMonoidal.monoid[Predicate, MiniInt]
+    implicit val predicateMonoid: Monoid[Predicate[MiniInt]] = ContravariantMonoidal.monoid[Predicate, MiniInt]
     checkAll("ContravariantMonoidal[Predicate].monoid", MonoidTests[Predicate[MiniInt]].monoid)
   }
   {
-    implicit val predicateSemigroup = ContravariantSemigroupal.semigroup[Predicate, MiniInt]
+    implicit val predicateSemigroup: Semigroup[Predicate[MiniInt]] =
+      ContravariantSemigroupal.semigroup[Predicate, MiniInt]
     checkAll("ContravariantSemigroupal[Predicate].semigroup", SemigroupTests[Predicate[MiniInt]].semigroup)
   }
 

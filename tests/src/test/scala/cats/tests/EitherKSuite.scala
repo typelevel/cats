@@ -14,7 +14,7 @@ class EitherKSuite extends CatsSuite {
   checkAll("Traverse[EitherK[Option, Option, *]]", SerializableTests.serializable(Traverse[EitherK[Option, Option, *]]))
 
   {
-    implicit val foldable = EitherK.catsDataFoldableForEitherK[Option, Option]
+    implicit val foldable: Foldable[EitherK[Option, Option, *]] = EitherK.catsDataFoldableForEitherK[Option, Option]
     checkAll("EitherK[Option, Option, *]", FoldableTests[EitherK[Option, Option, *]].foldable[Int, Int])
     checkAll("Foldable[EitherK[Option, Option, *]]",
              SerializableTests.serializable(Foldable[EitherK[Option, Option, *]]))
@@ -24,7 +24,7 @@ class EitherKSuite extends CatsSuite {
   checkAll("Comonad[EitherK[Eval, Eval, *]]", SerializableTests.serializable(Comonad[EitherK[Eval, Eval, *]]))
 
   {
-    implicit val coflatMap = EitherK.catsDataCoflatMapForEitherK[Eval, Eval]
+    implicit val coflatMap: CoflatMap[EitherK[Eval, Eval, *]] = EitherK.catsDataCoflatMapForEitherK[Eval, Eval]
     checkAll("EitherK[Eval, Eval, *]", CoflatMapTests[EitherK[Eval, Eval, *]].coflatMap[Int, Int, Int])
     checkAll("CoflatMap[EitherK[Eval, Eval, *]]", SerializableTests.serializable(CoflatMap[EitherK[Eval, Eval, *]]))
   }

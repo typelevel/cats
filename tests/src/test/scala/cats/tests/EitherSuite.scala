@@ -6,11 +6,12 @@ import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Either[Int, *]]
+  implicit val iso: Isomorphisms[Either[Int, *]] = Isomorphisms.invariant[Either[Int, *]]
 
   checkAll("Either[String, Int]", MonoidTests[Either[String, Int]].monoid)
   checkAll("Monoid[Either[String, Int]]", SerializableTests.serializable(Monoid[Either[String, Int]]))
@@ -21,7 +22,7 @@ class EitherSuite extends CatsSuite {
   checkAll("Either[Int, Int]", AlignTests[Either[Int, *]].align[Int, Int, Int, Int])
   checkAll("Align[Either[Int, *]]", SerializableTests.serializable(Align[Either[Int, *]]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, *], Int, Int]
+  implicit val eq0: Eq[EitherT[Either[Int, *], Int, Int]] = EitherT.catsDataEqForEitherT[Either[Int, *], Int, Int]
 
   checkAll("Either[Int, Int]", MonadErrorTests[Either[Int, *], Int].monadError[Int, Int, Int])
   checkAll("MonadError[Either[Int, *]]", SerializableTests.serializable(MonadError[Either[Int, *], Int]))
@@ -46,8 +47,8 @@ class EitherSuite extends CatsSuite {
   val show = implicitly[Show[Either[Int, String]]]
 
   {
-    implicit val S = ListWrapper.eqv[String]
-    implicit val I = ListWrapper.eqv[Int]
+    implicit val S: Eq[ListWrapper[String]] = ListWrapper.eqv[String]
+    implicit val I: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Either[ListWrapper[String], ListWrapper[Int]]",
              EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]",

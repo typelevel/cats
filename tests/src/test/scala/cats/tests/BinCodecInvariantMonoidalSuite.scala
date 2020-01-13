@@ -163,13 +163,13 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
 
   {
     implicit val miniIntMonoid: Monoid[MiniInt] = MiniInt.miniIntAddition
-    implicit val binMonoid = InvariantMonoidal.monoid[BinCodec, MiniInt]
+    implicit val binMonoid: Monoid[BinCodec[MiniInt]] = InvariantMonoidal.monoid[BinCodec, MiniInt]
     checkAll("InvariantMonoidal[BinCodec].monoid", MonoidTests[BinCodec[MiniInt]].monoid)
   }
 
   {
     implicit val miniIntSemigroup: Semigroup[MiniInt] = MiniInt.miniIntAddition
-    implicit val binSemigroup = InvariantSemigroupal.semigroup[BinCodec, MiniInt]
+    implicit val binSemigroup: Semigroup[BinCodec[MiniInt]] = InvariantSemigroupal.semigroup[BinCodec, MiniInt]
     checkAll("InvariantSemigroupal[BinCodec].semigroup", SemigroupTests[BinCodec[MiniInt]].semigroup)
   }
 }

@@ -6,6 +6,7 @@ import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, 
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import cats.arrow.{Profunctor, Strong}
 
@@ -327,8 +328,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
-  implicit val iso = SemigroupalTests.Isomorphisms
-    .invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]](
+  implicit val iso: Isomorphisms[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]] =
+    Isomorphisms.invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]](
       IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor)
     )
 
@@ -419,7 +420,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[ReaderWriterStateT[Option, Boolean, String, MiniInt, *]]
+    implicit val iso: Isomorphisms[ReaderWriterStateT[Option, Boolean, String, MiniInt, *]] =
+      Isomorphisms.invariant[ReaderWriterStateT[Option, Boolean, String, MiniInt, *]]
     implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, *], Unit, Int]] =
       EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, *], Unit, Int]
 

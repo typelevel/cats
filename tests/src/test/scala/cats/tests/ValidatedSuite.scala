@@ -6,20 +6,22 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.laws.discipline._
 import org.scalacheck.Arbitrary._
 import cats.laws.discipline.SemigroupKTests
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 
 import scala.util.Try
 
 class ValidatedSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Validated[String, *]]
+  implicit val iso: Isomorphisms[Validated[String, *]] = Isomorphisms.invariant[Validated[String, *]]
   checkAll("Validated[String, Int]", SemigroupalTests[Validated[String, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Validated[String,*]]", SerializableTests.serializable(Semigroupal[Validated[String, *]]))
 
   checkAll("Validated[*, *]", BitraverseTests[Validated].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Validated]", SerializableTests.serializable(Bitraverse[Validated]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Validated[String, *], String, Int]
+  implicit val eq0: Eq[EitherT[Validated[String, *], String, Int]] =
+    EitherT.catsDataEqForEitherT[Validated[String, *], String, Int]
 
   checkAll("Validated[String, Int]",
            ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
@@ -45,15 +47,15 @@ class ValidatedSuite extends CatsSuite {
   checkAll("Align[Validated[Int, *]]", SerializableTests.serializable(Align[Validated[Int, *]]))
 
   {
-    implicit val L = ListWrapper.semigroup[String]
+    implicit val L: Semigroup[ListWrapper[String]] = ListWrapper.semigroup[String]
     checkAll("Validated[ListWrapper[String], *]", SemigroupKTests[Validated[ListWrapper[String], *]].semigroupK[Int])
     checkAll("SemigroupK[Validated[ListWrapper[String], *]]",
              SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], *]]))
   }
 
   {
-    implicit val S = ListWrapper.partialOrder[String]
-    implicit val I = ListWrapper.partialOrder[Int]
+    implicit val S: PartialOrder[ListWrapper[String]] = ListWrapper.partialOrder[String]
+    implicit val I: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Validated[ListWrapper[String], ListWrapper[Int]]",
              PartialOrderTests[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
     checkAll(
@@ -63,8 +65,8 @@ class ValidatedSuite extends CatsSuite {
   }
 
   {
-    implicit val S = ListWrapper.eqv[String]
-    implicit val I = ListWrapper.eqv[Int]
+    implicit val S: Eq[ListWrapper[String]] = ListWrapper.eqv[String]
+    implicit val I: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Validated[ListWrapper[String], ListWrapper[Int]]",
              EqTests[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
     checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]",

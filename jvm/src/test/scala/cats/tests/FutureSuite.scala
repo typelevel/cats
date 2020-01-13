@@ -45,7 +45,7 @@ class FutureSuite extends CatsSuite {
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
 
   {
-    implicit val F = ListWrapper.semigroup[Int]
+    implicit val F: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
     checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
   }
 
