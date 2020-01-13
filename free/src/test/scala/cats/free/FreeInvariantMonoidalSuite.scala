@@ -26,7 +26,8 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
       }
     }
 
-  implicit val isoFreeBinCodec = Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, *]]
+  implicit val isoFreeBinCodec: Isomorphisms[FreeInvariantMonoidal[BinCodec, *]] =
+    Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, *]]
 
   checkAll("FreeInvariantMonoidal[BinCodec, *]",
            InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, *]].invariantMonoidal[MiniInt, Boolean, Boolean])

@@ -36,14 +36,14 @@ class NonEmptyLazyListSuite extends CatsSuite {
   checkAll("Show[NonEmptyLazyList[Int]]", SerializableTests.serializable(Show[NonEmptyLazyList[Int]]))
 
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyLazyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyLazyList[ListWrapper[Int]]",
              SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", EqTests[NonEmptyLazyList[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]",
              SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
@@ -126,7 +126,7 @@ class NonEmptyLazyListSuite extends CatsSuite {
   }
 
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
-    forAll { ci: NonEmptyLazyList[Int] =>
+    forAll { (ci: NonEmptyLazyList[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }

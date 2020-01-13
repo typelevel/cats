@@ -5,6 +5,7 @@ import cats.data.{NonEmptyStream, OneAnd}
 import cats.instances.stream._
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 
 class NonEmptyStreamSuite extends CatsSuite {
@@ -31,7 +32,7 @@ class NonEmptyStreamSuite extends CatsSuite {
     implicitly[Comonad[NonEmptyStream]]
   }
 
-  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[NonEmptyStream]
+  implicit val iso2: Isomorphisms[NonEmptyStream] = Isomorphisms.invariant[NonEmptyStream]
 
   checkAll("NonEmptyStream[Int]", MonadTests[NonEmptyStream].monad[Int, Int, Int])
   checkAll("Monad[NonEmptyStream[A]]", SerializableTests.serializable(Monad[NonEmptyStream]))

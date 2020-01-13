@@ -2,7 +2,8 @@ package cats
 package free
 
 import cats.data.{NonEmptyList, OptionT}
-import cats.laws.discipline.{ComonadTests, ReducibleTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -11,16 +12,16 @@ class CofreeSuite extends CatsSuite {
 
   import CofreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Cofree[Option, *]]
+  implicit val iso: Isomorphisms[Cofree[Option, *]] = Isomorphisms.invariant[Cofree[Option, *]]
 
   checkAll("Cofree[Option, *]", ComonadTests[Cofree[Option, *]].comonad[Int, Int, Int])
   locally {
-    implicit val instance = Cofree.catsTraverseForCofree[Option]
+    implicit val instance: Traverse[Cofree[Option, *]] = Cofree.catsTraverseForCofree[Option]
     checkAll("Cofree[Option, *]", TraverseTests[Cofree[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[Cofree[Option, *]]", SerializableTests.serializable(Traverse[Cofree[Option, *]]))
   }
   locally {
-    implicit val instance = Cofree.catsReducibleForCofree[Option]
+    implicit val instance: Reducible[Cofree[Option, *]] = Cofree.catsReducibleForCofree[Option]
     checkAll("Cofree[Option, *]", ReducibleTests[Cofree[Option, *]].reducible[Option, Int, Int])
     checkAll("Reducible[Cofree[Option, *]]", SerializableTests.serializable(Reducible[Cofree[Option, *]]))
   }

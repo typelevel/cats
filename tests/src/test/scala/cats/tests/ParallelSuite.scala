@@ -82,7 +82,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 
   type ListTuple2[A, B] = List[(A, B)]
-  implicit val catsBitraverseForListTuple2 = new Bitraverse[ListTuple2] {
+  implicit val catsBitraverseForListTuple2: Bitraverse[ListTuple2] = new Bitraverse[ListTuple2] {
     def bifoldLeft[A, B, C](fab: ListTuple2[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
       fab.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
     def bifoldRight[A, B, C](fab: ListTuple2[A, B], lc: Eval[C])(f: (A, Eval[C]) => Eval[C],
@@ -410,12 +410,12 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
                                                       IorT.rightT(123)(monadInstance))
 
     val resultSansInstance = {
-      implicit val ev0 = monadInstance
+      implicit val ev0: Monad[Effect] = monadInstance
       checkMarker(iorts.parSequence)
     }
     val resultWithInstance = {
-      implicit val ev0 = monadInstance
-      implicit val ev1 = parallelInstance
+      implicit val ev0: Monad[Effect] = monadInstance
+      implicit val ev1: Parallel.Aux[Effect, Effect] = parallelInstance
       checkMarker(iorts.parSequence)
     }
 
@@ -509,7 +509,8 @@ trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
   {
-    implicit val parVal = Parallel.applicativeError[Either[String, *], String]
+    implicit val parVal: ApplicativeError[Validated[String, *], String] =
+      Parallel.applicativeError[Either[String, *], String]
 
     checkAll("ApplicativeError[Validated[String, Int]]",
              ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])

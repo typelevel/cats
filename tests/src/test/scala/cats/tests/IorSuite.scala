@@ -12,16 +12,17 @@ import cats.laws.discipline.{
 }
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Arbitrary._
 
 class IorSuite extends CatsSuite {
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Ior[String, *]]
+  implicit val iso: Isomorphisms[Ior[String, *]] = Isomorphisms.invariant[Ior[String, *]]
 
   checkAll("Ior[String, Int]", SemigroupalTests[Ior[String, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[String Ior *]]", SerializableTests.serializable(Semigroupal[String Ior *]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, *], String, Int]
+  implicit val eq0: Eq[EitherT[Ior[String, *], String, Int]] = EitherT.catsDataEqForEitherT[Ior[String, *], String, Int]
 
   checkAll("Ior[String, Int]", MonadErrorTests[String Ior *, String].monadError[Int, Int, Int])
   checkAll("MonadError[String Ior *]", SerializableTests.serializable(MonadError[String Ior *, String]))

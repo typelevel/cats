@@ -8,6 +8,7 @@ import cats.kernel.instances.tuple._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.platform.Platform
 
 class IndexedStateTSuite extends CatsSuite {
@@ -321,9 +322,10 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, *]](
-    IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad)
-  )
+  implicit val iso: Isomorphisms[IndexedStateT[ListWrapper, String, Int, *]] =
+    Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, *]](
+      IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad)
+    )
 
   {
     // F has a Functor
@@ -366,8 +368,8 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   {
-    implicit val F0 = ListWrapper.monad
-    implicit val FF = ListWrapper.functorFilter
+    implicit val F0: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
              FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int])
@@ -429,7 +431,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   {
     // F has a Monad
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
              MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int])
@@ -445,8 +447,8 @@ class IndexedStateTSuite extends CatsSuite {
 
   {
     // F has a Monad and a SemigroupK
-    implicit val F = ListWrapper.monad
-    implicit val S = ListWrapper.semigroupK
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
              SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int])
@@ -456,8 +458,8 @@ class IndexedStateTSuite extends CatsSuite {
 
   {
     // F has an Alternative
-    implicit val G = ListWrapper.monad
-    implicit val F = ListWrapper.alternative
+    implicit val G: Monad[ListWrapper] = ListWrapper.monad
+    implicit val F: Alternative[ListWrapper] = ListWrapper.alternative
     val SA =
       IndexedStateT
         .catsDataAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
@@ -477,7 +479,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[State[MiniInt, *]]
+    implicit val iso: Isomorphisms[State[MiniInt, *]] = Isomorphisms.invariant[State[MiniInt, *]]
 
     checkAll("State[MiniInt, *]", MonadTests[State[MiniInt, *]].monad[Int, Int, Int])
     checkAll("Monad[State[Long, *]]", SerializableTests.serializable(Monad[State[Long, *]]))
@@ -485,7 +487,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   {
     // F has a MonadError
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[StateT[Option, MiniInt, *]]
+    implicit val iso: Isomorphisms[StateT[Option, MiniInt, *]] = Isomorphisms.invariant[StateT[Option, MiniInt, *]]
     implicit val eqEitherTFA: Eq[EitherT[StateT[Option, MiniInt, *], Unit, Int]] =
       EitherT.catsDataEqForEitherT[StateT[Option, MiniInt, *], Unit, Int]
 

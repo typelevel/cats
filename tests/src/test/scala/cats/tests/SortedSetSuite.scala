@@ -11,7 +11,7 @@ import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, S
 import scala.collection.immutable.SortedSet
 
 class SortedSetSuite extends CatsSuite {
-  implicit val iso = SortedSetIsomorphism
+  implicit val iso: Isomorphisms[SortedSet] = SortedSetIsomorphism
 
   checkAll("SortedSet[Int]", SemigroupKTests[SortedSet].semigroupK[Int])
   checkAll("SortedSet[Int]", SemigroupalTests[SortedSet].semigroupal[Int, Int, Int])
