@@ -2,7 +2,7 @@ package cats
 package free
 
 import cats.data.{NonEmptyList, OptionT}
-import cats.laws.discipline.{ComonadTests, ReducibleTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.list._
 import cats.tests.{CatsSuite, Spooky}

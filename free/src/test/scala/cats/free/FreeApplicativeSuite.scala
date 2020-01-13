@@ -3,7 +3,7 @@ package free
 
 import cats.tests.CatsSuite
 import cats.arrow.FunctionK
-import cats.laws.discipline.{ApplicativeTests, SemigroupalTests, SerializableTests}
+import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.data.State
 

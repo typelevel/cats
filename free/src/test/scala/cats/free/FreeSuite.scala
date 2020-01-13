@@ -3,7 +3,7 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.tests.CatsSuite
