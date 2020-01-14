@@ -157,7 +157,7 @@ class KleisliSuite extends CatsSuite {
            SerializableTests.serializable(Contravariant[Kleisli[Option, *, Int]]))
 
   test("Functor[Kleisli[F, Int, *]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
-    def shouldCompile1[F[_]: ApplicativeError[*[_], E]: FlatMap, E]: Functor[Kleisli[F, Int, *]] =
+    def shouldCompile1[F[_], E](implicit F: ApplicativeError[F, E], FM: FlatMap[F]): Functor[Kleisli[F, Int, *]] =
       Functor[Kleisli[F, Int, *]]
   }
 
