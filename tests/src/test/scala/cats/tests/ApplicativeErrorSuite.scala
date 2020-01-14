@@ -32,7 +32,7 @@ class ApplicativeErrorSuite extends CatsSuite {
     implicit val eqForErrA: Eq[ErrA] = Eq.fromUniversalEquals[ErrA]
     implicit val eqForErrB: Eq[ErrB] = Eq.fromUniversalEquals[ErrB]
 
-    val failed: Either[Err, Int] = ErrA().raiseError[Either[Err, ?], Int]
+    val failed: Either[Err, Int] = ErrA().raiseError[Either[Err, *], Int]
 
     failed.attemptNarrow[ErrA] should ===(ErrA().asLeft[Int].asRight[Err])
     failed.attemptNarrow[ErrB] should ===(Either.left[Err, Either[ErrB, Int]](ErrA()))
