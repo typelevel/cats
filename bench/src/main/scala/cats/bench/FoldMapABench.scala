@@ -14,7 +14,7 @@ class FoldMapABench {
   val xs: Vector[Int] = (1 to 10000).toVector
   val f: Int => Either[Int, Int] = x => if (x >= 5000) Left(x) else Right(x)
   val g: Int => Either[Int, Int] = x => if (x >= 5000) Right(0) else Right(x)
-  val M: Monoid[Either[Int, Int]] = Applicative.monoid[Either[Int, ?], Int]
+  val M: Monoid[Either[Int, Int]] = Applicative.monoid[Either[Int, *], Int]
 
   @Benchmark
   def foldMapMShortCircuit: Either[Int, Int] = xs.foldMapM(f)
