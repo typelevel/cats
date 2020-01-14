@@ -560,7 +560,7 @@ class FoldableEitherKSuite extends FoldableSuite[EitherK[Option, Option, *]]("ei
   def iterator[T](eitherK: EitherK[Option, Option, T]) = eitherK.run.bimap(_.iterator, _.iterator).merge
 }
 
-class FoldableIorSuite extends FoldableSuite[Int Ior *]("ior") {
+class FoldableIorSuite extends FoldableSuite[Ior[Int, *]]("ior") {
   def iterator[T](ior: Int Ior T) =
     ior.fold(_ => None.iterator, b => Some(b).iterator, (_, b) => Some(b).iterator)
 }
