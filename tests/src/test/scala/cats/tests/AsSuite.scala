@@ -14,7 +14,7 @@ class AsSuite extends CatsSuite {
     fa.foldLeft(Map.empty[A, B])(subst(_ + _))
   }
 
-  implicit def arbAs[A, B](implicit ev: A <~< B) = Arbitrary(Gen.const(ev))
+  implicit def arbAs[A, B](implicit ev: A <~< B): Arbitrary[A <~< B] = Arbitrary(Gen.const(ev))
   implicit def eq[A, B]: Eq[As[A, B]] = Eq.fromUniversalEquals
 
   test("narrow an input of a function2") {
