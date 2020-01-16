@@ -84,7 +84,7 @@ this conversion for two test frameworks: `ScalaTest` and `Specs2`.
 
 * If you are using `Specs2`, extend your test class with `org.typelevel.discipline.specs2.Discipline` (provided by `discipline-specs2`).
 
-* If you are using `ScalaTest`, extend your test class with `org.typelevel.discipline.scalatest.Discipline` (provided by `discipline-scalatest`) and `org.scalatest.funsuite.AnyFunSuiteLike`.
+* If you are using `ScalaTest`, extend your test class with `org.typelevel.discipline.scalatest.FunSuiteDiscipline` (provided by `discipline-scalatest`) and `org.scalatest.funsuite.AnyFunSuiteLike`.
 
 * For other test frameworks, you need to resort to their integration with `ScalaCheck` to test
 the `ScalaCheck` `Properties` provided by `cats-laws`.
@@ -95,10 +95,10 @@ The following example is for ScalaTest.
 import cats.implicits._
 import cats.laws.discipline.FunctorTests
 import org.scalatest.funsuite.AnyFunSuite
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import arbitraries._
 
-class TreeLawTests extends AnyFunSuite with Discipline {
+class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline {
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
 }
 ```
@@ -106,7 +106,7 @@ class TreeLawTests extends AnyFunSuite with Discipline {
 * `cats.implicits._` imports the instances we need for `Eq[Tree[Int]]`, which the laws use to compare trees.
 * `FunctorTests` contains the functor laws.
 * `AnyFunSuite` defines the style of ScalaTest.
-* `Discipline` provides `checkAll`, and must be mixed into `AnyFunSuite`
+* `FunSuiteDiscipline` provides `checkAll`, and must be mixed into `AnyFunSuite`
 * `arbitraries._` imports the `Arbitrary[Tree[_]]` instances needed to check the laws.
 
 Alternatively, you can use the `CatsSuite` provided by [Cats-testkit-scalatest](https://github.com/typelevel/cats-testkit-scalatest),

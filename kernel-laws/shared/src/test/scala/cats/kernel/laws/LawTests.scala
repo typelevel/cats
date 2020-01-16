@@ -5,7 +5,7 @@ import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosInt, PosZInt}

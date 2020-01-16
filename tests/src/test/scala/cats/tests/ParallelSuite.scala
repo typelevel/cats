@@ -8,7 +8,7 @@ import org.scalatest.funsuite.AnyFunSuiteLike
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import scala.collection.immutable.SortedSet
 import kernel.compat.scalaVersionSpecific._
 
@@ -498,7 +498,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 }
 
-trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
+trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with FunSuiteDiscipline {
 
   import cats.instances.either._
   import cats.instances.string._
