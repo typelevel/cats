@@ -8,8 +8,9 @@ import cats.arrow._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
+import org.scalatestplus.scalacheck.Checkers
 
-class AndThenSuite extends CatsSuite {
+class AndThenSuite extends CatsSuite with Checkers {
   checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[AndThen[Int, *]]", SerializableTests.serializable(Semigroupal[AndThen[Int, *]]))
 

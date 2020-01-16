@@ -5,11 +5,12 @@ import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
+import org.scalatestplus.scalacheck.Checkers
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
@@ -133,7 +134,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
+class Tests extends AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests with Checkers {
 
   import KernelCheck._
 

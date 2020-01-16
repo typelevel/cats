@@ -8,7 +8,7 @@ import cats.syntax.{AllSyntax, EqOps}
 import cats.tests.StrictCatsEquality
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.matchers.should.Matchers
@@ -23,7 +23,7 @@ trait AlleycatsSuite
     extends AnyFunSuiteLike
     with Matchers
     with ScalaCheckDrivenPropertyChecks
-    with Discipline
+    with FunSuiteDiscipline
     with TestSettings
     with AllInstances
     with AllSyntax
