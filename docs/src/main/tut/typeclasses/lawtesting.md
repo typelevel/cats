@@ -161,10 +161,10 @@ import cats.implicits._
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.FunctorTests
 import org.scalatest.funsuite.AnyFunSuite
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import arbitraries._
 
-class TreeLawTests extends AnyFunSuite with Discipline {
+class TreeLawTests extends AnyFunSuite with FunSuiteDiscipline {
   checkAll("Tree[Int].SemigroupLaws", SemigroupTests[Tree[Int]].semigroup)
   checkAll("Tree.FunctorLaws", FunctorTests[Tree].functor[Int, Int, String])
 }

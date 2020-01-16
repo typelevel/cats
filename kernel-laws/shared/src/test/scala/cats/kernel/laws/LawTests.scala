@@ -133,7 +133,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
+class Tests extends AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
 
   import KernelCheck._
 
