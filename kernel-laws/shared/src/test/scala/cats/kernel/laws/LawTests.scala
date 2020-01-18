@@ -134,10 +134,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests with Checkers {
-
-  import KernelCheck._
-
+class TestsConfig extends Checkers {
   // The ScalaCheck defaults (100,100) are too high for Scala.js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
@@ -145,6 +142,11 @@ class Tests extends AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpe
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
+}
+
+class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
+
+  import KernelCheck._
 
   {
     // needed for Cogen[Map[...]]
