@@ -3,8 +3,6 @@ package data
 
 import cats.arrow.{Profunctor, Strong}
 
-import cats.syntax.either._
-
 /**
  *
  * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding
@@ -434,7 +432,14 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
   def tailRecM[A, B](a: A)(f: A => IndexedStateT[F, S, S, Either[A, B]]): IndexedStateT[F, S, S, B] =
     IndexedStateT[F, S, S, B](s =>
       F.tailRecM[(S, A), (S, B)]((s, a)) {
-        case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
+        case (s, a) =>
+          F.map(f(a).run(s)) {
+            case (s, ab) =>
+              ab match {
+                case Right(b) => Right((s, b))
+                case Left(a)  => Left((s, a))
+              }
+          }
       }
     )
 }

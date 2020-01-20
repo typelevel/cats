@@ -257,8 +257,6 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-    import cats.syntax.either._
-
     def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
       eval.map(ior =>
         (f(a), ior) match {
@@ -269,7 +267,12 @@ import simulacrum.{noop, typeclass}
         }
       )
 
-    reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
+    reduceRightTo(fa)(a =>
+      f(a) match {
+        case Right(c) => Ior.right(NonEmptyList.one(c))
+        case Left(b)  => Ior.left(NonEmptyList.one(b))
+      }
+    )(g).value
   }
 
   override def isEmpty[A](fa: F[A]): Boolean = false

@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
-import cats.syntax.either._
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -424,7 +423,7 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, *]] {
     OptionT(
       F.tailRecM(a)(a0 =>
         F.map(f(a0).value)(
-          _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
+          _.fold[Either[A, Option[B]]](Right(None))(_.map(b => Some(b): Option[B]))
         )
       )
     )

@@ -3,8 +3,6 @@ package data
 
 import cats.arrow.{Profunctor, Strong}
 
-import cats.syntax.either._
-
 /**
  * Represents a stateful computation in a context `F[_]`, from state `SA` to state `SB`,
  *  with an initial environment `E`, an accumulated log `L` and a result `A`.
@@ -671,7 +669,10 @@ sealed abstract private[data] class RWSTMonad[F[_], E, L, S]
         case (currL, currS, currA) =>
           F.map(f(currA).run(e, currS)) {
             case (nextL, nextS, ab) =>
-              ab.bimap((L.combine(currL, nextL), nextS, _), (L.combine(currL, nextL), nextS, _))
+              ab match {
+                case Right(b) => Right((L.combine(currL, nextL), nextS, b))
+                case Left(a)  => Left((L.combine(currL, nextL), nextS, a))
+              }
           }
       }
     }

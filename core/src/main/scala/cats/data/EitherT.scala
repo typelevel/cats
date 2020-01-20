@@ -478,7 +478,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     EitherT(F.map2(this.value, that.value)(_.combine(_)))
 
   def toValidated(implicit F: Functor[F]): F[Validated[A, B]] =
-    F.map(value)(_.toValidated)
+    F.map(value)(Validated.fromEither)
 
   def toValidatedNel(implicit F: Functor[F]): F[ValidatedNel[A, B]] =
     F.map(value)(_.toValidatedNel)
@@ -503,7 +503,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * }}}
    */
   def withValidated[C, D](f: Validated[A, B] => Validated[C, D])(implicit F: Functor[F]): EitherT[F, C, D] =
-    EitherT(F.map(value)(either => f(either.toValidated).toEither))
+    EitherT(F.map(value)(either => f(Validated.fromEither(either)).toEither))
 
   def show(implicit show: Show[F[Either[A, B]]]): String = show.show(value)
 
@@ -548,7 +548,7 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * }}}
    */
   def toNestedValidated(implicit F: Functor[F]): Nested[F, Validated[A, *], B] =
-    Nested[F, Validated[A, *], B](F.map(value)(_.toValidated))
+    Nested[F, Validated[A, *], B](F.map(value)(Validated.fromEither))
 
   /**
    * Transform this `EitherT[F, A, B]` into a `[[Nested]][F, ValidatedNel[A, *], B]`.
@@ -569,7 +569,7 @@ object EitherT extends EitherTInstances {
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class LeftPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
-    def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Either.left))
+    def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fa)(Left(_)))
   }
 
   /**
@@ -587,7 +587,7 @@ object EitherT extends EitherTInstances {
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class LeftTPartiallyApplied[F[_], B](private val dummy: Boolean = true) extends AnyVal {
-    def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Either.left(a)))
+    def apply[A](a: A)(implicit F: Applicative[F]): EitherT[F, A, B] = EitherT(F.pure(Left(a)))
   }
 
   /**
@@ -605,7 +605,7 @@ object EitherT extends EitherTInstances {
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class RightPartiallyApplied[A](private val dummy: Boolean = true) extends AnyVal {
-    def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Either.right))
+    def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = EitherT(F.map(fb)(Right(_)))
   }
 
   /**
@@ -815,7 +815,7 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
       def parallel: EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *] =
         λ[EitherT[M, E, *] ~> Nested[P.F, Validated[E, *], *]] { eitherT =>
           val fea = P.parallel(eitherT.value)
-          Nested(P.applicative.map(fea)(_.toValidated))
+          Nested(P.applicative.map(fea)(Validated.fromEither))
         }
     }
 }
@@ -874,7 +874,7 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
       def parallel: EitherT[M, E, *] ~> Nested[M, Validated[E, *], *] =
         λ[EitherT[M, E, *] ~> Nested[M, Validated[E, *], *]] { eitherT =>
-          Nested(Monad[M].map(eitherT.value)(_.toValidated))
+          Nested(Monad[M].map(eitherT.value)(Validated.fromEither))
         }
     }
 }
