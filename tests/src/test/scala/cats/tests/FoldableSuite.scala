@@ -306,7 +306,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     val f = (_: String) match {
       case "Calvin" => None
       case "Deirdra" =>
-        fail: Unit // : Unit ascription suppresses unreachable code warning
+        fail(): Unit // : Unit ascription suppresses unreachable code warning
         None
       case x => Some(x)
     }
