@@ -144,7 +144,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParBisequence Ior should bisequence values") {
     forAll { (es: ListTuple2[Ior[String, Int], Ior[String, Int]]) =>
-      es.parBisequence.right should ===(es.bimap(_.toOption, _.toOption).bisequence)
+      es.parBisequence.right should ===(catsBitraverseForListTuple2.bimap(es)(_.toOption, _.toOption).bisequence)
     }
   }
 
@@ -183,7 +183,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 
   test("ParLeftSequence Ior should leftSequence values") {
     forAll { (es: ListTuple2[Ior[String, Int], Int]) =>
-      es.parLeftSequence.right should ===(es.bimap(_.toOption, identity).leftSequence)
+      es.parLeftSequence.right should ===(catsBitraverseForListTuple2.bimap(es)(_.toOption, identity).leftSequence)
     }
   }
 
