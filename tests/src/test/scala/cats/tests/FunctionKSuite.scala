@@ -3,8 +3,8 @@ package tests
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.data.NonEmptyList
-import cats.laws.discipline.arbitrary._
+//import cats.data.NonEmptyList
+//import cats.laws.discipline.arbitrary._
 
 class FunctionKSuite extends CatsSuite {
 
@@ -64,6 +64,7 @@ class FunctionKSuite extends CatsSuite {
     }
   }
 
+  /*
   test("lift simple unary") {
     def optionToList[A](option: Option[A]): List[A] = option.toList
     val fOptionToList = FunctionK.lift(optionToList _)
@@ -103,5 +104,6 @@ class FunctionKSuite extends CatsSuite {
     assertTypeError("FunctionK.lift(sample[String])")
     assertTypeError("FunctionK.lift(sample[Nothing])")
   }
+ */
 
 }
