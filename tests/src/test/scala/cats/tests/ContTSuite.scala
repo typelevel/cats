@@ -45,7 +45,7 @@ class ContTSuite extends CatsSuite {
                                  fnArb: Arbitrary[(C => M[A]) => B => M[A]],
                                  gnArb: Arbitrary[C => M[A]]) =
     forAll { (cont: ContT[M, A, B], fn: (C => M[A]) => B => M[A], gn: C => M[A]) =>
-      assert(eqma.eqv(cont.withCont(fn).run(gn), cont.run(fn(gn))))
+      eqma.eqv(cont.withCont(fn).run(gn), cont.run(fn(gn))) should ===(true)
     }
 
   test("ContT.mapContLaw[Function0, Int, String]") {
