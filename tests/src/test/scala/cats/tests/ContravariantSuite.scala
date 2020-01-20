@@ -4,7 +4,6 @@ package tests
 import cats.data.Const
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniInt}
-import org.scalactic.CanEqual
 import org.scalacheck.{Arbitrary, Cogen}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
@@ -13,8 +12,6 @@ class ContravariantSuite extends CatsSuite {
 
   test("narrow equals contramap(identity)") {
     implicit val constInst: Contravariant[Const[Int, *]] = Const.catsDataContravariantForConst[Int]
-    implicit val canEqual: CanEqual[cats.data.Const[Int, Some[Int]], cats.data.Const[Int, Some[Int]]] =
-      StrictCatsEquality.lowPriorityConversionCheckedConstraint
     forAll { (i: Int) =>
       val const: Const[Int, Option[Int]] = Const[Int, Option[Int]](i)
       val narrowed: Const[Int, Some[Int]] = constInst.narrow[Option[Int], Some[Int]](const)
