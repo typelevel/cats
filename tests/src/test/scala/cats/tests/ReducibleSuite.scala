@@ -111,7 +111,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val n = 100000
     val xs = NES(Right(0), Stream.from(1).map(i => if (i < n) Right(i) else Left(i)))
 
-    assert(xs.reduceA === Left(n))
+    xs.reduceA should ===(Left(n))
   }
 }
 
