@@ -33,7 +33,8 @@ class LazyListSuite extends CatsSuite {
   checkAll("Traverse[LazyList]", SerializableTests.serializable(Traverse[LazyList]))
 
   checkAll("LazyList[Int]", TraverseFilterTests[LazyList].traverseFilter[Int, Int, Int])
-  checkAll("TraverseFilter[LazyList]", SerializableTests.serializable(TraverseFilter[LazyList]))
+  checkAll("TraverseFilter[LazyList]",
+           SerializableTests.serializable(cats.instances.lazyList.catsStdTraverseFilterForLazyList))
 
   checkAll("LazyList[Int]", AlignTests[LazyList].align[Int, Int, Int, Int])
   checkAll("Align[LazyList]", SerializableTests.serializable(Align[LazyList]))

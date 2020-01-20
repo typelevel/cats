@@ -80,7 +80,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Contravariant[* => Int]", SerializableTests.serializable(Contravariant[* => Int]))
 
   checkAll("Function1", MonoidKTests[λ[α => α => α]].monoidK[MiniInt])
-  checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(catsStdMonoidKForFunction1))
+  checkAll("MonoidK[λ[α => α => α]", SerializableTests.serializable(cats.instances.function.catsStdMonoidKForFunction1))
 
   checkAll("Function1[MiniInt, *]",
            DistributiveTests[MiniInt => *].distributive[Int, Int, Int, Id, Function1[MiniInt, *]])
