@@ -299,7 +299,7 @@ class OptionTSuite extends CatsSuite {
 
   test("OptionT.whenK and OptionT.whenF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
-      IdT(li).mapK(OptionT.whenK(b)).value should ===(OptionT.whenF(b)(li))
+      IdT(li).mapK(OptionT.whenK[List](b)).value should ===(OptionT.whenF(b)(li))
     }
   }
 
@@ -321,7 +321,7 @@ class OptionTSuite extends CatsSuite {
 
   test("OptionT.unlessK and OptionT.unlessF consistent") {
     forAll { (li: List[Int], b: Boolean) =>
-      IdT(li).mapK(OptionT.unlessK(b)).value should ===(OptionT.unlessF(b)(li))
+      IdT(li).mapK(OptionT.unlessK[List](b)).value should ===(OptionT.unlessF(b)(li))
     }
   }
 

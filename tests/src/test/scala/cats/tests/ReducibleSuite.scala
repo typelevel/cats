@@ -97,14 +97,14 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val n = 100000
     val xs = NES(0, Stream.from(1))
 
-    assert(xs.reduceMapM(i => if (i < n) Right(i) else Left(i)) === Left(n))
+    assert(xs.reduceMapM[Either[Int, *], Int](i => if (i < n) Right(i) else Left(i)) === Left(n))
   }
 
   test("reduceMapA should be stack-safe and short-circuiting if reduceRightTo is sufficiently lazy") {
     val n = 100000
     val xs = NES(0, Stream.from(1))
 
-    assert(xs.reduceMapA(i => if (i < n) Right(i) else Left(i)) === Left(n))
+    assert(xs.reduceMapA[Either[Int, *], Int](i => if (i < n) Right(i) else Left(i)) === Left(n))
   }
 
   test("reduceA should be stack-safe and short-circuiting if reduceRightTo is sufficiently lazy") {
