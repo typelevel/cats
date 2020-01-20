@@ -95,7 +95,8 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
 
   test("#500: foldMap - traverse consistency") {
     assert(
-      List(1, 2, 3).traverse(i => Const.of[List[Int]](List(i))).getConst == List(1, 2, 3).foldMap(List(_))
+      List(1, 2, 3).traverse(i => (Const.of[List[Int]](List(i))): Const[List[Int], List[Int]]).getConst == List(1, 2, 3)
+        .foldMap(List(_))
     )
   }
 
