@@ -11,7 +11,7 @@ import cats.laws.discipline.{
   RepresentableTests,
   SerializableTests
 }
-import cats.{Bimonad, Distributive, Eq, Eval, Id, Monad, Monoid, Representable}
+import cats.{catsRepresentableForId, Bimonad, Distributive, Eq, Eval, Id, Monad, Monoid, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
 
