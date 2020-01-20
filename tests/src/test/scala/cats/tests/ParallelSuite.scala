@@ -66,11 +66,13 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
     }
   }
 
+  /*
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
       Parallel.parSequence_(es) should ===(es.parSequence_)
     }
   }
+   */
 
   test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
     forAll { (es: NonEmptyVector[Either[String, Int]]) =>
