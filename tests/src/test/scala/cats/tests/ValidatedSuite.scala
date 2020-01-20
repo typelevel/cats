@@ -257,7 +257,7 @@ class ValidatedSuite extends CatsSuite {
 
   test("Unapply-based apply syntax") {
     // this type has kind F[_, _], which requires `Unapply`-based syntax
-    val x: ValidatedNel[String, Int] = Validated.invalidNel("error 1")
+    val x: Validated[NonEmptyList[String], Int] = Validated.invalidNel("error 1")
     val y: ValidatedNel[String, Boolean] = Validated.invalidNel("error 2")
 
     val z = x.map2(y)((i, b) => if (b) i + 1 else i)
