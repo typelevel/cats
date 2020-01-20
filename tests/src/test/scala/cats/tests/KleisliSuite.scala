@@ -306,7 +306,7 @@ class KleisliSuite extends CatsSuite {
     val program = for {
       k1 <- Kleisli((a: A1) => List(1))
       k2 <- Kleisli((a: A2) => List("2"))
-      k3 <- Kleisli((a: A3) => List(true))
+      k3 <- Kleisli[List, A3, Boolean]((a: A3) => List(true))
     } yield (k1, k2, k3)
 
     program.run(A123) shouldBe (List((1, "2", true)))
