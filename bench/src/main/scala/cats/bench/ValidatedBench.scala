@@ -13,14 +13,12 @@ class ValidatedBench {
 
   def bimapPointfull[E, A, EE, AA](v: Validated[E, A])(fe: E => EE, fa: A => AA): Validated[EE, AA] =
     v match {
-      case Valid(a) => Valid(fa(a))
+      case Valid(a)   => Valid(fa(a))
       case Invalid(e) => Invalid(fe(e))
     }
 
   @Benchmark
   def pointfull: Validated[Int, Int] = bimapPointfull(x)(_.length, _ + 1)
-
-
   @Benchmark
   def pointfree: Validated[Int, Int] = bimapPointfree(x)(_.length, _ + 1)
 }
