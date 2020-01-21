@@ -32,17 +32,21 @@ package object cats {
    * encodes pure unary function application.
    */
   type Id[+A] = A
+
+  // Workaround for a compiler bug that should be fixed soon.
+  private type IdWrapper = { type L[+A] = A }
+
   type Endo[A] = A => A
-  implicit val catsInstancesForId: Bimonad[({ type L[+x] = x })#L]
-    with CommutativeMonad[({ type L[+x] = x })#L]
-    with Comonad[({ type L[+x] = x })#L]
-    with NonEmptyTraverse[({ type L[+x] = x })#L]
-    with Distributive[({ type L[+x] = x })#L] =
-    new Bimonad[({ type L[+x] = x })#L]
-      with CommutativeMonad[({ type L[+x] = x })#L]
-      with Comonad[({ type L[+x] = x })#L]
-      with NonEmptyTraverse[({ type L[+x] = x })#L]
-      with Distributive[({ type L[+x] = x })#L] {
+  implicit val catsInstancesForId: Bimonad[IdWrapper#L]
+    with CommutativeMonad[IdWrapper#L]
+    with Comonad[IdWrapper#L]
+    with NonEmptyTraverse[IdWrapper#L]
+    with Distributive[IdWrapper#L] =
+    new Bimonad[IdWrapper#L]
+      with CommutativeMonad[IdWrapper#L]
+      with Comonad[IdWrapper#L]
+      with NonEmptyTraverse[IdWrapper#L]
+      with Distributive[IdWrapper#L] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -88,8 +92,8 @@ package object cats {
   /**
    * Witness for: Id[A] <-> Unit => A
    */
-  implicit val catsRepresentableForId: Representable.Aux[({ type L[+x] = x })#L, Unit] =
-    new Representable[({ type L[+x] = x })#L] {
+  implicit val catsRepresentableForId: Representable.Aux[IdWrapper#L, Unit] =
+    new Representable[IdWrapper#L] {
       override type Representation = Unit
       override val F: Functor[Id] = Functor[Id]
 
@@ -98,8 +102,8 @@ package object cats {
       override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
     }
 
-  implicit val catsParallelForId: Parallel.Aux[({ type L[+x] = x })#L, ({ type L[+x] = x })#L] =
-    Parallel.identity[({ type L[+x] = x })#L]
+  implicit val catsParallelForId: Parallel.Aux[IdWrapper#L, IdWrapper#L] =
+    Parallel.identity[Id]
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
