@@ -33,16 +33,16 @@ package object cats {
    */
   type Id[+A] = A
   type Endo[A] = A => A
-  implicit val catsInstancesForId: Bimonad[λ[A => A]]
-    with CommutativeMonad[λ[A => A]]
-    with Comonad[λ[A => A]]
-    with NonEmptyTraverse[λ[A => A]]
-    with Distributive[λ[A => A]] =
-    new Bimonad[λ[A => A]]
-      with CommutativeMonad[λ[A => A]]
-      with Comonad[λ[A => A]]
-      with NonEmptyTraverse[λ[A => A]]
-      with Distributive[λ[A => A]] {
+  implicit val catsInstancesForId: Bimonad[({ type L[+x] = x })#L]
+    with CommutativeMonad[({ type L[+x] = x })#L]
+    with Comonad[({ type L[+x] = x })#L]
+    with NonEmptyTraverse[({ type L[+x] = x })#L]
+    with Distributive[({ type L[+x] = x })#L] =
+    new Bimonad[({ type L[+x] = x })#L]
+      with CommutativeMonad[({ type L[+x] = x })#L]
+      with Comonad[({ type L[+x] = x })#L]
+      with NonEmptyTraverse[({ type L[+x] = x })#L]
+      with Distributive[({ type L[+x] = x })#L] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -88,8 +88,8 @@ package object cats {
   /**
    * Witness for: Id[A] <-> Unit => A
    */
-  implicit val catsRepresentableForId: Representable.Aux[λ[A => A], Unit] =
-    new Representable[λ[A => A]] {
+  implicit val catsRepresentableForId: Representable.Aux[({ type L[+x] = x })#L, Unit] =
+    new Representable[({ type L[+x] = x })#L] {
       override type Representation = Unit
       override val F: Functor[Id] = Functor[Id]
 
@@ -98,7 +98,8 @@ package object cats {
       override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
     }
 
-  implicit val catsParallelForId: Parallel.Aux[λ[A => A], λ[A => A]] = Parallel.identity[λ[A => A]]
+  implicit val catsParallelForId: Parallel.Aux[({ type L[+x] = x })#L, ({ type L[+x] = x })#L] =
+    Parallel.identity[({ type L[+x] = x })#L]
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
