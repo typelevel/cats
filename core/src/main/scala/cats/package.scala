@@ -31,11 +31,18 @@ package object cats {
    * type `A` to get a pure value of type `B`. That is, the instance
    * encodes pure unary function application.
    */
-  type Id[A] = A
+  type Id[+A] = A
   type Endo[A] = A => A
-  implicit val catsInstancesForId
-    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
+  implicit val catsInstancesForId: Bimonad[λ[A => A]]
+    with CommutativeMonad[λ[A => A]]
+    with Comonad[λ[A => A]]
+    with NonEmptyTraverse[λ[A => A]]
+    with Distributive[λ[A => A]] =
+    new Bimonad[λ[A => A]]
+      with CommutativeMonad[λ[A => A]]
+      with Comonad[λ[A => A]]
+      with NonEmptyTraverse[λ[A => A]]
+      with Distributive[λ[A => A]] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -81,16 +88,17 @@ package object cats {
   /**
    * Witness for: Id[A] <-> Unit => A
    */
-  implicit val catsRepresentableForId: Representable.Aux[Id, Unit] = new Representable[Id] {
-    override type Representation = Unit
-    override val F: Functor[Id] = Functor[Id]
+  implicit val catsRepresentableForId: Representable.Aux[λ[A => A], Unit] =
+    new Representable[λ[A => A]] {
+      override type Representation = Unit
+      override val F: Functor[Id] = Functor[Id]
 
-    override def tabulate[A](f: Unit => A): Id[A] = f(())
+      override def tabulate[A](f: Unit => A): Id[A] = f(())
 
-    override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
-  }
+      override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
+    }
 
-  implicit val catsParallelForId: Parallel.Aux[Id, Id] = Parallel.identity
+  implicit val catsParallelForId: Parallel.Aux[λ[A => A], λ[A => A]] = Parallel.identity[λ[A => A]]
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
