@@ -150,8 +150,8 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test",
-    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % "test"
+    "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % Test,
+    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % Test
   )
 )
 
@@ -486,7 +486,7 @@ lazy val kernel = crossProject(JSPlatform, JVMPlatform)
   .settings(includeGeneratedSrc)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-kernel"))
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
 
 lazy val kernelLaws = crossProject(JSPlatform, JVMPlatform)
   .in(file("kernel-laws"))
@@ -509,7 +509,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(catsSettings)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
   .settings(includeGeneratedSrc)
-  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test")
+  .settings(libraryDependencies += "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
 
@@ -534,7 +534,7 @@ lazy val free = crossProject(JSPlatform, JVMPlatform)
 
 lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(testkit % "test")
+  .dependsOn(testkit % Test)
   .settings(moduleName := "cats-tests")
   .settings(catsSettings)
   .settings(noPublishSettings)
