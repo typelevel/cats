@@ -163,8 +163,8 @@ lazy val docSettings = Seq(
   micrositeAuthor := "Cats contributors",
   micrositeFooterText := Some(
     """
-      |<p>© 2017 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
-      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2016 47 Degrees</a></p>
+      |<p>© 2020 <a href="https://github.com/typelevel/cats#maintainers">The Cats Maintainers</a></p>
+      |<p style="font-size: 80%; margin-top: 10px">Website built with <a href="https://47deg.github.io/sbt-microsites/">sbt-microsites © 2020 47 Degrees</a></p>
       |""".stripMargin
   ),
   micrositeHighlightTheme := "atom-one-light",
