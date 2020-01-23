@@ -34,6 +34,7 @@ package object cats {
   type Id[+A] = A
 
   // Workaround for a compiler bug that should be fixed soon.
+  // See https://github.com/scala/scala/pull/8651 for details.
   private type IdWrapper = { type L[+A] = A }
 
   type Endo[A] = A => A
