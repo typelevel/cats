@@ -23,7 +23,7 @@ val scalatestplusScalaCheckVersion = "3.1.0.1"
 
 val disciplineVersion = "1.0.2"
 
-val disciplineScalatestVersion = "1.0.0-RC4"
+val disciplineScalatestVersion = "1.0.0"
 
 val kindProjectorVersion = "0.11.0"
 
