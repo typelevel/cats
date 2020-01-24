@@ -51,6 +51,11 @@ jobs:
       scala: *scala_version_213
       after_success: codecov -F scala_version_213
 
+    - &jvm_dotty_tests
+      stage: test
+      env: TEST="JVM Dotty tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVMDottyCompat
+      scala: *scala_version_dotty
 
     - stage: test
       env: TEST="docs"
