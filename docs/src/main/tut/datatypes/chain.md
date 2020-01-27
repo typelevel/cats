@@ -67,8 +67,7 @@ You can also check out the benchmarks [here](https://github.com/typelevel/cats/b
 
 `Chain` is a fairly simple data structure compared to something like `Vector`.
 It's a simple ADT that has only 4 cases.
-It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collect
-ion.
+It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collection.
 In code it looks like this:
 
 ```tut:book
