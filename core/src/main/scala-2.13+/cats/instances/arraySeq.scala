@@ -1,0 +1,146 @@
+package cats
+package instances
+
+import scala.collection.immutable.ArraySeq
+
+trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
+
+  implicit val catsStdInstancesForArraySeq: Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] =
+    new Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] {
+      def empty[A]: ArraySeq[A] =
+        ArraySeq.untagged.empty
+
+      def combineK[A](xs: ArraySeq[A], ys: ArraySeq[A]): ArraySeq[A] =
+        xs.concat(ys)
+
+      override def algebra[A]: Monoid[ArraySeq[A]] =
+        new cats.kernel.instances.ArraySeqMonoid[A]
+
+      def pure[A](a: A): ArraySeq[A] =
+        ArraySeq.untagged.fill(n = 1)(elem = a)
+
+      override def map[A, B](fa: ArraySeq[A])(f: A => B): ArraySeq[B] =
+        fa.map(f)
+
+      def flatMap[A, B](fa: ArraySeq[A])(f: A => ArraySeq[B]): ArraySeq[B] =
+        fa.flatMap(f)
+
+      override def map2[A, B, Z](fa: ArraySeq[A], fb: ArraySeq[B])(f: (A, B) => Z): ArraySeq[Z] =
+        if (fb.isEmpty) ArraySeq.empty // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: ArraySeq[A], fb: Eval[ArraySeq[B]])(f: (A, B) => Z): Eval[ArraySeq[Z]] =
+        if (fa.isEmpty) Eval.now(ArraySeq.empty) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
+
+      def foldLeft[A, B](fa: ArraySeq[A], b: B)(f: (B, A) => B): B =
+        fa.foldLeft(b)(f)
+
+      def foldRight[A, B](fa: ArraySeq[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        def loop(i: Int): Eval[B] =
+          if (i < fa.length) f(fa(i), Eval.defer(loop(i + 1))) else lb
+
+        Eval.defer(loop(0))
+      }
+
+      override def foldMap[A, B](fa: ArraySeq[A])(f: A => B)(implicit B: Monoid[B]): B =
+        B.combineAll(fa.iterator.map(f))
+
+      def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
+        foldRight[A, G[ArraySeq[B]]](fa, Always(G.pure(ArraySeq.untagged.empty))) {
+          case (a, lgvb) =>
+            G.map2Eval(f(a), lgvb)(_ +: _)
+        }.value
+
+      override def mapWithIndex[A, B](fa: ArraySeq[A])(f: (A, Int) => B): ArraySeq[B] =
+        ArraySeq.untagged.tabulate(n = fa.length) { i =>
+          f(fa(i), i)
+        }
+
+      override def zipWithIndex[A](fa: ArraySeq[A]): ArraySeq[(A, Int)] =
+        fa.zipWithIndex
+
+      def tailRecM[A, B](a: A)(fn: A => ArraySeq[Either[A, B]]): ArraySeq[B] =
+        ???
+
+      override def exists[A](fa: ArraySeq[A])(p: A => Boolean): Boolean =
+        fa.exists(p)
+
+      override def forall[A](fa: ArraySeq[A])(p: A => Boolean): Boolean =
+        fa.forall(p)
+
+      override def get[A](fa: ArraySeq[A])(idx: Long): Option[A] =
+        if (idx < fa.length && idx.isValidInt) Some(fa(idx.toInt)) else None
+
+      override def isEmpty[A](fa: ArraySeq[A]): Boolean =
+        fa.isEmpty
+
+      override def foldM[G[_], A, B](fa: ArraySeq[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] =
+        G.tailRecM((z, 0)) {
+          case (b, i) =>
+            if (i < fa.length) G.map(f(b, fa(i)))(b => Left((b, i + 1)))
+            else G.pure(Right(b))
+        }
+
+      override def fold[A](fa: ArraySeq[A])(implicit A: Monoid[A]): A =
+        A.combineAll(fa)
+
+      override def toList[A](fa: ArraySeq[A]): List[A] =
+        fa.toList
+
+      override def toIterable[A](fa: ArraySeq[A]): Iterable[A] =
+        fa
+
+      override def reduceLeftOption[A](fa: ArraySeq[A])(f: (A, A) => A): Option[A] =
+        fa.reduceLeftOption(f)
+
+      override def find[A](fa: ArraySeq[A])(f: A => Boolean): Option[A] =
+        fa.find(f)
+
+      override def collectFirst[A, B](fa: ArraySeq[A])(pf: PartialFunction[A, B]): Option[B] =
+        fa.collectFirst(pf)
+
+      override def collectFirstSome[A, B](fa: ArraySeq[A])(f: A => Option[B]): Option[B] =
+        fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[ArraySeq] = this
+    }
+
+  implicit def catsStdShowForArraySeq[A: Show]: Show[ArraySeq[A]] =
+    Show.fromToString
+
+  implicit val catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] = new TraverseFilter[ArraySeq] {
+    val traverse: Traverse[ArraySeq] = catsStdInstancesForArraySeq
+
+    override def mapFilter[A, B](fa: ArraySeq[A])(f: (A) => Option[B]): ArraySeq[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
+      fa.filter(f)
+
+    override def filterNot[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
+      fa.filterNot(f)
+
+    override def collect[A, B](fa: ArraySeq[A])(f: PartialFunction[A, B]): ArraySeq[B] =
+      fa.collect(f)
+
+    override def flattenOption[A](fa: ArraySeq[Option[A]]): ArraySeq[A] =
+      fa.flatten
+
+    def traverseFilter[G[_], A, B](
+      fa: ArraySeq[A]
+    )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
+      fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
+          case (x, xse) =>
+            G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        }
+        .value
+
+    override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
+      fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
+          case (x, xse) =>
+            G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        }
+        .value
+  }
+}
