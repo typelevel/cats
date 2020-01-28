@@ -4,8 +4,20 @@ package instances
 import scala.collection.immutable.ArraySeq
 
 trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
+  implicit def catsStdInstancesForArraySeq: Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] =
+    ArraySeqInstances.stdInstances
 
-  implicit val catsStdInstancesForArraySeq: Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] =
+  implicit def catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] =
+    ArraySeqInstances.stdTraverseFilterInstance
+
+  implicit def catsStdShowForArraySeq[A](implicit ev: Show[A]): Show[ArraySeq[A]] =
+    Show.show { arraySeq =>
+      arraySeq.iterator.map(ev.show).mkString("ArraySeq(", ", ", ")")
+    }
+}
+
+object ArraySeqInstances {
+  final private val stdInstances =
     new Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] {
       def empty[A]: ArraySeq[A] =
         ArraySeq.untagged.empty
@@ -102,45 +114,41 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
 
       override def collectFirstSome[A, B](fa: ArraySeq[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
-
-      def functor: Functor[ArraySeq] = this
     }
 
-  implicit def catsStdShowForArraySeq[A: Show]: Show[ArraySeq[A]] =
-    Show.fromToString
+  final private val stdTraverseFilterInstance =
+    new TraverseFilter[ArraySeq] {
+      val traverse: Traverse[ArraySeq] = stdInstances
 
-  implicit val catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] = new TraverseFilter[ArraySeq] {
-    val traverse: Traverse[ArraySeq] = catsStdInstancesForArraySeq
+      override def mapFilter[A, B](fa: ArraySeq[A])(f: (A) => Option[B]): ArraySeq[B] =
+        fa.collect(Function.unlift(f))
 
-    override def mapFilter[A, B](fa: ArraySeq[A])(f: (A) => Option[B]): ArraySeq[B] =
-      fa.collect(Function.unlift(f))
+      override def filter[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
+        fa.filter(f)
 
-    override def filter[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
-      fa.filter(f)
+      override def filterNot[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
+        fa.filterNot(f)
 
-    override def filterNot[A](fa: ArraySeq[A])(f: (A) => Boolean): ArraySeq[A] =
-      fa.filterNot(f)
+      override def collect[A, B](fa: ArraySeq[A])(f: PartialFunction[A, B]): ArraySeq[B] =
+        fa.collect(f)
 
-    override def collect[A, B](fa: ArraySeq[A])(f: PartialFunction[A, B]): ArraySeq[B] =
-      fa.collect(f)
+      override def flattenOption[A](fa: ArraySeq[Option[A]]): ArraySeq[A] =
+        fa.flatten
 
-    override def flattenOption[A](fa: ArraySeq[Option[A]]): ArraySeq[A] =
-      fa.flatten
+      def traverseFilter[G[_], A, B](
+        fa: ArraySeq[A]
+      )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
+            case (x, xse) =>
+              G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+          }
+          .value
 
-    def traverseFilter[G[_], A, B](
-      fa: ArraySeq[A]
-    )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
-      fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
-          case (x, xse) =>
-            G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        }
-        .value
-
-    override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
-      fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
-          case (x, xse) =>
-            G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
-        }
-        .value
-  }
+      override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
+        fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
+            case (x, xse) =>
+              G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+          }
+          .value
+    }
 }
