@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
 
 trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
@@ -72,8 +73,30 @@ object ArraySeqInstances {
       override def zipWithIndex[A](fa: ArraySeq[A]): ArraySeq[(A, Int)] =
         fa.zipWithIndex
 
-      def tailRecM[A, B](a: A)(fn: A => ArraySeq[Either[A, B]]): ArraySeq[B] =
-        ???
+      def tailRecM[A, B](a: A)(fn: A => ArraySeq[Either[A, B]]): ArraySeq[B] = {
+        val buf = ArraySeq.untagged.newBuilder[B]
+
+        @tailrec
+        def loop(state: List[Iterator[Either[A, B]]]): Unit =
+          state match {
+            case h :: tail if h.isEmpty =>
+              loop(state = tail)
+            case h :: tail =>
+              h.next match {
+                case Right(b) =>
+                  buf += b
+                  loop(state)
+                case Left(a) =>
+                  loop(state = fn(a).iterator :: h :: tail)
+              }
+
+            case Nil => ()
+          }
+
+        loop(state = fn(a).iterator :: Nil)
+
+        buf.result()
+      }
 
       override def exists[A](fa: ArraySeq[A])(p: A => Boolean): Boolean =
         fa.exists(p)
@@ -82,7 +105,7 @@ object ArraySeqInstances {
         fa.forall(p)
 
       override def get[A](fa: ArraySeq[A])(idx: Long): Option[A] =
-        if (idx < fa.length && idx.isValidInt) Some(fa(idx.toInt)) else None
+        if (idx >= 0 && idx < fa.length && idx.isValidInt) Some(fa(idx.toInt)) else None
 
       override def isEmpty[A](fa: ArraySeq[A]): Boolean =
         fa.isEmpty
