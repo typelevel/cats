@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
 
 trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
-  implicit def catsStdInstancesForArraySeq: Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] =
+  implicit def catsStdInstancesForArraySeq: Monad[ArraySeq] with MonoidK[ArraySeq] with Traverse[ArraySeq] =
     ArraySeqInstances.stdInstances
 
   implicit def catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] =
@@ -19,7 +19,7 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
 
 object ArraySeqInstances {
   final private val stdInstances =
-    new Traverse[ArraySeq] with Monad[ArraySeq] with MonoidK[ArraySeq] {
+    new Monad[ArraySeq] with MonoidK[ArraySeq] with Traverse[ArraySeq] {
       def empty[A]: ArraySeq[A] =
         ArraySeq.untagged.empty
 
@@ -27,7 +27,7 @@ object ArraySeqInstances {
         xs.concat(ys)
 
       override def algebra[A]: Monoid[ArraySeq[A]] =
-        new cats.kernel.instances.ArraySeqMonoid[A]
+        new cats.kernel.instances.ArraySeqInstances.ArraySeqMonoid
 
       def pure[A](a: A): ArraySeq[A] =
         ArraySeq.untagged.fill(n = 1)(elem = a)
