@@ -29,7 +29,7 @@ object ArraySeqInstances {
   }
 
   final private class ArraySeqOrder[A](implicit ev: Order[A]) extends Order[ArraySeq[A]] {
-    def compare(xs: ArraySeq[A], ys: ArraySeq[A]): Int = {
+    final def compare(xs: ArraySeq[A], ys: ArraySeq[A]): Int = {
       @tailrec def loop(i: Int): Int =
         (i < xs.length, i < ys.length) match {
           case (true, true) =>
@@ -45,7 +45,7 @@ object ArraySeqInstances {
   }
 
   private class ArraySeqPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[ArraySeq[A]] {
-    def partialCompare(xs: ArraySeq[A], ys: ArraySeq[A]): Double = {
+    final def partialCompare(xs: ArraySeq[A], ys: ArraySeq[A]): Double = {
       @tailrec def loop(i: Int): Double =
         (i < xs.length, i < ys.length) match {
           case (true, true) =>
@@ -61,11 +61,11 @@ object ArraySeqInstances {
   }
 
   private class ArraySeqHash[A](implicit ev: Hash[A]) extends ArraySeqEq[A]()(ev) with Hash[ArraySeq[A]] {
-    def hash(xs: ArraySeq[A]): Int = StaticMethods.orderedHash(xs)
+    final def hash(xs: ArraySeq[A]): Int = StaticMethods.orderedHash(xs)
   }
 
   private class ArraySeqEq[A](implicit ev: Eq[A]) extends Eq[ArraySeq[A]] {
-    def eqv(xs: ArraySeq[A], ys: ArraySeq[A]): Boolean = {
+    final def eqv(xs: ArraySeq[A], ys: ArraySeq[A]): Boolean = {
       @tailrec def loop(i: Int): Boolean =
         (i < xs.length, i < ys.length) match {
           case (true, true)   => if (ev.eqv(xs(i), ys(i))) loop(i + 1) else false
