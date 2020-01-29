@@ -2,7 +2,8 @@ package cats.kernel
 package instances
 
 trait AllInstances
-    extends BigDecimalInstances
+    extends ArraySeqInstances
+    with BigDecimalInstances
     with BigIntInstances
     with BitSetInstances
     with BooleanInstances

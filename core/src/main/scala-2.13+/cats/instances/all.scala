@@ -13,6 +13,7 @@ abstract class AllInstancesBinCompat
 
 trait AllInstances
     extends AnyValInstances
+    with ArraySeqInstances
     with BigIntInstances
     with BigDecimalInstances
     with BitSetInstances
