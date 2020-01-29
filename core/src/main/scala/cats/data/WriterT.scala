@@ -4,7 +4,6 @@ package data
 import cats.Foldable
 import cats.kernel.instances.tuple._
 import cats.kernel.CommutativeMonoid
-import cats.syntax.semigroup._
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
@@ -20,7 +19,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def tell(l: L)(implicit functorF: Functor[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
-    mapWritten(_ |+| l)
+    mapWritten(semigroupL.combine(_, l))
 
   /**
    * Example:

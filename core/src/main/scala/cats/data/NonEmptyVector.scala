@@ -314,18 +314,20 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       override def nonEmptyPartition[A, B, C](
         fa: NonEmptyVector[A]
       )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-        import cats.syntax.either._
-        import cats.syntax.reducible._
+        val reversed = fa.reverse
+        val lastIor = f(reversed.head) match {
+          case Right(c) => Ior.right(NonEmptyList.one(c))
+          case Left(b)  => Ior.left(NonEmptyList.one(b))
+        }
 
-        reduceLeftTo(fa)(a => f(a).bimap(NonEmptyVector.one, NonEmptyVector.one).toIor)((ior, a) =>
+        reversed.tail.foldLeft(lastIor)((ior, a) =>
           (f(a), ior) match {
-            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyVector.one(c))
-            case (Right(c), _)           => ior.map(_ :+ c)
-            case (Left(b), Ior.Right(_)) => ior.putLeft(NonEmptyVector.one(b))
-            case (Left(b), _)            => ior.leftMap(_ :+ b)
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+            case (Right(c), _)           => ior.map(c :: _)
+            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+            case (Left(b), _)            => ior.leftMap(b :: _)
           }
-        ).bimap(_.toNonEmptyList, _.toNonEmptyList)
-
+        )
       }
 
       override def get[A](fa: NonEmptyVector[A])(idx: Long): Option[A] =

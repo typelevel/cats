@@ -3,7 +3,6 @@ package data
 
 import cats.instances.sortedSet._
 import cats.kernel._
-import cats.syntax.order._
 
 import scala.collection.immutable._
 import kernel.compat.scalaVersionSpecific._
@@ -421,7 +420,7 @@ sealed abstract private[data] class NonEmptySetOrder[A] extends Order[NonEmptySe
   implicit override def A0: Order[A]
 
   override def compare(x: NonEmptySet[A], y: NonEmptySet[A]): Int =
-    x.toSortedSet.compare(y.toSortedSet)
+    Order[SortedSet[A]].compare(x.toSortedSet, y.toSortedSet)
 }
 
 sealed private[data] trait NonEmptySetEq[A] extends Eq[NonEmptySet[A]] {

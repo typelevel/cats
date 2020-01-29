@@ -3,7 +3,6 @@ package data
 
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
-import cats.syntax.order._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
@@ -244,7 +243,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   def ===[AA >: A](o: NonEmptyList[AA])(implicit AA: Eq[AA]): Boolean =
-    ((this.head: AA) === o.head) && (this.tail: List[AA]) === o.tail
+    AA.eqv(this.head, o.head) && Eq[List[AA]].eqv(this.tail, o.tail)
 
   def show[AA >: A](implicit AA: Show[AA]): String =
     toList.iterator.map(AA.show).mkString("NonEmptyList(", ", ", ")")
@@ -594,10 +593,11 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       override def nonEmptyPartition[A, B, C](
         fa: NonEmptyList[A]
       )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-        import cats.syntax.either._
-
         val reversed = fa.reverse
-        val lastIor = f(reversed.head).bimap(NonEmptyList.one, NonEmptyList.one).toIor
+        val lastIor = f(reversed.head) match {
+          case Right(c) => Ior.right(NonEmptyList.one(c))
+          case Left(b)  => Ior.left(NonEmptyList.one(b))
+        }
 
         reversed.tail.foldLeft(lastIor)((ior, a) =>
           (f(a), ior) match {
@@ -698,7 +698,7 @@ sealed private[data] trait NonEmptyListPartialOrder[A] extends PartialOrder[NonE
   implicit override def A0: PartialOrder[A]
 
   override def partialCompare(x: NonEmptyList[A], y: NonEmptyList[A]): Double =
-    x.toList.partialCompare(y.toList)
+    PartialOrder[List[A]].partialCompare(x.toList, y.toList)
 }
 
 sealed abstract private[data] class NonEmptyListOrder[A]
@@ -707,5 +707,5 @@ sealed abstract private[data] class NonEmptyListOrder[A]
   implicit override def A0: Order[A]
 
   override def compare(x: NonEmptyList[A], y: NonEmptyList[A]): Int =
-    x.toList.compare(y.toList)
+    Order[List[A]].compare(x.toList, y.toList)
 }
