@@ -88,6 +88,15 @@ object ContT {
 
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._
+   * scala> trait Foo[F[_]] { def bar: F[Int] }
+   * scala> def mapK[F[_], G[_]](fooF: Foo[F])(f: F ~> G): Foo[G] = new Foo[G] { def bar: G[Int] = f(fooF.bar) }
+   * scala> val eitherTFoo = new Foo[EitherT[Eval, String, *]] { def bar = EitherT.rightT(1) }
+   * scala> val contTFoo: Foo[ContT[EitherT[Eval, String, *], Int, *]] = mapK(eitherTFoo)(ContT.liftK)
+   * scala> contTFoo.bar.run(EitherT.rightT(_)).value.value
+   * res0: Either[String, Int] = Right(1)
+   * }}}
    */
   def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
     λ[M ~> ContT[M, B, *]](ContT.liftF(_))
