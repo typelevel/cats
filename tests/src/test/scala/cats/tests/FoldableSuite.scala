@@ -151,6 +151,13 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
       fa.collectFold(pf) should ===(fa.toList.collect(pf).fold(m.empty)(m.combine))
 
       def g(a: String): Option[String] = Some(a).filter(f)
+
+      // `collectSomeFold` (deprecated) is used here instead of `collectFoldSome` to
+      // keep testing the deprecated code until it's finally removed. This helps with
+      // the coverage and, most importantly, prevents from breaking deprecated code paths
+      // that might still be in use.
+      //
+      // https://github.com/typelevel/cats/pull/3278#discussion_r372841693
       fa.collectSomeFold(g) should ===(fa.toList.filter(f).fold(m.empty)(m.combine))
     }
   }
