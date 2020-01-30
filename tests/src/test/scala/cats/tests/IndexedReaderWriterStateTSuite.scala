@@ -328,6 +328,26 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
+  test("pure + listen + map(_._1) + runEmptyA is identity") {
+    forAll { i: Int =>
+      IndexedReaderWriterStateT
+        .pure[Id, String, String, Int, Int](i)
+        .listen
+        .map(_._1)
+        .runEmptyA("") should ===(i)
+    }
+  }
+
+  test("tell + listen + map(_._2) + runEmptyA is identity") {
+    forAll { s: String =>
+      IndexedReaderWriterStateT
+        .tell[Id, String, String, Int](s)
+        .listen
+        .map(_._2)
+        .runEmptyA("") should ===(s)
+    }
+  }
+
   implicit val iso: Isomorphisms[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]] =
     Isomorphisms.invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]](
       IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor)
