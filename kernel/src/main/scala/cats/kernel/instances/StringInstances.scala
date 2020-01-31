@@ -23,7 +23,7 @@ class StringOrder extends Order[String] with Hash[String] with StringLowerBounde
   override val partialOrder: PartialOrder[String] = self
 }
 
-class StringMonoid extends Monoid[String] {
+class StringMonoid extends Monoid[String] { self =>
   def empty: String = ""
   def combine(x: String, y: String): String = x + y
 
@@ -32,4 +32,16 @@ class StringMonoid extends Monoid[String] {
     xs.iterator.foreach(sb.append)
     sb.toString
   }
+
+  override def reverse: Monoid[String] =
+    new Monoid[String] {
+      def empty = self.empty
+      def combine(x: String, y: String) = y + x
+      override def combineAll(xs: IterableOnce[String]): String = {
+        val revStrings = xs.foldLeft(List.empty[String]) { (acc, s) => s :: acc }
+        self.combineAll(revStrings)
+      }
+
+      override def reverse = self
+    }
 }

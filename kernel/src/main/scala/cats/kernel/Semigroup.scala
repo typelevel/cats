@@ -7,7 +7,7 @@ import compat.scalaVersionSpecific._
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
 
   /**
    * Associative operation which combines two values.
@@ -77,6 +77,27 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
    */
   def combineAllOption(as: IterableOnce[A]): Option[A] =
     as.reduceOption(combine)
+
+  /**
+   * return a semigroup that reverses the order
+   * so combine(a, b) == reverse.combine(b, a)
+   */
+  def reverse: Semigroup[A] =
+    new Semigroup[A] {
+      def combine(a: A, b: A): A = self.combine(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineN(a: A, n: Int): A = self.combineN(a, n)
+      override def reverse = self
+    }
+
+  /**
+   * Between each pair of elements insert middle
+   */
+  def intercalate(middle: A): Semigroup[A] =
+    new Semigroup[A] {
+      def combine(a: A, b: A): A =
+        self.combine(a, self.combine(middle, b))
+    }
 }
 
 abstract class SemigroupFunctions[S[T] <: Semigroup[T]] {

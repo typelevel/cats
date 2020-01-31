@@ -7,7 +7,9 @@ import scala.{specialized => sp}
  *
  * A monoid is commutative if for all x and y, x |+| y === y |+| x.
  */
-trait CommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] with CommutativeSemigroup[A]
+trait CommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] with CommutativeSemigroup[A] { self =>
+  override def reverse: CommutativeMonoid[A] = self
+}
 
 object CommutativeMonoid extends MonoidFunctions[CommutativeMonoid] {
 

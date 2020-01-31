@@ -17,6 +17,51 @@ trait SemigroupLaws[A] {
   def combineAllOption(xs: Vector[A]): IsEq[Option[A]] =
     S.combineAllOption(xs) <-> xs.reduceOption(S.combine)
 
+  def reverseReverses(a: A, b: A): IsEq[A] =
+    S.combine(a, b) <-> S.reverse.combine(b, a)
+
+  def reverseSemigroupAssociative(x: A, y: A, z: A): IsEq[A] = {
+    val rev = S.reverse
+    rev.combine(rev.combine(x, y), z) <-> rev.combine(x, rev.combine(y, z))
+  }
+
+  def reverseRepeat1(a: A): IsEq[A] = {
+    val rev = S.reverse
+    rev.combineN(a, 1) <-> a
+  }
+
+  def reverseRepeat2(a: A): IsEq[A] = {
+    val rev = S.reverse
+    rev.combineN(a, 2) <-> rev.combine(a, a)
+  }
+
+  def reverseCombineAllOption(xs: Vector[A]): IsEq[Option[A]] = {
+    val rev = S.reverse
+    rev.combineAllOption(xs) <-> xs.reduceOption(rev.combine)
+  }
+
+  def intercalateIntercalates(a: A, m: A, b: A): IsEq[A] =
+    S.combine(a, S.combine(m, b)) <-> S.intercalate(m).combine(a, b)
+
+  def intercalateSemigroupAssociative(m: A, x: A, y: A, z: A): IsEq[A] = {
+    val withMiddle = S.intercalate(m)
+    withMiddle.combine(withMiddle.combine(x, y), z) <-> withMiddle.combine(x, withMiddle.combine(y, z))
+  }
+
+  def intercalateRepeat1(m: A, a: A): IsEq[A] = {
+    val withMiddle = S.intercalate(m)
+    withMiddle.combineN(a, 1) <-> a
+  }
+
+  def intercalateRepeat2(m: A, a: A): IsEq[A] = {
+    val withMiddle = S.intercalate(m)
+    withMiddle.combineN(a, 2) <-> withMiddle.combine(a, a)
+  }
+
+  def intercalateCombineAllOption(m: A, xs: Vector[A]): IsEq[Option[A]] = {
+    val withMiddle = S.intercalate(m)
+    withMiddle.combineAllOption(xs) <-> xs.reduceOption(withMiddle.combine)
+  }
 }
 
 object SemigroupLaws {

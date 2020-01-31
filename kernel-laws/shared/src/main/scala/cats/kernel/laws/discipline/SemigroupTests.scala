@@ -18,7 +18,17 @@ trait SemigroupTests[A] extends Laws {
       "associative" -> forAll(laws.semigroupAssociative _),
       "repeat1" -> forAll(laws.repeat1 _),
       "repeat2" -> forAll(laws.repeat2 _),
-      "combineAllOption" -> forAll(laws.combineAllOption _)
+      "combineAllOption" -> forAll(laws.combineAllOption _),
+      "reverseReverses" -> forAll(laws.reverseReverses _),
+      "reverseAssociative" -> forAll(laws.reverseSemigroupAssociative _),
+      "reverseRepeat1" -> forAll(laws.reverseRepeat1 _),
+      "reverseRepeat2" -> forAll(laws.reverseRepeat2 _),
+      "reverseCombineAllOption" -> forAll(laws.reverseCombineAllOption _),
+      "intercalateIntercalates" -> forAll(laws.intercalateIntercalates _),
+      "intercalateAssociative" -> forAll(laws.intercalateSemigroupAssociative _),
+      "intercalateRepeat1" -> forAll(laws.intercalateRepeat1 _),
+      "intercalateRepeat2" -> forAll(laws.intercalateRepeat2 _),
+      "intercalateCombineAllOption" -> forAll(laws.intercalateCombineAllOption _)
     )
 }
 
