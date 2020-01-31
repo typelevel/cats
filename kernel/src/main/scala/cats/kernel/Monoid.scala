@@ -88,6 +88,8 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { se
     new Monoid[A] {
       def empty = self.empty
       def combine(a: A, b: A) = self.combine(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineN(a: A, n: Int): A = self.combineN(a, n)
       override def reverse = self
     }
 }

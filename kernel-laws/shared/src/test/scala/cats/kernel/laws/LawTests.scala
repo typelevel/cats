@@ -34,7 +34,7 @@ object KernelCheck {
   implicit val arbitraryDuration: Arbitrary[Duration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 50
+    val n = (292L * 365) / 500
     Arbitrary(
       Gen.oneOf(
         Gen.choose(-n, n).map(Duration(_, DAYS)),
@@ -51,7 +51,7 @@ object KernelCheck {
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 50
+    val n = (292L * 365) / 500
     Arbitrary(
       Gen.oneOf(
         Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
