@@ -13,13 +13,6 @@ trait CommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Sem
     new CommutativeSemigroup[A] {
       def combine(a: A, b: A): A =
         self.combine(a, self.combine(middle, b))
-
-      override def combineN(a: A, n: Int): A =
-        if (n <= 1) self.combineN(a, n)
-        else {
-          // a + m + a ... = combineN(a, n) + combineN(m, n - 1)
-          self.combine(self.combineN(a, n), self.combineN(middle, n - 1))
-        }
     }
 }
 
