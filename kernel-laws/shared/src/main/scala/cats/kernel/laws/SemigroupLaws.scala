@@ -20,11 +20,6 @@ trait SemigroupLaws[A] {
   def reverseReverses(a: A, b: A): IsEq[A] =
     S.combine(a, b) <-> S.reverse.combine(b, a)
 
-  def reverseSemigroupAssociative(x: A, y: A, z: A): IsEq[A] = {
-    val rev = S.reverse
-    rev.combine(rev.combine(x, y), z) <-> rev.combine(x, rev.combine(y, z))
-  }
-
   def reverseRepeat1(a: A): IsEq[A] = {
     val rev = S.reverse
     rev.combineN(a, 1) <-> a
@@ -42,11 +37,6 @@ trait SemigroupLaws[A] {
 
   def intercalateIntercalates(a: A, m: A, b: A): IsEq[A] =
     S.combine(a, S.combine(m, b)) <-> S.intercalate(m).combine(a, b)
-
-  def intercalateSemigroupAssociative(m: A, x: A, y: A, z: A): IsEq[A] = {
-    val withMiddle = S.intercalate(m)
-    withMiddle.combine(withMiddle.combine(x, y), z) <-> withMiddle.combine(x, withMiddle.combine(y, z))
-  }
 
   def intercalateRepeat1(m: A, a: A): IsEq[A] = {
     val withMiddle = S.intercalate(m)

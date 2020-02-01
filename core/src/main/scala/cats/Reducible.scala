@@ -238,11 +238,7 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
-    toNonEmptyList(fa) match {
-      case NonEmptyList(hd, Nil) => hd
-      case NonEmptyList(hd, tl) =>
-        Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
-    }
+    reduce(fa)(A.intercalate(a))
 
   /**
    * Partition this Reducible by a separating function `A => Either[B, C]`

@@ -38,7 +38,7 @@ class StringMonoid extends Monoid[String] { self =>
       def empty = self.empty
       def combine(x: String, y: String) = y + x
       override def combineAll(xs: IterableOnce[String]): String = {
-        val revStrings = xs.foldLeft(List.empty[String]) { (acc, s) =>
+        val revStrings = xs.iterator.foldLeft(List.empty[String]) { (acc, s) =>
           s :: acc
         }
         self.combineAll(revStrings)

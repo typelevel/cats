@@ -92,6 +92,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
    * Between each pair of elements insert middle
+   * This name matches the term used in Foldable and Reducible and a similar Haskell function.
    */
   def intercalate(middle: A): Semigroup[A] =
     new Semigroup[A] {

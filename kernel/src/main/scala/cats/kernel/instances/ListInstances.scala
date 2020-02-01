@@ -99,7 +99,7 @@ class ListMonoid[A] extends Monoid[List[A]] { self =>
       def combine(x: List[A], y: List[A]) = y ::: x
 
       override def combineAll(xs: IterableOnce[List[A]]): List[A] =
-        xs.foldLeft(empty) { (acc, item) =>
+        xs.iterator.foldLeft(empty) { (acc, item) =>
           item ::: acc
         }
 
