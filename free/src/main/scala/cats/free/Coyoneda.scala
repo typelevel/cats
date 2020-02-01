@@ -24,7 +24,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   /** The list of transformer functions composed into a single function, to be lifted into `F` by `run`. */
   final def k: Pivot => A = Function.chain(ks.reverse)(_).asInstanceOf[A]
 
-  import Coyoneda.{Aux, unsafeApply}
+  import Coyoneda.{unsafeApply, Aux}
 
   /** Converts to `F[A]` given that `F` is a functor */
   final def run(implicit F: Functor[F]): F[A] = F.map(fi)(k)
@@ -36,7 +36,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
   /** Converts to `Yoneda[F,A]` given that `F` is a functor */
   final def toYoneda(implicit F: Functor[F]): Yoneda[F, A] =
     new Yoneda[F, A] {
-      def apply[B](f: A => B): F[B] = F.map(fi)(k andThen f)
+      def apply[B](f: A => B): F[B] = F.map(fi)(k.andThen(f))
     }
 
   /**
@@ -47,13 +47,13 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
     unsafeApply(fi)(f.asInstanceOf[Any => Any] :: ks)
 
   /**
-    * Modify the context `F` using transformation `f`.
-    */
+   * Modify the context `F` using transformation `f`.
+   */
   final def mapK[G[_]](f: F ~> G): Aux[G, A, Pivot] =
     unsafeApply(f(fi))(ks)
 
-  @deprecated("Use mapK", "1.0.0")
-  final def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
+  @deprecated("Use mapK", "1.0.0-RC2")
+  final private[free] def transform[G[_]](f: FunctionK[F, G]): Aux[G, A, Pivot] =
     mapK(f)
 
 }
@@ -83,11 +83,11 @@ object Coyoneda {
     }
 
   /**
-   * As the free functor, `Coyoneda[F, ?]` provides a functor for any `F`.
+   * As the free functor, `Coyoneda[F, *]` provides a functor for any `F`.
    */
-  implicit def catsFreeFunctorForCoyoneda[F[_]]: Functor[Coyoneda[F, ?]] =
-    new Functor[Coyoneda[F, ?]] {
-      def map[A, B](cfa: Coyoneda[F, A])(f: A => B): Coyoneda[F, B] = cfa map f
+  implicit def catsFreeFunctorForCoyoneda[F[_]]: Functor[Coyoneda[F, *]] =
+    new Functor[Coyoneda[F, *]] {
+      def map[A, B](cfa: Coyoneda[F, A])(f: A => B): Coyoneda[F, B] = cfa.map(f)
     }
 
 }

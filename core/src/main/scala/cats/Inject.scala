@@ -1,20 +1,20 @@
 package cats
 
 /**
-  * Inject is a type class providing an injection from type `A` into
-  * type `B`. An injection is a function `inj` which does not destroy
-  * any information: for every `b: B` there is at most one `a: A` such
-  * that `inj(a) = b`.
-  *
-  * Because of this all injections admit partial inverses `prj` which
-  * pair a value `b: B` back with a single value `a: A`.
-  *
-  * @since 1.0
-  * @note Prior to cats 1.0, Inject handled injection for type
-  * constructors. For injection of type constructors, use [[InjectK]].
-  *
-  * @see [[InjectK]] for injection for [[cats.data.EitherK]]
-  */
+ * Inject is a type class providing an injection from type `A` into
+ * type `B`. An injection is a function `inj` which does not destroy
+ * any information: for every `b: B` there is at most one `a: A` such
+ * that `inj(a) = b`.
+ *
+ * Because of this all injections admit partial inverses `prj` which
+ * pair a value `b: B` back with a single value `a: A`.
+ *
+ * @since 1.0
+ * @note Prior to cats 1.0, Inject handled injection for type
+ * constructors. For injection of type constructors, use [[InjectK]].
+ *
+ * @see [[InjectK]] for injection for [[cats.data.EitherK]]
+ */
 abstract class Inject[A, B] {
   def inj: A => B
 
@@ -25,7 +25,7 @@ abstract class Inject[A, B] {
   final def unapply(b: B): Option[A] = prj(b)
 }
 
-private[cats] sealed abstract class InjectInstances {
+sealed abstract private[cats] class InjectInstances {
   implicit def catsReflexiveInjectInstance[A]: Inject[A, A] =
     new Inject[A, A] {
       val inj = identity(_: A)
@@ -44,7 +44,7 @@ private[cats] sealed abstract class InjectInstances {
     new Inject[A, Either[C, B]] {
       val inj = (a: A) => Right(I.inj(a))
 
-      val prj = (_: Either[C, B]).right.toOption.flatMap(I.prj)
+      val prj = (_: Either[C, B]).toOption.flatMap(I.prj)
     }
 
 }

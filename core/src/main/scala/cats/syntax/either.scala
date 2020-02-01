@@ -1,7 +1,8 @@
 package cats
 package syntax
 
-import cats.data.{EitherT, Ior, Validated, ValidatedNel}
+import cats.data._
+
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import EitherSyntax._
@@ -9,7 +10,8 @@ import EitherSyntax._
 trait EitherSyntax {
   implicit final def catsSyntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
-  implicit final def catsSyntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
+  implicit final def catsSyntaxEitherObject(either: Either.type): EitherObjectOps =
+    new EitherObjectOps(either) // scalastyle:off ensure.single.space.after.token
 
   implicit final def catsSyntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
 
@@ -23,7 +25,7 @@ object EitherSyntax {
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
-  private[syntax] final class CatchOnlyPartiallyApplied[T](val dummy: Boolean = true ) extends AnyVal {
+  final private[syntax] class CatchOnlyPartiallyApplied[T](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
       try {
         Right(f)
@@ -34,13 +36,15 @@ object EitherSyntax {
   }
 }
 
-final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
-  def foreach(f: B => Unit): Unit = eab match {
+final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def foreach(f: B => Unit): Unit = eab match {
     case Left(_)  => ()
     case Right(b) => f(b)
   }
 
-  def getOrElse[BB >: B](default: => BB): BB = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def getOrElse[BB >: B](default: => BB): BB = eab match {
     case Left(_)  => default
     case Right(b) => b
   }
@@ -65,12 +69,14 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => b
   }
 
-  def forall(f: B => Boolean): Boolean = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def forall(f: B => Boolean): Boolean = eab match {
     case Left(_)  => true
     case Right(b) => f(b)
   }
 
-  def exists(f: B => Boolean): Boolean = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def exists(f: B => Boolean): Boolean = eab match {
     case Left(_)  => false
     case Right(b) => f(b)
   }
@@ -85,12 +91,10 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => if (f(b)) eab else Left(onFailure(b))
   }
 
-  def toIor: A Ior B = eab match {
-    case Left(a)  => Ior.left(a)
-    case Right(b) => Ior.right(b)
-  }
+  def toIor: A Ior B = Ior.fromEither(eab)
 
-  def toOption: Option[B] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def toOption: Option[B] = eab match {
     case Left(_)  => None
     case Right(b) => Some(b)
   }
@@ -100,7 +104,8 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => List(b)
   }
 
-  def toTry(implicit ev: A <:< Throwable): Try[B] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def toTry(implicit ev: A <:< Throwable): Try[B] = eab match {
     case Left(a)  => Failure(ev(a))
     case Right(b) => Success(b)
   }
@@ -130,7 +135,8 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => Right(fb(b))
   }
 
-  def map[C](f: B => C): Either[A, C] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def map[C](f: B => C): Either[A, C] = eab match {
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => Right(f(b))
   }
@@ -138,7 +144,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   def map2Eval[AA >: A, C, Z](fc: Eval[Either[AA, C]])(f: (B, C) => Z): Eval[Either[AA, Z]] =
     eab match {
       case l @ Left(_) => Now(EitherUtil.rightCast(l))
-      case Right(b)    => fc.map(either => new EitherOps(either).map(f(b, _)))
+      case Right(b)    => fc.map(_.map(f(b, _)))
     }
 
   def leftMap[C](f: A => C): Either[C, B] = eab match {
@@ -146,13 +152,19 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case r @ Right(_) => EitherUtil.leftCast(r)
   }
 
-  def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
+  @deprecated("Included in the standard library", "2.1.0-RC1")
+  private[syntax] def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => f(b)
   }
 
+  def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] = eab match {
+    case Left(a)      => f(a)
+    case r @ Right(_) => EitherUtil.leftCast(r)
+  }
+
   def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int = eab match {
-    case Left(a1)  =>
+    case Left(a1) =>
       that match {
         case Left(a2) => AA.compare(a1, a2)
         case Right(_) => -1
@@ -164,8 +176,9 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
       }
   }
 
-  def partialCompare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: PartialOrder[AA], BB: PartialOrder[BB]): Double = eab match {
-    case Left(a1)  =>
+  def partialCompare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: PartialOrder[AA],
+                                                             BB: PartialOrder[BB]): Double = eab match {
+    case Left(a1) =>
       that match {
         case Left(a2) => AA.partialCompare(a1, a2)
         case Right(_) => -1
@@ -178,7 +191,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
   }
 
   def ===[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Eq[AA], BB: Eq[BB]): Boolean = eab match {
-    case Left(a1)  =>
+    case Left(a1) =>
       that match {
         case Left(a2) => AA.eqv(a1, a2)
         case Right(_) => false
@@ -239,10 +252,11 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   final def combine[AA >: A, BB >: B](that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] = eab match {
     case left @ Left(_) => left
-    case Right(b1) => that match {
-      case left @ Left(_) => left
-      case Right(b2) => Right(BB.combine(b1, b2))
-    }
+    case Right(b1) =>
+      that match {
+        case left @ Left(_) => left
+        case Right(b2)      => Right(BB.combine(b1, b2))
+      }
   }
 
   def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = eab match {
@@ -250,7 +264,7 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
     case Right(b) => s"Right(${BB.show(b)})"
   }
 
-  def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = new EitherOps(that).flatMap(this.map)
+  def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = that.flatMap(eab.map)
 
   /**
    * Transform the `Either` into a [[cats.data.EitherT]] while lifting it into the specified Applicative.
@@ -264,15 +278,46 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal {
    */
   def toEitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither(eab)
 
+  def toEitherNec[AA >: A]: EitherNec[AA, B] = leftMap(NonEmptyChain.one)
+
+  def toEitherNes[AA >: A](implicit O: Order[AA]): EitherNes[AA, B] = leftMap(NonEmptySet.one(_))
+
+  def toEitherNel[AA >: A]: EitherNel[AA, B] = leftMap(NonEmptyList.one)
+
+  @deprecated("use liftTo instead", "2.0.0")
   def raiseOrPure[F[_]](implicit ev: ApplicativeError[F, A]): F[B] =
     ev.fromEither(eab)
 
+  /**
+   * lift the `Either` into a `F[_]` with `ApplicativeError[F, A]` instance
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.EitherT
+   * scala> val e: Either[String, Int] = Right(3)
+   * scala> e.liftTo[EitherT[Option, CharSequence, *]]
+   * res0: cats.data.EitherT[Option, CharSequence, Int] = EitherT(Some(Right(3)))
+   * }}}
+   */
+  def liftTo[F[_]](implicit F: ApplicativeError[F, _ >: A]): F[B] = F.fromEither(eab)
 }
 
-final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
+final class EitherObjectOps(private val either: Either.type) extends AnyVal { // scalastyle:off ensure.single.space.after.token
   def left[A, B](a: A): Either[A, B] = Left(a)
 
   def right[A, B](b: B): Either[A, B] = Right(b)
+
+  def leftNec[A, B](a: A): EitherNec[A, B] = Left(NonEmptyChain.one(a))
+
+  def rightNec[A, B](b: B): EitherNec[A, B] = Right(b)
+
+  def leftNes[A, B](a: A)(implicit O: Order[A]): EitherNes[A, B] = Left(NonEmptySet.one(a))
+
+  def rightNes[A, B](b: B)(implicit O: Order[B]): EitherNes[A, B] = Right(b)
+
+  def leftNel[A, B](a: A): EitherNel[A, B] = Left(NonEmptyList.one(a))
+
+  def rightNel[A, B](b: B): EitherNel[A, B] = Right(b)
 
   /**
    * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
@@ -314,24 +359,95 @@ final class EitherObjectOps(val either: Either.type) extends AnyVal { // scalast
   }
 }
 
+final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
 
-
-final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal {
   /** Cast the right type parameter of the `Left`. */
   def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
 }
 
-final class RightOps[A, B](val right: Right[A, B]) extends AnyVal {
+final class RightOps[A, B](private val right: Right[A, B]) extends AnyVal {
+
   /** Cast the left type parameter of the `Right`. */
   def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
 }
 
-final class EitherIdOps[A](val obj: A) extends AnyVal {
+final class EitherIdOps[A](private val obj: A) extends AnyVal {
+
   /** Wrap a value in `Left`. */
   def asLeft[B]: Either[A, B] = Left(obj)
 
   /** Wrap a value in `Right`. */
   def asRight[B]: Either[B, A] = Right(obj)
+
+  /**
+   * Wrap a value to a left EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> "Err".leftNel[Int]
+   * res0: Either[NonEmptyList[String], Int] = Left(NonEmptyList(Err))
+   * }}}
+   */
+  def leftNel[B]: Either[NonEmptyList[A], B] = Left(NonEmptyList.one(obj))
+
+  /**
+   * Wrap a value to a right EitherNel
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyList
+   * scala> 1.rightNel[String]
+   * res0: Either[NonEmptyList[String], Int] = Right(1)
+   * }}}
+   */
+  def rightNel[B]: Either[NonEmptyList[B], A] = Right(obj)
+
+}
+
+private[syntax] trait EitherSyntaxBinCompat0 {
+  implicit final def catsSyntaxEitherBinCompat0[A, B](eab: Either[A, B]): EitherOpsBinCompat0[A, B] =
+    new EitherOpsBinCompat0(eab)
+
+  implicit final def catsSyntaxEitherIdBinCompat0[A](a: A): EitherIdOpsBinCompat0[A] =
+    new EitherIdOpsBinCompat0(a)
+}
+
+final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) extends AnyVal {
+
+  /**
+   * Wrap a value to a left EitherNec
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> "Err".leftNec[Int]
+   * res0: Either[NonEmptyChain[String], Int] = Left(Chain(Err))
+   * }}}
+   */
+  def leftNec[B]: Either[NonEmptyChain[A], B] = Left(NonEmptyChain.one(value))
+
+  /**
+   * Wrap a value to a right EitherNec
+   *
+   * For example:
+   * {{{
+   * scala> import cats.implicits._, cats.data.NonEmptyChain
+   * scala> 1.rightNec[String]
+   * res0: Either[NonEmptyChain[String], Int] = Right(1)
+   * }}}
+   */
+  def rightNec[B]: Either[NonEmptyChain[B], A] = Right(value)
+}
+
+final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
+
+  /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+  def toValidatedNec: ValidatedNec[A, B] = value match {
+    case Left(a)  => Validated.invalidNec(a)
+    case Right(b) => Validated.valid(b)
+  }
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */

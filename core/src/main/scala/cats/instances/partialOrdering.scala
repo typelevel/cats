@@ -2,8 +2,9 @@ package cats
 package instances
 
 trait PartialOrderingInstances {
-  implicit val catsContravariantSemigroupalForPartialOrdering: ContravariantSemigroupal[PartialOrdering] =
-    new ContravariantSemigroupal[PartialOrdering] {
+  implicit val catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
+    new ContravariantMonoidal[PartialOrdering] {
+
       /** Derive a `PartialOrdering` for `B` given a `PartialOrdering[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
@@ -21,8 +22,10 @@ trait PartialOrderingInstances {
           def tryCompare(x: (A, B), y: (A, B)): Option[Int] =
             fa.tryCompare(x._1, y._1) match {
               case Some(0) => fb.tryCompare(x._2, y._2)
-              case option => option
+              case option  => option
             }
         }
+
+      def unit: PartialOrdering[Unit] = cats.instances.unit.catsKernelStdOrderForUnit.toOrdering
     }
 }

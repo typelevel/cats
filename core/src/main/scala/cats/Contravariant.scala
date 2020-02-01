@@ -1,5 +1,6 @@
 package cats
 import simulacrum.typeclass
+
 /**
  * Must obey the laws defined in cats.laws.ContravariantLaws.
  */
@@ -18,6 +19,8 @@ import simulacrum.typeclass
    * could be implemented as contramap(identity), but the Functor laws say this is equivalent
    */
   def narrow[A, B <: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
+
+  def liftContravariant[A, B](f: A => B): F[B] => F[A] = contramap(_: F[B])(f)
 
   override def composeFunctor[G[_]: Functor]: Contravariant[λ[α => F[G[α]]]] =
     new ComposedContravariantCovariant[F, G] {

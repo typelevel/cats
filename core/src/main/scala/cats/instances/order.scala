@@ -1,15 +1,24 @@
 package cats
 package instances
 
-trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
+import cats.kernel.instances.unit._
 
-  implicit val catsContravariantSemigroupalForOrder: ContravariantSemigroupal[Order] =
-    new ContravariantSemigroupal[Order] {
+trait OrderInstances extends kernel.instances.OrderInstances {
+
+  implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
+    new ContravariantMonoidal[Order] {
+
+      /**
+       * Provides trivial order
+       */
+      def unit: Order[Unit] = Order[Unit]
+
       /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] = Order.by[B, A](f)(fa)
+      def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
+        Order.by(f)(fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] =
         new Order[(A, B)] {
@@ -20,4 +29,3 @@ trait OrderInstances extends cats.kernel.OrderToOrderingConversion {
         }
     }
 }
-

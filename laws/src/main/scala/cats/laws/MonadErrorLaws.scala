@@ -14,11 +14,19 @@ trait MonadErrorLaws[F[_], E] extends ApplicativeErrorLaws[F, E] with MonadLaws[
   def monadErrorEnsureOrConsistency[A](fa: F[A], e: A => E, p: A => Boolean): IsEq[F[A]] =
     F.ensureOr(fa)(e)(p) <-> F.flatMap(fa)(a => if (p(a)) F.pure(a) else F.raiseError(e(a)))
 
-  def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
-    F.adaptError(F.pure(a))(PartialFunction(f)) <-> F.pure(a)
+  def rethrowAttempt[A](fa: F[A]): IsEq[F[A]] =
+    F.rethrow(F.attempt(fa)) <-> fa
 
-  def adaptErrorRaise[A](e: E, f: E => E): IsEq[F[A]] =
-    F.adaptError(F.raiseError[A](e))(PartialFunction(f)) <-> F.raiseError(f(e))
+  def redeemWithDerivedFromAttemptFlatMap[A, B](fa: F[A], fe: E => F[B], fs: A => F[B]): IsEq[F[B]] =
+    F.redeemWith(fa)(fe, fs) <-> F.flatMap(F.attempt(fa))(_.fold(fe, fs))
+
+  // See https://github.com/typelevel/cats/pull/3203 for an explanation of why these two overrides
+  // are needed in 2.x for binary compatibility.
+  override def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
+
+  override def adaptErrorRaise[A](e: E, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.raiseError[A](e)) { case x => f(x) } <-> F.raiseError(f(e))
 }
 
 object MonadErrorLaws {

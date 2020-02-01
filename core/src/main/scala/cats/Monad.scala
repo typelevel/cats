@@ -21,17 +21,19 @@ import simulacrum.typeclass
    * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
-  */
+   */
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
-    tailRecM[G[A], G[A]](G.empty)(xs => ifM(p)(
-      ifTrue = {
-        map(b.value) { bv =>
-          Left(G.combineK(xs, G.pure(bv)))
-        }
-      },
-      ifFalse = pure(Right(xs))
-    ))
+    tailRecM[G[A], G[A]](G.empty)(xs =>
+      ifM(p)(
+        ifTrue = {
+          map(b.value) { bv =>
+            Left(G.combineK(xs, G.pure(bv)))
+          }
+        },
+        ifFalse = pure(Right(xs))
+      )
+    )
   }
 
   /**
@@ -43,12 +45,14 @@ import simulacrum.typeclass
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
     val b = Eval.later(body)
-    tailRecM(())(_ => ifM(p)(
-      ifTrue = {
-        map(b.value)(_ => continue)
-      },
-      ifFalse = stop
-    ))
+    tailRecM(())(_ =>
+      ifM(p)(
+        ifTrue = {
+          map(b.value)(_ => continue)
+        },
+        ifFalse = stop
+      )
+    )
   }
 
   /**
@@ -91,9 +95,9 @@ import simulacrum.typeclass
     }
 
   /**
-    * Apply a monadic function iteratively until its result fails
-    * to satisfy the given predicate and return that result.
-    */
+   * Apply a monadic function iteratively until its result fails
+   * to satisfy the given predicate and return that result.
+   */
   def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     tailRecM(init) { a =>
       if (p(a))
@@ -103,9 +107,9 @@ import simulacrum.typeclass
     }
 
   /**
-    * Apply a monadic function iteratively until its result satisfies
-    * the given predicate and return that result.
-    */
+   * Apply a monadic function iteratively until its result satisfies
+   * the given predicate and return that result.
+   */
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
 

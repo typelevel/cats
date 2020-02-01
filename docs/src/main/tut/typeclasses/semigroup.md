@@ -47,7 +47,7 @@ Semigroup[Int].combine(Semigroup[Int].combine(x, y), z)
 Infix syntax is also available for types that have a `Semigroup` instance.
 
 ```tut:book
-import cats.syntax.semigroup._
+import cats.implicits._
 
 1 |+| 2
 ```
@@ -56,9 +56,9 @@ A more compelling example which we'll see later in this tutorial is the `Semigro
 for `Map`s.
 
 ```tut:book:silent
-import cats.instances.map._
+import cats.implicits._
 
-val map1 = Map("hello" -> 0, "world" -> 1)
+val map1 = Map("hello" -> 1, "world" -> 1)
 val map2 = Map("hello" -> 2, "cats"  -> 3)
 ```
 
@@ -74,7 +74,7 @@ Cats provides many `Semigroup` instances out of the box such as `Int` (`+`) and 
 
 ```tut:reset:book:silent
 import cats.Semigroup
-import cats.instances.all._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -108,8 +108,7 @@ type say, `Int` or `List[String]`, but we can write it once and for all for
 any type with a `Semigroup` instance.
 
 ```tut:book:silent
-import cats.instances.all._
-import cats.syntax.semigroup._
+import cats.implicits._
 
 def optionCombine[A: Semigroup](a: A, opt: Option[A]): A =
   opt.map(a |+| _).getOrElse(a)
@@ -133,7 +132,7 @@ val y = mergeMap(ym1, ym2)
 ```
 
 It is interesting to note that the type of `mergeMap` satisfies the type of `Semigroup`
-specialized to `Map[K, ?]` and is associative - indeed the `Semigroup` instance for `Map`
+specialized to `Map[K, *]` and is associative - indeed the `Semigroup` instance for `Map`
 uses the same function for its `combine`.
 
 ```tut:book

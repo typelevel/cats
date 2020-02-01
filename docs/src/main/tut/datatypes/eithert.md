@@ -104,7 +104,7 @@ val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
 
 ## From `F[A]` or `F[B]` to `EitherT[F, A, B]`
 
-Similary, use `EitherT.left` and `EitherT.right` to convert an `F[A]` or an `F[B]`
+Similarly, use `EitherT.left` and `EitherT.right` to convert an `F[A]` or an `F[B]`
 into an `EitherT`. It is also possible to use `EitherT.liftF` as an alias for
 `EitherT.right`.
 
@@ -118,7 +118,7 @@ val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 
 ## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
 
-Use `EitherT.fromEither` to a lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
+Use `EitherT.fromEither` to lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
 An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
 ```tut:silent
@@ -143,6 +143,19 @@ val myOptionList: List[Option[Int]] = List(None, Some(2), Some(3), None, Some(5)
 
 val myOptionET = EitherT.fromOption[Future](myOption, "option not defined")
 val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
+```
+
+## From `ApplicativeError[F, E]` to `EitherT[F, E, A]`
+
+An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
+using the `attemptT` method on them.
+
+```tut:silent
+val myTry: Try[Int] = Try(2)
+val myFuture: Future[String] = Future.failed(new Exception())
+
+val myTryET: EitherT[Try, Throwable, Int] = myTry.attemptT
+val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
 ```
 
 ## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`

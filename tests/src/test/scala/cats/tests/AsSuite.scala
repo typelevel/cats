@@ -7,17 +7,15 @@ import cats.arrow.Category
 class AsSuite extends CatsSuite {
   import evidence._
 
-  def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A,B)): Map[A,B] = {
+  def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A, B)): Map[A, B] = {
     type RequiredFunc = (Map[A, B], X) => Map[A, B]
     type GivenFunc = (Map[A, B], (A, B)) => Map[A, B]
-    val subst: GivenFunc <~< RequiredFunc = As.contra2_3(ev) //introduced because inference failed on scalajs on 2.10.6
-    fa.foldLeft(Map.empty[A,B])(subst(_ + _))
+    val subst: GivenFunc <~< RequiredFunc = As.contra2_3(ev) // because inference failed on Scala.js on 2.10.6
+    fa.foldLeft(Map.empty[A, B])(subst(_ + _))
   }
 
-  implicit def arbAs[A, B](implicit ev: A <~< B) = Arbitrary(Gen.const(ev))
+  implicit def arbAs[A, B](implicit ev: A <~< B): Arbitrary[A <~< B] = Arbitrary(Gen.const(ev))
   implicit def eq[A, B]: Eq[As[A, B]] = Eq.fromUniversalEquals
-
-
 
   test("narrow an input of a function2") {
     // scala's GenTraversableOnce#toMap has a similar <:< constraint
@@ -40,7 +38,7 @@ class AsSuite extends CatsSuite {
     implicitly[String <~< Any]
     implicitly[String <~< AnyRef]
     implicitly[String <~< AnyRef]
-    implicitly[(String,Int) <~< (AnyRef,Any)]
+    implicitly[(String, Int) <~< (AnyRef, Any)]
     implicitly[scala.collection.immutable.List[String] <~< scala.collection.Seq[Any]]
   }
 
@@ -55,11 +53,11 @@ class AsSuite extends CatsSuite {
 
   test("subtyping relationships compose") {
 
-    val cAsB: Bottom As Middle = As.reify[Bottom,Middle]
+    val cAsB: Bottom As Middle = As.reify[Bottom, Middle]
     val bAsA: Middle As Top = As.fromPredef(implicitly)
 
-    val one: Bottom As Top = cAsB andThen bAsA
-    val two: Bottom As Top = bAsA compose cAsB 
+    val one: Bottom As Top = cAsB.andThen(bAsA)
+    val two: Bottom As Top = bAsA.compose(cAsB)
   }
 
   test("we can use As to coerce a value") {
@@ -79,7 +77,7 @@ class AsSuite extends CatsSuite {
     val co3: ((Bottom, Unit, Unit) As (Top, Unit, Unit)) = As.co3(cAsA)
     val co3_2: ((Unit, Bottom, Unit) As (Unit, Top, Unit)) = As.co3_2(cAsA)
     val co3_3: ((Unit, Unit, Bottom) As (Unit, Unit, Top)) = As.co3_3(cAsA)
-    val lift2: ((Bottom, String) As (Top,Any)) = As.lift2(cAsA,implicitly)
+    val lift2: ((Bottom, String) As (Top, Any)) = As.lift2(cAsA, implicitly)
   }
 
   test("we can lift subtyping to contravariant type constructors") {
@@ -92,9 +90,9 @@ class AsSuite extends CatsSuite {
 
     val cAsA: (Bottom As Top) = implicitly
     val contra: Eat[Top] As Eat[Bottom] = As.contra(cAsA)
-    val contra1_2: EatF[Top, Unit] As EatF[Bottom,Unit] = As.contra1_2(cAsA)
-    val contra2_2: Eatꟻ[Unit, Top] As Eatꟻ[Unit,Bottom] = As.contra2_2(cAsA)
-    val contra1_3: EatF13[Top, Unit,Unit] As EatF13[Bottom, Unit, Unit] = As.contra1_3(cAsA)
+    val contra1_2: EatF[Top, Unit] As EatF[Bottom, Unit] = As.contra1_2(cAsA)
+    val contra2_2: Eatꟻ[Unit, Top] As Eatꟻ[Unit, Bottom] = As.contra2_2(cAsA)
+    val contra1_3: EatF13[Top, Unit, Unit] As EatF13[Bottom, Unit, Unit] = As.contra1_3(cAsA)
     val contra2_3: EatF23[Unit, Top, Unit] As EatF23[Unit, Bottom, Unit] = As.contra2_3(cAsA)
     val contra3_3: EatF33[Unit, Unit, Top] As EatF33[Unit, Unit, Bottom] = As.contra3_3(cAsA)
   }
@@ -111,7 +109,7 @@ class AsSuite extends CatsSuite {
     val f2: Bottom => Any = As.conF(cAsA)(f)
   }
 
-  test("we can simultaneously narrow the input and widen the ouptut of a Function1") {
+  test("we can simultaneously narrow the input and widen the output of a Function1") {
     val f: Top => Bottom = _ => Bottom()
     val cAsA: Bottom As Top = implicitly
     val f2: Bottom => Top = As.invF(cAsA, cAsA)(f)

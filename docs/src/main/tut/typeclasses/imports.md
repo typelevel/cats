@@ -5,7 +5,7 @@ section: "imports"
 ---
 # Imports
 
-The easiest approach to cats imports is to import everything that's commonly needed:
+The easiest approach to Сats imports is to import everything that's commonly needed:
 
 ```tut:silent
 import cats._
@@ -31,7 +31,7 @@ import cats.data.State
 The `cats.implicits._` import does a couple of things. Firstly, it brings in implicit type class instances for standard library types - so after this import you will have `Monad[List]` and `Semigroup[Int]` instances in implicit scope. Secondly, it adds syntax enrichment onto certain types to provide some handy methods such as right-biased `Either` combinators:
 
 ```tut:book
-// cats adds right-biased combinators to the standard library's Either
+// Сats adds right-biased combinators to the standard library's Either
 val e: Either[String, Int] = Right(3)
 e.map(_ + 1)
 
@@ -53,7 +53,7 @@ The first import pulls the `Semigroup` instance for String into the scope, while
 You can also import all syntax or all instances by importing `cats.syntax.all._` or `cats.instances.all._` respectively.
 
 For data types included in cats (i.e. data structure from the `cats.data` package), all type class instances are bundled with their implementation and therefore do not need to be imported separately.
-For example, if we wanted to import `NonEmptyList` from the `cats.data` package and use it's `SemigroupK` instance, we would not need to specifically import the instance:
+For example, if we wanted to import `NonEmptyList` from the `cats.data` package and use its `SemigroupK` instance, we would not need to specifically import the instance:
 
 ```tut:book
 import cats.data.NonEmptyList
@@ -71,7 +71,7 @@ import cats.instances.all._
 import cats.syntax.semigroup._
 val x = -2 |+| 1
 
-//now we also need access to isEmpty from Monoid
+// now we also need access to isEmpty from Monoid
 import cats.syntax.monoid._
 (x |+| 1).isEmpty //error: value |+| is not a member of Int
 ```

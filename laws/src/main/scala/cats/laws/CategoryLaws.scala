@@ -11,10 +11,10 @@ trait CategoryLaws[F[_, _]] extends ComposeLaws[F] {
   implicit override def F: Category[F]
 
   def categoryLeftIdentity[A, B](f: F[A, B]): IsEq[F[A, B]] =
-    (F.id[A] andThen f) <-> f
+    (F.id[A].andThen(f)) <-> f
 
   def categoryRightIdentity[A, B](f: F[A, B]): IsEq[F[A, B]] =
-    (f andThen F.id[B]) <-> f
+    (f.andThen(F.id[B])) <-> f
 }
 
 object CategoryLaws {

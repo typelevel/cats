@@ -1,9 +1,20 @@
 package cats
 package tests
 
-import cats.data.NonEmptyVector
-import cats.laws.discipline.{AlternativeTests, CoflatMapTests, SerializableTests, TraverseTests, SemigroupalTests}
+import cats.data.{NonEmptyVector, ZipVector}
+import cats.laws.discipline.{
+  AlignTests,
+  AlternativeTests,
+  CoflatMapTests,
+  CommutativeApplyTests,
+  MonadTests,
+  SemigroupalTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.laws.discipline.arbitrary._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", SemigroupalTests[Vector].semigroupal[Int, Int, Int])
@@ -15,26 +26,47 @@ class VectorSuite extends CatsSuite {
   checkAll("Vector[Int]", AlternativeTests[Vector].alternative[Int, Int, Int])
   checkAll("Alternative[Vector]", SerializableTests.serializable(Alternative[Vector]))
 
-  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, List[Int], Option, Option])
+  checkAll("Vector[Int] with Option", TraverseTests[Vector].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Vector]", SerializableTests.serializable(Traverse[Vector]))
 
+  checkAll("Vector[Int]", MonadTests[Vector].monad[Int, Int, Int])
+  checkAll("Monad[Vector]", SerializableTests.serializable(Monad[Vector]))
+
+  checkAll("Vector[Int]", TraverseFilterTests[Vector].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Vector]", SerializableTests.serializable(TraverseFilter[Vector]))
+
+  checkAll("Vector[Int]", AlignTests[Vector].align[Int, Int, Int, Int])
+  checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
+
+  checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
+
   test("show") {
-    Vector(1, 2, 3).show should === ("Vector(1, 2, 3)")
+    Vector(1, 2, 3).show should ===("Vector(1, 2, 3)")
 
-    Vector.empty[Int].show should === ("Vector()")
+    Vector.empty[Int].show should ===("Vector()")
 
-    forAll { vec: Vector[String] =>
-      vec.show should === (vec.toString)
+    forAll { (vec: Vector[String]) =>
+      vec.show should ===(vec.toString)
     }
   }
 
   test("nev => vector => nev returns original nev")(
-    forAll { fa: NonEmptyVector[Int] =>
+    forAll { (fa: NonEmptyVector[Int]) =>
       assert(fa.toVector.toNev == Some(fa))
     }
   )
 
-  test("toNev on empty vector returns None"){
+  test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
+  }
+}
+
+final class VectorInstancesSuite extends AnyFunSuiteLike {
+
+  test("NonEmptyParallel instance in cats.instances.vector") {
+    import cats.instances.vector._
+    import cats.syntax.parallel._
+
+    (Vector(1, 2, 3), Vector("A", "B", "C")).parTupled
   }
 }

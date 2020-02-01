@@ -66,7 +66,7 @@ final case class Pair[A, B](first: A, second: B)
 ```
 
 Defining a `Monoid[Pair[A, B]]` depends on the ability to define a `Monoid[A]` and `Monoid[B]`, where the definition
-is point-wise. With subtyping such a constraint would be encoded as something like
+is point-wise, i.e. the first element of the first pair combines with the first element of the second pair and the second element of the first pair combines with the second element of the second pair. With subtyping such a constraint would be encoded as something like
 
 ```tut:book:silent
 final case class Pair[A <: Monoid[A], B <: Monoid[B]](first: A, second: B) extends Monoid[Pair[A, B]] {
@@ -223,7 +223,7 @@ type class instances easy.
 
 You can find out more about law testing [here](typeclasses/lawtesting.html).
 
-## Type classes in cats
+## Type classes in Cats
 
 <img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
@@ -238,7 +238,7 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 | --------------- |:-------:|:-----------------:|:-----------:|:-----:|:-------:|:-----------------:|:----------:|:---------:|:-------:|
 | Id[A]           | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
 | Eval[A]         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |
-| Option[A]       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
+| Option[A]       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✔         | ✗       |
 | Const[K, A]     | ✔       | ✔ (`K:Monoid`)    | ✔           | ✗     | ✗       | ✗                 | ✗          | ✗         | ✗       |
 | Either[E, A]    | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✗         | ✗       |
 | List[A]         | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |
@@ -258,4 +258,4 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
-[simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"
+[simulacrum]: https://github.com/typelevel/simulacrum "First class syntax support for type classes in Scala"

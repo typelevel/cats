@@ -1,10 +1,21 @@
 package cats
 package tests
 
+import scala.collection.immutable.SortedSet
+import scala.collection.immutable.SortedMap
 import cats.arrow.Compose
-import cats.instances.AllInstances
-import cats.syntax.AllSyntax
-
+import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.instances.{
+  AllInstances,
+  AllInstancesBinCompat0,
+  AllInstancesBinCompat1,
+  AllInstancesBinCompat2,
+  AllInstancesBinCompat3,
+  AllInstancesBinCompat4,
+  AllInstancesBinCompat5,
+  AllInstancesBinCompat6
+}
+import cats.syntax.AllSyntaxBinCompat
 
 /**
  * Test that our syntax implicits are working.
@@ -24,7 +35,16 @@ import cats.syntax.AllSyntax
  *
  * None of these tests should ever run, or do any runtime checks.
  */
-object SyntaxSuite extends AllInstances with AllSyntax {
+object SyntaxSuite
+    extends AllSyntaxBinCompat
+    with AllInstances
+    with AllInstancesBinCompat0
+    with AllInstancesBinCompat1
+    with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
+    with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
+    with AllInstancesBinCompat6 {
 
   // pretend we have a value of type A
   def mock[A]: A = ???
@@ -43,11 +63,11 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
   def testMonoid[A: Monoid]: Unit = {
     val x = mock[A]
-    implicit val y = mock[Eq[A]]
+    implicit val y: Eq[A] = mock[Eq[A]]
     val z: Boolean = x.isEmpty
   }
 
-  def testCompose[F[_,_] : Compose, A, B, C, D]: Unit = {
+  def testCompose[F[_, _]: Compose, A, B, C, D]: Unit = {
     val x = mock[F[A, B]]
     val y = mock[F[B, C]]
     val z = mock[F[C, D]]
@@ -62,6 +82,8 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val y = mock[A]
     val b0: Boolean = x === y
     val b1: Boolean = x =!= y
+    val b2: Boolean = x.eqv(y)
+    val b3: Boolean = x.neqv(y)
   }
 
   def testPartialOrder[A: PartialOrder]: Unit = {
@@ -71,18 +93,18 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val b1: Boolean = x <= y
     val b2: Boolean = x > y
     val b3: Boolean = x >= y
-    val f: Double = x partialCompare y
-    val oi: Option[Int] = x tryCompare y
-    val oz0: Option[A] = x pmin y
-    val oz1: Option[A] = x pmax y
+    val f: Double = x.partialCompare(y)
+    val oi: Option[Int] = x.tryCompare(y)
+    val oz0: Option[A] = x.pmin(y)
+    val oz1: Option[A] = x.pmax(y)
   }
 
   def testOrder[A: Order]: Unit = {
     val x = mock[A]
     val y = mock[A]
-    val i: Int = x compare y
-    val z0: A = x min y
-    val z1: A = x max y
+    val i: Int = x.compare(y)
+    val z0: A = x.min(y)
+    val z1: A = x.max(y)
   }
 
   def testInvariantFunctor[F[_]: Invariant, A, B]: Unit = {
@@ -103,10 +125,12 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val b = mock[B]
     val f1 = mock[(B, A) => B]
     val b0: B = fa.foldLeft(b)(f1)
+    val b1: B = fa.foldl(b)(f1)
     val a0: A = fa.fold
 
     val f2 = mock[(A, Eval[B]) => Eval[B]]
     val lb0: Eval[B] = fa.foldRight(Now(b))(f2)
+    val lb1: Eval[B] = fa.foldr(Now(b))(f2)
 
     val fz = mock[F[Z]]
     val f3 = mock[Z => A]
@@ -143,10 +167,9 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
     val ft = mock[(A, B, C) => G[Z]]
 
-    val gfabc  = tfabc traverseN ft
-    val gfabc2 = (fa, fb, fc) traverseN ft
+    val gfabc = tfabc.traverseN(ft)
+    val gfabc2 = (fa, fb, fc).traverseN(ft)
   }
-
 
   def testNonEmptyTraverse[F[_]: NonEmptyTraverse: FlatMap, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
     val fa = mock[F[A]]
@@ -160,26 +183,79 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-
-
-  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel[M, F]): Unit = {
+  def testParallel[M[_]: Monad, F[_], T[_]: Traverse, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
 
     val tma = mock[T[M[A]]]
     val mta = tma.parSequence
+
+    val ma = mock[M[A]]
+    val mb = mock[M[B]]
+
+    val mb2: M[B] = ma &> mb
+    val ma2: M[A] = ma <& mb
+
+    val mab = mock[M[A => B]]
+    val mb3: M[B] = mab <&> ma
   }
 
-  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel[M, F]) = {
+  def testParallelUnorderedTraverse[M[_]: Monad, F[_]: CommutativeApplicative, T[_]: UnorderedTraverse: FlatMap, A, B](
+    implicit P: Parallel.Aux[M, F]
+  ): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mtb = ta.parUnorderedTraverse(f)
+
+    val tma = mock[T[M[A]]]
+    val mta = tma.parUnorderedSequence
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta2 = tmta.parUnorderedFlatSequence
+
+    val g = mock[A => M[T[B]]]
+    val mtb2 = ta.parUnorderedFlatTraverse(g)
+  }
+
+  def testParallelFlat[M[_]: Monad, F[_], T[_]: Traverse: FlatMap, A, B](implicit P: Parallel.Aux[M, F]): Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[T[B]]]
+    val mtb = ta.parFlatTraverse(f)
+
+    val tmta = mock[T[M[T[A]]]]
+    val mta = tmta.parFlatSequence
+  }
+
+  def testParallelTuple[M[_]: Monad, F[_], A, B, C, Z](implicit P: NonEmptyParallel.Aux[M, F]) = {
     val tfabc = mock[(M[A], M[B], M[C])]
     val fa = mock[M[A]]
     val fb = mock[M[B]]
     val fc = mock[M[C]]
     val f = mock[(A, B, C) => Z]
 
-    tfabc parMapN f
-    (fa, fb, fc) parMapN f
+    tfabc.parMapN(f)
+    (fa, fb, fc).parMapN(f)
+  }
+
+  def testParallelBi[M[_], F[_], T[_, _]: Bitraverse, A, B, C, D](implicit P: Parallel.Aux[M, F]): Unit = {
+    val tab = mock[T[A, B]]
+    val f = mock[A => M[C]]
+    val g = mock[B => M[D]]
+    val mtcd = tab.parBitraverse(f, g)
+    val mtcb = tab.parLeftTraverse(f)
+
+    val tmamb = mock[T[M[A], M[B]]]
+    val mtab1 = tmamb.parBisequence
+
+    val tmab = mock[T[M[A], B]]
+    val mtab2 = tmab.parLeftSequence
+  }
+
+  def testParallelFoldable[T[_]: Foldable, M[_]: Parallel, A, B: Monoid]: Unit = {
+    val ta = mock[T[A]]
+    val f = mock[A => M[B]]
+    val mb = ta.parFoldMapA(f)
   }
 
   def testReducible[F[_]: Reducible, G[_]: Apply: SemigroupK, A: Semigroup, B, Z]: Unit = {
@@ -223,7 +299,7 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val fb1: F[B] = fa.as(b)
   }
 
-  def testApply[F[_]: Apply : Semigroupal, G[_]: Contravariant : Semigroupal, H[_]: Invariant : Semigroupal, A, B, C, D, E, Z] = {
+  def testApply[F[_]: Apply: Semigroupal, G[_]: Contravariant: Semigroupal, H[_]: Invariant: Semigroupal, A, B, C, D, E, Z] = {
     val tfabc = mock[(F[A], F[B], F[C])]
     val fa = mock[F[A]]
     val fb = mock[F[B]]
@@ -234,17 +310,17 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     fa *> fb
     fb <* fc
 
-    tfabc mapN f
-    (fa, fb, fc) mapN f
-    (fa, fb, fc) apWith ff
+    tfabc.mapN(f)
+    (fa, fb, fc).mapN(f)
+    (fa, fb, fc).apWith(ff)
 
     val tgabc = mock[(G[A], G[B])]
     val ga = mock[G[A]]
     val gb = mock[G[B]]
     val g = mock[Z => (A, B)]
 
-    tgabc contramapN g
-    (ga, gb) contramapN g
+    tgabc.contramapN(g)
+    (ga, gb).contramapN(g)
 
     val thabcde = mock[(H[A], H[B], H[C], H[D], H[E])]
     val ha = mock[H[A]]
@@ -281,9 +357,13 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
     val fab = mock[F[A, B]]
     val gfcd = fab.bitraverse(f, g)
+    val gfcb = fab.leftTraverse(f)
 
     val fgagb = mock[F[G[A], G[B]]]
     val gfab = fgagb.bisequence
+
+    val fgab = mock[F[G[A], B]]
+    val gfab2 = fgab.leftSequence
   }
 
   def testAlternativeMonad[F[_]: Alternative: Monad, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
@@ -294,18 +374,23 @@ object SyntaxSuite extends AllInstances with AllSyntax {
     val fafb = fhab.separate
   }
 
+  def testAlternativeFoldable[F[_]: Alternative: Foldable, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separateFoldable
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
   }
 
-  def testFlatMap[F[_] : FlatMap, A, B]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
   }
 
-  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, ?], E]): Unit = {
+  def testApplicativeError[F[_, _], E, A, B](implicit F: ApplicativeError[F[E, *], E]): Unit = {
     type G[X] = F[E, X]
 
     val e = mock[E]
@@ -328,7 +413,110 @@ object SyntaxSuite extends AllInstances with AllSyntax {
 
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
+
+    val eb = mock[E => B]
+    val ab = mock[A => B]
+    val gb: G[B] = gea.redeem(eb, ab)
+
+    val pfee = mock[PartialFunction[E, E]]
+    val gea5 = gea.adaptErr(pfee)
   }
 
-}
+  def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
+    val fea = "meow".raiseError[F, A]
+  }
 
+  def testMonadError[F[_, _], E, A, B](implicit F: MonadError[F[E, *], E]): Unit = {
+    type G[X] = F[E, X]
+
+    val e = mock[E]
+    val ga = e.raiseError[G, A]
+
+    val gea = mock[G[A]]
+
+    val ea = mock[E => A]
+    val gea1 = ga.handleError(ea)
+
+    val egea = mock[E => G[A]]
+    val gea2 = ga.handleErrorWith(egea)
+
+    val gxea = ga.attempt
+
+    val gxtea = ga.attemptT
+
+    val pfea = mock[PartialFunction[E, A]]
+    val gea3 = ga.recover(pfea)
+
+    val pfegea = mock[PartialFunction[E, G[A]]]
+    val gea4 = ga.recoverWith(pfegea)
+
+    val eb = mock[E => B]
+    val ab = mock[A => B]
+    val gb: G[B] = gea.redeem(eb, ab)
+
+    val efb = mock[E => G[B]]
+    val afb = mock[A => G[B]]
+    val gb2: G[B] = gea.redeemWith(efb, afb)
+
+    val pfee = mock[PartialFunction[E, E]]
+    val gea5 = gea.adaptError(pfee)
+  }
+
+  def testNested[F[_], G[_], A]: Unit = {
+    val fga: F[G[A]] = mock[F[G[A]]]
+
+    val nested: Nested[F, G, A] = fga.nested
+  }
+
+  def testBinested[F[_, _], G[_], H[_], A, B]: Unit = {
+    val fgahb = mock[F[G[A], H[B]]]
+
+    val binested: Binested[F, G, H, A, B] = fgahb.binested
+  }
+
+  def testNonEmptySet[A, B: Order]: Unit = {
+    val f = mock[A => B]
+    val set = mock[SortedSet[A]]
+
+    val nes: Option[NonEmptySet[A]] = set.toNes
+    val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
+  }
+
+  def testAlign[F[_]: Align, A, B, C]: Unit = {
+    import cats.data.Ior
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[A Ior B => C]
+    val f2 = mock[(Option[A], Option[B]) => C]
+
+    val fab = fa.align(fb)
+    val fc = fa.alignWith(fb)(f)
+
+    val padZipped = fa.padZip(fb)
+    val padZippedWith = fa.padZipWith(fb)(f2)
+
+    implicit val sa: Semigroup[A] = mock[Semigroup[A]]
+    val fa2 = fa.alignCombine(fa)
+  }
+
+  def testNonEmptyList[A, B: Order]: Unit = {
+    val f = mock[A => B]
+    val list = mock[List[A]]
+
+    val nel: Option[NonEmptyList[A]] = list.toNel
+    val grouped: SortedMap[B, NonEmptyList[A]] = list.groupByNel(f)
+  }
+
+  def testNonEmptyChain[A, B: Order]: Unit = {
+    val f = mock[A => B]
+    val list = mock[List[A]]
+
+    val grouped: SortedMap[B, NonEmptyChain[A]] = list.groupByNec(f)
+  }
+
+  def testSequenceFilter[A, B]: Unit = {
+    val f = mock[List[Either[A, Option[B]]]]
+
+    val result: Either[A, List[B]] = f.sequenceFilter
+  }
+}

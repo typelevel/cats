@@ -1,22 +1,23 @@
 package cats
 package tests
 
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 
 import cats.instances.all._
+import kernel.compat.scalaVersionSpecific._
 
-abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite with PropertyChecks {
+@suppressUnusedImportWarningForScalaVersionSpecific
+abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>
-      fa.zipWithIndex.toList should === (fa.toList.zipWithIndex)
+      fa.zipWithIndex.toList should ===(fa.toList.zipWithIndex)
     }
   }
 
   test(s"Traverse[$name].mapWithIndex") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => Int) =>
-      fa.mapWithIndex((a, i) => fn((a, i))).toList should === (fa.toList.zipWithIndex.map(fn))
+      fa.mapWithIndex((a, i) => fn((a, i))).toList should ===(fa.toList.zipWithIndex.map(fn))
     }
   }
 
@@ -24,7 +25,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
       val left = fa.traverseWithIndexM((a, i) => fn((a, i))).map(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
-      left should === ((xs.combineAll, values))
+      left should ===((xs.combineAll, values))
     }
   }
 
@@ -47,15 +48,15 @@ object TraverseSuite {
   }
 }
 
-class TraverseListSuite   extends TraverseSuite[List]("List")
+class TraverseListSuite extends TraverseSuite[List]("List")
 class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
 
-class TraverseListSuiteUnderlying   extends TraverseSuite.Underlying[List]("List")
+class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
 class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
-class TraverseSuiteAdditional extends CatsSuite {
+class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTraverseSuite {
 
   def checkZipWithIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
     F.zipWithIndex(fromRange(1 to 70000))

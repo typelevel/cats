@@ -16,7 +16,7 @@ import simulacrum.typeclass
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
-@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] { self =>
+@typeclass trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
    * Given a function which returns a G effect, thread this effect
@@ -100,8 +100,7 @@ import simulacrum.typeclass
    * F when calling the function.
    */
   def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
-    traverse(fa)(a =>
-      State((s: Int) => (s + 1, f(a, s)))).runA(0).value
+    traverse(fa)(a => State((s: Int) => (s + 1, f(a, s)))).runA(0).value
 
   /**
    * Akin to [[traverse]], but also provides the value's index in
@@ -112,8 +111,7 @@ import simulacrum.typeclass
    * two passes using [[zipWithIndex]] followed by [[traverse]].
    */
   def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
-    traverse(fa)(a =>
-      StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
+    traverse(fa)(a => StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
 
   /**
    * Traverses through the structure F, pairing the values with
@@ -124,4 +122,10 @@ import simulacrum.typeclass
    */
   def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
     mapWithIndex(fa)((a, i) => (a, i))
+
+  override def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: F[A])(f: (A) => G[B]): G[F[B]] =
+    traverse(sa)(f)
+
+  override def unorderedSequence[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
+    sequence(fga)
 }

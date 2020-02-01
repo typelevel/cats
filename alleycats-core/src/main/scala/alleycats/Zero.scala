@@ -2,7 +2,7 @@ package alleycats
 
 import cats.Eq
 import cats.syntax.eq._
-import export.imports
+
 import simulacrum.typeclass
 
 @typeclass trait Zero[A] {
@@ -15,10 +15,7 @@ import simulacrum.typeclass
     zero =!= a
 }
 
-object Zero extends Zero0 {
+object Zero {
   def apply[A](a: => A): Zero[A] =
     new Zero[A] { lazy val zero: A = a }
 }
-
-@imports[Zero]
-trait Zero0

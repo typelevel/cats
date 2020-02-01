@@ -27,32 +27,30 @@ skip these steps and jump straight to submitting a pull request.
  3. [Build the project](#build-project)
  4. [Implement your contribution](#write-code)
  5. [Write tests](#write-tests)
- 6. [Write documentation](#write-documentation)
+ 6. [Write documentation](#contributing-documentation)
  7. [Write examples](#write-examples)
  8. [Submit pull request](#submit-a-pull-request)
 
-### Find something that belongs in cats
+### Find something that belongs in Cats
 
-Looking for a way that you can help out? Check out our
-[Waffle.io page](https://waffle.io/typelevel/cats). Choose a card from the
-"Ready" column. Before you start working on it, make sure that it's
-not already assigned to someone and that nobody has left a comment
-saying that they are working on it!
+Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
+
+Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
 (Of course, you can also comment on an issue someone is already
 working on and offer to collaborate.)
 
 Have an idea for something new? That's great! We recommend that you
-make sure it belongs in cats before you put effort into creating a
+make sure it belongs in Cats before you put effort into creating a
 pull request. The preferred ways to do that are to either:
 
  * [create a GitHub issue](https://github.com/typelevel/cats/issues/new)
    describing your idea.
  * get feedback in the [cats Gitter room](https://gitter.im/typelevel/cats).
 
-Things that belong in cats generally have the following characteristics:
+Things that belong in Cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](laws).
+ * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
@@ -72,6 +70,15 @@ Some great ideas are not a great fit, either due to their size or
 their complexity. In these cases, creating your own library that
 depends on Cats is probably the best plan.
 
+#### Cats subprojects
+
+Cats has other _companion_ projects, described next:
+
+* [cats-effect](https://github.com/typelevel/cats-effect): a project aimed to provide a standard IO type for the Cats ecosystem, as well as a set of typeclasses (and associated laws) which characterize general effect types.
+* [cats-mtl](https://github.com/typelevel/cats-mtl): provides transformer typeclasses for Cats' Monads, Applicatives and Functors.
+* [mouse](https://github.com/typelevel/mouse): a small companion to the Cats functional programming library for Scala. It includes convenience extension methods for Scala standard library classes, including some found in scalaz that are not in Cats.
+
+
 ### Let us know you are working on it
 
 If there is already a GitHub issue for the task you are working on,
@@ -90,7 +97,9 @@ git clone git@github.com:typelevel/cats.git
 
 To build Cats you should have
 [sbt](http://www.scala-sbt.org/0.13/tutorial/Setup.html) and [Node.js](https://nodejs.org/)
- installed. Run `sbt`, and then use any of the following commands:
+ installed. If you'd like, you can use the [Nix Cats development environment](#nix-cats-development-environment).
+
+ Run `sbt`, and then use any of the following commands:
 
  * `compile`: compile the code
  * `console`: launch a REPL
@@ -99,31 +108,32 @@ To build Cats you should have
  * `scalastyle`: run the style-checker on the code
  * `validate`: run tests, style-checker, and doc generation
 
-#### Scala and Scala-js
+#### Scala and Scala.js
 
-Cats cross-compiles to both JVM and Javascript(JS). If you are not used to
+Cats cross-compiles to both JVM and JavaScript runtimes. If you are not used to
 working with cross-compiling builds, the first things that you will notice is that
 builds:
 
- * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS` for
-
- JS only. And if you want the default project to be `catsJVM`, just copy the
+ * Will take longer: To build JVM only, just use the `catsJVM`, or `catsJS`
+   for JS only. And if you want the default project to be `catsJVM`, just copy the
    file `scripts/sbtrc-JVM` to `.sbtrc` in the root directory.
 
  * May run out of memory: We suggest you use
    [Paul Philips's sbt script](https://github.com/paulp/sbt-extras) that will use the settings from Cats.
 
+### Editor Setup Tips
+
+**IntelliJ**
+
+- Be warned, IntelliJ is currently not 100% accurate at reporting compilation errors, there *will* be cases that it reports errors incorrectly. If you simply don't want to see the errors, a quick an easy work around is to disable *Type-Aware Highlighting* by clicking the `[T]` icon in the bottom toolbar.
+
+- There is an open [issue](https://github.com/typelevel/cats/issues/2152) with the IntelliJ scala plugin, which prevents it from configuring similacrum correctly when importing the cats project. The work around for this issue is to set `val CompileTime = Provided` in `build.sbt`. Note: Be careful not to commit this change.
+
+- IntelliJ does have [support](https://blog.jetbrains.com/scala/2015/07/31/inline-refactoring-for-type-aliases-and-kind-projector-support/) for kind-projector. However, it is not always seamless. If you are unable to get IntelliJ to recognise the special symbols that kind-project provides, such as `?` `Lambda[X => G[F[A]]]` or `λ[X => G[F[A]]]` try upgrading to the early access preview (EAP) version of the scala plugin. This can be done under `Settings > Languages & Frameworks > Scala > Updates`
+
 ### Write code
 
-TODO
-
-*Should this just link to a separate doc? This might get large.*
-
-Write about implicit params as discussed in https://github.com/typelevel/cats/issues/27
-
-Write about type class methods on data structures as described in https://github.com/typelevel/cats/issues/25
-
-Write about https://github.com/typelevel/cats/pull/36#issuecomment-72892359
+[See guidelines](https://typelevel.org/cats/guidelines.html).
 
 ### Attributions
 
@@ -151,13 +161,26 @@ with [Discipline](https://github.com/typelevel/discipline) for law checking, and
 - It is also a goal that, for every combination of data type and supported type class instance:
  - Appropriate law checks for that combination are included to ensure that the instance meets the laws for that type class.
  - A serializability test for that combination is also included, such that we know that frameworks which
- rely heavily on serialization, such as `Spark`, will have strong compatibility with `cats`.
+ rely heavily on serialization, such as `Spark`, will have strong compatibility with `Cats`.
  - Note that custom serialization tests are not required for instances of type classes which come from
  `algebra`, such as `Monoid`, because the `algebra` laws include a test for serialization.
+- For testing your laws, it is advised to check [this guide](https://typelevel.org/cats/typeclasses/lawtesting.html).
 
-TODO
+### Binary compatibility
 
-Write about checking laws
+It is important to verify that the feature you are implementing is compatible with Scala 2.11.x and Scala 2.12.x (Scala <2.10.x is not supported). When you submit a PR, Travis makes this check, but it is time-expensive, so you can assure this step beforehand by issuing the command `++2.11.12`, which sets the cats' Scala version to `2.11.12` and then run `mimaReportBinaryIssues`.
+
+A summary of these steps is as follows:
+
+```
+$ sbt
+> ++2.11.12
+> mimaReportBinaryIssues
+```
+This procedure will report if there are any binary compatibility issues that should be fixed.
+
+As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/migration-manager) (shorthand for "Migration Manager") plugin and you can find more information about it [here](https://github.com/lightbend/migration-manager/wiki).
+
 
 ## Contributing documentation
 
@@ -173,13 +196,15 @@ run `sbt docs/makeMicrosite`
 
 ### Previewing the site
 
-1. Install jekyll locally, depending on your platform, you might do this with:
+1. Install jekyll locally. Depending on your platform, you might do this with:
 
-    yum install jekyll
+    `yum install jekyll`
 
-    apt-get install jekyll
+    `apt-get install ruby-full; gem install jekyll`
 
-    gem install jekyll
+    `gem install jekyll`
+
+    Or just dropping into a `nix-shell` if you are using the [Nix Cats development environment](#nix-cats-development-environment).
 
 2. In a shell, navigate to the generated site directory in `docs/target/site`
 
@@ -196,16 +221,9 @@ which appears in the documentation, this ensures us that our examples
 should always compile, and our documentation has a better chance of
 staying up-to-date.
 
-### Publishing the site to github.
-
-The `git.remoteRepo` variable in `docs/build.sbt` controls which
-repository you will push to. Ensure that this variable points to a
-repo you wish to push to, and that it is one for which you have push
-access, then run `sbt ghpagesPushSite`
-
 ### Write examples
 
-TODO
+One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
 
 ### Submit a pull request
 
@@ -243,15 +261,14 @@ we'll do our best to improve the process.
 
 Discussion around Cats is currently happening in the
 [Gitter channel](https://gitter.im/typelevel/cats) as well as on Github
-issue and PR pages. You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/typelevel/cats).
+issue and PR pages.
 
 Feel free to open an issue if you notice a bug, have an idea for a
 feature, or have a question about the code. Pull requests are also
 gladly accepted.
 
 People are expected to follow the
-[Typelevel Code of Conduct](http://typelevel.org/conduct.html) when
+[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
 venues.
 
@@ -264,3 +281,14 @@ escalate into larger problems.
 
 If you are being harassed, please contact one of [us](https://github.com/typelevel/cats#maintainers)
 immediately so that we can support you.
+
+## Nix Cats Development Environment
+
+Since Cats development can include the Scala runtime, the Scala.js runtime, the Cats website, and more; a number of dependencies (sbt, Node.js, Jekyll, etc) can be needed to work on Cats. Managing these dependencies globally can be a hassle and can lead to version conflicts. To make this easier to manage in an isolated development environment, Cats provides a `shell.nix` for anyone using the [Nix package manager](https://nixos.org/nix/).
+
+To use the Nix-based Cats development environment:
+
+1. [Install](https://nixos.org/nix/download.html) the Nix package manager.
+2. At the root level of the Cats repository, run `nix-shell --pure`. This will drop you into a minimal bash shell that has just the required dependencies on the `PATH`. Note that the first time that you run this it will take some extra time to download the necessary dependencies into your local Nix store.
+3. Run `sbt`, `jekyll`, etc as required from the `nix-shell`.
+4. When you are finished you can `exit` the `nix-shell`.

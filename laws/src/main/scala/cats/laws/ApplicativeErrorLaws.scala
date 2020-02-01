@@ -26,13 +26,13 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
     F.attempt(F.pure(a)) <-> F.pure(Right(a))
 
   def handleErrorWithConsistentWithRecoverWith[A](fa: F[A], f: E => F[A]): IsEq[F[A]] =
-    F.handleErrorWith(fa)(f) <-> F.recoverWith(fa)(PartialFunction(f))
+    F.handleErrorWith(fa)(f) <-> F.recoverWith(fa) { case x => f(x) }
 
   def handleErrorConsistentWithRecover[A](fa: F[A], f: E => A): IsEq[F[A]] =
-    F.handleError(fa)(f) <-> F.recover(fa)(PartialFunction(f))
+    F.handleError(fa)(f) <-> F.recover(fa) { case x => f(x) }
 
   def recoverConsistentWithRecoverWith[A](fa: F[A], pf: PartialFunction[E, A]): IsEq[F[A]] =
-    F.recover(fa)(pf) <-> F.recoverWith(fa)(pf andThen F.pure)
+    F.recover(fa)(pf) <-> F.recoverWith(fa)(pf.andThen(F.pure _))
 
   def attemptConsistentWithAttemptT[A](fa: F[A]): IsEq[EitherT[F, E, A]] =
     EitherT(F.attempt(fa)) <-> F.attemptT(fa)
@@ -41,10 +41,34 @@ trait ApplicativeErrorLaws[F[_], E] extends ApplicativeLaws[F] {
     F.attempt(F.fromEither(eab)) <-> F.pure(eab)
 
   def onErrorPure[A](a: A, f: E => F[Unit]): IsEq[F[A]] =
-    F.onError(F.pure(a))(PartialFunction(f)) <-> F.pure(a)
+    F.onError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
 
   def onErrorRaise[A](fa: F[A], e: E, fb: F[Unit]): IsEq[F[A]] =
-    F.onError(F.raiseError[A](e)){case err => fb} <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
+    F.onError(F.raiseError[A](e)) { case err => fb } <-> F.map2(fb, F.raiseError[A](e))((_, b) => b)
+
+  def adaptErrorPure[A](a: A, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.pure(a)) { case x => f(x) } <-> F.pure(a)
+
+  def adaptErrorRaise[A](e: E, f: E => E): IsEq[F[A]] =
+    F.adaptError(F.raiseError[A](e)) { case x => f(x) } <-> F.raiseError(f(e))
+
+  def redeemDerivedFromAttemptMap[A, B](fa: F[A], fe: E => B, fs: A => B): IsEq[F[B]] =
+    F.redeem(fa)(fe, fs) <-> F.map(F.attempt(fa))(_.fold(fe, fs))
+
+  /*
+   * These laws, taken together with applicativeErrorHandle, show that errors dominate in
+   * ap, *and* show that handle has lexical semantics over ap. F.unit is used in both laws
+   * because we don't have another way of expressing "an F[_] which does *not* contain any
+   * errors". We could make these laws considerably stronger if such a thing were
+   * expressible. Specifically, what we're missing here is the ability to say that
+   * raiseError distributes over an *arbitrary* number of aps.
+   */
+
+  def raiseErrorDistributesOverApLeft[A](h: E => F[A], e: E) =
+    F.handleErrorWith(F.ap(F.raiseError[Unit => A](e))(F.unit))(h) <-> h(e)
+
+  def raiseErrorDistributesOverApRight[A](h: E => F[A], e: E) =
+    F.handleErrorWith(F.ap(F.pure((a: A) => a))(F.raiseError[A](e)))(h) <-> h(e)
 }
 
 object ApplicativeErrorLaws {

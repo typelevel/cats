@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import cats.data.Ior
 
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
@@ -24,20 +25,69 @@ import simulacrum.typeclass
 
   /**
    * Combine two F[A] values.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> SemigroupK[List].combineK(List(1, 2), List(3, 4))
+   * res0: List[Int] = List(1, 2, 3, 4)
+   * }}}
    */
   @simulacrum.op("<+>", alias = true)
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
    * Given a type A, create a concrete Semigroup[F[A]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val s: Semigroup[List[Int]] = SemigroupK[List].algebra[Int]
+   * }}}
    */
   def algebra[A]: Semigroup[F[A]] =
     new Semigroup[F[A]] {
       def combine(x: F[A], y: F[A]): F[A] = self.combineK(x, y)
     }
 
+  /**
+   * "Compose" with a `G[_]` type to form a `SemigroupK` for `λ[α => F[G[α]]]`.
+   * Note that this universally works for any `G`, because the "inner" structure
+   * isn't considered when combining two instances.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type ListOption[A] = List[Option[A]]
+   * scala> val s: SemigroupK[ListOption] = SemigroupK[List].compose[Option]
+   * scala> s.combineK(List(Some(1), None, Some(2)), List(Some(3), None))
+   * res0: List[Option[Int]] = List(Some(1), None, Some(2), Some(3), None)
+   * }}}
+   */
   def compose[G[_]]: SemigroupK[λ[α => F[G[α]]]] =
     new ComposedSemigroupK[F, G] {
       val F = self
     }
+
+  /**
+   * Combines `F[A]` and `F[B]` into a `F[Either[A,B]]]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.SemigroupK
+   * scala> import cats.data.NonEmptyList
+   * scala> SemigroupK[NonEmptyList].sum(NonEmptyList.one("abc"), NonEmptyList.one(2))
+   * res0: NonEmptyList[Either[String,Int]] = NonEmptyList(Left(abc), Right(2))
+   * }}}
+   */
+  def sum[A, B](fa: F[A], fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] =
+    combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
+}
+
+object SemigroupK {
+  def align[F[_]: SemigroupK: Functor]: Align[F] = new Align[F] {
+    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
+      SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
+    def functor: Functor[F] = Functor[F]
+  }
 }

@@ -29,7 +29,7 @@ Because the second type parameter is not used in the data type, the type paramet
 
 ## Why do we care?
 It would seem `Const` gives us no benefit over a data type that would simply not have the second type parameter.
-However, while we don't directly use the second type parameter, it's existence becomes useful in certain contexts.
+However, while we don't directly use the second type parameter, its existence becomes useful in certain contexts.
 
 ### Example 1: Lens
 The following is heavily inspired by [Julien Truffaut](https://github.com/julien-truffaut)'s
@@ -134,13 +134,13 @@ is to take an `A` and return it right back (lifted into `Const`).
 Before we plug and play however, note that `modifyF` has a `Functor` constraint on `F[_]`. This means we need to
 define a `Functor` instance for `Const`, where the first type parameter is fixed.
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.data.Const
 
-implicit def constFunctor[X]: Functor[Const[X, ?]] =
-  new Functor[Const[X, ?]] {
+implicit def constFunctor[X]: Functor[Const[X, *]] =
+  new Functor[Const[X, *]] {
     // Recall Const[X, A] ~= X, so the function is not of any use to us
     def map[A, B](fa: Const[X, A])(f: A => B): Const[X, B] =
       Const(fa.getConst)
@@ -158,7 +158,7 @@ trait Lens[S, A] {
   def modify(s: S)(f: A => A): S = modifyF[Id](s)(f)
 
   def get(s: S): A = {
-    val storedValue = modifyF[Const[A, ?]](s)(a => Const(a))
+    val storedValue = modifyF[Const[A, *]](s)(a => Const(a))
     storedValue.getConst
   }
 }
@@ -216,8 +216,8 @@ one.
 ```tut:silent
 import cats.data.Const
 
-implicit def constApplicative[Z]: Applicative[Const[Z, ?]] =
-  new Applicative[Const[Z, ?]] {
+implicit def constApplicative[Z]: Applicative[Const[Z, *]] =
+  new Applicative[Const[Z, *]] {
     def pure[A](a: A): Const[Z, A] = ???
 
     def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] = ???
@@ -238,8 +238,8 @@ So now we need a constant `Z` value, and a binary function that takes two `Z`s a
 We want `Z` to have a `Monoid` instance!
 
 ```tut:silent
-implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, ?]] =
-  new Applicative[Const[Z, ?]] {
+implicit def constApplicative[Z : Monoid]: Applicative[Const[Z, *]] =
+  new Applicative[Const[Z, *]] {
     def pure[A](a: A): Const[Z, A] = Const(Monoid[Z].empty)
 
     def ap[A, B](f: Const[Z, A => B])(fa: Const[Z, A]): Const[Z, B] =

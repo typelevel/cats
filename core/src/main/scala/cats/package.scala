@@ -16,24 +16,26 @@ package object cats {
   /** [[cats.InjectK]][F, G] */
   type :≺:[F[_], G[_]] = InjectK[F, G]
 
-/**
- * Identity, encoded as `type Id[A] = A`, a convenient alias to make
- * identity instances well-kinded.
- *
- * The identity monad can be seen as the ambient monad that encodes
- * the effect of having no effect. It is ambient in the sense that
- * plain pure values are values of `Id`.
- *
- * For instance, the [[cats.Functor]] instance for `[[cats.Id]]`
- * allows us to apply a function `A => B` to an `Id[A]` and get an
- * `Id[B]`. However, an `Id[A]` is the same as `A`, so all we're doing
- * is applying a pure function of type `A => B` to a pure value  of
- * type `A` to get a pure value of type `B`. That is, the instance
- * encodes pure unary function application.
- */
+  /**
+   * Identity, encoded as `type Id[A] = A`, a convenient alias to make
+   * identity instances well-kinded.
+   *
+   * The identity monad can be seen as the ambient monad that encodes
+   * the effect of having no effect. It is ambient in the sense that
+   * plain pure values are values of `Id`.
+   *
+   * For instance, the [[cats.Functor]] instance for `[[cats.Id]]`
+   * allows us to apply a function `A => B` to an `Id[A]` and get an
+   * `Id[B]`. However, an `Id[A]` is the same as `A`, so all we're doing
+   * is applying a pure function of type `A => B` to a pure value  of
+   * type `A` to get a pure value of type `B`. That is, the instance
+   * encodes pure unary function application.
+   */
   type Id[A] = A
-  implicit val catsInstancesForId: Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] {
+  type Endo[A] = A => A
+  implicit val catsInstancesForId
+    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -42,6 +44,7 @@ package object cats {
         case Left(a1) => tailRecM(a1)(f)
         case Right(b) => b
       }
+      override def distribute[F[_], A, B](fa: F[A])(f: A => B)(implicit F: Functor[F]): Id[F[B]] = F.map(fa)(f)
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
@@ -73,12 +76,25 @@ package object cats {
       override def get[A](fa: Id[A])(idx: Long): Option[A] =
         if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
+    }
+
+  /**
+   * Witness for: Id[A] <-> Unit => A
+   */
+  implicit val catsRepresentableForId: Representable.Aux[Id, Unit] = new Representable[Id] {
+    override type Representation = Unit
+    override val F: Functor[Id] = Functor[Id]
+
+    override def tabulate[A](f: Unit => A): Id[A] = f(())
+
+    override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
   }
 
-  implicit val catsParallelForId: Parallel[Id, Id] = Parallel.identity
+  implicit val catsParallelForId: Parallel.Aux[Id, Id] = Parallel.identity
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
+  type Comparison = cats.kernel.Comparison
   type Order[A] = cats.kernel.Order[A]
   type Hash[A] = cats.kernel.Hash[A]
   type Semigroup[A] = cats.kernel.Semigroup[A]
@@ -88,11 +104,9 @@ package object cats {
   val Eq = cats.kernel.Eq
   val PartialOrder = cats.kernel.PartialOrder
   val Order = cats.kernel.Order
+  val Comparison = cats.kernel.Comparison
   val Hash = cats.kernel.Hash
   val Semigroup = cats.kernel.Semigroup
   val Monoid = cats.kernel.Monoid
   val Group = cats.kernel.Group
-
-  @deprecated("renamed to Semigroupal", "1.0.0-RC1")
-  type Cartesian[F[_]] = Semigroupal[F]
 }

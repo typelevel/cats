@@ -1,3 +1,1327 @@
+## Version 2.1.0
+
+_2019 December 18_
+
+This release currently only supports Scala 2.12 and 2.13. It provides the same binary compatibility
+guarantees as Cats 2.0 (note that it is not guaranteed to be binary-compatible with the 2.1.0
+release candidates).
+
+### 3 API / feature enhancements
+
+* [#3208](https://github.com/typelevel/cats/pull/3208) Add Defer.fix  by @johnynek
+* [#3215](https://github.com/typelevel/cats/pull/3215) Replace kind-projector placeholders in infix types  by @travisbrown
+* [#3207](https://github.com/typelevel/cats/pull/3207) Avoid kind-projector syntax with variance annotations  by @travisbrown
+
+
+### 1 documentation improvement
+
+* [#3218](https://github.com/typelevel/cats/pull/3218) Update sbt-microsites  by @travisbrown
+
+
+### 4 build improvements
+
+* [#3217](https://github.com/typelevel/cats/pull/3217) Remove sbt-partial-unification  by @travisbrown
+* [#3216](https://github.com/typelevel/cats/pull/3216) Update sbt-pgp to 2.0.1  by @scala-steward
+* [#3213](https://github.com/typelevel/cats/pull/3213) Update discipline-core to 1.0.2  by @scala-steward
+* [#3212](https://github.com/typelevel/cats/pull/3212) Update sbt-scalafix and sbt versions  by @travisbrown
+
+
+## Version 2.1.0-RC3
+
+_2019 December 11_
+
+This release candidate provides the same binary compatibility guarantees as Cats 2.0.
+
+### 1 bug fix
+
+* [#3203](https://github.com/typelevel/cats/pull/3203) Fix more bincompat breakage  by @travisbrown
+
+
+### 14 API / feature enhancements
+
+* [#3199](https://github.com/typelevel/cats/pull/3199) Fix foldA, reduceA, and reduceMapA short-circuiting  by @travisbrown
+* [#3198](https://github.com/typelevel/cats/pull/3198) Rename rangeE for clarity  by @travisbrown
+* [#3150](https://github.com/typelevel/cats/pull/3150) Add foldA, reduceA, and reduceMapA  by @Twizty
+* [#3174](https://github.com/typelevel/cats/pull/3174) Optimize Iterable instances implementation.  by @takayahilton
+* [#3186](https://github.com/typelevel/cats/pull/3186) Avoid unusual kind-projector syntax  by @travisbrown
+* [#3187](https://github.com/typelevel/cats/pull/3187) Helping out Dotty's type inference  by @travisbrown
+* [#3190](https://github.com/typelevel/cats/pull/3190) Mark match that is unchecked by Scala 2 as unchecked  by @travisbrown
+* [#3191](https://github.com/typelevel/cats/pull/3191) Add type for implicit val  by @travisbrown
+* [#3158](https://github.com/typelevel/cats/pull/3158) add `filterNot` to FunctorFilter  by @gagandeepkalra
+* [#3188](https://github.com/typelevel/cats/pull/3188) Add explicit type annotations for implicit Ordering vals  by @travisbrown
+* [#3189](https://github.com/typelevel/cats/pull/3189) Replace do-while  by @travisbrown
+* [#3185](https://github.com/typelevel/cats/pull/3185) Update Function0 syntax  by @travisbrown
+* [#3183](https://github.com/typelevel/cats/pull/3183) Remove redundant final modifiers on objects  by @travisbrown
+* [#3182](https://github.com/typelevel/cats/pull/3182) Parenthesize lambda parameters with type annotations  by @travisbrown
+
+
+### 4 documentation improvements
+
+* [#3155](https://github.com/typelevel/cats/pull/3155) Enable and fix doctests on 2.13  by @travisbrown
+* [#3178](https://github.com/typelevel/cats/pull/3178) Add ApplicativeError for EitherT documentation  by @tg44
+* [#3181](https://github.com/typelevel/cats/pull/3181) Fix typo  by @msinton
+* [#3173](https://github.com/typelevel/cats/pull/3173) Fix typo in Alternative docs  by @SimY4
+
+
+### 1 build improvement
+
+* [#3197](https://github.com/typelevel/cats/pull/3197) Update sbt-scalafmt to 2.3.0  by @scala-steward
+
+
+## Version 2.1.0-RC2
+
+_2019 November 26
+
+This release candidate provides the same binary compatibility guarantees as Cats 2.0.
+
+### 2 bug fixes
+
+* [#3163](https://github.com/typelevel/cats/pull/3163) Fix broken binary compatibility  by @travisbrown
+* [#3162](https://github.com/typelevel/cats/pull/3162) Add adaptError override to MonadError  by @travisbrown
+
+
+### 3 API / feature enhancements
+
+* [#3165](https://github.com/typelevel/cats/pull/3165) Add catchOnly to ApplicativeError by @takayahilton
+* [#3159](https://github.com/typelevel/cats/pull/3159) Some minor optimizations  by @travisbrown
+* [#3167](https://github.com/typelevel/cats/pull/3167) Make default reduceMapM lazy if reduceRightTo is lazy  by @travisbrown
+
+
+### 3 documentation improvements
+
+* [#3172](https://github.com/typelevel/cats/pull/3172) Fix typo  by @bwignall
+* [#3153](https://github.com/typelevel/cats/pull/3153) Activating Open Collective  by @monkeywithacupcake
+* [#3160](https://github.com/typelevel/cats/pull/3160) update links to sustainability program  by @kailuowang
+
+
+### 4 build improvements
+
+* [#3166](https://github.com/typelevel/cats/pull/3166) Update Scala to 2.13.1  by @travisbrown
+* [#3171](https://github.com/typelevel/cats/pull/3171) Update sbt to 1.3.4  by @scala-steward
+* [#3169](https://github.com/typelevel/cats/pull/3169) Update sbt-sonatype to 3.8.1  by @scala-steward
+* [#3170](https://github.com/typelevel/cats/pull/3170) Update sbt-scalajs, scalajs-compiler to 0.6.31  by @scala-steward
+
+
+## Version 2.1.0-RC1
+
+_2019 November 15_
+
+This release is currently only available for Scala 2.11 and Scala 2.12. It provides the same binary compatibility guarantees as Cats 2.0 (and is verified by MiMa to be fully binary-compatible with 2.0 itself).
+
+### 2 source breaking changes
+
+* [#3154](https://github.com/typelevel/cats/pull/3154) Make 1.x deprecation targets package-private  by @travisbrown
+* [#3099](https://github.com/typelevel/cats/pull/3099) Issue 3059: Move Parallel instances into instance packages for the type constructors they characterize  by @barambani
+
+
+### 3 bug fixes
+
+* [#3126](https://github.com/typelevel/cats/pull/3126) Remove Order constraint from Hash instance for Map  by @vasiliybondarenko
+* [#3105](https://github.com/typelevel/cats/pull/3105) Issue 2701 - Ambiguous Eq instances for tuples  by @barambani
+* [#3100](https://github.com/typelevel/cats/pull/3100) Issue 2891 - Ambiguous Vector instances  by @barambani
+
+
+### 25 API / feature enhancements
+
+* [#3152](https://github.com/typelevel/cats/pull/3152) "Move" type class syntax methods onto type classes  by @travisbrown
+* [#3149](https://github.com/typelevel/cats/pull/3149) Deprecate and make private syntax methods that are now on Either  by @travisbrown
+* [#3148](https://github.com/typelevel/cats/pull/3148) Move adaptError  by @travisbrown
+* [#3147](https://github.com/typelevel/cats/pull/3147) Add Parallel.parFoldMapA  by @nigredo-tori
+* [#3146](https://github.com/typelevel/cats/pull/3146) Add redeem and redeemWith  by @travisbrown
+* [#3144](https://github.com/typelevel/cats/pull/3144) Add Align for Stream  by @travisbrown
+* [#3136](https://github.com/typelevel/cats/pull/3136) Add benchmark for foldMapA  by @travisbrown
+* [#3135](https://github.com/typelevel/cats/pull/3135) Minor clean up. Removed duplication.  by @barambani
+* [#3133](https://github.com/typelevel/cats/pull/3133) Fix NonEmptyChain.fromSeq signature on 2.12  by @travisbrown
+* [#3130](https://github.com/typelevel/cats/pull/3130) add foldMapA as an alternative to foldMapM that only requires an Applicative rather than a monad  by @mberndt123
+* [#3124](https://github.com/typelevel/cats/pull/3124) SemigroupK sum: F[A], F[B] => F[A Either B]  by @pk044
+* [#3122](https://github.com/typelevel/cats/pull/3122) Fix constraints and names for new Foldable methods  by @travisbrown
+* [#3103](https://github.com/typelevel/cats/pull/3103) Add TraverseFilter instance for Queue.  by @takayahilton
+* [#3088](https://github.com/typelevel/cats/pull/3088) #2947 Added bifold to Bifoldable typeclass  by @Twizty
+* [#3084](https://github.com/typelevel/cats/pull/3084) Add minimumBy/maximumBy/Option to Foldable  by @joroKr21
+* [#3076](https://github.com/typelevel/cats/pull/3076) Add Align typeclass  by @LukaJCB
+* [#3062](https://github.com/typelevel/cats/pull/3062) add unzip to Functor  by @gagandeepkalra
+* [#3058](https://github.com/typelevel/cats/pull/3058) Add `ifF` on Functor #3040  by @vasiliybondarenko
+* [#3041](https://github.com/typelevel/cats/pull/3041) Add scala.util.control.TailCalls.TailRec instances  by @johnynek
+* [#3015](https://github.com/typelevel/cats/pull/3015) Use Foldable foldRight for Traverse and TraverseFilter.  by @takayahilton
+* [#2863](https://github.com/typelevel/cats/pull/2863) add attemptNarrow to ApplicativeErrorOps  by @marcodippy
+* [#2834](https://github.com/typelevel/cats/pull/2834) CommutativeMonoid[Option[A]] from CommutativeSemigroup  by @valydia
+* [#2772](https://github.com/typelevel/cats/pull/2772) Add foldRightDefer to Foldable  by @denisrosca
+* [#2742](https://github.com/typelevel/cats/pull/2742) Added separateFoldable  by @tkroman
+* [#2380](https://github.com/typelevel/cats/pull/2380) Add combineAllOption to Foldable  by @barambani
+
+
+### 12 documentation improvements
+
+* [#3156](https://github.com/typelevel/cats/pull/3156) Fix link to Monad and Comonad  by @XeeD
+* [#3151](https://github.com/typelevel/cats/pull/3151) fix link to moniodK and Applicative  by @stsatlantis
+* [#3104](https://github.com/typelevel/cats/pull/3104) Update faq.md repl documentation  by @psilospore
+* [#3081](https://github.com/typelevel/cats/pull/3081) Correct some mistakes in Comonad documentatoin  by @justinhj
+* [#3073](https://github.com/typelevel/cats/pull/3073) add more doctest to WriterT  by @hamednourhani
+* [#3072](https://github.com/typelevel/cats/pull/3072) Mention additional dependencies in lawtesting docs  by @miklos-martin
+* [#3071](https://github.com/typelevel/cats/pull/3071) Update Semigroup docs for Map  by @codingismy11to7
+* [#3065](https://github.com/typelevel/cats/pull/3065) Link to relevant Const doc from doc of Traverse  by @LPTK
+* [#3063](https://github.com/typelevel/cats/pull/3063) add more doctest to Ior  by @hamednourhani
+* [#3061](https://github.com/typelevel/cats/pull/3061) Validated doctest  by @hamednourhani
+* [#3054](https://github.com/typelevel/cats/pull/3054) add more doctest to EitherT  by @hamednourhani
+* [#3049](https://github.com/typelevel/cats/pull/3049) minor update to the doc to include cats-testkit-scalatest  by @kailuowang
+
+
+### 29 build improvements
+
+* [#3142](https://github.com/typelevel/cats/pull/3142) Backport MiMa config and dependency updates for 2.11  by @travisbrown
+* [#3139](https://github.com/typelevel/cats/pull/3139) Update 2.11 branch build  by @travisbrown
+* [#3129](https://github.com/typelevel/cats/pull/3129) Check bincompat on stuff we should be checking bincompat for  by @travisbrown
+* [#3125](https://github.com/typelevel/cats/pull/3125) Fix order of @deprecated arguments  by @travisbrown
+* [#3120](https://github.com/typelevel/cats/pull/3120) Update sbt-scalafmt to 2.2.1  by @scala-steward
+* [#3118](https://github.com/typelevel/cats/pull/3118) Update sbt-scalafmt to 2.2.0  by @scala-steward
+* [#3115](https://github.com/typelevel/cats/pull/3115) Update sbt-release to 1.0.12  by @scala-steward
+* [#3114](https://github.com/typelevel/cats/pull/3114) Update sbt to 1.3.3  by @scala-steward
+* [#3110](https://github.com/typelevel/cats/pull/3110) Update sbt-scalafmt to 2.0.7  by @scala-steward
+* [#3106](https://github.com/typelevel/cats/pull/3106) ci: Enable 2.13 build for scalajs and linting in travis  by @DieBauer
+* [#3102](https://github.com/typelevel/cats/pull/3102) Use new group ID for simulacrum  by @travisbrown
+* [#3101](https://github.com/typelevel/cats/pull/3101) update ScalaTest  by @larsrh
+* [#3096](https://github.com/typelevel/cats/pull/3096) Enable coverage and docs  by @DieBauer
+* [#3095](https://github.com/typelevel/cats/pull/3095) Update sbt-microsites to 0.9.7  by @scala-steward
+* [#3094](https://github.com/typelevel/cats/pull/3094) Update tut-plugin to 0.6.13  by @scala-steward
+* [#3092](https://github.com/typelevel/cats/pull/3092) Update scalafmt-core to 2.1.0  by @scala-steward
+* [#3091](https://github.com/typelevel/cats/pull/3091) Update sbt-sonatype to 3.8  by @scala-steward
+* [#3090](https://github.com/typelevel/cats/pull/3090) Update sbt-scalafmt to 2.0.6  by @scala-steward
+* [#3089](https://github.com/typelevel/cats/pull/3089) Update scalacheck to 1.14.2  by @scala-steward
+* [#3086](https://github.com/typelevel/cats/pull/3086) Update simulacrum to 1.0.0  by @scala-steward
+* [#3085](https://github.com/typelevel/cats/pull/3085) Update sbt-microsites to 0.9.6  by @scala-steward
+* [#3079](https://github.com/typelevel/cats/pull/3079) update to sbt 1.3.x, uses coursier by default  by @larsrh
+* [#3070](https://github.com/typelevel/cats/pull/3070) Update sbt-scalajs, scalajs-compiler to 0.6.29  by @scala-steward
+* [#3066](https://github.com/typelevel/cats/pull/3066) Update sbt-scalafmt to 2.0.5  by @scala-steward
+* [#3064](https://github.com/typelevel/cats/pull/3064) Update sbt-pgp to 2.0.1-M3  by @scala-steward
+* [#3056](https://github.com/typelevel/cats/pull/3056) Update sbt-sonatype to 3.7  by @scala-steward
+* [#3052](https://github.com/typelevel/cats/pull/3052) Create a Scala 2.11 branch  by @kailuowang
+* [#3051](https://github.com/typelevel/cats/pull/3051) Drops Scala 2.11 support on master  by @kailuowang
+* [#3030](https://github.com/typelevel/cats/pull/3030) Update sbt-sonatype to 3.6  by @scala-steward
+
+
+## Version 2.0.0
+
+> 2019 September 9
+
+Cats 2.0.0 is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+
+### 2 source breaking changes
+
+* [#3046](https://github.com/typelevel/cats/pull/3046) Infer dependent parameter in NonEmpty/ParallelTests/Laws  by @djspiewak
+* [#3042](https://github.com/typelevel/cats/pull/3042) Remove unused type parameter for Parallel instances  by @travisbrown
+        
+
+### 1 bug fix
+
+* [#3037](https://github.com/typelevel/cats/pull/3037) Add cats.kernel.instances.finiteDuration package  by @travisbrown
+        
+
+### 1 documentation improvement
+
+* [#3034](https://github.com/typelevel/cats/pull/3034) minor typo fixed  by @ikr0m
+
+
+
+## Version 2.0.0-RC3
+
+> 2019 September 7
+
+Cats 2.0.0-RC3 is the third release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 2 source breaking changes
+
+* [#3033](https://github.com/typelevel/cats/pull/3033) Move Parallel instances for EitherT and OptionT into implicit scope  by @travisbrown
+* [#3031](https://github.com/typelevel/cats/pull/3031) Add Parallel.apply overload with one type parameter  by @travisbrown
+
+
+### 3 documentation improvements
+
+* [#3028](https://github.com/typelevel/cats/pull/3028) Doc fixes  by @mebubo
+* [#3020](https://github.com/typelevel/cats/pull/3020) [DOC] Fix optionT link in monad documentation  by @CucumisSativus
+* [#3019](https://github.com/typelevel/cats/pull/3019) Fix typo in Comonad documentation  by @chiller
+
+
+### 4 build improvements
+
+* [#3027](https://github.com/typelevel/cats/pull/3027) Update sbt-sonatype to 2.6  by @scala-steward
+* [#3021](https://github.com/typelevel/cats/pull/3021) Update sbt-microsites to 0.9.4  by @scala-steward
+* [#3017](https://github.com/typelevel/cats/pull/3017) Update sbt-microsites to 0.9.3  by @scala-steward
+* [#3014](https://github.com/typelevel/cats/pull/3014) Update sbt-scalafmt to 2.0.4  by @scala-steward
+
+
+## Version 2.0.0-RC2
+
+> 2019 August 26
+
+Cats 2.0.0-RC2 is the second release candidate for Cats 2.0, and is available for Scala 2.11, 2.12, 2.13, and Scala.js 0.6. This release (like the upcoming 2.0.0) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 4 source breaking changes
+
+* [#3012](https://github.com/typelevel/cats/pull/3012) Make Parallel's F a type member  by @travisbrown
+* [#3003](https://github.com/typelevel/cats/pull/3003) Make bincompat and prioritization traits package-private  by @travisbrown
+* [#3001](https://github.com/typelevel/cats/pull/3001) Move appropriate SortedSet and SortedMap instances to kernel  by @travisbrown
+* [#2983](https://github.com/typelevel/cats/pull/2983) Treat Stream and LazyList as different types  by @travisbrown
+
+### 2 bug fixes
+
+* [#3010](https://github.com/typelevel/cats/pull/3010) Fix a few issues related to bin-compat traits  by @travisbrown
+* [#3004](https://github.com/typelevel/cats/pull/3004) Fix argument order in deprecations  by @travisbrown
+
+### 9 API/feature enhancements
+
+* [#3002](https://github.com/typelevel/cats/pull/3002) Fix easy typos  by @travisbrown
+* [#2999](https://github.com/typelevel/cats/pull/2999) optimize chain's get.  by @takayahilton
+* [#2996](https://github.com/typelevel/cats/pull/2996) Add :== unapply to Chain.  by @takayahilton
+* [#2995](https://github.com/typelevel/cats/pull/2995) Chain optimize map method  by @gagandeepkalra
+* [#2990](https://github.com/typelevel/cats/pull/2990) unapplySeq in Chain (issue #2960)  by @vasiliybondarenko
+* [#2989](https://github.com/typelevel/cats/pull/2989) Add Hash instance for NonEmptyMap.  by @takayahilton
+* [#2984](https://github.com/typelevel/cats/pull/2984) improve liftTo/rethrowT/raiseOrPure syntax to be more flexible  by @bpholt
+* [#2981](https://github.com/typelevel/cats/pull/2981) Add Hash instance for NonEmptySet.  by @takayahilton
+* [#2980](https://github.com/typelevel/cats/pull/2980) Remove redundant type annotation.  by @takayahilton
+
+### 2 documentation improvements
+
+* [#2993](https://github.com/typelevel/cats/pull/2993) add missing parenthese in faq.md  by @xuwei-k
+* [#2985](https://github.com/typelevel/cats/pull/2985) fix a typo in `comonad.md`  by @pismute
+
+### 4 build improvements
+
+* [#2987](https://github.com/typelevel/cats/pull/2987) Update snakeyaml to 1.25  by @scala-steward
+* [#2986](https://github.com/typelevel/cats/pull/2986) Update scalafmt to 2.0.1  by @scala-steward
+* [#2979](https://github.com/typelevel/cats/pull/2979) Update sbt-scalafmt to 2.0.3  by @scala-steward
+* [#2978](https://github.com/typelevel/cats/pull/2978) Update Scala 2.12 to 2.12.9  by @jhnsmth
+
+
+## Version 2.0.0-RC1
+
+> 2019 August 5
+
+Cats 2.0.0-RC1 is the first release candidate for Cats 2.0, It's available on Scala 2.11, 2.12, 2.13 and Scala.js 0.6.
+Cats 2.0.0-RC1 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats. 
+
+### 2 breaking changes
+
+* [#2970](https://github.com/typelevel/cats/pull/2970) Decouple published modules from scalatest  by @rossabaker
+* [#2896](https://github.com/typelevel/cats/pull/2896) replace `Stream` in ExhaustiveCheck with `List`  by @kailuowang
+
+
+### 1 bug fix
+
+* [#2942](https://github.com/typelevel/cats/pull/2942) fix Cofree.cata stack-safety #2940  by @road21
+
+### 21 API/feature enhancements
+
+* [#2969](https://github.com/typelevel/cats/pull/2969) Add syntax to option.  by @takayahilton
+* [#2964](https://github.com/typelevel/cats/pull/2964) Implement LazyList tailRecM using Iterator.unfold  by @andyscott
+* [#2956](https://github.com/typelevel/cats/pull/2956) added Chain#takeWhile and Chain#dropWhile  by @kailuowang
+* [#2953](https://github.com/typelevel/cats/pull/2953) Add method init and last to NonEmptyChain like NonEmptyList.  by @takayahilton
+* [#2946](https://github.com/typelevel/cats/pull/2946) add unordered parallel variants of (flat)traverse and (flat)sequence  by @mberndt123
+* [#2941](https://github.com/typelevel/cats/pull/2941) Added `NonEmptyLazyList` to replace `NonEmptyStream`  by @kailuowang
+* [#2939](https://github.com/typelevel/cats/pull/2939) add map to NonEmptyChain.  by @takayahilton
+* [#2929](https://github.com/typelevel/cats/pull/2929) Migrate to new kind-projector symbol  by @LukaJCB
+* [#2925](https://github.com/typelevel/cats/pull/2925) Replace machinist macros by plain forwarders  by @smarter
+* [#2924](https://github.com/typelevel/cats/pull/2924) More stack safety for IndexedReaderWriterStateT & IndexedStateT  by @ybasket
+* [#2922](https://github.com/typelevel/cats/pull/2922) Reader contravariant on input type A  by @kklorenzotesta
+* [#2917](https://github.com/typelevel/cats/pull/2917) Implement local for Reader  by @jooohn
+* [#2916](https://github.com/typelevel/cats/pull/2916) Add listen for Writer and WriterT  by @jooohn
+* [#2914](https://github.com/typelevel/cats/pull/2914) Fixed all 2.13 warnings, reenabled fatalWarning on 2.13  by @kailuowang
+* [#2913](https://github.com/typelevel/cats/pull/2913) Add LowerBounded and UpperBounded typeclasses  by @izeigerman
+* [#2911](https://github.com/typelevel/cats/pull/2911) fixed more warnings on 2.13  by @kailuowang
+* [#2904](https://github.com/typelevel/cats/pull/2904) Cross compile replace Stream with LazyList on Scala 2.13  by @kailuowang
+* [#2895](https://github.com/typelevel/cats/pull/2895) Replace ⇒ with => to avoid Scala 2.13 warnings  by @travisbrown
+* [#2889](https://github.com/typelevel/cats/pull/2889) Add missing factories similar to existing factories  by @morgen-peschke
+* [#2880](https://github.com/typelevel/cats/pull/2880) Improve MonadError rethrow syntax to be more flexible  by @bpholt
+* [#2787](https://github.com/typelevel/cats/pull/2787) Add Order instance for NonEmptySet (#2779)  by @jatcwang
+
+### 7 documentation improvements
+
+* [#2967](https://github.com/typelevel/cats/pull/2967) Fix FunctorFilter mapFilter doc example  by @regadas
+* [#2966](https://github.com/typelevel/cats/pull/2966) add ContT to Data Types menu  by @Jasper-M
+* [#2949](https://github.com/typelevel/cats/pull/2949) Update "README.md" for Scala 2.13.0 compiler specification changing(a… by @SeanDaru
+* [#2921](https://github.com/typelevel/cats/pull/2921) Fix typo in show.md  by @ollyw
+* [#2888](https://github.com/typelevel/cats/pull/2888) Comonad documentation  by @justinhj
+* [#2881](https://github.com/typelevel/cats/pull/2881) improve process document and release notes script  by @kailuowang
+* [#2876](https://github.com/typelevel/cats/pull/2876) Fix typo  by @asakaev
+        
+
+### 1 test improvement
+
+* [#2915](https://github.com/typelevel/cats/pull/2915) Add OrderTests for SortedSet  by @jooohn
+        
+
+### 14 build improvements
+
+* [#2923](https://github.com/typelevel/cats/pull/2923) Update sbt-scalafmt to 2.0.2  by @scala-steward
+* [#2918](https://github.com/typelevel/cats/pull/2918) Update sbt-scala-native-crossproject, ... to 0.6.1  by @scala-steward
+* [#2912](https://github.com/typelevel/cats/pull/2912) Update sbt-microsites to 0.9.2  by @scala-steward
+* [#2908](https://github.com/typelevel/cats/pull/2908) Update sbt-scalafmt to 2.0.1  by @fthomas
+* [#2907](https://github.com/typelevel/cats/pull/2907) Update sbt-scalafix to 0.9.5  by @fthomas
+* [#2906](https://github.com/typelevel/cats/pull/2906) Update sbt-microsites to 0.9.1  by @scala-steward
+* [#2902](https://github.com/typelevel/cats/pull/2902) Update sbt-sonatype to 2.5  by @scala-steward
+* [#2901](https://github.com/typelevel/cats/pull/2901) Update sbt-scoverage to 1.6.0  by @scala-steward
+* [#2900](https://github.com/typelevel/cats/pull/2900) Update sbt-doctest to 0.9.5  by @scala-steward
+* [#2899](https://github.com/typelevel/cats/pull/2899) Update sbt-microsites to 0.7.27  by @scala-steward
+* [#2897](https://github.com/typelevel/cats/pull/2897) Update sbt-jmh to 0.3.7  by @scala-steward
+* [#2882](https://github.com/typelevel/cats/pull/2882) Update tut-plugin to 0.6.12  by @scala-steward
+* [#2828](https://github.com/typelevel/cats/pull/2828) make stage more explicit  by @kailuowang
+
+
+## Version 2.0.0-M4
+
+> 2019 June 11
+
+Cats 2.0.0-M4 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13 and Scala.js 0.6.
+Cats 2.0.0-M4 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 2 documentation additions/fixes
+
+* [#2868](https://github.com/typelevel/cats/pull/2868) mention cats by example  by @TomTriple
+* [#2860](https://github.com/typelevel/cats/pull/2860) Remove index.md from post-release process  by @rossabaker
+
+
+### 1 build improvements
+
+* [#2884](https://github.com/typelevel/cats/pull/2884) Upgrade Scala to 2.13.0  by @kailuowang
+
+
+## Version 1.6.1
+
+> 2019 June 3
+
+Cats 1.6.1 is binary compatible with all previous 1.x Cats releases.
+
+### 2 API/Feature enhancements
+
+* [#2784](https://github.com/typelevel/cats/pull/2784) Make WrappedMutableMapBase extend Serializable  by @ceedubs
+* [#2728](https://github.com/typelevel/cats/pull/2728) Optimize productR in Apply  by @maphi
+
+### 1 documentation addition/fix
+
+* [#2842](https://github.com/typelevel/cats/pull/2842) Fix Order.max and Oder.min description comments  by @orvi
+
+### 1 bug fix
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
+
+
+## Version 2.0.0-M3
+
+> 2019 June 1
+
+Cats 2.0.0-M3 is a milestone release for Cats 2.0 that's available on Scala 2.11, 2.12, 2.13.0-RC3 and Scala.js 0.6.
+Cats 2.0.0-M3 (like the upcoming 2.0.0 release) maintains binary compatibility with Cats 1.x.x in the cats-kernel, cats-core and cats-free modules, but not cats-laws, cats-kernel-laws, cats-testkit, or alleycats.
+
+### 1 breaking change
+
+* [#2830](https://github.com/typelevel/cats/pull/2830) Remove deprecated `cats.laws.discipline.eq` methods (by @kailuowang).
+
+### 1 source-breaking change
+
+* [#2843](https://github.com/typelevel/cats/pull/2843) `Kleisli` is now covariant in the input type (by @jcouyang).
+
+### 1 documentation fix
+
+* [#2842](https://github.com/typelevel/cats/pull/2842) Fixes for API docs for `Order` methods (by @orvi).
+
+### 3 build improvements
+
+* [#2869](https://github.com/typelevel/cats/pull/2869) Updates for 2.13.0-RC3 (by @travisbrown).
+* [#2865](https://github.com/typelevel/cats/pull/2865) Update sbt-hydra plugin (by @scala-steward).
+* [#2871](https://github.com/typelevel/cats/pull/2871) Remove closed-source sbt-hydra plugin (by @travisbrown).
+
+## Version 2.0.0-M2
+
+> 2019 May 25
+
+Cats 2.0.0-M2 is a milestone release for Cats 2.0. It's available on Scala 2.11, Scala 2.12, Scala 2.13.0-RC2 and Scala.js 0.6.
+Cats 2.0.0-M2 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x.
+Their 2.0.0-M2 jars are drop-in replacements for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0, 1.5.0, 1.6.0, and 2.0.0-M1 jars.
+cats-kernel, cats-core and cats-free 2.0.0 will remain binary compatible with 1.x.
+Cats 2.0.0-M2 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats.
+
+### 1 breaking change in cats-laws
+
+* [#2817](https://github.com/typelevel/cats/pull/2817) Added a new foldRight lazy law, move forallLazy and existLazy laws  by @kailuowang
+
+
+### 6 documentation additions/fixes
+
+* [#2855](https://github.com/typelevel/cats/pull/2855) Edit example in Parallel docs  by @Jasper-M
+* [#2850](https://github.com/typelevel/cats/pull/2850) Small Readme fix  by @dispalt
+* [#2819](https://github.com/typelevel/cats/pull/2819) added FreeT basic example  by @mtsokol
+* [#2815](https://github.com/typelevel/cats/pull/2815) added navigation links to readme  by @kailuowang
+* [#2813](https://github.com/typelevel/cats/pull/2813) Remove 'cats experimental' clause from README.md.  by @kamilkloch
+* [#2811](https://github.com/typelevel/cats/pull/2811) added availability information  by @kailuowang
+        
+
+### 3 API/Feature enhancements
+
+* [#2840](https://github.com/typelevel/cats/pull/2840) 2708 sorted set semigroupal  by @vladislavGutov
+* [#2837](https://github.com/typelevel/cats/pull/2837) Delete unnecessary restriction on biFlatMap  by @AdrianRaFo
+* [#2796](https://github.com/typelevel/cats/pull/2796) Added collectFirst to Chain and NonEmptyChain  by @LMnet
+        
+
+### 5 build improvements
+
+* [#2858](https://github.com/typelevel/cats/pull/2858) Don't create the hydra.license if $HydraLicense is empty  by @dotta
+* [#2857](https://github.com/typelevel/cats/pull/2857) Updates for 2.13.0-RC2  by @travisbrown
+* [#2856](https://github.com/typelevel/cats/pull/2856) Update sbt-scalajs to 0.6.28  by @scala-steward
+* [#2848](https://github.com/typelevel/cats/pull/2848) Enables Hydra on cats build  by @kailuowang
+* [#2821](https://github.com/typelevel/cats/pull/2821) removing unused resolver  by @kailuowang
+        
+
+### 2 test improvements
+
+* [#2831](https://github.com/typelevel/cats/pull/2831) fixed applicative monoid test  by @kailuowang
+* [#2827](https://github.com/typelevel/cats/pull/2827) In Apply.semigroup test replace ` ListWrapper` with `Option`  by @kailuowang
+        
+### 1 bug fix
+
+* [#2810](https://github.com/typelevel/cats/pull/2810) Change MonadErrorOps#reject so it no longer runs effects twice  by @bplommer
+
+## Version 2.0.0-M1
+
+> 2019 April 24
+
+Cats 2.0.0-M1 is a milestone release for Cats 2.0. It's available on Scala 2.11, Scala 2.12, Scala 2.13.0-RC1 and Scala.js 0.6.
+Cats 2.0.0-M1 maintains binary compatibility on cats-kernel, cats-core and cats-free with Cats 1.x.x.
+Their 2.0.0-M1 jars are drop-in replacements for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0, 1.5.0 and 1.6.0 jars.
+cats-kernel, cats-core and cats-free 2.0.0 will remain binary compatible with 1.x.
+Cats 2.0.0-M1 breaks binary compatibility on cats-laws, cats-kernel-laws, cats-testkit and alleycats.
+
+### Breaking changes 
+
+* cats-laws and cats-kernel-laws now depend on ScalaCheck 1.14.0 which is not binary compatible with ScalaCheck 1.13.
+* cats-testkit now depends on Scalatest 3.1.0-SNAP9 whics is not backward compatible with Scalatest 3.0.x.
+* alleycats no longer supports export-hook.
+* [#2672](https://github.com/typelevel/cats/pull/2672) Alter from Reflexitivity to Reflexivity   by @mattkohl
+* [#2640](https://github.com/typelevel/cats/pull/2640) Strong profunctor laws based on category theory  by @lemastero
+
+
+### 4 documentation additions/fixes
+
+* [#2803](https://github.com/typelevel/cats/pull/2803) Fix repetition in NonEmptyChain scala docs  by @Obarros
+* [#2753](https://github.com/typelevel/cats/pull/2753) fix typo in faq.md  by @xuwei-k
+* [#2736](https://github.com/typelevel/cats/pull/2736) Fix minor typo in parse-test-durations.awk example  by @ceedubs
+* [#2722](https://github.com/typelevel/cats/pull/2722) Add more doctests to Kleisli  by @nasadorian
+        
+
+### 18 API/Feature enhancements
+
+* [#2794](https://github.com/typelevel/cats/pull/2794) removed export hook  by @kailuowang
+* [#2791](https://github.com/typelevel/cats/pull/2791) Remove catalysts dependency  by @travisbrown
+* [#2785](https://github.com/typelevel/cats/pull/2785) Fix unconventional package objects in kernel  by @denisrosca
+* [#2780](https://github.com/typelevel/cats/pull/2780) added `foldF` to `EitherT`  by @kailuowang
+* [#2775](https://github.com/typelevel/cats/pull/2775) Distributive instance for Representable Functor  by @catostrophe
+* [#2765](https://github.com/typelevel/cats/pull/2765) Define OptionT.mapFilter in terms of OptionT.subflatMap  by @morgen-peschke
+* [#2760](https://github.com/typelevel/cats/pull/2760) Make MonoidK[Endo] stack safe on combineK  by @denisrosca
+* [#2759](https://github.com/typelevel/cats/pull/2759) Category[Is] and related tests  by @ctongfei
+* [#2750](https://github.com/typelevel/cats/pull/2750) Par functions for Bitraverse  by @catostrophe
+* [#2747](https://github.com/typelevel/cats/pull/2747) add method on `object CommutativeApplicative` to get `CommutativeMonoid`  by @alexeygorobets
+* [#2744](https://github.com/typelevel/cats/pull/2744) MonoidK instances for Map and SortedMap  by @alexeygorobets
+* [#2728](https://github.com/typelevel/cats/pull/2728) Optimize productR in Apply  by @maphi
+* [#2726](https://github.com/typelevel/cats/pull/2726) Add `TraverseFilter` instance for `Set` to alleycats  by @dcastro
+* [#2724](https://github.com/typelevel/cats/pull/2724) adding helper method `toFreeT` to `Free`  by @jcouyang
+* [#2711](https://github.com/typelevel/cats/pull/2711) Fixes #2631 Fix InvariantMonoidal Laws  by @wojciechUrbanski
+* [#2709](https://github.com/typelevel/cats/pull/2709) Adds version of mkString_ with no prefix/suffix, matching the std lib.  by @matthughes
+* [#2698](https://github.com/typelevel/cats/pull/2698) Add `adaptErr` to `ApplicativeErrorOps`  by @bplommer
+* [#2696](https://github.com/typelevel/cats/pull/2696) Add a `defer` factory method to `ContT`  by @cb372
+        
+
+### 15 build improvements
+
+* [#2806](https://github.com/typelevel/cats/pull/2806) update scalatest and discipline.  by @kailuowang
+* [#2804](https://github.com/typelevel/cats/pull/2804) Update sbt-scala-native to 0.3.9  by @scala-steward
+* [#2797](https://github.com/typelevel/cats/pull/2797) Tuning JVM options for throughput  by @DavidGregory084
+* [#2793](https://github.com/typelevel/cats/pull/2793) Update sbt-jmh to 0.3.6  by @scala-steward
+* [#2792](https://github.com/typelevel/cats/pull/2792) 2.13.0-RC1  by @travisbrown
+* [#2786](https://github.com/typelevel/cats/pull/2786) Update tut-plugin to 0.6.11  by @scala-steward
+* [#2773](https://github.com/typelevel/cats/pull/2773) Update sbt-scalajs, scalajs-compiler to 0.6.27  by @scala-steward
+* [#2771](https://github.com/typelevel/cats/pull/2771) Fix our crossScalaVersions since the last change to travis.yml  by @kailuowang
+* [#2764](https://github.com/typelevel/cats/pull/2764) Update sbt-jmh to 0.3.5  by @scala-steward
+* [#2762](https://github.com/typelevel/cats/pull/2762) Update sbt-travisci to 1.2.0  by @scala-steward
+* [#2752](https://github.com/typelevel/cats/pull/2752) added a styling stage to check the styles first  by @kailuowang
+* [#2740](https://github.com/typelevel/cats/pull/2740) Update paradise to 2.1.1  by @scala-steward
+* [#2737](https://github.com/typelevel/cats/pull/2737) Experiment with modularizing Travis jobs  by @ceedubs
+* [#2734](https://github.com/typelevel/cats/pull/2734) upgrade to scalacheck 1.14  by @kailuowang
+* [#2732](https://github.com/typelevel/cats/pull/2732) new better release settings  by @kailuowang
+        
+
+### 3 test improvments
+
+* [#2672](https://github.com/typelevel/cats/pull/2672) Alter from Reflexitivity to Reflexivity   by @mattkohl
+* [#2640](https://github.com/typelevel/cats/pull/2640) Strong profunctor laws based on category theory  by @lemastero
+* [#2577](https://github.com/typelevel/cats/pull/2577) Don't depend on random sampling to determine function equivalence  by @ceedubs
+        
+
+### 2 bug fixes
+
+* [#2784](https://github.com/typelevel/cats/pull/2784) Make WrappedMutableMapBase extend Serializable  by @ceedubs
+* [#2735](https://github.com/typelevel/cats/pull/2735) Fix failing doctests  by @ceedubs
+
+
+
+## Version 1.6.0
+
+> 2019 Jan 31
+
+Cats 1.6.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0 and 1.5.0 jars. 
+1.6.0 is mostly identical to 1.6.0-RC1 except one additional feature enhancement.
+
+* [#2709](https://github.com/typelevel/cats/pull/2709) Adds version of mkString_ with no prefix/suffix, matching the std lib.  by @matthughes
+
+## Version 1.6.0-RC1
+
+> 2019 Jan 22
+
+Cats 1.6.0-RC1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1, 1.4.0 and 1.5.0 jars.
+
+It brought you:
+
+### 12 API/Feature enhancements
+
+* [#2641](https://github.com/typelevel/cats/pull/2641) Adding partitionEitherM  by @blast-hardcheese
+* [#2609](https://github.com/typelevel/cats/pull/2609) Add an If-Then-Else operation to the Apply.  by @diesalbla
+* [#2606](https://github.com/typelevel/cats/pull/2606) Add syntax for Bitraverse to allow traversal and sequencing of the left side  by @andimiller
+* [#2600](https://github.com/typelevel/cats/pull/2600) Add `sequenceFilter` syntax  by @kubukoz
+* [#2563](https://github.com/typelevel/cats/pull/2563) Add an `applyK` function to `Kleisli`.  by @diesalbla
+* [#2450](https://github.com/typelevel/cats/pull/2450) Add Kleisli#mapK equivalent returning FunctionK  by @kubukoz
+* [#2292](https://github.com/typelevel/cats/pull/2292) Add foldMapK, reduceMapK  by @kubukoz
+* [#2693](https://github.com/typelevel/cats/pull/2693) Add IndexedState alias (#2686)  by @valydia
+* [#2690](https://github.com/typelevel/cats/pull/2690) Override equals and hashCode on Chain  by @ceedubs
+* [#2671](https://github.com/typelevel/cats/pull/2671) add syntax <&> for parallel  by @jcouyang
+* [#2655](https://github.com/typelevel/cats/pull/2655) Add `rethrowT` method to EitherT  by @bplommer
+* [#2647](https://github.com/typelevel/cats/pull/2647) Move cats.tests.ListWrapper to cats-testkit  by @ArturGajowy
+        
+
+### 3 bug fixes
+
+* [#2702](https://github.com/typelevel/cats/pull/2702) Reverted binary incompatible changes to generated parallel syntax  by @barambani
+* [#2692](https://github.com/typelevel/cats/pull/2692) Private val in value classes (Resolve TODO since 2.10 is dropped)  by @barambani
+* [#2670](https://github.com/typelevel/cats/pull/2670) Issue 2657 - Ambiguous duration instances  by @barambani
+        
+
+### 17 documentation additions/fixes
+
+* [#2642](https://github.com/typelevel/cats/pull/2642) Update table headers and clarify method signature for `flatTap`  by @mtomko
+* [#2636](https://github.com/typelevel/cats/pull/2636) Some changes to glossary.  by @diesalbla
+* [#2630](https://github.com/typelevel/cats/pull/2630) Fix a typo in Chain's doc  by @satansk
+* [#2627](https://github.com/typelevel/cats/pull/2627) A bit clarification on PULL Request template  by @kailuowang
+* [#2625](https://github.com/typelevel/cats/pull/2625) Fix type signature of `productL` in cats glossary  by @mtomko
+* [#2622](https://github.com/typelevel/cats/pull/2622) Fix documented constraint on B param in foldMapM  by @ksonj
+* [#2574](https://github.com/typelevel/cats/pull/2574) Remove duplicate menu item in docs  by @petern-sc
+* [#2277](https://github.com/typelevel/cats/pull/2277) Add an explanation for the missing Applicative instances for monad transformers  by @kubukoz
+* [#2700](https://github.com/typelevel/cats/pull/2700) update the copyright  by @RafalSladek
+* [#2699](https://github.com/typelevel/cats/pull/2699) typo in Comanad[Try]  by @philipschwarz
+* [#2684](https://github.com/typelevel/cats/pull/2684) Fix FAQ formatting error  by @ceedubs
+* [#2677](https://github.com/typelevel/cats/pull/2677) Write documentation for ContT  by @cb372
+* [#2668](https://github.com/typelevel/cats/pull/2668) Fix broken link to Arrow.scala  by @DieBauer
+* [#2665](https://github.com/typelevel/cats/pull/2665) minor fix  by @kailuowang
+* [#2664](https://github.com/typelevel/cats/pull/2664) Cleaning up docs to no longer use fine grained imports  by @calvinbrown085
+* [#2659](https://github.com/typelevel/cats/pull/2659) change prePR to run BC test on Scala 2.11  build by @kailuowang
+* [#2656](https://github.com/typelevel/cats/pull/2656) Fix instructions for checking binary compatibility  by @bplommer
+        
+
+### 10 build improvements
+
+* [#2637](https://github.com/typelevel/cats/pull/2637) Update kind-projector to 0.9.9  by @scala-steward
+* [#2619](https://github.com/typelevel/cats/pull/2619) Use composite projects  by @Alistair-Johnson
+* [#2703](https://github.com/typelevel/cats/pull/2703) Update simulacrum to 0.15.0  by @scala-steward
+* [#2691](https://github.com/typelevel/cats/pull/2691) Don't send Gitter notifications for fork builds  by @ceedubs
+* [#2681](https://github.com/typelevel/cats/pull/2681) Update sbt-release to 1.0.11  by @scala-steward
+* [#2674](https://github.com/typelevel/cats/pull/2674) minor fix to build  by @kailuowang
+* [#2660](https://github.com/typelevel/cats/pull/2660) Update tut-plugin to 0.6.10  by @scala-steward
+* [#2654](https://github.com/typelevel/cats/pull/2654) Add a shell.nix and instructions for using it  by @ceedubs
+* [#2652](https://github.com/typelevel/cats/pull/2652) Update SBT 1.2.7  by @ChristopherDavenport
+* [#2643](https://github.com/typelevel/cats/pull/2643) Update sbt-scalajs, scalajs-compiler, scalajs-library... to 0.6.26  by @scala-steward
+
+
+## Version 1.5.0
+
+> 2018 Nov 30
+
+Cats 1.5.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars.
+
+The artifacts are identical to Cats 1.5.0-RC1. For changes since 1.4.0 please check release notes of [Cats 1.5.0-RC0](https://github.com/typelevel/cats/releases/tag/v1.5.0-RC0) and [Cats 1.5.0-RC1](https://github.com/typelevel/cats/releases/tag/v1.5.0-RC1). 
+
+
+## Version 1.5.0-RC1
+
+> 2018 Nov 19
+
+Cats 1.5.0-RC1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars.
+
+It brought you:
+
+### 5 API/Feature enhancements
+
+* [#2610](https://github.com/typelevel/cats/pull/2610) Expose headOption for Chain  by @ChristopherDavenport
+* [#2596](https://github.com/typelevel/cats/pull/2596) Add standalone Try syntax import  by @kubukoz
+* [#2594](https://github.com/typelevel/cats/pull/2594) Get FunctorFilter on par with the other MTL typeclasses  by @barambani
+* [#2588](https://github.com/typelevel/cats/pull/2588) Add flap function to Apply  by @ssanj
+* [#2506](https://github.com/typelevel/cats/pull/2506) Add ContT monad  by @johnynek
+        
+
+### 1 test improvment
+
+* [#2578](https://github.com/typelevel/cats/pull/2578) Add awk script to parse test durations  by @ceedubs
+        
+
+### 5 bug fixes
+
+* [#2618](https://github.com/typelevel/cats/pull/2618) Issue 2608 - Ambiguous implicit values for Functor[Kleisli[F, A, ?]]  by @barambani
+* [#2617](https://github.com/typelevel/cats/pull/2617) Make the vals inside all 'Ops' style classes private  by @coltfred
+* [#2615](https://github.com/typelevel/cats/pull/2615) 2611 - MonadError syntax for OptionT uses incorrect instance  by @barambani
+* [#2614](https://github.com/typelevel/cats/pull/2614) Make the value of the class private  by @coltfred
+* [#2603](https://github.com/typelevel/cats/pull/2603) Rename EitherT.biflatMap  by @ochrons
+        
+
+### 1 build improvement
+
+* [#2605](https://github.com/typelevel/cats/pull/2605) Reduce Xmx in .jvmopts and build.sbt  by @Alistair-Johnson
+
+
+
+## Version 1.5.0-RC0
+
+> 2018 Nov 8
+
+Cats 1.5.0-RC0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, 1.3.1 and 1.4.0 jars. 
+ 
+
+1.5.0-RC0 brought
+
+
+### 23 API/Feature enhancements
+
+* [#2597](https://github.com/typelevel/cats/pull/2597) Optimize `Apply` methods in `FlatMap`  by @kailuowang
+* [#2592](https://github.com/typelevel/cats/pull/2592) Add `updateWith` method to NonEmptyMap  by @nasadorian
+* [#2579](https://github.com/typelevel/cats/pull/2579) Added `Chain#distinct` and `NonEmptyChain#distinct` to match `List#distinct` and `NonEmptyList#distinct`  by @fmsbeekmans
+* [#2573](https://github.com/typelevel/cats/pull/2573) Add biFlatMap to EitherT  by @agajek
+* [#2557](https://github.com/typelevel/cats/pull/2557) Add NonEmptyList#toNes (issue #2346)  by @CucumisSativus
+* [#2555](https://github.com/typelevel/cats/pull/2555) Add OptionOps.toInvalidNec and OptionOps.toValidNec  by @ybasket
+* [#2552](https://github.com/typelevel/cats/pull/2552) Optimize the foldM implementation for Vector  by @ceedubs
+* [#2548](https://github.com/typelevel/cats/pull/2548) Missing Contravariant instance for OptionT  by @barambani
+* [#2544](https://github.com/typelevel/cats/pull/2544) Adding FiniteDuration instances  by @calvinbrown085
+* [#2543](https://github.com/typelevel/cats/pull/2543) Adding Nes and Nec equivalents of Nel functions  by @calvinbrown085
+* [#2541](https://github.com/typelevel/cats/pull/2541) Add NonEmptyList#toNem (issue #2346)  by @CucumisSativus
+* [#2535](https://github.com/typelevel/cats/pull/2535) Add NonEmptyMap#toNonEmptyList (issue #2346)  by @CucumisSativus
+* [#2534](https://github.com/typelevel/cats/pull/2534) avoid deprecated macro APIs post 2.10  by @larsrh
+* [#2533](https://github.com/typelevel/cats/pull/2533) Add empty to State and StateT objects  by @larsrh
+* [#2527](https://github.com/typelevel/cats/pull/2527) align type parameter of smart constructor with Validated (#2525)  by @thoefer
+* [#2522](https://github.com/typelevel/cats/pull/2522) added Convenience functions for Ior NonEmptyChain  by @binkabir
+* [#2521](https://github.com/typelevel/cats/pull/2521) fixed eqv alias issue #2513:  by @binkabir
+* [#2520](https://github.com/typelevel/cats/pull/2520) Add count as syntax to UnorderedFoldable  by @leusgalvan
+* [#2515](https://github.com/typelevel/cats/pull/2515) Add Duration Instances to cats.instances.all and cats.implicits  by @LukaJCB
+* [#2511](https://github.com/typelevel/cats/pull/2511) .raiseError syntax allows an error subtype  by @guersam
+* [#2510](https://github.com/typelevel/cats/pull/2510) Add Pure instance for Future  by @danslapman
+* [#2487](https://github.com/typelevel/cats/pull/2487) Add toValidatedNec to Validated  by @satansk
+* [#2475](https://github.com/typelevel/cats/pull/2475) Add Either#toEitherNel extension and friends  by @kubukoz
+        
+        
+### 1 bug fix
+
+* [#2586](https://github.com/typelevel/cats/pull/2586) UnorderedFoldable#isEmpty default implementation is incorrect  by @barambani
+
+
+### 16 documentation additions/fixes
+
+* [#2576](https://github.com/typelevel/cats/pull/2576) Contributing guidelines link  by @fmsbeekmans
+* [#2572](https://github.com/typelevel/cats/pull/2572) Add Alternative docs  by @stephen-lazaro
+* [#2566](https://github.com/typelevel/cats/pull/2566) Add Tuple2 Example for Bifunctor  by @stephen-lazaro
+* [#2564](https://github.com/typelevel/cats/pull/2564) Fixed typo in the docs  by @barambani
+* [#2558](https://github.com/typelevel/cats/pull/2558) Add Nomenclature / Cheatsheet page  by @diesalbla
+* [#2554](https://github.com/typelevel/cats/pull/2554) Adding the cats friendly badge link to README  by @calvinbrown085
+* [#2550](https://github.com/typelevel/cats/pull/2550) Proposal: add `cats-collections` as an external cats module  by @kailuowang
+* [#2549](https://github.com/typelevel/cats/pull/2549) Add FAQ for monad transformer variance  by @ceedubs
+* [#2547](https://github.com/typelevel/cats/pull/2547) Fix link for contributing documentation  by @ceedubs
+* [#2537](https://github.com/typelevel/cats/pull/2537) Updating Year.  by @shankarshastri
+* [#2528](https://github.com/typelevel/cats/pull/2528) fix typo in validated documentation  by @ssanj
+* [#2524](https://github.com/typelevel/cats/pull/2524) cats logo as svg and new "cats friendly" badge  by @thoefer
+* [#2512](https://github.com/typelevel/cats/pull/2512) Add definition of point-wise to README  by @AaronDelaplane
+* [#2505](https://github.com/typelevel/cats/pull/2505) Add Chain docs  by @LukaJCB
+* [#2472](https://github.com/typelevel/cats/pull/2472) Replace List with Chain in Validated's docs  by @satansk
+* [#2459](https://github.com/typelevel/cats/pull/2459) Add documentation for FlatMap and Bifunctor  by @asoltysik
+        
+
+### 20 build improvements
+
+* [#2591](https://github.com/typelevel/cats/pull/2591) Update tut-plugin to 0.6.9  by @scala-steward
+* [#2590](https://github.com/typelevel/cats/pull/2590) Update sbt-release to 1.0.10  by @scala-steward
+* [#2589](https://github.com/typelevel/cats/pull/2589) updated to 2.13-M5 by @kailuowang
+* [#2583](https://github.com/typelevel/cats/pull/2583) added a prePR command and PR template to remind people to run it  by @kailuowang
+* [#2581](https://github.com/typelevel/cats/pull/2581) Fix test fork settings I think  by @ceedubs
+* [#2568](https://github.com/typelevel/cats/pull/2568) give test more memory  by @kailuowang
+* [#2565](https://github.com/typelevel/cats/pull/2565) Disable Scala Native build for kernel  by @agajek
+* [#2562](https://github.com/typelevel/cats/pull/2562) Introduce Scalafmt  by @joan38
+* [#2507](https://github.com/typelevel/cats/pull/2507) Update sbt to 1.2.3  by @fthomas
+* [#2503](https://github.com/typelevel/cats/pull/2503) Update sbt-jmh to 0.3.4  by @scala-steward
+* [#2502](https://github.com/typelevel/cats/pull/2502) Update tut-core to 0.6.7  by @scala-steward
+* [#2501](https://github.com/typelevel/cats/pull/2501) Update sbt-scala-native to 0.3.8  by @scala-steward
+* [#2499](https://github.com/typelevel/cats/pull/2499) Update sbt-crossproject to 0.6.0  by @scala-steward
+* [#2497](https://github.com/typelevel/cats/pull/2497) Update partial-unification to 1.1.2  by @scala-steward
+* [#2496](https://github.com/typelevel/cats/pull/2496) Update sbt-git to 1.0.0  by @scala-steward
+* [#2495](https://github.com/typelevel/cats/pull/2495) Update sbt-pgp to 1.1.2  by @scala-steward
+* [#2494](https://github.com/typelevel/cats/pull/2494) Update sbt-release to 1.0.9  by @scala-steward
+* [#2493](https://github.com/typelevel/cats/pull/2493) Update sbt-unidoc to 0.4.2  by @scala-steward
+* [#2492](https://github.com/typelevel/cats/pull/2492) Update sbt-travisci to 1.1.3  by @scala-steward
+* [#2382](https://github.com/typelevel/cats/pull/2382) Removed not used sbt-scala-native plugin and fixed importing the project into intellij by @LukaszMarchewka
+        
+
+### 2 test improvments
+
+* [#2523](https://github.com/typelevel/cats/pull/2523) Add doctests for Semigroup, Group, and Monoid  enhancement by @DennisVDB
+* [#2509](https://github.com/typelevel/cats/pull/2509) Adding tests for binary compat that can't be tested by Mima  by @kailuowang
+        
+
+
+
+## Version 1.4.0
+
+> 2018 Sep 12
+
+Cats 1.4.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0, 1.2.0, and 1.3.1 jars. 
+Cats 1.3.1 introduced an unnecessary runtime dependency (scala-collection-compat), this 1.4.0 release removes it. 
+
+
+1.4.0 also brought you:
+ 
+### 2 Bug fixes 
+
+* [#2488](https://github.com/typelevel/cats/pull/2488) Kill scala-collection-compat  by @travisbrown 
+* [#2423](https://github.com/typelevel/cats/pull/2423) Fix NestedIdOps.value leaking to types of shapes `F[G[A]]`  by @zarthross 
+
+
+### 4 API Enhancements
+* [#2480](https://github.com/typelevel/cats/pull/2480) improve interaction with subtyping in OptionOps#liftTo  by @mberndt123 
+* [#2452](https://github.com/typelevel/cats/pull/2452) Add filterFold and collectFold to Foldable  by @satansk 
+* [#2426](https://github.com/typelevel/cats/pull/2426) Enrich return type for Representable.apply and add doctests  by @ceedubs 
+* [#2477](https://github.com/typelevel/cats/pull/2477) Add Order#fromLessThan by @vlovgr 
+
+
+### 7 Documentation Additions/Fixes
+
+* [#2485](https://github.com/typelevel/cats/pull/2485) Proposal - add cats-tagless as an external module  by @kailuowang 
+* [#2483](https://github.com/typelevel/cats/pull/2483) Add examples to Functor and verify with docstyle  by @YuvalItzchakov 
+* [#2481](https://github.com/typelevel/cats/pull/2481) moved a couple of ecosystem project to more accurate section  by @kailuowang 
+* [#2478](https://github.com/typelevel/cats/pull/2478) Made it slightly easier to add a Cats ecosystem project  by @kailuowang 
+* [#2476](https://github.com/typelevel/cats/pull/2476) add nezasa to adopters list  by @rethab 
+* [#2461](https://github.com/typelevel/cats/pull/2461) Fix typo in CHANGES  by @asakaev 
+* [#2234](https://github.com/typelevel/cats/pull/2234) Fix CONTRIBUTING docs  by @asakaev 
+
+
+
+## Version 1.3.1
+
+> 2018 Sep 5
+
+Cats 1.3.1 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0 and 1.2.0 jars. 
+Cats 1.3.1 does not support Scala 2.10.
+
+This is a bug fix release that fixed the binary compatibility breakage when summoning `Monad[OptionT[F, ?]]` in 1.3.0
+
+## Version 1.3.0
+
+> 2018 Sep 4
+
+~Cats 1.3.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1, 1.1.0 and 1.2.0 jars.~ There is a bug in this release that breaks binary compatibility when summoning `Monad[OptionT[F, ?]]`.
+Cats 1.3.0 does not support Scala 2.10.
+
+
+1.3.0 brought you:
+
+
+### 12 API Enhancements
+
+* [#2431](https://github.com/typelevel/cats/pull/2431) Give NonEmptyChain more presence by @LukaJCB
+* [#2421](https://github.com/typelevel/cats/pull/2421) Add/fix Foldable extensions: findM and collectFirstSomeM by @catostrophe
+* [#2416](https://github.com/typelevel/cats/pull/2416) add append method to NEL by @julien-truffaut
+* [#2406](https://github.com/typelevel/cats/pull/2406) Add NonEmptyChain by @LukaJCB
+* [#2405](https://github.com/typelevel/cats/pull/2405) Add FunctorFilter and TraverseFilter by @LukaJCB
+* [#2402](https://github.com/typelevel/cats/pull/2402) Add Compose instance for Map by @denisrosca
+* [#2371](https://github.com/typelevel/cats/pull/2371) Add Chain by @LukaJCB
+* [#2367](https://github.com/typelevel/cats/pull/2367) add Tuple2K#swap by @aoiroaoino
+* [#2366](https://github.com/typelevel/cats/pull/2366) Add Foldable extension collectFirstSomeM by @catostrophe
+* [#2351](https://github.com/typelevel/cats/pull/2351) Add parTraverse_ and parSequence_ syntax by @denisrosca
+* [#2345](https://github.com/typelevel/cats/pull/2345) Add one off object for importing lawless Map instances by @andyscott
+* [#2314](https://github.com/typelevel/cats/pull/2314) Adding on flatTransform to OptionT as suggested.  by @abhishek7
+
+### 1 Bug fix:
+
+* [#2383](https://github.com/typelevel/cats/pull/2383) Monad[Free[Id, ?]] cannot be found by @barambani
+
+
+### 3 Code Cleanups
+
+* [#2451](https://github.com/typelevel/cats/pull/2451) Remove unnecessary semicolons by @satansk
+* [#2425](https://github.com/typelevel/cats/pull/2425) Override size in Chain instance by @ceedubs
+* [#2403](https://github.com/typelevel/cats/pull/2403) use as and void instead of map(_ => ) by @julien-truffaut
+
+### 13 Documentation Additions/Fixes
+
+* [#2427](https://github.com/typelevel/cats/pull/2427) Add scaladoc example for Semigroupal.product by @ceedubs
+* [#2378](https://github.com/typelevel/cats/pull/2378) Fix typos detected by github.com/client9/misspell by @seratch
+* [#2377](https://github.com/typelevel/cats/pull/2377) Fix minor typos in typeclasses docs by @ksonj
+* [#2374](https://github.com/typelevel/cats/pull/2374) proofread: remove extra word by @jarrodu
+* [#2373](https://github.com/typelevel/cats/pull/2373) add new nested to menu by @kailuowang
+* [#2372](https://github.com/typelevel/cats/pull/2372) Add initial adopters list by @kubukoz
+* [#2369](https://github.com/typelevel/cats/pull/2369) Add a documentation page for Nested by @cb372
+* [#2368](https://github.com/typelevel/cats/pull/2368) fix typo by @letusfly85
+* [#2361](https://github.com/typelevel/cats/pull/2361) Make kittens officially a Cats module (still separate repo) by @kailuowang
+* [#2337](https://github.com/typelevel/cats/pull/2337) Update the outdated FAQ on IO/Task by @ceedubs
+* [#2344](https://github.com/typelevel/cats/pull/2344) Use sbt-doctest for Defer example by @ceedubs
+* [#2429](https://github.com/typelevel/cats/pull/2429) Replace all usage of the list Monoid in the docs with the chain Monoid by @jan0sch
+* [#2465](https://github.com/typelevel/cats/pull/2465) fix laws link in CONTRIBUTING by @melrief
+
+
+### 7 Build and Tests Improvements:
+
+* [#2430](https://github.com/typelevel/cats/pull/2430) Make Chain Arbitraries recursively build concatenations by @johnynek
+* [#2420](https://github.com/typelevel/cats/pull/2420) Better Chain Arbitrary by @LukaJCB
+* [#2359](https://github.com/typelevel/cats/pull/2359) tweak a test to compile on latest Scala 2.13 nightlies by @SethTisue
+* [#2354](https://github.com/typelevel/cats/pull/2354) temporarily disable scaladoc on 2.13 by @kailuowang
+* [#2335](https://github.com/typelevel/cats/pull/2335) Updating to scala 2.13-M4 by @kailuowang
+* [#2306](https://github.com/typelevel/cats/pull/2306) Drop 2.10 support / update to 2.13-M4 by @larsrh
+* [##2466](https://github.com/typelevel/cats/pull/#2466) remove bench from release by @kailuowang
+
+
+
+## Version 1.2.0
+
+Cats 1.2.0 is binary compatible with all previous 1.x Cats releases, i.e. its jar is a drop-in replacement for 1.0.1 and 1.1.0 jars.
+
+Cats 1.2.0 is also the last non-patch release that supports Scala 2.10. Farewell Scala 2.10. 
+ 
+1.2.0 brought you:
+
+### 24 API Enhancements
+
+* [#2329](https://github.com/typelevel/cats/pull/2329) Add Representable instance for Eval. by @denisrosca
+* [#2325](https://github.com/typelevel/cats/pull/2325) Add Cofree.ana and Cofree.anaEval. by @andyscott
+* [#2315](https://github.com/typelevel/cats/pull/2315) Add choice syntax. by @catostrophe
+* [#2299](https://github.com/typelevel/cats/pull/2299) 2228-add MonadError instance for optionT where F is a Monad. by @heyrutvik
+* [#2297](https://github.com/typelevel/cats/pull/2297) Make cats.data.AndThen public. by @alexandru
+* [#2293](https://github.com/typelevel/cats/pull/2293) added `liftTo` syntax to `Validated`. by @kailuowang
+* [#2285](https://github.com/typelevel/cats/pull/2285) Add groupBy for NonEmptySet. by @Obarros
+* [#2284](https://github.com/typelevel/cats/pull/2284) Add Representable Functor  enhancemen. by @eli
+* [#2279](https://github.com/typelevel/cats/pull/2279) Add Defer typeclass, laws and implementations. by @johnynek
+* [#2274](https://github.com/typelevel/cats/pull/2274) Adding biSemiflatMap to EitherT (#2269). by @ericaovo
+* [#2262](https://github.com/typelevel/cats/pull/2262) Add `.nested` syntax.. by @danielkarch
+* [#2259](https://github.com/typelevel/cats/pull/2259) Add a Binested data type. by @iravid
+* [#2258](https://github.com/typelevel/cats/pull/2258) updated trait ComposedFoldable in Composed.scala. by @Zhen
+* [#2256](https://github.com/typelevel/cats/pull/2256) Add .parFlatTraverse and .parFlatSequence syntax. by @Avasil
+* [#2253](https://github.com/typelevel/cats/pull/2253) Add .toOptionT to option syntax. by @marcodippy
+* [#2252](https://github.com/typelevel/cats/pull/2252) Add tapWithF to Kleisli. by @marcodippy
+* [#2249](https://github.com/typelevel/cats/pull/2249) Add some FlatMap loops useful for State and Effects. by @johnynek
+* [#2246](https://github.com/typelevel/cats/pull/2246) Use unit from Applicative. by @johnynek
+* [#2243](https://github.com/typelevel/cats/pull/2243) Add `orElse` to ApplicativeError. by @barambani
+* [#2232](https://github.com/typelevel/cats/pull/2232) Change override of neqv in Order. by @ceedubs
+* [#2219](https://github.com/typelevel/cats/pull/2219) Add Bimonad instance to NEL and NEV. by @LukaJCB
+* [#2217](https://github.com/typelevel/cats/pull/2217) Add dual categories.. by @sellout
+* [#2204](https://github.com/typelevel/cats/pull/2204) Added commutative apply and applicative to Const. by @barambani
+* [#2191](https://github.com/typelevel/cats/pull/2191) Extend Functor implementation in the Traverse instance of EitherT, OptionT and Tuple2K. by @barambani
+
+
+### 22 Documentation Additions/Fixes
+
+* [#2330](https://github.com/typelevel/cats/pull/2330) Add droste to project list. by @andyscott
+* [#2311](https://github.com/typelevel/cats/pull/2311) Add Rainier to the cats library list. by @andyscott
+* [#2307](https://github.com/typelevel/cats/pull/2307) Specify the source of the autogenerated boilerplate. by @dadepo
+* [#2303](https://github.com/typelevel/cats/pull/2303) Change scaladoc link title to "API Documentation". by @Obarros
+* [#2291](https://github.com/typelevel/cats/pull/2291) Update Bitraverse docs. by @Zelenya
+* [#2280](https://github.com/typelevel/cats/pull/2280) add editor setup tips to contrib guide. by @eli
+* [#2278](https://github.com/typelevel/cats/pull/2278) Elaborate on Foldable#collectFirst comment. by @kubukoz
+* [#2270](https://github.com/typelevel/cats/pull/2270) markdown improvements. by @martijnhoekstra
+* [#2266](https://github.com/typelevel/cats/pull/2266) Update 'Scala with Cats' reference in docs. by @guersam
+* [#2251](https://github.com/typelevel/cats/pull/2251) Be more precise about left vs right in Foldable doc. by @ceedubs
+* [#2248](https://github.com/typelevel/cats/pull/2248) Update state.md. by @rsekulski
+* [#2247](https://github.com/typelevel/cats/pull/2247) Add fastparse-cats to the list of projects. by @johnynek
+* [#2245](https://github.com/typelevel/cats/pull/2245) clarify law testing's dependency on cats-testkit and scalates. by @kailuowang
+* [#2241](https://github.com/typelevel/cats/pull/2241) Added shims to the ecosystem list. by @djspiewak
+* [#2226](https://github.com/typelevel/cats/pull/2226) Slight clean up of State docs. by @ceedubs
+* [#2225](https://github.com/typelevel/cats/pull/2225) Add doctest example for groupByNel. by @ceedubs
+* [#2223](https://github.com/typelevel/cats/pull/2223) replace cats with Cats for consistency in README.md. by @satansk
+* [#2222](https://github.com/typelevel/cats/pull/2222) Port alleycats README.md from the defunct repo. by @longcao
+* [#2221](https://github.com/typelevel/cats/pull/2221) Update contributors guide. by @AlejandroME
+* [#2218](https://github.com/typelevel/cats/pull/2218) Remove extra 'a' in eithert.md. by @donaldosalas
+* [#2211](https://github.com/typelevel/cats/pull/2211) 2.12.x no longer needs future-tense. by @mattkohl
+* [#2178](https://github.com/typelevel/cats/pull/2178) Add jump start guide. by @PawelLipski
+
+### 12 Build and Tests Improvements:
+
+* [#2302](https://github.com/typelevel/cats/pull/2302) Update sbt-partial-unification with support for 2.13.0-M4. by @kailuowang
+* [#2301](https://github.com/typelevel/cats/pull/2301) sbt 1.1.6. by @sullis
+* [#2298](https://github.com/typelevel/cats/pull/2298) Replace to new jvm flag. by @jiminhsieh
+* [#2265](https://github.com/typelevel/cats/pull/2265) Add Function To Check All Relevant MiMa Versions. by @ChristopherDavenport
+* [#2264](https://github.com/typelevel/cats/pull/2264) update bin compat versions to 1.0.0 and 1.1.0. by @kailuowang
+* [#2260](https://github.com/typelevel/cats/pull/2260) Update Scala, sbt, and sbt plugins. by @fthomas
+* [#2206](https://github.com/typelevel/cats/pull/2206) upgraded scala 2.12.5. by @kailuowang
+* [#2205](https://github.com/typelevel/cats/pull/2205) Use helper addSbtCoursier in project/plugins.sbt. by @BennyHill
+* [#2203](https://github.com/typelevel/cats/pull/2203) Add support for 2.13.0-M3. by @BennyHill
+* [#2215](https://github.com/typelevel/cats/pull/2215) Test Show instance for Duration. by @ceedubs
+* [#2214](https://github.com/typelevel/cats/pull/2214) Check MonadTests for Vector and List. by @ceedubs
+* [#2213](https://github.com/typelevel/cats/pull/2213) Use poly lambda syntax in FreeApplicative test. @ceedubs
+
+
+## Version 1.1.0
+
+Cats 1.1.0 is binary compatible with 1.0.1, i.e. its jar is a drop-in replacement for the 1.0.1 jar.
+
+1.1.0 brought you:
+
+### 15 API Enhancements
+
+* [#2194](https://github.com/typelevel/cats/pull/2194) Add `reject` (partial function) method to MonadError  by @Wogan
+* [#2192](https://github.com/typelevel/cats/pull/2192) Add valueOrF to EitherT  by @denisrosca
+* [#2183](https://github.com/typelevel/cats/pull/2183) Add parTuple  by @barambani
+* [#2182](https://github.com/typelevel/cats/pull/2182) Add `Foldable`, `Traverse` and `Comonad` instances to `WriterT`  by @barambani
+* [#2179](https://github.com/typelevel/cats/pull/2179) added `liftTo` to `Try`, `Either` and `Option`  by @kailuowang
+* [#2169](https://github.com/typelevel/cats/pull/2169) Add FreeT.inject helper function (#1534)  by @valydia
+* [#2159](https://github.com/typelevel/cats/pull/2159) Added Bitraverse for Ior (#2144)  by @V-Lamp
+* [#2150](https://github.com/typelevel/cats/pull/2150) contravariant coyoneda  by @tpolecat
+* [#2149](https://github.com/typelevel/cats/pull/2149) Add leftFlatMap to Either  by @rohanshah
+* [#2146](https://github.com/typelevel/cats/pull/2146) added `leftNel` and `rightNel` syntax  by @kailuowang
+* [#2143](https://github.com/typelevel/cats/pull/2143) Add NonEmptySet  by @LukaJCB
+* [#2141](https://github.com/typelevel/cats/pull/2141) Add NonEmptyMap  by @LukaJCB
+* [#2123](https://github.com/typelevel/cats/pull/2123) Add `contains_`, `foldSmash` and `mkString_` to `FoldableOps`  by @rsoeldner
+* [#2119](https://github.com/typelevel/cats/pull/2119) Fixes type params for OptionT.getOrElse(F)  by @fcanedo
+* [#2076](https://github.com/typelevel/cats/pull/2076) Add `Endo` type alias for (`A => A`)  by @kailuowang
+
+### 4 Bug Fixes
+
+* [#2188](https://github.com/typelevel/cats/pull/2188) Remove calls to PartialFunction.apply, deprecated in 2.12.5  by @BennyHill
+* [#2187](https://github.com/typelevel/cats/pull/2187) Fix #2186: make IndexedStateT stack safe  by @alexandru
+* [#2185](https://github.com/typelevel/cats/pull/2185) Fix #1733: make Kleisli.flatMap stack safe  by @alexandru
+* [#2148](https://github.com/typelevel/cats/pull/2148) Add missing UnorderedTraverse syntax  by @andyscott
+
+### 16 Documentation Additions/Fixes
+
+* [#2196](https://github.com/typelevel/cats/pull/2196) Add "Law Testing" to side menu to increase visiblity.  by @wjlow
+* [#2190](https://github.com/typelevel/cats/pull/2190) Add Ciris to list of projects in readme  by @vlovgr
+* [#2184](https://github.com/typelevel/cats/pull/2184) Add Dsl.scala in the cats ecosystem  by @Atry
+* [#2177](https://github.com/typelevel/cats/pull/2177) Docs: Updated typeclass instances table  by @battermann
+* [#2171](https://github.com/typelevel/cats/pull/2171) adding validation video  by @Andrea
+* [#2165](https://github.com/typelevel/cats/pull/2165) Add types in the Kleisli code sample for composition  by @jcranky
+* [#2156](https://github.com/typelevel/cats/pull/2156) Fix Spooky scaladoc typo  by @jcranky
+* [#2155](https://github.com/typelevel/cats/pull/2155) Fix broken link in parallel documentation  by @allantl
+* [#2154](https://github.com/typelevel/cats/pull/2154) contravariant.md [reversing roles of A and B in commentary to match the code] by @phderome
+* [#2153](https://github.com/typelevel/cats/pull/2153) added ammonite instructions to faq  by @kailuowang
+* [#2145](https://github.com/typelevel/cats/pull/2145) Update version in lawtesting docs  by @LukaJCB
+* [#2140](https://github.com/typelevel/cats/pull/2140) Set micrositeDocumentationUrl as root-relative  by @calvellido
+* [#2134](https://github.com/typelevel/cats/pull/2134) Minor scaladoc fix for :::  by @jcranky
+* [#2125](https://github.com/typelevel/cats/pull/2125) Wrong link in Eval doc  by @gruggiero
+* [#2122](https://github.com/typelevel/cats/pull/2122) Add doctest example for ApplicativeError.raiseError  by @ceedubs
+* [#1720](https://github.com/typelevel/cats/pull/1720) type classes with only defined laws to guideline  by @kailuowang
+
+
+### 4 Build Improvements:
+
+* [#2189](https://github.com/typelevel/cats/pull/2189) split build jvm,add workers to kernel  by @BennyHill
+* [#2164](https://github.com/typelevel/cats/pull/2164) remove java 7 build  by @xuwe
+* [#2158](https://github.com/typelevel/cats/pull/2158) update travis cache settings  by @kailuowang
+* [#1919](https://github.com/typelevel/cats/pull/1919) update to sbt 1.0  by @kailuowang
+
+
+## Version 1.0.1
+
+> 2017 Dec 31
+
+There is zero code change since 1.0.0. This is a release to fix the 1.0.0-MF issue that on Maven 1.0.0-MF is deemed later than 1.0.0. 
+For details see [#2131](https://github.com/typelevel/cats/issues/2131)
+
+
+## Version 1.0.0
+
+> 2017 Dec 25
+
+### Documentation Improvements/Additions:
+
+* [#2121](https://github.com/typelevel/cats/pull/2121) Update deprecations to `product{L,R}` instead of `ap{L,R}`  by @rossabaker
+* [#2086](https://github.com/typelevel/cats/pull/2086) Add doctest examples for `Apply` by @ceedubs
+* [#2080](https://github.com/typelevel/cats/pull/2080) Add grouping to scaladoc for arity methods by @ceedubs  
+
+
+
+## Version 1.0.0-RC2
+
+> 2017 Dec 18
+
+
+### Breaking changes and migration
+
+* [#2039](https://github.com/typelevel/cats/pull/2039) Remove `Applicative#traverse` and `Applicative#sequence` by @kubukoz
+* [#2033](https://github.com/typelevel/cats/pull/2033) standardise on `liftF` and add `liftK` to transformers by @SystemFw
+* [#2083](https://github.com/typelevel/cats/pull/2083) Change forEffect/followedBy to productL/productR by @Jacoby6000
+* [#2088](https://github.com/typelevel/cats/pull/2088) Add `InvariantSemigroupal` and `ability` to turn `Monoidal`s to `Monoid`s by @LukaJCB
+
+### New features / enhancements (API, instances, data types, etc.):
+
+* [#1949](https://github.com/typelevel/cats/pull/1949) Add ::: to NonEmptyList by @jcranky
+* [#2020](https://github.com/typelevel/cats/pull/2020) Add `foldl` and `foldr` aliases to `Foldable` by @felixmulder
+* [#2024](https://github.com/typelevel/cats/pull/2024) Optimize foldMap implementations with combineAll by @carymrobbins
+* [#1938](https://github.com/typelevel/cats/pull/1938) Add more Parallel instances by @LukaJCB
+* [#2030](https://github.com/typelevel/cats/pull/2030) added `collectFirst` and `collectFirstSome` to `Foldable` by @kailuowang
+* [#1977](https://github.com/typelevel/cats/pull/1977) Add Ior Monad Transformer by @frroliveira
+* [#2038](https://github.com/typelevel/cats/pull/2038) Add &> and <& as syntax for Parallel by @LukaJCB
+* [#1981](https://github.com/typelevel/cats/pull/1981) Add UnorderedFoldable and UnorderedTraverse by @LukaJCB
+* [#2047](https://github.com/typelevel/cats/pull/2047) CommutativeMonoid instance for SortedMap by @alonsodomin
+* [#2043](https://github.com/typelevel/cats/pull/2043) Removed deprecation of >> and changed its param to be a by-name by @mpilquist
+* [#2034](https://github.com/typelevel/cats/pull/2034) Add ContravariantMonoidal by @stephen-lazaro
+* [#2057](https://github.com/typelevel/cats/pull/2057) Add `Ior.fromEither` by @markus1189
+* [#2056](https://github.com/typelevel/cats/pull/2056) Functor.fmap by @fosskers
+* [#2059](https://github.com/typelevel/cats/pull/2059) Add Parallel instance for Ior by @andyscott
+* [#2061](https://github.com/typelevel/cats/pull/2061) Add `MonadError.rethrow` by @SystemFw
+* [#2072](https://github.com/typelevel/cats/pull/2072) added a default id for Arrow by @kailuowang
+* [#2063](https://github.com/typelevel/cats/pull/2063) Added `merge` (product) to `Arrow` for arrows composition by @marcobattaglia
+* [#2060](https://github.com/typelevel/cats/pull/2060) Add parallel instance for IorT by @andyscott
+* [#2046](https://github.com/typelevel/cats/pull/2046) Add distributive typeclass and some instances by @coltfred
+* [#2099](https://github.com/typelevel/cats/pull/2099) CommutativeMonad and CommutativeFlatMap instances for Tuple2 by @ceedubs
+* [#2096](https://github.com/typelevel/cats/pull/2096) Add Arrow Choice by @stephen-lazaro
+* [#2098](https://github.com/typelevel/cats/pull/2098) Add a CommutativeMonoid for Map by @ceedubs
+* [#2101](https://github.com/typelevel/cats/pull/2101) Add Semigroup.instance method by @jozic
+* [#2103](https://github.com/typelevel/cats/pull/2103) CommutativeMonad for Eval by @ceedubs
+* [#2104](https://github.com/typelevel/cats/pull/2104) Add Commutative{Monad, FlatMap} instances for IdT by @ceedubs
+* [#2105](https://github.com/typelevel/cats/pull/2105) Some Kleisli instance cleanup by @ceedubs
+* [#2110](https://github.com/typelevel/cats/pull/2110) add `Comparison` to `cats` package by @kailuowang
+* [#2112](https://github.com/typelevel/cats/pull/2112) CoflatMap Instance for Applicative by @ChristopherDavenport
+* [#2116](https://github.com/typelevel/cats/pull/2116) conversion `PartialOrder` to `PartialOrdering` and `Hash` to `Hashing`  by @kailuowang
+* [#2100](https://github.com/typelevel/cats/pull/2100) Add `comparison` method in `Order` companion object by @ceedubs
+
+
+### Bug fixes:
+
+* [#2011](https://github.com/typelevel/cats/pull/2011) Rename ContravariantCartesian.scala to ContravariantSemigroupal.scala by @iravid
+* [#2016](https://github.com/typelevel/cats/pull/2016) Removed redundant Eq instance by @denisrosset
+* [#2029](https://github.com/typelevel/cats/pull/2029) make sure that EitherT MonadError syntax works the old way by @kailuowang
+
+
+### Documentation Improvements/Additions:
+
+* [#2007](https://github.com/typelevel/cats/pull/2007) move alleycats in readme by @kailuowang
+* [#2008](https://github.com/typelevel/cats/pull/2008) Upgrade Scalafix instructions by @gabro
+* [#2009](https://github.com/typelevel/cats/pull/2009) Correct it's -> its documentation errors by @kellen
+* [#2017](https://github.com/typelevel/cats/pull/2017) Fix alleycats module name by @benhutchison
+* [#2023](https://github.com/typelevel/cats/pull/2023) Fixes in Arrow docs by @Jasper-M
+* [#2026](https://github.com/typelevel/cats/pull/2026) Correctly close a tut:silent block in faq by @vendethiel
+* [#2027](https://github.com/typelevel/cats/pull/2027) Rename Validation to Validated in Validated docs by @Ttcao
+* [#2036](https://github.com/typelevel/cats/pull/2036) Clean up applicative syntax doc by @bkirwi
+* [#2035](https://github.com/typelevel/cats/pull/2035) Do not redirect to cats-mtl for MonadCombine by @vendethiel
+* [#2048](https://github.com/typelevel/cats/pull/2048) Add direct link to the scaladoc by @fagossa
+* [#2050](https://github.com/typelevel/cats/pull/2050) Link Directly to Cats Package in ScalaDoc by @stephen-lazaro
+* [#2031](https://github.com/typelevel/cats/pull/2031) Add parallel docs by @LukaJCB
+* [#2045](https://github.com/typelevel/cats/pull/2045) Fix scalafix testing instructions by @kubukoz
+* [#2068](https://github.com/typelevel/cats/pull/2068) Update symbols table by @stephen-lazaro
+* [#2070](https://github.com/typelevel/cats/pull/2070) Add some doctest examples for Alternative methods by @ceedubs
+* [#2065](https://github.com/typelevel/cats/pull/2065) added entry for sbt-catalysts by @kailuowang
+* [#2071](https://github.com/typelevel/cats/pull/2071) Add doc example for imap by @ceedubs
+* [#2073](https://github.com/typelevel/cats/pull/2073) Add doctests for `Ior.fromOptions` by @markus1189
+* [#2077](https://github.com/typelevel/cats/pull/2077) Add some doctest examples for SemigroupK/MonoidK by @ceedubs
+* [#2079](https://github.com/typelevel/cats/pull/2079) Add doctest examples for Applicative by @ceedubs
+* [#2095](https://github.com/typelevel/cats/pull/2095) Update guidelines.md by @kailuowang
+* [#2108](https://github.com/typelevel/cats/pull/2108) Update version of deprecation to 1.0.0-RC2 by @rossabaker
+
+
+### Build improvements/dependency updates
+
+* [#2028](https://github.com/typelevel/cats/pull/2028) Lawtesting: Update scalacheck-shapeless and cats by @vendethiel
+* [#2065](https://github.com/typelevel/cats/pull/2065) improve build by not displaying each success test by @kailuowang
+* [#2106](https://github.com/typelevel/cats/pull/2106) Update to latest patch versions of scala by @ceedubs
+* [#2114](https://github.com/typelevel/cats/pull/2114) sbt-coursier 1.0.0 by @sullis
+
+### Testing improvements
+
+* [#2037](https://github.com/typelevel/cats/pull/2037) Tests: MonadCombine->Alternative, add missing ones by @vendethiel 
+* [#2052](https://github.com/typelevel/cats/pull/2052) Add labels to prop produced from IsEq by @nigredo-tori
+* [#2053](https://github.com/typelevel/cats/pull/2053) Fix #2051, Remove superfluous implicit by @rsoeldner
+* [#2081](https://github.com/typelevel/cats/pull/2081) Reduce redundancy in Semigroup and Eq test names by @ceedubs
+* [#2097](https://github.com/typelevel/cats/pull/2097) added distributeIdentityLaw by @kailuowang
+
+
+
+## Version 1.0.0-RC1
+
+> 2017 Oct 21 
+
+This is the only planned release candidate release prior to 1.0.0. 
+
+### Breaking changes and migration 
+
+* [#1964](https://github.com/typelevel/cats/pull/1964) Require an `Order` instance for `NonEmptyList`'s groupBy function  by @igstan
+* [#1961](https://github.com/typelevel/cats/pull/1961) rename `Cartesian` to `Semigroupal`  by @kailuowang
+* [#1955](https://github.com/typelevel/cats/pull/1955) Deprecate `FlatMap`'s `>>` and `<<`  by @LukaJCB
+* [#1947](https://github.com/typelevel/cats/pull/1947) Rename `EitherT.liftT` to `EitherT.liftF`  by @aeons
+* [#1934](https://github.com/typelevel/cats/pull/1934) Restruct `functor`  by @kailuowang
+* [#1803](https://github.com/typelevel/cats/pull/1803) Convert `ReaderWriterStateT` to `IndexedReaderWriterStateT`  by @iravid
+* [#1775](https://github.com/typelevel/cats/pull/1775) Convert `StateT` to `IndexedStateT`  by @iravid
+* [#1098](https://github.com/typelevel/cats/pull/1098) Add a different `MonoidK` and `SemigroupK` instance for `Kleisli`  by @peterneyens
+* [#1922](https://github.com/typelevel/cats/pull/1922) Make kernel laws consistent with core laws  by @LukaJCB
+* [#1838](https://github.com/typelevel/cats/pull/1838) Sync `NonEmptyList` and `NonEmptyVector` methods by @durban
+* [#1914](https://github.com/typelevel/cats/pull/1914) Add `Invariant` instances for kernel type classes by @LukaJCB 
+* [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
+* [#1972](https://github.com/typelevel/cats/pull/1972) Add `SortedMap` and `SortedSet` instances/Move `Set` and `Map` instances to Alleycats by @LukaJCB/@kailuowang 
+* [#1997](https://github.com/typelevel/cats/pull/1997) Minimizing typeclass surface in cats-kernel  by @denisrosset  
+* [#1987](https://github.com/typelevel/cats/pull/1987) Add `mapK` to `transformers`  by @andyscott / @LukaJCB  
+
+To migrate from 1.0.0-MF.
+
+* The rename of `Cartesian` to `Semigroupal` and `EitherT.liftT` to `EitherT.liftF` can be done automatically through Scalafix we provide. See instructions [here](https://github.com/typelevel/cats/blob/master/scalafix/README.md).
+* For `FlatMap`'s `>>` and `<<`, use `Apply`'s `*>` and `<*` instead.
+* `Profunctor` and `Strong` were moved to the `cats.arrow` package,  `Bifunctor`, `Invariant` and `Contravariant` were moved to the `cats` root package.
+* `SemigroupK[λ[α => Kleisli[F, α, α]]]` and `MonoidK[λ[α => Kleisli[F, α, α]]]` are no longer implicitly available, Use `Kleisli.endoSemigroupK` and `Kleisli.endoMonoidK` to get them explicitly.
+* law testing for type classes in `cats.kernel` was made consistent with the law testing in `cats.core`. Check [here](https://typelevel.org/cats/typeclasses/lawtesting.html) for a guide on how to test cats type class instances. 
+* `NonEmptyList.concat` that takes `NonEmptlyList` was deprecated, use `NonEmptyList.concatNel` instead.
+* `Monoid` no longer has a `InvariantMonoidal` instance, we discovered that it's not lawful. It has have an `Invariant` and a `Semigroupal` (new name for `Cartesian`) instance. 
+* `Foldable.iterateRight` now takes an `Iterable` instead of `Iterator`, see #1973 for rationale. 
+* `Foldable` for `Set` and `Traversable` for `Map` were moved to Alleycats, see #1831 for rationale.
+* `cats.data.Kleisli#transform` and `cats.free.Coyoneda#transform` were deprecated and replaced by `mapK`
+
+### New features / enhancements (API, instances, data types, etc.):
+
+* [#1958](https://github.com/typelevel/cats/pull/1958) Add `FlatMap#flatTap`, a more principled version of the kestrel combinator.  by @hrhino
+* [#1950](https://github.com/typelevel/cats/pull/1950) more instances for `Hash` (#1712): `Queue`/`Duration`  by @ctongfei
+* [#1942](https://github.com/typelevel/cats/pull/1942) add `traverseN` to cartesian syntax by @julien-truffaut
+* [#1939](https://github.com/typelevel/cats/pull/1939) Add `guard` to `Alternative`  by @SystemFw
+* [#1933](https://github.com/typelevel/cats/pull/1933) Add syntax for `ApplicativeError`.fromEither  by @tpolecat
+* [#1921](https://github.com/typelevel/cats/pull/1921) Optimize `FreeApplicative.product`  by @peterneyens
+* [#1910](https://github.com/typelevel/cats/pull/1910) Add `NonEmptyList.ofInitLast`  by @eddsteel
+* [#1888](https://github.com/typelevel/cats/pull/1888) Enhances stack safety for `Eval`.  by @non
+* [#1885](https://github.com/typelevel/cats/pull/1885) Add `zipWith` to `NonEmptyList` and `NonEmptyVector`  by @LukaJCB
+* [#1882](https://github.com/typelevel/cats/pull/1882) convert trait into abstract class for better bin compact  by @kailuowang
+* [#1878](https://github.com/typelevel/cats/pull/1878) Add some instances we were missing.  by @non
+* [#1858](https://github.com/typelevel/cats/pull/1858) Add `NonEmptyList#partitionE`  by @LukaJCB
+* [#1847](https://github.com/typelevel/cats/pull/1847) Add right and left functor to `BiFunctor`  by @LukaJCB
+* [#1840](https://github.com/typelevel/cats/pull/1840) Add `Foldable` and `Traversable` instances for `Free`  by @aaronlevin
+* [#1819](https://github.com/typelevel/cats/pull/1819) Added more implementations of `map2Eval` in progress  by @johnynek
+* [#1811](https://github.com/typelevel/cats/pull/1811) Move tuple `Cartesian` syntax implicit parameter  by @DavidGregory084
+* [#1809](https://github.com/typelevel/cats/pull/1809) Add iterateWhileM and iterateUntilM  by @drbild
+* [#1790](https://github.com/typelevel/cats/pull/1790) Implement EitherT#leftFlatMap and EitherT#leftSemiflatMap  by @vendethiel
+* [#1784](https://github.com/typelevel/cats/pull/1784) Add `existsM` and `forallM` to Foldable  by @refried
+* [#1712](https://github.com/typelevel/cats/pull/1712) Hash typeclass  by @ctongfei
+* [#1976](https://github.com/typelevel/cats/pull/1976) Reduced usage of `fold` in `Validated` for better performance by @kailuowang
+* [#1967](https://github.com/typelevel/cats/pull/1967) Add a few type classes to generated tuple instances by @edmundnoble/@kailuowang
+* [#1984](https://github.com/typelevel/cats/pull/1984) Welcome, Alleycats  by @kailuowang
+* [#1927](https://github.com/typelevel/cats/pull/1927) Add `CommutativeApply` and `CommutativeApplicative`  by @LukaJCB
+* [#1837](https://github.com/typelevel/cats/pull/1837) Add `Parallel` type class  by @LukaJCB
+* [#1998](https://github.com/typelevel/cats/pull/1998) Add `Validated.cond` and `Validated.condNel`  by @andyscott
+
+
+### Bug fixes:
+
+* [#1917](https://github.com/typelevel/cats/pull/1917) Don't use package object convention for object source path  by @travisbrown
+* [#1804](https://github.com/typelevel/cats/pull/1804) workaround for a possible scala bug in show for value class  by @kailuowang
+* [#1980](https://github.com/typelevel/cats/pull/1980) Make `iterateRight` in `Foldable` sound  by @LukaJCB 
+
+### Documentation Improvements/Additions:
+
+* [#1970](https://github.com/typelevel/cats/pull/1970) Add docs for `StateT` and `IndexedStateT`  by @iravid
+* [#1956](https://github.com/typelevel/cats/pull/1956) Mention the right issue number of doom.  by @hrhino
+* [#1952](https://github.com/typelevel/cats/pull/1952) Added examples of `Arrow` composition  by @raymondtay
+* [#1946](https://github.com/typelevel/cats/pull/1946) Give higher priority to partial-unification fix  by @LukaJCB
+* [#1944](https://github.com/typelevel/cats/pull/1944) Fix typo.  by @jooohn
+* [#1924](https://github.com/typelevel/cats/pull/1924) Add docs for Arrow  by @zliu41
+* [#1923](https://github.com/typelevel/cats/pull/1923) Update footer  by @kailuowang
+* [#1920](https://github.com/typelevel/cats/pull/1920) Document naming implicits according to @non s comment in #1061  by @tbje
+* [#1916](https://github.com/typelevel/cats/pull/1916) Fix tiny extra vowel typo  by @andyscott
+* [#1915](https://github.com/typelevel/cats/pull/1915) Consolidate readme.md and index.md  by @kailuowang
+* [#1913](https://github.com/typelevel/cats/pull/1913) updated footer  by @kailuowang
+* [#1905](https://github.com/typelevel/cats/pull/1905) s/rewrites/rules and update scalafix version in the README  by @gabro
+* [#1903](https://github.com/typelevel/cats/pull/1903) `Validated` beginners doc  by @AlejandroME
+* [#1901](https://github.com/typelevel/cats/pull/1901) added FAQ item diff between cats and scalaz  by @kailuowang
+* [#1900](https://github.com/typelevel/cats/pull/1900) add newts to related projects  by @kailuowang
+* [#1899](https://github.com/typelevel/cats/pull/1899) Fix symbol signature for right and left apply in faq.md  by @suhasgaddam
+* [#1897](https://github.com/typelevel/cats/pull/1897) add bin compat goal  by @kailuowang
+* [#1895](https://github.com/typelevel/cats/pull/1895) trying to fix contributing page  by @kailuowang
+* [#1894](https://github.com/typelevel/cats/pull/1894) Fix typo in background image of homepage.  by @Ttcao
+* [#1890](https://github.com/typelevel/cats/pull/1890) Doc: Correct the URL of cats-mtl to the typelevel repository  by @richardimaoka
+* [#1884](https://github.com/typelevel/cats/pull/1884) Rename typeclass => type class in Readme.md  by @LukaJCB
+* [#1880](https://github.com/typelevel/cats/pull/1880) Add law testing guide  by @LukaJCB
+* [#1875](https://github.com/typelevel/cats/pull/1875) Fix typo in `SemigroupK` scaladoc  by @LukaJCB
+* [#1874](https://github.com/typelevel/cats/pull/1874) Fix typo in `WriterT` tests  by @LukaJCB
+* [#1873](https://github.com/typelevel/cats/pull/1873) Add pureconfig and finch to ecosystem project list  by @kailuowang
+* [#1872](https://github.com/typelevel/cats/pull/1872) Fix couple of typos in CHANGES.md  by @LukaJCB
+* [#1871](https://github.com/typelevel/cats/pull/1871) Fix typo in `Traverse#traverseWithIndexM`  by @LukaJCB
+* [#1857](https://github.com/typelevel/cats/pull/1857) Fix typo (Foldabale => Foldable)  by @LukaJCB
+* [#1856](https://github.com/typelevel/cats/pull/1856) Remove mtl classes from menu  by @LukaJCB
+* [#1854](https://github.com/typelevel/cats/pull/1854) Add EitherT docs  by @Technius
+* [#1846](https://github.com/typelevel/cats/pull/1846) Add `grafter` to the list of Typelevel projects using cats  by @etorreborre
+* [#1845](https://github.com/typelevel/cats/pull/1845) Adding the origami project to the list of Typelevel projects using cats  by @etorreborre
+* [#1827](https://github.com/typelevel/cats/pull/1827) add trailing slashes to URLs  by @larsrh
+* [#1822](https://github.com/typelevel/cats/pull/1822) Add docs for `Ior`  by @LukaJCB
+* [#1820](https://github.com/typelevel/cats/pull/1820) Fix links  by @n4to4
+* [#1817](https://github.com/typelevel/cats/pull/1817) Add seals to related projects  by @durban
+* [#1816](https://github.com/typelevel/cats/pull/1816) Add `Eval` documentation  by @LukaJCB
+* [#1814](https://github.com/typelevel/cats/pull/1814) remove outdated TODOs  by @kailuowang
+* [#1808](https://github.com/typelevel/cats/pull/1808) minor link change  by @kailuowang
+* [#1806](https://github.com/typelevel/cats/pull/1806) add notes to cartesian migration  by @kailuowang
+* [#1799](https://github.com/typelevel/cats/pull/1799) add decline to project list  by @kailuowang
+* [#1796](https://github.com/typelevel/cats/pull/1796) add `Foldable.existsM/forallM` to docs  by @refried
+* [#1792](https://github.com/typelevel/cats/pull/1792) Add size control for typeclass diagram  by @LukaJCB
+* [#1789](https://github.com/typelevel/cats/pull/1789) Add documentation for `Show`  by @LukaJCB
+* [#1788](https://github.com/typelevel/cats/pull/1788) Add `Eq` docs  by @LukaJCB
+* [#1787](https://github.com/typelevel/cats/pull/1787) Add `NonEmptyTraverse` docs  by @LukaJCB
+* [#1781](https://github.com/typelevel/cats/pull/1781) promoting the ecosystem in readme a bit and fixed a typo  by @kailuowang
+* [#1779](https://github.com/typelevel/cats/pull/1779) quick date fix  by @kailuowang
+* [#1756](https://github.com/typelevel/cats/pull/1756) Add piecemeal import guide  by @LukaJCB
+* [#1777](https://github.com/typelevel/cats/pull/1777) Add `Reducible` docs  by @LukaJCB
+* [#1985](https://github.com/typelevel/cats/pull/1985) Links "LawTesting.md" in FAQ and TypeClasses pages  by @AlejandroME 
+* [#1993](https://github.com/typelevel/cats/pull/1993) Added examples for `Cokleisli`  by @raymondtay  
+
+### Build improvements/dependency updates
+ 
+* [#1948](https://github.com/typelevel/cats/pull/1948) Update scalafix project dependencies  by @aeons
+* [#1926](https://github.com/typelevel/cats/pull/1926) Update coursier to version 1.0.0-RC12  by @mxl
+* [#1925](https://github.com/typelevel/cats/pull/1925) temporarily disable MiMa check on kernel  by @kailuowang
+* [#1918](https://github.com/typelevel/cats/pull/1918) Update sbt-microsites to 0.7.0  by @LukaJCB
+* [#1902](https://github.com/typelevel/cats/pull/1902) Upgrade Scalafix to 0.5.0-RC2  by @gabro
+* [#1898](https://github.com/typelevel/cats/pull/1898) Update various sbt plugins  by @fthomas
+* [#1892](https://github.com/typelevel/cats/pull/1892) Remove deprecated requiresDOM setting  by @fthomas
+* [#1889](https://github.com/typelevel/cats/pull/1889) Add val for "compile-time" sbt Configuration  by @fthomas
+* [#1887](https://github.com/typelevel/cats/pull/1887) Update sbt-pgp to 1.1.0  by @fthomas
+* [#1886](https://github.com/typelevel/cats/pull/1886) Update Scala.js to 0.6.20  by @fthomas
+* [#1876](https://github.com/typelevel/cats/pull/1876) build: use curly braces for disabling tasks  by @fthomas
+* [#1868](https://github.com/typelevel/cats/pull/1868) Update sbt-microsites to 0.6.1  by @BennyHill
+* [#1866](https://github.com/typelevel/cats/pull/1866) Revert scalatest to 3.0.3  by @BennyHill
+* [#1865](https://github.com/typelevel/cats/pull/1865) Set simulacrum version to 0.11.0  by @BennyHill
+* [#1864](https://github.com/typelevel/cats/pull/1864) Set scalaz version to 7.2.15  by @BennyHill
+* [#1862](https://github.com/typelevel/cats/pull/1862) Bump kind-projector version to 0.9.4  by @shokohara
+* [#1861](https://github.com/typelevel/cats/pull/1861) Update sbt-scoverage to 1.5.1  by @fthomas
+* [#1860](https://github.com/typelevel/cats/pull/1860) Update sbt-pgp to 1.1.0-M1  by @LukaJCB
+* [#1859](https://github.com/typelevel/cats/pull/1859) Update sbt-sonatype  by @LukaJCB
+* [#1852](https://github.com/typelevel/cats/pull/1852) Remove sbt-ghpages because it is pulled in by sbt-microsites  by @fthomas
+* [#1849](https://github.com/typelevel/cats/pull/1849) Update sbt-git to 0.9.3  by @fthomas
+* [#1844](https://github.com/typelevel/cats/pull/1844) Replace botBuild with sbt-travisci's isTravisBuild  by @fthomas
+* [#1843](https://github.com/typelevel/cats/pull/1843) Update sbt-unidoc to 0.4.1  by @fthomas
+* [#1842](https://github.com/typelevel/cats/pull/1842) Update partial-unification plugin to 1.1.0  by @fthomas
+* [#1839](https://github.com/typelevel/cats/pull/1839) Update scalastyle-sbt-plugin to 1.0.0  by @fthomas
+* [#1829](https://github.com/typelevel/cats/pull/1829) Update sbt-release to 1.0.6  by @fthomas
+* [#1828](https://github.com/typelevel/cats/pull/1828) Update sbt-jmh to 0.2.27  by @fthomas
+* [#1826](https://github.com/typelevel/cats/pull/1826) Pass sbt settings without varargs expansion  by @fthomas
+* [#1825](https://github.com/typelevel/cats/pull/1825) Update sbt-coursier to 1.0.0-RC10  by @fthomas
+* [#1824](https://github.com/typelevel/cats/pull/1824) Update sbt-mima-plugin to 0.1.17  by @fthomas
+* [#1821](https://github.com/typelevel/cats/pull/1821) Update sbt-doctest to 0.7.0  by @fthomas
+* [#1795](https://github.com/typelevel/cats/pull/1795) Bump discipline version to 0.8  by @shokohara
+* [#1793](https://github.com/typelevel/cats/pull/1793) Add Scalafix rewrites for 1.0.0  by @gabro
+* [#1782](https://github.com/typelevel/cats/pull/1782) Bump scalacheck version to 1.13.5  by @shokohara
+* [#1780](https://github.com/typelevel/cats/pull/1780) Bump machinist version to 0.6.2  by @shokohara
+* [#1778](https://github.com/typelevel/cats/pull/1778) Bump sbt version to 0.13.16  by @shokohara
+
+### Testing improvements
+
+* [#1963](https://github.com/typelevel/cats/pull/1963) Move `followedBy`/`forEffect` tests to `ApplyTests`  by @peterneyens 
+* [#1960](https://github.com/typelevel/cats/pull/1960) Harmonize naming of discipline test classes in cats-kernel-laws.  by @denisrosset 
+* [#1953](https://github.com/typelevel/cats/pull/1953) Add a more direct tailRecM law.  by @johnynek 
+* [#1906](https://github.com/typelevel/cats/pull/1906) Fix `Alternative` law checking for `IndexedStateT`.  by @iravid 
+* [#1975](https://github.com/typelevel/cats/pull/1975) Unifies test naming standard.  by @AlejandroME  
+* [#1999](https://github.com/typelevel/cats/pull/1999) Fix order of comparison for `EitherT.cond`.  by @andyscott  
+
+### Scalafix for migration
+
+* [#1813](https://github.com/typelevel/cats/pull/1813) Add `RenameInjectProdAndCoproduct`, `RenameTupleApplySyntax` and `RemoveSplit` Scalafix rewrites by @gabro
+* [#1937](https://github.com/typelevel/cats/pull/1937) Add scalafix for `contramap`  by @LukaJCB
+
+
+
 ## Version 1.0.0-MF
 
 > 2017 Aug 3
@@ -22,7 +1346,8 @@ as many breaking changes as possible in this release before we lock down the API
  * All `Unapply` enabled methods, e.g. `sequenceU`, `traverseU`, etc. are removed. `Unapply`
    enabled syntax ops are also removed. Please use the partial unification SI-2712 fix
    instead. The easiest way might be this [sbt-plugin](https://github.com/fiadliel/sbt-partial-unification).
- *  `FunctorFilter`, `MonadCombine`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inherited by the new [cats-mtl](https://github.com/typelevel/cats-mtl) project. Please check [here](https://github.com/typelevel/cats-mtl#migration-guide) for migration guide.
+ *  `FunctorFilter`, `MonadFilter`, `MonadReader`, `MonadState`, `MonadTrans`, `MonadWriter` and `TraverseFilter` are no longer in `cats`, the functionalities they provided are inherited by the new [cats-mtl](https://github.com/typelevel/cats-mtl) project. Please check [here](https://github.com/typelevel/cats-mtl#migration-guide) for migration guide.
+ *  `MonadCombine` is no longer in cats. Use `Alternative` or `Monad` + `MonoidK` instead.
  * `CartesianBuilder` (i.e. `|@|`) syntax is deprecated, use the apply syntax on tuples instead. E.g. `(x |@| y |@| z).map(...)` should be replaced by `(x, y, z).mapN(...)`. If you are getting "`mapN` not found" error message, it could be due to SI-2712, see the 3rd migration item above. 
  * Apply syntax on tuple (e.g. `(x, y, z).map3(...)`)  was moved from `cats.syntax.tuple._` to `cats.syntax.apply._` and renamed to `mapN`, `contramapN` and `imapN` respectively.
  * The creation methods (`left`, `right`, `apply`, `pure`, etc.) in `EitherT` were improved to take less
@@ -367,7 +1692,7 @@ Additions:
  * [#1319](https://github.com/typelevel/cats/pull/1347): add missing `BigDecimal` instances.
  * [#1324](https://github.com/typelevel/cats/pull/1324): add missing function and `BitSet` instances.
 
-Note that 0.7.2 was preceeded by a botched 0.7.1. release. Please
+Note that 0.7.2 was preceded by a botched 0.7.1. release. Please
 avoid using this version of Cats -- it has major incompatibilities
 with 0.7.0 and is not documented here.
 
@@ -691,7 +2016,7 @@ published under the `org.typelevel` group from the
 [Typelevel](https://github.com/typelevel) organization on GitHub (previous
 releases had been published to `org.spire-math` from `non/cats`). This means
 that users will need to change the `groupId` for their Cats dependencies when
-updating. If you have a line like this in your SBT build configuration, for
+updating. If you have a line like this in your `sbt` build configuration, for
 example:
 
 ```scala
@@ -1041,7 +2366,7 @@ Version 0.2.0 is the second release of the Cats library.
 
 The most exciting feature of this release is Scala.js support, which
 comes courtesy of much hard work by the Scala.js community (especially
-Alistair Johnson). The SBT build configuration and project layout were
+Alistair Johnson). The `sbt` build configuration and project layout were
 updated to support building for both the JVM and JS platforms.
 
 Since the 0.1.2 release there was wide agreement that the split

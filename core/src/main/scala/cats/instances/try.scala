@@ -10,26 +10,27 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
+  implicit def catsStdInstancesForTry
+    : MonadError[Try, Throwable] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
     new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
         case (Success(a), Success(b)) => Success((a, b))
-        case (f: Failure[_], _) => castFailure[(A, B)](f)
-        case (_, f: Failure[_]) => castFailure[(A, B)](f)
+        case (f: Failure[_], _)       => castFailure[(A, B)](f)
+        case (_, f: Failure[_])       => castFailure[(A, B)](f)
       }
 
       override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
         case (Success(a), Success(b)) => Try(f(a, b))
-        case (f: Failure[_], _) => castFailure[Z](f)
-        case (_, f: Failure[_]) => castFailure[Z](f)
+        case (f: Failure[_], _)       => castFailure[Z](f)
+        case (_, f: Failure[_])       => castFailure[Z](f)
       }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
           case f: Failure[_] => Now(castFailure[Z](f))
-          case Success(a) => tb.map(_.map(f(a, _)))
+          case Success(a)    => tb.map(_.map(f(a, _)))
         }
 
       def flatMap[A, B](ta: Try[A])(f: A => Try[B]): Try[B] = ta.flatMap(f)
@@ -48,13 +49,13 @@ trait TryInstances extends TryInstances1 {
 
       def traverse[G[_], A, B](fa: Try[A])(f: A => G[B])(implicit G: Applicative[G]): G[Try[B]] =
         fa match {
-          case Success(a) => G.map(f(a))(Success(_))
+          case Success(a)    => G.map(f(a))(Success(_))
           case f: Failure[_] => G.pure(castFailure[B](f))
         }
 
       @tailrec final def tailRecM[B, C](b: B)(f: B => Try[Either[B, C]]): Try[C] =
         f(b) match {
-          case f: Failure[_] => castFailure[C](f)
+          case f: Failure[_]     => castFailure[C](f)
           case Success(Left(b1)) => tailRecM(b1)(f)
           case Success(Right(c)) => Success(c)
         }
@@ -68,7 +69,15 @@ trait TryInstances extends TryInstances1 {
         ta.recover { case t => f(t) }
 
       override def attempt[A](ta: Try[A]): Try[Either[Throwable, A]] =
-        (ta.map(a => Right[Throwable, A](a))) recover { case NonFatal(t) => Left(t) }
+        ta match { case Success(a) => Success(Right(a)); case Failure(e) => Success(Left(e)) }
+
+      override def redeem[A, B](ta: Try[A])(recover: Throwable => B, map: A => B): Try[B] =
+        ta match { case Success(a) => Try(map(a)); case Failure(e) => Try(recover(e)) }
+
+      override def redeemWith[A, B](ta: Try[A])(recover: Throwable => Try[B], bind: A => Try[B]): Try[B] =
+        try ta match {
+          case Success(a) => bind(a); case Failure(e) => recover(e)
+        } catch { case NonFatal(e) => Failure(e) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)
@@ -128,6 +137,10 @@ trait TryInstances extends TryInstances1 {
         }
 
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
+
+      override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
+
+      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
     }
   // scalastyle:on method.length
 
@@ -138,6 +151,7 @@ trait TryInstances extends TryInstances1 {
         case Failure(e) => s"Failure($e)"
       }
     }
+
   /**
    * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
    * doing a fine grained equality on Throwable can make the code very execution
@@ -148,12 +162,13 @@ trait TryInstances extends TryInstances1 {
       def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
         case (Success(a), Success(b)) => A.eqv(a, b)
         case (Failure(a), Failure(b)) => T.eqv(a, b)
-        case _ => false
+        case _                        => false
       }
     }
 }
 
 private[instances] object TryInstances {
+
   /**
    * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
    * does not actually contain an `A` value (as `Success[A]` does).
@@ -161,21 +176,22 @@ private[instances] object TryInstances {
   @inline final def castFailure[A](f: Failure[_]): Try[A] = f.asInstanceOf[Try[A]]
 }
 
-private[instances] sealed trait TryInstances1 extends TryInstances2 {
+sealed private[instances] trait TryInstances1 extends TryInstances2 {
   implicit def catsStdMonoidForTry[A: Monoid]: Monoid[Try[A]] =
     new TryMonoid[A]
 }
 
-private[instances] sealed trait TryInstances2 {
+sealed private[instances] trait TryInstances2 {
   implicit def catsStdSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
     new TrySemigroup[A]
 }
 
-private[cats] abstract class TryCoflatMap extends CoflatMap[Try] {
+abstract private[cats] class TryCoflatMap extends CoflatMap[Try] {
   def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
   def coflatMap[A, B](ta: Try[A])(f: Try[A] => B): Try[B] = Try(f(ta))
 }
 
 private[cats] class TrySemigroup[A: Semigroup] extends ApplySemigroup[Try, A](try_.catsStdInstancesForTry, implicitly)
 
-private[cats] class TryMonoid[A](implicit A: Monoid[A]) extends ApplicativeMonoid[Try, A](try_.catsStdInstancesForTry, implicitly)
+private[cats] class TryMonoid[A](implicit A: Monoid[A])
+    extends ApplicativeMonoid[Try, A](try_.catsStdInstancesForTry, implicitly)

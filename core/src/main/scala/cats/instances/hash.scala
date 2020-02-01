@@ -1,11 +1,11 @@
 package cats
 package instances
 
-
-trait HashInstances {
+trait HashInstances extends kernel.instances.HashInstances {
 
   implicit val catsContravariantForHash: Contravariant[Hash] =
     new Contravariant[Hash] {
+
       /**
        * Derive a `Hash` for `B` given an `Hash[A]` and a function `B => A`.
        */

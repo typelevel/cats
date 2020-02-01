@@ -1,3 +1,19 @@
 package cats
 
-object implicits extends syntax.AllSyntax with instances.AllInstances
+object implicits
+    extends syntax.AllSyntax
+    with syntax.AllSyntaxBinCompat0
+    with syntax.AllSyntaxBinCompat1
+    with syntax.AllSyntaxBinCompat2
+    with syntax.AllSyntaxBinCompat3
+    with syntax.AllSyntaxBinCompat4
+    with syntax.AllSyntaxBinCompat5
+    with syntax.AllSyntaxBinCompat6
+    with instances.AllInstances
+    with instances.AllInstancesBinCompat0
+    with instances.AllInstancesBinCompat1
+    with instances.AllInstancesBinCompat2
+    with instances.AllInstancesBinCompat3
+    with instances.AllInstancesBinCompat4
+    with instances.AllInstancesBinCompat5
+    with instances.AllInstancesBinCompat6

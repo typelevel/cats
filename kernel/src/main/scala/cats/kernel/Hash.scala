@@ -26,7 +26,6 @@ abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
 
 }
 
-
 object Hash extends HashFunctions[Hash] {
 
   /** Fetch a `Hash` instance given the specific type. */
@@ -53,4 +52,10 @@ object Hash extends HashFunctions[Hash] {
       def eqv(x: A, y: A) = x == y
     }
 
+}
+
+trait HashToHashingConversion {
+  implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] = new Hashing[A] {
+    override def hash(x: A): Int = ev.hash(x)
+  }
 }

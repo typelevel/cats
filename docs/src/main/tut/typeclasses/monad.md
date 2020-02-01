@@ -56,7 +56,7 @@ implicit def optionMonad(implicit app: Applicative[Option]) =
 
 ### flatMap
 
-`flatMap` is often considered to be the core function of `Monad`, and cats
+`flatMap` is often considered to be the core function of `Monad`, and Cats
 follows this tradition by providing implementations of `flatten` and `map`
 derived from `flatMap` and `pure`.
 
@@ -82,7 +82,7 @@ In addition to requiring `flatMap` and `pure`, Cats has chosen to require
 [Stack Safety for Free](http://functorial.com/stack-safety-for-free/index.pdf) by
 Phil Freeman. Because monadic recursion is so common in functional programming but
 is not stack safe on the JVM, Cats has chosen to require this method of all monad implementations
-as opposed to just a subset. All functions requiring monadic recursion in Cats is done via
+as opposed to just a subset. All functions requiring monadic recursion in Cats do so via
 `tailRecM`.
 
 An example `Monad` implementation for `Option` is shown below. Note the tail recursive
@@ -129,13 +129,13 @@ instructions on how to compose any outer monad (`F` in the following
 example) with a specific inner monad (`Option` in the following
 example).
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 case class OptionT[F[_], A](value: F[Option[A]])
 
 implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
-  new Monad[OptionT[F, ?]] {
+  new Monad[OptionT[F, *]] {
     def pure[A](a: A): OptionT[F, A] = OptionT(F.pure(Some(a)))
     def flatMap[A, B](fa: OptionT[F, A])(f: A => OptionT[F, B]): OptionT[F, B] =
       OptionT {
@@ -158,4 +158,27 @@ implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {
 
 This sort of construction is called a monad transformer.
 
-Cats has an [`OptionT`](optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+Cats has an [`OptionT`](../datatypes/optiont.html) monad transformer, which adds a lot of useful functions to the simple implementation above.
+
+## FlatMap - a weakened Monad
+A closely related type class is `FlatMap` which is identical to `Monad`, minus the `pure`
+method. Indeed in Cats `Monad` is a subclass of `FlatMap` (from which it gets `flatMap`)
+and `Applicative` (from which it gets `pure`).
+
+```scala
+trait FlatMap[F[_]] extends Apply[F] {
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+}
+
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
+```
+
+The laws for `FlatMap` are just the laws of `Monad` that don't mention `pure`.
+
+One of the motivations for `FlatMap`'s existence is that some types have `FlatMap` instances but not
+`Monad` - one example is `Map[K, *]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
+
+However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
+pair up (or apply functions to) values with the same key. Hence `Map[K, *]` has an `FlatMap` instance.
+
