@@ -13,7 +13,7 @@ jdk:
 
 scala_version_212: &scala_version_212 2.12.10
 scala_version_213: &scala_version_213 2.13.1
-scala_version_dotty: &scala_version_dotty 0.22.0-bin-20200123-9982f0d-NIGHTLY
+scala_version_dotty: &scala_version_dotty 0.22.0-bin-20200201-c4c847f-NIGHTLY
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
