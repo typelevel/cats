@@ -1,9 +1,11 @@
 package cats
 package tests
 
-import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
-import cats.laws.discipline._
+import cats.data._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import cats.laws.discipline._
+import org.scalatest.funsuite.AnyFunSuiteLike
+
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
@@ -362,4 +364,16 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+}
+
+final class EitherInstancesSuite extends AnyFunSuiteLike {
+
+  test("parallel instance in cats.instances.either") {
+    import cats.instances.either._
+    import cats.instances.string._
+    import cats.syntax.parallel._
+
+    val either: Either[String, Int] = Left("Test")
+    (either, either).parTupled
+  }
 }

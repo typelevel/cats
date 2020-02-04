@@ -493,7 +493,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest {
 trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with Discipline {
 
   import cats.instances.either._
-  import cats.instances.parallel._
   import cats.instances.string._
   import cats.instances.int._
   import cats.instances.unit._

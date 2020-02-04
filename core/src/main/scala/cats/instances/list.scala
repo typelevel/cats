@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.ZipList
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -176,4 +177,20 @@ private[instances] trait ListInstancesBinCompat0 {
         )
         .value
   }
+}
+
+private[instances] trait ListInstancesBinCompat1 {
+  implicit def catsStdNonEmptyParallelForListZipList: NonEmptyParallel.Aux[List, ZipList] =
+    new NonEmptyParallel[List] {
+      type F[x] = ZipList[x]
+
+      def flatMap: FlatMap[List] = cats.instances.list.catsStdInstancesForList
+      def apply: Apply[ZipList] = ZipList.catsDataCommutativeApplyForZipList
+
+      def sequential: ZipList ~> List =
+        λ[ZipList ~> List](_.value)
+
+      def parallel: List ~> ZipList =
+        λ[List ~> ZipList](v => new ZipList(v))
+    }
 }
