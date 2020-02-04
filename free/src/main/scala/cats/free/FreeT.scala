@@ -36,7 +36,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
    * Modify the context `M` using the transformation `mn`, flattening the free
    * suspensions into the outer.
    */
-  def flatMapK[N[_]: Monad](mn: M ~> FreeT[S, N, *])(implicit S: Functor[S]): FreeT[S, N, A] = {
+  def flatMapK[N[_]](mn: M ~> FreeT[S, N, *])(implicit S: Functor[S], N: Monad[N]): FreeT[S, N, A] = {
     def loop(ftft: FreeT[S, FreeT[S, N, *], A]): FreeT[S, N, A] =
       ftft.resume.flatMap { e =>
         e.fold(sft => FreeT.liftF[S, N, FreeT[S, FreeT[S, N, *], A]](sft).flatMap(loop(_)), a => FreeT.pure(a))
