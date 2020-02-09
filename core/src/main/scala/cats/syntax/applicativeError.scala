@@ -4,6 +4,8 @@ package syntax
 import cats.data.Validated.{Invalid, Valid}
 import cats.data.{EitherT, Validated}
 
+import scala.reflect.ClassTag
+
 trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
@@ -85,6 +87,12 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
 
   def attemptT(implicit F: ApplicativeError[F, E]): EitherT[F, E, A] =
     F.attemptT(fa)
+
+  /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE <: E: ClassTag](implicit F: ApplicativeError[F, E]): F[Either[EE, A]] =
+    F.recover(F.map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
 
   def recover(pf: PartialFunction[E, A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.recover(fa)(pf)
