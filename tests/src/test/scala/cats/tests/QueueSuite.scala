@@ -2,13 +2,13 @@ package cats
 package tests
 
 import scala.collection.immutable.Queue
-
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  TraverseFilterTests,
   TraverseTests
 }
 
@@ -27,6 +27,9 @@ class QueueSuite extends CatsSuite {
 
   checkAll("Queue[Int] with Option", TraverseTests[Queue].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Queue]", SerializableTests.serializable(Traverse[Queue]))
+
+  checkAll("Queue[Int]", TraverseFilterTests[Queue].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Queue]", SerializableTests.serializable(TraverseFilter[Queue]))
 
   test("show") {
     Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")
