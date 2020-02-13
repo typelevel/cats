@@ -69,6 +69,19 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   def filterA[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
 
+  /**
+   * Like [[traverseFilter]], but uses `Either` instead of `Option` and allows for an action to be run on each filtered value.
+   */
+  def traverseEither[G[_], A, B, E](
+    fa: F[A]
+  )(f: A => G[Either[E, B]])(g: (A, E) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
+    traverseFilter(fa)(a =>
+      G.flatMap(f(a)) {
+        case Left(e)  => G.as(g(a, e), Option.empty[B])
+        case Right(b) => G.pure(Some(b))
+      }
+    )
+
   override def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B] =
     traverseFilter[Id, A, B](fa)(f)
 }

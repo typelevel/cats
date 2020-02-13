@@ -27,6 +27,11 @@ trait TraverseFilterLaws[F[_]] extends FunctorFilterLaws[F] {
 
   def filterAConsistentWithTraverseFilter[G[_]: Applicative, A](fa: F[A], f: A => G[Boolean]): IsEq[G[F[A]]] =
     fa.filterA(f) <-> fa.traverseFilter(a => f(a).map(if (_) Some(a) else None))
+
+  def traverseEitherConsistentWithTraverseFilter[G[_], E, A, B](fa: F[A], f: A => G[Option[B]], e: E)(
+    implicit G: Monad[G]
+  ): IsEq[G[F[B]]] =
+    fa.traverseEither(a => f(a).map(_.toRight(e)))((_, _) => Applicative[G].unit) <-> fa.traverseFilter(f)
 }
 
 object TraverseFilterLaws {
