@@ -318,6 +318,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
+- [HelloSoda](https://hellosoda.com)
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
