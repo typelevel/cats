@@ -28,7 +28,8 @@ object Boilerplate {
     GenTupleSemigroupalSyntax,
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
-    GenTupleParallelSyntax
+    GenTupleParallelSyntax,
+    GenTupleShowInstances
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -49,7 +50,7 @@ object Boilerplate {
     val `A..N` = synTypes.mkString(", ")
     val `a..n` = synVals.mkString(", ")
     val `_.._` = Seq.fill(arity)("_").mkString(", ")
-    val `(A..N)` = if (arity == 1) "Tuple1[A]" else synTypes.mkString("(", ", ", ")")
+    val `(A..N)` = if (arity == 1) "Tuple1[A0]" else synTypes.mkString("(", ", ", ")")
     val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
     val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
     val `a:A..n:N` = synTypedVals.mkString(", ")
@@ -500,4 +501,34 @@ object Boilerplate {
     }
   }
 
+  object GenTupleShowInstances extends Template {
+    def filename(root: sbt.File): File =
+      root / "cats" / "instances" / "NTupleInstances.scala"
+
+    def content(tv: TemplateVals): String = {
+      import tv._
+
+      def constraints(name: String) =
+        synTypes.map(tpe => s"$tpe: $name[$tpe]").mkString(", ")
+
+      val showMethod: String =
+        synTypes.zipWithIndex.iterator
+          .map {
+            case (tpe, i) => s"$${${tpe}.show(f._${i + 1})}"
+          }
+          .mkString("s\"(", ",", ")\"")
+
+      block"""
+      |
+      |package cats
+      |package instances
+      |
+      |private[instances] trait NTupleInstances {
+      -  implicit final def catsShowForTuple$arity[${`A..N`}](implicit ${constraints("Show")}): Show[${`(A..N)`}] =
+      -    new Show[${`(A..N)`}] {
+      -      def show(f: ${`(A..N)`}): String = $showMethod
+      -    }
+      |}"""
+    }
+  }
 }

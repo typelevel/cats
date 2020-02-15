@@ -5,7 +5,10 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 
 import scala.annotation.tailrec
 
-trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
+trait TupleInstances
+    extends cats.instances.NTupleInstances
+    with Tuple2Instances
+    with cats.kernel.instances.TupleInstances
 
 private[instances] trait Tuple2InstancesBinCompat0 {
 
@@ -45,10 +48,11 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
         g(fab._2, f(fab._1, c))
     }
 
-  implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
-    override def show(f: (A, B)): String =
-      s"(${aShow.show(f._1)},${bShow.show(f._2)})"
-  }
+  @deprecated("Use catsShowForTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
+    new Show[(A, B)] {
+      override def show(f: (A, B)): String = s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+    }
 
   implicit def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =
     new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
