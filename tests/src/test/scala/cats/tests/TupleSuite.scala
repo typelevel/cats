@@ -67,6 +67,12 @@ class TupleSuite extends CatsSuite {
 
   test("show") {
     (1, 2).show should ===("(1,2)")
+    (1, 2, 3).show should ===("(1,2,3)")
+    (1, 2, 3, 4).show should ===("(1,2,3,4)")
+    (1, 2, 3, 4, 5).show should ===("(1,2,3,4,5)")
+    (1, 2, 3, 4, 5, 6).show should ===("(1,2,3,4,5,6)")
+    (1, 2, 3, 4, 5, 6, 7).show should ===("(1,2,3,4,5,6,7)")
+    (1, 2, 3, 4, 5, 6, 7, 8).show should ===("(1,2,3,4,5,6,7,8)")
 
     forAll { (fs: (String, String)) =>
       fs.show should ===(fs.toString)
@@ -75,16 +81,30 @@ class TupleSuite extends CatsSuite {
     // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
     // relevant types instead of blindly calling toString
     case class Foo(x: Int)
-    implicit val fooShow: Show[Foo] = new Show[Foo] {
-      override def show(f: Foo): String = s"foo.x = ${f.x}"
+    object Foo {
+      implicit val fooShow: Show[Foo] = new Show[Foo] {
+        override def show(f: Foo): String = s"foo.x = ${f.x}"
+      }
     }
+
     case class Bar(y: Int)
-    implicit val barShow: Show[Bar] = new Show[Bar] {
-      override def show(f: Bar): String = s"bar.y = ${f.y}"
+    object Bar {
+      implicit val barShow: Show[Bar] = new Show[Bar] {
+        override def show(f: Bar): String = s"bar.y = ${f.y}"
+      }
+    }
+
+    case class Baz(y: Int)
+    object Baz {
+      implicit val bazShow: Show[Baz] =
+        new Show[Baz] {
+          override def show(f: Baz): String = s"baz.y = ${f.y}"
+        }
     }
 
     val foo = Foo(1)
     val bar = Bar(2)
-    (foo, bar).show should ===(s"(${fooShow.show(foo)},${barShow.show(bar)})")
+    val baz = Baz(3)
+    (foo, bar, baz).show should ===(s"(${Show[Foo].show(foo)},${Show[Bar].show(bar)},${Show[Baz].show(baz)})")
   }
 }
