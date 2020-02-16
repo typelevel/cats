@@ -119,10 +119,12 @@ class TupleSuite extends CatsSuite {
       s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)})"
     )
     (foo1, bar1, baz1, foo2, bar2, baz2).show should ===(
-      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)})"
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar]
+        .show(bar2)},${Show[Baz].show(baz2)})"
     )
     (foo1, bar1, baz1, foo2, bar2, baz2, foo3, bar3, baz3).show should ===(
-      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})"
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar]
+        .show(bar2)},${Show[Baz].show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})"
     )
   }
 }
