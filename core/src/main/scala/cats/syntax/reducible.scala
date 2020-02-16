@@ -31,4 +31,20 @@ final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * */
   def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] =
     F.reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
+
+  /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[maximumBy]] for maximum instead of minimum.
+   */
+  def minimumBy[B: Order](f: A => B)(implicit F: Reducible[F]): A =
+    F.minimum(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[minimumBy]] for minimum instead of maximum.
+   */
+  def maximumBy[B: Order](f: A => B)(implicit F: Reducible[F]): A =
+    F.maximum(fa)(Order.by(f))
 }
