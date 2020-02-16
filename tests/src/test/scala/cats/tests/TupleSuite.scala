@@ -78,7 +78,7 @@ class TupleSuite extends CatsSuite {
       fs.show should ===(fs.toString)
     }
 
-    // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
+    // Provide some "non-standard" Show instances to make sure the tuples actually use the Show instances for the
     // relevant types instead of blindly calling toString
     case class Foo(x: Int)
     object Foo {
@@ -102,9 +102,27 @@ class TupleSuite extends CatsSuite {
         }
     }
 
-    val foo = Foo(1)
-    val bar = Bar(2)
-    val baz = Baz(3)
-    (foo, bar, baz).show should ===(s"(${Show[Foo].show(foo)},${Show[Bar].show(bar)},${Show[Baz].show(baz)})")
+    val foo1 = Foo(1)
+    val bar1 = Bar(2)
+    val baz1 = Baz(3)
+    val foo2 = Foo(4)
+    val bar2 = Bar(5)
+    val baz2 = Baz(6)
+    val foo3 = Foo(7)
+    val bar3 = Bar(8)
+    val baz3 = Baz(9)
+
+    (foo1, bar1).show should ===(
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)})"
+    )
+    (foo1, bar1, baz1).show should ===(
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)})"
+    )
+    (foo1, bar1, baz1, foo2, bar2, baz2).show should ===(
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)})"
+    )
+    (foo1, bar1, baz1, foo2, bar2, baz2, foo3, bar3, baz3).show should ===(
+      s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)},${Show[Baz].show(baz1)},${Show[Foo].show(foo2)},${Show[Bar].show(bar2)},${Show[Baz].show(baz2)},${Show[Foo].show(foo3)},${Show[Bar].show(bar3)},${Show[Baz].show(baz3)})"
+    )
   }
 }
