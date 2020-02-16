@@ -303,6 +303,34 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     import cats.syntax.foldable._
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
   }
+
+  /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#minimum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[maximumOptionBy]] for maximum instead of minimum.
+   */
+  def minimumOptionBy[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
+    F.minimumOption(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[Reducible#maximum]] for a version that doesn't need to return an
+   * `Option` for structures that are guaranteed to be non-empty.
+   *
+   * @see [[minimumOptionBy]] for minimum instead of maximum.
+   */
+  def maximumOptionBy[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
+    F.maximumOption(fa)(Order.by(f))
 }
 
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {

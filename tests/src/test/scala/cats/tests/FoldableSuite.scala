@@ -192,6 +192,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Foldable[$name].maximumBy/minimumBy") {
+    forAll { (fa: F[Int], f: Int => Int) =>
+      val maxOpt = fa.maximumOptionBy(f).map(f)
+      val minOpt = fa.minimumOptionBy(f).map(f)
+      val nelOpt = fa.toList.toNel
+      maxOpt should ===(nelOpt.map(_.maximumBy(f)).map(f))
+      maxOpt should ===(nelOpt.map(_.toList.maxBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.minimumBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.toList.minBy(f)).map(f))
+      maxOpt.forall(i => fa.forall(f(_) <= i)) should ===(true)
+      minOpt.forall(i => fa.forall(f(_) >= i)) should ===(true)
+    }
+  }
+
   test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList
