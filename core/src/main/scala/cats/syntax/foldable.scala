@@ -310,12 +310,12 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * @return `None` if the structure is empty, otherwise the minimum element
    * wrapped in a `Some`.
    *
-   * @see [[Reducible#minimum]] for a version that doesn't need to return an
+   * @see [[ReducibleOps0.minimumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
-   * @see [[maximumOptionBy]] for maximum instead of minimum.
+   * @see [[FoldableOps0.minimumByOption]] for maximum instead of minimum.
    */
-  def minimumOptionBy[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
+  def minimumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.minimumOption(fa)(Order.by(f))
 
   /**
@@ -324,12 +324,12 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * @return `None` if the structure is empty, otherwise the maximum element
    * wrapped in a `Some`.
    *
-   * @see [[Reducible#maximum]] for a version that doesn't need to return an
+   * @see [[ReducibleOps0.maximumBy]] for a version that doesn't need to return an
    * `Option` for structures that are guaranteed to be non-empty.
    *
-   * @see [[minimumOptionBy]] for minimum instead of maximum.
+   * @see [[FoldableOps0.maximumByOption]] for minimum instead of maximum.
    */
-  def maximumOptionBy[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
+  def maximumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.maximumOption(fa)(Order.by(f))
 }
 
