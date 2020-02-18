@@ -1,11 +1,14 @@
 package cats
 package instances
 
+import cats.data.Ior
 import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
+import scala.collection.mutable.Builder
 
 trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
-  implicit def catsStdInstancesForArraySeq: Monad[ArraySeq] with MonoidK[ArraySeq] with Traverse[ArraySeq] =
+  implicit def catsStdInstancesForArraySeq
+    : Traverse[ArraySeq] with Monad[ArraySeq] with Alternative[ArraySeq] with CoflatMap[ArraySeq] with Align[ArraySeq] =
     ArraySeqInstances.stdInstances
 
   implicit def catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] =
@@ -17,9 +20,14 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
     }
 }
 
-object ArraySeqInstances {
-  final private val stdInstances =
-    new Monad[ArraySeq] with MonoidK[ArraySeq] with Traverse[ArraySeq] {
+private[cats] object ArraySeqInstances {
+  final private val stdInstances
+    : Traverse[ArraySeq] with Monad[ArraySeq] with Alternative[ArraySeq] with CoflatMap[ArraySeq] with Align[ArraySeq] =
+    new Traverse[ArraySeq]
+      with Monad[ArraySeq]
+      with Alternative[ArraySeq]
+      with CoflatMap[ArraySeq]
+      with Align[ArraySeq] {
       def empty[A]: ArraySeq[A] =
         ArraySeq.untagged.empty
 
@@ -37,6 +45,15 @@ object ArraySeqInstances {
 
       def flatMap[A, B](fa: ArraySeq[A])(f: A => ArraySeq[B]): ArraySeq[B] =
         fa.flatMap(f)
+
+      def coflatMap[A, B](fa: ArraySeq[A])(f: ArraySeq[A] => B): ArraySeq[B] = {
+        @tailrec def loop(builder: Builder[B, ArraySeq[B]], as: ArraySeq[A]): ArraySeq[B] =
+          as match {
+            case _ +: rest => loop(builder += f(as), rest)
+            case _         => builder.result()
+          }
+        loop(ArraySeq.untagged.newBuilder[B], fa)
+      }
 
       override def map2[A, B, Z](fa: ArraySeq[A], fb: ArraySeq[B])(f: (A, B) => Z): ArraySeq[Z] =
         if (fb.isEmpty) ArraySeq.empty // do O(1) work if fb is empty
@@ -138,9 +155,21 @@ object ArraySeqInstances {
 
       override def collectFirstSome[A, B](fa: ArraySeq[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[ArraySeq] = this
+
+      def align[A, B](fa: ArraySeq[A], fb: ArraySeq[B]): ArraySeq[Ior[A, B]] = {
+        val aLarger = fa.size >= fb.size
+        if (aLarger) {
+          fa.lazyZip(fb).map(Ior.both) ++ fa.drop(fb.size).map(Ior.left)
+        } else {
+          fa.lazyZip(fb).map(Ior.both) ++ fb.drop(fa.size).map(Ior.right)
+        }
+      }
+
     }
 
-  final private val stdTraverseFilterInstance =
+  final private val stdTraverseFilterInstance: TraverseFilter[ArraySeq] =
     new TraverseFilter[ArraySeq] {
       val traverse: Traverse[ArraySeq] = stdInstances
 
