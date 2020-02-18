@@ -15,7 +15,7 @@ trait ArraySeqInstances extends ArraySeqInstances.ArraySeqInstances1 {
 }
 
 object ArraySeqInstances {
-  trait ArraySeqInstances1 extends ArraySeqInstances2 {
+  private[instances] trait ArraySeqInstances1 extends ArraySeqInstances2 {
     implicit def catsKernelStdPartialOrderForArraySeq[A: PartialOrder]: PartialOrder[ArraySeq[A]] =
       new ArraySeqPartialOrder[A]
 
@@ -23,7 +23,7 @@ object ArraySeqInstances {
       new ArraySeqHash[A]
   }
 
-  trait ArraySeqInstances2 {
+  private[instances] trait ArraySeqInstances2 {
     implicit def catsKernelStdEqForArraySeq[A: Eq]: Eq[ArraySeq[A]] =
       new ArraySeqEq[A]
   }
