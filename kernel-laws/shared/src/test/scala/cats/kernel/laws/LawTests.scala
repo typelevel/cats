@@ -314,9 +314,6 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
   {
-    // default Arbitrary[BigDecimal] is a bit too intense :/
-    implicit val arbBigDecimal: Arbitrary[BigDecimal] =
-      Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
     checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
     checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
     checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
