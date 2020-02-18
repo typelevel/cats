@@ -10,9 +10,10 @@ trait BigDecimalInstances {
 
 class BigDecimalGroup extends CommutativeGroup[BigDecimal] {
   val empty: BigDecimal = BigDecimal(0)
-  def combine(x: BigDecimal, y: BigDecimal): BigDecimal = x + y
-  def inverse(x: BigDecimal): BigDecimal = -x
-  override def remove(x: BigDecimal, y: BigDecimal): BigDecimal = x - y
+  def combine(x: BigDecimal, y: BigDecimal): BigDecimal = new BigDecimal(x.bigDecimal.add(y.bigDecimal), x.mc)
+  def inverse(x: BigDecimal): BigDecimal = new BigDecimal(x.bigDecimal.negate(), x.mc)
+  override def remove(x: BigDecimal, y: BigDecimal): BigDecimal =
+    new BigDecimal(x.bigDecimal.subtract(y.bigDecimal), x.mc)
 }
 
 class BigDecimalOrder extends Order[BigDecimal] with Hash[BigDecimal] {
