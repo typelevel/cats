@@ -8,6 +8,14 @@ trait BigDecimalInstances {
     new BigDecimalGroup
 }
 
+/**
+ * Note that combining, removing, and inverting `BigDecimal` values will use unlimited precision
+ * operations.
+ *
+ * This matches the behavior of Scala 2.12 and earlier versions, but not Scala 2.13, which means
+ * that `+` and `|+|` (or `sum` and `combineAll`) may not agree if you are working with values with
+ * limited-precision `MathContext`s.
+ */
 class BigDecimalGroup extends CommutativeGroup[BigDecimal] {
   val empty: BigDecimal = BigDecimal(0)
   def combine(x: BigDecimal, y: BigDecimal): BigDecimal = new BigDecimal(x.bigDecimal.add(y.bigDecimal), x.mc)
