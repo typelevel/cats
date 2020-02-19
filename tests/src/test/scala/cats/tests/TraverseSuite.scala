@@ -1,10 +1,10 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalacheck.Arbitrary
-
+import cats.{Applicative, Eval, Traverse}
 import cats.instances.all._
-import kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.syntax.all._
+import org.scalacheck.Arbitrary
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {

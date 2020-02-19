@@ -1,13 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
-import cats.kernel.Semigroup
+import cats.instances.all._
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
+import cats.syntax.all._
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]

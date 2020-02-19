@@ -1,9 +1,12 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilter}
 import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
+import cats.instances.all._
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
+import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -13,8 +16,8 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.all._
 
 class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])

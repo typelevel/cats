@@ -1,7 +1,9 @@
-package cats
-package free
+package cats.free
 
+import cats.{~>, Comonad, Eval, Id, Reducible, Traverse}
 import cats.data.{NonEmptyList, OptionT}
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, ReducibleTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.list._

@@ -1,6 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
+import cats.arrow.Compose
+import cats.instances.all._
+import cats.kernel.instances.StaticMethods.wrapMutableMap
 import cats.laws.discipline.{
   AlignTests,
   ComposeTests,
@@ -12,8 +15,7 @@ import cats.laws.discipline.{
   UnorderedTraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import cats.arrow.Compose
-import cats.kernel.instances.StaticMethods.wrapMutableMap
+import cats.syntax.all._
 
 class MapSuite extends CatsSuite {
 

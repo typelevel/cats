@@ -1,8 +1,8 @@
 package cats.tests
 
-import cats.Alternative
-import cats.{Align, SemigroupK}
+import cats.{Align, Alternative, SemigroupK}
 import cats.data.{Chain, Validated}
+import cats.instances.all._
 import cats.laws.discipline.AlignTests
 import cats.laws.discipline.arbitrary._
 

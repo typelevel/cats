@@ -1,8 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalacheck.Arbitrary
+import cats.{Eval, NonEmptyReducible, Now, Reducible}
 import cats.data.NonEmptyList
+import cats.kernel.Eq
+import cats.instances.all._
+import cats.syntax.all._
+import org.scalacheck.Arbitrary
 
 class ReducibleSuiteAdditional extends CatsSuite {
 

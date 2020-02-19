@@ -1,7 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Id, Monad}
 import cats.data.{IndexedStateT, StateT}
+import cats.instances.all._
+import cats.syntax.all._
 import org.scalacheck.Gen
 
 class MonadSuite extends CatsSuite {

@@ -1,12 +1,13 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{EitherT, State}
+import cats.instances.all._
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-
+import cats.syntax.all._
 import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {

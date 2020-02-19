@@ -1,13 +1,13 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{Const, Tuple2K, Validated}
-import cats.Contravariant
+import cats.instances.all._
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
 
 class Tuple2KSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Tuple2K[Option, List, *]] = Isomorphisms.invariant[Tuple2K[Option, List, *]]

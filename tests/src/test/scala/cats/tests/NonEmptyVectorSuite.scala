@@ -1,11 +1,26 @@
-package cats
-package tests
+package cats.tests
 
-import cats.data.NonEmptyVector.ZipNonEmptyVector
-
-import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
-
+import cats.{
+  Align,
+  Bimonad,
+  CommutativeApply,
+  Comonad,
+  Eval,
+  Foldable,
+  Functor,
+  Monad,
+  NonEmptyTraverse,
+  Now,
+  Reducible,
+  SemigroupK,
+  Show,
+  Traverse
+}
 import cats.data.NonEmptyVector
+import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.all._
+import cats.kernel.Semigroup
+import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline.{
   AlignTests,
   BimonadTests,
@@ -18,7 +33,7 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
-
+import cats.syntax.all._
 import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {

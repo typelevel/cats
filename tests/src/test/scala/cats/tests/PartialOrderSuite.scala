@@ -1,12 +1,15 @@
-package cats
-package tests
+package cats.tests
 
-import Helpers.POrd
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
+import cats.instances.all._
+import cats.kernel.PartialOrder
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
-import org.scalatest.Assertion
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.all._
+import cats.tests.Helpers.POrd
+import org.scalatest.Assertion
 
 class PartialOrderSuite extends CatsSuite {
 

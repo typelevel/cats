@@ -1,14 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{InvariantMonoidal, InvariantSemigroupal}
+import cats.implicits._
+import cats.kernel.{Eq, Monoid, Semigroup}
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, MiniInt, SerializableTests}
-import cats.implicits._
-import cats.Eq
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Gen}
-import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object BinCodecInvariantMonoidalSuite {

@@ -1,10 +1,9 @@
-package alleycats
-package tests
+package alleycats.tests
 
 import alleycats.std.MapInstances
 import cats._
-import cats.instances.AllInstances
-import cats.syntax.{AllSyntax, EqOps}
+import cats.instances.all._
+import cats.syntax.EqOps
 import cats.tests.StrictCatsEquality
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
@@ -12,7 +11,6 @@ import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.matchers.should.Matchers
-
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -25,8 +23,6 @@ trait AlleycatsSuite
     with ScalaCheckDrivenPropertyChecks
     with FunSuiteDiscipline
     with TestSettings
-    with AllInstances
-    with AllSyntax
     with TestInstances
     with StrictCatsEquality
     with MapInstances {
@@ -35,7 +31,7 @@ trait AlleycatsSuite
 
   // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
   // with scalactic's equality
-  override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
+  def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 
   implicit def EqIterable[A: Eq]: Eq[Iterable[A]] = Eq.by(_.toList)
 }

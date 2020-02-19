@@ -1,7 +1,21 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{
+  Applicative,
+  Bimonad,
+  Contravariant,
+  ContravariantMonoidal,
+  Defer,
+  Distributive,
+  Endo,
+  Id,
+  Monad,
+  MonoidK,
+  Semigroupal
+}
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
+import cats.instances.all._
+import cats.kernel._
 import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{
   BandTests,
@@ -19,11 +33,10 @@ import cats.kernel.laws.discipline.{
   SerializableTests
 }
 import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
-import cats.kernel.{Band, BoundedSemilattice, Semilattice}
+import cats.syntax.all._
 import org.scalacheck.Gen
 
 class FunctionSuite extends CatsSuite {
