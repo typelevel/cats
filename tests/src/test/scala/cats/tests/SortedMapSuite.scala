@@ -1,7 +1,8 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.CommutativeMonoid
+import cats.{Align, FlatMap, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
+import cats.instances.all._
+import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -12,9 +13,9 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-
+import cats.laws.discipline.arbitrary._
+import cats.syntax.all._
 import scala.collection.immutable.SortedMap
 
 class SortedMapSuite extends CatsSuite {

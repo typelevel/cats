@@ -1,6 +1,8 @@
-package cats
-package tests
+package cats.tests
 
+import cats.instances.all._
+import cats.kernel.Eq
+import cats.syntax.all._
 import scala.util.{Failure, Success, Try}
 
 class MonadErrorSuite extends CatsSuite {

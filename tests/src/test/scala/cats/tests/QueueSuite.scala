@@ -1,7 +1,7 @@
-package cats
-package tests
+package cats.tests
 
-import scala.collection.immutable.Queue
+import cats.{Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.instances.all._
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
@@ -11,6 +11,8 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
+import cats.syntax.all._
+import scala.collection.immutable.Queue
 
 class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", SemigroupalTests[Queue].semigroupal[Int, Int, Int])

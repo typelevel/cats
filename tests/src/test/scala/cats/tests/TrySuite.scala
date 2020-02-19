@@ -1,11 +1,13 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{CoflatMap, Eval, Later, Monad, MonadError, Semigroupal, Traverse}
+import cats.instances.all._
+import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-
+import cats.syntax.all._
 import scala.util.{Success, Try}
 
 class TrySuite extends CatsSuite {

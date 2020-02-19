@@ -1,6 +1,7 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bimonad, CommutativeMonad, Eval, Reducible}
+import cats.instances.all._
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{
   BimonadTests,
@@ -11,6 +12,7 @@ import cats.laws.discipline.{
   SerializableTests
 }
 import cats.laws.discipline.arbitrary._
+import cats.kernel.{Eq, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary

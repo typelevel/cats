@@ -1,10 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-
+import cats.{Align, Bimonad, Eval, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.instances.all._
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
   AlignTests,
@@ -15,8 +16,8 @@ import cats.laws.discipline.{
   SemigroupKTests,
   SerializableTests
 }
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.SortedSet
+import cats.syntax.all._
+import scala.collection.immutable.{SortedMap, SortedSet}
 
 class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
   protected def toList[A](value: NonEmptyList[A]): List[A] = value.toList

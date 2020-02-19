@@ -1,7 +1,7 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Invariant
+import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
+import cats.instances._
 import cats.kernel._
 import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
 import cats.laws.discipline.{
@@ -11,15 +11,27 @@ import cats.laws.discipline.{
   MiniInt,
   SerializableTests
 }
-import MiniInt._
+import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Gen}
 
-class AlgebraInvariantSuite extends CatsSuite {
+class AlgebraInvariantSuite
+    extends CatsSuite
+    with AllInstances
+    with AllInstancesBinCompat0
+    with AllInstancesBinCompat1
+    with AllInstancesBinCompat2
+    with AllInstancesBinCompat3
+    with AllInstancesBinCompat4
+    with AllInstancesBinCompat5
+    with AllInstancesBinCompat6 {
   // working around https://github.com/typelevel/cats/issues/2701
   implicit private val eqSetBooleanTuple: Eq[(Set[Boolean], Set[Boolean])] = Eq.fromUniversalEquals
   implicit private val eqSetBooleanBooleanTuple: Eq[(Set[Boolean], Boolean)] = Eq.fromUniversalEquals
+
+  catsLawsEqForBand[Set[Boolean]]
 
   // https://github.com/typelevel/cats/issues/2725
   implicit private def commutativeMonoidForSemigroup[A](

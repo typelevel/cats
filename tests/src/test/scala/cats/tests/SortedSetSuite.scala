@@ -1,13 +1,15 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{SemigroupK, Semigroupal, Show}
+import cats.instances.all._
+import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, OrderTests, PartialOrderTests}
 import cats.kernel.{BoundedSemilattice, Semilattice}
 import cats.laws._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests}
-
+import cats.syntax.all._
 import scala.collection.immutable.SortedSet
 
 class SortedSetSuite extends CatsSuite {

@@ -1,10 +1,11 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
-import cats.instances.lazyList._
+import cats.instances.all._
 import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.all._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {

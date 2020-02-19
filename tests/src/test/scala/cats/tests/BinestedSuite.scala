@@ -1,12 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bifoldable, Bifunctor, Bitraverse, Foldable, Functor, Traverse}
 import cats.arrow.Profunctor
 import cats.data.Binested
-
+import cats.kernel.Eq
+import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.all._
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell

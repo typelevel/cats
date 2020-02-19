@@ -1,7 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Bifoldable
+import cats.instances.all._
 import cats.laws.discipline.{BifoldableTests, SerializableTests}
+import cats.syntax.all._
 
 class BifoldableSuite extends CatsSuite {
   type EitherEither[A, B] = Either[Either[A, B], Either[A, B]]

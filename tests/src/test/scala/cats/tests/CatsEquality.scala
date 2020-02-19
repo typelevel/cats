@@ -1,6 +1,6 @@
-package cats
-package tests
+package cats.tests
 
+import cats.kernel.Eq
 import org.scalactic._
 import TripleEqualsSupport.AToBEquivalenceConstraint
 import TripleEqualsSupport.BToAEquivalenceConstraint

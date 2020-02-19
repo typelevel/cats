@@ -1,15 +1,16 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.arrow.Profunctor
-import cats.kernel.instances.tuple._
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.platform.Platform
+import cats.syntax.all._
 
 class IndexedStateTSuite extends CatsSuite {
 

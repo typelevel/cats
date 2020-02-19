@@ -1,5 +1,8 @@
-package cats
-package tests
+package cats.tests
+
+import cats.Id
+import cats.instances.all._
+import cats.syntax.all._
 
 class UnorderedTraverseSuite extends CatsSuite {
   test("UnorderedTraverse[Set[Int]].unorderedTraverse via syntax") {

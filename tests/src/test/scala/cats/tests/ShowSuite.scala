@@ -1,14 +1,15 @@
-package cats
-package tests
+package cats.tests
 
-import java.util.concurrent.TimeUnit
-
+import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
-import cats.laws.discipline.arbitrary._
+import cats.kernel.Order
+import cats.instances.all._
+import cats.syntax.all._
 import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import java.util.concurrent.TimeUnit
 import org.scalatest.funsuite.AnyFunSuiteLike
-
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {

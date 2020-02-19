@@ -1,11 +1,12 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Eval, Foldable, Now, SemigroupK, Show}
+import cats.data.{NonEmptyList, NonEmptyMap}
+import cats.kernel.laws.discipline.{SerializableTests => _, _}
+import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.data._
-import cats.kernel.laws.discipline.{SerializableTests => _, _}
-
+import cats.syntax.all._
 import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {
