@@ -161,6 +161,24 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("zipWithIndex is consistent with toList.zipWithIndex") {
+    forAll { (ci: Chain[Int]) =>
+      ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex)
+    }
+  }
+
+  test("sortBy is consistent with toList.sortBy") {
+    forAll { (ci: Chain[Int], f: Int => String) =>
+      ci.sortBy(f).toList should ===(ci.toList.sortBy(f))
+    }
+  }
+
+  test("sorted is consistent with toList.sorted") {
+    forAll { (ci: Chain[Int]) =>
+      ci.sorted.toList should ===(ci.toList.sorted)
+    }
+  }
+
   test("reverse . reverse is id") {
     forAll { (ci: Chain[Int]) =>
       ci.reverse.reverse should ===(ci)
