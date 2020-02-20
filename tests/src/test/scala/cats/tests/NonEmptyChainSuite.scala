@@ -1,12 +1,15 @@
 package cats
 package tests
 
-import cats.data.{Chain, NonEmptyChain}
+import cats.data.{Chain, NonEmptyChain, NonEmptyChainOps}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-class NonEmptyChainSuite extends CatsSuite {
+class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
+  def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList
+  def underlyingToList[A](underlying: Chain[A]): List[A] = underlying.toList
+
   checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
 

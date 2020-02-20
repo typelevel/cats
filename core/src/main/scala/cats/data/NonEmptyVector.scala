@@ -16,7 +16,9 @@ import kernel.compat.scalaVersionSpecific._
  * `NonEmptyVector`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
  * Scala 2.10, this may be bypassed due to a compiler bug.
  */
-final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal {
+final class NonEmptyVector[+A] private (val toVector: Vector[A])
+    extends AnyVal
+    with NonEmptyCollection[A, Vector, NonEmptyVector] {
 
   /** Gets the element at the index, if it exists */
   def get(i: Int): Option[A] =
