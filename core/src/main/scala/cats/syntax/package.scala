@@ -26,7 +26,7 @@ package object syntax {
   object contravariantMonoidal extends ContravariantMonoidalSyntax
   object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
-  object flatMap extends FlatMapSyntax
+  object flatMap extends FlatMapSyntax with FlatMapOptionSyntax
   object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0 with FoldableSyntaxBinCompat1
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
