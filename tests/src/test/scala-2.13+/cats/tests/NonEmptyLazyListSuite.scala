@@ -1,12 +1,14 @@
 package cats
 package tests
 
-import cats.data.NonEmptyLazyList
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-class NonEmptyLazyListSuite extends CatsSuite {
+class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
+  def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))

@@ -54,7 +54,9 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
     new NonEmptyLazyListOps(value)
 }
 
-class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends AnyVal {
+class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
+    extends AnyVal
+    with NonEmptyCollection[A, LazyList, NonEmptyLazyList] {
 
   /**
    * Converts this NonEmptyLazyList to a `LazyList`

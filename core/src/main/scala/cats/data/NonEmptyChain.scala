@@ -53,7 +53,9 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with Scala
     new NonEmptyChainOps(value)
 }
 
-class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
+class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
+    extends AnyVal
+    with NonEmptyCollection[A, Chain, NonEmptyChain] {
 
   /**
    * Converts this chain to a `Chain`
