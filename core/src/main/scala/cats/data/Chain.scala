@@ -5,8 +5,7 @@ import Chain._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{SortedMap, TreeSet}
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -325,6 +324,18 @@ sealed abstract class Chain[+A] {
     }
 
   /**
+   * Zips each element of this `Chain` with its index.
+   */
+  final def zipWithIndex: Chain[(A, Int)] = this match {
+    case Empty        => Empty
+    case Singleton(a) => Singleton((a, 0))
+    case Append(left, right) =>
+      val leftSize = left.length.toInt
+      Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
+    case Wrap(seq) => Wrap(seq.zipWithIndex)
+  }
+
+  /**
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
    */
@@ -529,6 +540,20 @@ sealed abstract class Chain[+A] {
       }
       result
     }
+
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] = this match {
+    case Empty        => this
+    case Singleton(_) => this
+    case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
+    case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+  }
+
+  final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] = this match {
+    case Empty        => this
+    case Singleton(_) => this
+    case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
+    case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+  }
 }
 
 object Chain extends ChainInstances {
