@@ -4,6 +4,7 @@ package data
 import NonEmptyChainImpl.create
 import cats.{Order, Semigroup}
 import cats.kernel._
+import scala.collection.immutable.SortedMap
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
@@ -382,6 +383,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
     toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
 
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] = groupBy(f)
+
   final def iterator: Iterator[A] = toChain.iterator
 
   final def reverseIterator: Iterator[A] = toChain.reverseIterator
@@ -396,6 +399,14 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] =
     create(toChain.distinct[AA])
 
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyChain[A] = create(toChain.sortBy(f))
+  final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyChain[AA] = create(toChain.sorted[AA])
+  final def toNem[T, V](implicit ev: A <:< (T, V), order: Order[T]): NonEmptyMap[T, V] =
+    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev): _*)(order.toOrdering))
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector: _*)
+  final def zipWithIndex: NonEmptyChain[(A, Int)] = create(toChain.zipWithIndex)
+
+  final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[Chain[AA]].show(toChain)}"
 }
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
@@ -454,7 +465,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     Semigroup[Chain[A]].asInstanceOf[Semigroup[NonEmptyChain[A]]]
 
   implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
-    Show.show[NonEmptyChain[A]](nec => s"NonEmpty${Show[Chain[A]].show(nec.toChain)}")
+    Show.show[NonEmptyChain[A]](_.show)
 
 }
 

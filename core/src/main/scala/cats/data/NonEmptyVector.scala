@@ -5,7 +5,8 @@ import cats.data.NonEmptyVector.ZipNonEmptyVector
 import cats.instances.vector._
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{TreeSet, VectorBuilder}
+import scala.collection.mutable
+import scala.collection.immutable.{SortedMap, TreeMap, TreeSet, VectorBuilder}
 import kernel.compat.scalaVersionSpecific._
 
 /**
@@ -41,6 +42,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
   def last: A = toVector.last
 
   def init: Vector[A] = toVector.init
+
+  final def iterator: Iterator[A] = toVector.iterator
 
   /**
    * Remove elements not matching the predicate
@@ -233,6 +236,85 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A]) extends AnyVal 
 
   def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyVector[AA] =
     new NonEmptyVector(toVector.sorted(AA.toOrdering))
+
+  /**
+   * Groups elements inside this `NonEmptyVector` according to the `Order`
+   * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyVector
+   * scala> import cats.implicits._
+   * scala> val nev = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyVector.of(-2, -5), true -> NonEmptyVector.of(12, 3))
+   * scala> val result = nev.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyVector[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    var m = TreeMap.empty[B, mutable.Builder[A, Vector[A]]]
+
+    for { elem <- toVector } {
+      val k = f(elem)
+
+      m.get(k) match {
+        case None          => m += ((k, Vector.newBuilder[A] += elem))
+        case Some(builder) => builder += elem
+      }
+    }
+
+    m.map {
+      case (k, v) => (k, NonEmptyVector.fromVectorUnsafe(v.result))
+    }: TreeMap[B, NonEmptyVector[A]]
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyVector` according to the `Order`
+   * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyVector.of(-2, -5), true -> NonEmptyVector.of(12, 3))
+   * scala> val result = nel.groupByNem(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyVector[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+  /**
+   * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
+   *{{{
+   * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
+   * scala> import cats.implicits._
+   * scala> val nev = NonEmptyVector((0, "a"), Vector((1, "b"),(0, "c"), (2, "d")))
+   * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
+   * scala> val result = nev.toNem
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   *}}}
+   *
+   */
+  final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
+    NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(order.toOrdering))
+
+  /**
+   * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
+   *{{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nev = NonEmptyVector(1, Vector(2,2,3,4))
+   * scala> nev.toNes
+   * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
+   *}}}
+   */
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
+    NonEmptySet.of(head, tail: _*)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
