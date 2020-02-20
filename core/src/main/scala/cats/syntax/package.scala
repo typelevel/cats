@@ -31,6 +31,7 @@ package object syntax {
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
+  object hash extends HashSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
   object list extends ListSyntax with ListSyntaxBinCompat0
