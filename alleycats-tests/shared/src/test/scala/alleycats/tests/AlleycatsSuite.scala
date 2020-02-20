@@ -3,7 +3,6 @@ package alleycats.tests
 import alleycats.std.MapInstances
 import cats._
 import cats.instances.all._
-import cats.syntax.EqOps
 import cats.tests.StrictCatsEquality
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
@@ -28,10 +27,6 @@ trait AlleycatsSuite
     with MapInstances {
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
-
-  // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
-  // with scalactic's equality
-  def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 
   implicit def EqIterable[A: Eq]: Eq[Iterable[A]] = Eq.by(_.toList)
 }
