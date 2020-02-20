@@ -8,7 +8,8 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.either._
+import cats.syntax.monadError._
 
 class OptionTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[OptionT[ListWrapper, *]] = Isomorphisms

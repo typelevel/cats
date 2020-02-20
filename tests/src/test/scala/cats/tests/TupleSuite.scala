@@ -18,7 +18,7 @@ import cats.kernel.{Eq, Order}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.show._
 import cats.tests.Helpers.CSemi
 
 class TupleSuite extends CatsSuite {

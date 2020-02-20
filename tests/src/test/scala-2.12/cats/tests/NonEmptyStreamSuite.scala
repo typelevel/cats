@@ -8,7 +8,9 @@ import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 
 class NonEmptyStreamSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit

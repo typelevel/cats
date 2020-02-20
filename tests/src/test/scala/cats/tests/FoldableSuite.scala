@@ -6,7 +6,13 @@ import cats.instances.all._
 import cats.kernel.{Eq, Monoid}
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.alternative._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.list._
+import cats.syntax.reducible._
+import cats.syntax.semigroupk._
 import org.scalacheck.Arbitrary
 import scala.collection.immutable.{SortedMap, SortedSet}
 import scala.util.Try

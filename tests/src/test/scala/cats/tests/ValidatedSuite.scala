@@ -20,7 +20,9 @@ import cats.laws.discipline._
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.apply._
+import cats.syntax.either._
+import cats.syntax.validated._
 import org.scalacheck.Arbitrary._
 import scala.util.Try
 

@@ -33,7 +33,9 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {

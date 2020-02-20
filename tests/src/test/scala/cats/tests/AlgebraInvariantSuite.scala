@@ -14,7 +14,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.MiniInt._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.invariant._
+import cats.syntax.order._
 import org.scalacheck.{Arbitrary, Gen}
 
 class AlgebraInvariantSuite

@@ -6,7 +6,7 @@ import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.foldable._
 
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit

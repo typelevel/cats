@@ -4,7 +4,9 @@ import cats.ApplicativeError
 import cats.data.EitherT
 import cats.instances.all._
 import cats.kernel.Eq
-import cats.syntax.all._
+import cats.syntax.applicativeError._
+import cats.syntax.either._
+import cats.syntax.option._
 
 class ApplicativeErrorSuite extends CatsSuite {
   val failed: Option[Int] =

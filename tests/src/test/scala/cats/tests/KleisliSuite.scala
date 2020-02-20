@@ -10,7 +10,9 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.syntax.all._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 

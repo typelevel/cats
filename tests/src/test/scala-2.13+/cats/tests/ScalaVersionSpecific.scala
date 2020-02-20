@@ -5,7 +5,10 @@ import cats.data.NonEmptyLazyList
 import cats.instances.all._
 import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.parallel._
+import cats.syntax.traverse._
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].foldM stack safety") {

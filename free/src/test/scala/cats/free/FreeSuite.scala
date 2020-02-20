@@ -8,7 +8,7 @@ import cats.kernel.Eq
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.apply._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbFunction1

@@ -8,7 +8,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.syntax.all._
+import cats.syntax.option._
 
 class WriterTSuite extends CatsSuite {
   type Logged[A] = Writer[ListWrapper[Int], A]

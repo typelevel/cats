@@ -7,7 +7,7 @@ import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{MiniInt, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.eq.catsLawsEqForFn1Exhaustive
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.compose._
 
 class ComposeSuite extends CatsSuite {
   val functionCompose = Compose[Function1]

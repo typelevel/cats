@@ -7,7 +7,9 @@ import cats.kernel.{Eq, Order, PartialOrder, Semilattice}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, SemilatticeTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.collection.immutable.SortedSet
 
 class NonEmptySetSuite extends CatsSuite {

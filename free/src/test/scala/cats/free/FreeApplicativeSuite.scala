@@ -7,7 +7,7 @@ import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.apply._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 

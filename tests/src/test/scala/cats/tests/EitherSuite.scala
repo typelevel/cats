@@ -7,7 +7,7 @@ import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.either._
 import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.util.Try
 

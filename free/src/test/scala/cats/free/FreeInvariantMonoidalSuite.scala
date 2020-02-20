@@ -7,7 +7,8 @@ import cats.instances.all._
 import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.invariant._
+import cats.syntax.semigroupal._
 import cats.tests.BinCodecInvariantMonoidalSuite._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}

@@ -16,7 +16,9 @@ import cats.laws.discipline.{
   SemigroupKTests,
   SerializableTests
 }
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.collection.immutable.{SortedMap, SortedSet}
 
 class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {

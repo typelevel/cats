@@ -8,7 +8,8 @@ import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.syntax.all._
+import cats.syntax.bifunctor._
+import cats.syntax.binested._
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell

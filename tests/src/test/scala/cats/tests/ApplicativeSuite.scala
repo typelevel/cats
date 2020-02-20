@@ -7,7 +7,7 @@ import cats.kernel.Monoid
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{AlignTests, CoflatMapTests}
-import cats.syntax.all._
+import cats.syntax.applicative._
 
 class ApplicativeSuite extends CatsSuite {
 

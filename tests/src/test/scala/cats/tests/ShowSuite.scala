@@ -4,7 +4,7 @@ import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
 import cats.kernel.Order
 import cats.instances.all._
-import cats.syntax.all._
+import cats.syntax.show._
 import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._

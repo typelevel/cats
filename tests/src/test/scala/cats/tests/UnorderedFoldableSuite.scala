@@ -4,7 +4,7 @@ import cats.UnorderedFoldable
 import cats.instances.all._
 import cats.kernel.CommutativeMonoid
 import cats.laws.discipline.UnorderedFoldableTests
-import cats.syntax.all._
+import cats.syntax.unorderedFoldable._
 import org.scalacheck.Arbitrary
 
 sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFString: Arbitrary[F[String]],
