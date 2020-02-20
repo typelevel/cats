@@ -219,7 +219,14 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
    * Finds the first element of this `NonEmptyLazyList` for which the given partial
    * function is defined, and applies the partial function to it.
    */
-  final def collectLazyList[B](pf: PartialFunction[A, B]): Option[B] = toLazyList.collectFirst(pf)
+  @deprecated("Use collectFirst", "2.2.0-M1")
+  final def collectLazyList[B](pf: PartialFunction[A, B]): Option[B] = collectFirst(pf)
+
+  /**
+   * Finds the first element of this `NonEmptyLazyList` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toLazyList.collectFirst(pf)
 
   /**
    * Filters all elements of this NonEmptyLazyList that do not satisfy the given predicate.
