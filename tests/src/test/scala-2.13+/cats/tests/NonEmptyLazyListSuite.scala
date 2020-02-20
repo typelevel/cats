@@ -101,6 +101,12 @@ class NonEmptyLazyListSuite extends CatsSuite {
     Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft should ===(true)
   }
 
+  test("fromLazyListAppend is consistent with LazyList#:+") {
+    forAll { (lli: LazyList[Int], i: Int) =>
+      NonEmptyLazyList.fromLazyListAppend(lli, i).toLazyList should ===(lli :+ i)
+    }
+  }
+
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       NonEmptyLazyList.fromSeq(ci.iterator.toList) should ===(Option(ci))
