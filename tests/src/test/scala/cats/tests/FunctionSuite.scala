@@ -36,7 +36,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.foldable._
 import org.scalacheck.Gen
 
 class FunctionSuite extends CatsSuite {

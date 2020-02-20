@@ -9,7 +9,7 @@ import cats.laws._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests}
-import cats.syntax.all._
+import cats.syntax.show._
 import scala.collection.immutable.SortedSet
 
 class SortedSetSuite extends CatsSuite {

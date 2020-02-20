@@ -15,7 +15,7 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.show._
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 class LazyListSuite extends CatsSuite {

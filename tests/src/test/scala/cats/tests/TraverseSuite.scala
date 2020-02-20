@@ -3,7 +3,9 @@ package cats.tests
 import cats.{Applicative, Eval, Traverse}
 import cats.instances.all._
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -23,7 +25,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
 
   test(s"Traverse[$name].traverseWithIndexM") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
-      val left = fa.traverseWithIndexM((a, i) => fn((a, i))).map(_.toList)
+      val left = fa.traverseWithIndexM((a, i) => fn((a, i))).fmap(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
       left should ===((xs.combineAll, values))
     }

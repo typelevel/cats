@@ -4,7 +4,11 @@ import cats.{Eval, NonEmptyReducible, Now, Reducible}
 import cats.data.NonEmptyList
 import cats.kernel.Eq
 import cats.instances.all._
-import cats.syntax.all._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.list._
+import cats.syntax.option._
+import cats.syntax.reducible._
 import org.scalacheck.Arbitrary
 
 class ReducibleSuiteAdditional extends CatsSuite {

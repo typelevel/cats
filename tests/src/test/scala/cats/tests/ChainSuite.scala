@@ -17,7 +17,8 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.semigroup._
 
 class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])

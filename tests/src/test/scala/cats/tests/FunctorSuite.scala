@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.Functor
 import cats.instances.all._
-import cats.syntax.all._
+import cats.syntax.functor._
 
 class FunctorSuite extends CatsSuite {
   test("void replaces values with unit preserving structure") {

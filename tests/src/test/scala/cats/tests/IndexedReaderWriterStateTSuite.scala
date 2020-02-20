@@ -9,7 +9,9 @@ import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.apply._
+import cats.syntax.semigroup._
+import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
 
 class ReaderWriterStateTSuite extends CatsSuite {

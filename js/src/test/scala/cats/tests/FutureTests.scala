@@ -8,7 +8,7 @@ import cats.kernel.Eq
 import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.either._
 import cats.tests.{CatsSuite, ListWrapper}
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary

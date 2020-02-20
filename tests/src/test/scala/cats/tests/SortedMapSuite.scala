@@ -15,7 +15,7 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.show._
 import scala.collection.immutable.SortedMap
 
 class SortedMapSuite extends CatsSuite {

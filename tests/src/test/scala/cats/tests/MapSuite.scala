@@ -15,7 +15,7 @@ import cats.laws.discipline.{
   UnorderedTraverseTests
 }
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.show._
 
 class MapSuite extends CatsSuite {
 

@@ -7,7 +7,9 @@ import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrd
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.all._
+import cats.syntax.applicative._
+import cats.syntax.applicativeError._
+import cats.syntax.either._
 import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {

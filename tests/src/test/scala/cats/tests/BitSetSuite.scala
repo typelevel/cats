@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.instances.all._
-import cats.syntax.all._
+import cats.syntax.show._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import scala.collection.immutable.BitSet

@@ -6,7 +6,10 @@ import cats.kernel.laws.discipline.{SerializableTests => _, _}
 import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.show._
+import cats.syntax.reducible._
 import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {

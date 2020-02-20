@@ -10,7 +10,9 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
-import cats.syntax.all._
+import cats.syntax.apply._
+import cats.syntax.flatMap._
+import cats.syntax.traverse._
 
 class IndexedStateTSuite extends CatsSuite {
 

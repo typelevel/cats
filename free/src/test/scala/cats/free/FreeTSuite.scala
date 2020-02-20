@@ -5,7 +5,8 @@ import cats.arrow.FunctionK
 import cats.data._
 import cats.instances.all._
 import cats.laws.discipline._
-import cats.syntax.all._
+import cats.syntax.applicative._
+import cats.syntax.either._
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 

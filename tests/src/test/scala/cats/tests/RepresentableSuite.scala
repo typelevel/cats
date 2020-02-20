@@ -15,7 +15,7 @@ import cats.laws.discipline.{
   RepresentableTests,
   SerializableTests
 }
-import cats.syntax.all._
+import cats.syntax.representable._
 import org.scalacheck.Arbitrary
 
 class RepresentableSuite extends CatsSuite {

@@ -5,7 +5,11 @@ import cats.data.{Const, NonEmptyList, StateT}
 import cats.instances.all._
 import cats.kernel.Eq
 import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.all._
+import cats.syntax.applicativeError._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.monadError._
+import cats.syntax.traverse._
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
 

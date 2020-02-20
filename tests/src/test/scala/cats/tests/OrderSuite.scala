@@ -7,7 +7,7 @@ import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
-import cats.syntax.all._
+import cats.syntax.order._
 import cats.tests.Helpers.Ord
 
 class OrderSuite extends CatsSuite {

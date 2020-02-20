@@ -11,7 +11,7 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.syntax.all._
+import cats.syntax.show._
 import scala.collection.immutable.Queue
 
 class QueueSuite extends CatsSuite {
