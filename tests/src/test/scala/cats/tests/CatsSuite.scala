@@ -1,8 +1,6 @@
 package cats.tests
 
-import cats.kernel.Eq
 import cats.platform.Platform
-import cats.syntax._
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatest.matchers.should.Matchers
@@ -40,10 +38,6 @@ trait CatsSuite
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
-
-  // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
-  // with scalactic's equality
-  def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 
   def even(i: Int): Boolean = i % 2 == 0
 
