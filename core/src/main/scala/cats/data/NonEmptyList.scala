@@ -55,6 +55,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     case t   => head :: t.init
   }
 
+  final def iterator: Iterator[A] = toList.iterator
+
   /**
    * The size of this NonEmptyList
    *

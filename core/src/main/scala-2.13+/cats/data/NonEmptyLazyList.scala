@@ -5,7 +5,8 @@ import NonEmptyLazyList.create
 import kernel.PartialOrder
 import instances.lazyList._
 
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
+import scala.collection.mutable
 
 object NonEmptyLazyList extends NonEmptyLazyListInstances {
 
@@ -326,6 +327,116 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A]) extends Any
 
     create(buf.result())
   }
+
+  /**
+   * Sorts this `NonEmptyLazyList` according to an `Order` on transformed `B` from `A`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyLazyList
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyLazyList(('a', 4), ('z', 1), ('e', 22))
+   * scala> nel.sortBy(_._2).toLazyList.toList
+   * res0: List[(Char, Int)] = List((z,1), (a,4), (e,22))
+   * }}}
+   */
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyLazyList[A] =
+    // safe: sorting a NonEmptyList cannot produce an empty List
+    create(toLazyList.sortBy(f)(B.toOrdering))
+
+  /**
+   * Sorts this `NonEmptyList` according to an `Order`
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyLazyList
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyLazyList(12, 4, 3, 9)
+   * scala> nel.sorted.toLazyList.toList
+   * res0: List[Int] = List(3, 4, 9, 12)
+   * }}}
+   */
+  final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyLazyList[AA] =
+    create(toLazyList.sorted(AA.toOrdering))
+
+  /**
+   * Groups elements inside this `NonEmptyLazyList` according to the `Order`
+   * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptyLazyList
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyLazyList(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
+   * scala> val result = nel.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyLazyList[A]] = {
+    implicit val ordering: Ordering[B] = B.toOrdering
+    var m = TreeMap.empty[B, mutable.Builder[A, LazyList[A]]]
+
+    for { elem <- toLazyList } {
+      val k = f(elem)
+
+      m.get(k) match {
+        case None          => m += ((k, LazyList.newBuilder[A] += elem))
+        case Some(builder) => builder += elem
+      }
+    }
+
+    m.map {
+      case (k, v) => (k, create(v.result))
+    }: TreeMap[B, NonEmptyLazyList[A]]
+  }
+
+  /**
+   * Groups elements inside this `NonEmptyLazyList` according to the `Order`
+   * of the keys produced by the given mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyLazyList(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyLazyList(-2, -5), true -> NonEmptyLazyList(12, 3))
+   * scala> val result = nel.groupByNem(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyLazyList[A]] =
+    NonEmptyMap.fromMapUnsafe(groupBy(f))
+
+  /**
+   * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
+   *{{{
+   * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
+   * scala> import cats.implicits._
+   * scala> val nel = NonEmptyLazyList.fromLazyListPrepend((0, "a"), LazyList((1, "b"),(0, "c"), (2, "d")))
+   * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
+   * scala> val result = nel.toNem
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   *}}}
+   *
+   */
+  final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
+    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
+
+  /**
+   * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
+   *{{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,2,3,4))
+   * scala> nel.toNes
+   * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
+   *}}}
+   */
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
+    NonEmptySet.of(head, tail: _*)
+
+  final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[LazyList[AA]].show(toLazyList)}"
 }
 
 sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
@@ -375,7 +486,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
     Semigroup[LazyList[A]].asInstanceOf[Semigroup[NonEmptyLazyList[A]]]
 
   implicit def catsDataShowForNonEmptyLazyList[A](implicit A: Show[A]): Show[NonEmptyLazyList[A]] =
-    Show.show[NonEmptyLazyList[A]](nell => s"NonEmpty${Show[LazyList[A]].show(nell.toLazyList)}")
+    Show.show[NonEmptyLazyList[A]](_.show)
 
   implicit def catsDataParallelForNonEmptyLazyList: Parallel.Aux[NonEmptyLazyList, OneAnd[ZipLazyList, *]] =
     new Parallel[NonEmptyLazyList] {
