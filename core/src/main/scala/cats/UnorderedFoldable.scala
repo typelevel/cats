@@ -73,6 +73,50 @@ import simulacrum.{noop, typeclass}
   @noop
   def count[A](fa: F[A])(p: A => Boolean): Long =
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
+
+  /**
+   * Find the minimum `A` item in this structure according to the `Order[A]`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[maximumOption]] for maximum instead of minimum.
+   */
+  def minimumOption[A: Order](fa: F[A]): Option[A] =
+    unorderedReduceOption(fa)(UnorderedFoldable.minCommutativeSemigroup)
+
+  /**
+   * Find the maximum `A` item in this structure according to the `Order[A]`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[minimumOption]] for minimum instead of maximum.
+   */
+  def maximumOption[A: Order](fa: F[A]): Option[A] =
+    unorderedReduceOption(fa)(UnorderedFoldable.maxCommutativeSemigroup)
+
+  /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the minimum element
+   * wrapped in a `Some`.
+   *
+   * @see [[maximumByOption]] for maximum instead of minimum.
+   */
+  def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    minimumOption(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @return `None` if the structure is empty, otherwise the maximum element
+   * wrapped in a `Some`.
+   *
+   * @see [[minimumByOption]] for minimum instead of maximum.
+   */
+  def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+    maximumOption(fa)(Order.by(f))
 }
 
 object UnorderedFoldable {
@@ -94,5 +138,13 @@ object UnorderedFoldable {
         case true  => ly
         case false => Eval.False
       }
+  }
+
+  private def minCommutativeSemigroup[A: Order]: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+    override def combine(x: A, y: A): A = Order.min(x, y)
+  }
+
+  private def maxCommutativeSemigroup[A: Order]: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+    override def combine(x: A, y: A): A = Order.max(x, y)
   }
 }
