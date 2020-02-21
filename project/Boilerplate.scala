@@ -508,7 +508,15 @@ object Boilerplate {
     def content(tv: TemplateVals): String = {
       import tv._
 
-      def constraints(name: String) =
+      /**
+       * These special cases for N = 2 is needed because of the
+       * deprecated `catsStdShowForTuple2` in TupleInstances.
+       * It will be removed once deprecated one is deleted.
+       */
+      val showInst       = if(arity == 2) "catsStdShowForNTuple2" else s"catsStdShowForTuple$arity"
+      val bitraverseInst = if(arity == 2) "catsStdBitraverseForNTuple2" else s"catsStdBitraverseForTuple$arity"
+
+      def constraints(name: String): String =
         synTypes.map(tpe => s"$tpe: $name[$tpe]").mkString(", ")
 
       val showMethod: String =
@@ -518,16 +526,32 @@ object Boilerplate {
           }
           .mkString("s\"(", ",", ")\"")
 
+      val bifunctorSynTypes = (0 until (arity - 2)).map(n => s"A$n")
+      val `(A..N - 2)` = if (arity == 1) "Tuple1[A0]" else bifunctorSynTypes.mkString("(", ", ", ")")
+
       block"""
       |
       |package cats
       |package instances
       |
       |private[instances] trait NTupleInstances {
-      -  implicit final def catsShowForTuple$arity[${`A..N`}](implicit ${constraints("Show")}): Show[${`(A..N)`}] =
+      -  implicit val $bitraverseInst: Bitraverse[Tuple$arity] =
+      -    new Bitraverse[Tuple2] {
+      -      def bitraverse[G[_]: Applicative, ${`A..N`}, C, D](fab: ${`(A..N)`})(f: A => G[C], g: B => G[D]): G[(C, D)] =
+      -        Applicative[G].tuple2(f(fab._1), g(fab._2))
+      -
+      -      def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
+      -        g(f(c, fab._1), fab._2)
+      -
+      -      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
+      -                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      -        g(fab._2, f(fab._1, c))
+      -    }
+      -  implicit final def $showInst[${`A..N`}](implicit ${constraints("Show")}): Show[${`(A..N)`}] =
       -    new Show[${`(A..N)`}] {
       -      def show(f: ${`(A..N)`}): String = $showMethod
       -    }
+      -
       |}"""
     }
   }

@@ -35,7 +35,8 @@ private[instances] trait Tuple2InstancesBinCompat0 {
 }
 
 sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
-  implicit val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
+  @deprecated("Use catsStdBitraverseForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  val catsStdBitraverseForTuple2: Bitraverse[Tuple2] =
     new Bitraverse[Tuple2] {
       def bitraverse[G[_]: Applicative, A, B, C, D](fab: (A, B))(f: A => G[C], g: B => G[D]): G[(C, D)] =
         Applicative[G].tuple2(f(fab._1), g(fab._2))
@@ -48,7 +49,7 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
         g(fab._2, f(fab._1, c))
     }
 
-  @deprecated("Use catsShowForTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  @deprecated("Use catsStdShowForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
   def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
     new Show[(A, B)] {
       override def show(f: (A, B)): String = s"(${aShow.show(f._1)},${bShow.show(f._2)})"
