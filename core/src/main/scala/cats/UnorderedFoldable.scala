@@ -2,7 +2,6 @@ package cats
 
 import cats.instances.long._
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
-import cats.syntax.option._
 import simulacrum.{noop, typeclass}
 
 /**
@@ -16,7 +15,7 @@ import simulacrum.{noop, typeclass}
     unorderedFoldMap(fa)(identity)
 
   def unorderedReduceOption[A](fa: F[A])(implicit A: CommutativeSemigroup[A]): Option[A] =
-    unorderedFoldMap(fa)(_.some)(cats.instances.option.catsKernelStdCommutativeMonoidForOption(A))
+    unorderedFoldMap(fa)(Some(_): Option[A])(cats.instances.option.catsKernelStdCommutativeMonoidForOption(A))
 
   /**
    * Returns true if there are no elements. Otherwise false.
