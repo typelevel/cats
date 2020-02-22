@@ -526,8 +526,21 @@ object Boilerplate {
           }
           .mkString("s\"(", ",", ")\"")
 
-      val bifunctorSynTypes = (0 until (arity - 2)).map(n => s"A$n")
-      val `(A..N - 2)` = if (arity == 1) "Tuple1[A0]" else bifunctorSynTypes.mkString("(", ", ", ")")
+      val `A..(N - 1)` = (0 until (arity - 1)).map(n => s"A$n")
+      val `A..(N - 2)` = (0 until (arity - 2)).map(n => s"A$n")
+      val `A0, A(N - 1)` = if (arity <= 2) "" else `A..(N - 1)`.mkString("", ", ", ", ")
+      val `A0, A(N - 2)` = if (arity <= 2) "" else `A..(N - 2)`.mkString("", ", ", ", ")
+
+      val `[A0, A(N - 1)]` = if (arity <= 2) "" else `A..(N - 1)`.mkString("[", ", ", "]")
+      val `[A0, A(N - 2)]` = if (arity <= 2) "" else `A..(N - 2)`.mkString("[", ", ", "]")
+      val `(A..N - 1, *)` =
+        if (arity == 1) "Tuple1"
+        else `A..(N - 1)`.mkString("(", ", ", ", *)")
+      val `(A..N - 2, *, *)` =
+        if (arity <= 2) "(*, *)"
+        else `A..(N - 2)`.mkString("(", ", ", ", *, *)")
+
+      val `t._n` = if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"G.pure(t._${n + 1})").mkString("", ", ", ", ")
 
       block"""
       |
@@ -535,18 +548,23 @@ object Boilerplate {
       |package instances
       |
       |private[instances] trait NTupleInstances {
-      -  implicit val $bitraverseInst: Bitraverse[Tuple$arity] =
-      -    new Bitraverse[Tuple2] {
-      -      def bitraverse[G[_]: Applicative, ${`A..N`}, C, D](fab: ${`(A..N)`})(f: A => G[C], g: B => G[D]): G[(C, D)] =
-      -        Applicative[G].tuple2(f(fab._1), g(fab._2))
+      ${
+        if(arity > 1)
+      block"""
+      -  implicit def $bitraverseInst${`[A0, A(N - 2)]`}: Bitraverse[${`(A..N - 2, *, *)`}] =
+      -    new Bitraverse[${`(A..N - 2, *, *)`}] {
+      -      def bitraverse[G[_], A, B, C, D](t: (${`A0, A(N - 2)`}A, B))(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[(${`A0, A(N - 2)`}C, D)] =
+      -        G.tuple$arity(${`t._n`}f(t._${arity - 1}), g(t._$arity))
       -
-      -      def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
-      -        g(f(c, fab._1), fab._2)
+      -      def bifoldLeft[A, B, C](t: (${`A0, A(N - 2)`}A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
+      -        g(f(c, t._${arity - 1}), t._$arity)
       -
-      -      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-      -                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
-      -        g(fab._2, f(fab._1, c))
+      -      def bifoldRight[A, B, C](t: (${`A0, A(N - 2)`}A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      -        g(t._$arity, f(t._${arity - 1}, c))
       -    }
+          """
+        else block""
+      }
       -  implicit final def $showInst[${`A..N`}](implicit ${constraints("Show")}): Show[${`(A..N)`}] =
       -    new Show[${`(A..N)`}] {
       -      def show(f: ${`(A..N)`}): String = $showMethod

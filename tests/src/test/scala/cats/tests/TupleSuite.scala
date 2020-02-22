@@ -16,6 +16,9 @@ class TupleSuite extends CatsSuite {
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
 
+  checkAll("Tuple4", BitraverseTests[(Boolean, Boolean, *, *)].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("Bitraverse[Tuple4]", SerializableTests.serializable(Bitraverse[(Boolean, Boolean, *, *)]))
+
   checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[(String, *)]", SerializableTests.serializable(Traverse[(String, *)]))
 
