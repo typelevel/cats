@@ -22,8 +22,14 @@ class TupleSuite extends CatsSuite {
   checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[(String, *)]", SerializableTests.serializable(Traverse[(String, *)]))
 
+  checkAll("Tuple4[Boolean, Boolean, String, Int] with Option", TraverseTests[(Boolean, Boolean, String, *)].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[(Boolean, Boolean, String, *)]", SerializableTests.serializable(Traverse[(Boolean, Boolean, String, *)]))
+
   checkAll("Tuple2[String, Int]", ComonadTests[(String, *)].comonad[Int, Int, Int])
   checkAll("Comonad[(String, *)]", SerializableTests.serializable(Comonad[(String, *)]))
+
+  checkAll("Tuple4[Boolean, Boolean, String, Int]", ComonadTests[(Boolean, Boolean, String, *)].comonad[Int, Int, Int])
+  checkAll("Comonad[(Boolean, Boolean, String, *)]", SerializableTests.serializable(Comonad[(Boolean, Boolean, String, *)]))
 
   // Note that NonEmptyList has no Monoid, so we can make a FlatMap, but not a Monad
   checkAll("FlatMap[(NonEmptyList[Int], *)]", FlatMapTests[(NonEmptyList[Int], *)].flatMap[String, Long, String])
@@ -42,6 +48,9 @@ class TupleSuite extends CatsSuite {
 
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, *)]", SerializableTests.serializable(Reducible[(String, *)]))
+
+  checkAll("Tuple4[Boolean, Boolean, String, Int]", ReducibleTests[(Boolean, Boolean, String, *)].reducible[Option, Int, Int])
+  checkAll("Reducible[(Boolean, Boolean, String, *)]", SerializableTests.serializable(Reducible[(Boolean, Boolean, String, *)]))
 
   test("Semigroupal composition") {
     val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]

@@ -29,7 +29,7 @@ object Boilerplate {
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
     GenTupleParallelSyntax,
-    GenTupleShowInstances
+    GenTupleCoreInstances
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -498,79 +498,6 @@ object Boilerplate {
         -}
       |
       """
-    }
-  }
-
-  object GenTupleShowInstances extends Template {
-    def filename(root: sbt.File): File =
-      root / "cats" / "instances" / "NTupleInstances.scala"
-
-    def content(tv: TemplateVals): String = {
-      import tv._
-
-      /**
-       * These special cases for N = 2 is needed because of the
-       * deprecated `catsStdShowForTuple2` in TupleInstances.
-       * It will be removed once deprecated one is deleted.
-       */
-      val showInst       = if(arity == 2) "catsStdShowForNTuple2" else s"catsStdShowForTuple$arity"
-      val bitraverseInst = if(arity == 2) "catsStdBitraverseForNTuple2" else s"catsStdBitraverseForTuple$arity"
-
-      def constraints(name: String): String =
-        synTypes.map(tpe => s"$tpe: $name[$tpe]").mkString(", ")
-
-      val showMethod: String =
-        synTypes.zipWithIndex.iterator
-          .map {
-            case (tpe, i) => s"$${${tpe}.show(f._${i + 1})}"
-          }
-          .mkString("s\"(", ",", ")\"")
-
-      val `A..(N - 1)` = (0 until (arity - 1)).map(n => s"A$n")
-      val `A..(N - 2)` = (0 until (arity - 2)).map(n => s"A$n")
-      val `A0, A(N - 1)` = if (arity <= 2) "" else `A..(N - 1)`.mkString("", ", ", ", ")
-      val `A0, A(N - 2)` = if (arity <= 2) "" else `A..(N - 2)`.mkString("", ", ", ", ")
-
-      val `[A0, A(N - 1)]` = if (arity <= 2) "" else `A..(N - 1)`.mkString("[", ", ", "]")
-      val `[A0, A(N - 2)]` = if (arity <= 2) "" else `A..(N - 2)`.mkString("[", ", ", "]")
-      val `(A..N - 1, *)` =
-        if (arity == 1) "Tuple1"
-        else `A..(N - 1)`.mkString("(", ", ", ", *)")
-      val `(A..N - 2, *, *)` =
-        if (arity <= 2) "(*, *)"
-        else `A..(N - 2)`.mkString("(", ", ", ", *, *)")
-
-      val `t._n` = if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"G.pure(t._${n + 1})").mkString("", ", ", ", ")
-
-      block"""
-      |
-      |package cats
-      |package instances
-      |
-      |private[instances] trait NTupleInstances {
-      ${
-        if(arity > 1)
-      block"""
-      -  implicit def $bitraverseInst${`[A0, A(N - 2)]`}: Bitraverse[${`(A..N - 2, *, *)`}] =
-      -    new Bitraverse[${`(A..N - 2, *, *)`}] {
-      -      def bitraverse[G[_], A, B, C, D](t: (${`A0, A(N - 2)`}A, B))(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[(${`A0, A(N - 2)`}C, D)] =
-      -        G.tuple$arity(${`t._n`}f(t._${arity - 1}), g(t._$arity))
-      -
-      -      def bifoldLeft[A, B, C](t: (${`A0, A(N - 2)`}A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
-      -        g(f(c, t._${arity - 1}), t._$arity)
-      -
-      -      def bifoldRight[A, B, C](t: (${`A0, A(N - 2)`}A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
-      -        g(t._$arity, f(t._${arity - 1}, c))
-      -    }
-          """
-        else block""
-      }
-      -  implicit final def $showInst[${`A..N`}](implicit ${constraints("Show")}): Show[${`(A..N)`}] =
-      -    new Show[${`(A..N)`}] {
-      -      def show(f: ${`(A..N)`}): String = $showMethod
-      -    }
-      -
-      |}"""
     }
   }
 }
