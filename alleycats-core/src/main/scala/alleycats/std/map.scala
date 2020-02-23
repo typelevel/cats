@@ -14,11 +14,7 @@ trait MapInstances {
       def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
-              buf + (kv._1 -> b)
-            })
-          }
+          .iterateRight(fa, gba)((kv, lbuf) => G.map2Eval(f(kv._2), lbuf)((b, buf) => buf + (kv._1 -> b)))
           .value
         G.map(gbb)(_.toMap)
       }
@@ -67,9 +63,7 @@ trait MapInstances {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (ob, buf) =>
-              ob.fold(buf)(b => buf + (kv._1 -> b))
-            })
+            G.map2Eval(f(kv._2), lbuf)((ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b)))
           }
           .value
       }

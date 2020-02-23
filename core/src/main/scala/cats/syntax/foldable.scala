@@ -99,9 +99,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * }}}
    */
   def mkString_(prefix: String, delim: String, suffix: String)(implicit A: Show[A], F: Foldable[F]): String = {
-    val b = F.foldLeft(fa, new StringBuilder) { (builder, a) =>
-      builder.append(A.show(a)).append(delim)
-    }
+    val b = F.foldLeft(fa, new StringBuilder)((builder, a) => builder.append(A.show(a)).append(delim))
     prefix + {
       if (b.isEmpty)
         ""

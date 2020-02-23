@@ -20,9 +20,7 @@ import simulacrum.typeclass
    * }}}
    */
   def unite[G[_], A](fga: F[G[A]])(implicit FM: Monad[F], G: Foldable[G]): F[A] =
-    FM.flatMap(fga) { ga =>
-      G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, pure(a)))
-    }
+    FM.flatMap(fga)(ga => G.foldLeft(ga, empty[A])((acc, a) => combineK(acc, pure(a))))
 
   /**
    * Separate the inner foldable values into the "lefts" and "rights"

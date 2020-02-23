@@ -210,9 +210,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
     reduceRightToOptionWithKey[A, G[SortedMap[K, B]]](tail)({
       case (k, a) =>
         G.map(f(a))(b => SortedMap.empty[K, B] + ((k, b)))
-    }) { (t, lglb) =>
-      G.map2Eval(f(t._2), lglb)((b, bs) => bs + ((t._1, b)))
-    }.map {
+    })((t, lglb) => G.map2Eval(f(t._2), lglb)((b, bs) => bs + ((t._1, b)))).map {
       case None        => G.map(f(head._2))(a => NonEmptyMapImpl.one(head._1, a))
       case Some(gtail) => G.map2(f(head._2), gtail)((a, bs) => NonEmptyMapImpl((head._1, a), bs))
     }.value

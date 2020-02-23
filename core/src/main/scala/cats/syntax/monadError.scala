@@ -23,9 +23,7 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
    * in the partial function's domain.
    */
   def reject(pf: PartialFunction[A, E])(implicit F: MonadError[F, E]): F[A] =
-    F.flatMap(fa) { a =>
-      pf.andThen(F.raiseError[A] _).applyOrElse(a, F.pure)
-    }
+    F.flatMap(fa)(a => pf.andThen(F.raiseError[A] _).applyOrElse(a, F.pure))
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
@@ -36,5 +34,7 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
 
 final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {
   def rethrow(implicit F: MonadError[F, _ >: E]): F[A] =
-    F.flatMap(fea)(_.fold(F.raiseError, F.pure)) // dup from the type class impl, due to https://github.com/scala/bug/issues/11562. Once fixed should be able to replace with `F.rethrow(fea)`
+    F.flatMap(fea)(
+      _.fold(F.raiseError, F.pure)
+    ) // dup from the type class impl, due to https://github.com/scala/bug/issues/11562. Once fixed should be able to replace with `F.rethrow(fea)`
 }

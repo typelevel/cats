@@ -43,19 +43,13 @@ class TupleSuite extends CatsSuite {
   test("Semigroupal composition") {
     val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
-    forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
-      (a == b) should ===(eq.eqv(a, b))
-    }
+    forAll((a: (Int, (String, Int)), b: (Int, (String, Int))) => (a == b) should ===(eq.eqv(a, b)))
   }
 
   test("eqv") {
     val eq = Eq[(Int, Long)]
-    forAll { (t: (Int, Long)) =>
-      eq.eqv(t, t) should ===(true)
-    }
-    forAll { (t: (Int, Long)) =>
-      eq.eqv(t, t._1 -> (t._2 + 1)) should ===(false)
-    }
+    forAll((t: (Int, Long)) => eq.eqv(t, t) should ===(true))
+    forAll((t: (Int, Long)) => eq.eqv(t, t._1 -> (t._2 + 1)) should ===(false))
   }
 
   test("order") {
@@ -68,9 +62,7 @@ class TupleSuite extends CatsSuite {
   test("show") {
     (1, 2).show should ===("(1,2)")
 
-    forAll { (fs: (String, String)) =>
-      fs.show should ===(fs.toString)
-    }
+    forAll((fs: (String, String)) => fs.show should ===(fs.toString))
 
     // Provide some "non-standard" Show instances to make sure the tuple2 is actually use the Show instances for the
     // relevant types instead of blindly calling toString

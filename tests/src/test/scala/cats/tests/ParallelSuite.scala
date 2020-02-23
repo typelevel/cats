@@ -41,15 +41,11 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 
   test("ParSequence Ior should sequence values") {
-    forAll { (es: List[Ior[String, Int]]) =>
-      es.parSequence.right should ===(es.map(_.toOption).sequence)
-    }
+    forAll((es: List[Ior[String, Int]]) => es.parSequence.right should ===(es.map(_.toOption).sequence))
   }
 
   test("ParTraverse identity should be equivalent to parSequence") {
-    forAll { (es: List[Either[String, Int]]) =>
-      es.parTraverse(identity) should ===(es.parSequence)
-    }
+    forAll((es: List[Either[String, Int]]) => es.parTraverse(identity) should ===(es.parSequence))
   }
 
   test("ParTraverse_ identity should be equivalent to parSequence_") {
@@ -65,9 +61,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 
   test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
-    forAll { (es: SortedSet[Either[String, Int]]) =>
-      Parallel.parSequence_(es) should ===(es.parSequence_)
-    }
+    forAll((es: SortedSet[Either[String, Int]]) => Parallel.parSequence_(es) should ===(es.parSequence_))
   }
 
   test("ParNonEmptyTraverse identity should be equivalent to parNonEmptySequence") {
@@ -204,9 +198,7 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   }
 
   test("ParFlatSequence syntax should be equivalent to Parallel.parFlatSequence") {
-    forAll { (es: List[Either[String, List[Int]]]) =>
-      es.parFlatSequence should ===(Parallel.parFlatSequence(es))
-    }
+    forAll((es: List[Either[String, List[Int]]]) => es.parFlatSequence should ===(Parallel.parFlatSequence(es)))
   }
 
   test("ParFlatTraverse syntax should be equivalent to Parallel.parFlatTraverse") {

@@ -55,9 +55,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("defer doesn't change value") {
-    forAll { (x: Free[List, Int]) =>
-      Free.defer(x) should ===(x)
-    }
+    forAll((x: Free[List, Int]) => Free.defer(x) should ===(x))
   }
 
   test("defer is lazy") {

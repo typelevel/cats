@@ -180,11 +180,7 @@ sealed private[data] trait Tuple2KDistributive[F[_], G[_]] extends Distributive[
   def G: Distributive[G]
 
   override def distribute[H[_]: Functor, A, B](ha: H[A])(f: A => Tuple2K[F, G, B]): Tuple2K[F, G, H[B]] =
-    Tuple2K(F.distribute(ha) { a =>
-      f(a).first
-    }, G.distribute(ha) { a =>
-      f(a).second
-    })
+    Tuple2K(F.distribute(ha)(a => f(a).first), G.distribute(ha)(a => f(a).second))
 
   override def map[A, B](fa: Tuple2K[F, G, A])(f: A => B): Tuple2K[F, G, B] =
     Tuple2K(F.map(fa.first)(f), G.map(fa.second)(f))

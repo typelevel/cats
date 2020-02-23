@@ -405,9 +405,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
       override def reduceRightOption[A](fa: Eval[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
         fa.map(Some(_))
       override def reduceRightToOption[A, B](fa: Eval[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] =
-        fa.map { a =>
-          Some(f(a))
-        }
+        fa.map(a => Some(f(a)))
       override def size[A](f: Eval[A]): Long = 1L
     }
 

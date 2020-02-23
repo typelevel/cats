@@ -442,9 +442,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
       def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
-        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a))) { (a, b) =>
-          Eval.defer(g(a, b))
-        })
+        Eval.defer(fa.reduceRightTo(a => Eval.now(f(a)))((a, b) => Eval.defer(g(a, b))))
 
       override def get[A](fa: NonEmptyChain[A])(idx: Long): Option[A] =
         if (idx == 0) Some(fa.head) else fa.tail.get(idx - 1)

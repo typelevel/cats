@@ -37,9 +37,7 @@ class TrySuite extends CatsSuite {
   checkAll("Monoid[Try[Int]]", SerializableTests.serializable(Monoid[Try[Int]]))
 
   test("show") {
-    forAll { (fs: Try[String]) =>
-      fs.show should ===(fs.toString)
-    }
+    forAll((fs: Try[String]) => fs.show should ===(fs.toString))
   }
 
   test("catchNonFatal works") {
@@ -79,9 +77,7 @@ class TrySuite extends CatsSuite {
   }
 
   test("fromTry works") {
-    forAll { (t: Try[Int]) =>
-      (MonadError[Try, Throwable].fromTry(t)) should ===(t)
-    }
+    forAll((t: Try[Int]) => (MonadError[Try, Throwable].fromTry(t)) should ===(t))
   }
 
   // The following tests check laws which are a different formulation of

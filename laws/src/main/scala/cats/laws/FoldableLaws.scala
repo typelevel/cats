@@ -23,9 +23,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
     f: A => B
   )(implicit
     M: Monoid[B]): IsEq[B] =
-    fa.foldMap(f) <-> fa.foldLeft(M.empty) { (b, a) =>
-      b |+| f(a)
-    }
+    fa.foldMap(f) <-> fa.foldLeft(M.empty)((b, a) => b |+| f(a))
 
   def rightFoldConsistentWithFoldMap[A, B](
     fa: F[A],
@@ -80,50 +78,36 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def getRef[A](fa: F[A], idx: Long): IsEq[Option[A]] =
     F.get(fa)(idx) <-> (if (idx < 0L) None
                         else
-                          F.foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
-                            if (i == idx) Left(a) else Right(i + 1L)
-                          } match {
+                          F.foldM[Either[A, *], A, Long](fa, 0L)((i, a) => if (i == idx) Left(a) else Right(i + 1L)) match {
                             case Left(a)  => Some(a)
                             case Right(_) => None
                           })
 
   def foldRef[A](fa: F[A])(implicit A: Monoid[A]): IsEq[A] =
-    F.fold(fa) <-> F.foldLeft(fa, A.empty) { (acc, a) =>
-      A.combine(acc, a)
-    }
+    F.fold(fa) <-> F.foldLeft(fa, A.empty)((acc, a) => A.combine(acc, a))
 
   def toListRef[A](fa: F[A]): IsEq[List[A]] =
     F.toList(fa) <-> F
-      .foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-        buf += a
-      }
+      .foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => buf += a)
       .toList
 
   def filter_Ref[A](fa: F[A], p: A => Boolean): IsEq[List[A]] =
     F.filter_(fa)(p) <-> F
-      .foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-        if (p(a)) buf += a else buf
-      }
+      .foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => if (p(a)) buf += a else buf)
       .toList
 
   def takeWhile_Ref[A](fa: F[A], p: A => Boolean): IsEq[List[A]] =
     F.takeWhile_(fa)(p) <-> F
-      .foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-        if (p(a)) llst.map(a :: _) else Now(Nil)
-      }
+      .foldRight(fa, Now(List.empty[A]))((a, llst) => if (p(a)) llst.map(a :: _) else Now(Nil))
       .value
 
   def dropWhile_Ref[A](fa: F[A], p: A => Boolean): IsEq[List[A]] =
     F.dropWhile_(fa)(p) <-> F
-      .foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-        if (buf.nonEmpty || !p(a)) buf += a else buf
-      }
+      .foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => if (buf.nonEmpty || !p(a)) buf += a else buf)
       .toList
 
   def collectFirstSome_Ref[A, B](fa: F[A], f: A => Option[B]): IsEq[Option[B]] =
-    F.collectFirstSome(fa)(f) <-> F.foldLeft(fa, Option.empty[B]) { (ob, a) =>
-      if (ob.isDefined) ob else f(a)
-    }
+    F.collectFirstSome(fa)(f) <-> F.foldLeft(fa, Option.empty[B])((ob, a) => if (ob.isDefined) ob else f(a))
 
   def collectFirst_Ref[A, B](fa: F[A], pf: PartialFunction[A, B]): IsEq[Option[B]] =
     F.collectFirst(fa)(pf) <-> F.collectFirstSome(fa)(pf.lift)

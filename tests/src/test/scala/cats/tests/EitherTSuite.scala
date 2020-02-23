@@ -157,9 +157,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("toValidated") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.toValidated.map(_.toEither) should ===(eithert.value)
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.toValidated.map(_.toEither) should ===(eithert.value))
   }
 
   test("toValidatedNel") {
@@ -175,9 +173,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("toNested") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.toNested.value should ===(eithert.value)
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.toNested.value should ===(eithert.value))
   }
 
   test("toNestedValidated") {
@@ -211,9 +207,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("fromOption isLeft consistent with Option.isEmpty") {
-    forAll { (o: Option[Int], s: String) =>
-      EitherT.fromOption[Id](o, s).isLeft should ===(o.isEmpty)
-    }
+    forAll((o: Option[Int], s: String) => EitherT.fromOption[Id](o, s).isLeft should ===(o.isEmpty))
   }
 
   test("cond consistent with Either.cond") {
@@ -223,33 +217,23 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("isLeft negation of isRight") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.isLeft should ===(eithert.isRight.map(!_))
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.isLeft should ===(eithert.isRight.map(!_)))
   }
 
   test("double swap is noop") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.swap.swap should ===(eithert)
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.swap.swap should ===(eithert))
   }
 
   test("swap negates isRight") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.swap.isRight should ===(eithert.isRight.map(!_))
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.swap.isRight should ===(eithert.isRight.map(!_)))
   }
 
   test("toOption on Right returns Some") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.toOption.isDefined should ===(eithert.isRight)
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.toOption.isDefined should ===(eithert.isRight))
   }
 
   test("toEither preserves isRight") {
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.value.map(_.isRight) should ===(eithert.isRight)
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.value.map(_.isRight) should ===(eithert.isRight))
   }
 
   test("recover recovers handled values") {
@@ -308,9 +292,7 @@ class EitherTSuite extends CatsSuite {
 
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
-    forAll { (eithert: EitherT[List, String, Int]) =>
-      eithert.mapK(f) should ===(EitherT(f(eithert.value)))
-    }
+    forAll((eithert: EitherT[List, String, Int]) => eithert.mapK(f) should ===(EitherT(f(eithert.value))))
   }
 
   test("semiflatMap consistent with value.flatMap+f+pure") {
@@ -410,9 +392,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("=== with Id consistent with Either ===") {
-    forAll { (x: EitherT[Id, String, Int], y: EitherT[Id, String, Int]) =>
-      x === y should ===(x.value === y.value)
-    }
+    forAll((x: EitherT[Id, String, Int], y: EitherT[Id, String, Int]) => x === y should ===(x.value === y.value))
   }
 
   test("traverse with Id consistent with Either traverse") {
@@ -435,33 +415,23 @@ class EitherTSuite extends CatsSuite {
   }
 
   test("collectRight with Option consistent with flattening a to[Option]") {
-    forAll { (et: EitherT[Option, String, Int]) =>
-      et.collectRight should ===(et.to[Option].flatten)
-    }
+    forAll((et: EitherT[Option, String, Int]) => et.collectRight should ===(et.to[Option].flatten))
   }
 
   test("applyAlt with Id consistent with EitherT map") {
-    forAll { (et: EitherT[Id, String, Int], f: Int => String) =>
-      et.applyAlt(EitherT.pure(f)) should ===(et.map(f))
-    }
+    forAll((et: EitherT[Id, String, Int], f: Int => String) => et.applyAlt(EitherT.pure(f)) should ===(et.map(f)))
   }
 
   test("merge with Id consistent with Either merge") {
-    forAll { (x: EitherT[Id, Int, Int]) =>
-      x.merge should ===(x.value.merge)
-    }
+    forAll((x: EitherT[Id, Int, Int]) => x.merge should ===(x.value.merge))
   }
 
   test("to consistent with toOption") {
-    forAll { (x: EitherT[List, String, Int]) =>
-      x.to[Option] should ===(x.toOption.value)
-    }
+    forAll((x: EitherT[List, String, Int]) => x.to[Option] should ===(x.toOption.value))
   }
 
   test("toEither consistent with toOption") {
-    forAll { (x: EitherT[List, String, Int]) =>
-      x.value.map(_.toOption) should ===(x.toOption.value)
-    }
+    forAll((x: EitherT[List, String, Int]) => x.value.map(_.toOption) should ===(x.toOption.value))
   }
 
   test("ensure on left is identity") {

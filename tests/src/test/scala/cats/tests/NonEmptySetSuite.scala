@@ -132,22 +132,16 @@ class NonEmptySetSuite extends CatsSuite {
   }
 
   test("reduce consistent with fold") {
-    forAll { (nes: NonEmptySet[Int]) =>
-      nes.reduce should ===(nes.fold)
-    }
+    forAll((nes: NonEmptySet[Int]) => nes.reduce should ===(nes.fold))
   }
 
   test("reduce consistent with reduceK") {
-    forAll { (nes: NonEmptySet[Option[Int]]) =>
-      nes.reduce(SemigroupK[Option].algebra[Int]) should ===(nes.reduceK)
-    }
+    forAll((nes: NonEmptySet[Option[Int]]) => nes.reduce(SemigroupK[Option].algebra[Int]) should ===(nes.reduceK))
   }
 
   test("reduceLeftToOption consistent with foldLeft + Option") {
     forAll { (nes: NonEmptySet[Int], f: Int => String, g: (String, Int) => String) =>
-      val expected = nes.tail.foldLeft(Option(f(nes.head))) { (opt, i) =>
-        opt.map(s => g(s, i))
-      }
+      val expected = nes.tail.foldLeft(Option(f(nes.head)))((opt, i) => opt.map(s => g(s, i)))
       nes.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
@@ -157,9 +151,7 @@ class NonEmptySetSuite extends CatsSuite {
       val got = nes.reduceRightToOption(f)(g).value
       val last = nes.last
       val rev = nes - last
-      val expected = rev.foldRight(Option(f(last))) { (i, opt) =>
-        opt.map(s => g(i, Now(s)).value)
-      }
+      val expected = rev.foldRight(Option(f(last)))((i, opt) => opt.map(s => g(i, Now(s)).value))
       got should ===(expected)
     }
   }
@@ -167,17 +159,13 @@ class NonEmptySetSuite extends CatsSuite {
   test("reduceLeftM consistent with foldM") {
     forAll { (nes: NonEmptySet[Int], f: Int => Option[Int]) =>
       val got = nes.reduceLeftM(f)((acc, i) => f(i).map(acc + _))
-      val expected = f(nes.head).flatMap { hd =>
-        nes.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
-      }
+      val expected = f(nes.head).flatMap(hd => nes.tail.foldM(hd)((acc, i) => f(i).map(acc + _)))
       got should ===(expected)
     }
   }
 
   test("reduceMapM consistent with foldMapM") {
-    forAll { (nes: NonEmptySet[Int], f: Int => Option[Int]) =>
-      nes.reduceMapM(f) should ===(nes.foldMapM(f))
-    }
+    forAll((nes: NonEmptySet[Int], f: Int => Option[Int]) => nes.reduceMapM(f) should ===(nes.foldMapM(f)))
   }
 
   test("fromSet round trip") {
@@ -185,9 +173,7 @@ class NonEmptySetSuite extends CatsSuite {
       NonEmptySet.fromSet(l).map(_.toSortedSet).getOrElse(SortedSet.empty[Int]) should ===(l)
     }
 
-    forAll { (nes: NonEmptySet[Int]) =>
-      NonEmptySet.fromSet(nes.toSortedSet) should ===(Some(nes))
-    }
+    forAll((nes: NonEmptySet[Int]) => NonEmptySet.fromSet(nes.toSortedSet) should ===(Some(nes)))
   }
 
   test("fromSetUnsafe/fromSet consistency") {
@@ -203,21 +189,15 @@ class NonEmptySetSuite extends CatsSuite {
   }
 
   test("+ consistent with Set") {
-    forAll { (nes: NonEmptySet[Int], i: Int) =>
-      nes.add(i).toSortedSet should ===(nes.toSortedSet + i)
-    }
+    forAll((nes: NonEmptySet[Int], i: Int) => nes.add(i).toSortedSet should ===(nes.toSortedSet + i))
   }
 
   test("NonEmptySet#zipWithIndex is consistent with Set#zipWithIndex") {
-    forAll { (nes: NonEmptySet[Int]) =>
-      nes.zipWithIndex.toSortedSet should ===(nes.toSortedSet.zipWithIndex)
-    }
+    forAll((nes: NonEmptySet[Int]) => nes.zipWithIndex.toSortedSet should ===(nes.toSortedSet.zipWithIndex))
   }
 
   test("NonEmptySet#length is consistent with Set#size") {
-    forAll { (nes: NonEmptySet[Int]) =>
-      nes.length should ===(nes.toSortedSet.size)
-    }
+    forAll((nes: NonEmptySet[Int]) => nes.length should ===(nes.toSortedSet.size))
   }
 
   test("NonEmptySet#concat is consistent with Set#++") {
@@ -233,9 +213,7 @@ class NonEmptySetSuite extends CatsSuite {
   }
 
   test("NonEmptySet.of is consistent with removal") {
-    forAll { (is: SortedSet[Int], i: Int) =>
-      NonEmptySet.of(i, is.toList: _*) - i should ===(is - i)
-    }
+    forAll((is: SortedSet[Int], i: Int) => NonEmptySet.of(i, is.toList: _*) - i should ===(is - i))
   }
 
   test("NonEmptySet#groupBy is consistent with Set#groupBy") {

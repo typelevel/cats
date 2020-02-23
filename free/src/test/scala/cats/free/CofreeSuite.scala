@@ -44,9 +44,7 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.tailForced") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Id, Int](spooky.counter) { _ =>
-        spooky.increment(); spooky.counter
-      }
+      Cofree.unfold[Id, Int](spooky.counter) { _ => spooky.increment(); spooky.counter }
     spooky.counter should ===(0)
     incrementor.tailForced
     spooky.counter should ===(1)
@@ -55,9 +53,7 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.forceTail") {
     val spooky = new Spooky
     val incrementor =
-      Cofree.unfold[Id, Int](spooky.counter) { _ =>
-        spooky.increment(); spooky.counter
-      }
+      Cofree.unfold[Id, Int](spooky.counter) { _ => spooky.increment(); spooky.counter }
     spooky.counter should ===(0)
     incrementor.forceTail
     spooky.counter should ===(1)

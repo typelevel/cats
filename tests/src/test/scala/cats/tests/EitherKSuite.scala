@@ -37,9 +37,7 @@ class EitherKSuite extends CatsSuite {
            SerializableTests.serializable(Contravariant[EitherK[Show, Show, *]]))
 
   test("double swap is identity") {
-    forAll { (x: EitherK[Option, Option, Int]) =>
-      x.swap.swap should ===(x)
-    }
+    forAll((x: EitherK[Option, Option, Int]) => x.swap.swap should ===(x))
   }
 
   test("swap negates isLeft/isRight") {
@@ -50,14 +48,10 @@ class EitherKSuite extends CatsSuite {
   }
 
   test("isLeft consistent with isRight") {
-    forAll { (x: EitherK[Option, Option, Int]) =>
-      x.isLeft should !==(x.isRight)
-    }
+    forAll((x: EitherK[Option, Option, Int]) => x.isLeft should !==(x.isRight))
   }
 
   test("toValidated + toEither is identity") {
-    forAll { (x: EitherK[Option, List, Int]) =>
-      x.toValidated.toEither should ===(x.run)
-    }
+    forAll((x: EitherK[Option, List, Int]) => x.toValidated.toEither should ===(x.run))
   }
 }

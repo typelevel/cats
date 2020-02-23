@@ -20,15 +20,11 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
     }
 
   test(s"UnorderedFoldable[$name].isEmpty") {
-    forAll { (fa: F[String]) =>
-      instance.isEmpty(fa) should ===(instance.size(fa) === 0L)
-    }
+    forAll((fa: F[String]) => instance.isEmpty(fa) should ===(instance.size(fa) === 0L))
   }
 
   test(s"UnorderedFoldable[$name].nonEmpty") {
-    forAll { (fa: F[String]) =>
-      instance.nonEmpty(fa) should ===(instance.size(fa) > 0L)
-    }
+    forAll((fa: F[String]) => instance.nonEmpty(fa) should ===(instance.size(fa) > 0L))
   }
 
   test(s"UnorderedFoldable[$name].count") {
@@ -66,9 +62,7 @@ sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable]
   def iterator[T](fa: F[T]): Iterator[T]
 
   test(s"Specialized UnorderedFoldable[$name].count") {
-    forAll { (fa: F[String], p: String => Boolean) =>
-      fa.count(p) should ===(iterator(fa).count(p).toLong)
-    }
+    forAll((fa: F[String], p: String => Boolean) => fa.count(p) should ===(iterator(fa).count(p).toLong))
   }
 }
 

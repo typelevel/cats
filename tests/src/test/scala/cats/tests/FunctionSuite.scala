@@ -49,15 +49,11 @@ class FunctionSuite extends CatsSuite {
   // checkAll("Function1[Int => *]", DeferTests[Function1[Int, *]].defer[Int])
 
   test("Defer[Function1[Int, *]].fix computing sum") {
-    val sum2 = Defer[Function1[Int, *]].fix[Int] { rec => (n: Int) =>
-      if (n <= 0) 0 else n * n + rec(n - 1)
-    }
+    val sum2 = Defer[Function1[Int, *]].fix[Int](rec => (n: Int) => if (n <= 0) 0 else n * n + rec(n - 1))
 
     forAll(Gen.choose(0, 1000)) { n =>
       // don't let n get too large because this consumes stack
-      assert(sum2(n) == (0 to n).map { n =>
-        n * n
-      }.sum)
+      assert(sum2(n) == (0 to n).map(n => n * n).sum)
     }
   }
 
@@ -102,9 +98,7 @@ class FunctionSuite extends CatsSuite {
   checkAll("Function0[Distributive]", DistributiveTests[Function0].distributive[Int, Int, Int, Id, Function0])
 
   test("Function0[Hsh]") {
-    forAll { (x: Function0[Hsh], y: Function0[Hsh]) =>
-      HashLaws[Function0[Hsh]].hashCompatibility(x, y)
-    }
+    forAll((x: Function0[Hsh], y: Function0[Hsh]) => HashLaws[Function0[Hsh]].hashCompatibility(x, y))
   }
 
   // Test for Arrow applicative

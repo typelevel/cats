@@ -63,8 +63,6 @@ class CokleisliSuite extends SlowCatsSuite {
   }
 
   test("contramapValue with Id consistent with lmap") {
-    forAll { (c: Cokleisli[Id, Int, Long], f: MiniInt => Int) =>
-      c.contramapValue[MiniInt](f) should ===(c.lmap(f))
-    }
+    forAll((c: Cokleisli[Id, Int, Long], f: MiniInt => Int) => c.contramapValue[MiniInt](f) should ===(c.lmap(f)))
   }
 }

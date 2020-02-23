@@ -41,9 +41,7 @@ class RepresentableStoreSuite extends CatsSuite {
   }
 
   test("extract and peek are consistent") {
-    forAll { (store: Store[String, String]) =>
-      store.extract should ===(store.peek(store.index))
-    }
+    forAll((store: Store[String, String]) => store.extract should ===(store.peek(store.index)))
   }
 
   test("use store alias constructor") {

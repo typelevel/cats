@@ -42,15 +42,11 @@ class InjectSuite extends CatsSuite {
   }
 
   test("apply in left") {
-    forAll { (y: String) =>
-      Inject[String, StringOrInt].inj(y) == Left(y) should ===(true)
-    }
+    forAll((y: String) => Inject[String, StringOrInt].inj(y) == Left(y) should ===(true))
   }
 
   test("apply in right") {
-    forAll { (y: Int) =>
-      Inject[Int, StringOrInt].inj(y) == Right(y) should ===(true)
-    }
+    forAll((y: Int) => Inject[Int, StringOrInt].inj(y) == Right(y) should ===(true))
   }
 
   test("null identity") {

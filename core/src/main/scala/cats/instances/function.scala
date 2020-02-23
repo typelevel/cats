@@ -176,8 +176,6 @@ sealed private[instances] trait Function1Instances0 {
       Functor[F].map(fa)(a => f(a)(t1))
     }
 
-    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
-      f(fa(t1))
-    }
+    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 => f(fa(t1)) }
   }
 }

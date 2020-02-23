@@ -30,9 +30,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   def flatMapF[B](faf: A => F[B])(implicit F: FlatMap[F]): IndexedStateT[F, SA, SB, B] =
     IndexedStateT.applyF(F.map(runF) { sfsa =>
-      AndThen(sfsa).andThen { fsa =>
-        F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) }
-      }
+      AndThen(sfsa).andThen(fsa => F.flatMap(fsa) { case (s, a) => F.map(faf(a))((s, _)) })
     })
 
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SB, B] =
@@ -46,15 +44,11 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
 
   def contramap[S0](f: S0 => SA)(implicit F: Functor[F]): IndexedStateT[F, S0, SB, A] =
     IndexedStateT.applyF {
-      F.map(runF) { safsba => (s0: S0) =>
-        safsba(f(s0))
-      }
+      F.map(runF)(safsba => (s0: S0) => safsba(f(s0)))
     }
 
   def bimap[SC, B](f: SB => SC, g: A => B)(implicit F: Functor[F]): IndexedStateT[F, SA, SC, B] =
-    transform { (s, a) =>
-      (f(s), g(a))
-    }
+    transform((s, a) => (f(s), g(a)))
 
   def dimap[S0, S1](f: S0 => SA)(g: SB => S1)(implicit F: Functor[F]): IndexedStateT[F, S0, S1, A] =
     contramap(f).modify(g)
@@ -98,11 +92,7 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    * Like [[map]], but also allows the state (`S`) value to be modified.
    */
   def transform[B, SC](f: (SB, A) => (SC, B))(implicit F: Functor[F]): IndexedStateT[F, SA, SC, B] =
-    IndexedStateT.applyF(F.map(runF) { sfsa =>
-      AndThen(sfsa).andThen { fsa =>
-        F.map(fsa) { case (s, a) => f(s, a) }
-      }
-    })
+    IndexedStateT.applyF(F.map(runF)(sfsa => AndThen(sfsa).andThen(fsa => F.map(fsa) { case (s, a) => f(s, a) })))
 
   /**
    * Like [[transform]], but allows the context to change from `F` to `G`.

@@ -17,27 +17,19 @@ class ApplicativeSuite extends CatsSuite {
   }
 
   test("whenA return given argument when cond is true") {
-    forAll { (l: List[Int]) =>
-      l.whenA(true) should ===(List.fill(l.length)(()))
-    }
+    forAll((l: List[Int]) => l.whenA(true) should ===(List.fill(l.length)(())))
   }
 
   test("whenA lift Unit to F when cond is false") {
-    forAll { (l: List[Int]) =>
-      l.whenA(false) should ===(List(()))
-    }
+    forAll((l: List[Int]) => l.whenA(false) should ===(List(())))
   }
 
   test("unlessA return given argument when cond is false") {
-    forAll { (l: List[Int]) =>
-      l.unlessA(false) should ===(List.fill(l.length)(()))
-    }
+    forAll((l: List[Int]) => l.unlessA(false) should ===(List.fill(l.length)(())))
   }
 
   test("unlessA lift Unit to F when cond is true") {
-    forAll { (l: List[Int]) =>
-      l.unlessA(true) should ===(List(()))
-    }
+    forAll((l: List[Int]) => l.unlessA(true) should ===(List(())))
   }
 
   {

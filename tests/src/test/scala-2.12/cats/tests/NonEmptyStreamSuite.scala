@@ -118,22 +118,16 @@ class NonEmptyStreamSuite extends CatsSuite {
   }
 
   test("reduce consistent with fold") {
-    forAll { (nel: NonEmptyStream[Int]) =>
-      nel.reduce should ===(nel.fold)
-    }
+    forAll((nel: NonEmptyStream[Int]) => nel.reduce should ===(nel.fold))
   }
 
   test("reduce consistent with reduceK") {
-    forAll { (nel: NonEmptyStream[Option[Int]]) =>
-      nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK)
-    }
+    forAll((nel: NonEmptyStream[Option[Int]]) => nel.reduce(SemigroupK[Option].algebra[Int]) should ===(nel.reduceK))
   }
 
   test("reduceLeftToOption consistent with foldLeft + Option") {
     forAll { (nel: NonEmptyStream[Int], f: Int => String, g: (String, Int) => String) =>
-      val expected = nel.tail.foldLeft(Option(f(nel.head))) { (opt, i) =>
-        opt.map(s => g(s, i))
-      }
+      val expected = nel.tail.foldLeft(Option(f(nel.head)))((opt, i) => opt.map(s => g(s, i)))
       nel.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
@@ -142,17 +136,13 @@ class NonEmptyStreamSuite extends CatsSuite {
     forAll { (nel: NonEmptyStream[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
       val got = nel.reduceRightToOption(f)(g).value
       val last :: rev = nel.unwrap.toList.reverse
-      val expected = rev.reverse.foldRight(Option(f(last))) { (i, opt) =>
-        opt.map(s => g(i, Now(s)).value)
-      }
+      val expected = rev.reverse.foldRight(Option(f(last)))((i, opt) => opt.map(s => g(i, Now(s)).value))
       got should ===(expected)
     }
   }
 
   test("filter includes elements based on a predicate") {
-    forAll { (nes: NonEmptyStream[Int], pred: Int => Boolean) =>
-      nes.filter(pred) should ===(nes.unwrap.filter(pred))
-    }
+    forAll((nes: NonEmptyStream[Int], pred: Int => Boolean) => nes.filter(pred) should ===(nes.unwrap.filter(pred)))
   }
 
 }

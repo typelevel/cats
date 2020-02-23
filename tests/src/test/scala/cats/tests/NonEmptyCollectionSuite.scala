@@ -13,51 +13,35 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
   def underlyingToList[A](underlying: U[A]): List[A]
 
   test("head is consistent with iterator.toList.head") {
-    forAll { (is: NE[Int]) =>
-      is.head should ===(is.iterator.toList.head)
-    }
+    forAll((is: NE[Int]) => is.head should ===(is.iterator.toList.head))
   }
 
   test("tail is consistent with iterator.toList.tail") {
-    forAll { (is: NE[Int]) =>
-      underlyingToList(is.tail) should ===(is.iterator.toList.tail)
-    }
+    forAll((is: NE[Int]) => underlyingToList(is.tail) should ===(is.iterator.toList.tail))
   }
 
   test("last is consistent with iterator.toList.last") {
-    forAll { (is: NE[Int]) =>
-      is.last should ===(is.iterator.toList.last)
-    }
+    forAll((is: NE[Int]) => is.last should ===(is.iterator.toList.last))
   }
 
   test("init is consistent with iterator.toList.init") {
-    forAll { (is: NE[Int]) =>
-      underlyingToList(is.init) should ===(is.iterator.toList.init)
-    }
+    forAll((is: NE[Int]) => underlyingToList(is.init) should ===(is.iterator.toList.init))
   }
 
   test("map is consistent with iterator.toList.map") {
-    forAll { (is: NE[Int], f: Int => String) =>
-      toList(is.map(f)) should ===(is.iterator.toList.map(f))
-    }
+    forAll((is: NE[Int], f: Int => String) => toList(is.map(f)) should ===(is.iterator.toList.map(f)))
   }
 
   test("reverse is consistent with iterator.toList.reverse") {
-    forAll { (is: NE[Int]) =>
-      toList(is.reverse) should ===(is.iterator.toList.reverse)
-    }
+    forAll((is: NE[Int]) => toList(is.reverse) should ===(is.iterator.toList.reverse))
   }
 
   test("prepend is consistent with iterator.toList.::") {
-    forAll { (is: NE[Int], i: Int) =>
-      toList(is.prepend(i)) should ===(i :: is.iterator.toList)
-    }
+    forAll((is: NE[Int], i: Int) => toList(is.prepend(i)) should ===(i :: is.iterator.toList))
   }
 
   test("append is consistent with iterator.toList.::") {
-    forAll { (is: NE[Int], i: Int) =>
-      toList(is.append(i)) should ===(is.iterator.toList :+ i)
-    }
+    forAll((is: NE[Int], i: Int) => toList(is.append(i)) should ===(is.iterator.toList :+ i))
   }
 
   test("filter is consistent with iterator.toList.filter") {
@@ -79,21 +63,15 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
   }
 
   test("find is consistent with iterator.toList.find") {
-    forAll { (is: NE[Int], pred: Int => Boolean) =>
-      is.find(pred) should ===(is.iterator.toList.find(pred))
-    }
+    forAll((is: NE[Int], pred: Int => Boolean) => is.find(pred) should ===(is.iterator.toList.find(pred)))
   }
 
   test("exists is consistent with iterator.toList.exists") {
-    forAll { (is: NE[Int], pred: Int => Boolean) =>
-      is.exists(pred) should ===(is.iterator.toList.exists(pred))
-    }
+    forAll((is: NE[Int], pred: Int => Boolean) => is.exists(pred) should ===(is.iterator.toList.exists(pred)))
   }
 
   test("forall is consistent with iterator.toList.forall") {
-    forAll { (is: NE[Int], pred: Int => Boolean) =>
-      is.forall(pred) should ===(is.iterator.toList.forall(pred))
-    }
+    forAll((is: NE[Int], pred: Int => Boolean) => is.forall(pred) should ===(is.iterator.toList.forall(pred)))
   }
 
   test("foldLeft is consistent with iterator.toList.foldLeft") {
@@ -103,9 +81,7 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
   }
 
   test("reduce is consistent with iterator.toList.sum") {
-    forAll { (is: NE[Int]) =>
-      is.reduce should ===(is.iterator.toList.sum)
-    }
+    forAll((is: NE[Int]) => is.reduce should ===(is.iterator.toList.sum))
   }
 
   test("zipWith is consistent with iterator.toList.zip") {
@@ -115,27 +91,19 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
   }
 
   test("zipWithIndex is consistent with iterator.toList.zipWithIndex") {
-    forAll { (is: NE[Int]) =>
-      toList(is.zipWithIndex) should ===(is.iterator.toList.zipWithIndex)
-    }
+    forAll((is: NE[Int]) => toList(is.zipWithIndex) should ===(is.iterator.toList.zipWithIndex))
   }
 
   test("distinct is consistent with iterator.toList.distinct") {
-    forAll { (is: NE[Int]) =>
-      toList(is.distinct) should ===(is.iterator.toList.distinct)
-    }
+    forAll((is: NE[Int]) => toList(is.distinct) should ===(is.iterator.toList.distinct))
   }
 
   test("sortBy is consistent with iterator.toList.sortBy") {
-    forAll { (is: NE[Int], f: Int => String) =>
-      toList(is.sortBy(f)) should ===(is.iterator.toList.sortBy(f))
-    }
+    forAll((is: NE[Int], f: Int => String) => toList(is.sortBy(f)) should ===(is.iterator.toList.sortBy(f)))
   }
 
   test("sorted is consistent with iterator.toList.sorted") {
-    forAll { (is: NE[Int]) =>
-      toList(is.sorted) should ===(is.iterator.toList.sorted)
-    }
+    forAll((is: NE[Int]) => toList(is.sorted) should ===(is.iterator.toList.sorted))
   }
 
   test("groupByNem is consistent with iterator.toList.groupBy") {
@@ -145,14 +113,10 @@ abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollecti
   }
 
   test("toNem is consistent with iterator.toMap") {
-    forAll { (is: NE[Int]) =>
-      is.zipWithIndex.toNem.toSortedMap should ===(is.zipWithIndex.iterator.toMap)
-    }
+    forAll((is: NE[Int]) => is.zipWithIndex.toNem.toSortedMap should ===(is.zipWithIndex.iterator.toMap))
   }
 
   test("toNes is consistent with iterator.toSet") {
-    forAll { (is: NE[Int]) =>
-      is.toNes.toSortedSet should ===(is.iterator.toSet)
-    }
+    forAll((is: NE[Int]) => is.toNes.toSortedSet should ===(is.iterator.toSet))
   }
 }

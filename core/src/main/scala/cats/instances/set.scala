@@ -11,14 +11,10 @@ trait SetInstances extends cats.kernel.instances.SetInstances {
     new UnorderedTraverse[Set] with MonoidK[Set] {
 
       def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] =
-        sa.foldLeft(Applicative[G].pure(Set.empty[B])) { (acc, a) =>
-          Apply[G].map2(acc, f(a))(_ + _)
-        }
+        sa.foldLeft(Applicative[G].pure(Set.empty[B]))((acc, a) => Apply[G].map2(acc, f(a))(_ + _))
 
       override def unorderedSequence[G[_]: CommutativeApplicative, A](sa: Set[G[A]]): G[Set[A]] =
-        sa.foldLeft(Applicative[G].pure(Set.empty[A])) { (acc, a) =>
-          Apply[G].map2(acc, a)(_ + _)
-        }
+        sa.foldLeft(Applicative[G].pure(Set.empty[A]))((acc, a) => Apply[G].map2(acc, a)(_ + _))
 
       def empty[A]: Set[A] = Set.empty[A]
 

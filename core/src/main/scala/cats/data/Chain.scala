@@ -383,9 +383,7 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element, left to right.
    */
-  final private def foreach(f: A => Unit): Unit = foreachUntil { a =>
-    f(a); false
-  }
+  final private def foreach(f: A => Unit): Unit = foreachUntil { a => f(a); false }
 
   /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
@@ -743,9 +741,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-        foldRight[A, G[Chain[B]]](fa, Always(G.pure(nil))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        foldRight[A, G[Chain[B]]](fa, Always(G.pure(nil)))((a, lglb) => G.map2Eval(f(a), lglb)(_ +: _)).value
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
       def pure[A](a: A): Chain[A] = Chain.one(a)

@@ -13,9 +13,7 @@ class BitSetSuite extends CatsSuite {
     BitSet(1, 1, 2, 3).show should ===("BitSet(1, 2, 3)")
     BitSet.empty.show should ===("BitSet()")
 
-    forAll { (fs: BitSet) =>
-      fs.show should ===(fs.toString)
-    }
+    forAll((fs: BitSet) => fs.show should ===(fs.toString))
   }
 
 }

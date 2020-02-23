@@ -18,9 +18,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    */
   def contramap[S0](f: S0 => SA)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, S0, SB, A] =
     IndexedReaderWriterStateT.applyF {
-      F.map(runF) { rwsfa => (e: E, s0: S0) =>
-        rwsfa(e, f(s0))
-      }
+      F.map(runF)(rwsfa => (e: E, s0: S0) => rwsfa(e, f(s0)))
     }
 
   /**
@@ -40,9 +38,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    */
   def local[EE](f: EE => E)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, EE, L, SA, SB, A] =
     IndexedReaderWriterStateT.applyF {
-      F.map(runF) { rwsa => (ee: EE, sa: SA) =>
-        rwsa(f(ee), sa)
-      }
+      F.map(runF)(rwsa => (ee: EE, sa: SA) => rwsa(f(ee), sa))
     }
 
   /**
@@ -56,17 +52,13 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * }}}
    */
   def listen(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, (A, L)] =
-    transform { (l, s, a) =>
-      (l, s, (a, l))
-    }
+    transform((l, s, a) => (l, s, (a, l)))
 
   /**
    * Modify the result of the computation using `f`.
    */
   def map[B](f: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
-    transform { (l, s, a) =>
-      (l, s, f(a))
-    }
+    transform((l, s, a) => (l, s, f(a)))
 
   /**
    * Modify the context `F` using transformation `f`.
@@ -78,9 +70,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Modify the resulting state using `f` and the resulting value using `g`.
    */
   def bimap[SC, B](f: SB => SC, g: A => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SC, B] =
-    transform { (l, s, a) =>
-      (l, f(s), g(a))
-    }
+    transform((l, s, a) => (l, f(s), g(a)))
 
   /**
    * Modify the initial state using `f` and the resulting state using `g`.
@@ -92,9 +82,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Modify the written log value using `f`.
    */
   def mapWritten[LL](f: L => LL)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, LL, SA, SB, A] =
-    transform { (l, s, a) =>
-      (f(l), s, a)
-    }
+    transform((l, s, a) => (f(l), s, a))
 
   /**
    * Modify the result of the computation by feeding it into `f`, threading the state
@@ -200,17 +188,13 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Modify the resulting state.
    */
   def modify[SC](f: SB => SC)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SC, A] =
-    transform { (l, sb, a) =>
-      (l, f(sb), a)
-    }
+    transform((l, sb, a) => (l, f(sb), a))
 
   /**
    * Inspect a value from the input state, without modifying the state.
    */
   def inspect[B](f: SB => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
-    transform { (l, sb, a) =>
-      (l, sb, f(sb))
-    }
+    transform((l, sb, a) => (l, sb, f(sb)))
 
   /**
    * Get the input state, without modifying it.
@@ -228,9 +212,7 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * Retrieve the value written to the log.
    */
   def written(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, L] =
-    transform { (l, sb, a) =>
-      (l, sb, l)
-    }
+    transform((l, sb, a) => (l, sb, l))
 
   /**
    * Clear the log.
@@ -717,9 +699,7 @@ sealed abstract private[data] class RWSTMonadError[F[_], E, L, S, R]
   def handleErrorWith[A](
     fa: ReaderWriterStateT[F, E, L, S, A]
   )(f: R => ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, A] =
-    ReaderWriterStateT { (e, s) =>
-      F.handleErrorWith(fa.run(e, s))(r => f(r).run(e, s))
-    }
+    ReaderWriterStateT((e, s) => F.handleErrorWith(fa.run(e, s))(r => f(r).run(e, s)))
 }
 
 private trait IRWSTSemigroupK1[F[_], E, L, SA, SB] extends SemigroupK[IndexedReaderWriterStateT[F, E, L, SA, SB, *]] {
@@ -728,9 +708,7 @@ private trait IRWSTSemigroupK1[F[_], E, L, SA, SB] extends SemigroupK[IndexedRea
 
   def combineK[A](x: IndexedReaderWriterStateT[F, E, L, SA, SB, A],
                   y: IndexedReaderWriterStateT[F, E, L, SA, SB, A]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
-    IndexedReaderWriterStateT { (e, sa) =>
-      G.combineK(x.run(e, sa), y.run(e, sa))
-    }
+    IndexedReaderWriterStateT((e, sa) => G.combineK(x.run(e, sa), y.run(e, sa)))
 }
 
 private trait RWSTAlternative1[F[_], E, L, S]

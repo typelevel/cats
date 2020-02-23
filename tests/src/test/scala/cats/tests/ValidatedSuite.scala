@@ -79,24 +79,22 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("catchOnly catches matching exceptions") {
-    assert(Validated.catchOnly[NumberFormatException] { "foo".toInt }.isInstanceOf[Invalid[NumberFormatException]])
+    assert(Validated.catchOnly[NumberFormatException]("foo".toInt).isInstanceOf[Invalid[NumberFormatException]])
   }
 
   test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Validated.catchOnly[IndexOutOfBoundsException] { "foo".toInt }
+      Validated.catchOnly[IndexOutOfBoundsException]("foo".toInt)
     }
   }
 
   test("catchNonFatal catches non-fatal exceptions") {
-    assert(Validated.catchNonFatal { "foo".toInt }.isInvalid)
-    assert(Validated.catchNonFatal { throw new Throwable("blargh") }.isInvalid)
+    assert(Validated.catchNonFatal("foo".toInt).isInvalid)
+    assert(Validated.catchNonFatal(throw new Throwable("blargh")).isInvalid)
   }
 
   test("fromTry is invalid for failed try") {
-    forAll { (t: Try[Int]) =>
-      t.isFailure should ===(Validated.fromTry(t).isInvalid)
-    }
+    forAll((t: Try[Int]) => t.isFailure should ===(Validated.fromTry(t).isInvalid))
   }
 
   test("ValidatedNel") {
@@ -165,15 +163,11 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("valueOr consistent with swap then map then merge") {
-    forAll { (v: Validated[String, Int], f: String => Int) =>
-      v.valueOr(f) should ===(v.swap.map(f).merge)
-    }
+    forAll((v: Validated[String, Int], f: String => Int) => v.valueOr(f) should ===(v.swap.map(f).merge))
   }
 
   test("toEither then fromEither is identity") {
-    forAll { (v: Validated[String, Int]) =>
-      Validated.fromEither(v.toEither) should ===(v)
-    }
+    forAll((v: Validated[String, Int]) => Validated.fromEither(v.toEither) should ===(v))
   }
 
   test("toList and toOption are empty for invalid") {
@@ -207,27 +201,19 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("fromOption consistent with Either.fromOption") {
-    forAll { (o: Option[Int], s: String) =>
-      Validated.fromOption(o, s) should ===(Either.fromOption(o, s).toValidated)
-    }
+    forAll((o: Option[Int], s: String) => Validated.fromOption(o, s) should ===(Either.fromOption(o, s).toValidated))
   }
 
   test("fromOption consistent with toOption") {
-    forAll { (o: Option[Int], s: String) =>
-      Validated.fromOption(o, s).toOption should ===(o)
-    }
+    forAll((o: Option[Int], s: String) => Validated.fromOption(o, s).toOption should ===(o))
   }
 
   test("fromIor consistent with Ior.toValidated") {
-    forAll { (i: Ior[String, Int]) =>
-      Validated.fromIor(i) should ===(i.toValidated)
-    }
+    forAll((i: Ior[String, Int]) => Validated.fromIor(i) should ===(i.toValidated))
   }
 
   test("toIor then fromEither is identity") {
-    forAll { (v: Validated[String, Int]) =>
-      Validated.fromIor(v.toIor) should ===(v)
-    }
+    forAll((v: Validated[String, Int]) => Validated.fromIor(v.toIor) should ===(v))
   }
 
   test("isValid after combine, iff both are valid") {
@@ -237,15 +223,11 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("isInvalid consistent with isValid") {
-    forAll { (x: Validated[String, Int]) =>
-      x.isInvalid should !==(x.isValid)
-    }
+    forAll((x: Validated[String, Int]) => x.isInvalid should !==(x.isValid))
   }
 
   test("double swap is identity") {
-    forAll { (x: Validated[String, Int]) =>
-      x.swap.swap should ===(x)
-    }
+    forAll((x: Validated[String, Int]) => x.swap.swap should ===(x))
   }
 
   test("swap negates isInvalid/isValid") {
@@ -315,9 +297,7 @@ class ValidatedSuite extends CatsSuite {
   }
 
   test("liftTo consistent with direct to Option") {
-    forAll { (v: Validated[Unit, Int]) =>
-      v.liftTo[Option] shouldBe v.toOption
-    }
+    forAll((v: Validated[Unit, Int]) => v.liftTo[Option] shouldBe v.toOption)
   }
 
   test("liftTo works with specialized errors") {

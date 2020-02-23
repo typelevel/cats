@@ -231,16 +231,17 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("flatMap and flatMapF+tell are consistent") {
-    forAll { (rwst: ReaderWriterStateT[Option, String, String, String, Int], f: Int => Option[Int], initial: String, context: String, log: String) =>
-      val flatMap = rwst.flatMap { a =>
-        ReaderWriterStateT { (e, s) =>
-          f(a).map((log, s, _))
-        }
-      }
+    forAll {
+      (rwst: ReaderWriterStateT[Option, String, String, String, Int],
+       f: Int => Option[Int],
+       initial: String,
+       context: String,
+       log: String) =>
+        val flatMap = rwst.flatMap(a => ReaderWriterStateT((e, s) => f(a).map((log, s, _))))
 
-      val flatMapF = rwst.flatMapF(f).tell(log)
+        val flatMapF = rwst.flatMapF(f).tell(log)
 
-      flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
+        flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
     }
   }
 
@@ -475,17 +476,13 @@ object ReaderWriterStateTSuite {
   def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] = {
     import cats.instances.vector._
 
-    ReaderWriterState { (context, state) =>
-      (Vector(s"${context}: Added ${i}"), state + i, state + i)
-    }
+    ReaderWriterState((context, state) => (Vector(s"${context}: Added ${i}"), state + i, state + i))
   }
 
   def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] = {
     import cats.kernel.instances.unit._
 
-    ReaderWriterState { (context, state) =>
-      ((), state + i, state + i)
-    }
+    ReaderWriterState((context, state) => ((), state + i, state + i))
   }
 
   implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],

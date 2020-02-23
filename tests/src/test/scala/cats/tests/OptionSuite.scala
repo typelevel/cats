@@ -31,9 +31,7 @@ class OptionSuite extends CatsSuite {
     none[Int].show should ===("None")
     1.some.show should ===("Some(1)")
 
-    forAll { (fs: Option[String]) =>
-      fs.show should ===(fs.toString)
-    }
+    forAll((fs: Option[String]) => fs.show should ===(fs.toString))
   }
 
   // The following tests check laws which are a different formulation of

@@ -90,15 +90,11 @@ class InjectKSuite extends CatsSuite {
   }
 
   test("apply in left") {
-    forAll { (y: Test1Algebra[Int]) =>
-      InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) should ===(true)
-    }
+    forAll((y: Test1Algebra[Int]) => InjectK[Test1Algebra, T].inj(y) == EitherK(Left(y)) should ===(true))
   }
 
   test("apply in right") {
-    forAll { (y: Test2Algebra[Int]) =>
-      InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) should ===(true)
-    }
+    forAll((y: Test2Algebra[Int]) => InjectK[Test2Algebra, T].inj(y) == EitherK(Right(y)) should ===(true))
   }
 
   test("null identity") {

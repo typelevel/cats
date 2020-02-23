@@ -155,9 +155,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   }
 
   test("reduce consistent with fold") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.reduce should ===(nonEmptyVector.fold)
-    }
+    forAll((nonEmptyVector: NonEmptyVector[Int]) => nonEmptyVector.reduce should ===(nonEmptyVector.fold))
   }
 
   test("reduce consistent with reduceK") {
@@ -168,9 +166,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("reduceLeftToOption consistent with foldLeft + Option") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], f: Int => String, g: (String, Int) => String) =>
-      val expected = nonEmptyVector.tail.foldLeft(Option(f(nonEmptyVector.head))) { (opt, i) =>
-        opt.map(s => g(s, i))
-      }
+      val expected = nonEmptyVector.tail.foldLeft(Option(f(nonEmptyVector.head)))((opt, i) => opt.map(s => g(s, i)))
       nonEmptyVector.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
@@ -178,9 +174,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("reduceRightToOption consistent with foldRight + Option") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], f: Int => String, g: (Int, Eval[String]) => Eval[String]) =>
       val (first, last) = excise(nonEmptyVector.toVector)
-      val expected = first.foldRight(Option(f(last))) { (i, opt) =>
-        opt.map(s => g(i, Now(s)).value)
-      }
+      val expected = first.foldRight(Option(f(last)))((i, opt) => opt.map(s => g(i, Now(s)).value))
       nonEmptyVector.reduceRightToOption(f)(g).value should ===(expected)
     }
   }
@@ -213,9 +207,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
     }
   }
   test("append is consistent with :+") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
-      nonEmptyVector.append(i) should ===(nonEmptyVector :+ i)
-    }
+    forAll((nonEmptyVector: NonEmptyVector[Int], i: Int) => nonEmptyVector.append(i) should ===(nonEmptyVector :+ i))
   }
 
   test("+: is consistent with concatNev") {
@@ -346,15 +338,11 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   }
 
   test("NonEmptyVector#last is consistent with Vector#last") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.last should ===(nonEmptyVector.toVector.last)
-    }
+    forAll((nonEmptyVector: NonEmptyVector[Int]) => nonEmptyVector.last should ===(nonEmptyVector.toVector.last))
   }
 
   test("NonEmptyVector#init is consistent with Vector#init") {
-    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
-      nonEmptyVector.init should ===(nonEmptyVector.toVector.init)
-    }
+    forAll((nonEmptyVector: NonEmptyVector[Int]) => nonEmptyVector.init should ===(nonEmptyVector.toVector.init))
   }
 
   test("NonEmptyVector#collect is consistent with Vector#collect") {

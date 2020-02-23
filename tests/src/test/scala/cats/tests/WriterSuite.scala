@@ -12,14 +12,10 @@ class WriterSuite extends CatsSuite {
   }
 
   test("tell syntax creates a writer with a unit result") {
-    forAll { (log: List[Int]) =>
-      log.tell should ===(Writer(log, ()))
-    }
+    forAll((log: List[Int]) => log.tell should ===(Writer(log, ())))
   }
 
   test("writer syntax creates a writer with the specified result and log") {
-    forAll { (result: String, log: List[Int]) =>
-      result.writer(log) should ===(Writer(log, result))
-    }
+    forAll((result: String, log: List[Int]) => result.writer(log) should ===(Writer(log, result)))
   }
 }

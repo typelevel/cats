@@ -16,9 +16,7 @@ class ContTSuite extends CatsSuite {
     val fns = genItems.sample.get
     new Eq[ContT[M, A, B]] {
       def eqv(a: ContT[M, A, B], b: ContT[M, A, B]) =
-        fns.forall { fn =>
-          eqMA.eqv(a.run(fn), b.run(fn))
-        }
+        fns.forall(fn => eqMA.eqv(a.run(fn), b.run(fn)))
     }
   }
 

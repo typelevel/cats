@@ -47,63 +47,43 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("size is consistent with toChain.size") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.size should ===(ci.toChain.size)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.size should ===(ci.toChain.size))
   }
 
   test("filterNot and then exists should always be false") {
-    forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.filterNot(f).exists(f) should ===(false)
-    }
+    forAll((ci: NonEmptyChain[Int], f: Int => Boolean) => ci.filterNot(f).exists(f) should ===(false))
   }
 
   test("filter and then forall should always be true") {
-    forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.filter(f).forall(f) should ===(true)
-    }
+    forAll((ci: NonEmptyChain[Int], f: Int => Boolean) => ci.filter(f).forall(f) should ===(true))
   }
 
   test("exists should be consistent with find + isDefined") {
-    forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.exists(f) should ===(ci.find(f).isDefined)
-    }
+    forAll((ci: NonEmptyChain[Int], f: Int => Boolean) => ci.exists(f) should ===(ci.find(f).isDefined))
   }
 
   test("deleteFirst consistent with find") {
-    forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.find(f) should ===(ci.deleteFirst(f).map(_._1))
-    }
+    forAll((ci: NonEmptyChain[Int], f: Int => Boolean) => ci.find(f) should ===(ci.deleteFirst(f).map(_._1)))
   }
 
   test("filterNot element and then contains should be false") {
-    forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      ci.filterNot(_ === i).contains(i) should ===(false)
-    }
+    forAll((ci: NonEmptyChain[Int], i: Int) => ci.filterNot(_ === i).contains(i) should ===(false))
   }
 
   test("Always nonempty after cons") {
-    forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      (i +: ci).nonEmpty should ===(true)
-    }
+    forAll((ci: NonEmptyChain[Int], i: Int) => (i +: ci).nonEmpty should ===(true))
   }
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) should ===(ci)
-    }
+    forAll((ci: NonEmptyChain[Int]) => NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) should ===(ci))
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) should ===(ci)
-    }
+    forAll((ci: NonEmptyChain[Int]) => NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) should ===(ci))
   }
 
   test("fromChain . toChain is Option.some") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromChain(ci.toChain) should ===(Some(ci))
-    }
+    forAll((ci: NonEmptyChain[Int]) => NonEmptyChain.fromChain(ci.toChain) should ===(Some(ci)))
   }
 
   test("fromChainUnsafe throws exception when used with empty chain") {
@@ -111,9 +91,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("fromSeq . toList . iterator is id") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci))
-    }
+    forAll((ci: NonEmptyChain[Int]) => NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci)))
   }
 
   test("zipWith consistent with List#zip and then List#map") {
@@ -129,33 +107,23 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("reverse . reverse is id") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.reverse.reverse should ===(ci)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.reverse.reverse should ===(ci))
   }
 
   test("reverse consistent with Chain#reverse") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.reverse.toChain should ===(ci.toChain.reverse)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.reverse.toChain should ===(ci.toChain.reverse))
   }
 
   test("NonEmptyChain#distinct is consistent with List#distinct") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.distinct.toList should ===(ci.toList.distinct)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.distinct.toList should ===(ci.toList.distinct))
   }
 
   test("init") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.init.toList should ===(ci.toList.init)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.init.toList should ===(ci.toList.init))
   }
 
   test("last") {
-    forAll { (ci: NonEmptyChain[Int]) =>
-      ci.last should ===(ci.toList.last)
-    }
+    forAll((ci: NonEmptyChain[Int]) => ci.last should ===(ci.toList.last))
   }
 }
 

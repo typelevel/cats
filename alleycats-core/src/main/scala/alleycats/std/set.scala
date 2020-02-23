@@ -74,9 +74,7 @@ trait SetInstances {
 
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
-        sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>
-          G.map2(buf, f(a))(_ + _)
-        }
+        sa.foldLeft(G.pure(Set.empty[B]))((buf, a) => G.map2(buf, f(a))(_ + _))
       }
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {

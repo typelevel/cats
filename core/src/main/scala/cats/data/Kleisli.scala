@@ -291,9 +291,7 @@ sealed abstract private[data] class KleisliInstances extends KleisliInstances0 {
     new Defer[Kleisli[F, A, *]] {
       def defer[B](fa: => Kleisli[F, A, B]): Kleisli[F, A, B] = {
         lazy val cacheFa = fa
-        Kleisli[F, A, B] { a =>
-          F.defer(cacheFa.run(a))
-        }
+        Kleisli[F, A, B](a => F.defer(cacheFa.run(a)))
       }
     }
 
@@ -598,9 +596,7 @@ private[data] trait KleisliFlatMap[F[_], A] extends FlatMap[Kleisli[F, A, *]] wi
     fa.flatMap(f)
 
   def tailRecM[B, C](b: B)(f: B => Kleisli[F, A, Either[B, C]]): Kleisli[F, A, C] =
-    Kleisli[F, A, C]({ a =>
-      F.tailRecM(b) { f(_).run(a) }
-    })
+    Kleisli[F, A, C](a => F.tailRecM(b)(f(_).run(a)))
 }
 
 private[data] trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, *]] with KleisliApply[F, A] {
@@ -643,7 +639,5 @@ private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[
   def functor: Functor[Kleisli[F, R, *]] = Kleisli.catsDataFunctorForKleisli(FF.functor)
 
   def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] =
-    Kleisli[F, R, B] { r =>
-      FF.mapFilter(fa.run(r))(f)
-    }
+    Kleisli[F, R, B](r => FF.mapFilter(fa.run(r))(f))
 }

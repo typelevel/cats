@@ -10,9 +10,7 @@ import kernel.compat.scalaVersionSpecific._
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
-    forAll { (fa: F[Int]) =>
-      fa.zipWithIndex.toList should ===(fa.toList.zipWithIndex)
-    }
+    forAll((fa: F[Int]) => fa.zipWithIndex.toList should ===(fa.toList.zipWithIndex))
   }
 
   test(s"Traverse[$name].mapWithIndex") {

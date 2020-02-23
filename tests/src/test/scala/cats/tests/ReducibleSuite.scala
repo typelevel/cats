@@ -18,9 +18,7 @@ class ReducibleSuiteAdditional extends CatsSuite {
 
   // exists method written in terms of reduceRightTo
   def contains[F[_]: Reducible, A: Eq](as: F[A], goal: A): Eval[Boolean] =
-    as.reduceRightTo(_ === goal) { (a, lb) =>
-      if (a === goal) Now(true) else lb
-    }
+    as.reduceRightTo(_ === goal)((a, lb) => if (a === goal) Now(true) else lb)
 
   test("Reducible[NonEmptyList] default get/size implementation") {
     val R = new NonEmptyReducible[NonEmptyList, List] {
@@ -48,19 +46,13 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val totalLength = names.toList.map(_.length).sum
     R.reduceLeftTo(names)(_.length)((sum, s) => s.length + sum) should ===(totalLength)
     R.reduceMap(names)(_.length) should ===(totalLength)
-    val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String]) { (acc, x) =>
-      (Some(acc + x): Option[String])
-    }
+    val sumLeftM = R.reduceLeftM(names)(Some(_): Option[String])((acc, x) => (Some(acc + x): Option[String]))
     assert(sumLeftM == Some("AaronBettyCalvinDeirdra"))
-    val sumMapM = R.reduceMapM(names) { x =>
-      (Some(x): Option[String])
-    }
+    val sumMapM = R.reduceMapM(names)(x => (Some(x): Option[String]))
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
     val isNotCalvin: String => Option[String] =
       x => if (x == "Calvin") None else Some(x)
-    val notCalvin = R.reduceLeftM(names)(isNotCalvin) { (acc, x) =>
-      isNotCalvin(x).map(acc + _)
-    }
+    val notCalvin = R.reduceLeftM(names)(isNotCalvin)((acc, x) => isNotCalvin(x).map(acc + _))
     assert(notCalvin == None)
     val notCalvinMapM = R.reduceMapM(names)(isNotCalvin)
     assert(notCalvinMapM == None)
@@ -160,15 +152,11 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: A
   }
 
   test(s"Reducible[$name].toNonEmptyList/toList consistency") {
-    forAll { (fa: F[Int]) =>
-      fa.toList.toNel should ===(Some(fa.toNonEmptyList))
-    }
+    forAll((fa: F[Int]) => fa.toList.toNel should ===(Some(fa.toNonEmptyList)))
   }
 
   test(s"Reducible[$name].nonEmptyIntercalate") {
-    forAll { (fa: F[String], a: String) =>
-      fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a))
-    }
+    forAll((fa: F[String], a: String) => fa.nonEmptyIntercalate(a) === (fa.toList.mkString(a)))
   }
 
   test("Reducible#nonEmptyPartition retains size") {

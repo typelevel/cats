@@ -114,9 +114,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    */
   def map[Z](fn: V => Z)(implicit functorF: Functor[F]): WriterT[F, L, Z] =
     WriterT {
-      functorF.map(run) { z =>
-        (z._1, fn(z._2))
-      }
+      functorF.map(run)(z => (z._1, fn(z._2)))
     }
 
   /**
@@ -158,9 +156,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
   def contramap[Z](fn: Z => V)(implicit F: Contravariant[F]): WriterT[F, L, Z] =
     WriterT {
-      F.contramap(run) { z =>
-        (z._1, fn(z._2))
-      }
+      F.contramap(run)(z => (z._1, fn(z._2)))
     }
 
   /**
@@ -179,11 +175,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    */
   def flatMap[U](f: V => WriterT[F, L, U])(implicit flatMapF: FlatMap[F], semigroupL: Semigroup[L]): WriterT[F, L, U] =
     WriterT {
-      flatMapF.flatMap(run) { lv =>
-        flatMapF.map(f(lv._2).run) { lv2 =>
-          (semigroupL.combine(lv._1, lv2._1), lv2._2)
-        }
-      }
+      flatMapF.flatMap(run)(lv => flatMapF.map(f(lv._2).run)(lv2 => (semigroupL.combine(lv._1, lv2._1), lv2._2)))
     }
 
   /**
@@ -200,7 +192,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
-    WriterT { functorF.map(run)(f.tupled) }
+    WriterT(functorF.map(run)(f.tupled))
 
   /**
    * Example:

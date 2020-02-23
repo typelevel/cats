@@ -19,9 +19,7 @@ class ContravariantCoyonedaSuite extends CatsSuite {
   implicit def contravariantCoyonedaEq[A: Arbitrary, T](implicit eqft: Eq[T]): Eq[ContravariantCoyoneda[* => T, A]] =
     new Eq[ContravariantCoyoneda[* => T, A]] {
       def eqv(cca: ContravariantCoyoneda[* => T, A], ccb: ContravariantCoyoneda[* => T, A]): Boolean =
-        Arbitrary.arbitrary[List[A]].sample.get.forall { a =>
-          eqft.eqv(cca.run.apply(a), ccb.run.apply(a))
-        }
+        Arbitrary.arbitrary[List[A]].sample.get.forall(a => eqft.eqv(cca.run.apply(a), ccb.run.apply(a)))
     }
 
   // This instance cannot be summoned implicitly. This is not specific to contravariant coyoneda;

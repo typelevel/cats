@@ -168,9 +168,7 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("pure consistent with ask") {
-    forAll { (i: Int) =>
-      Kleisli.pure[Option, Int, Int](i).run(i) should ===(Kleisli.ask[Option, Int].run(i))
-    }
+    forAll((i: Int) => Kleisli.pure[Option, Int, Int](i).run(i) should ===(Kleisli.ask[Option, Int].run(i)))
   }
 
   test("mapF") {
@@ -181,16 +179,12 @@ class KleisliSuite extends CatsSuite {
 
   test("mapK") {
     val t: List ~> Option = λ[List ~> Option](_.headOption)
-    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      t(f.run(i)) should ===(f.mapK(t).run(i))
-    }
+    forAll((f: Kleisli[List, Int, Int], i: Int) => t(f.run(i)) should ===(f.mapK(t).run(i)))
   }
 
   test("liftFunctionK consistent with mapK") {
     val t: List ~> Option = λ[List ~> Option](_.headOption)
-    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i))
-    }
+    forAll((f: Kleisli[List, Int, Int], i: Int) => (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i)))
   }
 
   test("flatMapF") {
@@ -200,15 +194,11 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("lower") {
-    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      f.run(i) should ===(f.lower.run(i).flatten)
-    }
+    forAll((f: Kleisli[List, Int, Int], i: Int) => f.run(i) should ===(f.lower.run(i).flatten))
   }
 
   test("tap") {
-    forAll { (f: Kleisli[List, Int, String], i: Int) =>
-      f.run(i).as(i) should ===(f.tap.run(i))
-    }
+    forAll((f: Kleisli[List, Int, String], i: Int) => f.run(i).as(i) should ===(f.tap.run(i)))
   }
 
   test("tapWith") {
@@ -218,9 +208,7 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("toReader") {
-    forAll { (f: Kleisli[List, Int, String], i: Int) =>
-      f.run(i) should ===(f.toReader.run(i))
-    }
+    forAll((f: Kleisli[List, Int, String], i: Int) => f.run(i) should ===(f.toReader.run(i)))
   }
 
   test("tapWithF") {
@@ -230,9 +218,7 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("apply") {
-    forAll { (f: Kleisli[List, Int, Int], i: Int) =>
-      f.run(i) should ===(f(i))
-    }
+    forAll((f: Kleisli[List, Int, Int], i: Int) => f.run(i) should ===(f(i)))
   }
 
   test("traverse") {
@@ -242,9 +228,7 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("lift") {
-    val f = Kleisli { (x: Int) =>
-      (Some(x + 1): Option[Int])
-    }
+    val f = Kleisli((x: Int) => (Some(x + 1): Option[Int]))
     val l = f.lift[List]
     (List(1, 2, 3) >>= l.run) should ===(List(Some(2), Some(3), Some(4)))
   }
@@ -252,26 +236,18 @@ class KleisliSuite extends CatsSuite {
   test("local") {
     case class Config(i: Int, s: String)
 
-    val kint = Kleisli { (x: Int) =>
-      Option(x.toDouble)
-    }
+    val kint = Kleisli((x: Int) => Option(x.toDouble))
     val kconfig1 = kint.local[Config](_.i)
-    val kconfig2 = Kleisli { (c: Config) =>
-      Option(c.i.toDouble)
-    }
+    val kconfig2 = Kleisli((c: Config) => Option(c.i.toDouble))
 
     val config = Config(0, "cats")
     kconfig1.run(config) should ===(kconfig2.run(config))
   }
 
   test("local for Reader") {
-    val rint1 = Reader { (x: Int) =>
-      x.toDouble
-    }
+    val rint1 = Reader((x: Int) => x.toDouble)
     val rint1local = Reader.local((i: Int) => i * 2)(rint1)
-    val rint2 = Reader { (i: Int) =>
-      (i * 2).toDouble
-    }
+    val rint2 = Reader((i: Int) => (i * 2).toDouble)
 
     val config = 10
     rint1local.run(config) should ===(rint2.run(config))
@@ -281,18 +257,14 @@ class KleisliSuite extends CatsSuite {
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
     val count = if (Platform.isJvm) 10000 else 100
-    val result = (0 until count).foldLeft(unit) { (acc, _) =>
-      acc.flatMap(_ => unit)
-    }
+    val result = (0 until count).foldLeft(unit)((acc, _) => acc.flatMap(_ => unit))
     result.run(()).value
   }
 
   test("flatMap is stack safe on repeated right binds when F is") {
     val unit = Kleisli.pure[Eval, Unit, Unit](())
     val count = if (Platform.isJvm) 10000 else 100
-    val result = (0 until count).foldLeft(unit) { (acc, _) =>
-      unit.flatMap(_ => acc)
-    }
+    val result = (0 until count).foldLeft(unit)((acc, _) => unit.flatMap(_ => acc))
     result.run(()).value
   }
 

@@ -97,9 +97,7 @@ import Foldable.sentinel
 
   def foldRightDefer[G[_]: Defer, A, B](fa: F[A], gb: G[B])(fn: (A, G[B]) => G[B]): G[B] =
     Defer[G].defer(
-      this.foldLeft(fa, (z: G[B]) => z) { (acc, elem) => z =>
-        Defer[G].defer(acc(fn(elem, z)))
-      }(gb)
+      this.foldLeft(fa, (z: G[B]) => z)((acc, elem) => z => Defer[G].defer(acc(fn(elem, z))))(gb)
     )
 
   def reduceLeftToOption[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): Option[B] =
@@ -234,9 +232,7 @@ import Foldable.sentinel
   def get[A](fa: F[A])(idx: Long): Option[A] =
     if (idx < 0L) None
     else
-      foldM[Either[A, *], A, Long](fa, 0L) { (i, a) =>
-        if (i == idx) Left(a) else Right(i + 1L)
-      } match {
+      foldM[Either[A, *], A, Long](fa, 0L)((i, a) => if (i == idx) Left(a) else Right(i + 1L)) match {
         case Left(a)  => Some(a)
         case Right(_) => None
       }
@@ -499,11 +495,7 @@ import Foldable.sentinel
    * needed.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-    foldRight(fa, Always(G.pure(()))) { (a, acc) =>
-      G.map2Eval(f(a), acc) { (_, _) =>
-        ()
-      }
-    }.value
+    foldRight(fa, Always(G.pure(())))((a, acc) => G.map2Eval(f(a), acc)((_, _) => ())).value
 
   /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
@@ -547,9 +539,7 @@ import Foldable.sentinel
    * Find the first element matching the predicate, if one exists.
    */
   def find[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight(fa, Now(Option.empty[A])) { (a, lb) =>
-      if (f(a)) Now(Some(a)) else lb
-    }.value
+    foldRight(fa, Now(Option.empty[A]))((a, lb) => if (f(a)) Now(Some(a)) else lb).value
 
   /**
    * Find the first element matching the effectful predicate, if one exists.
@@ -587,9 +577,7 @@ import Foldable.sentinel
    * If there are no elements, the result is `false`.
    */
   override def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.False) { (a, lb) =>
-      if (p(a)) Eval.True else lb
-    }.value
+    foldRight(fa, Eval.False)((a, lb) => if (p(a)) Eval.True else lb).value
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -597,9 +585,7 @@ import Foldable.sentinel
    * If there are no elements, the result is `true`.
    */
   override def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    foldRight(fa, Eval.True) { (a, lb) =>
-      if (p(a)) lb else Eval.False
-    }.value
+    foldRight(fa, Eval.True)((a, lb) => if (p(a)) lb else Eval.False).value
 
   /**
    * Check whether at least one element satisfies the effectful predicate.
@@ -675,9 +661,7 @@ import Foldable.sentinel
    * Convert F[A] to a List[A].
    */
   def toList[A](fa: F[A]): List[A] =
-    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      buf += a
-    }.toList
+    foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => buf += a).toList
 
   /**
    * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
@@ -710,27 +694,21 @@ import Foldable.sentinel
    * Convert F[A] to a List[A], only including elements which match `p`.
    */
   def filter_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      if (p(a)) buf += a else buf
-    }.toList
+    foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => if (p(a)) buf += a else buf).toList
 
   /**
    * Convert F[A] to a List[A], retaining only initial elements which
    * match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldRight(fa, Now(List.empty[A])) { (a, llst) =>
-      if (p(a)) llst.map(a :: _) else Now(Nil)
-    }.value
+    foldRight(fa, Now(List.empty[A]))((a, llst) => if (p(a)) llst.map(a :: _) else Now(Nil)).value
 
   /**
    * Convert F[A] to a List[A], dropping all initial elements which
    * match `p`.
    */
   def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
-    foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
-      if (buf.nonEmpty || !p(a)) buf += a else buf
-    }.toList
+    foldLeft(fa, mutable.ListBuffer.empty[A])((buf, a) => if (buf.nonEmpty || !p(a)) buf += a else buf).toList
 
   /**
    * Returns true if there are no elements. Otherwise false.

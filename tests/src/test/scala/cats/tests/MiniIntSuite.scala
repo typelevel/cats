@@ -35,9 +35,7 @@ class MiniIntSuite extends CatsSuite {
   }
 
   test("int roundtrip") {
-    forAll { (i: MiniInt) =>
-      MiniInt.fromInt(i.toInt) should ===(Some(i))
-    }
+    forAll((i: MiniInt) => MiniInt.fromInt(i.toInt) should ===(Some(i)))
   }
 
   test("int bounds") {

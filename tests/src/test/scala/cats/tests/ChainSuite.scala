@@ -63,21 +63,15 @@ class ChainSuite extends CatsSuite {
   test("show") {
     Show[Chain[Int]].show(Chain(1, 2, 3)) should ===("Chain(1, 2, 3)")
     Chain.empty[Int].show should ===("Chain()")
-    forAll { (l: Chain[String]) =>
-      l.show should ===(l.toString)
-    }
+    forAll((l: Chain[String]) => l.show should ===(l.toString))
   }
 
   test("headOption") {
-    forAll { (s: Seq[Int]) =>
-      Chain.fromSeq(s).headOption should ===(s.headOption)
-    }
+    forAll((s: Seq[Int]) => Chain.fromSeq(s).headOption should ===(s.headOption))
   }
 
   test("lastOption") {
-    forAll { (c: Chain[Int]) =>
-      c.lastOption should ===(c.toList.lastOption)
-    }
+    forAll((c: Chain[Int]) => c.lastOption should ===(c.toList.lastOption))
   }
 
   test("seq-like pattern match") {
@@ -96,57 +90,39 @@ class ChainSuite extends CatsSuite {
   }
 
   test("size is consistent with toList.size") {
-    forAll { (ci: Chain[Int]) =>
-      ci.size.toInt should ===(ci.toList.size)
-    }
+    forAll((ci: Chain[Int]) => ci.size.toInt should ===(ci.toList.size))
   }
 
   test("filterNot and then exists should always be false") {
-    forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.filterNot(f).exists(f) should ===(false)
-    }
+    forAll((ci: Chain[Int], f: Int => Boolean) => ci.filterNot(f).exists(f) should ===(false))
   }
 
   test("filter and then forall should always be true") {
-    forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.filter(f).forall(f) should ===(true)
-    }
+    forAll((ci: Chain[Int], f: Int => Boolean) => ci.filter(f).forall(f) should ===(true))
   }
 
   test("exists should be consistent with find + isDefined") {
-    forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.exists(f) should ===(ci.find(f).isDefined)
-    }
+    forAll((ci: Chain[Int], f: Int => Boolean) => ci.exists(f) should ===(ci.find(f).isDefined))
   }
 
   test("deleteFirst consistent with find") {
-    forAll { (ci: Chain[Int], f: Int => Boolean) =>
-      ci.find(f) should ===(ci.deleteFirst(f).map(_._1))
-    }
+    forAll((ci: Chain[Int], f: Int => Boolean) => ci.find(f) should ===(ci.deleteFirst(f).map(_._1)))
   }
 
   test("filterNot element and then contains should be false") {
-    forAll { (ci: Chain[Int], i: Int) =>
-      ci.filterNot(_ === i).contains(i) should ===(false)
-    }
+    forAll((ci: Chain[Int], i: Int) => ci.filterNot(_ === i).contains(i) should ===(false))
   }
 
   test("Always nonempty after cons") {
-    forAll { (ci: Chain[Int], i: Int) =>
-      (i +: ci).nonEmpty should ===(true)
-    }
+    forAll((ci: Chain[Int], i: Int) => (i +: ci).nonEmpty should ===(true))
   }
 
   test("fromSeq . toVector is id") {
-    forAll { (ci: Chain[Int]) =>
-      Chain.fromSeq(ci.toVector) should ===(ci)
-    }
+    forAll((ci: Chain[Int]) => Chain.fromSeq(ci.toVector) should ===(ci))
   }
 
   test("fromSeq . toList . iterator is id") {
-    forAll { (ci: Chain[Int]) =>
-      Chain.fromSeq(ci.iterator.toList) should ===(ci)
-    }
+    forAll((ci: Chain[Int]) => Chain.fromSeq(ci.iterator.toList) should ===(ci))
   }
 
   test("zipWith consistent with List#zip and then List#map") {
@@ -162,47 +138,33 @@ class ChainSuite extends CatsSuite {
   }
 
   test("zipWithIndex is consistent with toList.zipWithIndex") {
-    forAll { (ci: Chain[Int]) =>
-      ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex)
-    }
+    forAll((ci: Chain[Int]) => ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex))
   }
 
   test("sortBy is consistent with toList.sortBy") {
-    forAll { (ci: Chain[Int], f: Int => String) =>
-      ci.sortBy(f).toList should ===(ci.toList.sortBy(f))
-    }
+    forAll((ci: Chain[Int], f: Int => String) => ci.sortBy(f).toList should ===(ci.toList.sortBy(f)))
   }
 
   test("sorted is consistent with toList.sorted") {
-    forAll { (ci: Chain[Int]) =>
-      ci.sorted.toList should ===(ci.toList.sorted)
-    }
+    forAll((ci: Chain[Int]) => ci.sorted.toList should ===(ci.toList.sorted))
   }
 
   test("reverse . reverse is id") {
-    forAll { (ci: Chain[Int]) =>
-      ci.reverse.reverse should ===(ci)
-    }
+    forAll((ci: Chain[Int]) => ci.reverse.reverse should ===(ci))
   }
 
   test("reverse consistent with List#reverse") {
-    forAll { (ci: Chain[Int]) =>
-      ci.reverse.toList should ===(ci.toList.reverse)
-    }
+    forAll((ci: Chain[Int]) => ci.reverse.toList should ===(ci.toList.reverse))
   }
 
   test("(a ++ b).isEmpty ==> a.isEmpty and b.isEmpty") {
-    forAll { (a: Chain[Int], b: Chain[Int]) =>
-      assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty))
-    }
+    forAll((a: Chain[Int], b: Chain[Int]) => assert((a ++ b).nonEmpty || (a.isEmpty && b.isEmpty)))
   }
 
   test("a.isEmpty == (a eq Chain.nil)") {
     assert(Chain.fromSeq(Nil) eq Chain.nil)
 
-    forAll { (a: Chain[Int]) =>
-      assert(a.isEmpty == (a eq Chain.nil))
-    }
+    forAll((a: Chain[Int]) => assert(a.isEmpty == (a eq Chain.nil)))
   }
 
   test("(nil ++ a) eq a") {
@@ -233,53 +195,37 @@ class ChainSuite extends CatsSuite {
   }
 
   test("Chain#distinct is consistent with List#distinct") {
-    forAll { (a: Chain[Int]) =>
-      a.distinct.toList should ===(a.toList.distinct)
-    }
+    forAll((a: Chain[Int]) => a.distinct.toList should ===(a.toList.distinct))
   }
 
   test("=== is consistent with == (issue #2540)") {
     (Chain.one(1) |+| Chain.one(2) |+| Chain.one(3)) should be(Chain.fromSeq(List(1, 2, 3)))
 
-    forAll { (a: Chain[Int], b: Chain[Int]) =>
-      (a === b) should ===(a == b)
-    }
+    forAll((a: Chain[Int], b: Chain[Int]) => (a === b) should ===(a == b))
   }
 
   test("== returns false for non-Chains") {
-    forAll { (a: Chain[Int], b: Int) =>
-      (a == b) should ===(false)
-    }
+    forAll((a: Chain[Int], b: Int) => (a == b) should ===(false))
   }
 
   test("== returns false for Chains of different element types") {
-    forAll { (a: Chain[Option[String]], b: Chain[String]) =>
-      (a == b) should ===(a.isEmpty && b.isEmpty)
-    }
+    forAll((a: Chain[Option[String]], b: Chain[String]) => (a == b) should ===(a.isEmpty && b.isEmpty))
   }
 
   test("Chain#hashCode is consistent with List#hashCode") {
-    forAll { (x: Chain[Int]) =>
-      x.hashCode should ===(x.toList.hashCode)
-    }
+    forAll((x: Chain[Int]) => x.hashCode should ===(x.toList.hashCode))
   }
 
   test("Chain#takeWhile is consistent with List#takeWhile") {
-    forAll { (x: Chain[Int], p: Int => Boolean) =>
-      x.takeWhile(p).toList should ===(x.toList.takeWhile(p))
-    }
+    forAll((x: Chain[Int], p: Int => Boolean) => x.takeWhile(p).toList should ===(x.toList.takeWhile(p)))
   }
 
   test("Chain#dropWhile is consistent with List#dropWhile") {
-    forAll { (x: Chain[Int], p: Int => Boolean) =>
-      x.dropWhile(p).toList should ===(x.toList.dropWhile(p))
-    }
+    forAll((x: Chain[Int], p: Int => Boolean) => x.dropWhile(p).toList should ===(x.toList.dropWhile(p)))
   }
 
   test("Chain#get is consistent with List#lift") {
-    forAll { (x: Chain[Int], idx: Int) =>
-      x.get(idx.toLong) should ===(x.toList.lift(idx))
-    }
+    forAll((x: Chain[Int], idx: Int) => x.get(idx.toLong) should ===(x.toList.lift(idx)))
   }
 
 }

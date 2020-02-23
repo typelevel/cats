@@ -54,9 +54,7 @@ class OneAndSuite extends CatsSuite {
   }
 
   test("size is consistent with toList.size") {
-    forAll { (oa: OneAnd[Vector, Int]) =>
-      oa.size should ===(oa.toList.size.toLong)
-    }
+    forAll((oa: OneAnd[Vector, Int]) => oa.size should ===(oa.toList.size.toLong))
   }
 
 }

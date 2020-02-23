@@ -172,15 +172,11 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("runEmpty, runEmptyS, and runEmptyA consistent") {
-    forAll { (f: StateT[List, Long, Int]) =>
-      (f.runEmptyS.zip(f.runEmptyA)) should ===(f.runEmpty)
-    }
+    forAll((f: StateT[List, Long, Int]) => (f.runEmptyS.zip(f.runEmptyA)) should ===(f.runEmpty))
   }
 
   test("modify identity is a noop") {
-    forAll { (f: StateT[List, MiniInt, Int]) =>
-      f.modify(identity) should ===(f)
-    }
+    forAll((f: StateT[List, MiniInt, Int]) => f.modify(identity) should ===(f))
   }
 
   test("modify modifies state") {
@@ -232,15 +228,11 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test(".get equivalent to flatMap with State.get") {
-    forAll { (s: State[MiniInt, Int]) =>
-      s.get should ===(s.flatMap(_ => State.get))
-    }
+    forAll((s: State[MiniInt, Int]) => s.get should ===(s.flatMap(_ => State.get)))
   }
 
   test("StateT#transformS with identity is identity") {
-    forAll { (s: StateT[List, MiniInt, Int]) =>
-      s.transformS[MiniInt](identity, (s, i) => i) should ===(s)
-    }
+    forAll((s: StateT[List, MiniInt, Int]) => s.transformS[MiniInt](identity, (s, i) => i) should ===(s))
   }
 
   test("StateT#mapK transforms effect") {
@@ -267,27 +259,21 @@ class IndexedStateTSuite extends CatsSuite {
   test("repeated map is stack safe") {
     val unit = StateT.pure[Eval, Unit, Int](0)
     val count = stackSafeTestSize
-    val result = (0 until count).foldLeft(unit) { (acc, _) =>
-      acc.map(_ + 1)
-    }
+    val result = (0 until count).foldLeft(unit)((acc, _) => acc.map(_ + 1))
     result.run(()).value should ===(((), count))
   }
 
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
     val count = stackSafeTestSize
-    val result = (0 until count).foldLeft(unit) { (acc, _) =>
-      acc.flatMap(_ => unit)
-    }
+    val result = (0 until count).foldLeft(unit)((acc, _) => acc.flatMap(_ => unit))
     result.run(()).value should ===(((), ()))
   }
 
   test("flatMap is stack safe on repeated right binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
     val count = stackSafeTestSize
-    val result = (0 until count).foldLeft(unit) { (acc, _) =>
-      unit.flatMap(_ => acc)
-    }
+    val result = (0 until count).foldLeft(unit)((acc, _) => unit.flatMap(_ => acc))
     result.run(()).value should ===(((), ()))
   }
 
@@ -301,9 +287,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("foreverM works") {
-    val step = StateT[Either[Int, *], Int, Unit] { i =>
-      if (i > stackSafeTestSize) Left(i) else Right((i + 1, ()))
-    }
+    val step = StateT[Either[Int, *], Int, Unit](i => if (i > stackSafeTestSize) Left(i) else Right((i + 1, ())))
     step.foreverM.run(0) match {
       case Left(big)     => big should ===(stackSafeTestSize + 1)
       case Right((_, _)) => fail("unreachable code due to Nothing, but scalac won't let us match on it")
@@ -312,9 +296,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("iterateForeverM works") {
     val result = 0.iterateForeverM { i =>
-      StateT[Either[Int, *], Int, Int] { j =>
-        if (j > stackSafeTestSize) Left(j) else Right((j + 1, i + 1))
-      }
+      StateT[Either[Int, *], Int, Int](j => if (j > stackSafeTestSize) Left(j) else Right((j + 1, i + 1)))
     }
     result.run(0) match {
       case Left(sum)     => sum should ===(stackSafeTestSize + 1)

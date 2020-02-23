@@ -236,27 +236,19 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
   }
 
   test(s"Foldable[$name].intercalate") {
-    forAll { (fa: F[String], a: String) =>
-      fa.intercalate(a) should ===(fa.toList.mkString(a))
-    }
+    forAll((fa: F[String], a: String) => fa.intercalate(a) should ===(fa.toList.mkString(a)))
   }
 
   test(s"Foldable[$name].toList") {
-    forAll { (fa: F[Int]) =>
-      fa.toList should ===(iterator(fa).toList)
-    }
+    forAll((fa: F[Int]) => fa.toList should ===(iterator(fa).toList))
   }
 
   test(s"Foldable[$name] mkString_") {
-    forAll { (fa: F[Int]) =>
-      fa.mkString_("L[", ";", "]") should ===(fa.toList.mkString("L[", ";", "]"))
-    }
+    forAll((fa: F[Int]) => fa.mkString_("L[", ";", "]") should ===(fa.toList.mkString("L[", ";", "]")))
   }
 
   test(s"Foldable[$name] mkString_ delimiter only") {
-    forAll { (fa: F[Int]) =>
-      fa.mkString_(",") should ===(fa.toList.mkString(","))
-    }
+    forAll((fa: F[Int]) => fa.mkString_(",") should ===(fa.toList.mkString(",")))
   }
 
   test(s"Foldable[$name].collectFirstSomeM") {
@@ -276,9 +268,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
 
   // exists method written in terms of foldRight
   def contains[F[_]: Foldable, A: Eq](as: F[A], goal: A): Eval[Boolean] =
-    as.foldRight(Now(false)) { (a, lb) =>
-      if (a === goal) Now(true) else lb
-    }
+    as.foldRight(Now(false))((a, lb) => if (a === goal) Now(true) else lb)
 
   test("Foldable[List]") {
     val F = Foldable[List]
@@ -293,13 +283,9 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
     F.foldMap(names)(_.length) should ===(names.map(_.length).sum)
-    val sumM = F.foldM(names, "") { (acc, x) =>
-      (Some(acc + x): Option[String])
-    }
+    val sumM = F.foldM(names, "")((acc, x) => (Some(acc + x): Option[String]))
     assert(sumM == Some("AaronBettyCalvinDeirdra"))
-    val sumMapM = F.foldMapM(names) { x =>
-      (Some(x): Option[String])
-    }
+    val sumMapM = F.foldMapM(names)(x => (Some(x): Option[String]))
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
 
     // foldMapM should short-circuit and not call the function when not necessary
@@ -315,9 +301,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
 
     val isNotCalvin: String => Option[String] =
       x => if (x == "Calvin") None else Some(x)
-    val notCalvin = F.foldM(names, "") { (acc, x) =>
-      isNotCalvin(x).map(acc + _)
-    }
+    val notCalvin = F.foldM(names, "")((acc, x) => isNotCalvin(x).map(acc + _))
     assert(notCalvin == None)
     val notCalvinMapM = F.foldMapM(names)(isNotCalvin)
     assert(notCalvinMapM == None)
@@ -376,9 +360,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
 
   test(s"Foldable.iterateRight") {
     forAll { (fa: List[Int]) =>
-      val eval = Foldable.iterateRight(fa, Eval.later(0)) { (a, eb) =>
-        Eval.always(a + eb.value)
-      }
+      val eval = Foldable.iterateRight(fa, Eval.later(0))((a, eb) => Eval.always(a + eb.value))
 
       eval.value should ===(fa.sum)
 
@@ -440,9 +422,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     // ensure that the . it only needs to be evaluated if we reach the
     // "end" of the fold.
     val trap = Eval.later(bomb[Boolean])
-    val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap) { (n, lb) =>
-      if (n == 2) Now(true) else lb
-    }
+    val result = F.foldRight(1 #:: 2 #:: Stream.empty, trap)((n, lb) => if (n == 2) Now(true) else lb)
     assert(result.value)
   }
 

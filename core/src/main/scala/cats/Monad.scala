@@ -27,9 +27,7 @@ import simulacrum.typeclass
     tailRecM[G[A], G[A]](G.empty)(xs =>
       ifM(p)(
         ifTrue = {
-          map(b.value) { bv =>
-            Left(G.combineK(xs, G.pure(bv)))
-          }
+          map(b.value)(bv => Left(G.combineK(xs, G.pure(bv))))
         },
         ifFalse = pure(Right(xs))
       )
@@ -81,18 +79,14 @@ import simulacrum.typeclass
    * and return that result, discarding all others.
    */
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
-    flatMap(f) { i =>
-      iterateWhileM(i)(_ => f)(p)
-    }
+    flatMap(f)(i => iterateWhileM(i)(_ => f)(p))
 
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
-    flatMap(f) { i =>
-      iterateUntilM(i)(_ => f)(p)
-    }
+    flatMap(f)(i => iterateUntilM(i)(_ => f)(p))
 
   /**
    * Apply a monadic function iteratively until its result fails

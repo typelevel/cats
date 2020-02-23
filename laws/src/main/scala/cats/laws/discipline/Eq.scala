@@ -140,9 +140,7 @@ object eq {
 
   /** Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
   implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] =
-    Eq.by[Show[A], A => String] { showInstance => (a: A) =>
-      showInstance.show(a)
-    }(catsLawsEqForFn1)
+    Eq.by[Show[A], A => String](showInstance => (a: A) => showInstance.show(a))(catsLawsEqForFn1)
 
   /**
    * Create an approximate Eq instance for some type A, by comparing
@@ -156,9 +154,7 @@ object eq {
           .range(1, samples)
           .map(_ => gen.sample)
           .map(_.getOrElse(sys.error(s"generator $gen failed")))
-          .forall { b =>
-            f(x, b) === f(y, b)
-          }
+          .forall(b => f(x, b) === f(y, b))
     }
 
   implicit def catsLawsEqForEq[A](implicit arbA: Arbitrary[(A, A)]): Eq[Eq[A]] =
@@ -191,9 +187,7 @@ object eq {
         case Some(a) => a
         case None    => sys.error("Could not generate arbitrary values to compare two Hash[A]")
       }
-      samples.forall { x =>
-        f.hash(x) == g.hash(x)
-      }
+      samples.forall(x => f.hash(x) == g.hash(x))
     }
   }
 

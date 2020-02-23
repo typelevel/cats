@@ -247,9 +247,7 @@ class EvalSuite extends CatsSuite {
   test("memoize handles branched evaluation correctly") {
     forAll { (e: Eval[Int], fn: Int => Eval[Int]) =>
       var n0 = 0
-      val a0 = e.flatMap { i =>
-        n0 += 1; fn(i);
-      }.memoize
+      val a0 = e.flatMap { i => n0 += 1; fn(i); }.memoize
       assert(a0.flatMap(i1 => a0.map(i1 == _)).value == true)
       assert(n0 == 1)
 

@@ -37,11 +37,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
       def traverse[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
         val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty(Order[K].toOrdering)))
         Foldable
-          .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
-              buf + (kv._1 -> b)
-            })
-          }
+          .iterateRight(fa, gba)((kv, lbuf) => G.map2Eval(f(kv._2), lbuf)((b, buf) => buf + (kv._1 -> b)))
           .value
       }
 
@@ -186,9 +182,7 @@ private[instances] trait SortedMapInstancesBinCompat0 {
         val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty))
         Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (ob, buf) =>
-              ob.fold(buf)(b => buf + (kv._1 -> b))
-            })
+            G.map2Eval(f(kv._2), lbuf)((ob, buf) => ob.fold(buf)(b => buf + (kv._1 -> b)))
           }
           .value
       }

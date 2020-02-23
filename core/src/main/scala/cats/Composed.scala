@@ -102,16 +102,12 @@ private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G
 
   override def reduceLeftTo[A, B](fga: F[G[A]])(f: A => B)(g: (B, A) => B): B = {
     def toB(ga: G[A]): B = G.reduceLeftTo(ga)(f)(g)
-    F.reduceLeftTo(fga)(toB) { (b, ga) =>
-      G.foldLeft(ga, b)(g)
-    }
+    F.reduceLeftTo(fga)(toB)((b, ga) => G.foldLeft(ga, b)(g))
   }
 
   override def reduceRightTo[A, B](fga: F[G[A]])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
     def toB(ga: G[A]): B = G.reduceRightTo(ga)(f)(g).value
-    F.reduceRightTo(fga)(toB) { (ga, lb) =>
-      G.foldRight(ga, lb)(g)
-    }
+    F.reduceRightTo(fga)(toB)((ga, lb) => G.foldRight(ga, lb)(g))
   }
 }
 
@@ -152,9 +148,7 @@ private[cats] trait ComposedSemigroupal[F[_], G[_]]
   def G: Functor[G]
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
-    F.contramap(F.product(fa, fb)) { (g: G[(A, B)]) =>
-      (G.map(g)(_._1), G.map(g)(_._2))
-    }
+    F.contramap(F.product(fa, fb))((g: G[(A, B)]) => (G.map(g)(_._1), G.map(g)(_._2)))
 }
 
 private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]]
@@ -167,9 +161,7 @@ private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]]
     F.imap(F.product(fa, fb)) {
       case (ga, gb) =>
         G.map2(ga, gb)(_ -> _)
-    } { (g: G[(A, B)]) =>
-      (G.map(g)(_._1), G.map(g)(_._2))
-    }
+    }((g: G[(A, B)]) => (G.map(g)(_._1), G.map(g)(_._2)))
 }
 
 private[cats] trait ComposedCovariantContravariant[F[_], G[_]] extends Contravariant[λ[α => F[G[α]]]] { outer =>

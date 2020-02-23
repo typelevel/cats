@@ -135,9 +135,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
           case (Nil, b) => G.pure(Right(b))
           case (a :: tail, b) =>
-            G.map(f(b, a)) { bnext =>
-              Left((tail, bnext))
-            }
+            G.map(f(b, a))(bnext => Left((tail, bnext)))
         }
 
         G.tailRecM((fa, z))(step)

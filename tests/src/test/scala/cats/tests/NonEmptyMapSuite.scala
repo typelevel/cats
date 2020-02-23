@@ -79,15 +79,11 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("lookup is consistent with contains") {
-    forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should ===(nem.contains(key))
-    }
+    forAll((nem: NonEmptyMap[String, Int], key: String) => nem(key).isDefined should ===(nem.contains(key)))
   }
 
   test("keys.contains is consistent with contains") {
-    forAll { (nem: NonEmptyMap[String, Int], key: String) =>
-      nem(key).isDefined should ===(nem.keys.contains(key))
-    }
+    forAll((nem: NonEmptyMap[String, Int], key: String) => nem(key).isDefined should ===(nem.keys.contains(key)))
   }
 
   test("reduceLeft consistent with foldLeft") {
@@ -109,9 +105,7 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("reduce consistent with fold") {
-    forAll { (nem: NonEmptyMap[String, Int]) =>
-      nem.reduce should ===(nem.fold)
-    }
+    forAll((nem: NonEmptyMap[String, Int]) => nem.reduce should ===(nem.fold))
   }
 
   test("reduce consistent with reduceK") {
@@ -122,9 +116,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("reduceLeftToOption consistent with foldLeft + Option") {
     forAll { (nem: NonEmptyMap[String, Int], f: Int => String, g: (String, Int) => String) =>
-      val expected = nem.tail.foldLeft(Option(f(nem.head._2))) { (opt, i) =>
-        opt.map(s => g(s, i._2))
-      }
+      val expected = nem.tail.foldLeft(Option(f(nem.head._2)))((opt, i) => opt.map(s => g(s, i._2)))
       nem.reduceLeftToOption(f)(g) should ===(expected)
     }
   }
@@ -134,9 +126,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val got = nem.reduceRightToOption(f)(g).value
       val last = nem.last
       val rev = nem - last._1
-      val expected = rev.foldRight(Option(f(last._2))) { (i, opt) =>
-        opt.map(s => g(i._2, Now(s)).value)
-      }
+      val expected = rev.foldRight(Option(f(last._2)))((i, opt) => opt.map(s => g(i._2, Now(s)).value))
       got should ===(expected)
     }
   }
@@ -144,17 +134,13 @@ class NonEmptyMapSuite extends CatsSuite {
   test("reduceLeftM consistent with foldM") {
     forAll { (nem: NonEmptyMap[String, Int], f: Int => Option[Int]) =>
       val got = nem.reduceLeftM(f)((acc, i) => f(i).map(acc + _))
-      val expected = f(nem.head._2).flatMap { hd =>
-        nem.tail.foldM(hd)((acc, i) => f(i).map(acc + _))
-      }
+      val expected = f(nem.head._2).flatMap(hd => nem.tail.foldM(hd)((acc, i) => f(i).map(acc + _)))
       got should ===(expected)
     }
   }
 
   test("reduceMapM consistent with foldMapM") {
-    forAll { (nem: NonEmptyMap[String, Int], f: Int => Option[Int]) =>
-      nem.reduceMapM(f) should ===(nem.foldMapM(f))
-    }
+    forAll((nem: NonEmptyMap[String, Int], f: Int => Option[Int]) => nem.reduceMapM(f) should ===(nem.foldMapM(f)))
   }
 
   test("fromMap round trip") {
@@ -162,9 +148,7 @@ class NonEmptyMapSuite extends CatsSuite {
       NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
     }
 
-    forAll { (nem: NonEmptyMap[String, Int]) =>
-      NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
-    }
+    forAll((nem: NonEmptyMap[String, Int]) => NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem)))
   }
 
   test("fromMapUnsafe/fromMap consistency") {

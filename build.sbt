@@ -137,9 +137,7 @@ lazy val commonJvmSettings = Seq(
 lazy val includeGeneratedSrc: Setting[_] = {
   mappings in (Compile, packageSrc) ++= {
     val base = (sourceManaged in Compile).value
-    (managedSources in Compile).value.map { file =>
-      file -> file.relativeTo(base).get.getPath
-    }
+    (managedSources in Compile).value.map(file => file -> file.relativeTo(base).get.getPath)
   }
 }
 

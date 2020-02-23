@@ -79,9 +79,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
-        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty)))((a, lglb) => G.map2Eval(f(a), lglb)(_ +: _)).value
 
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
         val b = Queue.newBuilder[B]
@@ -110,9 +108,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
           if (xs.isEmpty) G.pure(Right(b))
           else {
             val (a, tail) = xs.dequeue
-            G.map(f(b, a)) { bnext =>
-              Left((tail, bnext))
-            }
+            G.map(f(b, a))(bnext => Left((tail, bnext)))
           }
         }
 

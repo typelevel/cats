@@ -177,9 +177,7 @@ import simulacrum.noop
    */
   @noop
   def iterateForeverM[A, B](a: A)(f: A => F[A]): F[B] =
-    tailRecM[A, B](a)(f.andThen { fa =>
-      map(fa)(Left(_): Either[A, B])
-    })
+    tailRecM[A, B](a)(f.andThen(fa => map(fa)(Left(_): Either[A, B])))
 
   /**
    * This repeats an F until we get defined values. This can be useful

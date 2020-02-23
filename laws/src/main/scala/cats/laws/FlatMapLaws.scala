@@ -53,13 +53,9 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
   def flatMapFromTailRecMConsistency[A, B](fa: F[A], fn: A => F[B]): IsEq[F[B]] = {
     val tailRecMFlatMap = F.tailRecM[Option[A], B](Option.empty[A]) {
       case None =>
-        F.map(fa) { a =>
-          Left(Some(a))
-        }
+        F.map(fa)(a => Left(Some(a)))
       case Some(a) =>
-        F.map(fn(a)) { b =>
-          Right(b)
-        }
+        F.map(fn(a))(b => Right(b))
     }
 
     F.flatMap(fa)(fn) <-> tailRecMFlatMap

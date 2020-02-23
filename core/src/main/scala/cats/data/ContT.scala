@@ -67,9 +67,7 @@ object ContT {
 
   /** Lift a pure value into `ContT` */
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
-    apply { cb =>
-      cb(b)
-    }
+    apply(cb => cb(b))
 
   /**
    * Lifts the `M[B]` into an `ContT[M, A, B]`.
@@ -127,9 +125,7 @@ object ContT {
    * }}}
    */
   def defer[M[_], A, B](b: => B): ContT[M, A, B] =
-    apply { cb =>
-      cb(b)
-    }
+    apply(cb => cb(b))
 
   /**
    * Build a computation that makes use of a callback, also known as a continuation.

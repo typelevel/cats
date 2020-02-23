@@ -59,9 +59,7 @@ class FreeApplicativeSuite extends CatsSuite {
   }
 
   test("FreeApplicative#monad") {
-    forAll { (x: FreeApplicative[List, Int]) =>
-      x.monad.foldMap(FunctionK.id) should ===(x.fold)
-    }
+    forAll((x: FreeApplicative[List, Int]) => x.monad.foldMap(FunctionK.id) should ===(x.fold))
   }
 
   test("FreeApplicative#ap") {
@@ -102,11 +100,7 @@ class FreeApplicativeSuite extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f = λ[FunctionK[Foo, Tracked]] { fa =>
-      State { s0 =>
-        (s0 + fa.toString + ";", fa.getA)
-      }
-    }
+    val f = λ[FunctionK[Foo, Tracked]](fa => State(s0 => (s0 + fa.toString + ";", fa.getA)))
 
     val x: Dsl[Int] = FreeApplicative.lift(Bar(3))
     val y: Dsl[Long] = FreeApplicative.lift(Baz(5L))

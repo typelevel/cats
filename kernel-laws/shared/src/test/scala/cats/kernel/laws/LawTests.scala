@@ -413,9 +413,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     // integers.
     implicit val arbNOrder: Arbitrary[Order[N]] = Arbitrary(arbitrary[Int].map { seed =>
       val order = new Random(seed).shuffle(Vector.range(0, nMax))
-      Order.by { (n: N) =>
-        order(n.n)
-      }
+      Order.by((n: N) => order(n.n))
     })
     implicit val cogNOrder: Cogen[Order[N]] =
       Cogen[Unit].contramap(_ => ())
@@ -423,9 +421,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
     // integers.
     implicit val arbNEq: Arbitrary[Eq[N]] = Arbitrary(arbitrary[Int].map { seed =>
       val mapping = new Random(seed).shuffle(Vector.range(0, nMax))
-      Eq.by { (n: N) =>
-        mapping(n.n)
-      }
+      Eq.by((n: N) => mapping(n.n))
     })
     implicit val cogNEq: Cogen[Eq[N]] =
       Cogen[Unit].contramap(_ => ())
@@ -441,9 +437,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
       def eqv(a: Eq[N], b: Eq[N]) =
         Iterator
           .tabulate(nMax)(N)
-          .flatMap { x =>
-            Iterator.tabulate(nMax)(N).map((x, _))
-          }
+          .flatMap(x => Iterator.tabulate(nMax)(N).map((x, _)))
           .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
     }
 

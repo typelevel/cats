@@ -31,9 +31,7 @@ class WriterTSuite extends CatsSuite {
   Eq[Writer[Int, Int]]
 
   test("double swap is a noop") {
-    forAll { (w: WriterT[List, Int, Int]) =>
-      w.swap.swap should ===(w)
-    }
+    forAll((w: WriterT[List, Int, Int]) => w.swap.swap should ===(w))
   }
 
   test("reset on pure is a noop") {
@@ -51,33 +49,23 @@ class WriterTSuite extends CatsSuite {
   }
 
   test("tell + written is identity") {
-    forAll { (i: Int) =>
-      WriterT.tell[Id, Int](i).written should ===(i)
-    }
+    forAll((i: Int) => WriterT.tell[Id, Int](i).written should ===(i))
   }
 
   test("value + value is identity") {
-    forAll { (i: Int) =>
-      WriterT.value[Id, Int, Int](i).value should ===(i)
-    }
+    forAll((i: Int) => WriterT.value[Id, Int, Int](i).value should ===(i))
   }
 
   test("valueT + value is identity") {
-    forAll { (i: Int) =>
-      WriterT.valueT[Id, Int, Int](i).value should ===(i)
-    }
+    forAll((i: Int) => WriterT.valueT[Id, Int, Int](i).value should ===(i))
   }
 
   test("value + listen + map(_._1) + value is identity") {
-    forAll { (i: Int) =>
-      WriterT.value[Id, Int, Int](i).listen.map(_._1).value should ===(i)
-    }
+    forAll((i: Int) => WriterT.value[Id, Int, Int](i).listen.map(_._1).value should ===(i))
   }
 
   test("tell + listen + map(_._2) + value is identity") {
-    forAll { (i: Int) =>
-      WriterT.tell[Id, Int](i).listen.map(_._2).value should ===(i)
-    }
+    forAll((i: Int) => WriterT.tell[Id, Int](i).listen.map(_._2).value should ===(i))
   }
 
   test("Writer.pure and WriterT.liftF are consistent") {
@@ -111,9 +99,7 @@ class WriterTSuite extends CatsSuite {
 
   test("mapK consistent with f(value)+pure") {
     val f: List ~> Option = λ[List ~> Option](_.headOption)
-    forAll { (writert: WriterT[List, String, Int]) =>
-      writert.mapK(f) should ===(WriterT(f(writert.run)))
-    }
+    forAll((writert: WriterT[List, String, Int]) => writert.mapK(f) should ===(WriterT(f(writert.run))))
   }
 
   {
