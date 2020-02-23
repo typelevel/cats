@@ -1,12 +1,14 @@
 package cats
 package tests
 
-import cats.data.NonEmptyLazyList
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-class NonEmptyLazyListSuite extends CatsSuite {
+class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
+  def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))
@@ -99,6 +101,12 @@ class NonEmptyLazyListSuite extends CatsSuite {
 
   test("fromLazyListUnsafe throws exception when used with empty LazyList") {
     Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft should ===(true)
+  }
+
+  test("fromLazyListAppend is consistent with LazyList#:+") {
+    forAll { (lli: LazyList[Int], i: Int) =>
+      NonEmptyLazyList.fromLazyListAppend(lli, i).toLazyList should ===(lli :+ i)
+    }
   }
 
   test("fromSeq . toList . iterator is id") {

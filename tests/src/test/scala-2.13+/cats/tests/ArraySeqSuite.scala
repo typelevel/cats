@@ -2,7 +2,15 @@ package cats
 package tests
 
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
-import cats.laws.discipline.{MonadTests, MonoidKTests, SerializableTests, TraverseFilterTests, TraverseTests}
+import cats.laws.discipline.{
+  AlignTests,
+  AlternativeTests,
+  CoflatMapTests,
+  MonadTests,
+  SerializableTests,
+  TraverseFilterTests,
+  TraverseTests
+}
 import cats.laws.discipline.arbitrary._
 
 import scala.collection.immutable.ArraySeq
@@ -14,17 +22,23 @@ class ArraySeqSuite extends CatsSuite {
   checkAll("ArraySeq[Int]", OrderTests[ArraySeq[Int]].order)
   checkAll("Order[ArraySeq]", SerializableTests.serializable(Order[ArraySeq[Int]]))
 
-  checkAll("ArraySeq[Int]", MonadTests[ArraySeq].monad[Int, Int, Int])
-  checkAll("Monad[ArraySeq]", SerializableTests.serializable(Monad[ArraySeq]))
+  checkAll("ArraySeq[Int]", CoflatMapTests[ArraySeq].coflatMap[Int, Int, Int])
+  checkAll("CoflatMap[ArraySeq]", SerializableTests.serializable(CoflatMap[ArraySeq]))
 
-  checkAll("ArraySeq[Int]", MonoidKTests[ArraySeq].monoidK[Int])
-  checkAll("MonoidK[ArraySeq]", SerializableTests.serializable(MonoidK[ArraySeq]))
+  checkAll("ArraySeq[Int]", AlternativeTests[ArraySeq].alternative[Int, Int, Int])
+  checkAll("Alternative[ArraySeq]", SerializableTests.serializable(Alternative[ArraySeq]))
 
   checkAll("ArraySeq[Int] with Option", TraverseTests[ArraySeq].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[ArraySeq]", SerializableTests.serializable(Traverse[ArraySeq]))
 
+  checkAll("ArraySeq[Int]", MonadTests[ArraySeq].monad[Int, Int, Int])
+  checkAll("Monad[ArraySeq]", SerializableTests.serializable(Monad[ArraySeq]))
+
   checkAll("ArraySeq[Int]", TraverseFilterTests[ArraySeq].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[ArraySeq]", SerializableTests.serializable(TraverseFilter[ArraySeq]))
+
+  checkAll("ArraySeq[Int]", AlignTests[ArraySeq].align[Int, Int, Int, Int])
+  checkAll("Align[ArraySeq]", SerializableTests.serializable(Align[ArraySeq]))
 
   {
     implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]

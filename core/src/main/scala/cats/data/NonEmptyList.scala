@@ -13,7 +13,7 @@ import scala.collection.mutable.ListBuffer
  * A data type which represents a non empty list of A, with
  * single element (head) and optional structure (tail).
  */
-final case class NonEmptyList[+A](head: A, tail: List[A]) {
+final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollection[A, List, NonEmptyList] {
 
   /**
    * Return the head and tail into a single list
@@ -54,6 +54,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     case Nil => List.empty
     case t   => head :: t.init
   }
+
+  final def iterator: Iterator[A] = toList.iterator
 
   /**
    * The size of this NonEmptyList

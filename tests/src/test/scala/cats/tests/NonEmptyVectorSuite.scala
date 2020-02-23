@@ -21,7 +21,10 @@ import cats.platform.Platform
 
 import scala.util.Properties
 
-class NonEmptyVectorSuite extends CatsSuite {
+class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
+  def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
