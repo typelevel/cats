@@ -58,9 +58,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        foldRight(fa, Always(G.pure(LazyList.empty[B]))) { (a, lgsb) =>
-          G.map2Eval(f(a), lgsb)(_ #:: _)
-        }.value
+        foldRight(fa, Always(G.pure(LazyList.empty[B])))((a, lgsb) => G.map2Eval(f(a), lgsb)(_ #:: _)).value
 
       override def mapWithIndex[A, B](fa: LazyList[A])(f: (A, Int) => B): LazyList[B] =
         fa.zipWithIndex.map(ai => f(ai._1, ai._2))
@@ -105,9 +103,7 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
           if (s.isEmpty)
             G.pure(Right(b))
           else {
-            G.map(f(b, s.head)) { bnext =>
-              Left((s.tail, bnext))
-            }
+            G.map(f(b, s.head))(bnext => Left((s.tail, bnext)))
           }
         }
 

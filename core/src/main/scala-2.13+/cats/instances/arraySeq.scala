@@ -15,9 +15,7 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
     ArraySeqInstances.stdTraverseFilterInstance
 
   implicit def catsStdShowForArraySeq[A](implicit ev: Show[A]): Show[ArraySeq[A]] =
-    Show.show { arraySeq =>
-      arraySeq.iterator.map(ev.show).mkString("ArraySeq(", ", ", ")")
-    }
+    Show.show(arraySeq => arraySeq.iterator.map(ev.show).mkString("ArraySeq(", ", ", ")"))
 }
 
 private[cats] object ArraySeqInstances {
@@ -84,9 +82,7 @@ private[cats] object ArraySeqInstances {
       }
 
       override def mapWithIndex[A, B](fa: ArraySeq[A])(f: (A, Int) => B): ArraySeq[B] =
-        ArraySeq.untagged.tabulate(n = fa.length) { i =>
-          f(fa(i), i)
-        }
+        ArraySeq.untagged.tabulate(n = fa.length)(i => f(fa(i), i))
 
       override def zipWithIndex[A](fa: ArraySeq[A]): ArraySeq[(A, Int)] =
         fa.zipWithIndex

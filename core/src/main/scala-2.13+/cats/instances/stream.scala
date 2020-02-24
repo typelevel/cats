@@ -53,9 +53,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
         // We use foldRight to avoid possible stack overflows. Since
         // we don't want to return a Eval[_] instance, we call .value
         // at the end.
-        foldRight(fa, Always(G.pure(Stream.empty[B]))) { (a, lgsb) =>
-          G.map2Eval(f(a), lgsb)(_ #:: _)
-        }.value
+        foldRight(fa, Always(G.pure(Stream.empty[B])))((a, lgsb) => G.map2Eval(f(a), lgsb)(_ #:: _)).value
 
       override def mapWithIndex[A, B](fa: Stream[A])(f: (A, Int) => B): Stream[B] =
         fa.zipWithIndex.map(ai => f(ai._1, ai._2))
@@ -129,9 +127,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           if (s.isEmpty)
             G.pure(Right(b))
           else
-            G.map(f(b, s.head)) { bnext =>
-              Left((s.tail, bnext))
-            }
+            G.map(f(b, s.head))(bnext => Left((s.tail, bnext)))
         }
 
         G.tailRecM((fa, z))(step)

@@ -52,51 +52,35 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   }
 
   test("size is consistent with toLazyList.size") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      ci.size should ===(ci.toLazyList.size.toLong)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => ci.size should ===(ci.toLazyList.size.toLong))
   }
 
   test("filterNot and then exists should always be false") {
-    forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-      ci.filterNot(f).exists(f) should ===(false)
-    }
+    forAll((ci: NonEmptyLazyList[Int], f: Int => Boolean) => ci.filterNot(f).exists(f) should ===(false))
   }
 
   test("filter and then forall should always be true") {
-    forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-      ci.filter(f).forall(f) should ===(true)
-    }
+    forAll((ci: NonEmptyLazyList[Int], f: Int => Boolean) => ci.filter(f).forall(f) should ===(true))
   }
 
   test("exists should be consistent with find + isDefined") {
-    forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-      ci.exists(f) should ===(ci.find(f).isDefined)
-    }
+    forAll((ci: NonEmptyLazyList[Int], f: Int => Boolean) => ci.exists(f) should ===(ci.find(f).isDefined))
   }
 
   test("filterNot element and then contains should be false") {
-    forAll { (ci: NonEmptyLazyList[Int], i: Int) =>
-      ci.filterNot(_ === i).contains(i) should ===(false)
-    }
+    forAll((ci: NonEmptyLazyList[Int], i: Int) => ci.filterNot(_ === i).contains(i) should ===(false))
   }
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) should ===(ci)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) should ===(ci))
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) should ===(ci)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) should ===(ci))
   }
 
   test("fromLazyList . toLazyList is Option.some") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      NonEmptyLazyList.fromLazyList(ci.toLazyList) should ===(Some(ci))
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => NonEmptyLazyList.fromLazyList(ci.toLazyList) should ===(Some(ci)))
   }
 
   test("fromLazyListUnsafe throws exception when used with empty LazyList") {
@@ -110,9 +94,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   }
 
   test("fromSeq . toList . iterator is id") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      NonEmptyLazyList.fromSeq(ci.iterator.toList) should ===(Option(ci))
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => NonEmptyLazyList.fromSeq(ci.iterator.toList) should ===(Option(ci)))
   }
 
   test("zipWith consistent with List#zip and then List#map") {
@@ -122,21 +104,15 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   }
 
   test("reverse . reverse is id") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      ci.reverse.reverse should ===(ci)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => ci.reverse.reverse should ===(ci))
   }
 
   test("reverse consistent with LazyList#reverse") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      ci.reverse.toLazyList should ===(ci.toLazyList.reverse)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => ci.reverse.toLazyList should ===(ci.toLazyList.reverse))
   }
 
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
-    forAll { (ci: NonEmptyLazyList[Int]) =>
-      ci.distinct.toList should ===(ci.toList.distinct)
-    }
+    forAll((ci: NonEmptyLazyList[Int]) => ci.distinct.toList should ===(ci.toList.distinct))
   }
 }
 
