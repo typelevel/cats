@@ -110,26 +110,30 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 }
 
 sealed private[instances] trait Tuple2Instances1 extends Tuple2Instances2 {
-  implicit def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
+  @deprecated("Use catsStdCommutativeMonadForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  def catsStdCommutativeMonadForTuple2[X](implicit MX: CommutativeMonoid[X]): CommutativeMonad[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeMonad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
 sealed private[instances] trait Tuple2Instances2 extends Tuple2Instances3 {
-  implicit def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
+  @deprecated("Use catsStdCommutativeFlatMapForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  def catsStdCommutativeFlatMapForTuple2[X](implicit MX: CommutativeSemigroup[X]): CommutativeFlatMap[(X, *)] =
     new FlatMapTuple2[X](MX) with CommutativeFlatMap[(X, *)]
 }
 
 sealed private[instances] trait Tuple2Instances3 extends Tuple2Instances4 {
-  implicit def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, *)] =
+  @deprecated("Use catsStdMonadForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  def catsStdMonadForTuple2[X](implicit MX: Monoid[X]): Monad[(X, *)] =
     new FlatMapTuple2[X](MX) with Monad[(X, *)] {
       def pure[A](a: A): (X, A) = (MX.empty, a)
     }
 }
 
 sealed private[instances] trait Tuple2Instances4 {
-  implicit def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, *)] =
+  @deprecated("Use catsStdFlatMapForNTuple2 on cats.instances.NTupleInstances", "2.1.1")
+  def catsStdFlatMapForTuple2[X](implicit SX: Semigroup[X]): FlatMap[(X, *)] =
     new FlatMapTuple2[X](SX)
 }
 
