@@ -1,6 +1,7 @@
 package cats
 
-import simulacrum.{noop, typeclass}
+import cats.evidence.<~<
+import simulacrum.typeclass
 
 /**
  * Functor.
@@ -158,8 +159,11 @@ import simulacrum.{noop, typeclass}
    * }}}
    *
    */
-  @noop
-  def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
+  def unzip[A, X, Y](fa: F[A])(implicit ev: A <~< (X, Y)): (F[X], F[Y]) = {
+    val fxy = map(fa)(ev)
+
+    (map(fxy)(_._1), map(fxy)(_._2))
+  }
 
   /**
    * Lifts `if` to Functor
