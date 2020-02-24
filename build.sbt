@@ -845,9 +845,7 @@ lazy val sharedReleaseProcess = Seq(
     tagRelease,
     releaseStepCommandAndRemaining("+publishSigned"),
     setNextVersion,
-    commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
-    pushChanges
+    commitNextVersion
   )
 )
 
