@@ -5,11 +5,12 @@ import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
+import org.scalatestplus.scalacheck.Checkers
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
@@ -133,10 +134,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
-
-  import KernelCheck._
-
+class TestsConfig extends Checkers {
   // The ScalaCheck defaults (100,100) are too high for Scala.js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
@@ -144,6 +142,11 @@ class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTes
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
+}
+
+class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
+
+  import KernelCheck._
 
   {
     // needed for Cogen[Map[...]]

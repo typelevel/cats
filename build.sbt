@@ -19,11 +19,11 @@ isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 
 val scalaCheckVersion = "1.14.3"
 
-val scalatestplusScalaCheckVersion = "3.1.0.0-RC2"
+val scalatestplusScalaCheckVersion = "3.1.1.1"
 
 val disciplineVersion = "1.0.2"
 
-val disciplineScalatestVersion = "1.0.0-RC1"
+val disciplineScalatestVersion = "1.0.1"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -119,7 +119,7 @@ lazy val commonJsSettings = Seq(
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
-  scalaJSOptimizerOptions := scalaJSOptimizerOptions.value.withBatchMode(isTravisBuild.value),
+  scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
   doctestGenTests := Seq.empty
@@ -151,7 +151,7 @@ lazy val disciplineDependencies = Seq(
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % "test",
-    "org.scalatestplus" %%% "scalatestplus-scalacheck" % scalatestplusScalaCheckVersion % "test"
+    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % "test"
   )
 )
 
