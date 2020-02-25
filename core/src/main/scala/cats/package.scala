@@ -59,22 +59,11 @@ package object cats {
    * type `A` to get a pure value of type `B`. That is, the instance
    * encodes pure unary function application.
    */
-  type Id[+A] = A
-
-  // Workaround for a compiler bug that should be fixed soon.
-  private type IdWrapper = { type L[+A] = A }
-
+  type Id[A] = A
   type Endo[A] = A => A
-  implicit val catsInstancesForId: Bimonad[IdWrapper#L]
-    with CommutativeMonad[IdWrapper#L]
-    with Comonad[IdWrapper#L]
-    with NonEmptyTraverse[IdWrapper#L]
-    with Distributive[IdWrapper#L] =
-    new Bimonad[IdWrapper#L]
-      with CommutativeMonad[IdWrapper#L]
-      with Comonad[IdWrapper#L]
-      with NonEmptyTraverse[IdWrapper#L]
-      with Distributive[IdWrapper#L] {
+  implicit val catsInstancesForId
+    : Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] =
+    new Bimonad[Id] with CommutativeMonad[Id] with Comonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)
@@ -120,18 +109,16 @@ package object cats {
   /**
    * Witness for: Id[A] <-> Unit => A
    */
-  implicit val catsRepresentableForId: Representable.Aux[IdWrapper#L, Unit] =
-    new Representable[IdWrapper#L] {
-      override type Representation = Unit
-      override val F: Functor[Id] = Functor[Id]
+  implicit val catsRepresentableForId: Representable.Aux[Id, Unit] = new Representable[Id] {
+    override type Representation = Unit
+    override val F: Functor[Id] = Functor[Id]
 
-      override def tabulate[A](f: Unit => A): Id[A] = f(())
+    override def tabulate[A](f: Unit => A): Id[A] = f(())
 
-      override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
-    }
+    override def index[A](f: Id[A]): Unit => A = (_: Unit) => f
+  }
 
-  implicit val catsParallelForId: Parallel.Aux[IdWrapper#L, IdWrapper#L] =
-    Parallel.identity[Id]
+  implicit val catsParallelForId: Parallel.Aux[Id, Id] = Parallel.identity
 
   type Eq[A] = cats.kernel.Eq[A]
   type PartialOrder[A] = cats.kernel.PartialOrder[A]
