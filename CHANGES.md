@@ -1,3 +1,11 @@
+## Version 2.1.1
+
+_2020 February 25_
+
+This release introduces support for Scala.js 1.0.0. There are no changes since 2.1.0 for the
+Scala.js 0.6 or JVM artifacts. This is likely to be the last Cats release supporting Scala.js 0.6,
+and we encourage Scala.js users to upgrade to 1.0.0 as soon as possible.
+
 ## Version 2.1.0
 
 _2019 December 18_
