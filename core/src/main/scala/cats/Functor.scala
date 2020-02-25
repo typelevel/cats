@@ -168,7 +168,7 @@ import simulacrum.{noop, typeclass}
   final def unzip[A, X, Y](fa: F[A])(implicit ev: A <~< (X, Y)): (F[X], F[Y]) = {
     val fxy = map(fa)(ev)
 
-    unzip(fxy)
+    unzip[X, Y](fxy)
   }
 
   /**
