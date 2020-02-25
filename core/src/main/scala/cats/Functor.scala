@@ -1,7 +1,7 @@
 package cats
 
 import cats.evidence.<~<
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
 
 /**
  * Functor.
@@ -159,10 +159,16 @@ import simulacrum.typeclass
    * }}}
    *
    */
-  def unzip[A, X, Y](fa: F[A])(implicit ev: A <~< (X, Y)): (F[X], F[Y]) = {
+  //TODO: Drop from Cats 3.0
+  @noop
+  def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))
+
+  //TODO: Drop `final` when the `noop` version deprecates
+  // `final` restricts functor instance overriding of `unzip` to the noop version
+  final def unzip[A, X, Y](fa: F[A])(implicit ev: A <~< (X, Y)): (F[X], F[Y]) = {
     val fxy = map(fa)(ev)
 
-    (map(fxy)(_._1), map(fxy)(_._2))
+    unzip(fxy)
   }
 
   /**
