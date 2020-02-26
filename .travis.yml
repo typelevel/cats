@@ -54,7 +54,8 @@ jobs:
     - stage: test
       env: TEST="docs"
       install: gem install jekyll -v 4.0.0
-      script: sbt docs/makeMicrosite
+      script: sbt  docs/makeMicrosite
+      scala: *scala_version_212
 
     - stage: test
       env: TEST="scalafix"
