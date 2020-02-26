@@ -50,7 +50,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 
 lazy val commonScalaVersionSettings = Seq(
   crossScalaVersions := (crossScalaVersionsFromTravis in Global).value,
-  scalaVersion := crossScalaVersions.value.find(_.contains("2.12")).get
+  scalaVersion := crossScalaVersions.value.find(_.contains("2.13")).get
 )
 
 commonScalaVersionSettings
