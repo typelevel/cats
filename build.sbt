@@ -157,7 +157,7 @@ lazy val testingDependencies = Seq(
   libraryDependencies ++= (
     if (isDotty.value)
       Seq(
-        "dev.travisbrown" %% "discipline-scalatest" % (disciplineScalatestVersion + "-20200201-c4c847f-NIGHTLY") % Test
+        "dev.travisbrown" %% "discipline-scalatest" % disciplineScalatestVersion % Test
       )
     else
       Seq(
