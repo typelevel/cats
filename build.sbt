@@ -802,7 +802,6 @@ def commonScalacOptions(scalaVersion: String, isDotty: Boolean) =
     "UTF-8",
     "-feature",
     "-unchecked",
-    "-Xfatal-warnings",
     "-deprecation"
   ) ++ (if (priorTo2_13(scalaVersion))
           Seq(
@@ -821,7 +820,8 @@ def commonScalacOptions(scalaVersion: String, isDotty: Boolean) =
                        "-Ywarn-dead-code",
                        "-Ywarn-numeric-widen",
                        "-Ywarn-value-discard",
-                       "-Xlint:-unused,_"
+                       "-Xlint:-unused,_",
+                       "-Xfatal-warnings"
                      ))
 
 def priorTo2_13(scalaVersion: String): Boolean =
