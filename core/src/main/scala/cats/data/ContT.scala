@@ -99,7 +99,9 @@ object ContT {
    * }}}
    */
   def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
-    λ[M ~> ContT[M, B, *]](ContT.liftF(_))
+    new (M ~> ContT[M, B, *]) {
+      def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
+    }
 
   /**
    * Similar to [[pure]] but evaluation of the argument is deferred.

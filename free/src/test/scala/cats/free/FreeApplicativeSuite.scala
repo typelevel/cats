@@ -52,7 +52,9 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#flatCompile") {
     forAll { (x: FreeApplicative[Option, Int]) =>
-      val nt = λ[FunctionK[Option, FreeApplicative[Option, *]]](FreeApplicative.lift(_))
+      val nt = new FunctionK[Option, FreeApplicative[Option, *]] {
+        def apply[A](a: Option[A]): FreeApplicative[Option, A] = FreeApplicative.lift(a)
+      }
 
       x.foldMap[FreeApplicative[Option, *]](nt).fold should ===(x.flatCompile[Option](nt).fold)
     }
@@ -82,7 +84,7 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#analyze") {
     type G[A] = List[Int]
-    val countingNT = λ[FunctionK[List, G]](la => List(la.length))
+    val countingNT = new FunctionK[List, G] { def apply[A](la: List[A]): G[A] = List(la.length) }
 
     val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
     fli1.analyze[G[Int]](countingNT) should ===(List(4))
@@ -102,10 +104,11 @@ class FreeApplicativeSuite extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f = λ[FunctionK[Foo, Tracked]] { fa =>
-      State { s0 =>
-        (s0 + fa.toString + ";", fa.getA)
-      }
+    val f = new FunctionK[Foo, Tracked] {
+      def apply[A](fa: Foo[A]): Tracked[A] =
+        State { s0 =>
+          (s0 + fa.toString + ";", fa.getA)
+        }
     }
 
     val x: Dsl[Int] = FreeApplicative.lift(Bar(3))
@@ -125,7 +128,7 @@ class FreeApplicativeSuite extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString = λ[FunctionK[Id, λ[α => String]]](_.toString)
+    val asString = new FunctionK[Id, λ[x => String]] { def apply[A](a: A): String = a.toString }
 
     z.analyze(asString) should ===("xy")
   }
