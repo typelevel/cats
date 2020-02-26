@@ -308,7 +308,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("ReaderWriterStateT.mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: ReaderWriterStateT[Eval, Long, String, String, Int], env: Long, initial: String) =>
       state.mapK(f).runA(env, initial) should ===(state.runA(env, initial).value)
     }

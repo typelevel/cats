@@ -81,14 +81,16 @@ class CofreeSuite extends CatsSuite {
 
   test("Cofree.mapBranchingRoot") {
     val unfoldedHundred: CofreeNel[Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
-    val withNoneRoot = unfoldedHundred.mapBranchingRoot(λ[Option ~> Option](_ => None))
+    val withNoneRoot = unfoldedHundred.mapBranchingRoot(new (Option ~> Option) {
+      def apply[A](a: Option[A]): Option[A] = None
+    })
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.one(0)
     cofNelToNel(withNoneRoot) should ===(nelUnfoldedOne)
   }
 
   val unfoldedHundred: Cofree[Option, Int] = Cofree.unfold[Option, Int](0)(i => if (i == 100) None else Some(i + 1))
   test("Cofree.mapBranchingS/T") {
-    val toList = λ[Option ~> List](_.toList)
+    val toList = new (Option ~> List) { def apply[A](a: Option[A]): List[A] = a.toList }
     val toNelS = unfoldedHundred.mapBranchingS(toList)
     val toNelT = unfoldedHundred.mapBranchingT(toList)
     val nelUnfoldedOne: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
@@ -178,11 +180,19 @@ sealed trait CofreeSuiteInstances {
     }
   }
 
-  val nelToCofNel = λ[NonEmptyList ~> CofreeNel](fa => Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply))))
+  val nelToCofNel = new (NonEmptyList ~> CofreeNel) {
+    def apply[A](fa: NonEmptyList[A]): CofreeNel[A] = Cofree(fa.head, Eval.later(fa.tail.toNel.map(apply)))
+  }
 
   val cofNelToNel =
-    λ[CofreeNel ~> NonEmptyList](fa => NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil)))
+    new (CofreeNel ~> NonEmptyList) {
+      def apply[A](fa: CofreeNel[A]): NonEmptyList[A] =
+        NonEmptyList(fa.head, fa.tailForced.map(apply(_).toList).getOrElse(Nil))
+    }
 
   val cofRoseTreeToNel =
-    λ[CofreeRoseTree ~> NonEmptyList](fa => NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList)))
+    new (CofreeRoseTree ~> NonEmptyList) {
+      def apply[A](fa: CofreeRoseTree[A]): NonEmptyList[A] =
+        NonEmptyList(fa.head, fa.tailForced.flatMap(apply(_).toList))
+    }
 }

@@ -97,8 +97,10 @@ class FreeSuite extends CatsSuite {
         z <- if (j < 10000) a(j) else Free.pure[FTestApi, Int](j)
       } yield z
 
-    def runner: FunctionK[FTestApi, Id] = λ[FunctionK[FTestApi, Id]] {
-      case TB(i) => i + 1
+    def runner: FunctionK[FTestApi, Id] = new FunctionK[FTestApi, Id] {
+      def apply[A](a: FTestApi[A]): A = a match {
+        case TB(i) => i + 1
+      }
     }
   }
 
@@ -241,7 +243,7 @@ sealed trait FreeSuiteInstances extends FreeSuiteInstances1 {
 }
 
 sealed trait FreeSuiteInstances1 {
-  val headOptionU = λ[FunctionK[List, Option]](_.headOption)
+  val headOptionU = new FunctionK[List, Option] { def apply[A](a: List[A]): Option[A] = a.headOption }
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
     val noFlatMapped = Gen.oneOf(A.arbitrary.map(Free.pure[F, A]), F.arbitrary.map(Free.liftF[F, A]))

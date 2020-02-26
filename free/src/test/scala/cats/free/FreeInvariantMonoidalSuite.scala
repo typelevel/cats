@@ -66,7 +66,7 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
 
   test("FreeInvariantMonoidal#analyze") {
     type G[A] = List[Int]
-    val countingNT = λ[FunctionK[List, G]](la => List(la.length))
+    val countingNT = new FunctionK[List, G] { def apply[A](la: List[A]): G[A] = List(la.length) }
 
     val fli1 = FreeInvariantMonoidal.lift[List, Int](List(1, 3, 5, 7))
     fli1.analyze[G[Int]](countingNT) should ===(List(4))

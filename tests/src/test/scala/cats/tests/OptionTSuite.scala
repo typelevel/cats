@@ -401,7 +401,7 @@ class OptionTSuite extends CatsSuite {
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (optiont: OptionT[List, Int]) =>
       optiont.mapK(f) should ===(OptionT(f(optiont.value)))
     }

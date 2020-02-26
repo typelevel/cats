@@ -25,7 +25,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * transformation applied last.
    */
   def compose[E[_]](f: FunctionK[E, F]): FunctionK[E, G] =
-    λ[FunctionK[E, G]](fa => self(f(fa)))
+    new FunctionK[E, G] { def apply[A](fa: E[A]): G[A] = self(f(fa)) }
 
   /**
    * Composes two instances of FunctionK into a new FunctionK with this
@@ -42,7 +42,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * `h` will be used to transform right `H` values.
    */
   def or[H[_]](h: FunctionK[H, G]): FunctionK[EitherK[F, H, *], G] =
-    λ[FunctionK[EitherK[F, H, *], G]](fa => fa.fold(self, h))
+    new FunctionK[EitherK[F, H, *], G] { def apply[A](fa: EitherK[F, H, A]): G[A] = fa.fold(self, h) }
 
   /**
    * Composes two instances of `FunctionK` into a new `FunctionK` that transforms
@@ -58,7 +58,7 @@ trait FunctionK[F[_], G[_]] extends Serializable { self =>
    * }}}
    */
   def and[H[_]](h: FunctionK[F, H]): FunctionK[F, Tuple2K[G, H, *]] =
-    λ[FunctionK[F, Tuple2K[G, H, *]]](fa => Tuple2K(self(fa), h(fa)))
+    new FunctionK[F, Tuple2K[G, H, *]] { def apply[A](fa: F[A]): Tuple2K[G, H, A] = Tuple2K(self(fa), h(fa)) }
 }
 
 object FunctionK extends FunctionKMacroMethods {
@@ -66,6 +66,5 @@ object FunctionK extends FunctionKMacroMethods {
   /**
    * The identity transformation of `F` to `F`
    */
-  def id[F[_]]: FunctionK[F, F] = λ[FunctionK[F, F]](fa => fa)
-
+  def id[F[_]]: FunctionK[F, F] = new FunctionK[F, F] { def apply[A](fa: F[A]): F[A] = fa }
 }
