@@ -53,7 +53,7 @@ jobs:
 
     - stage: test
       env: TEST="docs"
-      install: gem install jekyll -v 2.5
+      install: gem install jekyll -v 4.0.0
       script: sbt docs/makeMicrosite
 
     - stage: test

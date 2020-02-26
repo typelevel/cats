@@ -6,6 +6,7 @@ import cats.kernel.Semigroup
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 
 class WriterTSuite extends CatsSuite {
@@ -162,7 +163,7 @@ class WriterTSuite extends CatsSuite {
              SerializableTests.serializable(Bifunctor[WriterT[ListWrapper, *, *]]))
   }
 
-  implicit val iso = SemigroupalTests.Isomorphisms
+  implicit val iso: Isomorphisms[WriterT[ListWrapper, ListWrapper[Int], *]] = Isomorphisms
     .invariant[WriterT[ListWrapper, ListWrapper[Int], *]](WriterT.catsDataCoflatMapForWriterT(ListWrapper.functor))
 
   // We have varying instances available depending on `F` and `L`.
@@ -361,8 +362,10 @@ class WriterTSuite extends CatsSuite {
   {
     // F has an Applicative and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    implicit val app = WriterT.catsDataApplicativeForWriterT[Validated[String, *], ListWrapper[Int]]
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Validated[String, *], ListWrapper[Int], *]]
+    implicit val app: Applicative[WriterT[Validated[String, *], ListWrapper[Int], *]] =
+      WriterT.catsDataApplicativeForWriterT[Validated[String, *], ListWrapper[Int]]
+    implicit val iso: Isomorphisms[WriterT[Validated[String, *], ListWrapper[Int], *]] =
+      Isomorphisms.invariant[WriterT[Validated[String, *], ListWrapper[Int], *]]
     implicit def eq1[A: Eq]: Eq[WriterT[Validated[String, *], ListWrapper[Int], A]] =
       WriterT.catsDataEqForWriterT[Validated[String, *], ListWrapper[Int], A]
     implicit val eq2: Eq[EitherT[WriterT[Validated[String, *], ListWrapper[Int], *], String, Int]] =
@@ -383,8 +386,10 @@ class WriterTSuite extends CatsSuite {
   {
     // F has an ApplicativeError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    implicit val appErr = WriterT.catsDataApplicativeErrorForWriterT[Validated[String, *], ListWrapper[Int], String]
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Validated[String, *], ListWrapper[Int], *]]
+    implicit val appErr: ApplicativeError[WriterT[Validated[String, *], ListWrapper[Int], *], String] =
+      WriterT.catsDataApplicativeErrorForWriterT[Validated[String, *], ListWrapper[Int], String]
+    implicit val iso: Isomorphisms[WriterT[Validated[String, *], ListWrapper[Int], *]] =
+      Isomorphisms.invariant[WriterT[Validated[String, *], ListWrapper[Int], *]]
     checkAll(
       "WriterT[Validated[String, *], ListWrapper[Int], *]",
       ApplicativeErrorTests[WriterT[Validated[String, *], ListWrapper[Int], *], String].applicativeError[Int, Int, Int]
@@ -398,7 +403,8 @@ class WriterTSuite extends CatsSuite {
   {
     // F has a MonadError and L has a Monoid
     implicit val L: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[WriterT[Option, ListWrapper[Int], *]]
+    implicit val iso: Isomorphisms[WriterT[Option, ListWrapper[Int], *]] =
+      Isomorphisms.invariant[WriterT[Option, ListWrapper[Int], *]]
     implicit val eq0: Eq[EitherT[WriterT[Option, ListWrapper[Int], *], Unit, Int]] =
       EitherT.catsDataEqForEitherT[WriterT[Option, ListWrapper[Int], *], Unit, Int]
 
@@ -428,7 +434,7 @@ class WriterTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    implicit val evidence = ListWrapper.invariant
+    implicit val evidence: Invariant[ListWrapper] = ListWrapper.invariant
     Invariant[ListWrapper]
     Invariant[WriterT[ListWrapper, Int, *]]
 

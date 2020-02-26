@@ -89,8 +89,8 @@ val first: FunctionK[List, Option] = new FunctionK[List, Option] {
 
 ## Syntactic Sugar
 
-If the example above looks a bit too verbose for you, the [kind-projector](https://github.com/non/kind-projector)
-compiler plugin [provides](https://github.com/non/kind-projector#polymorphic-lambda-values) a more concise syntax.
+If the example above looks a bit too verbose for you, the [kind-projector](https://github.com/typelevel/kind-projector)
+compiler plugin [provides](https://github.com/typelevel/kind-projector#polymorphic-lambda-values) a more concise syntax.
 After adding the plugin to your project, you could write the `first` example as:
 
 ```tut:silent

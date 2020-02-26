@@ -194,16 +194,19 @@ private[instances] trait SortedMapInstancesBinCompat0 {
       }
 
       override def mapFilter[A, B](fa: SortedMap[K, A])(f: (A) => Option[B]): SortedMap[K, B] =
-        fa.collect(scala.Function.unlift(t => f(t._2).map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, A)) => f(t._2).map(t._1 -> _)))
 
       override def collect[A, B](fa: SortedMap[K, A])(f: PartialFunction[A, B]): SortedMap[K, B] =
-        fa.collect(scala.Function.unlift(t => f.lift(t._2).map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, A)) => f.lift(t._2).map(t._1 -> _)))
 
       override def flattenOption[A](fa: SortedMap[K, Option[A]]): SortedMap[K, A] =
-        fa.collect(scala.Function.unlift(t => t._2.map(t._1 -> _)))
+        fa.collect(scala.Function.unlift((t: (K, Option[A])) => t._2.map(t._1 -> _)))
 
       override def filter[A](fa: SortedMap[K, A])(f: (A) => Boolean): SortedMap[K, A] =
         fa.filter { case (_, v) => f(v) }
+
+      override def filterNot[A](fa: SortedMap[K, A])(f: A => Boolean): SortedMap[K, A] =
+        fa.filterNot { case (_, v) => f(v) }
 
       override def filterA[G[_], A](
         fa: SortedMap[K, A]

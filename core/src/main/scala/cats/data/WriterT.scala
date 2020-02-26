@@ -4,7 +4,6 @@ package data
 import cats.Foldable
 import cats.kernel.instances.tuple._
 import cats.kernel.CommutativeMonoid
-import cats.syntax.semigroup._
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
 
@@ -20,7 +19,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def tell(l: L)(implicit functorF: Functor[F], semigroupL: Semigroup[L]): WriterT[F, L, V] =
-    mapWritten(_ |+| l)
+    mapWritten(semigroupL.combine(_, l))
 
   /**
    * Example:
@@ -719,11 +718,10 @@ sealed private[data] trait WriterTContravariantMonoidal[F[_], L] extends Contrav
 
   override def product[A, B](fa: WriterT[F, L, A], fb: WriterT[F, L, B]): WriterT[F, L, (A, B)] =
     WriterT(
-      F0.contramap(F0.product(fa.run, fb.run))(
-        (t: (L, (A, B))) =>
-          t match {
-            case (l, (a, b)) => ((l, a), (l, b))
-          }
+      F0.contramap(F0.product(fa.run, fb.run))((t: (L, (A, B))) =>
+        t match {
+          case (l, (a, b)) => ((l, a), (l, b))
+        }
       )
     )
 }

@@ -3,7 +3,6 @@ package data
 
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.instances.list._
-import cats.syntax.order._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
@@ -14,7 +13,7 @@ import scala.collection.mutable.ListBuffer
  * A data type which represents a non empty list of A, with
  * single element (head) and optional structure (tail).
  */
-final case class NonEmptyList[+A](head: A, tail: List[A]) {
+final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollection[A, List, NonEmptyList] {
 
   /**
    * Return the head and tail into a single list
@@ -55,6 +54,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
     case Nil => List.empty
     case t   => head :: t.init
   }
+
+  final def iterator: Iterator[A] = toList.iterator
 
   /**
    * The size of this NonEmptyList
@@ -244,7 +245,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   }
 
   def ===[AA >: A](o: NonEmptyList[AA])(implicit AA: Eq[AA]): Boolean =
-    ((this.head: AA) === o.head) && (this.tail: List[AA]) === o.tail
+    AA.eqv(this.head, o.head) && Eq[List[AA]].eqv(this.tail, o.tail)
 
   def show[AA >: A](implicit AA: Show[AA]): String =
     toList.iterator.map(AA.show).mkString("NonEmptyList(", ", ", ")")
@@ -295,7 +296,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    * scala> import cats.data.NonEmptyList
    * scala> val as = NonEmptyList.of(1, 2, 3)
    * scala> val bs = NonEmptyList.of("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptyList[String] = NonEmptyList(1A, 2B, 3C)
    * }}}
    */
@@ -369,10 +370,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    * {{{
    * scala> import scala.collection.immutable.SortedMap
    * scala> import cats.data.NonEmptyList
-   * scala> import cats.instances.boolean._
+   * scala> import cats.implicits._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
-   * scala> nel.groupBy(_ >= 0)
-   * res0: SortedMap[Boolean, cats.data.NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+   * scala> val expectedResult = SortedMap(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3))
+   * scala> val result = nel.groupBy(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupBy[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
@@ -398,11 +401,13 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
    * of the keys produced by the given mapping function.
    *
    * {{{
-   * scala> import cats.data._
-   * scala> import cats.instances.boolean._
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
    * scala> val nel = NonEmptyList.of(12, -2, 3, -5)
-   * scala> nel.groupByNem(_ >= 0)
-   * res0: NonEmptyMap[Boolean, NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3))
+   * scala> val result = nel.groupByNem(_ >= 0)
+   * scala> result === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyList[A]] =
@@ -411,11 +416,13 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) {
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
    *{{{
-   * scala> import cats.data._
-   * scala> import cats.instances.int._
+   * scala> import cats.data.{NonEmptyList, NonEmptyMap}
+   * scala> import cats.implicits._
    * scala> val nel = NonEmptyList((0, "a"), List((1, "b"),(0, "c"), (2, "d")))
-   * scala> nel.toNem
-   * res0: NonEmptyMap[Int,String] = Map(0 -> c, 1 -> b, 2 -> d)
+   * scala> val expectedResult = NonEmptyMap.of(0 -> "c", 1 -> "b", 2 -> "d")
+   * scala> val result = nel.toNem
+   * scala> result === expectedResult
+   * res0: Boolean = true
    *}}}
    *
    */
@@ -588,19 +595,19 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       override def nonEmptyPartition[A, B, C](
         fa: NonEmptyList[A]
       )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-        import cats.syntax.either._
-
         val reversed = fa.reverse
-        val lastIor = f(reversed.head).bimap(NonEmptyList.one, NonEmptyList.one).toIor
+        val lastIor = f(reversed.head) match {
+          case Right(c) => Ior.right(NonEmptyList.one(c))
+          case Left(b)  => Ior.left(NonEmptyList.one(b))
+        }
 
-        reversed.tail.foldLeft(lastIor)(
-          (ior, a) =>
-            (f(a), ior) match {
-              case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-              case (Right(c), _)           => ior.map(c :: _)
-              case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-              case (Left(b), _)            => ior.leftMap(b :: _)
-            }
+        reversed.tail.foldLeft(lastIor)((ior, a) =>
+          (f(a), ior) match {
+            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+            case (Right(c), _)           => ior.map(c :: _)
+            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+            case (Left(b), _)            => ior.leftMap(b :: _)
+          }
         )
 
       }
@@ -695,7 +702,7 @@ sealed private[data] trait NonEmptyListPartialOrder[A] extends PartialOrder[NonE
   implicit override def A0: PartialOrder[A]
 
   override def partialCompare(x: NonEmptyList[A], y: NonEmptyList[A]): Double =
-    x.toList.partialCompare(y.toList)
+    PartialOrder[List[A]].partialCompare(x.toList, y.toList)
 }
 
 sealed abstract private[data] class NonEmptyListOrder[A]
@@ -704,5 +711,5 @@ sealed abstract private[data] class NonEmptyListOrder[A]
   implicit override def A0: Order[A]
 
   override def compare(x: NonEmptyList[A], y: NonEmptyList[A]): Int =
-    x.toList.compare(y.toList)
+    Order[List[A]].compare(x.toList, y.toList)
 }

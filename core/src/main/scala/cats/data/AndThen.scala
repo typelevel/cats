@@ -122,7 +122,7 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
       self match {
         case Concat(left, inner) =>
           self = left.asInstanceOf[AndThen[Any, Any]]
-          right = inner.andThenF(right)
+          right = inner.asInstanceOf[AndThen[Any, Any]].andThenF(right)
 
         case _ => // Single
           self = self.andThenF(right)

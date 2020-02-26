@@ -33,7 +33,10 @@ trait TraverseFilterTests[F[_]] extends FunctorFilterTests[F] {
       "traverseFilter identity" -> forAll(laws.traverseFilterIdentity[Option, A] _),
       "traverseFilter nested composition" -> forAll(laws.traverseFilterComposition[A, B, C, Option, Option] _),
       "traverseFilter consistent with traverse" -> forAll(laws.traverseFilterConsistentWithTraverse[Option, A] _),
-      "filterA consistent with traverseFilter" -> forAll(laws.filterAConsistentWithTraverseFilter[Option, A] _)
+      "filterA consistent with traverseFilter" -> forAll(laws.filterAConsistentWithTraverseFilter[Option, A] _),
+      "traverseEither consistent with traverseFilter" -> forAll(
+        laws.traverseEitherConsistentWithTraverseFilter[Option, F[A], A, B] _
+      )
     )
 }
 

@@ -1,8 +1,9 @@
 package cats
 package syntax
 
-import scala.collection.immutable.SortedMap
 import cats.data.{NonEmptyChain, NonEmptyList}
+
+import scala.collection.immutable.SortedMap
 
 trait ListSyntax {
   implicit final def catsSyntaxList[A](la: List[A]): ListOps[A] = new ListOps(la)
@@ -40,14 +41,56 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    *
    * scala> val list = List(12, -2, 3, -5)
    *
-   * scala> list.groupByNel(_ >= 0)
-   * res0: SortedMap[Boolean, NonEmptyList[Int]] = Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3))
+   * scala> val expectedResult = SortedMap(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3))
+   *
+   * scala> list.groupByNel(_ >= 0) === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupByNel[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyList[A]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
     toNel.fold(SortedMap.empty[B, NonEmptyList[A]])(_.groupBy(f))
   }
+
+  /** Produces a `NonEmptyList` containing cumulative results of applying the
+   * operator going left to right.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: List[Int] = List(1, 2)
+   * scala> result1.scanLeftNel(100)(_ + _)
+   * res0: NonEmptyList[Int] = NonEmptyList(100, 101, 103)
+   *
+   * scala> val result2: List[Int] = List.empty[Int]
+   * scala> result2.scanLeftNel(1)(_ + _)
+   * res1: NonEmptyList[Int] = NonEmptyList(1)
+   * }}}
+   */
+  def scanLeftNel[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
+    NonEmptyList.fromListUnsafe(la.scanLeft(b)(f))
+
+  /** Produces a `NonEmptyList` containing cumulative results of applying the
+   * operator going right to left.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: List[Int] = List(1, 2)
+   * scala> result1.scanRightNel(100)(_ + _)
+   * res0: NonEmptyList[Int] = NonEmptyList(103, 102, 100)
+   *
+   * scala> val result2: List[Int] = List.empty[Int]
+   * scala> result2.scanRightNel(1)(_ + _)
+   * res1: NonEmptyList[Int] = NonEmptyList(1)
+   * }}}
+   */
+  def scanRightNel[B](b: B)(f: (A, B) => B): NonEmptyList[B] =
+    NonEmptyList.fromListUnsafe(la.scanRight(b)(f))
 }
 
 private[syntax] trait ListSyntaxBinCompat0 {
@@ -67,8 +110,10 @@ final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extend
    *
    * scala> val list = List(12, -2, 3, -5)
    *
-   * scala> list.groupByNec(_ >= 0)
-   * res0: SortedMap[Boolean, NonEmptyChain[Int]] = Map(false -> Chain(-2, -5), true -> Chain(12, 3))
+   * scala> val expectedResult = SortedMap(false -> NonEmptyChain(-2, -5), true -> NonEmptyChain(12, 3))
+   *
+   * scala> list.groupByNec(_ >= 0) === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupByNec[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptyChain[A]] = {

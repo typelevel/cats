@@ -73,10 +73,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def foldMap[A, B](fa: List[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
-      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] =
-        foldRight[A, G[List[B]]](fa, Always(G.pure(List.empty))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ :: _)
-        }.value
+      def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
+        def loop(fa: List[A]): Eval[G[List[B]]] = fa match {
+          case h :: t => G.map2Eval(f(h), Eval.defer(loop(t)))(_ :: _)
+          case Nil    => Eval.now(G.pure(Nil))
+        }
+        loop(fa).value
+      }
 
       def functor: Functor[List] = this
 
@@ -103,12 +106,11 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def partitionEither[A, B, C](
         fa: List[A]
       )(f: (A) => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =
-        fa.foldRight((List.empty[B], List.empty[C]))(
-          (a, acc) =>
-            f(a) match {
-              case Left(b)  => (b :: acc._1, acc._2)
-              case Right(c) => (acc._1, c :: acc._2)
-            }
+        fa.foldRight((List.empty[B], List.empty[C]))((a, acc) =>
+          f(a) match {
+            case Left(b)  => (b :: acc._1, acc._2)
+            case Right(c) => (acc._1, c :: acc._2)
+          }
         )
 
       @tailrec
@@ -193,21 +195,21 @@ private[instances] trait ListInstancesBinCompat0 {
 
     override def filter[A](fa: List[A])(f: (A) => Boolean): List[A] = fa.filter(f)
 
+    override def filterNot[A](fa: List[A])(f: A => Boolean): List[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: List[A])(f: PartialFunction[A, B]): List[B] = fa.collect(f)
 
     override def flattenOption[A](fa: List[Option[A]]): List[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(List.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o))
-        )
+        .foldRight(fa, Eval.now(G.pure(List.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o)))
         .value
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(List.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
+        .foldRight(fa, Eval.now(G.pure(List.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
         )
         .value
   }

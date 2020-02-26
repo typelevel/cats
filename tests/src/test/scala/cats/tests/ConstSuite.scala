@@ -12,12 +12,14 @@ import cats.kernel.laws.discipline.{
 }
 import cats.data.{Const, NonEmptyList}
 import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.tests.Helpers.{CMono, CSemi}
 
 class ConstSuite extends CatsSuite {
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[String, *]](Const.catsDataTraverseForConst)
+  implicit val iso: Isomorphisms[Const[String, *]] =
+    Isomorphisms.invariant[Const[String, *]](Const.catsDataTraverseForConst)
 
   checkAll("Const[String, Int]", SemigroupalTests[Const[String, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Const[String, *]]", SerializableTests.serializable(Semigroupal[Const[String, *]]))
@@ -38,8 +40,8 @@ class ConstSuite extends CatsSuite {
   // Get Apply[Const[C : Semigroup, *]], not Applicative[Const[C : Monoid, *]]
   {
     implicit def nonEmptyListSemigroup[A]: Semigroup[NonEmptyList[A]] = SemigroupK[NonEmptyList].algebra
-    implicit val iso =
-      SemigroupalTests.Isomorphisms.invariant[Const[NonEmptyList[String], *]](Const.catsDataContravariantForConst)
+    implicit val iso: Isomorphisms[Const[NonEmptyList[String], *]] =
+      Isomorphisms.invariant[Const[NonEmptyList[String], *]](Const.catsDataContravariantForConst)
     checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], *]].apply[Int, Int, Int])
     checkAll("Apply[Const[NonEmptyList[String], *]]",
              SerializableTests.serializable(Apply[Const[NonEmptyList[String], *]]))
@@ -98,7 +100,8 @@ class ConstSuite extends CatsSuite {
   checkAll("Functor[Const[String, *]]", SerializableTests.serializable(Functor[Const[String, *]]))
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Const[CMono, *]](Const.catsDataFunctorForConst)
+    implicit val iso: Isomorphisms[Const[CMono, *]] =
+      Isomorphisms.invariant[Const[CMono, *]](Const.catsDataFunctorForConst)
     checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, *]].commutativeApplicative[Int, Int, Int])
     checkAll("CommutativeApplicative[Const[CMono, *]]",
              SerializableTests.serializable(CommutativeApplicative[Const[CMono, *]]))

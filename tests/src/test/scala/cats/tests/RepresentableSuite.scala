@@ -11,7 +11,7 @@ import cats.laws.discipline.{
   RepresentableTests,
   SerializableTests
 }
-import cats.{Bimonad, Eq, Eval, Id, Representable}
+import cats.{Bimonad, Distributive, Eq, Eval, Id, Monad, Monoid, Representable}
 import org.scalacheck.Arbitrary
 import cats.data.Kleisli
 
@@ -32,7 +32,8 @@ class RepresentableSuite extends CatsSuite {
   checkAll("Representable[Eval]", SerializableTests.serializable(Representable[Eval]))
 
   {
-    implicit val representableKleisliPair = Kleisli.catsDataRepresentableForKleisli[Pair, Boolean, MiniInt]
+    implicit val representableKleisliPair: Representable.Aux[Kleisli[Pair, MiniInt, *], (MiniInt, Boolean)] =
+      Kleisli.catsDataRepresentableForKleisli[Pair, Boolean, MiniInt]
 
     implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =
       Eq.by[Kleisli[F, A, B], A => F[B]](_.run)
@@ -54,29 +55,31 @@ class RepresentableSuite extends CatsSuite {
              SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, *]]))
   }
 
+  val reprPair = Representable[Pair]
+  val reprMiniIntFunc = Representable[MiniInt => *]
+  val isoPair: Isomorphisms[Pair] = Isomorphisms.invariant[Pair]
+  val isoMiniIntFunc: Isomorphisms[MiniInt => *] = Isomorphisms.invariant[MiniInt => *]
+
   {
-    implicit val andMonoid = new cats.Monoid[Boolean] {
+    implicit val andMonoid: Monoid[Boolean] = new Monoid[Boolean] {
       def empty: Boolean = true
       override def combine(x: Boolean, y: Boolean): Boolean = x && y
     }
 
-    implicit val isoPair = Isomorphisms.invariant[Pair]
-    implicit val bimonadInstance = Representable.bimonad[Pair, Boolean]
+    implicit val isoPairInstance: Isomorphisms[Pair] = isoPair
+    implicit val bimonadInstance: Bimonad[Pair] = Representable.bimonad[Pair, Boolean](reprPair, Monoid[Boolean])
     checkAll("Pair[Int]", BimonadTests[Pair].bimonad[Int, Int, Int])
     checkAll("Bimonad[Pair]", SerializableTests.serializable(Bimonad[Pair]))
   }
 
   {
-    // the monadInstance below made a conflict to resolve this one.
-    // TODO: ceedubs is this needed*
-    implicit val isoFun1: Isomorphisms[MiniInt => *] = Isomorphisms.invariant[MiniInt => *]
-
-    implicit val monadInstance = Representable.monad[MiniInt => *]
+    implicit val isoFun1: Isomorphisms[MiniInt => *] = isoMiniIntFunc
+    implicit val monadInstance: Monad[MiniInt => *] = Representable.monad[MiniInt => *](reprMiniIntFunc)
     checkAll("MiniInt => *", MonadTests[MiniInt => *].monad[String, String, String])
   }
 
   {
-    implicit val distributiveInstance = Representable.distributive[Pair]
+    implicit val distributiveInstance: Distributive[Pair] = Representable.distributive[Pair](reprPair)
     checkAll("Pair[Int]", DistributiveTests[Pair].distributive[Int, Int, Int, Option, MiniInt => *])
   }
 

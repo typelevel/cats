@@ -21,14 +21,13 @@ trait FutureInstances extends FutureInstances1 {
       override def handleError[A](fea: Future[A])(f: Throwable => A): Future[A] =
         fea.recover { case t => f(t) }
       override def attempt[A](fa: Future[A]): Future[Either[Throwable, A]] =
-        fa.transformWith(
-          r =>
-            Future.successful(
-              r match {
-                case Success(a) => Right(a)
-                case Failure(e) => Left(e)
-              }
-            )
+        fa.transformWith(r =>
+          Future.successful(
+            r match {
+              case Success(a) => Right(a)
+              case Failure(e) => Left(e)
+            }
+          )
         )
       override def redeemWith[A, B](fa: Future[A])(recover: Throwable => Future[B], bind: A => Future[B]): Future[B] =
         fa.transformWith {

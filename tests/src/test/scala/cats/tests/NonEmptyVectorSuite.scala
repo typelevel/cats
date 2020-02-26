@@ -21,7 +21,10 @@ import cats.platform.Platform
 
 import scala.util.Properties
 
-class NonEmptyVectorSuite extends CatsSuite {
+class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
+  def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
@@ -300,17 +303,17 @@ class NonEmptyVectorSuite extends CatsSuite {
         // A bug in scala 2.10 allows private constructors to be accessed.
         // We should still ensure that on scala 2.11 and up we cannot construct the
         // object directly. see: https://issues.scala-lang.org/browse/SI-6601
-        "val bad: NonEmptyVector[Int] = new NonEmptyVector(Vector(1))" shouldNot compile
+        assertDoesNotCompile("val bad: NonEmptyVector[Int] = new NonEmptyVector(Vector(1))")
       }
     }
   }
 
   test("Cannot create a new NonEmptyVector[Int] from apply with a Vector[Int]") {
-    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector(1))" shouldNot compile
+    assertDoesNotCompile("val bad: NonEmptyVector[Int] = NonEmptyVector(Vector(1))")
   }
 
   test("Cannot create a new NonEmptyVector[Int] from apply with a an empty Vector") {
-    "val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])" shouldNot compile
+    assertDoesNotCompile("val bad: NonEmptyVector[Int] = NonEmptyVector(Vector.empty[Int])")
   }
 
   test("NonEmptyVector#distinct is consistent with Vector#distinct") {
@@ -403,4 +406,6 @@ class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEm
     val tailStart: Long = start + 1L
     NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
   }
+
+  def fromValues[A](el: A, els: A*): NonEmptyVector[A] = NonEmptyVector(el, Vector(els: _*))
 }

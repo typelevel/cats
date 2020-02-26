@@ -42,20 +42,20 @@ class ChainSuite extends CatsSuite {
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
 
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Chain[ListWrapper[Int]]", PartialOrderTests[Chain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Chain[ListWrapper[Int]]",
              SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]]))
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Chain[ListWrapper[Int]]", EqTests[Chain[ListWrapper[Int]]].eqv)
     checkAll("Eq[Chain[ListWrapper[Int]]", SerializableTests.serializable(Eq[Chain[ListWrapper[Int]]]))
   }
 
   {
-    implicit val hash = ListWrapper.hash[Int]
+    implicit val hash: Hash[ListWrapper[Int]] = ListWrapper.hash[Int]
     checkAll("Chain[ListWrapper[Int]]", HashTests[Chain[ListWrapper[Int]]].hash)
     checkAll("Hash[Chain[ListWrapper[Int]]", SerializableTests.serializable(Hash[Chain[ListWrapper[Int]]]))
   }
@@ -158,6 +158,24 @@ class ChainSuite extends CatsSuite {
   test("groupBy consistent with List#groupBy") {
     forAll { (cs: Chain[String], f: String => Int) =>
       cs.groupBy(f).map { case (k, v) => (k, v.toList) }.toMap should ===(cs.toList.groupBy(f).toMap)
+    }
+  }
+
+  test("zipWithIndex is consistent with toList.zipWithIndex") {
+    forAll { (ci: Chain[Int]) =>
+      ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex)
+    }
+  }
+
+  test("sortBy is consistent with toList.sortBy") {
+    forAll { (ci: Chain[Int], f: Int => String) =>
+      ci.sortBy(f).toList should ===(ci.toList.sortBy(f))
+    }
+  }
+
+  test("sorted is consistent with toList.sorted") {
+    forAll { (ci: Chain[Int]) =>
+      ci.sorted.toList should ===(ci.toList.sorted)
     }
   }
 

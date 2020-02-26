@@ -20,7 +20,7 @@ class WordCountSuite extends CatsSuite {
     // A simple counter
     def count[A](a: A): Count[Unit] = liftInt(1)
 
-    // An applicatve functor to count each character
+    // An applicative functor to count each character
     val countChar: AppFunc[Count, Char, Unit] = appFunc(count)
     def testIf(b: Boolean): Int = if (b) 1 else 0
     // An applicative functor to count each line

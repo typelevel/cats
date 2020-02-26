@@ -7,6 +7,7 @@ import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
 import cats.platform.Platform
@@ -19,11 +20,13 @@ class KleisliSuite extends CatsSuite {
   implicit def readerEq[A, B](implicit ev: Eq[A => B]): Eq[Reader[A, B]] =
     kleisliEq
 
-  implicit val eitherTEq = EitherT.catsDataEqForEitherT[Kleisli[Option, MiniInt, *], Unit, Int]
-  implicit val eitherTEq2 = EitherT.catsDataEqForEitherT[Reader[MiniInt, *], Unit, Int]
+  implicit val eitherTEq: Eq[EitherT[Kleisli[Option, MiniInt, *], Unit, Int]] =
+    EitherT.catsDataEqForEitherT[Kleisli[Option, MiniInt, *], Unit, Int]
+  implicit val eitherTEq2: Eq[EitherT[Reader[MiniInt, *], Unit, Int]] =
+    EitherT.catsDataEqForEitherT[Reader[MiniInt, *], Unit, Int]
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Kleisli[Option, Int, *]]
-  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[Reader[Int, *]]
+  implicit val iso: Isomorphisms[Kleisli[Option, Int, *]] = Isomorphisms.invariant[Kleisli[Option, Int, *]]
+  implicit val iso2: Isomorphisms[Reader[Int, *]] = Isomorphisms.invariant[Reader[Int, *]]
 
   {
     implicit val instance: ApplicativeError[Kleisli[Option, MiniInt, *], Unit] =
@@ -104,7 +107,7 @@ class KleisliSuite extends CatsSuite {
   checkAll("Functor[Kleisli[Option, Int, *]]", SerializableTests.serializable(Functor[Kleisli[Option, Int, *]]))
 
   {
-    implicit val FF = ListWrapper.functorFilter
+    implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
     checkAll("Kleisli[ListWrapper, MiniInt, *]",
              FunctorFilterTests[Kleisli[ListWrapper, MiniInt, *]].functorFilter[Int, Int, Int])
@@ -127,13 +130,14 @@ class KleisliSuite extends CatsSuite {
            SerializableTests.serializable(Semigroup[Kleisli[Option, Int, String]]))
 
   {
-    implicit val catsDataMonoidKForKleisli = Kleisli.endoMonoidK[Option]
+    implicit val catsDataMonoidKForKleisli: MonoidK[λ[α => Kleisli[Option, α, α]]] = Kleisli.endoMonoidK[Option]
     checkAll("Kleisli[Option, MiniInt, MiniInt]", MonoidKTests[λ[α => Kleisli[Option, α, α]]].monoidK[MiniInt])
     checkAll("MonoidK[λ[α => Kleisli[Option, α, α]]]", SerializableTests.serializable(catsDataMonoidKForKleisli))
   }
 
   {
-    implicit val catsDataSemigroupKForKleisli = Kleisli.endoSemigroupK[Option]
+    implicit val catsDataSemigroupKForKleisli: SemigroupK[λ[α => Kleisli[Option, α, α]]] =
+      Kleisli.endoSemigroupK[Option]
     checkAll("Kleisli[Option, MiniInt, MiniInt]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[MiniInt])
     checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]",
              SerializableTests.serializable(SemigroupK[λ[α => Kleisli[Option, α, α]]]))
@@ -153,7 +157,7 @@ class KleisliSuite extends CatsSuite {
            SerializableTests.serializable(Contravariant[Kleisli[Option, *, Int]]))
 
   test("Functor[Kleisli[F, Int, *]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
-    def shouldCompile1[F[_]: ApplicativeError[*[_], E]: FlatMap, E]: Functor[Kleisli[F, Int, *]] =
+    def shouldCompile1[F[_], E](implicit F: ApplicativeError[F, E], FM: FlatMap[F]): Functor[Kleisli[F, Int, *]] =
       Functor[Kleisli[F, Int, *]]
   }
 

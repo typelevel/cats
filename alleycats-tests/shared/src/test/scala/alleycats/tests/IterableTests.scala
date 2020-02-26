@@ -3,6 +3,7 @@ package tests
 
 import cats.{Eval, Foldable}
 import alleycats.std.all._
+import cats.laws.discipline.FoldableTests
 
 class IterableTests extends AlleycatsSuite {
 
@@ -22,4 +23,5 @@ class IterableTests extends AlleycatsSuite {
       .value shouldEqual (Eval.now("OK").value)
   }
 
+  checkAll("Foldable[Iterable]", FoldableTests[Iterable].foldable[Int, Int])
 }

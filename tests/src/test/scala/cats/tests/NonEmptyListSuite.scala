@@ -18,7 +18,10 @@ import cats.laws.discipline.{
 import scala.collection.immutable.SortedMap
 import scala.collection.immutable.SortedSet
 
-class NonEmptyListSuite extends CatsSuite {
+class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
+  def toList[A](value: NonEmptyList[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: List[A]): List[A] = underlying
+
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
@@ -50,7 +53,7 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
   {
-    implicit val A = ListWrapper.partialOrder[Int]
+    implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]",
              SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
@@ -59,7 +62,7 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   {
-    implicit val A = ListWrapper.order[Int]
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", OrderTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]",
              SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
@@ -370,4 +373,5 @@ class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyL
     NonEmptyList(start, (tailStart).to(endInclusive).toList)
   }
 
+  def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els: _*))
 }

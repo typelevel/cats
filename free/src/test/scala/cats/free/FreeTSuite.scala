@@ -44,15 +44,16 @@ class FreeTSuite extends CatsSuite {
              SerializableTests.serializable(MonadError[FreeTOption, Unit]))
   }
 
+  checkAll("FreeT[Option, Option, Int", DeferTests[FreeTOption].defer[Int])
+
   test("FlatMap stack safety tested with 50k flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      Monad[FreeTOption].tailRecM(0)(
-        (i: Int) =>
-          if (i < 50000)
-            Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
-          else
-            Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
+      Monad[FreeTOption].tailRecM(0)((i: Int) =>
+        if (i < 50000)
+          Applicative[FreeTOption].pure(Either.left[Int, Unit](i + 1))
+        else
+          Applicative[FreeTOption].pure(Either.right[Int, Unit](()))
       )
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
@@ -61,8 +62,8 @@ class FreeTSuite extends CatsSuite {
   test("Stack safe with 50k left-associated flatMaps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-        (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+      (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+        fu.flatMap(u => Applicative[FreeTOption].pure(u))
       )
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
@@ -71,9 +72,7 @@ class FreeTSuite extends CatsSuite {
   test("Stack safe with flatMap followed by 50k maps") {
     val expected = Applicative[FreeTOption].pure(())
     val result =
-      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))(
-        (fu, i) => fu.map(identity)
-      )
+      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
 
     Eq[FreeTOption[Unit]].eqv(expected, result) should ===(true)
   }
@@ -86,8 +85,8 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("mapK stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-      (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+      fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.mapK(FunctionK.id)
   }
@@ -102,8 +101,8 @@ class FreeTSuite extends CatsSuite {
   }
 
   test("compile stack-safety") {
-    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))(
-      (fu, i) => fu.flatMap(u => Applicative[FreeTOption].pure(u))
+    val a = (0 until 50000).foldLeft(Applicative[FreeTOption].pure(()))((fu, i) =>
+      fu.flatMap(u => Applicative[FreeTOption].pure(u))
     )
     val b = a.compile(FunctionK.id) // used to overflow
   }
@@ -116,6 +115,15 @@ class FreeTSuite extends CatsSuite {
       Eq[Option[Int]].eqv(x, y) should ===(true)
       y should ===(fk(a))
     }
+  }
+
+  // NB: this does not analogously cause problems for the SemigroupK implementation as semigroup's effects associate while errors do not
+  test("handle errors in non-head suspensions") {
+    type F[A] = FreeT[Id, Option, A]
+    val F = MonadError[F, Unit]
+
+    val eff = F.flatMap(F.pure(()))(_ => F.raiseError[String](()))
+    F.attempt(eff).runM(Some(_)) should ===(Some(Left(())))
   }
 
   sealed trait Test1Algebra[A]
@@ -191,9 +199,7 @@ class FreeTSuite extends CatsSuite {
 
   test("toString is stack-safe") {
     val result =
-      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))(
-        (fu, i) => fu.map(identity)
-      )
+      (0 until 50000).foldLeft(().pure[FreeTOption].flatMap(_.pure[FreeTOption]))((fu, i) => fu.map(identity))
     result.toString.length should be > 0
   }
 

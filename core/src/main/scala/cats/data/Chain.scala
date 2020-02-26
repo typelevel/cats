@@ -5,8 +5,7 @@ import Chain._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{SortedMap, TreeSet}
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -325,6 +324,18 @@ sealed abstract class Chain[+A] {
     }
 
   /**
+   * Zips each element of this `Chain` with its index.
+   */
+  final def zipWithIndex: Chain[(A, Int)] = this match {
+    case Empty        => Empty
+    case Singleton(a) => Singleton((a, 0))
+    case Append(left, right) =>
+      val leftSize = left.length.toInt
+      Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
+    case Wrap(seq) => Wrap(seq.zipWithIndex)
+  }
+
+  /**
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
    */
@@ -529,6 +540,20 @@ sealed abstract class Chain[+A] {
       }
       result
     }
+
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] = this match {
+    case Empty        => this
+    case Singleton(_) => this
+    case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
+    case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+  }
+
+  final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] = this match {
+    case Empty        => this
+    case Singleton(_) => this
+    case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
+    case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+  }
 }
 
 object Chain extends ChainInstances {
@@ -687,7 +712,10 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
         def loop(as: Chain[A]): Eval[B] =
-          as match {
+          // In Scala 2 the compiler silently ignores the fact that it can't
+          // prove that this match is exhaustive, but Dotty warns, so we
+          // explicitly mark it as unchecked.
+          (as: @unchecked) match {
             case Chain.nil => lb
             case h ==: t   => f(h, Eval.defer(loop(t)))
           }
@@ -799,6 +827,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Chain[A])(f: PartialFunction[A, B]): Chain[B] = fa.collect(f)
 
     override def mapFilter[A, B](fa: Chain[A])(f: A => Option[B]): Chain[B] = fa.collect(Function.unlift(f))
@@ -807,15 +837,13 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
         .value
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, chain) => if (b) x +: chain else chain)
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, chain) => if (b) x +: chain else chain)
         )
         .value
 

@@ -3,8 +3,6 @@ package data
 
 import cats.arrow.{Profunctor, Strong}
 
-import cats.syntax.either._
-
 /**
  *
  * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding
@@ -144,13 +142,10 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
    * }}}
    */
   def transformS[R](f: R => SA, g: (R, SB) => R)(implicit F: Functor[F]): IndexedStateT[F, R, R, A] =
-    StateT.applyF(F.map(runF) {
-      sfsa =>
-        { (r: R) =>
-          val sa = f(r)
-          val fsba = sfsa(sa)
-          F.map(fsba) { case (sb, a) => (g(r, sb), a) }
-        }
+    StateT.applyF(F.map(runF) { sfsa => (r: R) =>
+      val sa = f(r)
+      val fsba = sfsa(sa)
+      F.map(fsba) { case (sb, a) => (g(r, sb), a) }
     })
 
   /**
@@ -435,11 +430,17 @@ sealed abstract private[data] class IndexedStateTMonad[F[_], S]
     fa.flatMap(f)
 
   def tailRecM[A, B](a: A)(f: A => IndexedStateT[F, S, S, Either[A, B]]): IndexedStateT[F, S, S, B] =
-    IndexedStateT[F, S, S, B](
-      s =>
-        F.tailRecM[(S, A), (S, B)]((s, a)) {
-          case (s, a) => F.map(f(a).run(s)) { case (s, ab) => ab.bimap((s, _), (s, _)) }
-        }
+    IndexedStateT[F, S, S, B](s =>
+      F.tailRecM[(S, A), (S, B)]((s, a)) {
+        case (s, a) =>
+          F.map(f(a).run(s)) {
+            case (s, ab) =>
+              ab match {
+                case Right(b) => Right((s, b))
+                case Left(a)  => Left((s, a))
+              }
+          }
+      }
     )
 }
 
@@ -470,14 +471,12 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
   def contramap2[A, B, C](fb: IndexedStateT[F, S, S, B],
                           fc: IndexedStateT[F, S, S, C])(f: A => (B, C)): IndexedStateT[F, S, S, A] =
     IndexedStateT.applyF(
-      G.pure(
-        (s: S) =>
-          ContravariantMonoidal.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))(
-            (tup: (S, A)) =>
-              f(tup._2) match {
-                case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
-              }
-          )(G, F)
+      G.pure((s: S) =>
+        ContravariantMonoidal.contramap2(G.map(fb.runF)(_.apply(s)), G.map(fc.runF)(_.apply(s)))((tup: (S, A)) =>
+          f(tup._2) match {
+            case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
+          }
+        )(G, F)
       )
     )
 }

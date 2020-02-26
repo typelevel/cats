@@ -161,7 +161,7 @@ import Foldable.sentinel
    * {{{
    * scala> import cats.implicits._
    * scala> val l = List(6, 3, 2)
-   * This is eqivalent to 6 - (3 - 2)
+   * This is equivalent to 6 - (3 - 2)
    * scala> Foldable[List].reduceRightOption(l)((current, rest) => rest.map(current - _)).value
    * res0: Option[Int] = Some(5)
    *
@@ -332,16 +332,15 @@ import Foldable.sentinel
    *}}}
    */
   def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
-    foldLeft(fa, B.empty)(
-      (acc, a) =>
-        f(a) match {
-          case Some(x) => B.combine(acc, x)
-          case None    => acc
-        }
+    foldLeft(fa, B.empty)((acc, a) =>
+      f(a) match {
+        case Some(x) => B.combine(acc, x)
+        case None    => acc
+      }
     )
 
   /**
-   * Fold implemented using the given Monoid[A] instance.
+   * Fold implemented using the given `Monoid[A]` instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
     A.combineAll(toIterable(fa))
@@ -395,6 +394,25 @@ import Foldable.sentinel
   }
 
   /**
+   * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
+   *
+   * This method is similar to [[fold]], but may short-circuit.
+   *
+   * For example:
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val F = Foldable[List]
+   * scala> F.foldA(List(Either.right[String, Int](1), Either.right[String, Int](2)))
+   * res0: Either[String, Int] = Right(3)
+   * }}}
+   *
+   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
+   */
+  @noop def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
+    foldMapA(fga)(identity)
+
+  /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
    * combining them using the `MonoidK[G]` instance.
    *
@@ -420,7 +438,7 @@ import Foldable.sentinel
    * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
    * values using the given `Monoid[B]` instance.
    *
-   * Similar to [[foldM]], but using a `Monoid[B]`.
+   * Similar to [[foldM]], but using a `Monoid[B]`. Will typically be more efficient than [[foldMapA]].
    *
    * {{{
    * scala> import cats.Foldable
@@ -438,9 +456,22 @@ import Foldable.sentinel
     foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
-   * Equivalent to foldMapM.
-   * The difference is that foldMapA only requires G to be an Applicative
-   * rather than a Monad. It is also slower due to use of Eval.
+   * Fold in an [[Applicative]] context by mapping the `A` values to `G[B]`. combining
+   * the `B` values using the given `Monoid[B]` instance.
+   *
+   * Similar to [[foldMapM]], but will typically be less efficient.
+   *
+   * {{{
+   * scala> import cats.Foldable
+   * scala> import cats.implicits._
+   * scala> val evenNumbers = List(2,4,6,8,10)
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> Foldable[List].foldMapA(evenNumbers)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Foldable[List].foldMapA(evenNumbers :+ 11)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
    */
   def foldMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
     foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
@@ -667,12 +698,11 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMap(fa)(
-      a =>
-        f(a) match {
-          case Right(c) => (A.empty[B], A.pure(c))
-          case Left(b)  => (A.pure(b), A.empty[C])
-        }
+    foldMap(fa)(a =>
+      f(a) match {
+        case Right(c) => (A.empty[B], A.pure(c))
+        case Left(b)  => (A.pure(b), A.empty[C])
+      }
     )
   }
 
@@ -727,7 +757,10 @@ import Foldable.sentinel
    * }}}
    */
   def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
-    A.combineAll(intersperseList(toList(fa), a))
+    combineAllOption(fa)(A.intercalate(a)) match {
+      case None    => A.empty
+      case Some(a) => a
+    }
 
   protected def intersperseList[A](xs: List[A], x: A): List[A] = {
     val bld = List.newBuilder[A]
@@ -774,8 +807,8 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMap[A, (F[B], F[C])](fa)(
-      a => H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+    foldMap[A, (F[B], F[C])](fa)(a =>
+      H.bifoldMap[B, C, (F[B], F[C])](f(a))(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
     )
   }
 
@@ -800,11 +833,10 @@ import Foldable.sentinel
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 
-    foldMapM[G, A, (F[B], F[C])](fa)(
-      a =>
-        M.map(f(a)) {
-          H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
-        }
+    foldMapM[G, A, (F[B], F[C])](fa)(a =>
+      M.map(f(a)) {
+        H.bifoldMap[B, C, (F[B], F[C])](_)(b => (A.pure(b), A.empty[C]), c => (A.empty[B], A.pure(c)))
+      }
     )
   }
 

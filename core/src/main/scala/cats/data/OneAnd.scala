@@ -256,12 +256,9 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
   implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F],
                                                        F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] {
-      def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
-        import cats.syntax.apply._
-
+      def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] =
         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-          .reduceLeft(((acc, a) => (acc, a).mapN((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
-      }
+          .reduceLeft(((acc, a) => G.map2(acc, a)((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
 
       override def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] =
         G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value

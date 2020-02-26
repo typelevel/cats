@@ -145,6 +145,19 @@ val myOptionET = EitherT.fromOption[Future](myOption, "option not defined")
 val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
 ```
 
+## From `ApplicativeError[F, E]` to `EitherT[F, E, A]`
+
+An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
+using the `attemptT` method on them.
+
+```tut:silent
+val myTry: Try[Int] = Try(2)
+val myFuture: Future[String] = Future.failed(new Exception())
+
+val myTryET: EitherT[Try, Throwable, Int] = myTry.attemptT
+val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
+```
+
 ## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
 
 Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:

@@ -77,16 +77,52 @@ import simulacrum.{noop, typeclass}
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
-   *  Monadic variant of [[reduceLeftTo]]
+   *  Monadic variant of [[reduceLeftTo]].
    */
   def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
-   * Monadic reducing by mapping the `A` values to `G[B]`. combining
+   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
+   * semigroup for `G[_]`.
+   *
+   * This method is similar to [[reduce]], but may short-circuit.
+   *
+   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
+   */
+  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+    reduceMapA(fga)(identity)
+
+  /**
+   * Reduce in an [[Apply]] context by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `Semigroup[B]` instance.
    *
-   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`.
+   * Similar to [[reduceMapM]], but may be less efficient.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
+   * allEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10)
+   * scala> val notAllEven = allEven ++ List(11)
+   * notAllEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10, 11)
+   * scala> Reducible[NonEmptyList].reduceMapA(allEven)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Reducible[NonEmptyList].reduceMapA(notAllEven)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
+    reduceRightTo(fa)(f)((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
+
+  /**
+   * Reduce in an [[FlatMap]] context by mapping the `A` values to `G[B]`. combining
+   * the `B` values using the given `Semigroup[B]` instance.
+   *
+   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`. May be more efficient than [[reduceMapA]].
    *
    * {{{
    * scala> import cats.Reducible
@@ -202,11 +238,7 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
-    toNonEmptyList(fa) match {
-      case NonEmptyList(hd, Nil) => hd
-      case NonEmptyList(hd, tl) =>
-        Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
-    }
+    reduce(fa)(A.intercalate(a))
 
   /**
    * Partition this Reducible by a separating function `A => Either[B, C]`
@@ -221,20 +253,22 @@ import simulacrum.{noop, typeclass}
    * }}}
    */
   def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-    import cats.syntax.either._
-
     def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
-      eval.map(
-        ior =>
-          (f(a), ior) match {
-            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-            case (Right(c), _)           => ior.map(c :: _)
-            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-            case (Left(b), _)            => ior.leftMap(b :: _)
-          }
+      eval.map(ior =>
+        (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+          case (Right(c), _)           => ior.map(c :: _)
+          case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+          case (Left(b), _)            => ior.leftMap(b :: _)
+        }
       )
 
-    reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
+    reduceRightTo(fa)(a =>
+      f(a) match {
+        case Right(c) => Ior.right(NonEmptyList.one(c))
+        case Left(b)  => Ior.left(NonEmptyList.one(b))
+      }
+    )(g).value
   }
 
   override def isEmpty[A](fa: F[A]): Boolean = false

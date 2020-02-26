@@ -2,6 +2,7 @@ package cats
 
 package object instances {
   object all extends AllInstancesBinCompat
+  object arraySeq extends ArraySeqInstances
   object bigInt extends BigIntInstances
   object bigDecimal extends BigDecimalInstances
   object bitSet extends BitSetInstances

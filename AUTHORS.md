@@ -21,6 +21,7 @@ possible:
  * Alejandro Gómez
  * Alessandro Lacava
  * Alejandro Marín E.
+ * Alex Simkin
  * Alexandru Nedelcu
  * Alexander Semenov
  * Alexey Levan
@@ -108,6 +109,7 @@ possible:
  * Gagandeep Kalra
  * Gavin Bisesi
  * Georgi Krastev
+ * Gergő Törcsvári
  * Giovanni Ruggiero
  * Giulio De Luise
  * Giuseppe Cannella
@@ -185,6 +187,7 @@ possible:
  * Miklós Martin
  * Miles Sabin
  * Mirco Dotta
+ * msinton
  * nigredo-tori
  * Nikolay Maksimenko
  * n4to4

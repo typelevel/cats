@@ -2,8 +2,6 @@ package cats
 
 import scala.annotation.tailrec
 
-import cats.syntax.all._
-
 /**
  * Eval is a monad which controls evaluation.
  *
@@ -356,7 +354,7 @@ object Eval extends EvalInstances {
                 case Nil     => a
               }
             case None =>
-              loop(eval, addToMemo(m) :: fs)
+              loop(eval, addToMemo(m.asInstanceOf[M]) :: fs)
           }
         case x =>
           fs match {
@@ -416,7 +414,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value.compare(ly.value)
+        Order[A].compare(lx.value, ly.value)
     }
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
@@ -443,7 +441,7 @@ sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        lx.value.partialCompare(ly.value)
+        PartialOrder[A].partialCompare(lx.value, ly.value)
     }
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
@@ -454,7 +452,7 @@ sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        lx.value === ly.value
+        Eq[A].eqv(lx.value, ly.value)
     }
 
   implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
@@ -464,7 +462,7 @@ sealed abstract private[cats] class EvalInstances1 {
 trait EvalSemigroup[A] extends Semigroup[Eval[A]] {
   implicit def algebra: Semigroup[A]
   def combine(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |+| y
+    for { x <- lx; y <- ly } yield algebra.combine(x, y)
 }
 
 trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
@@ -475,7 +473,7 @@ trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
   implicit def algebra: Group[A]
   def inverse(lx: Eval[A]): Eval[A] =
-    lx.map(_.inverse())
+    lx.map(algebra.inverse)
   override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |-| y
+    for { x <- lx; y <- ly } yield algebra.remove(x, y)
 }

@@ -47,7 +47,7 @@ class LazyListSuite extends CatsSuite {
   }
 
   test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
-    forAll { lazyList: LazyList[Int] =>
+    forAll { (lazyList: LazyList[Int]) =>
       if (!lazyList.isEmpty) {
         val unevaluatedLL = lazyList.map(identity)
         val initialShow = unevaluatedLL.show

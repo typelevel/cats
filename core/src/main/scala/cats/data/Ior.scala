@@ -507,14 +507,14 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * scala> import cats.data.Ior
    * scala> import cats.implicits._
    *
-   * scala> "abc".leftIor[Int].bimap(_.length, _ * 2)
-   * res0: Ior[Int, Int] = Left(3)
+   * scala> "abc".leftIor[Int].map(_ * 2)
+   * res0: Ior[String, Int] = Left(abc)
    *
-   * scala> 123.rightIor[String].bimap(_.length, _ * 2)
-   * res1: Ior[Int, Int] = Right(246)
+   * scala> 123.rightIor[String].map(_ * 2)
+   * res1: Ior[String, Int] = Right(246)
    *
-   * scala> Ior.Both("abc", 123).bimap(_.length, _ * 2)
-   * res2: Ior[Int, Int] = Both(3,246)
+   * scala> Ior.Both("abc", 123).map(_ * 2)
+   * res2: Ior[String, Int] = Both(abc,246)
    * }}}
    */
   final def map[D](f: B => D): A Ior D = bimap(identity, f)
@@ -811,7 +811,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
 sealed abstract private[data] class IorInstances0 {
 
-  implicit def catsDataTraverseFunctorForIor[A]: Traverse[A Ior *] = new Traverse[A Ior *] {
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[Ior[A, *]] = new Traverse[Ior[A, *]] {
     def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
       fa.traverse(f)
     def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =

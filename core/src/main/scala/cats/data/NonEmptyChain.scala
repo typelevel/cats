@@ -1,25 +1,10 @@
-/*
- * Copyright (c) 2018 Luka Jacobowitz
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package cats
 package data
 
 import NonEmptyChainImpl.create
 import cats.{Order, Semigroup}
 import cats.kernel._
+import scala.collection.immutable.SortedMap
 
 private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
@@ -68,7 +53,9 @@ private[data] object NonEmptyChainImpl extends NonEmptyChainInstances with Scala
     new NonEmptyChainOps(value)
 }
 
-class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
+class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
+    extends AnyVal
+    with NonEmptyCollection[A, Chain, NonEmptyChain] {
 
   /**
    * Converts this chain to a `Chain`
@@ -384,7 +371,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
    * scala> import cats.data.NonEmptyChain
    * scala> val as = NonEmptyChain(1, 2, 3)
    * scala> val bs = NonEmptyChain("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptyChain[String] = Chain(1A, 2B, 3C)
    * }}}
    */
@@ -397,6 +384,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
    */
   final def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] =
     toChain.groupBy(f).asInstanceOf[NonEmptyMap[B, NonEmptyChain[A]]]
+
+  final def groupByNem[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptyChain[A]] = groupBy(f)
 
   final def iterator: Iterator[A] = toChain.iterator
 
@@ -412,6 +401,14 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
   final def distinct[AA >: A](implicit O: Order[AA]): NonEmptyChain[AA] =
     create(toChain.distinct[AA])
 
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyChain[A] = create(toChain.sortBy(f))
+  final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyChain[AA] = create(toChain.sorted[AA])
+  final def toNem[T, V](implicit ev: A <:< (T, V), order: Order[T]): NonEmptyMap[T, V] =
+    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev): _*)(order.toOrdering))
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector: _*)
+  final def zipWithIndex: NonEmptyChain[(A, Int)] = create(toChain.zipWithIndex)
+
+  final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[Chain[AA]].show(toChain)}"
 }
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
@@ -470,7 +467,7 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     Semigroup[Chain[A]].asInstanceOf[Semigroup[NonEmptyChain[A]]]
 
   implicit def catsDataShowForNonEmptyChain[A](implicit A: Show[A]): Show[NonEmptyChain[A]] =
-    Show.show[NonEmptyChain[A]](nec => s"NonEmpty${Show[Chain[A]].show(nec.toChain)}")
+    Show.show[NonEmptyChain[A]](_.show)
 
 }
 

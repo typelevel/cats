@@ -9,7 +9,7 @@ import compat.scalaVersionSpecific._
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>
 
   /**
    * Return the identity element for this monoid.
@@ -83,6 +83,15 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   override def combineAllOption(as: IterableOnce[A]): Option[A] =
     if (as.iterator.isEmpty) None else Some(combineAll(as))
+
+  override def reverse: Monoid[A] =
+    new Monoid[A] {
+      def empty = self.empty
+      def combine(a: A, b: A) = self.combine(b, a)
+      // a + a + a + ... is the same when reversed
+      override def combineN(a: A, n: Int): A = self.combineN(a, n)
+      override def reverse = self
+    }
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific

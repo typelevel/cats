@@ -48,7 +48,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
-  def foldableLazyListWithDefaultImpl = new Foldable[LazyList] {
+  def foldableLazyListWithDefaultImpl: Foldable[LazyList] = new Foldable[LazyList] {
     def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
       Foldable[LazyList].foldLeft(fa, b)(f)
 
@@ -57,7 +57,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList].foldLeftM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl
     val ns = LazyList.continually(1)
     val res = F.foldLeftM[Either[Int, *], Int, Int](ns, 0) { (sum, n) =>
       if (sum >= 100000) Left(sum) else Right(sum + n)
@@ -66,7 +66,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList].foldLeftM short-circuiting optimality") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl
 
     // test that no more elements are evaluated than absolutely necessary
 
@@ -81,13 +81,13 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList].existsM/.forallM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl
     assert(F.existsM[Id, Boolean](true #:: boomLazyList[Boolean])(identity) == true)
     assert(F.forallM[Id, Boolean](false #:: boomLazyList[Boolean])(identity) == false)
   }
 
   test("Foldable[LazyList].findM/.collectFirstSomeM short-circuiting") {
-    implicit val F = foldableLazyListWithDefaultImpl
+    implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl
     assert((1 #:: boomLazyList[Int]).findM[Id](_ > 0) == Some(1))
     assert((1 #:: boomLazyList[Int]).collectFirstSomeM[Id, Int](Option.apply) == Some(1))
   }
@@ -142,7 +142,7 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
     }
 
     LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
-    // shouldn't have ever evaluted validate(8)
+    // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
     LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))

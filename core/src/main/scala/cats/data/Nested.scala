@@ -117,10 +117,12 @@ sealed abstract private[data] class NestedInstances3 extends NestedInstances4 {
 }
 
 sealed abstract private[data] class NestedInstances4 extends NestedInstances5 {
-  implicit def catsDataApplicativeErrorForNested[F[_]: ApplicativeError[*[_], E], G[_]: Applicative, E]
-    : ApplicativeError[Nested[F, G, *], E] =
+  implicit def catsDataApplicativeErrorForNested[F[_], G[_], E](
+    implicit F: ApplicativeError[F, E],
+    G0: Applicative[G]
+  ): ApplicativeError[Nested[F, G, *], E] =
     new NestedApplicativeError[F, G, E] {
-      val G: Applicative[G] = Applicative[G]
+      val G: Applicative[G] = G0
 
       val AEF: ApplicativeError[F, E] = ApplicativeError[F, E]
     }
@@ -247,7 +249,7 @@ abstract private[data] class NestedApplicativeError[F[_], G[_], E]
 
   def FG: Applicative[λ[α => F[G[α]]]] = AEF.compose[G](G)
 
-  def raiseError[A](e: E): Nested[F, G, A] = Nested(AEF.map(AEF.raiseError(e))(G.pure))
+  def raiseError[A](e: E): Nested[F, G, A] = Nested(AEF.map(AEF.raiseError[A](e))(G.pure))
 
   def handleErrorWith[A](fa: Nested[F, G, A])(f: E => Nested[F, G, A]): Nested[F, G, A] =
     Nested(AEF.handleErrorWith(fa.value)(e => f(e).value))
@@ -369,6 +371,10 @@ abstract private[data] class NestedFunctorFilter[F[_], G[_]] extends FunctorFilt
 
   override def filter[A](fa: Nested[F, G, A])(f: (A) => Boolean): Nested[F, G, A] =
     Nested[F, G, A](F.map(fa.value)(G.filter(_)(f)))
+
+  override def filterNot[A](fa: Nested[F, G, A])(f: A => Boolean): Nested[F, G, A] =
+    Nested[F, G, A](F.map(fa.value)(G.filterNot(_)(f)))
+
 }
 
 abstract private[data] class NestedTraverseFilter[F[_], G[_]]

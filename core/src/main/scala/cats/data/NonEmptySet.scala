@@ -1,25 +1,8 @@
-/*
- * Copyright (c) 2018 Luka Jacobowitz
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package cats
 package data
 
 import cats.instances.sortedSet._
 import cats.kernel._
-import cats.syntax.order._
 
 import scala.collection.immutable._
 import kernel.compat.scalaVersionSpecific._
@@ -332,7 +315,7 @@ sealed class NonEmptySetOps[A](val value: NonEmptySet[A]) {
    * scala> import cats.implicits._
    * scala> val as = NonEmptySet.of(1, 2, 3)
    * scala> val bs = NonEmptySet.of("A", "B", "C")
-   * scala> as.zipWith(bs)(_ + _)
+   * scala> as.zipWith(bs)(_.toString + _)
    * res0: cats.data.NonEmptySet[String] = TreeSet(1A, 2B, 3C)
    * }}}
    */
@@ -437,7 +420,7 @@ sealed abstract private[data] class NonEmptySetOrder[A] extends Order[NonEmptySe
   implicit override def A0: Order[A]
 
   override def compare(x: NonEmptySet[A], y: NonEmptySet[A]): Int =
-    x.toSortedSet.compare(y.toSortedSet)
+    Order[SortedSet[A]].compare(x.toSortedSet, y.toSortedSet)
 }
 
 sealed private[data] trait NonEmptySetEq[A] extends Eq[NonEmptySet[A]] {

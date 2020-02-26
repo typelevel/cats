@@ -27,7 +27,8 @@ trait FunctorFilterTests[F[_]] extends Laws {
       "mapFilter map consistency" -> forAll(laws.mapFilterMapConsistency[A, B] _),
       "collect mapFilter consistency" -> forAll(laws.collectConsistentWithMapFilter[A, B] _),
       "flattenOption mapFilter consistency" -> forAll(laws.flattenOptionConsistentWithMapFilter[A] _),
-      "filter mapFilter consistency" -> forAll(laws.filterConsistentWithMapFilter[A] _)
+      "filter mapFilter consistency" -> forAll(laws.filterConsistentWithMapFilter[A] _),
+      "filterNot mapFilter consistency" -> forAll(laws.filterNotConsistentWithFilter[A] _)
     )
 }
 

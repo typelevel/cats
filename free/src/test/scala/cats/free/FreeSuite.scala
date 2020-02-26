@@ -3,8 +3,9 @@ package free
 
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.tests.CatsSuite
 
 import org.scalacheck.{Arbitrary, Cogen, Gen}
@@ -13,7 +14,7 @@ import Arbitrary.arbFunction1
 class FreeSuite extends CatsSuite {
   import FreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, *]]
+  implicit val iso: Isomorphisms[Free[Option, *]] = Isomorphisms.invariant[Free[Option, *]]
 
   Monad[Free[Id, *]]
   implicitly[Monad[Free[Id, *]]]
@@ -27,14 +28,14 @@ class FreeSuite extends CatsSuite {
   checkAll("Monad[Free[Option, *]]", SerializableTests.serializable(Monad[Free[Option, *]]))
 
   locally {
-    implicit val instance = Free.catsFreeFoldableForFree[Option]
+    implicit val instance: Foldable[Free[Option, *]] = Free.catsFreeFoldableForFree[Option]
 
     checkAll("Free[Option, *]", FoldableTests[Free[Option, *]].foldable[Int, Int])
     checkAll("Foldable[Free[Option,*]]", SerializableTests.serializable(Foldable[Free[Option, *]]))
   }
 
   locally {
-    implicit val instance = Free.catsFreeTraverseForFree[Option]
+    implicit val instance: Traverse[Free[Option, *]] = Free.catsFreeTraverseForFree[Option]
     checkAll("Free[Option,*]", TraverseTests[Free[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
     checkAll("Traverse[Free[Option,*]]", SerializableTests.serializable(Traverse[Free[Option, *]]))
   }

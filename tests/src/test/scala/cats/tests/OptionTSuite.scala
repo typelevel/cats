@@ -1,15 +1,16 @@
 package cats
 package tests
 
-import cats.data.{Const, OptionT}
+import cats.data.{Const, IdT, OptionT}
 import cats.kernel.{Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 
 class OptionTSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms
+  implicit val iso: Isomorphisms[OptionT[ListWrapper, *]] = Isomorphisms
     .invariant[OptionT[ListWrapper, *]](OptionT.catsDataFunctorForOptionT(ListWrapper.functor))
 
   checkAll("OptionT[Eval, *]", DeferTests[OptionT[Eval, *]].defer[Int])
@@ -17,7 +18,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // if a Functor for F is defined
-    implicit val F = ListWrapper.functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("OptionT[ListWrapper, *]", FunctorFilterTests[OptionT[ListWrapper, *]].functorFilter[Int, Int, Int])
     checkAll("FunctorFilter[OptionT[ListWrapper, *]]",
@@ -27,7 +28,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // if a Traverse for F is defined
-    implicit val F = ListWrapper.traverse
+    implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, *]", TraverseFilterTests[OptionT[ListWrapper, *]].traverseFilter[Int, Int, Int])
     checkAll("TraverseFilter[OptionT[ListWrapper, *]]",
@@ -36,14 +37,14 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.eqv[Option[Int]]
+    implicit val F: Eq[ListWrapper[Option[Int]]] = ListWrapper.eqv[Option[Int]]
 
     checkAll("OptionT[ListWrapper, Int]", EqTests[OptionT[ListWrapper, Int]].eqv)
     checkAll("Eq[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Eq[OptionT[ListWrapper, Int]]))
   }
 
   {
-    implicit val F = ListWrapper.partialOrder[Option[Int]]
+    implicit val F: PartialOrder[ListWrapper[Option[Int]]] = ListWrapper.partialOrder[Option[Int]]
 
     checkAll("OptionT[ListWrapper, Int]", PartialOrderTests[OptionT[ListWrapper, Int]].partialOrder)
     checkAll("PartialOrder[OptionT[ListWrapper, Int]]",
@@ -53,7 +54,7 @@ class OptionTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.order[Option[Int]]
+    implicit val F: Order[ListWrapper[Option[Int]]] = ListWrapper.order[Option[Int]]
 
     checkAll("OptionT[ListWrapper, Int]", OrderTests[OptionT[ListWrapper, Int]].order)
     checkAll("Order[OptionT[ListWrapper, Int]]", SerializableTests.serializable(Order[OptionT[ListWrapper, Int]]))
@@ -64,7 +65,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has a Functor
-    implicit val F = ListWrapper.functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("OptionT[ListWrapper, Int]", FunctorTests[OptionT[ListWrapper, *]].functor[Int, Int, Int])
     checkAll("Functor[OptionT[ListWrapper, *]]", SerializableTests.serializable(Functor[OptionT[ListWrapper, *]]))
@@ -72,7 +73,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has an Invariant
-    implicit val evidence = ListWrapper.invariant
+    implicit val evidence: Invariant[ListWrapper] = ListWrapper.invariant
     Invariant[ListWrapper]
     Invariant[OptionT[ListWrapper, *]]
 
@@ -99,9 +100,10 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has a Monad
-    implicit val F = ListWrapper.monad
-    implicit val eq0 = OptionT.catsDataEqForOptionT[ListWrapper, Option[Int]]
-    implicit val eq1 = OptionT.catsDataEqForOptionT[OptionT[ListWrapper, *], Int](eq0)
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val eq0: Eq[OptionT[ListWrapper, Option[Int]]] = OptionT.catsDataEqForOptionT[ListWrapper, Option[Int]]
+    implicit val eq1: Eq[OptionT[OptionT[ListWrapper, *], Int]] =
+      OptionT.catsDataEqForOptionT[OptionT[ListWrapper, *], Int](eq0)
 
     checkAll("OptionT[ListWrapper, Int]", MonadTests[OptionT[ListWrapper, *]].monad[Int, Int, Int])
     checkAll("Monad[OptionT[ListWrapper, *]]", SerializableTests.serializable(Monad[OptionT[ListWrapper, *]]))
@@ -125,7 +127,8 @@ class OptionTSuite extends CatsSuite {
     // F has a MonadError
     type SEither[A] = Either[String, A]
 
-    implicit val monadError = OptionT.catsDataMonadErrorForOptionT[SEither, String]
+    implicit val monadError: MonadError[OptionT[SEither, *], String] =
+      OptionT.catsDataMonadErrorForOptionT[SEither, String]
 
     checkAll("OptionT[Either[String, *], Int]", MonadErrorTests[OptionT[SEither, *], String].monadError[Int, Int, Int])
     checkAll("MonadError[OptionT[Either[String, *], *]]", SerializableTests.serializable(monadError))
@@ -139,7 +142,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has a Foldable
-    implicit val F = ListWrapper.foldable
+    implicit val F: Foldable[ListWrapper] = ListWrapper.foldable
 
     checkAll("OptionT[ListWrapper, Int]", FoldableTests[OptionT[ListWrapper, *]].foldable[Int, Int])
     checkAll("Foldable[OptionT[ListWrapper, *]]", SerializableTests.serializable(Foldable[OptionT[ListWrapper, *]]))
@@ -147,7 +150,7 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has a Traverse
-    implicit val F = ListWrapper.traverse
+    implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, Int] with Option",
              TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
@@ -179,14 +182,14 @@ class OptionTSuite extends CatsSuite {
 
   {
     // MonadError instance where F has a Monad
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
     checkAll("OptionT[ListWrapper, Int]", MonadErrorTests[OptionT[ListWrapper, *], Unit].monadError[Int, Int, Int])
     checkAll("MonadError[OptionT[List, *]]", SerializableTests.serializable(MonadError[OptionT[ListWrapper, *], Unit]))
   }
 
   test("MonadError[OptionT[F, *], E] instance has higher priority than MonadError[OptionT[F, *], Unit]") {
 
-    def shouldCompile[F[_]: MonadError[*[_], E], E](x: OptionT[F, Int], e: E): OptionT[F, Int] =
+    def shouldCompile[F[_], E](x: OptionT[F, Int], e: E)(implicit F: MonadError[F, E]): OptionT[F, Int] =
       x.ensure(e)(_ => true)
   }
 
@@ -275,6 +278,50 @@ class OptionTSuite extends CatsSuite {
   test("OptionT[Id, A].isEmpty consistent with Option.isEmpty") {
     forAll { (o: Option[Int]) =>
       o.isEmpty should ===(OptionT[Id, Int](o).isEmpty)
+    }
+  }
+
+  test("OptionT.when[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.when[Id, Int](b)(i).value should ===(when(b, i))
+    }
+  }
+
+  test("OptionT.whenF[Id, A] consistent with Option.when") {
+    // Option.when is inlined here because it is not available before Scala 2.13
+    def when[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.whenF[Id, Int](b)(i).value should ===(when(b, i))
+    }
+  }
+
+  test("OptionT.whenK and OptionT.whenF consistent") {
+    forAll { (li: List[Int], b: Boolean) =>
+      IdT(li).mapK(OptionT.whenK(b)).value should ===(OptionT.whenF(b)(li))
+    }
+  }
+
+  test("OptionT.unless[Id, A] consistent with Option.unless") {
+    // Option.unless is inlined here because it is not available before Scala 2.13
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.unless[Id, Int](b)(i).value should ===(unless(b, i))
+    }
+  }
+
+  test("OptionT.unlessF[Id, A] consistent with Option.unless") {
+    // Option.unless is inlined here because it is not available before Scala 2.13
+    def unless[A]: (Boolean, A) => Option[A] = (c: Boolean, a: A) => if (!c) Some(a) else None
+    forAll { (i: Int, b: Boolean) =>
+      OptionT.unlessF[Id, Int](b)(i).value should ===(unless(b, i))
+    }
+  }
+
+  test("OptionT.unlessK and OptionT.unlessF consistent") {
+    forAll { (li: List[Int], b: Boolean) =>
+      IdT(li).mapK(OptionT.unlessK(b)).value should ===(OptionT.unlessF(b)(li))
     }
   }
 
@@ -406,8 +453,8 @@ class OptionTSuite extends CatsSuite {
     Foldable[OptionT[List, *]]
     Traverse[OptionT[List, *]]
 
-    implicit val T = ListWrapper.traverse
-    implicit val M = ListWrapper.monad
+    implicit val T: Traverse[ListWrapper] = ListWrapper.traverse
+    implicit val M: Monad[ListWrapper] = ListWrapper.monad
     Functor[OptionT[ListWrapper, *]]
   }
 

@@ -107,6 +107,8 @@ sealed abstract private[data] class ConstInstances extends ConstInstances0 {
 
     override def filter[A](fa: Const[C, A])(f: (A) => Boolean): Const[C, A] = fa.retag
 
+    override def filterNot[A](fa: Const[C, A])(f: A => Boolean): Const[C, A] = fa.retag
+
     def traverseFilter[G[_], A, B](
       fa: Const[C, A]
     )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Const[C, B]] =

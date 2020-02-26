@@ -11,7 +11,7 @@ class IorTSuite extends CatsSuite {
   checkAll("IorT[Eval, String, *]", DeferTests[IorT[Eval, String, *]].defer[Int])
 
   {
-    implicit val F = ListWrapper.functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("IorT[ListWrapper, *, *]",
              BifunctorTests[IorT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
@@ -22,7 +22,7 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.traverse
+    implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("IorT[ListWrapper, Int, *]",
              TraverseTests[IorT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
@@ -30,7 +30,7 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll("IorT[ListWrapper, String, Int]",
              MonadErrorTests[IorT[ListWrapper, String, *], String].monadError[Int, Int, Int])
@@ -48,14 +48,14 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.foldable
+    implicit val F: Foldable[ListWrapper] = ListWrapper.foldable
 
     checkAll("IorT[ListWrapper, Int, *]", FoldableTests[IorT[ListWrapper, Int, *]].foldable[Int, Int])
     checkAll("Foldable[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Foldable[IorT[ListWrapper, Int, *]]))
   }
 
   {
-    implicit val F = ListWrapper.semigroup[Ior[String, Int]]
+    implicit val F: Semigroup[ListWrapper[Ior[String, Int]]] = ListWrapper.semigroup[Ior[String, Int]]
 
     checkAll("IorT[ListWrapper, String, Int]", SemigroupTests[IorT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[IorT[ListWrapper, String, Int]]",
@@ -63,7 +63,7 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.monoid[Ior[String, Int]]
+    implicit val F: Monoid[ListWrapper[Ior[String, Int]]] = ListWrapper.monoid[Ior[String, Int]]
 
     checkAll("IorT[ListWrapper, String, Int]", MonoidTests[IorT[ListWrapper, String, Int]].monoid)
     checkAll("Monoid[IorT[ListWrapper, String, Int]]",
@@ -71,7 +71,7 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.eqv[Ior[String, Int]]
+    implicit val F: Eq[ListWrapper[Ior[String, Int]]] = ListWrapper.eqv[Ior[String, Int]]
 
     checkAll("IorT[ListWrapper, String, Int]", EqTests[IorT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[IorT[ListWrapper, String, Int]]", SerializableTests.serializable(Eq[IorT[ListWrapper, String, Int]]))

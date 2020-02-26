@@ -32,7 +32,7 @@ trait NonEmptyTraverseLaws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
     N: Apply[N],
     M: Apply[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
-    implicit val MN = new Apply[MN] {
+    implicit val MN: Apply[MN] = new Apply[MN] {
       def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {
         val (fam, fan) = fa
         val (fm, fn) = f

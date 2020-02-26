@@ -27,7 +27,7 @@ class TrySuite extends CatsSuite {
   checkAll("Monad[Try]", SerializableTests.serializable(Monad[Try]))
 
   {
-    implicit val F = ListWrapper.semigroup[Int]
+    implicit val F: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
 
     checkAll("Try[ListWrapper[Int]]", SemigroupTests[Try[ListWrapper[Int]]].semigroup)
     checkAll("Semigroup[Try[ListWrapper[Int]]", SerializableTests.serializable(Semigroup[Try[ListWrapper[Int]]]))

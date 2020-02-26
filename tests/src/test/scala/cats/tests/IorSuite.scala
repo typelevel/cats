@@ -12,25 +12,26 @@ import cats.laws.discipline.{
 }
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Arbitrary._
 
 class IorSuite extends CatsSuite {
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Ior[String, *]]
+  implicit val iso: Isomorphisms[Ior[String, *]] = Isomorphisms.invariant[Ior[String, *]]
 
   checkAll("Ior[String, Int]", SemigroupalTests[Ior[String, *]].semigroupal[Int, Int, Int])
-  checkAll("Semigroupal[String Ior *]]", SerializableTests.serializable(Semigroupal[String Ior *]))
+  checkAll("Semigroupal[Ior[String, *]]", SerializableTests.serializable(Semigroupal[Ior[String, *]]))
 
-  implicit val eq0 = EitherT.catsDataEqForEitherT[Ior[String, *], String, Int]
+  implicit val eq0: Eq[EitherT[Ior[String, *], String, Int]] = EitherT.catsDataEqForEitherT[Ior[String, *], String, Int]
 
-  checkAll("Ior[String, Int]", MonadErrorTests[String Ior *, String].monadError[Int, Int, Int])
-  checkAll("MonadError[String Ior *]", SerializableTests.serializable(MonadError[String Ior *, String]))
+  checkAll("Ior[String, Int]", MonadErrorTests[Ior[String, *], String].monadError[Int, Int, Int])
+  checkAll("MonadError[SIor[String, *]]", SerializableTests.serializable(MonadError[Ior[String, *], String]))
 
-  checkAll("Ior[String, Int] with Option", TraverseTests[String Ior *].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[String Ior *]", SerializableTests.serializable(Traverse[String Ior *]))
-  checkAll("* Ior *", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
+  checkAll("Ior[String, Int] with Option", TraverseTests[Ior[String, *]].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Ior[String, *]]", SerializableTests.serializable(Traverse[Ior[String, *]]))
+  checkAll("Ior[*, *]", BifunctorTests[Ior].bifunctor[Int, Int, Int, String, String, String])
 
-  checkAll("Ior[*, *]", BitraverseTests[Ior].bitraverse[Option, Int, Int, Int, String, String, String])
+  checkAll("BitraverseTests Ior[*, *]", BitraverseTests[Ior].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Ior]", SerializableTests.serializable(Bitraverse[Ior]))
 
   checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupTests[Ior[List[Int], List[Int]]].semigroup)

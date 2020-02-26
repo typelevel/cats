@@ -1,5 +1,7 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
+* **Dec 11 2019** [Cats 2.1.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC3)
 * **Nov 26 2019** [Cats 2.1.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC2)
 * **Nov 15 2019** [Cats 2.1.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC1)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
@@ -112,14 +114,13 @@ addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 And then create the Cats dependency, by adding the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.0"
 ```
 
 This will pull in the cats-core module. If you require some other
 functionality, you can pick-and-choose from amongst these modules
 (used in place of `"cats-core"`):
 
- * `cats-macros`: Macros used by Cats syntax (*required*).
  * `cats-kernel`: Small set of basic type classes (*required*).
  * `cats-core`: Most core type classes and functionality (*required*).
  * `cats-laws`: Laws for testing type class instances.
@@ -244,9 +245,6 @@ is dedicated for Cats development related discussions. For people who wants to
 follow closely and/or to participate in the decisions in Cats development, 
 this is the room to join. 
 
-You can get an overview of who is working on what
-via [Waffle.io](https://waffle.io/typelevel/cats).
-
 People are expected to follow the
 [Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
 discussing Cats on the Github page, Gitter channel, or other
@@ -320,6 +318,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [E.ON](https://eon.com)
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
+- [HelloSoda](https://hellosoda.com)
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)

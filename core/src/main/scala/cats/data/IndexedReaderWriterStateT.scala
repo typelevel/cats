@@ -3,8 +3,6 @@ package data
 
 import cats.arrow.{Profunctor, Strong}
 
-import cats.syntax.either._
-
 /**
  * Represents a stateful computation in a context `F[_]`, from state `SA` to state `SB`,
  *  with an initial environment `E`, an accumulated log `L` and a result `A`.
@@ -45,6 +43,21 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
       F.map(runF) { rwsa => (ee: EE, sa: SA) =>
         rwsa(f(ee), sa)
       }
+    }
+
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val x: IndexedReaderWriterStateT[Option, String, String, Int, Int, Unit] = IndexedReaderWriterStateT.tell("something")
+   * scala> val y: IndexedReaderWriterStateT[Option, String, String, Int, Int, (Unit, String)] = x.listen
+   * scala> y.run("environment", 17)
+   * res0: Option[(String, Int, (Unit, String))] = Some((something,17,((),something)))
+   * }}}
+   */
+  def listen(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, (A, L)] =
+    transform { (l, s, a) =>
+      (l, s, (a, l))
     }
 
   /**
@@ -441,6 +454,10 @@ abstract private[data] class RWSTFunctions extends CommonIRWSTConstructors {
   def modifyF[F[_], E, L, S](f: S => F[S])(implicit F: Applicative[F],
                                            L: Monoid[L]): ReaderWriterStateT[F, E, L, S, Unit] =
     ReaderWriterStateT((_, s) => F.map(f(s))((L.empty, _, ())))
+
+  def listen[F[_], E, L, S, A](rwst: ReaderWriterStateT[F, E, L, S, A])(
+    implicit F: Functor[F]
+  ): ReaderWriterStateT[F, E, L, S, (A, L)] = rwst.listen
 }
 
 /**
@@ -495,6 +512,9 @@ abstract private[data] class RWSFunctions {
    */
   def tell[E, L, S](l: L): ReaderWriterState[E, L, S, Unit] =
     ReaderWriterStateT.tell(l)
+
+  def listen[E, L, S, A](rws: ReaderWriterState[E, L, S, A]): ReaderWriterState[E, L, S, (A, L)] =
+    rws.listen
 }
 
 sealed abstract private[data] class IRWSTInstances extends IRWSTInstances1 {
@@ -673,7 +693,10 @@ sealed abstract private[data] class RWSTMonad[F[_], E, L, S]
         case (currL, currS, currA) =>
           F.map(f(currA).run(e, currS)) {
             case (nextL, nextS, ab) =>
-              ab.bimap((L.combine(currL, nextL), nextS, _), (L.combine(currL, nextL), nextS, _))
+              ab match {
+                case Right(b) => Right((L.combine(currL, nextL), nextS, b))
+                case Left(a)  => Left((L.combine(currL, nextL), nextS, a))
+              }
           }
       }
     }

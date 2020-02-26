@@ -2,8 +2,6 @@ package cats
 package data
 
 import cats.arrow.FunctionK
-import cats.syntax.either._
-import cats.syntax.option._
 
 final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
@@ -294,7 +292,8 @@ object IorT extends IorTInstances {
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class FromEitherPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
-    def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): IorT[F, E, A] = IorT(F.pure(either.toIor))
+    def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): IorT[F, E, A] =
+      IorT(F.pure(Ior.fromEither(either)))
   }
 
   /**
@@ -320,14 +319,14 @@ object IorT extends IorTInstances {
    * }}}
    */
   final def fromEitherF[F[_], E, A](feither: F[Either[E, A]])(implicit F: Functor[F]): IorT[F, E, A] =
-    IorT(F.map(feither)(_.toIor))
+    IorT(F.map(feither)(Ior.fromEither))
 
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */
   final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](option: Option[A], ifNone: => E)(implicit F: Applicative[F]): IorT[F, E, A] =
-      IorT(F.pure(option.toRightIor(ifNone)))
+      IorT(F.pure(option.fold[Ior[E, A]](Ior.left(ifNone))(Ior.right)))
   }
 
   /**
@@ -358,7 +357,7 @@ object IorT extends IorTInstances {
    * }}}
    */
   final def fromOptionF[F[_], E, A](foption: F[Option[A]], ifNone: => E)(implicit F: Functor[F]): IorT[F, E, A] =
-    IorT(F.map(foption)(_.toRightIor(ifNone)))
+    IorT(F.map(foption)(_.fold[Ior[E, A]](Ior.left(ifNone))(Ior.right)))
 
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
@@ -476,7 +475,7 @@ abstract private[data] class IorTInstances1 extends IorTInstances2 {
     type F[x] = IorT[F0, E, x]
     private[this] val identityK: IorT[F0, E, *] ~> IorT[F0, E, *] = FunctionK.id
     private[this] val underlyingParallel: Parallel.Aux[Ior[E, *], Ior[E, *]] =
-      Parallel[Ior[E, *], Ior[E, *]]
+      Ior.catsDataParallelForIor[E]
 
     def parallel: IorT[F0, E, *] ~> IorT[F0, E, *] = identityK
     def sequential: IorT[F0, E, *] ~> IorT[F0, E, *] = identityK

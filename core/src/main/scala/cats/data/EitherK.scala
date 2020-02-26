@@ -3,7 +3,6 @@ package data
 
 import cats.Contravariant
 import cats.arrow.FunctionK
-import cats.syntax.either._
 
 /** `F` on the left and `G` on the right of `scala.util.Either`.
  *
@@ -14,7 +13,12 @@ final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
   import EitherK._
 
   def map[B](f: A => B)(implicit F: Functor[F], G: Functor[G]): EitherK[F, G, B] =
-    EitherK(run.bimap(F.lift(f), G.lift(f)))
+    EitherK(
+      run match {
+        case Right(ga) => Right(G.map(ga)(f))
+        case Left(fa)  => Left(F.map(fa)(f))
+      }
+    )
 
   /**
    * Modify the right side context `G` using transformation `f`.
@@ -24,17 +28,30 @@ final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
 
   def coflatMap[B](f: EitherK[F, G, A] => B)(implicit F: CoflatMap[F], G: CoflatMap[G]): EitherK[F, G, B] =
     EitherK(
-      run.bimap(a => F.coflatMap(a)(x => f(leftc(x))), a => G.coflatMap(a)(x => f(rightc(x))))
+      run match {
+        case Right(ga) => Right(G.coflatMap(ga)(x => f(rightc(x))))
+        case Left(fa)  => Left(F.coflatMap(fa)(x => f(leftc(x))))
+      }
     )
 
   def coflatten(implicit F: CoflatMap[F], G: CoflatMap[G]): EitherK[F, G, EitherK[F, G, A]] =
-    EitherK(run.bimap(x => F.coflatMap(x)(a => leftc(a)), x => G.coflatMap(x)(a => rightc(a))))
+    EitherK(
+      run match {
+        case Right(ga) => Right(G.coflatMap(ga)(x => rightc(x)))
+        case Left(fa)  => Left(F.coflatMap(fa)(x => leftc(x)))
+      }
+    )
 
   def extract(implicit F: Comonad[F], G: Comonad[G]): A =
     run.fold(F.extract, G.extract)
 
   def contramap[B](f: B => A)(implicit F: Contravariant[F], G: Contravariant[G]): EitherK[F, G, B] =
-    EitherK(run.bimap(F.contramap(_)(f), G.contramap(_)(f)))
+    EitherK(
+      run match {
+        case Right(ga) => Right(G.contramap(ga)(f))
+        case Left(fa)  => Left(F.contramap(fa)(f))
+      }
+    )
 
   def foldRight[B](z: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F], G: Foldable[G]): Eval[B] =
     run.fold(a => F.foldRight(a, z)(f), a => G.foldRight(a, z)(f))
@@ -61,7 +78,7 @@ final case class EitherK[F[_], G[_], A](run: Either[F[A], G[A]]) {
     EitherK(run.swap)
 
   def toValidated: Validated[F[A], G[A]] =
-    run.toValidated
+    Validated.fromEither(run)
 
   /**
    * Fold this eitherK into a new type constructor using two natural transformations.

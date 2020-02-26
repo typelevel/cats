@@ -1,12 +1,15 @@
 package cats
 package tests
 
-import cats.data.{Chain, NonEmptyChain}
+import cats.data.{Chain, NonEmptyChain, NonEmptyChainOps}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-class NonEmptyChainSuite extends CatsSuite {
+class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
+  def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList
+  def underlyingToList[A](underlying: Chain[A]): List[A] = underlying.toList
+
   checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
 
@@ -27,14 +30,14 @@ class NonEmptyChainSuite extends CatsSuite {
   checkAll("Align[NonEmptyChain]", SerializableTests.serializable(Align[NonEmptyChain]))
 
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", PartialOrderTests[NonEmptyChain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyChain[ListWrapper[Int]]",
              SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", EqTests[NonEmptyChain[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyChain[ListWrapper[Int]]", SerializableTests.serializable(Eq[NonEmptyChain[ListWrapper[Int]]]))
   }
@@ -161,4 +164,6 @@ class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmpt
 
   def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
     NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
+
+  def fromValues[A](el: A, els: A*): NonEmptyChain[A] = NonEmptyChain(el, els: _*)
 }

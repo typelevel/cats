@@ -92,12 +92,11 @@ private[instances] trait SortedSetInstancesBinCompat0 {
 }
 
 private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
-  // TODO: Remove when this is no longer necessary for binary compatibility.
-  // Note that the overrides here and below are only necessary because the
-  // definitions in `SortedSetInstances1` conflict with the ones in
-  // `cats.kernel.instances.SortedSetInstances`. Both are inherited here, so
-  // we have to "bubble" the "correct" ones up to the appropriate place.
-  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+  implicit def catsKernelStdHashForSortedSet1[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
+
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC3")
+  override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 

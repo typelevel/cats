@@ -41,8 +41,10 @@ final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
    *
    * scala> val sortedSet = SortedSet(12, -2, 3, -5)
    *
-   * scala> sortedSet.groupByNes(_ >= 0)
-   * res0: SortedMap[Boolean, NonEmptySet[Int]] = Map(false -> TreeSet(-5, -2), true -> TreeSet(3, 12))
+   * scala> val expectedResult = SortedMap(false -> NonEmptySet.of(-5, -2), true -> NonEmptySet.of(3, 12))
+   *
+   * scala> sortedSet.groupByNes(_ >= 0) === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupByNes[B](f: A => B)(implicit B: Order[B]): SortedMap[B, NonEmptySet[A]] = {

@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
-import cats.syntax.either._
 
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
@@ -223,6 +222,46 @@ object OptionT extends OptionTInstances {
    */
   def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, *] =
     new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
+
+  /**
+   * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
+   */
+  def when[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
+    if (cond) OptionT.some[F](a) else OptionT.none[F, A]
+
+  /**
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
+   */
+  def whenF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
+    if (cond) OptionT.liftF(fa) else OptionT.none[F, A]
+
+  /**
+   * Same as `whenF`, but expressed as a FunctionK for use with mapK.
+   */
+  def whenK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.whenF(cond)(a) }
+
+  /**
+   * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
+   */
+  def unless[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
+    OptionT.when(!cond)(a)
+
+  /**
+   * Creates an non-empty `OptionT[F, A]` from an `F[A]` if the given condition is `false`.
+   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
+   */
+  def unlessF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
+    OptionT.whenF(!cond)(fa)
+
+  /**
+   * Same as `unlessF`, but expressed as a FunctionK for use with mapK.
+   */
+  def unlessK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.unlessF(cond)(a) }
 }
 
 sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
@@ -386,11 +425,10 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, *]] {
 
   def tailRecM[A, B](a: A)(f: A => OptionT[F, Either[A, B]]): OptionT[F, B] =
     OptionT(
-      F.tailRecM(a)(
-        a0 =>
-          F.map(f(a0).value)(
-            _.fold(Either.right[A, Option[B]](None))(_.map(b => Some(b): Option[B]))
-          )
+      F.tailRecM(a)(a0 =>
+        F.map(f(a0).value)(
+          _.fold[Either[A, Option[B]]](Right(None))(_.map(b => Some(b): Option[B]))
+        )
       )
     )
 }
@@ -427,12 +465,11 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
 
   override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
     OptionT(
-      F.contramap(F.product(fa.value, fb.value))(
-        (t: Option[(A, B)]) =>
-          t match {
-            case Some((x, y)) => (Some(x), Some(y))
-            case None         => (None, None)
-          }
+      F.contramap(F.product(fa.value, fb.value))((t: Option[(A, B)]) =>
+        t match {
+          case Some((x, y)) => (Some(x), Some(y))
+          case None         => (None, None)
+        }
       )
     )
 }
@@ -501,6 +538,8 @@ sealed private[data] trait OptionTFunctorFilter[F[_]] extends FunctorFilter[Opti
   override def flattenOption[A](fa: OptionT[F, Option[A]]): OptionT[F, A] = fa.subflatMap(identity)
 
   override def filter[A](fa: OptionT[F, A])(f: (A) => Boolean): OptionT[F, A] = fa.filter(f)
+
+  override def filterNot[A](fa: OptionT[F, A])(f: A => Boolean): OptionT[F, A] = fa.filterNot(f)
 }
 
 sealed private[data] trait OptionTOrder[F[_], A] extends Order[OptionT[F, A]] with OptionTPartialOrder[F, A] {

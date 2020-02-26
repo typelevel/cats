@@ -6,11 +6,12 @@ import cats.data.EitherT
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {
-  implicit val iso = SemigroupalTests.Isomorphisms
+  implicit val iso: Isomorphisms[EitherT[ListWrapper, String, *]] = Isomorphisms
     .invariant[EitherT[ListWrapper, String, *]](EitherT.catsDataFunctorForEitherT(ListWrapper.functor))
 
   checkAll("EitherT[Eval, String, *]", DeferTests[EitherT[Eval, String, *]].defer[Int])
@@ -23,7 +24,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.order[Either[String, Int]]
+    implicit val F: Order[ListWrapper[Either[String, Int]]] = ListWrapper.order[Either[String, Int]]
 
     checkAll("EitherT[List, String, Int]", OrderTests[EitherT[ListWrapper, String, Int]].order)
     checkAll("Order[EitherT[List, String, Int]]",
@@ -32,7 +33,7 @@ class EitherTSuite extends CatsSuite {
 
   {
     // if a Functor for F is defined
-    implicit val F = ListWrapper.functor
+    implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("EitherT[ListWrapper, *, *]",
              BifunctorTests[EitherT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
@@ -45,7 +46,7 @@ class EitherTSuite extends CatsSuite {
 
   {
     // if a Traverse for F is defined
-    implicit val F = ListWrapper.traverse
+    implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("EitherT[ListWrapper, Int, *]",
              TraverseTests[EitherT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
@@ -61,9 +62,11 @@ class EitherTSuite extends CatsSuite {
   {
     // if a Monad is defined
 
-    implicit val F = ListWrapper.monad
-    implicit val eq0 = EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
-    implicit val eq1 = EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, *], String, Int](eq0)
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val eq0: Eq[EitherT[ListWrapper, String, Either[String, Int]]] =
+      EitherT.catsDataEqForEitherT[ListWrapper, String, Either[String, Int]]
+    implicit val eq1: Eq[EitherT[EitherT[ListWrapper, String, *], String, Int]] =
+      EitherT.catsDataEqForEitherT[EitherT[ListWrapper, String, *], String, Int](eq0)
 
     Functor[EitherT[ListWrapper, String, *]]
     Applicative[EitherT[ListWrapper, String, *]]
@@ -80,9 +83,12 @@ class EitherTSuite extends CatsSuite {
     // if a MonadError is defined
     // Tests for catsDataMonadErrorFForEitherT instance, for recovery on errors of F.
 
-    implicit val eq1 = EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
-    implicit val eq2 = EitherT.catsDataEqForEitherT[EitherT[Option, String, *], Unit, String](eq1)
-    implicit val me = EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
+    implicit val eq1: Eq[EitherT[Option, String, Either[Unit, String]]] =
+      EitherT.catsDataEqForEitherT[Option, String, Either[Unit, String]]
+    implicit val eq2: Eq[EitherT[EitherT[Option, String, *], Unit, String]] =
+      EitherT.catsDataEqForEitherT[EitherT[Option, String, *], Unit, String](eq1)
+    implicit val me: MonadError[EitherT[Option, String, *], Unit] =
+      EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
 
     Functor[EitherT[Option, String, *]]
     Applicative[EitherT[Option, String, *]]
@@ -96,7 +102,7 @@ class EitherTSuite extends CatsSuite {
 
   {
     // if a Monad is defined
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     Functor[EitherT[ListWrapper, String, *]]
     Applicative[EitherT[ListWrapper, String, *]]
@@ -109,7 +115,7 @@ class EitherTSuite extends CatsSuite {
 
   {
     // if a foldable is defined
-    implicit val F = ListWrapper.foldable
+    implicit val F: Foldable[ListWrapper] = ListWrapper.foldable
 
     checkAll("EitherT[ListWrapper, Int, *]", FoldableTests[EitherT[ListWrapper, Int, *]].foldable[Int, Int])
     checkAll("Foldable[EitherT[ListWrapper, Int, *]]",
@@ -117,7 +123,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.partialOrder[Either[String, Int]]
+    implicit val F: PartialOrder[ListWrapper[Either[String, Int]]] = ListWrapper.partialOrder[Either[String, Int]]
 
     checkAll("EitherT[ListWrapper, String, Int]", PartialOrderTests[EitherT[ListWrapper, String, Int]].partialOrder)
     checkAll("PartialOrder[EitherT[ListWrapper, String, Int]]",
@@ -125,7 +131,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.semigroup[Either[String, Int]]
+    implicit val F: Semigroup[ListWrapper[Either[String, Int]]] = ListWrapper.semigroup[Either[String, Int]]
 
     checkAll("EitherT[ListWrapper, String, Int]", SemigroupTests[EitherT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[EitherT[ListWrapper, String, Int]]",
@@ -133,7 +139,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.monoid[Either[String, Int]]
+    implicit val F: Monoid[ListWrapper[Either[String, Int]]] = ListWrapper.monoid[Either[String, Int]]
 
     Semigroup[EitherT[ListWrapper, String, Int]]
 
@@ -143,7 +149,7 @@ class EitherTSuite extends CatsSuite {
   }
 
   {
-    implicit val F = ListWrapper.eqv[Either[String, Int]]
+    implicit val F: Eq[ListWrapper[Either[String, Int]]] = ListWrapper.eqv[Either[String, Int]]
 
     checkAll("EitherT[ListWrapper, String, Int]", EqTests[EitherT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[EitherT[ListWrapper, String, Int]]",

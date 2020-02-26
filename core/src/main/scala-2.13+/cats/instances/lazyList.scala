@@ -154,6 +154,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
     override def filter[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filter(f)
 
+    override def filterNot[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: LazyList[A])(f: PartialFunction[A, B]): LazyList[B] = fa.collect(f)
 
     override def flattenOption[A](fa: LazyList[Option[A]]): LazyList[A] = fa.flatten
@@ -161,14 +163,12 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
     def traverseFilter[G[_], A, B](
       fa: LazyList[A]
     )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-        )
+      fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+      fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
         )
         .value
 

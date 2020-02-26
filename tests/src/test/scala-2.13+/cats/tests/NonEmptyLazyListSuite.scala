@@ -1,12 +1,14 @@
 package cats
 package tests
 
-import cats.data.NonEmptyLazyList
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
 
-class NonEmptyLazyListSuite extends CatsSuite {
+class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
+  def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
+  def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))
@@ -36,14 +38,14 @@ class NonEmptyLazyListSuite extends CatsSuite {
   checkAll("Show[NonEmptyLazyList[Int]]", SerializableTests.serializable(Show[NonEmptyLazyList[Int]]))
 
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyLazyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyLazyList[ListWrapper[Int]]",
              SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", EqTests[NonEmptyLazyList[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]",
              SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
@@ -101,6 +103,12 @@ class NonEmptyLazyListSuite extends CatsSuite {
     Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft should ===(true)
   }
 
+  test("fromLazyListAppend is consistent with LazyList#:+") {
+    forAll { (lli: LazyList[Int], i: Int) =>
+      NonEmptyLazyList.fromLazyListAppend(lli, i).toLazyList should ===(lli :+ i)
+    }
+  }
+
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       NonEmptyLazyList.fromSeq(ci.iterator.toList) should ===(Option(ci))
@@ -126,7 +134,7 @@ class NonEmptyLazyListSuite extends CatsSuite {
   }
 
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
-    forAll { ci: NonEmptyLazyList[Int] =>
+    forAll { (ci: NonEmptyLazyList[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
@@ -137,4 +145,6 @@ class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("N
 
   def range(start: Long, endInclusive: Long): NonEmptyLazyList[Long] =
     NonEmptyLazyList(start, (start + 1L).to(endInclusive): _*)
+
+  def fromValues[A](el: A, els: A*): NonEmptyLazyList[A] = NonEmptyLazyList(el, els: _*)
 }

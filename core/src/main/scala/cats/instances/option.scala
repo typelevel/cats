@@ -168,6 +168,8 @@ private[instances] trait OptionInstancesBinCompat0 {
 
     override def filter[A](fa: Option[A])(f: (A) => Boolean): Option[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Option[A])(f: A => Boolean): Option[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Option[A])(f: PartialFunction[A, B]): Option[B] = fa.collect(f)
 
     override def flattenOption[A](fa: Option[Option[A]]): Option[A] = fa.flatten

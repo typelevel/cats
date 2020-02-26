@@ -5,12 +5,13 @@ import data.NonEmptyList
 
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import Helpers.CSemi
 
 class TupleSuite extends CatsSuite {
 
-  implicit val iso1 = SemigroupalTests.Isomorphisms.invariant[(NonEmptyList[Int], *)]
-  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[(String, *)]
+  implicit val iso1: Isomorphisms[(NonEmptyList[Int], *)] = Isomorphisms.invariant[(NonEmptyList[Int], *)]
+  implicit val iso2: Isomorphisms[(String, *)] = Isomorphisms.invariant[(String, *)]
 
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))

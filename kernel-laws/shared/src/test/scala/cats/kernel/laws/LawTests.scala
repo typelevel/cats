@@ -5,11 +5,12 @@ import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosInt, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
+import org.scalatestplus.scalacheck.Checkers
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
@@ -33,7 +34,7 @@ object KernelCheck {
   implicit val arbitraryDuration: Arbitrary[Duration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 50
+    val n = (292L * 365) / 500
     Arbitrary(
       Gen.oneOf(
         Gen.choose(-n, n).map(Duration(_, DAYS)),
@@ -50,7 +51,7 @@ object KernelCheck {
   implicit val arbitraryFiniteDuration: Arbitrary[FiniteDuration] = {
     // max range is +/- 292 years, but we give ourselves some extra headroom
     // to ensure that we can add these things up. they crash on overflow.
-    val n = (292L * 365) / 50
+    val n = (292L * 365) / 500
     Arbitrary(
       Gen.oneOf(
         Gen.choose(-n, n).map(FiniteDuration(_, DAYS)),
@@ -133,10 +134,7 @@ object KernelCheck {
     }
 }
 
-class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTests {
-
-  import KernelCheck._
-
+class TestsConfig extends Checkers {
   // The ScalaCheck defaults (100,100) are too high for Scala.js.
   final val PropMaxSize: PosZInt = if (Platform.isJs) 10 else 100
   final val PropMinSuccessful: PosInt = if (Platform.isJs) 10 else 100
@@ -144,6 +142,11 @@ class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTes
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = PropMinSuccessful, sizeRange = PropMaxSize, workers = PropWorkers)
+}
+
+class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
+
+  import KernelCheck._
 
   {
     // needed for Cogen[Map[...]]
@@ -311,9 +314,6 @@ class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTes
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
   {
-    // default Arbitrary[BigDecimal] is a bit too intense :/
-    implicit val arbBigDecimal: Arbitrary[BigDecimal] =
-      Arbitrary(arbitrary[Double].map(n => BigDecimal(n.toString)))
     checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
     checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
     checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
@@ -444,7 +444,7 @@ class Tests extends AnyFunSuiteLike with Discipline with ScalaVersionSpecificTes
           .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
     }
 
-    implicit val monoidOrderN = Order.whenEqualMonoid[N]
+    implicit val monoidOrderN: Monoid[Order[N]] with Band[Order[N]] = Order.whenEqualMonoid[N]
     checkAll("Monoid[Order[N]]", MonoidTests[Order[N]].monoid)
     checkAll("Band[Order[N]]", BandTests[Order[N]].band)
 

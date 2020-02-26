@@ -258,4 +258,4 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
-[simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"
+[simulacrum]: https://github.com/typelevel/simulacrum "First class syntax support for type classes in Scala"
