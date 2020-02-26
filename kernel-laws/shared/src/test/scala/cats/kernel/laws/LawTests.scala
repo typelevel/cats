@@ -313,11 +313,9 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
-  {
-    checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
-    checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
-    checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
-  }
+  checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
+  checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
+  checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
 
   test("CommutativeGroup[BigDecimal]'s combine should be associative for known problematic cases (#3303)") {
     import java.math.MathContext
