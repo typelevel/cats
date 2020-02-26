@@ -7,8 +7,9 @@ import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, Se
 import cats.laws.discipline.arbitrary._
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
-  def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
+  protected def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
+  protected def toNonEmptyCollection[A](nea: NonEmptyLazyList[A]): NonEmptyLazyListOps[A] = nea
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))

@@ -22,8 +22,9 @@ import cats.platform.Platform
 import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
-  def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+  protected def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+  protected def toNonEmptyCollection[A](nea: NonEmptyVector[A]): NonEmptyVector[A] = nea
 
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
