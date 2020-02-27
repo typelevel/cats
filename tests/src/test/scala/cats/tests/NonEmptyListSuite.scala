@@ -19,8 +19,9 @@ import scala.collection.immutable.SortedMap
 import scala.collection.immutable.SortedSet
 
 class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
-  def toList[A](value: NonEmptyList[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: List[A]): List[A] = underlying
+  protected def toList[A](value: NonEmptyList[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: List[A]): List[A] = underlying
+  protected def toNonEmptyCollection[A](nea: NonEmptyList[A]): NonEmptyList[A] = nea
 
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
