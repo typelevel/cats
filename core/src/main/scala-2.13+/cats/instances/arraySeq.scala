@@ -56,11 +56,11 @@ private[cats] object ArraySeqInstances {
       }
 
       override def map2[A, B, Z](fa: ArraySeq[A], fb: ArraySeq[B])(f: (A, B) => Z): ArraySeq[Z] =
-        if (fb.isEmpty) ArraySeq.empty // do O(1) work if fb is empty
+        if (fb.isEmpty) ArraySeq.untagged.empty // do O(1) work if fb is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
       override def map2Eval[A, B, Z](fa: ArraySeq[A], fb: Eval[ArraySeq[B]])(f: (A, B) => Z): Eval[ArraySeq[Z]] =
-        if (fa.isEmpty) Eval.now(ArraySeq.empty) // no need to evaluate fb
+        if (fa.isEmpty) Eval.now(ArraySeq.untagged.empty) // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
       def foldLeft[A, B](fa: ArraySeq[A], b: B)(f: (B, A) => B): B =

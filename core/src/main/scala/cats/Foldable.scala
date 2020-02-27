@@ -757,7 +757,10 @@ import Foldable.sentinel
    * }}}
    */
   def intercalate[A](fa: F[A], a: A)(implicit A: Monoid[A]): A =
-    A.combineAll(intersperseList(toList(fa), a))
+    combineAllOption(fa)(A.intercalate(a)) match {
+      case None    => A.empty
+      case Some(a) => a
+    }
 
   protected def intersperseList[A](xs: List[A], x: A): List[A] = {
     val bld = List.newBuilder[A]

@@ -329,7 +329,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("pure + listen + map(_._1) + runEmptyA is identity") {
-    forAll { i: Int =>
+    forAll { (i: Int) =>
       IndexedReaderWriterStateT
         .pure[Id, String, String, Int, Int](i)
         .listen
@@ -339,7 +339,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("tell + listen + map(_._2) + runEmptyA is identity") {
-    forAll { s: String =>
+    forAll { (s: String) =>
       IndexedReaderWriterStateT
         .tell[Id, String, String, Int](s)
         .listen
