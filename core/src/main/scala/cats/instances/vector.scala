@@ -27,7 +27,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         fa.flatMap(f)
 
       override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
-        if (fb.isEmpty) Vector.empty// do O(1) work if either is empty
+        if (fb.isEmpty) Vector.empty // do O(1) work if either is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
       override def map2Eval[A, B, Z](fa: Vector[A], fb: Eval[Vector[B]])(f: (A, B) => Z): Eval[Vector[Z]] =
@@ -175,7 +175,8 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
