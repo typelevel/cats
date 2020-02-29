@@ -235,6 +235,27 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     }
 
   /**
+   * Inspect a value from the environment and input state, without modifying the state.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xAsk: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, String] = xOpt.inspectAsk(_ + _)
+   * scala> val input = 5
+   * scala> xOpt.run("env", input)
+   * res0: Option[(Log, Int, Int)] = Some((List(),5,5))
+   * scala> xAsk.run("env", 5)
+   * res1: Option[(Log, Int, String)] = Some((List(),5,env5))
+   * }}}
+   */
+  def inspectAsk[B](f: (E, SB) => B)(implicit F: Monad[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    IndexedReaderWriterStateT.apply { (e, sa) =>
+      F.map(run(e, sa)) { case (l, sb, _) => (l, sb, f(e, sb)) }
+    }
+
+  /**
    * Get the input state, without modifying it.
    */
   def get(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, SB] =
