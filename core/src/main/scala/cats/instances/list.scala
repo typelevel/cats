@@ -166,13 +166,15 @@ private[instances] trait ListInstancesBinCompat0 {
     override def flattenOption[A](fa: List[Option[A]]): List[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: List[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[List[B]] =
-      fa.foldRight(Eval.now(G.pure(List.empty[B])))(
+      traverse
+        .foldRight(fa, Eval.now(G.pure(List.empty[B])))(
           (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ :: o))
         )
         .value
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =
-      fa.foldRight(Eval.now(G.pure(List.empty[A])))(
+      traverse
+        .foldRight(fa, Eval.now(G.pure(List.empty[A])))(
           (x, xse) => G.map2Eval(f(x), xse)((b, list) => if (b) x :: list else list)
         )
         .value
