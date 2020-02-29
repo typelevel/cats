@@ -90,8 +90,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * Perform an effect if the value inside the is a [[None]], leaving the result untouched. Equivalent to [[orElseF]]
    * with an effect returning [[None]] as argument.
    */
-  def emptyflatTap(f: => F[Unit])(implicit F: Monad[F]): OptionT[F, A] =
-    OptionT(F.flatTap(value)(_.fold(f)(_ => F.unit)))
+  def emptyflatTap[B](f: => F[B])(implicit F: Monad[F]): OptionT[F, A] =
+    OptionT(F.flatTap(value)(_.fold(F.void(f))(_ => F.unit)))
 
   def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.getOrElse(default))
