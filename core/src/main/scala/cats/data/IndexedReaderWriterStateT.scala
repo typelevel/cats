@@ -379,6 +379,18 @@ sealed private[data] trait CommonIRWSTConstructors {
     IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, s, _)))
 
   /**
+   * Inspect values from the environment and input state, without modifying the state.
+   */
+  def inspectAsk[F[_]: Applicative, E, L: Monoid, S, A](f: (E, S) => A): ReaderWriterStateT[F, E, L, S, A] =
+    IndexedReaderWriterStateT((e, s) => Applicative[F].pure((Monoid[L].empty, s, f(e, s))))
+
+  /**
+   * Like [[inspectAsk]], but using an effectful function.
+   */
+  def inspectAskF[F[_]: Applicative, E, L: Monoid, S, A](f: (E, S) => F[A]): ReaderWriterStateT[F, E, L, S, A] =
+    IndexedReaderWriterStateT((e, s) => Functor[F].map(f(e, s))((Monoid[L].empty, s, _)))
+
+  /**
    * Set the state to `s`.
    */
   def set[F[_], E, L, S](s: S)(implicit F: Applicative[F],
@@ -482,6 +494,12 @@ abstract private[data] class RWSTFunctions extends CommonIRWSTConstructors {
    */
   def applyF[F[_], E, L, S, A](runF: F[(E, S) => F[(L, S, A)]]): ReaderWriterStateT[F, E, L, S, A] =
     new IndexedReaderWriterStateT(runF)
+
+  /**
+   * Like [[apply]], but using a effectful function from `S`.
+   */
+  def applyS[F[_]: Applicative, E, L, S, A](f: S => F[(L, S, A)]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    apply((_, s) => f(s))
 
   /**
    * Modify the input state using `f`.
