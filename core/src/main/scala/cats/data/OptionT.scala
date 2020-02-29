@@ -16,6 +16,21 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.fold(default)(f))
 
+  /** Transform this `OptionT[F, A]` into a `F[C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data.OptionT
+   *
+   * scala> val optionT: OptionT[List, Int] = OptionT[List, Int](List(Some(23), None))
+   * scala> optionT.foldF(Nil)(v => List(v, v * 2))
+   * res0: List[Int] = List(23, 46)
+   * }}}
+   */
+  def foldF[B](default: => F[B])(f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+    F.flatMap(value)(_.fold(default)(f))
+
   /**
    * Catamorphism on the Option. This is identical to [[fold]], but it only has
    * one parameter list, which can result in better type inference in some
@@ -23,6 +38,14 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    */
   def cata[B](default: => B, f: A => B)(implicit F: Functor[F]): F[B] =
     fold(default)(f)
+
+  /**
+   * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
+   * one parameter list, which can result in better type inference in some
+   * contexts.
+   */
+  def cataF[B](default: => F[B], f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+    foldF(default)(f)
 
   def map[B](f: A => B)(implicit F: Functor[F]): OptionT[F, B] =
     OptionT(F.map(value)(_.map(f)))
@@ -62,6 +85,13 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def subflatMap[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     transform(_.flatMap(f))
+
+  /**
+   * Perform an effect if the value inside the is a [[None]], leaving the result untouched. Equivalent to [[orElseF]]
+   * with an effect returning [[None]] as argument.
+   */
+  def emptyflatTap(f: => F[Unit])(implicit F: Monad[F]): OptionT[F, A] =
+    OptionT(F.flatTap(value)(_.fold(f)(_ => F.unit)))
 
   def getOrElse[B >: A](default: => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.getOrElse(default))
