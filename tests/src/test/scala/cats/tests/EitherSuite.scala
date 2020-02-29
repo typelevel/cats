@@ -99,13 +99,13 @@ class EitherSuite extends CatsSuite {
 
   test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Either.catchOnly[IndexOutOfBoundsException] { "foo".toInt }
+      Either.catchOnly[IndexOutOfBoundsException]("foo".toInt)
     }
   }
 
   test("catchNonFatal catches non-fatal exceptions") {
-    assert(Either.catchNonFatal { "foo".toInt }.isLeft)
-    assert(Either.catchNonFatal { throw new Throwable("blargh") }.isLeft)
+    assert(Either.catchNonFatal("foo".toInt).isLeft)
+    assert(Either.catchNonFatal(throw new Throwable("blargh")).isLeft)
   }
 
   test("fromTry is left for failed Try") {
