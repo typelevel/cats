@@ -87,7 +87,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     transform(_.flatMap(f))
 
   /**
-   * Perform an effect if the value inside the is a `None`, leaving the result untouched. Equivalent to [[orElseF]]
+   * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]]
    * with an effect returning `None` as argument.
    */
   def flatTapNone[B](f: => F[B])(implicit F: Monad[F]): OptionT[F, A] =

@@ -199,6 +199,25 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("foldF and cataF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => List[String]) =>
+      o.foldF(List(s))(f) should ===(o.cataF(List(s), f))
+    }
+  }
+
+  test("fold and foldF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
+      val f2 = f.andThen(i => List(i))
+      o.fold(s)(f) should ===(o.foldF(List(s))(f2))
+    }
+  }
+
+  test("flatTapNone doesn't change value inside") {
+    forAll { (o: OptionT[Eval, Int], f: Eval[String]) =>
+      o.flatTapNone(f) should ===(o)
+    }
+  }
+
   test("OptionT[Id, A].fold consistent with Option.fold") {
     forAll { (o: Option[Int], s: String, f: Int => String) =>
       o.fold(s)(f) should ===(OptionT[Id, Int](o).fold(s)(f))
