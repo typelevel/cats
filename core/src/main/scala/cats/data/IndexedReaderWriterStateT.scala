@@ -169,6 +169,28 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     IndexedReaderWriterStateT.apply((e, s) => f(run(e, s)))
 
   /**
+   * Like [[transform]], but does it in the monadic context `F`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> val xOpt0: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = xOpt0.tell("xxx" :: Nil)
+   * scala> val xHead: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, String] = xOpt.semiflatTransform((l, s, a) => l.headOption.map(h => (l, s, h + a)))
+   * scala> val input = 5
+   * scala> xOpt.run("env", input)
+   * res0: Option[(Log, Int, Int)] = Some((List(xxx),5,5))
+   * scala> xHead.run("env", 5)
+   * res1: Option[(Log, Int, String)] = Some((List(xxx),5,xxx5))
+   * }}}
+   */
+  def semiflatTransform[LL, SC, B](f: (L, SB, A) => F[(LL, SC, B)])(
+    implicit F: Monad[F]
+  ): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
+    IndexedReaderWriterStateT.apply((e, s) => F.flatMap(run(e, s)) { case (l, sb, a) => f(l, sb, a) })
+
+  /**
    * Transform the state used. See [[StateT]] for more details.
    *
    * {{{
