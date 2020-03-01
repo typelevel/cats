@@ -36,3 +36,5 @@ trait AllInstances
 private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
 
 private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
+
+private[instances] trait AllInstancesBinCompat2 extends SortedSetInstances2
