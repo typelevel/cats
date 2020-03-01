@@ -335,7 +335,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldRightDefer[G[_]: Defer, B](gb: G[B])(fn: (A, G[B]) => G[B])(implicit F: Foldable[F]): G[B] =
     Defer[G].defer(
       F.foldLeft(fa, (z: G[B]) => z)(
-        (acc, elem) => z => Defer[G].defer(fn(elem, acc(z)))
+        (acc, elem) => z => Defer[G].defer(acc(fn(elem, z)))
       )(gb)
     )
 }
