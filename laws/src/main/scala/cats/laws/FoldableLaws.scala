@@ -47,6 +47,16 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   ): IsEq[B] =
     F.foldM[Id, A, B](fa, b)(f) <-> F.foldLeft(fa, b)(f)
 
+  def foldRightDeferConsistentWithFoldRight[A, B](
+    fa: F[A],
+    f: (B, A) => B
+  )(implicit
+    M: Monoid[B]): IsEq[B] = {
+    val g: (A, Eval[B]) => Eval[B] = (a, ea) => ea.map(f(_, a))
+
+    F.foldRight(fa, Later(M.empty))(g).value <-> fa.foldRightDefer(Later(M.empty): Eval[B])(g).value
+  }
+
   /**
    * `reduceLeftOption` consistent with `reduceLeftToOption`
    */
