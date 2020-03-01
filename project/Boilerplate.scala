@@ -16,7 +16,7 @@ object Boilerplate {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
-      val trimmedLines = rawLines.map { _.dropWhile(_.isWhitespace) }
+      val trimmedLines = rawLines.map(_.dropWhile(_.isWhitespace))
       trimmedLines.mkString("\n")
     }
   }
@@ -65,8 +65,8 @@ object Boilerplate {
           acc.map(_.tail)
         else {
           val pre = contents.head.takeWhile(_.startsWith("|"))
-          val instances = contents.flatMap { _.dropWhile(_.startsWith("|")).takeWhile(_.startsWith("-")) }
-          val next = contents.map { _.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")) }
+          val instances = contents.flatMap(_.dropWhile(_.startsWith("|")).takeWhile(_.startsWith("-")))
+          val next = contents.map(_.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")))
           expandInstances(next, acc ++ pre ++ instances)
         }
 
@@ -174,14 +174,14 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val fargs = (0 until arity).map { "f" + _ }
+      val fargs = (0 until arity).map("f" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
 
       val a = arity / 2
       val b = arity - a
 
-      val fArgsA = (0 until a).map { "f" + _ }.mkString(",")
-      val fArgsB = (a until arity).map { "f" + _ }.mkString(",")
+      val fArgsA = (0 until a).map("f" + _).mkString(",")
+      val fArgsB = (a until arity).map("f" + _).mkString(",")
       val argsA = (0 until a)
         .map { n =>
           "a" + n + ":A" + n
@@ -198,7 +198,7 @@ object Boilerplate {
         } else {
           s"ap$n"
         }
-      def allArgs = (0 until arity).map { "a" + _ }.mkString(",")
+      def allArgs = (0 until arity).map("a" + _).mkString(",")
 
       val apply =
         block"""
@@ -253,7 +253,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"M[$tpe]"
       }
-      val fargs = (0 until arity).map { "m" + _ }
+      val fargs = (0 until arity).map("m" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
@@ -286,7 +286,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"M[$tpe]"
       }
-      val fargs = (0 until arity).map { "m" + _ }
+      val fargs = (0 until arity).map("m" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
@@ -319,7 +319,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val fargs = (0 until arity).map { "f" + _ }
+      val fargs = (0 until arity).map("f" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
 
