@@ -93,6 +93,7 @@ private[instances] trait SortedSetInstancesBinCompat0 {
 }
 
 private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
+  // TODO: Remove when this is no longer necessary for binary compatibility.
   @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
   override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet(Hash[A])
