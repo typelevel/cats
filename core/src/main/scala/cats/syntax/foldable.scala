@@ -331,6 +331,18 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def maximumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.maximumOption(fa)(Order.by(f))
+
+  def combineAllOption(implicit ev: Semigroup[A], F: Foldable[F]): Option[A] =
+    if (F.isEmpty(fa)) None else ev.combineAllOption(toIterable)
+
+  /**
+   * Convert F[A] to an Iterable[A].
+   *
+   * This method may be overridden for the sake of performance, but implementers should take care
+   * not to force a full materialization of the collection.
+   */
+  def toIterable(implicit F: Foldable[F]): Iterable[A] =
+    cats.compat.FoldableCompat.toIterable(fa)(F)
 }
 
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
