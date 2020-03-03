@@ -49,6 +49,30 @@ final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) exten
                F: Monad[F],
                A: Alternative[F],
                G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
+
+  /**
+   * Separate the inner foldable values into the "lefts" and "rights".
+   * A variant of [[separate]] that is specialized
+   * for Fs that have Foldable instances
+   * which allows for a single-pass implementation
+   * (as opposed to {{{separate}}} which is 2-pass).
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
+   * scala> l.separateFoldable
+   * res0: (List[String], List[Int]) = (List(error),List(1))
+   * }}}
+   */
+  def separateFoldable(implicit AA: Alternative[F], G: Bifoldable[G], FF: Foldable[F]): (F[A], F[B]) =
+      FF.foldLeft(fgab, (AA.empty[A], AA.empty[B])) {
+        case (mamb, gab) =>
+          G.bifoldLeft(gab, mamb)(
+            (t, a) => (AA.combineK(t._1, AA.pure(a)), t._2),
+            (t, b) => (t._1, AA.combineK(t._2, AA.pure(b)))
+          )
+      }
 }
 
 final class GuardOps(private val condition: Boolean) extends AnyVal {

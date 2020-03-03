@@ -370,6 +370,11 @@ object SyntaxSuite
     val fafb = fhab.separate
   }
 
+  def testAlternativeFoldable[F[_]: Alternative: Foldable, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separateFoldable
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
