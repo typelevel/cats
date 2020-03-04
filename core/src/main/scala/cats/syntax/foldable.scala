@@ -342,7 +342,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * not to force a full materialization of the collection.
    */
   def toIterable(implicit F: Foldable[F]): Iterable[A] =
-    cats.compat.FoldableCompat.toIterable(fa)(F)
+    F.foldRight[A, Stream[A]](fa, Eval.now(Stream.empty))((a, eb) => eb.map(Stream.cons(a, _))).value
 }
 
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {

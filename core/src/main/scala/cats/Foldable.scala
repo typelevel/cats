@@ -1,10 +1,12 @@
 package cats
 
-import scala.collection.mutable
+import cats.Foldable.sentinel
 import cats.instances.either._
 import cats.kernel.CommutativeMonoid
+import cats.syntax.foldable
 import simulacrum.typeclass
-import Foldable.sentinel
+
+import scala.collection.mutable
 
 /**
  * Data structures that can be folded to a summary value.
@@ -238,7 +240,7 @@ import Foldable.sentinel
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    A.combineAll(cats.compat.FoldableCompat.toIterable(fa)(this))
+    A.combineAll(foldable.catsSyntaxFoldableOps0(fa).toIterable(this))
 
   /**
    * Alias for [[fold]].
