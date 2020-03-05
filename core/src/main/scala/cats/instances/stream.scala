@@ -140,8 +140,6 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
       override def toList[A](fa: Stream[A]): List[A] = fa.toList
 
-      def toIterable[A](fa: Stream[A]): Iterable[A] = fa
-
       override def reduceLeftOption[A](fa: Stream[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
