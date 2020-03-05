@@ -598,9 +598,9 @@ private[data] trait KleisliFlatMap[F[_], A] extends FlatMap[Kleisli[F, A, *]] wi
     fa.flatMap(f)
 
   def tailRecM[B, C](b: B)(f: B => Kleisli[F, A, Either[B, C]]): Kleisli[F, A, C] =
-    Kleisli[F, A, C]({ a =>
-      F.tailRecM(b) { f(_).run(a) }
-    })
+    Kleisli[F, A, C] { a =>
+      F.tailRecM(b)(f(_).run(a))
+    }
 }
 
 private[data] trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, *]] with KleisliApply[F, A] {

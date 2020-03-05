@@ -1,5 +1,9 @@
-package cats
-package tests
+package cats.tests
+
+import cats.{Contravariant, Invariant}
+import cats.instances.all._
+import cats.kernel.Hash
+import cats.syntax.hash._
 
 class HashSuite extends CatsSuite {
 

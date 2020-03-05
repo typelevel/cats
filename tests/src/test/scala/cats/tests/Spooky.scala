@@ -1,5 +1,4 @@
-package cats
-package tests
+package cats.tests
 
 /**
  * Class for spooky side-effects and action-at-a-distance.

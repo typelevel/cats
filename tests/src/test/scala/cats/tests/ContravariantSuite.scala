@@ -1,12 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
 import cats.data.Const
+import cats.instances.all._
+import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniInt}
-import org.scalacheck.{Arbitrary, Cogen}
-import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq._
+import org.scalacheck.{Arbitrary, Cogen}
 
 class ContravariantSuite extends CatsSuite {
 

@@ -1,7 +1,8 @@
-package cats
+package cats.tests
 
+import cats.Inject
+import cats.instances.all._
 import cats.laws.discipline.InjectTests
-import cats.tests.CatsSuite
 
 class InjectSuite extends CatsSuite {
 

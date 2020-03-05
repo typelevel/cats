@@ -1,12 +1,13 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Applicative
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
+import cats.{Align, Applicative, Apply, CoflatMap}
 import cats.data.{Const, Validated}
+import cats.instances.all._
+import cats.kernel.Monoid
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.CoflatMapTests
-import cats.laws.discipline.AlignTests
+import cats.laws.discipline.{AlignTests, CoflatMapTests}
+import cats.syntax.applicative._
 
 class ApplicativeSuite extends CatsSuite {
 

@@ -1,13 +1,21 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalacheck.Arbitrary
-import scala.util.Try
-import scala.collection.immutable.{SortedMap, SortedSet}
+import cats.{Eval, Foldable, Id, Now}
+import cats.data.{Const, EitherK, IdT, Ior, Nested, NonEmptyList, NonEmptyStream, NonEmptyVector, OneAnd, Validated}
 import cats.instances.all._
-import cats.data._
+import cats.kernel.{Eq, Monoid}
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.arbitrary._
-import kernel.compat.scalaVersionSpecific._
+import cats.syntax.alternative._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.list._
+import cats.syntax.reducible._
+import cats.syntax.semigroupk._
+import org.scalacheck.Arbitrary
+import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.util.Try
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],

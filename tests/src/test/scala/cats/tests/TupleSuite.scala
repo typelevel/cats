@@ -1,12 +1,25 @@
-package cats
-package tests
+package cats.tests
 
-import data.NonEmptyList
-
+import cats.{
+  Bitraverse,
+  CommutativeFlatMap,
+  CommutativeMonad,
+  Comonad,
+  ContravariantSemigroupal,
+  FlatMap,
+  Monad,
+  Reducible,
+  Show,
+  Traverse
+}
+import cats.data.NonEmptyList
+import cats.instances.all._
+import cats.kernel.{Eq, Order}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import Helpers.CSemi
+import cats.syntax.show._
+import cats.tests.Helpers.CSemi
 
 class TupleSuite extends CatsSuite {
 

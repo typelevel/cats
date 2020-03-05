@@ -1,9 +1,10 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Contravariant
+import cats.{Contravariant, Id, Monad, MonoidK, SemigroupK, Semigroupal}
 import cats.arrow._
 import cats.data.{Cokleisli, NonEmptyList}
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
