@@ -65,12 +65,12 @@ final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) exten
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}
    */
-  def separateFoldable(implicit AA: Alternative[F], G: Bifoldable[G], FF: Foldable[F]): (F[A], F[B]) =
-    FF.foldLeft(fgab, (AA.empty[A], AA.empty[B])) {
+  def separateFoldable(implicit G: Bifoldable[G], A: Alternative[F], FF: Foldable[F]): (F[A], F[B]) =
+    FF.foldLeft(fgab, (A.empty[A], A.empty[B])) {
       case (mamb, gab) =>
         G.bifoldLeft(gab, mamb)(
-          (t, a) => (AA.combineK(t._1, AA.pure(a)), t._2),
-          (t, b) => (t._1, AA.combineK(t._2, AA.pure(b)))
+          (t, a) => (A.combineK(t._1, A.pure(a)), t._2),
+          (t, b) => (t._1, A.combineK(t._2, A.pure(b)))
         )
     }
 }
