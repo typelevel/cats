@@ -42,8 +42,7 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
       "takeWhile_ reference" -> forAll(laws.takeWhile_Ref[A] _),
       "dropWhile_ reference" -> forAll(laws.dropWhile_Ref[A] _),
       "collectFirstSome reference" -> forAll(laws.collectFirstSome_Ref[A, B] _),
-      "collectFirst reference" -> forAll(laws.collectFirst_Ref[A, B] _),
-      "foldRightDefer consistency" -> forAll(laws.foldRightDeferConsistentWithFoldRight[A, B] _)
+      "collectFirst reference" -> forAll(laws.collectFirst_Ref[A, B] _)
     )
 }
 
