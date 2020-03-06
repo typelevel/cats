@@ -1,5 +1,5 @@
 val scalaJSVersion =
-  Option(System.getenv("SCALAJS_VERSION")).getOrElse("0.6.32")
+  Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.0.1")
 
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.3")
 addSbtPlugin("com.github.gseitz" %% "sbt-release" % "1.0.13")
