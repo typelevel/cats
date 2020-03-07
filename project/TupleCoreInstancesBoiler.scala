@@ -82,9 +82,7 @@ object GenTupleCoreInstances extends Template {
     val coflattenReturn =
       if (arity <= 1) "Tuple1[Tuple1[A]]"
       else
-        s"${`A0, A(N - 1)&`(
-          { `A0, A(N - 1)&`("A") }
-        )}"
+        s"${`A0, A(N - 1)&`(`A0, A(N - 1)&`("A"))}"
 
     val monadPureMethod: String =
       if (arity <= 1) "Tuple1(a)"
