@@ -5,6 +5,9 @@ import cats.kernel._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.SortedMap
+import cats.Align
+import cats.Functor
+import cats.data.Ior
 
 trait SortedMapInstances extends SortedMapInstances2 {
 
@@ -25,8 +28,9 @@ trait SortedMapInstances extends SortedMapInstances2 {
     }
 
   // scalastyle:off method.length
-  implicit def catsStdInstancesForSortedMap[K: Order]: Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] =
-    new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] {
+  implicit def catsStdInstancesForSortedMap[K: Order]
+    : Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
+    new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
 
       implicit val orderingK: Ordering[K] = Order[K].toOrdering
 
@@ -109,6 +113,27 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
       override def collectFirstSome[A, B](fa: SortedMap[K, A])(f: A => Option[B]): Option[B] =
         collectFirst(fa)(Function.unlift(f))
+
+      def functor: Functor[SortedMap[K, *]] = this
+
+      def align[A, B](fa: SortedMap[K, A], fb: SortedMap[K, B]): SortedMap[K, Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: SortedMap[K, A], fb: SortedMap[K, B])(f: Ior[A, B] => C): SortedMap[K, C] = {
+        val keys = fa.keySet ++ fb.keySet
+        val builder = SortedMap.newBuilder[K, C]
+        builder.sizeHint(keys.size)
+        keys
+          .foldLeft(builder) { (builder, k) =>
+            (fa.get(k), fb.get(k)) match {
+              case (Some(a), Some(b)) => builder += k -> f(Ior.both(a, b))
+              case (Some(a), None)    => builder += k -> f(Ior.left(a))
+              case (None, Some(b))    => builder += k -> f(Ior.right(b))
+              case (None, None)       => ??? // should not happen
+            }
+          }
+          .result()
+      }
     }
 
 }
