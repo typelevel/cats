@@ -27,6 +27,9 @@ class OptionSuite extends CatsSuite {
   checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
 
+  checkAll("Option[Int]", AlignTests[Option].align[Int, Int, Int, Int])
+  checkAll("Align[Option]", SerializableTests.serializable(Align[Option]))
+
   test("show") {
     none[Int].show should ===("None")
     1.some.show should ===("Some(1)")
