@@ -5,10 +5,7 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 
 import scala.annotation.tailrec
 
-trait TupleInstances
-    extends cats.instances.NTupleInstances
-    with Tuple2Instances
-    with cats.kernel.instances.TupleInstances
+trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
 
 private[instances] trait Tuple2InstancesBinCompat0 {
 

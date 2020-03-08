@@ -71,7 +71,7 @@ import simulacrum.{noop, typeclass}
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-object UnorderedFoldable {
+object UnorderedFoldable extends cats.instances.NTupleUnorderedFoldableInstances {
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
     val empty: Eval[Boolean] = Eval.False
 

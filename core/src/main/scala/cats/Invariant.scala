@@ -45,7 +45,7 @@ import cats.kernel.compat.scalaVersionSpecific._
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-object Invariant {
+object Invariant extends cats.instances.NTupleMonadInstances {
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 
     def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {

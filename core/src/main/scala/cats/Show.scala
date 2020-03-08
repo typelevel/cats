@@ -12,7 +12,7 @@ trait Show[T] extends Show.ContravariantShow[T]
 /**
  * Hand rolling the type class boilerplate due to scala/bug#6260 and scala/bug#10458
  */
-object Show {
+object Show extends cats.instances.NTupleShowInstances {
 
   def apply[A](implicit instance: Show[A]): Show[A] = instance
 

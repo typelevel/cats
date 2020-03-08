@@ -19,7 +19,7 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.show._
-import cats.tests.Helpers.CSemi
+import cats.tests.Helpers.{CMono, CSemi, Mono, Semi}
 
 class TupleSuite extends CatsSuite {
 
@@ -52,16 +52,35 @@ class TupleSuite extends CatsSuite {
   checkAll("FlatMap[(NonEmptyList[Int], *)]", FlatMapTests[(NonEmptyList[Int], *)].flatMap[String, Long, String])
   checkAll("FlatMap[(String, *)] serializable", SerializableTests.serializable(FlatMap[(String, *)]))
 
+  checkAll("FlatMap[(Semi, Semi, NonEmptyList[Int], *)]",
+           FlatMapTests[(Semi, Semi, NonEmptyList[Int], *)].flatMap[String, Long, String])
+  checkAll("FlatMap[(Semi, Semi, String, *)] serializable",
+           SerializableTests.serializable(FlatMap[(Semi, Semi, String, *)]))
+
   checkAll("Monad[(String, *)]", MonadTests[(String, *)].monad[Int, Int, String])
   checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
+
+  checkAll("Monad[(Mono, Mono, String, *)]", MonadTests[(Mono, Mono, String, *)].monad[Int, Int, String])
+  checkAll("Monad[(Mono, Mono, String, *)] serializable",
+           SerializableTests.serializable(Monad[(Mono, Mono, String, *)]))
 
   checkAll("CommutativeFlatMap[(CSemi, *)]",
            CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi])
   checkAll("CommutativeFlatMap[(CSemi, *)] serializable",
            SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)]))
 
+  checkAll("CommutativeFlatMap[(CSemi, CSemi, CSemi, *)]",
+           CommutativeFlatMapTests[(CSemi, CSemi, CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi])
+  checkAll("CommutativeFlatMap[(CSemi, CSemi, CSemi, *)] serializable",
+           SerializableTests.serializable(CommutativeFlatMap[(CSemi, CSemi, CSemi, *)]))
+
   checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))
+
+  checkAll("CommutativeMonad[(CMono, CMono, Int, *)]",
+           CommutativeMonadTests[(CMono, CMono, Int, *)].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[(CMono, CMono, Int, *)] serializable",
+           SerializableTests.serializable(CommutativeMonad[(CMono, CMono, Int, *)]))
 
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, *)]", SerializableTests.serializable(Reducible[(String, *)]))

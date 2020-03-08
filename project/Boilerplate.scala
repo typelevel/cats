@@ -29,7 +29,11 @@ object Boilerplate {
     GenParallelArityFunctions,
     GenParallelArityFunctions2,
     GenTupleParallelSyntax,
-    GenTupleCoreInstances
+    GenTupleShowInstances,
+    GenTupleMonadInstances,
+    GenTupleBifunctorInstances,
+    GenTupleBitraverseInstances,
+    GenTupleUnorderedFoldableInstances
   )
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
@@ -54,6 +58,42 @@ object Boilerplate {
     val `(_.._)` = if (arity == 1) "Tuple1[_]" else Seq.fill(arity)("_").mkString("(", ", ", ")")
     val `(a..n)` = if (arity == 1) "Tuple1(a)" else synVals.mkString("(", ", ", ")")
     val `a:A..n:N` = synTypedVals.mkString(", ")
+
+    val `A..(N - 1)` = (0 until (arity - 1)).map(n => s"A$n")
+    val `A..(N - 2)` = (0 until (arity - 2)).map(n => s"A$n")
+    val `A0, A(N - 1)` = if (arity <= 1) "" else `A..(N - 1)`.mkString(", ")
+    val `A0, A(N - 2)` = if (arity <= 2) "" else `A..(N - 2)`.mkString("", ", ", ", ")
+    val `[A0, A(N - 2)]` = if (arity <= 2) "" else `A..(N - 2)`.mkString("[", ", ", "]")
+    val `(A..N - 2, *, *)` =
+      if (arity <= 2) "(*, *)"
+      else `A..(N - 2)`.mkString("(", ", ", ", *, *)")
+    val `a..(n - 1)` = (0 until (arity - 1)).map(n => s"a$n")
+    val `fa._1..fa._(n - 2)` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"fa._${n + 1}").mkString("", ", ", ", ")
+    val `pure(fa._1..(n - 2))` =
+      if (arity <= 2) "" else (0 until (arity - 2)).map(n => s"G.pure(fa._${n + 1})").mkString("", ", ", ", ")
+    val `a0, a(n - 1)` = if (arity <= 1) "" else `a..(n - 1)`.mkString(", ")
+    val `[A0, A(N - 1)]` = if (arity <= 1) "" else `A..(N - 1)`.mkString("[", ", ", "]")
+    val `(A0, A(N - 1))` =
+      if (arity == 1) "Tuple1[A0]"
+      else if (arity == 2) "A0"
+      else `A..(N - 1)`.mkString("(", ", ", ")")
+    val `(A..N - 1, *)` =
+      if (arity == 1) "Tuple1"
+      else `A..(N - 1)`.mkString("(", ", ", ", *)")
+    val `(fa._1..(n - 1))` =
+      if (arity <= 1) "Tuple1.apply" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", ", _)")
+
+    def `A0, A(N - 1)&`(a: String): String =
+      if (arity <= 1) s"Tuple1[$a]" else `A..(N - 1)`.mkString("(", ", ", s", $a)")
+
+    def `fa._1..(n - 1) & `(a: String): String =
+      if (arity <= 1) s"Tuple1($a)" else (0 until (arity - 1)).map(n => s"fa._${n + 1}").mkString("(", ", ", s", $a)")
+
+    def `constraints A..N`(c: String): String = synTypes.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `constraints A..(N-1)`(c: String): String =
+      if (arity <= 1) "" else `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString("(implicit ", ", ", ")")
+    def `parameters A..(N-1)`(c: String): String = `A..(N - 1)`.map(tpe => s"$tpe: $c[$tpe]").mkString(", ")
   }
 
   trait Template {
