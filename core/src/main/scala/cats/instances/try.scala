@@ -1,11 +1,10 @@
 package cats
 package instances
 
-import TryInstances.castFailure
+import cats.instances.TryInstances.castFailure
 
-import scala.util.control.NonFatal
-import scala.util.{Failure, Success, Try}
 import scala.annotation.tailrec
+import scala.util.{Failure, Success, Try}
 
 trait TryInstances extends TryInstances1 {
 
@@ -69,7 +68,7 @@ trait TryInstances extends TryInstances1 {
         ta.recover { case t => f(t) }
 
       override def attempt[A](ta: Try[A]): Try[Either[Throwable, A]] =
-        (ta.map(a => Right[Throwable, A](a))).recover { case NonFatal(t) => Left(t) }
+        ta match { case Success(a) => Success(Right(a)); case Failure(e) => Success(Left(e)) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)
