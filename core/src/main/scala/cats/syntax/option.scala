@@ -335,6 +335,27 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
 
   /**
+   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance
+   * If the option is empty, an empty unit effect is given.
+   * If the option contains an error, it is raised.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> type F[A] = Either[String, A]
+   *
+   * scala> Option.empty[String].raiseTo[F]
+   * res0: scala.Either[String, Unit] = Right(())
+   *
+   * scala> Option("Failed").raiseTo[F]
+   * res1: scala.Either[String, Unit] = Left(Failed)
+   * }}}
+   */
+  def raiseTo[F[_]](implicit F: ApplicativeError[F, A]): F[Unit] =
+    oa.fold(F.unit)(F.raiseError)
+
+  /**
    * Transform the `Option` into a [[cats.data.OptionT]] while lifting it into the specified Applicative.
    *
    * {{{
