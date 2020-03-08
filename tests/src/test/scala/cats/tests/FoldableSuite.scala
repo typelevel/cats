@@ -280,6 +280,18 @@ class FoldableSuiteAdditional extends CatsSuite {
       (Some(x): Option[String])
     }
     assert(sumMapM == Some("AaronBettyCalvinDeirdra"))
+
+    // foldMapM should short-circuit and not call the function when not necessary
+    val f = (_: String) match {
+      case "Calvin" => None
+      case "Deirdra" =>
+        fail: Unit // : Unit ascription suppresses unreachable code warning
+        None
+      case x => Some(x)
+    }
+    names.foldMapM(f)
+    names.foldMapA(f)
+
     val isNotCalvin: String => Option[String] =
       x => if (x == "Calvin") None else Some(x)
     val notCalvin = F.foldM(names, "") { (acc, x) =>

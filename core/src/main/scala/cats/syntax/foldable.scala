@@ -331,6 +331,14 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def maximumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.maximumOption(fa)(Order.by(f))
+
+  /**
+   * Equivalent to foldMapM.
+   * The difference is that foldMapA only requires G to be an Applicative
+   * rather than a Monad. It is also slower due to use of Eval.
+   */
+  def foldMapA[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: Applicative[G], B: Monoid[B]): G[B] =
+    F.foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 }
 
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
