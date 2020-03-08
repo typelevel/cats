@@ -1,8 +1,6 @@
 package cats
 package syntax
 
-import scala.language.implicitConversions
-
 trait FunctorSyntax extends Functor.ToFunctorOps
 
 private[syntax] trait FunctorSyntaxBinCompat0 {

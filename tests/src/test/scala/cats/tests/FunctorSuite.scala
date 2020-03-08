@@ -86,14 +86,4 @@ class FunctorSuite extends CatsSuite {
 
   }
 
-  test("unzip preserves structure") {
-    forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
-      def doUnzip[F[_]: Functor, A, B](fab: F[(A, B)]): (F[A], F[B]) = fab.unzip
-
-      doUnzip(l.map(i => (i, i))) === ((l, l))
-      doUnzip(o.map(i => (i, i))) === ((o, o))
-      doUnzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m))
-    }
-  }
-
 }
