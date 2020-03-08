@@ -3,7 +3,6 @@ package cats.bench
 import cats.{Bitraverse, Parallel, Traverse}
 import cats.instances.int._
 import cats.instances.either._
-import cats.instances.tuple._
 import cats.instances.vector._
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
