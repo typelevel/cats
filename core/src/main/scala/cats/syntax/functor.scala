@@ -1,14 +1,16 @@
 package cats
 package syntax
 
+import cats.evidence.<~<
+
 trait FunctorSyntax extends Functor.ToFunctorOps
 
 private[syntax] trait FunctorSyntaxBinCompat0 {
-  implicit final def catsSyntaxUnzipFunctorOps[F[_], A, B](fa: F[(A, B)]): UnzipFunctorOps[F, A, B] =
-    new UnzipFunctorOps[F, A, B](fa)
+  implicit final def catsSyntaxFunctorOps0[F[_], A](fa: F[A]): FunctorOps0[F, A] =
+    new FunctorOps0[F, A](fa)
 }
 
-final class UnzipFunctorOps[F[_], A, B](private val fab: F[(A, B)]) extends AnyVal {
+final class FunctorOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Un-zips an `F[(A, B)]` consisting of element pairs or Tuple2 into two separate F's tupled.
@@ -24,5 +26,9 @@ final class UnzipFunctorOps[F[_], A, B](private val fab: F[(A, B)]) extends AnyV
    * }}}
    *
    */
-  def unzip(implicit F: Functor[F]): (F[A], F[B]) = (F.map(fab)(_._1), F.map(fab)(_._2))
+  def unzip[X, Y](implicit F: Functor[F], ev: A <~< (X, Y)): (F[X], F[Y]) = {
+    val fxy = F.map(fa)(ev)
+
+    F.unzip(fxy)
+  }
 }
