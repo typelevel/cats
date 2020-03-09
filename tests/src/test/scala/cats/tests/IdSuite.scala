@@ -1,6 +1,7 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bimonad, CommutativeMonad, Id, Reducible, Traverse}
+import cats.instances.all._
 import cats.laws.discipline._
 
 class IdSuite extends CatsSuite {

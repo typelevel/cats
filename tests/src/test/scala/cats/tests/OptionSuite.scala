@@ -1,9 +1,13 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Alternative, CoflatMap, CommutativeMonad, Eval, Later, MonadError, Semigroupal, Traverse, TraverseFilter}
+import cats.instances.all._
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.apply._
+import cats.syntax.option._
+import cats.syntax.show._
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])

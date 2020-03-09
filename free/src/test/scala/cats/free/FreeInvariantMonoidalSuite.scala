@@ -1,13 +1,17 @@
-package cats
-package tests
+package cats.free
 
+import cats.{Id, InvariantMonoidal}
 import cats.arrow.FunctionK
-import cats.free.FreeInvariantMonoidal
+import cats.kernel.Eq
+import cats.instances.all._
 import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Gen}
+import cats.syntax.invariant._
+import cats.syntax.semigroupal._
 import cats.tests.BinCodecInvariantMonoidalSuite._
+import cats.tests.CatsSuite
+import org.scalacheck.{Arbitrary, Gen}
 
 class FreeInvariantMonoidalSuite extends CatsSuite {
   implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]],

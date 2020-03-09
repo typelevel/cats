@@ -1,9 +1,8 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Functor
+import cats._
 import cats.data._
-
+import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._

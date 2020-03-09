@@ -1,17 +1,20 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Contravariant
+import cats._
 import cats.arrow._
 import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
+import cats.instances.all._
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import cats.platform.Platform
-import Helpers.CSemi
+import cats.tests.Helpers.CSemi
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =

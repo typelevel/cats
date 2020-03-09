@@ -1,13 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
-import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.instances.all._
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-
+import cats.syntax.either._
+import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {

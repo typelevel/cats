@@ -1,9 +1,10 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Id
 import cats.arrow.FunctionK
 import cats.data.EitherK
 import cats.data.NonEmptyList
+import cats.instances.all._
 import cats.laws.discipline.arbitrary._
 
 class FunctionKSuite extends CatsSuite {

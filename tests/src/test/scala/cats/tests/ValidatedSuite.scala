@@ -1,15 +1,29 @@
-package cats
-package tests
+package cats.tests
 
-import cats.data._
+import cats.{
+  Align,
+  Applicative,
+  ApplicativeError,
+  Bitraverse,
+  CommutativeApplicative,
+  SemigroupK,
+  Semigroupal,
+  Show,
+  Traverse
+}
+import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Invalid, Valid}
+import cats.instances.all._
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
-import org.scalacheck.Arbitrary._
 import cats.laws.discipline.SemigroupKTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-
+import cats.syntax.apply._
+import cats.syntax.either._
+import cats.syntax.validated._
+import org.scalacheck.Arbitrary._
 import scala.util.Try
 
 class ValidatedSuite extends CatsSuite {

@@ -1,7 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Eval
 import cats.data.ContT
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.{Arbitrary, Gen}
