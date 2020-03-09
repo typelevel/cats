@@ -1,13 +1,15 @@
-package cats
-package tests
+package cats.tests
 
-import cats.Bifunctor
-import cats.data.EitherT
-
+import cats._
+import cats.data.{EitherT, State}
+import cats.instances.all._
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
+import cats.syntax.applicative._
+import cats.syntax.applicativeError._
+import cats.syntax.either._
 import scala.util.{Failure, Success, Try}
 
 class EitherTSuite extends CatsSuite {
@@ -538,6 +540,43 @@ class EitherTSuite extends CatsSuite {
   test("leftSemiflatmap consistent with swap and the semiflatMap") {
     forAll { (eithert: EitherT[List, String, Int], f: String => List[String]) =>
       eithert.leftSemiflatMap(f) should ===(eithert.swap.semiflatMap(a => f(a)).swap)
+    }
+  }
+
+  test("semiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (eithert: EitherT[TestEffect, String, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      eithert.semiflatTap(v => f(v)).value.runA(initial) should ===(eithert.value.runA(initial))
+    }
+  }
+
+  test("semiflatTap runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (eithert: EitherT[TestEffect, String, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      eithert.semiflatTap(v => f(v)).value.runS(initial) should ===(eithert.semiflatMap(f).value.runS(initial))
+    }
+  }
+
+  test("leftSemiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (eithert: EitherT[TestEffect, String, Int], f: String => TestEffect[Int], initial: List[Int]) =>
+      eithert.leftSemiflatTap(v => f(v)).value.runA(initial) should ===(eithert.value.runA(initial))
+    }
+  }
+
+  test("leftSemiflatTap runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (eithert: EitherT[TestEffect, String, Int], f: String => TestEffect[Int], initial: List[Int]) =>
+      eithert.leftSemiflatTap(v => f(v)).value.runS(initial) should ===(eithert.leftSemiflatMap(f).value.runS(initial))
+    }
+  }
+
+  test("leftSemiflatTap consistent with swap and the semiflatTap") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (eithert: EitherT[TestEffect, String, Int], f: String => TestEffect[Int], initial: List[Int]) =>
+      eithert.leftSemiflatTap(v => f(v)).value.runA(initial) should ===(
+        eithert.swap.semiflatTap(v => f(v)).swap.value.runA(initial)
+      )
     }
   }
 

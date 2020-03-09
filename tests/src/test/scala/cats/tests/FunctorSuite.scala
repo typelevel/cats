@@ -1,6 +1,8 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Functor
+import cats.instances.all._
+import cats.syntax.functor._
 import cats.data.{NonEmptyList, NonEmptyMap}
 import cats.laws.discipline.arbitrary._
 import org.scalatest.matchers.must.Matchers._

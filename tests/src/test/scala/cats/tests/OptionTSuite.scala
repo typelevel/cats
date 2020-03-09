@@ -1,13 +1,15 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{Const, IdT, OptionT}
-import cats.kernel.{Monoid, Semigroup}
+import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.either._
+import cats.syntax.monadError._
 
 class OptionTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[OptionT[ListWrapper, *]] = Isomorphisms

@@ -1,9 +1,10 @@
-package cats
-package free
+package cats.free
 
-import cats.tests.CatsSuite
+import cats.Functor
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline.{FunctorTests, SerializableTests}
-
+import cats.tests.CatsSuite
 import org.scalacheck.Arbitrary
 
 class YonedaSuite extends CatsSuite {

@@ -1,6 +1,7 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Show
+import cats.instances.all._
 import ExtraRegressionSuite._
 
 class ExtraRegressionSuite extends CatsSuite {

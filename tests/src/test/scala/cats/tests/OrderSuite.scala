@@ -1,11 +1,14 @@
-package cats
-package tests
+package cats.tests
 
-import Helpers.Ord
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
+import cats.instances.all._
+import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.order._
+import cats.tests.Helpers.Ord
 
 class OrderSuite extends CatsSuite {
   {

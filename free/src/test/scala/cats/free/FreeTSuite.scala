@@ -1,12 +1,13 @@
-package cats
-package free
+package cats.free
 
 import cats._
 import cats.arrow.FunctionK
 import cats.data._
+import cats.instances.all._
 import cats.laws.discipline._
+import cats.syntax.applicative._
+import cats.syntax.either._
 import cats.tests.CatsSuite
-import cats.instances.option._
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 
 class FreeTSuite extends CatsSuite {

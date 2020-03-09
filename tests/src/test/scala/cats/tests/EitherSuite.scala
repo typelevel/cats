@@ -1,13 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
-import cats.laws.discipline._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.instances.all._
+import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-
+import cats.syntax.either._
+import org.scalatest.funsuite.AnyFunSuiteLike
 import scala.util.Try
 
 class EitherSuite extends CatsSuite {
@@ -99,13 +100,13 @@ class EitherSuite extends CatsSuite {
 
   test("catchOnly lets non-matching exceptions escape") {
     val _ = intercept[NumberFormatException] {
-      Either.catchOnly[IndexOutOfBoundsException] { "foo".toInt }
+      Either.catchOnly[IndexOutOfBoundsException]("foo".toInt)
     }
   }
 
   test("catchNonFatal catches non-fatal exceptions") {
-    assert(Either.catchNonFatal { "foo".toInt }.isLeft)
-    assert(Either.catchNonFatal { throw new Throwable("blargh") }.isLeft)
+    assert(Either.catchNonFatal("foo".toInt).isLeft)
+    assert(Either.catchNonFatal(throw new Throwable("blargh")).isLeft)
   }
 
   test("fromTry is left for failed Try") {

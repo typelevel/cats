@@ -1,15 +1,17 @@
-package cats
-package free
+package cats.free
 
+import cats.{:<:, Foldable, Functor, Id, Monad, Traverse}
 import cats.arrow.FunctionK
 import cats.data.EitherK
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.apply._
 import cats.tests.CatsSuite
-
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import Arbitrary.arbFunction1
+import org.scalacheck.Arbitrary.arbFunction1
 
 class FreeSuite extends CatsSuite {
   import FreeSuite._

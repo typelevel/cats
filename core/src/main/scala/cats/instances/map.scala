@@ -28,9 +28,9 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
               buf + (kv._1 -> b)
-            })
+            }
           }
           .value
         G.map(gbb)(_.toMap)

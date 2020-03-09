@@ -1,9 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Functor
 import cats.laws.discipline.ExhaustiveCheck
-
-import org.scalacheck.{Arbitrary, Cogen}, Arbitrary.arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.Arbitrary.arbitrary
 
 /**
  * Similar to [[ListWrapper]], but using `Option` instead of `List` limits the size of the structure, which can be

@@ -1,8 +1,8 @@
-package alleycats
-package tests
+package alleycats.tests
 
-import cats.{Eval, Foldable}
 import alleycats.std.all._
+import cats.{Eval, Foldable}
+import cats.instances.all._
 import cats.laws.discipline.FoldableTests
 
 class IterableTests extends AlleycatsSuite {

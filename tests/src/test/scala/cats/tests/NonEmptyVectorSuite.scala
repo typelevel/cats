@@ -1,11 +1,26 @@
-package cats
-package tests
+package cats.tests
 
-import cats.data.NonEmptyVector.ZipNonEmptyVector
-
-import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
-
+import cats.{
+  Align,
+  Bimonad,
+  CommutativeApply,
+  Comonad,
+  Eval,
+  Foldable,
+  Functor,
+  Monad,
+  NonEmptyTraverse,
+  Now,
+  Reducible,
+  SemigroupK,
+  Show,
+  Traverse
+}
 import cats.data.NonEmptyVector
+import cats.data.NonEmptyVector.ZipNonEmptyVector
+import cats.instances.all._
+import cats.kernel.Semigroup
+import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline.{
   AlignTests,
   BimonadTests,
@@ -18,12 +33,15 @@ import cats.laws.discipline.{
 }
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
-
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
-  def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+  protected def toList[A](value: NonEmptyVector[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: Vector[A]): List[A] = underlying.toList
+  protected def toNonEmptyCollection[A](nea: NonEmptyVector[A]): NonEmptyVector[A] = nea
 
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =

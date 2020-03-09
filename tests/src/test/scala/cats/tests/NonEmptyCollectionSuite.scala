@@ -1,16 +1,19 @@
 package cats.tests
 
 import cats.data.NonEmptyCollection
+import cats.instances.all._
 import org.scalacheck.Arbitrary
 
 abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollection[x, U, NE]](
   implicit arbitraryU: Arbitrary[U[Int]],
-  arbitraryNE: Arbitrary[NE[Int]],
-  ev: NE[Int] => NEC[Int],
-  evPair: NE[(Int, Int)] => NEC[(Int, Int)]
+  arbitraryNE: Arbitrary[NE[Int]]
 ) extends CatsSuite {
-  def toList[A](value: NE[A]): List[A]
-  def underlyingToList[A](underlying: U[A]): List[A]
+  protected def toList[A](value: NE[A]): List[A]
+  protected def underlyingToList[A](underlying: U[A]): List[A]
+
+  // Necessary because of the non-inheritance-based encoding of some non-empty collections.
+  protected def toNonEmptyCollection[A](nea: NE[A]): NEC[A]
+  implicit private def convertToNonEmptyCollection[A](nea: NE[A]): NEC[A] = toNonEmptyCollection(nea)
 
   test("head is consistent with iterator.toList.head") {
     forAll { (is: NE[Int]) =>

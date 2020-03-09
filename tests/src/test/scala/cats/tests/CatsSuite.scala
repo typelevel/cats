@@ -1,9 +1,6 @@
-package cats
-package tests
+package cats.tests
 
-import cats.instances._
 import cats.platform.Platform
-import cats.syntax._
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatest.matchers.should.Matchers
@@ -37,31 +34,10 @@ trait CatsSuite
     with ScalaCheckDrivenPropertyChecks
     with FunSuiteDiscipline
     with TestSettings
-    with AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
-    with AllInstancesBinCompat4
-    with AllInstancesBinCompat5
-    with AllInstancesBinCompat6
-    with AllSyntax
-    with AllSyntaxBinCompat0
-    with AllSyntaxBinCompat1
-    with AllSyntaxBinCompat2
-    with AllSyntaxBinCompat3
-    with AllSyntaxBinCompat4
-    with AllSyntaxBinCompat5
-    with AllSyntaxBinCompat6
-    with AllSyntaxBinCompat7
     with StrictCatsEquality {
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     checkConfiguration
-
-  // disable Eq syntax (by making `catsSyntaxEq` not implicit), since it collides
-  // with scalactic's equality
-  override def catsSyntaxEq[A: Eq](a: A): EqOps[A] = new EqOps[A](a)
 
   def even(i: Int): Boolean = i % 2 == 0
 

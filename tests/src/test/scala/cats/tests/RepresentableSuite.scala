@@ -1,5 +1,9 @@
 package cats.tests
 
+import cats.{Bimonad, Distributive, Eq, Eval, Id, Monad, Representable}
+import cats.data.Kleisli
+import cats.instances.all._
+import cats.kernel.Monoid
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
@@ -11,9 +15,8 @@ import cats.laws.discipline.{
   RepresentableTests,
   SerializableTests
 }
-import cats.{Bimonad, Distributive, Eq, Eval, Id, Monad, Monoid, Representable}
+import cats.syntax.representable._
 import org.scalacheck.Arbitrary
-import cats.data.Kleisli
 
 class RepresentableSuite extends CatsSuite {
 
