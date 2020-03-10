@@ -24,9 +24,5 @@ final class FunctorOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * }}}
    *
    */
-  def unzip[X, Y](implicit F: Functor[F], ev: A <~< (X, Y)): (F[X], F[Y]) = {
-    val fxy = F.map(fa)(ev)
-
-    F.unzip(fxy)
-  }
+  def unzip[X, Y](implicit F: Functor[F], ev: A <~< (X, Y)): (F[X], F[Y]) = F.unzip(F.map(fa)(ev))
 }
