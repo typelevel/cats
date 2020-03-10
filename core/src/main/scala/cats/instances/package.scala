@@ -36,7 +36,11 @@ package object instances {
       with SortedMapInstancesBinCompat0
       with SortedMapInstancesBinCompat1
       with SortedMapInstancesBinCompat2
-  object sortedSet extends SortedSetInstances with SortedSetInstancesBinCompat0 with SortedSetInstancesBinCompat1
+  object sortedSet
+      extends SortedSetInstances
+      with SortedSetInstancesBinCompat0
+      with SortedSetInstancesBinCompat1
+      with SortedSetInstancesBinCompat2
   object stream extends StreamInstances with StreamInstancesBinCompat0 with StreamInstancesBinCompat1
   object string extends StringInstances
   object try_ extends TryInstances

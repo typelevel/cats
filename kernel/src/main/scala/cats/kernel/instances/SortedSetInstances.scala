@@ -1,11 +1,11 @@
 package cats.kernel
 package instances
 
-import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 
 trait SortedSetInstances extends SortedSetInstances1 {
-  implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+  @deprecated("Use catsKernelStdHashForSortedSet without Order", "2.1.0")
+  def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
     new SortedSetHash[A]
 }
 
@@ -15,6 +15,11 @@ private[instances] trait SortedSetInstances1 {
 
   implicit def catsKernelStdBoundedSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
     new SortedSetSemilattice[A]
+}
+
+private[instances] trait SortedSetInstances2 extends SortedSetInstances1 {
+  implicit def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    new SortedSetHash[A]
 }
 
 class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
@@ -28,8 +33,11 @@ class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
     StaticMethods.iteratorEq(s1.iterator, s2.iterator)
 }
 
-class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
+class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3._
+
+  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.1.0")
+  private[instances] def this(o: Order[A], h: Hash[A]) = this()(h)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
@@ -50,7 +58,7 @@ class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
     finalizeHash(h, n)
   }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
-    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Order[A])
+    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Eq[A])
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
