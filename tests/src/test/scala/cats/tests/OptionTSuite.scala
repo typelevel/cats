@@ -1,7 +1,7 @@
 package cats
 package tests
 
-import cats.data.{Const, IdT, OptionT}
+import cats.data.{Const, IdT, OptionT, State}
 import cats.kernel.{Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
@@ -212,9 +212,20 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
-  test("flatTapNone doesn't change value inside") {
-    forAll { (o: OptionT[Eval, Int], f: Eval[String]) =>
-      o.flatTapNone(f) should ===(o)
+  test("flatTapNone doesn't change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      optiont.flatTapNone(f).value.runA(initial) should ===(optiont.value.runA(initial))
+    }
+  }
+
+  test("flatTapNone runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      optiont.flatTapNone(f).value.runS(initial) should ===(optiont.value.flatTap {
+        case Some(v) => v.pure[TestEffect]
+        case None => f
+      }.runS(initial))
     }
   }
 
@@ -432,6 +443,26 @@ class OptionTSuite extends CatsSuite {
         case None    => List(None)
         case Some(a) => f(a).map(Some(_))
       }))
+    }
+  }
+
+  test("semiflatTap consistent with semiflatMap") {
+    forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
+      o.semiflatMap(v => f(v).as(v)) should ===(o.semiflatTap(f))
+    }
+  }
+
+  test("semiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      optiont.semiflatTap(v => f(v)).value.runA(initial) should ===(optiont.value.runA(initial))
+    }
+  }
+
+  test("semiflatTap runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      optiont.semiflatTap(v => f(v)).value.runS(initial) should ===(optiont.semiflatMap(f).value.runS(initial))
     }
   }
 

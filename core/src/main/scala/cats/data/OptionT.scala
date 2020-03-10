@@ -68,6 +68,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def semiflatMap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, B] =
     flatMap(a => OptionT.liftF(f(a)))
 
+  def semiflatTap[B](f: A => F[B])(implicit F: Monad[F]): OptionT[F, A] =
+    semiflatMap(a => F.as(f(a), a))
+
   def mapFilter[B](f: A => Option[B])(implicit F: Functor[F]): OptionT[F, B] =
     subflatMap(f)
 
