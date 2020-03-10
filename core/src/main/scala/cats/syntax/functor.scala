@@ -3,14 +3,12 @@ package syntax
 
 import cats.evidence.<~<
 
-trait FunctorSyntax extends Functor.ToFunctorOps
-
-private[syntax] trait FunctorSyntaxBinCompat0 {
-  implicit final def catsSyntaxFunctorOps0[F[_], A](fa: F[A]): FunctorOps0[F, A] =
-    new FunctorOps0[F, A](fa)
+trait FunctorSyntax extends Functor.ToFunctorOps {
+  implicit final def catsSyntaxFunctorOps[F[_], A](fa: F[A]): FunctorOps[F, A] =
+    new FunctorOps[F, A](fa)
 }
 
-final class FunctorOps0[F[_], A](private val fa: F[A]) extends AnyVal {
+final class FunctorOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Un-zips an `F[(A, B)]` consisting of element pairs or Tuple2 into two separate F's tupled.
