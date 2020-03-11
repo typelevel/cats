@@ -17,6 +17,7 @@ TAGS
 .idea/*
 .idea_modules
 .DS_Store
+.vscode
 .sbtrc
 *.sublime-project
 *.sublime-workspace

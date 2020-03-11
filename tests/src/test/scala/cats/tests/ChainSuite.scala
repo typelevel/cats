@@ -5,6 +5,7 @@ import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   MonadTests,
@@ -33,6 +34,9 @@ class ChainSuite extends CatsSuite {
 
   checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
   checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
+
+  checkAll("Chain[Int]", AlignTests[Chain].align[Int, Int, Int, Int])
+  checkAll("Align[Chain]", SerializableTests.serializable(Align[Chain]))
 
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))

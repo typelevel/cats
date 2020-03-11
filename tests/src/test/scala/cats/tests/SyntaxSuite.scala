@@ -472,6 +472,23 @@ object SyntaxSuite
     val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
   }
 
+  def testAlign[F[_]: Align, A, B, C]: Unit = {
+    import cats.data.Ior
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[A Ior B => C]
+    val f2 = mock[(Option[A], Option[B]) => C]
+
+    val fab = fa.align(fb)
+    val fc = fa.alignWith(fb)(f)
+
+    val padZipped = fa.padZip(fb)
+    val padZippedWith = fa.padZipWith(fb)(f2)
+
+    implicit val sa = mock[Semigroup[A]]
+    val fa2 = fa.alignCombine(fa)
+  }
+
   def testNonEmptyList[A, B: Order]: Unit = {
     val f = mock[A => B]
     val list = mock[List[A]]

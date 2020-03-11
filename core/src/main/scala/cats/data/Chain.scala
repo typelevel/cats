@@ -681,8 +681,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
   }
 
   implicit val catsDataInstancesForChain
-    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] =
-    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] {
+    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
+    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] {
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
@@ -747,6 +747,27 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
+
+      def functor: Functor[Chain] = this
+
+      def align[A, B](fa: Chain[A], fb: Chain[B]): Chain[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Chain[A], fb: Chain[B])(f: Ior[A, B] => C): Chain[C] = {
+        val iterA = fa.iterator
+        val iterB = fb.iterator
+
+        var result: Chain[C] = Chain.empty
+
+        while (iterA.hasNext || iterB.hasNext) {
+          val ior =
+            if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
+            else if (iterA.hasNext) Ior.left(iterA.next())
+            else Ior.right(iterB.next())
+          result = result :+ f(ior)
+        }
+        result
+      }
     }
 
   implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =

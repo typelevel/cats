@@ -77,5 +77,4 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
 
   override def collectFirstSome[A, B](fa: NonEmptyF[A])(f: A => Option[B]): Option[B] =
     traverseInstance.collectFirstSome(fa)(f)
-
 }

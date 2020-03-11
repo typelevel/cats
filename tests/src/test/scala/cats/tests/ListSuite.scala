@@ -4,6 +4,7 @@ package tests
 import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
@@ -34,6 +35,9 @@ class ListSuite extends CatsSuite {
 
   checkAll("List[Int]", TraverseFilterTests[List].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[List]", SerializableTests.serializable(TraverseFilter[List]))
+
+  checkAll("List[Int]", AlignTests[List].align[Int, Int, Int, Int])
+  checkAll("Align[List]", SerializableTests.serializable(Align[List]))
 
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
