@@ -69,3 +69,6 @@ trait AllInstancesBinCompat7
     with VectorInstancesBinCompat1
     with EitherInstancesBinCompat0
     with StreamInstancesBinCompat1
+    with QueueInstancesBinCompat0
+    with TailRecInstances
+    with SortedSetInstancesBinCompat2

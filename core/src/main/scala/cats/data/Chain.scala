@@ -681,14 +681,18 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
   }
 
   implicit val catsDataInstancesForChain
-    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] =
-    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] {
+    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
+    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] {
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
-      def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Eval.defer(fa.foldRight(lb) { (a, lb) =>
-          Eval.defer(f(a, lb))
-        })
+      def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        def loop(as: Chain[A]): Eval[B] =
+          as match {
+            case Chain.nil => lb
+            case h ==: t   => f(h, Eval.defer(loop(t)))
+          }
+        Eval.defer(loop(fa))
+      }
 
       override def map[A, B](fa: Chain[A])(f: A => B): Chain[B] = fa.map(f)
       override def toList[A](fa: Chain[A]): List[A] = fa.toList
@@ -711,9 +715,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-        fa.foldRight[G[Chain[B]]](G.pure(nil)) { (a, gcatb) =>
-          G.map2(f(a), gcatb)(_ +: _)
-        }
+        foldRight[A, G[Chain[B]]](fa, Always(G.pure(nil))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ +: _)
+        }.value
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
       def pure[A](a: A): Chain[A] = Chain.one(a)
@@ -743,6 +747,27 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
+
+      def functor: Functor[Chain] = this
+
+      def align[A, B](fa: Chain[A], fb: Chain[B]): Chain[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Chain[A], fb: Chain[B])(f: Ior[A, B] => C): Chain[C] = {
+        val iterA = fa.iterator
+        val iterB = fb.iterator
+
+        var result: Chain[C] = Chain.empty
+
+        while (iterA.hasNext || iterB.hasNext) {
+          val ior =
+            if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
+            else if (iterA.hasNext) Ior.left(iterA.next())
+            else Ior.right(iterB.next())
+          result = result :+ f(ior)
+        }
+        result
+      }
     }
 
   implicit def catsDataShowForChain[A](implicit A: Show[A]): Show[Chain[A]] =
@@ -781,12 +806,18 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     override def flattenOption[A](fa: Chain[Option[A]]): Chain[A] = fa.collect { case Some(a) => a }
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
-      fa.foldRight(G.pure(Chain.empty[B]))(
-        (a, gcb) => G.map2(f(a), gcb)((ob, cb) => ob.fold(cb)(_ +: cb))
-      )
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))(
+          (a, gcb) => G.map2Eval(f(a), gcb)((ob, cb) => ob.fold(cb)(_ +: cb))
+        )
+        .value
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
-      fa.foldRight(G.pure(Chain.empty[A]))((a, gca) => G.map2(f(a), gca)((b, chain) => if (b) a +: chain else chain))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))(
+          (a, gca) => G.map2Eval(f(a), gca)((b, chain) => if (b) a +: chain else chain)
+        )
+        .value
 
   }
 

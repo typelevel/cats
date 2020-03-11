@@ -310,6 +310,13 @@ class FoldableSuiteAdditional extends CatsSuite {
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     larger.value should ===(large.map(_ + 1))
+
+    val sum = large.foldRightDefer(Eval.later(0))((elem, acc) => acc.map(_ + elem))
+    sum.value should ===(large.sum)
+
+    def boom[A]: Eval[A] = Eval.later(sys.error("boom"))
+    // Ensure that the lazy param is actually handled lazily
+    val lazySum: Eval[Int] = large.foldRightDefer(boom[Int])((elem, acc) => acc.map(_ + elem))
   }
 
   def checkMonadicFoldsStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {

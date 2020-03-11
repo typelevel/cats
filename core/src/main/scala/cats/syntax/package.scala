@@ -1,6 +1,7 @@
 package cats
 
 package object syntax {
+  object align extends AlignSyntax
   object all extends AllSyntaxBinCompat
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
