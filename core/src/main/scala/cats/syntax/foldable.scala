@@ -345,6 +345,14 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     F.foldRight[A, Stream[A]](fa, Eval.now(Stream.empty))((a, eb) => eb.map(Stream.cons(a, _))).value
 
   /**
+   * Equivalent to foldMapM.
+   * The difference is that foldMapA only requires G to be an Applicative
+   * rather than a Monad. It is also slower due to use of Eval.
+   */
+  def foldMapA[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: Applicative[G], B: Monoid[B]): G[B] =
+    F.foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
+
+  /**
    * Implementers are responsible for ensuring they maintain consistency with foldRight; this is not checked by laws on Scala 2.11
    */
   def foldRightDefer[G[_]: Defer, B](gb: G[B])(fn: (A, G[B]) => G[B])(implicit F: Foldable[F]): G[B] =
