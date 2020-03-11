@@ -7,7 +7,18 @@ import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
 import cats.syntax.apply._
 import cats.syntax.option._
 import cats.syntax.show._
-import cats.{Align, Alternative, CoflatMap, CommutativeMonad, Eval, Later, MonadError, Semigroupal, Traverse, TraverseFilter}
+import cats.{
+  Align,
+  Alternative,
+  CoflatMap,
+  CommutativeMonad,
+  Eval,
+  Later,
+  MonadError,
+  Semigroupal,
+  Traverse,
+  TraverseFilter
+}
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])
