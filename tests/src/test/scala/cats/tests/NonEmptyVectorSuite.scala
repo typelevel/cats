@@ -7,6 +7,7 @@ import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 
 import cats.data.NonEmptyVector
 import cats.laws.discipline.{
+  AlignTests,
   BimonadTests,
   CommutativeApplyTests,
   FoldableTests,
@@ -43,6 +44,9 @@ class NonEmptyVectorSuite extends CatsSuite {
 
   checkAll("NonEmptyVector[Int]", FoldableTests[NonEmptyVector].foldable[Int, Int])
   checkAll("Foldable[NonEmptyVector]", SerializableTests.serializable(Foldable[NonEmptyVector]))
+
+  checkAll("NonEmptyVector[Int]", AlignTests[NonEmptyVector].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyVector]", SerializableTests.serializable(Align[NonEmptyVector]))
 
   checkAll("ZipNonEmptyVector[Int]", CommutativeApplyTests[ZipNonEmptyVector].commutativeApply[Int, Int, Int])
   checkAll("CommutativeApply[ZipNonEmptyVector]", SerializableTests.serializable(CommutativeApply[ZipNonEmptyVector]))

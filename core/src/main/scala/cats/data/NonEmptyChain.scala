@@ -418,9 +418,11 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A]) extends AnyVal {
 
 sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChainInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyChain
-    : SemigroupK[NonEmptyChain] with NonEmptyTraverse[NonEmptyChain] with Bimonad[NonEmptyChain] =
-    new AbstractNonEmptyInstances[Chain, NonEmptyChain] {
+  implicit val catsDataInstancesForNonEmptyChain: SemigroupK[NonEmptyChain]
+    with NonEmptyTraverse[NonEmptyChain]
+    with Bimonad[NonEmptyChain]
+    with Align[NonEmptyChain] =
+    new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
@@ -451,6 +453,16 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def get[A](fa: NonEmptyChain[A])(idx: Long): Option[A] =
         if (idx == 0) Some(fa.head) else fa.tail.get(idx - 1)
+
+      private val alignInstance = Align[Chain].asInstanceOf[Align[NonEmptyChain]]
+
+      def functor: Functor[NonEmptyChain] = alignInstance.functor
+
+      def align[A, B](fa: NonEmptyChain[A], fb: NonEmptyChain[B]): NonEmptyChain[Ior[A, B]] =
+        alignInstance.align(fa, fb)
+
+      override def alignWith[A, B, C](fa: NonEmptyChain[A], fb: NonEmptyChain[B])(f: Ior[A, B] => C): NonEmptyChain[C] =
+        alignInstance.alignWith(fa, fb)(f)
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =

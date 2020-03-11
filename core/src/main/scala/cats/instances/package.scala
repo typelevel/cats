@@ -43,6 +43,7 @@ package object instances {
       with SortedSetInstancesBinCompat2
   object stream extends StreamInstances with StreamInstancesBinCompat0 with StreamInstancesBinCompat1
   object string extends StringInstances
+  object tailRec extends TailRecInstances
   object try_ extends TryInstances
   object tuple extends TupleInstances with Tuple2InstancesBinCompat0
   object unit extends UnitInstances

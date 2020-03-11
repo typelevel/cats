@@ -4,6 +4,7 @@ package tests
 import cats.kernel.CommutativeMonoid
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
+  AlignTests,
   FlatMapTests,
   MonoidKTests,
   SemigroupalTests,
@@ -30,6 +31,9 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("SortedMap[Int, Int]", TraverseFilterTests[SortedMap[Int, *]].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[SortedMap[Int, *]]", SerializableTests.serializable(TraverseFilter[SortedMap[Int, *]]))
+
+  checkAll("SortedMap[Int, Int]", AlignTests[SortedMap[Int, *]].align[Int, Int, Int, Int])
+  checkAll("Align[SortedMap[Int, *]]", SerializableTests.serializable(Align[SortedMap[Int, *]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>

@@ -331,6 +331,16 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    */
   def maximumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.maximumOption(fa)(Order.by(f))
+
+  /**
+   * Implementers are responsible for ensuring they maintain consistency with foldRight; this is not checked by laws on Scala 2.11
+   */
+  def foldRightDefer[G[_]: Defer, B](gb: G[B])(fn: (A, G[B]) => G[B])(implicit F: Foldable[F]): G[B] =
+    Defer[G].defer(
+      F.foldLeft(fa, (z: G[B]) => z)(
+        (acc, elem) => z => Defer[G].defer(acc(fn(elem, z)))
+      )(gb)
+    )
 }
 
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
