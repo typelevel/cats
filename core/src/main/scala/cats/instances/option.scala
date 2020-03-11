@@ -1,6 +1,8 @@
 package cats
 package instances
 
+import cats.kernel.instances.OptionInstances3
+
 import scala.annotation.tailrec
 import cats.data.Ior
 
@@ -172,3 +174,5 @@ private[instances] trait OptionInstancesBinCompat0 {
 
   }
 }
+
+private[instances] trait OptionInstancesBinCompat1 extends OptionInstances3

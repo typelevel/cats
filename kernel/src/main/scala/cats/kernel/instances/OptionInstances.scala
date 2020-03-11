@@ -23,6 +23,11 @@ private[instances] trait OptionInstances2 {
     new OptionEq[A]
 }
 
+trait OptionInstances3 {
+  implicit def catsKernelStdCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    new OptionCommutativeMonoid[A]
+}
+
 class OptionOrder[A](implicit A: Order[A]) extends Order[Option[A]] {
   def compare(x: Option[A], y: Option[A]): Int =
     x match {
@@ -80,3 +85,7 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
         }
     }
 }
+
+private class OptionCommutativeMonoid[A](implicit A: CommutativeSemigroup[A])
+    extends OptionMonoid[A]()(A)
+    with CommutativeMonoid[Option[A]]
