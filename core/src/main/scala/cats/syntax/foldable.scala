@@ -332,6 +332,18 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def maximumByOption[B: Order](f: A => B)(implicit F: Foldable[F]): Option[A] =
     F.maximumOption(fa)(Order.by(f))
 
+  def combineAllOption(implicit ev: Semigroup[A], F: Foldable[F]): Option[A] =
+    if (F.isEmpty(fa)) None else ev.combineAllOption(toIterable)
+
+  /**
+   * Convert F[A] to an Iterable[A].
+   *
+   * This method may be overridden for the sake of performance, but implementers should take care
+   * not to force a full materialization of the collection.
+   */
+  def toIterable(implicit F: Foldable[F]): Iterable[A] =
+    F.foldRight[A, Stream[A]](fa, Eval.now(Stream.empty))((a, eb) => eb.map(Stream.cons(a, _))).value
+
   /**
    * Implementers are responsible for ensuring they maintain consistency with foldRight; this is not checked by laws on Scala 2.11
    */

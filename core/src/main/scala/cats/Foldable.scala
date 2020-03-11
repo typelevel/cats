@@ -3,6 +3,7 @@ package cats
 import cats.Foldable.sentinel
 import cats.instances.either._
 import cats.kernel.CommutativeMonoid
+import cats.syntax.foldable
 import simulacrum.typeclass
 
 import scala.collection.mutable
@@ -239,9 +240,7 @@ import scala.collection.mutable
    * Fold implemented using the given Monoid[A] instance.
    */
   def fold[A](fa: F[A])(implicit A: Monoid[A]): A =
-    foldLeft(fa, A.empty) { (acc, a) =>
-      A.combine(acc, a)
-    }
+    A.combineAll(foldable.catsSyntaxFoldableOps0(fa).toIterable(this))
 
   /**
    * Alias for [[fold]].

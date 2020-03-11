@@ -214,6 +214,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Foldable[$name].combineAllOption") {
+    forAll { (fa: F[Int]) =>
+      fa.combineAllOption should ===(fa.toList.combineAllOption)
+      fa.combineAllOption should ===(iterator(fa).toList.combineAllOption)
+    }
+  }
+
+  test(s"Foldable[$name].iterable") {
+    forAll { (fa: F[Int]) =>
+      fa.toIterable.toList should ===(fa.toList)
+      fa.toIterable.toList should ===(iterator(fa).toList)
+    }
+  }
+
   test(s"Foldable[$name].intercalate") {
     forAll { (fa: F[String], a: String) =>
       fa.intercalate(a) should ===(fa.toList.mkString(a))
