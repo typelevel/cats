@@ -1,10 +1,11 @@
 package cats.bench
 
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
-
 import cats._
 import cats.implicits._
 import cats.free.Trampoline
+
+import scala.util.control.TailCalls
 
 @State(Scope.Benchmark)
 class TrampolineBench {
@@ -30,14 +31,12 @@ class TrampolineBench {
       y <- Trampoline.defer(trampolineFib(n - 2))
     } yield x + y
 
-  // TailRec[A] only has .flatMap in 2.11.
+   @Benchmark
+   def stdlib(): Int = stdlibFib(N).result
 
-  // @Benchmark
-  // def stdlib(): Int = stdlibFib(N).result
-  //
-  // def stdlibFib(n: Int): TailCalls.TailRec[Int] =
-  //   if (n < 2) TailCalls.done(n) else for {
-  //     x <- TailCalls.tailcall(stdlibFib(n - 1))
-  //     y <- TailCalls.tailcall(stdlibFib(n - 2))
-  //   } yield x + y
+   def stdlibFib(n: Int): TailCalls.TailRec[Int] =
+     if (n < 2) TailCalls.done(n) else for {
+       x <- TailCalls.tailcall(stdlibFib(n - 1))
+       y <- TailCalls.tailcall(stdlibFib(n - 2))
+     } yield x + y
 }

@@ -99,3 +99,4 @@ trait AllSyntaxBinCompat7
     extends FunctorSyntaxBinCompat0
     with BiFoldableSyntaxBinCompat0
     with SemigroupKSyntaxBinCompat0
+    with AlignSyntax

@@ -1,10 +1,11 @@
 package cats
 
-import scala.collection.mutable
+import cats.Foldable.sentinel
 import cats.instances.either._
 import cats.kernel.CommutativeMonoid
 import simulacrum.typeclass
-import Foldable.sentinel
+
+import scala.collection.mutable
 
 /**
  * Data structures that can be folded to a summary value.
@@ -592,6 +593,13 @@ object Foldable {
       Eval.defer(if (it.hasNext) f(it.next, loop(it)) else lb)
 
     Eval.always(iterable.iterator).flatMap(loop)
+  }
+
+  def iterateRightDefer[G[_]: Defer, A, B](iterable: Iterable[A], lb: G[B])(f: (A, G[B]) => G[B]): G[B] = {
+    def loop(it: Iterator[A]): G[B] =
+      Defer[G].defer(if (it.hasNext) f(it.next(), Defer[G].defer(loop(it))) else Defer[G].defer(lb))
+
+    Defer[G].defer(loop(iterable.iterator))
   }
 
   /**

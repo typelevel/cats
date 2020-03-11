@@ -7,6 +7,7 @@ import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
+  AlignTests,
   BimonadTests,
   CommutativeApplyTests,
   NonEmptyTraverseTests,
@@ -42,6 +43,9 @@ class NonEmptyListSuite extends CatsSuite {
 
   checkAll("NonEmptyList[ListWrapper[Int]]", EqTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
+
+  checkAll("NonEmptyList[Int]", AlignTests[NonEmptyList].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyList]", SerializableTests.serializable(Align[NonEmptyList]))
 
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 

@@ -268,8 +268,8 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
 sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInstances0 {
 
   implicit def catsDataInstancesForNonEmptyMap[K: Order]
-    : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] =
-    new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] {
+    : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
+    new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] {
 
       override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
         fa.map(f)
@@ -316,6 +316,11 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
 
       override def toNonEmptyList[A](fa: NonEmptyMap[K, A]): NonEmptyList[A] =
         NonEmptyList(fa.head._2, fa.tail.toList.map(_._2))
+
+      def functor: Functor[NonEmptyMap[K, *]] = this
+
+      def align[A, B](fa: NonEmptyMap[K, A], fb: NonEmptyMap[K, B]): NonEmptyMap[K, Ior[A, B]] =
+        NonEmptyMap.fromMapUnsafe(Align[SortedMap[K, *]].align(fa.toSortedMap, fb.toSortedMap))
     }
 
   implicit def catsDataHashForNonEmptyMap[K: Hash: Order, A: Hash]: Hash[NonEmptyMap[K, A]] =

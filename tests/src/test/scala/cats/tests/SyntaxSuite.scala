@@ -370,6 +370,11 @@ object SyntaxSuite
     val fafb = fhab.separate
   }
 
+  def testAlternativeFoldable[F[_]: Alternative: Foldable, G[_]: Foldable, H[_, _]: Bifoldable, A, B]: Unit = {
+    val fhab = mock[F[H[A, B]]]
+    val fafb = fhab.separateFoldable
+  }
+
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
@@ -381,7 +386,7 @@ object SyntaxSuite
     val done = a.tailRecM[F, B](a => returnValue)
   }
 
-  def testApplicativeError[F[_, _], E, A](implicit F: ApplicativeError[F[E, *], E]): Unit = {
+  def testApplicativeError[F[_, _], E, A, B](implicit F: ApplicativeError[F[E, *], E]): Unit = {
     type G[X] = F[E, X]
 
     val e = mock[E]
@@ -404,10 +409,47 @@ object SyntaxSuite
 
     val pfegea = mock[PartialFunction[E, G[A]]]
     val gea4 = ga.recoverWith(pfegea)
+
+    val eb = mock[E => B]
+    val ab = mock[A => B]
+    val gb: G[B] = gea.redeem(eb, ab)
   }
 
   def testApplicativeErrorSubtype[F[_], A](implicit F: ApplicativeError[F, CharSequence]): Unit = {
     val fea = "meow".raiseError[F, A]
+  }
+
+  def testMonadError[F[_, _], E, A, B](implicit F: MonadError[F[E, *], E]): Unit = {
+    type G[X] = F[E, X]
+
+    val e = mock[E]
+    val ga = e.raiseError[G, A]
+
+    val gea = mock[G[A]]
+
+    val ea = mock[E => A]
+    val gea1 = ga.handleError(ea)
+
+    val egea = mock[E => G[A]]
+    val gea2 = ga.handleErrorWith(egea)
+
+    val gxea = ga.attempt
+
+    val gxtea = ga.attemptT
+
+    val pfea = mock[PartialFunction[E, A]]
+    val gea3 = ga.recover(pfea)
+
+    val pfegea = mock[PartialFunction[E, G[A]]]
+    val gea4 = ga.recoverWith(pfegea)
+
+    val eb = mock[E => B]
+    val ab = mock[A => B]
+    val gb: G[B] = gea.redeem(eb, ab)
+
+    val efb = mock[E => G[B]]
+    val afb = mock[A => G[B]]
+    val gb2: G[B] = gea.redeemWith(efb, afb)
   }
 
   def testNested[F[_], G[_], A]: Unit = {
@@ -428,6 +470,23 @@ object SyntaxSuite
 
     val nes: Option[NonEmptySet[A]] = set.toNes
     val grouped: SortedMap[B, NonEmptySet[A]] = set.groupByNes(f)
+  }
+
+  def testAlign[F[_]: Align, A, B, C]: Unit = {
+    import cats.data.Ior
+    val fa = mock[F[A]]
+    val fb = mock[F[B]]
+    val f = mock[A Ior B => C]
+    val f2 = mock[(Option[A], Option[B]) => C]
+
+    val fab = fa.align(fb)
+    val fc = fa.alignWith(fb)(f)
+
+    val padZipped = fa.padZip(fb)
+    val padZippedWith = fa.padZipWith(fb)(f2)
+
+    implicit val sa = mock[Semigroup[A]]
+    val fa2 = fa.alignCombine(fa)
   }
 
   def testNonEmptyList[A, B: Order]: Unit = {
