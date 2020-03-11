@@ -340,7 +340,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def foldMapA[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: Applicative[G], B: Monoid[B]): G[B] =
     F.foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 
- /**
+  /**
    * Implementers are responsible for ensuring they maintain consistency with foldRight; this is not checked by laws on Scala 2.11
    */
   def foldRightDefer[G[_]: Defer, B](gb: G[B])(fn: (A, G[B]) => G[B])(implicit F: Foldable[F]): G[B] =
