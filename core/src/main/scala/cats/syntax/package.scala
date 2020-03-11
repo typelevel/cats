@@ -1,6 +1,7 @@
 package cats
 
 package object syntax {
+  object align extends AlignSyntax
   object all extends AllSyntaxBinCompat
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
@@ -52,7 +53,7 @@ package object syntax {
   object representable extends RepresentableSyntax
   object semigroup extends SemigroupSyntax
   object semigroupal extends SemigroupalSyntax
-  object semigroupk extends SemigroupKSyntax
+  object semigroupk extends SemigroupKSyntax with SemigroupKSyntaxBinCompat0
   object show extends ShowSyntax
   object strong extends StrongSyntax
   object try_ extends TrySyntax

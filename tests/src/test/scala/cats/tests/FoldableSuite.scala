@@ -192,6 +192,20 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arb
     }
   }
 
+  test(s"Foldable[$name].maximumBy/minimumBy") {
+    forAll { (fa: F[Int], f: Int => Int) =>
+      val maxOpt = fa.maximumByOption(f).map(f)
+      val minOpt = fa.minimumByOption(f).map(f)
+      val nelOpt = fa.toList.toNel
+      maxOpt should ===(nelOpt.map(_.maximumBy(f)).map(f))
+      maxOpt should ===(nelOpt.map(_.toList.maxBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.minimumBy(f)).map(f))
+      minOpt should ===(nelOpt.map(_.toList.minBy(f)).map(f))
+      maxOpt.forall(i => fa.forall(f(_) <= i)) should ===(true)
+      minOpt.forall(i => fa.forall(f(_) >= i)) should ===(true)
+    }
+  }
+
   test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList
@@ -282,6 +296,13 @@ class FoldableSuiteAdditional extends CatsSuite {
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
     larger.value should ===(large.map(_ + 1))
+
+    val sum = large.foldRightDefer(Eval.later(0))((elem, acc) => acc.map(_ + elem))
+    sum.value should ===(large.sum)
+
+    def boom[A]: Eval[A] = Eval.later(sys.error("boom"))
+    // Ensure that the lazy param is actually handled lazily
+    val lazySum: Eval[Int] = large.foldRightDefer(boom[Int])((elem, acc) => acc.map(_ + elem))
   }
 
   def checkMonadicFoldsStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Foldable[F]): Unit = {

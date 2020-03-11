@@ -29,6 +29,40 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
 
   def adaptError(pf: PartialFunction[E, E])(implicit F: MonadError[F, E]): F[A] =
     F.adaptError(fa)(pf)
+
+  /**
+   * Returns a new value that transforms the result of the source,
+   * given the `recover` or `bind` functions, which get executed depending
+   * on whether the result is successful or if it ends in error.
+   *
+   * This is an optimization on usage of [[ApplicativeError.attempt]] and [[FlatMap.flatMap]],
+   * this equivalence being available:
+   *
+   * {{{
+   *   fa.redeemWith(fe, fs) <-> fa.attempt.flatMap(_.fold(fe, fs))
+   * }}}
+   *
+   * Usage of `redeemWith` subsumes [[ApplicativeError.handleErrorWith]] because:
+   *
+   * {{{
+   *   fa.redeemWith(fe, F.pure) <-> fa.handleErrorWith(fe)
+   * }}}
+   *
+   * Usage of `redeemWith` also subsumes [[FlatMap.flatMap]] because:
+   *
+   * {{{
+   *   fa.redeemWith(F.raiseError, fs) <-> fa.flatMap(fs)
+   * }}}
+   *
+   * @see [[ApplicativeErrorOps.redeem]], [[ApplicativeError.attempt]] and [[ApplicativeError.handleErrorWith]]
+   *
+   * @param recover is the function that gets called to recover the source
+   *        in case of error
+   * @param bind is the function that gets to transform the source
+   *        in case of success
+   */
+  def redeemWith[B](recover: E => F[B], bind: A => F[B])(implicit F: MonadError[F, E]): F[B] =
+    F.flatMap(F.attempt(fa))(_.fold(recover, bind))
 }
 
 final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {

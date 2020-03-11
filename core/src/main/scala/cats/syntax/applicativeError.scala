@@ -4,6 +4,8 @@ package syntax
 import cats.data.Validated.{Invalid, Valid}
 import cats.data.{EitherT, Validated}
 
+import scala.reflect.ClassTag
+
 trait ApplicativeErrorSyntax {
   implicit final def catsSyntaxApplicativeErrorId[E](e: E): ApplicativeErrorIdOps[E] =
     new ApplicativeErrorIdOps(e)
@@ -86,11 +88,46 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
   def attemptT(implicit F: ApplicativeError[F, E]): EitherT[F, E, A] =
     F.attemptT(fa)
 
+  /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE <: E: ClassTag](implicit F: ApplicativeError[F, E]): F[Either[EE, A]] =
+    F.recover(F.map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
+
   def recover(pf: PartialFunction[E, A])(implicit F: ApplicativeError[F, E]): F[A] =
     F.recover(fa)(pf)
 
   def recoverWith(pf: PartialFunction[E, F[A]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.recoverWith(fa)(pf)
+
+  /**
+   * Returns a new value that transforms the result of the source,
+   * given the `recover` or `map` functions, which get executed depending
+   * on whether the result is successful or if it ends in error.
+   *
+   * This is an optimization on usage of [[attempt]] and [[Functor.map]],
+   * this equivalence being available:
+   *
+   * {{{
+   *   fa.redeem(fe, fs) <-> fa.attempt.map(_.fold(fe, fs))
+   * }}}
+   *
+   * Usage of `redeem` subsumes [[handleError]] because:
+   *
+   * {{{
+   *   fa.redeem(fe, id) <-> fa.handleError(fe)
+   * }}}
+   *
+   *
+   * @see [[MonadErrorOps.redeemWith]], [[attempt]] and [[handleError]]
+   *
+   * @param recover is the function that gets called to recover the source
+   *        in case of error
+   * @param f is the function that gets to transform the source
+   *        in case of success
+   */
+  def redeem[B](recover: E => B, f: A => B)(implicit F: ApplicativeError[F, E]): F[B] =
+    F.handleError(F.map(fa)(f))(recover)
 
   def onError(pf: PartialFunction[E, F[Unit]])(implicit F: ApplicativeError[F, E]): F[A] =
     F.onError(fa)(pf)

@@ -95,4 +95,8 @@ trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
 trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
 
-trait AllSyntaxBinCompat7 extends FunctorSyntaxBinCompat0 with BiFoldableSyntaxBinCompat0
+trait AllSyntaxBinCompat7
+    extends FunctorSyntaxBinCompat0
+    with BiFoldableSyntaxBinCompat0
+    with SemigroupKSyntaxBinCompat0
+    with AlignSyntax

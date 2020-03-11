@@ -27,6 +27,43 @@ class ApplicativeErrorSuite extends CatsSuite {
     failed.attemptT should ===(EitherT[Option, Unit, Int](Option(Left(()))))
   }
 
+  test("attemptNarrow[EE] syntax creates an F[Either[EE, A]]") {
+    trait Err
+    case class ErrA() extends Err
+    case class ErrB() extends Err
+
+    implicit val eqForErr: Eq[Err] = Eq.fromUniversalEquals[Err]
+    implicit val eqForErrA: Eq[ErrA] = Eq.fromUniversalEquals[ErrA]
+    implicit val eqForErrB: Eq[ErrB] = Eq.fromUniversalEquals[ErrB]
+
+    val failed: Either[Err, Int] = ErrA().raiseError[Either[Err, *], Int]
+
+    failed.attemptNarrow[ErrA] should ===(ErrA().asLeft[Int].asRight[Err])
+    failed.attemptNarrow[ErrB] should ===(Either.left[Err, Either[ErrB, Int]](ErrA()))
+  }
+
+  test("attemptNarrow works for parametrized types") {
+    trait T[A]
+    case object Str extends T[String]
+    case class Num(i: Int) extends T[Int]
+
+    implicit def eqForT[A]: Eq[T[A]] = Eq.fromUniversalEquals[T[A]]
+    implicit val eqForStr: Eq[Str.type] = Eq.fromUniversalEquals[Str.type]
+    implicit val eqForNum: Eq[Num] = Eq.fromUniversalEquals[Num]
+
+    val e: Either[T[Int], Unit] = Num(1).asLeft[Unit]
+    e.attemptNarrow[Num] should ===(e.asRight[T[Int]])
+    assertTypeError("e.attemptNarrow[Str.type]")
+
+    val e2: Either[T[String], Unit] = Str.asLeft[Unit]
+    e2.attemptNarrow[Str.type] should ===(e2.asRight[T[String]])
+    assertTypeError("e2.attemptNarrow[Num]")
+
+    val e3: Either[List[T[String]], Unit] = List(Str).asLeft[Unit]
+    e3.attemptNarrow[List[Str.type]] should ===(e3.asRight[List[T[String]]])
+    assertTypeError("e3.attemptNarrow[List[Num]]")
+  }
+
   test("recover syntax transforms an error to a success") {
     failed.recover { case _ => 7 } should ===(Some(7))
   }

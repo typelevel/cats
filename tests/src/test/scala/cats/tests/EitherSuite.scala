@@ -5,6 +5,7 @@ import cats.data._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.laws.discipline.arbitrary._
 
 import scala.util.Try
 
@@ -16,6 +17,9 @@ class EitherSuite extends CatsSuite {
 
   checkAll("Either[Int, Int]", SemigroupalTests[Either[Int, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Either[Int, *]]", SerializableTests.serializable(Semigroupal[Either[Int, *]]))
+
+  checkAll("Either[Int, Int]", AlignTests[Either[Int, *]].align[Int, Int, Int, Int])
+  checkAll("Align[Either[Int, *]]", SerializableTests.serializable(Align[Either[Int, *]]))
 
   implicit val eq0 = EitherT.catsDataEqForEitherT[Either[Int, *], Int, Int]
 
