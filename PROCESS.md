@@ -18,6 +18,15 @@ When fixing typos, improving documentation or minor build fix only
 one sign-off is required (although for major edits waiting for two
  may be preferable).
 
+In some cases pull requests that don't target the master branch may be
+merged with a single sign-off from a maintainer (as long as they
+aren't also the author of the pull request). For example, backporting
+changes from master to the `scala_2.11` branch generally shouldn't
+require multiple reviews. If either the pull request author or a Cats
+maintainer thinks that a specific change should receive multiple
+approvals even though it doesn't target the master branch, their
+request should be respected.
+
 For serious emergencies or work on the build which can't easily be
 reviewed or tested, pushing directly to master may be OK (but is
 definitely not encouraged). In these cases it's best to comment in
