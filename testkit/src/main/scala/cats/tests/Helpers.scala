@@ -1,11 +1,8 @@
-package cats
-package tests
+package cats.tests
 
+import cats.kernel._
 import org.scalacheck.{Arbitrary, Cogen}
-import Arbitrary.arbitrary
-
-import cats.kernel.{CommutativeGroup, CommutativeMonoid, CommutativeSemigroup}
-import cats.kernel.{Band, BoundedSemilattice, Semilattice}
+import org.scalacheck.Arbitrary.arbitrary
 
 /**
  * Helpers provides new concrete types where we control exactly which

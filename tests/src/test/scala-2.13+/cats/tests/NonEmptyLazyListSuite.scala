@@ -1,14 +1,19 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
 import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
+import cats.instances.all._
+import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.either._
+import cats.syntax.foldable._
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
-  def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
+  protected def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: LazyList[A]): List[A] = underlying.toList
+  protected def toNonEmptyCollection[A](nea: NonEmptyLazyList[A]): NonEmptyLazyListOps[A] = nea
 
   checkAll("NonEmptyLazyList[Int]", SemigroupTests[NonEmptyLazyList[Int]].semigroup)
   checkAll(s"Semigroup[NonEmptyLazyList]", SerializableTests.serializable(Semigroup[NonEmptyLazyList[Int]]))

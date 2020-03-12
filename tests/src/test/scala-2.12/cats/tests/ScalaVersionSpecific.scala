@@ -1,5 +1,4 @@
-package cats
-package tests
+package cats.tests
 
 trait ScalaVersionSpecificFoldableSuite
 trait ScalaVersionSpecificParallelSuite

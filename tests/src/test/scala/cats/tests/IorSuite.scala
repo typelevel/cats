@@ -1,6 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
+import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.instances.all._
+import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{
   BifunctorTests,
@@ -10,9 +13,8 @@ import cats.laws.discipline.{
   SerializableTests,
   TraverseTests
 }
-import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
-import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
 
 class IorSuite extends CatsSuite {

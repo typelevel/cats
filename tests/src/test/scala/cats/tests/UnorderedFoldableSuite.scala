@@ -1,10 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalacheck.Arbitrary
+import cats.UnorderedFoldable
 import cats.instances.all._
 import cats.kernel.CommutativeMonoid
 import cats.laws.discipline.UnorderedFoldableTests
+import cats.syntax.unorderedFoldable._
+import org.scalacheck.Arbitrary
 
 sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFString: Arbitrary[F[String]],
                                                                  ArbFInt: Arbitrary[F[Int]])

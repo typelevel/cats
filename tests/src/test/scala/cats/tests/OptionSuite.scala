@@ -1,9 +1,24 @@
-package cats
-package tests
+package cats.tests
 
-import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
+import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
+import cats.syntax.apply._
+import cats.syntax.option._
+import cats.syntax.show._
+import cats.{
+  Align,
+  Alternative,
+  CoflatMap,
+  CommutativeMonad,
+  Eval,
+  Later,
+  MonadError,
+  Semigroupal,
+  Traverse,
+  TraverseFilter
+}
 
 class OptionSuite extends CatsSuite {
   checkAll("Option[Int]", SemigroupalTests[Option].semigroupal[Int, Int, Int])
@@ -26,6 +41,9 @@ class OptionSuite extends CatsSuite {
 
   checkAll("Option with Unit", MonadErrorTests[Option, Unit].monadError[Int, Int, Int])
   checkAll("MonadError[Option, Unit]", SerializableTests.serializable(MonadError[Option, Unit]))
+
+  checkAll("Option[Int]", AlignTests[Option].align[Int, Int, Int, Int])
+  checkAll("Align[Option]", SerializableTests.serializable(Align[Option]))
 
   test("show") {
     none[Int].show should ===("None")

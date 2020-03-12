@@ -1,10 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-
+import cats.{Align, Bimonad, Eval, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.instances.all._
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
   AlignTests,
@@ -15,12 +16,15 @@ import cats.laws.discipline.{
   SemigroupKTests,
   SerializableTests
 }
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.SortedSet
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
+import scala.collection.immutable.{SortedMap, SortedSet}
 
 class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
-  def toList[A](value: NonEmptyList[A]): List[A] = value.toList
-  def underlyingToList[A](underlying: List[A]): List[A] = underlying
+  protected def toList[A](value: NonEmptyList[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: List[A]): List[A] = underlying
+  protected def toNonEmptyCollection[A](nea: NonEmptyList[A]): NonEmptyList[A] = nea
 
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =

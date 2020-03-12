@@ -1,12 +1,14 @@
-package cats
-package free
+package cats.free
 
-import cats.tests.CatsSuite
+import cats.{~>, Applicative, Apply, Id}
 import cats.arrow.FunctionK
+import cats.data.State
+import cats.instances.all._
+import cats.kernel.Eq
 import cats.laws.discipline.{ApplicativeTests, SerializableTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.data.State
-
+import cats.syntax.apply._
+import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeApplicativeSuite extends CatsSuite {

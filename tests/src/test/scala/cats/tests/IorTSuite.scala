@@ -1,7 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{~>, Bifunctor, Eval, Foldable, Functor, Id, Monad, MonadError, Traverse}
 import cats.data.{Ior, IorT}
+import cats.instances.all._
+import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

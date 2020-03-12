@@ -1,6 +1,7 @@
 package cats.tests
 
 import cats.Align
+import cats.instances.all._
 import cats.kernel.laws.discipline.SemigroupTests
 
 class AlignSuite extends CatsSuite {

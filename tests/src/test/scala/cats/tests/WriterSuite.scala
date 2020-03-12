@@ -1,7 +1,9 @@
-package cats
-package tests
+package cats.tests
 
 import cats.data.Writer
+import cats.instances.all._
+import cats.syntax.applicative._
+import cats.syntax.writer._
 
 class WriterSuite extends CatsSuite {
   test("pure syntax creates a writer with an empty log") {

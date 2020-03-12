@@ -1,14 +1,18 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
+import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-
+import cats.instances.all._
+import cats.kernel.{Eq, Monoid}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.apply._
+import cats.syntax.semigroup._
+import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
-import cats.arrow.{Profunctor, Strong}
 
 class ReaderWriterStateTSuite extends CatsSuite {
   import ReaderWriterStateTSuite._
@@ -231,16 +235,21 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("flatMap and flatMapF+tell are consistent") {
-    forAll { (rwst: ReaderWriterStateT[Option, String, String, String, Int], f: Int => Option[Int], initial: String, context: String, log: String) =>
-      val flatMap = rwst.flatMap { a =>
-        ReaderWriterStateT { (e, s) =>
-          f(a).map((log, s, _))
+    forAll {
+      (rwst: ReaderWriterStateT[Option, String, String, String, Int],
+       f: Int => Option[Int],
+       initial: String,
+       context: String,
+       log: String) =>
+        val flatMap = rwst.flatMap { a =>
+          ReaderWriterStateT { (e, s) =>
+            f(a).map((log, s, _))
+          }
         }
-      }
 
-      val flatMapF = rwst.flatMapF(f).tell(log)
+        val flatMapF = rwst.flatMapF(f).tell(log)
 
-      flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
+        flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
     }
   }
 

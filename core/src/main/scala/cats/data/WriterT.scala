@@ -200,7 +200,7 @@ final case class WriterT[F[_], L, V](run: F[(L, V)]) {
    * }}}
    */
   def mapBoth[M, U](f: (L, V) => (M, U))(implicit functorF: Functor[F]): WriterT[F, M, U] =
-    WriterT { functorF.map(run)(f.tupled) }
+    WriterT(functorF.map(run)(f.tupled))
 
   /**
    * Example:

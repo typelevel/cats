@@ -15,9 +15,9 @@ trait MapInstances {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
               buf + (kv._1 -> b)
-            })
+            }
           }
           .value
         G.map(gbb)(_.toMap)
@@ -67,9 +67,9 @@ trait MapInstances {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (ob, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (ob, buf) =>
               ob.fold(buf)(b => buf + (kv._1 -> b))
-            })
+            }
           }
           .value
       }
