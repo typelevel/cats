@@ -38,9 +38,9 @@ trait SortedMapInstances extends SortedMapInstances2 {
         val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty(Order[K].toOrdering)))
         Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
               buf + (kv._1 -> b)
-            })
+            }
           }
           .value
       }
@@ -186,9 +186,9 @@ private[instances] trait SortedMapInstancesBinCompat0 {
         val gba: Eval[G[SortedMap[K, B]]] = Always(G.pure(SortedMap.empty))
         Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (ob, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (ob, buf) =>
               ob.fold(buf)(b => buf + (kv._1 -> b))
-            })
+            }
           }
           .value
       }

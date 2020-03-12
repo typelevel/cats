@@ -1,17 +1,25 @@
-package cats
-package tests
+package cats.tests
 
 import cats._
-import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data._
-import org.scalatest.funsuite.AnyFunSuiteLike
+import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.instances.all._
+import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.bifunctor._
+import cats.syntax.bitraverse._
+import cats.syntax.either._
+import cats.syntax.flatMap._
+import cats.syntax.foldable._
+import cats.syntax.option._
+import cats.syntax.parallel._
+import cats.syntax.traverse._
+import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import scala.collection.immutable.SortedSet
-import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with ScalaVersionSpecificParallelSuite {

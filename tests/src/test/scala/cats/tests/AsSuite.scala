@@ -1,11 +1,12 @@
-package cats
-package tests
+package cats.tests
 
+import cats.kernel.Eq
 import cats.laws.discipline.{CategoryTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
 import cats.arrow.Category
+
 class AsSuite extends CatsSuite {
-  import evidence._
+  import cats.evidence._
 
   def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A, B)): Map[A, B] = {
     type RequiredFunc = (Map[A, B], X) => Map[A, B]

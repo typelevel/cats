@@ -1,10 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
 import cats.data.{Chain, NonEmptyChain, NonEmptyChainOps}
+import cats.instances.all._
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.either._
+import cats.syntax.foldable._
 
 class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
   protected def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList

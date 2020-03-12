@@ -1,10 +1,17 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Apply, Monad, MonadError, StackSafeMonad, Traverse}
 import cats.data.{Const, NonEmptyList, StateT}
+import cats.instances.all._
+import cats.kernel.Eq
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.syntax.applicativeError._
+import cats.syntax.either._
+import cats.syntax.foldable._
+import cats.syntax.monadError._
+import cats.syntax.traverse._
 import scala.collection.mutable
 import scala.collection.immutable.SortedMap
-import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite {
@@ -13,13 +20,13 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
   // not stack safe, very minimal, not for actual use
   case class State[S, A](run: S => (A, S)) { self =>
     def map[B](f: A => B): State[S, B] =
-      State({ s =>
+      State { s =>
         val (a, s2) = self.run(s); (f(a), s2)
-      })
+      }
     def flatMap[B](f: A => State[S, B]): State[S, B] =
-      State({ s =>
+      State { s =>
         val (a, s2) = self.run(s); f(a).run(s2)
-      })
+      }
   }
 
   object State {
@@ -149,7 +156,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
   }
 
   test("#2022 EitherT syntax no long works the old way") {
-    import data._
+    import cats.data._
 
     EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
 

@@ -1,12 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import cats.laws.discipline.MiniInt
-import MiniInt._
-import cats.laws.discipline.arbitrary._
-import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid}
+import cats.instances.all._
+import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid, Hash, Order}
 import cats.kernel.laws.discipline._
-
+import cats.laws.discipline.MiniInt
+import cats.laws.discipline.MiniInt._
+import cats.laws.discipline.arbitrary._
 import org.scalacheck.Gen
 
 class MiniIntSuite extends CatsSuite {

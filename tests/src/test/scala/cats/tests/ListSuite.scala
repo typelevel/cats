@@ -1,7 +1,8 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
+import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
@@ -14,6 +15,8 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
+import cats.syntax.list._
+import cats.syntax.show._
 import org.scalatest.funsuite.AnyFunSuiteLike
 
 class ListSuite extends CatsSuite {

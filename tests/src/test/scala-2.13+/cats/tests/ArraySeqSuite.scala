@@ -1,6 +1,8 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Alternative, CoflatMap, Monad, MonoidK, Traverse, TraverseFilter}
+import cats.instances.all._
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -12,7 +14,7 @@ import cats.laws.discipline.{
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
-
+import cats.syntax.show._
 import scala.collection.immutable.ArraySeq
 
 class ArraySeqSuite extends CatsSuite {

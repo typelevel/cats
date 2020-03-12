@@ -52,7 +52,7 @@ import simulacrum.typeclass
    * {{{
    * scala> import cats.implicits._
    * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
-   * scala> Alternative[List].separate(l)
+   * scala> Alternative[List].separateFoldable(l)
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}
    */

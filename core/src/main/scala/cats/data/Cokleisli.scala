@@ -123,14 +123,14 @@ private[data] class CokleisliMonad[F[_], A] extends Monad[Cokleisli[F, A, *]] {
     fa.map(f)
 
   def tailRecM[B, C](b: B)(fn: B => Cokleisli[F, A, Either[B, C]]): Cokleisli[F, A, C] =
-    Cokleisli({ (fa: F[A]) =>
+    Cokleisli { (fa: F[A]) =>
       @tailrec
       def loop(c: Cokleisli[F, A, Either[B, C]]): C = c.run(fa) match {
         case Right(c) => c
         case Left(bb) => loop(fn(bb))
       }
       loop(fn(b))
-    })
+    }
 
 }
 

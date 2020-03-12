@@ -1,12 +1,13 @@
-package cats
-package tests
+package cats.tests
 
+import cats._
 import cats.data.{Const, IdT, NonEmptyList}
+import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, OrderTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import Helpers.CSemi
+import cats.tests.Helpers.CSemi
 
 class IdTSuite extends CatsSuite {
 

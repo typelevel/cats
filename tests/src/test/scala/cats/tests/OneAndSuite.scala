@@ -1,10 +1,12 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Alternative, Applicative, Foldable, Functor, Monad, SemigroupK, Traverse}
 import cats.data.OneAnd
+import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.foldable._
 
 class OneAndSuite extends CatsSuite {
   // Lots of collections here.. telling ScalaCheck to calm down a bit
