@@ -122,7 +122,8 @@ lazy val commonJsSettings = Seq(
   scalaJSLinkerConfig := scalaJSLinkerConfig.value.withBatchMode(isTravisBuild.value),
   // currently sbt-doctest doesn't work in JS builds
   // https://github.com/tkawachi/sbt-doctest/issues/52
-  doctestGenTests := Seq.empty
+  doctestGenTests := Seq.empty,
+  coverageEnabled := false
 )
 
 lazy val commonJvmSettings = Seq(
