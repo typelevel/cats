@@ -227,10 +227,14 @@ class OptionTSuite extends CatsSuite {
   test("flatTapNone runs the effect") {
     type TestEffect[A] = State[List[Int], A]
     forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
-      optiont.flatTapNone(f).value.runS(initial) should ===(optiont.value.flatTap {
-        case Some(v) => v.pure[TestEffect]
-        case None => f
-      }.runS(initial))
+      optiont.flatTapNone(f).value.runS(initial) should ===(
+        optiont.value
+          .flatTap {
+            case Some(v) => v.pure[TestEffect]
+            case None    => f
+          }
+          .runS(initial)
+      )
     }
   }
 
