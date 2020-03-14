@@ -183,7 +183,7 @@ import Foldable.sentinel
    *
    * @see [[maximumOption]] for maximum instead of minimum.
    */
-  def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+  override def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.min)
 
   /**
@@ -197,7 +197,7 @@ import Foldable.sentinel
    *
    * @see [[minimumOption]] for minimum instead of maximum.
    */
-  def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+  override def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.max)
 
   /**
@@ -211,7 +211,7 @@ import Foldable.sentinel
    *
    * @see [[maximumByOption]] for maximum instead of minimum.
    */
-  def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+  override def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     minimumOption(fa)(Order.by(f))
 
   /**
@@ -225,7 +225,7 @@ import Foldable.sentinel
    *
    * @see [[minimumByOption]] for minimum instead of maximum.
    */
-  def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
+  override def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     maximumOption(fa)(Order.by(f))
 
   /**

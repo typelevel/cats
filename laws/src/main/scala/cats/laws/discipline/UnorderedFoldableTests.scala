@@ -18,11 +18,15 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
                                                     A: CommutativeMonoid[A],
                                                     B: CommutativeMonoid[B],
                                                     EqFA: Eq[A],
-                                                    EqFB: Eq[B]): RuleSet =
+                                                    EqFB: Eq[B],
+                                                    EqOptionA: Eq[Option[A]]): RuleSet =
     new DefaultRuleSet(
       name = "unorderedFoldable",
       parent = None,
       "unorderedFold consistent with unorderedFoldMap" -> forAll(laws.unorderedFoldConsistentWithUnorderedFoldMap[A] _),
+      "unorderedReduceOption consistent with unorderedFold" -> forAll(
+        laws.unorderedReduceOptionConsistentWithUnorderedFold[A] _
+      ),
       "forall consistent with exists" -> forAll(laws.forallConsistentWithExists[A] _),
       "forall true if empty" -> forAll(laws.forallEmpty[A] _),
       "nonEmpty reference" -> forAll(laws.nonEmptyRef[A] _),
