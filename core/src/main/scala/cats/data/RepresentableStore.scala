@@ -19,6 +19,16 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
   lazy val extract: A = peek(index)
 
   /**
+   * Extract the "index"
+   */
+  lazy val pos: S = index
+
+  /**
+   * Set the "index"
+   */
+  def seek(s: S): RepresentableStore[F, S, A] = copy(index = s)
+
+  /**
    * Duplicate the store structure
    */
   lazy val coflatten: RepresentableStore[F, S, RepresentableStore[F, S, A]] =
