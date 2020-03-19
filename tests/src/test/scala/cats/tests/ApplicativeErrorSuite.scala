@@ -29,7 +29,7 @@ class ApplicativeErrorSuite extends CatsSuite {
   }
 
   test("attemptNarrow[EE] syntax creates an F[Either[EE, A]]") {
-    trait Err
+    trait Err extends Throwable
     case class ErrA() extends Err
     case class ErrB() extends Err
 
@@ -44,7 +44,7 @@ class ApplicativeErrorSuite extends CatsSuite {
   }
 
   test("attemptNarrow works for parametrized types") {
-    trait T[A]
+    trait T[A] extends Throwable
     case object Str extends T[String]
     case class Num(i: Int) extends T[Int]
 
@@ -61,7 +61,7 @@ class ApplicativeErrorSuite extends CatsSuite {
     assertTypeError("e2.attemptNarrow[Num]")
 
     val e3: Either[List[T[String]], Unit] = List(Str).asLeft[Unit]
-    e3.attemptNarrow[List[Str.type]] should ===(e3.asRight[List[T[String]]])
+    assertTypeError("e3.attemptNarrow[List[Str.type]]")
     assertTypeError("e3.attemptNarrow[List[Num]]")
   }
 
