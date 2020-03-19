@@ -77,6 +77,11 @@ package object data extends ScalaVersionSpecificPackage {
   type RWS[E, L, S, A] = ReaderWriterState[E, L, S, A]
   val RWS = ReaderWriterState
 
+  type Env[E, A] = EnvT[Id, E, A]
+  object Env {
+    def apply[E, A](e: E, a: Id[A]): Env[E, A] = EnvT(a, e)
+  }
+
   type Store[S, A] = RepresentableStore[S => *, S, A]
   object Store {
     import cats.instances.function._

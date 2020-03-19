@@ -2,9 +2,8 @@ package cats
 package laws
 package discipline
 
-import cats.data.RepresentableStore
+import cats.data.{AndThen, EnvT, RepresentableStore}
 import cats.Eq
-import cats.data.AndThen
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
@@ -100,6 +99,9 @@ object eq {
   implicit def catsLawsEqForRepresentableStore[F[_]: Representable, S, A](implicit eqFA: Eq[F[A]],
                                                                           eqS: Eq[S]): Eq[RepresentableStore[F, S, A]] =
     Eq.instance((s1, s2) => eqFA.eqv(s1.fa, s2.fa) && eqS.eqv(s1.index, s2.index))
+
+  implicit def catsLawsEqForEnvT[W[_], E, A](implicit eqFA: Eq[W[A]], eqS: Eq[E]): Eq[EnvT[W, E, A]] =
+    Eq.instance((s1, s2) => eqFA.eqv(s1.wa, s2.wa) && eqS.eqv(s1.env, s2.env))
 }
 
 @deprecated(

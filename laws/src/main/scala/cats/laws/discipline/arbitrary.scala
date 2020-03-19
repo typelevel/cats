@@ -349,6 +349,16 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
 
   implicit val catsLawsArbitraryForMiniInt: Arbitrary[MiniInt] =
     Arbitrary(Gen.oneOf(MiniInt.allValues))
+
+  implicit def catsLawsArbitraryForEnvT[W[_], E, A](implicit ArbWA: Arbitrary[W[A]],
+                                                    ArbE: Arbitrary[E]): Arbitrary[EnvT[W, E, A]] = Arbitrary {
+    for {
+      wa <- ArbWA.arbitrary
+      e <- ArbE.arbitrary
+    } yield EnvT(wa, e)
+  }
+
+  implicit def catsLawsCogenForEnvT[W[_], E, A](implicit CA: Cogen[W[A]]): Cogen[EnvT[W, E, A]] = CA.contramap(_.wa)
 }
 
 sealed private[discipline] trait ArbitraryInstances0 {
