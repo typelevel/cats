@@ -79,7 +79,7 @@ package object data extends ScalaVersionSpecificPackage {
 
   type Env[E, A] = EnvT[Id, E, A]
   object Env {
-    def apply[E, A](e: E, a: Id[A]): Env[E, A] = EnvT(a, e)
+    def apply[E, A](a: A, e: E): Env[E, A] = EnvT[Id, E, A](a, e)
   }
 
   type Store[S, A] = RepresentableStore[S => *, S, A]

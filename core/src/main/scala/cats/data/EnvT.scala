@@ -1,6 +1,6 @@
 package cats.data
 
-import cats.{Applicative, Comonad, Eval, Foldable, Functor, Traverse}
+import cats.{Applicative, Comonad, Eval, Foldable, Functor, Monoid, Traverse}
 
 /**
  * EnvT[W, E, A] is the Env Comonad transformer
@@ -10,7 +10,7 @@ final case class EnvT[W[_], E, A](wa: W[A], env: E) {
   /**
    * Return the environment
    */
-  lazy val ask: E = env
+  def ask: E = env
 
   /**
    * Return a transformed environment
@@ -24,10 +24,22 @@ final case class EnvT[W[_], E, A](wa: W[A], env: E) {
 
   def map[B](f: A => B)(implicit W: Functor[W]): EnvT[W, E, B] = EnvT(W.map(wa)(f), env)
 
-  lazy val runEnvT: (E, W[A]) = (env, wa)
+  def runEnvT: (W[A], E) = (wa, env)
 }
 
 object EnvT {
+
+  implicit def catsDataEnvTFunctor[W[_]: Functor, E]: Functor[EnvT[W, E, *]] = new Functor[EnvT[W, E, *]] {
+    override def map[A, B](fa: EnvT[W, E, A])(f: A => B): EnvT[W, E, B] = fa.map(f)
+  }
+
+  implicit def catsDataEnvTApplicative[W[_]: Applicative, E: Monoid]: Applicative[EnvT[W, E, *]] =
+    new Applicative[EnvT[W, E, *]] {
+      override def pure[A](x: A): EnvT[W, E, A] = EnvT(Applicative[W].pure(x), Monoid[E].empty)
+
+      override def ap[A, B](ff: EnvT[W, E, A => B])(fa: EnvT[W, E, A]): EnvT[W, E, B] =
+        EnvT(Applicative[W].ap(ff.wa)(fa.wa), Monoid[E].combine(ff.env, fa.env))
+    }
 
   implicit def catsDataEnvTComonad[W[_]: Comonad, E]: Comonad[EnvT[W, E, *]] = new Comonad[EnvT[W, E, *]] {
     override def extract[A](x: EnvT[W, E, A]): A = Comonad[W].extract(x.wa)
@@ -35,7 +47,7 @@ object EnvT {
     override def coflatMap[A, B](fa: EnvT[W, E, A])(f: EnvT[W, E, A] => B): EnvT[W, E, B] =
       EnvT(Comonad[W].coflatMap(fa.wa)(wa => f(EnvT(wa, fa.env))), fa.env)
 
-    override def map[A, B](fa: EnvT[W, E, A])(f: A => B): EnvT[W, E, B] = EnvT(Comonad[W].map(fa.wa)(f), fa.env)
+    override def map[A, B](fa: EnvT[W, E, A])(f: A => B): EnvT[W, E, B] = catsDataEnvTFunctor[W, E].map(fa)(f)
   }
 
   implicit def catsDataEnvTFoldable[W[_]: Foldable, E]: Foldable[EnvT[W, E, *]] = new Foldable[EnvT[W, E, *]] {
