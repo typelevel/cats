@@ -33,6 +33,9 @@ class TupleSuite extends CatsSuite {
            BitraverseTests[(Boolean, Boolean, *, *)].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple4]", SerializableTests.serializable(Bitraverse[(Boolean, Boolean, *, *)]))
 
+  checkAll("Tuple1[Int] with Option", TraverseTests[Tuple1].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[Tuple1]", SerializableTests.serializable(Traverse[Tuple1]))
+
   checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
   checkAll("Traverse[(String, *)]", SerializableTests.serializable(Traverse[(String, *)]))
 
@@ -41,12 +44,18 @@ class TupleSuite extends CatsSuite {
   checkAll("Traverse[(Boolean, Boolean, String, *)]",
            SerializableTests.serializable(Traverse[(Boolean, Boolean, String, *)]))
 
+  checkAll("Tuple1[Int]", ComonadTests[Tuple1].comonad[Int, Int, Int])
+  checkAll("Comonad[Tuple1]", SerializableTests.serializable(Comonad[Tuple1]))
+
   checkAll("Tuple2[String, Int]", ComonadTests[(String, *)].comonad[Int, Int, Int])
   checkAll("Comonad[(String, *)]", SerializableTests.serializable(Comonad[(String, *)]))
 
   checkAll("Tuple4[Boolean, Boolean, String, Int]", ComonadTests[(Boolean, Boolean, String, *)].comonad[Int, Int, Int])
   checkAll("Comonad[(Boolean, Boolean, String, *)]",
            SerializableTests.serializable(Comonad[(Boolean, Boolean, String, *)]))
+
+  checkAll("Tuple1[String]", FlatMapTests[Tuple1].flatMap[String, Long, String])
+  checkAll("FlatMap[Tuple1] serializable", SerializableTests.serializable(FlatMap[Tuple1]))
 
   // Note that NonEmptyList has no Monoid, so we can make a FlatMap, but not a Monad
   checkAll("FlatMap[(NonEmptyList[Int], *)]", FlatMapTests[(NonEmptyList[Int], *)].flatMap[String, Long, String])
@@ -57,12 +66,18 @@ class TupleSuite extends CatsSuite {
   checkAll("FlatMap[(Semi, Semi, String, *)] serializable",
            SerializableTests.serializable(FlatMap[(Semi, Semi, String, *)]))
 
+  checkAll("Tuple1[Int]", MonadTests[Tuple1].monad[Int, Int, String])
+  checkAll("Monad[Tuple1] serializable", SerializableTests.serializable(Monad[Tuple1]))
+
   checkAll("Monad[(String, *)]", MonadTests[(String, *)].monad[Int, Int, String])
   checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
 
   checkAll("Monad[(Mono, Mono, String, *)]", MonadTests[(Mono, Mono, String, *)].monad[Int, Int, String])
   checkAll("Monad[(Mono, Mono, String, *)] serializable",
            SerializableTests.serializable(Monad[(Mono, Mono, String, *)]))
+
+  checkAll("Tuple1[CSemi]", CommutativeFlatMapTests[Tuple1].commutativeFlatMap[CSemi, CSemi, CSemi])
+  checkAll("CommutativeFlatMap[Tuple1] serializable", SerializableTests.serializable(CommutativeFlatMap[Tuple1]))
 
   checkAll("CommutativeFlatMap[(CSemi, *)]",
            CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi])
@@ -74,6 +89,9 @@ class TupleSuite extends CatsSuite {
   checkAll("CommutativeFlatMap[(CSemi, CSemi, CSemi, *)] serializable",
            SerializableTests.serializable(CommutativeFlatMap[(CSemi, CSemi, CSemi, *)]))
 
+  checkAll("Tuple1[Int]", CommutativeMonadTests[Tuple1].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[Tuple1] serializable", SerializableTests.serializable(CommutativeMonad[Tuple1]))
+
   checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))
 
@@ -81,6 +99,9 @@ class TupleSuite extends CatsSuite {
            CommutativeMonadTests[(CMono, CMono, Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(CMono, CMono, Int, *)] serializable",
            SerializableTests.serializable(CommutativeMonad[(CMono, CMono, Int, *)]))
+
+  checkAll("Tuple1[Int]", ReducibleTests[Tuple1].reducible[Option, Int, Int])
+  checkAll("Reducible[Tuple1]", SerializableTests.serializable(Reducible[Tuple1]))
 
   checkAll("Tuple2[String, Int]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
   checkAll("Reducible[(String, *)]", SerializableTests.serializable(Reducible[(String, *)]))
@@ -116,6 +137,7 @@ class TupleSuite extends CatsSuite {
   }
 
   test("show") {
+    Tuple1(1).show should ===("(1)")
     (1, 2).show should ===("(1,2)")
     (1, 2, 3).show should ===("(1,2,3)")
     (1, 2, 3, 4).show should ===("(1,2,3,4)")
@@ -162,6 +184,9 @@ class TupleSuite extends CatsSuite {
     val bar3 = Bar(8)
     val baz3 = Baz(9)
 
+    Tuple1(foo1).show should ===(
+      s"(${Show[Foo].show(foo1)})"
+    )
     (foo1, bar1).show should ===(
       s"(${Show[Foo].show(foo1)},${Show[Bar].show(bar1)})"
     )
