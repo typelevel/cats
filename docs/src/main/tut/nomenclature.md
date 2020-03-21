@@ -159,7 +159,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `WriterT[F[_], A, B]` | `F[(A,B)]`
 | `Tuple2K[F[_], G[_], A]` | `(F[A], G[A])`
 | `EitherK[F[_], G[_], A]` | `Either[F[A], G[A]]`
-| `FunctionK[F[_], G[_]`   | `F[X] => G[X]` for every `X`
+| `FunctionK[F[_], G[_]]`   | `F[X] => G[X]` for every `X`
 | `F ~> G`   | Alias of `FunctionK[F, G]`
 
 ### OptionT

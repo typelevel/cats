@@ -80,7 +80,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Similar to [[attempt]], but it only handles errors of type `EE`.
    */
-  def attemptNarrow[EE, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+  def attemptNarrow[EE <: Throwable, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
     recover(map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
 
   /**

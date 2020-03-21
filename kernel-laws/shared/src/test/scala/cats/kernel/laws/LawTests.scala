@@ -313,10 +313,29 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("Hash[Queue[Int]", HashTests[Queue[Int]].hash)
 
-  {
-    checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
-    checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
-    checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
+  checkAll("Order[BigDecimal]", OrderTests[BigDecimal].order)
+  checkAll("CommutativeGroup[BigDecimal]", CommutativeGroupTests[BigDecimal].commutativeGroup)
+  checkAll("CommutativeGroup[BigDecimal]", SerializableTests.serializable(CommutativeGroup[BigDecimal]))
+
+  test("CommutativeGroup[BigDecimal]'s combine should be associative for known problematic cases (#3303)") {
+    import java.math.MathContext
+
+    val one = BigDecimal("1", MathContext.DECIMAL32)
+    val small = BigDecimal("0.00001111111", MathContext.DECIMAL32)
+    val xs = one :: List.fill(10)(small)
+    val combineRight = xs.reduceRight(CommutativeGroup[BigDecimal].combine)
+    val combineLeft = xs.reduceLeft(CommutativeGroup[BigDecimal].combine)
+
+    assert(combineRight === combineLeft)
+  }
+
+  test("CommutativeGroup[BigDecimal]'s combine should be commutative for known problematic cases (#3303)") {
+    import java.math.MathContext
+
+    val one = BigDecimal("1")
+    val small = BigDecimal("1e-7", MathContext.DECIMAL32)
+
+    assert(CommutativeGroup[BigDecimal].combine(one, small) === CommutativeGroup[BigDecimal].combine(small, one))
   }
 
   checkAll("Band[(Int, Int)]", BandTests[(Int, Int)].band)
