@@ -665,10 +665,12 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       def apply: Apply[ZipNonEmptyList] = ZipNonEmptyList.catsDataCommutativeApplyForZipNonEmptyList
 
       def sequential: ZipNonEmptyList ~> NonEmptyList =
-        λ[ZipNonEmptyList ~> NonEmptyList](_.value)
+        new (ZipNonEmptyList ~> NonEmptyList) { def apply[B](nel: ZipNonEmptyList[B]): NonEmptyList[B] = nel.value }
 
       def parallel: NonEmptyList ~> ZipNonEmptyList =
-        λ[NonEmptyList ~> ZipNonEmptyList](nel => new ZipNonEmptyList(nel))
+        new (NonEmptyList ~> ZipNonEmptyList) {
+          def apply[B](nel: NonEmptyList[B]): ZipNonEmptyList[B] = new ZipNonEmptyList(nel)
+        }
     }
 }
 

@@ -174,7 +174,7 @@ object Kleisli
    * }}}
    */
   def applyK[F[_], A](a: A): Kleisli[F, A, *] ~> F =
-    λ[Kleisli[F, A, *] ~> F](_.apply(a))
+    new (Kleisli[F, A, *] ~> F) { def apply[B](k: Kleisli[F, A, B]): F[B] = k.apply(a) }
 
 }
 
@@ -204,7 +204,7 @@ sealed private[data] trait KleisliFunctions {
    * }}}
    */
   def liftK[F[_], A]: F ~> Kleisli[F, A, *] =
-    λ[F ~> Kleisli[F, A, *]](Kleisli.liftF(_))
+    new (F ~> Kleisli[F, A, *]) { def apply[B](fb: F[B]): Kleisli[F, A, B] = Kleisli.liftF(fb) }
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
   private[cats] def lift[F[_], A, B](x: F[B]): Kleisli[F, A, B] =
@@ -268,7 +268,7 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * }}}
    * */
   def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, *] ~> Kleisli[G, A, *] =
-    λ[Kleisli[F, A, *] ~> Kleisli[G, A, *]](_.mapK(f))
+    new (Kleisli[F, A, *] ~> Kleisli[G, A, *]) { def apply[B](k: Kleisli[F, A, B]): Kleisli[G, A, B] = k.mapK(f) }
 }
 
 sealed private[data] trait KleisliExplicitInstances {
@@ -374,10 +374,14 @@ sealed abstract private[data] class KleisliInstances1 extends KleisliInstances2 
     def monad: Monad[Kleisli[M, A, *]] = catsDataMonadForKleisli
 
     def sequential: Kleisli[P.F, A, *] ~> Kleisli[M, A, *] =
-      λ[Kleisli[P.F, A, *] ~> Kleisli[M, A, *]](_.mapK(P.sequential))
+      new (Kleisli[P.F, A, *] ~> Kleisli[M, A, *]) {
+        def apply[B](k: Kleisli[P.F, A, B]): Kleisli[M, A, B] = k.mapK(P.sequential)
+      }
 
     def parallel: Kleisli[M, A, *] ~> Kleisli[P.F, A, *] =
-      λ[Kleisli[M, A, *] ~> Kleisli[P.F, A, *]](_.mapK(P.parallel))
+      new (Kleisli[M, A, *] ~> Kleisli[P.F, A, *]) {
+        def apply[B](k: Kleisli[M, A, B]): Kleisli[P.F, A, B] = k.mapK(P.parallel)
+      }
   }
 
   implicit def catsDataContravariantForKleisli[F[_], C]: Contravariant[Kleisli[F, *, C]] =

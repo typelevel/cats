@@ -9,9 +9,9 @@ import cats.laws.discipline.arbitrary._
 
 class FunctionKSuite extends CatsSuite {
 
-  val listToOption = λ[FunctionK[List, Option]](_.headOption)
-  val listToVector = λ[FunctionK[List, Vector]](_.toVector)
-  val optionToList = λ[FunctionK[Option, List]](_.toList)
+  val listToOption = new FunctionK[List, Option] { def apply[A](a: List[A]): Option[A] = a.headOption }
+  val listToVector = new FunctionK[List, Vector] { def apply[A](a: List[A]): Vector[A] = a.toVector }
+  val optionToList = new FunctionK[Option, List] { def apply[A](a: Option[A]): List[A] = a.toList }
 
   sealed trait Test1Algebra[A] {
     def v: A
@@ -25,8 +25,8 @@ class FunctionKSuite extends CatsSuite {
 
   case class Test2[A](v: A) extends Test2Algebra[A]
 
-  val Test1FK = λ[FunctionK[Test1Algebra, Id]](_.v)
-  val Test2FK = λ[FunctionK[Test2Algebra, Id]](_.v)
+  val Test1FK = new FunctionK[Test1Algebra, Id] { def apply[A](a: Test1Algebra[A]): A = a.v }
+  val Test2FK = new FunctionK[Test2Algebra, Id] { def apply[A](a: Test2Algebra[A]): A = a.v }
 
   test("compose") {
     forAll { (list: List[Int]) =>

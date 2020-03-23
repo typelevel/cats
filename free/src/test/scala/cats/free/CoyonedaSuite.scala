@@ -27,7 +27,7 @@ class CoyonedaSuite extends CatsSuite {
   }
 
   test("mapK and run is same as applying natural trans") {
-    val nt = λ[FunctionK[Option, List]](_.toList)
+    val nt = new FunctionK[Option, List] { def apply[A](a: Option[A]): List[A] = a.toList }
     val o = Option("hello")
     val c = Coyoneda.lift(o)
     c.mapK(nt).run should ===(nt(o))

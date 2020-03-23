@@ -183,14 +183,14 @@ class KleisliSuite extends CatsSuite {
   }
 
   test("mapK") {
-    val t: List ~> Option = λ[List ~> Option](_.headOption)
+    val t: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       t(f.run(i)) should ===(f.mapK(t).run(i))
     }
   }
 
   test("liftFunctionK consistent with mapK") {
-    val t: List ~> Option = λ[List ~> Option](_.headOption)
+    val t: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (f: Kleisli[List, Int, Int], i: Int) =>
       (f.mapK(t).run(i)) should ===(Kleisli.liftFunctionK(t)(f).run(i))
     }

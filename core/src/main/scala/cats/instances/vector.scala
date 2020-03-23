@@ -143,10 +143,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
 
       def sequential: ZipVector ~> Vector =
-        λ[ZipVector ~> Vector](_.value)
+        new (ZipVector ~> Vector) { def apply[A](a: ZipVector[A]): Vector[A] = a.value }
 
       def parallel: Vector ~> ZipVector =
-        λ[Vector ~> ZipVector](v => new ZipVector(v))
+        new (Vector ~> ZipVector) { def apply[A](v: Vector[A]): ZipVector[A] = new ZipVector(v) }
     }
 }
 
