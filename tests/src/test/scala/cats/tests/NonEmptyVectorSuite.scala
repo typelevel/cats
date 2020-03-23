@@ -247,6 +247,18 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
     }
   }
 
+  test("prependVector with a NonEmptyVector is the same as concatNec") {
+    forAll { (nonEmptyVector1: NonEmptyVector[Int], nonEmptyVector2: NonEmptyVector[Int]) =>
+      nonEmptyVector2.prependVector(nonEmptyVector1.toVector) should ===(nonEmptyVector1.concatNev(nonEmptyVector2))
+    }
+  }
+
+  test("prependVector with an empty Vector is the same as the original NonEmptyVector") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.prependVector(Vector.empty) should ===(nonEmptyVector)
+    }
+  }
+
   test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
       NonEmptyVector.of(head, tail: _*) should ===(NonEmptyVector(head, tail))

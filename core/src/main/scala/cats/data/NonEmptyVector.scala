@@ -116,6 +116,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   def prepend[AA >: A](a: AA): NonEmptyVector[AA] = new NonEmptyVector(a +: toVector)
 
   /**
+   * Prepend a `Vector` to this, producing a new `NonEmptyVector`.
+   */
+  def prependVector[AA >: A](vector: Vector[AA]): NonEmptyVector[AA] =
+    new NonEmptyVector(vector ++ this.toVector)
+
+  /**
    * Alias for [[prepend]]
    */
   def +:[AA >: A](a: AA): NonEmptyVector[AA] = prepend(a)
