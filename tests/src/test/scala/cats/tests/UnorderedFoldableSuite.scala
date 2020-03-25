@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.UnorderedFoldable
-import cats.instances.all._
 import cats.kernel.CommutativeMonoid
 import cats.laws.discipline.UnorderedFoldableTests
 import cats.syntax.unorderedFoldable._
@@ -51,13 +50,13 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit ArbFSt
 final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set") {
   def iterator[T](set: Set[T]): Iterator[T] = set.iterator
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: Set[A])(f: A => B): B =
-    catsStdInstancesForSet.unorderedFoldMap(fa)(f)
+    UnorderedFoldable[Set].unorderedFoldMap(fa)(f)
 }
 
 final class UnorderedFoldableMapSuite extends UnorderedFoldableSuite[Map[String, *]]("map") {
   def iterator[T](map: Map[String, T]): Iterator[T] = map.valuesIterator
   def specializedUnorderedFoldMap[A, B: CommutativeMonoid](fa: Map[String, A])(f: A => B): B =
-    catsStdInstancesForMap[String].unorderedFoldMap(fa)(f)
+    UnorderedFoldable[Map[String, *]].unorderedFoldMap(fa)(f)
 }
 
 sealed abstract class SpecializedUnorderedFoldableSuite[F[_]: UnorderedFoldable](name: String)(

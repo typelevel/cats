@@ -41,8 +41,6 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F: MonadError[Option, Unit] = catsStdInstancesForOption
-
     checkAll("IorT[Option, String, String]",
              MonadErrorTests[IorT[Option, String, *], Unit].monadError[String, String, String])
     checkAll("MonadError[IorT[Option, *, *]]",

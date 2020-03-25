@@ -1,6 +1,6 @@
 package cats.jvm.tests
 
-import cats.instances.all._
+import cats.instances.future._
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
