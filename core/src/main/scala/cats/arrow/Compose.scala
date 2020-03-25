@@ -37,3 +37,9 @@ import simulacrum.typeclass
       def combine(f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
     }
 }
+
+object Compose {
+  implicit def catsInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
+    cats.instances.function.catsStdInstancesForFunction1
+  implicit def catsComposeForMap: Compose[Map] = cats.instances.map.catsStdComposeForMap
+}

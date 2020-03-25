@@ -40,3 +40,8 @@ import simulacrum.typeclass
   def rmap[A, B, C](fab: F[A, B])(f: B => C): F[A, C] =
     dimap[A, B, A, C](fab)(identity)(f)
 }
+
+object Profunctor {
+  implicit def catsStrongForFunction1: Strong[Function1] =
+    cats.instances.function.catsStdInstancesForFunction1
+}

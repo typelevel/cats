@@ -145,4 +145,11 @@ object Representable {
     new RepresentableDistributive[F, Rep.Representation] {
       override def R: Aux[F, Rep.Representation] = Rep
     }
+
+  implicit def catsRepresentableForFunction1[E](implicit EF: Functor[E => *]): Representable.Aux[E => *, E] =
+    cats.instances.function.catsStdRepresentableForFunction1[E]
+
+  implicit def catsRepresentableForPair(
+    implicit PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] = cats.instances.tuple.catsDataRepresentableForPair
 }

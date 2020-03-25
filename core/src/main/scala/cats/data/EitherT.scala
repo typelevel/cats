@@ -1,7 +1,7 @@
 package cats
 package data
 
-import cats.instances.either._
+import cats.Bifunctor
 import cats.syntax.EitherUtil
 
 /**

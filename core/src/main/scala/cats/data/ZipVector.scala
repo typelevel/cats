@@ -1,7 +1,6 @@
 package cats
 package data
 
-import instances.vector._
 import kernel.compat.scalaVersionSpecific._
 
 class ZipVector[A](val value: Vector[A]) extends AnyVal

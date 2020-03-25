@@ -1,8 +1,6 @@
 package cats
 package data
 
-import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
-
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
  * convenient methods for working with this nested structure.
@@ -120,13 +118,13 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     eq.eqv(value, that.value)
 
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
-    G.map(F.compose(optionInstance).traverse(value)(f))(OptionT.apply)
+    G.map(F.compose(Traverse[Option]).traverse(value)(f))(OptionT.apply)
 
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
-    F.compose(optionInstance).foldLeft(value, b)(f)
+    F.compose(Foldable[Option]).foldLeft(value, b)(f)
 
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
-    F.compose(optionInstance).foldRight(value, lb)(f)
+    F.compose(Foldable[Option]).foldRight(value, lb)(f)
 
   /**
    * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
