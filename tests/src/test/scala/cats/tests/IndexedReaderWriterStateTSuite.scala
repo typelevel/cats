@@ -481,21 +481,15 @@ class ReaderWriterStateTSuite extends CatsSuite {
 }
 
 object ReaderWriterStateTSuite {
-  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] = {
-    import cats.instances.vector._
-
+  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] =
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
-  }
 
-  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] = {
-    import cats.kernel.instances.unit._
-
+  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] =
     ReaderWriterState { (context, state) =>
       ((), state + i, state + i)
     }
-  }
 
   implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],
                                               SB: Arbitrary[SB],

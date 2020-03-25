@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

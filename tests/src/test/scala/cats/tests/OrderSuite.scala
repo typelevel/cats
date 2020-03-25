@@ -47,7 +47,6 @@ class OrderSuite extends CatsSuite {
 
 object OrderSuite {
   def summonInstance(): Unit = {
-    import cats.instances.order._
     Invariant[Order]
     Contravariant[Order]
     ContravariantMonoidal[Order]
@@ -58,7 +57,6 @@ object OrderSuite {
   // the Ordering instance from the Order instance should be trumped
   // by the one provided in the Ordering companion object
   {
-    import cats.instances.all._
     Ordering[String]
     class C
     implicit val ording: Ordering[C] = new Ordering[C] {
