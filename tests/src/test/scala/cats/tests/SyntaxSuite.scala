@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.arrow.Compose
 import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
-import cats.instances.all._
 import cats.syntax.all._
 import scala.collection.immutable.{SortedMap, SortedSet}
 

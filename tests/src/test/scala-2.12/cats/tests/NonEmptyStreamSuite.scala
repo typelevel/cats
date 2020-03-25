@@ -2,8 +2,8 @@ package cats.tests
 
 import cats.{Comonad, Eval, Functor, Monad, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
 import cats.data.{NonEmptyStream, OneAnd}
-import cats.instances.all._
 import cats.kernel.Semigroup
+import cats.kernel.instances.order.catsKernelOrderingForOrder
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

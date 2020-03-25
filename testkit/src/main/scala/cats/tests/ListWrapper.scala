@@ -1,7 +1,6 @@
 package cats
 package tests
 
-import cats.instances.list._
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 

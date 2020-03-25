@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Contravariant, ContravariantMonoidal, Invariant}
 import cats.instances.all._
-import cats.kernel.PartialOrder
+import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
@@ -30,6 +30,7 @@ class PartialOrderSuite extends CatsSuite {
 
   test("companion object syntax") {
     forAll { (i: Int, j: Int) =>
+      val catsKernelStdOrderForInt: Order[Int] = Order[Int]
       checkPartialCompare(PartialOrder.partialCompare(i, j), catsKernelStdOrderForInt.partialCompare(i, j))
       PartialOrder.tryCompare(i, j) should ===(catsKernelStdOrderForInt.tryCompare(i, j))
       PartialOrder.pmin(i, j) should ===(catsKernelStdOrderForInt.pmin(i, j))
@@ -58,7 +59,6 @@ class PartialOrderSuite extends CatsSuite {
 
 object PartialOrderSuite {
   def summonInstance(): Unit = {
-    import cats.instances.partialOrder._
     Invariant[PartialOrder]
     Contravariant[PartialOrder]
     ()

@@ -508,13 +508,6 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
 }
 
 trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with FunSuiteDiscipline with Checkers {
-
-  import cats.instances.either._
-  import cats.instances.string._
-  import cats.instances.int._
-  import cats.instances.unit._
-  import cats.instances.tuple._
-
   implicit def eqV[A: Eq, B: Eq]: Eq[Validated[A, B]] = cats.data.Validated.catsDataEqForValidated
 
   {

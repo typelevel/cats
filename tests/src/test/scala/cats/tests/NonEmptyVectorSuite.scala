@@ -18,8 +18,8 @@ import cats.{
 }
 import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.instances.all._
 import cats.kernel.Semigroup
+import cats.kernel.instances.order.catsKernelOrderingForOrder
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline.{
   AlignTests,

@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Applicative, Eval, Traverse}
-import cats.instances.all._
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.foldable._
 import cats.syntax.functor._

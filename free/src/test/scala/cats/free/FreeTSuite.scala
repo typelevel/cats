@@ -249,7 +249,6 @@ trait FreeTSuiteInstances {
 
   import FreeT._
   import IndexedStateT._
-  import cats.kernel.instances.option._
   import cats.tests.IndexedStateTSuite._
   import SemigroupalTests._
 
