@@ -129,3 +129,7 @@ import simulacrum.typeclass
   override def unorderedSequence[G[_]: CommutativeApplicative, A](fga: F[G[A]]): G[F[A]] =
     sequence(fga)
 }
+
+object Traverse {
+  implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
+}

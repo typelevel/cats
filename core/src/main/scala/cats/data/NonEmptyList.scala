@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.NonEmptyList.ZipNonEmptyList
-import cats.instances.list._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}

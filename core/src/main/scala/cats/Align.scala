@@ -3,6 +3,7 @@ package cats
 import simulacrum.typeclass
 
 import cats.data.Ior
+import scala.collection.immutable.SortedMap
 
 /**
  * `Align` supports zipping together structures with different shapes,
@@ -100,10 +101,18 @@ import cats.data.Ior
     }
 }
 
-object Align {
+object Align extends ScalaVersionSpecificAlignInstances {
   def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] = new Semigroup[F[A]] {
     def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
   }
+
+  implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsAlignForVector: Align[Vector] = cats.instances.vector.catsStdInstancesForVector
+  implicit def catsAlignForMap[K]: Align[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
+  implicit def catsAlignForSortedMap[K: Order]: Align[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
+  implicit def catsAlignForEither[A]: Align[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
 
   private[cats] def alignWithIterator[A, B, C](fa: Iterable[A], fb: Iterable[B])(f: Ior[A, B] => C): Iterator[C] =
     new Iterator[C] {

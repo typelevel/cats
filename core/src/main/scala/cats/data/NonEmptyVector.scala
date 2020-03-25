@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.instances.vector._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
