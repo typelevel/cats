@@ -118,5 +118,5 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * }}}
    */
   def orRaise(other: => E)(implicit F: ApplicativeError[F, E]): F[A] =
-    orElse(F.raiseError(other))
+    adaptErr { case _ => other }
 }
