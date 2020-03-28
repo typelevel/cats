@@ -81,6 +81,23 @@ import cats.data.Ior
       val (oa, ob) = ior.pad
       f(oa, ob)
     }
+
+  /**
+   * Pairs elements of two structures along the union of their shapes, using placeholders for missing values.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> Align[List].zipAll(List(1, 2), List(10, 11, 12), 20, 21)
+   * res0: List[(Int, Int)] = List((1,10), (2,11), (20,12))
+   * }}}
+   */
+  def zipAll[A, B](fa: F[A], fb: F[B], a: A, b: B): F[(A, B)] =
+    alignWith(fa, fb) {
+      case Ior.Left(x)    => (x, b)
+      case Ior.Right(y)   => (a, y)
+      case Ior.Both(x, y) => (x, y)
+    }
 }
 
 object Align {
