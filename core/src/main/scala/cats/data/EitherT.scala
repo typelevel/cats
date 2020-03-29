@@ -742,6 +742,25 @@ object EitherT extends EitherTInstances {
   final def liftK[F[_], A](implicit F: Functor[F]): F ~> EitherT[F, A, *] =
     new (F ~> EitherT[F, A, *]) { def apply[B](fb: F[B]): EitherT[F, A, B] = right(fb) }
 
+  /**
+   * Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.
+   *
+   * {{{
+   * scala> import cats._, data._, implicits._
+   * scala> val a: Option[Int] = None
+   * scala> val b: EitherT[Option, Unit, Int] = EitherT.liftAttemptK[Option, Unit].apply(a)
+   * scala> b.value
+   * res0: Option[Either[Unit, Int]] = Some(Left(()))
+   *
+   * scala> val a2: Option[Int] = Some(42)
+   * scala> val b2: EitherT[Option, Unit, Int] = EitherT.liftAttemptK[Option, Unit].apply(a2)
+   * scala> b2.value
+   * res1: Option[Either[Unit, Int]] = Some(Right(42))
+   * }}}
+   */
+  final def liftAttemptK[F[_], E](implicit F: ApplicativeError[F, E]): F ~> EitherT[F, E, *] =
+    λ[F ~> EitherT[F, E, *]](fa => EitherT(F.attempt(fa)))
+
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
