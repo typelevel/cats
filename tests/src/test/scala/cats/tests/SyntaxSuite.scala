@@ -469,6 +469,8 @@ object SyntaxSuite {
     val fb = mock[F[B]]
     val f = mock[A Ior B => C]
     val f2 = mock[(Option[A], Option[B]) => C]
+    val a = mock[A]
+    val b = mock[B]
 
     val fab = fa.align(fb)
     val fc = fa.alignWith(fb)(f)
@@ -478,6 +480,8 @@ object SyntaxSuite {
 
     implicit val sa: Semigroup[A] = mock[Semigroup[A]]
     val fa2 = fa.alignCombine(fa)
+
+    val zippedAll = fa.zipAll(fb, a, b)
   }
 
   def testNonEmptyList[A, B: Order]: Unit = {
