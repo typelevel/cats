@@ -1,10 +1,10 @@
 package alleycats
 package std
 
-import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
+import alleycats.compat.scalaVersionSpecific._
+import cats.{Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
-import compat.scalaVersionSpecific._
 
 object set extends SetInstances
 
@@ -35,6 +35,14 @@ trait SetInstances {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
+
+      override def map2[A, B, Z](fa: Set[A], fb: Set[B])(f: (A, B) => Z): Set[Z] =
+        if (fb.isEmpty) Set.empty[Z] // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Set[A], fb: Eval[Set[B]])(f: (A, B) => Z): Eval[Set[Z]] =
+        if (fa.isEmpty) Eval.now(Set.empty[Z]) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: (A) => Set[Either[A, B]]): Set[B] = {
         val bldr = Set.newBuilder[B]
@@ -74,9 +82,9 @@ trait SetInstances {
 
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
-        sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>
-          G.map2(buf, f(a))(_ + _)
-        }
+        foldRight[A, G[Set[B]]](sa, Always(G.pure(Set.empty[B]))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)((b, set) => set + b)
+        }.value
       }
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
@@ -123,11 +131,8 @@ trait SetInstances {
       val traverse: Traverse[Set] = alleyCatsSetTraverse
 
       def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
-        fa.foldLeft(G.pure(Set.empty[B])) { (gSet, a) =>
-          G.map2(f(a), gSet) {
-            case (Some(b), set) => set + b
-            case (None, set)    => set
-          }
-        }
+        traverse
+          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
+          .value
     }
 }

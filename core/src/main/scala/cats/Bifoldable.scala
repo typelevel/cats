@@ -32,7 +32,9 @@ import simulacrum.typeclass
   }
 }
 
-object Bifoldable extends cats.instances.NTupleBitraverseInstances
+object Bifoldable extends cats.instances.NTupleBitraverseInstances {
+  implicit def catsBitraverseForEither: Bitraverse[Either] = cats.instances.either.catsStdBitraverseForEither
+}
 
 private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(α, β) => F[G[α, β], G[α, β]]]] {
   implicit def F: Bifoldable[F]

@@ -1,7 +1,8 @@
 package cats
 
-import cats.instances.long._
 import cats.kernel.CommutativeMonoid
+import scala.collection.immutable.{Queue, SortedMap, SortedSet}
+import scala.util.Try
 import simulacrum.{noop, typeclass}
 
 /**
@@ -71,7 +72,10 @@ import simulacrum.{noop, typeclass}
     unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
 }
 
-object UnorderedFoldable extends cats.instances.NTupleUnorderedFoldableInstances {
+object UnorderedFoldable
+    extends ScalaVersionSpecificTraverseInstances
+    with cats.instances.NTupleUnorderedFoldableInstances {
+
   private val orEvalMonoid: CommutativeMonoid[Eval[Boolean]] = new CommutativeMonoid[Eval[Boolean]] {
     val empty: Eval[Boolean] = Eval.False
 
@@ -91,4 +95,21 @@ object UnorderedFoldable extends cats.instances.NTupleUnorderedFoldableInstances
         case false => Eval.False
       }
   }
+
+  implicit def catsNonEmptyTraverseForId: NonEmptyTraverse[Id] = catsInstancesForId
+  implicit def catsTraverseForOption: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsTraverseForList: Traverse[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsTraverseForVector: Traverse[Vector] = cats.instances.vector.catsStdInstancesForVector
+  implicit def catsTraverseForQueue: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+  implicit def catsUnorderedTraverseForSet: UnorderedTraverse[Set] = cats.instances.set.catsStdInstancesForSet
+  implicit def catsFoldableForSortedSet: Foldable[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
+  implicit def catsTraverseForSortedMap[K: Order]: Traverse[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
+
+  implicit def catsUnorderedTraverseForMap[K]: UnorderedTraverse[Map[K, *]] =
+    cats.instances.map.catsStdInstancesForMap[K]
+
+  implicit def catsTraverseForEither[A]: Traverse[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
+
+  implicit def catsTraverseForTry: Traverse[Try] = cats.instances.try_.catsStdInstancesForTry
 }

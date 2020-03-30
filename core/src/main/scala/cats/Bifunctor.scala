@@ -55,7 +55,9 @@ import simulacrum.typeclass
   def leftWiden[A, B, AA >: A](fab: F[A, B]): F[AA, B] = fab.asInstanceOf[F[AA, B]]
 }
 
-object Bifunctor extends cats.instances.NTupleBifunctorInstances
+object Bifunctor extends cats.instances.NTupleBifunctorInstances {
+  implicit def catsBifunctorForEither: Bifunctor[Either] = cats.instances.either.catsStdBitraverseForEither
+}
 
 private[cats] trait ComposedBifunctor[F[_, _], G[_, _]] extends Bifunctor[λ[(A, B) => F[G[A, B], G[A, B]]]] {
   def F: Bifunctor[F]

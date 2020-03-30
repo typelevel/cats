@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.instances.vector._
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -114,6 +113,12 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * Prepend an item to this, producing a new `NonEmptyVector`.
    */
   def prepend[AA >: A](a: AA): NonEmptyVector[AA] = new NonEmptyVector(a +: toVector)
+
+  /**
+   * Prepend a `Vector` to this, producing a new `NonEmptyVector`.
+   */
+  def prependVector[AA >: A](vector: Vector[AA]): NonEmptyVector[AA] =
+    new NonEmptyVector(vector ++ this.toVector)
 
   /**
    * Alias for [[prepend]]
@@ -478,10 +483,12 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def flatMap: FlatMap[NonEmptyVector] = NonEmptyVector.catsDataInstancesForNonEmptyVector
 
       def sequential: ZipNonEmptyVector ~> NonEmptyVector =
-        λ[ZipNonEmptyVector ~> NonEmptyVector](_.value)
+        new (ZipNonEmptyVector ~> NonEmptyVector) { def apply[A](a: ZipNonEmptyVector[A]): NonEmptyVector[A] = a.value }
 
       def parallel: NonEmptyVector ~> ZipNonEmptyVector =
-        λ[NonEmptyVector ~> ZipNonEmptyVector](nev => new ZipNonEmptyVector(nev))
+        new (NonEmptyVector ~> ZipNonEmptyVector) {
+          def apply[A](nev: NonEmptyVector[A]): ZipNonEmptyVector[A] = new ZipNonEmptyVector(nev)
+        }
     }
 
 }

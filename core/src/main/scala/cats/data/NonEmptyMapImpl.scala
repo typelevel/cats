@@ -1,7 +1,6 @@
 package cats
 package data
 
-import cats.instances.sortedMap._
 import cats.kernel._
 import cats.{Always, Apply, Eval, Foldable, Functor, Later, NonEmptyTraverse, Now, SemigroupK, Show}
 

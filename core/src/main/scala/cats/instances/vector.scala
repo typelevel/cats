@@ -26,6 +26,14 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def flatMap[A, B](fa: Vector[A])(f: A => Vector[B]): Vector[B] =
         fa.flatMap(f)
 
+      override def map2[A, B, Z](fa: Vector[A], fb: Vector[B])(f: (A, B) => Z): Vector[Z] =
+        if (fb.isEmpty) Vector.empty // do O(1) work if either is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Vector[A], fb: Eval[Vector[B]])(f: (A, B) => Z): Eval[Vector[Z]] =
+        if (fa.isEmpty) Eval.now(Vector.empty) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
+
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {
         @tailrec def loop(builder: VectorBuilder[B], as: Vector[A]): Vector[B] =
           as match {
@@ -143,10 +151,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       def apply: Apply[ZipVector] = ZipVector.catsDataCommutativeApplyForZipVector
 
       def sequential: ZipVector ~> Vector =
-        λ[ZipVector ~> Vector](_.value)
+        new (ZipVector ~> Vector) { def apply[A](a: ZipVector[A]): Vector[A] = a.value }
 
       def parallel: Vector ~> ZipVector =
-        λ[Vector ~> ZipVector](v => new ZipVector(v))
+        new (Vector ~> ZipVector) { def apply[A](v: Vector[A]): ZipVector[A] = new ZipVector(v) }
     }
 }
 
@@ -166,7 +174,8 @@ private[instances] trait VectorInstancesBinCompat0 {
     override def flattenOption[A](fa: Vector[Option[A]]): Vector[A] = fa.flatten
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
-      fa.foldRight(Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
         .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =

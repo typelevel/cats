@@ -1,5 +1,7 @@
 package cats
 
+import scala.util.control.TailCalls.TailRec
+
 /**
  * Defer is a type class that shows the ability to defer creation
  * inside of the type constructor F[_].
@@ -53,4 +55,8 @@ trait Defer[F[_]] extends Serializable {
 
 object Defer {
   def apply[F[_]](implicit defer: Defer[F]): Defer[F] = defer
+
+  implicit def catsDeferForFunction0: Defer[Function0] = cats.instances.function.catsSddDeferForFunction0
+  implicit def catsDeferForFunction1[A]: Defer[Function1[A, *]] = cats.instances.function.catsStdDeferForFunction1[A]
+  implicit def catsDeferForTailRec: Defer[TailRec] = cats.instances.tailRec.catsInstancesForTailRec
 }

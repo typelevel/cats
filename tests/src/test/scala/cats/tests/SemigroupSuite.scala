@@ -9,14 +9,12 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class SemigroupSuite extends AnyFunSuiteLike with Matchers with ScalaCheckDrivenPropertyChecks {
   {
-    import cats.implicits._
     Invariant[Semigroup]
     Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]
   }
 
   {
-    import cats.instances.invariant._
     Invariant[Semigroup]
     Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]

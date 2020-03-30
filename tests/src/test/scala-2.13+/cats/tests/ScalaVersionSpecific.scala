@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Eval, Foldable, Id, Now}
 import cats.data.NonEmptyLazyList
-import cats.instances.all._
 import cats.laws.discipline.{NonEmptyParallelTests, ParallelTests}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._

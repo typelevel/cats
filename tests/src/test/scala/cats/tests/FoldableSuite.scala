@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Eval, Foldable, Id, Now}
 import cats.data.{Const, EitherK, IdT, Ior, Nested, NonEmptyList, NonEmptyStream, NonEmptyVector, OneAnd, Validated}
-import cats.instances.all._
+import cats.instances.order._
 import cats.kernel.{Eq, Monoid}
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.arbitrary._

@@ -1,7 +1,6 @@
 package cats
 package data
 
-import instances.list.catsKernelStdEqForList
 import kernel.compat.scalaVersionSpecific._
 
 class ZipList[A](val value: List[A]) extends AnyVal
