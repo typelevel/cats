@@ -7,6 +7,7 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -31,6 +32,8 @@ class QueueSuite extends CatsSuite {
 
   checkAll("Queue[Int]", TraverseFilterTests[Queue].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Queue]", SerializableTests.serializable(TraverseFilter[Queue]))
+
+  checkAll("Queue[Int]", ShortCircuitingTests[Queue].traverseFilter[Int])
 
   test("show") {
     Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")

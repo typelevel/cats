@@ -9,12 +9,14 @@ import cats.laws.discipline.{
   MonoidKTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import cats.syntax.show._
+
 import scala.collection.immutable.SortedMap
 
 class SortedMapSuite extends CatsSuite {
@@ -35,6 +37,8 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("SortedMap[Int, Int]", AlignTests[SortedMap[Int, *]].align[Int, Int, Int, Int])
   checkAll("Align[SortedMap[Int, *]]", SerializableTests.serializable(Align[SortedMap[Int, *]]))
+
+  checkAll("SortedMap[Int, *]", ShortCircuitingTests[SortedMap[Int, *]].traverseFilter[Int])
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: SortedMap[Int, String]) =>

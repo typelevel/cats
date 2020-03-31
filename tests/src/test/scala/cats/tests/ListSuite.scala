@@ -10,6 +10,7 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -40,6 +41,8 @@ class ListSuite extends CatsSuite {
 
   checkAll("List[Int]", AlignTests[List].align[Int, Int, Int, Int])
   checkAll("Align[List]", SerializableTests.serializable(Align[List]))
+
+  checkAll("List[Int]", ShortCircuitingTests[List].traverseFilter[Int])
 
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
