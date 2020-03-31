@@ -177,8 +177,9 @@ private object QueueInstances {
         .value
 
     override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
-      fa.foldRight(Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
-          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, queue) => if (b) x +: queue else queue)
         )
         .value
   }

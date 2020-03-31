@@ -179,8 +179,9 @@ private[instances] trait VectorInstancesBinCompat0 {
         .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
-      fa.foldRight(Eval.now(G.pure(Vector.empty[A])))((x, xse) =>
-          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, vector) => if (b) x +: vector else vector)
         )
         .value
   }
