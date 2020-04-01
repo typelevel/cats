@@ -3,7 +3,6 @@ package cats.tests
 import cats.{Align, Eval, Foldable, Now, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap}
 import cats.kernel.laws.discipline.{SerializableTests => _, _}
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.syntax.foldable._

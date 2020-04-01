@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -375,7 +374,6 @@ final class EitherInstancesSuite extends AnyFunSuiteLike {
 
   test("parallel instance in cats.instances.either") {
     import cats.instances.either._
-    import cats.instances.string._
     import cats.syntax.parallel._
 
     def either: Either[String, Int] = Left("Test")

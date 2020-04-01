@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet}
-import cats.instances.all._
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{

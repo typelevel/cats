@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.{Const, NonEmptyList}
-import cats.instances.all._
 import cats.kernel.Semigroup
 import cats.kernel.laws.discipline.{
   EqTests,

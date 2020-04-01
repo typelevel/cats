@@ -13,7 +13,6 @@ import cats.{
 }
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, Validated, ValidatedNel}
 import cats.data.Validated.{Invalid, Valid}
-import cats.instances.all._
 import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._

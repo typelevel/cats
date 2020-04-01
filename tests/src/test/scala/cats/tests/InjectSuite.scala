@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Inject
-import cats.instances.all._
 import cats.laws.discipline.InjectTests
 
 class InjectSuite extends CatsSuite {

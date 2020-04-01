@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
-import cats.instances._
 import cats.kernel._
 import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, GroupTests, _}
 import cats.laws.discipline.{
@@ -19,15 +18,7 @@ import cats.syntax.order._
 import org.scalacheck.{Arbitrary, Gen}
 
 class AlgebraInvariantSuite
-    extends CatsSuite
-    with AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
-    with AllInstancesBinCompat4
-    with AllInstancesBinCompat5
-    with AllInstancesBinCompat6 {
+    extends CatsSuite {
   // working around https://github.com/typelevel/cats/issues/2701
   implicit private val eqSetBooleanTuple: Eq[(Set[Boolean], Set[Boolean])] = Eq.fromUniversalEquals
   implicit private val eqSetBooleanBooleanTuple: Eq[(Set[Boolean], Boolean)] = Eq.fromUniversalEquals

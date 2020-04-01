@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.arrow._
 import cats.data.{Kleisli, Op}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
