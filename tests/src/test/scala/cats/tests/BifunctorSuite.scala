@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Bifunctor, Functor}
-import cats.instances.all._
 import cats.laws.discipline.{BifunctorTests, FunctorTests, SerializableTests}
 
 class BifunctorSuite extends CatsSuite {

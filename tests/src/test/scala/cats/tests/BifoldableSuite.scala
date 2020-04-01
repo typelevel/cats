@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Bifoldable
-import cats.instances.all._
 import cats.laws.discipline.{BifoldableTests, SerializableTests}
 import cats.syntax.either._
 

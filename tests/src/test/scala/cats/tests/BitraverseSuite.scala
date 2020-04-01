@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Bitraverse
-import cats.instances.all._
 import cats.laws.discipline.{BitraverseTests, SerializableTests}
 
 class BitraverseSuite extends CatsSuite {

@@ -4,7 +4,6 @@ import cats.{Bifoldable, Bifunctor, Bitraverse, Foldable, Functor, Traverse}
 import cats.arrow.Profunctor
 import cats.data.Binested
 import cats.kernel.Eq
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._

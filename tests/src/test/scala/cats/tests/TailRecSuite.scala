@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Defer, Monad}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{DeferTests, MonadTests, SerializableTests}
 import scala.util.control.TailCalls.{done, tailcall, TailRec}

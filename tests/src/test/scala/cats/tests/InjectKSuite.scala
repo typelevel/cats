@@ -3,7 +3,6 @@ package cats.tests
 import cats.{:<:, Functor, InjectK}
 import cats.data.EitherK
 import cats.kernel.Eq
-import cats.instances.all._
 import cats.laws.discipline.InjectKTests
 import org.scalacheck._
 

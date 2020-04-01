@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Applicative, Apply, CoflatMap}
 import cats.data.{Const, Validated}
-import cats.instances.all._
 import cats.kernel.Monoid
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._

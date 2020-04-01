@@ -14,7 +14,6 @@ import cats.{
   Semigroupal
 }
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
-import cats.instances.all._
 import cats.kernel._
 import cats.kernel.laws.HashLaws
 import cats.kernel.laws.discipline.{

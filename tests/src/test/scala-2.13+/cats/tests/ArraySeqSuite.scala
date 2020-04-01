@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, MonoidK, Traverse, TraverseFilter}
-import cats.instances.all._
 import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{

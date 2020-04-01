@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.Comonad
 import cats.data.{RepresentableStore, Store}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, SerializableTests}
 import cats.laws.discipline.arbitrary._

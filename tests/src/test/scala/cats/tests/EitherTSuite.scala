@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.{EitherT, State}
-import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -90,7 +89,7 @@ class EitherTSuite extends CatsSuite {
     implicit val eq2: Eq[EitherT[EitherT[Option, String, *], Unit, String]] =
       EitherT.catsDataEqForEitherT[EitherT[Option, String, *], Unit, String](eq1)
     implicit val me: MonadError[EitherT[Option, String, *], Unit] =
-      EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](catsStdInstancesForOption)
+      EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String](cats.instances.option.catsStdInstancesForOption)
 
     Functor[EitherT[Option, String, *]]
     Applicative[EitherT[Option, String, *]]

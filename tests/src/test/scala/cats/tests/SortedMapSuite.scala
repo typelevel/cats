@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Align, FlatMap, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
-import cats.instances.all._
 import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{

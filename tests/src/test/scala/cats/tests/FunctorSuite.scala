@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Functor
-import cats.instances.all._
 import cats.syntax.functor._
 
 class FunctorSuite extends CatsSuite {

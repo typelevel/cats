@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Bimonad, Distributive, Eq, Eval, Id, Monad, Representable}
 import cats.data.Kleisli
-import cats.instances.all._
 import cats.kernel.Monoid
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
