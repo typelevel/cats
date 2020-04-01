@@ -236,6 +236,8 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.function.catsKernelMonoidForFunction0[A]
   implicit def catsKernelMonoidForFunction1[A, B: Monoid]: Monoid[A => B] =
     cats.kernel.instances.function.catsKernelMonoidForFunction1[A, B]
+  implicit def catsKernelMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
+    cats.kernel.instances.map.catsKernelStdMonoidForMap[K, V]
   implicit def catsKernelMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap[K, V]
   implicit def catsKernelMonoidForEither[A, B: Monoid]: Monoid[Either[A, B]] =
