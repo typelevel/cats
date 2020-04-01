@@ -1,3 +1,113 @@
+## Version 2.2.0-M1
+
+_2020 March 31_
+
+### 3 source breaking changes
+
+* [#3043](https://github.com/typelevel/cats/pull/3043) Move standard library type class instances into implicit scope  by @travisbrown
+* [#3241](https://github.com/typelevel/cats/pull/3241) Reimplemented MonadError[FreeT[...]] to be correct  by @djspiewak
+* [#3361](https://github.com/typelevel/cats/pull/3361) Restrict attemptNarrow to subtypes of Throwable  by @travisbrown
+
+
+### 2 bug fixes
+
+* [#3306](https://github.com/typelevel/cats/pull/3306) Make cats.syntax.flatMap include untilDefinedM  by @travisbrown
+* [#3305](https://github.com/typelevel/cats/pull/3305) Add cats.syntax.hash  by @travisbrown
+
+
+### 31 API/feature enhancements
+
+* [#3321](https://github.com/typelevel/cats/pull/3321) Reinstate @johnynek's intercalate optimization from #3279  by @travisbrown
+* [#3374](https://github.com/typelevel/cats/pull/3374) Add EitherT.liftAttemptK  by @kubukoz
+* [#3168](https://github.com/typelevel/cats/pull/3168) Use `getOrElse` in `NonEmptyList#last`  by @PeterPerhac
+* [#2689](https://github.com/typelevel/cats/pull/2689) Add `orElseRaise` syntax for `ApplicativeError`  by @kubukoz
+* [#3372](https://github.com/typelevel/cats/pull/3372) Add zipAll to Align typeclass  by @dantb
+* [#3328](https://github.com/typelevel/cats/pull/3328) Fix short circuiting behaviour in `traverse` and `traverseFilter`  by @gagandeepkalra
+* [#3362](https://github.com/typelevel/cats/pull/3362) Prepend a Vector to a NonEmptyVector  by @ssanj 
+* [#3361](https://github.com/typelevel/cats/pull/3361) Restrict attemptNarrow to subtypes of Throwable  by @travisbrown
+* [#3346](https://github.com/typelevel/cats/pull/3346) Add Either.unit, use in Applicative[Either[A, ?]]  by @rossabaker
+* [#3323](https://github.com/typelevel/cats/pull/3323) Re-encode relationships to avoid implicit conversion functions  by @travisbrown
+* [#3316](https://github.com/typelevel/cats/pull/3316) Add semiflatTap and leftSemiflatTap functions to EitherT  by @matwojcik
+* [#3324](https://github.com/typelevel/cats/pull/3324) Use ArraySeq.untagged instead of ClassTag[Nothing]  by @travisbrown
+* [#3235](https://github.com/typelevel/cats/pull/3235) Added flatMapK to FreeT  by @djspiewak
+* [#3279](https://github.com/typelevel/cats/pull/3279) Add Semigroup and Monoid combinators reverse and intercalate  by @johnynek
+* [#3303](https://github.com/typelevel/cats/pull/3303) Use unlimited MathContext for BigDecimal arithmetic  by @travisbrown
+* [#3307](https://github.com/typelevel/cats/pull/3307) Clean up some NonEmpty stuff  by @travisbrown
+* [#3283](https://github.com/typelevel/cats/pull/3283) Optimize traverse  by @travisbrown
+* [#3294](https://github.com/typelevel/cats/pull/3294) Add traverseEither  by @LukaJCB
+* [#3302](https://github.com/typelevel/cats/pull/3302) ArraySeq instance follow-up  by @travisbrown
+* [#3278](https://github.com/typelevel/cats/pull/3278) Issue 2304: Missing functions for RWST  by @barambani
+* [#3273](https://github.com/typelevel/cats/pull/3273) Adding instances for ArraySeq  by @BalmungSan
+* [#3274](https://github.com/typelevel/cats/pull/3274) Add ContT.liftF and ContT.liftK  by @lavrov
+* [#3263](https://github.com/typelevel/cats/pull/3263) Avoid syntax methods in implementations in cats-core  by @travisbrown
+* [#3261](https://github.com/typelevel/cats/pull/3261) Fix compiler warnings in tests  by @travisbrown
+* [#3255](https://github.com/typelevel/cats/pull/3255) More Dotty compat stuff in tests  by @travisbrown
+* [#3254](https://github.com/typelevel/cats/pull/3254) Use dotty-friendly kind-projector placeholder  by @travisbrown
+* [#3253](https://github.com/typelevel/cats/pull/3253) Some Dotty compat for tests  by @travisbrown
+* [#3239](https://github.com/typelevel/cats/pull/3239) add List#scanLeftNel and List#scanRightNel  by @enzief
+* [#3237](https://github.com/typelevel/cats/pull/3237) Follow up to #3233  by @strong-zero
+* [#3233](https://github.com/typelevel/cats/pull/3233) Add when and unless to OptionT  by @strong-zero
+* [#3230](https://github.com/typelevel/cats/pull/3230) Add two casts to satisfy Dotty  by @travisbrown
+* [#3225](https://github.com/typelevel/cats/pull/3225) Publicize Free#foldStep  by @djspiewak
+
+
+### 11 documentation improvements
+
+* [#3301](https://github.com/typelevel/cats/pull/3301) Cats package: add comprehensive scaladoc.  by @diesalbla
+* [#3364](https://github.com/typelevel/cats/pull/3364) Fix typo  by @MaT1g3R
+* [#3314](https://github.com/typelevel/cats/pull/3314) Fix doc examples for Ior.map  by @ybasket
+* [#3290](https://github.com/typelevel/cats/pull/3290) Update readme with latest cats-core version  by @leusgalvan
+* [#3285](https://github.com/typelevel/cats/pull/3285) Remove machinist from colophon microsite page  by @markusa380
+* [#3272](https://github.com/typelevel/cats/pull/3272) Fix typo on Chain docs  by @LLCampos
+* [#3265](https://github.com/typelevel/cats/pull/3265) Copyright and license  by @travisbrown
+* [#3229](https://github.com/typelevel/cats/pull/3229) fixes #3206 remove references to waffle.io  by @ssikdar1
+* [#3226](https://github.com/typelevel/cats/pull/3226) Update kind-projector and simulacrum url  by @xuwei-k
+* [#3224](https://github.com/typelevel/cats/pull/3224) Add a Developer-Comment regarding an unused parameter.  by @diesalbla
+* [#3221](https://github.com/typelevel/cats/pull/3221) Fix typos  by @bwignall
+
+
+### 38 build improvements
+
+* [#3193](https://github.com/typelevel/cats/pull/3193) Expand kind-projector's syntax for polymorphic function values  by @travisbrown
+* [#3365](https://github.com/typelevel/cats/pull/3365) Update sbt-microsites to 1.1.5  by @scala-steward
+* [#3371](https://github.com/typelevel/cats/pull/3371) Update sbt-sonatype to 3.9.2  by @scala-steward
+* [#3325](https://github.com/typelevel/cats/pull/3325) Specific commutativity and associativity tests for BigDecimal  by @travisbrown
+* [#3342](https://github.com/typelevel/cats/pull/3342) Fix `Foldable` doctest to use `separateFoldable` instead of `separate`  by @gagandeepkalra
+* [#3352](https://github.com/typelevel/cats/pull/3352) Update sbt-microsites to 1.1.3  by @scala-steward
+* [#3354](https://github.com/typelevel/cats/pull/3354) Change review policy for PRs that don't target master  by @travisbrown
+* [#3319](https://github.com/typelevel/cats/pull/3319) Update changelog  by @travisbrown
+* [#3337](https://github.com/typelevel/cats/pull/3337) Update Scalafmt to 2.4.2  by @travisbrown
+* [#3331](https://github.com/typelevel/cats/pull/3331) Update sbt-mima-plugin to 0.7.0  by @scala-steward
+* [#3326](https://github.com/typelevel/cats/pull/3326) Update snakeyaml to 1.26  by @scala-steward
+* [#3344](https://github.com/typelevel/cats/pull/3344) Update sbt-scalafmt to 2.3.2  by @scala-steward
+* [#3350](https://github.com/typelevel/cats/pull/3350) Add Align lawful tests for Option instance  by @gagandeepkalra
+* [#3304](https://github.com/typelevel/cats/pull/3304) Replace instance trait inheritance with imports in tests  by @travisbrown
+* [#3322](https://github.com/typelevel/cats/pull/3322) Add parentheses for Dotty  by @travisbrown
+* [#3311](https://github.com/typelevel/cats/pull/3311) Update sbt-microsites to 1.1.2  by @scala-steward
+* [#3310](https://github.com/typelevel/cats/pull/3310) Update discipline-scalatest  by @travisbrown
+* [#3308](https://github.com/typelevel/cats/pull/3308) Update scalacheck-1-14 to 3.1.1.0  by @scala-steward
+* [#3291](https://github.com/typelevel/cats/pull/3291) Update sbt-scalajs-crossproject to 1.0.0  by @scala-steward
+* [#3284](https://github.com/typelevel/cats/pull/3284) Update sbt to 1.3.8  by @scala-steward
+* [#3288](https://github.com/typelevel/cats/pull/3288) Update sbt-mima-plugin to 0.6.4  by @scala-steward
+* [#3282](https://github.com/typelevel/cats/pull/3282) Update sbt-mima-plugin to 0.6.3  by @scala-steward
+* [#3276](https://github.com/typelevel/cats/pull/3276) Update sbt-unidoc to 0.4.3  by @scala-steward
+* [#3267](https://github.com/typelevel/cats/pull/3267) Update sbt-scalajs to 0.6.32  by @scala-steward
+* [#3268](https://github.com/typelevel/cats/pull/3268) Update sbt-doctest with ScalaTest 3.1.0 and Dotty fixes  by @travisbrown
+* [#3266](https://github.com/typelevel/cats/pull/3266) Update discipline-scalatest to 1.0.0  by @scala-steward
+* [#3277](https://github.com/typelevel/cats/pull/3277) Update sbt-scalafmt to 2.3.1  by @scala-steward
+* [#3246](https://github.com/typelevel/cats/pull/3246) Minor changes for Scala.js 1.0 compatibility  by @travisbrown
+* [#3259](https://github.com/typelevel/cats/pull/3259) Update discipline-scalatest  by @travisbrown
+* [#3258](https://github.com/typelevel/cats/pull/3258) Update sbt-release to 1.0.13  by @scala-steward
+* [#3257](https://github.com/typelevel/cats/pull/3257) Update sbt to 1.3.7  by @scala-steward
+* [#3251](https://github.com/typelevel/cats/pull/3251) Update sbt-microsites to 1.1.0  by @scala-steward
+* [#3250](https://github.com/typelevel/cats/pull/3250) Avoid ScalaTest 3.1.0 deprecations  by @travisbrown
+* [#3244](https://github.com/typelevel/cats/pull/3244) Update discipline-scalatest and scalatestplus dependency  by @travisbrown
+* [#3243](https://github.com/typelevel/cats/pull/3243) Remove unused Scala Native sbt plugin  by @travisbrown
+* [#3232](https://github.com/typelevel/cats/pull/3232) Update Scalafmt to 2.3.2  by @travisbrown
+* [#3231](https://github.com/typelevel/cats/pull/3231) Drop cats-macros project  by @travisbrown
+* [#3227](https://github.com/typelevel/cats/pull/3227) Update sbt to 1.3.6  by @scala-steward
+
+
 ## Version 2.1.1
 
 _2020 February 25_
