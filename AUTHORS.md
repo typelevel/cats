@@ -71,6 +71,7 @@ possible:
  * Daniel Spiewak
  * Daniel Urban
  * Daniela Sfregola
+ * dantb
  * Dave Gurnell
  * Dave Rostron
  * David Allsopp
@@ -87,6 +88,7 @@ possible:
  * Earl St Sauver
  * Edd Steel
  * Endre Galaczi
+ * enzief
  * Eric Torreborre
  * ericaovo
  * Erik LaBianca
@@ -156,11 +158,14 @@ possible:
  * kellen
  * Kenji Yoshida
  * Lars Hupel
+ * Leandro
  * Leandro Bolivar
  * Leif Battermann
  * Lionel Parreaux
  * Long Cao
  * Luis Angel Vicente Sanchez
+ * Luís Campos
+ * Luis Miguel Mejía Suárez
  * Luis Sanchez
  * Luka Jacobowitz
  * Lukáš Voda
@@ -171,9 +176,12 @@ possible:
  * Marco Battaglia
  * Mariot Chauvin
  * Mark de Jong
+ * Markus Appel
  * Markus Hauck
  * Martijn Hoekstra
+ * MaT1g3R
  * Mateusz Sokół
+ * Mateusz Wójcik
  * mathhun
  * Matt Martin
  * Matthias Lüneberg
@@ -187,6 +195,7 @@ possible:
  * Miklós Martin
  * Miles Sabin
  * Mirco Dotta
+ * mooi
  * msinton
  * nigredo-tori
  * Nikolay Maksimenko
@@ -230,8 +239,10 @@ possible:
  * Rutvik Patel
  * Ryan Case
  * Sam Ritchie
+ * Sanjiv Sahayam
  * Sarunas Valaskevicius
  * Sergei Dolgov
+ * Shan Sikdar
  * Sho Kohara
  * Shohei Kamimori
  * Shunsuke Otani
@@ -257,10 +268,12 @@ possible:
  * Tya
  * Valy Diarrassouba
  * Vasileios Lampridis
+ * Vasilis Nicolaou
  * Vasiliy Bondarenko
  * ven
  * Viktor Dychko
  * Viktor Lövgren
+ * Vitaly Lavrov
  * Vladimir Samoylov
  * Vladislav Gutov
  * Wedens
@@ -268,6 +281,7 @@ possible:
  * Xavier Fernández Salas
  * XUWE
  * 杨博 (Yang Bo)
+ * Yannick Heiber
  * Yosef Fertel
  * Yilin Wei
  * Yuriy Badalyantc
