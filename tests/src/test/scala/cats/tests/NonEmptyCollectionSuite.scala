@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.data.NonEmptyCollection
-import cats.instances.all._
 import org.scalacheck.Arbitrary
 
 abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollection[x, U, NE]](

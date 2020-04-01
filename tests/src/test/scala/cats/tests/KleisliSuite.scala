@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.arrow._
 import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
-import cats.instances.all._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

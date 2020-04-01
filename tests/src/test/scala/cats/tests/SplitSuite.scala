@@ -1,6 +1,5 @@
 package cats.tests
 
-import cats.instances.all._
 import cats.syntax.arrow._
 
 class SplitSuite extends CatsSuite {

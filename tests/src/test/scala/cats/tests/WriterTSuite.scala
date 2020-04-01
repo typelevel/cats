@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
-import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

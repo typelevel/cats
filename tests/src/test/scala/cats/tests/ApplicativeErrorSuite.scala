@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.ApplicativeError
 import cats.data.EitherT
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.syntax.applicativeError._
 import cats.syntax.either._

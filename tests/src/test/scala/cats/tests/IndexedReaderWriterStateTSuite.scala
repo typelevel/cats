@@ -3,7 +3,6 @@ package cats.tests
 import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-import cats.instances.all._
 import cats.kernel.{Eq, Monoid}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._

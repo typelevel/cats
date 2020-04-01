@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.data._
 import cats.data.NonEmptyList.ZipNonEmptyList
-import cats.instances.all._
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.laws.discipline.{ApplicativeErrorTests, MiniInt, NonEmptyParallelTests, ParallelTests, SerializableTests}
 import cats.laws.discipline.eq._

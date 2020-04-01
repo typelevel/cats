@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.EitherK
-import cats.instances.all._
 import cats.kernel.laws.discipline.EqTests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

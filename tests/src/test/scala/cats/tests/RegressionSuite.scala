@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Apply, Monad, MonadError, StackSafeMonad, Traverse}
 import cats.data.{Const, NonEmptyList, StateT}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.syntax.applicativeError._

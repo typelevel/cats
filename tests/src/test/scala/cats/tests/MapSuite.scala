@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
 import cats.arrow.Compose
-import cats.instances.all._
 import cats.kernel.instances.StaticMethods.wrapMutableMap
 import cats.laws.discipline.{
   AlignTests,

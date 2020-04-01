@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Eval, Now, Reducible, SemigroupK, Show}
 import cats.data.NonEmptySet
-import cats.instances.all._
 import cats.kernel.{Eq, Order, PartialOrder, Semilattice}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, SemilatticeTests}
 import cats.laws.discipline._

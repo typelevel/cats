@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{SemigroupK, Semigroupal, Show}
-import cats.instances.all._
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{BoundedSemilatticeTests, HashTests, OrderTests, PartialOrderTests}
 import cats.kernel.{BoundedSemilattice, Semilattice}

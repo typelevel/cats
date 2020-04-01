@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Invariant, InvariantSemigroupal}
-import cats.instances.all._
 import cats.kernel.Monoid
 
 class MonoidSuite extends CatsSuite {

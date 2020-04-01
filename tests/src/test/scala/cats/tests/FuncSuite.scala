@@ -3,7 +3,6 @@ package cats.tests
 import cats.{Applicative, Apply, Contravariant, Functor, Semigroupal, Show}
 import cats.data.{AppFunc, Func}
 import cats.data.Func.appFunc
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

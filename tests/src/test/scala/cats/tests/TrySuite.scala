@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{CoflatMap, Eval, Later, Monad, MonadError, Semigroupal, Traverse}
-import cats.instances.all._
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}

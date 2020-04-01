@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Id, Monad}
 import cats.data.{IndexedStateT, StateT}
-import cats.instances.all._
 import cats.syntax.apply._
 import cats.syntax.monad._
 import org.scalacheck.Gen

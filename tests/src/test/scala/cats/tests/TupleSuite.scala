@@ -13,7 +13,6 @@ import cats.{
   Traverse
 }
 import cats.data.NonEmptyList
-import cats.instances.all._
 import cats.kernel.{Eq, Order}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

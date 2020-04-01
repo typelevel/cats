@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal}
 import cats.data.Const
-import cats.instances.all._
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniInt}

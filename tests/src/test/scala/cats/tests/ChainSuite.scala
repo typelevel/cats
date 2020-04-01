@@ -4,7 +4,6 @@ import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilte
 import cats.data.Chain
 import cats.data.Chain.==:
 import cats.data.Chain.`:==`
-import cats.instances.all._
 import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
 import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{

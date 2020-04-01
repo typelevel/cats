@@ -1,6 +1,5 @@
 package cats.tests
 
-import cats.instances.all._
 import cats.kernel.Group
 import cats.kernel.laws.discipline.GroupTests
 

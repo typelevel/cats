@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.data.{AppFunc, Const}
 import cats.data.Func.appFunc
-import cats.instances.all._
 
 /*
  * This an example of applicative function composition.
