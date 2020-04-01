@@ -200,7 +200,9 @@ private[instances] trait StreamInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Stream[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Stream[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Stream.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ #:: o)))
+        .foldRight(fa, Eval.now(G.pure(Stream.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ #:: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Stream[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Stream[A]] =
