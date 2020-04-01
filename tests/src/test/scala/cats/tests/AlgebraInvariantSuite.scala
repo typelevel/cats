@@ -17,8 +17,7 @@ import cats.syntax.invariant._
 import cats.syntax.order._
 import org.scalacheck.{Arbitrary, Gen}
 
-class AlgebraInvariantSuite
-    extends CatsSuite {
+class AlgebraInvariantSuite extends CatsSuite {
   // working around https://github.com/typelevel/cats/issues/2701
   implicit private val eqSetBooleanTuple: Eq[(Set[Boolean], Set[Boolean])] = Eq.fromUniversalEquals
   implicit private val eqSetBooleanBooleanTuple: Eq[(Set[Boolean], Boolean)] = Eq.fromUniversalEquals
