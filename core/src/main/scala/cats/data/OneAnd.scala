@@ -262,9 +262,20 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
     F2: Alternative[F]
   ): NonEmptyTraverse[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] {
-      def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] =
-        fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
-          .reduceLeft(((acc, a) => G.map2(acc, a)((x: OneAnd[F, B], y: OneAnd[F, B]) => x.combine(y))))
+      def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] = {
+        import syntax.foldable._
+
+        def loop(head: A, tail: Iterator[A]): Eval[G[OneAnd[F, B]]] =
+          if (tail.hasNext) {
+            val h = tail.next()
+            val t = tail
+            G.map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => OneAnd(b, acc.unwrap))
+          } else {
+            Eval.now(G.map(f(head))(OneAnd(_, F2.empty[B])))
+          }
+
+        loop(fa.head, fa.tail.toIterable.iterator).value
+      }
 
       override def traverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Applicative[G]): G[OneAnd[F, B]] =
         G.map2Eval(f(fa.head), Always(F.traverse(fa.tail)(f)))(OneAnd(_, _)).value

@@ -473,16 +473,14 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
 
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] =
-        Foldable[LazyList]
-          .reduceRightToOption[A, G[LazyList[B]]](fa.tail)(a => Apply[G].map(f(a))(LazyList.apply(_))) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] = {
+        def loop(head: A, tail: LazyList[A]): Eval[G[NonEmptyLazyList[B]]] =
+          tail.headOption.fold(Eval.now(Apply[G].map(f(head))(NonEmptyLazyList(_)))) { h =>
+            Apply[G].map2Eval(f(head), Eval.defer(loop(h, tail.tail)))((b, acc) => b +: acc)
           }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(h => create(LazyList(h)))
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(LazyList(h) ++ t))
-          }
-          .value
+
+        loop(fa.head, fa.tail).value
+      }
 
       def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
