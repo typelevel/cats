@@ -5,8 +5,9 @@ import java.util.concurrent.atomic.AtomicLong
 import cats.instances.option._
 import cats.syntax.foldable._
 import cats.syntax.traverse._
+import cats.syntax.nonEmptyTraverse._
 import cats.syntax.traverseFilter._
-import cats.{Applicative, Foldable, MonoidK, Traverse, TraverseFilter}
+import cats.{Applicative, Foldable, MonoidK, NonEmptyTraverse, Traverse, TraverseFilter}
 
 trait ShortCircuitingLaws[F[_]] {
 
@@ -43,6 +44,24 @@ trait ShortCircuitingLaws[F[_]] {
     val f = new RestrictedFunction((i: A) => Some(i), maxInvocationsAllowed, None)
 
     fa.traverse(f)(nonShortCircuitingApplicative)
+    f.invocations.get <-> size
+  }
+
+  def nonEmptyTraverseShortCircuits[A](fa: F[A])(implicit F: NonEmptyTraverse[F]): IsEq[Long] = {
+    val size = fa.size
+    val maxInvocationsAllowed = size / 2
+    val f = new RestrictedFunction((i: A) => Some(i), maxInvocationsAllowed, None)
+
+    fa.nonEmptyTraverse(f)
+    f.invocations.get <-> (maxInvocationsAllowed + 1).min(size)
+  }
+
+  def nonEmptyTraverseWontShortCircuit[A](fa: F[A])(implicit F: NonEmptyTraverse[F]): IsEq[Long] = {
+    val size = fa.size
+    val maxInvocationsAllowed = size / 2
+    val f = new RestrictedFunction((i: A) => Some(i), maxInvocationsAllowed, None)
+
+    fa.nonEmptyTraverse(f)(nonShortCircuitingApplicative)
     f.invocations.get <-> size
   }
 
