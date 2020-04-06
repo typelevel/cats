@@ -2,7 +2,9 @@ package cats.tests
 
 import cats.{Align, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
 import cats.arrow.Compose
+import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.instances.StaticMethods.wrapMutableMap
+import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
   AlignTests,
   ComposeTests,
@@ -39,6 +41,12 @@ class MapSuite extends CatsSuite {
 
   checkAll("Map[Int, Int]", AlignTests[Map[Int, *]].align[Int, Int, Int, Int])
   checkAll("Align[Map]", SerializableTests.serializable(Align[Map[Int, *]]))
+
+  checkAll("Hash[Map[Int, String]]", HashTests[Map[Int, String]].hash)
+  checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
+  checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))
+  checkAll("Monoid[Map[String, String]]", MonoidTests[Map[String, String]].monoid)
+  checkAll("Monoid[Map[String, String]]", SerializableTests.serializable(Monoid[Map[String, String]]))
 
   test("show isn't empty and is formatted as expected") {
     forAll { (map: Map[Int, String]) =>
