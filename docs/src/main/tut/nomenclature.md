@@ -52,13 +52,13 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 
 ### FlatMap
 
-| Type          | Method Name |
-| ------------- |---------------|
-| `F[F[A]] => F[A]` | `flatten`  |
-| `F[A] => (A => F[B]) => F[B]` | `flatMap`
-| `F[A] => (A => F[B]) => F[(A,B)]` | `productM`
-| `F[Boolean] => F[A] => F[A] => F[A]` | `ifM`
-| `F[A] => (A => F[B]) => F[A]` | `flatTap`
+| Type          | Method Name | Symbol |
+| ------------- |---------------|---------------|
+| `F[F[A]] => F[A]` | `flatten`  | 
+| `F[A] => (A => F[B]) => F[B]` | `flatMap` | `>>`, `>>=`
+| `F[A] => (A => F[B]) => F[(A,B)]` | `productM` |
+| `F[Boolean] => F[A] => F[A] => F[A]` | `ifM` |
+| `F[A] => (A => F[B]) => F[A]` | `flatTap` |
 
 ### FunctorFilter
 
