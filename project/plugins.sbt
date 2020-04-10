@@ -14,7 +14,7 @@ addSbtPlugin("com.47deg" % "sbt-microsites" % "1.1.5")
 addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.6.13")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion)
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.3")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")
 
 /* Temporarily disabling sbt-hydra, see #2870.
