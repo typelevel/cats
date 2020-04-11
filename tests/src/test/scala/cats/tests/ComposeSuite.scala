@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.Endo
 import cats.arrow.Compose
-import cats.instances.all._
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.laws.discipline.{MiniInt, SemigroupKTests, SerializableTests}
 import cats.laws.discipline.eq.catsLawsEqForFn1Exhaustive

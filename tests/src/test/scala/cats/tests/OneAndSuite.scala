@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Alternative, Applicative, Foldable, Functor, Monad, SemigroupK, Traverse}
 import cats.data.OneAnd
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms

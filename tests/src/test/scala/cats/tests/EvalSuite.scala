@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Bimonad, CommutativeMonad, Eval, Reducible}
-import cats.instances.all._
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{
   BimonadTests,

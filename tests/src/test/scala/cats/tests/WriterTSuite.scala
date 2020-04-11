@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.{Const, EitherT, Validated, Writer, WriterT}
-import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -111,7 +110,7 @@ class WriterTSuite extends CatsSuite {
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (writert: WriterT[List, String, Int]) =>
       writert.mapK(f) should ===(WriterT(f(writert.run)))
     }

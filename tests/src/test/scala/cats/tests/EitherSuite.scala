@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, Validated}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.instances.all._
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -42,7 +41,7 @@ class EitherSuite extends CatsSuite {
   checkAll("Semigroup[Either[ListWrapper[String], Int]]",
            SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
 
-  val partialOrder = catsStdPartialOrderForEither[Int, String]
+  val partialOrder = cats.kernel.instances.either.catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
   val monad = implicitly[Monad[Either[Int, *]]]
   val show = implicitly[Show[Either[Int, String]]]
@@ -80,7 +79,7 @@ class EitherSuite extends CatsSuite {
   }
 
   test("implicit instances resolve specifically") {
-    val eq = catsStdEqForEither[Int, String]
+    val eq = cats.kernel.instances.either.catsStdEqForEither[Int, String]
     assert(!eq.isInstanceOf[PartialOrder[_]])
     assert(!eq.isInstanceOf[Order[_]])
     assert(!partialOrder.isInstanceOf[Order[_]])
@@ -375,7 +374,6 @@ final class EitherInstancesSuite extends AnyFunSuiteLike {
 
   test("parallel instance in cats.instances.either") {
     import cats.instances.either._
-    import cats.instances.string._
     import cats.syntax.parallel._
 
     def either: Either[String, Int] = Left("Test")

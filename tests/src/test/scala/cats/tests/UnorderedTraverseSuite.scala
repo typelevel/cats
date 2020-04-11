@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Id
-import cats.instances.all._
 import cats.syntax.unorderedTraverse._
 
 class UnorderedTraverseSuite extends CatsSuite {

@@ -1,5 +1,6 @@
 package cats
 
+import scala.collection.immutable.{Queue, SortedMap}
 import simulacrum.typeclass
 
 /**
@@ -73,4 +74,18 @@ trait FunctorFilter[F[_]] extends Serializable {
    */
   def filterNot[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(Some(_).filterNot(f))
+}
+
+object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
+  implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
+    cats.instances.option.catsStdTraverseFilterForOption
+  implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
+  implicit def catsTraverseFilterForVector: TraverseFilter[Vector] =
+    cats.instances.vector.catsStdTraverseFilterForVector
+  implicit def catsFunctorFilterForMap[K: Order]: FunctorFilter[Map[K, *]] =
+    cats.instances.map.catsStdFunctorFilterForMap[K]
+  implicit def catsTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdTraverseFilterForSortedMap[K]
+  implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
+    cats.instances.queue.catsStdTraverseFilterForQueue
 }

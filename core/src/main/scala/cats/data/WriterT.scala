@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.Foldable
-import cats.kernel.instances.tuple._
 import cats.kernel.CommutativeMonoid
 
 final case class WriterT[F[_], L, V](run: F[(L, V)]) {
@@ -339,7 +338,7 @@ object WriterT extends WriterTInstances with WriterTFunctions with WriterTFuncti
    * }}}
    */
   def liftK[F[_], L](implicit monoidL: Monoid[L], F: Applicative[F]): F ~> WriterT[F, L, *] =
-    λ[F ~> WriterT[F, L, *]](WriterT.liftF(_))
+    new (F ~> WriterT[F, L, *]) { def apply[A](a: F[A]): WriterT[F, L, A] = WriterT.liftF(a) }
 
   @deprecated("Use liftF instead", "1.0.0-RC2")
   def lift[F[_], L, V](fv: F[V])(implicit monoidL: Monoid[L], F: Applicative[F]): WriterT[F, L, V] =
@@ -396,10 +395,14 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
     def monad: Monad[WriterT[M, L, *]] = catsDataMonadForWriterT
 
     def sequential: WriterT[P.F, L, *] ~> WriterT[M, L, *] =
-      λ[WriterT[P.F, L, *] ~> WriterT[M, L, *]](wfl => WriterT(P.sequential(wfl.run)))
+      new (WriterT[P.F, L, *] ~> WriterT[M, L, *]) {
+        def apply[A](wfl: WriterT[P.F, L, A]): WriterT[M, L, A] = WriterT(P.sequential(wfl.run))
+      }
 
     def parallel: WriterT[M, L, *] ~> WriterT[P.F, L, *] =
-      λ[WriterT[M, L, *] ~> WriterT[P.F, L, *]](wml => WriterT(P.parallel(wml.run)))
+      new (WriterT[M, L, *] ~> WriterT[P.F, L, *]) {
+        def apply[A](wml: WriterT[M, L, A]): WriterT[P.F, L, A] = WriterT(P.parallel(wml.run))
+      }
   }
 
   implicit def catsDataEqForWriterTId[L: Eq, V: Eq]: Eq[WriterT[Id, L, V]] =

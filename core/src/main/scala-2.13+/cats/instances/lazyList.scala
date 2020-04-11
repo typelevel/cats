@@ -163,7 +163,10 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
     def traverseFilter[G[_], A, B](
       fa: LazyList[A]
     )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(LazyList.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
@@ -182,9 +185,9 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
       def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
 
       def sequential: ZipLazyList ~> LazyList =
-        λ[ZipLazyList ~> LazyList](_.value)
+        new (ZipLazyList ~> LazyList) { def apply[B](zll: ZipLazyList[B]): LazyList[B] = zll.value }
 
       def parallel: LazyList ~> ZipLazyList =
-        λ[LazyList ~> ZipLazyList](v => new ZipLazyList(v))
+        new (LazyList ~> ZipLazyList) { def apply[B](ll: LazyList[B]): ZipLazyList[B] = new ZipLazyList(ll) }
     }
 }

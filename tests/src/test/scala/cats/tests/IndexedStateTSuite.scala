@@ -3,7 +3,6 @@ package cats.tests
 import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.instances.all._
 import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -247,7 +246,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("StateT#mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: StateT[Eval, Long, Int], initial: Long) =>
       state.mapK(f).runA(initial) should ===(state.runA(initial).value)
     }

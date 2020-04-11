@@ -18,8 +18,8 @@ import cats.{
 }
 import cats.data.NonEmptyVector
 import cats.data.NonEmptyVector.ZipNonEmptyVector
-import cats.instances.all._
 import cats.kernel.Semigroup
+import cats.kernel.instances.order.catsKernelOrderingForOrder
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
 import cats.laws.discipline.{
   AlignTests,
@@ -244,6 +244,18 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   test("prepend is consistent with +:") {
     forAll { (nonEmptyVector: NonEmptyVector[Int], i: Int) =>
       nonEmptyVector.prepend(i) should ===(i +: nonEmptyVector)
+    }
+  }
+
+  test("prependVector with a NonEmptyVector is the same as concatNec") {
+    forAll { (nonEmptyVector1: NonEmptyVector[Int], nonEmptyVector2: NonEmptyVector[Int]) =>
+      nonEmptyVector2.prependVector(nonEmptyVector1.toVector) should ===(nonEmptyVector1.concatNev(nonEmptyVector2))
+    }
+  }
+
+  test("prependVector with an empty Vector is the same as the original NonEmptyVector") {
+    forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
+      nonEmptyVector.prependVector(Vector.empty) should ===(nonEmptyVector)
     }
   }
 

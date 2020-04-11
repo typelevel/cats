@@ -3,7 +3,6 @@ package cats.tests
 import cats.{Eval, NonEmptyReducible, Now, Reducible}
 import cats.data.NonEmptyList
 import cats.kernel.Eq
-import cats.instances.all._
 import cats.syntax.either._
 import cats.syntax.foldable._
 import cats.syntax.list._

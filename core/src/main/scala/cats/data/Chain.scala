@@ -774,6 +774,14 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         acc
       }
 
+      override def map2[A, B, Z](fa: Chain[A], fb: Chain[B])(f: (A, B) => Z): Chain[Z] =
+        if (fb.isEmpty) nil // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Chain[A], fb: Eval[Chain[B]])(f: (A, B) => Z): Eval[Chain[Z]] =
+        if (fa.isEmpty) Eval.now(nil) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
+
       override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
 
       def functor: Functor[Chain] = this

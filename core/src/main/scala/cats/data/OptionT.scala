@@ -1,8 +1,6 @@
 package cats
 package data
 
-import cats.instances.option.{catsStdInstancesForOption => optionInstance, catsStdTraverseFilterForOption}
-
 /**
  * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
  * convenient methods for working with this nested structure.
@@ -153,13 +151,13 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     eq.eqv(value, that.value)
 
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
-    G.map(F.compose(optionInstance).traverse(value)(f))(OptionT.apply)
+    G.map(F.compose(Traverse[Option]).traverse(value)(f))(OptionT.apply)
 
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
-    F.compose(optionInstance).foldLeft(value, b)(f)
+    F.compose(Foldable[Option]).foldLeft(value, b)(f)
 
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
-    F.compose(optionInstance).foldRight(value, lb)(f)
+    F.compose(Foldable[Option]).foldRight(value, lb)(f)
 
   /**
    * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
@@ -254,7 +252,7 @@ object OptionT extends OptionTInstances {
    * }}}
    */
   def liftK[F[_]](implicit F: Functor[F]): F ~> OptionT[F, *] =
-    λ[F ~> OptionT[F, *]](OptionT.liftF(_))
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
 
   /**
    * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`.
@@ -274,7 +272,7 @@ object OptionT extends OptionTInstances {
    * Same as `whenF`, but expressed as a FunctionK for use with mapK.
    */
   def whenK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
-    λ[F ~> OptionT[F, *]](OptionT.whenF(cond)(_))
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.whenF(cond)(a) }
 
   /**
    * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`.
@@ -294,7 +292,7 @@ object OptionT extends OptionTInstances {
    * Same as `unlessF`, but expressed as a FunctionK for use with mapK.
    */
   def unlessK[F[_]](cond: Boolean)(implicit F: Applicative[F]): F ~> OptionT[F, *] =
-    λ[F ~> OptionT[F, *]](OptionT.unlessF(cond)(_))
+    new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.unlessF(cond)(a) }
 }
 
 sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
@@ -357,10 +355,14 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
     def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
     def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-      λ[Nested[P.F, Option, *] ~> OptionT[M, *]](nested => OptionT(P.sequential(nested.value)))
+      new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
+        def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
+      }
 
     def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-      λ[OptionT[M, *] ~> Nested[P.F, Option, *]](optT => Nested(P.parallel(optT.value)))
+      new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
+        def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
+      }
   }
 }
 

@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
-import cats.instances.all._
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,

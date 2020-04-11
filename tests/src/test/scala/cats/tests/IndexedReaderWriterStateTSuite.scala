@@ -3,7 +3,6 @@ package cats.tests
 import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-import cats.instances.all._
 import cats.kernel.{Eq, Monoid}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
@@ -317,7 +316,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("ReaderWriterStateT.mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: ReaderWriterStateT[Eval, Long, String, String, Int], env: Long, initial: String) =>
       state.mapK(f).runA(env, initial) should ===(state.runA(env, initial).value)
     }
@@ -481,21 +480,15 @@ class ReaderWriterStateTSuite extends CatsSuite {
 }
 
 object ReaderWriterStateTSuite {
-  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] = {
-    import cats.instances.vector._
-
+  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] =
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
-  }
 
-  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] = {
-    import cats.kernel.instances.unit._
-
+  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] =
     ReaderWriterState { (context, state) =>
       ((), state + i, state + i)
     }
-  }
 
   implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],
                                               SB: Arbitrary[SB],

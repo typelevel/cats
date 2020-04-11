@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.Alternative
-import cats.instances.all._
 
 class AlternativeSuite extends CatsSuite {
   test("unite") {

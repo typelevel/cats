@@ -3,7 +3,6 @@ package cats.tests
 import cats.{Contravariant, ContravariantMonoidal, Monad, Semigroupal}
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
 import cats.data.AndThen
-import cats.instances.all._
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._

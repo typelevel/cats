@@ -1,7 +1,6 @@
 package cats
 
 import scala.collection.mutable
-import cats.instances.either._
 import cats.kernel.CommutativeMonoid
 import simulacrum.{noop, typeclass}
 import Foldable.sentinel
@@ -693,8 +692,6 @@ import Foldable.sentinel
    * }}}
    */
   def partitionEither[A, B, C](fa: F[A])(f: A => Either[B, C])(implicit A: Alternative[F]): (F[B], F[C]) = {
-    import cats.instances.tuple._
-
     implicit val mb: Monoid[F[B]] = A.algebra[B]
     implicit val mc: Monoid[F[C]] = A.algebra[C]
 

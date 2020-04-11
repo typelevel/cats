@@ -1,5 +1,6 @@
 package cats
 
+import scala.collection.immutable.{SortedMap, SortedSet}
 import simulacrum.typeclass
 import cats.data.Ior
 
@@ -84,10 +85,22 @@ import cats.data.Ior
     combineK(F.map(fa)(Left(_)), F.map(fb)(Right(_)))
 }
 
-object SemigroupK {
+object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   def align[F[_]: SemigroupK: Functor]: Align[F] = new Align[F] {
     def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
       SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
     def functor: Functor[F] = Functor[F]
   }
+
+  implicit def catsMonoidKForOption: MonoidK[Option] = cats.instances.option.catsStdInstancesForOption
+  implicit def catsMonoidKForList: MonoidK[List] = cats.instances.list.catsStdInstancesForList
+  implicit def catsMonoidKForVector: MonoidK[Vector] = cats.instances.vector.catsStdInstancesForVector
+  implicit def catsMonoidKForSet: MonoidK[Set] = cats.instances.set.catsStdInstancesForSet
+  implicit def catsMonoidKForMap[K]: MonoidK[Map[K, *]] = cats.instances.map.catsStdMonoidKForMap[K]
+  implicit def catsSemigroupKForEither[A]: SemigroupK[Either[A, *]] =
+    cats.instances.either.catsStdSemigroupKForEither[A]
+  implicit def catsSemigroupKForSortedSet: SemigroupK[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
+  implicit def catsMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
+  implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1
 }

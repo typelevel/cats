@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{~>, Bifunctor, Eval, Foldable, Functor, Id, Monad, MonadError, Traverse}
 import cats.data.{Ior, IorT}
-import cats.instances.all._
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline._
@@ -41,8 +40,6 @@ class IorTSuite extends CatsSuite {
   }
 
   {
-    implicit val F: MonadError[Option, Unit] = catsStdInstancesForOption
-
     checkAll("IorT[Option, String, String]",
              MonadErrorTests[IorT[Option, String, *], Unit].monadError[String, String, String])
     checkAll("MonadError[IorT[Option, *, *]]",
@@ -200,7 +197,7 @@ class IorTSuite extends CatsSuite {
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (iort: IorT[List, String, Int]) =>
       iort.mapK(f) should ===(IorT(f(iort.value)))
     }

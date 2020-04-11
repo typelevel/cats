@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data.{Const, IdT, NonEmptyList}
-import cats.instances.all._
 import cats.kernel.laws.discipline.{EqTests, OrderTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
@@ -108,7 +107,7 @@ class IdTSuite extends CatsSuite {
   }
 
   test("mapK consistent with f(value)+pure") {
-    val f: List ~> Option = λ[List ~> Option](_.headOption)
+    val f: List ~> Option = new (List ~> Option) { def apply[A](a: List[A]): Option[A] = a.headOption }
     forAll { (idT: IdT[List, Int]) =>
       idT.mapK(f) should ===(IdT(f(idT.value)))
     }

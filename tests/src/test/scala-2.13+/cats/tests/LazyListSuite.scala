@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.ZipLazyList
-import cats.instances.all._
 import cats.laws.discipline.{
   AlignTests,
   AlternativeTests,
