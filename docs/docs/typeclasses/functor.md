@@ -9,7 +9,7 @@ scaladoc: "#cats.Functor"
 `Functor` is a type class that abstracts over type constructors that can be `map`'ed over. Examples of such
 type constructors are `List`, `Option`, and `Future`.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Functor[F[_]] {
   def map[A, B](fa: F[A])(f: A => B): F[B]
 }
@@ -36,7 +36,7 @@ A `Functor` instance must obey two laws:
 Another way of viewing a `Functor[F]` is that `F` allows the lifting of a pure function `A => B` into the effectful
 function `F[A] => F[B]`. We can see this if we re-order the `map` signature above.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Functor[F[_]] {
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
@@ -64,12 +64,12 @@ like `_.map(_.map(_.map(f)))`. As it turns out, `Functor`s compose, which means 
 
 Such composition can be achieved via the `Functor#compose` method.
 
-```tut:reset:book:silent
+```scala mdoc:reset:silent
 import cats.Functor
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 val listOption = List(Some(1), None, Some(2))
 
 // Through Functor#compose
@@ -81,7 +81,7 @@ introduce complications in more complex use cases. For example, if we need to ca
 requires a `Functor` and we want to use the composed `Functor`, we would have to explicitly pass in the
 composed instance during the function call or create a local implicit.
 
-```tut:book:silent
+```scala mdoc:silent
 def needsFunctor[F[_]: Functor, A](fa: F[A]): F[Unit] = Functor[F].map(fa)(_ => ())
 
 def foo: List[Option[Unit]] = {
@@ -93,12 +93,12 @@ def foo: List[Option[Unit]] = {
 
 We can make this nicer at the cost of boxing with the `Nested` data type.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.data.Nested
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 val nested: Nested[List, Option, Int] = Nested(listOption)
 
 nested.map(_ + 1)

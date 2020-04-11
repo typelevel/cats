@@ -26,7 +26,7 @@ Examples of `Contravariant` instances are [`Show`](show.html) and `scala.math.Or
 
 Say we have a class `Money` with a `Show` instance, and a `Salary` class:
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 
 import cats.implicits._
@@ -41,7 +41,7 @@ If we want to show a `Salary` instance, we can just convert it to a `Money` inst
 
 Let's use `Show`'s `Contravariant`:
 
-```tut:book
+```scala mdoc
 implicit val showSalary: Show[Salary] = showMoney.contramap(_.size)
 
 Salary(Money(1000)).show
@@ -53,7 +53,7 @@ The `Show` example is trivial and quite far-fetched, let's see how `Contravarian
 
 The `scala.math.Ordering` type class defines comparison operations, e.g. `compare`:
 
-```tut:book
+```scala mdoc
 Ordering.Int.compare(2, 1)
 Ordering.Int.compare(1, 2)
 ```
@@ -68,7 +68,7 @@ In fact, it is just `contramap`, defined in a slightly different way! We supply 
 
 So let's use it to our advantage and get `Ordering[Money]` for free:
 
-```tut:book
+```scala mdoc
 // we need this for `<` to work
 import scala.math.Ordered._
 
@@ -81,7 +81,7 @@ Money(100) < Money(200)
 
 Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:
 
-```tut:book
+```scala mdoc
 class A
 class B extends A
 val b: B = new B

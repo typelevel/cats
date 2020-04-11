@@ -24,7 +24,7 @@ You also want to react to both possibilities - if there was a failure, you want 
 convert it to your own `DomainError`, and if the result was a success, you want to
 convert it to an UNIX timestamp.
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.implicits._
 import java.time._
@@ -35,7 +35,7 @@ def dateTimeFromUser: Either[Throwable, ZonedDateTime] =
   Right(ZonedDateTime.now())  // Example definition
 ```
 
-```tut:book
+```scala mdoc
 dateTimeFromUser.bimap(
   error => DomainError(error.getMessage),
   dateTime => dateTime.toEpochSecond
@@ -58,7 +58,7 @@ Another very popular `Bifunctor` is that for the `Tuple2` data type, or `(A, B)`
 Let's say we have a list of balances and want divide them by the number of months in the lifetime of the account holder. The balances are given in cents.
 A bit contrived, but we want an average contribution per month to the given account. We want the result in dollars per month. The lifetime is given in the number of years the account has been active.
 
-```tut:book
+```scala mdoc
 val records: List[(Int, Int)] = List((450000, 3), (770000, 4), (990000, 2), (2100, 4), (43300, 3))
 
 def calculateContributionPerMonth(balance: Int, lifetime: Int) = balance / lifetime

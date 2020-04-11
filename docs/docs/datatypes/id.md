@@ -21,7 +21,7 @@ That is to say that the type `Id[A]` is just a synonym for `A`.  We can
 freely treat values of type `A` as values of type `Id[A]`, and
 vice-versa.
 
-```tut:book
+```scala mdoc
 import cats._
 
 val x: Id[Int] = 1
@@ -34,7 +34,7 @@ method, which has type `A => Id[A]` just becomes the identity
 function.  The `map` method from `Functor` just becomes function
 application:
 
-```tut:book
+```scala mdoc
 import cats.Functor
 
 val one: Int = 1
@@ -56,7 +56,7 @@ two functions the same, and, in fact, they can have the same
 implementation, meaning that for `Id`, `flatMap` is also just function
 application:
 
-```tut:book
+```scala mdoc
 import cats.Monad
 
 val one: Int = 1
@@ -66,7 +66,7 @@ Monad[Id].flatMap(one)(_ + 1)
 
 And that similarly, `coflatMap` is just function application:
 
-```tut:book
+```scala mdoc
 import cats.Comonad
 
 Comonad[Id].coflatMap(one)(_ + 1)

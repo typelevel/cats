@@ -30,7 +30,7 @@ and the "non empty" collections.
 
 First some imports.
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.data._
 import cats.implicits._
@@ -42,7 +42,7 @@ import cats.instances.list._
 simply returns the head element of the list, which we know we will always
 have.
 
-```tut:book
+```scala mdoc
 NonEmptyList.of(1,2,3).extract
 ```
 
@@ -56,7 +56,7 @@ The default implementation of `coflatMap` for `NonEmptyList` will pass the suppl
 function with the whole list, then the tail of that, then the tail of that and so 
 on. This is illustrated below.
 
-```tut:book
+```scala mdoc
 NonEmptyList.of(1,2,3,4,5).coflatMap(identity)
 ```
 
@@ -69,7 +69,7 @@ of type classes in Cats that implement `CoflatMap` but not `Comonad`.
 For example we cannot write `extract` for `Option[A]` because there's no way to 
 pull an `A` out of nowhere if the Option is empty.
 
-```tut:silent
+```scala mdoc:silent
 def extract[A](fa : Option[A]): A = fa match {
 	case Some(a) => a
 	case None => ??? // What now?
@@ -80,6 +80,6 @@ Another example is `List`. Remember we cannot write `extract` for list because l
 can be empty, but we can implement the `coflatMap` and it works identically to the
 one shown above for `NonEmptyList`.
 
-```tut:book
+```scala mdoc
 List(1,2,3,4,5).coflatMap(identity)
 ```

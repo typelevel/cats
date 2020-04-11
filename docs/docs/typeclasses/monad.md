@@ -15,7 +15,7 @@ that we have a single context (ie. `F[A]`).
 The name `flatten` should remind you of the functions of the same name on many
 classes in the standard library.
 
-```tut:book
+```scala mdoc
 Option(Option(1)).flatten
 Option(None).flatten
 List(List(1),List(2,3)).flatten
@@ -33,7 +33,7 @@ We can use `flatten` to define `flatMap`: `flatMap` is just `map`
 followed by `flatten`. Conversely, `flatten` is just `flatMap` using
 the identity function `x => x` (i.e. `flatMap(_)(x => x)`).
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 
 implicit def optionMonad(implicit app: Applicative[Option]) =
@@ -64,7 +64,7 @@ Part of the reason for this is that name `flatMap` has special significance in
 scala, as for-comprehensions rely on this method to chain together operations
 in a monadic context.
 
-```tut:book
+```scala mdoc
 import scala.reflect.runtime.universe
 
 universe.reify(
@@ -88,7 +88,7 @@ as opposed to just a subset. All functions requiring monadic recursion in Cats d
 An example `Monad` implementation for `Option` is shown below. Note the tail recursive
 and therefore stack safe implementation of `tailRecM`.
 
-```tut:silent
+```scala mdoc:silent
 import scala.annotation.tailrec
 
 implicit val optionMonad = new Monad[Option] {
@@ -113,7 +113,7 @@ More discussion about `tailRecM` can be found in the [FAQ](../faq.html#tailrecm)
 the results of earlier ones. This is embodied in `ifM`, which lifts an `if`
 statement into the monadic context.
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 Monad[List].ifM(List(true, false, true))(ifTrue = List(1, 2), ifFalse = List(3, 4))
@@ -131,7 +131,7 @@ example).
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
-```tut:silent
+```scala mdoc:silent
 case class OptionT[F[_], A](value: F[Option[A]])
 
 implicit def optionTMonad[F[_]](implicit F : Monad[F]) = {

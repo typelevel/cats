@@ -10,7 +10,7 @@ scaladoc: "#cats.ContravariantMonoidal"
 The `ContravariantMonoidal` type class is for [`Contravariant`](contravariant.html) functors that can define a
 `product` function and a `unit` function.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Contravariant
 
 trait ContravariantMonoidal[F[_]] extends Contravariant[F] {
@@ -38,7 +38,7 @@ but there are also interesting instances for other types.
 
 An example application would be the case of predicates. Consider the type,
 
-```tut:book:silent:reset
+```scala mdoc:silent:reset
 import cats._
 
 import cats.implicits._
@@ -49,7 +49,7 @@ case class Predicate[A](run: A => Boolean)
 Then, we can exhibit a `ContravariantMonoidal` for `Predicate` by basing it on the
 `Monoid` for `Boolean` via `&&` as,
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val contravariantMonoidalPredicate: ContravariantMonoidal[Predicate] =
   new ContravariantMonoidal [Predicate] {
     def unit: Predicate[Unit] = Predicate[Unit](Function.const(true))
@@ -68,7 +68,7 @@ tends to be a little more convenient for this application.
 Just like for `Contravariant`, we can `contramap` to
 pull `Predicates` back along functions.
 
-```tut:book
+```scala mdoc
 case class Money(value: Long)
 def isEven: Predicate[Long] = Predicate(_ % 2 == 0)
 
@@ -80,7 +80,7 @@ isEvenMoney.run(Money(55))
 We can also lift functions contravariantly into
 the context instead of contramapping repeatedly.
 
-```tut:book
+```scala mdoc
 def times2Predicate: Predicate[Long] => Predicate[Long] =
   ContravariantMonoidal[Predicate].liftContravariant((x: Long) => 2*x)
 
@@ -95,7 +95,7 @@ trivial.run(5)
 More interestingly, we can combine multiple predicates using
 a `contramapN`.
 
-```tut:book
+```scala mdoc
 case class Transaction(value: Money, payee: String)
 
 def isEvan: Predicate[String] = Predicate(_ == "Evan")

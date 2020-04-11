@@ -13,7 +13,7 @@ scaladoc: "#cats.data.OptionT"
 
 Consider the following scenario:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -22,7 +22,7 @@ val customGreeting: Future[Option[String]] = Future.successful(Some("welcome bac
 
 We want to try out various forms of our greetings.
 
-```tut:silent
+```scala mdoc:silent
 val excitedGreeting: Future[Option[String]] = customGreeting.map(_.map(_ + "!"))
 
 val hasWelcome: Future[Option[String]] = customGreeting.map(_.filter(_.contains("welcome")))
@@ -36,7 +36,7 @@ As you can see, the implementations of all of these variations are very similar.
 
 `OptionT` can help remove some of this boilerplate. It exposes methods that look like those on `Option`, but it handles the outer `map` call on the `Future` so we don't have to:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.OptionT
 import cats.implicits._
 
@@ -55,7 +55,7 @@ val withFallback: Future[String] = customGreetingT.getOrElse("hello, there!")
 
 Sometimes you may have an `Option[A]` and/or `F[A]` and want to *lift* them into an `OptionT[F, A]`. For this purpose `OptionT` exposes two useful methods, namely `fromOption` and `liftF`, respectively. E.g.:
 
-```tut:silent
+```scala mdoc:silent
 val greetingFO: Future[Option[String]] = Future.successful(Some("Hello"))
 
 val firstnameF: Future[String] = Future.successful("Jane")
@@ -76,7 +76,7 @@ val result: Future[Option[String]] = ot.value // Future(Some("Hello Jane Doe"))
 
 If you have only an `A` and you wish to *lift* it into an `OptionT[F,A]` assuming you have an [`Applicative`]({{ site.baseurl }}/typeclasses/applicative.html) instance for `F` you can use `some` which is an alias for `pure`. There also exists a `none` method which can be used to create an `OptionT[F,A]`, where the `Option` wrapped `A` type is actually a `None`:
 
-```tut:silent
+```scala mdoc:silent
 val greet: OptionT[Future,String] = OptionT.pure("Hola!")
 
 val greetAlt: OptionT[Future,String] = OptionT.some("Hi!")
@@ -90,7 +90,7 @@ val failedGreet: OptionT[Future,String] = OptionT.none
 
 Sometimes the operation you want to perform on an `Future[Option[String]]` might not be as simple as just wrapping the `Option` method in a `Future.map` call. For example, what if we want to greet the customer with their custom greeting if it exists but otherwise fall back to a default `Future[String]` greeting? Without `OptionT`, this implementation might look like:
 
-```tut:silent
+```scala mdoc:silent
 val defaultGreeting: Future[String] = Future.successful("hello, there")
 
 val greeting: Future[String] = customGreeting.flatMap(custom =>
@@ -99,7 +99,7 @@ val greeting: Future[String] = customGreeting.flatMap(custom =>
 
 We can't quite turn to the `getOrElse` method on `OptionT`, because it takes a `default` value of type `A` instead of `Future[A]`. However, the `getOrElseF` method is exactly what we want:
 
-```tut:silent
+```scala mdoc:silent
 val greeting: Future[String] = customGreetingT.getOrElseF(defaultGreeting)
 ```
 
@@ -107,6 +107,6 @@ val greeting: Future[String] = customGreetingT.getOrElseF(defaultGreeting)
 
 If you want to get the `F[Option[A]]` value (in this case `Future[Option[String]]`) out of an `OptionT` instance, you can simply call  `value`:
 
-```tut:silent
+```scala mdoc:silent
 val customGreeting: Future[Option[String]] = customGreetingT.value
 ```

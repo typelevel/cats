@@ -23,7 +23,7 @@ One of the most useful properties of functions is that they **compose**. That is
 this compositional property that we are able to write many small functions and compose them together
 to create a larger one that suits our needs.
 
-```tut:silent
+```scala mdoc:silent
 val twice: Int => Int =
   x => x * 2
 
@@ -36,13 +36,13 @@ val twiceAsManyCats: Int => String =
 
 Thus.
 
-```tut:book
+```scala mdoc
 twiceAsManyCats(1) // "2 cats"
 ```
 
 Sometimes, our functions will need to return monadic values. For instance, consider the following set of functions.
 
-```tut:silent
+```scala mdoc:silent
 val parse: String => Option[Int] =
   s => if (s.matches("-?[0-9]+")) Some(s.toInt) else None
 
@@ -61,7 +61,7 @@ properties of the `F[_]`, we can do different things with `Kleisli`s. For instan
 `FlatMap[F]` instance (we can call `flatMap` on `F[A]` values), we can
 compose two `Kleisli`s much like we can two functions.
 
-```tut:silent
+```scala mdoc:silent
 import cats.FlatMap
 import cats.implicits._
 
@@ -73,7 +73,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) {
 
 Returning to our earlier example:
 
-```tut:silent
+```scala mdoc:silent
 // Bring in cats.FlatMap[Option] instance
 import cats.implicits._
 
@@ -93,7 +93,7 @@ It is important to note that the `F[_]` having a `FlatMap` (or a `Monad`) instan
 we can do useful things with weaker requirements. Such an example would be `Kleisli#map`, which only requires
 that `F[_]` have a `Functor` instance (e.g. is equipped with `map: F[A] => (A => B) => F[B]`).
 
-```tut:silent
+```scala mdoc:silent
 import cats.Functor
 
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
@@ -127,7 +127,7 @@ An example of a `Monad` instance for `Kleisli` is shown below.
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._
 
 // We can define a FlatMap instance for Kleisli if the F[_] we chose has a FlatMap instance
@@ -191,7 +191,7 @@ That is, we take a read-only value, and produce some value with it. For this rea
 functions often refer to the function as a `Reader`. For instance, it is common to hear about the `Reader` monad.
 In the same spirit, Cats defines a `Reader` type alias along the lines of:
 
-```tut:silent
+```scala mdoc:silent
 // We want A => B, but Kleisli provides A => F[B]. To make the types/shapes match,
 // we need an F[_] such that providing it a type A is equivalent to A
 // This can be thought of as the type-level equivalent of the identity function
@@ -222,7 +222,7 @@ Let's look at some example modules, where each module has its own configuration 
 If the configuration is good, we return a `Some` of the module, otherwise a `None`. This example uses `Option` for
 simplicity - if you want to provide error messages or other failure context, consider using `Either` instead.
 
-```tut:silent
+```scala mdoc:silent
 case class DbConfig(url: String, user: String, pass: String)
 trait Db
 object Db {
@@ -241,7 +241,7 @@ data over the web). Both depend on their own configuration parameters. Neither k
 should be. However our application needs both of these modules to work. It is plausible we then have a more global
 application configuration.
 
-```tut:silent
+```scala mdoc:silent
 case class AppConfig(dbConfig: DbConfig, serviceConfig: ServiceConfig)
 
 class App(db: Db, service: Service)
@@ -251,7 +251,7 @@ As it stands, we cannot use both `Kleisli` validation functions together nicely 
 other a `ServiceConfig`. That means the `FlatMap` (and by extension, the `Monad`) instances differ (recall the
 input type is fixed in the type class instances). However, there is a nice function on `Kleisli` called `local`.
 
-```tut:silent
+```scala mdoc:silent
 final case class Kleisli[F[_], A, B](run: A => F[B]) {
   def local[AA](f: AA => A): Kleisli[F, AA, B] = Kleisli(f.andThen(run))
 }
@@ -263,7 +263,7 @@ so long as we tell it how to go from an `AppConfig` to the other configs.
 
 Now we can create our application config validator!
 
-```tut:silent
+```scala mdoc:silent
 final case class Kleisli[F[_], Z, A](run: Z => F[A]) {
   def flatMap[B](f: A => Kleisli[F, Z, B])(implicit F: FlatMap[F]): Kleisli[F, Z, B] =
     Kleisli(z => F.flatMap(run(z))(a => f(a).run(z)))

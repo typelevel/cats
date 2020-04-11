@@ -42,13 +42,13 @@ Before diving into `Validated`, let's take a look at an `Either` based first app
 
 Our data will be represented this way:
 
-```tut:silent
+```scala mdoc:silent
 final case class RegistrationData(username: String, password: String, firstName: String, lastName: String, age: Int)
 ```
 
 And our error model:
 
-```tut:silent
+```scala mdoc:silent
 sealed trait DomainValidation {
   def errorMessage: String
 }
@@ -76,7 +76,7 @@ case object AgeIsInvalid extends DomainValidation {
 
 We have our `RegistrationData` case class that will hold the information the user has submitted, alongside the definition of the error model that we'll be using for displaying the possible errors of every field. Now, let's explore the proposed implementation:
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._
 
 sealed trait FormValidator {
@@ -141,7 +141,7 @@ Well, yes, but the error reporting part will have the downside of showing only t
 
 Let's look this in detail:
 
-```tut:silent:fail
+```scala mdoc:silent:fail
 for {
   validatedUserName <- validateUserName(username)
   validatedPassword <- validatePassword(password)
@@ -155,7 +155,7 @@ A for-comprehension is _fail-fast_. If some of the evaluations in the `for` bloc
 
 If we run our code:
 
-```tut:book
+```scala mdoc
 FormValidator.validateForm(
   username = "fakeUs3rname",
   password = "password",
@@ -171,7 +171,7 @@ We should have gotten another `DomainValidation` object denoting the invalid age
 
 Time to do some refactoring! We're going to try a `Validated` approach:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data._
 import cats.data.Validated._
 import cats.implicits._
@@ -186,7 +186,7 @@ def validateLastName(lastName: String): Validated[DomainValidation, String] = Fo
 
 def validateAge(age: Int): Validated[DomainValidation, Int] = FormValidator.validateAge(age).toValidated
 ```
-```tut:book:fail
+```scala mdoc:fail
 def validateForm(username: String, password: String, firstName: String, lastName: String, age: Int): Validated[DomainValidation, RegistrationData] = {
   for {
     validatedUserName <- validateUserName(username)
@@ -212,7 +212,7 @@ So, how do we do here?
 
 We have to look into another direction: a for-comprehension plays well in a fail-fast scenario, but the structure in our previous example was designed to catch one error at a time, so, our next step is to tweak the implementation a bit.
 
-```tut:silent
+```scala mdoc:silent
 sealed trait FormValidatorNec {
 
   type ValidationResult[A] = ValidatedNec[DomainValidation, A]
@@ -260,7 +260,7 @@ Note that, at the end, we expect to lift the result of the validation functions 
 
 For example:
 
-```tut:book
+```scala mdoc
 FormValidatorNec.validateForm(
   username = "Joe",
   password = "Passw0r$1234",
@@ -290,7 +290,7 @@ For doing this, you have to provide a `Semigroup` instance. `NonEmptyChain`, by 
 
 Let's take a look about how a `Semigroup` works in a `NonEmptyChain`:
 
-```tut:book
+```scala mdoc
 NonEmptyChain.one[DomainValidation](UsernameHasSpecialCharacters) |+| NonEmptyChain[DomainValidation](FirstNameHasSpecialCharacters, LastNameHasSpecialCharacters)
 ```
 
@@ -307,7 +307,7 @@ We've used `.toValidated` in our second example, now let's see how to use `.toEi
 
 To do this, simply use `.toEither` combinator:
 
-```tut:book
+```scala mdoc
 // Successful case
 FormValidatorNec.validateForm(
   username = "Joe",
@@ -355,7 +355,7 @@ As our running example, we will look at config parsing. Our config will be repre
 `Map[String, String]`. Parsing will be handled by a `Read` type class - we provide instances
 just for `String` and `Int` for brevity.
 
-```tut:silent
+```scala mdoc:silent
 trait Read[A] {
   def read(s: String): Option[A]
 }
@@ -379,7 +379,7 @@ Then we enumerate our errors - when asking for a config value, one of two things
 go wrong: the field is missing, or it is not well-formed with regards to the expected
 type.
 
-```tut:silent
+```scala mdoc:silent
 sealed abstract class ConfigError
 final case class MissingConfig(field: String) extends ConfigError
 final case class ParseError(field: String) extends ConfigError
@@ -399,7 +399,7 @@ object Validated {
 
 Now we are ready to write our parser.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 
@@ -420,7 +420,7 @@ Everything is in place to write the parallel validator. Recall that we can only 
 validation if each piece is independent. How do we enforce the data is independent? By asking
 for all of it up front. Let's start with two pieces of data.
 
-```tut:silent
+```scala mdoc:silent
 def parallelValidate[E, A, B, C](v1: Validated[E, A], v2: Validated[E, B])(f: (A, B) => C): Validated[E, C] =
   (v1, v2) match {
     case (Valid(a), Valid(b))       => Valid(f(a, b))
@@ -436,7 +436,7 @@ but that seems needlessly specific - clients may want to define their own way of
 
 How then do we abstract over a binary operation? The `Semigroup` type class captures this idea.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Semigroup
 
 def parallelValidate[E : Semigroup, A, B, C](v1: Validated[E, A], v2: Validated[E, B])(f: (A, B) => C): Validated[E, C] =
@@ -458,7 +458,7 @@ Additionally, the type alias `ValidatedNec[E, A]` is provided.
 
 Time to parse.
 
-```tut:silent
+```scala mdoc:silent
 import cats.SemigroupK
 import cats.data.NonEmptyChain
 import cats.implicits._
@@ -476,7 +476,7 @@ implicit val readInt: Read[Int] = Read.intRead
 
 Any and all errors are reported!
 
-```tut:book
+```scala mdoc
 val v1 = parallelValidate(config.parse[String]("url").toValidatedNec,
                           config.parse[Int]("port").toValidatedNec)(ConnectionParams.apply)
 
@@ -501,7 +501,7 @@ Can we perhaps define an `Apply` instance for `Validated`? Better yet, can we de
 
 *Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Applicative
 
 implicit def validatedApplicative[E : Semigroup]: Applicative[Validated[E, *]] =
@@ -523,7 +523,7 @@ Awesome! And now we also get access to all the goodness of `Applicative`, which 
 
 We can now easily ask for several bits of configuration and get any and all errors returned back.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Apply
 import cats.data.ValidatedNec
 
@@ -538,7 +538,7 @@ case class Person(name: String, age: Int, address: Address)
 
 Thus.
 
-```tut:book
+```scala mdoc
 val personFromConfig: ValidatedNec[ConfigError, Person] =
   Apply[ValidatedNec[ConfigError, *]].map4(config.parse[String]("name").toValidatedNec,
                                            config.parse[Int]("age").toValidatedNec,
@@ -552,7 +552,7 @@ val personFromConfig: ValidatedNec[ConfigError, Person] =
 `Option` has `flatMap`, `Either` has `flatMap`, where's `Validated`'s? Let's try to implement it - better yet,
 let's implement the `Monad` type class.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Monad
 
 implicit def validatedMonad[E]: Monad[Validated[E, *]] =
@@ -577,7 +577,7 @@ implicit def validatedMonad[E]: Monad[Validated[E, *]] =
 
 Note that all `Monad` instances are also `Applicative` instances, where `ap` is defined as
 
-```tut:silent
+```scala mdoc:silent
 trait Monad[F[_]] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
   def pure[A](x: A): F[A]
@@ -593,7 +593,7 @@ trait Monad[F[_]] {
 However, the `ap` behavior defined in terms of `flatMap` does not behave the same as that of
 our `ap` defined above. Observe:
 
-```tut:book
+```scala mdoc
 val v = validatedMonad.tuple2(Validated.invalidNec[String, Int]("oops"), Validated.invalidNec[String, Double]("uh oh"))
 ```
 
@@ -616,7 +616,7 @@ If you do want error accumulation but occasionally run into places where you seq
 ### `andThen`
 The `andThen` method is similar to `flatMap` (such as `Either.flatMap`). In the case of success, it passes the valid value into a function that returns a new `Validated` instance.
 
-```tut:book
+```scala mdoc
 val houseNumber = config.parse[Int]("house_number").andThen{ n =>
    if (n >= 0) Validated.valid(n)
    else Validated.invalid(ParseError("house_number"))
@@ -626,7 +626,7 @@ val houseNumber = config.parse[Int]("house_number").andThen{ n =>
 ### `withEither`
 The `withEither` method allows you to temporarily turn a `Validated` instance into an `Either` instance and apply it to a function.
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._ // get Either#flatMap
 
 def positive(field: String, i: Int): Either[ConfigError, Int] = {
@@ -637,7 +637,7 @@ def positive(field: String, i: Int): Either[ConfigError, Int] = {
 
 Thus.
 
-```tut:book
+```scala mdoc
 val houseNumber = config.parse[Int]("house_number").withEither{ either: Either[ConfigError, Int] =>
   either.flatMap{ i =>
     positive("house_number", i)

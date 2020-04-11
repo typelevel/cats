@@ -12,7 +12,7 @@ scaladoc: "#cats.Functor"
 One of the most useful functions when working with `scala.concurrent.Future` is `Future.traverse`, presented below
 in a simplified form.
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.concurrent.{ExecutionContext, Future}
 
 def traverseFuture[A, B](as: List[A])(f: A => Future[B])(implicit ec: ExecutionContext): Future[List[B]] =

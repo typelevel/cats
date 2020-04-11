@@ -33,7 +33,7 @@ position: 40
 
 The easiest approach to Cats imports is to import everything that's commonly needed:
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.data._
 import cats.implicits._
@@ -86,13 +86,13 @@ It's really common to have a `List` of values with types like `Option`, `Either`
 
 There are monad transformers for various types, such as [OptionT]({{ site.baseurl }}/datatypes/optiont.html), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
 
-```tut:reset:silent
+```scala mdoc:reset:silent
 val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
 
 def isEven(i: Int): Boolean = i % 2 == 0
 ```
 
-```tut:book
+```scala mdoc
 l.map(_.map(_ + 1))
 l.exists(_.exists(isEven))
 ```
@@ -101,12 +101,12 @@ A naive implementation of `ListT` suffers from associativity issues; see [this g
 
 Here is how we could achieve the effect of the previous example using `Nested`:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Nested
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 val nl = Nested(l)
 nl.map(_ + 1)
 nl.exists(isEven)
@@ -114,13 +114,13 @@ nl.exists(isEven)
 
 We can even perform more complicated operations, such as a `traverse` of the nested structure:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.ValidatedNel
 type ErrorsOr[A] = ValidatedNel[String, A]
 def even(i: Int): ErrorsOr[Int] = if (i % 2 == 0) i.validNel else s"$i is odd".invalidNel
 ```
 
-```tut:book
+```scala mdoc
 nl.traverse(even)
 ```
 
@@ -164,7 +164,7 @@ def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
 
 When you are defining a `FlatMap` instance, its `tailRecM` implementation must have two properties in order for the instance to be considered lawful. The first property is that `tailRecM` must return the same result that you would get if you recursively called `flatMap` until you got a `Right` value (assuming you had unlimited stack space—we'll get to that in a moment). In other words, it must give the same result as this implementation:
 
-```tut:silent
+```scala mdoc:silent
 trait Monad[F[_]] {
   def pure[A](x: A): F[A] = ???
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = ???
@@ -181,7 +181,7 @@ The reason we can't simply use this implementation for all type constructors (an
 
 `Option` is one example of a monadic type whose `flatMap` consumes stack in such a way that nesting `flatMap` calls deeply enough (usually around a couple thousand levels) will result in a stack overflow. We can provide a stack-safe `tailRecM` implementation for `Option`, though:
 
-```tut:silent
+```scala mdoc:silent
 import cats.FlatMap
 import scala.annotation.tailrec
 

@@ -8,7 +8,7 @@ and ad-hoc polymorphism.
 The following code snippets show code that sums a list of integers, concatenates a list of strings, and unions a list
 of sets.
 
-```tut:book:silent
+```scala mdoc:silent
 def sumInts(list: List[Int]): Int = list.foldRight(0)(_ + _)
 
 def concatStrings(list: List[String]): String = list.foldRight("")(_ ++ _)
@@ -20,7 +20,7 @@ All of these follow the same pattern: an initial value (0, empty string, empty s
 (`+`, `++`, `union`). We'd like to abstract over this so we can write the function once instead of once for every type
 so we pull out the necessary pieces into an interface.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Monoid[A] {
   def empty: A
   def combine(x: A, y: A): A
@@ -37,7 +37,7 @@ The name `Monoid` is taken from abstract algebra which specifies precisely this 
 
 We can now write the functions above against this interface.
 
-```tut:book:silent
+```scala mdoc:silent
 def combineAll[A](list: List[A], A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
 ```
 
@@ -45,7 +45,7 @@ def combineAll[A](list: List[A], A: Monoid[A]): A = list.foldRight(A.empty)(A.co
 The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
 subtype constraints.
 
-```tut:book:silent
+```scala mdoc:silent
 // Subtyping
 def combineAll[A <: Monoid[A]](list: List[A]): A = ???
 ```
@@ -61,14 +61,14 @@ object.
 
 For another motivating difference, consider the simple pair type.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Pair[A, B](first: A, second: B)
 ```
 
 Defining a `Monoid[Pair[A, B]]` depends on the ability to define a `Monoid[A]` and `Monoid[B]`, where the definition
 is point-wise, i.e. the first element of the first pair combines with the first element of the second pair and the second element of the first pair combines with the second element of the second pair. With subtyping such a constraint would be encoded as something like
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Pair[A <: Monoid[A], B <: Monoid[B]](first: A, second: B) extends Monoid[Pair[A, B]] {
   def empty: Pair[A, B] = ???
 
@@ -80,7 +80,7 @@ Not only is the type signature of `Pair` now messy but it also forces all instan
 instance, whereas `Pair` should be able to carry any types it wants and if the types happens to have a
 `Monoid` instance then so would it. We could try bubbling down the constraint into the methods themselves.
 
-```tut:book:fail
+```scala mdoc:fail
 final case class Pair[A, B](first: A, second: B) extends Monoid[Pair[A, B]] {
   def empty(implicit eva: A <:< Monoid[A], evb: B <:< Monoid[B]): Pair[A, B] = ???
 
@@ -94,7 +94,7 @@ But now these don't conform to the interface of `Monoid` due to the implicit con
 
 Note that a `Monoid[Pair[A, B]]` is derivable given `Monoid[A]` and `Monoid[B]`:
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Pair[A, B](first: A, second: B)
 
 def deriveMonoidPair[A, B](A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] =
@@ -109,7 +109,7 @@ def deriveMonoidPair[A, B](A: Monoid[A], B: Monoid[B]): Monoid[Pair[A, B]] =
 One of the most powerful features of type classes is the ability to do this kind of derivation automatically.
 We can do this through Scala's implicit mechanism.
 
-```tut:book:silent
+```scala mdoc:silent
 object Demo { // needed for tut, irrelevant to demonstration
   final case class Pair[A, B](first: A, second: B)
 
@@ -128,7 +128,7 @@ object Demo { // needed for tut, irrelevant to demonstration
 We also change any functions that have a `Monoid` constraint on the type parameter to take the argument implicitly,
 and any instances of the type class to be implicit.
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
   def empty: Int = 0
   def combine(x: Int, y: Int): Int = x + y
@@ -140,14 +140,14 @@ def combineAll[A](list: List[A])(implicit A: Monoid[A]): A = list.foldRight(A.em
 Now we can also `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
 instances.
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val stringMonoid: Monoid[String] = new Monoid[String] {
   def empty: String = ""
   def combine(x: String, y: String): String = x ++ y
 }
 ```
 
-```tut:book
+```scala mdoc
 import Demo.{Pair => Paired}
 
 combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
@@ -156,13 +156,13 @@ combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
 ## A note on syntax
 In many cases, including the `combineAll` function above, the implicit arguments can be written with syntactic sugar.
 
-```tut:book:silent
+```scala mdoc:silent
 def combineAll[A : Monoid](list: List[A]): A = ???
 ```
 
 While nicer to read as a user, it comes at a cost for the implementer.
 
-```tut:book:silent
+```scala mdoc:silent
 // Defined in the standard library, shown for illustration purposes
 // Implicitly looks in implicit scope for a value of type `A` and just hands it back
 def implicitly[A](implicit ev: A): A = ev
@@ -174,7 +174,7 @@ def combineAll[A : Monoid](list: List[A]): A =
 For this reason, many libraries that provide type classes provide a utility method on the companion object of the type
 class, usually under the name `apply`, that skirts the need to call `implicitly` everywhere.
 
-```tut:book:silent
+```scala mdoc:silent
 object Monoid {
   def apply[A : Monoid]: Monoid[A] = implicitly[Monoid[A]]
 }
@@ -204,12 +204,12 @@ reasons. A function that collapses a `List[A]` into a single `A` can do so with 
 `foldRight` since `combine` is assumed to be associative, or it can break apart the list into smaller
 lists and collapse in parallel, such as
 
-```tut:book:silent
+```scala mdoc:silent
 val list = List(1, 2, 3, 4, 5)
 val (left, right) = list.splitAt(2)
 ```
 
-```tut:book
+```scala mdoc
 // Imagine the following two operations run in parallel
 val sumLeft = combineAll(left)
 val sumRight = combineAll(right)

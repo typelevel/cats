@@ -25,7 +25,7 @@ Knowing this, we can make use of `NonEmptyTraverse`, to traverse over a sequence
 One example application one could think of is, when we have a list of text snippets,
 count the occurrence of each word in each snippet and return all the common words and their occurrences in each snippet:
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 import cats.data.NonEmptyList
 
@@ -39,7 +39,7 @@ snippets.nonEmptyTraverse(countWords)
 
 Note that, just like `traverse`, `nonEmptyTraverse(f)` is equivalent to `map(f).nonEmptySequence`, so the above could be rewritten as:
 
-```tut:book
+```scala mdoc
 snippets.map(countWords).nonEmptySequence
 ```
 

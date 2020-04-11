@@ -12,7 +12,7 @@ scaladoc: "#cats.data.EitherT"
 amount of boilerplate is required to handle errors. For example, consider the
 following program:
 
-```tut:book
+```scala mdoc
 import scala.util.Try
 import cats.implicits._
 
@@ -39,7 +39,7 @@ used since `divisionProgram` must now compose `Future` and `Either` together,
 which means that the error handling must be performed explicitly to ensure that
 the proper types are returned:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -73,7 +73,7 @@ it easy to compose `Either`s and `F`s together. To use `EitherT`, values of
 resulting `EitherT` values are then composed using combinators. For example, the
 asynchronous division program can be rewritten as follows:
 
-```tut:book
+```scala mdoc
 import cats.data.EitherT
 import cats.implicits._
 
@@ -97,7 +97,7 @@ To obtain a left version or a right version of `EitherT` when given an `A` or a
 `B`, use `EitherT.leftT` and `EitherT.rightT` (which is an alias for
 `EitherT.pure`), respectively.
 
-```tut:silent
+```scala mdoc:silent
 val number: EitherT[Option, String, Int] = EitherT.rightT(5)
 val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
 ```
@@ -108,7 +108,7 @@ Similarly, use `EitherT.left` and `EitherT.right` to convert an `F[A]` or an `F[
 into an `EitherT`. It is also possible to use `EitherT.liftF` as an alias for
 `EitherT.right`.
 
-```tut:silent
+```scala mdoc:silent
 val numberO: Option[Int] = Some(5)
 val errorO: Option[String] = Some("Not a number")
 
@@ -121,7 +121,7 @@ val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 Use `EitherT.fromEither` to lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
 An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
 
-```tut:silent
+```scala mdoc:silent
 val numberE: Either[String, Int] = Right(100)
 val errorE: Either[String, Int] = Left("Not a number")
 val numberFE: List[Either[String, Int]] = List(Right(250))
@@ -137,7 +137,7 @@ An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed t
 `EitherT.fromOption` and `EitherT.fromOptionF`, respectively, to produce an
 `EitherT`.
 
-```tut:book
+```scala mdoc
 val myOption: Option[Int] = None
 val myOptionList: List[Option[Int]] = List(None, Some(2), Some(3), None, Some(5))
 
@@ -150,7 +150,7 @@ val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
 An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
 using the `attemptT` method on them.
 
-```tut:silent
+```scala mdoc:silent
 val myTry: Try[Int] = Try(2)
 val myFuture: Future[String] = Future.failed(new Exception())
 
@@ -162,7 +162,7 @@ val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
 
 Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
 
-```tut:book
+```scala mdoc
 val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
 
 val error: Future[Either[String, Int]] = errorT.value

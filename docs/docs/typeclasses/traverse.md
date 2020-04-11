@@ -12,7 +12,7 @@ In the `Applicative` tutorial we saw a more polymorphic version of the standard 
 `Future.traverse` and `Future.sequence` functions, generalizing `Future` to be any
 `F[_]` that's `Applicative`.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.Applicative
 
 def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
@@ -25,7 +25,7 @@ def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
 Here `traverse` still has knowledge of `List`, but we could just as easily use
 `Vector` or some similar data type. Another example is a binary tree:
 
-```tut:book:silent
+```scala mdoc:silent
 object tree {
   sealed abstract class Tree[A] extends Product with Serializable {
     def traverse[F[_]: Applicative, B](f: A => F[B]): F[Tree[B]] = this match {
@@ -45,7 +45,7 @@ import tree._
 
 This suggests an abstraction over "things that can be traversed over," hence `Traverse`.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Traverse[F[_]] {
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 }
@@ -71,18 +71,18 @@ Sometimes you will be given a traversable that has effectful values already, suc
 a `List[Option[A]]`. Since the values themselves are effects, traversing with `identity`
 will turn the traversable "inside out."
 
-```tut:reset:book:silent
+```scala mdoc:reset:silent
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 val list = List(Some(1), Some(2), None)
 val traversed = list.traverse(identity)
 ```
 
 Cats provides a convenience method for this called `sequence`.
 
-```tut:book
+```scala mdoc
 val sequenced = list.sequence
 ```
 
@@ -95,7 +95,7 @@ use in `traverse` we can implement `map`.
 
 First let's look at the two signatures.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.{Applicative, Traverse}
 
 def traverse[F[_]: Traverse, G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] = ???
@@ -109,14 +109,14 @@ of `f` to be `G[B]` whereas `map` just wants `B`. Similarly the return type of `
 `G[A]` communicates exactly as much information as `A`. We can conjure one up by simply wrapping
 an `A`.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Id[A](value: A)
 ```
 
 In order to call `traverse` `Id` needs to be `Applicative` which is straightforward - note that while
 `Id` just wraps an `A`, it is still a type constructor which matches the shape required by `Applicative`.
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val applicativeForId: Applicative[Id] = new Applicative[Id] {
   def ap[A, B](ff: Id[A => B])(fa: Id[A]): Id[B] = Id(ff.value(fa.value))
 
@@ -126,7 +126,7 @@ implicit val applicativeForId: Applicative[Id] = new Applicative[Id] {
 
 Now we can implement `map` by wrapping and unwrapping `Id` as necessary.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.Functor
 
 trait Traverse[F[_]] extends Functor[F] {
@@ -152,7 +152,7 @@ of `traverse` by using `cats.data.Const`. You can then implement `foldRight` in 
 and `foldLeft` can then be implemented in terms of `foldRight`, though the resulting implementations
 may be slow.
 
-```tut:reset:book:silent
+```scala mdoc:reset:silent
 import cats.{Applicative, Monoid, Traverse}
 import cats.data.Const
 

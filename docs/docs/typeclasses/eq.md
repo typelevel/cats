@@ -22,13 +22,13 @@ The Scala compiler may warn us in some cases, but not all, which can lead to som
 For example this code will raise a warning at compile time:
 
 
-```tut:book:fail
+```scala mdoc:fail
 42 == "Hello"
 ```
 
 While this code will compile without a hitch:
 
-```tut:book
+```scala mdoc
 "Hello" == 42
 ```
 
@@ -39,7 +39,7 @@ eliminating these types of bugs altogether.
 
 The `Eq` syntax package also offers some handy symbolic operators:
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 1 === 1
@@ -53,7 +53,7 @@ Another option is to use a small library called [kittens](https://github.com/typ
 
 The first option using `Eq.fromUniversalEquals` only defers to `==` and works like this:
 
-```tut:book
+```scala mdoc
 import cats.kernel.Eq
 import cats.implicits._
 

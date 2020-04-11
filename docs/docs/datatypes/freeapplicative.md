@@ -21,7 +21,7 @@ for the `cats-free` module.
 Consider building an EDSL for validating strings - to keep things simple we'll just have
 a way to check a string is at least a certain size and to ensure the string contains numbers.
 
-```tut:silent
+```scala mdoc:silent
 sealed abstract class ValidationOp[A]
 case class Size(size: Int) extends ValidationOp[Boolean]
 case object HasNumber extends ValidationOp[Boolean]
@@ -29,7 +29,7 @@ case object HasNumber extends ValidationOp[Boolean]
 
 Much like the `Free` monad tutorial, we use smart constructors to lift our algebra into the `FreeApplicative`.
 
-```tut:silent
+```scala mdoc:silent
 import cats.free.FreeApplicative
 import cats.free.FreeApplicative.lift
 
@@ -43,7 +43,7 @@ val hasNumber: Validation[Boolean] = lift(HasNumber)
 Because a `FreeApplicative` only supports the operations of `Applicative`, we do not get the nicety
 of a for-comprehension. We can however still use `Applicative` syntax provided by Cats.
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._
 
 val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && r}
@@ -52,7 +52,7 @@ val prog: Validation[Boolean] = (size(5), hasNumber).mapN { case (l, r) => l && 
 As it stands, our program is just an instance of a data structure - nothing has happened
 at this point. To make our program useful we need to interpret it.
 
-```tut:silent
+```scala mdoc:silent
 import cats.Id
 import cats.arrow.FunctionK
 import cats.implicits._
@@ -69,7 +69,7 @@ val compiler = new FunctionK[ValidationOp, FromString] {
 }
 ```
 
-```tut:book
+```scala mdoc
 val validator = prog.foldMap[FromString](compiler)
 validator("1234")
 validator("12345")
@@ -91,7 +91,7 @@ In the context of `FreeApplicative`s, we can leverage this static knowledge in o
 Because we have everything we need up front and know there can be no branching, we can easily
 write a validator that validates in parallel.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Kleisli
 import cats.implicits._
 import scala.concurrent.Future
@@ -119,7 +119,7 @@ the rules against a string for this, we simply need to map each rule to some ide
 we can completely ignore the return type of the operation and return just a `List[String]` - the
 `Const` data type is useful for this.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Const
 import cats.implicits._
 
@@ -136,7 +136,7 @@ def logValidation[A](validation: Validation[A]): List[String] =
   validation.foldMap[Log](logCompiler).getConst
 ```
 
-```tut:book
+```scala mdoc
 logValidation(prog)
 logValidation(size(5) *> hasNumber *> size(10))
 logValidation((hasNumber, size(3)).mapN(_ || _))
@@ -154,7 +154,7 @@ case for monads.
 Therefore, we can write an interpreter that uses the product of the `ParValidator` and `Log` `Applicative`s
 to interpret our program in one go. We can create this interpreter easily by using `FunctionK#and`.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Tuple2K
 
 type ValidateAndLog[A] = Tuple2K[ParValidator, Log, A]
