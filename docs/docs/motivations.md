@@ -47,4 +47,3 @@ are attempting to do our best at keeping our library as efficient as
 we can without making unnecessary sacrifices of purity and
 usability. Where sacrifices have to be made, we will strive to make
 these obvious, and will keep them well documented.
-

@@ -24,7 +24,7 @@ skip these steps and jump straight to submitting a pull request.
 
  1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
  2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Build the project](#build-project)
+ 3. [Build the project](#build-the-project)
  4. [Implement your contribution](#write-code)
  5. [Write tests](#write-tests)
  6. [Write documentation](#contributing-documentation)
