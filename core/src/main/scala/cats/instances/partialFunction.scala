@@ -10,11 +10,10 @@ trait PartialFunctionInstances {
      * Example:
      * {{{
      * scala> import cats.implicits._
-     * scala> import cats.arrow.Profunctor
      * scala> val fab: PartialFunction[Double, Double] = { case x => x + 0.3 }
      * scala> val f: Int => Double = x => x.toDouble / 2
      * scala> val g: Double => Double = x => x * 3
-     * scala> val h = Profunctor[PartialFunction].dimap(fab)(f)(g)
+     * scala> val h = fab.dimap(f)(g)
      * scala> h(3)
      * res0: Double = 5.4
      * }}}
