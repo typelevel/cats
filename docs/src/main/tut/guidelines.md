@@ -136,6 +136,6 @@ x === y
 > false
 ```
 
-#### TODO:
+### Classes extending AnyVal
 
-Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
+AnyVal-extending class constructor parameters must be marked as private.
