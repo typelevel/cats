@@ -15,6 +15,9 @@ import scala.annotation.implicitNotFound
 
 object CommutativeArrow {
 
+  implicit val partialFunction: CommutativeArrow[PartialFunction] =
+    cats.instances.partialFunction.catsStdInstancesForArrowHierarchy
+
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/

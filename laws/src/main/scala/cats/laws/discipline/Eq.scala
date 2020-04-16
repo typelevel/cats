@@ -22,6 +22,14 @@ object eq {
   implicit def catsLawsEqForFn2[A, B, C](implicit ev: Eq[((A, B)) => C]): Eq[(A, B) => C] =
     Eq.by((_: (A, B) => C).tupled)
 
+  implicit def catsLawsEqForPartialFunctionExhaustive[A, B](implicit A: ExhaustiveCheck[A],
+                                                            B: Eq[B]): Eq[PartialFunction[A, B]] =
+    Eq.instance((f, g) =>
+      A.allValues
+        .filter(a => f.isDefinedAt(a) || g.isDefinedAt(a))
+        .forall(a => f.isDefinedAt(a) && g.isDefinedAt(a) && B.eqv(f(a), g(a)))
+    )
+
   implicit def catsLawsEqForAndThen[A, B](implicit eqAB: Eq[A => B]): Eq[AndThen[A, B]] =
     Eq.by[AndThen[A, B], A => B](identity)
 

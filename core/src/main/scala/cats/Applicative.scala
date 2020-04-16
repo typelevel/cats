@@ -202,7 +202,7 @@ object Applicative {
    * scala> import cats.Applicative.catsApplicativeForArrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val double: Int => Int = 2*_
-   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow.product(toLong, double)
+   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow[Function1, Int].product(toLong, double)
    * scala> f(3)
    * res0: (Long, Int) = (3,6)
    * }}}

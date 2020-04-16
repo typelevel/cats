@@ -74,6 +74,9 @@ import scala.annotation.implicitNotFound
 
 object Arrow {
 
+  implicit val partialFunction: Arrow[PartialFunction] =
+    cats.instances.partialFunction.catsStdInstancesForArrowHierarchy
+
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/

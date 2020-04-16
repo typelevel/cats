@@ -1,27 +1,60 @@
 package cats.instances
-import cats.arrow.Profunctor
+import cats.arrow.{ArrowChoice, CommutativeArrow}
 
 trait PartialFunctionInstances {
-  implicit val catsStdProFunctorForPartialFunction: Profunctor[PartialFunction] = new Profunctor[PartialFunction] {
 
-    /**
-     * Contramap on the first type parameter and map on the second type parameter
-     *
-     * Example:
-     * {{{
-     * scala> import cats.implicits._
-     * scala> val fab: PartialFunction[Double, Double] = { case x => x + 0.3 }
-     * scala> val f: Int => Double = x => x.toDouble / 2
-     * scala> val g: Double => Double = x => x * 3
-     * scala> val h = fab.dimap(f)(g)
-     * scala> h(3)
-     * res0: Double = 5.4
-     * }}}
-     */
-    override def dimap[A, B, C, D](fab: PartialFunction[A, B])(f: C => A)(g: B => D): PartialFunction[C, D] =
-      new PartialFunction[C, D] {
-        override def isDefinedAt(c: C): Boolean = fab.isDefinedAt(f(c))
-        override def apply(c: C): D = g(fab(f(c)))
+  implicit val catsStdInstancesForArrowHierarchy: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+    new ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] {
+
+      /**
+       * {{{
+       * scala> import cats.arrow.Arrow
+       * scala> import cats.syntax.arrowChoice._
+       * scala> val toLong: PartialFunction[Int, Long] = Arrow[PartialFunction].lift(_.toLong)
+       * scala> val toDouble: PartialFunction[Float, Double] = Arrow[PartialFunction].lift(_.toDouble)
+       * scala> val f: PartialFunction[Either[Int, Float], Either[Long, Double]] = toLong +++ toDouble
+       * scala> f(Left(3))
+       * res0: Either[Long,Double] = Left(3)
+       * scala> f(Right(3))
+       * res1: Either[Long,Double] = Right(3.0)
+       * }}}
+       */
+      override def choose[A, B, C, D](f: PartialFunction[A, C])(
+        g: PartialFunction[B, D]
+      ): PartialFunction[Either[A, B], Either[C, D]] = {
+        case Left(a) if f.isDefinedAt(a)  => Left(f(a))
+        case Right(b) if g.isDefinedAt(b) => Right(g(b))
       }
-  }
+
+      override def lift[A, B](f: A => B): PartialFunction[A, B] = { case a if a.isInstanceOf[A] => f(a) }
+
+      /**
+       * Create a new `F` that takes two inputs, but only modifies the first input
+       *
+       * Example:
+       * {{{
+       * scala> import cats.arrow.Arrow
+       * scala> import cats.arrow.Strong
+       * scala> import cats.implicits._
+       * scala> val f: PartialFunction[Int, Int] = Arrow[PartialFunction].lift(_ * 2)
+       * scala> val fab = Strong[PartialFunction].first[Int,Int,Int](f)
+       * scala> fab((2,3))
+       * res0: (Int, Int) = (4,3)
+       * }}}
+       */
+      override def first[A, B, C](fa: PartialFunction[A, B]): PartialFunction[(A, C), (B, C)] = {
+        case (a, c) if fa.isDefinedAt(a) => (fa(a), c)
+      }
+
+      override def split[A, B, C, D](
+        f: PartialFunction[A, B],
+        g: PartialFunction[C, D]
+      ): PartialFunction[(A, C), (B, D)] = {
+        case (a, c) if f.isDefinedAt(a) && g.isDefinedAt(c) => (f(a), g(c))
+      }
+
+      override def compose[A, B, C](f: PartialFunction[B, C], g: PartialFunction[A, B]): PartialFunction[A, C] = {
+        case a if g.isDefinedAt(a) && f.isDefinedAt(g(a)) => f(g(a))
+      }
+    }
 }
