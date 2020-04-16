@@ -2,7 +2,7 @@ package cats.tests
 
 import cats._
 import cats.arrow.Compose
-import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{Binested, Kleisli, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.syntax.all._
 import scala.collection.immutable.{SortedMap, SortedSet}
 
@@ -55,6 +55,15 @@ object SyntaxSuite {
     val a = x >>> y >>> z
     val b = z <<< y <<< x
 
+  }
+
+  def testComposeKleisli[F[_]: Lambda[X[_] => Compose[Kleisli[X, *, *]]], A, B, C, D]: Unit = {
+    val x = mock[Function[A, F[B]]]
+    val y = mock[Function[B, F[C]]]
+    val z = mock[Function[C, F[D]]]
+
+    val a = x >=> y >=> z
+    val b = z <=< y <=< x
   }
 
   def testEq[A: Eq]: Unit = {
