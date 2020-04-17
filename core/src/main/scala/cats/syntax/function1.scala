@@ -70,7 +70,7 @@ trait Function1Syntax {
      * res0: Option[Int] = Some(42)
      * scala> (f <=< g)(List("abc"))
      * res1: Option[Int] = None
-     * scala> (f >=> g)(List())
+     * scala> (f <=< g)(List())
      * res2: Option[Int] = None
      * }}}
      */
