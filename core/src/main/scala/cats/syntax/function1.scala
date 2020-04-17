@@ -6,9 +6,7 @@ trait Function1Syntax {
   implicit def catsSyntaxFunction1[F[_]: Functor, A, B](fab: F[Function1[A, B]]): Function1Ops[F, A, B] =
     new Function1Ops[F, A, B](fab)
 
-  implicit def catsSyntaxFunction1FlatMap[F[_]: FlatMap, A, B](
-    fab: Function1[A, F[B]]
-  ): Function1FlatMapOps[F, A, B] =
+  implicit def catsSyntaxFunction1FlatMap[F[_]: FlatMap, A, B](fab: Function1[A, F[B]]): Function1FlatMapOps[F, A, B] =
     new Function1FlatMapOps[F, A, B](fab)
 
   final class Function1Ops[F[_]: Functor, A, B](fab: F[Function1[A, B]]) {
