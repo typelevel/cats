@@ -2,7 +2,7 @@ package cats.tests
 
 import cats._
 import cats.arrow.Compose
-import cats.data.{Binested, Kleisli, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
+import cats.data.{Binested, Nested, NonEmptyChain, NonEmptyList, NonEmptySet}
 import cats.syntax.all._
 import scala.collection.immutable.{SortedMap, SortedSet}
 
@@ -55,15 +55,6 @@ object SyntaxSuite {
     val a = x >>> y >>> z
     val b = z <<< y <<< x
 
-  }
-
-  def testComposeKleisli[F[_]: Lambda[X[_] => Compose[Kleisli[X, *, *]]], A, B, C, D]: Unit = {
-    val x = mock[Function[A, F[B]]]
-    val y = mock[Function[B, F[C]]]
-    val z = mock[Function[C, F[D]]]
-
-    val a = x >=> y >=> z
-    val b = z <=< y <=< x
   }
 
   def testEq[A: Eq]: Unit = {
@@ -373,10 +364,17 @@ object SyntaxSuite {
     val fa = a.pure[F]
   }
 
-  def testFlatMap[F[_]: FlatMap, A, B]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B, C, D]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
+
+    val x = mock[Function[A, F[B]]]
+    val y = mock[Function[B, F[C]]]
+    val z = mock[Function[C, F[D]]]
+
+    val b = x >=> y >=> z
+    val c = z <=< y <=< x
   }
 
   def testApplicativeError[F[_, _], E, A, B](implicit F: ApplicativeError[F[E, *], E]): Unit = {
