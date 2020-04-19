@@ -128,6 +128,8 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   implicit def catsSemigroupKForEither[A]: SemigroupK[Either[A, *]] =
     cats.instances.either.catsStdSemigroupKForEither[A]
   implicit def catsSemigroupKForSortedSet: SemigroupK[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
+  implicit def catsSemigroupKForSortedMap[K]: SemigroupK[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdSemigroupKForSortedMap[K]
   implicit def catsMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
   implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1

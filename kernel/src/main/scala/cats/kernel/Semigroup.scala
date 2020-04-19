@@ -197,6 +197,9 @@ object Semigroup
 
   implicit def catsKernelCommutativeMonoidForMap[K, V: CommutativeSemigroup]: CommutativeMonoid[Map[K, V]] =
     cats.kernel.instances.map.catsKernelStdCommutativeMonoidForMap[K, V]
+  implicit def catsKernelCommutativeSemigroupForSortedMap[K, V: CommutativeSemigroup]
+    : CommutativeSemigroup[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdCommutativeSemigroupForSortedMap[K, V]
   implicit def catsKernelCommutativeMonoidForSortedMap[K: Order, V: CommutativeSemigroup]
     : CommutativeMonoid[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdCommutativeMonoidForSortedMap[K, V]
@@ -239,6 +242,8 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.function.catsKernelMonoidForFunction1[A, B]
   implicit def catsKernelMonoidForMap[K, V: Semigroup]: Monoid[Map[K, V]] =
     cats.kernel.instances.map.catsKernelStdMonoidForMap[K, V]
+  implicit def catsKernelSemigroupForSortedMap[K, V: Semigroup]: Semigroup[SortedMap[K, V]] =
+    cats.kernel.instances.sortedMap.catsKernelStdSemigroupForSortedMap[K, V]
   implicit def catsKernelMonoidForSortedMap[K: Order, V: Semigroup]: Monoid[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap[K, V]
   implicit def catsKernelMonoidForEither[A, B: Monoid]: Monoid[Either[A, B]] =
