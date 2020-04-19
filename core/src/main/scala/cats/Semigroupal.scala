@@ -56,7 +56,7 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsSemigroupalForSortedSet: Semigroupal[SortedSet] =
     cats.instances.sortedSet.catsStdSemigroupalForSortedSet
-  implicit def catsSemigroupalForSortedMap[K: Order]: Semigroupal[SortedMap[K, *]] =
+  implicit def catsSemigroupalForSortedMap[K]: Semigroupal[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsSemigroupalForFunction1[A]: Semigroupal[A => *] =
     cats.instances.function.catsStdMonadForFunction1[A]

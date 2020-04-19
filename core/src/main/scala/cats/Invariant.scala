@@ -66,7 +66,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsMonadForTailRec: Monad[TailRec] = cats.instances.tailRec.catsInstancesForTailRec
 
   implicit def catsFlatMapForMap[K]: FlatMap[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
-  implicit def catsFlatMapForSortedMap[K: Order]: FlatMap[SortedMap[K, *]] =
+  implicit def catsFlatMapForSortedMap[K]: FlatMap[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsBimonadForFunction0[I]: Bimonad[Function0] = cats.instances.function.catsStdBimonadForFunction0
   implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
