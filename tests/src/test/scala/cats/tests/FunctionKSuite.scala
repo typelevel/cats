@@ -1,12 +1,12 @@
 package cats.tests
 
-import cats.Id
 import cats.arrow.FunctionK
-import cats.data.EitherK
-import cats.data.NonEmptyList
+import cats.data.{EitherK, NonEmptyList}
 import cats.laws.discipline.arbitrary._
+import cats.{Applicative, Id}
 
 class FunctionKSuite extends CatsSuite {
+  type OptionOfNel[+A] = Option[NonEmptyList[A]]
 
   val listToOption = new FunctionK[List, Option] { def apply[A](a: List[A]): Option[A] = a.headOption }
   val listToVector = new FunctionK[List, Vector] { def apply[A](a: List[A]): Vector[A] = a.toVector }
@@ -92,9 +92,16 @@ class FunctionKSuite extends CatsSuite {
   }
 
   test("lift compound unary") {
-    val fNelFromList = FunctionK.lift[List, λ[α => Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
+    val fNelFromList = FunctionK.lift[List, OptionOfNel](NonEmptyList.fromList)
     forAll { (a: List[String]) =>
       fNelFromList(a) should ===(NonEmptyList.fromList(a))
+    }
+  }
+
+  test("lift Applicative[Option].pure") {
+    val fSomeNel = FunctionK.lift[NonEmptyList, OptionOfNel](Applicative[Option].pure)
+    forAll { (a: NonEmptyList[Int]) =>
+      fSomeNel(a) should ===(Some(a))
     }
   }
 

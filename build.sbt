@@ -369,11 +369,9 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
           exclude[DirectMissingMethodProblem]("cats.syntax.WriterIdSyntax.a")
         ) ++ // Only compile-time abstractions (macros) allowed here
         Seq(
-          exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros.lift"),
-          exclude[MissingTypesProblem]("cats.arrow.FunctionKMacros$"),
-          exclude[IncompatibleMethTypeProblem]("cats.arrow.FunctionKMacros#Lifter.this"),
-          exclude[IncompatibleResultTypeProblem]("cats.arrow.FunctionKMacros#Lifter.c"),
-          exclude[DirectMissingMethodProblem]("cats.arrow.FunctionKMacros.compatNewTypeName")
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros"),
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros$Lifter"),
+          exclude[MissingClassProblem]("cats.arrow.FunctionKMacros$")
         ) ++ //package private classes no longer needed
         Seq(
           exclude[MissingClassProblem]("cats.kernel.compat.scalaVersionMoreSpecific$"),
