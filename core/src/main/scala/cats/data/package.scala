@@ -82,4 +82,17 @@ package object data extends ScalaVersionSpecificPackage {
     def apply[S, A](f: S => A, s: S): Store[S, A] =
       RepresentableStore[S => *, S, A](f, s)
   }
+
+  type Cont[A, B] = ContT[Id, A, B]
+
+  object Cont {
+    def apply[A, B](f: (B => A) => A): Cont[A, B] =
+      ContT[Id, A, B](f)
+
+    def pure[A, B](b: B): Cont[A, B] =
+      ContT.pure[Id, A, B](b)
+
+    def defer[A, B](b: => B): Cont[A, B] =
+      ContT.defer[Id, A, B](b)
+  }
 }
