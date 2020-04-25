@@ -67,5 +67,4 @@ object FunctionK extends FunctionKMacroMethods {
    * The identity transformation of `F` to `F`
    */
   def id[F[_]]: FunctionK[F, F] = new FunctionK[F, F] { def apply[A](fa: F[A]): F[A] = fa }
-
 }

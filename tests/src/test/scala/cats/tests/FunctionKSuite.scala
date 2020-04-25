@@ -1,14 +1,14 @@
 package cats.tests
 
-import cats.Id
 import cats.arrow.FunctionK
-import cats.data.EitherK
-import cats.data.NonEmptyList
+import cats.data.{EitherK, NonEmptyList}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.eq._
 import org.scalacheck.Prop._
+import cats.{Applicative, Id}
 
 class FunctionKSuite extends CatsSuite {
+  type OptionOfNel[+A] = Option[NonEmptyList[A]]
 
   val listToOption = new FunctionK[List, Option] { def apply[A](a: List[A]): Option[A] = a.headOption }
   val listToVector = new FunctionK[List, Vector] { def apply[A](a: List[A]): Vector[A] = a.toVector }
@@ -32,28 +32,28 @@ class FunctionKSuite extends CatsSuite {
   test("compose") {
     forAll { (list: List[Int]) =>
       val listToList = optionToList.compose(listToOption)
-      assert(listToList(list) === (list.take(1)))
+      assert(listToList(list) === list.take(1))
     }
   }
 
   test("andThen") {
     forAll { (list: List[Int]) =>
       val listToList = listToOption.andThen(optionToList)
-      assert(listToList(list) === (list.take(1)))
+      assert(listToList(list) === list.take(1))
     }
   }
 
   test("id is identity") {
     forAll { (list: List[Int]) =>
-      assert(FunctionK.id[List].apply(list) === (list))
+      assert(FunctionK.id[List].apply(list) === list)
     }
   }
 
   test("or") {
     val combinedInterpreter = Test1FK.or(Test2FK)
     forAll { (a: Int, b: Int) =>
-      assert(combinedInterpreter(EitherK.left(Test1(a))) === (a))
-      assert(combinedInterpreter(EitherK.right(Test2(b))) === (b))
+      assert(combinedInterpreter(EitherK.left(Test1(a))) === a)
+      assert(combinedInterpreter(EitherK.right(Test2(b))) === b)
     }
   }
 
@@ -61,8 +61,8 @@ class FunctionKSuite extends CatsSuite {
     val combinedInterpreter = listToOption.and(listToVector)
     forAll { (list: List[Int]) =>
       val prod = combinedInterpreter(list)
-      assert(prod.first === (list.headOption))
-      assert(prod.second === (list.toVector))
+      assert(prod.first === list.headOption)
+      assert(prod.second === list.toVector)
     }
   }
 
@@ -70,17 +70,17 @@ class FunctionKSuite extends CatsSuite {
     def optionToList[A](option: Option[A]): List[A] = option.toList
     val fOptionToList = FunctionK.lift(optionToList _)
     forAll { (a: Option[Int]) =>
-      assert(fOptionToList(a) === (optionToList(a)))
+      assert(fOptionToList(a) === optionToList(a))
     }
 
     val fO2I: FunctionK[Option, Iterable] = FunctionK.lift(Option.option2Iterable _)
     forAll { (a: Option[String]) =>
-      assert(fO2I(a).toList === (Option.option2Iterable(a).toList))
+      assert(fO2I(a).toList === Option.option2Iterable(a).toList)
     }
 
     val fNelFromListUnsafe = FunctionK.lift(NonEmptyList.fromListUnsafe _)
     forAll { (a: NonEmptyList[Int]) =>
-      assert(fNelFromListUnsafe(a.toList) === (NonEmptyList.fromListUnsafe(a.toList)))
+      assert(fNelFromListUnsafe(a.toList) === NonEmptyList.fromListUnsafe(a.toList))
     }
   }
 
@@ -89,14 +89,29 @@ class FunctionKSuite extends CatsSuite {
     def optionToList[A](option: Option[A]): List[A] = option.toList
     val fOptionToList = cats.arrow.FunctionK.lift(optionToList _)
     forAll { (a: Option[Int]) =>
-      assert(fOptionToList(a) === (optionToList(a)))
+      assert(fOptionToList(a) === optionToList(a))
     }
   }
 
   test("lift compound unary") {
-    val fNelFromList = FunctionK.lift[List, λ[α => Option[NonEmptyList[α]]]](NonEmptyList.fromList _)
+    val fNelFromList = FunctionK.lift[List, OptionOfNel](NonEmptyList.fromList)
     forAll { (a: List[String]) =>
-      assert(fNelFromList(a) === (NonEmptyList.fromList(a)))
+      assert(fNelFromList(a) === NonEmptyList.fromList(a))
+    }
+  }
+
+  test("lift eta-expanded function") {
+    val fSomeNel = FunctionK.lift[NonEmptyList, OptionOfNel](Applicative[Option].pure)
+    forAll { (a: NonEmptyList[Int]) =>
+      assert(fSomeNel(a) === Some(a))
+    }
+  }
+
+  test("lift a function directly") {
+    def headOption[A](list: List[A]): Option[A] = list.headOption
+    val fHeadOption = FunctionK.liftFunction[List, Option](headOption)
+    forAll { (a: List[Int]) =>
+      assert(fHeadOption(a) === a.headOption)
     }
   }
 
@@ -105,5 +120,4 @@ class FunctionKSuite extends CatsSuite {
     assert(compileErrors("FunctionK.lift(sample[String])").nonEmpty)
     assert(compileErrors("FunctionK.lift(sample[Nothing])").nonEmpty)
   }
-
 }
