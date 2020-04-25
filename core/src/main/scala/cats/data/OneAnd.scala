@@ -241,7 +241,7 @@ sealed abstract private[data] class OneAndLowPriority1 extends OneAndLowPriority
 }
 
 sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriority1 {
-  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): Reducible[OneAnd[F, *]] =
+  implicit def catsDataReducibleForOneAnd[F[_]](implicit F: Foldable[F]): NonEmptyReducible[OneAnd[F, *], F] =
     new NonEmptyReducible[OneAnd[F, *], F] {
       override def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
 
@@ -253,8 +253,10 @@ sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriori
 }
 
 sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority0_5 {
-  implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F],
-                                                       F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, *]] =
+  implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](
+    implicit F: Traverse[F],
+    F2: Alternative[F]
+  ): NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] =
         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)
