@@ -80,14 +80,6 @@ import simulacrum.{noop, typeclass}
    *  Monadic variant of [[reduceLeftTo]].
    *
    *  This method may short-circuit.
-   *
-   *  {{{
-   *  scala> import cats.Reducible, cats.data.NonEmptyStream, cats.implicits._
-   *  scala> def f(i: Int): Either[Int, Int] = if (i < 100000) Right(i) else Left(i)
-   *  scala> val s = NonEmptyStream(0, Stream.from(1))
-   *  scala> Reducible[NonEmptyStream].reduceLeftM(s)(f)((b, a) => f(a).map(_ + b))
-   *  res0: Either[Int, Int] = Left(100000)
-   *  }}}
    */
   def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] = {
     import Foldable.Source

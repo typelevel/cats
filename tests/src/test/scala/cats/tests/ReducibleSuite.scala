@@ -119,6 +119,14 @@ class ReducibleSuiteAdditional extends CatsSuite {
 
     xs.reduceA should ===(Left(n))
   }
+
+  test("reduceLeftM should be stack-safe and short-circuiting") {
+    val n = 100000
+    val xs = NES(0, Stream.from(1))
+    def f(i: Int): Either[Int, Int] = if (i < n) Right(i) else Left(i)
+
+    xs.reduceLeftM(f)((b, a) => f(a).map(_ + b)) should ===(Left(n))
+  }
 }
 
 abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
