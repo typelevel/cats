@@ -79,8 +79,22 @@ import simulacrum.{noop, typeclass}
   /**
    *  Monadic variant of [[reduceLeftTo]].
    */
-  def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
-    reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
+  def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] = {
+    import Foldable.Source
+    def reduceRecursively(gb: G[B], src: Source[A]): G[B] = G.tailRecM((gb, src)) {
+      case (gb, src) =>
+        src.uncons match {
+          case Some((a, src)) => G.map(gb)(b => Left((g(b, a), src.value)))
+          case None           => G.map(gb)(Right(_))
+        }
+    }
+
+    Source.fromFoldable(fa)(self).uncons match {
+      case Some((a, src)) => reduceRecursively(f(a), src.value)
+      // It seems we have to fall back to the original implementation when fa is "empty".
+      case None => reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
+    }
+  }
 
   /**
    * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
