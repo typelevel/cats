@@ -49,9 +49,10 @@ class PartialOrderSuite extends CatsSuite {
       (i <= j) should ===(PartialOrder.lteqv(i, j))
 
       checkPartialCompare(i.partialCompare(j), PartialOrder.partialCompare(i, j))
-      (i.tryCompare(j)) should ===(PartialOrder.tryCompare(i, j))
-      (i.pmin(j)) should ===(PartialOrder.pmin(i, j))
-      (i.pmax(j)) should ===(PartialOrder.pmax(i, j))
+      i.partialComparison(j) should ===(PartialOrder[POrd].partialComparison(i, j))
+      i.tryCompare(j) should ===(PartialOrder.tryCompare(i, j))
+      i.pmin(j) should ===(PartialOrder.pmin(i, j))
+      i.pmax(j) should ===(PartialOrder.pmax(i, j))
     }
   }
 }
