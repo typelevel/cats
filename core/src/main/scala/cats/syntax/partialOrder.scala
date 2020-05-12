@@ -13,6 +13,7 @@ final class PartialOrderOps[A](lhs: A)(implicit A: PartialOrder[A]) {
   def <=(rhs: A): Boolean = A.lteqv(lhs, rhs)
 
   def partialCompare(rhs: A): Double = A.partialCompare(lhs, rhs)
+  def partialComparison(rhs: A): Option[Comparison] = A.partialComparison(lhs, rhs)
   def tryCompare(rhs: A): Option[Int] = A.tryCompare(lhs, rhs)
   def pmin(rhs: A): Option[A] = A.pmin(lhs, rhs)
   def pmax(rhs: A): Option[A] = A.pmax(lhs, rhs)
