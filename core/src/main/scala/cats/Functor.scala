@@ -100,6 +100,20 @@ import simulacrum.{noop, typeclass}
   def fproduct[A, B](fa: F[A])(f: A => B): F[(A, B)] = map(fa)(a => a -> f(a))
 
   /**
+   *  Pair the result of function application with `A`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Functor
+   * scala> import cats.implicits.catsStdInstancesForOption
+   *
+   * scala> Functor[Option].fproductLeft(Option(42))(_.toString)
+   * res0: Option[(String, Int)] = Some((42,42))
+   * }}}
+   */
+  def fproductLeft[A, B](fa: F[A])(f: A => B): F[(B, A)] = map(fa)(a => f(a) -> a)
+
+  /**
    * Replaces the `A` value in `F[A]` with the supplied value.
    *
    * Example:
