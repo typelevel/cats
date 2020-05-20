@@ -142,6 +142,12 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
+
+  test("NonEmptyLazyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (ci: NonEmptyLazyList[Int]) =>
+      ci.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector))
+    }
+  }
 }
 
 class ReducibleNonEmptyLazyListSuite extends ReducibleSuite[NonEmptyLazyList]("NonEmptyLazyList") {
