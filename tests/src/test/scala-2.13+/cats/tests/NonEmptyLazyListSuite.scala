@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
-import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps, NonEmptyVector}
 import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}

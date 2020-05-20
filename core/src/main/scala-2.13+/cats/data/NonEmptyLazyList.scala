@@ -458,7 +458,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    *}}}
    */
   final def toNev[B >: A]: NonEmptyVector[B] =
-    NonEmptyVector.fromVectorUnsafe(toLazyList.toList.toVector)
+    NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
 
   final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[LazyList[AA]].show(toLazyList)}"
 }
