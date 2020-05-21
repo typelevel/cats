@@ -1,7 +1,7 @@
 package cats.tests
 
 import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
-import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps, NonEmptyVector}
 import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
@@ -140,6 +140,12 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
+    }
+  }
+
+  test("NonEmptyLazyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (ci: NonEmptyLazyList[Int]) =>
+      ci.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector))
     }
   }
 }

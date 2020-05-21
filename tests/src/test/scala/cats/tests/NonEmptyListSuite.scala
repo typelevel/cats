@@ -354,6 +354,12 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
     }
   }
+
+  test("NonEmptyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
+    }
+  }
 }
 
 @deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")

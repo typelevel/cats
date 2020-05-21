@@ -437,6 +437,21 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    */
   def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
+
+  /**
+   * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
+   *{{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyList(1, List(2,3,4))
+   * scala> val expectedResult = NonEmptyVector.fromVectorUnsafe(Vector(1,2,3,4))
+   * scala> val result = nel.toNev
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   *}}}
+   */
+  def toNev[B >: A]: NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(toList.toVector)
 }
 
 object NonEmptyList extends NonEmptyListInstances {
