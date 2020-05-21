@@ -26,6 +26,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | `F[A] => B => F[B]`  | `as`   |
 | `F[A] => (A => B) => F[B]` | `map`   |
 | `F[A] => (A => B) => F[(A,B)]` | `fproduct`   |
+| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft`   |
 | `F[A] => B => F[(B, A)]`  | `tupleLeft`  |
 | `F[A] => B => F[(A, B)]`  | `tupleRight` |
 | `(A => B) => (F[A] => F[B])` | `lift`   |

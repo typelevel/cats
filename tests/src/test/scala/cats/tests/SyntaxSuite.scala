@@ -274,6 +274,7 @@ object SyntaxSuite {
     val fb0: F[B] = fa.map(f)
     val fu: F[Unit] = fa.void
     val fab: F[(A, B)] = fa.fproduct(f)
+    val fba: F[(B, A)] = fa.fproductLeft(f)
 
     val b = mock[B]
     val fb1: F[B] = fa.as(b)
