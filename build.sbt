@@ -393,7 +393,8 @@ lazy val docs = project
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
-    )
+    ),
+    scalacOptions in (ScalaUnidoc, unidoc) ~= { _.filter(_ != "-Xlint:-unused,_") }
   )
   .dependsOn(core.jvm, free.jvm, kernelLaws.jvm, laws.jvm)
 
