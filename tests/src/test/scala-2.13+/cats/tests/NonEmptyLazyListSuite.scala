@@ -4,7 +4,14 @@ import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
 import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps, NonEmptyVector}
 import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{
+  AlignTests,
+  BimonadTests,
+  NonEmptyTraverseTests,
+  SemigroupKTests,
+  SerializableTests,
+  ShortCircuitingTests
+}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
@@ -35,6 +42,8 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
 
   checkAll("NonEmptyLazyList[Int]", AlignTests[NonEmptyLazyList].align[Int, Int, Int, Int])
   checkAll("Align[NonEmptyLazyList]", SerializableTests.serializable(Align[NonEmptyLazyList]))
+
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].traverse[Int])
 
   test("show") {
     Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) should ===("NonEmptyLazyList(1, ?)")
