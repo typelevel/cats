@@ -125,21 +125,23 @@ object NonEmptyTraverse {
   trait ToNonEmptyTraverseOps {
     implicit def toNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): Ops[F, A] {
       type TypeClassType = NonEmptyTraverse[F]
-    } = new Ops[F, A] {
-      type TypeClassType = NonEmptyTraverse[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = NonEmptyTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToNonEmptyTraverseOps
   object ops {
     implicit def toAllNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): AllOps[F, A] {
       type TypeClassType = NonEmptyTraverse[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = NonEmptyTraverse[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = NonEmptyTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

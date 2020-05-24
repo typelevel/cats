@@ -40,7 +40,7 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
-      val contRun: ContT[M, A, C] => M[A] = (_.run(fn2))
+      val contRun: ContT[M, A, C] => M[A] = _.run(fn2)
       val fn3: B => M[A] = fnAndThen.andThen(contRun)
       M.defer(run(fn3))
     }

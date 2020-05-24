@@ -17,8 +17,8 @@ trait ShortCircuitingTests[F[_]] extends Laws {
       "traverse won't short-circuit if Applicative[G].map2Eval won't" -> forAll(laws.traverseWontShortCircuit[A] _)
     )
 
-  def traverseFilter[A: Arbitrary](
-    implicit TF: TraverseFilter[F],
+  def traverseFilter[A: Arbitrary](implicit
+    TF: TraverseFilter[F],
     ArbFA: Arbitrary[F[A]],
     lEq: Eq[Long]
   ): RuleSet = {
@@ -37,7 +37,8 @@ trait ShortCircuitingTests[F[_]] extends Laws {
 }
 
 object ShortCircuitingTests {
-  def apply[F[_]]: ShortCircuitingTests[F] = new ShortCircuitingTests[F] {
-    override def laws: ShortCircuitingLaws[F] = ShortCircuitingLaws[F]
-  }
+  def apply[F[_]]: ShortCircuitingTests[F] =
+    new ShortCircuitingTests[F] {
+      override def laws: ShortCircuitingLaws[F] = ShortCircuitingLaws[F]
+    }
 }

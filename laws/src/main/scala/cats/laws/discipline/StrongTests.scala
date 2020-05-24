@@ -9,8 +9,7 @@ import cats.arrow.Strong
 trait StrongTests[F[_, _]] extends ProfunctorTests[F] {
   def laws: StrongLaws[F]
 
-  def strong[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](
-    implicit
+  def strong[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary, E: Arbitrary, G: Arbitrary](implicit
     ArbFAB: Arbitrary[F[A, B]],
     ArbFCD: Arbitrary[F[C, D]],
     CogenA: Cogen[A],

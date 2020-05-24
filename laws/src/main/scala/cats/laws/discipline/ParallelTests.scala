@@ -8,14 +8,16 @@ import org.scalacheck.Prop.forAll
 trait ParallelTests[M[_]] extends NonEmptyParallelTests[M] {
   val laws: ParallelLaws[M]
 
-  def parallel[A, B](implicit ArbA: Arbitrary[A],
-                     ArbM: Arbitrary[M[A]],
-                     ArbMb: Arbitrary[M[B]],
-                     Arbf: Arbitrary[A => B],
-                     EqMa: Eq[M[A]],
-                     EqMb: Eq[M[B]],
-                     ArbF: Arbitrary[F[A]],
-                     EqFa: Eq[F[A]]): RuleSet =
+  def parallel[A, B](implicit
+    ArbA: Arbitrary[A],
+    ArbM: Arbitrary[M[A]],
+    ArbMb: Arbitrary[M[B]],
+    Arbf: Arbitrary[A => B],
+    EqMa: Eq[M[A]],
+    EqMb: Eq[M[B]],
+    ArbF: Arbitrary[F[A]],
+    EqFa: Eq[F[A]]
+  ): RuleSet =
     new DefaultRuleSet(
       "parallel",
       Some(nonEmptyParallel[A, B]),

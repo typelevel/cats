@@ -32,21 +32,23 @@ object EmptyK {
   trait ToEmptyKOps {
     implicit def toEmptyKOps[F[_], A](target: F[A])(implicit tc: EmptyK[F]): Ops[F, A] {
       type TypeClassType = EmptyK[F]
-    } = new Ops[F, A] {
-      type TypeClassType = EmptyK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = EmptyK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToEmptyKOps
   object ops {
     implicit def toAllEmptyKOps[F[_], A](target: F[A])(implicit tc: EmptyK[F]): AllOps[F, A] {
       type TypeClassType = EmptyK[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = EmptyK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = EmptyK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

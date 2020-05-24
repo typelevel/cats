@@ -105,8 +105,8 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
 @suppressUnusedImportWarningForScalaVersionSpecific
 sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
-  implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F0[_]: Alternative](
-    implicit P: Parallel.Aux[M, F0]
+  implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F0[_]: Alternative](implicit
+    P: Parallel.Aux[M, F0]
   ): Parallel.Aux[OneAnd[M, *], OneAnd[F0, *]] =
     new Parallel[OneAnd[M, *]] {
       type F[x] = OneAnd[F0, x]
@@ -143,8 +143,10 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
   implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
-  implicit def catsDataMonadForOneAnd[F[_]](implicit monad: Monad[F],
-                                            alternative: Alternative[F]): Monad[OneAnd[F, *]] =
+  implicit def catsDataMonadForOneAnd[F[_]](implicit
+    monad: Monad[F],
+    alternative: Alternative[F]
+  ): Monad[OneAnd[F, *]] =
     new Monad[OneAnd[F, *]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa.map(f)(monad)
@@ -166,18 +168,20 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
           val oneAnd = fn(a)
           alternative.combineK(monad.pure(oneAnd.head), oneAnd.tail)
         }
-        def toFB(in: Either[A, B]): F[B] = in match {
-          case Right(b) => monad.pure(b)
-          case Left(a)  => monad.tailRecM(a)(stepF)
-        }
+        def toFB(in: Either[A, B]): F[B] =
+          in match {
+            case Right(b) => monad.pure(b)
+            case Left(a)  => monad.tailRecM(a)(stepF)
+          }
 
         // This could probably be in SemigroupK to perform well
         @tailrec
-        def combineAll(items: List[F[B]]): F[B] = items match {
-          case Nil              => alternative.empty
-          case h :: Nil         => h
-          case h1 :: h2 :: tail => combineAll(alternative.combineK(h1, h2) :: tail)
-        }
+        def combineAll(items: List[F[B]]): F[B] =
+          items match {
+            case Nil              => alternative.empty
+            case h :: Nil         => h
+            case h1 :: h2 :: tail => combineAll(alternative.combineK(h1, h2) :: tail)
+          }
 
         @tailrec
         def go(in: A, rest: List[F[B]]): OneAnd[F, B] =
@@ -253,8 +257,10 @@ sealed abstract private[data] class OneAndLowPriority0_5 extends OneAndLowPriori
 }
 
 sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority0_5 {
-  implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit F: Traverse[F],
-                                                       F2: Alternative[F]): NonEmptyTraverse[OneAnd[F, *]] =
+  implicit def catsDataNonEmptyTraverseForOneAnd[F[_]](implicit
+    F: Traverse[F],
+    F2: Alternative[F]
+  ): NonEmptyTraverse[OneAnd[F, *]] =
     new NonEmptyReducible[OneAnd[F, *], F] with NonEmptyTraverse[OneAnd[F, *]] {
       def nonEmptyTraverse[G[_], A, B](fa: OneAnd[F, A])(f: (A) => G[B])(implicit G: Apply[G]): G[OneAnd[F, B]] =
         fa.map(a => Apply[G].map(f(a))(OneAnd(_, F2.empty[B])))(F)

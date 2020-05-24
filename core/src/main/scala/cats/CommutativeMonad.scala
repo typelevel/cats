@@ -40,21 +40,23 @@ object CommutativeMonad {
   trait ToCommutativeMonadOps {
     implicit def toCommutativeMonadOps[F[_], A](target: F[A])(implicit tc: CommutativeMonad[F]): Ops[F, A] {
       type TypeClassType = CommutativeMonad[F]
-    } = new Ops[F, A] {
-      type TypeClassType = CommutativeMonad[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = CommutativeMonad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToCommutativeMonadOps
   object ops {
     implicit def toAllCommutativeMonadOps[F[_], A](target: F[A])(implicit tc: CommutativeMonad[F]): AllOps[F, A] {
       type TypeClassType = CommutativeMonad[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = CommutativeMonad[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CommutativeMonad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

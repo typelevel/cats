@@ -261,10 +261,11 @@ object Apply {
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)
 
-  def align[F[_]: Apply]: Align[F] = new Align[F] {
-    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
-    def functor: Functor[F] = Apply[F]
-  }
+  def align[F[_]: Apply]: Align[F] =
+    new Align[F] {
+      def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
+      def functor: Functor[F] = Apply[F]
+    }
 
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
@@ -297,21 +298,23 @@ object Apply {
   trait ToApplyOps {
     implicit def toApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): Ops[F, A] {
       type TypeClassType = Apply[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Apply[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Apply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToApplyOps
   object ops {
     implicit def toAllApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): AllOps[F, A] {
       type TypeClassType = Apply[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Apply[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Apply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

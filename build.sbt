@@ -83,14 +83,15 @@ lazy val simulacrumSettings = Seq(
   libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.2.0",
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
-      override def transform(node: xml.Node): Seq[xml.Node] = node match {
-        case e: xml.Elem
-            if e.label == "dependency" &&
-              e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-              e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
-          Nil
-        case _ => Seq(node)
-      }
+      override def transform(node: xml.Node): Seq[xml.Node] =
+        node match {
+          case e: xml.Elem
+              if e.label == "dependency" &&
+                e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
+                e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
+            Nil
+          case _ => Seq(node)
+        }
     }).transform(node).head
   }
 )
@@ -139,7 +140,8 @@ lazy val includeGeneratedSrc: Setting[_] = {
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies ++= Seq("org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-                              "org.typelevel" %%% "discipline-core" % disciplineVersion)
+                              "org.typelevel" %%% "discipline-core" % disciplineVersion
+  )
 )
 
 lazy val testingDependencies = Seq(
@@ -423,7 +425,8 @@ lazy val catsJVM = project
              alleycatsLaws.jvm,
              alleycatsTests.jvm,
              jvm,
-             docs)
+             docs
+  )
   .dependsOn(
     kernel.jvm,
     kernelLaws.jvm,
@@ -454,7 +457,8 @@ lazy val catsJS = project
              alleycatsCore.js,
              alleycatsLaws.js,
              alleycatsTests.js,
-             js)
+             js
+  )
   .dependsOn(
     kernel.js,
     kernelLaws.js,

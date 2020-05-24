@@ -36,21 +36,23 @@ object CommutativeFlatMap {
   trait ToCommutativeFlatMapOps {
     implicit def toCommutativeFlatMapOps[F[_], A](target: F[A])(implicit tc: CommutativeFlatMap[F]): Ops[F, A] {
       type TypeClassType = CommutativeFlatMap[F]
-    } = new Ops[F, A] {
-      type TypeClassType = CommutativeFlatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = CommutativeFlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToCommutativeFlatMapOps
   object ops {
     implicit def toAllCommutativeFlatMapOps[F[_], A](target: F[A])(implicit tc: CommutativeFlatMap[F]): AllOps[F, A] {
       type TypeClassType = CommutativeFlatMap[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = CommutativeFlatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CommutativeFlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

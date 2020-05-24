@@ -30,7 +30,8 @@ class ConstSuite extends CatsSuite {
   checkAll("Applicative[Const[String, *]]", SerializableTests.serializable(Applicative[Const[String, *]]))
 
   checkAll("Const[String, Int] with Option",
-           TraverseTests[Const[String, *]].traverse[Int, Int, Int, Int, Option, Option])
+           TraverseTests[Const[String, *]].traverse[Int, Int, Int, Int, Option, Option]
+  )
   checkAll("Traverse[Const[String, *]]", SerializableTests.serializable(Traverse[Const[String, *]]))
 
   checkAll("Const[String, Int]", TraverseFilterTests[Const[String, *]].traverseFilter[Int, Int, Int])
@@ -46,7 +47,8 @@ class ConstSuite extends CatsSuite {
       Isomorphisms.invariant[Const[NonEmptyList[String], *]](Const.catsDataContravariantForConst)
     checkAll("Apply[Const[NonEmptyList[String], Int]]", ApplyTests[Const[NonEmptyList[String], *]].apply[Int, Int, Int])
     checkAll("Apply[Const[NonEmptyList[String], *]]",
-             SerializableTests.serializable(Apply[Const[NonEmptyList[String], *]]))
+             SerializableTests.serializable(Apply[Const[NonEmptyList[String], *]])
+    )
   }
 
   // Algebra checks for Serializability of instances as part of the laws
@@ -77,13 +79,15 @@ class ConstSuite extends CatsSuite {
 
   checkAll("Const[String, Int]", ContravariantMonoidalTests[Const[String, *]].contravariantMonoidal[Int, Int, Int])
   checkAll("ContravariantMonoidal[Const[String, *]]",
-           SerializableTests.serializable(ContravariantMonoidal[Const[String, *]]))
+           SerializableTests.serializable(ContravariantMonoidal[Const[String, *]])
+  )
 
   checkAll("Const[*, *]", BifoldableTests[Const].bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Const]", SerializableTests.serializable(Bifoldable[Const]))
 
   checkAll("InvariantMonoidal[Const[String, *]]",
-           InvariantMonoidalTests[Const[String, *]].invariantMonoidal[Int, Int, Int])
+           InvariantMonoidalTests[Const[String, *]].invariantMonoidal[Int, Int, Int]
+  )
   checkAll("InvariantMonoidal[Const[String, *]]", SerializableTests.serializable(InvariantMonoidal[Const[String, *]]))
 
   test("show") {
@@ -106,7 +110,8 @@ class ConstSuite extends CatsSuite {
       Isomorphisms.invariant[Const[CMono, *]](Const.catsDataFunctorForConst)
     checkAll("Const[CMono, Int]", CommutativeApplicativeTests[Const[CMono, *]].commutativeApplicative[Int, Int, Int])
     checkAll("CommutativeApplicative[Const[CMono, *]]",
-             SerializableTests.serializable(CommutativeApplicative[Const[CMono, *]]))
+             SerializableTests.serializable(CommutativeApplicative[Const[CMono, *]])
+    )
   }
 
   checkAll("Const[CSemi, Int]", CommutativeApplyTests[Const[CSemi, *]].commutativeApply[Int, Int, Int])

@@ -25,7 +25,8 @@ class BinestedSuite extends CatsSuite {
       BifunctorTests[Binested[Either, ListWrapper, Option, *, *]].bifunctor[Int, Int, Int, String, String, String]
     )
     checkAll("Bifunctor[Binested[Either, ListWrapper, Option, *, *]]",
-             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, *, *]]))
+             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, *, *]])
+    )
   }
 
   {
@@ -47,7 +48,8 @@ class BinestedSuite extends CatsSuite {
     // Bifoldable + foldable + foldable = Bifoldable
     implicit val instance: Foldable[ListWrapper] = ListWrapper.foldable
     checkAll("Binested[Either, ListWrapper, ListWrapper, *, *]",
-             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, *, *]].bifoldable[Int, Int, Int])
+             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, *, *]].bifoldable[Int, Int, Int]
+    )
     checkAll(
       "Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]]",
       SerializableTests.serializable(Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]])

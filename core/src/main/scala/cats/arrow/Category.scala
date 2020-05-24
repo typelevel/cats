@@ -46,21 +46,23 @@ object Category {
   trait ToCategoryOps {
     implicit def toCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): Ops[F, A, B] {
       type TypeClassType = Category[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Category[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Category[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToCategoryOps
   object ops {
     implicit def toAllCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): AllOps[F, A, B] {
       type TypeClassType = Category[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Category[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Category[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

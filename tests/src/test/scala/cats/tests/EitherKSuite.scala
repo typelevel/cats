@@ -10,14 +10,16 @@ import cats.laws.discipline.eq._
 class EitherKSuite extends CatsSuite {
 
   checkAll("EitherK[Option, Option, *]",
-           TraverseTests[EitherK[Option, Option, *]].traverse[Int, Int, Int, Int, Option, Option])
+           TraverseTests[EitherK[Option, Option, *]].traverse[Int, Int, Int, Int, Option, Option]
+  )
   checkAll("Traverse[EitherK[Option, Option, *]]", SerializableTests.serializable(Traverse[EitherK[Option, Option, *]]))
 
   {
     implicit val foldable: Foldable[EitherK[Option, Option, *]] = EitherK.catsDataFoldableForEitherK[Option, Option]
     checkAll("EitherK[Option, Option, *]", FoldableTests[EitherK[Option, Option, *]].foldable[Int, Int])
     checkAll("Foldable[EitherK[Option, Option, *]]",
-             SerializableTests.serializable(Foldable[EitherK[Option, Option, *]]))
+             SerializableTests.serializable(Foldable[EitherK[Option, Option, *]])
+    )
   }
 
   checkAll("EitherK[Eval, Eval, *]", ComonadTests[EitherK[Eval, Eval, *]].comonad[Int, Int, Int])
@@ -34,7 +36,8 @@ class EitherKSuite extends CatsSuite {
 
   checkAll("EitherK[Show, Show, *]", ContravariantTests[EitherK[Show, Show, *]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[EitherK[Show, Show, *]]",
-           SerializableTests.serializable(Contravariant[EitherK[Show, Show, *]]))
+           SerializableTests.serializable(Contravariant[EitherK[Show, Show, *]])
+  )
 
   test("double swap is identity") {
     forAll { (x: EitherK[Option, Option, Int]) =>

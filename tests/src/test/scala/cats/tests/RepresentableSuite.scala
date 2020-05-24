@@ -54,7 +54,8 @@ class RepresentableSuite extends CatsSuite {
     )
 
     checkAll("Representable[Kleisli[Pair, MiniInt, *]]",
-             SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, *]]))
+             SerializableTests.serializable(Representable[Kleisli[Pair, MiniInt, *]])
+    )
   }
 
   val reprPair = Representable[Pair]

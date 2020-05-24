@@ -12,8 +12,9 @@ import cats.data.Ior
 trait EitherInstances extends cats.kernel.instances.EitherInstances {
   implicit val catsStdBitraverseForEither: Bitraverse[Either] =
     new Bitraverse[Either] {
-      def bitraverse[G[_], A, B, C, D](fab: Either[A, B])(f: A => G[C],
-                                                          g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
+      def bitraverse[G[_], A, B, C, D](
+        fab: Either[A, B]
+      )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Either[C, D]] =
         fab match {
           case Left(a)  => G.map(f(a))(Left(_))
           case Right(b) => G.map(g(b))(Right(_))
@@ -25,8 +26,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Right(b) => g(c, b)
         }
 
-      def bifoldRight[A, B, C](fab: Either[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                              g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: Either[A, B],
+                               c: Eval[C]
+      )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         fab match {
           case Left(a)  => f(a, c)
           case Right(b) => g(b, c)
@@ -103,8 +105,9 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       override def redeem[B, R](fab: Either[A, B])(recover: A => R, map: B => R): Either[A, R] =
         Right(fab.fold(recover, map))
 
-      override def redeemWith[B, R](fab: Either[A, B])(recover: A => Either[A, R],
-                                                       bind: B => Either[A, R]): Either[A, R] =
+      override def redeemWith[B, R](
+        fab: Either[A, B]
+      )(recover: A => Either[A, R], bind: B => Either[A, R]): Either[A, R] =
         fab.fold(recover, bind)
 
       override def fromEither[B](fab: Either[A, B]): Either[A, B] =
@@ -159,28 +162,30 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
       def align[B, C](fa: Either[A, B], fb: Either[A, C]): Either[A, Ior[B, C]] =
         alignWith(fa, fb)(identity)
 
-      override def alignWith[B, C, D](fb: Either[A, B], fc: Either[A, C])(f: Ior[B, C] => D): Either[A, D] = fb match {
-        case left @ Left(a) =>
-          fc match {
-            case Left(_)  => left.rightCast[D]
-            case Right(c) => Right(f(Ior.right(c)))
-          }
-        case Right(b) =>
-          fc match {
-            case Left(a)  => Right(f(Ior.left(b)))
-            case Right(c) => Right(f(Ior.both(b, c)))
-          }
-      }
+      override def alignWith[B, C, D](fb: Either[A, B], fc: Either[A, C])(f: Ior[B, C] => D): Either[A, D] =
+        fb match {
+          case left @ Left(a) =>
+            fc match {
+              case Left(_)  => left.rightCast[D]
+              case Right(c) => Right(f(Ior.right(c)))
+            }
+          case Right(b) =>
+            fc match {
+              case Left(a)  => Right(f(Ior.left(b)))
+              case Right(c) => Right(f(Ior.both(b, c)))
+            }
+        }
 
     }
   // scalastyle:on method.length
 
   implicit def catsStdSemigroupKForEither[L]: SemigroupK[Either[L, *]] =
     new SemigroupK[Either[L, *]] {
-      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] = x match {
-        case Left(_)  => y
-        case Right(_) => x
-      }
+      def combineK[A](x: Either[L, A], y: Either[L, A]): Either[L, A] =
+        x match {
+          case Left(_)  => y
+          case Right(_) => x
+        }
     }
 
   implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =

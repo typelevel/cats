@@ -61,21 +61,23 @@ object Bifoldable {
   trait ToBifoldableOps {
     implicit def toBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): Ops[F, A, B] {
       type TypeClassType = Bifoldable[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Bifoldable[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Bifoldable[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToBifoldableOps
   object ops {
     implicit def toAllBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): AllOps[F, A, B] {
       type TypeClassType = Bifoldable[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Bifoldable[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Bifoldable[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/
@@ -94,8 +96,9 @@ private[cats] trait ComposedBifoldable[F[_, _], G[_, _]] extends Bifoldable[λ[(
       (c: C, gab: G[A, B]) => G.bifoldLeft(gab, c)(f, g)
     )
 
-  override def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                                          g: (B, Eval[C]) => Eval[C]): Eval[C] =
+  override def bifoldRight[A, B, C](fab: F[G[A, B], G[A, B]],
+                                    c: Eval[C]
+  )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
     F.bifoldRight(fab, c)(
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g),
       (gab: G[A, B], c: Eval[C]) => G.bifoldRight(gab, c)(f, g)

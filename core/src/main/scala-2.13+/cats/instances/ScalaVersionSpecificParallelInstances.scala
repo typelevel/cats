@@ -13,8 +13,8 @@ trait ParallelInstances extends ParallelInstances1 {
     cats.instances.either.catsParallelForEitherAndValidated[E]
 
   @deprecated("Use OptionT.catsDataParallelForOptionT", "2.0.0")
-  def catsParallelForOptionTNestedOption[M[_]](
-    implicit P: Parallel[M]
+  def catsParallelForOptionTNestedOption[M[_]](implicit
+    P: Parallel[M]
   ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = OptionT.catsDataParallelForOptionT[M]
 
   @deprecated("Use cats.instances.list.catsStdNonEmptyParallelForListZipList", "2.1.0")
@@ -34,8 +34,8 @@ trait ParallelInstances extends ParallelInstances1 {
     cats.instances.lazyList.catsStdParallelForLazyListZipLazyList[A]
 
   @deprecated("Use EitherT.catsDataParallelForEitherTWithParallelEffect", "2.0.0")
-  def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](
-    implicit P: Parallel[M]
+  def catsParallelForEitherTNestedParallelValidated[M[_], E: Semigroup](implicit
+    P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     EitherT.catsDataParallelForEitherTWithParallelEffect[M, E]
 }

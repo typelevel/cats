@@ -38,108 +38,126 @@ object EitherSyntax {
 
 final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def foreach(f: B => Unit): Unit = eab match {
-    case Left(_)  => ()
-    case Right(b) => f(b)
-  }
+  private[syntax] def foreach(f: B => Unit): Unit =
+    eab match {
+      case Left(_)  => ()
+      case Right(b) => f(b)
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def getOrElse[BB >: B](default: => BB): BB = eab match {
-    case Left(_)  => default
-    case Right(b) => b
-  }
+  private[syntax] def getOrElse[BB >: B](default: => BB): BB =
+    eab match {
+      case Left(_)  => default
+      case Right(b) => b
+    }
 
-  def orElse[C, BB >: B](fallback: => Either[C, BB]): Either[C, BB] = eab match {
-    case Left(_)      => fallback
-    case r @ Right(_) => EitherUtil.leftCast(r)
-  }
+  def orElse[C, BB >: B](fallback: => Either[C, BB]): Either[C, BB] =
+    eab match {
+      case Left(_)      => fallback
+      case r @ Right(_) => EitherUtil.leftCast(r)
+    }
 
-  def recover[BB >: B](pf: PartialFunction[A, BB]): Either[A, BB] = eab match {
-    case Left(a) if pf.isDefinedAt(a) => Right(pf(a))
-    case _                            => eab
-  }
+  def recover[BB >: B](pf: PartialFunction[A, BB]): Either[A, BB] =
+    eab match {
+      case Left(a) if pf.isDefinedAt(a) => Right(pf(a))
+      case _                            => eab
+    }
 
-  def recoverWith[AA >: A, BB >: B](pf: PartialFunction[A, Either[AA, BB]]): Either[AA, BB] = eab match {
-    case Left(a) if pf.isDefinedAt(a) => pf(a)
-    case _                            => eab
-  }
+  def recoverWith[AA >: A, BB >: B](pf: PartialFunction[A, Either[AA, BB]]): Either[AA, BB] =
+    eab match {
+      case Left(a) if pf.isDefinedAt(a) => pf(a)
+      case _                            => eab
+    }
 
-  def valueOr[BB >: B](f: A => BB): BB = eab match {
-    case Left(a)  => f(a)
-    case Right(b) => b
-  }
+  def valueOr[BB >: B](f: A => BB): BB =
+    eab match {
+      case Left(a)  => f(a)
+      case Right(b) => b
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def forall(f: B => Boolean): Boolean = eab match {
-    case Left(_)  => true
-    case Right(b) => f(b)
-  }
+  private[syntax] def forall(f: B => Boolean): Boolean =
+    eab match {
+      case Left(_)  => true
+      case Right(b) => f(b)
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def exists(f: B => Boolean): Boolean = eab match {
-    case Left(_)  => false
-    case Right(b) => f(b)
-  }
+  private[syntax] def exists(f: B => Boolean): Boolean =
+    eab match {
+      case Left(_)  => false
+      case Right(b) => f(b)
+    }
 
-  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean): Either[AA, B] = eab match {
-    case Left(_)  => eab
-    case Right(b) => if (f(b)) eab else Left(onFailure)
-  }
+  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean): Either[AA, B] =
+    eab match {
+      case Left(_)  => eab
+      case Right(b) => if (f(b)) eab else Left(onFailure)
+    }
 
-  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean): Either[AA, B] = eab match {
-    case Left(_)  => eab
-    case Right(b) => if (f(b)) eab else Left(onFailure(b))
-  }
+  def ensureOr[AA >: A](onFailure: B => AA)(f: B => Boolean): Either[AA, B] =
+    eab match {
+      case Left(_)  => eab
+      case Right(b) => if (f(b)) eab else Left(onFailure(b))
+    }
 
   def toIor: A Ior B = Ior.fromEither(eab)
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def toOption: Option[B] = eab match {
-    case Left(_)  => None
-    case Right(b) => Some(b)
-  }
+  private[syntax] def toOption: Option[B] =
+    eab match {
+      case Left(_)  => None
+      case Right(b) => Some(b)
+    }
 
-  def toList: List[B] = eab match {
-    case Left(_)  => Nil
-    case Right(b) => List(b)
-  }
+  def toList: List[B] =
+    eab match {
+      case Left(_)  => Nil
+      case Right(b) => List(b)
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def toTry(implicit ev: A <:< Throwable): Try[B] = eab match {
-    case Left(a)  => Failure(ev(a))
-    case Right(b) => Success(b)
-  }
+  private[syntax] def toTry(implicit ev: A <:< Throwable): Try[B] =
+    eab match {
+      case Left(a)  => Failure(ev(a))
+      case Right(b) => Success(b)
+    }
 
-  def toValidated: Validated[A, B] = eab match {
-    case Left(a)  => Validated.invalid(a)
-    case Right(b) => Validated.valid(b)
-  }
+  def toValidated: Validated[A, B] =
+    eab match {
+      case Left(a)  => Validated.invalid(a)
+      case Right(b) => Validated.valid(b)
+    }
 
   /** Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
-  def toValidatedNel[AA >: A]: ValidatedNel[AA, B] = eab match {
-    case Left(a)  => Validated.invalidNel(a)
-    case Right(b) => Validated.valid(b)
-  }
+  def toValidatedNel[AA >: A]: ValidatedNel[AA, B] =
+    eab match {
+      case Left(a)  => Validated.invalidNel(a)
+      case Right(b) => Validated.valid(b)
+    }
 
   def withValidated[AA, BB](f: Validated[A, B] => Validated[AA, BB]): Either[AA, BB] =
     f(toValidated).toEither
 
-  def to[F[_]](implicit F: Alternative[F]): F[B] = eab match {
-    case Left(_)  => F.empty
-    case Right(b) => F.pure(b)
-  }
+  def to[F[_]](implicit F: Alternative[F]): F[B] =
+    eab match {
+      case Left(_)  => F.empty
+      case Right(b) => F.pure(b)
+    }
 
-  def bimap[C, D](fa: A => C, fb: B => D): Either[C, D] = eab match {
-    case Left(a)  => Left(fa(a))
-    case Right(b) => Right(fb(b))
-  }
+  def bimap[C, D](fa: A => C, fb: B => D): Either[C, D] =
+    eab match {
+      case Left(a)  => Left(fa(a))
+      case Right(b) => Right(fb(b))
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def map[C](f: B => C): Either[A, C] = eab match {
-    case l @ Left(_) => EitherUtil.rightCast(l)
-    case Right(b)    => Right(f(b))
-  }
+  private[syntax] def map[C](f: B => C): Either[A, C] =
+    eab match {
+      case l @ Left(_) => EitherUtil.rightCast(l)
+      case Right(b)    => Right(f(b))
+    }
 
   def map2Eval[AA >: A, C, Z](fc: Eval[Either[AA, C]])(f: (B, C) => Z): Eval[Either[AA, Z]] =
     eab match {
@@ -147,76 +165,86 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
       case Right(b)    => fc.map(_.map(f(b, _)))
     }
 
-  def leftMap[C](f: A => C): Either[C, B] = eab match {
-    case Left(a)      => Left(f(a))
-    case r @ Right(_) => EitherUtil.leftCast(r)
-  }
+  def leftMap[C](f: A => C): Either[C, B] =
+    eab match {
+      case Left(a)      => Left(f(a))
+      case r @ Right(_) => EitherUtil.leftCast(r)
+    }
 
   @deprecated("Included in the standard library", "2.1.0-RC1")
-  private[syntax] def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match {
-    case l @ Left(_) => EitherUtil.rightCast(l)
-    case Right(b)    => f(b)
-  }
+  private[syntax] def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] =
+    eab match {
+      case l @ Left(_) => EitherUtil.rightCast(l)
+      case Right(b)    => f(b)
+    }
 
-  def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] = eab match {
-    case Left(a)      => f(a)
-    case r @ Right(_) => EitherUtil.leftCast(r)
-  }
+  def leftFlatMap[C, BB >: B](f: A => Either[C, BB]): Either[C, BB] =
+    eab match {
+      case Left(a)      => f(a)
+      case r @ Right(_) => EitherUtil.leftCast(r)
+    }
 
-  def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int = eab match {
-    case Left(a1) =>
-      that match {
-        case Left(a2) => AA.compare(a1, a2)
-        case Right(_) => -1
-      }
-    case Right(b1) =>
-      that match {
-        case Left(_)   => 1
-        case Right(b2) => BB.compare(b1, b2)
-      }
-  }
+  def compare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Order[AA], BB: Order[BB]): Int =
+    eab match {
+      case Left(a1) =>
+        that match {
+          case Left(a2) => AA.compare(a1, a2)
+          case Right(_) => -1
+        }
+      case Right(b1) =>
+        that match {
+          case Left(_)   => 1
+          case Right(b2) => BB.compare(b1, b2)
+        }
+    }
 
-  def partialCompare[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: PartialOrder[AA],
-                                                             BB: PartialOrder[BB]): Double = eab match {
-    case Left(a1) =>
-      that match {
-        case Left(a2) => AA.partialCompare(a1, a2)
-        case Right(_) => -1
-      }
-    case Right(b1) =>
-      that match {
-        case Left(_)   => 1
-        case Right(b2) => BB.partialCompare(b1, b2)
-      }
-  }
+  def partialCompare[AA >: A, BB >: B](
+    that: Either[AA, BB]
+  )(implicit AA: PartialOrder[AA], BB: PartialOrder[BB]): Double =
+    eab match {
+      case Left(a1) =>
+        that match {
+          case Left(a2) => AA.partialCompare(a1, a2)
+          case Right(_) => -1
+        }
+      case Right(b1) =>
+        that match {
+          case Left(_)   => 1
+          case Right(b2) => BB.partialCompare(b1, b2)
+        }
+    }
 
-  def ===[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Eq[AA], BB: Eq[BB]): Boolean = eab match {
-    case Left(a1) =>
-      that match {
-        case Left(a2) => AA.eqv(a1, a2)
-        case Right(_) => false
-      }
-    case Right(b1) =>
-      that match {
-        case Left(_)   => false
-        case Right(b2) => BB.eqv(b1, b2)
-      }
-  }
+  def ===[AA >: A, BB >: B](that: Either[AA, BB])(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
+    eab match {
+      case Left(a1) =>
+        that match {
+          case Left(a2) => AA.eqv(a1, a2)
+          case Right(_) => false
+        }
+      case Right(b1) =>
+        that match {
+          case Left(_)   => false
+          case Right(b2) => BB.eqv(b1, b2)
+        }
+    }
 
-  def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[Either[AA, D]] = eab match {
-    case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
-    case Right(b)    => F.map(f(b))(Right(_))
-  }
+  def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[Either[AA, D]] =
+    eab match {
+      case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
+      case Right(b)    => F.map(f(b))(Right(_))
+    }
 
-  def foldLeft[C](c: C)(f: (C, B) => C): C = eab match {
-    case Left(_)  => c
-    case Right(b) => f(c, b)
-  }
+  def foldLeft[C](c: C)(f: (C, B) => C): C =
+    eab match {
+      case Left(_)  => c
+      case Right(b) => f(c, b)
+    }
 
-  def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] = eab match {
-    case Left(_)  => lc
-    case Right(b) => f(b, lc)
-  }
+  def foldRight[C](lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+    eab match {
+      case Left(_)  => lc
+      case Right(b) => f(b, lc)
+    }
 
   /**
    * Combine with another `Either` value.
@@ -250,19 +278,21 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    * res3: Either[String, Int] = Right(7)
    * }}}
    */
-  final def combine[AA >: A, BB >: B](that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] = eab match {
-    case left @ Left(_) => left
-    case Right(b1) =>
-      that match {
-        case left @ Left(_) => left
-        case Right(b2)      => Right(BB.combine(b1, b2))
-      }
-  }
+  final def combine[AA >: A, BB >: B](that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] =
+    eab match {
+      case left @ Left(_) => left
+      case Right(b1) =>
+        that match {
+          case left @ Left(_) => left
+          case Right(b2)      => Right(BB.combine(b1, b2))
+        }
+    }
 
-  def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = eab match {
-    case Left(a)  => s"Left(${AA.show(a)})"
-    case Right(b) => s"Right(${BB.show(b)})"
-  }
+  def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
+    eab match {
+      case Left(a)  => s"Left(${AA.show(a)})"
+      case Right(b) => s"Right(${BB.show(b)})"
+    }
 
   def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = that.flatMap(eab.map)
 
@@ -353,10 +383,11 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal { //
    * Converts an `Option[B]` to an `Either[A, B]`, where the provided `ifNone` values is returned on
    * the left of the `Either` when the specified `Option` is `None`.
    */
-  def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match {
-    case None    => left[A, B](ifNone)
-    case Some(a) => right(a)
-  }
+  def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] =
+    o match {
+      case None    => left[A, B](ifNone)
+      case Some(a) => right(a)
+    }
 
   /** Cached value of `Right(())` to avoid allocations for a common case. */
   def unit[A]: Either[A, Unit] = EitherUtil.unit
@@ -447,10 +478,11 @@ final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[
 
   /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
    * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
-  def toValidatedNec: ValidatedNec[A, B] = value match {
-    case Left(a)  => Validated.invalidNec(a)
-    case Right(b) => Validated.valid(b)
-  }
+  def toValidatedNec: ValidatedNec[A, B] =
+    value match {
+      case Left(a)  => Validated.invalidNec(a)
+      case Right(b) => Validated.valid(b)
+    }
 }
 
 /** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */

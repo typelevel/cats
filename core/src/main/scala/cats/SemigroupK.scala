@@ -88,11 +88,12 @@ import scala.annotation.implicitNotFound
 }
 
 object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
-  def align[F[_]: SemigroupK: Functor]: Align[F] = new Align[F] {
-    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
-      SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
-    def functor: Functor[F] = Functor[F]
-  }
+  def align[F[_]: SemigroupK: Functor]: Align[F] =
+    new Align[F] {
+      def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] =
+        SemigroupK[F].combineK(Functor[F].map(fa)(Ior.left), Functor[F].map(fb)(Ior.right))
+      def functor: Functor[F] = Functor[F]
+    }
 
   implicit def catsMonoidKForOption: MonoidK[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsMonoidKForList: MonoidK[List] = cats.instances.list.catsStdInstancesForList
@@ -126,21 +127,23 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   trait ToSemigroupKOps {
     implicit def toSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): Ops[F, A] {
       type TypeClassType = SemigroupK[F]
-    } = new Ops[F, A] {
-      type TypeClassType = SemigroupK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = SemigroupK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToSemigroupKOps
   object ops {
     implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
       type TypeClassType = SemigroupK[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = SemigroupK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = SemigroupK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

@@ -45,11 +45,12 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
   trait ToInvariantSemigroupalOps {
     implicit def toInvariantSemigroupalOps[F[_], A](target: F[A])(implicit tc: InvariantSemigroupal[F]): Ops[F, A] {
       type TypeClassType = InvariantSemigroupal[F]
-    } = new Ops[F, A] {
-      type TypeClassType = InvariantSemigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = InvariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToInvariantSemigroupalOps
   object ops {
@@ -57,11 +58,12 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
       target: F[A]
     )(implicit tc: InvariantSemigroupal[F]): AllOps[F, A] {
       type TypeClassType = InvariantSemigroupal[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = InvariantSemigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = InvariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

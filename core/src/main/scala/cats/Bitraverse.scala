@@ -136,21 +136,23 @@ object Bitraverse {
   trait ToBitraverseOps {
     implicit def toBitraverseOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bitraverse[F]): Ops[F, A, B] {
       type TypeClassType = Bitraverse[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Bitraverse[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Bitraverse[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToBitraverseOps
   object ops {
     implicit def toAllBitraverseOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bitraverse[F]): AllOps[F, A, B] {
       type TypeClassType = Bitraverse[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Bitraverse[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Bitraverse[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

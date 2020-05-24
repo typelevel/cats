@@ -93,9 +93,10 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * Convert a `Order[A]` to a `scala.math.Ordering[A]`
    * instance.
    */
-  def toOrdering: Ordering[A] = new Ordering[A] {
-    def compare(x: A, y: A): Int = self.compare(x, y)
-  }
+  def toOrdering: Ordering[A] =
+    new Ordering[A] {
+      def compare(x: A, y: A): Int = self.compare(x, y)
+    }
 }
 
 abstract class OrderFunctions[O[T] <: Order[T]] extends PartialOrderFunctions[O] {

@@ -342,44 +342,45 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
   def catsDateTraverseFilterForOptionT[F[_]](implicit F0: Traverse[F]): TraverseFilter[OptionT[F, *]] =
     catsDataTraverseFilterForOptionT
 
-  implicit def catsDataParallelForOptionT[M[_]](
-    implicit P: Parallel[M]
-  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] = new Parallel[OptionT[M, *]] {
-    type F[x] = Nested[P.F, Option, x]
+  implicit def catsDataParallelForOptionT[M[_]](implicit
+    P: Parallel[M]
+  ): Parallel.Aux[OptionT[M, *], Nested[P.F, Option, *]] =
+    new Parallel[OptionT[M, *]] {
+      type F[x] = Nested[P.F, Option, x]
 
-    implicit val monadM: Monad[M] = P.monad
+      implicit val monadM: Monad[M] = P.monad
 
-    def applicative: Applicative[Nested[P.F, Option, *]] =
-      cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
+      def applicative: Applicative[Nested[P.F, Option, *]] =
+        cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
 
-    def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
+      def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 
-    def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
-      new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
-        def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
-      }
+      def sequential: Nested[P.F, Option, *] ~> OptionT[M, *] =
+        new (Nested[P.F, Option, *] ~> OptionT[M, *]) {
+          def apply[A](nested: Nested[P.F, Option, A]): OptionT[M, A] = OptionT(P.sequential(nested.value))
+        }
 
-    def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
-      new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
-        def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
-      }
-  }
+      def parallel: OptionT[M, *] ~> Nested[P.F, Option, *] =
+        new (OptionT[M, *] ~> Nested[P.F, Option, *]) {
+          def apply[A](optT: OptionT[M, A]): Nested[P.F, Option, A] = Nested(P.parallel(optT.value))
+        }
+    }
 }
 
 sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 {
 
   // the Dummy type is to make this one more specific than catsDataMonadErrorMonadForOptionT on 2.13.x
   // see https://github.com/typelevel/cats/pull/2335#issuecomment-408249775
-  implicit def catsDataMonadErrorForOptionT[F[_], E](
-    implicit F0: MonadError[F, E]
+  implicit def catsDataMonadErrorForOptionT[F[_], E](implicit
+    F0: MonadError[F, E]
   ): MonadError[OptionT[F, *], E] { type Dummy } =
     new OptionTMonadError[F, E] {
       type Dummy
       implicit val F = F0
     }
 
-  implicit def catsDataContravariantMonoidalForOptionT[F[_]](
-    implicit F0: ContravariantMonoidal[F]
+  implicit def catsDataContravariantMonoidalForOptionT[F[_]](implicit
+    F0: ContravariantMonoidal[F]
   ): ContravariantMonoidal[OptionT[F, *]] =
     new OptionTContravariantMonoidal[F] { implicit val F = F0 }
 
@@ -389,8 +390,8 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
   implicit def catsDataSemigroupForOptionT[F[_], A](implicit F0: Semigroup[F[Option[A]]]): Semigroup[OptionT[F, A]] =
     new OptionTSemigroup[F, A] { implicit val F = F0 }
 
-  implicit def catsDataPartialOrderForOptionT[F[_], A](
-    implicit F0: PartialOrder[F[Option[A]]]
+  implicit def catsDataPartialOrderForOptionT[F[_], A](implicit
+    F0: PartialOrder[F[Option[A]]]
   ): PartialOrder[OptionT[F, A]] =
     new OptionTPartialOrder[F, A] { implicit val F = F0 }
 

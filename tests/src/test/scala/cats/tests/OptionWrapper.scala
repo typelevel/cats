@@ -22,8 +22,8 @@ object OptionWrapper {
   implicit def optionWrapperCogen[A: Cogen]: Cogen[OptionWrapper[A]] =
     Cogen[Option[A]].contramap(_.option)
 
-  implicit def catsLawsExhaustiveCheckForOptionWrapper[A](
-    implicit A: ExhaustiveCheck[A]
+  implicit def catsLawsExhaustiveCheckForOptionWrapper[A](implicit
+    A: ExhaustiveCheck[A]
   ): ExhaustiveCheck[OptionWrapper[A]] =
     ExhaustiveCheck.instance(ExhaustiveCheck[Option[A]].allValues.map(OptionWrapper(_)))
 }

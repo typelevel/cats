@@ -19,9 +19,11 @@ class EitherTSuite extends CatsSuite {
 
   {
     checkAll("EitherT[Option, ListWrapper[String], *]",
-             SemigroupKTests[EitherT[Option, ListWrapper[String], *]].semigroupK[Int])
+             SemigroupKTests[EitherT[Option, ListWrapper[String], *]].semigroupK[Int]
+    )
     checkAll("SemigroupK[EitherT[Option, ListWrapper[String], *]]",
-             SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], *]]))
+             SerializableTests.serializable(SemigroupK[EitherT[Option, ListWrapper[String], *]])
+    )
   }
 
   {
@@ -29,7 +31,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[List, String, Int]", OrderTests[EitherT[ListWrapper, String, Int]].order)
     checkAll("Order[EitherT[List, String, Int]]",
-             SerializableTests.serializable(Order[EitherT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Order[EitherT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -37,12 +40,15 @@ class EitherTSuite extends CatsSuite {
     implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("EitherT[ListWrapper, *, *]",
-             BifunctorTests[EitherT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
+             BifunctorTests[EitherT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String]
+    )
     checkAll("Bifunctor[EitherT[ListWrapper, *, *]]",
-             SerializableTests.serializable(Bifunctor[EitherT[ListWrapper, *, *]]))
+             SerializableTests.serializable(Bifunctor[EitherT[ListWrapper, *, *]])
+    )
     checkAll("EitherT[ListWrapper, Int, *]", FunctorTests[EitherT[ListWrapper, Int, *]].functor[Int, Int, Int])
     checkAll("Functor[EitherT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(Functor[EitherT[ListWrapper, Int, *]]))
+             SerializableTests.serializable(Functor[EitherT[ListWrapper, Int, *]])
+    )
   }
 
   {
@@ -50,13 +56,17 @@ class EitherTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("EitherT[ListWrapper, Int, *]",
-             TraverseTests[EitherT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[EitherT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[EitherT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(Traverse[EitherT[ListWrapper, Int, *]]))
+             SerializableTests.serializable(Traverse[EitherT[ListWrapper, Int, *]])
+    )
     checkAll("EitherT[ListWrapper, *, *]",
-             BitraverseTests[EitherT[ListWrapper, *, *]].bitraverse[Option, Int, Int, Int, String, String, String])
+             BitraverseTests[EitherT[ListWrapper, *, *]].bitraverse[Option, Int, Int, Int, String, String, String]
+    )
     checkAll("Bitraverse[EitherT[ListWrapper, *, *]]",
-             SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, *, *]]))
+             SerializableTests.serializable(Bitraverse[EitherT[ListWrapper, *, *]])
+    )
 
   }
 
@@ -74,9 +84,11 @@ class EitherTSuite extends CatsSuite {
     Monad[EitherT[ListWrapper, String, *]]
 
     checkAll("EitherT[ListWrapper, String, Int]",
-             MonadErrorTests[EitherT[ListWrapper, String, *], String].monadError[Int, Int, Int])
+             MonadErrorTests[EitherT[ListWrapper, String, *], String].monadError[Int, Int, Int]
+    )
     checkAll("MonadError[EitherT[List, *, *]]",
-             SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, *], String]))
+             SerializableTests.serializable(MonadError[EitherT[ListWrapper, String, *], String])
+    )
 
   }
 
@@ -96,9 +108,11 @@ class EitherTSuite extends CatsSuite {
     Monad[EitherT[Option, String, *]]
 
     checkAll("EitherT[Option, String, String]",
-             MonadErrorTests[EitherT[Option, String, *], Unit].monadError[String, String, String])
+             MonadErrorTests[EitherT[Option, String, *], Unit].monadError[String, String, String]
+    )
     checkAll("MonadError[EitherT[Option, *, *]]",
-             SerializableTests.serializable(MonadError[EitherT[Option, String, *], Unit]))
+             SerializableTests.serializable(MonadError[EitherT[Option, String, *], Unit])
+    )
   }
 
   {
@@ -111,7 +125,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", MonadTests[EitherT[ListWrapper, String, *]].monad[Int, Int, Int])
     checkAll("Monad[EitherT[ListWrapper, String, *]]",
-             SerializableTests.serializable(Monad[EitherT[ListWrapper, String, *]]))
+             SerializableTests.serializable(Monad[EitherT[ListWrapper, String, *]])
+    )
   }
 
   {
@@ -120,7 +135,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, Int, *]", FoldableTests[EitherT[ListWrapper, Int, *]].foldable[Int, Int])
     checkAll("Foldable[EitherT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(Foldable[EitherT[ListWrapper, Int, *]]))
+             SerializableTests.serializable(Foldable[EitherT[ListWrapper, Int, *]])
+    )
   }
 
   {
@@ -128,7 +144,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", PartialOrderTests[EitherT[ListWrapper, String, Int]].partialOrder)
     checkAll("PartialOrder[EitherT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(PartialOrder[EitherT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(PartialOrder[EitherT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -136,7 +153,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", SemigroupTests[EitherT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[EitherT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(Semigroup[EitherT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Semigroup[EitherT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -146,7 +164,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", MonoidTests[EitherT[ListWrapper, String, Int]].monoid)
     checkAll("Monoid[EitherT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(Monoid[EitherT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Monoid[EitherT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -154,7 +173,8 @@ class EitherTSuite extends CatsSuite {
 
     checkAll("EitherT[ListWrapper, String, Int]", EqTests[EitherT[ListWrapper, String, Int]].eqv)
     checkAll("Eq[EitherT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(Eq[EitherT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Eq[EitherT[ListWrapper, String, Int]])
+    )
   }
 
   test("toValidated") {

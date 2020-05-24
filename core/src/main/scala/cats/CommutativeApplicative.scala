@@ -47,11 +47,12 @@ object CommutativeApplicative {
   trait ToCommutativeApplicativeOps {
     implicit def toCommutativeApplicativeOps[F[_], A](target: F[A])(implicit tc: CommutativeApplicative[F]): Ops[F, A] {
       type TypeClassType = CommutativeApplicative[F]
-    } = new Ops[F, A] {
-      type TypeClassType = CommutativeApplicative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = CommutativeApplicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToCommutativeApplicativeOps
   object ops {
@@ -59,11 +60,12 @@ object CommutativeApplicative {
       target: F[A]
     )(implicit tc: CommutativeApplicative[F]): AllOps[F, A] {
       type TypeClassType = CommutativeApplicative[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = CommutativeApplicative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CommutativeApplicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

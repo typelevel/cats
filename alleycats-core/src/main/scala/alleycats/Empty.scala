@@ -42,21 +42,23 @@ object Empty extends EmptyInstances0 {
   trait ToEmptyOps {
     implicit def toEmptyOps[A](target: A)(implicit tc: Empty[A]): Ops[A] {
       type TypeClassType = Empty[A]
-    } = new Ops[A] {
-      type TypeClassType = Empty[A]
-      val self: A = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[A] {
+        type TypeClassType = Empty[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToEmptyOps
   object ops {
     implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
       type TypeClassType = Empty[A]
-    } = new AllOps[A] {
-      type TypeClassType = Empty[A]
-      val self: A = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[A] {
+        type TypeClassType = Empty[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

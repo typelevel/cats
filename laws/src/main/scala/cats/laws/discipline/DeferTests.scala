@@ -9,10 +9,7 @@ import org.typelevel.discipline.Laws
 trait DeferTests[F[_]] extends Laws {
   def laws: DeferLaws[F]
 
-  def defer[A: Arbitrary](implicit
-                          ArbFA: Arbitrary[F[A]],
-                          EqFA: Eq[F[A]],
-                          EqBool: Eq[Boolean]): RuleSet =
+  def defer[A: Arbitrary](implicit ArbFA: Arbitrary[F[A]], EqFA: Eq[F[A]], EqBool: Eq[Boolean]): RuleSet =
     new DefaultRuleSet(
       name = "defer",
       parent = None,

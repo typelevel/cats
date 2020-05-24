@@ -69,21 +69,23 @@ object ArrowChoice {
   trait ToArrowChoiceOps {
     implicit def toArrowChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: ArrowChoice[F]): Ops[F, A, B] {
       type TypeClassType = ArrowChoice[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = ArrowChoice[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = ArrowChoice[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToArrowChoiceOps
   object ops {
     implicit def toAllArrowChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: ArrowChoice[F]): AllOps[F, A, B] {
       type TypeClassType = ArrowChoice[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = ArrowChoice[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = ArrowChoice[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

@@ -11,12 +11,13 @@ trait InvariantTests[F[_]] extends Laws {
   def laws: InvariantLaws[F]
 
   def invariant[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                          ArbFA: Arbitrary[F[A]],
-                                                          CogenA: Cogen[A],
-                                                          CogenB: Cogen[B],
-                                                          CogenC: Cogen[C],
-                                                          EqFA: Eq[F[A]],
-                                                          EqFC: Eq[F[C]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFC: Eq[F[C]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "invariant",
       parent = None,
