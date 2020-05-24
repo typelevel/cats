@@ -87,7 +87,7 @@ lazy val simulacrumSettings = Seq(
         case e: xml.Elem
             if e.label == "dependency" &&
               e.child.exists(child => child.label == "groupId" && child.text == "org.typelevel") &&
-              e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum_")) =>
+              e.child.exists(child => child.label == "artifactId" && child.text.startsWith("simulacrum")) =>
           Nil
         case _ => Seq(node)
       }
