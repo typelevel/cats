@@ -223,7 +223,7 @@ val numberF: IorT[Option, String, Int] = IorT.fromEitherF(numberFEither)
 
 An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed
 to `IorT.fromOption` and `IorT.fromOptionF`, respectively, to produce an
-`IorT`.
+`IorT`. For `F[Option[B]]` and default `F[A]`, there is `IorT.fromOptionM`.
 
 ```tut:silent
 val numberOption: Option[Int] = None
@@ -231,6 +231,7 @@ val numberFOption: List[Option[Int]] = List(None, Some(2), None, Some(5))
 
 val number = IorT.fromOption[List](numberOption, "Not defined")
 val numberF = IorT.fromOptionF(numberFOption, "Not defined")
+val numberM = IorT.fromOptionM(numberFOption, List("Not defined"))
 ```
 
 ## Creating an `IorT[F, A, B]` from a `Boolean` test

@@ -217,6 +217,18 @@ class EitherTSuite extends CatsSuite {
     }
   }
 
+  test("fromOptionF isLeft consistent with Option isEmpty") {
+    forAll { (option: Option[Int], s: String) =>
+      EitherT.fromOptionF[Id, String, Int](option, s).isLeft should ===(option.isEmpty)
+    }
+  }
+
+  test("fromOptionM consistent with fromOptionF") {
+    forAll { (option: Option[Int], s: String) =>
+      EitherT.fromOptionM[Id, String, Int](option, s) should ===(EitherT.fromOptionF[Id, String, Int](option, s))
+    }
+  }
+
   test("cond consistent with Either.cond") {
     forAll { (cond: Boolean, s: String, i: Int) =>
       EitherT.cond[Id](cond, s, i).value should ===(Either.cond(cond, s, i))
