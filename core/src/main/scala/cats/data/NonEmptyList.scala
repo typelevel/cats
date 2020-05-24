@@ -450,7 +450,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: Boolean = true
    *}}}
    */
-  def toNev[B >: A]: NonEmptyVector[B] =
+  final def toNev[B >: A]: NonEmptyVector[B] =
     NonEmptyVector.fromVectorUnsafe(toList.toVector)
 }
 
