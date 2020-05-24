@@ -1,7 +1,9 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("Could not find an instance of Alternative for ${F}")
 @typeclass trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] { self =>
 
   /**
@@ -86,4 +88,54 @@ import simulacrum.typeclass
       val F = self
       val G = Applicative[G]
     }
+}
+
+object Alternative {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+  /**
+   * Summon an instance of [[Alternative]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Alternative[F]): Alternative[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: Alternative[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def unite[G[_], B](implicit ev$1: A <:< G[B], FM: Monad[F], G: Foldable[G]): F[B] =
+      typeClassInstance.unite[G, B](self.asInstanceOf[F[G[B]]])(FM, G)
+    def separate[G[_, _], B, C](implicit ev$1: A <:< G[B, C], FM: Monad[F], G: Bifoldable[G]): (F[B], F[C]) =
+      typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])(FM, G)
+    def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
+      typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with MonoidK.AllOps[F, A] {
+    type TypeClassType <: Alternative[F]
+  }
+  trait ToAlternativeOps {
+    implicit def toAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): Ops[F, A] {
+      type TypeClassType = Alternative[F]
+    } = new Ops[F, A] {
+      type TypeClassType = Alternative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToAlternativeOps
+  object ops {
+    implicit def toAllAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): AllOps[F, A] {
+      type TypeClassType = Alternative[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = Alternative[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }
