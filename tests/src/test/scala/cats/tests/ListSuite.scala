@@ -59,6 +59,12 @@ class ListSuite extends CatsSuite {
     }
   )
 
+  test("groupByNelA should be consistent with groupByNel")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      fa.groupByNelA(f.andThen(Option(_))) should === (Option(fa.groupByNel(f)))
+    }
+  )
+
   test("show") {
     List(1, 2, 3).show should ===("List(1, 2, 3)")
     (Nil: List[Int]).show should ===("List()")
