@@ -72,9 +72,10 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   def groupByNelA[F[_], B](f: A => F[B])(implicit B: Order[B], F: Applicative[F]): F[SortedMap[B, NonEmptyList[A]]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
 
-    toNel.fold(F.pure(SortedMap.empty[B, NonEmptyList[A]]))(nel => F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(_.groupBy(_._2).mapValues(_.map(_._1))))
+    toNel.fold(F.pure(SortedMap.empty[B, NonEmptyList[A]]))(nel =>
+      F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(_.groupBy(_._2).mapValues(_.map(_._1)))
+    )
   }
-
 
   /** Produces a `NonEmptyList` containing cumulative results of applying the
    * operator going left to right.
