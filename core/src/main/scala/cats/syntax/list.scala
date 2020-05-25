@@ -52,6 +52,23 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
     toNel.fold(SortedMap.empty[B, NonEmptyList[A]])(_.groupBy(f))
   }
 
+  /**
+   * Groups elements inside this `List` according to the `Order` of the keys
+   * produced by the given mapping monadic function.
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.implicits._
+   *
+   * scala> val list = List(12, -2, 3, -5)
+   *
+   * scala> val expectedResult = Option(SortedMap(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3)))
+   *
+   * scala> list.groupByNelA(num => Option(0).map(num >= _)) === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
   def groupByNelA[F[_], B](f: A => F[B])(implicit B: Order[B], F: Applicative[F]): F[SortedMap[B, NonEmptyList[A]]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
 
