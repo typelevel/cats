@@ -13,7 +13,8 @@ import cats.laws.discipline.{
   NonEmptyTraverseTests,
   ReducibleTests,
   SemigroupKTests,
-  SerializableTests
+  SerializableTests,
+  ShortCircuitingTests
 }
 import cats.syntax.foldable._
 import cats.syntax.reducible._
@@ -54,6 +55,8 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   checkAll("Align[NonEmptyList]", SerializableTests.serializable(Align[NonEmptyList]))
 
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
+
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].traverse[Int])
 
   {
     implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
@@ -352,6 +355,12 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
     forAll { (nel: NonEmptyList[Int]) =>
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
+    }
+  }
+
+  test("NonEmptyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
     }
   }
 }

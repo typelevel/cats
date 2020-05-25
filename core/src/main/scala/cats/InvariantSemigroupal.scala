@@ -1,11 +1,13 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * [[InvariantSemigroupal]] is nothing more than something both invariant
  * and Semigroupal. It comes up enough to be useful, and composes well
  */
+@implicitNotFound("Could not find an instance of InvariantSemigroupal for ${F}")
 @typeclass trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
 
   def composeApply[G[_]: Apply]: InvariantSemigroupal[λ[α => F[G[α]]]] =
@@ -23,6 +25,49 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
    */
   def semigroup[F[_], A](implicit F: InvariantSemigroupal[F], A: Semigroup[A]): Semigroup[F[A]] =
     new InvariantSemigroupalSemigroup[F, A](F, A)
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+  /**
+   * Summon an instance of [[InvariantSemigroupal]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: InvariantSemigroupal[F]): InvariantSemigroupal[F] = instance
+
+  trait Ops[F[_], A] {
+    type TypeClassType <: InvariantSemigroupal[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Semigroupal.AllOps[F, A] with Invariant.AllOps[F, A] {
+    type TypeClassType <: InvariantSemigroupal[F]
+  }
+  trait ToInvariantSemigroupalOps {
+    implicit def toInvariantSemigroupalOps[F[_], A](target: F[A])(implicit tc: InvariantSemigroupal[F]): Ops[F, A] {
+      type TypeClassType = InvariantSemigroupal[F]
+    } = new Ops[F, A] {
+      type TypeClassType = InvariantSemigroupal[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+  object nonInheritedOps extends ToInvariantSemigroupalOps
+  object ops {
+    implicit def toAllInvariantSemigroupalOps[F[_], A](
+      target: F[A]
+    )(implicit tc: InvariantSemigroupal[F]): AllOps[F, A] {
+      type TypeClassType = InvariantSemigroupal[F]
+    } = new AllOps[F, A] {
+      type TypeClassType = InvariantSemigroupal[F]
+      val self: F[A] = target
+      val typeClassInstance: TypeClassType = tc
+    }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }
 
 private[cats] class InvariantSemigroupalSemigroup[F[_], A](f: InvariantSemigroupal[F], sg: Semigroup[A])

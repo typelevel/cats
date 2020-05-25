@@ -12,6 +12,7 @@ import cats.laws.discipline.{
   CoflatMapTests,
   MonadTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -43,6 +44,8 @@ class ChainSuite extends CatsSuite {
 
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
+
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].traverseFilter[Int])
 
   {
     implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]

@@ -10,6 +10,7 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -38,6 +39,8 @@ class StreamSuite extends CatsSuite {
 
   checkAll("Stream[Int]", AlignTests[Stream].align[Int, Int, Int, Int])
   checkAll("Align[Stream]", SerializableTests.serializable(Align[Stream]))
+
+  checkAll("Stream[Int]", ShortCircuitingTests[Stream].traverseFilter[Int])
 
   // Can't test applicative laws as they don't terminate
   checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])

@@ -29,6 +29,8 @@ class NonEmptyStreamSuite extends CatsSuite {
   checkAll("NonEmptyStream[Int]", SemigroupTests[NonEmptyStream[Int]].semigroup)
   checkAll("Semigroup[NonEmptyStream[Int]]", SerializableTests.serializable(Semigroup[NonEmptyStream[Int]]))
 
+  checkAll("NonEmptyStream[Int]", ShortCircuitingTests[NonEmptyStream].traverse[Int])
+
   {
     // Test functor and subclasses don't have implicit conflicts
     implicitly[Functor[NonEmptyStream]]
