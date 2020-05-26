@@ -73,7 +73,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
 
     toNel.fold(F.pure(SortedMap.empty[B, NonEmptyList[A]]))(nel =>
       F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(list =>
-        Functor[SortedMap[B, ?]].map(list.groupBy(_._2))(_.map(_._1))
+        Functor[SortedMap[B, *]].map(list.groupBy(_._2))(_.map(_._1))
       )
     )
   }
