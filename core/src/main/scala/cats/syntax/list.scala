@@ -2,7 +2,6 @@ package cats
 package syntax
 
 import cats.data.{NonEmptyChain, NonEmptyList}
-
 import scala.collection.immutable.SortedMap
 
 trait ListSyntax {
@@ -73,7 +72,9 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
     implicit val ordering: Ordering[B] = B.toOrdering
 
     toNel.fold(F.pure(SortedMap.empty[B, NonEmptyList[A]]))(nel =>
-      F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(_.groupBy(_._2).mapValues(_.map(_._1)))
+      F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(list =>
+        Functor[SortedMap[B, ?]].map(list.groupBy(_._2))(_.map(_._1))
+      )
     )
   }
 
