@@ -68,12 +68,14 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    * res0: Option[SortedMap[Boolean, NonEmptyList[Int]]] = Some(Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3)))
    * }}}
    */
+    import cats.instances.sortedMap.catsStdInstancesForSortedMap
   def groupByNelA[F[_], B](f: A => F[B])(implicit F: Applicative[F], B: Order[B]): F[SortedMap[B, NonEmptyList[A]]] = {
     implicit val ordering: Ordering[B] = B.toOrdering
+    val functor = Functor[SortedMap[B, *]]
 
     toNel.fold(F.pure(SortedMap.empty[B, NonEmptyList[A]]))(nel =>
       F.map(nel.traverse(a => F.tupleLeft(f(a), a)))(list =>
-        Functor[SortedMap[B, *]].map(list.groupBy(_._2))(_.map(_._1))
+        functor.map(list.groupBy(_._2))(_.map(_._1))
       )
     )
   }
