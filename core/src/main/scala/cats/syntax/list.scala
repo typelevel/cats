@@ -64,8 +64,8 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    *
    * scala> val expectedResult = Option(SortedMap(false -> NonEmptyList.of(-2, -5), true -> NonEmptyList.of(12, 3)))
    *
-   * scala> list.groupByNelA(num => Option(0).map(num >= _))
-   * res0: Option[SortedMap[Boolean, NonEmptyList[Int]]] = Some(Map(false -> NonEmptyList(-2, -5), true -> NonEmptyList(12, 3)))
+   * scala> list.groupByNelA(num => Option(0).map(num >= _)) === expectedResult
+   * res0: Boolean = true
    * }}}
    */
   def groupByNelA[F[_], B](f: A => F[B])(implicit F: Applicative[F], B: Order[B]): F[SortedMap[B, NonEmptyList[A]]] = {
