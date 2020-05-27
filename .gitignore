@@ -19,6 +19,8 @@ TAGS
 .DS_Store
 .vscode
 .sbtrc
+.semanticdb
+metals.sbt
 *.sublime-project
 *.sublime-workspace
 tests.iml
