@@ -1,10 +1,13 @@
 package cats
 
-trait AutoVariance {
+trait AutoVariance extends AutoVarianceLowPriority {
   implicit def autoWidenFunctor[F[_]: Functor, A, B >: A](fa: F[A]): F[B] = Functor[F].widen(fa)
 
   implicit def autoNarrowContravariant[F[_]: Contravariant, A, B <: A](fa: F[A]): F[B] = Contravariant[F].narrow(fa)
 
-  implicit def autoLeftWidenBifunctor[F[_, _]: Bifunctor, A, B >: A, C](fac: F[A, C]): F[B, C] =
-    Bifunctor[F].leftWiden(fac)
+}
+
+trait AutoVarianceLowPriority {
+  implicit def autoWidenBifunctor[F[_, _]: Bifunctor, A, B >: A, C, D >: C](fac: F[A, C]): F[B, D] =
+    Bifunctor[F].leftWiden(Bifunctor[F].rightFunctor.widen(fac))
 }

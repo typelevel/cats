@@ -22,11 +22,11 @@ class VarianceSuite extends CatsSuite {
       f(fi)
   }
 
-  test("Auto-variance should left widen a bifunctor automatically") {
+  test("Auto-variance should widen a bifunctor automatically") {
     def shouldInfer[F[_, _]: Bifunctor](fi: F[Int, Int]) =
-      fi.leftMap(i => if (true) Left(Bar(i)) else Right(Baz))
+      fi.bimap(i => if (true) Left(Bar(i)) else Right(Baz), i => if (true) Left(Bar(i)) else Right(Baz))
 
-    def inferred[F[_, _]: Bifunctor](fi: F[Int, Int]): F[Either[Foo, Foo], Int] = shouldInfer[F](fi)
+    def inferred[F[_, _]: Bifunctor](fi: F[Int, Int]): F[Either[Foo, Foo], Either[Foo, Foo]] = shouldInfer[F](fi)
   }
 
 }
