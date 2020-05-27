@@ -109,7 +109,7 @@ lazy val commonJsSettings = Seq(
     val g = "https://raw.githubusercontent.com/typelevel/cats/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
-  scalaJSStage in Global := FastOptStage,
+  scalaJSStage in Global := FullOptStage,
   parallelExecution := false,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   // batch mode decreases the amount of memory needed to compile Scala.js code
