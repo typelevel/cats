@@ -759,7 +759,9 @@ object EitherT extends EitherTInstances {
    * }}}
    */
   final def liftAttemptK[F[_], E](implicit F: ApplicativeError[F, E]): F ~> EitherT[F, E, *] =
-    λ[F ~> EitherT[F, E, *]](fa => EitherT(F.attempt(fa)))
+    new (F ~> EitherT[F, E, *]) {
+      def apply[A](fa: F[A]): EitherT[F, E, A] = EitherT(F.attempt(fa))
+    }
 
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
