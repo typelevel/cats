@@ -20,12 +20,13 @@ object CommutativeFlatMap {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[CommutativeFlatMap]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CommutativeFlatMap[F]): CommutativeFlatMap[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CommutativeFlatMap[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -33,7 +34,7 @@ object CommutativeFlatMap {
   trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with CommutativeApply.AllOps[F, A] {
     type TypeClassType <: CommutativeFlatMap[F]
   }
-  trait ToCommutativeFlatMapOps {
+  trait ToCommutativeFlatMapOps extends Serializable {
     implicit def toCommutativeFlatMapOps[F[_], A](target: F[A])(implicit tc: CommutativeFlatMap[F]): Ops[F, A] {
       type TypeClassType = CommutativeFlatMap[F]
     } =

@@ -20,12 +20,13 @@ object CommutativeMonad {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[CommutativeMonad]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CommutativeMonad[F]): CommutativeMonad[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CommutativeMonad[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -37,7 +38,7 @@ object CommutativeMonad {
       with CommutativeApplicative.AllOps[F, A] {
     type TypeClassType <: CommutativeMonad[F]
   }
-  trait ToCommutativeMonadOps {
+  trait ToCommutativeMonadOps extends Serializable {
     implicit def toCommutativeMonadOps[F[_], A](target: F[A])(implicit tc: CommutativeMonad[F]): Ops[F, A] {
       type TypeClassType = CommutativeMonad[F]
     } =

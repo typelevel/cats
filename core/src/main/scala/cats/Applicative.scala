@@ -233,12 +233,13 @@ object Applicative {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Applicative]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Applicative[F]): Applicative[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Applicative[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -246,7 +247,7 @@ object Applicative {
   trait AllOps[F[_], A] extends Ops[F, A] with Apply.AllOps[F, A] with InvariantMonoidal.AllOps[F, A] {
     type TypeClassType <: Applicative[F]
   }
-  trait ToApplicativeOps {
+  trait ToApplicativeOps extends Serializable {
     implicit def toApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): Ops[F, A] {
       type TypeClassType = Applicative[F]
     } =

@@ -110,12 +110,13 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: SemigroupK[F]): SemigroupK[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: SemigroupK[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -124,7 +125,7 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
     def sum[B](fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)(F)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToSemigroupKOps {
+  trait ToSemigroupKOps extends Serializable {
     implicit def toSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): Ops[F, A] {
       type TypeClassType = SemigroupK[F]
     } =

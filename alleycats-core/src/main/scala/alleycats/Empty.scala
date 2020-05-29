@@ -26,12 +26,13 @@ object Empty extends EmptyInstances0 {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Empty]] for `A`.
    */
   @inline def apply[A](implicit instance: Empty[A]): Empty[A] = instance
 
-  trait Ops[A] {
+  trait Ops[A] extends Serializable {
     type TypeClassType <: Empty[A]
     def self: A
     val typeClassInstance: TypeClassType
@@ -39,7 +40,7 @@ object Empty extends EmptyInstances0 {
     def nonEmpty(implicit ev: Eq[A]): Boolean = typeClassInstance.nonEmpty(self)(ev)
   }
   trait AllOps[A] extends Ops[A]
-  trait ToEmptyOps {
+  trait ToEmptyOps extends Serializable {
     implicit def toEmptyOps[A](target: A)(implicit tc: Empty[A]): Ops[A] {
       type TypeClassType = Empty[A]
     } =

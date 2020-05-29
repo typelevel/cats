@@ -94,12 +94,13 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[FunctorFilter]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: FunctorFilter[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -111,7 +112,7 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
     def filterNot(f: A => Boolean): F[A] = typeClassInstance.filterNot[A](self)(f)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToFunctorFilterOps {
+  trait ToFunctorFilterOps extends Serializable {
     implicit def toFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): Ops[F, A] {
       type TypeClassType = FunctorFilter[F]
     } =

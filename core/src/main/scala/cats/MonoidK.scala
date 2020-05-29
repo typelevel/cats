@@ -58,12 +58,13 @@ object MonoidK {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[MonoidK]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: MonoidK[F]): MonoidK[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: MonoidK[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -71,7 +72,7 @@ object MonoidK {
   trait AllOps[F[_], A] extends Ops[F, A] with SemigroupK.AllOps[F, A] {
     type TypeClassType <: MonoidK[F]
   }
-  trait ToMonoidKOps {
+  trait ToMonoidKOps extends Serializable {
     implicit def toMonoidKOps[F[_], A](target: F[A])(implicit tc: MonoidK[F]): Ops[F, A] {
       type TypeClassType = MonoidK[F]
     } =

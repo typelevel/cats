@@ -289,12 +289,13 @@ object Reducible {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Reducible]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Reducible[F]): Reducible[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Reducible[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -329,7 +330,7 @@ object Reducible {
   trait AllOps[F[_], A] extends Ops[F, A] with Foldable.AllOps[F, A] {
     type TypeClassType <: Reducible[F]
   }
-  trait ToReducibleOps {
+  trait ToReducibleOps extends Serializable {
     implicit def toReducibleOps[F[_], A](target: F[A])(implicit tc: Reducible[F]): Ops[F, A] {
       type TypeClassType = Reducible[F]
     } =

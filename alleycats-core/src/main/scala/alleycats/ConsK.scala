@@ -18,18 +18,19 @@ object ConsK {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[ConsK]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: ConsK[F]): ConsK[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: ConsK[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToConsKOps {
+  trait ToConsKOps extends Serializable {
     implicit def toConsKOps[F[_], A](target: F[A])(implicit tc: ConsK[F]): Ops[F, A] {
       type TypeClassType = ConsK[F]
     } =

@@ -205,12 +205,13 @@ object FlatMap {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[FlatMap]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: FlatMap[F]): FlatMap[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: FlatMap[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -224,7 +225,7 @@ object FlatMap {
   trait AllOps[F[_], A] extends Ops[F, A] with Apply.AllOps[F, A] {
     type TypeClassType <: FlatMap[F]
   }
-  trait ToFlatMapOps {
+  trait ToFlatMapOps extends Serializable {
     implicit def toFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): Ops[F, A] {
       type TypeClassType = FlatMap[F]
     } =

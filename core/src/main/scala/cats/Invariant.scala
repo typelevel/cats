@@ -186,19 +186,20 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Invariant]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Invariant[F]): Invariant[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Invariant[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
     def imap[B](f: A => B)(g: B => A): F[B] = typeClassInstance.imap[A, B](self)(f)(g)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToInvariantOps {
+  trait ToInvariantOps extends Serializable {
     implicit def toInvariantOps[F[_], A](target: F[A])(implicit tc: Invariant[F]): Ops[F, A] {
       type TypeClassType = Invariant[F]
     } =

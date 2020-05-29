@@ -53,12 +53,13 @@ object CoflatMap {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[CoflatMap]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CoflatMap[F]): CoflatMap[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CoflatMap[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -68,7 +69,7 @@ object CoflatMap {
   trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] {
     type TypeClassType <: CoflatMap[F]
   }
-  trait ToCoflatMapOps {
+  trait ToCoflatMapOps extends Serializable {
     implicit def toCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): Ops[F, A] {
       type TypeClassType = CoflatMap[F]
     } =
