@@ -53,12 +53,13 @@ object Choice {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Choice]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Choice[F]): Choice[F] = instance
 
-  trait Ops[F[_, _], A, B] {
+  trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Choice[F]
     def self: F[A, B]
     val typeClassInstance: TypeClassType
@@ -68,7 +69,7 @@ object Choice {
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Category.AllOps[F, A, B] {
     type TypeClassType <: Choice[F]
   }
-  trait ToChoiceOps {
+  trait ToChoiceOps extends Serializable {
     implicit def toChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: Choice[F]): Ops[F, A, B] {
       type TypeClassType = Choice[F]
     } =

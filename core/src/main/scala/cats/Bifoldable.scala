@@ -41,12 +41,13 @@ object Bifoldable {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Bifoldable]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Bifoldable[F]): Bifoldable[F] = instance
 
-  trait Ops[F[_, _], A, B] {
+  trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Bifoldable[F]
     def self: F[A, B]
     val typeClassInstance: TypeClassType
@@ -58,7 +59,7 @@ object Bifoldable {
     def bifold(implicit A: Monoid[A], B: Monoid[B]): (A, B) = typeClassInstance.bifold[A, B](self)(A, B)
   }
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
-  trait ToBifoldableOps {
+  trait ToBifoldableOps extends Serializable {
     implicit def toBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): Ops[F, A, B] {
       type TypeClassType = Bifoldable[F]
     } =

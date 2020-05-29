@@ -133,12 +133,13 @@ object Align extends ScalaVersionSpecificAlignInstances {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Align]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Align[F]): Align[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Align[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -151,7 +152,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
     def zipAll[B](fb: F[B], a: A, b: B): F[(A, B)] = typeClassInstance.zipAll[A, B](self, fb, a, b)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToAlignOps {
+  trait ToAlignOps extends Serializable {
     implicit def toAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): Ops[F, A] {
       type TypeClassType = Align[F]
     } =

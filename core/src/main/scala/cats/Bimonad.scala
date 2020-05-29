@@ -11,12 +11,13 @@ object Bimonad {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Bimonad]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Bimonad[F]): Bimonad[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Bimonad[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -24,7 +25,7 @@ object Bimonad {
   trait AllOps[F[_], A] extends Ops[F, A] with Monad.AllOps[F, A] with Comonad.AllOps[F, A] {
     type TypeClassType <: Bimonad[F]
   }
-  trait ToBimonadOps {
+  trait ToBimonadOps extends Serializable {
     implicit def toBimonadOps[F[_], A](target: F[A])(implicit tc: Bimonad[F]): Ops[F, A] {
       type TypeClassType = Bimonad[F]
     } =

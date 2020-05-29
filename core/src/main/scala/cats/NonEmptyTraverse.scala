@@ -101,12 +101,13 @@ object NonEmptyTraverse {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[NonEmptyTraverse]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: NonEmptyTraverse[F]): NonEmptyTraverse[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: NonEmptyTraverse[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -122,7 +123,7 @@ object NonEmptyTraverse {
   trait AllOps[F[_], A] extends Ops[F, A] with Traverse.AllOps[F, A] with Reducible.AllOps[F, A] {
     type TypeClassType <: NonEmptyTraverse[F]
   }
-  trait ToNonEmptyTraverseOps {
+  trait ToNonEmptyTraverseOps extends Serializable {
     implicit def toNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): Ops[F, A] {
       type TypeClassType = NonEmptyTraverse[F]
     } =

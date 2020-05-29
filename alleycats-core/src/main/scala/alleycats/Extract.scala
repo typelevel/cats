@@ -28,19 +28,20 @@ object Extract {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Extract]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Extract[F]): Extract[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Extract[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
     def extract: A = typeClassInstance.extract[A](self)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToExtractOps {
+  trait ToExtractOps extends Serializable {
     implicit def toExtractOps[F[_], A](target: F[A])(implicit tc: Extract[F]): Ops[F, A] {
       type TypeClassType = Extract[F]
     } =

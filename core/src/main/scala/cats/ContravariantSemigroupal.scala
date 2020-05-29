@@ -24,12 +24,13 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[ContravariantSemigroupal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: ContravariantSemigroupal[F]): ContravariantSemigroupal[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: ContravariantSemigroupal[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -37,7 +38,7 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   trait AllOps[F[_], A] extends Ops[F, A] with InvariantSemigroupal.AllOps[F, A] with Contravariant.AllOps[F, A] {
     type TypeClassType <: ContravariantSemigroupal[F]
   }
-  trait ToContravariantSemigroupalOps {
+  trait ToContravariantSemigroupalOps extends Serializable {
     implicit def toContravariantSemigroupalOps[F[_], A](
       target: F[A]
     )(implicit tc: ContravariantSemigroupal[F]): Ops[F, A] {

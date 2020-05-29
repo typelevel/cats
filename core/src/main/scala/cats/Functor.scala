@@ -210,12 +210,13 @@ object Functor {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Functor]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Functor[F]): Functor[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Functor[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -232,7 +233,7 @@ object Functor {
   trait AllOps[F[_], A] extends Ops[F, A] with Invariant.AllOps[F, A] {
     type TypeClassType <: Functor[F]
   }
-  trait ToFunctorOps {
+  trait ToFunctorOps extends Serializable {
     implicit def toFunctorOps[F[_], A](target: F[A])(implicit tc: Functor[F]): Ops[F, A] {
       type TypeClassType = Functor[F]
     } =

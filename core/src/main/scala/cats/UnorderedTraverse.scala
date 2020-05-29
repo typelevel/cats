@@ -19,12 +19,13 @@ object UnorderedTraverse {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[UnorderedTraverse]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: UnorderedTraverse[F]): UnorderedTraverse[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: UnorderedTraverse[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -36,7 +37,7 @@ object UnorderedTraverse {
   trait AllOps[F[_], A] extends Ops[F, A] with UnorderedFoldable.AllOps[F, A] {
     type TypeClassType <: UnorderedTraverse[F]
   }
-  trait ToUnorderedTraverseOps {
+  trait ToUnorderedTraverseOps extends Serializable {
     implicit def toUnorderedTraverseOps[F[_], A](target: F[A])(implicit tc: UnorderedTraverse[F]): Ops[F, A] {
       type TypeClassType = UnorderedTraverse[F]
     } =

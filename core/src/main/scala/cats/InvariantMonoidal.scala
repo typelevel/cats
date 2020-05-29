@@ -39,12 +39,13 @@ object InvariantMonoidal {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[InvariantMonoidal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: InvariantMonoidal[F]): InvariantMonoidal[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: InvariantMonoidal[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -52,7 +53,7 @@ object InvariantMonoidal {
   trait AllOps[F[_], A] extends Ops[F, A] with InvariantSemigroupal.AllOps[F, A] {
     type TypeClassType <: InvariantMonoidal[F]
   }
-  trait ToInvariantMonoidalOps {
+  trait ToInvariantMonoidalOps extends Serializable {
     implicit def toInvariantMonoidalOps[F[_], A](target: F[A])(implicit tc: InvariantMonoidal[F]): Ops[F, A] {
       type TypeClassType = InvariantMonoidal[F]
     } =

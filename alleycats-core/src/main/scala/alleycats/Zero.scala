@@ -24,12 +24,13 @@ object Zero {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Zero]] for `A`.
    */
   @inline def apply[A](implicit instance: Zero[A]): Zero[A] = instance
 
-  trait Ops[A] {
+  trait Ops[A] extends Serializable {
     type TypeClassType <: Zero[A]
     def self: A
     val typeClassInstance: TypeClassType
@@ -37,7 +38,7 @@ object Zero {
     def nonZero(implicit ev: Eq[A]): Boolean = typeClassInstance.nonZero(self)(ev)
   }
   trait AllOps[A] extends Ops[A]
-  trait ToZeroOps {
+  trait ToZeroOps extends Serializable {
     implicit def toZeroOps[A](target: A)(implicit tc: Zero[A]): Ops[A] {
       type TypeClassType = Zero[A]
     } =

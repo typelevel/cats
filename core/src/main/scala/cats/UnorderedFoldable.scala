@@ -117,12 +117,13 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[UnorderedFoldable]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: UnorderedFoldable[F]): UnorderedFoldable[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: UnorderedFoldable[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -136,7 +137,7 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
     def size: Long = typeClassInstance.size[A](self)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToUnorderedFoldableOps {
+  trait ToUnorderedFoldableOps extends Serializable {
     implicit def toUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): Ops[F, A] {
       type TypeClassType = UnorderedFoldable[F]
     } =

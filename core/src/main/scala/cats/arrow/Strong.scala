@@ -46,12 +46,13 @@ object Strong {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Strong]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Strong[F]): Strong[F] = instance
 
-  trait Ops[F[_, _], A, B] {
+  trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Strong[F]
     def self: F[A, B]
     val typeClassInstance: TypeClassType
@@ -61,7 +62,7 @@ object Strong {
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Profunctor.AllOps[F, A, B] {
     type TypeClassType <: Strong[F]
   }
-  trait ToStrongOps {
+  trait ToStrongOps extends Serializable {
     implicit def toStrongOps[F[_, _], A, B](target: F[A, B])(implicit tc: Strong[F]): Ops[F, A, B] {
       type TypeClassType = Strong[F]
     } =

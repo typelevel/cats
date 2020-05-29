@@ -87,19 +87,20 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Semigroupal[F]): Semigroupal[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Semigroupal[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
     def product[B](fb: F[B]): F[(A, B)] = typeClassInstance.product[A, B](self, fb)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
-  trait ToSemigroupalOps {
+  trait ToSemigroupalOps extends Serializable {
     implicit def toSemigroupalOps[F[_], A](target: F[A])(implicit tc: Semigroupal[F]): Ops[F, A] {
       type TypeClassType = Semigroupal[F]
     } =

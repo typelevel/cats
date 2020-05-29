@@ -77,12 +77,13 @@ object Arrow {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Arrow]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Arrow[F]): Arrow[F] = instance
 
-  trait Ops[F[_, _], A, B] {
+  trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Arrow[F]
     def self: F[A, B]
     val typeClassInstance: TypeClassType
@@ -94,7 +95,7 @@ object Arrow {
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Category.AllOps[F, A, B] with Strong.AllOps[F, A, B] {
     type TypeClassType <: Arrow[F]
   }
-  trait ToArrowOps {
+  trait ToArrowOps extends Serializable {
     implicit def toArrowOps[F[_, _], A, B](target: F[A, B])(implicit tc: Arrow[F]): Ops[F, A, B] {
       type TypeClassType = Arrow[F]
     } =

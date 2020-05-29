@@ -93,12 +93,13 @@ object TraverseFilter {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[TraverseFilter]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: TraverseFilter[F]): TraverseFilter[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: TraverseFilter[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -112,7 +113,7 @@ object TraverseFilter {
   trait AllOps[F[_], A] extends Ops[F, A] with FunctorFilter.AllOps[F, A] {
     type TypeClassType <: TraverseFilter[F]
   }
-  trait ToTraverseFilterOps {
+  trait ToTraverseFilterOps extends Serializable {
     implicit def toTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): Ops[F, A] {
       type TypeClassType = TraverseFilter[F]
     } =

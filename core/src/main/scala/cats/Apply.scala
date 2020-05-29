@@ -270,12 +270,13 @@ object Apply {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[Apply]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Apply[F]): Apply[F] = instance
 
-  trait Ops[F[_], A] {
+  trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Apply[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -295,7 +296,7 @@ object Apply {
   trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] with InvariantSemigroupal.AllOps[F, A] {
     type TypeClassType <: Apply[F]
   }
-  trait ToApplyOps {
+  trait ToApplyOps extends Serializable {
     implicit def toApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): Ops[F, A] {
       type TypeClassType = Apply[F]
     } =
