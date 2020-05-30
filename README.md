@@ -324,6 +324,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
+- [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)
