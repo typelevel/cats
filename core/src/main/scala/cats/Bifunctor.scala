@@ -81,21 +81,23 @@ object Bifunctor {
   trait ToBifunctorOps {
     implicit def toBifunctorOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifunctor[F]): Ops[F, A, B] {
       type TypeClassType = Bifunctor[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Bifunctor[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Bifunctor[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToBifunctorOps
   object ops {
     implicit def toAllBifunctorOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifunctor[F]): AllOps[F, A, B] {
       type TypeClassType = Bifunctor[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Bifunctor[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Bifunctor[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

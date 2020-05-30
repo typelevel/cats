@@ -102,21 +102,23 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   trait ToSemigroupalOps {
     implicit def toSemigroupalOps[F[_], A](target: F[A])(implicit tc: Semigroupal[F]): Ops[F, A] {
       type TypeClassType = Semigroupal[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Semigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Semigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToSemigroupalOps
   object ops {
     implicit def toAllSemigroupalOps[F[_], A](target: F[A])(implicit tc: Semigroupal[F]): AllOps[F, A] {
       type TypeClassType = Semigroupal[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Semigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Semigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

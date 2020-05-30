@@ -69,36 +69,39 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
           var state: Either[Unit, Option[B]] = Left(())
 
           @tailrec
-          def advance(): Unit = stack match {
-            case Right(b) #:: tail =>
-              stack = tail
-              state = Right(Some(b))
-            case Left(a) #:: tail =>
-              stack = fn(a) #::: tail
-              advance()
-            case empty =>
-              state = Right(None)
-          }
+          def advance(): Unit =
+            stack match {
+              case Right(b) #:: tail =>
+                stack = tail
+                state = Right(Some(b))
+              case Left(a) #:: tail =>
+                stack = fn(a) #::: tail
+                advance()
+              case empty =>
+                state = Right(None)
+            }
 
           @tailrec
-          def hasNext: Boolean = state match {
-            case Left(()) =>
-              advance()
-              hasNext
-            case Right(o) =>
-              o.isDefined
-          }
+          def hasNext: Boolean =
+            state match {
+              case Left(()) =>
+                advance()
+                hasNext
+              case Right(o) =>
+                o.isDefined
+            }
 
           @tailrec
-          def next(): B = state match {
-            case Left(()) =>
-              advance()
-              next()
-            case Right(o) =>
-              val b = o.get
-              advance()
-              b
-          }
+          def next(): B =
+            state match {
+              case Left(()) =>
+                advance()
+                next()
+              case Right(o) =>
+                val b = o.get
+                advance()
+                b
+            }
         }
 
         it.toStream

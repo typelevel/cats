@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
 * **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
 * **Dec 11 2019** [Cats 2.1.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC3)
@@ -323,6 +324,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
+- [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
 - [Lookout](https://www.lookout.com)

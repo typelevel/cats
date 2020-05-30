@@ -42,21 +42,23 @@ object Pure {
   trait ToPureOps {
     implicit def toPureOps[F[_], A](target: F[A])(implicit tc: Pure[F]): Ops[F, A] {
       type TypeClassType = Pure[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Pure[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Pure[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToPureOps
   object ops {
     implicit def toAllPureOps[F[_], A](target: F[A])(implicit tc: Pure[F]): AllOps[F, A] {
       type TypeClassType = Pure[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Pure[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Pure[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

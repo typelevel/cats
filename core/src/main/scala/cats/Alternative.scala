@@ -117,21 +117,23 @@ object Alternative {
   trait ToAlternativeOps {
     implicit def toAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): Ops[F, A] {
       type TypeClassType = Alternative[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Alternative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Alternative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToAlternativeOps
   object ops {
     implicit def toAllAlternativeOps[F[_], A](target: F[A])(implicit tc: Alternative[F]): AllOps[F, A] {
       type TypeClassType = Alternative[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Alternative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Alternative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

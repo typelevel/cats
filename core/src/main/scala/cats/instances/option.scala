@@ -153,10 +153,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
     new Show[Option[A]] {
-      def show(fa: Option[A]): String = fa match {
-        case Some(a) => s"Some(${A.show(a)})"
-        case None    => "None"
-      }
+      def show(fa: Option[A]): String =
+        fa match {
+          case Some(a) => s"Some(${A.show(a)})"
+          case None    => "None"
+        }
     }
 }
 

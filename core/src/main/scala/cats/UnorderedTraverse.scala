@@ -39,21 +39,23 @@ object UnorderedTraverse {
   trait ToUnorderedTraverseOps {
     implicit def toUnorderedTraverseOps[F[_], A](target: F[A])(implicit tc: UnorderedTraverse[F]): Ops[F, A] {
       type TypeClassType = UnorderedTraverse[F]
-    } = new Ops[F, A] {
-      type TypeClassType = UnorderedTraverse[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = UnorderedTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToUnorderedTraverseOps
   object ops {
     implicit def toAllUnorderedTraverseOps[F[_], A](target: F[A])(implicit tc: UnorderedTraverse[F]): AllOps[F, A] {
       type TypeClassType = UnorderedTraverse[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = UnorderedTraverse[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = UnorderedTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

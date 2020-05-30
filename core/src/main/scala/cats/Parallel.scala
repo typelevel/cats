@@ -78,33 +78,34 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
    * I.e. if you have a type M[_], that supports parallel composition through type F[_],
    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
-  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] = new ApplicativeError[F, E] {
+  def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
+    new ApplicativeError[F, E] {
 
-    def raiseError[A](e: E): F[A] =
-      parallel(MonadError[M, E].raiseError(e))
+      def raiseError[A](e: E): F[A] =
+        parallel(MonadError[M, E].raiseError(e))
 
-    def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A] = {
-      val ma = E.handleErrorWith(sequential(fa))(e => sequential.apply(f(e)))
-      parallel(ma)
+      def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A] = {
+        val ma = E.handleErrorWith(sequential(fa))(e => sequential.apply(f(e)))
+        parallel(ma)
+      }
+
+      def pure[A](x: A): F[A] = applicative.pure(x)
+
+      def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
+
+      override def map[A, B](fa: F[A])(f: (A) => B): F[B] = applicative.map(fa)(f)
+
+      override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = applicative.product(fa, fb)
+
+      override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] = applicative.map2(fa, fb)(f)
+
+      override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+        applicative.map2Eval(fa, fb)(f)
+
+      override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
+
+      override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
     }
-
-    def pure[A](x: A): F[A] = applicative.pure(x)
-
-    def ap[A, B](ff: F[(A) => B])(fa: F[A]): F[B] = applicative.ap(ff)(fa)
-
-    override def map[A, B](fa: F[A])(f: (A) => B): F[B] = applicative.map(fa)(f)
-
-    override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = applicative.product(fa, fb)
-
-    override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] = applicative.map2(fa, fb)(f)
-
-    override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
-      applicative.map2Eval(fa, fb)(f)
-
-    override def unlessA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.unlessA(cond)(f)
-
-    override def whenA[A](cond: Boolean)(f: => F[A]): F[Unit] = applicative.whenA(cond)(f)
-  }
 }
 
 object NonEmptyParallel extends ScalaVersionSpecificParallelInstances {
@@ -372,15 +373,16 @@ object Parallel extends ParallelArityFunctions2 {
    * but are required to have an instance of `Parallel` defined,
    * in which case parallel composition will actually be sequential.
    */
-  def identity[M[_]: Monad]: Parallel.Aux[M, M] = new Parallel[M] {
-    type F[x] = M[x]
+  def identity[M[_]: Monad]: Parallel.Aux[M, M] =
+    new Parallel[M] {
+      type F[x] = M[x]
 
-    val monad: Monad[M] = implicitly[Monad[M]]
+      val monad: Monad[M] = implicitly[Monad[M]]
 
-    val applicative: Applicative[M] = implicitly[Monad[M]]
+      val applicative: Applicative[M] = implicitly[Monad[M]]
 
-    val sequential: M ~> M = FunctionK.id
+      val sequential: M ~> M = FunctionK.id
 
-    val parallel: M ~> M = FunctionK.id
-  }
+      val parallel: M ~> M = FunctionK.id
+    }
 }

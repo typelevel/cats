@@ -59,21 +59,22 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         val buf = Vector.newBuilder[B]
         var state = List(fn(a).iterator)
         @tailrec
-        def loop(): Unit = state match {
-          case Nil => ()
-          case h :: tail if h.isEmpty =>
-            state = tail
-            loop()
-          case h :: tail =>
-            h.next match {
-              case Right(b) =>
-                buf += b
-                loop()
-              case Left(a) =>
-                state = (fn(a).iterator) :: h :: tail
-                loop()
-            }
-        }
+        def loop(): Unit =
+          state match {
+            case Nil => ()
+            case h :: tail if h.isEmpty =>
+              state = tail
+              loop()
+            case h :: tail =>
+              h.next match {
+                case Right(b) =>
+                  buf += b
+                  loop()
+                case Left(a) =>
+                  state = (fn(a).iterator) :: h :: tail
+                  loop()
+              }
+          }
         loop()
         buf.result
       }
@@ -175,7 +176,9 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =

@@ -24,21 +24,22 @@ trait AlignLaws[F[_]] {
   def alignWithConsistent[A, B, C](fa: F[A], fb: F[B], f: A Ior B => C): IsEq[F[C]] =
     fa.alignWith(fb)(f) <-> fa.align(fb).map(f)
 
-  private def assoc[A, B, C](x: Ior[A, Ior[B, C]]): Ior[Ior[A, B], C] = x match {
-    case Left(a) => Left(Left(a))
-    case Right(bc) =>
-      bc match {
-        case Left(b)    => Left(Right(b))
-        case Right(c)   => Right(c)
-        case Both(b, c) => Both(Right(b), c)
-      }
-    case Both(a, bc) =>
-      bc match {
-        case Left(b)    => Left(Both(a, b))
-        case Right(c)   => Both(Left(a), c)
-        case Both(b, c) => Both(Both(a, b), c)
-      }
-  }
+  private def assoc[A, B, C](x: Ior[A, Ior[B, C]]): Ior[Ior[A, B], C] =
+    x match {
+      case Left(a) => Left(Left(a))
+      case Right(bc) =>
+        bc match {
+          case Left(b)    => Left(Right(b))
+          case Right(c)   => Right(c)
+          case Both(b, c) => Both(Right(b), c)
+        }
+      case Both(a, bc) =>
+        bc match {
+          case Left(b)    => Left(Both(a, b))
+          case Right(c)   => Both(Left(a), c)
+          case Both(b, c) => Both(Both(a, b), c)
+        }
+    }
 }
 
 object AlignLaws {

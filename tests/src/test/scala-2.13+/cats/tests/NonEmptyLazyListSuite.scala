@@ -31,7 +31,8 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("SemigroupK[NonEmptyLazyList]", SerializableTests.serializable(SemigroupK[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyLazyList]", SerializableTests.serializable(Traverse[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int]", BimonadTests[NonEmptyLazyList].bimonad[Int, Int, Int])
@@ -54,14 +55,16 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
     implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyLazyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyLazyList[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]])
+    )
   }
 
   {
     implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", EqTests[NonEmptyLazyList[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]",
-             SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]])
+    )
   }
 
   test("size is consistent with toLazyList.size") {

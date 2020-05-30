@@ -66,21 +66,23 @@ object Compose {
   trait ToComposeOps {
     implicit def toComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): Ops[F, A, B] {
       type TypeClassType = Compose[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Compose[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Compose[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToComposeOps
   object ops {
     implicit def toAllComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): AllOps[F, A, B] {
       type TypeClassType = Compose[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Compose[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Compose[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

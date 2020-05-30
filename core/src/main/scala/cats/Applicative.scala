@@ -249,21 +249,23 @@ object Applicative {
   trait ToApplicativeOps {
     implicit def toApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): Ops[F, A] {
       type TypeClassType = Applicative[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Applicative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToApplicativeOps
   object ops {
     implicit def toAllApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): AllOps[F, A] {
       type TypeClassType = Applicative[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Applicative[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

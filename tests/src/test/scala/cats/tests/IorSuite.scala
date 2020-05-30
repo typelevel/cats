@@ -37,7 +37,8 @@ class IorSuite extends CatsSuite {
 
   checkAll("Semigroup[Ior[A: Semigroup, B: Semigroup]]", SemigroupTests[Ior[List[Int], List[Int]]].semigroup)
   checkAll("SerializableTest Semigroup[Ior[A: Semigroup, B: Semigroup]]",
-           SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]]))
+           SerializableTests.serializable(Semigroup[Ior[List[Int], List[Int]]])
+  )
 
   test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>

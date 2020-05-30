@@ -20,9 +20,11 @@ class NestedSuite extends CatsSuite {
     // Invariant composition
     implicit val instance: Invariant[ListWrapper] = ListWrapper.invariant
     checkAll("Nested[ListWrapper, ListWrapper]",
-             InvariantTests[Nested[ListWrapper, ListWrapper, *]].invariant[Int, Int, Int])
+             InvariantTests[Nested[ListWrapper, ListWrapper, *]].invariant[Int, Int, Int]
+    )
     checkAll("Invariant[Nested[ListWrapper, ListWrapper, *]]",
-             SerializableTests.serializable(Invariant[Nested[ListWrapper, ListWrapper, *]]))
+             SerializableTests.serializable(Invariant[Nested[ListWrapper, ListWrapper, *]])
+    )
   }
 
   {
@@ -30,9 +32,11 @@ class NestedSuite extends CatsSuite {
     implicit val instance: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
     implicit val functorInstance: Functor[ListWrapper] = ListWrapper.functor
     checkAll("Nested[ListWrapper, ListWrapper]",
-             FunctorFilterTests[Nested[ListWrapper, ListWrapper, *]].functorFilter[Int, Int, Int])
+             FunctorFilterTests[Nested[ListWrapper, ListWrapper, *]].functorFilter[Int, Int, Int]
+    )
     checkAll("FunctorFilter[Nested[ListWrapper, ListWrapper, *]]",
-             SerializableTests.serializable(FunctorFilter[Nested[ListWrapper, ListWrapper, *]]))
+             SerializableTests.serializable(FunctorFilter[Nested[ListWrapper, ListWrapper, *]])
+    )
   }
 
   {
@@ -40,9 +44,11 @@ class NestedSuite extends CatsSuite {
     implicit val instance: TraverseFilter[ListWrapper] = ListWrapper.traverseFilter
     implicit val traverseInstance: Traverse[ListWrapper] = ListWrapper.traverse
     checkAll("Nested[ListWrapper, ListWrapper]",
-             TraverseFilterTests[Nested[ListWrapper, ListWrapper, *]].traverseFilter[Int, Int, Int])
+             TraverseFilterTests[Nested[ListWrapper, ListWrapper, *]].traverseFilter[Int, Int, Int]
+    )
     checkAll("TraverseFilter[Nested[ListWrapper, ListWrapper, *]]",
-             SerializableTests.serializable(TraverseFilter[Nested[ListWrapper, ListWrapper, *]]))
+             SerializableTests.serializable(TraverseFilter[Nested[ListWrapper, ListWrapper, *]])
+    )
   }
 
   {
@@ -50,16 +56,19 @@ class NestedSuite extends CatsSuite {
     val instance: Invariant[Nested[ListWrapper, ListWrapper, *]] =
       Nested.catsDataInvariantForCovariantNested(ListWrapper.invariant, ListWrapper.functor)
     checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant",
-             InvariantTests[Nested[ListWrapper, ListWrapper, *]](instance).invariant[Int, Int, Int])
+             InvariantTests[Nested[ListWrapper, ListWrapper, *]](instance).invariant[Int, Int, Int]
+    )
     checkAll("Invariant[Nested[ListWrapper, ListWrapper, *]] - Invariant + Covariant",
-             SerializableTests.serializable(instance))
+             SerializableTests.serializable(instance)
+    )
   }
 
   {
     // Invariant + Contravariant = Invariant
     val instance = Nested.catsDataInvariantForNestedContravariant(ListWrapper.invariant, Contravariant[Show])
     checkAll("Nested[ListWrapper, Show, *]",
-             InvariantTests[Nested[ListWrapper, Show, *]](instance).invariant[MiniInt, Int, Boolean])
+             InvariantTests[Nested[ListWrapper, Show, *]](instance).invariant[MiniInt, Int, Boolean]
+    )
     checkAll("Invariant[Nested[ListWrapper, Show, *]]", SerializableTests.serializable(instance))
   }
 
@@ -68,32 +77,39 @@ class NestedSuite extends CatsSuite {
     implicit val instance: Functor[ListWrapper] = ListWrapper.functor
     checkAll("Nested[Option, ListWrapper, *]", FunctorTests[Nested[Option, ListWrapper, *]].functor[Int, Int, Int])
     checkAll("Functor[Nested[Option, ListWrapper, *]]",
-             SerializableTests.serializable(Functor[Nested[Option, ListWrapper, *]]))
+             SerializableTests.serializable(Functor[Nested[Option, ListWrapper, *]])
+    )
   }
 
   {
     // Covariant + contravariant functor composition
     checkAll("Nested[Option, Show, *]",
-             ContravariantTests[Nested[Option, Show, *]].contravariant[MiniInt, Int, Boolean])
+             ContravariantTests[Nested[Option, Show, *]].contravariant[MiniInt, Int, Boolean]
+    )
     checkAll("Contravariant[Nested[Option, Show, *]]",
-             SerializableTests.serializable(Contravariant[Nested[Option, Show, *]]))
+             SerializableTests.serializable(Contravariant[Nested[Option, Show, *]])
+    )
   }
 
   {
     // InvariantSemigroupal + Apply functor composition
     implicit val instance: InvariantSemigroupal[ListWrapper] = ListWrapper.invariantSemigroupal
     checkAll("Nested[ListWrapper, Option, *]",
-             InvariantSemigroupalTests[Nested[ListWrapper, Option, *]].invariantSemigroupal[Int, Int, Int])
+             InvariantSemigroupalTests[Nested[ListWrapper, Option, *]].invariantSemigroupal[Int, Int, Int]
+    )
     checkAll("InvariantSemigroupal[Nested[ListWrapper, Const[String, *], *]",
-             SerializableTests.serializable(InvariantSemigroupal[Nested[ListWrapper, Option, *]]))
+             SerializableTests.serializable(InvariantSemigroupal[Nested[ListWrapper, Option, *]])
+    )
   }
 
   {
     // Applicative + ContravariantMonoidal functor composition
     checkAll("Nested[Option, Const[String, *], *]",
-             ContravariantMonoidalTests[Nested[Option, Const[String, *], *]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[Nested[Option, Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+    )
     checkAll("ContravariantMonoidal[Nested[Option, Const[String, *], *]",
-             SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, *], *]]))
+             SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, *], *]])
+    )
   }
 
   {
@@ -101,15 +117,18 @@ class NestedSuite extends CatsSuite {
     type ConstInt[A] = Const[Int, A]
     checkAll("Nested[Const[Int, *], Show, *]", FunctorTests[Nested[ConstInt, Show, *]].functor[Int, Int, Int])
     checkAll("Functor[Nested[Const[Int, *], Show, *]]",
-             SerializableTests.serializable(Functor[Nested[ConstInt, Show, *]]))
+             SerializableTests.serializable(Functor[Nested[ConstInt, Show, *]])
+    )
   }
 
   {
     // Contravariant + Functor = Contravariant
     checkAll("Nested[Show, Option, *]",
-             ContravariantTests[Nested[Show, Option, *]].contravariant[MiniInt, Int, Boolean])
+             ContravariantTests[Nested[Show, Option, *]].contravariant[MiniInt, Int, Boolean]
+    )
     checkAll("Contravariant[Nested[Show, Option, *]]",
-             SerializableTests.serializable(Contravariant[Nested[Show, Option, *]]))
+             SerializableTests.serializable(Contravariant[Nested[Show, Option, *]])
+    )
   }
 
   {
@@ -122,9 +141,11 @@ class NestedSuite extends CatsSuite {
   {
     // CommutativeApply composition
     checkAll("Nested[Option, Validated[Int, *], *]",
-             CommutativeApplyTests[Nested[Option, Validated[Int, *], *]].commutativeApply[Int, Int, Int])
+             CommutativeApplyTests[Nested[Option, Validated[Int, *], *]].commutativeApply[Int, Int, Int]
+    )
     checkAll("CommutativeApply[Nested[Option, Validated[Int, *], *], *]]",
-             SerializableTests.serializable(CommutativeApply[Nested[Option, Validated[Int, *], *]]))
+             SerializableTests.serializable(CommutativeApply[Nested[Option, Validated[Int, *], *]])
+    )
   }
 
   {
@@ -132,16 +153,19 @@ class NestedSuite extends CatsSuite {
     implicit val instance: Applicative[ListWrapper] = ListWrapper.applicative
     checkAll("Nested[List, ListWrapper, *]", ApplicativeTests[Nested[List, ListWrapper, *]].applicative[Int, Int, Int])
     checkAll("Applicative[Nested[List, ListWrapper, *]]",
-             SerializableTests.serializable(Applicative[Nested[List, ListWrapper, *]]))
+             SerializableTests.serializable(Applicative[Nested[List, ListWrapper, *]])
+    )
   }
 
   {
     // CommutativeApplicative composition
     implicit val instance: Applicative[ListWrapper] = ListWrapper.applicative
     checkAll("Nested[Option, Validated[Int, *], *]",
-             CommutativeApplicativeTests[Nested[Option, Validated[Int, *], *]].commutativeApplicative[Int, Int, Int])
+             CommutativeApplicativeTests[Nested[Option, Validated[Int, *], *]].commutativeApplicative[Int, Int, Int]
+    )
     checkAll("CommutativeApplicative[Nested[List, ListWrapper, *]]",
-             SerializableTests.serializable(CommutativeApplicative[Nested[Option, Validated[Int, *], *]]))
+             SerializableTests.serializable(CommutativeApplicative[Nested[Option, Validated[Int, *], *]])
+    )
   }
 
   {
@@ -163,7 +187,8 @@ class NestedSuite extends CatsSuite {
     implicit val instance: Alternative[ListWrapper] = ListWrapper.alternative
     checkAll("Nested[List, ListWrapper, *]", AlternativeTests[Nested[List, ListWrapper, *]].alternative[Int, Int, Int])
     checkAll("Alternative[Nested[List, ListWrapper, *]]",
-             SerializableTests.serializable(Alternative[Nested[List, ListWrapper, *]]))
+             SerializableTests.serializable(Alternative[Nested[List, ListWrapper, *]])
+    )
   }
 
   {
@@ -171,25 +196,30 @@ class NestedSuite extends CatsSuite {
     implicit val instance: Foldable[ListWrapper] = ListWrapper.foldable
     checkAll("Nested[List, ListWrapper, *]", FoldableTests[Nested[List, ListWrapper, *]].foldable[Int, Int])
     checkAll("Foldable[Nested[List, ListWrapper, *]]",
-             SerializableTests.serializable(Foldable[Nested[List, ListWrapper, *]]))
+             SerializableTests.serializable(Foldable[Nested[List, ListWrapper, *]])
+    )
   }
 
   {
     // Traverse composition
     implicit val instance: Traverse[ListWrapper] = ListWrapper.traverse
     checkAll("Nested[List, ListWrapper, *]",
-             TraverseTests[Nested[List, ListWrapper, *]].traverse[Int, Int, Int, Set[Int], Option, Option])
+             TraverseTests[Nested[List, ListWrapper, *]].traverse[Int, Int, Int, Set[Int], Option, Option]
+    )
     checkAll("Traverse[Nested[List, ListWrapper, *]]",
-             SerializableTests.serializable(Traverse[Nested[List, ListWrapper, *]]))
+             SerializableTests.serializable(Traverse[Nested[List, ListWrapper, *]])
+    )
   }
 
   {
     // Reducible composition
     implicit val instance: Foldable[ListWrapper] = ListWrapper.foldable
     checkAll("Nested[NonEmptyList, OneAnd[ListWrapper, *], *]",
-             ReducibleTests[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]].reducible[Option, Int, Int])
+             ReducibleTests[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]].reducible[Option, Int, Int]
+    )
     checkAll("Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]]",
-             SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]]))
+             SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]])
+    )
   }
 
   {
@@ -200,7 +230,8 @@ class NestedSuite extends CatsSuite {
         .nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
     )
     checkAll("NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, *]]",
-             SerializableTests.serializable(NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, *]]))
+             SerializableTests.serializable(NonEmptyTraverse[Nested[NonEmptyList, NonEmptyVector, *]])
+    )
   }
 
   {
@@ -208,7 +239,8 @@ class NestedSuite extends CatsSuite {
     implicit val instance: SemigroupK[ListWrapper] = ListWrapper.semigroupK
     checkAll("Nested[ListWrapper, Option, *]", SemigroupKTests[Nested[ListWrapper, Option, *]].semigroupK[Int])
     checkAll("SemigroupK[Nested[ListWrapper, Option, *]]",
-             SerializableTests.serializable(SemigroupK[Nested[ListWrapper, Option, *]]))
+             SerializableTests.serializable(SemigroupK[Nested[ListWrapper, Option, *]])
+    )
   }
 
   {
@@ -216,7 +248,8 @@ class NestedSuite extends CatsSuite {
     implicit val instance: MonoidK[ListWrapper] = ListWrapper.monoidK
     checkAll("Nested[ListWrapper, Option, *]", MonoidKTests[Nested[ListWrapper, Option, *]].monoidK[Int])
     checkAll("MonoidK[Nested[ListWrapper, Option, *]]",
-             SerializableTests.serializable(MonoidK[Nested[ListWrapper, Option, *]]))
+             SerializableTests.serializable(MonoidK[Nested[ListWrapper, Option, *]])
+    )
   }
 
   {
@@ -227,6 +260,7 @@ class NestedSuite extends CatsSuite {
       DistributiveTests[Nested[Function1[MiniInt, *], Function0, *]].distributive[Int, Int, Int, Option, Function0]
     )
     checkAll("Distributive[Nested[Function1[Int,*], Function0, *]]",
-             SerializableTests.serializable(Distributive[Nested[Function1[Int, *], Function0, *]]))
+             SerializableTests.serializable(Distributive[Nested[Function1[Int, *], Function0, *]])
+    )
   }
 }

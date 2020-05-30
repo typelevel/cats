@@ -51,7 +51,8 @@ class ChainSuite extends CatsSuite {
     implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Chain[ListWrapper[Int]]", PartialOrderTests[Chain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Chain[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]])
+    )
   }
 
   {

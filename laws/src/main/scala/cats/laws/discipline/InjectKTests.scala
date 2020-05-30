@@ -11,10 +11,11 @@ trait InjectKTests[F[_], G[_]] extends Laws {
   def laws: InjectKLaws[F, G]
 
   def injectK[A](implicit
-                 ArbFA: Arbitrary[F[A]],
-                 EqOptionFA: Eq[Option[F[A]]],
-                 ArbGA: Arbitrary[G[A]],
-                 EqOptionGA: Eq[Option[G[A]]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    EqOptionFA: Eq[Option[F[A]]],
+    ArbGA: Arbitrary[G[A]],
+    EqOptionGA: Eq[Option[G[A]]]
+  ): RuleSet =
     new DefaultRuleSet(
       "injectK",
       None,

@@ -10,16 +10,17 @@ trait FunctorFilterTests[F[_]] extends Laws {
   def laws: FunctorFilterLaws[F]
 
   def functorFilter[A, B, C](implicit
-                             ArbFA: Arbitrary[F[A]],
-                             ArbFABoo: Arbitrary[PartialFunction[A, B]],
-                             ArbFOA: Arbitrary[F[Option[A]]],
-                             ArbAOB: Arbitrary[A => Option[B]],
-                             ArbBOC: Arbitrary[B => Option[C]],
-                             ArbAB: Arbitrary[A => B],
-                             ArbABoo: Arbitrary[A => Boolean],
-                             EqFA: Eq[F[A]],
-                             EqFB: Eq[F[B]],
-                             EqFC: Eq[F[C]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    ArbFABoo: Arbitrary[PartialFunction[A, B]],
+    ArbFOA: Arbitrary[F[Option[A]]],
+    ArbAOB: Arbitrary[A => Option[B]],
+    ArbBOC: Arbitrary[B => Option[C]],
+    ArbAB: Arbitrary[A => B],
+    ArbABoo: Arbitrary[A => Boolean],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "functorFilter",
       parent = None,

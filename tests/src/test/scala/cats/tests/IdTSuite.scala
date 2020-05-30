@@ -15,7 +15,8 @@ class IdTSuite extends CatsSuite {
 
   checkAll("IdT[(CSemi, *), Int]", CommutativeFlatMapTests[IdT[(CSemi, *), *]].commutativeFlatMap[Int, Int, Int])
   checkAll("CommutativeFlatMap[IdT[(CSemi, *), *]]",
-           SerializableTests.serializable(CommutativeFlatMap[IdT[(CSemi, *), *]]))
+           SerializableTests.serializable(CommutativeFlatMap[IdT[(CSemi, *), *]])
+  )
 
   checkAll("IdT[Option, Int]", CommutativeMonadTests[IdT[Option, *]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[IdT[Option, *]]", SerializableTests.serializable(CommutativeMonad[IdT[Option, *]]))
@@ -57,9 +58,11 @@ class IdTSuite extends CatsSuite {
 
   {
     checkAll("IdT[Const[String, *], *]",
-             ContravariantMonoidalTests[IdT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[IdT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+    )
     checkAll("ContravariantMonoidal[IdT[Const[String, *], *]]",
-             SerializableTests.serializable(ContravariantMonoidal[IdT[Const[String, *], *]]))
+             SerializableTests.serializable(ContravariantMonoidal[IdT[Const[String, *], *]])
+    )
   }
 
   {
@@ -87,7 +90,8 @@ class IdTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("IdT[ListWrapper, Int] with Option",
-             TraverseTests[IdT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[IdT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[IdT[ListWrapper, *]]", SerializableTests.serializable(Traverse[IdT[ListWrapper, *]]))
   }
 
@@ -95,9 +99,11 @@ class IdTSuite extends CatsSuite {
     implicit val F: Traverse[NonEmptyList] = NonEmptyList.catsDataInstancesForNonEmptyList
 
     checkAll("IdT[NonEmptyList, Int]",
-             NonEmptyTraverseTests[IdT[NonEmptyList, *]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+             NonEmptyTraverseTests[IdT[NonEmptyList, *]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+    )
     checkAll("NonEmptyTraverse[IdT[NonEmptyList, *]]",
-             SerializableTests.serializable(NonEmptyTraverse[IdT[NonEmptyList, *]]))
+             SerializableTests.serializable(NonEmptyTraverse[IdT[NonEmptyList, *]])
+    )
   }
 
   test("flatMap and flatMapF consistent") {

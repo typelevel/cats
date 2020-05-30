@@ -93,8 +93,9 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
   implicit val catsBitraverseForListTuple2: Bitraverse[ListTuple2] = new Bitraverse[ListTuple2] {
     def bifoldLeft[A, B, C](fab: ListTuple2[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
       fab.foldLeft(c) { case (c, (a, b)) => g(f(c, a), b) }
-    def bifoldRight[A, B, C](fab: ListTuple2[A, B], lc: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                                 g: (B, Eval[C]) => Eval[C]): Eval[C] = {
+    def bifoldRight[A, B, C](fab: ListTuple2[A, B],
+                             lc: Eval[C]
+    )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] = {
       def loop(abs: ListTuple2[A, B]): Eval[C] =
         abs match {
           case Nil         => lc
@@ -406,16 +407,18 @@ class ParallelSuite extends CatsSuite with ApplicativeErrorForEitherTest with Sc
       def parallel: Effect ~> Effect = arrow.FunctionK.id
       def sequential: Effect ~> Effect = arrow.FunctionK.id
 
-      def applicative: Applicative[Effect] = new Applicative[Effect] {
-        def pure[A](a: A): Effect[A] = Effect(a)
-        def ap[A, B](ff: Effect[A => B])(fa: Effect[A]): Effect[B] = throw Marker("parallel")
-      }
+      def applicative: Applicative[Effect] =
+        new Applicative[Effect] {
+          def pure[A](a: A): Effect[A] = Effect(a)
+          def ap[A, B](ff: Effect[A => B])(fa: Effect[A]): Effect[B] = throw Marker("parallel")
+        }
       def monad: Monad[Effect] = monadInstance
     }
 
     val iorts: List[IorT[Effect, String, Int]] = List(IorT.leftT("hello")(monadInstance),
                                                       IorT.bothT(" world", 404)(monadInstance),
-                                                      IorT.rightT(123)(monadInstance))
+                                                      IorT.rightT(123)(monadInstance)
+    )
 
     val resultSansInstance = {
       implicit val ev0: Monad[Effect] = monadInstance
@@ -514,6 +517,7 @@ trait ApplicativeErrorForEitherTest extends AnyFunSuiteLike with FunSuiteDiscipl
       Parallel.applicativeError[Either[String, *], String]
 
     checkAll("ApplicativeError[Validated[String, Int]]",
-             ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
+             ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int]
+    )
   }
 }

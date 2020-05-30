@@ -44,21 +44,23 @@ object Distributive {
   trait ToDistributiveOps {
     implicit def toDistributiveOps[F[_], A](target: F[A])(implicit tc: Distributive[F]): Ops[F, A] {
       type TypeClassType = Distributive[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Distributive[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Distributive[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToDistributiveOps
   object ops {
     implicit def toAllDistributiveOps[F[_], A](target: F[A])(implicit tc: Distributive[F]): AllOps[F, A] {
       type TypeClassType = Distributive[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Distributive[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Distributive[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

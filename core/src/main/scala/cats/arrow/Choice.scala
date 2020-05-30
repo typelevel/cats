@@ -71,21 +71,23 @@ object Choice {
   trait ToChoiceOps {
     implicit def toChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: Choice[F]): Ops[F, A, B] {
       type TypeClassType = Choice[F]
-    } = new Ops[F, A, B] {
-      type TypeClassType = Choice[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Choice[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToChoiceOps
   object ops {
     implicit def toAllChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: Choice[F]): AllOps[F, A, B] {
       type TypeClassType = Choice[F]
-    } = new AllOps[F, A, B] {
-      type TypeClassType = Choice[F]
-      val self: F[A, B] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Choice[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

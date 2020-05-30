@@ -31,7 +31,8 @@ class NonEmptySetSuite extends CatsSuite {
 
     checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
-             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
+             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptySet[ListWrapper[Int]]]
     PartialOrder[NonEmptySet[ListWrapper[Int]]]

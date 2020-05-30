@@ -498,8 +498,9 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def align[A, B](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B]): NonEmptyLazyList[Ior[A, B]] =
         alignInstance.align(fa, fb)
 
-      override def alignWith[A, B, C](fa: NonEmptyLazyList[A],
-                                      fb: NonEmptyLazyList[B])(f: Ior[A, B] => C): NonEmptyLazyList[C] =
+      override def alignWith[A, B, C](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyLazyList[C] =
         alignInstance.alignWith(fa, fb)(f)
     }
 

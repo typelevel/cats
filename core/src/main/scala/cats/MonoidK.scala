@@ -74,21 +74,23 @@ object MonoidK {
   trait ToMonoidKOps {
     implicit def toMonoidKOps[F[_], A](target: F[A])(implicit tc: MonoidK[F]): Ops[F, A] {
       type TypeClassType = MonoidK[F]
-    } = new Ops[F, A] {
-      type TypeClassType = MonoidK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = MonoidK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToMonoidKOps
   object ops {
     implicit def toAllMonoidKOps[F[_], A](target: F[A])(implicit tc: MonoidK[F]): AllOps[F, A] {
       type TypeClassType = MonoidK[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = MonoidK[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = MonoidK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

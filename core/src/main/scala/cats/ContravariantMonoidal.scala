@@ -49,11 +49,12 @@ object ContravariantMonoidal extends SemigroupalArityFunctions {
   trait ToContravariantMonoidalOps {
     implicit def toContravariantMonoidalOps[F[_], A](target: F[A])(implicit tc: ContravariantMonoidal[F]): Ops[F, A] {
       type TypeClassType = ContravariantMonoidal[F]
-    } = new Ops[F, A] {
-      type TypeClassType = ContravariantMonoidal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = ContravariantMonoidal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToContravariantMonoidalOps
   object ops {
@@ -61,11 +62,12 @@ object ContravariantMonoidal extends SemigroupalArityFunctions {
       target: F[A]
     )(implicit tc: ContravariantMonoidal[F]): AllOps[F, A] {
       type TypeClassType = ContravariantMonoidal[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = ContravariantMonoidal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = ContravariantMonoidal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

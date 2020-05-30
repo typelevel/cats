@@ -55,21 +55,23 @@ object InvariantMonoidal {
   trait ToInvariantMonoidalOps {
     implicit def toInvariantMonoidalOps[F[_], A](target: F[A])(implicit tc: InvariantMonoidal[F]): Ops[F, A] {
       type TypeClassType = InvariantMonoidal[F]
-    } = new Ops[F, A] {
-      type TypeClassType = InvariantMonoidal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = InvariantMonoidal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToInvariantMonoidalOps
   object ops {
     implicit def toAllInvariantMonoidalOps[F[_], A](target: F[A])(implicit tc: InvariantMonoidal[F]): AllOps[F, A] {
       type TypeClassType = InvariantMonoidal[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = InvariantMonoidal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = InvariantMonoidal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/
