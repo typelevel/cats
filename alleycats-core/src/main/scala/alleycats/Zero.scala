@@ -48,7 +48,9 @@ object Zero {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToZeroOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllZeroOps[A](target: A)(implicit tc: Zero[A]): AllOps[A] {
       type TypeClassType = Zero[A]

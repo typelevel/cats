@@ -48,7 +48,9 @@ object CommutativeMonad {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeMonadOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllCommutativeMonadOps[F[_], A](target: F[A])(implicit tc: CommutativeMonad[F]): AllOps[F, A] {
       type TypeClassType = CommutativeMonad[F]

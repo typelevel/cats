@@ -50,7 +50,9 @@ object Empty extends EmptyInstances0 {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToEmptyOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
       type TypeClassType = Empty[A]

@@ -209,7 +209,9 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToInvariantOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllInvariantOps[F[_], A](target: F[A])(implicit tc: Invariant[F]): AllOps[F, A] {
       type TypeClassType = Invariant[F]
