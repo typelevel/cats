@@ -12,19 +12,20 @@ private[instances] trait Tuple2InstancesBinCompat0 {
   /**
    * Witness for: (A, A) <-> Boolean => A
    */
-  implicit def catsDataRepresentableForPair(
-    implicit PF: Functor[λ[P => (P, P)]]
-  ): Representable.Aux[λ[P => (P, P)], Boolean] = new Representable[λ[P => (P, P)]] {
-    override type Representation = Boolean
-    override val F: Functor[λ[P => (P, P)]] = PF
+  implicit def catsDataRepresentableForPair(implicit
+    PF: Functor[λ[P => (P, P)]]
+  ): Representable.Aux[λ[P => (P, P)], Boolean] =
+    new Representable[λ[P => (P, P)]] {
+      override type Representation = Boolean
+      override val F: Functor[λ[P => (P, P)]] = PF
 
-    override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
+      override def tabulate[A](f: Boolean => A): (A, A) = (f(true), f(false))
 
-    override def index[A](pair: (A, A)): Boolean => A = {
-      case true  => pair._1
-      case false => pair._2
+      override def index[A](pair: (A, A)): Boolean => A = {
+        case true  => pair._1
+        case false => pair._2
+      }
     }
-  }
 
   implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
     override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
@@ -40,15 +41,17 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
       def bifoldLeft[A, B, C](fab: (A, B), c: C)(f: (C, A) => C, g: (C, B) => C): C =
         g(f(c, fab._1), fab._2)
 
-      def bifoldRight[A, B, C](fab: (A, B), c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                        g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: (A, B),
+                               c: Eval[C]
+      )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         g(fab._2, f(fab._1, c))
     }
 
-  implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] = new Show[(A, B)] {
-    override def show(f: (A, B)): String =
-      s"(${aShow.show(f._1)},${bShow.show(f._2)})"
-  }
+  implicit def catsStdShowForTuple2[A, B](implicit aShow: Show[A], bShow: Show[B]): Show[(A, B)] =
+    new Show[(A, B)] {
+      override def show(f: (A, B)): String =
+        s"(${aShow.show(f._1)},${bShow.show(f._2)})"
+    }
 
   implicit def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =
     new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {

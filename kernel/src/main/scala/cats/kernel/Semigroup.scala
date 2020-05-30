@@ -147,9 +147,10 @@ object Semigroup
   /**
    * Create a `Semigroup` instance from the given function.
    */
-  @inline def instance[A](cmb: (A, A) => A): Semigroup[A] = new Semigroup[A] {
-    override def combine(x: A, y: A): A = cmb(x, y)
-  }
+  @inline def instance[A](cmb: (A, A) => A): Semigroup[A] =
+    new Semigroup[A] {
+      override def combine(x: A, y: A): A = cmb(x, y)
+    }
 
   implicit def catsKernelBoundedSemilatticeForBitSet: BoundedSemilattice[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdSemilatticeForBitSet
@@ -274,9 +275,10 @@ private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[
 }
 
 private class TrySemigroup[A](A: Semigroup[A]) extends Semigroup[Try[A]] {
-  def combine(x: Try[A], y: Try[A]): Try[A] = (x, y) match {
-    case (Success(xv), Success(yv)) => Success(A.combine(xv, yv))
-    case (f @ Failure(_), _)        => f
-    case (_, f)                     => f
-  }
+  def combine(x: Try[A], y: Try[A]): Try[A] =
+    (x, y) match {
+      case (Success(xv), Success(yv)) => Success(A.combine(xv, yv))
+      case (f @ Failure(_), _)        => f
+      case (_, f)                     => f
+    }
 }

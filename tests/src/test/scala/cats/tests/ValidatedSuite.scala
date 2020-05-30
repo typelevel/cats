@@ -37,12 +37,15 @@ class ValidatedSuite extends CatsSuite {
     EitherT.catsDataEqForEitherT[Validated[String, *], String, Int]
 
   checkAll("Validated[String, Int]",
-           ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int])
+           ApplicativeErrorTests[Validated[String, *], String].applicativeError[Int, Int, Int]
+  )
   checkAll("ApplicativeError[Validated, String]",
-           SerializableTests.serializable(ApplicativeError[Validated[String, *], String]))
+           SerializableTests.serializable(ApplicativeError[Validated[String, *], String])
+  )
 
   checkAll("Validated[String, Int] with Option",
-           TraverseTests[Validated[String, *]].traverse[Int, Int, Int, Int, Option, Option])
+           TraverseTests[Validated[String, *]].traverse[Int, Int, Int, Int, Option, Option]
+  )
   checkAll("Traverse[Validated[String, *]]", SerializableTests.serializable(Traverse[Validated[String, *]]))
 
   checkAll("Validated[String, Int]", OrderTests[Validated[String, Int]].order)
@@ -54,7 +57,8 @@ class ValidatedSuite extends CatsSuite {
 
   checkAll("Validated[Int, Int]", CommutativeApplicativeTests[Validated[Int, *]].commutativeApplicative[Int, Int, Int])
   checkAll("CommutativeApplicative[Validated[Int, *]]",
-           SerializableTests.serializable(CommutativeApplicative[Validated[Int, *]]))
+           SerializableTests.serializable(CommutativeApplicative[Validated[Int, *]])
+  )
 
   checkAll("Validated[Int, Int]", AlignTests[Validated[Int, *]].align[Int, Int, Int, Int])
   checkAll("Align[Validated[Int, *]]", SerializableTests.serializable(Align[Validated[Int, *]]))
@@ -63,14 +67,16 @@ class ValidatedSuite extends CatsSuite {
     implicit val L: Semigroup[ListWrapper[String]] = ListWrapper.semigroup[String]
     checkAll("Validated[ListWrapper[String], *]", SemigroupKTests[Validated[ListWrapper[String], *]].semigroupK[Int])
     checkAll("SemigroupK[Validated[ListWrapper[String], *]]",
-             SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], *]]))
+             SerializableTests.serializable(SemigroupK[Validated[ListWrapper[String], *]])
+    )
   }
 
   {
     implicit val S: PartialOrder[ListWrapper[String]] = ListWrapper.partialOrder[String]
     implicit val I: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Validated[ListWrapper[String], ListWrapper[Int]]",
-             PartialOrderTests[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder)
+             PartialOrderTests[Validated[ListWrapper[String], ListWrapper[Int]]].partialOrder
+    )
     checkAll(
       "PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]]",
       SerializableTests.serializable(PartialOrder[Validated[ListWrapper[String], ListWrapper[Int]]])
@@ -81,9 +87,11 @@ class ValidatedSuite extends CatsSuite {
     implicit val S: Eq[ListWrapper[String]] = ListWrapper.eqv[String]
     implicit val I: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Validated[ListWrapper[String], ListWrapper[Int]]",
-             EqTests[Validated[ListWrapper[String], ListWrapper[Int]]].eqv)
+             EqTests[Validated[ListWrapper[String], ListWrapper[Int]]].eqv
+    )
     checkAll("Eq[Validated[ListWrapper[String], ListWrapper[Int]]]",
-             SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]]))
+             SerializableTests.serializable(Eq[Validated[ListWrapper[String], ListWrapper[Int]]])
+    )
   }
 
   test("ap2 combines failures in order") {

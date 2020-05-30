@@ -236,8 +236,8 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
 
   // retained for binary compatibility. its results are incorrect though and it would fail the laws if we generated things of the form pure(()).flatMap(_ => fa)
   @deprecated("does not handle errors beyond the head suspension; use catsFreeMonadErrorForFreeT2", "2.1.0")
-  def catsFreeMonadErrorForFreeT[S[_], M[_], E](
-    implicit E: MonadError[M, E]
+  def catsFreeMonadErrorForFreeT[S[_], M[_], E](implicit
+    E: MonadError[M, E]
   ): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
@@ -254,8 +254,10 @@ sealed abstract private[free] class FreeTInstances extends FreeTInstances0 {
         FreeT.pure[S, M, Unit](()).flatMap(_ => fa)
     }
 
-  implicit def catsFreeMonadErrorForFreeT2[S[_], M[_], E](implicit E: MonadError[M, E],
-                                                          S: Functor[S]): MonadError[FreeT[S, M, *], E] =
+  implicit def catsFreeMonadErrorForFreeT2[S[_], M[_], E](implicit
+    E: MonadError[M, E],
+    S: Functor[S]
+  ): MonadError[FreeT[S, M, *], E] =
     new MonadError[FreeT[S, M, *], E] with FreeTMonad[S, M] {
       override def M = E
 

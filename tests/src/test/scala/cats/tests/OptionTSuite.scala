@@ -26,7 +26,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", FunctorFilterTests[OptionT[ListWrapper, *]].functorFilter[Int, Int, Int])
     checkAll("FunctorFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -36,7 +37,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", TraverseFilterTests[OptionT[ListWrapper, *]].traverseFilter[Int, Int, Int])
     checkAll("TraverseFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -52,7 +54,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", PartialOrderTests[OptionT[ListWrapper, Int]].partialOrder)
     checkAll("PartialOrder[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]])
+    )
 
     Eq[OptionT[ListWrapper, Int]]
   }
@@ -97,9 +100,11 @@ class OptionTSuite extends CatsSuite {
   {
     // F has a ContravariantMonoidal
     checkAll("OptionT[Const[String, *], Int]",
-             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+    )
     checkAll("ContravariantMonoidal[OptionT[Const[String, *], Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]]))
+             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]])
+    )
   }
 
   {
@@ -157,7 +162,8 @@ class OptionTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, Int] with Option",
-             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[OptionT[ListWrapper, *]]", SerializableTests.serializable(Traverse[OptionT[ListWrapper, *]]))
 
     Foldable[OptionT[ListWrapper, *]]
@@ -181,7 +187,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", SemigroupTests[OptionT[ListWrapper, Int]].semigroup)
     checkAll("Semigroup[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]])
+    )
   }
 
   {

@@ -38,7 +38,8 @@ class CofreeSuite extends CatsSuite {
   test("Cofree.ana") {
     val anaHundred: CofreeNel[Int] =
       Cofree.ana[Option, List[Int], Int](List.tabulate(101)(identity))(l => if (l.tail.isEmpty) None else Some(l.tail),
-                                                                       _.head)
+                                                                       _.head
+      )
     val nelUnfoldedHundred: NonEmptyList[Int] = NonEmptyList.fromListUnsafe(List.tabulate(101)(identity))
     cofNelToNel(anaHundred) should ===(nelUnfoldedHundred)
   }
@@ -153,17 +154,18 @@ sealed trait CofreeSuiteInstances {
   type CofreeNel[A] = Cofree[Option, A]
   type CofreeRoseTree[A] = Cofree[List, A]
 
-  implicit def cofNelEq[A](implicit e: Eq[A]): Eq[CofreeNel[A]] = new Eq[CofreeNel[A]] {
-    override def eqv(a: CofreeNel[A], b: CofreeNel[A]): Boolean = {
-      def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
-        (a.tailForced, b.tailForced) match {
-          case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
-          case (None, None) if e.eqv(a.head, b.head)         => true
-          case _                                             => false
-        }
-      tr(a, b)
+  implicit def cofNelEq[A](implicit e: Eq[A]): Eq[CofreeNel[A]] =
+    new Eq[CofreeNel[A]] {
+      override def eqv(a: CofreeNel[A], b: CofreeNel[A]): Boolean = {
+        def tr(a: CofreeNel[A], b: CofreeNel[A]): Boolean =
+          (a.tailForced, b.tailForced) match {
+            case (Some(at), Some(bt)) if e.eqv(a.head, b.head) => tr(at, bt)
+            case (None, None) if e.eqv(a.head, b.head)         => true
+            case _                                             => false
+          }
+        tr(a, b)
+      }
     }
-  }
 
   implicit def CofreeOptionCogen[A: Cogen]: Cogen[CofreeNel[A]] =
     implicitly[Cogen[List[A]]].contramap[CofreeNel[A]](cofNelToNel(_).toList)

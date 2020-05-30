@@ -227,21 +227,23 @@ object FlatMap {
   trait ToFlatMapOps {
     implicit def toFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): Ops[F, A] {
       type TypeClassType = FlatMap[F]
-    } = new Ops[F, A] {
-      type TypeClassType = FlatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = FlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToFlatMapOps
   object ops {
     implicit def toAllFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): AllOps[F, A] {
       type TypeClassType = FlatMap[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = FlatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

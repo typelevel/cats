@@ -104,9 +104,10 @@ import scala.annotation.implicitNotFound
 }
 
 object Align extends ScalaVersionSpecificAlignInstances {
-  def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] = new Semigroup[F[A]] {
-    def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
-  }
+  def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] =
+    new Semigroup[F[A]] {
+      def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
+    }
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
@@ -153,21 +154,23 @@ object Align extends ScalaVersionSpecificAlignInstances {
   trait ToAlignOps {
     implicit def toAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): Ops[F, A] {
       type TypeClassType = Align[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Align[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToAlignOps
   object ops {
     implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
       type TypeClassType = Align[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Align[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

@@ -114,21 +114,23 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   trait ToFunctorFilterOps {
     implicit def toFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): Ops[F, A] {
       type TypeClassType = FunctorFilter[F]
-    } = new Ops[F, A] {
-      type TypeClassType = FunctorFilter[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToFunctorFilterOps
   object ops {
     implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
       type TypeClassType = FunctorFilter[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = FunctorFilter[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

@@ -46,10 +46,11 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * res0: scala.collection.immutable.List[Int] = List(1, 2, 3, 4)
    * }}}
    */
-  def init: List[A] = tail match {
-    case Nil => List.empty
-    case t   => head :: t.init
-  }
+  def init: List[A] =
+    tail match {
+      case Nil => List.empty
+      case t   => head :: t.init
+    }
 
   final def iterator: Iterator[A] = toList.iterator
 
@@ -299,11 +300,12 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def zipWith[B, C](b: NonEmptyList[B])(f: (A, B) => C): NonEmptyList[C] = {
 
     @tailrec
-    def zwRev(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
-      case (Nil, _)           => acc
-      case (_, Nil)           => acc
-      case (x :: xs, y :: ys) => zwRev(xs, ys, f(x, y) :: acc)
-    }
+    def zwRev(as: List[A], bs: List[B], acc: List[C]): List[C] =
+      (as, bs) match {
+        case (Nil, _)           => acc
+        case (_, Nil)           => acc
+        case (x :: xs, y :: ys) => zwRev(xs, ys, f(x, y) :: acc)
+      }
 
     NonEmptyList(f(head, b.head), zwRev(tail, b.tail, Nil).reverse)
   }
@@ -587,15 +589,16 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyList[Either[A, B]]): NonEmptyList[B] = {
         val buf = new ListBuffer[B]
-        @tailrec def go(v: NonEmptyList[Either[A, B]]): Unit = v.head match {
-          case Right(b) =>
-            buf += b
-            NonEmptyList.fromList(v.tail) match {
-              case Some(t) => go(t)
-              case None    => ()
-            }
-          case Left(a) => go(f(a) ++ v.tail)
-        }
+        @tailrec def go(v: NonEmptyList[Either[A, B]]): Unit =
+          v.head match {
+            case Right(b) =>
+              buf += b
+              NonEmptyList.fromList(v.tail) match {
+                case Some(t) => go(t)
+                case None    => ()
+              }
+            case Left(a) => go(f(a) ++ v.tail)
+          }
         go(f(a))
         NonEmptyList.fromListUnsafe(buf.result())
       }
@@ -647,12 +650,13 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
       override def alignWith[A, B, C](fa: NonEmptyList[A], fb: NonEmptyList[B])(f: Ior[A, B] => C): NonEmptyList[C] = {
 
         @tailrec
-        def go(as: List[A], bs: List[B], acc: List[C]): List[C] = (as, bs) match {
-          case (Nil, Nil)         => acc
-          case (Nil, y :: ys)     => go(Nil, ys, f(Ior.right(y)) :: acc)
-          case (x :: xs, Nil)     => go(xs, Nil, f(Ior.left(x)) :: acc)
-          case (x :: xs, y :: ys) => go(xs, ys, f(Ior.both(x, y)) :: acc)
-        }
+        def go(as: List[A], bs: List[B], acc: List[C]): List[C] =
+          (as, bs) match {
+            case (Nil, Nil)         => acc
+            case (Nil, y :: ys)     => go(Nil, ys, f(Ior.right(y)) :: acc)
+            case (x :: xs, Nil)     => go(xs, Nil, f(Ior.left(x)) :: acc)
+            case (x :: xs, y :: ys) => go(xs, ys, f(Ior.both(x, y)) :: acc)
+          }
 
         NonEmptyList(f(Ior.both(fa.head, fb.head)), go(fa.tail, fb.tail, Nil).reverse)
       }

@@ -799,8 +799,9 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   @noop
-  def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
-                                                                   H: Bifoldable[H]): (F[B], F[C]) = {
+  def partitionBifold[H[_, _], A, B, C](
+    fa: F[A]
+  )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) = {
     import cats.instances.tuple._
 
     implicit val mb: Monoid[F[B]] = A.algebra[B]
@@ -856,8 +857,9 @@ import scala.annotation.implicitNotFound
    * }}}
    */
   @noop
-  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
-                                                                         M: Monad[G]): G[(F[B], F[C])] = {
+  def partitionEitherM[G[_], A, B, C](
+    fa: F[A]
+  )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] = {
     import cats.instances.either._
     partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
   }
@@ -899,9 +901,10 @@ object Foldable {
       def uncons = None
     }
 
-    def cons[A](a: A, src: Eval[Source[A]]): Source[A] = new Source[A] {
-      def uncons = Some((a, src))
-    }
+    def cons[A](a: A, src: Eval[Source[A]]): Source[A] =
+      new Source[A] {
+        def uncons = Some((a, src))
+      }
 
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
@@ -978,21 +981,23 @@ object Foldable {
   trait ToFoldableOps {
     implicit def toFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): Ops[F, A] {
       type TypeClassType = Foldable[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Foldable[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Foldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToFoldableOps
   object ops {
     implicit def toAllFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): AllOps[F, A] {
       type TypeClassType = Foldable[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Foldable[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Foldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

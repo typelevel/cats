@@ -424,15 +424,16 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
-        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit = v.head match {
-          case Right(b) =>
-            buf += b
-            NonEmptyVector.fromVector(v.tail) match {
-              case Some(t) => go(t)
-              case None    => ()
-            }
-          case Left(a) => go(f(a).concat(v.tail))
-        }
+        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit =
+          v.head match {
+            case Right(b) =>
+              buf += b
+              NonEmptyVector.fromVector(v.tail) match {
+                case Some(t) => go(t)
+                case None    => ()
+              }
+            case Left(a) => go(f(a).concat(v.tail))
+          }
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())
       }
@@ -459,8 +460,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def align[A, B](fa: NonEmptyVector[A], fb: NonEmptyVector[B]): NonEmptyVector[Ior[A, B]] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].align(fa.toVector, fb.toVector))
 
-      override def alignWith[A, B, C](fa: NonEmptyVector[A],
-                                      fb: NonEmptyVector[B])(f: Ior[A, B] => C): NonEmptyVector[C] =
+      override def alignWith[A, B, C](fa: NonEmptyVector[A], fb: NonEmptyVector[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyVector[C] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 

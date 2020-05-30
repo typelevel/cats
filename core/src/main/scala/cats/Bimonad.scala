@@ -27,21 +27,23 @@ object Bimonad {
   trait ToBimonadOps {
     implicit def toBimonadOps[F[_], A](target: F[A])(implicit tc: Bimonad[F]): Ops[F, A] {
       type TypeClassType = Bimonad[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Bimonad[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Bimonad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToBimonadOps
   object ops {
     implicit def toAllBimonadOps[F[_], A](target: F[A])(implicit tc: Bimonad[F]): AllOps[F, A] {
       type TypeClassType = Bimonad[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Bimonad[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Bimonad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

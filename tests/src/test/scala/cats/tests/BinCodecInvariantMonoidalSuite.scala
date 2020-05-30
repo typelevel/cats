@@ -82,10 +82,11 @@ object BinCodecInvariantMonoidalSuite {
     // In tut/invariantmonoidal.md pure, product and imap are defined in
     // their own trait to be introduced one by one,
     trait CCPure {
-      def unit: BinCodec[Unit] = new BinCodec[Unit] {
-        def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
-        def write(a: Unit): Bin = MiniList.empty
-      }
+      def unit: BinCodec[Unit] =
+        new BinCodec[Unit] {
+          def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
+          def write(a: Unit): Bin = MiniList.empty
+        }
     }
 
     trait CCProduct {

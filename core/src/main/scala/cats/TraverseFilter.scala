@@ -115,21 +115,23 @@ object TraverseFilter {
   trait ToTraverseFilterOps {
     implicit def toTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): Ops[F, A] {
       type TypeClassType = TraverseFilter[F]
-    } = new Ops[F, A] {
-      type TypeClassType = TraverseFilter[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = TraverseFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToTraverseFilterOps
   object ops {
     implicit def toAllTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): AllOps[F, A] {
       type TypeClassType = TraverseFilter[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = TraverseFilter[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = TraverseFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

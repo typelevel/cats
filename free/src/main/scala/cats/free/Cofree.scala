@@ -71,10 +71,11 @@ object Cofree extends CofreeInstances {
   def anaEval[F[_], A, B](a: A)(coalg: A => Eval[F[A]], f: A => B)(implicit F: Functor[F]): Cofree[F, B] =
     Cofree[F, B](f(a), mapSemilazy(coalg(a))(fa => F.map(fa)(anaEval(_)(coalg, f))))
 
-  private def mapSemilazy[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa match {
-    case Now(a) => Now(f(a))
-    case other  => other.map(f)
-  }
+  private def mapSemilazy[A, B](fa: Eval[A])(f: A => B): Eval[B] =
+    fa match {
+      case Now(a) => Now(f(a))
+      case other  => other.map(f)
+    }
 
   /**
    * A stack-safe algebraic recursive fold out of the cofree comonad.
@@ -114,9 +115,10 @@ sealed abstract private[free] class CofreeInstances1 extends CofreeInstances2 {
 }
 
 sealed abstract private[free] class CofreeInstances extends CofreeInstances1 {
-  implicit def catsFreeComonadForCofree[S[_]: Functor]: Comonad[Cofree[S, *]] = new CofreeComonad[S] {
-    def F = implicitly
-  }
+  implicit def catsFreeComonadForCofree[S[_]: Functor]: Comonad[Cofree[S, *]] =
+    new CofreeComonad[S] {
+      def F = implicitly
+    }
 }
 
 private trait CofreeComonad[S[_]] extends Comonad[Cofree[S, *]] {

@@ -71,21 +71,23 @@ object CoflatMap {
   trait ToCoflatMapOps {
     implicit def toCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): Ops[F, A] {
       type TypeClassType = CoflatMap[F]
-    } = new Ops[F, A] {
-      type TypeClassType = CoflatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = CoflatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToCoflatMapOps
   object ops {
     implicit def toAllCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): AllOps[F, A] {
       type TypeClassType = CoflatMap[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = CoflatMap[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CoflatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

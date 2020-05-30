@@ -24,7 +24,8 @@ class SortedSetSuite extends CatsSuite {
   checkAll("Order.reverse(Order[SortedSet[Int]])", OrderTests(Order.reverse(Order[SortedSet[Int]])).order)
   checkAll("PartialOrder[SortedSet[Int]]", PartialOrderTests[SortedSet[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[SortedSet[Int]])",
-           PartialOrderTests(PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder)
+           PartialOrderTests(PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder
+  )
   checkAll(
     "PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))",
     PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))).partialOrder
@@ -32,12 +33,15 @@ class SortedSetSuite extends CatsSuite {
 
   checkAll("BoundedSemilattice[SortedSet[String]]", BoundedSemilatticeTests[SortedSet[String]].boundedSemilattice)
   checkAll("BoundedSemilattice[SortedSet[String]]",
-           SerializableTests.serializable(BoundedSemilattice[SortedSet[String]]))
+           SerializableTests.serializable(BoundedSemilattice[SortedSet[String]])
+  )
 
   checkAll("Semilattice.asMeetPartialOrder[SortedSet[Int]]",
-           PartialOrderTests(Semilattice.asMeetPartialOrder[SortedSet[Int]]).partialOrder)
+           PartialOrderTests(Semilattice.asMeetPartialOrder[SortedSet[Int]]).partialOrder
+  )
   checkAll("Semilattice.asJoinPartialOrder[SortedSet[Int]]",
-           PartialOrderTests(Semilattice.asJoinPartialOrder[SortedSet[Int]]).partialOrder)
+           PartialOrderTests(Semilattice.asJoinPartialOrder[SortedSet[Int]]).partialOrder
+  )
   checkAll("Hash[SortedSet[Int]]", HashTests[SortedSet[Int]].hash)
 
   test("show keeps separate entries for items that map to identical strings") {
@@ -59,7 +63,7 @@ object SortedSetIsomorphism extends Isomorphisms[SortedSet] {
       fs._2.ordering
     )
 
-    fs._1.map { case (a, (b, c))   => (a, b, c) } <->
+    fs._1.map { case (a, (b, c)) => (a, b, c) } <->
       fs._2.map { case ((a, b), c) => (a, b, c) }
   }
 

@@ -20,7 +20,8 @@ class NonEmptyStreamSuite extends CatsSuite {
   checkAll("NonEmptyStream[Int]", EqTests[NonEmptyStream[Int]].eqv)
 
   checkAll("NonEmptyStream[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyStream].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyStream].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyStream[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyStream[*]]))
 
   checkAll("NonEmptyStream[Int]", ReducibleTests[NonEmptyStream].reducible[Option, Int, Int])

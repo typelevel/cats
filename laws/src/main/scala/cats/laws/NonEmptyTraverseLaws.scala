@@ -15,9 +15,7 @@ trait NonEmptyTraverseLaws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
     fa: F[A],
     f: A => M[B],
     g: B => N[C]
-  )(implicit
-    N: Apply[N],
-    M: Apply[M]): IsEq[Nested[M, N, F[C]]] = {
+  )(implicit N: Apply[N], M: Apply[M]): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(fa.nonEmptyTraverse(f))(fb => fb.nonEmptyTraverse(g)))
     val rhs = fa.nonEmptyTraverse[Nested[M, N, *], C](a => Nested(M.map(f(a))(g)))
@@ -28,9 +26,7 @@ trait NonEmptyTraverseLaws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
     fa: F[A],
     f: A => M[B],
     g: A => N[B]
-  )(implicit
-    N: Apply[N],
-    M: Apply[M]): IsEq[(M[F[B]], N[F[B]])] = {
+  )(implicit N: Apply[N], M: Apply[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
     implicit val MN: Apply[MN] = new Apply[MN] {
       def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {

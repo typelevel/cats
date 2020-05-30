@@ -40,21 +40,23 @@ object Zero {
   trait ToZeroOps {
     implicit def toZeroOps[A](target: A)(implicit tc: Zero[A]): Ops[A] {
       type TypeClassType = Zero[A]
-    } = new Ops[A] {
-      type TypeClassType = Zero[A]
-      val self: A = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[A] {
+        type TypeClassType = Zero[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToZeroOps
   object ops {
     implicit def toAllZeroOps[A](target: A)(implicit tc: Zero[A]): AllOps[A] {
       type TypeClassType = Zero[A]
-    } = new AllOps[A] {
-      type TypeClassType = Zero[A]
-      val self: A = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[A] {
+        type TypeClassType = Zero[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

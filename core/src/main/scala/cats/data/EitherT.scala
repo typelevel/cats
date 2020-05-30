@@ -368,8 +368,10 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       }
     )
 
-  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit traverseF: Traverse[F],
-                                                         applicativeG: Applicative[G]): G[EitherT[F, C, D]] =
+  def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit
+    traverseF: Traverse[F],
+    applicativeG: Applicative[G]
+  ): G[EitherT[F, C, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Bitraverse[Either].bitraverse(axb)(f, g)))(EitherT.apply)
 
   def biflatMap[C, D](fa: A => EitherT[F, C, D], fb: B => EitherT[F, C, D])(implicit F: FlatMap[F]): EitherT[F, C, D] =
@@ -462,8 +464,9 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
   def ===(that: EitherT[F, A, B])(implicit eq: Eq[F[Either[A, B]]]): Boolean =
     eq.eqv(value, that.value)
 
-  def traverse[G[_], D](f: B => G[D])(implicit traverseF: Traverse[F],
-                                      applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
+  def traverse[G[_], D](
+    f: B => G[D]
+  )(implicit traverseF: Traverse[F], applicativeG: Applicative[G]): G[EitherT[F, A, D]] =
     applicativeG.map(traverseF.traverse(value)(axb => Traverse[Either[A, *]].traverse(axb)(f)))(EitherT.apply)
 
   def foldLeft[C](c: C)(f: (C, B) => C)(implicit F: Foldable[F]): C =
@@ -891,8 +894,8 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
         EitherT(F.defer(fa.value))
     }
 
-  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](
-    implicit P: Parallel[M]
+  implicit def catsDataParallelForEitherTWithParallelEffect[M[_], E: Semigroup](implicit
+    P: Parallel[M]
   ): Parallel.Aux[EitherT[M, E, *], Nested[P.F, Validated[E, *], *]] =
     new Parallel[EitherT[M, E, *]] {
       type F[x] = Nested[P.F, Validated[E, *], x]
@@ -925,8 +928,8 @@ abstract private[data] class EitherTInstances extends EitherTInstances1 {
 
 abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
-  implicit def catsSemigroupForEitherT[F[_], L, A](
-    implicit F: Semigroup[F[Either[L, A]]]
+  implicit def catsSemigroupForEitherT[F[_], L, A](implicit
+    F: Semigroup[F[Either[L, A]]]
   ): Semigroup[EitherT[F, L, A]] =
     new EitherTSemigroup[F, L, A] { implicit val F0 = F }
 
@@ -935,8 +938,8 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
       val F0: Foldable[F] = F
     }
 
-  implicit def catsDataPartialOrderForEitherT[F[_], L, R](
-    implicit F: PartialOrder[F[Either[L, R]]]
+  implicit def catsDataPartialOrderForEitherT[F[_], L, R](implicit
+    F: PartialOrder[F[Either[L, R]]]
   ): PartialOrder[EitherT[F, L, R]] =
     new EitherTPartialOrder[F, L, R] {
       val F0: PartialOrder[F[Either[L, R]]] = F
@@ -1000,8 +1003,8 @@ abstract private[data] class EitherTInstances2 extends EitherTInstances3 {
    * res0: cats.data.EitherT[Option,String,Int] = EitherT(Some(Right(1)))
    * }}}
    */
-  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](
-    implicit FE0: MonadError[F, E]
+  implicit def catsDataMonadErrorFForEitherT[F[_], E, L](implicit
+    FE0: MonadError[F, E]
   ): MonadError[EitherT[F, L, *], E] =
     new EitherTMonadErrorF[F, E, L] { implicit val F = FE0 }
 
@@ -1112,8 +1115,9 @@ sealed private[data] trait EitherTBifoldable[F[_]] extends Bifoldable[EitherT[F,
   def bifoldLeft[A, B, C](fab: EitherT[F, A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C =
     F0.foldLeft(fab.value, c)((acc, axb) => Bifoldable[Either].bifoldLeft(axb, acc)(f, g))
 
-  def bifoldRight[A, B, C](fab: EitherT[F, A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                              g: (B, Eval[C]) => Eval[C]): Eval[C] =
+  def bifoldRight[A, B, C](fab: EitherT[F, A, B],
+                           c: Eval[C]
+  )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
     F0.foldRight(fab.value, c)((axb, acc) => Bifoldable[Either].bifoldRight(axb, acc)(f, g))
 }
 

@@ -54,21 +54,23 @@ object Contravariant {
   trait ToContravariantOps {
     implicit def toContravariantOps[F[_], A](target: F[A])(implicit tc: Contravariant[F]): Ops[F, A] {
       type TypeClassType = Contravariant[F]
-    } = new Ops[F, A] {
-      type TypeClassType = Contravariant[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Contravariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToContravariantOps
   object ops {
     implicit def toAllContravariantOps[F[_], A](target: F[A])(implicit tc: Contravariant[F]): AllOps[F, A] {
       type TypeClassType = Contravariant[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = Contravariant[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Contravariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/

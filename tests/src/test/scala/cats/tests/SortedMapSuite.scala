@@ -29,7 +29,8 @@ class SortedMapSuite extends CatsSuite {
   checkAll("FlatMap[SortedMap[Int, *]]", SerializableTests.serializable(FlatMap[SortedMap[Int, *]]))
 
   checkAll("SortedMap[Int, Int] with Option",
-           TraverseTests[SortedMap[Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+           TraverseTests[SortedMap[Int, *]].traverse[Int, Int, Int, Int, Option, Option]
+  )
   checkAll("Traverse[SortedMap[Int, *]]", SerializableTests.serializable(Traverse[SortedMap[Int, *]]))
 
   checkAll("SortedMap[Int, Int]", TraverseFilterTests[SortedMap[Int, *]].traverseFilter[Int, Int, Int])
@@ -50,9 +51,11 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
-           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid
+  )
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
-           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
+           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]])
+  )
   checkAll("Monoid[SortedMap[String, String]]", MonoidTests[SortedMap[String, String]].monoid)
   checkAll("Monoid[SortedMap[String, String]]", SerializableTests.serializable(Monoid[SortedMap[String, String]]))
 

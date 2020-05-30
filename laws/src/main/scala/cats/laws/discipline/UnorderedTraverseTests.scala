@@ -9,8 +9,10 @@ import cats.kernel.CommutativeMonoid
 trait UnorderedTraverseTests[F[_]] extends UnorderedFoldableTests[F] {
   def laws: UnorderedTraverseLaws[F]
 
-  def unorderedTraverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, X[_]: CommutativeApplicative, Y[_]: CommutativeApplicative](
-    implicit ArbFA: Arbitrary[F[A]],
+  def unorderedTraverse[A: Arbitrary, B: Arbitrary, C: Arbitrary, X[_]: CommutativeApplicative, Y[
+    _
+  ]: CommutativeApplicative](implicit
+    ArbFA: Arbitrary[F[A]],
     ArbFXB: Arbitrary[F[X[B]]],
     ArbXB: Arbitrary[X[B]],
     ArbYB: Arbitrary[Y[B]],
@@ -25,10 +27,11 @@ trait UnorderedTraverseTests[F[_]] extends UnorderedFoldableTests[F] {
     EqXFB: Eq[X[F[B]]],
     EqYFB: Eq[Y[F[B]]]
   ): RuleSet = {
-    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] = new Eq[(X[F[B]], Y[F[B]])] {
-      override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
-        EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
-    }
+    implicit def EqXFBYFB: Eq[(X[F[B]], Y[F[B]])] =
+      new Eq[(X[F[B]], Y[F[B]])] {
+        override def eqv(x: (X[F[B]], Y[F[B]]), y: (X[F[B]], Y[F[B]])): Boolean =
+          EqXFB.eqv(x._1, y._1) && EqYFB.eqv(x._2, y._2)
+      }
     new DefaultRuleSet(
       name = "unorderedTraverse",
       parent = Some(unorderedFoldable[A, B]),

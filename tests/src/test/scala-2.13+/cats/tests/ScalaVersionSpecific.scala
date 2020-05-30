@@ -51,13 +51,14 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
-  def foldableLazyListWithDefaultImpl: Foldable[LazyList] = new Foldable[LazyList] {
-    def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
-      Foldable[LazyList].foldLeft(fa, b)(f)
+  def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
+    new Foldable[LazyList] {
+      def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
+        Foldable[LazyList].foldLeft(fa, b)(f)
 
-    def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      Foldable[LazyList].foldRight(fa, lb)(f)
-  }
+      def foldRight[A, B](fa: LazyList[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable[LazyList].foldRight(fa, lb)(f)
+    }
 
   test("Foldable[LazyList].foldLeftM short-circuiting") {
     implicit val F: Foldable[LazyList] = foldableLazyListWithDefaultImpl

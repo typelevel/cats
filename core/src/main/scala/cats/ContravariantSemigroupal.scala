@@ -42,11 +42,12 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
       target: F[A]
     )(implicit tc: ContravariantSemigroupal[F]): Ops[F, A] {
       type TypeClassType = ContravariantSemigroupal[F]
-    } = new Ops[F, A] {
-      type TypeClassType = ContravariantSemigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new Ops[F, A] {
+        type TypeClassType = ContravariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
   object nonInheritedOps extends ToContravariantSemigroupalOps
   object ops {
@@ -54,11 +55,12 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
       target: F[A]
     )(implicit tc: ContravariantSemigroupal[F]): AllOps[F, A] {
       type TypeClassType = ContravariantSemigroupal[F]
-    } = new AllOps[F, A] {
-      type TypeClassType = ContravariantSemigroupal[F]
-      val self: F[A] = target
-      val typeClassInstance: TypeClassType = tc
-    }
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = ContravariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
   }
 
   /****************************************************************************/
