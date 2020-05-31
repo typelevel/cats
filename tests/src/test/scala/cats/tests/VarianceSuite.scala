@@ -2,7 +2,7 @@ package cats.tests
 
 import cats.{Bifunctor, Contravariant, Functor}
 import cats.implicits._
-import cats.implicits.variance._
+import cats.conversions.all._
 
 class VarianceSuite extends CatsSuite {
 
