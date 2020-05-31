@@ -9,7 +9,6 @@ import org.typelevel.discipline.Laws
 trait ShortCircuitingTests[F[_]] extends Laws {
   def laws: ShortCircuitingLaws[F]
 
-
   def foldable[A: Arbitrary](implicit F: Foldable[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet =
     new DefaultRuleSet(
       name = "foldMapKShortCircuiting",
