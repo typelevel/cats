@@ -80,7 +80,7 @@ lazy val catsSettings = Seq(
 lazy val simulacrumSettings = Seq(
   addCompilerPlugin(scalafixSemanticdb),
   scalacOptions ++= Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos"),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.2.0",
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.3.0",
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] =
