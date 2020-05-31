@@ -14,7 +14,8 @@ class SyntaxSerializationSuite extends CatsSuite {
   )
 
   checkAll("SemigroupalOps[Option, Int]",
-           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None)))
+           SerializableTests.serializable(cats.syntax.all.catsSyntaxSemigroupal[Option, Int](None))
+  )
 
   checkAll(
     "Tuple3ParallelOps[Either[String, ?], Boolean, Int, Long]",

@@ -42,6 +42,7 @@ class VectorSuite extends CatsSuite {
   checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
 
   checkAll("Vector[Int]", ShortCircuitingTests[Vector].traverseFilter[Int])
+  checkAll("Vector[Int]", ShortCircuitingTests[Vector].foldable[Int])
 
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 

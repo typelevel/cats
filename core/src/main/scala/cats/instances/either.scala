@@ -186,6 +186,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
           case Left(_)  => y
           case Right(_) => x
         }
+
+      override def combineKEval[A](x: Either[L, A], y: Eval[Either[L, A]]): Eval[Either[L, A]] =
+        x match {
+          case Left(_)  => y
+          case Right(_) => Now(x)
+        }
     }
 
   implicit def catsStdShowForEither[A, B](implicit A: Show[A], B: Show[B]): Show[Either[A, B]] =

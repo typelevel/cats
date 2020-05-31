@@ -74,6 +74,15 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def foldMap[A, B](fa: List[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
+      override def foldMapK[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] = {
+        def loop(fa: List[A]): Eval[G[B]] =
+          fa match {
+            case head :: tl => G.combineKEval(f(head), Eval.defer(loop(tl)))
+            case Nil        => Eval.now(G.empty)
+          }
+        loop(fa).value
+      }
+
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
         def loop(fa: List[A]): Eval[G[List[B]]] =
           fa match {
