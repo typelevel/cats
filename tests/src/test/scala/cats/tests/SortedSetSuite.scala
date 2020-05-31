@@ -7,7 +7,7 @@ import cats.kernel.{BoundedSemilattice, Semilattice}
 import cats.laws._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests}
+import cats.laws.discipline.{FoldableTests, SemigroupKTests, SemigroupalTests, SerializableTests, ShortCircuitingTests}
 import cats.syntax.show._
 import scala.collection.immutable.SortedSet
 

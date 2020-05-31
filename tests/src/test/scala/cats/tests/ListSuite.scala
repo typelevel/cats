@@ -43,6 +43,7 @@ class ListSuite extends CatsSuite {
   checkAll("Align[List]", SerializableTests.serializable(Align[List]))
 
   checkAll("List[Int]", ShortCircuitingTests[List].traverseFilter[Int])
+  checkAll("List[Int]", ShortCircuitingTests[List].foldable[Int])
 
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 

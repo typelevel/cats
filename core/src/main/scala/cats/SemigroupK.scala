@@ -40,6 +40,31 @@ import scala.annotation.implicitNotFound
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
+   * Similar to [[combineK]] but uses [[Eval]] to allow for laziness in the second
+   * argument. This can allow for "short-circuiting" of computations.
+   *
+   * NOTE: the default implementation of `combineKEval` does not short-circuit
+   * computations. For data structures that can benefit from laziness, [[SemigroupK]]
+   * instances should override this method.
+   *
+   * In the following example, `x.combineK(bomb)` would result in an error,
+   * but `combineKEval` "short-circuits" the computation. `x` is `Some` and thus the
+   * result of `bomb` doesn't even need to be evaluated in order to determine
+   * that the result of `combineKEval` should be `x`.
+   *
+   * {{{
+   * scala> import cats.{Eval, Later}
+   * scala> import cats.implicits._
+   * scala> val bomb: Eval[Option[Int]] = Later(sys.error("boom"))
+   * scala> val x: Option[Int] = Some(42)
+   * scala> x.combineKEval(bomb).value
+   * res0: Option[Int] = Some(42)
+   * }}}
+   */
+  def combineKEval[A](x: F[A], y: Eval[F[A]]): Eval[F[A]] =
+    y.map(yy => combineK(x, yy))
+
+  /**
    * Given a type A, create a concrete Semigroup[F[A]].
    *
    * Example:
@@ -110,6 +135,7 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
+
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
    */
@@ -121,6 +147,7 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
     val typeClassInstance: TypeClassType
     def combineK(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
     def <+>(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
+    def combineKEval(y: Eval[F[A]]): Eval[F[A]] = typeClassInstance.combineKEval[A](self, y)
     def sum[B](fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)(F)
   }
   trait AllOps[F[_], A] extends Ops[F, A]

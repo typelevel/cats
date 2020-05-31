@@ -1,13 +1,21 @@
 package cats.laws.discipline
 
 import cats.laws.ShortCircuitingLaws
-import cats.{Eq, Traverse, TraverseFilter}
+import cats.{Eq, Foldable, Traverse, TraverseFilter}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws
 
 trait ShortCircuitingTests[F[_]] extends Laws {
   def laws: ShortCircuitingLaws[F]
+
+  def foldable[A: Arbitrary](implicit F: Foldable[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet =
+    new DefaultRuleSet(
+      name = "foldMapKShortCircuiting",
+      parent = None,
+      "foldMapK short-circuits if MonoidK[G].combineKEval shorts" -> forAll(laws.foldMapKShortCircuits[A] _),
+      "foldMapK won't short-circuit if MonoidK[G].combineKEval won't" -> forAll(laws.foldMapKWontShortCircuit[A] _)
+    )
 
   def traverse[A: Arbitrary](implicit F: Traverse[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet =
     new DefaultRuleSet(
