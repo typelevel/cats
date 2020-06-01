@@ -38,6 +38,8 @@ class NonEmptySetSuite extends CatsSuite {
     PartialOrder[NonEmptySet[ListWrapper[Int]]]
   }
 
+  checkAll("NonEmptySet[Int]", ShortCircuitingTests[NonEmptySet].foldable[Int])
+
   test("First element is always the smallest") {
     forAll { (nes: NonEmptySet[Int]) =>
       nes.forall { v =>

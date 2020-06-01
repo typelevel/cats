@@ -40,6 +40,7 @@ class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", AlignTests[LazyList].align[Int, Int, Int, Int])
   checkAll("Align[LazyList]", SerializableTests.serializable(Align[LazyList]))
 
+  checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].foldable[Int])
   checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].traverseFilter[Int])
 
   // Can't test applicative laws as they don't terminate

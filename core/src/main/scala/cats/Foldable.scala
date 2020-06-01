@@ -427,7 +427,9 @@ import scala.annotation.implicitNotFound
    * */
   @noop
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
-    foldMap(fa)(f)(G.algebra)
+    foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>
+      G.combineKEval(f(a), evalGb)
+    }.value
 
   /**
    * Alias for [[foldM]].

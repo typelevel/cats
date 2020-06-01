@@ -57,6 +57,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].foldable[Int])
   checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].traverse[Int])
 
   {
