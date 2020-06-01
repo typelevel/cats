@@ -28,12 +28,12 @@ for example with Simulacrum.
 In Scala, when there are multiple type parameters in a function, either scalac infers all type parameters or the user has to
 specify all of them. Often we have functions where there are one or more types that are inferable but not all of them. For example, there is helper function in `OptionT` that creates an `OptionT[F, A]` from an `A`. It could be written as:
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.implicits._
 import cats.data.OptionT
 ```
-```tut:book
+```scala mdoc
 def pure[F[_], A](a: A)(implicit F: Applicative[F]): OptionT[F, A] =
   OptionT(F.pure(Some(a)))
 
@@ -60,7 +60,7 @@ object OptionT {
 ```
 
 We introduced an intermediate or, as the name suggested, type parameter partially applied type `PurePartiallyApplied` to divide the function into two steps: the first step is a construction of the partially applied type, for which the type `F[_]` is given by the user; the second step is the `apply` method inside partially applied type, for which the `A` can be inferred from the argument. Now we can write:
-```tut:book
+```scala mdoc
 OptionT.pure[List](1)
 ```
 

@@ -30,14 +30,14 @@ Let's compare the usage of `Monoid[A]` and `MonoidK[F]`.
 
 First some imports:
 
-```tut:silent
+```scala mdoc:silent
 import cats.{Monoid, MonoidK}
 import cats.implicits._
 ```
 
 Just like `Monoid[A]`, `MonoidK[F]` has an `empty` method, but it is parametrized on the type of the element contained in `F`:
 
-```tut:book
+```scala mdoc
 Monoid[List[String]].empty
 MonoidK[List].empty[String]
 MonoidK[List].empty[Int]
@@ -45,7 +45,7 @@ MonoidK[List].empty[Int]
 
 And instead of `combine`, it has `combineK`, which also takes one type parameter:
 
-```tut:book
+```scala mdoc
 Monoid[List[String]].combine(List("hello", "world"), List("goodbye", "moon"))
 MonoidK[List].combineK[String](List("hello", "world"), List("goodbye", "moon"))
 MonoidK[List].combineK[Int](List(1, 2), List(3, 4))
@@ -53,7 +53,7 @@ MonoidK[List].combineK[Int](List(1, 2), List(3, 4))
 
 Actually the type parameter can usually be inferred:
 
-```tut:book
+```scala mdoc
 MonoidK[List].combineK(List("hello", "world"), List("goodbye", "moon"))
 MonoidK[List].combineK(List(1, 2), List(3, 4))
 ```

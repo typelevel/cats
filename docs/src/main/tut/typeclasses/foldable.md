@@ -33,14 +33,14 @@ These form the basis for many other operations, see also:
 
 First some standard imports.
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.implicits._
 ```
 
 And examples.
 
-```tut:book
+```scala mdoc
 Foldable[List].fold(List("a", "b", "c"))
 Foldable[List].foldMap(List(1, 2, 4))(_.toString)
 Foldable[List].foldK(List(List(1,2,3), List(2,3,4)))
@@ -108,7 +108,7 @@ Scala's standard library might expect. This will prevent operations
 which are lazy in their right hand argument to traverse the entire
 structure unnecessarily. For example, if you have:
 
-```tut:book
+```scala mdoc
 val allFalse = Stream.continually(false)
 ```
 
@@ -121,7 +121,7 @@ value. Using `foldRight` from the standard library *will* try to
 consider the entire stream, and thus will eventually cause a stack
 overflow:
 
-```tut:book
+```scala mdoc
 try {
   allFalse.foldRight(true)(_ && _)
 } catch {
@@ -132,6 +132,6 @@ try {
 With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
-```tut:book
+```scala mdoc
 Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
 ```

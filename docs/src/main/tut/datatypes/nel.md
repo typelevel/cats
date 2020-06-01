@@ -38,7 +38,7 @@ e.g., `List`.
 
 Let's take as an example a method that calculates the `average`:
 
-```tut:silent
+```scala mdoc:silent
 def average(xs: List[Int]): Double = {
   xs.sum / xs.length.toDouble
 }
@@ -48,7 +48,7 @@ Clearly, this is not a valid definition for *empty* lists, because
 division by zero will throw an exception.  To fix this, one way is to
 return an `Option` instead of a `Double` right away:
 
-```tut:silent
+```scala mdoc:silent
 def average(xs: List[Int]): Option[Double] = if (xs.isEmpty) {
   None
 } else {
@@ -70,7 +70,7 @@ can be sure that there is at least one `A` in there.
 
 Let's see how that impacts your `average` method:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.NonEmptyList
 def average(xs: NonEmptyList[Int]): Double = {
   xs.reduceLeft(_+_) / xs.length.toDouble
@@ -115,7 +115,7 @@ To construct a `NonEmptyList` you have different possibilities.
 If you want to construct a collection with only one argument, use
 `NonEmptyList.one`:
 
-```tut:book
+```scala mdoc
 NonEmptyList.one(42)
 ```
 
@@ -130,7 +130,7 @@ def of[A](head: A, tail: A*): NonEmptyList[A]
 It accepts an argument list with at least one `A` followed by a
 *varargs* argument for the `tail`.  Call it like this:
 
-```tut:book
+```scala mdoc
 NonEmptyList.of(1)
 NonEmptyList.of(1, 2)
 NonEmptyList.of(1, 2, 3, 4)
@@ -139,7 +139,7 @@ NonEmptyList.of(1, 2, 3, 4)
 There also is `ofInitLast` which takes a normal `List[A]` for the
 prefix and a last element:
 
-```tut:book
+```scala mdoc
 NonEmptyList.ofInitLast(List(), 4)
 NonEmptyList.ofInitLast(List(1,2,3), 4)
 ```
@@ -149,7 +149,7 @@ NonEmptyList.ofInitLast(List(1,2,3), 4)
 There is also `NonEmptyList.fromList` which returns an
 `Option[NonEmptyList[A]]`:
 
-```tut:book
+```scala mdoc
 NonEmptyList.fromList(List())
 NonEmptyList.fromList(List(1,2,3))
 ```
@@ -157,7 +157,7 @@ NonEmptyList.fromList(List(1,2,3))
 Last but not least, there is `.toNel` if you import the syntax for
 `list`:
 
-```tut:book
+```scala mdoc
 import cats.syntax.list._
 List(1,2,3).toNel
 ```
@@ -171,7 +171,7 @@ is only available for non-empty datastructures.
 
 Here are some examples:
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 NonEmptyList.fromFoldable(List())

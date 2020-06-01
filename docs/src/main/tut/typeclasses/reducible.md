@@ -28,7 +28,7 @@ Furthermore, just like with `foldRight`, `reduceRight` uses the `Eval` data type
 
 First some standard imports.
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.data._
 import cats.implicits._
@@ -36,7 +36,7 @@ import cats.implicits._
 
 And examples.
 
-```tut:book
+```scala mdoc
 Reducible[NonEmptyList].reduce(NonEmptyList.of("a", "b", "c"))
 Reducible[NonEmptyList].reduceMap(NonEmptyList.of(1, 2, 4))(_.toString)
 Reducible[NonEmptyVector].reduceK(NonEmptyVector.of(List(1,2,3), List(2,3,4)))

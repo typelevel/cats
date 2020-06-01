@@ -9,7 +9,7 @@ scaladoc: "#cats.InvariantMonoidal"
 
 `InvariantMonoidal` combines [`Invariant`](invariant.html) and `Semigroupal` with the addition of a `unit` methods, defined in isolation the `InvariantMonoidal` type class could be defined as follows:
 
-```tut:silent
+```scala mdoc:silent
 trait InvariantMonoidal[F[_]] {
   def unit: F[Unit]
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
@@ -27,7 +27,7 @@ As explained in the [`Invariant` tutorial](invariant.html), `Semigroup` forms an
 
 To construct a `Semigroup` from a single value, we can define a trivial `Semigroup` with a combine that always outputs the given value. A `Semigroup[(A, B)]` can be obtained from two `Semigroup`s for type `A` and `B` by deconstructing two pairs into elements of type `A` and `B`, combining these element using their respective `Semigroup`s, and reconstructing a pair from the results:
 
-```tut:silent
+```scala mdoc:silent
 import cats.Semigroup
 
 def unit: Semigroup[Unit] =
@@ -45,7 +45,7 @@ def product[A, B](fa: Semigroup[A], fb: Semigroup[B]): Semigroup[(A, B)] =
 
 Given an instance of `InvariantMonoidal` for `Semigroup`, we are able to combine existing `Semigroup` instances to form a new `Semigroup` by using the `Semigroupal` syntax:
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._
 
 // Let's build a Semigroup for this case class
@@ -59,7 +59,7 @@ implicit val fooSemigroup: Semigroup[Foo] = (
 
 Our new Semigroup in action:
 
-```tut:book
+```scala mdoc
 Foo("Hello", List(0.0)) |+| Foo("World", Nil) |+| Foo("!", List(1.1, 2.2))
 ```
 
@@ -68,7 +68,7 @@ Foo("Hello", List(0.0)) |+| Foo("World", Nil) |+| Foo("!", List(1.1, 2.2))
 We define `CsvCodec`, a type class for serialization and deserialization of CSV rows:
 
 
-```tut:silent
+```scala mdoc:silent
 type CSV = List[String]
 
 trait CsvCodec[A] {
@@ -87,7 +87,7 @@ forAll { (c: CsvCodec[A], a: A) => c.read(c.write(a)) == ((Some(a), List()))
 
 Let's now see how we could define an `InvariantMonoidal` instance for `CsvCodec`. Lifting a single value into a `CsvCodec` can be done "the trivial way" by consuming nothing from CSV and producing that value, and writing this value as the empty CSV:
 
-```tut:silent
+```scala mdoc:silent
 trait CCUnit {
   def unit: CsvCodec[Unit] = new CsvCodec[Unit] {
     def read(s: CSV): (Option[Unit], CSV) = (Some(()), s)
@@ -98,7 +98,7 @@ trait CCUnit {
 
 Combining two `CsvCodec`s could be done by reading and writing each value of a pair sequentially, where reading succeeds if both read operations succeed:
 
-```tut:silent
+```scala mdoc:silent
 trait CCProduct {
   def product[A, B](fa: CsvCodec[A], fb: CsvCodec[B]): CsvCodec[(A, B)] =
     new CsvCodec[(A, B)] {
@@ -116,7 +116,7 @@ trait CCProduct {
 
 Changing a `CsvCodec[A]` to `CsvCodec[B]` requires two functions of type `A => B` and `B => A` to transform a value from `A` to `B` after  deserialized, and from `B` to `A` before serialization:
 
-```tut:silent
+```scala mdoc:silent
 trait CCImap {
   def imap[A, B](fa: CsvCodec[A])(f: A => B)(g: B => A): CsvCodec[B] =
     new CsvCodec[B] {
@@ -133,7 +133,7 @@ trait CCImap {
 
 Putting it all together:
 
-```tut:silent
+```scala mdoc:silent
 import cats.InvariantMonoidal
 
 implicit val csvCodecIsInvariantMonoidal: InvariantMonoidal[CsvCodec] =
@@ -142,7 +142,7 @@ implicit val csvCodecIsInvariantMonoidal: InvariantMonoidal[CsvCodec] =
 
 We can now define a few `CsvCodec` instances and use the methods provided by `InvariantMonoidal` to define `CsvCodec` from existing `CsvCodec`s:
 
-```tut:silent
+```scala mdoc:silent
 val stringCodec: CsvCodec[String] =
   new CsvCodec[String] {
     def read(s: CSV): (Option[String], CSV) = (s.headOption, s.drop(1))
@@ -159,7 +159,7 @@ def numericSystemCodec(base: Int): CsvCodec[Int] =
   }
 ```
 
-```tut:silent
+```scala mdoc:silent
 case class BinDec(binary: Int, decimal: Int)
 
 val binDecCodec: CsvCodec[BinDec] = (
@@ -177,7 +177,7 @@ val fooCodec: CsvCodec[Foo] = (
 
 Finally let's verify out CsvCodec law with an example:
 
-```tut:book
+```scala mdoc
 val foo = Foo("foo", BinDec(10, 10), BinDec(20, 20))
 
 val fooCsv = fooCodec.write(foo)
@@ -197,7 +197,7 @@ For instance, a value `a` of type `A` can be seen as a pair of nullary functions
 
 The `Invariant` instance alone does not provide either of these lifting, and it is therefore natural to define define a type class for generalizing `Invariant`s for functions of arbitrary arity:
 
-```tut:silent
+```scala mdoc:silent
 trait MultiInvariant[F[_]] {
   def imap0[A](a: A): F[A]
   def imap1[A, B](f: A => B)(g: B => A)(fa: F[A]): F[B]
@@ -207,7 +207,7 @@ trait MultiInvariant[F[_]] {
 
 Higher-arity `imapN` can be defined in terms of `imap2`, for example for `N = 3`:
 
-```tut:silent
+```scala mdoc:silent
 trait MultiInvariantImap3[F[_]] extends MultiInvariant[F] {
   def imap3[A, B, C, D](
     f: ((A, B, C)) => D,
@@ -226,7 +226,7 @@ trait MultiInvariantImap3[F[_]] extends MultiInvariant[F] {
 
 We can observe that `MultiInvariant` is none other than an alternative formulation for `InvariantMonoidal`. Indeed, `imap1` and `imap` only differ by the order of their argument, and `imap2` can easily be defined in terms of `imap` and `product`:
 
-```tut:silent
+```scala mdoc:silent
 trait Imap2FromImapProduct[F[_]] extends cats.InvariantMonoidal[F] {
   def imap2[A, B, C](f: ((A, B)) => C)(g: C => (A, B))(fa: F[A], fb: F[B]): F[C] =
     imap(product(fa, fb))(f)(g)

@@ -13,7 +13,7 @@ second part that is wrapped inside an higher kinded type constructor
 `F[_]`.  By choosing the `F` parameter, you can model for example
 non-empty lists by choosing `List` for `F`, giving:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.OneAnd
 
 type NonEmptyList[A] = OneAnd[List, A]
@@ -24,6 +24,6 @@ been replaced by the `cats.data.NonEmptyList` data type. By
 having the higher kinded type parameter `F[_]`, `OneAnd` is also able
 to represent other "non-empty" data structures e.g.
 
-```tut:silent
+```scala mdoc:silent
 type NonEmptyStream[A] = OneAnd[Stream, A]
 ```

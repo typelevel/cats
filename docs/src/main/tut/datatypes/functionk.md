@@ -15,27 +15,27 @@ first step back and talk about ordinary functions.
 ## Ordinary Functions
 Consider the following scala method:
 
-```tut:silent
+```scala mdoc:silent
 def first(l: List[Int]): Option[Int] = l.headOption
 ```
 
 This isn't a particularly helpful method, but it will work as an example. Instead of writing this as a
 method, we could have written this as a function _value_:
 
-```tut:silent
+```scala mdoc:silent
 val first: List[Int] => Option[Int] = l => l.headOption
 ```
 
 And here, `=>` is really just some syntactic sugar for `Function1`, so we could also write that as:
 
-```tut:silent
+```scala mdoc:silent
 val first: Function1[List[Int], Option[Int]] = l => l.headOption
 ````
 
 Let's cut through the syntactic sugar even a little bit further. `Function1` isn't really a special type.
 It's just a trait that looks something like this:
 
-```tut:silent
+```scala mdoc:silent
 // we are calling this `MyFunction1` so we don't collide with the actual `Function1`
 trait MyFunction1[A, B] {
   def apply(a: A): B
@@ -44,7 +44,7 @@ trait MyFunction1[A, B] {
 
 So if we didn't mind being a bit verbose, we could have written our function as:
 
-```tut:silent
+```scala mdoc:silent
 val first: Function1[List[Int], Option[Int]] = new Function1[List[Int], Option[Int]] {
   def apply(l: List[Int]): Option[Int] = l.headOption
 }
@@ -54,7 +54,7 @@ val first: Function1[List[Int], Option[Int]] = new Function1[List[Int], Option[I
 
 Recall our `first` method:
 
-```tut:silent
+```scala mdoc:silent
 def first(l: List[Int]): Option[Int] = l.headOption
 ```
 
@@ -71,7 +71,7 @@ But how would we represent this new `first` method as a `=>`/`Function1` value? 
 It turns out that we can represent our universal `List` to `Option` transformation with something that looks a bit like `Function1` but
 that adds a type parameter to the `apply` method and utilizes higher kinds:
 
-```tut:silent
+```scala mdoc:silent
 trait MyFunctionK[F[_], G[_]] {
   def apply[A](fa: F[A]): G[A]
 }
@@ -79,7 +79,7 @@ trait MyFunctionK[F[_], G[_]] {
 
 Cats provides this type as `FunctionK` (we used `MyFunctionK` for our example type to avoid confusion). So now we can write `first` as a `FunctionK[List, Option]` value:
 
-```tut:silent
+```scala mdoc:silent
 import cats.arrow.FunctionK
 
 val first: FunctionK[List, Option] = new FunctionK[List, Option] {
@@ -93,13 +93,13 @@ If the example above looks a bit too verbose for you, the [kind-projector](https
 compiler plugin [provides](https://github.com/typelevel/kind-projector#polymorphic-lambda-values) a more concise syntax.
 After adding the plugin to your project, you could write the `first` example as:
 
-```tut:silent
+```scala mdoc:silent
 val first: FunctionK[List, Option] = λ[FunctionK[List, Option]](_.headOption)
 ```
 
 Cats also provides a `~>` type alias for `FunctionK`, so an even more concise version would be:
 
-```tut:silent
+```scala mdoc:silent
 import cats.~>
 
 val first: List ~> Option = λ[List ~> Option](_.headOption)
@@ -115,7 +115,7 @@ Being able to use `~>` as an alias for `FunctionK` parallels being able to use `
 
 Earlier it was mentioned that `FunctionK` operates on first-order-kinded types (types that take a single type parameter such as `List` or `Option`). It's still possible to use `FunctionK` with types that would normally take more than one type parameter (such as `Either`) if we fix all of the type parameters except for one. For example:
 
-```tut:silent
+```scala mdoc:silent
 type ErrorOr[A] = Either[String, A]
 
 val errorOrFirst: FunctionK[List, ErrorOr] =

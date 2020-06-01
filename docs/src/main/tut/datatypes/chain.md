@@ -70,7 +70,7 @@ It's a simple ADT that has only 4 cases.
 It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collection.
 In code it looks like this:
 
-```tut:book
+```scala mdoc
 sealed abstract class Chain[+A]
 
 case object Empty extends Chain[Nothing]
@@ -121,7 +121,7 @@ Likewise, it defines a `NonEmptyTraverse` instance, but no `TraverseFilter` inst
 
 There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
 
-```tut:book
+```scala mdoc
 import cats.data._
 
 NonEmptyChain(1, 2, 3, 4)
@@ -136,7 +136,7 @@ NonEmptyChain.one(1)
 
 You can also create an `Option` of `NonEmptyChain` from a `Chain` or any other collection type:
 
-```tut:book
+```scala mdoc
 import cats.data._
 
 NonEmptyChain.fromChain(Chain(1, 2, 3))
@@ -146,7 +146,7 @@ NonEmptyChain.fromSeq(Vector(1, 2, 3))
 
 Sometimes, you'll want to prepend or append a single element to a chain and return the result as a `NonEmptyChain`:
 
-```tut:book
+```scala mdoc
 import cats.data._
 
 NonEmptyChain.fromChainAppend(Chain(1, 2, 3), 4)

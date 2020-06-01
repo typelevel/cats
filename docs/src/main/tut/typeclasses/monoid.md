@@ -9,7 +9,7 @@ scaladoc: "#cats.kernel.Monoid"
 
 `Monoid` extends the power of `Semigroup` by providing an additional `empty` value.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Semigroup[A] {
   def combine(x: A, y: A): A
 }
@@ -28,7 +28,7 @@ combine(x, empty) = combine(empty, x) = x
 
 Many types that form a `Semigroup` also form a `Monoid`, such as `Int`s (with `0`) and `Strings` (with `""`).
 
-```tut:reset:book:silent
+```scala mdoc:reset:book:silent
 import cats.Monoid
 
 implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
@@ -39,7 +39,7 @@ implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
 val x = 1
 ```
 
-```tut:book
+```scala mdoc
 Monoid[Int].combine(x, Monoid[Int].empty)
 
 Monoid[Int].combine(Monoid[Int].empty, x)
@@ -50,18 +50,18 @@ Monoid[Int].combine(Monoid[Int].empty, x)
 In the `Semigroup` section we had trouble writing a generic `combineAll` function because we had nothing
 to give if the list was empty. With `Monoid` we can return `empty`, giving us
 
-```tut:book:silent
+```scala mdoc:silent
 def combineAll[A: Monoid](as: List[A]): A =
   as.foldLeft(Monoid[A].empty)(Monoid[A].combine)
 ```
 
 which can be used for any type that has a `Monoid` instance.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 combineAll(List(1, 2, 3))
 
 combineAll(List("hello", " ", "world"))
@@ -79,7 +79,7 @@ There are some types that can form a `Semigroup` but not a `Monoid`. For example
 following `NonEmptyList` type forms a semigroup through `++`, but has no corresponding
 identity element to form a monoid.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.Semigroup
 
 final case class NonEmptyList[A](head: A, tail: List[A]) {
@@ -99,7 +99,7 @@ object NonEmptyList {
 How then can we collapse a `List[NonEmptyList[A]]` ? For such types that only have a `Semigroup` we can
 lift into `Option` to get a `Monoid`.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.implicits._
 
 implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] = new Monoid[Option[A]] {
@@ -121,7 +121,7 @@ This is the `Monoid` for `Option`: for any `Semigroup[A]`, there is a `Monoid[Op
 
 Thus:
 
-```tut:reset:book:silent
+```scala mdoc:reset:book:silent
 import cats.Monoid
 import cats.data.NonEmptyList
 import cats.implicits._
@@ -130,7 +130,7 @@ val list = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
 val lifted = list.map(nel => Option(nel))
 ```
 
-```tut:book
+```scala mdoc
 Monoid.combineAll(lifted)
 ```
 

@@ -12,7 +12,7 @@ In day-to-day programming we quite often end up with data inside nested
 effects, e.g. an integer inside an `Either`, which in turn is nested inside
 an `Option`:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Validated
 import cats.data.Validated.Valid
 val x: Option[Validated[String, Int]] = Some(Valid(123))
@@ -21,19 +21,19 @@ val x: Option[Validated[String, Int]] = Some(Valid(123))
 This can be quite annoying to work with, as you have to traverse the nested
 structure every time you want to perform a `map` or something similar:
 
-```tut:book
+```scala mdoc
 x.map(_.map(_.toString))
 ```
 
 `Nested` can help with this by composing the two `map` operations into one:
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.Nested
 import cats.implicits._
 val nested: Nested[Option, Validated[String, *], Int] = Nested(Some(Valid(123)))
 ```
 
-```tut:book
+```scala mdoc
 nested.map(_.toString).value
 ```
 
@@ -68,7 +68,7 @@ slightly adapted)
 
 Say we have an API for creating users:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.Future
 
 case class UserInfo(name: String, age: Int)
@@ -81,7 +81,7 @@ def createUser(userInfo: UserInfo): Future[Either[List[String], User]] =
 Using `Nested` we can write a function that, given a list of `UserInfo`s,
 creates a list of `User`s:
 
-```tut:silent
+```scala mdoc:silent
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -98,18 +98,18 @@ val userInfos = List(
 )
 ```
 
-```tut:book
+```scala mdoc
 Await.result(createUsers(userInfos), 1.second)
 ```
 
 Note that if we hadn't used `Nested`, the behaviour of our function would have
 been different, resulting in a different return type:
 
-```tut:silent
+```scala mdoc:silent
 def createUsersNotNested(userInfos: List[UserInfo]): Future[List[Either[List[String], User]]] =
   userInfos.traverse(createUser)
 ```
 
-```tut:book
+```scala mdoc
 Await.result(createUsersNotNested(userInfos), 1.second)
 ```

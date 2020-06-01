@@ -19,7 +19,7 @@ The difference is that `toString` is defined on `Any`(Java's `Object`) and can t
 Most often, this is unwanted behaviour, as the standard implementation of `toString` on non case classes is mostly gibberish.
 Consider the following example:
 
-```tut:book
+```scala mdoc
 (new {}).toString
 ```
 
@@ -39,7 +39,7 @@ def fromToString[A]: Show[A]
 
 These can be used like this:
 
-```tut:book
+```scala mdoc
 import cats.Show
 
 case class Person(name: String, age: Int)
@@ -58,7 +58,7 @@ Thankfully with the help of a small library called [kittens](https://github.com/
 Cats also offers `Show` syntax to make working with it easier.
 This includes the `show` method which can be called on anything with a `Show` instance in scope:
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 val john = Person("John", 31)
@@ -68,7 +68,7 @@ john.show
 
 It also includes a String interpolator, which works just like the standard `s"..."` interpolator, but uses `Show` instead of `toString`:
 
-```tut:book
+```scala mdoc
 val engineering = Department(2, "Engineering")
 show"$john works at $engineering"
 ```

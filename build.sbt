@@ -388,6 +388,7 @@ def mimaSettings(moduleName: String, includeCats1: Boolean = true) =
 lazy val docs = project
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
+  .enablePlugins(MdocPlugin)
   .settings(moduleName := "cats-docs")
   .settings(catsSettings)
   .settings(noPublishSettings)

@@ -8,7 +8,7 @@ scaladoc: "#cats.Applicative"
 # Applicative
 `Applicative` extends [`Functor`](functor.html) with an `ap` and `pure` method.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.Functor
 
 trait Applicative[F[_]] extends Functor[F] {
@@ -26,7 +26,7 @@ trait Applicative[F[_]] extends Functor[F] {
 `ap` is a bit tricky to explain and motivate, so we'll look at an alternative but equivalent
 formulation via `product`.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Applicative[F[_]] extends Functor[F] {
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 
@@ -72,7 +72,7 @@ If we view `Functor` as the ability to work with a single effect, `Applicative` 
 multiple **independent** effects. Between `product` and `map`, we can take two separate effectful values
 and compose them. From there we can generalize to working with any N number of independent effects.
 
-```tut:reset:book:silent
+```scala mdoc:reset:book:silent
 import cats.Applicative
 
 def product3[F[_]: Applicative, A, B, C](fa: F[A], fb: F[B], fc: F[C]): F[(A, B, C)] = {
@@ -86,7 +86,7 @@ def product3[F[_]: Applicative, A, B, C](fa: F[A], fb: F[B], fc: F[C]): F[(A, B,
 
 Let's see what happens if we try to compose two effectful values with just `map`.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.implicits._
 
 val f: (Int, Char) => Double = (i, c) => (i + c).toDouble
@@ -95,7 +95,7 @@ val int: Option[Int] = Some(5)
 val char: Option[Char] = Some('a')
 ```
 
-```tut:book
+```scala mdoc
 int.map(i => (c: Char) => f(i, c)) // what now?
 ```
 
@@ -107,7 +107,7 @@ but `map` doesn't give us enough power to do that. Hence, `ap`.
 Like [`Functor`](functor.html), `Applicative`s compose. If `F` and `G` have `Applicative` instances, then so
 does `F[G[_]]`.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.data.Nested
 import cats.implicits._
 import scala.concurrent.Future
@@ -117,7 +117,7 @@ val x: Future[Option[Int]] = Future.successful(Some(5))
 val y: Future[Option[Char]] = Future.successful(Some('a'))
 ```
 
-```tut:book
+```scala mdoc
 val composed = Applicative[Future].compose[Option].map2(x, y)(_ + _)
 
 val nested = Applicative[Nested[Future, Option, *]].map2(Nested(x), Nested(y))(_ + _)
@@ -132,7 +132,7 @@ where `n` is a fixed number. In fact there are convenience methods named `apN`, 
 Imagine we have one `Option` representing a username, one representing a password, and another representing
 a URL for logging into a database.
 
-```tut:book:silent
+```scala mdoc:silent
 import java.sql.Connection
 
 val username: Option[String] = Some("username")
@@ -145,14 +145,14 @@ def attemptConnect(username: String, password: String, url: String): Option[Conn
 
 We know statically we have 3 `Option`s, so we can use `map3` specifically.
 
-```tut:book
+```scala mdoc
 Applicative[Option].map3(username, password, url)(attemptConnect)
 ```
 
 Sometimes we don't know how many effects will be in play - perhaps we are receiving a list from user
 input or getting rows from a database. This implies the need for a function:
 
-```tut:book:silent
+```scala mdoc:silent
 def sequenceOption[A](fa: List[Option[A]]): Option[List[A]] = ???
 
 // Alternatively..
@@ -164,7 +164,7 @@ familiar.
 
 Let's implement `traverseOption` (you can implement `sequenceOption` in terms of `traverseOption`).
 
-```tut:book:silent
+```scala mdoc:silent
 def traverseOption[A, B](as: List[A])(f: A => Option[B]): Option[List[B]] =
   as.foldRight(Some(List.empty[B]): Option[List[B]]) { (a: A, acc: Option[List[B]]) =>
     val optB: Option[B] = f(a)
@@ -173,14 +173,14 @@ def traverseOption[A, B](as: List[A])(f: A => Option[B]): Option[List[B]] =
   }
 ```
 
-```tut:book
+```scala mdoc
 traverseOption(List(1, 2, 3))(i => Some(i): Option[Int])
 ```
 
 This works...but if we look carefully at the implementation there's nothing `Option`-specific going on. As
 another example let's implement the same function but for `Either`.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.implicits._
 
 def traverseEither[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
@@ -190,7 +190,7 @@ def traverseEither[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B
   }
 ```
 
-```tut:book
+```scala mdoc
 traverseEither(List(1, 2, 3))(i => if (i % 2 != 0) Left(s"${i} is not even") else Right(i / 2))
 ```
 
@@ -200,7 +200,7 @@ Generalizing `Option` and `Either` to any `F[_]: Applicative` gives us the fully
 Existing data types with `Applicative` instances (`Future`, `Option`, `Either[E, *]`, `Try`) can call it by fixing `F`
 appropriately, and new data types need only be concerned with implementing `Applicative` to do so as well.
 
-```tut:book:silent
+```scala mdoc:silent
 def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
   as.foldRight(Applicative[F].pure(List.empty[B])) { (a: A, acc: F[List[B]]) =>
     val fb: F[B] = f(a)
@@ -211,11 +211,11 @@ def traverse[F[_]: Applicative, A, B](as: List[A])(f: A => F[B]): F[List[B]] =
 This function is provided by Cats via the `Traverse[List]` instance and syntax, which is covered in another
 tutorial.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.implicits._
 ```
 
-```tut:book
+```scala mdoc
 List(1, 2, 3).traverse(i => Some(i): Option[Int])
 ```
 
@@ -257,12 +257,12 @@ by enriching Scala's standard tuple types.
 
 For example, we've already seen this code for mapping over three options together:
 
-```tut:book
+```scala mdoc
 Applicative[Option].map3(username, password, url)(attemptConnect)
 ```
 With the applicative syntax, we can change this to the slightly shorter:
 
-```tut:book
+```scala mdoc
 import cats.implicits._
 
 (username, password, url).mapN(attemptConnect)

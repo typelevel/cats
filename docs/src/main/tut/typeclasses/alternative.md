@@ -9,7 +9,7 @@ scaladoc: "#cats.Alternative"
 Alternative extends [`Applicative`](applicative.html) with a [`MonoidK`](monoidk.html).
 Let's stub out all the operations just to remind ourselves what that gets us.
 
-```tut:book:silent
+```scala mdoc:silent
 import cats.{Applicative, MonoidK}
 
 trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] {
@@ -42,14 +42,14 @@ Let's examine an instance to get a feel for things. A useful instance of `Altern
 
 The relevant imports:
 
-```tut:book:reset:silent
+```scala mdoc:reset:silent
 import cats.Alternative
 import cats.implicits._
 ```
 
 And what we can do with them:
 
-```tut:book
+```scala mdoc
 val empty = Alternative[Vector].empty[Int]
 val pureOfFive = 5.pure[Vector]
 val concatenated = 7.pure[Vector] <+> 8.pure[Vector]
@@ -64,7 +64,7 @@ val apForVectors = (double.pure[Vector] <+> addFive.pure[Vector]) ap concatenate
 
 Suppose we have a simple parser library with an interface something like:
 
-```tut:book:silent
+```scala mdoc:silent
 trait Decoder[A] {
   def decode(in: String): Either[Throwable, A]
 }
@@ -78,7 +78,7 @@ object Decoder {
 
 Then, we can implement an `Alternative` instance for this type like so:
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val decoderAlternative = new Alternative[Decoder] {
   def pure[A](a: A) = Decoder.from(Function.const(Right(a)))
 
@@ -98,7 +98,7 @@ implicit val decoderAlternative = new Alternative[Decoder] {
 
 The addition of the `Alternative` methods allows us to prioritize multiple strategies, compensating for inconsistencies in the source data.
 
-```tut:book:silent
+```scala mdoc:silent
 def parseInt(s: String): Either[Throwable, Int] = Either.catchNonFatal(s.toInt)
 def parseIntFirstChar(s: String): Either[Throwable, Int] = Either.catchNonFatal(2 * Character.digit(s.charAt(0), 10))
 
@@ -108,7 +108,7 @@ val decoder: Decoder[Int] = Decoder.from(parseInt _) <+> Decoder.from(parseIntFi
 
 This decoder correctly attempts each strategy in turn, as you can see:
 
-```tut:book
+```scala mdoc
 
 decoder.decode("555")
 decoder.decode("5a")
@@ -122,7 +122,7 @@ The trick here is that the inner type constructor (essentially the replacement f
 
 Let's imagine that we're trying to make a bunch of independent possibly failure-prone calls with a bunch of different `Int` inputs (say it's the id of a resource), each returning `Either[String, Int]` where a left `String` is the code modeling the failure we're given (say it's the HTTP code returned by a remote API we're calling), while right of an integer is the output of the calculation.
 
-```tut:book:silent
+```scala mdoc:silent
 // Resource holder returns (Request, Status)
 def requestResource(a: Int): Either[(Int, String), (Int, Long)] = {
   if (a % 4 == 0) Left((a, "Bad request"))
@@ -133,14 +133,14 @@ def requestResource(a: Int): Either[(Int, String), (Int, Long)] = {
 
 We can use `separate` to pull apart the failures and successes zipped with the input, letting us log failures and proceed with successes intelligently. `separate` will pull the two different outcomes into different sides of a tuple.
 
-```tut:book
+```scala mdoc
 val partitionedResults = 
   ((requestResource _).pure[Vector] ap Vector(5, 6, 7, 99, 1200, 8, 22)).separate
 ```
 
 Alternatively (no pun intended), in a totally different version of the same idea, we can lean on the instance of `Bitraverse` for `Tuple2` to try and partition cleanly the outcomes of two different calculations that each depend pairwise on the same input (maybe we have a primary key and we want to select both the remote id of the resources with that key, and those that are linked via the foreign key to the input key).
 
-```tut:book
+```scala mdoc
 // Surprising regularity in this politico-geographical data model!
 def getRegionAndDistrict(pkey: Int): (Int, Vector[Int]) = (5 * pkey, (double.pure[Vector] <+> addFive.pure[Vector]) ap pkey.pure[Vector])
 

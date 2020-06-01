@@ -79,7 +79,7 @@ recursive values.
 
 We need to create an ADT to represent our key-value operations:
 
-```tut:silent
+```scala mdoc:silent
 sealed trait KVStoreA[A]
 case class Put[T](key: String, value: T) extends KVStoreA[Unit]
 case class Get[T](key: String) extends KVStoreA[Option[T]]
@@ -98,7 +98,7 @@ There are five basic steps to "freeing" the ADT:
 
 #### 1. Create a `Free` type based on your ADT
 
-```tut:silent
+```scala mdoc:silent
 import cats.free.Free
 
 type KVStore[A] = Free[KVStoreA, A]
@@ -110,7 +110,7 @@ These methods will make working with our DSL a lot nicer, and will
 lift `KVStoreA[_]` values into our `KVStore[_]` monad (note the
 missing "A" in the second type).
 
-```tut:silent
+```scala mdoc:silent
 import cats.free.Free.liftF
 
 // Put returns nothing (i.e. Unit).
@@ -138,7 +138,7 @@ def update[T](key: String, f: T => T): KVStore[Unit] =
 Now that we can construct `KVStore[_]` values we can use our DSL to
 write "programs" using a *for-comprehension*:
 
-```tut:silent
+```scala mdoc:silent
 def program: KVStore[Option[Int]] =
   for {
     _ <- put("wild-cats", 2)
@@ -172,7 +172,7 @@ alternative as `F ~> G`).
 In our case, we will use a simple mutable map to represent our key
 value store:
 
-```tut:silent
+```scala mdoc:silent
 import cats.arrow.FunctionK
 import cats.{Id, ~>}
 import scala.collection.mutable
@@ -252,7 +252,7 @@ under `Monad`). As `Id` is a `Monad`, we can use `foldMap`.
 
 To run your `Free` with previous `impureCompiler`:
 
-```tut:book
+```scala mdoc
 val result: Option[Int] = program.foldMap(impureCompiler)
 ```
 
@@ -272,7 +272,7 @@ works, but you might prefer folding your `Free` in a "purer" way. The
 [State](state.html) data structure can be used to keep track of the program
 state in an immutable map, avoiding mutation altogether.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.State
 
 type KVStoreState[A] = State[Map[String, Any], A]
@@ -291,7 +291,7 @@ val pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
 support for pattern matching is limited by the JVM's type erasure, but
 it's not too hard to get around.)
 
-```tut:book
+```scala mdoc
 val result: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
 ```
 
@@ -303,14 +303,14 @@ lets us compose different algebras in the context of `Free`.
 
 Let's see a trivial example of unrelated ADT's getting composed as a `EitherK` that can form a more complex program.
 
-```tut:silent
+```scala mdoc:silent
 import cats.data.EitherK
 import cats.free.Free
 import cats.{Id, InjectK, ~>}
 import scala.collection.mutable.ListBuffer
 ```
 
-```tut:silent
+```scala mdoc:silent
 /* Handles user interaction */
 sealed trait Interact[A]
 case class Ask(prompt: String) extends Interact[String]
@@ -324,13 +324,13 @@ case class GetAllCats() extends DataOp[List[String]]
 
 Once the ADTs are defined we can formally state that a `Free` program is the EitherK of its Algebras.
 
-```tut:silent
+```scala mdoc:silent
 type CatsApp[A] = EitherK[DataOp, Interact, A]
 ```
 
 In order to take advantage of monadic composition we use smart constructors to lift our Algebra to the `Free` context.
 
-```tut:silent
+```scala mdoc:silent
 class Interacts[F[_]](implicit I: InjectK[Interact, F]) {
   def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
   def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
@@ -352,7 +352,7 @@ object DataSource {
 
 ADTs are now easily composed and trivially intertwined inside monadic contexts.
 
-```tut:silent
+```scala mdoc:silent
 def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[CatsApp, Unit] = {
 
   import I._, D._
@@ -369,11 +369,11 @@ def program(implicit I : Interacts[CatsApp], D : DataSource[CatsApp]): Free[Cats
 Finally we write one interpreter per ADT and combine them with a `FunctionK` to `EitherK` so they can be
 compiled and applied to our `Free` program.
 
-```tut:invisible
+```scala mdoc:invisible
 def readLine(): String = "snuggles"
 ```
 
-```tut:silent
+```scala mdoc:silent
 object ConsoleCatsInterpreter extends (Interact ~> Id) {
   def apply[A](i: Interact[A]) = i match {
     case Ask(prompt) =>
@@ -399,11 +399,11 @@ val interpreter: CatsApp ~> Id = InMemoryDatasourceInterpreter or ConsoleCatsInt
 
 Now if we run our program and type in "snuggles" when prompted, we see something like this:
 
-```tut:silent
+```scala mdoc:silent
 import DataSource._, Interacts._
 ```
 
-```tut:book
+```scala mdoc
 val evaled: Unit = program.foldMap(interpreter)
 ```
 
@@ -507,7 +507,7 @@ typed.
 As we can observe in this case `FreeT` offers us the alternative to delegate denotations to `State`
 monad with stronger equational guarantees than if we were emulating the `State` ops in our own ADT.
 
-```tut:book
+```scala mdoc
 import cats.free._
 import cats._
 import cats.data._
@@ -563,7 +563,7 @@ val (stored, _) = state.run(initialState).value
 Another example is more basic usage of `FreeT` with some context `Ctx` for which we provide `Try` interpreter,
 combined with `OptionT` for reducing boilerplate.
 
-```tut:book
+```scala mdoc
 import cats.free._
 import cats._
 import cats.data._

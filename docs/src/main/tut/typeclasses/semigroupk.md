@@ -21,7 +21,7 @@ and, in fact, the `K` in `SemigroupK` stands for `Kind`.
 
 First some imports.
 
-```tut:silent
+```scala mdoc:silent
 import cats._
 import cats.implicits._
 ```
@@ -29,7 +29,7 @@ import cats.implicits._
 For `List`, the `Semigroup` instance's `combine` operation and the `SemigroupK`
 instance's `combineK` operation are both list concatenation:
 
-```tut:book
+```scala mdoc
 SemigroupK[List].combineK(List(1,2,3), List(4,5,6)) == Semigroup[List[Int]].combine(List(1,2,3), List(4,5,6))
 ```
 
@@ -46,7 +46,7 @@ two of them. Therefore, in the case of `Option` the
 `SemigroupK[Option].combineK` method has no choice but to use the
 `orElse` method of Option:
 
-```tut:book
+```scala mdoc
 Semigroup[Option[Int]].combine(Some(1), Some(2))
 SemigroupK[Option].combineK(Some(1), Some(2))
 SemigroupK[Option].combineK(Some(1), None)
@@ -58,7 +58,7 @@ There is inline syntax available for both `Semigroup` and
 `|+|` is the operator from semigroup and that `<+>` is the operator
 from `SemigroupK` (called `Plus` in scalaz).
 
-```tut:silent
+```scala mdoc:silent
 import cats.implicits._
 
 val one = Option(1)
@@ -68,7 +68,7 @@ val n: Option[Int] = None
 
 Thus.
 
-```tut:book
+```scala mdoc
 one |+| two
 one <+> two
 n |+| two
@@ -84,7 +84,7 @@ You'll notice that instead of declaring `one` as `Some(1)`, we chose
 because the `SemigroupK` type class instances is defined for `Option`,
 not `Some` or `None`. If we try to use `Some` or `None`, we'll get errors:
 
-```tut:nofail
+```scala mdoc:nofail
 Some(1) <+> None
 None <+> Some(1)
 ```

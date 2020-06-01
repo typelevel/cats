@@ -26,7 +26,7 @@ A normal `val` evaluates eagerly and also memoizes the result.
 First of the strategies is eager evaluation, we can construct an `Eval` eagerly using `Eval.now`:
 
 
-```tut:book
+```scala mdoc
 import cats.Eval
 import cats.implicits._
 
@@ -40,7 +40,7 @@ val eager = Eval.now {
 
 We can run the computation using the given evaluation strategy anytime by using the `value` method.
 
-```tut:book
+```scala mdoc
 eager.value
 
 ```
@@ -49,7 +49,7 @@ eager.value
 
 If we want lazy evaluation, we can use `Eval.later`:
 
-```tut:book
+```scala mdoc
 val lazyEval = Eval.later {
   println("Running expensive calculation...")
   1 + 2 * 3
@@ -69,7 +69,7 @@ Secondly, when `lazy val`s are evaluated, in order to preserve thread-safety, th
 
 If we want lazy evaluation, but without memoization akin to `Function0`, we can use `Eval.always`
 
-```tut:book
+```scala mdoc
 val always = Eval.always {
   println("Running expensive calculation...")
   1 + 2 * 3
@@ -89,7 +89,7 @@ One of the most useful applications of `Eval` is its ability to chain together c
 You can see one such usage when looking at the `foldRight` method found in [`Foldable`](../typeclasses/foldable.html).
 Another great example are mutual tail-recursive calls:
 
-```tut:book
+```scala mdoc
 object MutualRecursion {
   def even(n: Int): Eval[Boolean] =
     Eval.always(n == 0).flatMap {
