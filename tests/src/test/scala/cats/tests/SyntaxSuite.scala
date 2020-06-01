@@ -373,8 +373,11 @@ object SyntaxSuite {
     val y = mock[Function[B, F[C]]]
     val z = mock[Function[C, F[D]]]
 
-    val b = x >=> y >=> z
-    val c = z <=< y <=< x
+    val b = x.andThenF(y).andThenF(z)
+    val b2 = x >=> y >=> z
+
+    val c = z.composeF(y).composeF(x)
+    val c2 = z <=< y <=< x
   }
 
   def testApplicativeError[F[_, _], E, A, B](implicit F: ApplicativeError[F[E, *], E]): Unit = {
