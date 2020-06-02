@@ -33,6 +33,7 @@ class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", TraverseFilterTests[Queue].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Queue]", SerializableTests.serializable(TraverseFilter[Queue]))
 
+  checkAll("Queue[Int]", ShortCircuitingTests[Queue].foldable[Int])
   checkAll("Queue[Int]", ShortCircuitingTests[Queue].traverseFilter[Int])
 
   test("show") {
