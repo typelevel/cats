@@ -6,7 +6,8 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 trait DurationInstances extends cats.kernel.instances.DurationInstances {
 
   @deprecated("Left to keep binary compatibility. Use CoreDurationInstances.catsStdShowForDurationUnambiguous instead.",
-              "1.5.0")
+              "1.5.0"
+  )
   def catsStdShowForDuration: Show[Duration] =
     AllCoreDurationInstances.catsStdShowForDurationUnambiguous
 }

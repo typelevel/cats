@@ -274,12 +274,15 @@ object SyntaxSuite {
     val fb0: F[B] = fa.map(f)
     val fu: F[Unit] = fa.void
     val fab: F[(A, B)] = fa.fproduct(f)
+    val fba: F[(B, A)] = fa.fproductLeft(f)
 
     val b = mock[B]
     val fb1: F[B] = fa.as(b)
   }
 
-  def testApply[F[_]: Apply: Semigroupal, G[_]: Contravariant: Semigroupal, H[_]: Invariant: Semigroupal, A, B, C, D, E, Z] = {
+  def testApply[F[_]: Apply: Semigroupal, G[_]: Contravariant: Semigroupal, H[
+    _
+  ]: Invariant: Semigroupal, A, B, C, D, E, Z] = {
     val tfabc = mock[(F[A], F[B], F[C])]
     val fa = mock[F[A]]
     val fb = mock[F[B]]

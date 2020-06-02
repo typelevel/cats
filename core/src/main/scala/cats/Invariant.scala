@@ -7,11 +7,13 @@ import cats.kernel.compat.scalaVersionSpecific._
 import scala.collection.immutable.{Queue, SortedMap}
 import scala.util.Try
 import scala.util.control.TailCalls.TailRec
+import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.InvariantLaws.
  */
-@typeclass trait Invariant[F[_]] { self =>
+@implicitNotFound("Could not find an instance of Invariant for ${F}")
+@typeclass trait Invariant[F[_]] extends Serializable { self =>
 
   /**
    * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
@@ -100,79 +102,129 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 
-    def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] = new Monoid[B] {
-      val empty = f(fa.empty)
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] =
+      new Monoid[B] {
+        val empty = f(fa.empty)
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
 
   implicit val catsInvariantBand: Invariant[Band] = new Invariant[Band] {
 
-    def imap[A, B](fa: Band[A])(f: A => B)(g: B => A): Band[B] = new Band[B] {
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: Band[A])(f: A => B)(g: B => A): Band[B] =
+      new Band[B] {
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
   }
 
   implicit val catsInvariantSemilattice: Invariant[Semilattice] = new Invariant[Semilattice] {
 
-    def imap[A, B](fa: Semilattice[A])(f: A => B)(g: B => A): Semilattice[B] = new Semilattice[B] {
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: Semilattice[A])(f: A => B)(g: B => A): Semilattice[B] =
+      new Semilattice[B] {
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
 
   implicit val catsInvariantCommutativeMonoid: Invariant[CommutativeMonoid] = new Invariant[CommutativeMonoid] {
 
-    def imap[A, B](fa: CommutativeMonoid[A])(f: A => B)(g: B => A): CommutativeMonoid[B] = new CommutativeMonoid[B] {
-      val empty = f(fa.empty)
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: CommutativeMonoid[A])(f: A => B)(g: B => A): CommutativeMonoid[B] =
+      new CommutativeMonoid[B] {
+        val empty = f(fa.empty)
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
 
   implicit val catsInvariantBoundedSemilattice: Invariant[BoundedSemilattice] = new Invariant[BoundedSemilattice] {
 
-    def imap[A, B](fa: BoundedSemilattice[A])(f: A => B)(g: B => A): BoundedSemilattice[B] = new BoundedSemilattice[B] {
-      val empty = f(fa.empty)
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: BoundedSemilattice[A])(f: A => B)(g: B => A): BoundedSemilattice[B] =
+      new BoundedSemilattice[B] {
+        val empty = f(fa.empty)
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
 
   implicit val catsInvariantGroup: Invariant[Group] = new Invariant[Group] {
 
-    def imap[A, B](fa: Group[A])(f: A => B)(g: B => A): Group[B] = new Group[B] {
-      val empty = f(fa.empty)
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      def inverse(b: B): B = f(fa.inverse(g(b)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: Group[A])(f: A => B)(g: B => A): Group[B] =
+      new Group[B] {
+        val empty = f(fa.empty)
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        def inverse(b: B): B = f(fa.inverse(g(b)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
 
   implicit val catsInvariantCommutativeGroup: Invariant[CommutativeGroup] = new Invariant[CommutativeGroup] {
 
-    def imap[A, B](fa: CommutativeGroup[A])(f: A => B)(g: B => A): CommutativeGroup[B] = new CommutativeGroup[B] {
-      val empty = f(fa.empty)
-      def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
-      def inverse(b: B): B = f(fa.inverse(g(b)))
-      override def combineAllOption(bs: IterableOnce[B]): Option[B] =
-        fa.combineAllOption(bs.iterator.map(g)).map(f)
-    }
+    def imap[A, B](fa: CommutativeGroup[A])(f: A => B)(g: B => A): CommutativeGroup[B] =
+      new CommutativeGroup[B] {
+        val empty = f(fa.empty)
+        def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
+        def inverse(b: B): B = f(fa.inverse(g(b)))
+        override def combineAllOption(bs: IterableOnce[B]): Option[B] =
+          fa.combineAllOption(bs.iterator.map(g)).map(f)
+      }
 
   }
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[Invariant]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Invariant[F]): Invariant[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Invariant[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def imap[B](f: A => B)(g: B => A): F[B] = typeClassInstance.imap[A, B](self)(f)(g)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToInvariantOps extends Serializable {
+    implicit def toInvariantOps[F[_], A](target: F[A])(implicit tc: Invariant[F]): Ops[F, A] {
+      type TypeClassType = Invariant[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Invariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  object nonInheritedOps extends ToInvariantOps
+  object ops {
+    implicit def toAllInvariantOps[F[_], A](target: F[A])(implicit tc: Invariant[F]): AllOps[F, A] {
+      type TypeClassType = Invariant[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Invariant[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }
 
 private[cats] trait InvariantInstances0 extends TupleInstances0 {

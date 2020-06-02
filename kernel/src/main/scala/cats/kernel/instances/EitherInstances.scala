@@ -51,8 +51,10 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
         }
     }
 
-  implicit def catsStdPartialOrderForEither[A, B](implicit A: PartialOrder[A],
-                                                  B: PartialOrder[B]): PartialOrder[Either[A, B]] =
+  implicit def catsStdPartialOrderForEither[A, B](implicit
+    A: PartialOrder[A],
+    B: PartialOrder[B]
+  ): PartialOrder[Either[A, B]] =
     new PartialOrder[Either[A, B]] {
       def partialCompare(x: Either[A, B], y: Either[A, B]): Double =
         x match {

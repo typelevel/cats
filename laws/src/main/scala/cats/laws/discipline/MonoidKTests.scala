@@ -8,9 +8,7 @@ import org.scalacheck.Arbitrary
 trait MonoidKTests[F[_]] extends SemigroupKTests[F] {
   def laws: MonoidKLaws[F]
 
-  def monoidK[A: Arbitrary](implicit
-                            ArbFA: Arbitrary[F[A]],
-                            EqFA: Eq[F[A]]): RuleSet =
+  def monoidK[A: Arbitrary](implicit ArbFA: Arbitrary[F[A]], EqFA: Eq[F[A]]): RuleSet =
     new DefaultRuleSet(
       "monoidK",
       Some(semigroupK[A]),

@@ -36,15 +36,16 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {
         val buf = List.newBuilder[B]
-        @tailrec def go(lists: List[List[Either[A, B]]]): Unit = lists match {
-          case (ab :: abs) :: tail =>
-            ab match {
-              case Right(b) => buf += b; go(abs :: tail)
-              case Left(a)  => go(f(a) :: abs :: tail)
-            }
-          case Nil :: tail => go(tail)
-          case Nil         => ()
-        }
+        @tailrec def go(lists: List[List[Either[A, B]]]): Unit =
+          lists match {
+            case (ab :: abs) :: tail =>
+              ab match {
+                case Right(b) => buf += b; go(abs :: tail)
+                case Left(a)  => go(f(a) :: abs :: tail)
+              }
+            case Nil :: tail => go(tail)
+            case Nil         => ()
+          }
         go(f(a) :: Nil)
         buf.result
       }
@@ -73,11 +74,21 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def foldMap[A, B](fa: List[A])(f: A => B)(implicit B: Monoid[B]): B =
         B.combineAll(fa.iterator.map(f))
 
+      override def foldMapK[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] = {
+        def loop(fa: List[A]): Eval[G[B]] =
+          fa match {
+            case head :: tl => G.combineKEval(f(head), Eval.defer(loop(tl)))
+            case Nil        => Eval.now(G.empty)
+          }
+        loop(fa).value
+      }
+
       def traverse[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[List[B]] = {
-        def loop(fa: List[A]): Eval[G[List[B]]] = fa match {
-          case h :: t => G.map2Eval(f(h), Eval.defer(loop(t)))(_ :: _)
-          case Nil    => Eval.now(G.pure(Nil))
-        }
+        def loop(fa: List[A]): Eval[G[List[B]]] =
+          fa match {
+            case h :: t => G.map2Eval(f(h), Eval.defer(loop(t)))(_ :: _)
+            case Nil    => Eval.now(G.pure(Nil))
+          }
         loop(fa).value
       }
 
@@ -132,13 +143,14 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def isEmpty[A](fa: List[A]): Boolean = fa.isEmpty
 
       override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
-        def step(in: (List[A], B)): G[Either[(List[A], B), B]] = in match {
-          case (Nil, b) => G.pure(Right(b))
-          case (a :: tail, b) =>
-            G.map(f(b, a)) { bnext =>
-              Left((tail, bnext))
-            }
-        }
+        def step(in: (List[A], B)): G[Either[(List[A], B), B]] =
+          in match {
+            case (Nil, b) => G.pure(Right(b))
+            case (a :: tail, b) =>
+              G.map(f(b, a)) { bnext =>
+                Left((tail, bnext))
+              }
+          }
 
         G.tailRecM((fa, z))(step)
       }

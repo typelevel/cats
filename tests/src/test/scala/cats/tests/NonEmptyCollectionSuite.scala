@@ -3,8 +3,8 @@ package cats.tests
 import cats.data.NonEmptyCollection
 import org.scalacheck.Arbitrary
 
-abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollection[x, U, NE]](
-  implicit arbitraryU: Arbitrary[U[Int]],
+abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollection[x, U, NE]](implicit
+  arbitraryU: Arbitrary[U[Int]],
   arbitraryNE: Arbitrary[NE[Int]]
 ) extends CatsSuite {
   protected def toList[A](value: NE[A]): List[A]

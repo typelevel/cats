@@ -13,7 +13,8 @@ import cats.laws.discipline.{
   NonEmptyTraverseTests,
   ReducibleTests,
   SemigroupKTests,
-  SerializableTests
+  SerializableTests,
+  ShortCircuitingTests
 }
 import cats.syntax.foldable._
 import cats.syntax.reducible._
@@ -32,7 +33,8 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   checkAll("NonEmptyList[Int]", OrderTests[NonEmptyList[Int]].order)
 
   checkAll("NonEmptyList[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
@@ -55,11 +57,14 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
 
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].traverse[Int])
+
   {
     implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptyList[ListWrapper[Int]]]
   }
@@ -68,7 +73,8 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
     implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", OrderTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]",
-             SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptyList[ListWrapper[Int]]]
     PartialOrder[NonEmptyList[ListWrapper[Int]]]
@@ -354,6 +360,12 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
     }
   }
+
+  test("NonEmptyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
+    }
+  }
 }
 
 @deprecated("to be able to test deprecated methods", since = "1.0.0-RC1")
@@ -373,7 +385,7 @@ class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyL
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyList(start, (tailStart).to(endInclusive).toList)
+    NonEmptyList(start, tailStart.to(endInclusive).toList)
   }
 
   def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els: _*))

@@ -28,16 +28,19 @@ class RepresentableStoreSuite extends CatsSuite {
     implicit val eqStoreStoreStore: Eq[
       RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)],
                                                                      Boolean,
-                                                                     RepresentableStore[λ[P => (P, P)], Boolean, Int]]]
+                                                                     RepresentableStore[λ[P => (P, P)], Boolean, Int]
+      ]]
     ] =
       cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[
         P => (P, P)
       ], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]]
     checkAll("Comonad[RepresentableStore[λ[P => (P, P)], Boolean, *]]",
-             ComonadTests[RepresentableStore[λ[P => (P, P)], Boolean, *]].comonad[Int, Int, Int])
+             ComonadTests[RepresentableStore[λ[P => (P, P)], Boolean, *]].comonad[Int, Int, Int]
+    )
 
     checkAll("Comonad[RepresentableStore[λ[P => (P, P)], Boolean, *]]",
-             SerializableTests.serializable(Comonad[RepresentableStore[λ[P => (P, P)], Boolean, *]]))
+             SerializableTests.serializable(Comonad[RepresentableStore[λ[P => (P, P)], Boolean, *]])
+    )
   }
 
   test("extract and peek are consistent") {

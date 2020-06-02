@@ -1,11 +1,12 @@
 package cats
 package data
 
-abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](implicit MF: Monad[F],
-                                                                           CF: CoflatMap[F],
-                                                                           TF: Traverse[F],
-                                                                           SF: SemigroupK[F])
-    extends Bimonad[NonEmptyF]
+abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](implicit
+  MF: Monad[F],
+  CF: CoflatMap[F],
+  TF: Traverse[F],
+  SF: SemigroupK[F]
+) extends Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
     with SemigroupK[NonEmptyF] {
   val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]

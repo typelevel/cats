@@ -2,10 +2,12 @@ package cats
 package arrow
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.ArrowLaws.
  */
+@implicitNotFound("Could not find an instance of Arrow for ${F}")
 @typeclass trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**
@@ -68,4 +70,55 @@ import simulacrum.typeclass
   @simulacrum.op("&&&", alias = true)
   def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =
     andThen(lift((x: A) => (x, x)), split(f, g))
+}
+
+object Arrow {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[Arrow]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Arrow[F]): Arrow[F] = instance
+
+  trait Ops[F[_, _], A, B] extends Serializable {
+    type TypeClassType <: Arrow[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+    def split[C, D](g: F[C, D]): F[(A, C), (B, D)] = typeClassInstance.split[A, B, C, D](self, g)
+    def ***[C, D](g: F[C, D]): F[(A, C), (B, D)] = typeClassInstance.split[A, B, C, D](self, g)
+    def merge[C](g: F[A, C]): F[A, (B, C)] = typeClassInstance.merge[A, B, C](self, g)
+    def &&&[C](g: F[A, C]): F[A, (B, C)] = typeClassInstance.merge[A, B, C](self, g)
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Category.AllOps[F, A, B] with Strong.AllOps[F, A, B] {
+    type TypeClassType <: Arrow[F]
+  }
+  trait ToArrowOps extends Serializable {
+    implicit def toArrowOps[F[_, _], A, B](target: F[A, B])(implicit tc: Arrow[F]): Ops[F, A, B] {
+      type TypeClassType = Arrow[F]
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Arrow[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  object nonInheritedOps extends ToArrowOps
+  object ops {
+    implicit def toAllArrowOps[F[_, _], A, B](target: F[A, B])(implicit tc: Arrow[F]): AllOps[F, A, B] {
+      type TypeClassType = Arrow[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Arrow[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }

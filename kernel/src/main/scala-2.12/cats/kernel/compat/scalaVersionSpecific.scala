@@ -23,7 +23,8 @@ private[cats] object scalaVersionSpecific {
   }
 
   implicit class lazyZipExtension[A](private val a: A) extends AnyVal {
-    def lazyZip[El1, Repr1, El2, Repr2, T](that: T)(implicit w1: A => TraversableLike[El1, Repr1],
-                                                    w2: T => IterableLike[El2, Repr2]) = (a, that).zipped
+    def lazyZip[El1, Repr1, El2, Repr2, T](
+      that: T
+    )(implicit w1: A => TraversableLike[El1, Repr1], w2: T => IterableLike[El2, Repr2]) = (a, that).zipped
   }
 }

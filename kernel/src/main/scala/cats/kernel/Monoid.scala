@@ -116,9 +116,10 @@ object Monoid extends MonoidFunctions[Monoid] {
   /**
    * Create a `Monoid` instance from the given function and empty value.
    */
-  @inline def instance[A](emptyValue: A, cmb: (A, A) => A): Monoid[A] = new Monoid[A] {
-    override val empty: A = emptyValue
+  @inline def instance[A](emptyValue: A, cmb: (A, A) => A): Monoid[A] =
+    new Monoid[A] {
+      override val empty: A = emptyValue
 
-    override def combine(x: A, y: A): A = cmb(x, y)
-  }
+      override def combine(x: A, y: A): A = cmb(x, y)
+    }
 }

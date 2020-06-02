@@ -99,11 +99,13 @@ class FreeSuite extends CatsSuite {
         z <- if (j < 10000) a(j) else Free.pure[FTestApi, Int](j)
       } yield z
 
-    def runner: FunctionK[FTestApi, Id] = new FunctionK[FTestApi, Id] {
-      def apply[A](a: FTestApi[A]): A = a match {
-        case TB(i) => i + 1
+    def runner: FunctionK[FTestApi, Id] =
+      new FunctionK[FTestApi, Id] {
+        def apply[A](a: FTestApi[A]): A =
+          a match {
+            case TB(i) => i + 1
+          }
       }
-    }
   }
 
   test("foldMap is stack safe") {
@@ -139,13 +141,16 @@ class FreeSuite extends CatsSuite {
   object Test1Algebra {
     implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
       new Functor[Test1Algebra] {
-        def map[A, B](a: Test1Algebra[A])(f: A => B): Test1Algebra[B] = a match {
-          case Test1(k, h) => Test1(k, x => f(h(x)))
-        }
+        def map[A, B](a: Test1Algebra[A])(f: A => B): Test1Algebra[B] =
+          a match {
+            case Test1(k, h) => Test1(k, x => f(h(x)))
+          }
       }
 
-    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
-                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
+    implicit def test1AlgebraArbitrary[A](implicit
+      seqArb: Arbitrary[Int],
+      intAArb: Arbitrary[Int => A]
+    ): Arbitrary[Test1Algebra[A]] =
       Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test1(s, f))
   }
 
@@ -158,28 +163,33 @@ class FreeSuite extends CatsSuite {
   object Test2Algebra {
     implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
       new Functor[Test2Algebra] {
-        def map[A, B](a: Test2Algebra[A])(f: A => B): Test2Algebra[B] = a match {
-          case Test2(k, h) => Test2(k, x => f(h(x)))
-        }
+        def map[A, B](a: Test2Algebra[A])(f: A => B): Test2Algebra[B] =
+          a match {
+            case Test2(k, h) => Test2(k, x => f(h(x)))
+          }
       }
 
-    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
-                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
+    implicit def test2AlgebraArbitrary[A](implicit
+      seqArb: Arbitrary[Int],
+      intAArb: Arbitrary[Int => A]
+    ): Arbitrary[Test2Algebra[A]] =
       Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test2(s, f))
   }
 
   type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   object Test1Interpreter extends FunctionK[Test1Algebra, Id] {
-    override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
-      case Test1(k, h) => h(k)
-    }
+    override def apply[A](fa: Test1Algebra[A]): Id[A] =
+      fa match {
+        case Test1(k, h) => h(k)
+      }
   }
 
   object Test2Interpreter extends FunctionK[Test2Algebra, Id] {
-    override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
-      case Test2(k, h) => h(k)
-    }
+    override def apply[A](fa: Test2Algebra[A]): Id[A] =
+      fa match {
+        case Test2(k, h) => h(k)
+      }
   }
 
   val eitherKInterpreter: FunctionK[T, Id] = Test1Interpreter.or(Test2Interpreter)
@@ -209,10 +219,9 @@ class FreeSuite extends CatsSuite {
   val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 
   test(".injectRoll") {
-    def distr[F[_], A](f: Free[F, A])(implicit
-                                      F: Functor[F],
-                                      I0: Test1Algebra :<: F,
-                                      I1: Test2Algebra :<: F): Option[Free[F, A]] =
+    def distr[F[_], A](
+      f: Free[F, A]
+    )(implicit F: Functor[F], I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Option[Free[F, A]] =
       for {
         Test1(x, h) <- Free.match_[F, Test1Algebra, A](f)
         Test2(y, k) <- Free.match_[F, Test2Algebra, A](h(x))

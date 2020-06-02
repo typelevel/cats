@@ -13,7 +13,8 @@ class CokleisliSuite extends SlowCatsSuite {
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     slowCheckConfiguration.copy(sizeRange = slowCheckConfiguration.sizeRange.min(5),
-                                minSuccessful = slowCheckConfiguration.minSuccessful.min(20))
+                                minSuccessful = slowCheckConfiguration.minSuccessful.min(20)
+    )
 
   implicit def cokleisliEq[F[_], A, B](implicit ev: Eq[F[A] => B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
@@ -21,33 +22,42 @@ class CokleisliSuite extends SlowCatsSuite {
   implicit val iso: Isomorphisms[Cokleisli[Option, Int, *]] = Isomorphisms.invariant[Cokleisli[Option, Int, *]]
 
   checkAll("Cokleisli[Option, MiniInt, Int]",
-           SemigroupalTests[Cokleisli[Option, MiniInt, *]].semigroupal[Int, Int, Int])
+           SemigroupalTests[Cokleisli[Option, MiniInt, *]].semigroupal[Int, Int, Int]
+  )
   checkAll("Semigroupal[Cokleisli[Option, Int, *]]",
-           SerializableTests.serializable(Semigroupal[Cokleisli[Option, Int, *]]))
+           SerializableTests.serializable(Semigroupal[Cokleisli[Option, Int, *]])
+  )
 
   checkAll("Cokleisli[Option, MiniInt, Int]", MonadTests[Cokleisli[Option, MiniInt, *]].monad[Int, Int, Int])
   checkAll("Monad[Cokleisli[Option, Int, *]]", SerializableTests.serializable(Monad[Cokleisli[Option, Int, *]]))
 
   checkAll("Cokleisli[Option, MiniInt, Int]",
-           ProfunctorTests[Cokleisli[Option, *, *]].profunctor[MiniInt, Int, Int, Int, Int, Int])
+           ProfunctorTests[Cokleisli[Option, *, *]].profunctor[MiniInt, Int, Int, Int, Int, Int]
+  )
   checkAll("Profunctor[Cokleisli[Option, *, *]]", SerializableTests.serializable(Profunctor[Cokleisli[Option, *, *]]))
 
   checkAll("Cokleisli[Option, MiniInt, MiniInt]",
-           ContravariantTests[Cokleisli[Option, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt])
+           ContravariantTests[Cokleisli[Option, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt]
+  )
   checkAll("Contravariant[Cokleisli[Option, *, MiniInt]]",
-           SerializableTests.serializable(Contravariant[Cokleisli[Option, *, Int]]))
+           SerializableTests.serializable(Contravariant[Cokleisli[Option, *, Int]])
+  )
 
   checkAll("Cokleisli[(Boolean, *), MiniInt, MiniInt]",
-           MonoidKTests[λ[α => Cokleisli[(Boolean, *), α, α]]].monoidK[MiniInt])
+           MonoidKTests[λ[α => Cokleisli[(Boolean, *), α, α]]].monoidK[MiniInt]
+  )
   checkAll("MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]",
-           SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]]))
+           SerializableTests.serializable(MonoidK[λ[α => Cokleisli[NonEmptyList, α, α]]])
+  )
 
   checkAll("Cokleisli[Option, MiniInt, MiniInt]", SemigroupKTests[λ[α => Cokleisli[Option, α, α]]].semigroupK[MiniInt])
   checkAll("SemigroupK[λ[α => Cokleisli[List, α, α]]]",
-           SerializableTests.serializable(SemigroupK[λ[α => Cokleisli[List, α, α]]]))
+           SerializableTests.serializable(SemigroupK[λ[α => Cokleisli[List, α, α]]])
+  )
 
   checkAll("Cokleisli[(Boolean, *), MiniInt, MiniInt]",
-           ArrowTests[Cokleisli[(Boolean, *), *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt])
+           ArrowTests[Cokleisli[(Boolean, *), *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
+  )
   checkAll("Arrow[Cokleisli[NonEmptyList, *, *]]", SerializableTests.serializable(Arrow[Cokleisli[NonEmptyList, *, *]]))
 
   {
@@ -59,7 +69,8 @@ class CokleisliSuite extends SlowCatsSuite {
       CommutativeArrowTests[Cokleisli[Id, *, *]].commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, MiniInt]
     )
     checkAll("CommutativeArrow[Cokleisli[Id, *, *]]",
-             SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, *, *]]))
+             SerializableTests.serializable(CommutativeArrow[Cokleisli[Id, *, *]])
+    )
   }
 
   test("contramapValue with Id consistent with lmap") {

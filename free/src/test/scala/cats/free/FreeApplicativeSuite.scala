@@ -18,7 +18,8 @@ class FreeApplicativeSuite extends CatsSuite {
 
   checkAll("FreeApplicative[Option, *]", ApplicativeTests[FreeApplicative[Option, *]].applicative[Int, Int, Int])
   checkAll("Applicative[FreeApplicative[Option, *]]",
-           SerializableTests.serializable(Applicative[FreeApplicative[Option, *]]))
+           SerializableTests.serializable(Applicative[FreeApplicative[Option, *]])
+  )
 
   test("toString is stack-safe") {
     val r = FreeApplicative.pure[List, Int](333)
@@ -158,9 +159,11 @@ object FreeApplicativeSuite {
     else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
-  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]],
-                                      FF: Arbitrary[(A, A) => A],
-                                      A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
+  implicit def freeArbitrary[F[_], A](implicit
+    F: Arbitrary[F[A]],
+    FF: Arbitrary[(A, A) => A],
+    A: Arbitrary[A]
+  ): Arbitrary[FreeApplicative[F, A]] =
     Arbitrary(freeGen[F, A](4))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
@@ -170,9 +173,13 @@ object FreeApplicativeSuite {
     }
 
   implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
-    Arbitrary(Gen.oneOf(FunctionK.id[List], new (List ~> List) {
-      def apply[A](fa: List[A]): List[A] =
-        fa ++ fa
-    }))
+    Arbitrary(
+      Gen.oneOf(FunctionK.id[List],
+                new (List ~> List) {
+                  def apply[A](fa: List[A]): List[A] =
+                    fa ++ fa
+                }
+      )
+    )
 
 }

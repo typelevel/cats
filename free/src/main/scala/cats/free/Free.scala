@@ -48,26 +48,28 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
 
   /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
   @tailrec
-  final def step: Free[S, A] = this match {
-    case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
-    case FlatMapped(Pure(a), f)          => f(a).step
-    case x                               => x
-  }
+  final def step: Free[S, A] =
+    this match {
+      case FlatMapped(FlatMapped(c, f), g) => c.flatMap(cc => f(cc).flatMap(g)).step
+      case FlatMapped(Pure(a), f)          => f(a).step
+      case x                               => x
+    }
 
   /**
    * Evaluate a single layer of the free monad.
    */
   @tailrec
-  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] = this match {
-    case Pure(a)    => Right(a)
-    case Suspend(t) => Left(S.map(t)(Pure(_)))
-    case FlatMapped(c, f) =>
-      c match {
-        case Pure(a)          => f(a).resume
-        case Suspend(t)       => Left(S.map(t)(f))
-        case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
-      }
-  }
+  final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] =
+    this match {
+      case Pure(a)    => Right(a)
+      case Suspend(t) => Left(S.map(t)(Pure(_)))
+      case FlatMapped(c, f) =>
+        c match {
+          case Pure(a)          => f(a).resume
+          case Suspend(t)       => Left(S.map(t)(f))
+          case FlatMapped(d, g) => d.flatMap(dd => g(dd).flatMap(f)).resume
+        }
+    }
 
   /**
    * A combination of step and fold. May be used to define interpreters with custom
@@ -77,12 +79,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     onPure: A => B,
     onSuspend: S[A] => B,
     onFlatMapped: ((S[X], X => Free[S, A]) forSome { type X }) => B
-  ): B = this.step match {
-    case Pure(a)                    => onPure(a)
-    case Suspend(a)                 => onSuspend(a)
-    case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
-    case _                          => sys.error("FlatMapped should be right associative after step")
-  }
+  ): B =
+    this.step match {
+      case Pure(a)                    => onPure(a)
+      case Suspend(a)                 => onSuspend(a)
+      case FlatMapped(Suspend(fa), f) => onFlatMapped((fa, f))
+      case _                          => sys.error("FlatMapped should be right associative after step")
+    }
 
   /**
    * Run to completion, using a function that extracts the resumption
@@ -356,16 +359,14 @@ sealed abstract private[free] class FreeInstances extends FreeInstances1 {
 
 sealed abstract private[free] class FreeInstances1 {
 
-  implicit def catsFreeFoldableForFree[F[_]](
-    implicit
+  implicit def catsFreeFoldableForFree[F[_]](implicit
     foldableF: Foldable[F]
   ): Foldable[Free[F, *]] =
     new FreeFoldable[F] {
       val F = foldableF
     }
 
-  implicit def catsFreeTraverseForFree[F[_]](
-    implicit
+  implicit def catsFreeTraverseForFree[F[_]](implicit
     traversableF: Traverse[F]
   ): Traverse[Free[F, *]] =
     new FreeTraverse[F] {

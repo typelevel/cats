@@ -289,8 +289,9 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) extends AnyVal {
 
   @deprecated("Use partitionBifold on Foldable", "2.1.0-RC1")
-  def partitionBifold[H[_, _], A, B, C](fa: F[A])(f: A => H[B, C])(implicit A: Alternative[F],
-                                                                   H: Bifoldable[H]): (F[B], F[C]) =
+  def partitionBifold[H[_, _], A, B, C](
+    fa: F[A]
+  )(f: A => H[B, C])(implicit A: Alternative[F], H: Bifoldable[H]): (F[B], F[C]) =
     F.partitionBifold[H, A, B, C](fa)(f)
 
   @deprecated("Use partitionBifoldM on Foldable", "2.1.0-RC1")
@@ -300,7 +301,8 @@ final private[syntax] class FoldableOps1[F[_]](private val F: Foldable[F]) exten
     F.partitionBifoldM[G, H, A, B, C](fa)(f)
 
   @deprecated("Use partitionEitherM on Foldable", "2.1.0-RC1")
-  def partitionEitherM[G[_], A, B, C](fa: F[A])(f: A => G[Either[B, C]])(implicit A: Alternative[F],
-                                                                         M: Monad[G]): G[(F[B], F[C])] =
+  def partitionEitherM[G[_], A, B, C](
+    fa: F[A]
+  )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)
 }

@@ -445,6 +445,21 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
 
+  /**
+   * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
+   *{{{
+   * scala> import cats.data._
+   * scala> import cats.instances.int._
+   * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,3,4))
+   * scala> val expectedResult = NonEmptyVector.fromVectorUnsafe(Vector(1,2,3,4))
+   * scala> val result = nel.toNev
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   *}}}
+   */
+  final def toNev[B >: A]: NonEmptyVector[B] =
+    NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
+
   final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[LazyList[AA]].show(toLazyList)}"
 }
 
@@ -483,8 +498,9 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       def align[A, B](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B]): NonEmptyLazyList[Ior[A, B]] =
         alignInstance.align(fa, fb)
 
-      override def alignWith[A, B, C](fa: NonEmptyLazyList[A],
-                                      fb: NonEmptyLazyList[B])(f: Ior[A, B] => C): NonEmptyLazyList[C] =
+      override def alignWith[A, B, C](fa: NonEmptyLazyList[A], fb: NonEmptyLazyList[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyLazyList[C] =
         alignInstance.alignWith(fa, fb)(f)
     }
 

@@ -1,13 +1,16 @@
 package cats.tests
 
 import cats._
-import cats.data.{Const, IdT, OptionT}
+import cats.data.{Const, IdT, OptionT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.applicative._
 import cats.syntax.either._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
 import cats.syntax.monadError._
 
 class OptionTSuite extends CatsSuite {
@@ -23,7 +26,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", FunctorFilterTests[OptionT[ListWrapper, *]].functorFilter[Int, Int, Int])
     checkAll("FunctorFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(FunctorFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -33,7 +37,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, *]", TraverseFilterTests[OptionT[ListWrapper, *]].traverseFilter[Int, Int, Int])
     checkAll("TraverseFilter[OptionT[ListWrapper, *]]",
-             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]]))
+             SerializableTests.serializable(TraverseFilter[OptionT[ListWrapper, *]])
+    )
 
   }
 
@@ -49,7 +54,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", PartialOrderTests[OptionT[ListWrapper, Int]].partialOrder)
     checkAll("PartialOrder[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(PartialOrder[OptionT[ListWrapper, Int]])
+    )
 
     Eq[OptionT[ListWrapper, Int]]
   }
@@ -94,9 +100,11 @@ class OptionTSuite extends CatsSuite {
   {
     // F has a ContravariantMonoidal
     checkAll("OptionT[Const[String, *], Int]",
-             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int])
+             ContravariantMonoidalTests[OptionT[Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+    )
     checkAll("ContravariantMonoidal[OptionT[Const[String, *], Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]]))
+             SerializableTests.serializable(ContravariantMonoidal[OptionT[Const[String, *], *]])
+    )
   }
 
   {
@@ -154,7 +162,8 @@ class OptionTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("OptionT[ListWrapper, Int] with Option",
-             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[OptionT[ListWrapper, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[OptionT[ListWrapper, *]]", SerializableTests.serializable(Traverse[OptionT[ListWrapper, *]]))
 
     Foldable[OptionT[ListWrapper, *]]
@@ -178,7 +187,8 @@ class OptionTSuite extends CatsSuite {
 
     checkAll("OptionT[ListWrapper, Int]", SemigroupTests[OptionT[ListWrapper, Int]].semigroup)
     checkAll("Semigroup[OptionT[ListWrapper, Int]]",
-             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]]))
+             SerializableTests.serializable(Semigroup[OptionT[ListWrapper, Int]])
+    )
   }
 
   {
@@ -197,6 +207,40 @@ class OptionTSuite extends CatsSuite {
   test("fold and cata consistent") {
     forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
       o.fold(s)(f) should ===(o.cata(s, f))
+    }
+  }
+
+  test("foldF and cataF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => List[String]) =>
+      o.foldF(List(s))(f) should ===(o.cataF(List(s), f))
+    }
+  }
+
+  test("fold and foldF consistent") {
+    forAll { (o: OptionT[List, Int], s: String, f: Int => String) =>
+      val f2 = f.andThen(i => List(i))
+      o.fold(s)(f) should ===(o.foldF(List(s))(f2))
+    }
+  }
+
+  test("flatTapNone doesn't change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      optiont.flatTapNone(f).value.runA(initial) should ===(optiont.value.runA(initial))
+    }
+  }
+
+  test("flatTapNone runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: TestEffect[Int], initial: List[Int]) =>
+      optiont.flatTapNone(f).value.runS(initial) should ===(
+        optiont.value
+          .flatTap {
+            case Some(v) => v.pure[TestEffect]
+            case None    => f
+          }
+          .runS(initial)
+      )
     }
   }
 
@@ -414,6 +458,26 @@ class OptionTSuite extends CatsSuite {
         case None    => List(None)
         case Some(a) => f(a).map(Some(_))
       }))
+    }
+  }
+
+  test("semiflatTap consistent with semiflatMap") {
+    forAll { (o: OptionT[List, Int], f: Int => List[String]) =>
+      o.semiflatMap(v => f(v).as(v)) should ===(o.semiflatTap(f))
+    }
+  }
+
+  test("semiflatTap does not change the return value") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      optiont.semiflatTap(v => f(v)).value.runA(initial) should ===(optiont.value.runA(initial))
+    }
+  }
+
+  test("semiflatTap runs the effect") {
+    type TestEffect[A] = State[List[Int], A]
+    forAll { (optiont: OptionT[TestEffect, Int], f: Int => TestEffect[Int], initial: List[Int]) =>
+      optiont.semiflatTap(v => f(v)).value.runS(initial) should ===(optiont.semiflatMap(f).value.runS(initial))
     }
   }
 

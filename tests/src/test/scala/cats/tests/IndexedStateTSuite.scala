@@ -362,9 +362,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Functor[IndexedStateT[ListWrapper, String, Int, *]] = IndexedStateT.catsDataFunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
-             FunctorTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functor[Int, Int, Int])
+             FunctorTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functor[Int, Int, Int]
+    )
     checkAll("Functor[IndexedStateT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, *]]))
+             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, *]])
+    )
 
     Functor[IndexedStateT[ListWrapper, String, Int, *]]
   }
@@ -374,9 +376,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int])
+             FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int]
+    )
     checkAll("FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]",
-             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]))
+             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]])
+    )
 
     FunctorFilter[IndexedStateT[ListWrapper, String, Int, *]]
   }
@@ -387,9 +391,11 @@ class IndexedStateTSuite extends CatsSuite {
       IndexedStateT.catsDataContravariantForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, *, Int, Boolean]",
-             ContravariantTests[IndexedStateT[ListWrapper, *, Int, Int]].contravariant[MiniInt, Int, Boolean])
+             ContravariantTests[IndexedStateT[ListWrapper, *, Int, Int]].contravariant[MiniInt, Int, Boolean]
+    )
     checkAll("Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]",
-             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]))
+             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, *, Int, Int]])
+    )
 
     Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]
   }
@@ -399,9 +405,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, *, *]] = IndexedStateT.catsDataBifunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, String, Int]",
-             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int])
+             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int]
+    )
     checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]",
-             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]))
+             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]])
+    )
 
     Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]
   }
@@ -412,9 +420,11 @@ class IndexedStateTSuite extends CatsSuite {
       IndexedStateT.catsDataProfunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
-             ProfunctorTests[IndexedStateT[ListWrapper, *, *, Int]].profunctor[MiniInt, String, String, Int, Int, Int])
+             ProfunctorTests[IndexedStateT[ListWrapper, *, *, Int]].profunctor[MiniInt, String, String, Int, Int, Int]
+    )
     checkAll("Profunctor[IndexedStateT[ListWrapper, *, *, Int]]",
-             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, *, *, Int]]))
+             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
     Profunctor[IndexedStateT[ListWrapper, *, *, Int]]
   }
@@ -424,9 +434,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val FS: Strong[IndexedStateT[ListWrapper, *, *, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, *, *, Int]",
-             StrongTests[IndexedStateT[ListWrapper, *, *, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String])
+             StrongTests[IndexedStateT[ListWrapper, *, *, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String]
+    )
     checkAll("Strong[IndexedStateT[ListWrapper, *, *, Int]]",
-             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, *, *, Int]]))
+             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
     Strong[IndexedStateT[ListWrapper, *, *, Int]]
   }
@@ -436,9 +448,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int])
+             MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int]
+    )
     checkAll("Monad[IndexedStateT[ListWrapper, Int, Int, *]]",
-             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, *]]))
+             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, *]])
+    )
 
     Monad[IndexedStateT[ListWrapper, Int, Int, *]]
     FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
@@ -453,9 +467,11 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
-             SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int])
+             SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int]
+    )
     checkAll("SemigroupK[IndexedStateT[ListWrapper, Int, *]]",
-             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, *]]))
+             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, *]])
+    )
   }
 
   {
@@ -467,7 +483,8 @@ class IndexedStateTSuite extends CatsSuite {
         .catsDataAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
-             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int])
+             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+    )
     checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, *]]", SerializableTests.serializable(SA))
 
     Monad[IndexedStateT[ListWrapper, Int, Int, *]]
@@ -494,9 +511,11 @@ class IndexedStateTSuite extends CatsSuite {
       EitherT.catsDataEqForEitherT[StateT[Option, MiniInt, *], Unit, Int]
 
     checkAll("StateT[Option, MiniInt, Int]",
-             MonadErrorTests[StateT[Option, MiniInt, *], Unit].monadError[Int, Int, Int])
+             MonadErrorTests[StateT[Option, MiniInt, *], Unit].monadError[Int, Int, Int]
+    )
     checkAll("MonadError[StateT[Option, Int, *], Unit]",
-             SerializableTests.serializable(MonadError[StateT[Option, Int, *], Unit]))
+             SerializableTests.serializable(MonadError[StateT[Option, Int, *], Unit])
+    )
   }
 
 }
@@ -510,8 +529,10 @@ object IndexedStateTSuite extends IndexedStateTSuiteInstances {
 
 sealed trait IndexedStateTSuiteInstances {
 
-  implicit def indexedStateTEq[F[_], SA, SB, A](implicit SA: ExhaustiveCheck[SA],
-                                                FSB: Eq[F[(SB, A)]],
-                                                F: FlatMap[F]): Eq[IndexedStateT[F, SA, SB, A]] =
+  implicit def indexedStateTEq[F[_], SA, SB, A](implicit
+    SA: ExhaustiveCheck[SA],
+    FSB: Eq[F[(SB, A)]],
+    F: FlatMap[F]
+  ): Eq[IndexedStateT[F, SA, SB, A]] =
     Eq.by[IndexedStateT[F, SA, SB, A], SA => F[(SB, A)]](state => s => state.run(s))
 }

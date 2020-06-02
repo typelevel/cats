@@ -22,9 +22,10 @@ object CommutativeMonoid extends MonoidFunctions[CommutativeMonoid] {
   /**
    * Create a `CommutativeMonoid` instance from the given function and empty value.
    */
-  @inline def instance[A](emptyValue: A, cmb: (A, A) => A): CommutativeMonoid[A] = new CommutativeMonoid[A] {
-    override val empty: A = emptyValue
+  @inline def instance[A](emptyValue: A, cmb: (A, A) => A): CommutativeMonoid[A] =
+    new CommutativeMonoid[A] {
+      override val empty: A = emptyValue
 
-    override def combine(x: A, y: A): A = cmb(x, y)
-  }
+      override def combine(x: A, y: A): A = cmb(x, y)
+    }
 }

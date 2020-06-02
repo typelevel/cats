@@ -23,4 +23,9 @@ class WriterSuite extends CatsSuite {
       result.writer(log) should ===(Writer(log, result))
     }
   }
+
+  test("catsDataCommutativeMonadForWriterT and catsDataTraverseForWriterTId instances are not ambiguous") {
+    import cats.Functor
+    Functor[Writer[Int, *]]
+  }
 }

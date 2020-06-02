@@ -29,13 +29,15 @@ import cats.laws.discipline.{
   NonEmptyTraverseTests,
   ReducibleTests,
   SemigroupKTests,
-  SerializableTests
+  SerializableTests,
+  ShortCircuitingTests
 }
 import cats.laws.discipline.arbitrary._
 import cats.platform.Platform
 import cats.syntax.foldable._
 import cats.syntax.reducible._
 import cats.syntax.show._
+
 import scala.util.Properties
 
 class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector, NonEmptyVector] {
@@ -50,7 +52,8 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
   checkAll("NonEmptyVector[Int]", EqTests[NonEmptyVector[Int]].eqv)
 
   checkAll("NonEmptyVector[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyVector].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyVector[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyVector]))
 
   checkAll("NonEmptyVector[Int]", ReducibleTests[NonEmptyVector].reducible[Option, Int, Int])
@@ -80,6 +83,8 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   checkAll("NonEmptyVector[Int]", BimonadTests[NonEmptyVector].bimonad[Int, Int, Int])
   checkAll("Bimonad[NonEmptyVector]", SerializableTests.serializable(Bimonad[NonEmptyVector]))
+
+  checkAll("NonEmptyVector[Int]", ShortCircuitingTests[NonEmptyVector].traverse[Int])
 
   test("size is consistent with toList.size") {
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
@@ -389,7 +394,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("NonEmptyVector#collect is consistent with Vector#collect") {
     val pf: PartialFunction[Int, Double] = {
-      case i if (i % 2 == 0) => i.toDouble
+      case i if i % 2 == 0 => i.toDouble
     }
     forAll { (nonEmptyVector: NonEmptyVector[Int]) =>
       nonEmptyVector.collect(pf) should ===(nonEmptyVector.toVector.collect(pf))
@@ -434,7 +439,7 @@ class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEm
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyVector(start, (tailStart).to(endInclusive).toVector)
+    NonEmptyVector(start, tailStart.to(endInclusive).toVector)
   }
 
   def fromValues[A](el: A, els: A*): NonEmptyVector[A] = NonEmptyVector(el, Vector(els: _*))
