@@ -25,11 +25,7 @@ trait ShortCircuitingTests[F[_]] extends Laws {
       "traverse won't short-circuit if Applicative[G].map2Eval won't" -> forAll(laws.traverseWontShortCircuit[A] _)
     )
 
-  def nonEmptyTraverse[A: Arbitrary](
-    implicit TF: NonEmptyTraverse[F],
-    ArbFA: Arbitrary[F[A]],
-    lEq: Eq[Long]
-  ): RuleSet =
+  def nonEmptyTraverse[A: Arbitrary](implicit TF: NonEmptyTraverse[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet =
     new DefaultRuleSet(
       name = "nonEmptyTraverseShortCircuiting",
       parent = Some(traverse[A]),
@@ -39,11 +35,7 @@ trait ShortCircuitingTests[F[_]] extends Laws {
         forAll(laws.nonEmptyTraverseWontShortCircuit[A] _)
     )
 
-  def traverseFilter[A: Arbitrary](
-    implicit TF: TraverseFilter[F],
-    ArbFA: Arbitrary[F[A]],
-    lEq: Eq[Long]
-  ): RuleSet = {
+  def traverseFilter[A: Arbitrary](implicit TF: TraverseFilter[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet = {
     implicit val T: Traverse[F] = TF.traverse
     new DefaultRuleSet(
       name = "traverseFilterShortCircuiting",
