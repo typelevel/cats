@@ -359,6 +359,15 @@ object IorT extends IorTInstances {
   final def fromOptionF[F[_], E, A](foption: F[Option[A]], ifNone: => E)(implicit F: Functor[F]): IorT[F, E, A] =
     IorT(F.map(foption)(_.fold[Ior[E, A]](Ior.left(ifNone))(Ior.right)))
 
+  /** Similar to `fromOptionF` but the left is carried from monadic `F[_]` context when the option is `None` */
+  final def fromOptionM[F[_], E, A](foption: F[Option[A]], ifNone: => F[E])(implicit F: Monad[F]): IorT[F, E, A] =
+    IorT(
+      F.flatMap(foption) {
+        case Some(a) => F.pure(Ior.right[E, A](a))
+        case None    => F.map(ifNone)(Ior.left[E, A])
+      }
+    )
+
   /**
    * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
    */

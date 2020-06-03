@@ -353,6 +353,12 @@ class IorTSuite extends CatsSuite {
     }
   }
 
+  test("IorT.fromOptionM consistent with IorT.fromOptionF") {
+    forAll { (option: Option[Int], s: String) =>
+      IorT.fromOptionM[Id, String, Int](option, s) should ===(IorT.fromOptionF[Id, String, Int](option, s))
+    }
+  }
+
   test("IorT.cond isRight equals test") {
     forAll { (test: Boolean, s: String, i: Int) =>
       val iort = IorT.cond[Id](test, s, i)
