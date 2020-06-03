@@ -198,7 +198,6 @@ Here, we use `ET` to abbreviate `EitherT`; and we use `A` and `B` as type variab
 | `Either[A, B] => ET[F, A, B]` | `fromEither` | `F: Applicative` |
 | `Option[B] => A => ET[F, A, B]` | `fromOption` | `F: Applicative` |
 | `F[Option[B]] => A => ET[F, A, B]` | `fromOptionF` | `F: Functor` |
-| `F[Option[B]] => F[A] => ET[F, A, B]` | `fromOptionM` | `F: Monad` |
 | `Boolean => B => A => ET[F, A, B]` | `cond`   | `F: Applicative` |
 | `ET[F, A, B] => (A => C) => (B => C) => F[C]` | `fold` | `F: Functor` |
 | `ET[F, A, B] => ET[F, B, A]` | `swap` | `F: Functor` |

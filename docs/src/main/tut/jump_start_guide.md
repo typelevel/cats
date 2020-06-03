@@ -379,7 +379,6 @@ def ensureUserExists(userId: Int): EitherT[Future, BaseException, User] = {
 
 `toRight` is pretty analogous to the method `Either.fromOption` mentioned before: just as `fromOption` built an `Either` from an `Option`, `toRight` creates an `EitherT` from an `OptionT`.
 If the original `OptionT` stores `Some` value, it will be wrapped into `Right`; otherwise the value provided as the `left` parameter will be wrapped into a `Left`.
-To provide the `left` value within the monad, there is corresponding `toRightF` method.
 
 `toLeft` is `toRight`'s counterpart which wraps the `Some` value into `Left` and transforms `None` into `Right` enclosing the provided `right` value.
 This is less commonly used in practice, but can serve e.g. for enforcing uniqueness checks in code.

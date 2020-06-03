@@ -838,15 +838,6 @@ object EitherT extends EitherTInstances {
       }
     )
 
-  /** Similar to `fromOptionF` but the left is carried from monadic `F[_]` context when the option is `None` */
-  final def fromOptionM[F[_], E, A](fopt: F[Option[A]], ifNone: => F[E])(implicit F: Monad[F]): EitherT[F, E, A] =
-    EitherT(
-      F.flatMap(fopt) {
-        case Some(a) => F.pure(Right.apply[E, A](a))
-        case None    => F.map(ifNone)(Left.apply[E, A])
-      }
-    )
-
   /**  If the condition is satisfied, return the given `A` in `Right`
    *  lifted into the specified `Applicative`, otherwise, return the
    *  given `E` in `Left` lifted into the specified `Applicative`.

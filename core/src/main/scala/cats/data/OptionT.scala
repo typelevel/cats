@@ -136,14 +136,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def toRight[L](left: => L)(implicit F: Functor[F]): EitherT[F, L, A] =
     EitherT(cata(Left(left), Right.apply))
 
-  def toRightF[L](left: => F[L])(implicit F: Monad[F]): EitherT[F, L, A] =
-    EitherT(cataF(F.map(left)(Left.apply[L, A]), a => F.pure(Right(a))))
-
   def toLeft[R](right: => R)(implicit F: Functor[F]): EitherT[F, A, R] =
     EitherT(cata(Right(right), Left.apply))
-
-  def toLeftF[R](right: => F[R])(implicit F: Monad[F]): EitherT[F, A, R] =
-    EitherT(cataF(F.map(right)(Right.apply[A, R]), a => F.pure(Left(a))))
 
   def show(implicit F: Show[F[Option[A]]]): String = F.show(value)
 
