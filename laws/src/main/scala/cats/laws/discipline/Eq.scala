@@ -2,13 +2,10 @@ package cats
 package laws
 package discipline
 
-import cats.data.RepresentableStore
-import cats.Eq
-import cats.data.AndThen
+import cats.data.{AndThen, RepresentableStore}
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
-import cats.instances.tuple._
 import cats.kernel._
 import cats.platform.Platform
 import cats.syntax.eq._
@@ -22,12 +19,11 @@ object eq {
   implicit def catsLawsEqForFn2[A, B, C](implicit ev: Eq[((A, B)) => C]): Eq[(A, B) => C] =
     Eq.by((_: (A, B) => C).tupled)
 
-  implicit def catsLawsEqForPartialFunctionExhaustive[A, B](implicit A: ExhaustiveCheck[A],
-                                                            B: Eq[B]): Eq[PartialFunction[A, B]] =
+  implicit def catsLawsEqForPartialFunctionExhaustive[A: ExhaustiveCheck, B: Eq]: Eq[PartialFunction[A, B]] =
     Eq.instance((f, g) =>
-      A.allValues
+      ExhaustiveCheck[A].allValues
         .filter(a => f.isDefinedAt(a) || g.isDefinedAt(a))
-        .forall(a => f.isDefinedAt(a) && g.isDefinedAt(a) && B.eqv(f(a), g(a)))
+        .forall(a => f.isDefinedAt(a) && g.isDefinedAt(a) && Eq[B].eqv(f(a), g(a)))
     )
 
   implicit def catsLawsEqForAndThen[A, B](implicit eqAB: Eq[A => B]): Eq[AndThen[A, B]] =

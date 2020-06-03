@@ -3,7 +3,7 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
 
 trait PartialFunctionInstances {
 
-  implicit val catsStdInstancesForArrowHierarchy: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+  implicit val catsStdInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
     new ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] {
 
       /**
@@ -19,14 +19,14 @@ trait PartialFunctionInstances {
        * res1: Either[Long,Double] = Right(3.0)
        * }}}
        */
-      override def choose[A, B, C, D](f: PartialFunction[A, C])(
-        g: PartialFunction[B, D]
-      ): PartialFunction[Either[A, B], Either[C, D]] = {
+      override def choose[A, B, C, D](
+        f: PartialFunction[A, C]
+      )(g: PartialFunction[B, D]): PartialFunction[Either[A, B], Either[C, D]] = {
         case Left(a) if f.isDefinedAt(a)  => Left(f(a))
         case Right(b) if g.isDefinedAt(b) => Right(g(b))
       }
 
-      override def lift[A, B](f: A => B): PartialFunction[A, B] = { case a if a.isInstanceOf[A] => f(a) }
+      override def lift[A, B](f: A => B): PartialFunction[A, B] = { case a => f(a) }
 
       /**
        * Create a new `F` that takes two inputs, but only modifies the first input

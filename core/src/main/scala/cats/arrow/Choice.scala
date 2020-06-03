@@ -50,9 +50,6 @@ import scala.annotation.implicitNotFound
 
 object Choice {
 
-  implicit val partialFunction: Choice[PartialFunction] =
-    cats.instances.partialFunction.catsStdInstancesForArrowHierarchy
-
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/
