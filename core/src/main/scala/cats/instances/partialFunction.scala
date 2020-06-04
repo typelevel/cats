@@ -26,7 +26,7 @@ trait PartialFunctionInstances {
         case Right(b) if g.isDefinedAt(b) => Right(g(b))
       }
 
-      override def lift[A, B](f: A => B): PartialFunction[A, B] = { case a => f(a) }
+      override def lift[A, B](f: A => B): PartialFunction[A, B] = { case a if a.isInstanceOf[A] => f(a) }
 
       /**
        * Create a new `F` that takes two inputs, but only modifies the first input
