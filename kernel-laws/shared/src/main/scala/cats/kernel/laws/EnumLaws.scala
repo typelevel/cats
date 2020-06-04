@@ -35,11 +35,14 @@ trait PartialNextLaws[A] extends UpperBoundedLaws[A] {
 
   implicit def N: PartialNext[A]
 
-  def nextMaxBound: IsEq[Option[A]] =
+  def maximum: IsEq[Option[A]] =
     N.partialNext(N.maxBound) <-> None
 
-  def partialNextGreaterThan(x: A): IsEq[Boolean] =
+  def nextWeak(x: A): IsEq[Boolean] =
     N.partialNext(x).map(E.gt(_, x)).getOrElse(true) <-> true
+
+  def nextStrong(a: A, b: A): IsEq[Boolean] =
+    (if(E.lt(a, b)) N.partialNext(a).map(E.lteqv(_, b)).getOrElse(true) else true) <-> true
 
 }
 

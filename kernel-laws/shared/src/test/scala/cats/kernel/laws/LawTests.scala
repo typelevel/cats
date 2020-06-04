@@ -233,11 +233,12 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
   checkAll("UpperBounded[Short]", UpperBoundedTests[Short].upperBounded)
   checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
-  checkAll("UpperBounded[Int]", UpperBoundedTests[Int].upperBounded)
   checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
   checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
+
+  checkAll("PartialNext[Int]", PartialNextTests[Int].partialNext)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
