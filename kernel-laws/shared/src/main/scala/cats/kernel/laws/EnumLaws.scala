@@ -1,6 +1,6 @@
-package cats.kernel.laws
+package cats.kernel
+package laws
 
-import cats.kernel.{Next, Previous, PartialPrevious, PartialNext}
 
 trait PartialPreviousLaws[A] extends LowerBoundedLaws[A] {
 
@@ -12,6 +12,15 @@ trait PartialPreviousLaws[A] extends LowerBoundedLaws[A] {
   def partialPreviousLessThan(x: A): IsEq[Boolean] =
     P.partialPrevious(x).map(E.lt(_, x)).getOrElse(true) <-> true
 
+}
+
+object PartialPreviousLaws {
+  def apply[A](implicit ev: PartialPrevious[A]): PartialPreviousLaws[A] =
+    new PartialPreviousLaws[A] {
+      def P: PartialPrevious[A] = ev
+      def B: LowerBounded[A] = ev
+      def E: PartialOrder[A] = ev.partialOrder
+    }
 }
 
 trait PreviousLaws[A] extends PartialOrderLaws[A] {
@@ -32,6 +41,16 @@ trait PartialNextLaws[A] extends UpperBoundedLaws[A] {
   def partialNextGreaterThan(x: A): IsEq[Boolean] =
     N.partialNext(x).map(E.gt(_, x)).getOrElse(true) <-> true
 
+}
+
+
+object PartialNextLaws {
+  def apply[A](implicit ev: PartialNext[A]): PartialNextLaws[A] =
+    new PartialNextLaws[A] {
+      def N: PartialNext[A] = ev
+      def B: UpperBounded[A] = ev
+      def E: PartialOrder[A] = ev.partialOrder
+    }
 }
 
 trait NextLaws[A] extends PartialOrderLaws[A] {

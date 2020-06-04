@@ -14,12 +14,16 @@ class IntGroup extends CommutativeGroup[Int] {
   override def remove(x: Int, y: Int): Int = x - y
 }
 
-trait IntBounded extends LowerBounded[Int] with UpperBounded[Int] {
+trait IntBoundedEnum extends BoundedEnum[Int] {
   override def minBound: Int = Int.MinValue
   override def maxBound: Int = Int.MaxValue
+  override def partialNext(a: Int) =
+    if(a == maxBound) None else Some(a + 1)
+  override def partialPrevious(a: Int) =
+    if(a == minBound) None else Some(a - 1)
 }
 
-class IntOrder extends Order[Int] with Hash[Int] with IntBounded { self =>
+class IntOrder extends Order[Int] with Hash[Int] with IntBoundedEnum { self =>
   def hash(x: Int): Int = x.hashCode()
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
@@ -36,5 +40,5 @@ class IntOrder extends Order[Int] with Hash[Int] with IntBounded { self =>
   override def max(x: Int, y: Int): Int =
     java.lang.Math.max(x, y)
 
-  override val partialOrder: PartialOrder[Int] = self
+  override val order: Order[Int] = self
 }

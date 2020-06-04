@@ -28,8 +28,10 @@ trait UnboundedEnum[@sp A] extends Next[A] with Previous[A] {
 }
 
 trait BoundedEnum[@sp A] extends PartialNext[A] with PartialPrevious[A] {
+
   def order: Order[A]
   override final def partialOrder = order
+
 }
 
 trait LowerBoundedEnum[@sp A] extends Next[A] with PartialPrevious[A] {
