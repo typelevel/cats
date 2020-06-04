@@ -562,16 +562,15 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       def extract[A](fa: NonEmptyList[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] =
-        Foldable[List]
-          .reduceRightToOption[A, G[List[B]]](nel.tail)(a => G.map(f(a))(_ :: Nil)) { (a, lglb) =>
-            G.map2Eval(f(a), lglb)(_ :: _)
+      def nonEmptyTraverse[G[_], A, B](nel: NonEmptyList[A])(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyList[B]] = {
+        def loop(head: A, tail: List[A]): Eval[G[NonEmptyList[B]]] =
+          tail match {
+            case Nil    => Eval.now(G.map(f(head))(NonEmptyList(_, Nil)))
+            case h :: t => G.map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => NonEmptyList(b, acc.toList))
           }
-          .map {
-            case None        => G.map(f(nel.head))(NonEmptyList(_, Nil))
-            case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyList(_, _))
-          }
-          .value
+
+        loop(nel.head, nel.tail).value
+      }
 
       override def traverse[G[_], A, B](
         fa: NonEmptyList[A]

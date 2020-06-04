@@ -371,17 +371,15 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
       def nonEmptyTraverse[G[_], A, B](
-        nel: NonEmptyVector[A]
-      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
-        Foldable[Vector]
-          .reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
-            G.map2Eval(f(a), lglb)(_ +: _)
-          }
-          .map {
-            case None        => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
-            case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
-          }
-          .value
+        nev: NonEmptyVector[A]
+      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] = {
+        def loop(head: A, tail: Vector[A]): Eval[G[NonEmptyVector[B]]] =
+          tail.headOption.fold(Eval.now(G.map(f(head))(NonEmptyVector(_, Vector.empty[B]))))(h =>
+            G.map2Eval(f(head), Eval.defer(loop(h, tail.tail)))((b, acc) => b +: acc)
+          )
+
+        loop(nev.head, nev.tail).value
+      }
 
       override def traverse[G[_], A, B](
         fa: NonEmptyVector[A]
