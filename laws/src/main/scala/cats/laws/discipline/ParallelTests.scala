@@ -31,6 +31,6 @@ object ParallelTests {
   def apply[M[_]](implicit ev: Parallel[M]): ParallelTests.Aux[M, ev.F] =
     apply[M, ev.F](ev, implicitly)
 
-  def apply[M[_], F[_]](implicit ev: Parallel.Aux[M, F], D: DummyImplicit): ParallelTests.Aux[M, F] =
-    new ParallelTests[M] { val laws = ParallelLaws[M] }
+  def apply[M[_], F0[_]](implicit ev: Parallel.Aux[M, F0], D: DummyImplicit): ParallelTests.Aux[M, F0] =
+    new ParallelTests[M] { val laws: ParallelLaws.Aux[M, F0] = ParallelLaws[M](ev) }
 }
