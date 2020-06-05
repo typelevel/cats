@@ -77,9 +77,11 @@ def macroDependencies(scalaVersion: String) =
 lazy val catsSettings = Seq(
   incOptions := incOptions.value.withLogRecompileOnMacro(false),
   libraryDependencies ++= (
-    if (isDotty.value) Nil else Seq(
-      compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
-    )
+    if (isDotty.value) Nil
+    else
+      Seq(
+        compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjectorVersion).cross(CrossVersion.full))
+      )
   ) ++ macroDependencies(scalaVersion.value)
 ) ++ commonSettings ++ publishSettings ++ scoverageSettings ++ simulacrumSettings
 
@@ -536,6 +538,13 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += ("org.scalacheck" %%% "scalacheck" % scalaCheckVersion % Test)
       .withDottyCompat(scalaVersion.value),
     doctestGenTests := doctestGenTestsDottyCompat(isDotty.value, doctestGenTests.value)
+  )
+  .settings(
+    scalacOptions in Compile :=
+      (scalacOptions in Compile).value.filter {
+        case "-Xfatal-warnings" if isDotty.value => false
+        case _                                   => true
+      }
   )
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings ++ mimaSettings("cats-core"))
