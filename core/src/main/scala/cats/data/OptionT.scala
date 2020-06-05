@@ -540,6 +540,12 @@ private[data] trait OptionTSemigroupK[F[_]] extends SemigroupK[OptionT[F, *]] {
   implicit def F: Monad[F]
 
   def combineK[A](x: OptionT[F, A], y: OptionT[F, A]): OptionT[F, A] = x.orElse(y)
+
+  override def combineKEval[A](x: OptionT[F, A], y: Eval[OptionT[F, A]]): Eval[OptionT[F, A]] =
+    Eval.now(OptionT(F.flatMap(x.value) {
+      case oa @ Some(_) => F.pure(oa)
+      case None         => y.value.value
+    }))
 }
 
 private[data] trait OptionTMonoidK[F[_]] extends MonoidK[OptionT[F, *]] with OptionTSemigroupK[F] {

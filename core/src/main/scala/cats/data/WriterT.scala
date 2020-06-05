@@ -704,6 +704,9 @@ sealed private[data] trait WriterTSemigroupK[F[_], L] extends SemigroupK[WriterT
 
   def combineK[A](x: WriterT[F, L, A], y: WriterT[F, L, A]): WriterT[F, L, A] =
     WriterT(F0.combineK(x.run, y.run))
+
+  override def combineKEval[A](x: WriterT[F, L, A], y: Eval[WriterT[F, L, A]]): Eval[WriterT[F, L, A]] =
+    F0.combineKEval(x.run, y.map(_.run)).map(WriterT(_))
 }
 
 sealed private[data] trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L, *]] with WriterTSemigroupK[F, L] {
