@@ -17,9 +17,9 @@ class IntGroup extends CommutativeGroup[Int] {
 trait IntBoundedEnum extends BoundedEnum[Int] {
   override def minBound: Int = Int.MinValue
   override def maxBound: Int = Int.MaxValue
-  override def partialNext(a: Int) =
+  override def partialNext(a: Int): Option[Int] =
     if(a == maxBound) None else Some(a + 1)
-  override def partialPrevious(a: Int) =
+  override def partialPrevious(a: Int): Option[Int] =
     if(a == minBound) None else Some(a - 1)
 }
 

@@ -3,13 +3,17 @@ package instances
 
 trait BooleanInstances {
   implicit val catsKernelStdOrderForBoolean
-    : Order[Boolean] with Hash[Boolean] with LowerBounded[Boolean] with UpperBounded[Boolean] =
+    : Order[Boolean] with Hash[Boolean] with BoundedEnum[Boolean] =
     new BooleanOrder
 }
 
-trait BooleanBounded extends LowerBounded[Boolean] with UpperBounded[Boolean] {
+trait BooleanBounded extends BoundedEnum[Boolean] {
   override def minBound: Boolean = false
   override def maxBound: Boolean = true
+  override def partialNext(a: Boolean): Option[Boolean] =
+    if(!a) Some(true) else None
+  override def partialPrevious(a: Boolean): Option[Boolean] =
+    if(a) Some(false) else None
 }
 
 class BooleanOrder extends Order[Boolean] with Hash[Boolean] with BooleanBounded { self =>
@@ -28,5 +32,5 @@ class BooleanOrder extends Order[Boolean] with Hash[Boolean] with BooleanBounded
   override def min(x: Boolean, y: Boolean): Boolean = x && y
   override def max(x: Boolean, y: Boolean): Boolean = x || y
 
-  override val partialOrder: PartialOrder[Boolean] = self
+  override val order: Order[Boolean] = self
 }

@@ -189,12 +189,9 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
            PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder
   )
 
-  checkAll("Order[Unit]", OrderTests[Unit].order)
-  checkAll("Order[Boolean]", OrderTests[Boolean].order)
   checkAll("Order[String]", OrderTests[String].order)
   checkAll("Order[Symbol]", OrderTests[Symbol].order)
   checkAll("Order[Byte]", OrderTests[Byte].order)
-  checkAll("Order[Short]", OrderTests[Short].order)
   checkAll("Order[Char]", OrderTests[Char].order)
   checkAll("Order[Int]", OrderTests[Int].order)
   checkAll("Order[Long]", OrderTests[Long].order)
@@ -215,10 +212,7 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
 
-  checkAll("LowerBounded[Unit]", LowerBoundedTests[Unit].lowerBounded)
-  checkAll("LowerBounded[Boolean]", LowerBoundedTests[Boolean].lowerBounded)
   checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
-  checkAll("LowerBounded[Short]", LowerBoundedTests[Short].lowerBounded)
   checkAll("LowerBounded[Char]", LowerBoundedTests[Char].lowerBounded)
   checkAll("LowerBounded[Int]", LowerBoundedTests[Int].lowerBounded)
   checkAll("LowerBounded[Long]", LowerBoundedTests[Long].lowerBounded)
@@ -228,17 +222,17 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("LowerBounded[String]", LowerBoundedTests[String].lowerBounded)
   checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
 
-  checkAll("UpperBounded[Unit]", UpperBoundedTests[Unit].upperBounded)
-  checkAll("UpperBounded[Boolean]", UpperBoundedTests[Boolean].upperBounded)
   checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
-  checkAll("UpperBounded[Short]", UpperBoundedTests[Short].upperBounded)
   checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
   checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
   checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
-  checkAll("PartialNext[Int]", PartialNextTests[Int].partialNext)
+  checkAll("BoundedEnum[Unit]", BoundedEnumTests[Unit].boundedEnum)
+  checkAll("BoundedEnum[Boolean]", BoundedEnumTests[Boolean].boundedEnum)
+  checkAll("BoundedEnum[Short]", BoundedEnumTests[Short].boundedEnum)
+  checkAll("BoundedEnum[Int]", BoundedEnumTests[Int].boundedEnum)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))

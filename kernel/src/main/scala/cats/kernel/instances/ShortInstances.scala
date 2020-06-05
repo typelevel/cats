@@ -3,7 +3,7 @@ package instances
 
 trait ShortInstances {
   implicit val catsKernelStdOrderForShort
-    : Order[Short] with Hash[Short] with LowerBounded[Short] with UpperBounded[Short] = new ShortOrder
+    : Order[Short] with Hash[Short] with BoundedEnum[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 
@@ -14,9 +14,13 @@ class ShortGroup extends CommutativeGroup[Short] {
   override def remove(x: Short, y: Short): Short = (x - y).toShort
 }
 
-trait ShortBounded extends LowerBounded[Short] with UpperBounded[Short] {
+trait ShortBounded extends BoundedEnum[Short] {
   override def minBound: Short = Short.MinValue
   override def maxBound: Short = Short.MaxValue
+  override def partialNext(a: Short): Option[Short] =
+    if(a == maxBound) None else Some((a + 1).toShort)
+  override def partialPrevious(a: Short): Option[Short] =
+    if(a == minBound) None else Some((a - 1).toShort)
 }
 
 class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self =>
@@ -38,5 +42,5 @@ class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self 
   override def max(x: Short, y: Short): Short =
     java.lang.Math.max(x.toInt, y.toInt).toShort
 
-  override val partialOrder: PartialOrder[Short] = self
+  override val order: Order[Short] = self
 }

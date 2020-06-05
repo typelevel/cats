@@ -1,65 +1,84 @@
 package cats.kernel
 package laws
 
+trait PartialPreviousLaws[A] extends PartialOrderLaws[A] {
 
-// trait PartialPreviousLaws[A] extends LowerBoundedLaws[A] {
+  implicit def P: PartialPrevious[A]
 
-//   implicit def P: PartialPrevious[A]
+  def previousOrderWeak(a: A): IsEq[Boolean] =
+    P.partialPrevious(a).map(E.lt(_, a)).getOrElse(true) <-> true
 
-//   def previousMinBound: IsEq[Option[A]] =
-//     P.partialPrevious(P.minBound) <-> None
+  def previousOrderStrong(a: A, b: A): IsEq[Option[Boolean]] =
+    if (E.gt(a, b)) {
+      P.partialPrevious(a).map(E.gteqv(_, b)) <-> Option(true)
+    } else {
+      Option.empty <-> Option.empty
+    }
 
-//   def partialPreviousLessThan(x: A): IsEq[Boolean] =
-//     P.partialPrevious(x).map(E.lt(_, x)).getOrElse(true) <-> true
+}
 
-// }
+object PartialPreviousLaws {
+  def apply[A](implicit ev: PartialPrevious[A]): PartialPreviousLaws[A] =
+    new PartialPreviousLaws[A] {
+      def E: PartialOrder[A] = ev.partialOrder
+      def P: PartialPrevious[A] = ev
+    }
+}
 
-// object PartialPreviousLaws {
-//   def apply[A](implicit ev: PartialPrevious[A]): PartialPreviousLaws[A] =
-//     new PartialPreviousLaws[A] {
-//       def P: PartialPrevious[A] = ev
-//       def B: LowerBounded[A] = ev
-//       def E: PartialOrder[A] = ev.partialOrder
-//     }
-// }
+trait PartialNextLaws[A] extends PartialOrderLaws[A] {
 
-// trait PreviousLaws[A] extends PartialOrderLaws[A] {
+  implicit def N: PartialNext[A]
 
-//   implicit def P: Previous[A]
+  def nextOrderWeak(a: A): IsEq[Boolean] =
+    N.partialNext(a).map(E.gt(_, a)).getOrElse(true) <-> true
 
-//   def previousLessThan(x: A): IsEq[Boolean] =
-//     E.lt(P.previous(x) , x) <-> true
-// }
+  def nextOrderStrong(a: A, b: A): IsEq[Option[Boolean]] =
+    if (E.lt(a, b)) {
+      N.partialNext(a).map(E.lteqv(_, b)) <-> Option(true)
+    } else {
+      Option(true) <-> Option(true)
+    }
 
-// trait PartialNextLaws[A] extends PartialOrderLaws[A] {
+}
 
-//   implicit def N: PartialNext[A]
+trait PartialNextBoundedLaws[A] extends PartialNextLaws[A] with UpperBoundedLaws[A] {
 
-//   // def maximum: IsEq[Option[A]] =
-//   //   N.partialNext(N.maxBound) <-> None
+  def minBoundTerminal: IsEq[Option[A]] =
+    N.partialNext(UB.maxBound) <-> None
 
-//   def nextWeak(x: A): IsEq[Boolean] =
-//     N.partialNext(x).map(E.gt(_, x)).getOrElse(true) <-> true
+}
 
-//   def nextStrong(a: A, b: A): IsEq[Boolean] =
-//     (if(E.lt(a, b)) N.partialNext(a).map(E.lteqv(_, b)).getOrElse(true) else true) <-> true
+trait PartialPreviousNextLaws[A] extends PartialNextLaws[A] with PartialPreviousLaws[A] with OrderLaws[A] {
 
-// }
+  def partialLeftIdentity(a: A): IsEq[Option[A]] =
+    P.partialPrevious(a)
+      .map(N.partialNext(_) <-> Some(a))
+      .getOrElse(Option.empty <-> Option.empty)
 
+  def partialRightIdentity(a: A): IsEq[Option[A]] =
+    N.partialNext(a)
+      .map(P.partialPrevious(_) <-> Some(a))
+      .getOrElse(Option.empty <-> Option.empty)
 
-// object PartialNextLaws {
-//   def apply[A](implicit ev: PartialNext[A]): PartialNextLaws[A] =
-//     new PartialNextLaws[A] {
-//       def N: PartialNext[A] = ev
-//       def B: UpperBounded[A] = ev
-//       def E: PartialOrder[A] = ev.partialOrder
-//     }
-// }
+}
 
-// trait NextLaws[A] extends PartialOrderLaws[A] {
+trait PartialPreviousBoundedLaws[A] extends PartialPreviousLaws[A] with LowerBoundedLaws[A] {
 
-//   implicit def N: Next[A]
+  def maxBoundTerminal: IsEq[Option[A]] =
+    P.partialPrevious(LB.minBound) <-> None
 
-//   def nextGreaterThan(x: A): IsEq[Boolean] =
-//     E.gt(N.next(x) , x) <-> true
-// }
+}
+
+trait BoundedEnumLaws[A] extends PartialPreviousNextLaws[A] with PartialPreviousBoundedLaws[A] with PartialNextBoundedLaws[A] {
+}
+
+object BoundedEnumLaws {
+  def apply[A](implicit ev: BoundedEnum[A]): BoundedEnumLaws[A] =
+    new BoundedEnumLaws[A] {
+      val LB = ev
+      val E = ev.order
+      val UB = ev
+      val N = ev
+      val P = ev
+    }
+}
