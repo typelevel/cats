@@ -3,7 +3,7 @@ package kernel
 
 import scala.{specialized => sp}
 
-trait PartialNext[@sp A] extends UpperBounded[A] {
+trait PartialNext[@sp A] {
   def partialOrder: PartialOrder[A]
   def partialNext(a: A): Option[A]
 }
@@ -30,8 +30,10 @@ trait UnboundedEnum[@sp A] extends Next[A] with Previous[A] {
 }
 
 trait BoundedEnum[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] with LowerBounded[A] {
+
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
+
 }
 
 trait LowerBoundedEnum[@sp A] extends Next[A] with PartialPrevious[A] with LowerBounded[A] {
