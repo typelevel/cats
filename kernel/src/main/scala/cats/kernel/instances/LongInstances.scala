@@ -18,9 +18,9 @@ trait LongBounded extends BoundedEnum[Long] {
   override def minBound: Long = Long.MinValue
   override def maxBound: Long = Long.MaxValue
   override def partialNext(a: Long): Option[Long] =
-    if(order.neqv(a, maxBound)) Some(a + 1L) else None
+    if (order.neqv(a, maxBound)) Some(a + 1L) else None
   override def partialPrevious(a: Long): Option[Long] =
-    if(order.neqv(a, minBound)) Some(a - 1L) else None
+    if (order.neqv(a, minBound)) Some(a - 1L) else None
 }
 
 class LongOrder extends Order[Long] with Hash[Long] with LongBounded { self =>

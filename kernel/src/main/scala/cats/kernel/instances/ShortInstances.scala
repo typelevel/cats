@@ -2,8 +2,7 @@ package cats.kernel
 package instances
 
 trait ShortInstances {
-  implicit val catsKernelStdOrderForShort
-    : Order[Short] with Hash[Short] with BoundedEnum[Short] = new ShortOrder
+  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] with BoundedEnum[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 
@@ -18,9 +17,9 @@ trait ShortBounded extends BoundedEnum[Short] {
   override def minBound: Short = Short.MinValue
   override def maxBound: Short = Short.MaxValue
   override def partialNext(a: Short): Option[Short] =
-    if(order.eqv(a, maxBound)) None else Some((a + 1).toShort)
+    if (order.eqv(a, maxBound)) None else Some((a + 1).toShort)
   override def partialPrevious(a: Short): Option[Short] =
-    if(order.eqv(a, minBound)) None else Some((a - 1).toShort)
+    if (order.eqv(a, minBound)) None else Some((a - 1).toShort)
 }
 
 class ShortOrder extends Order[Short] with Hash[Short] with ShortBounded { self =>

@@ -9,11 +9,10 @@ trait CharBounded extends BoundedEnum[Char] {
   override def minBound: Char = Char.MinValue
   override def maxBound: Char = Char.MaxValue
   override def partialNext(a: Char): Option[Char] =
-    if(a == maxBound) None else Some((a + 1).toChar)
+    if (a == maxBound) None else Some((a + 1).toChar)
   override def partialPrevious(a: Char): Option[Char] =
     if (a == minBound) None else Some((a - 1).toChar)
 }
-
 
 class CharOrder extends Order[Char] with Hash[Char] with CharBounded { self =>
   def hash(x: Char): Int = x.hashCode()
