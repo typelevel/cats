@@ -394,9 +394,21 @@ class OptionTSuite extends CatsSuite {
     }
   }
 
+  test("toRight and toRightF consistent") {
+    forAll { (o: OptionT[List, Int], s: String) =>
+      o.toRight(s) should ===(o.toRightF(List(s)))
+    }
+  }
+
   test("toLeft consistent with isDefined") {
     forAll { (o: OptionT[List, Int], s: String) =>
       o.toLeft(s).isLeft should ===(o.isDefined)
+    }
+  }
+
+  test("toLeft and toLeftF consistent") {
+    forAll { (o: OptionT[List, Int], s: String) =>
+      o.toLeft(s) should ===(o.toLeftF(List(s)))
     }
   }
 
