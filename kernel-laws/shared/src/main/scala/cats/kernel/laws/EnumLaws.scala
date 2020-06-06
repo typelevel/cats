@@ -69,8 +69,10 @@ trait PartialPreviousBoundedLaws[A] extends PartialPreviousLaws[A] with LowerBou
 
 }
 
-trait BoundedEnumLaws[A] extends PartialPreviousNextLaws[A] with PartialPreviousBoundedLaws[A] with PartialNextBoundedLaws[A] {
-}
+trait BoundedEnumLaws[A]
+    extends PartialPreviousNextLaws[A]
+    with PartialPreviousBoundedLaws[A]
+    with PartialNextBoundedLaws[A] {}
 
 object BoundedEnumLaws {
   def apply[A](implicit ev: BoundedEnum[A]): BoundedEnumLaws[A] =

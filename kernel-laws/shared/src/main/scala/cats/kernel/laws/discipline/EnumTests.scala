@@ -55,6 +55,6 @@ trait BoundedEnumTests[A] extends OrderTests[A] with PartialNextTests[A] with Pa
 }
 
 object BoundedEnumTests {
-  def apply[A : BoundedEnum]: BoundedEnumTests[A] =
+  def apply[A: BoundedEnum]: BoundedEnumTests[A] =
     new BoundedEnumTests[A] { def laws: BoundedEnumLaws[A] = BoundedEnumLaws[A] }
 }

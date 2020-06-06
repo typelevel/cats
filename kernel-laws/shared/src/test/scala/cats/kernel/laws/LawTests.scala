@@ -192,9 +192,6 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Order[String]", OrderTests[String].order)
   checkAll("Order[Symbol]", OrderTests[Symbol].order)
   checkAll("Order[Byte]", OrderTests[Byte].order)
-  checkAll("Order[Char]", OrderTests[Char].order)
-  checkAll("Order[Int]", OrderTests[Int].order)
-  checkAll("Order[Long]", OrderTests[Long].order)
   checkAll("PartialOrder[BitSet]", PartialOrderTests[BitSet].partialOrder)
   checkAll("Order[BigInt]", OrderTests[BigInt].order)
   checkAll("Order[Duration]", OrderTests[Duration].order)
@@ -213,9 +210,6 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
 
   checkAll("LowerBounded[Byte]", LowerBoundedTests[Byte].lowerBounded)
-  checkAll("LowerBounded[Char]", LowerBoundedTests[Char].lowerBounded)
-  checkAll("LowerBounded[Int]", LowerBoundedTests[Int].lowerBounded)
-  checkAll("LowerBounded[Long]", LowerBoundedTests[Long].lowerBounded)
   checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
   checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
   checkAll("LowerBounded[UUID]", LowerBoundedTests[UUID].lowerBounded)
@@ -223,8 +217,6 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("LowerBounded[Symbol]", LowerBoundedTests[Symbol].lowerBounded)
 
   checkAll("UpperBounded[Byte]", UpperBoundedTests[Byte].upperBounded)
-  checkAll("UpperBounded[Char]", UpperBoundedTests[Char].upperBounded)
-  checkAll("UpperBounded[Long]", UpperBoundedTests[Long].upperBounded)
   checkAll("UpperBounded[Duration]", UpperBoundedTests[Duration].upperBounded)
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
@@ -233,6 +225,8 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("BoundedEnum[Boolean]", BoundedEnumTests[Boolean].boundedEnum)
   checkAll("BoundedEnum[Short]", BoundedEnumTests[Short].boundedEnum)
   checkAll("BoundedEnum[Int]", BoundedEnumTests[Int].boundedEnum)
+  checkAll("BoundedEnum[Char]", BoundedEnumTests[Char].boundedEnum)
+  checkAll("BoundedEnum[Long]", BoundedEnumTests[Long].boundedEnum)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))
