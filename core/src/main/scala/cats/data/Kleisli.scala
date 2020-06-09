@@ -3,14 +3,21 @@ package data
 
 import cats.{Contravariant, Id}
 import cats.arrow._
+import cats.evidence.As
 
 /**
  * Represents a function `A => F[B]`.
  */
 final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
 
-  def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
-    Kleisli(a => F.ap(f.run(a))(run(a)))
+  def ap[C, D, AA <: A](fc: Kleisli[F, AA, C])(implicit F: Apply[F], ev: B As (C => D)): Kleisli[F, AA, D] = {
+    Kleisli{
+      (a: AA) => {
+        val what: F[C => D] = run(a).asInstanceOf[F[C => D]]
+        F.ap(what)(fc.run(a))
+      }
+    }
+  }
 
   /**
    * Performs [[local]] and [[map]] simultaneously.
@@ -620,7 +627,7 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
   implicit def F: Apply[F]
 
   override def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
-    fa.ap(f)
+    f.ap(fa)
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => F.product(fb.run(a), fc.run(a)))
