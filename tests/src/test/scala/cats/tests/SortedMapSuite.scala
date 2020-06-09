@@ -39,6 +39,7 @@ class SortedMapSuite extends CatsSuite {
   checkAll("SortedMap[Int, Int]", AlignTests[SortedMap[Int, *]].align[Int, Int, Int, Int])
   checkAll("Align[SortedMap[Int, *]]", SerializableTests.serializable(Align[SortedMap[Int, *]]))
 
+  checkAll("SortedMap[Int, *]", ShortCircuitingTests[SortedMap[Int, *]].foldable[Int])
   checkAll("SortedMap[Int, *]", ShortCircuitingTests[SortedMap[Int, *]].traverseFilter[Int])
 
   test("show isn't empty and is formatted as expected") {

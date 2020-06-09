@@ -25,6 +25,8 @@ class NonEmptyMapSuite extends CatsSuite {
   checkAll("NonEmptyMap[String, Int]", AlignTests[NonEmptyMap[String, *]].align[Int, Int, Int, Int])
   checkAll("Align[NonEmptyMap]", SerializableTests.serializable(Align[NonEmptyMap[String, *]]))
 
+  checkAll("NonEmptyMap[Int, *]", ShortCircuitingTests[NonEmptyMap[Int, *]].nonEmptyTraverse[Int])
+
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
       nem.show.nonEmpty should ===(true)

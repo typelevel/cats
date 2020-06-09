@@ -44,7 +44,9 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("NonEmptyLazyList[Int]", AlignTests[NonEmptyLazyList].align[Int, Int, Int, Int])
   checkAll("Align[NonEmptyLazyList]", SerializableTests.serializable(Align[NonEmptyLazyList]))
 
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].foldable[Int])
   checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].traverse[Int])
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].nonEmptyTraverse[Int])
 
   test("show") {
     Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) should ===("NonEmptyLazyList(1, ?)")

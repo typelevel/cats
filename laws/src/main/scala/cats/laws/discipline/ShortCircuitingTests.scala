@@ -1,7 +1,7 @@
 package cats.laws.discipline
 
 import cats.laws.ShortCircuitingLaws
-import cats.{Eq, Foldable, Traverse, TraverseFilter}
+import cats.{Eq, Foldable, NonEmptyTraverse, Traverse, TraverseFilter}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws
@@ -25,11 +25,17 @@ trait ShortCircuitingTests[F[_]] extends Laws {
       "traverse won't short-circuit if Applicative[G].map2Eval won't" -> forAll(laws.traverseWontShortCircuit[A] _)
     )
 
-  def traverseFilter[A: Arbitrary](implicit
-    TF: TraverseFilter[F],
-    ArbFA: Arbitrary[F[A]],
-    lEq: Eq[Long]
-  ): RuleSet = {
+  def nonEmptyTraverse[A: Arbitrary](implicit TF: NonEmptyTraverse[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet =
+    new DefaultRuleSet(
+      name = "nonEmptyTraverseShortCircuiting",
+      parent = Some(traverse[A]),
+      "nonEmptyTraverse short-circuits if Applicative[G].map2Eval shorts" ->
+        forAll(laws.nonEmptyTraverseShortCircuits[A] _),
+      "nonEmptyTraverse short-circuits if Applicative[G].map2Eval won't" ->
+        forAll(laws.nonEmptyTraverseWontShortCircuit[A] _)
+    )
+
+  def traverseFilter[A: Arbitrary](implicit TF: TraverseFilter[F], ArbFA: Arbitrary[F[A]], lEq: Eq[Long]): RuleSet = {
     implicit val T: Traverse[F] = TF.traverse
     new DefaultRuleSet(
       name = "traverseFilterShortCircuiting",

@@ -45,6 +45,7 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
 
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].foldable[Int])
   checkAll("Chain[Int]", ShortCircuitingTests[Chain].traverseFilter[Int])
 
   {
