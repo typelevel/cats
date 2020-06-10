@@ -94,4 +94,4 @@ trait AllSyntaxBinCompat4
 
 trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
-trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
+trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax with ParallelTraverseFilterSyntax

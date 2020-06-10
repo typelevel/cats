@@ -131,6 +131,74 @@ object Parallel extends ParallelArityFunctions2 {
   def apply[M[_]](implicit P: Parallel[M], D: DummyImplicit): Parallel.Aux[M, P.F] = P
 
   /**
+   * Like `TraverseFilter#traverseFilter`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[Int] = List(1, 2, 3, 4)
+   * scala> def validate(n: Int): EitherNec[String, Option[Int]] =
+   *      | if (n > 100) Left(NonEmptyChain.one("Too large"))
+   *      | else if (n % 3 =!= 0) Right(Some(n))
+   *      | else Right(None)
+   * scala> list.parTraverseFilter(validate)
+   * res0: EitherNec[String, List[Int]] = Right(List(1, 2, 4))
+   * }}}
+   */
+  def parTraverseFilter[T[_], M[_], A, B](
+    ta: T[A]
+  )(f: A => M[Option[B]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[B]] = {
+    val ftb: P.F[T[B]] = T.traverseFilter[P.F, A, B](ta)(a => P.parallel(f(a)))(P.applicative)
+
+    P.sequential(ftb)
+  }
+
+  /**
+   * Like `TraverseFilter#sequenceFilter`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[EitherNec[String, Option[Int]]] = List(Left(NonEmptyChain.one("Error")), Left(NonEmptyChain.one("Warning!")))
+   * scala> list.parSequenceFilter
+   * res0: EitherNec[String, List[Int]] = Left(Chain(Error, Warning!))
+   * }}}
+   */
+  def parSequenceFilter[T[_], M[_], A](ta: T[M[Option[A]]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
+    val fta: P.F[T[A]] = T.traverseFilter[P.F, M[Option[A]], A](ta)(P.parallel.apply(_))(P.applicative)
+
+    P.sequential(fta)
+  }
+
+  /**
+   * Like `TraverseFilter#filterA`, but uses the applicative instance
+   * corresponding to the Parallel instance instead.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.data._
+   * scala> val list: List[Int] = List(1, 2, 3, 4)
+   * scala> def validate(n: Int): EitherNec[String, Boolean] =
+   *      | if (n > 100) Left(NonEmptyChain.one("Too large"))
+   *      | else Right(n % 3 =!= 0)
+   * scala> list.parFilterA(validate)
+   * res0: EitherNec[String, List[Int]] = Right(List(1, 2, 4))
+   * }}}
+   */
+  def parFilterA[T[_], M[_], A](
+    ta: T[A]
+  )(f: A => M[Boolean])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
+    val fta: P.F[T[A]] = T.filterA(ta)(a => P.parallel(f(a)))(P.applicative)
+
+    P.sequential(fta)
+  }
+
+  /**
    * Like `Traverse[A].sequence`, but uses the applicative instance
    * corresponding to the Parallel instance instead.
    */
