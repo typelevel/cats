@@ -68,11 +68,12 @@ jobs:
 
     - &bincompat
       stage: test
-      name: Binary compatibility
+      name: Binary compatibility 2.12
       env: TEST="binary compatibility"
       script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
       scala: *scala_version_212
     - <<: *bincompat
+      name: Binary compatibility 2.13
       scala: *scala_version_213
 
     - stage: styling
