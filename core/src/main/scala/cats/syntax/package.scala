@@ -6,7 +6,7 @@ package object syntax {
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
-  object apply extends ApplySyntax with ApplySyntaxBinCompat0 with ParallelApplySyntax
+  object apply extends ApplySyntax with ApplySyntaxBinCompat0
   object arrow extends ArrowSyntax
   object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
