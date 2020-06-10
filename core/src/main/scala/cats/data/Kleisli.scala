@@ -10,12 +10,14 @@ import cats.evidence.As
  */
 final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
 
-  def ap[C, D, AA <: A](fc: Kleisli[F, AA, C])(implicit F: Apply[F], ev: B As (C => D)): Kleisli[F, AA, D] = {
-    Kleisli{
-      (a: AA) => {
-        val what: F[C => D] = run(a).asInstanceOf[F[C => D]]
-        F.ap(what)(fc.run(a))
-      }
+  private[data] def ap[C, AA <: A](f: Kleisli[F, AA, B => C])(implicit F: Apply[F]): Kleisli[F, AA, C] =
+    Kleisli(a => F.ap(f.run(a))(run(a)))
+
+  def ap[C, D, AA <: A](f: Kleisli[F, AA, C])(implicit F: Apply[F], ev: B As (C => D)): Kleisli[F, AA, D] = {
+    Kleisli{ a =>
+      val fb: F[C => D] = F.map(run(a))(ev.coerce)
+      val fc: F[C] = f.run(a)
+      F.ap(fb)(fc)
     }
   }
 
