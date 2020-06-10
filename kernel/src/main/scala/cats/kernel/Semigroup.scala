@@ -267,7 +267,10 @@ private[kernel] trait SemigroupInstances {
     cats.kernel.instances.function.catsKernelSemigroupForFunction1[A, B]
   implicit def catsKernelSemigroupForEither[A, B: Semigroup]: Semigroup[Either[A, B]] =
     cats.kernel.instances.either.catsDataSemigroupForEither[A, B]
-  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] = new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
+    new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    cats.kernel.instances.option.catsKernelStdCommutativeMonoidForOption[A]
 }
 
 private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[Try[A]] {

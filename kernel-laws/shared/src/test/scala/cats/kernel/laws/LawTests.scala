@@ -1,7 +1,6 @@
 package cats.kernel
 package laws
 
-import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
