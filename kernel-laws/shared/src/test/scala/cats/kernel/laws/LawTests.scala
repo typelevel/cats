@@ -147,6 +147,15 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
 
   import KernelCheck._
 
+  test("The instances in scope are not ambiguous") {
+    implicitly[Monoid[Option[String]]]
+    implicitly[Semigroup[Option[String]]]
+    implicitly[Monoid[Option[Int]]]
+    implicitly[Semigroup[Option[Int]]]
+    implicitly[CommutativeSemigroup[Option[Int]]]
+    implicitly[CommutativeMonoid[Option[Int]]]
+  }
+
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
