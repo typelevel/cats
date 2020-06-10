@@ -14,7 +14,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     Kleisli(a => F.ap(f.run(a))(run(a)))
 
   def ap[C, D, AA <: A](f: Kleisli[F, AA, C])(implicit F: Apply[F], ev: B As (C => D)): Kleisli[F, AA, D] = {
-    Kleisli{ a =>
+    Kleisli { a =>
       val fb: F[C => D] = F.map(run(a))(ev.coerce)
       val fc: F[C] = f.run(a)
       F.ap(fb)(fc)
