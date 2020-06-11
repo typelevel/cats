@@ -44,10 +44,10 @@ import scala.annotation.implicitNotFound
 }
 
 object Profunctor {
-  implicit val catsStrongForFunction1: Strong[Function1] =
+  implicit def catsStrongForFunction1: Strong[Function1] =
     cats.instances.function.catsStdInstancesForFunction1
 
-  implicit val catsStrongForPartialFunction: Strong[PartialFunction] =
+  implicit def catsStrongForPartialFunction: Strong[PartialFunction] =
     cats.instances.partialFunction.catsStdInstancesForPartialFunction
 
   /****************************************************************************/

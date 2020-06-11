@@ -41,11 +41,11 @@ import scala.annotation.implicitNotFound
 }
 
 object Compose {
-  implicit val catsInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
+  implicit def catsInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
     cats.instances.function.catsStdInstancesForFunction1
-  implicit val catsComposeForMap: Compose[Map] = cats.instances.map.catsStdComposeForMap
+  implicit def catsComposeForMap: Compose[Map] = cats.instances.map.catsStdComposeForMap
 
-  implicit val catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+  implicit def catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
     cats.instances.partialFunction.catsStdInstancesForPartialFunction
 
   /****************************************************************************/
