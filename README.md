@@ -376,6 +376,7 @@ The current maintainers (people who can merge pull requests) are:
  * [peterneyens](https://github.com/peterneyens) Peter Neyens
  * [tpolecat](https://github.com/tpolecat) Rob Norris
  * [non](https://github.com/non) Erik Osheim
+ * [barambani](https://github.com/barambani) Filippo Mariotti
  * [mpilquist](https://github.com/mpilquist) Michael Pilquist
  * [milessabin](https://github.com/milessabin) Miles Sabin
  * [djspiewak](https://github.com/djspiewak) Daniel Spiewak
