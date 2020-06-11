@@ -179,8 +179,6 @@ object Semigroup
 
   implicit def catsKernelMonoidForString: Monoid[String] = cats.kernel.instances.string.catsKernelStdMonoidForString
 
-  implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
-    cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
   implicit def catsKernelMonoidForList[A]: Monoid[List[A]] = cats.kernel.instances.list.catsKernelStdMonoidForList[A]
   implicit def catsKernelMonoidForVector[A]: Monoid[Vector[A]] =
     cats.kernel.instances.vector.catsKernelStdMonoidForVector[A]
@@ -230,6 +228,8 @@ private[kernel] trait CommutativeMonoidInstances extends MonoidInstances {
     cats.kernel.instances.function.catsKernelCommutativeMonoidForFunction0[A]
   implicit def catsKernelCommutativeMonoidForFunction1[A, B: CommutativeMonoid]: CommutativeMonoid[A => B] =
     cats.kernel.instances.function.catsKernelCommutativeMonoidForFunction1[A, B]
+  implicit def catsKernelCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    cats.kernel.instances.option.catsKernelStdCommutativeMonoidForOption[A]
 }
 
 private[kernel] trait MonoidInstances extends BandInstances {
@@ -243,7 +243,10 @@ private[kernel] trait MonoidInstances extends BandInstances {
     cats.kernel.instances.sortedMap.catsKernelStdMonoidForSortedMap[K, V]
   implicit def catsKernelMonoidForEither[A, B: Monoid]: Monoid[Either[A, B]] =
     cats.kernel.instances.either.catsDataMonoidForEither[A, B]
-  implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] = new TryMonoid[A](Monoid[A])
+  implicit def catsKernelMonoidForTry[A: Monoid]: Monoid[Try[A]] =
+    new TryMonoid[A](Monoid[A])
+  implicit def catsKernelMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
+    cats.kernel.instances.option.catsKernelStdMonoidForOption[A]
 }
 
 private[kernel] trait BandInstances extends CommutativeSemigroupInstances {
@@ -267,7 +270,8 @@ private[kernel] trait SemigroupInstances {
     cats.kernel.instances.function.catsKernelSemigroupForFunction1[A, B]
   implicit def catsKernelSemigroupForEither[A, B: Semigroup]: Semigroup[Either[A, B]] =
     cats.kernel.instances.either.catsDataSemigroupForEither[A, B]
-  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] = new TrySemigroup[A](Semigroup[A])
+  implicit def catsKernelSemigroupForTry[A: Semigroup]: Semigroup[Try[A]] =
+    new TrySemigroup[A](Semigroup[A])
 }
 
 private class TryMonoid[A](A: Monoid[A]) extends TrySemigroup[A](A) with Monoid[Try[A]] {

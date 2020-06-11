@@ -1,7 +1,6 @@
 package cats.kernel
 package laws
 
-import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
@@ -147,6 +146,15 @@ class TestsConfig extends Checkers {
 class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline with ScalaVersionSpecificTests {
 
   import KernelCheck._
+
+  test("The instances in scope are not ambiguous") {
+    implicitly[Monoid[Option[String]]]
+    implicitly[Semigroup[Option[String]]]
+    implicitly[Monoid[Option[Int]]]
+    implicitly[Semigroup[Option[Int]]]
+    implicitly[CommutativeSemigroup[Option[Int]]]
+    implicitly[CommutativeMonoid[Option[Int]]]
+  }
 
   {
     // needed for Cogen[Map[...]]
