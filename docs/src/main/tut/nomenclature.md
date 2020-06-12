@@ -5,12 +5,11 @@ section: "Glossary"
 position: 60
 ---
 
-> - What is the difference between `unit` and `void`?
-> - To discard the first value and keep only the first effect, is it `<*` or `*>`?
-> - How do I make a computation `F[A]` fail by checking a condition on the value?
+This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like these:
 
-
-This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like the ones above.
+- What is the difference between `unit` and `void`?
+- To discard the first value and keep only the first effect, is it `<*` or `*>`?
+- How do I make a computation `F[A]` fail by checking a condition on the value?
 
 The signatures and type-classes have been simplified, are described [below](#simplifications). If you want a printable version, you can also check out this [cats-cheatsheet](https://arosien.github.io/cats-cheatsheets/typeclasses.pdf).
 
