@@ -17,4 +17,3 @@ object implicits
     with instances.AllInstancesBinCompat4
     with instances.AllInstancesBinCompat5
     with instances.AllInstancesBinCompat6
-    with instances.AllInstancesBinCompat7

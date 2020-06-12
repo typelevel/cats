@@ -3,7 +3,13 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
 
 trait PartialFunctionInstances {
 
-  implicit val catsStdInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+  implicit def catsStdInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+    PartialFunctionInstances.instance
+}
+
+private object PartialFunctionInstances {
+
+  private val instance: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
     new ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] {
 
       /**
@@ -34,10 +40,8 @@ trait PartialFunctionInstances {
        * Example:
        * {{{
        * scala> import cats.arrow.Arrow
-       * scala> import cats.arrow.Strong
-       * scala> import cats.implicits._
        * scala> val f: PartialFunction[Int, Int] = Arrow[PartialFunction].lift(_ * 2)
-       * scala> val fab = Strong[PartialFunction].first[Int,Int,Int](f)
+       * scala> val fab = Arrow[PartialFunction].first[Int,Int,Int](f)
        * scala> fab((2,3))
        * res0: (Int, Int) = (4,3)
        * }}}

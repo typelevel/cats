@@ -10,7 +10,6 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat4
     with AllInstancesBinCompat5
     with AllInstancesBinCompat6
-    with AllInstancesBinCompat7
 
 trait AllInstances
     extends AnyValInstances
@@ -46,6 +45,7 @@ trait AllInstances
     with TupleInstances
     with UUIDInstances
     with VectorInstances
+    with PartialFunctionInstances
 
 trait AllInstancesBinCompat0 extends FunctionInstancesBinCompat0 with Tuple2InstancesBinCompat0
 
@@ -66,5 +66,3 @@ trait AllInstancesBinCompat4 extends SortedMapInstancesBinCompat1 with MapInstan
 trait AllInstancesBinCompat5 extends SortedSetInstancesBinCompat0
 
 trait AllInstancesBinCompat6 extends SortedSetInstancesBinCompat1 with SortedMapInstancesBinCompat2
-
-trait AllInstancesBinCompat7 extends PartialFunctionInstances
