@@ -56,11 +56,10 @@ jobs:
 
 
     - stage: test
-      name: Make Microsite 2.12
+      name: Make Microsite
       env: TEST="docs"
       install: gem install jekyll -v 4.0.0
-      script: sbt ++$TRAVIS_SCALA_VERSION! docs/makeMicrosite
-      scala: *scala_version_212
+      script: sbt docs/makeMicrosite
 
     - stage: test
       name: Scalafix tests
