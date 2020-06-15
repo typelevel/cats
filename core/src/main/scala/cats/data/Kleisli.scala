@@ -550,6 +550,9 @@ sealed private[data] trait KleisliSemigroupK[F[_], A] extends SemigroupK[Kleisli
 
   override def combineK[B](x: Kleisli[F, A, B], y: Kleisli[F, A, B]): Kleisli[F, A, B] =
     Kleisli(a => F.combineK(x.run(a), y.run(a)))
+
+  override def combineKEval[B](x: Kleisli[F, A, B], y: Eval[Kleisli[F, A, B]]): Eval[Kleisli[F, A, B]] =
+    Eval.now(Kleisli(a => F.combineKEval(x.run(a), y.map(_.run(a))).value))
 }
 
 sealed private[data] trait KleisliMonoidK[F[_], A] extends MonoidK[Kleisli[F, A, *]] with KleisliSemigroupK[F, A] {
@@ -630,6 +633,11 @@ private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with K
 
   override def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =
     f.ap(fa)
+
+  override def map2Eval[B, C, Z](fa: Kleisli[F, A, B], fb: Eval[Kleisli[F, A, C]])(
+    f: (B, C) => Z
+  ): Eval[Kleisli[F, A, Z]] =
+    Eval.now(Kleisli(a => F.map2Eval(fa.run(a), fb.map(_.run(a)))(f).value))
 
   override def product[B, C](fb: Kleisli[F, A, B], fc: Kleisli[F, A, C]): Kleisli[F, A, (B, C)] =
     Kleisli(a => F.product(fb.run(a), fc.run(a)))

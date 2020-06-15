@@ -9,9 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-import cats.syntax.traverse._
+import cats.implicits._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 
@@ -319,6 +317,24 @@ class KleisliSuite extends CatsSuite {
       unit.flatMap(_ => acc)
     }
     result.run(()).value
+  }
+
+  test("map2Eval is lazy") {
+    var count = 0
+    val l = Kleisli { (n: Int) => count += 1; Option.empty[String] }
+
+    l.map2Eval(Eval.now(l))(_ + _).value.run(0)
+
+    count shouldBe 1
+  }
+
+  test("combineKEval is lazy") {
+    var count = 0
+    val l = Kleisli { (n: Int) => count += 1; Option(n.toString) }
+
+    l.combineKEval(Eval.now(l)).value.run(0)
+
+    count shouldBe 1
   }
 
   test("auto contravariant") {
