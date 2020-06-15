@@ -11,8 +11,8 @@ jdk:
   - openjdk8
 
 
-scala_version_212: &scala_version_212 2.12.10
-scala_version_213: &scala_version_213 2.13.1
+scala_version_212: &scala_version_212 2.12.11
+scala_version_213: &scala_version_213 2.13.2
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
@@ -56,10 +56,10 @@ jobs:
 
 
     - stage: test
-      name: Make Microsite
+      name: Make Microsite on 2.12.10
       env: TEST="docs"
       install: gem install jekyll -v 4.0.0
-      script: sbt docs/makeMicrosite
+      script: sbt ++2.12.10! docs/makeMicrosite
 
     - stage: test
       name: Scalafix tests
@@ -115,7 +115,7 @@ cache:
     - $HOME/.m2
     - $HOME/.ivy2/cache
     - $HOME/.sbt
-    - $HOME/.coursier
+    - $HOME/.cache/coursier
     # Pants cache
     - $HOME/.cache
 
