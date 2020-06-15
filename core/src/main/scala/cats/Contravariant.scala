@@ -62,7 +62,9 @@ object Contravariant {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllContravariantOps[F[_], A](target: F[A])(implicit tc: Contravariant[F]): AllOps[F, A] {
       type TypeClassType = Contravariant[F]

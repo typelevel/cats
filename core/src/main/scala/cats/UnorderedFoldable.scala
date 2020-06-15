@@ -147,7 +147,9 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToUnorderedFoldableOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): AllOps[F, A] {
       type TypeClassType = UnorderedFoldable[F]

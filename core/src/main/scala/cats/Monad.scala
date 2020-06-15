@@ -153,7 +153,9 @@ object Monad {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToMonadOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllMonadOps[F[_], A](target: F[A])(implicit tc: Monad[F]): AllOps[F, A] {
       type TypeClassType = Monad[F]

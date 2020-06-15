@@ -161,7 +161,9 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupKOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
       type TypeClassType = SemigroupK[F]

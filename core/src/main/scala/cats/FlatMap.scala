@@ -235,7 +235,9 @@ object FlatMap {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFlatMapOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): AllOps[F, A] {
       type TypeClassType = FlatMap[F]

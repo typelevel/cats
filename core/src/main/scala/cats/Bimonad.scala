@@ -35,7 +35,9 @@ object Bimonad {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBimonadOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllBimonadOps[F[_], A](target: F[A])(implicit tc: Bimonad[F]): AllOps[F, A] {
       type TypeClassType = Bimonad[F]

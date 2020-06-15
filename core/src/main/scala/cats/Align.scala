@@ -162,7 +162,9 @@ object Align extends ScalaVersionSpecificAlignInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlignOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
       type TypeClassType = Align[F]

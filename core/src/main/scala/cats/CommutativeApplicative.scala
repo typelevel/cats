@@ -55,7 +55,9 @@ object CommutativeApplicative {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeApplicativeOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllCommutativeApplicativeOps[F[_], A](
       target: F[A]

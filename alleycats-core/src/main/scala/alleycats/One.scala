@@ -47,7 +47,9 @@ object One {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToOneOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllOneOps[A](target: A)(implicit tc: One[A]): AllOps[A] {
       type TypeClassType = One[A]

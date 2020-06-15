@@ -50,7 +50,9 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantSemigroupalOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllContravariantSemigroupalOps[F[_], A](
       target: F[A]

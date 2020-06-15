@@ -40,7 +40,9 @@ object ConsK {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToConsKOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object ops {
     implicit def toAllConsKOps[F[_], A](target: F[A])(implicit tc: ConsK[F]): AllOps[F, A] {
       type TypeClassType = ConsK[F]
