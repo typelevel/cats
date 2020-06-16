@@ -60,6 +60,7 @@ trait AllSyntax
     with VectorSyntax
     with WriterSyntax
     with ParallelFoldMapASyntax
+    with ParallelTraverseFilterSyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
@@ -94,4 +95,4 @@ trait AllSyntaxBinCompat4
 
 trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
 
-trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax with ParallelTraverseFilterSyntax
+trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
