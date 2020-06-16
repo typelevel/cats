@@ -367,10 +367,20 @@ object SyntaxSuite {
     val fa = a.pure[F]
   }
 
-  def testFlatMap[F[_]: FlatMap, A, B]: Unit = {
+  def testFlatMap[F[_]: FlatMap, A, B, C, D]: Unit = {
     val a = mock[A]
     val returnValue = mock[F[Either[A, B]]]
     val done = a.tailRecM[F, B](a => returnValue)
+
+    val x = mock[Function[A, F[B]]]
+    val y = mock[Function[B, F[C]]]
+    val z = mock[Function[C, F[D]]]
+
+    val b = x.andThenF(y).andThenF(z)
+    val b2 = x >=> y >=> z
+
+    val c = z.composeF(y).composeF(x)
+    val c2 = z <=< y <=< x
   }
 
   def testApplicativeError[F[_, _], E, A, B](implicit F: ApplicativeError[F[E, *], E]): Unit = {
