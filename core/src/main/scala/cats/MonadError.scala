@@ -88,17 +88,23 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    * scala> import cats.implicits._
    * scala> import scala.util.{Try, Success}
    *
-   * scala> def logErrors(result: Either[Throwable, Int]): Try[Unit] =
+   * scala> def logErrors(result: Either[Throwable, Int]): Try[Unit] = Try {
+   *   result match {
+   *     case Right(value) => println(s"Success: $value")
+   *     case Left(_) => println("Failed")
+   *   }
+   * }
    *
-   * scala> val a: Try[Either[Throwable, Int]] = Success(Left(new java.lang.Exception))
+   * scala> val a: Try[Int] = Success(new java.lang.Exception)
    * scala> a.attemptTap(logErrors)
+   * Failed
    * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
    *
-   * scala> val b: Try[Either[Throwable, Int]] = Success(Right(1))
+   * scala> val b: Try[Int] = Success(1)
    * scala> b.attemptTap(logErrors)
+   * Success: 1
    * res1: scala.util.Try[Int] = Success(1)
    * }}}
-   *
    */
   def attemptTap[A, B](fa: F[A])(f: Either[E, A] => F[B]): F[A] =
     rethrow(flatTap(attempt(fa))(f))
