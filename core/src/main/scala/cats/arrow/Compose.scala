@@ -45,6 +45,9 @@ object Compose {
     cats.instances.function.catsStdInstancesForFunction1
   implicit def catsComposeForMap: Compose[Map] = cats.instances.map.catsStdComposeForMap
 
+  implicit def catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
+    cats.instances.partialFunction.catsStdInstancesForPartialFunction
+
   /****************************************************************************/
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
   /****************************************************************************/

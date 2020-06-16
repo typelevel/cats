@@ -1,12 +1,14 @@
 package cats.kernel
 
 import java.util.UUID
+
+import cats.kernel.compat.scalaVersionSpecific._
+
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.math.Equiv
-import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
-import compat.scalaVersionSpecific._
+import scala.{specialized => sp}
 
 /**
  * A type class used to determine equality between 2 instances of the same
