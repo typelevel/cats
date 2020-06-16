@@ -420,16 +420,14 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
-      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] =
-        Foldable[Chain]
-          .reduceRightToOption[A, G[Chain[B]]](fa.tail)(a => Apply[G].map(f(a))(Chain.one)) { (a, lglb) =>
-            Apply[G].map2Eval(f(a), lglb)(_ +: _)
+      def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
+        def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
+          tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) {
+            case (h, t) => Apply[G].map2Eval(f(head), Eval.defer(loop(h, t)))((b, acc) => b +: acc)
           }
-          .map {
-            case None        => Apply[G].map(f(fa.head))(NonEmptyChain.one)
-            case Some(gtail) => Apply[G].map2(f(fa.head), gtail)((h, t) => create(Chain.one(h) ++ t))
-          }
-          .value
+
+        loop(fa.head, fa.tail).value
+      }
 
       override def size[A](fa: NonEmptyChain[A]): Long = fa.length
 

@@ -2,12 +2,14 @@ package cats
 
 import simulacrum.{noop, typeclass}
 import cats.data.Ior
+import scala.annotation.implicitNotFound
 
 /**
  * Weaker version of Applicative[F]; has apply but not pure.
  *
  * Must obey the laws defined in cats.laws.ApplyLaws.
  */
+@implicitNotFound("Could not find an instance of Apply for ${F}")
 @typeclass(excludeParents = List("ApplyArityFunctions"))
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 
@@ -259,10 +261,69 @@ object Apply {
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)
 
-  def align[F[_]: Apply]: Align[F] = new Align[F] {
-    def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
-    def functor: Functor[F] = Apply[F]
+  def align[F[_]: Apply]: Align[F] =
+    new Align[F] {
+      def align[A, B](fa: F[A], fb: F[B]): F[Ior[A, B]] = Apply[F].map2(fa, fb)(Ior.both)
+      def functor: Functor[F] = Apply[F]
+    }
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[Apply]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Apply[F]): Apply[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Apply[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def ap[B, C](fa: F[B])(implicit ev$1: A <:< (B => C)): F[C] =
+      typeClassInstance.ap[B, C](self.asInstanceOf[F[B => C]])(fa)
+    def productR[B](fb: F[B]): F[B] = typeClassInstance.productR[A, B](self)(fb)
+    def productL[B](fb: F[B]): F[A] = typeClassInstance.productL[A, B](self)(fb)
+    @inline final def <*>[B, C](fa: F[B])(implicit ev$1: A <:< (B => C)): F[C] =
+      typeClassInstance.<*>[B, C](self.asInstanceOf[F[B => C]])(fa)
+    @inline final def *>[B](fb: F[B]): F[B] = typeClassInstance.*>[A, B](self)(fb)
+    @inline final def <*[B](fb: F[B]): F[A] = typeClassInstance.<*[A, B](self)(fb)
+    def ap2[B, C, D](fa: F[B], fb: F[C])(implicit ev$1: A <:< ((B, C) => D)): F[D] =
+      typeClassInstance.ap2[B, C, D](self.asInstanceOf[F[(B, C) => D]])(fa, fb)
+    def map2[B, C](fb: F[B])(f: (A, B) => C): F[C] = typeClassInstance.map2[A, B, C](self, fb)(f)
+    def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C): Eval[F[C]] = typeClassInstance.map2Eval[A, B, C](self, fb)(f)
   }
+  trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] with InvariantSemigroupal.AllOps[F, A] {
+    type TypeClassType <: Apply[F]
+  }
+  trait ToApplyOps extends Serializable {
+    implicit def toApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): Ops[F, A] {
+      type TypeClassType = Apply[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Apply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToApplyOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): AllOps[F, A] {
+      type TypeClassType = Apply[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Apply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }
 
 private[cats] class ApplySemigroup[F[_], A](f: Apply[F], sg: Semigroup[A]) extends Semigroup[F[A]] {

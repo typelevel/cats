@@ -4,6 +4,7 @@ import simulacrum.typeclass
 
 import cats.data.Ior
 import scala.collection.immutable.SortedMap
+import scala.annotation.implicitNotFound
 
 /**
  * `Align` supports zipping together structures with different shapes,
@@ -11,7 +12,8 @@ import scala.collection.immutable.SortedMap
  *
  * Must obey the laws in cats.laws.AlignLaws
  */
-@typeclass trait Align[F[_]] {
+@implicitNotFound("Could not find an instance of Align for ${F}")
+@typeclass trait Align[F[_]] extends Serializable {
 
   def functor: Functor[F]
 
@@ -102,9 +104,10 @@ import scala.collection.immutable.SortedMap
 }
 
 object Align extends ScalaVersionSpecificAlignInstances {
-  def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] = new Semigroup[F[A]] {
-    def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
-  }
+  def semigroup[F[_], A](implicit F: Align[F], A: Semigroup[A]): Semigroup[F[A]] =
+    new Semigroup[F[A]] {
+      def combine(x: F[A], y: F[A]): F[A] = Align[F].alignCombine(x, y)
+    }
 
   implicit def catsAlignForList: Align[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
@@ -126,4 +129,55 @@ object Align extends ScalaVersionSpecificAlignInstances {
           else Ior.right(iterB.next())
         )
     }
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[Align]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Align[F]): Align[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Align[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def align[B](fb: F[B]): F[Ior[A, B]] = typeClassInstance.align[A, B](self, fb)
+    def alignWith[B, C](fb: F[B])(f: Ior[A, B] => C): F[C] = typeClassInstance.alignWith[A, B, C](self, fb)(f)
+    def alignCombine(fa2: F[A])(implicit ev$1: Semigroup[A]): F[A] = typeClassInstance.alignCombine[A](self, fa2)
+    def padZip[B](fb: F[B]): F[(Option[A], Option[B])] = typeClassInstance.padZip[A, B](self, fb)
+    def padZipWith[B, C](fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
+      typeClassInstance.padZipWith[A, B, C](self, fb)(f)
+    def zipAll[B](fb: F[B], a: A, b: B): F[(A, B)] = typeClassInstance.zipAll[A, B](self, fb, a, b)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToAlignOps extends Serializable {
+    implicit def toAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): Ops[F, A] {
+      type TypeClassType = Align[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToAlignOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
+      type TypeClassType = Align[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }

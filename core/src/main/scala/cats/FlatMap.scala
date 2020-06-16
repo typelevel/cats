@@ -2,6 +2,7 @@ package cats
 
 import simulacrum.typeclass
 import simulacrum.noop
+import scala.annotation.implicitNotFound
 
 /**
  * FlatMap type class gives us flatMap, which allows us to have a value
@@ -18,6 +19,7 @@ import simulacrum.noop
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
+@implicitNotFound("Could not find an instance of FlatMap for ${F}")
 @typeclass trait FlatMap[F[_]] extends Apply[F] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
@@ -117,6 +119,7 @@ import simulacrum.noop
   /**
    * `if` lifted into monad.
    */
+  @noop
   def ifM[B](fa: F[Boolean])(ifTrue: => F[B], ifFalse: => F[B]): F[B] =
     flatMap(fa)(if (_) ifTrue else ifFalse)
 
@@ -195,4 +198,59 @@ import simulacrum.noop
     }
     tailRecM(())(_ => feither)
   }
+}
+
+object FlatMap {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[FlatMap]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: FlatMap[F]): FlatMap[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: FlatMap[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def flatMap[B](f: A => F[B]): F[B] = typeClassInstance.flatMap[A, B](self)(f)
+    def flatten[B](implicit ev$1: A <:< F[B]): F[B] = typeClassInstance.flatten[B](self.asInstanceOf[F[F[B]]])
+    def productREval[B](fb: Eval[F[B]]): F[B] = typeClassInstance.productREval[A, B](self)(fb)
+    def productLEval[B](fb: Eval[F[B]]): F[A] = typeClassInstance.productLEval[A, B](self)(fb)
+    def mproduct[B](f: A => F[B]): F[(A, B)] = typeClassInstance.mproduct[A, B](self)(f)
+    def flatTap[B](f: A => F[B]): F[A] = typeClassInstance.flatTap[A, B](self)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Apply.AllOps[F, A] {
+    type TypeClassType <: FlatMap[F]
+  }
+  trait ToFlatMapOps extends Serializable {
+    implicit def toFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): Ops[F, A] {
+      type TypeClassType = FlatMap[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = FlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToFlatMapOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFlatMapOps[F[_], A](target: F[A])(implicit tc: FlatMap[F]): AllOps[F, A] {
+      type TypeClassType = FlatMap[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FlatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }

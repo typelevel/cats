@@ -5,12 +5,11 @@ section: "Glossary"
 position: 60
 ---
 
-> - What is the difference between `unit` and `void`?
-> - To discard the first value and keep only the first effect, is it `<*` or `*>`?
-> - How do I make a computation `F[A]` fail by checking a condition on the value?
+This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like these:
 
-
-This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like the ones above.
+- What is the difference between `unit` and `void`?
+- To discard the first value and keep only the first effect, is it `<*` or `*>`?
+- How do I make a computation `F[A]` fail by checking a condition on the value?
 
 The signatures and type-classes have been simplified, are described [below](#simplifications). If you want a printable version, you can also check out this [cats-cheatsheet](https://arosien.github.io/cats-cheatsheets/typeclasses.pdf).
 
@@ -26,6 +25,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | `F[A] => B => F[B]`  | `as`   |
 | `F[A] => (A => B) => F[B]` | `map`   |
 | `F[A] => (A => B) => F[(A,B)]` | `fproduct`   |
+| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft`   |
 | `F[A] => B => F[(B, A)]`  | `tupleLeft`  |
 | `F[A] => B => F[(A, B)]`  | `tupleRight` |
 | `(A => B) => (F[A] => F[B])` | `lift`   |
@@ -197,6 +197,7 @@ Here, we use `ET` to abbreviate `EitherT`; and we use `A` and `B` as type variab
 | `Either[A, B] => ET[F, A, B]` | `fromEither` | `F: Applicative` |
 | `Option[B] => A => ET[F, A, B]` | `fromOption` | `F: Applicative` |
 | `F[Option[B]] => A => ET[F, A, B]` | `fromOptionF` | `F: Functor` |
+| `F[Option[B]] => F[A] => ET[F, A, B]` | `fromOptionM` | `F: Monad` |
 | `Boolean => B => A => ET[F, A, B]` | `cond`   | `F: Applicative` |
 | `ET[F, A, B] => (A => C) => (B => C) => F[C]` | `fold` | `F: Functor` |
 | `ET[F, A, B] => ET[F, B, A]` | `swap` | `F: Functor` |

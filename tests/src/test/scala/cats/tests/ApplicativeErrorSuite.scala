@@ -9,7 +9,7 @@ import cats.syntax.option._
 
 class ApplicativeErrorSuite extends CatsSuite {
   val failed: Option[Int] =
-    (()).raiseError[Option, Int]
+    ().raiseError[Option, Int]
 
   test("raiseError syntax creates an Option with the correct value") {
     failed should ===(None: Option[Int])
@@ -79,8 +79,8 @@ class ApplicativeErrorSuite extends CatsSuite {
   {
     final case class OptionWrapper[A](option: Option[A])
 
-    implicit def mayBeApplicativeError[E](
-      implicit ev: ApplicativeError[Option, E]
+    implicit def mayBeApplicativeError[E](implicit
+      ev: ApplicativeError[Option, E]
     ): ApplicativeError[OptionWrapper, E] =
       new ApplicativeError[OptionWrapper, E] {
 

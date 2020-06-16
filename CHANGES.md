@@ -1,3 +1,52 @@
+## Version 2.2.0-M2
+
+_2020 May 25_
+
+### 2 bug fixes
+
+* [#3394](https://github.com/typelevel/cats/pull/3394) WriterTInstances: insufficient prioritization  by @barambani
+* [#3380](https://github.com/typelevel/cats/pull/3380) First two missing instances  by @travisbrown
+
+
+### 7 API / feature enhancements
+
+* [#3423](https://github.com/typelevel/cats/pull/3423) Add toNev to NonEmptyList variants  by @saraiva132
+* [#3421](https://github.com/typelevel/cats/pull/3421) Functor - fproductLeft  by @pk044
+* [#3415](https://github.com/typelevel/cats/pull/3415) Add partialComparison syntax  by @joroKr21
+* [#3412](https://github.com/typelevel/cats/pull/3412) Update sbt-microsites to 1.2.1  by @scala-steward
+* [#3408](https://github.com/typelevel/cats/pull/3408) Tweak EitherT.pure and rightT to avoid a map call  by @joroKr21
+* [#3403](https://github.com/typelevel/cats/pull/3403) Add Cont alias to ContT  by @RaasAhsan
+* [#3335](https://github.com/typelevel/cats/pull/3335) Add foldF, cataF and emptyflatTap to OptionT  by @ybasket
+
+
+### 3 documentation improvements
+
+* [#3419](https://github.com/typelevel/cats/pull/3419) fix scalaz source url. s/As.scala/Liskov.scala/  by @xuwei-k
+* [#3393](https://github.com/typelevel/cats/pull/3393) Remove TODO from guidelines  by @DieBauer
+* [#3383](https://github.com/typelevel/cats/pull/3383) Fix a link in the documentation for Traverse  by @justinhj
+
+
+### 2 test improvements
+
+* [#3378](https://github.com/typelevel/cats/pull/3378) Remove cats.instances from tests  by @travisbrown
+* [#3375](https://github.com/typelevel/cats/pull/3375) Add laws to check Short-Circuiting behaviour  by @gagandeepkalra
+
+
+### 11 build improvements
+
+* [#3430](https://github.com/typelevel/cats/pull/3430) Fix Simulacrum exclusion in POM  by @travisbrown
+* [#3424](https://github.com/typelevel/cats/pull/3424) Use Simulacrum Scalafix  by @travisbrown
+* [#3417](https://github.com/typelevel/cats/pull/3417) Update sbt-scalafmt to 2.4.0  by @scala-steward
+* [#3416](https://github.com/typelevel/cats/pull/3416) Update scalacheck-1-14 to 3.1.2.0  by @scala-steward
+* [#3413](https://github.com/typelevel/cats/pull/3413) Update sbt-scalajs, scalajs-compiler to 0.6.33  by @scala-steward
+* [#3399](https://github.com/typelevel/cats/pull/3399) Update sbt-microsites to 1.2.0  by @scala-steward
+* [#3395](https://github.com/typelevel/cats/pull/3395) Update sbt to 1.3.10  by @scala-steward
+* [#3389](https://github.com/typelevel/cats/pull/3389) Update sbt-scalafmt to 2.3.4  by @scala-steward
+* [#3388](https://github.com/typelevel/cats/pull/3388) Update sbt-scalafmt to 2.3.3  by @scala-steward
+* [#3379](https://github.com/typelevel/cats/pull/3379) Merge 2.2.x after 2.2.0-M1 release  by @travisbrown
+* [#3376](https://github.com/typelevel/cats/pull/3376) Update sbt to 1.3.9  by @scala-steward
+
+
 ## Version 2.2.0-M1
 
 _2020 March 31_

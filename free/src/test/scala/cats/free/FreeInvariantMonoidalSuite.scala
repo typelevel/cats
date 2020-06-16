@@ -14,14 +14,16 @@ import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeInvariantMonoidalSuite extends CatsSuite {
-  implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit F: Arbitrary[F[A]],
-                                                       A: Arbitrary[A]): Arbitrary[FreeInvariantMonoidal[F, A]] =
+  implicit def freeInvariantMonoidalArbitrary[F[_], A](implicit
+    F: Arbitrary[F[A]],
+    A: Arbitrary[A]
+  ): Arbitrary[FreeInvariantMonoidal[F, A]] =
     Arbitrary(
       Gen.oneOf(A.arbitrary.map(FreeInvariantMonoidal.pure[F, A]), F.arbitrary.map(FreeInvariantMonoidal.lift[F, A]))
     )
 
-  implicit def freeInvariantMonoidalEq[S[_]: InvariantMonoidal, A](
-    implicit SA: Eq[S[A]]
+  implicit def freeInvariantMonoidalEq[S[_]: InvariantMonoidal, A](implicit
+    SA: Eq[S[A]]
   ): Eq[FreeInvariantMonoidal[S, A]] =
     new Eq[FreeInvariantMonoidal[S, A]] {
       def eqv(a: FreeInvariantMonoidal[S, A], b: FreeInvariantMonoidal[S, A]): Boolean = {
@@ -34,9 +36,11 @@ class FreeInvariantMonoidalSuite extends CatsSuite {
     Isomorphisms.invariant[FreeInvariantMonoidal[BinCodec, *]]
 
   checkAll("FreeInvariantMonoidal[BinCodec, *]",
-           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, *]].invariantMonoidal[MiniInt, Boolean, Boolean])
+           InvariantMonoidalTests[FreeInvariantMonoidal[BinCodec, *]].invariantMonoidal[MiniInt, Boolean, Boolean]
+  )
   checkAll("InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]]",
-           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]]))
+           SerializableTests.serializable(InvariantMonoidal[FreeInvariantMonoidal[BinCodec, *]])
+  )
 
   test("FreeInvariantMonoidal#fold") {
     forAll { (i1: BinCodec[MiniInt]) =>

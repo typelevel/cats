@@ -35,11 +35,13 @@ class EitherSuite extends CatsSuite {
 
   checkAll("Either[ListWrapper[String], *]", SemigroupKTests[Either[ListWrapper[String], *]].semigroupK[Int])
   checkAll("SemigroupK[Either[ListWrapper[String], *]]",
-           SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], *]]))
+           SerializableTests.serializable(SemigroupK[Either[ListWrapper[String], *]])
+  )
 
   checkAll("Either[ListWrapper[String], Int]", SemigroupTests[Either[ListWrapper[String], Int]].semigroup)
   checkAll("Semigroup[Either[ListWrapper[String], Int]]",
-           SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]]))
+           SerializableTests.serializable(Semigroup[Either[ListWrapper[String], Int]])
+  )
 
   val partialOrder = cats.kernel.instances.either.catsStdPartialOrderForEither[Int, String]
   val order = implicitly[Order[Either[Int, String]]]
@@ -50,9 +52,11 @@ class EitherSuite extends CatsSuite {
     implicit val S: Eq[ListWrapper[String]] = ListWrapper.eqv[String]
     implicit val I: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Either[ListWrapper[String], ListWrapper[Int]]",
-             EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv)
+             EqTests[Either[ListWrapper[String], ListWrapper[Int]]].eqv
+    )
     checkAll("Eq[Either[ListWrapper[String], ListWrapper[Int]]]",
-             SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]]))
+             SerializableTests.serializable(Eq[Either[ListWrapper[String], ListWrapper[Int]]])
+    )
   }
 
   checkAll("Either[Int, String]", PartialOrderTests[Either[Int, String]](partialOrder).partialOrder)

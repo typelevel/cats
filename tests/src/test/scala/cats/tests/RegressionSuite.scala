@@ -29,10 +29,11 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
   }
 
   object State {
-    implicit def instance[S]: Monad[State[S, *]] = new Monad[State[S, *]] with StackSafeMonad[State[S, *]] { // lies!
-      def pure[A](a: A): State[S, A] = State(s => (a, s))
-      def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
-    }
+    implicit def instance[S]: Monad[State[S, *]] =
+      new Monad[State[S, *]] with StackSafeMonad[State[S, *]] { // lies!
+        def pure[A](a: A): State[S, A] = State(s => (a, s))
+        def flatMap[A, B](sa: State[S, A])(f: A => State[S, B]): State[S, B] = sa.flatMap(f)
+      }
   }
 
   // used to test side-effects

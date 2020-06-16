@@ -39,7 +39,8 @@ class ContravariantSuite extends CatsSuite {
     Arbitrary(implicitly[Arbitrary[A => Boolean]].arbitrary.map(f => Predicate(f)))
 
   checkAll("ContravariantMonoidal[Predicate]",
-           ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean])
+           ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean]
+  )
 
   {
     implicit val predicateMonoid: Monoid[Predicate[MiniInt]] = ContravariantMonoidal.monoid[Predicate, MiniInt]

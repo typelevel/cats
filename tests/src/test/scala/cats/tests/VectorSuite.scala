@@ -10,6 +10,7 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -39,6 +40,9 @@ class VectorSuite extends CatsSuite {
 
   checkAll("Vector[Int]", AlignTests[Vector].align[Int, Int, Int, Int])
   checkAll("Align[Vector]", SerializableTests.serializable(Align[Vector]))
+
+  checkAll("Vector[Int]", ShortCircuitingTests[Vector].traverseFilter[Int])
+  checkAll("Vector[Int]", ShortCircuitingTests[Vector].foldable[Int])
 
   checkAll("ZipVector[Int]", CommutativeApplyTests[ZipVector].commutativeApply[Int, Int, Int])
 

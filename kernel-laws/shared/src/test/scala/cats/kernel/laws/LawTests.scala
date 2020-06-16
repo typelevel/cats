@@ -1,7 +1,6 @@
 package cats.kernel
 package laws
 
-import cats.kernel.instances.all._
 import cats.kernel.laws.discipline._
 import cats.platform.Platform
 
@@ -148,6 +147,15 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
 
   import KernelCheck._
 
+  test("The instances in scope are not ambiguous") {
+    implicitly[Monoid[Option[String]]]
+    implicitly[Semigroup[Option[String]]]
+    implicitly[Monoid[Option[Int]]]
+    implicitly[Semigroup[Option[Int]]]
+    implicitly[CommutativeSemigroup[Option[Int]]]
+    implicitly[CommutativeMonoid[Option[Int]]]
+  }
+
   {
     // needed for Cogen[Map[...]]
     implicit val ohe: Ordering[HasEq[Int]] = Ordering.by[HasEq[Int], Int](_.a)
@@ -163,7 +171,8 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])",
-           PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder)
+           PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder
+  )
   checkAll(
     "PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))",
     PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder
@@ -174,9 +183,11 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("PartialOrder[Stream[HasPartialOrder[Int]]]", PartialOrderTests[Stream[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[Queue[HasPartialOrder[Int]]]", PartialOrderTests[Queue[HasPartialOrder[Int]]].partialOrder)
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
-           PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder)
+           PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder
+  )
   checkAll("Semilattice.asJoinPartialOrder[Set[Int]]",
-           PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder)
+           PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder
+  )
 
   checkAll("Order[Unit]", OrderTests[Unit].order)
   checkAll("Order[Boolean]", OrderTests[Boolean].order)
@@ -252,9 +263,11 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("CommutativeMonoid[Map[String, Int]]", CommutativeMonoidTests[Map[String, Int]].commutativeMonoid)
   checkAll("CommutativeMonoid[Map[String, Int]]", SerializableTests.serializable(CommutativeMonoid[Map[String, Int]]))
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
-           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid)
+           CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid
+  )
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
-           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]]))
+           SerializableTests.serializable(CommutativeMonoid[SortedMap[String, Int]])
+  )
 
   checkAll("BoundedSemilattice[BitSet]", BoundedSemilatticeTests[BitSet].boundedSemilattice)
   checkAll("BoundedSemilattice[BitSet]", SerializableTests.serializable(BoundedSemilattice[BitSet]))
@@ -347,27 +360,29 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   // Comparison related
 
   // Something that can give NaN for test
-  def subsetPartialOrder[A]: PartialOrder[Set[A]] = new PartialOrder[Set[A]] {
-    def partialCompare(x: Set[A], y: Set[A]): Double =
-      if (x == y) 0.0
-      else if (x.subsetOf(y)) -1.0
-      else if (y.subsetOf(x)) 1.0
-      else Double.NaN
-  }
+  def subsetPartialOrder[A]: PartialOrder[Set[A]] =
+    new PartialOrder[Set[A]] {
+      def partialCompare(x: Set[A], y: Set[A]): Double =
+        if (x == y) 0.0
+        else if (x.subsetOf(y)) -1.0
+        else if (y.subsetOf(x)) 1.0
+        else Double.NaN
+    }
 
   checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
 
   {
-    implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] = new PartialOrdering[Set[A]] {
+    implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] =
+      new PartialOrdering[Set[A]] {
 
-      override def tryCompare(x: Set[A], y: Set[A]): Option[Int] =
-        if (x == y) Some(0)
-        else if (x.subsetOf(y)) Some(-1)
-        else if (y.subsetOf(x)) Some(1)
-        else None
+        override def tryCompare(x: Set[A], y: Set[A]): Option[Int] =
+          if (x == y) Some(0)
+          else if (x.subsetOf(y)) Some(-1)
+          else if (y.subsetOf(x)) Some(1)
+          else None
 
-      override def lteq(x: Set[A], y: Set[A]): Boolean = (x.subsetOf(y)) || (x == y)
-    }
+        override def lteq(x: Set[A], y: Set[A]): Boolean = (x.subsetOf(y)) || (x == y)
+      }
     checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
   }
 

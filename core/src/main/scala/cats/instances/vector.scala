@@ -59,21 +59,22 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         val buf = Vector.newBuilder[B]
         var state = List(fn(a).iterator)
         @tailrec
-        def loop(): Unit = state match {
-          case Nil => ()
-          case h :: tail if h.isEmpty =>
-            state = tail
-            loop()
-          case h :: tail =>
-            h.next match {
-              case Right(b) =>
-                buf += b
-                loop()
-              case Left(a) =>
-                state = (fn(a).iterator) :: h :: tail
-                loop()
-            }
-        }
+        def loop(): Unit =
+          state match {
+            case Nil => ()
+            case h :: tail if h.isEmpty =>
+              state = tail
+              loop()
+            case h :: tail =>
+              h.next match {
+                case Right(b) =>
+                  buf += b
+                  loop()
+                case Left(a) =>
+                  state = (fn(a).iterator) :: h :: tail
+                  loop()
+              }
+          }
         loop()
         buf.result
       }
@@ -82,6 +83,12 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def get[A](fa: Vector[A])(idx: Long): Option[A] =
         if (idx < Int.MaxValue && fa.size > idx && idx >= 0) Some(fa(idx.toInt)) else None
+
+      override def foldMapK[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] = {
+        def loop(i: Int): Eval[G[B]] =
+          if (i < fa.length) G.combineKEval(f(fa(i)), Eval.defer(loop(i + 1))) else Eval.now(G.empty)
+        loop(0).value
+      }
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] = {
         def loop(i: Int): Eval[G[List[B]]] =
@@ -175,12 +182,15 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       traverse
-        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        )
         .value
 
     override def filterA[G[_], A](fa: Vector[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Vector[A]] =
-      fa.foldRight(Eval.now(G.pure(Vector.empty[A])))((x, xse) =>
-          G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Vector.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, vector) => if (b) x +: vector else vector)
         )
         .value
   }

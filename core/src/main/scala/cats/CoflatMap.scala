@@ -1,12 +1,14 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * `CoflatMap` is the dual of `FlatMap`.
  *
  * Must obey the laws in cats.laws.CoflatMapLaws
  */
+@implicitNotFound("Could not find an instance of CoflatMap for ${F}")
 @typeclass trait CoflatMap[F[_]] extends Functor[F] {
 
   /**
@@ -44,4 +46,55 @@ import simulacrum.typeclass
    */
   def coflatten[A](fa: F[A]): F[F[A]] =
     coflatMap(fa)(fa => fa)
+}
+
+object CoflatMap {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[CoflatMap]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: CoflatMap[F]): CoflatMap[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: CoflatMap[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def coflatMap[B](f: F[A] => B): F[B] = typeClassInstance.coflatMap[A, B](self)(f)
+    def coflatten: F[F[A]] = typeClassInstance.coflatten[A](self)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Functor.AllOps[F, A] {
+    type TypeClassType <: CoflatMap[F]
+  }
+  trait ToCoflatMapOps extends Serializable {
+    implicit def toCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): Ops[F, A] {
+      type TypeClassType = CoflatMap[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = CoflatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToCoflatMapOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): AllOps[F, A] {
+      type TypeClassType = CoflatMap[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CoflatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
+
 }

@@ -43,7 +43,8 @@ class FuncSuite extends CatsSuite {
     implicit val funcContravariant: Contravariant[Func[Show, *, MiniInt]] =
       Func.catsDataContravariantForFunc[Show, MiniInt]
     checkAll("Func[Show, MiniInt, MiniInt]",
-             ContravariantTests[Func[Show, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt])
+             ContravariantTests[Func[Show, *, MiniInt]].contravariant[MiniInt, MiniInt, MiniInt]
+    )
     checkAll("Contravariant[Func[Show, *, Int]]", SerializableTests.serializable(Contravariant[Func[Show, *, Int]]))
   }
 
@@ -51,9 +52,11 @@ class FuncSuite extends CatsSuite {
     implicit val appFuncApp: Applicative[AppFunc[Option, Int, *]] = AppFunc.appFuncApplicative[Option, Int]
     implicit val iso: Isomorphisms[AppFunc[Option, Int, *]] = Isomorphisms.invariant[AppFunc[Option, Int, *]]
     checkAll("AppFunc[Option, MiniInt, MiniInt]",
-             ApplicativeTests[AppFunc[Option, MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt])
+             ApplicativeTests[AppFunc[Option, MiniInt, *]].applicative[MiniInt, MiniInt, MiniInt]
+    )
     checkAll("Applicative[AppFunc[Option, Int, *]]",
-             SerializableTests.serializable(Applicative[AppFunc[Option, Int, *]]))
+             SerializableTests.serializable(Applicative[AppFunc[Option, Int, *]])
+    )
   }
 
   test("product") {

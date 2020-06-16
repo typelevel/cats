@@ -57,8 +57,8 @@ abstract private[data] class FuncInstances1 {
       def F: Functor[F] = FF
     }
 
-  implicit def catsDataContravariantForFunc[F[_], C](
-    implicit FC: Contravariant[F]
+  implicit def catsDataContravariantForFunc[F[_], C](implicit
+    FC: Contravariant[F]
   ): Contravariant[λ[α => Func[F, α, C]]] =
     new FuncContravariant[F, C] {
       def F: Contravariant[F] = FC

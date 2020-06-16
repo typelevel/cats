@@ -1,6 +1,7 @@
 package cats
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * NonEmptyTraverse, also known as Traversable1.
@@ -8,6 +9,7 @@ import simulacrum.typeclass
  * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence
  * methods it provides nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
  */
+@implicitNotFound("Could not find an instance of NonEmptyTraverse for ${F}")
 @typeclass trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**
@@ -91,5 +93,62 @@ import simulacrum.typeclass
       val F = self
       val G = NonEmptyTraverse[G]
     }
+
+}
+
+object NonEmptyTraverse {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[NonEmptyTraverse]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: NonEmptyTraverse[F]): NonEmptyTraverse[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: NonEmptyTraverse[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit ev$1: Apply[G]): G[F[B]] =
+      typeClassInstance.nonEmptyTraverse[G, A, B](self)(f)
+    def nonEmptySequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Apply[G]): G[F[B]] =
+      typeClassInstance.nonEmptySequence[G, B](self.asInstanceOf[F[G[B]]])
+    def nonEmptyFlatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Apply[G], F: FlatMap[F]): G[F[B]] =
+      typeClassInstance.nonEmptyFlatTraverse[G, A, B](self)(f)(G, F)
+    def nonEmptyFlatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Apply[G], F: FlatMap[F]): G[F[B]] =
+      typeClassInstance.nonEmptyFlatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Traverse.AllOps[F, A] with Reducible.AllOps[F, A] {
+    type TypeClassType <: NonEmptyTraverse[F]
+  }
+  trait ToNonEmptyTraverseOps extends Serializable {
+    implicit def toNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): Ops[F, A] {
+      type TypeClassType = NonEmptyTraverse[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = NonEmptyTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToNonEmptyTraverseOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): AllOps[F, A] {
+      type TypeClassType = NonEmptyTraverse[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = NonEmptyTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
 
 }

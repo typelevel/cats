@@ -1,10 +1,17 @@
 package cats.tests
 
 import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
-import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps}
+import cats.data.{NonEmptyLazyList, NonEmptyLazyListOps, NonEmptyVector}
 import cats.kernel.{Eq, Hash, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{AlignTests, BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{
+  AlignTests,
+  BimonadTests,
+  NonEmptyTraverseTests,
+  SemigroupKTests,
+  SerializableTests,
+  ShortCircuitingTests
+}
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
@@ -24,7 +31,8 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("SemigroupK[NonEmptyLazyList]", SerializableTests.serializable(SemigroupK[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyLazyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyLazyList]", SerializableTests.serializable(Traverse[NonEmptyLazyList]))
 
   checkAll("NonEmptyLazyList[Int]", BimonadTests[NonEmptyLazyList].bimonad[Int, Int, Int])
@@ -36,6 +44,10 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("NonEmptyLazyList[Int]", AlignTests[NonEmptyLazyList].align[Int, Int, Int, Int])
   checkAll("Align[NonEmptyLazyList]", SerializableTests.serializable(Align[NonEmptyLazyList]))
 
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].foldable[Int])
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].traverse[Int])
+  checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].nonEmptyTraverse[Int])
+
   test("show") {
     Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) should ===("NonEmptyLazyList(1, ?)")
   }
@@ -45,14 +57,16 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
     implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyLazyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyLazyList[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyLazyList[ListWrapper[Int]]])
+    )
   }
 
   {
     implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyLazyList[ListWrapper[Int]]", EqTests[NonEmptyLazyList[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyLazyList[ListWrapper[Int]]",
-             SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(Eq[NonEmptyLazyList[ListWrapper[Int]]])
+    )
   }
 
   test("size is consistent with toLazyList.size") {
@@ -140,6 +154,12 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
+    }
+  }
+
+  test("NonEmptyLazyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (ci: NonEmptyLazyList[Int]) =>
+      ci.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector))
     }
   }
 }

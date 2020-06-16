@@ -170,7 +170,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))((x, xse) =>
+      traverse
+        .foldRight(fa, Eval.now(G.pure(LazyList.empty[A])))((x, xse) =>
           G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
         )
         .value

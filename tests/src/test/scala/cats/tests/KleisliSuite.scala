@@ -9,9 +9,7 @@ import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-import cats.syntax.traverse._
+import cats.implicits._
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
 
@@ -34,46 +32,58 @@ class KleisliSuite extends CatsSuite {
     implicit val instance: ApplicativeError[Kleisli[Option, MiniInt, *], Unit] =
       Kleisli.catsDataApplicativeErrorForKleisli[Option, Unit, MiniInt](cats.instances.option.catsStdInstancesForOption)
     checkAll("Kleisli[Option, MinInt, *] with Unit",
-             ApplicativeErrorTests[Kleisli[Option, MiniInt, *], Unit](instance).applicativeError[Int, Int, Int])
+             ApplicativeErrorTests[Kleisli[Option, MiniInt, *], Unit](instance).applicativeError[Int, Int, Int]
+    )
     checkAll("ApplicativeError[Kleisli[Option, Int, Int], Unit]", SerializableTests.serializable(instance))
   }
 
   checkAll("Kleisli[Eval, MiniInt, *]", DeferTests[Kleisli[Eval, MiniInt, *]].defer[Int])
   checkAll("Kleisli[Option, MiniInt, *] with Unit",
-           MonadErrorTests[Kleisli[Option, MiniInt, *], Unit].monadError[Int, Int, Int])
+           MonadErrorTests[Kleisli[Option, MiniInt, *], Unit].monadError[Int, Int, Int]
+  )
   checkAll("MonadError[Kleisli[Option, Int, Int], Unit]",
-           SerializableTests.serializable(MonadError[Kleisli[Option, Int, *], Unit]))
+           SerializableTests.serializable(MonadError[Kleisli[Option, Int, *], Unit])
+  )
 
   checkAll("Kleisli[Option, MiniInt, *]", SemigroupalTests[Kleisli[Option, MiniInt, *]].semigroupal[Int, Int, Int])
   checkAll("Semigroupal[Kleisli[Option, Int, *]]", SerializableTests.serializable(Semigroupal[Kleisli[Option, Int, *]]))
 
   checkAll("Kleisli[(CSemi, *), MiniInt, *]",
-           CommutativeFlatMapTests[Kleisli[(CSemi, *), MiniInt, *]].commutativeFlatMap[Int, Int, Int])
+           CommutativeFlatMapTests[Kleisli[(CSemi, *), MiniInt, *]].commutativeFlatMap[Int, Int, Int]
+  )
   checkAll("CommutativeFlatMap[Kleisli[(CSemi, *), Int, *]]",
-           SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, *), Int, *]]))
+           SerializableTests.serializable(CommutativeFlatMap[Kleisli[(CSemi, *), Int, *]])
+  )
 
   checkAll("Kleisli[Option, MiniInt, *]",
-           CommutativeMonadTests[Kleisli[Option, MiniInt, *]].commutativeMonad[Int, Int, Int])
+           CommutativeMonadTests[Kleisli[Option, MiniInt, *]].commutativeMonad[Int, Int, Int]
+  )
   checkAll("CommutativeMonad[Kleisli[Option, Int, *]]",
-           SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, *]]))
+           SerializableTests.serializable(CommutativeMonad[Kleisli[Option, Int, *]])
+  )
 
   checkAll("Kleisli[Id, MiniInt, *]", CommutativeMonadTests[Kleisli[Id, MiniInt, *]].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[Kleisli[Id, Int, *]]",
-           SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, *]]))
+           SerializableTests.serializable(CommutativeMonad[Kleisli[Id, Int, *]])
+  )
 
   checkAll("Kleisli[List, *, *]",
-           ArrowTests[Kleisli[List, *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+           ArrowTests[Kleisli[List, *, *]].arrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean]
+  )
   checkAll("Arrow[Kleisli[List, *, *]]", SerializableTests.serializable(Arrow[Kleisli[List, *, *]]))
 
   checkAll("Kleisli[List, *, *]",
-           ArrowChoiceTests[Kleisli[List, *, *]].arrowChoice[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+           ArrowChoiceTests[Kleisli[List, *, *]].arrowChoice[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean]
+  )
   checkAll("ArrowChoice[Kleisli[List, *, *]]", SerializableTests.serializable(ArrowChoice[Kleisli[List, *, *]]))
 
   checkAll("Kleisli[Option, Int, Int]",
            CommutativeArrowTests[Kleisli[Option, *, *]]
-             .commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean])
+             .commutativeArrow[MiniInt, MiniInt, MiniInt, MiniInt, MiniInt, Boolean]
+  )
   checkAll("CommutativeArrow[Kleisli[Option, *, *]]",
-           SerializableTests.serializable(CommutativeArrow[Kleisli[Option, *, *]]))
+           SerializableTests.serializable(CommutativeArrow[Kleisli[Option, *, *]])
+  )
 
   checkAll("Kleisli[Option, *, *]", ChoiceTests[Kleisli[Option, *, *]].choice[MiniInt, Boolean, Int, Int])
   checkAll("Choice[Kleisli[Option, *, *]]", SerializableTests.serializable(Choice[Kleisli[Option, *, *]]))
@@ -85,7 +95,8 @@ class KleisliSuite extends CatsSuite {
   checkAll("Monad[Reader[*, *], Int]", SerializableTests.serializable(Monad[Reader[Int, *]]))
 
   checkAll("Kleisli[Option, *, *]",
-           StrongTests[Kleisli[Option, *, *]].strong[MiniInt, Boolean, Boolean, Boolean, Boolean, Int])
+           StrongTests[Kleisli[Option, *, *]].strong[MiniInt, Boolean, Boolean, Boolean, Boolean, Int]
+  )
   checkAll("Strong[Kleisli[Option, *, *]]", SerializableTests.serializable(Strong[Kleisli[Option, *, *]]))
 
   checkAll("Kleisli[Option, MiniInt, Int]", FlatMapTests[Kleisli[Option, MiniInt, *]].flatMap[Int, Int, Int])
@@ -95,9 +106,11 @@ class KleisliSuite extends CatsSuite {
   checkAll("Alternative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, *]]))
 
   checkAll("Kleisli[Const[String, *], MiniInt, *]",
-           ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int])
+           ContravariantMonoidalTests[Kleisli[Const[String, *], MiniInt, *]].contravariantMonoidal[Int, Int, Int]
+  )
   checkAll("ContravariantMonoidal[Kleisli[Option, Int, *]]",
-           SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, *], Int, *]]))
+           SerializableTests.serializable(ContravariantMonoidal[Kleisli[Const[String, *], Int, *]])
+  )
 
   checkAll("Kleisli[Option, MiniInt, Int]", ApplicativeTests[Kleisli[Option, MiniInt, *]].applicative[Int, Int, Int])
   checkAll("Applicative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Applicative[Kleisli[Option, Int, *]]))
@@ -112,24 +125,29 @@ class KleisliSuite extends CatsSuite {
     implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
     checkAll("Kleisli[ListWrapper, MiniInt, *]",
-             FunctorFilterTests[Kleisli[ListWrapper, MiniInt, *]].functorFilter[Int, Int, Int])
+             FunctorFilterTests[Kleisli[ListWrapper, MiniInt, *]].functorFilter[Int, Int, Int]
+    )
     checkAll("FunctorFilter[Kleisli[ListWrapper, MiniInt, *]]",
-             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, MiniInt, *]]))
+             SerializableTests.serializable(FunctorFilter[Kleisli[ListWrapper, MiniInt, *]])
+    )
 
     FunctorFilter[ReaderT[ListWrapper, Int, *]]
   }
 
   checkAll("Kleisli[Function0, MiniInt, *]",
-           DistributiveTests[Kleisli[Function0, MiniInt, *]].distributive[Int, Int, Int, Option, Id])
+           DistributiveTests[Kleisli[Function0, MiniInt, *]].distributive[Int, Int, Int, Option, Id]
+  )
   checkAll("Distributive[Kleisli[Function0, Int, *]]",
-           SerializableTests.serializable(Distributive[Kleisli[Function0, Int, *]]))
+           SerializableTests.serializable(Distributive[Kleisli[Function0, Int, *]])
+  )
 
   checkAll("Kleisli[Option, MiniInt, String]", MonoidTests[Kleisli[Option, MiniInt, String]].monoid)
   checkAll("Monoid[Kleisli[Option, Int, String]]", SerializableTests.serializable(Monoid[Kleisli[Option, Int, String]]))
 
   checkAll("Kleisli[Option, MiniInt, String]", SemigroupTests[Kleisli[Option, MiniInt, String]].semigroup)
   checkAll("Semigroup[Kleisli[Option, Int, String]]",
-           SerializableTests.serializable(Semigroup[Kleisli[Option, Int, String]]))
+           SerializableTests.serializable(Semigroup[Kleisli[Option, Int, String]])
+  )
 
   {
     implicit val catsDataMonoidKForKleisli: MonoidK[λ[α => Kleisli[Option, α, α]]] = Kleisli.endoMonoidK[Option]
@@ -142,12 +160,14 @@ class KleisliSuite extends CatsSuite {
       Kleisli.endoSemigroupK[Option]
     checkAll("Kleisli[Option, MiniInt, MiniInt]", SemigroupKTests[λ[α => Kleisli[Option, α, α]]].semigroupK[MiniInt])
     checkAll("SemigroupK[λ[α => Kleisli[Option, α, α]]]",
-             SerializableTests.serializable(SemigroupK[λ[α => Kleisli[Option, α, α]]]))
+             SerializableTests.serializable(SemigroupK[λ[α => Kleisli[Option, α, α]]])
+    )
   }
 
   checkAll("Kleisli[Option, MiniInt, Int]", SemigroupKTests[Kleisli[Option, MiniInt, *]].semigroupK[Int])
   checkAll("SemigroupK[Kleisli[Option, String, *]]",
-           SerializableTests.serializable(SemigroupK[Kleisli[Option, String, *]]))
+           SerializableTests.serializable(SemigroupK[Kleisli[Option, String, *]])
+  )
 
   checkAll("Kleisli[Option, MiniInt, *]", MonoidKTests[Kleisli[Option, MiniInt, *]].monoidK[Int])
   checkAll("MonoidK[Kleisli[Option, String, *]]", SerializableTests.serializable(MonoidK[Kleisli[Option, String, *]]))
@@ -156,7 +176,8 @@ class KleisliSuite extends CatsSuite {
 
   checkAll("Kleisli[Option, *, Int]", ContravariantTests[Kleisli[Option, *, Int]].contravariant[MiniInt, Int, Boolean])
   checkAll("Contravariant[Kleisli[Option, *, Int]]",
-           SerializableTests.serializable(Contravariant[Kleisli[Option, *, Int]]))
+           SerializableTests.serializable(Contravariant[Kleisli[Option, *, Int]])
+  )
 
   test("Functor[Kleisli[F, Int, *]] is not ambiguous when an ApplicativeError and a FlatMap are in scope for F") {
     def shouldCompile1[F[_], E](implicit F: ApplicativeError[F, E], FM: FlatMap[F]): Functor[Kleisli[F, Int, *]] =
@@ -296,6 +317,24 @@ class KleisliSuite extends CatsSuite {
       unit.flatMap(_ => acc)
     }
     result.run(()).value
+  }
+
+  test("map2Eval is lazy") {
+    var count = 0
+    val l = Kleisli { (n: Int) => count += 1; Option.empty[String] }
+
+    l.map2Eval(Eval.now(l))(_ + _).value.run(0)
+
+    count shouldBe 1
+  }
+
+  test("combineKEval is lazy") {
+    var count = 0
+    val l = Kleisli { (n: Int) => count += 1; Option(n.toString) }
+
+    l.combineKEval(Eval.now(l)).value.run(0)
+
+    count shouldBe 1
   }
 
   test("auto contravariant") {

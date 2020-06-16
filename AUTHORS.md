@@ -152,6 +152,7 @@ possible:
  * Julien Truffaut
  * Jun Tomioka
  * jurisk
+ * Justin Heyes-Jones
  * Kailuo Wang
  * Kamil Kloch
  * Keir Lawson
@@ -221,10 +222,12 @@ possible:
  * phderome
  * Philip Wills
  * Piotr Gawryś
+ * Raas Ahsan
  * Rafa Paradela
  * Raúl Raja Martínez
  * RawToast
  * Raymond Tay
+ * rfigueiredo
  * Richard Imaoka
  * Richard Miller
  * Rintcius Blok
@@ -282,6 +285,7 @@ possible:
  * XUWE
  * 杨博 (Yang Bo)
  * Yannick Heiber
+ * ybasket
  * Yosef Fertel
  * Yilin Wei
  * Yuriy Badalyantc

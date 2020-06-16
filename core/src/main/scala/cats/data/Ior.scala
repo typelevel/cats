@@ -47,11 +47,12 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res2: String = abc123
    * }}}
    */
-  final def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C): C = this match {
-    case Ior.Left(a)    => fa(a)
-    case Ior.Right(b)   => fb(b)
-    case Ior.Both(a, b) => fab(a, b)
-  }
+  final def fold[C](fa: A => C, fb: B => C, fab: (A, B) => C): C =
+    this match {
+      case Ior.Left(a)    => fa(a)
+      case Ior.Right(b)   => fb(b)
+      case Ior.Both(a, b) => fab(a, b)
+    }
 
   /**
    * Example:
@@ -562,27 +563,29 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * res5: Ior[String, Int] = Both(abcerror,456)
    * }}}
    */
-  final def flatMap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior D = this match {
-    case l @ Ior.Left(_) => l
-    case Ior.Right(b)    => f(b)
-    case Ior.Both(a1, b) =>
-      f(b) match {
-        case Ior.Left(a2)    => Ior.Left(AA.combine(a1, a2))
-        case Ior.Right(b)    => Ior.Both(a1, b)
-        case Ior.Both(a2, d) => Ior.Both(AA.combine(a1, a2), d)
-      }
-  }
+  final def flatMap[AA >: A, D](f: B => AA Ior D)(implicit AA: Semigroup[AA]): AA Ior D =
+    this match {
+      case l @ Ior.Left(_) => l
+      case Ior.Right(b)    => f(b)
+      case Ior.Both(a1, b) =>
+        f(b) match {
+          case Ior.Left(a2)    => Ior.Left(AA.combine(a1, a2))
+          case Ior.Right(b)    => Ior.Both(a1, b)
+          case Ior.Both(a2, d) => Ior.Both(AA.combine(a1, a2), d)
+        }
+    }
 
   final def foreach(f: B => Unit): Unit = {
     bimap(_ => (), f)
     ()
   }
 
-  final def traverse[F[_], AA >: A, D](g: B => F[D])(implicit F: Applicative[F]): F[AA Ior D] = this match {
-    case Ior.Left(a)    => F.pure(Ior.left(a))
-    case Ior.Right(b)   => F.map(g(b))(Ior.right)
-    case Ior.Both(a, b) => F.map(g(b))(d => Ior.both(a, d))
-  }
+  final def traverse[F[_], AA >: A, D](g: B => F[D])(implicit F: Applicative[F]): F[AA Ior D] =
+    this match {
+      case Ior.Left(a)    => F.pure(Ior.left(a))
+      case Ior.Right(b)   => F.map(g(b))(Ior.right)
+      case Ior.Both(a, b) => F.map(g(b))(d => Ior.both(a, d))
+    }
 
   /**
    * Example:
@@ -662,17 +665,19 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     }
   // scalastyle:on cyclomatic.complexity
 
-  final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean = fold(
-    a => that.fold(a2 => AA.eqv(a, a2), b2 => false, (a2, b2) => false),
-    b => that.fold(a2 => false, b2 => BB.eqv(b, b2), (a2, b2) => false),
-    (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
-  )
+  final def ===[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Eq[AA], BB: Eq[BB]): Boolean =
+    fold(
+      a => that.fold(a2 => AA.eqv(a, a2), b2 => false, (a2, b2) => false),
+      b => that.fold(a2 => false, b2 => BB.eqv(b, b2), (a2, b2) => false),
+      (a, b) => that.fold(a2 => false, b2 => false, (a2, b2) => AA.eqv(a, a2) && BB.eqv(b, b2))
+    )
 
-  final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = fold(
-    a => s"Ior.Left(${AA.show(a)})",
-    b => s"Ior.Right(${BB.show(b)})",
-    (a, b) => s"Ior.Both(${AA.show(a)}, ${BB.show(b)})"
-  )
+  final def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String =
+    fold(
+      a => s"Ior.Left(${AA.show(a)})",
+      b => s"Ior.Right(${BB.show(b)})",
+      (a, b) => s"Ior.Both(${AA.show(a)}, ${BB.show(b)})"
+    )
 }
 
 object Ior extends IorInstances with IorFunctions with IorFunctions2 {
@@ -685,8 +690,9 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
   implicit val catsBitraverseForIor: Bitraverse[Ior] = new Bitraverse[Ior] {
 
-    def bitraverse[G[_], A, B, C, D](fab: Ior[A, B])(f: A => G[C],
-                                                     g: B => G[D])(implicit G: Applicative[G]): G[Ior[C, D]] =
+    def bitraverse[G[_], A, B, C, D](
+      fab: Ior[A, B]
+    )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[Ior[C, D]] =
       fab match {
         case Ior.Left(a)    => G.map(f(a))(Ior.Left(_))
         case Ior.Right(b)   => G.map(g(b))(Ior.Right(_))
@@ -700,8 +706,9 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
         case Ior.Both(a, b) => g(f(c, a), b)
       }
 
-    def bifoldRight[A, B, C](fab: Ior[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                         g: (B, Eval[C]) => Eval[C]): Eval[C] =
+    def bifoldRight[A, B, C](fab: Ior[A, B],
+                             c: Eval[C]
+    )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
       fab match {
         case Ior.Left(a)    => f(a, c)
         case Ior.Right(b)   => g(b, c)
@@ -709,17 +716,20 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       }
   }
 
-  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = new Eq[A Ior B] {
-    def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
-  }
+  implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] =
+    new Eq[A Ior B] {
+      def eqv(x: A Ior B, y: A Ior B): Boolean = x === y
+    }
 
-  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] = new Show[A Ior B] {
-    def show(f: A Ior B): String = f.show
-  }
+  implicit def catsDataShowForIor[A: Show, B: Show]: Show[A Ior B] =
+    new Show[A Ior B] {
+      def show(f: A Ior B): String = f.show
+    }
 
-  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = new Semigroup[Ior[A, B]] {
-    def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
-  }
+  implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] =
+    new Semigroup[Ior[A, B]] {
+      def combine(x: Ior[A, B], y: Ior[A, B]) = x.combine(y)
+    }
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
     new MonadError[Ior[A, *], A] {
@@ -742,18 +752,19 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
       def tailRecM[B, C](b: B)(fn: B => Ior[A, Either[B, C]]): A Ior C = {
         @tailrec
-        def loop(v: Ior[A, Either[B, C]]): A Ior C = v match {
-          case Ior.Left(a)           => Ior.left(a)
-          case Ior.Right(Right(c))   => Ior.right(c)
-          case Ior.Both(a, Right(c)) => Ior.both(a, c)
-          case Ior.Right(Left(b))    => loop(fn(b))
-          case Ior.Both(a, Left(b)) =>
-            fn(b) match {
-              case Ior.Left(aa)    => Ior.left(Semigroup[A].combine(a, aa))
-              case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
-              case Ior.Right(x)    => loop(Ior.both(a, x))
-            }
-        }
+        def loop(v: Ior[A, Either[B, C]]): A Ior C =
+          v match {
+            case Ior.Left(a)           => Ior.left(a)
+            case Ior.Right(Right(c))   => Ior.right(c)
+            case Ior.Both(a, Right(c)) => Ior.both(a, c)
+            case Ior.Right(Left(b))    => loop(fn(b))
+            case Ior.Both(a, Left(b)) =>
+              fn(b) match {
+                case Ior.Left(aa)    => Ior.left(Semigroup[A].combine(a, aa))
+                case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
+                case Ior.Right(x)    => loop(Ior.both(a, x))
+              }
+          }
         loop(fn(b))
       }
 
@@ -811,26 +822,27 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 
 sealed abstract private[data] class IorInstances0 {
 
-  implicit def catsDataTraverseFunctorForIor[A]: Traverse[Ior[A, *]] = new Traverse[Ior[A, *]] {
-    def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
-      fa.traverse(f)
-    def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
-      fa.foldLeft(b)(f)
-    def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
-      fa.foldRight(lc)(f)
+  implicit def catsDataTraverseFunctorForIor[A]: Traverse[Ior[A, *]] =
+    new Traverse[Ior[A, *]] {
+      def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
+        fa.traverse(f)
+      def foldLeft[B, C](fa: A Ior B, b: C)(f: (C, B) => C): C =
+        fa.foldLeft(b)(f)
+      def foldRight[B, C](fa: A Ior B, lc: Eval[C])(f: (B, Eval[C]) => Eval[C]): Eval[C] =
+        fa.foldRight(lc)(f)
 
-    override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
+      override def size[B](fa: A Ior B): Long = fa.fold(_ => 0L, _ => 1L, (_, _) => 1L)
 
-    override def get[B](fa: A Ior B)(idx: Long): Option[B] =
-      if (idx == 0L) fa.toOption else None
+      override def get[B](fa: A Ior B)(idx: Long): Option[B] =
+        if (idx == 0L) fa.toOption else None
 
-    override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
+      override def forall[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.forall(p)
 
-    override def exists[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.exists(p)
+      override def exists[B](fa: Ior[A, B])(p: (B) => Boolean): Boolean = fa.exists(p)
 
-    override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
-      fa.map(f)
-  }
+      override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
+        fa.map(f)
+    }
 }
 
 sealed private[data] trait IorFunctions {

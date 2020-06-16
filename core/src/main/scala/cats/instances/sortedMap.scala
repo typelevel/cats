@@ -51,13 +51,15 @@ trait SortedMapInstances extends SortedMapInstances2 {
       override def map[A, B](fa: SortedMap[K, A])(f: A => B): SortedMap[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
 
-      override def map2Eval[A, B, Z](fa: SortedMap[K, A],
-                                     fb: Eval[SortedMap[K, B]])(f: (A, B) => Z): Eval[SortedMap[K, Z]] =
+      override def map2Eval[A, B, Z](fa: SortedMap[K, A], fb: Eval[SortedMap[K, B]])(
+        f: (A, B) => Z
+      ): Eval[SortedMap[K, Z]] =
         if (fa.isEmpty) Eval.now(SortedMap.empty(Order[K].toOrdering)) // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
-      override def ap2[A, B, Z](f: SortedMap[K, (A, B) => Z])(fa: SortedMap[K, A],
-                                                              fb: SortedMap[K, B]): SortedMap[K, Z] =
+      override def ap2[A, B, Z](
+        f: SortedMap[K, (A, B) => Z]
+      )(fa: SortedMap[K, A], fb: SortedMap[K, B]): SortedMap[K, Z] =
         f.flatMap {
           case (k, f) =>
             for { a <- fa.get(k); b <- fb.get(k) } yield (k, f(a, b))
@@ -216,11 +218,12 @@ private[instances] trait SortedMapInstancesBinCompat0 {
 }
 
 private[instances] trait SortedMapInstancesBinCompat1 {
-  implicit def catsStdMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] = new MonoidK[SortedMap[K, *]] {
-    override def empty[A]: SortedMap[K, A] = SortedMap.empty[K, A](Order[K].toOrdering)
+  implicit def catsStdMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] =
+    new MonoidK[SortedMap[K, *]] {
+      override def empty[A]: SortedMap[K, A] = SortedMap.empty[K, A](Order[K].toOrdering)
 
-    override def combineK[A](x: SortedMap[K, A], y: SortedMap[K, A]): SortedMap[K, A] = x ++ y
-  }
+      override def combineK[A](x: SortedMap[K, A], y: SortedMap[K, A]): SortedMap[K, A] = x ++ y
+    }
 }
 
 private[instances] trait SortedMapInstancesBinCompat2 extends cats.kernel.instances.SortedMapInstances

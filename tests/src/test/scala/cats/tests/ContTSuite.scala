@@ -30,10 +30,12 @@ class ContTSuite extends CatsSuite {
   /**
    * c.mapCont(f).run(g) == f(c.run(g))
    */
-  def mapContLaw[M[_], A, B](implicit eqma: Eq[M[A]],
-                             cArb: Arbitrary[ContT[M, A, B]],
-                             fnArb: Arbitrary[M[A] => M[A]],
-                             gnArb: Arbitrary[B => M[A]]) =
+  def mapContLaw[M[_], A, B](implicit
+    eqma: Eq[M[A]],
+    cArb: Arbitrary[ContT[M, A, B]],
+    fnArb: Arbitrary[M[A] => M[A]],
+    gnArb: Arbitrary[B => M[A]]
+  ) =
     forAll { (cont: ContT[M, A, B], fn: M[A] => M[A], gn: B => M[A]) =>
       assert(eqma.eqv(cont.mapCont(fn).run(gn), fn(cont.run(gn))))
     }
@@ -41,10 +43,12 @@ class ContTSuite extends CatsSuite {
   /**
    * cont.withCont(f).run(g) == cont.run(f(g))
    */
-  def withContLaw[M[_], A, B, C](implicit eqma: Eq[M[A]],
-                                 cArb: Arbitrary[ContT[M, A, B]],
-                                 fnArb: Arbitrary[(C => M[A]) => B => M[A]],
-                                 gnArb: Arbitrary[C => M[A]]) =
+  def withContLaw[M[_], A, B, C](implicit
+    eqma: Eq[M[A]],
+    cArb: Arbitrary[ContT[M, A, B]],
+    fnArb: Arbitrary[(C => M[A]) => B => M[A]],
+    gnArb: Arbitrary[C => M[A]]
+  ) =
     forAll { (cont: ContT[M, A, B], fn: (C => M[A]) => B => M[A], gn: C => M[A]) =>
       assert(eqma.eqv(cont.withCont(fn).run(gn), cont.run(fn(gn))))
     }

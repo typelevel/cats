@@ -27,7 +27,8 @@ class MapSuite extends CatsSuite {
   checkAll("FlatMap[Map[Int, *]]", SerializableTests.serializable(FlatMap[Map[Int, *]]))
 
   checkAll("Map[Int, Int] with Option",
-           UnorderedTraverseTests[Map[Int, *]].unorderedTraverse[Int, Int, Int, Option, Option])
+           UnorderedTraverseTests[Map[Int, *]].unorderedTraverse[Int, Int, Int, Option, Option]
+  )
   checkAll("UnorderedTraverse[Map[Int, *]]", SerializableTests.serializable(UnorderedTraverse[Map[Int, *]]))
 
   checkAll("Map[Int, Int]", FunctorFilterTests[Map[Int, *]].functorFilter[Int, Int, Int])
