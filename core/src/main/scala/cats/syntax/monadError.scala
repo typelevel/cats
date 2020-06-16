@@ -32,9 +32,6 @@ final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
 
   def redeemWith[B](recover: E => F[B], bind: A => F[B])(implicit F: MonadError[F, E]): F[B] =
     F.redeemWith[A, B](fa)(recover, bind)
-
-  def attemptTap[B](f: Either[E, A] => F[B])(implicit F: MonadError[F, E]): F[A] =
-    F.rethrow(F.flatTap(F.attempt(fa))(f))
 }
 
 final class MonadErrorRethrowOps[F[_], E, A](private val fea: F[Either[E, A]]) extends AnyVal {
