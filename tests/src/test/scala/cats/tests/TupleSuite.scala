@@ -42,9 +42,11 @@ class TupleSuite extends CatsSuite {
   checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
 
   checkAll("CommutativeFlatMap[(CSemi, *)]",
-           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi])
+           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi]
+  )
   checkAll("CommutativeFlatMap[(CSemi, *)] serializable",
-           SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)]))
+           SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)])
+  )
 
   checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
   checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))

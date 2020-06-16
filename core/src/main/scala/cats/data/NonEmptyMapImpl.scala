@@ -212,16 +212,15 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
    * through the running of this function on all the values in this map,
    * returning an NonEmptyMap[K, B] in a G context.
    */
-  def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] =
-    reduceRightToOptionWithKey[A, G[SortedMap[K, B]]](tail)({
-      case (k, a) =>
-        G.map(f(a))(b => SortedMap.empty[K, B] + ((k, b)))
-    }) { (t, lglb) =>
-      G.map2Eval(f(t._2), lglb)((b, bs) => bs + ((t._1, b)))
-    }.map {
-      case None        => G.map(f(head._2))(a => NonEmptyMapImpl.one(head._1, a))
-      case Some(gtail) => G.map2(f(head._2), gtail)((a, bs) => NonEmptyMapImpl((head._1, a), bs))
-    }.value
+  def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] = {
+    def loop(h: (K, A), t: SortedMap[K, A]): Eval[G[NonEmptyMap[K, B]]] =
+      if (t.isEmpty)
+        Eval.now(G.map(f(h._2))(b => NonEmptyMap(h._1 -> b, SortedMap.empty[K, B])))
+      else
+        G.map2Eval(f(h._2), Eval.defer(loop(t.head, t.tail)))((b, acc) => NonEmptyMap(h._1 -> b, acc.toSortedMap))
+
+    loop(head, tail).value
+  }
 
   /**
    * Typesafe stringification method.
@@ -329,9 +328,10 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
 
-  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] = new Band[NonEmptyMap[K, A]] {
-    def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
-  }
+  implicit def catsDataBandForNonEmptyMap[K, A]: Band[NonEmptyMap[K, A]] =
+    new Band[NonEmptyMap[K, A]] {
+      def combine(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): NonEmptyMap[K, A] = x ++ y
+    }
 }
 
 sealed abstract private[data] class NonEmptyMapInstances0 {

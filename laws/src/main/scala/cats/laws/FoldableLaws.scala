@@ -21,8 +21,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def leftFoldConsistentWithFoldMap[A, B](
     fa: F[A],
     f: A => B
-  )(implicit
-    M: Monoid[B]): IsEq[B] =
+  )(implicit M: Monoid[B]): IsEq[B] =
     fa.foldMap(f) <-> fa.foldLeft(M.empty) { (b, a) =>
       b |+| f(a)
     }
@@ -30,8 +29,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def rightFoldConsistentWithFoldMap[A, B](
     fa: F[A],
     f: A => B
-  )(implicit
-    M: Monoid[B]): IsEq[B] =
+  )(implicit M: Monoid[B]): IsEq[B] =
     fa.foldMap(f) <-> fa.foldRight(Later(M.empty))((a, lb) => lb.map(f(a) |+| _)).value
 
   def existsConsistentWithFind[A](fa: F[A], p: A => Boolean): Boolean =
@@ -50,8 +48,7 @@ trait FoldableLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def foldRightDeferConsistentWithFoldRight[A, B](
     fa: F[A],
     f: (B, A) => B
-  )(implicit
-    M: Monoid[B]): IsEq[B] = {
+  )(implicit M: Monoid[B]): IsEq[B] = {
     val g: (A, Eval[B]) => Eval[B] = (a, ea) => ea.map(f(_, a))
 
     F.foldRight(fa, Later(M.empty))(g).value <-> F.foldRightDefer(fa, Later(M.empty): Eval[B])(g).value

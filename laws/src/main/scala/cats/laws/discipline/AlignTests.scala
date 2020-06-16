@@ -11,8 +11,8 @@ import org.typelevel.discipline.Laws
 trait AlignTests[F[_]] extends Laws {
   def laws: AlignLaws[F]
 
-  def align[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary](
-    implicit ArbFA: Arbitrary[F[A]],
+  def align[A: Arbitrary, B: Arbitrary, C: Arbitrary, D: Arbitrary](implicit
+    ArbFA: Arbitrary[F[A]],
     ArbFB: Arbitrary[F[B]],
     ArbFC: Arbitrary[F[C]],
     ArbFAtoB: Arbitrary[A => C],
@@ -37,7 +37,8 @@ trait AlignTests[F[_]] extends Laws {
                        },
                        "alignWith consistent" -> forAll { (fa: F[A], fb: F[B], f: A Ior B => C) =>
                          laws.alignWithConsistent[A, B, C](fa, fb, f)
-                       })
+                       }
+    )
 }
 
 object AlignTests {

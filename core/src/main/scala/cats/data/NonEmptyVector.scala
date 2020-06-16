@@ -371,17 +371,15 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def extract[A](fa: NonEmptyVector[A]): A = fa.head
 
       def nonEmptyTraverse[G[_], A, B](
-        nel: NonEmptyVector[A]
-      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] =
-        Foldable[Vector]
-          .reduceRightToOption[A, G[Vector[B]]](nel.tail)(a => G.map(f(a))(_ +: Vector.empty)) { (a, lglb) =>
-            G.map2Eval(f(a), lglb)(_ +: _)
-          }
-          .map {
-            case None        => G.map(f(nel.head))(NonEmptyVector(_, Vector.empty))
-            case Some(gtail) => G.map2(f(nel.head), gtail)(NonEmptyVector(_, _))
-          }
-          .value
+        nev: NonEmptyVector[A]
+      )(f: A => G[B])(implicit G: Apply[G]): G[NonEmptyVector[B]] = {
+        def loop(head: A, tail: Vector[A]): Eval[G[NonEmptyVector[B]]] =
+          tail.headOption.fold(Eval.now(G.map(f(head))(NonEmptyVector(_, Vector.empty[B]))))(h =>
+            G.map2Eval(f(head), Eval.defer(loop(h, tail.tail)))((b, acc) => b +: acc)
+          )
+
+        loop(nev.head, nev.tail).value
+      }
 
       override def traverse[G[_], A, B](
         fa: NonEmptyVector[A]
@@ -424,15 +422,16 @@ sealed abstract private[data] class NonEmptyVectorInstances {
 
       def tailRecM[A, B](a: A)(f: A => NonEmptyVector[Either[A, B]]): NonEmptyVector[B] = {
         val buf = new VectorBuilder[B]
-        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit = v.head match {
-          case Right(b) =>
-            buf += b
-            NonEmptyVector.fromVector(v.tail) match {
-              case Some(t) => go(t)
-              case None    => ()
-            }
-          case Left(a) => go(f(a).concat(v.tail))
-        }
+        @tailrec def go(v: NonEmptyVector[Either[A, B]]): Unit =
+          v.head match {
+            case Right(b) =>
+              buf += b
+              NonEmptyVector.fromVector(v.tail) match {
+                case Some(t) => go(t)
+                case None    => ()
+              }
+            case Left(a) => go(f(a).concat(v.tail))
+          }
         go(f(a))
         NonEmptyVector.fromVectorUnsafe(buf.result())
       }
@@ -459,8 +458,9 @@ sealed abstract private[data] class NonEmptyVectorInstances {
       def align[A, B](fa: NonEmptyVector[A], fb: NonEmptyVector[B]): NonEmptyVector[Ior[A, B]] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].align(fa.toVector, fb.toVector))
 
-      override def alignWith[A, B, C](fa: NonEmptyVector[A],
-                                      fb: NonEmptyVector[B])(f: Ior[A, B] => C): NonEmptyVector[C] =
+      override def alignWith[A, B, C](fa: NonEmptyVector[A], fb: NonEmptyVector[B])(
+        f: Ior[A, B] => C
+      ): NonEmptyVector[C] =
         NonEmptyVector.fromVectorUnsafe(Align[Vector].alignWith(fa.toVector, fb.toVector)(f))
     }
 

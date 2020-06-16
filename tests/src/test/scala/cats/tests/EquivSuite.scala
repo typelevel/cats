@@ -16,6 +16,7 @@ class EquivSuite extends CatsSuite {
   checkAll("Contravariant[Equiv]", ContravariantTests[Equiv].contravariant[MiniInt, Int, Boolean])
   checkAll("Semigroupal[Equiv]", SemigroupalTests[Equiv].semigroupal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Equiv]",
-           ContravariantMonoidalTests[Equiv].contravariantMonoidal[MiniInt, Boolean, Boolean])
+           ContravariantMonoidalTests[Equiv].contravariantMonoidal[MiniInt, Boolean, Boolean]
+  )
   checkAll("ContravariantMonoidal[Equiv]", SerializableTests.serializable(ContravariantMonoidal[Equiv]))
 }

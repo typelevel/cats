@@ -1,12 +1,14 @@
 package cats.kernel
 
 import java.util.UUID
+
+import cats.kernel.compat.scalaVersionSpecific._
+
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.math.Equiv
-import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
-import compat.scalaVersionSpecific._
+import scala.{specialized => sp}
 
 /**
  * A type class used to determine equality between 2 instances of the same
@@ -41,9 +43,10 @@ trait EqToEquivConversion {
    * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
    * instance.
    */
-  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] = new Equiv[A] {
-    def equiv(a: A, b: A) = ev.eqv(a, b)
-  }
+  implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
+    new Equiv[A] {
+      def equiv(a: A, b: A) = ev.eqv(a, b)
+    }
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -108,42 +111,45 @@ object Eq
   /**
    * Everything is the same
    */
-  def allEqual[A]: Eq[A] = new Eq[A] {
-    def eqv(x: A, y: A) = true
-  }
+  def allEqual[A]: Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = true
+    }
 
   /**
    * This is a monoid that creates an Eq that
    * checks that all equality checks pass
    */
-  def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
-    def empty = allEqual[A]
-    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
-    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.iterator.isEmpty) None
-      else {
-        val materialized = es.iterator.toVector
-        Some(new Eq[A] {
-          def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
-        })
-      }
-  }
+  def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] =
+    new BoundedSemilattice[Eq[A]] {
+      def empty = allEqual[A]
+      def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.and(e1, e2)
+      override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+        if (es.iterator.isEmpty) None
+        else {
+          val materialized = es.iterator.toVector
+          Some(new Eq[A] {
+            def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
+          })
+        }
+    }
 
   /**
    * This is a monoid that creates an Eq that
    * checks that at least one equality check passes
    */
-  def anyEqualSemilattice[A]: Semilattice[Eq[A]] = new Semilattice[Eq[A]] {
-    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
-    override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
-      if (es.iterator.isEmpty) None
-      else {
-        val materialized = es.iterator.toVector
-        Some(new Eq[A] {
-          def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
-        })
-      }
-  }
+  def anyEqualSemilattice[A]: Semilattice[Eq[A]] =
+    new Semilattice[Eq[A]] {
+      def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = Eq.or(e1, e2)
+      override def combineAllOption(es: IterableOnce[Eq[A]]): Option[Eq[A]] =
+        if (es.iterator.isEmpty) None
+        else {
+          val materialized = es.iterator.toVector
+          Some(new Eq[A] {
+            def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
+          })
+        }
+    }
 
   implicit def catsKernelInstancesForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdOrderForBitSet
@@ -204,11 +210,12 @@ object Eq
    */
   implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
-        case (Success(a), Success(b)) => A.eqv(a, b)
-        case (Failure(a), Failure(b)) => T.eqv(a, b)
-        case _                        => false
-      }
+      def eqv(x: Try[A], y: Try[A]): Boolean =
+        (x, y) match {
+          case (Success(a), Success(b)) => A.eqv(a, b)
+          case (Failure(a), Failure(b)) => T.eqv(a, b)
+          case _                        => false
+        }
     }
 }
 

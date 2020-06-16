@@ -32,11 +32,12 @@ object KernelBoiler {
    *
    * As a side-effect, it actually generates them...
    */
-  def gen(dir: File): Seq[File] = templates.map { template =>
-    val tgtFile = template.filename(dir)
-    IO.write(tgtFile, template.body)
-    tgtFile
-  }
+  def gen(dir: File): Seq[File] =
+    templates.map { template =>
+      val tgtFile = template.filename(dir)
+      IO.write(tgtFile, template.body)
+      tgtFile
+    }
 
   class TemplateVals(val arity: Int) {
     val synTypes = (0 until arity).map(n => s"A$n")

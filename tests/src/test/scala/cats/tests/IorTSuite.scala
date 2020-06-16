@@ -15,7 +15,8 @@ class IorTSuite extends CatsSuite {
     implicit val F: Functor[ListWrapper] = ListWrapper.functor
 
     checkAll("IorT[ListWrapper, *, *]",
-             BifunctorTests[IorT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String])
+             BifunctorTests[IorT[ListWrapper, *, *]].bifunctor[Int, Int, Int, String, String, String]
+    )
     checkAll("Bifunctor[IorT[ListWrapper, *, *]]", SerializableTests.serializable(Bifunctor[IorT[ListWrapper, *, *]]))
 
     checkAll("IorT[ListWrapper, Int, *]", FunctorTests[IorT[ListWrapper, Int, *]].functor[Int, Int, Int])
@@ -26,7 +27,8 @@ class IorTSuite extends CatsSuite {
     implicit val F: Traverse[ListWrapper] = ListWrapper.traverse
 
     checkAll("IorT[ListWrapper, Int, *]",
-             TraverseTests[IorT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option])
+             TraverseTests[IorT[ListWrapper, Int, *]].traverse[Int, Int, Int, Int, Option, Option]
+    )
     checkAll("Traverse[IorT[ListWrapper, Int, *]]", SerializableTests.serializable(Traverse[IorT[ListWrapper, Int, *]]))
   }
 
@@ -34,16 +36,20 @@ class IorTSuite extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll("IorT[ListWrapper, String, Int]",
-             MonadErrorTests[IorT[ListWrapper, String, *], String].monadError[Int, Int, Int])
+             MonadErrorTests[IorT[ListWrapper, String, *], String].monadError[Int, Int, Int]
+    )
     checkAll("MonadError[IorT[List, *, *]]",
-             SerializableTests.serializable(MonadError[IorT[ListWrapper, String, *], String]))
+             SerializableTests.serializable(MonadError[IorT[ListWrapper, String, *], String])
+    )
   }
 
   {
     checkAll("IorT[Option, String, String]",
-             MonadErrorTests[IorT[Option, String, *], Unit].monadError[String, String, String])
+             MonadErrorTests[IorT[Option, String, *], Unit].monadError[String, String, String]
+    )
     checkAll("MonadError[IorT[Option, *, *]]",
-             SerializableTests.serializable(MonadError[IorT[Option, String, *], Unit]))
+             SerializableTests.serializable(MonadError[IorT[Option, String, *], Unit])
+    )
   }
 
   {
@@ -58,7 +64,8 @@ class IorTSuite extends CatsSuite {
 
     checkAll("IorT[ListWrapper, String, Int]", SemigroupTests[IorT[ListWrapper, String, Int]].semigroup)
     checkAll("Semigroup[IorT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(Semigroup[IorT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Semigroup[IorT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -66,7 +73,8 @@ class IorTSuite extends CatsSuite {
 
     checkAll("IorT[ListWrapper, String, Int]", MonoidTests[IorT[ListWrapper, String, Int]].monoid)
     checkAll("Monoid[IorT[ListWrapper, String, Int]]",
-             SerializableTests.serializable(Monoid[IorT[ListWrapper, String, Int]]))
+             SerializableTests.serializable(Monoid[IorT[ListWrapper, String, Int]])
+    )
   }
 
   {
@@ -342,6 +350,12 @@ class IorTSuite extends CatsSuite {
   test("IorT.fromOptionF isLeft consistent with Option isEmpty") {
     forAll { (option: Option[Int], s: String) =>
       IorT.fromOptionF[Id, String, Int](option, s).isLeft should ===(option.isEmpty)
+    }
+  }
+
+  test("IorT.fromOptionM consistent with IorT.fromOptionF") {
+    forAll { (option: Option[Int], s: String) =>
+      IorT.fromOptionM[Id, String, Int](option, s) should ===(IorT.fromOptionF[Id, String, Int](option, s))
     }
   }
 

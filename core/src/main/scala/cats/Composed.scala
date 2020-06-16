@@ -50,7 +50,8 @@ private[cats] trait ComposedSemigroupK[F[_], G[_]] extends SemigroupK[λ[α => F
   override def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
 
-private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]]]] with ComposedSemigroupK[F, G] { outer =>
+private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]]]] with ComposedSemigroupK[F, G] {
+  outer =>
   def F: MonoidK[F]
 
   override def empty[A]: F[G[A]] = F.empty
@@ -96,7 +97,8 @@ private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]
     F.nonEmptyTraverse(fga)(ga => G.nonEmptyTraverse(ga)(f))
 }
 
-private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] { outer =>
+private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] {
+  outer =>
   def F: Reducible[F]
   def G: Reducible[G]
 

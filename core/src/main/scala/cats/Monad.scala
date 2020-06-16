@@ -1,6 +1,7 @@
 package cats
 
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
+import scala.annotation.implicitNotFound
 
 /**
  * Monad.
@@ -11,6 +12,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.MonadLaws.
  */
+@implicitNotFound("Could not find an instance of Monad for ${F}")
 @typeclass trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
@@ -22,6 +24,7 @@ import simulacrum.typeclass
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
    */
+  @noop
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
     val b = Eval.later(body)
     tailRecM[G[A], G[A]](G.empty)(xs =>
@@ -41,6 +44,7 @@ import simulacrum.typeclass
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
    */
+  @noop
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
     val continue: Either[Unit, Unit] = Left(())
     val stop: F[Either[Unit, Unit]] = pure(Right(()))
@@ -112,5 +116,59 @@ import simulacrum.typeclass
    */
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
+
+}
+
+object Monad {
+
+  /****************************************************************************/
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /****************************************************************************/
+
+  /**
+   * Summon an instance of [[Monad]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Monad[F]): Monad[F] = instance
+
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Monad[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def untilM[G[_]](cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] =
+      typeClassInstance.untilM[G, A](self)(cond)(G)
+    def untilM_(cond: => F[Boolean]): F[Unit] = typeClassInstance.untilM_[A](self)(cond)
+    def iterateWhile(p: A => Boolean): F[A] = typeClassInstance.iterateWhile[A](self)(p)
+    def iterateUntil(p: A => Boolean): F[A] = typeClassInstance.iterateUntil[A](self)(p)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with Applicative.AllOps[F, A] {
+    type TypeClassType <: Monad[F]
+  }
+  trait ToMonadOps extends Serializable {
+    implicit def toMonadOps[F[_], A](target: F[A])(implicit tc: Monad[F]): Ops[F, A] {
+      type TypeClassType = Monad[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Monad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToMonadOps
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllMonadOps[F[_], A](target: F[A])(implicit tc: Monad[F]): AllOps[F, A] {
+      type TypeClassType = Monad[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Monad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+
+  /****************************************************************************/
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /****************************************************************************/
 
 }

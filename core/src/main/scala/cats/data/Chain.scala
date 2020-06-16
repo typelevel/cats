@@ -136,10 +136,11 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element and returns a new Chain.
    */
-  final def map[B](f: A => B): Chain[B] = this match {
-    case Wrap(seq) => Wrap(seq.map(f))
-    case _         => fromSeq(iterator.map(f).toVector)
-  }
+  final def map[B](f: A => B): Chain[B] =
+    this match {
+      case Wrap(seq) => Wrap(seq.map(f))
+      case _         => fromSeq(iterator.map(f).toVector)
+    }
 
   /**
    * Applies the supplied function to each element and returns a new Chain from the concatenated results
@@ -326,14 +327,15 @@ sealed abstract class Chain[+A] {
   /**
    * Zips each element of this `Chain` with its index.
    */
-  final def zipWithIndex: Chain[(A, Int)] = this match {
-    case Empty        => Empty
-    case Singleton(a) => Singleton((a, 0))
-    case Append(left, right) =>
-      val leftSize = left.length.toInt
-      Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
-    case Wrap(seq) => Wrap(seq.zipWithIndex)
-  }
+  final def zipWithIndex: Chain[(A, Int)] =
+    this match {
+      case Empty        => Empty
+      case Singleton(a) => Singleton((a, 0))
+      case Append(left, right) =>
+        val leftSize = left.length.toInt
+        Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
+      case Wrap(seq) => Wrap(seq.zipWithIndex)
+    }
 
   /**
    * Groups elements inside this `Chain` according to the `Order`
@@ -383,9 +385,10 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element, left to right.
    */
-  final private def foreach(f: A => Unit): Unit = foreachUntil { a =>
-    f(a); false
-  }
+  final private def foreach(f: A => Unit): Unit =
+    foreachUntil { a =>
+      f(a); false
+    }
 
   /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
@@ -423,15 +426,17 @@ sealed abstract class Chain[+A] {
   }
   // scalastyle:on null return cyclomatic.complexity
 
-  final def iterator: Iterator[A] = this match {
-    case Wrap(seq) => seq.iterator
-    case _         => new ChainIterator[A](this)
-  }
+  final def iterator: Iterator[A] =
+    this match {
+      case Wrap(seq) => seq.iterator
+      case _         => new ChainIterator[A](this)
+    }
 
-  final def reverseIterator: Iterator[A] = this match {
-    case Wrap(seq) => seq.reverseIterator
-    case _         => new ChainReverseIterator[A](this)
-  }
+  final def reverseIterator: Iterator[A] =
+    this match {
+      case Wrap(seq) => seq.reverseIterator
+      case _         => new ChainReverseIterator[A](this)
+    }
 
   /**
    * Returns the number of elements in this structure
@@ -541,19 +546,21 @@ sealed abstract class Chain[+A] {
       result
     }
 
-  final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] = this match {
-    case Empty        => this
-    case Singleton(_) => this
-    case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
-    case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
-  }
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
+    this match {
+      case Empty        => this
+      case Singleton(_) => this
+      case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+    }
 
-  final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] = this match {
-    case Empty        => this
-    case Singleton(_) => this
-    case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
-    case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
-  }
+  final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
+    this match {
+      case Empty        => this
+      case Singleton(_) => this
+      case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+    }
 }
 
 object Chain extends ChainInstances {
@@ -700,10 +707,11 @@ object Chain extends ChainInstances {
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
-  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = new Monoid[Chain[A]] {
-    def empty: Chain[A] = Chain.nil
-    def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
-  }
+  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] =
+    new Monoid[Chain[A]] {
+      def empty: Chain[A] = Chain.nil
+      def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
+    }
 
   implicit val catsDataInstancesForChain
     : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
@@ -865,17 +873,19 @@ sealed abstract private[data] class ChainInstances1 extends ChainInstances2 {
 }
 
 sealed abstract private[data] class ChainInstances2 extends ChainInstances3 {
-  implicit def catsDataHashForChain[A](implicit A: Hash[A]): Hash[Chain[A]] = new Hash[Chain[A]] {
-    def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+  implicit def catsDataHashForChain[A](implicit A: Hash[A]): Hash[Chain[A]] =
+    new Hash[Chain[A]] {
+      def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
 
-    def hash(fa: Chain[A]): Int = fa.hash
-  }
+      def hash(fa: Chain[A]): Int = fa.hash
+    }
 }
 
 sealed abstract private[data] class ChainInstances3 {
-  implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] = new Eq[Chain[A]] {
-    def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
-  }
+  implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] =
+    new Eq[Chain[A]] {
+      def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+    }
 }
 
 private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {

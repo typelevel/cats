@@ -32,21 +32,24 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   }
 
   trait ToShowOps {
-    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] = new Ops[A] {
-      val self = target
-      val typeClassInstance = tc
-    }
+    implicit def toShow[A](target: A)(implicit tc: Show[A]): Ops[A] =
+      new Ops[A] {
+        val self = target
+        val typeClassInstance = tc
+      }
   }
 
   /** creates an instance of [[Show]] using the provided function */
-  def show[A](f: A => String): Show[A] = new Show[A] {
-    def show(a: A): String = f(a)
-  }
+  def show[A](f: A => String): Show[A] =
+    new Show[A] {
+      def show(a: A): String = f(a)
+    }
 
   /** creates an instance of [[Show]] using object toString */
-  def fromToString[A]: Show[A] = new Show[A] {
-    def show(a: A): String = a.toString
-  }
+  def fromToString[A]: Show[A] =
+    new Show[A] {
+      def show(a: A): String = a.toString
+    }
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {

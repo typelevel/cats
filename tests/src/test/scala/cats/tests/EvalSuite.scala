@@ -197,7 +197,8 @@ class EvalSuite extends CatsSuite {
         Gen.oneOf(arbitrary[A => A].map(OMap(_)),
                   arbitrary[A => Eval[A]].map(OFlatMap(_)),
                   Gen.const(OMemoize[A]()),
-                  Gen.const(ODefer[A]()))
+                  Gen.const(ODefer[A]())
+        )
       )
 
     def build[A](leaf: () => Eval[A], os: Vector[O[A]]): DeepEval[A] = {

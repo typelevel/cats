@@ -54,7 +54,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
       (rwsa: ReaderWriterState[String, Vector[Int], Int, Int],
        rwsb: ReaderWriterState[String, Vector[Int], Int, Int],
        c: String,
-       s: Int) =>
+       s: Int
+      ) =>
         val logMap2 = rwsa.map2(rwsb)((_, _) => ()).runL(c, s).value
 
         val (logA, stateA, _) = rwsa.run(c, s).value
@@ -239,7 +240,8 @@ class ReaderWriterStateTSuite extends CatsSuite {
        f: Int => Option[Int],
        initial: String,
        context: String,
-       log: String) =>
+       log: String
+      ) =>
         val flatMap = rwst.flatMap { a =>
           ReaderWriterStateT { (e, s) =>
             f(a).map((log, s, _))
@@ -424,14 +426,16 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
     val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, Boolean, String, MiniInt](ListWrapper.monad,
                                                                                       ListWrapper.alternative,
-                                                                                      Monoid[String])
+                                                                                      Monoid[String]
+    )
 
     checkAll(
       "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]",
       AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
     )
     checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]]",
-             SerializableTests.serializable(SA))
+             SerializableTests.serializable(SA)
+    )
   }
 
   {
@@ -490,11 +494,13 @@ object ReaderWriterStateTSuite {
       ((), state + i, state + i)
     }
 
-  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],
-                                              SB: Arbitrary[SB],
-                                              E: ExhaustiveCheck[E],
-                                              FLSB: Eq[F[(L, SB, A)]],
-                                              F: Monad[F]): Eq[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
+  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit
+    SA: ExhaustiveCheck[SA],
+    SB: Arbitrary[SB],
+    E: ExhaustiveCheck[E],
+    FLSB: Eq[F[(L, SB, A)]],
+    F: Monad[F]
+  ): Eq[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Eq.by[IndexedReaderWriterStateT[F, E, L, SA, SB, A], (E, SA) => F[(L, SB, A)]] { state => (e, s) =>
       state.run(e, s)
     }

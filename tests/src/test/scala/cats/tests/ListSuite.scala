@@ -10,6 +10,7 @@ import cats.laws.discipline.{
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
@@ -41,6 +42,9 @@ class ListSuite extends CatsSuite {
   checkAll("List[Int]", AlignTests[List].align[Int, Int, Int, Int])
   checkAll("Align[List]", SerializableTests.serializable(Align[List]))
 
+  checkAll("List[Int]", ShortCircuitingTests[List].traverseFilter[Int])
+  checkAll("List[Int]", ShortCircuitingTests[List].foldable[Int])
+
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
   test("nel => list => nel returns original nel")(
@@ -56,6 +60,12 @@ class ListSuite extends CatsSuite {
   test("groupByNel should be consistent with groupBy")(
     forAll { (fa: List[Int], f: Int => Int) =>
       fa.groupByNel(f).map { case (k, v) => (k, v.toList) } should ===(fa.groupBy(f))
+    }
+  )
+
+  test("groupByNelA should be consistent with groupByNel")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      fa.groupByNelA(f.andThen(Option(_))) should ===(Option(fa.groupByNel(f)))
     }
   )
 

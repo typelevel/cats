@@ -23,6 +23,12 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = x.orElse(y)
 
+      override def combineKEval[A](x: Option[A], y: Eval[Option[A]]): Eval[Option[A]] =
+        x match {
+          case None    => y
+          case Some(_) => Now(x)
+        }
+
       def pure[A](x: A): Option[A] = Some(x)
 
       override def map[A, B](fa: Option[A])(f: A => B): Option[B] =
@@ -153,10 +159,11 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
     new Show[Option[A]] {
-      def show(fa: Option[A]): String = fa match {
-        case Some(a) => s"Some(${A.show(a)})"
-        case None    => "None"
-      }
+      def show(fa: Option[A]): String =
+        fa match {
+          case Some(a) => s"Some(${A.show(a)})"
+          case None    => "None"
+        }
     }
 }
 

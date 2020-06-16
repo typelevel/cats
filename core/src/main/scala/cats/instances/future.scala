@@ -6,8 +6,8 @@ import scala.util.{Failure, Success}
 
 trait FutureInstances extends FutureInstances1 {
 
-  implicit def catsStdInstancesForFuture(
-    implicit ec: ExecutionContext
+  implicit def catsStdInstancesForFuture(implicit
+    ec: ExecutionContext
   ): MonadError[Future, Throwable] with CoflatMap[Future] with Monad[Future] =
     new FutureCoflatMap with MonadError[Future, Throwable] with Monad[Future] with StackSafeMonad[Future] {
       override def pure[A](x: A): Future[A] =

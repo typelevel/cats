@@ -11,10 +11,11 @@ trait InjectTests[A, B] extends Laws {
   def laws: InjectLaws[A, B]
 
   def inject(implicit
-             ArbA: Arbitrary[A],
-             EqOptionA: Eq[Option[A]],
-             ArbB: Arbitrary[B],
-             EqOptionB: Eq[Option[B]]): RuleSet =
+    ArbA: Arbitrary[A],
+    EqOptionA: Eq[Option[A]],
+    ArbB: Arbitrary[B],
+    EqOptionB: Eq[Option[B]]
+  ): RuleSet =
     new DefaultRuleSet(
       "inject",
       None,

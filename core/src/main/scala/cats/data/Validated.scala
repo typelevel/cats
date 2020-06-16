@@ -40,10 +40,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res0: Boolean = false
    * }}}
    */
-  def isValid: Boolean = this match {
-    case Invalid(_) => false
-    case _          => true
-  }
+  def isValid: Boolean =
+    this match {
+      case Invalid(_) => false
+      case _          => true
+    }
 
   /**
    * Example:
@@ -55,18 +56,20 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res0: Boolean = true
    * }}}
    */
-  def isInvalid: Boolean = this match {
-    case Invalid(_) => true
-    case _          => false
-  }
+  def isInvalid: Boolean =
+    this match {
+      case Invalid(_) => true
+      case _          => false
+    }
 
   /**
    * Run the side-effecting function on the value if it is Valid
    */
-  def foreach(f: A => Unit): Unit = this match {
-    case Valid(a) => f(a)
-    case _        => ()
-  }
+  def foreach(f: A => Unit): Unit =
+    this match {
+      case Valid(a) => f(a)
+      case _        => ()
+    }
 
   /**
    * Return the Valid value, or the default if Invalid
@@ -85,10 +88,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Int = 123
    * }}}
    */
-  def getOrElse[B >: A](default: => B): B = this match {
-    case Valid(a) => a
-    case _        => default
-  }
+  def getOrElse[B >: A](default: => B): B =
+    this match {
+      case Valid(a) => a
+      case _        => default
+    }
 
   /**
    * Return the Valid value, or the result of f if Invalid
@@ -106,10 +110,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: String = OK
    * }}}
    */
-  def valueOr[B >: A](f: E => B): B = this match {
-    case Invalid(e) => f(e)
-    case Valid(a)   => a
-  }
+  def valueOr[B >: A](f: E => B): B =
+    this match {
+      case Invalid(e) => f(e)
+      case Valid(a)   => a
+    }
 
   /**
    * Is this Valid and matching the given predicate
@@ -128,10 +133,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Boolean = true
    * }}}
    */
-  def exists(predicate: A => Boolean): Boolean = this match {
-    case Valid(a) => predicate(a)
-    case _        => false
-  }
+  def exists(predicate: A => Boolean): Boolean =
+    this match {
+      case Valid(a) => predicate(a)
+      case _        => false
+    }
 
   /**
    * Is this Invalid or matching the predicate
@@ -150,10 +156,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Boolean = false
    * }}}
    */
-  def forall(f: A => Boolean): Boolean = this match {
-    case Valid(a) => f(a)
-    case _        => true
-  }
+  def forall(f: A => Boolean): Boolean =
+    this match {
+      case Valid(a) => f(a)
+      case _        => true
+    }
 
   /**
    * Return this if it is Valid, or else fall back to the given default.
@@ -232,10 +239,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * }}}
    *
    */
-  def toEither: Either[E, A] = this match {
-    case Invalid(e) => Left(e)
-    case Valid(a)   => Right(a)
-  }
+  def toEither: Either[E, A] =
+    this match {
+      case Invalid(e) => Left(e)
+      case Valid(a)   => Right(a)
+    }
 
   /**
    * Returns Valid values wrapped in Some, and None for Invalid values
@@ -254,10 +262,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Option[Int] = Some(123)
    * }}}
    */
-  def toOption: Option[A] = this match {
-    case Valid(a) => Some(a)
-    case _        => None
-  }
+  def toOption: Option[A] =
+    this match {
+      case Valid(a) => Some(a)
+      case _        => None
+    }
 
   /**
    * Returns Valid values wrapped in Ior.Right, and None for Ior.Left values
@@ -276,10 +285,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Ior[String, Int] = Right(123)
    * }}}
    */
-  def toIor: Ior[E, A] = this match {
-    case Invalid(e) => Ior.Left(e)
-    case Valid(a)   => Ior.Right(a)
-  }
+  def toIor: Ior[E, A] =
+    this match {
+      case Invalid(e) => Ior.Left(e)
+      case Valid(a)   => Ior.Right(a)
+    }
 
   /**
    * Convert this value to a single element List if it is Valid,
@@ -299,10 +309,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: List[Int] = List(123)
    * }}}
    */
-  def toList: List[A] = this match {
-    case Valid(a) => List(a)
-    case _        => Nil
-  }
+  def toList: List[A] =
+    this match {
+      case Valid(a) => List(a)
+      case _        => Nil
+    }
 
   /**
    * Lift the Invalid value into a NonEmptyList.
@@ -389,10 +400,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Validated[List[String] ,Option[Int]] = Valid(Some(123))
    * }}}
    */
-  def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] = this match {
-    case Valid(a)   => Valid(fa(a))
-    case Invalid(e) => Invalid(fe(e))
-  }
+  def bimap[EE, AA](fe: E => EE, fa: A => AA): Validated[EE, AA] =
+    this match {
+      case Valid(a)   => Valid(fa(a))
+      case Invalid(e) => Invalid(fe(e))
+    }
 
   /**
    * Example:
@@ -429,13 +441,15 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
       case (Valid(_), _)             => 1
     }
 
-  def partialCompare[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: PartialOrder[EE],
-                                                                AA: PartialOrder[AA]): Double = (this, that) match {
-    case (Valid(a), Valid(aa))     => AA.partialCompare(a, aa)
-    case (Invalid(e), Invalid(ee)) => EE.partialCompare(e, ee)
-    case (Invalid(_), _)           => -1
-    case (Valid(_), _)             => 1
-  }
+  def partialCompare[EE >: E, AA >: A](
+    that: Validated[EE, AA]
+  )(implicit EE: PartialOrder[EE], AA: PartialOrder[AA]): Double =
+    (this, that) match {
+      case (Valid(a), Valid(aa))     => AA.partialCompare(a, aa)
+      case (Invalid(e), Invalid(ee)) => EE.partialCompare(e, ee)
+      case (Invalid(_), _)           => -1
+      case (Valid(_), _)             => 1
+    }
 
   /**
    * Example:
@@ -457,11 +471,12 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res3: Boolean = false
    * }}}
    */
-  def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean = (this, that) match {
-    case (Invalid(e), Invalid(ee)) => EE.eqv(e, ee)
-    case (Valid(a), Valid(aa))     => AA.eqv(a, aa)
-    case _                         => false
-  }
+  def ===[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Eq[EE], AA: Eq[AA]): Boolean =
+    (this, that) match {
+      case (Invalid(e), Invalid(ee)) => EE.eqv(e, ee)
+      case (Valid(a), Valid(aa))     => AA.eqv(a, aa)
+      case _                         => false
+    }
 
   /**
    * From Apply:
@@ -540,10 +555,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Validated[String, Int] = Valid(246)
    * }}}
    */
-  def map[B](f: A => B): Validated[E, B] = this match {
-    case i @ Invalid(_) => i
-    case Valid(a)       => Valid(f(a))
-  }
+  def map[B](f: A => B): Validated[E, B] =
+    this match {
+      case i @ Invalid(_) => i
+      case Valid(a)       => Valid(f(a))
+    }
 
   /**
    * Apply a function to an Invalid value, returning a new Invalid value.
@@ -564,10 +580,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    *
    * }}}
    */
-  def leftMap[EE](f: E => EE): Validated[EE, A] = this match {
-    case a @ Valid(_) => a
-    case Invalid(e)   => Invalid(f(e))
-  }
+  def leftMap[EE](f: E => EE): Validated[EE, A] =
+    this match {
+      case a @ Valid(_) => a
+      case Invalid(e)   => Invalid(f(e))
+    }
 
   /**
    * When Valid, apply the function, marking the result as valid
@@ -588,10 +605,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Option[Validated[String, Int]] = Some(Valid(123))
    * }}}
    */
-  def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE, B]] = this match {
-    case Valid(a)       => F.map(f(a))(Valid.apply)
-    case e @ Invalid(_) => F.pure(e)
-  }
+  def traverse[F[_], EE >: E, B](f: A => F[B])(implicit F: Applicative[F]): F[Validated[EE, B]] =
+    this match {
+      case Valid(a)       => F.map(f(a))(Valid.apply)
+      case e @ Invalid(_) => F.pure(e)
+    }
 
   /**
    * apply the given function to the value with the given B when
@@ -611,10 +629,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res1: Int = 579
    * }}}
    */
-  def foldLeft[B](b: B)(f: (B, A) => B): B = this match {
-    case Valid(a) => f(b, a)
-    case _        => b
-  }
+  def foldLeft[B](b: B)(f: (B, A) => B): B =
+    this match {
+      case Valid(a) => f(b, a)
+      case _        => b
+    }
 
   /**
    * Lazily-apply the given function to the value with the given B
@@ -636,15 +655,17 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * }}}
    *
    */
-  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = this match {
-    case Valid(a) => f(a, lb)
-    case _        => lb
-  }
+  def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+    this match {
+      case Valid(a) => f(a, lb)
+      case _        => lb
+    }
 
-  def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String = this match {
-    case Invalid(e) => s"Invalid(${EE.show(e)})"
-    case Valid(a)   => s"Valid(${AA.show(a)})"
-  }
+  def show[EE >: E, AA >: A](implicit EE: Show[EE], AA: Show[AA]): String =
+    this match {
+      case Invalid(e) => s"Invalid(${EE.show(e)})"
+      case Valid(a)   => s"Valid(${AA.show(a)})"
+    }
 
   /**
    * Apply a function (that returns a `Validated`) in the valid case.
@@ -705,8 +726,9 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res2: Validated[NonEmptyList[String], List[Int]] = Valid(List(123, 456))
    * }}}
    */
-  def combine[EE >: E, AA >: A](that: Validated[EE, AA])(implicit EE: Semigroup[EE],
-                                                         AA: Semigroup[AA]): Validated[EE, AA] =
+  def combine[EE >: E, AA >: A](
+    that: Validated[EE, AA]
+  )(implicit EE: Semigroup[EE], AA: Semigroup[AA]): Validated[EE, AA] =
     (this, that) match {
       case (Valid(a), Valid(b))     => Valid(AA.combine(a, b))
       case (Invalid(a), Invalid(b)) => Invalid(EE.combine(a, b))
@@ -730,10 +752,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * }}}
    *
    */
-  def swap: Validated[A, E] = this match {
-    case Valid(a)   => Invalid(a)
-    case Invalid(e) => Valid(e)
-  }
+  def swap: Validated[A, E] =
+    this match {
+      case Valid(a)   => Invalid(a)
+      case Invalid(e) => Valid(e)
+    }
 
   /**
    * Example:
@@ -751,10 +774,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * }}}
    *
    */
-  def merge[EE >: E](implicit ev: A <:< EE): EE = this match {
-    case Invalid(e) => e
-    case Valid(a)   => ev(a)
-  }
+  def merge[EE >: E](implicit ev: A <:< EE): EE =
+    this match {
+      case Invalid(e) => e
+      case Valid(a)   => ev(a)
+    }
 
   /**
    * Ensure that a successful result passes the given predicate,
@@ -767,10 +791,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must not be empty)
    * }}}
    */
-  def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] = this match {
-    case Valid(a) => if (f(a)) this else Validated.invalid(onFailure)
-    case _        => this
-  }
+  def ensure[EE >: E](onFailure: => EE)(f: A => Boolean): Validated[EE, A] =
+    this match {
+      case Valid(a) => if (f(a)) this else Validated.invalid(onFailure)
+      case _        => this
+    }
 
   /**
    * Ensure that a successful result passes the given predicate,
@@ -783,10 +808,11 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * res0: Validated[IllegalArgumentException, String] = Invalid(java.lang.IllegalArgumentException: Must be longer than 3, provided 'ab')
    * }}}
    */
-  def ensureOr[EE >: E](onFailure: A => EE)(f: A => Boolean): Validated[EE, A] = this match {
-    case Valid(a) => if (f(a)) this else Validated.invalid(onFailure(a))
-    case _        => this
-  }
+  def ensureOr[EE >: E](onFailure: A => EE)(f: A => Boolean): Validated[EE, A] =
+    this match {
+      case Valid(a) => if (f(a)) this else Validated.invalid(onFailure(a))
+      case _        => this
+    }
 }
 
 object Validated extends ValidatedInstances with ValidatedFunctions with ValidatedFunctionsBinCompat0 {
@@ -829,14 +855,15 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
 
   implicit def catsDataSemigroupKForValidated[A](implicit A: Semigroup[A]): SemigroupK[Validated[A, *]] =
     new SemigroupK[Validated[A, *]] {
-      def combineK[B](x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x match {
-        case v @ Valid(_) => v
-        case Invalid(ix) =>
-          y match {
-            case Invalid(iy)  => Invalid(A.combine(ix, iy))
-            case v @ Valid(_) => v
-          }
-      }
+      def combineK[B](x: Validated[A, B], y: Validated[A, B]): Validated[A, B] =
+        x match {
+          case v @ Valid(_) => v
+          case Invalid(ix) =>
+            y match {
+              case Invalid(iy)  => Invalid(A.combine(ix, iy))
+              case v @ Valid(_) => v
+            }
+        }
     }
 
   implicit def catsDataAlignForValidated[E: Semigroup]: Align[Validated[E, *]] =
@@ -866,11 +893,12 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x.combine(y)
     }
 
-  implicit def catsDataOrderForValidated[A: Order, B: Order]: Order[Validated[A, B]] = new Order[Validated[A, B]] {
-    def compare(x: Validated[A, B], y: Validated[A, B]): Int = x.compare(y)
-    override def partialCompare(x: Validated[A, B], y: Validated[A, B]): Double = x.partialCompare(y)
-    override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
-  }
+  implicit def catsDataOrderForValidated[A: Order, B: Order]: Order[Validated[A, B]] =
+    new Order[Validated[A, B]] {
+      def compare(x: Validated[A, B], y: Validated[A, B]): Int = x.compare(y)
+      override def partialCompare(x: Validated[A, B], y: Validated[A, B]): Double = x.partialCompare(y)
+      override def eqv(x: Validated[A, B], y: Validated[A, B]): Boolean = x === y
+    }
 
   implicit def catsDataShowForValidated[A, B](implicit A: Show[A], B: Show[B]): Show[Validated[A, B]] =
     new Show[Validated[A, B]] {
@@ -893,8 +921,9 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
           case Valid(b)   => g(c, b)
         }
 
-      def bifoldRight[A, B, C](fab: Validated[A, B], c: Eval[C])(f: (A, Eval[C]) => Eval[C],
-                                                                 g: (B, Eval[C]) => Eval[C]): Eval[C] =
+      def bifoldRight[A, B, C](fab: Validated[A, B],
+                               c: Eval[C]
+      )(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
         fab match {
           case Invalid(a) => f(a, c)
           case Valid(b)   => g(b, c)
@@ -921,8 +950,10 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
 
 sealed abstract private[data] class ValidatedInstances1 extends ValidatedInstances2 {
 
-  implicit def catsDataSemigroupForValidated[A, B](implicit A: Semigroup[A],
-                                                   B: Semigroup[B]): Semigroup[Validated[A, B]] =
+  implicit def catsDataSemigroupForValidated[A, B](implicit
+    A: Semigroup[A],
+    B: Semigroup[B]
+  ): Semigroup[Validated[A, B]] =
     new Semigroup[Validated[A, B]] {
       def combine(x: Validated[A, B], y: Validated[A, B]): Validated[A, B] = x.combine(y)
     }
@@ -974,18 +1005,20 @@ sealed abstract private[data] class ValidatedInstances2 {
       override def reduceRightOption[A](fa: Validated[E, A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] =
         Now(fa.toOption)
 
-      override def size[A](fa: Validated[E, A]): Long = fa match {
-        case Invalid(_) => 0L
-        case _          => 1L
-      }
+      override def size[A](fa: Validated[E, A]): Long =
+        fa match {
+          case Invalid(_) => 0L
+          case _          => 1L
+        }
 
       override def get[A](fa: Validated[E, A])(idx: Long): Option[A] =
         if (idx == 0L) fa.toOption else None
 
-      override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B = fa match {
-        case Valid(a) => f(a)
-        case _        => B.empty
-      }
+      override def foldMap[A, B](fa: Validated[E, A])(f: A => B)(implicit B: Monoid[B]): B =
+        fa match {
+          case Valid(a) => f(a)
+          case _        => B.empty
+        }
 
       override def find[A](fa: Validated[E, A])(f: A => Boolean): Option[A] =
         fa.toOption.filter(f)
@@ -996,10 +1029,11 @@ sealed abstract private[data] class ValidatedInstances2 {
       override def forall[A](fa: Validated[E, A])(p: A => Boolean): Boolean =
         fa.forall(p)
 
-      override def toList[A](fa: Validated[E, A]): List[A] = fa match {
-        case Valid(a) => a :: Nil
-        case _        => Nil
-      }
+      override def toList[A](fa: Validated[E, A]): List[A] =
+        fa match {
+          case Valid(a) => a :: Nil
+          case _        => Nil
+        }
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
     }
@@ -1075,10 +1109,11 @@ private[data] trait ValidatedFunctions {
   /**
    * Converts a `Try[A]` to a `Validated[Throwable, A]`.
    */
-  def fromTry[A](t: Try[A]): Validated[Throwable, A] = t match {
-    case Failure(e) => invalid(e)
-    case Success(v) => valid(v)
-  }
+  def fromTry[A](t: Try[A]): Validated[Throwable, A] =
+    t match {
+      case Failure(e) => invalid(e)
+      case Success(v) => valid(v)
+    }
 
   /**
    * Converts an `Either[A, B]` to a `Validated[A, B]`.

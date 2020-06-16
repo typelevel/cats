@@ -15,7 +15,7 @@ import arrow.Category
  * function that expects a `B` as input.)
  *
  * This code was ported directly from scalaz to cats using this version from scalaz:
- * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/As.scala
+ * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala
  *
  *  The original contribution to scalaz came from Jason Zaugg
  */

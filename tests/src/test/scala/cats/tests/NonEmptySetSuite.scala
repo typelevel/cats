@@ -31,11 +31,14 @@ class NonEmptySetSuite extends CatsSuite {
 
     checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
-             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]]))
+             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptySet[ListWrapper[Int]]]
     PartialOrder[NonEmptySet[ListWrapper[Int]]]
   }
+
+  checkAll("NonEmptySet[Int]", ShortCircuitingTests[NonEmptySet].foldable[Int])
 
   test("First element is always the smallest") {
     forAll { (nes: NonEmptySet[Int]) =>

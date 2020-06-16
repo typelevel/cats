@@ -31,11 +31,12 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     F.mproduct(fa)(fb) <-> F.flatMap(fa)(a => F.map(fb(a))((a, _)))
 
   def tailRecMConsistentFlatMap[A](a: A, f: A => F[A]): IsEq[F[A]] = {
-    def bounce(n: Int) = F.tailRecM[(A, Int), A]((a, n)) {
-      case (a0, i) =>
-        if (i > 0) f(a0).map(a1 => Left((a1, i - 1)))
-        else f(a0).map(Right(_))
-    }
+    def bounce(n: Int) =
+      F.tailRecM[(A, Int), A]((a, n)) {
+        case (a0, i) =>
+          if (i > 0) f(a0).map(a1 => Left((a1, i - 1)))
+          else f(a0).map(Right(_))
+      }
     /*
      * The law is for n >= 1
      * bounce(n) == bounce(n - 1).flatMap(f)

@@ -18,9 +18,10 @@ import scala.collection.immutable.{SortedMap, SortedSet}
 import scala.util.Try
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit ArbFInt: Arbitrary[F[Int]],
-                                                           ArbFString: Arbitrary[F[String]])
-    extends CatsSuite {
+abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
+  ArbFInt: Arbitrary[F[Int]],
+  ArbFString: Arbitrary[F[String]]
+) extends CatsSuite {
 
   def iterator[T](fa: F[T]): Iterator[T]
 
@@ -463,13 +464,14 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
   }
 
-  def foldableStreamWithDefaultImpl: Foldable[Stream] = new Foldable[Stream] {
-    def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
-      Foldable[Stream].foldLeft(fa, b)(f)
+  def foldableStreamWithDefaultImpl: Foldable[Stream] =
+    new Foldable[Stream] {
+      def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
+        Foldable[Stream].foldLeft(fa, b)(f)
 
-    def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      Foldable[Stream].foldRight(fa, lb)(f)
-  }
+      def foldRight[A, B](fa: Stream[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Foldable[Stream].foldRight(fa, lb)(f)
+    }
 
   test(".foldA successful case") {
     implicit val F: Foldable[Stream] = foldableStreamWithDefaultImpl

@@ -13,7 +13,7 @@ class TailRecSuite extends CatsSuite {
     Arbitrary(
       Gen.frequency(
         (3, arbitrary[A].map(done(_))),
-        (1, Gen.lzy(arbitrary[(A, A => TailRec[A])].map { case (a, fn)          => tailcall(fn(a)) })),
+        (1, Gen.lzy(arbitrary[(A, A => TailRec[A])].map { case (a, fn) => tailcall(fn(a)) })),
         (1, Gen.lzy(arbitrary[(TailRec[A], A => TailRec[A])].map { case (a, fn) => a.flatMap(fn) }))
       )
     )

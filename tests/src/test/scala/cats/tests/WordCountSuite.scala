@@ -27,7 +27,7 @@ class WordCountSuite extends CatsSuite {
       appFunc { (c: Char) =>
         liftInt(testIf(c == '\n'))
       }
-    def isSpace(c: Char): Boolean = (c == ' ' || c == '\n')
+    def isSpace(c: Char): Boolean = c == ' ' || c == '\n'
 
     // To count words, we need to detect transitions from whitespace to non-whitespace.
     val countWord =

@@ -43,7 +43,7 @@ trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
   def dinaturalitySecond[A, B, C, D](fab: F[A, B], f: C => D): IsEq[F[(C, A), (D, B)]] =
     fab.second[C].rmap(mapFirst(f)) <-> fab.second[D].lmap(mapFirst(f))
 
-  private def assoc[A, B, C]: (((A, B), C)) => (A, (B, C)) = { case ((a, c), d)   => (a, (c, d)) }
+  private def assoc[A, B, C]: (((A, B), C)) => (A, (B, C)) = { case ((a, c), d) => (a, (c, d)) }
   private def unassoc[A, B, C]: ((A, (B, C))) => ((A, B), C) = { case (a, (c, d)) => ((a, c), d) }
 
   /** first' . first' == dimap assoc unassoc . first' where

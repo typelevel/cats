@@ -18,16 +18,19 @@ class AndThenSuite extends CatsSuite with Checkers {
     implicit val iso: SemigroupalTests.Isomorphisms[AndThen[*, Int]] =
       SemigroupalTests.Isomorphisms.invariant[AndThen[*, Int]]
     checkAll("AndThen[*, Int]",
-             ContravariantMonoidalTests[AndThen[*, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean])
+             ContravariantMonoidalTests[AndThen[*, Int]].contravariantMonoidal[MiniInt, Boolean, Boolean]
+    )
     checkAll("ContravariantMonoidal[AndThen[*, Int]]",
-             SerializableTests.serializable(ContravariantMonoidal[AndThen[*, Int]]))
+             SerializableTests.serializable(ContravariantMonoidal[AndThen[*, Int]])
+    )
   }
 
   checkAll("AndThen[MiniInt, Int]", MonadTests[AndThen[MiniInt, *]].monad[Int, Int, Int])
   checkAll("Monad[AndThen[Int, *]]", SerializableTests.serializable(Monad[AndThen[Int, *]]))
 
   checkAll("AndThen",
-           CommutativeArrowTests[AndThen].commutativeArrow[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean])
+           CommutativeArrowTests[AndThen].commutativeArrow[MiniInt, Boolean, Boolean, Boolean, Boolean, Boolean]
+  )
   checkAll("Arrow[AndThen]", SerializableTests.serializable(CommutativeArrow[AndThen]))
 
   checkAll("AndThen", ChoiceTests[AndThen].choice[MiniInt, Boolean, Int, Int])
