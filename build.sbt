@@ -12,7 +12,7 @@ lazy val scoverageSettings = Seq(
 )
 
 organization in ThisBuild := "org.typelevel"
-scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.3.0"
+scalafixDependencies in ThisBuild += "org.typelevel" %% "simulacrum-scalafix" % "0.4.0"
 
 val isTravisBuild = settingKey[Boolean]("Flag indicating whether the current build is running under Travis")
 val crossScalaVersionsFromTravis = settingKey[Seq[String]]("Scala versions set in .travis.yml as scala_version_XXX")
@@ -80,7 +80,7 @@ lazy val catsSettings = Seq(
 lazy val simulacrumSettings = Seq(
   addCompilerPlugin(scalafixSemanticdb),
   scalacOptions ++= Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos"),
-  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.3.0",
+  libraryDependencies += "org.typelevel" %% "simulacrum-scalafix-annotations" % "0.4.0",
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] =
