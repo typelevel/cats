@@ -102,7 +102,7 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
   implicit def catsTraverseForQueue: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
   implicit def catsUnorderedTraverseForSet: UnorderedTraverse[Set] = cats.instances.set.catsStdInstancesForSet
   implicit def catsFoldableForSortedSet: Foldable[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
-  implicit def catsTraverseForSortedMap[K: Order]: Traverse[SortedMap[K, *]] =
+  implicit def catsTraverseForSortedMap[K]: Traverse[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
 
   implicit def catsUnorderedTraverseForMap[K]: UnorderedTraverse[Map[K, *]] =

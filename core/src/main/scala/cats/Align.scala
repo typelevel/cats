@@ -113,7 +113,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsAlignForVector: Align[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsAlignForMap[K]: Align[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
-  implicit def catsAlignForSortedMap[K: Order]: Align[SortedMap[K, *]] =
+  implicit def catsAlignForSortedMap[K]: Align[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsAlignForEither[A]: Align[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
 
