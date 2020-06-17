@@ -54,7 +54,8 @@ import scala.annotation.implicitNotFound
   def bisequence[G[_]: Applicative, A, B](fab: F[G[A], G[B]]): G[F[A, B]] =
     bitraverse(fab)(identity, identity)
 
-  /** If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]] */
+  /**
+   * If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]] */
   def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBitraverse[F, G] {
       val F = self

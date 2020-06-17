@@ -4,7 +4,6 @@ package data
 import cats.arrow.{Profunctor, Strong}
 
 /**
- *
  * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding
  * a value of type `A`. The state transitions from a value of type `SA` to a value
  * of type `SB`.

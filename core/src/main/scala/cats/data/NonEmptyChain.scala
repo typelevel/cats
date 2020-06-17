@@ -391,7 +391,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
   final def reverseIterator: Iterator[A] = toChain.reverseIterator
 
-  /** Reverses this `NonEmptyChain` */
+  /**
+   * Reverses this `NonEmptyChain` */
   final def reverse: NonEmptyChain[A] =
     create(toChain.reverse)
 

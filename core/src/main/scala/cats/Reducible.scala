@@ -67,7 +67,7 @@ import scala.annotation.implicitNotFound
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   @noop
   def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))

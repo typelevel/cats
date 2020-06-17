@@ -109,7 +109,7 @@ final class FlatMapIdOps[A](private val a: A) extends AnyVal {
    * scala> a.tailRecM[Option,String](i => if (i == 20) Some(Right("done")) else Some(Left(i+1)))
    * res0: Option[String] = Some(done)
    *
-   *}}}
+   * }}}
    */
   def tailRecM[F[_], B](f: A => F[Either[A, B]])(implicit F: FlatMap[F]): F[B] = F.tailRecM(a)(f)
 

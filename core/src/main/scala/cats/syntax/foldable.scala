@@ -168,24 +168,24 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> xs.collectFold { case n if n % 2 == 0 => n }
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   def collectFold[M](f: PartialFunction[A, M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFold[A, M](fa)(f)
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> xs.collectFoldSome(f)
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   @deprecated("Use collectFoldSome", "2.1.0-RC1")
   def collectSomeFold[M](f: A => Option[M])(implicit F: Foldable[F], M: Monoid[M]): M = F.collectFoldSome[A, M](fa)(f)
@@ -224,7 +224,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   def foldMapK[G[_], B](f: A => G[B])(implicit F: Foldable[F], G: MonoidK[G]): G[B] = F.foldMapK(fa)(f)
 
   /**

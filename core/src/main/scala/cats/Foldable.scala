@@ -311,12 +311,12 @@ import scala.annotation.implicitNotFound
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   @noop
   def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
@@ -324,13 +324,13 @@ import scala.annotation.implicitNotFound
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> Foldable[List].collectFoldSome(xs)(f)
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((acc, a) =>
@@ -424,7 +424,7 @@ import scala.annotation.implicitNotFound
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   @noop
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
     foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>

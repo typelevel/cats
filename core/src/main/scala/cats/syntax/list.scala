@@ -77,7 +77,8 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
     )
   }
 
-  /** Produces a `NonEmptyList` containing cumulative results of applying the
+  /**
+   * Produces a `NonEmptyList` containing cumulative results of applying the
    * operator going left to right.
    *
    * Example:
@@ -97,7 +98,8 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   def scanLeftNel[B](b: B)(f: (B, A) => B): NonEmptyList[B] =
     NonEmptyList.fromListUnsafe(la.scanLeft(b)(f))
 
-  /** Produces a `NonEmptyList` containing cumulative results of applying the
+  /**
+   * Produces a `NonEmptyList` containing cumulative results of applying the
    * operator going right to left.
    *
    * Example:

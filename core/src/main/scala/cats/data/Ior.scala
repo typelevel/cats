@@ -7,7 +7,8 @@ import cats.data.Validated.{Invalid, Valid}
 
 import scala.annotation.tailrec
 
-/** Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
+/**
+ * Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *
  * An instance of `A [[Ior]] B` is one of:
  *  - `[[Ior.Left Left]][A]`

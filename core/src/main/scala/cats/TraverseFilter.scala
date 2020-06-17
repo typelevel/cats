@@ -43,13 +43,12 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * scala> val b: Either[String, List[Int]] = TraverseFilter[List].sequenceFilter(a)
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
-   * */
+   */
   @noop
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 
   /**
-   *
    * Filter values inside a `G` context.
    *
    * This is a generalized version of Haskell's [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
