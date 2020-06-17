@@ -172,7 +172,6 @@ import scala.annotation.implicitNotFound
    * scala> Functor[List].unzip(List((1,2), (3, 4)))
    * res0: (List[Int], List[Int]) = (List(1, 3),List(2, 4))
    * }}}
-   *
    */
   @noop
   def unzip[A, B](fab: F[(A, B)]): (F[A], F[B]) = (map(fab)(_._1), map(fab)(_._2))

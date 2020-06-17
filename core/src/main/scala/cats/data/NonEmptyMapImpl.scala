@@ -69,7 +69,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
 
   /**
    * Adds a key-value pair to this map, returning a new `NonEmptyMap`.
-   * */
+   */
   def add(ka: (K, A)): NonEmptyMap[K, A] = NonEmptyMapImpl.create(toSortedMap + ka)
 
   /**

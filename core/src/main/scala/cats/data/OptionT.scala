@@ -14,7 +14,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
     F.map(value)(_.fold(default)(f))
 
-  /** Transform this `OptionT[F, A]` into a `F[C]`.
+  /**
+   * Transform this `OptionT[F, A]` into a `F[C]`.
    *
    * Example:
    * {{{
@@ -197,25 +198,25 @@ object OptionT extends OptionTInstances {
       OptionT(F.pure(Some(value)))
   }
 
-  /** Creates a `OptionT[A]` from an `A`
+  /**
+   * Creates a `OptionT[A]` from an `A`
    *
    * {{{
    * scala> import cats.implicits._
    * scala> OptionT.pure[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
-   *
    */
   def pure[F[_]]: PurePartiallyApplied[F] = new PurePartiallyApplied[F]
 
-  /** An alias for pure
+  /**
+   * An alias for pure
    *
    * {{{
    * scala> import cats.implicits._
    * scala> OptionT.some[List](2)
    * res0: OptionT[List, Int] = OptionT(List(Some(2)))
    * }}}
-   *
    */
   def some[F[_]]: PurePartiallyApplied[F] = pure
 

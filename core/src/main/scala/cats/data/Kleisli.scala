@@ -112,11 +112,13 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   def second[C](implicit F: Functor[F]): Kleisli[F, (C, A), (C, B)] =
     Kleisli { case (c, a) => F.map(run(a))(c -> _) }
 
-  /** Discard computed B and yield the input value. */
+  /**
+   * Discard computed B and yield the input value. */
   def tap[AA <: A](implicit F: Functor[F]): Kleisli[F, AA, AA] =
     Kleisli(a => F.as(run(a), a))
 
-  /** Yield computed B combined with input value. */
+  /**
+   * Yield computed B combined with input value. */
   def tapWith[C, AA <: A](f: (AA, B) => C)(implicit F: Functor[F]): Kleisli[F, AA, C] =
     Kleisli(a => F.map(run(a))(b => f(a, b)))
 
@@ -275,7 +277,7 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * scala> k2.run("foo")
    * res1: Option[Char] = Some(f)
    * }}}
-   * */
+   */
   def liftFunctionK[F[_], G[_], A](f: F ~> G): Kleisli[F, A, *] ~> Kleisli[G, A, *] =
     new (Kleisli[F, A, *] ~> Kleisli[G, A, *]) { def apply[B](k: Kleisli[F, A, B]): Kleisli[G, A, B] = k.mapK(f) }
 }

@@ -4,7 +4,8 @@ package tests
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 
-/** This data type exists purely for testing.
+/**
+ * This data type exists purely for testing.
  *
  * The problem this type solves is to assist in picking up type class
  * instances that have more general constraints.
@@ -130,7 +131,8 @@ object ListWrapper {
 
   val applicative: Applicative[ListWrapper] = alternative
 
-  /** apply is taken due to ListWrapper being a case class */
+  /**
+   * apply is taken due to ListWrapper being a case class */
   val applyInstance: Apply[ListWrapper] = alternative
 
   def monoidK: MonoidK[ListWrapper] = alternative

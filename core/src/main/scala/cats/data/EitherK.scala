@@ -4,7 +4,8 @@ package data
 import cats.Contravariant
 import cats.arrow.FunctionK
 
-/** `F` on the left and `G` on the right of `scala.util.Either`.
+/**
+ * `F` on the left and `G` on the right of `scala.util.Either`.
  *
  * @param run The underlying `scala.util.Either`.
  */

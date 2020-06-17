@@ -595,27 +595,32 @@ object Chain extends ChainInstances {
       c.initLast
   }
 
-  /** Empty Chain. */
+  /**
+   * Empty Chain. */
   val nil: Chain[Nothing] = Empty
 
   def empty[A]: Chain[A] = nil
 
-  /** Creates a Chain of 1 element. */
+  /**
+   * Creates a Chain of 1 element. */
   def one[A](a: A): Chain[A] = Singleton(a)
 
-  /** Concatenates two Chains. */
+  /**
+   * Concatenates two Chains. */
   def concat[A](c: Chain[A], c2: Chain[A]): Chain[A] =
     if (c.isEmpty) c2
     else if (c2.isEmpty) c
     else Append(c, c2)
 
-  /** Creates a Chain from the specified sequence. */
+  /**
+   * Creates a Chain from the specified sequence. */
   def fromSeq[A](s: Seq[A]): Chain[A] =
     if (s.isEmpty) nil
     else if (s.lengthCompare(1) == 0) one(s.head)
     else Wrap(s)
 
-  /** Creates a Chain from the specified elements. */
+  /**
+   * Creates a Chain from the specified elements. */
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 

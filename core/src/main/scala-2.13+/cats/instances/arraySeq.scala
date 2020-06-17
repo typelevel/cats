@@ -192,16 +192,14 @@ private[cats] object ArraySeqInstances {
         fa: ArraySeq[A]
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
         fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[B]))) {
-            case (x, xse) =>
-              G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
-          }
-          .value
+          case (x, xse) =>
+            G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+        }.value
 
       override def filterA[G[_], A](fa: ArraySeq[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[ArraySeq[A]] =
         fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) {
-            case (x, xse) =>
-              G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
-          }
-          .value
+          case (x, xse) =>
+            G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
+        }.value
     }
 }

@@ -1,7 +1,8 @@
 package cats
 package data
 
-/** Similar to [[cats.data.Tuple2K]], but for nested composition.
+/**
+ * Similar to [[cats.data.Tuple2K]], but for nested composition.
  *
  * For instance, since both `List` and `Option` have a `Functor`, then so does
  * `List[Option[_]]`. This is represented by this data type via the instantiation

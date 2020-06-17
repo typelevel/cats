@@ -418,7 +418,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend((0, "a"), LazyList((1, "b"),(0, "c"), (2, "d")))
@@ -426,28 +426,27 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * scala> val result = nel.toNem
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
-   *
+   * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
     NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,2,3,4))
    * scala> nel.toNes
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-   *}}}
+   * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
 
   /**
    * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nel = NonEmptyLazyList.fromLazyListPrepend(1, LazyList(2,3,4))
@@ -455,7 +454,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * scala> val result = nel.toNev
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
+   * }}}
    */
   final def toNev[B >: A]: NonEmptyVector[B] =
     NonEmptyVector.fromVectorUnsafe(toLazyList.toVector)
