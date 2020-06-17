@@ -66,7 +66,8 @@ object ContT {
   }
 
   /**
-   * Lift a pure value into `ContT` */
+   * Lift a pure value into `ContT`
+   */
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
     apply { cb =>
       cb(b)
@@ -154,7 +155,8 @@ object ContT {
     FromFn(AndThen(fn))
 
   /**
-   * Similar to [[apply]] but evaluation of the argument is deferred. */
+   * Similar to [[apply]] but evaluation of the argument is deferred.
+   */
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
     DeferCont(() => FromFn(AndThen(fn)))
 

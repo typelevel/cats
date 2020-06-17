@@ -20,16 +20,19 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     with NonEmptyCollection[A, Vector, NonEmptyVector] {
 
   /**
-   * Gets the element at the index, if it exists */
+   * Gets the element at the index, if it exists
+   */
   def get(i: Int): Option[A] =
     toVector.lift(i)
 
   /**
-   * Gets the element at the index, or throws an exception if none exists */
+   * Gets the element at the index, or throws an exception if none exists
+   */
   def getUnsafe(i: Int): A = toVector(i)
 
   /**
-   * Updates the element at the index, if it exists */
+   * Updates the element at the index, if it exists
+   */
   def updated[AA >: A](i: Int, a: AA): Option[NonEmptyVector[AA]] =
     if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
@@ -162,7 +165,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     new NonEmptyVector(toVector.map(f))
 
   /**
-   *  Applies f to all elements and combines the result
+   * Applies f to all elements and combines the result
    */
   def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] =
     new NonEmptyVector(toVector.flatMap(a => f(a).toVector))

@@ -60,7 +60,8 @@ object BinCodecInvariantMonoidalSuite {
   }
 
   /**
-   * A small amount of binary bits */
+   * A small amount of binary bits
+   */
   type Bin = MiniList[Boolean]
 
   /**
@@ -73,11 +74,13 @@ object BinCodecInvariantMonoidalSuite {
   trait BinCodec[A] extends Serializable { self =>
 
     /**
-     * Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin. */
+     * Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin.
+     */
     def read(s: Bin): (Option[A], Bin)
 
     /**
-     * Writes a value of type `A` to Bin format. */
+     * Writes a value of type `A` to Bin format.
+     */
     def write(a: A): Bin
   }
 

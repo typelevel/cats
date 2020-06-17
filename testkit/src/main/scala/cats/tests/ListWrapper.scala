@@ -132,7 +132,8 @@ object ListWrapper {
   val applicative: Applicative[ListWrapper] = alternative
 
   /**
-   * apply is taken due to ListWrapper being a case class */
+   * apply is taken due to ListWrapper being a case class
+   */
   val applyInstance: Apply[ListWrapper] = alternative
 
   def monoidK: MonoidK[ListWrapper] = alternative

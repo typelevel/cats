@@ -79,7 +79,7 @@ import scala.annotation.implicitNotFound
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
-   *  Monadic variant of [[reduceLeftTo]].
+   * Monadic variant of [[reduceLeftTo]].
    */
   def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))

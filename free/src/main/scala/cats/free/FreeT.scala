@@ -46,7 +46,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   }
 
   /**
-   * Binds the given continuation to the result of this computation. */
+   * Binds the given continuation to the result of this computation.
+   */
   final def flatMap[B](f: A => FreeT[S, M, B]): FreeT[S, M, B] =
     FlatMapped(this, f)
 
@@ -61,7 +62,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   private[free] def interpret[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] = compile(st)
 
   /**
-   * Change the base functor `S` for a `FreeT` action. */
+   * Change the base functor `S` for a `FreeT` action.
+   */
   def compile[T[_]](st: FunctionK[S, T])(implicit M: Functor[M]): FreeT[T, M, A] =
     step match {
       case e @ FlatMapped(_, _) =>
@@ -97,7 +99,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   }
 
   /**
-   * Evaluates a single layer of the free monad */
+   * Evaluates a single layer of the free monad
+   */
   def resume(implicit S: Functor[S], M: Monad[M]): M[Either[S[FreeT[S, M, A]], A]] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], Either[S[FreeT[S, M, A]], A]]] =
       ft match {
@@ -169,11 +172,13 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
 object FreeT extends FreeTInstances {
 
   /**
-   * Suspend the computation with the given suspension. */
+   * Suspend the computation with the given suspension.
+   */
   private[free] case class Suspend[S[_], M[_], A](a: M[Either[S[A], A]]) extends FreeT[S, M, A]
 
   /**
-   * Call a subroutine and continue with the given function. */
+   * Call a subroutine and continue with the given function.
+   */
   private[free] case class FlatMapped[S[_], M[_], A0, B](a0: FreeT[S, M, A0], f0: A0 => FreeT[S, M, B])
       extends FreeT[S, M, B] {
     type A = A0
@@ -182,7 +187,8 @@ object FreeT extends FreeTInstances {
   }
 
   /**
-   * Return the given value in the free monad. */
+   * Return the given value in the free monad.
+   */
   def pure[S[_], M[_], A](value: A)(implicit M: Applicative[M]): FreeT[S, M, A] = Suspend(M.pure(Right(value)))
 
   @deprecated("Use FreeT.defer.", "1.0.0-MF")
@@ -205,7 +211,8 @@ object FreeT extends FreeTInstances {
     Suspend(M.map(value)(Right(_)))
 
   /**
-   * Suspends a value within a functor in a single step. Monadic unit for a higher-order monad. */
+   * Suspends a value within a functor in a single step. Monadic unit for a higher-order monad.
+   */
   def liftF[S[_], M[_], A](value: S[A])(implicit M: Applicative[M]): FreeT[S, M, A] =
     Suspend(M.pure(Left(value)))
 

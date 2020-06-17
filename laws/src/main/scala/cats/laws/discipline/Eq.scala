@@ -157,12 +157,14 @@ object eq {
     Eq.by((_: (A, B) => C).tupled)(catsLawsEqForFn1)
 
   /**
-   * `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]]. */
+   * `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]].
+   */
   implicit def catsLawsEqForAndThen[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[AndThen[A, B]] =
     Eq.instance(catsLawsEqForFn1[A, B].eqv(_, _))
 
   /**
-   * Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
+   * Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String]
+   */
   implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] =
     Eq.by[Show[A], A => String] { showInstance => (a: A) =>
       showInstance.show(a)
