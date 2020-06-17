@@ -114,9 +114,9 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
 
   implicit def catsTraverseForTry: Traverse[Try] = cats.instances.try_.catsStdInstancesForTry
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[UnorderedFoldable]] for `F`.
@@ -161,8 +161,8 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

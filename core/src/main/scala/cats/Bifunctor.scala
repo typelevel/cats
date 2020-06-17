@@ -61,9 +61,9 @@ object Bifunctor {
   implicit def catsBifunctorForEither: Bifunctor[Either] = cats.instances.either.catsStdBitraverseForEither
   implicit def catsBifunctorForTuple2: Bifunctor[Tuple2] = cats.instances.tuple.catsStdBitraverseForTuple2
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Bifunctor]] for `F`.
@@ -103,9 +103,9 @@ object Bifunctor {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

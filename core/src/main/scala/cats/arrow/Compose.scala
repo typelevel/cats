@@ -48,9 +48,9 @@ object Compose {
   implicit def catsInstancesForPartialFunction: ArrowChoice[PartialFunction] with CommutativeArrow[PartialFunction] =
     cats.instances.partialFunction.catsStdInstancesForPartialFunction
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Compose]] for `F`.
@@ -91,8 +91,8 @@ object Compose {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

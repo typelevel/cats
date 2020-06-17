@@ -26,9 +26,9 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
   def semigroup[F[_], A](implicit F: InvariantSemigroupal[F], A: Semigroup[A]): Semigroup[F[A]] =
     new InvariantSemigroupalSemigroup[F, A](F, A)
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[InvariantSemigroupal]] for `F`.
@@ -69,9 +69,9 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

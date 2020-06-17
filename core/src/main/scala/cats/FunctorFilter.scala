@@ -91,9 +91,9 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
     cats.instances.queue.catsStdTraverseFilterForQueue
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[FunctorFilter]] for `F`.
@@ -136,8 +136,8 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

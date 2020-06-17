@@ -84,9 +84,9 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit val catsSemigroupalForCommutativeSemigroup: Semigroupal[CommutativeSemigroup] =
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
@@ -124,8 +124,8 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
