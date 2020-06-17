@@ -78,31 +78,26 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(attempt(fa))(_.fold(recover, bind))
 
   /**
-   * Reifies the value or error of the source and performs an action on the result,
+   * Reifies the value or error of the source and performs an effect on the result,
    * then recovers the original value or error back into `F`.
+   *
+   * Note that if the effect returned by `f` fails, the resulting effect will fail too.
    *
    * Alias for `fa.attempt.flatTap(f).rethrow` for convenience.
    *
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> import scala.util.{Try, Success}
+   * scala> import scala.util.{Try, Success, Failure}
    *
-   * scala> def logErrors(result: Either[Throwable, Int]): Try[Unit] = Try {
-   *   result match {
-   *     case Right(value) => println(s"Success: $value")
-   *     case Left(_) => println("Failed")
-   *   }
-   * }
+   * scala> def checkError(result: Either[Throwable, Int]): Try[String] = result.fold(_ => Failure(new java.lang.Exception), _ => Success("success"))
    *
-   * scala> val a: Try[Int] = Success(new java.lang.Exception)
-   * scala> a.attemptTap(logErrors)
-   * Failed
+   * scala> val a: Try[Int] = Failure(new Throwable("failed"))
+   * scala> a.attemptTap(checkError)
    * res0: scala.util.Try[Int] = Failure(java.lang.Exception)
    *
    * scala> val b: Try[Int] = Success(1)
-   * scala> b.attemptTap(logErrors)
-   * Success: 1
+   * scala> b.attemptTap(checkError)
    * res1: scala.util.Try[Int] = Success(1)
    * }}}
    */
