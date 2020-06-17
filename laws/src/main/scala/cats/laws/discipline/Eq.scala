@@ -68,15 +68,19 @@ object eq {
     Eq.by[Band[A], (A, A) => (A, A)](f => (x, y) => (f.combine(x, y), f.combine(f.combine(x, y), y)))
 
   implicit def catsLawsEqForGroup[A](implicit ev1: Eq[(A, A) => (A, Boolean)], eqA: Eq[A]): Eq[Group[A]] =
-    Eq.by[Group[A], (A, A) => (A, Boolean)](f =>
-      (x, y) =>
-        (
-          f.combine(x, y),
-          f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
-            f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
-            f.inverse(f.empty) == f.empty
-        )
-    )
+    Eq.by[Group[A], (A, A) => (A, Boolean)] {
+      f =>
+        { (x, y) =>
+          {
+            val xy = f.combine(x, y)
+            val p1 = f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty
+            val p2 = f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty
+            val p3 = f.inverse(f.empty) == f.empty
+
+            (xy, p1 && p2 && p3)
+          }
+        }
+    }
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] =
     new Eq[Monoid[A]] {
@@ -261,14 +265,14 @@ object eq {
     }
 
     val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>
-      Function.tupled((x, y) =>
-        (
-          f.combine(x, y),
-          f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
-            f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
-            f.inverse(f.empty) == f.empty
-        )
-      )
+      Function.tupled { (x, y) =>
+        val xy = f.combine(x, y)
+        val p1 = f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty
+        val p2 = f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty
+        val p3 = f.inverse(f.empty) == f.empty
+
+        (xy, p1 && p2 && p3)
+      }
     )(catsLawsEqForFn1[(A, A), (A, Boolean)])
 
     Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))
