@@ -69,7 +69,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def length: Int = size
 
   /**
-   *  Applies f to all the elements of the structure
+   * Applies f to all the elements of the structure
    */
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))

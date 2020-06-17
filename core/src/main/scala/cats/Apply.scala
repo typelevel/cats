@@ -113,28 +113,33 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
   /**
-   * Alias for [[ap]]. */
+   * Alias for [[ap]].
+   */
   @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     ap(ff)(fa)
 
   /**
-   * Alias for [[productR]]. */
+   * Alias for [[productR]].
+   */
   @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /**
-   * Alias for [[productL]]. */
+   * Alias for [[productL]].
+   */
   @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
   /**
-   * Alias for [[productR]]. */
+   * Alias for [[productR]].
+   */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
   @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
   /**
-   * Alias for [[productL]]. */
+   * Alias for [[productL]].
+   */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
   @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)

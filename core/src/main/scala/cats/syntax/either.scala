@@ -391,32 +391,37 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal { //
     }
 
   /**
-   * Cached value of `Right(())` to avoid allocations for a common case. */
+   * Cached value of `Right(())` to avoid allocations for a common case.
+   */
   def unit[A]: Either[A, Unit] = EitherUtil.unit
 }
 
 final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
 
   /**
-   * Cast the right type parameter of the `Left`. */
+   * Cast the right type parameter of the `Left`.
+   */
   def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
 }
 
 final class RightOps[A, B](private val right: Right[A, B]) extends AnyVal {
 
   /**
-   * Cast the left type parameter of the `Right`. */
+   * Cast the left type parameter of the `Right`.
+   */
   def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
 }
 
 final class EitherIdOps[A](private val obj: A) extends AnyVal {
 
   /**
-   * Wrap a value in `Left`. */
+   * Wrap a value in `Left`.
+   */
   def asLeft[B]: Either[A, B] = Left(obj)
 
   /**
-   * Wrap a value in `Right`. */
+   * Wrap a value in `Right`.
+   */
   def asRight[B]: Either[B, A] = Right(obj)
 
   /**
@@ -493,7 +498,8 @@ final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[
 }
 
 /**
- * Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
+ * Convenience methods to use `Either` syntax inside `Either` syntax definitions.
+ */
 private[cats] object EitherUtil {
   def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
     right.asInstanceOf[Either[C, B]]

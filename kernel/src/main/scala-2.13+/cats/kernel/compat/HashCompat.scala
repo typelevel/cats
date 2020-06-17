@@ -102,7 +102,8 @@ private[kernel] class HashCompat {
 
   // adapted from scala.util.hashing.MurmurHash3
   /**
-   * Force all bits of the hash to avalanche. Used for finalizing the hash. */
+   * Force all bits of the hash to avalanche. Used for finalizing the hash.
+   */
   final protected def avalanche(hash: Int): Int = {
     var h = hash
 

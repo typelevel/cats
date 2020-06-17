@@ -4,7 +4,7 @@ import simulacrum.{noop, typeclass}
 import scala.annotation.implicitNotFound
 
 /**
- *  A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
+ * A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
  */
 @implicitNotFound("Could not find an instance of Bitraverse for ${F}")
 @typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
@@ -55,7 +55,8 @@ import scala.annotation.implicitNotFound
     bitraverse(fab)(identity, identity)
 
   /**
-   * If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]] */
+   * If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]]
+   */
   def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBitraverse[F, G] {
       val F = self

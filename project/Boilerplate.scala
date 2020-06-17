@@ -34,7 +34,8 @@ object Boilerplate {
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
 
   /**
-   * Returns a seq of the generated files.  As a side-effect, it actually generates them... */
+   * Returns a seq of the generated files.  As a side-effect, it actually generates them...
+   */
   def gen(dir: File) =
     for (t <- templates) yield {
       val tgtFile = t.filename(dir)

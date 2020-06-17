@@ -139,7 +139,8 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
 object AndThen extends AndThenInstances0 {
 
   /**
-   * Builds an [[AndThen]] reference by wrapping a plain function. */
+   * Builds an [[AndThen]] reference by wrapping a plain function.
+   */
   def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
       case ref: AndThen[A, B] @unchecked => ref

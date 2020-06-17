@@ -47,7 +47,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
     resume.fold(s, r)
 
   /**
-   * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
+   * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
+   */
   @tailrec
   final def step: Free[S, A] =
     this match {
@@ -203,11 +204,13 @@ object Free extends FreeInstances {
   final private[free] case class Pure[S[_], A](a: A) extends Free[S, A]
 
   /**
-   * Suspend the computation with the given suspension. */
+   * Suspend the computation with the given suspension.
+   */
   final private[free] case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
   /**
-   * Call a subroutine and continue with the given function. */
+   * Call a subroutine and continue with the given function.
+   */
   final private[free] case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**
