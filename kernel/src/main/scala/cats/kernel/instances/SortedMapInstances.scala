@@ -7,7 +7,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
   implicit def catsKernelStdHashForSortedMap[K: Hash, V: Hash]: Hash[SortedMap[K, V]] =
     new SortedMapHash[K, V]
 
-  @deprecated("Use catsKernelStdHashForSortedMap override without Order", "2.2.0-M2")
+  @deprecated("Use catsKernelStdHashForSortedMap override without Order", "2.2.0-M3")
   def catsKernelStdHashForSortedMap[K, V](hashK: Hash[K], orderK: Order[K], hashV: Hash[V]): Hash[SortedMap[K, V]] =
     new SortedMapHash[K, V]()(hashV, hashK)
 
@@ -24,7 +24,7 @@ private[instances] trait SortedMapInstances1 {
   implicit def catsKernelStdEqForSortedMap[K, V: Eq]: Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]
 
-  @deprecated("Use catsKernelStdEqForSortedMap override without Order", "2.2.0-M2")
+  @deprecated("Use catsKernelStdEqForSortedMap override without Order", "2.2.0-M3")
   def catsKernelStdEqForSortedMap[K, V](orderK: Order[K], eqV: Eq[V]): Eq[SortedMap[K, V]] =
     new SortedMapEq[K, V]()(eqV)
 }
@@ -39,7 +39,7 @@ private[instances] trait SortedMapInstances2 extends SortedMapInstances1 {
 
 class SortedMapHash[K, V](implicit V: Hash[V], K: Hash[K]) extends SortedMapEq[K, V]()(V) with Hash[SortedMap[K, V]] {
 
-  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.2.0-M2")
+  @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.2.0-M3")
   private[instances] def this(V: Hash[V], O: Order[K], K: Hash[K]) = this()(V, K)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],

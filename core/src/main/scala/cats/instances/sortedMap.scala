@@ -22,7 +22,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
       .map { case (a, b) => showA.show(a) + " -> " + showB.show(b) }
       .mkString("SortedMap(", ", ", ")")
 
-  @deprecated("Use catsStdShowForSortedMap override without Order", "2.2.0-M2")
+  @deprecated("Use catsStdShowForSortedMap override without Order", "2.2.0-M3")
   implicit def catsStdShowForSortedMap[A, B](orderA: Order[A], showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
     catsStdShowForSortedMap(showA, showB)
 
@@ -144,7 +144,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
       }
     }
 
-  @deprecated("Use catsStdInstancesForSortedMap override without Order", "2.2.0-M2")
+  @deprecated("Use catsStdInstancesForSortedMap override without Order", "2.2.0-M3")
   def catsStdInstancesForSortedMap[K](
     orderK: Order[K]
   ): Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
@@ -230,7 +230,7 @@ private[instances] trait SortedMapInstancesBinCompat0 {
         traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
     }
 
-  @deprecated("Use catsStdTraverseFilterForSortedMap override without Order", "2.2.0-M2")
+  @deprecated("Use catsStdTraverseFilterForSortedMap override without Order", "2.2.0-M3")
   def catsStdTraverseFilterForSortedMap[K](orderK: Order[K]): TraverseFilter[SortedMap[K, *]] =
     catsStdTraverseFilterForSortedMap[K]
 }
