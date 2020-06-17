@@ -134,9 +134,9 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
     cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
   implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
@@ -177,8 +177,8 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

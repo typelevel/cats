@@ -27,9 +27,9 @@ object ContravariantMonoidal extends SemigroupalArityFunctions {
   def monoid[F[_], A](implicit f: ContravariantMonoidal[F]): Monoid[F[A]] =
     new ContravariantMonoidalMonoid[F, A](f)
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ContravariantMonoidal]] for `F`.
@@ -73,9 +73,9 @@ object ContravariantMonoidal extends SemigroupalArityFunctions {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

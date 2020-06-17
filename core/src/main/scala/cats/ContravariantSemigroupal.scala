@@ -21,9 +21,9 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   def semigroup[F[_], A](implicit f: ContravariantSemigroupal[F]): Semigroup[F[A]] =
     new ContravariantSemigroupalSemigroup[F, A](f)
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ContravariantSemigroupal]] for `F`.
@@ -66,9 +66,9 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
       }
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 
