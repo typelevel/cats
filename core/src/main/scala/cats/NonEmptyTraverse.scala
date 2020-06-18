@@ -107,6 +107,17 @@ object NonEmptyTraverse {
    */
   @inline def apply[F[_]](implicit instance: NonEmptyTraverse[F]): NonEmptyTraverse[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): AllOps[F, A] {
+      type TypeClassType = NonEmptyTraverse[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = NonEmptyTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: NonEmptyTraverse[F]
     def self: F[A]
@@ -135,17 +146,6 @@ object NonEmptyTraverse {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToNonEmptyTraverseOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllNonEmptyTraverseOps[F[_], A](target: F[A])(implicit tc: NonEmptyTraverse[F]): AllOps[F, A] {
-      type TypeClassType = NonEmptyTraverse[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = NonEmptyTraverse[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

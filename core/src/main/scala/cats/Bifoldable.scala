@@ -53,6 +53,17 @@ object Bifoldable {
    */
   @inline def apply[F[_, _]](implicit instance: Bifoldable[F]): Bifoldable[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): AllOps[F, A, B] {
+      type TypeClassType = Bifoldable[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Bifoldable[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Bifoldable[F]
     def self: F[A, B]
@@ -77,17 +88,6 @@ object Bifoldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBifoldableOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllBifoldableOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bifoldable[F]): AllOps[F, A, B] {
-      type TypeClassType = Bifoldable[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = Bifoldable[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

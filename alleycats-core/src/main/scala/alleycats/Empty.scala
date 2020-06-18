@@ -32,6 +32,17 @@ object Empty extends EmptyInstances0 {
    */
   @inline def apply[A](implicit instance: Empty[A]): Empty[A] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
+      type TypeClassType = Empty[A]
+    } =
+      new AllOps[A] {
+        type TypeClassType = Empty[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[A] extends Serializable {
     type TypeClassType <: Empty[A]
     def self: A
@@ -52,17 +63,6 @@ object Empty extends EmptyInstances0 {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToEmptyOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
-      type TypeClassType = Empty[A]
-    } =
-      new AllOps[A] {
-        type TypeClassType = Empty[A]
-        val self: A = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

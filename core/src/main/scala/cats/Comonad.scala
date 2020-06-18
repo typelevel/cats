@@ -41,6 +41,17 @@ object Comonad {
    */
   @inline def apply[F[_]](implicit instance: Comonad[F]): Comonad[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllComonadOps[F[_], A](target: F[A])(implicit tc: Comonad[F]): AllOps[F, A] {
+      type TypeClassType = Comonad[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Comonad[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Comonad[F]
     def self: F[A]
@@ -62,17 +73,6 @@ object Comonad {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToComonadOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllComonadOps[F[_], A](target: F[A])(implicit tc: Comonad[F]): AllOps[F, A] {
-      type TypeClassType = Comonad[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Comonad[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

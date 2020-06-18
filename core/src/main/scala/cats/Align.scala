@@ -139,6 +139,17 @@ object Align extends ScalaVersionSpecificAlignInstances {
    */
   @inline def apply[F[_]](implicit instance: Align[F]): Align[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
+      type TypeClassType = Align[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Align[F]
     def self: F[A]
@@ -164,17 +175,6 @@ object Align extends ScalaVersionSpecificAlignInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlignOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
-      type TypeClassType = Align[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Align[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

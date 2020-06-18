@@ -34,6 +34,17 @@ object Extract {
    */
   @inline def apply[F[_]](implicit instance: Extract[F]): Extract[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllExtractOps[F[_], A](target: F[A])(implicit tc: Extract[F]): AllOps[F, A] {
+      type TypeClassType = Extract[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Extract[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Extract[F]
     def self: F[A]
@@ -53,17 +64,6 @@ object Extract {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToExtractOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllExtractOps[F[_], A](target: F[A])(implicit tc: Extract[F]): AllOps[F, A] {
-      type TypeClassType = Extract[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Extract[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

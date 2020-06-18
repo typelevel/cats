@@ -30,6 +30,17 @@ object Zero {
    */
   @inline def apply[A](implicit instance: Zero[A]): Zero[A] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllZeroOps[A](target: A)(implicit tc: Zero[A]): AllOps[A] {
+      type TypeClassType = Zero[A]
+    } =
+      new AllOps[A] {
+        type TypeClassType = Zero[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[A] extends Serializable {
     type TypeClassType <: Zero[A]
     def self: A
@@ -50,17 +61,6 @@ object Zero {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToZeroOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllZeroOps[A](target: A)(implicit tc: Zero[A]): AllOps[A] {
-      type TypeClassType = Zero[A]
-    } =
-      new AllOps[A] {
-        type TypeClassType = Zero[A]
-        val self: A = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

@@ -24,6 +24,19 @@ object CommutativeArrow {
    */
   @inline def apply[F[_, _]](implicit instance: CommutativeArrow[F]): CommutativeArrow[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCommutativeArrowOps[F[_, _], A, B](
+      target: F[A, B]
+    )(implicit tc: CommutativeArrow[F]): AllOps[F, A, B] {
+      type TypeClassType = CommutativeArrow[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = CommutativeArrow[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: CommutativeArrow[F]
     def self: F[A, B]
@@ -44,19 +57,6 @@ object CommutativeArrow {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeArrowOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllCommutativeArrowOps[F[_, _], A, B](
-      target: F[A, B]
-    )(implicit tc: CommutativeArrow[F]): AllOps[F, A, B] {
-      type TypeClassType = CommutativeArrow[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = CommutativeArrow[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

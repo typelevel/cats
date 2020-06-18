@@ -57,6 +57,17 @@ object Compose {
    */
   @inline def apply[F[_, _]](implicit instance: Compose[F]): Compose[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): AllOps[F, A, B] {
+      type TypeClassType = Compose[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Compose[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Compose[F]
     def self: F[A, B]
@@ -79,17 +90,6 @@ object Compose {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToComposeOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllComposeOps[F[_, _], A, B](target: F[A, B])(implicit tc: Compose[F]): AllOps[F, A, B] {
-      type TypeClassType = Compose[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = Compose[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

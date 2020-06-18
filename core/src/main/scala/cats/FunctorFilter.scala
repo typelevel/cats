@@ -100,6 +100,17 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
    */
   @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: FunctorFilter[F]
     def self: F[A]
@@ -124,17 +135,6 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFunctorFilterOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
-      type TypeClassType = FunctorFilter[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = FunctorFilter[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

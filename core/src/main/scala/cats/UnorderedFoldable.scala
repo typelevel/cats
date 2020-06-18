@@ -123,6 +123,17 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
    */
   @inline def apply[F[_]](implicit instance: UnorderedFoldable[F]): UnorderedFoldable[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): AllOps[F, A] {
+      type TypeClassType = UnorderedFoldable[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = UnorderedFoldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: UnorderedFoldable[F]
     def self: F[A]
@@ -149,17 +160,6 @@ object UnorderedFoldable extends ScalaVersionSpecificTraverseInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToUnorderedFoldableOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllUnorderedFoldableOps[F[_], A](target: F[A])(implicit tc: UnorderedFoldable[F]): AllOps[F, A] {
-      type TypeClassType = UnorderedFoldable[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = UnorderedFoldable[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
