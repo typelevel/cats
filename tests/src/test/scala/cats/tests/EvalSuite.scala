@@ -219,7 +219,7 @@ class EvalSuite extends CatsSuite {
       DeepEval(step(0, leaf, Nil))
     }
 
-    // we keep this low in master to keep travis happy.
+    // we keep this low in main to keep travis happy.
     // for an actual stress test increase to 200K or so.
     val MaxDepth = 100
 

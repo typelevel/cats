@@ -18,17 +18,17 @@ When fixing typos, improving documentation or minor build fix only
 one sign-off is required (although for major edits waiting for two
  may be preferable).
 
-In some cases pull requests that don't target the master branch may be
+In some cases pull requests that don't target the main branch may be
 merged with a single sign-off from a maintainer (as long as they
 aren't also the author of the pull request). For example, backporting
-changes from master to the `scala_2.11` branch generally shouldn't
+changes from main to the `scala_2.11` branch generally shouldn't
 require multiple reviews. If either the pull request author or a Cats
 maintainer thinks that a specific change should receive multiple
-approvals even though it doesn't target the master branch, their
+approvals even though it doesn't target the main branch, their
 request should be respected.
 
 For serious emergencies or work on the build which can't easily be
-reviewed or tested, pushing directly to master may be OK (but is
+reviewed or tested, pushing directly to main may be OK (but is
 definitely not encouraged). In these cases it's best to comment in
 Gitter or elsewhere about what happened and what was done.
 
@@ -67,7 +67,7 @@ replace `2019-05-29` with the last release date.
 
 For non-milestone releases (e.g. 2.0.0-M1), we shall release from a release branch. For each *MINOR* version, we shall have a corresponding branch, e.g. `2.1.x`. There are 2 main benefits for this: 
 1. Since we need to go through at least 1 release candidate release, having a release branch makes it easier to incorporate potential fixes and release the official release later. 
-2. The master branch of Cats is protected. This means sbt-release cannot push post release commits and more importantly tags directly to master. It can with a release branch, and a PR can be submitted to merge the release branch back into master. 
+2. The main branch of Cats is protected. This means sbt-release cannot push post release commits and more importantly tags directly to main. It can with a release branch, and a PR can be submitted to merge the release branch back into main.
 
   
 ### Releasing
@@ -90,7 +90,7 @@ including releasing the artifacts on Sonatype.
 
 If the Sonatype publishing fails, but the artifacts were uploaded, you
 can finish the release manually using the Sonatype web site. In that
-case you will also need to do `git push --tags origin master` to push
+case you will also need to do `git push --tags origin main` to push
 the new version's tags.
 
 (In the future we may want to create branches for major versions,
@@ -114,7 +114,7 @@ to be updated:
 (Other changes may be necessary, especially for large releases.)
 
 If the [Pre-release](#pre-release) step is properly done, meaning all released PRs are properly assigned with label and milestone, you can use a [script](
-https://github.com/typelevel/cats/blob/master/scripts/releaseNotes.scala) to generate the release note. Follow the doc in the script for instructions.  
+https://github.com/typelevel/cats/blob/main/scripts/releaseNotes.scala) to generate the release note. Follow the doc in the script for instructions.
 
 Alternatively, you can get a list of changes between release tags `v0.1.2` and
 `v0.2.0` via `git log v0.1.2..v0.2.0`. Scanning this list of commit

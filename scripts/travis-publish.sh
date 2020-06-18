@@ -15,14 +15,14 @@
 #    metrics when the tests are executing. This causes the full JVM build to be run a second time.
 
 # Example setting to use at command line for testing:
-# export TRAVIS_SCALA_VERSION=2.10.5;export TRAVIS_PULL_REQUEST="false";export TRAVIS_BRANCH="master"
+# export TRAVIS_SCALA_VERSION=2.10.5;export TRAVIS_PULL_REQUEST="false";export TRAVIS_BRANCH="main"
 
 
 sbt_cmd="sbt ++$TRAVIS_SCALA_VERSION"
 
 export publish_cmd="publishLocal"
 
-if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "master" && $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
+if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH == "main" && $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
   export publish_cmd="publish gitSnapshots publish"
   # temporarily disable to stabilize travis
   #if [[ $TRAVIS_SCALA_VERSION =~ ^2\.11\. ]]; then

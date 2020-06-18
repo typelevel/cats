@@ -140,5 +140,5 @@ This lifting and combining of `Semigroup`s into `Option` is provided by Cats as 
 
 N.B.
 Cats defines  the `Monoid` type class in cats-kernel. The
-[`cats` package object](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/package.scala)
+[`cats` package object](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/package.scala)
 defines type aliases to the `Monoid` from cats-kernel, so that you can simply import `cats.Monoid`.

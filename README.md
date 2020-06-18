@@ -17,7 +17,7 @@
 * **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with support for Scala 2.13.0-RC2
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
 * **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
-* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
+* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/main/ROADMAP_2019.md) is published.
 
 ## Cats
 
@@ -25,7 +25,7 @@
 
 [![Build Status](https://api.travis-ci.org/typelevel/cats.svg)](https://travis-ci.org/typelevel/cats)
 [![Financial Contributors on Open Collective](https://opencollective.com/typelevel/all/badge.svg?label=financial+contributors)](https://opencollective.com/typelevel) [![Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/typelevel/cats)
-[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=master)](http://codecov.io/github/typelevel/cats?branch=master)
+[![codecov.io](http://codecov.io/github/typelevel/cats/coverage.svg?branch=main)](http://codecov.io/github/typelevel/cats?branch=main)
 [![Latest version](https://index.scala-lang.org/typelevel/cats/cats-core/latest.svg?color=orange&v=1)](https://index.scala-lang.org/typelevel/cats/cats-core)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.14.svg)](http://scala-js.org)
 
@@ -142,8 +142,8 @@ functionality, you can pick-and-choose from amongst these modules
  * [`cats-collections`](https://github.com/typelevel/cats-collections): Data structures which facilitate pure functional programming
  * [`cats-testkit-scalatest`](https://github.com/typelevel/cats-testkit-scalatest): Cats testkit integration with Scalatest
 
-Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/master/CHANGES.md).
-See [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) for our plan for 2019.
+Past release notes for Cats are available in [CHANGES.md](https://github.com/typelevel/cats/blob/main/CHANGES.md).
+See [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/main/ROADMAP_2019.md) for our plan for 2019.
 
 ### Documentation
 
@@ -219,7 +219,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
 
-Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
+Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/main/README.md)
 
 *The full-size [Cats logo](https://typelevel.org/cats/img/cats-logo.png) is available for use for Cats related projects, contents, souvenirs, etc.*
 
@@ -292,7 +292,7 @@ versioning in the future. But that decision is yet to be made.
 
 ### Adopters
 
-Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/master/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m). 
+Here's a (non-exhaustive) list of companies that use Cats in production. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/README.md). And if you can, consider [supporting us](https://donorbox.org/typelevel-sustainability-program-2019?default_interval=m).
 
 - [Abacus Protocol](https://abacusprotocol.com)
 - [Anduin Transactions](https://anduintransact.com)
@@ -388,7 +388,7 @@ The current maintainers (people who can merge pull requests) are:
 We are currently following a practice of requiring at least two
 sign-offs to merge code PRs (and for large or contentious issues we may
 wait for more). For typos, documentation improvements or minor build fix we
-relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/master/PROCESS.md).
+relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/main/PROCESS.md).
 
 
 

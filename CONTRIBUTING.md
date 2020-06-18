@@ -185,7 +185,7 @@ As a side note, the latter command uses [sbt-mima](https://github.com/lightbend/
 ## Contributing documentation
 
 ### source for the documentation
-The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/master/docs).
+The documentation for this website is stored alongside the source, in the [docs subproject](https://github.com/typelevel/cats/tree/main/docs).
 
 * The source for the tut compiled pages is in `docs/src/main/tut`
 * The menu structure for these pages is in `docs/src/main/resources/microsite/data/menu.yml`
@@ -223,7 +223,7 @@ staying up-to-date.
 
 ### Write examples
 
-One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
+One of the best ways to provide examples is doctest, here is [an example](https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/Functor.scala#L19-L33). Doctest is a [sbt plugin](https://github.com/tkawachi/sbt-doctest) which generates tests based on the syntax mentioned above and runs when sbt's `test` task is invoked. You can find more information in the plugin documentation.
 
 ### Submit a pull request
 
