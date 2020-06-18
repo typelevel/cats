@@ -596,6 +596,22 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
     ()
   }
 
+  /**
+   * Example
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> "abc".leftIor[Int].traverse(i => List(i, i * 2))
+   * val res0: List[Ior[String,Int]] = List(Left(abc))
+   *
+   * scala> 123.rightIor[String].traverse(i => List(i, i * 2))
+   * val res1: List[Ior[String,Int]] = List(Right(123), Right(246))
+   *
+   * scala> Ior.both("abc", 123).traverse(i => List(i, i * 2))
+   * val res2: List[Ior[String,Int]] = List(Both(abc,123), Both(abc,246))
+   * }}}
+   */
   final def traverse[F[_], AA >: A, D](g: B => F[D])(implicit F: Applicative[F]): F[AA Ior D] =
     this match {
       case Ior.Left(a)    => F.pure(Ior.left(a))
