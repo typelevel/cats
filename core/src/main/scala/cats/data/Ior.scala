@@ -582,13 +582,17 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * scala> import cats.data.Ior
    * scala> import cats.implicits._
    *
-   * scala> "abc".leftIor[Int].foreach(println) // Nothing to show
+   * // Nothing to show
+   * scala> "abc".leftIor[Int].foreach(println)
+   * res0: Unit = ()
    *
+   * // 123 to be shown
    * scala> 123.rightIor[String].foreach(println)
-   * 123
+   * res1: Unit = ()
    *
+   * 123 to be shown
    * scala> Ior.both("abc", 123).foreach(println)
-   * 123
+   * res2: Unit = ()
    * }}}
    */
   final def foreach(f: B => Unit): Unit = {
@@ -603,10 +607,10 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
    * scala> import cats.implicits._
    *
    * scala> "abc".leftIor[Int].traverse(i => List(i, i * 2))
-   * val res0: List[Ior[String,Int]] = List(Left(abc))
+   * res0: List[Ior[String,Int]] = List(Left(abc))
    *
    * scala> 123.rightIor[String].traverse(i => List(i, i * 2))
-   * val res1: List[Ior[String,Int]] = List(Right(123), Right(246))
+   * res1: List[Ior[String,Int]] = List(Right(123), Right(246))
    *
    * scala> Ior.both("abc", 123).traverse(i => List(i, i * 2))
    * val res2: List[Ior[String,Int]] = List(Both(abc,123), Both(abc,246))
