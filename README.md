@@ -4,20 +4,9 @@
 * **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
 * **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
 * **Dec 18 2019** [Cats 2.1.0 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0)
-* **Dec 11 2019** [Cats 2.1.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC3)
-* **Nov 26 2019** [Cats 2.1.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC2)
-* **Nov 15 2019** [Cats 2.1.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.1.0-RC1)
 * **Sep 9 2019** [Cats 2.0.0 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0)
-* **Sep 7 2019** [Cats 2.0.0-RC3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC3)
-* **Aug 26 2019** [Cats 2.0.0-RC2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC2)
-* **Aug 2 2019** [Cats 2.0.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-RC1)
-* **Jun 11 2019** [Cats 2.0.0-M4 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M4) with support for Scala 2.13
 * **Jun 3 2019** [Cats 1.6.1 is released](https://github.com/typelevel/cats/releases/tag/v1.6.1) with backported bug fixes
-* **Jun 1 2019** [Cats 2.0.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M3) with support for Scala 2.13.0-RC3
-* **May 25 2019** [Cats 2.0.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M2) with support for Scala 2.13.0-RC2
 * **Apr 26 2019** [We launched a sustainability program](https://typelevel.org/blog/2019/04/24/typelevel-sustainability-program-announcement.html). Please consider supporting us.
-* **Apr 25 2019** [Cats 2.0.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.0.0-M1) with binary compatibility with 1.x on `cats-kernel`, `cats-core` and `cats-free`
-* **Feb 15 2019** [Cats 2019 roadmap](https://github.com/typelevel/cats/blob/master/ROADMAP_2019.md) is published.
 
 ## Cats
 
