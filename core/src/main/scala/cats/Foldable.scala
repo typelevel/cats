@@ -921,6 +921,17 @@ object Foldable {
    */
   @inline def apply[F[_]](implicit instance: Foldable[F]): Foldable[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): AllOps[F, A] {
+      type TypeClassType = Foldable[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Foldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Foldable[F]
     def self: F[A]
@@ -993,17 +1004,6 @@ object Foldable {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFoldableOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): AllOps[F, A] {
-      type TypeClassType = Foldable[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Foldable[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

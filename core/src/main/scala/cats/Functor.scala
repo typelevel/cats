@@ -215,6 +215,17 @@ object Functor {
    */
   @inline def apply[F[_]](implicit instance: Functor[F]): Functor[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorOps[F[_], A](target: F[A])(implicit tc: Functor[F]): AllOps[F, A] {
+      type TypeClassType = Functor[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Functor[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Functor[F]
     def self: F[A]
@@ -244,17 +255,6 @@ object Functor {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFunctorOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllFunctorOps[F[_], A](target: F[A])(implicit tc: Functor[F]): AllOps[F, A] {
-      type TypeClassType = Functor[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Functor[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

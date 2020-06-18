@@ -30,6 +30,19 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
    */
   @inline def apply[F[_]](implicit instance: ContravariantSemigroupal[F]): ContravariantSemigroupal[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllContravariantSemigroupalOps[F[_], A](
+      target: F[A]
+    )(implicit tc: ContravariantSemigroupal[F]): AllOps[F, A] {
+      type TypeClassType = ContravariantSemigroupal[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = ContravariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: ContravariantSemigroupal[F]
     def self: F[A]
@@ -52,19 +65,6 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantSemigroupalOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllContravariantSemigroupalOps[F[_], A](
-      target: F[A]
-    )(implicit tc: ContravariantSemigroupal[F]): AllOps[F, A] {
-      type TypeClassType = ContravariantSemigroupal[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = ContravariantSemigroupal[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */

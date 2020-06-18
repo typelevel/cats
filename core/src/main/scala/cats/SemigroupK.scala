@@ -143,6 +143,17 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
    */
   @inline def apply[F[_]](implicit instance: SemigroupK[F]): SemigroupK[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
+      type TypeClassType = SemigroupK[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = SemigroupK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: SemigroupK[F]
     def self: F[A]
@@ -165,17 +176,6 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   }
   @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupKOps
-  @deprecated("Use cats.syntax object imports", "2.2.0")
-  object ops {
-    implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
-      type TypeClassType = SemigroupK[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = SemigroupK[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
   /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
