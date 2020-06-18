@@ -576,6 +576,21 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
         }
     }
 
+  /**
+   * Example:
+   * {{{
+   * scala> import cats.data.Ior
+   * scala> import cats.implicits._
+   *
+   * scala> "abc".leftIor[Int].foreach(println) // Nothing to show
+   *
+   * scala> 123.rightIor[String].foreach(println)
+   * 123
+   *
+   * scala> Ior.both("abc", 123).foreach(println)
+   * 123
+   * }}}
+   */
   final def foreach(f: B => Unit): Unit = {
     bimap(_ => (), f)
     ()
