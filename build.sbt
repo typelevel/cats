@@ -782,7 +782,8 @@ addCommandAlias("validateJVM", ";fmtCheck;buildJVM;bench/test;validateBC;makeMic
 addCommandAlias("validateJS", ";catsJS/compile;testsJS/test;js/test")
 addCommandAlias("validateKernelJS", "kernelLawsJS/test")
 addCommandAlias("validateFreeJS", "freeJS/test") //separated due to memory constraint on travis
-addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM")
+addCommandAlias("validateDotty", ";++0.24.0!;alleycatsLawsJVM/compile")
+addCommandAlias("validate", ";clean;validateJS;validateKernelJS;validateFreeJS;validateJVM;validateDotty")
 
 addCommandAlias("prePR", "fmt")
 
