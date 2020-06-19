@@ -131,7 +131,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
 
   /**
    * Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   */
   def toValidatedNel[AA >: A]: ValidatedNel[AA, B] =
     eab match {
       case Left(a)  => Validated.invalidNel(a)
@@ -489,7 +490,8 @@ final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[
 
   /**
    * Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   */
   def toValidatedNec: ValidatedNec[A, B] =
     value match {
       case Left(a)  => Validated.invalidNec(a)
