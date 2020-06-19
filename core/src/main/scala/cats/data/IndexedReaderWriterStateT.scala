@@ -185,9 +185,9 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
    * res1: Option[(Log, Int, String)] = Some((List(xxx),5,xxx5))
    * }}}
    */
-  def semiflatTransform[LL, SC, B](f: (L, SB, A) => F[(LL, SC, B)])(
-    implicit F: Monad[F]
-  ): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
+  def semiflatTransform[LL, SC, B](
+    f: (L, SB, A) => F[(LL, SC, B)]
+  )(implicit F: Monad[F]): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
     IndexedReaderWriterStateT.apply((e, s) => F.flatMap(run(e, s)) { case (l, sb, a) => f(l, sb, a) })
 
   /**
