@@ -13,6 +13,7 @@ jdk:
 
 scala_version_212: &scala_version_212 2.12.11
 scala_version_213: &scala_version_213 2.13.2
+dotty_version: &dotty_version 0.24.0
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
@@ -75,6 +76,14 @@ jobs:
     - <<: *bincompat
       name: Binary compatibility 2.13
       scala: *scala_version_213
+
+    # Note that we're currently only building some modules on Dotty, not running tests.
+    - &dotty_tests
+      stage: test
+      name: Dotty tests
+      env: TEST="Dotty tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! alleycatsLawsJVM/compile
+      scala: *dotty_version
 
     - stage: styling
       name: Linting
