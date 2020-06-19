@@ -169,6 +169,28 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     IndexedReaderWriterStateT.apply((e, s) => f(run(e, s)))
 
   /**
+   * Like [[transform]], but does it in the monadic context `F`.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> val xOpt0: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = xOpt0.tell("xxx" :: Nil)
+   * scala> val xHead: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, String] = xOpt.semiflatTransform((l, s, a) => l.headOption.map(h => (l, s, h + a)))
+   * scala> val input = 5
+   * scala> xOpt.run("env", input)
+   * res0: Option[(Log, Int, Int)] = Some((List(xxx),5,5))
+   * scala> xHead.run("env", 5)
+   * res1: Option[(Log, Int, String)] = Some((List(xxx),5,xxx5))
+   * }}}
+   */
+  def semiflatTransform[LL, SC, B](f: (L, SB, A) => F[(LL, SC, B)])(
+    implicit F: Monad[F]
+  ): IndexedReaderWriterStateT[F, E, LL, SA, SC, B] =
+    IndexedReaderWriterStateT.apply((e, s) => F.flatMap(run(e, s)) { case (l, sb, a) => f(l, sb, a) })
+
+  /**
    * Transform the state used. See [[StateT]] for more details.
    *
    * {{{
@@ -210,6 +232,27 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
   def inspect[B](f: SB => B)(implicit F: Functor[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
     transform { (l, sb, a) =>
       (l, sb, f(sb))
+    }
+
+  /**
+   * Inspect a value from the environment and input state, without modifying the state.
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> type Env = String
+   * scala> type Log = List[String]
+   * scala> val xOpt: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, Int] = IndexedReaderWriterStateT.get
+   * scala> val xAsk: IndexedReaderWriterStateT[Option, Env, Log, Int, Int, String] = xOpt.inspectAsk(_ + _)
+   * scala> val input = 5
+   * scala> xOpt.run("env", input)
+   * res0: Option[(Log, Int, Int)] = Some((List(),5,5))
+   * scala> xAsk.run("env", 5)
+   * res1: Option[(Log, Int, String)] = Some((List(),5,env5))
+   * }}}
+   */
+  def inspectAsk[B](f: (E, SB) => B)(implicit F: Monad[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, B] =
+    IndexedReaderWriterStateT.apply { (e, sa) =>
+      F.map(run(e, sa)) { case (l, sb, _) => (l, sb, f(e, sb)) }
     }
 
   /**
@@ -343,6 +386,18 @@ sealed private[data] trait CommonIRWSTConstructors {
     IndexedReaderWriterStateT((_, s) => F.map(f(s))((L.empty, s, _)))
 
   /**
+   * Inspect values from the environment and input state, without modifying the state.
+   */
+  def inspectAsk[F[_]: Applicative, E, L: Monoid, S, A](f: (E, S) => A): ReaderWriterStateT[F, E, L, S, A] =
+    IndexedReaderWriterStateT((e, s) => Applicative[F].pure((Monoid[L].empty, s, f(e, s))))
+
+  /**
+   * Like [[inspectAsk]], but using an effectful function.
+   */
+  def inspectAskF[F[_]: Applicative, E, L: Monoid, S, A](f: (E, S) => F[A]): ReaderWriterStateT[F, E, L, S, A] =
+    IndexedReaderWriterStateT((e, s) => Functor[F].map(f(e, s))((Monoid[L].empty, s, _)))
+
+  /**
    * Set the state to `s`.
    */
   def set[F[_], E, L, S](
@@ -450,6 +505,12 @@ abstract private[data] class RWSTFunctions extends CommonIRWSTConstructors {
    */
   def applyF[F[_], E, L, S, A](runF: F[(E, S) => F[(L, S, A)]]): ReaderWriterStateT[F, E, L, S, A] =
     new IndexedReaderWriterStateT(runF)
+
+  /**
+   * Like [[apply]], but using a effectful function from `S`.
+   */
+  def applyS[F[_]: Applicative, E, L, S, A](f: S => F[(L, S, A)]): IndexedReaderWriterStateT[F, E, L, S, S, A] =
+    apply((_, s) => f(s))
 
   /**
    * Modify the input state using `f`.
