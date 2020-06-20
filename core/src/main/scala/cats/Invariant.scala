@@ -48,8 +48,8 @@ import scala.annotation.implicitNotFound
    */
   def compose[G[_]: Invariant]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariant[F, G] {
-      val F = self
-      val G = Invariant[G]
+      val F: Invariant[F] = self
+      val G: Invariant[G] = Invariant[G]
     }
 
   /**
@@ -71,8 +71,8 @@ import scala.annotation.implicitNotFound
    */
   def composeFunctor[G[_]: Functor]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariantCovariant[F, G] {
-      val F = self
-      val G = Functor[G]
+      val F: Invariant[F] = self
+      val G: Functor[G] = Functor[G]
     }
 
   /**
@@ -96,8 +96,8 @@ import scala.annotation.implicitNotFound
    */
   def composeContravariant[G[_]: Contravariant]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariantContravariant[F, G] {
-      val F = self
-      val G = Contravariant[G]
+      val F: Invariant[F] = self
+      val G: Contravariant[G] = Contravariant[G]
     }
 }
 
@@ -155,7 +155,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
     def imap[A, B](fa: Monoid[A])(f: A => B)(g: B => A): Monoid[B] =
       new Monoid[B] {
-        val empty = f(fa.empty)
+        val empty: B = f(fa.empty)
         def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
         override def combineAllOption(bs: IterableOnce[B]): Option[B] =
           fa.combineAllOption(bs.iterator.map(g)).map(f)
@@ -188,7 +188,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
     def imap[A, B](fa: CommutativeMonoid[A])(f: A => B)(g: B => A): CommutativeMonoid[B] =
       new CommutativeMonoid[B] {
-        val empty = f(fa.empty)
+        val empty: B = f(fa.empty)
         def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
         override def combineAllOption(bs: IterableOnce[B]): Option[B] =
           fa.combineAllOption(bs.iterator.map(g)).map(f)
@@ -200,7 +200,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
     def imap[A, B](fa: BoundedSemilattice[A])(f: A => B)(g: B => A): BoundedSemilattice[B] =
       new BoundedSemilattice[B] {
-        val empty = f(fa.empty)
+        val empty: B = f(fa.empty)
         def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
         override def combineAllOption(bs: IterableOnce[B]): Option[B] =
           fa.combineAllOption(bs.iterator.map(g)).map(f)
@@ -212,7 +212,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
     def imap[A, B](fa: Group[A])(f: A => B)(g: B => A): Group[B] =
       new Group[B] {
-        val empty = f(fa.empty)
+        val empty: B = f(fa.empty)
         def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
         def inverse(b: B): B = f(fa.inverse(g(b)))
         override def combineAllOption(bs: IterableOnce[B]): Option[B] =
@@ -225,7 +225,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
 
     def imap[A, B](fa: CommutativeGroup[A])(f: A => B)(g: B => A): CommutativeGroup[B] =
       new CommutativeGroup[B] {
-        val empty = f(fa.empty)
+        val empty: B = f(fa.empty)
         def combine(x: B, y: B): B = f(fa.combine(g(x), g(y)))
         def inverse(b: B): B = f(fa.inverse(g(b)))
         override def combineAllOption(bs: IterableOnce[B]): Option[B] =
