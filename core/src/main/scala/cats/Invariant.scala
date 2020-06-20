@@ -85,7 +85,7 @@ import scala.annotation.implicitNotFound
    * scala> import scala.concurrent.duration._
    *
    * scala> type ToInt[T] = T => Int
-   * scala> durSemigroupToInt: Semigroup[ToInt[FiniteDuration]] =
+   * scala> val durSemigroupToInt: Semigroup[ToInt[FiniteDuration]] =
    *      | Invariant[Semigroup]
    *      |   .composeContravariant[ToInt]
    *      |   .imap(Semigroup[ToInt[Long]])(Duration.fromNanos)(_.toNanos)
