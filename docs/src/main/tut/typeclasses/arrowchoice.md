@@ -11,15 +11,15 @@ scaladoc: "#cats.arrow.ArrowChoice"
 
 Usually we deal with function more often, we're so familiar with `A => B`.
 
-If we have two function `A => C` and `B => C`, how can we compose them into a single function that can take either A or B and produce a C?
+If we have two functions `A => C` and `B => C`, how can we compose them into a single function that can take either A or B and produce a C?
 
 So basically we just look for a function that has type `(A => C) => (B => C) => (Either[A, B] => C)`.
 
-This is exactly typeclass `Choice` provided, if we make `=>` more generic such as `F[?,?]`, you will get a `Choice`
+This is exactly typeclass `Choice` provided, if we make `=>` more generic such as `F[_,_]`, you will get a `Choice`
 
 ```scala
 trait Choice[F[_, _]] {
-  def choice(fac: F[A, C], fbc: F[B, C]): F[Either[A, B], C]
+  def choice[A,B,C,D](fac: F[A, C], fbc: F[B, C]): F[Either[A, B], C]
 }
 ```
 
@@ -33,29 +33,35 @@ Take Http4s for example:
 HttpRoutes[F] in Http4s is defined as [Kleisli](https://typelevel.org/cats/datatypes/kleisli.html)
 
 ```scala
-type HttpRoutes[F[_]] = Kleisli[OptionT[F, ?], Request[F], Response[F]]
+type HttpRoutes[F[_]] = Kleisli[OptionT[F, *], Request[F], Response[F]]
+// defined type HttpRoutes
 def routes[F[_]]: HttpRoutes[F] = ???
+// defined function routes
 ```
 
-If we like to have an authentication middleware compose the route, we can simply define middleware as:
+If we like to have an authentication middleware that composes the route, we can simply define middleware as:
 
 ```scala
-type Middleware[F[_]] = Kleisli[OptionT[F, ?], Request[F], Either[Response[F], Request[F]]]
-def auth[F[?]]: Middleware[F] = ???
+type Middleware[F[_]] = Kleisli[OptionT[F, *], Request[F], Either[Response[F], Request[F]]]
+// defined type Middleware
+def auth[F[_]]: Middleware[F] = ???
+// defined function auth
 ```
 
 Which means the `Request[F]` goes through the middleware, will become option of `Either[Response[F], Request[F]]`, where `Left` means the request is denied and return immediately, `Right` means the authentication is OK and request will get pass.
 
-Now we need to define what should we do when middleware returns `Left`:
+Now we need to define what we should do when middleware returns `Left`:
 
 ```scala
-def reject[F[?]]: Kleisli[OptionT[F, ?], Response[F], Response[F]] = Kleisli.ask[OptionT[F, ?], Response[F]]
+def reject[F[_]:Monad]: Kleisli[OptionT[F, *], Response[F], Response[F]] = Kleisli.ask[OptionT[F, *], Response[F]]
+// defined function reject
 ```
 
 Now compose middleware with route
 
 ```scala
-def authedRoute[F[?]] = auth[F] andThen (reject[F] ||| routes[F])
+def authedRoute[F[_]:Monad] = auth[F] andThen (reject[F] ||| routes[F])
+// defined function authedRoute
 ```
 
 You will then get a new route that has authentication ability by composing Kleisli.
@@ -84,7 +90,7 @@ With `Choice` there will be more composable solution without embedded logic in p
 def recover[A](error: Throwable): IO[A] = ???
 def processResp[A](resp: String): IO[A] = ???
 
-resp >>= (recover ||| processResp)
+resp >>= (recover _ ||| processResp _)
 ```
 
 # `ArrowChoice`
@@ -102,12 +108,15 @@ With the middleware example, you can think `ArrowChoice` is middleware of middle
 For example if we want to append log to middleware of `auth`, that can log both when rejected response and pass request:
 
 ```scala
-def logReject[F[?]]: Kleisli[OptionT[F, ?], Response[F], Response[F]] = ???
-def logThrough[F[?]]: Kleisli[OptionT[F, ?], Request[F], Request[F]] = ???
+def logReject[F[_]]: Kleisli[OptionT[F, *], Response[F], Response[F]] = ???
+// defined function logReject
+def logThrough[F[_]]: Kleisli[OptionT[F, *], Request[F], Request[F]] = ???
+// defined function logThrough
 ```
 
 See how easy to compose log functionality into our `authedRoute`:
 
 ```scala
-def authedRoute[F[?]] = auth[F] andThen (logReject[F] +++ logThrough[F]) andThen (reject[F] ||| routes[F])
+def authedRoute[F[_]:Monad] = auth[F] andThen (logReject[F] +++ logThrough[F]) andThen (reject[F] ||| routes[F])
+// defined function authedRoute
 ```
