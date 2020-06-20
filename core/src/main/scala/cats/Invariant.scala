@@ -23,6 +23,7 @@ import scala.annotation.implicitNotFound
    * {{{
    * scala> import cats.implicits._
    * scala> import scala.concurrent.duration._
+   *
    * scala> val durSemigroup: Semigroup[FiniteDuration] =
    *      | Invariant[Semigroup].imap(Semigroup[Long])(Duration.fromNanos)(_.toNanos)
    * scala> durSemigroup.combine(2.seconds, 3.seconds)
@@ -31,18 +32,68 @@ import scala.annotation.implicitNotFound
    */
   def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
 
+  /**
+   * Compose Invariant `F[_]` and `G[_]` then produce `Invariant[F[G[_]]]` using their `imap`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.concurrent.duration._
+   *
+   * scala> val durSemigroupList: Semigroup[List[FiniteDuration]] =
+   *      | Invariant[Semigroup].compose[List].imap(Semigroup[List[Long]])(Duration.fromNanos)(_.toNanos)
+   * scala> durSemigroupList.combine(List(2.seconds, 3.seconds), List(4.seconds))
+   * res1: List[FiniteDuration] = List(2 seconds, 3 seconds, 4 seconds)
+   * }}}
+   */
   def compose[G[_]: Invariant]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariant[F, G] {
       val F = self
       val G = Invariant[G]
     }
 
+  /**
+   * Compose Invariant `F[_]` and Functor `G[_]` then produce `Invariant[F[G[_]]]`
+   * using F's `imap` and G's `map`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.concurrent.duration._
+   *
+   * scala> val durSemigroupList: Semigroup[List[FiniteDuration]] =
+   *      | Invariant[Semigroup]
+   *      |   .composeFunctor[List]
+   *      |   .imap(Semigroup[List[Long]])(Duration.fromNanos)(_.toNanos)
+   * scala> durSemigroupList.combine(List(2.seconds, 3.seconds), List(4.seconds))
+   * res1: List[FiniteDuration] = List(2 seconds, 3 seconds, 4 seconds)
+   * }}}
+   */
   def composeFunctor[G[_]: Functor]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariantCovariant[F, G] {
       val F = self
       val G = Functor[G]
     }
 
+  /**
+   * Compose Invariant `F[_]` and Contravariant `G[_]` then produce `Invariant[F[G[_]]]`
+   * using F's `imap` and G's `contramap`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import scala.concurrent.duration._
+   *
+   * scala> type ToInt[T] = T => Int
+   * scala> durSemigroupToInt: Semigroup[ToInt[FiniteDuration]] =
+   *      | Invariant[Semigroup]
+   *      |   .composeContravariant[ToInt]
+   *      |   .imap(Semigroup[ToInt[Long]])(Duration.fromNanos)(_.toNanos)
+   * // semantically equal to (2.seconds.toSeconds.toInt + 1) + (2.seconds.toSeconds.toInt * 2) = 7
+   * scala> durSemigroupToInt.combine(_.toSeconds.toInt + 1, _.toSeconds.toInt * 2)(2.seconds)
+   * res1: Int = 7
+   * }}}
+   */
   def composeContravariant[G[_]: Contravariant]: Invariant[λ[α => F[G[α]]]] =
     new ComposedInvariantContravariant[F, G] {
       val F = self
