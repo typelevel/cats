@@ -502,6 +502,6 @@ sealed class LongRunningTestsConfig extends TestsConfig {
 final class LongRunningTests extends LongRunningTestsConfig with AnyFunSuiteLike with FunSuiteDiscipline {
   import KernelCheck._
 
-  checkAll("Deeper test of Eq[Duration]", OrderTests[Duration].eqv)
+  checkAll("Deeper test of Eq[Duration]", EqTests[Duration].eqv)
   checkAll("Deeper test of Eq[FiniteDuration]", EqTests[FiniteDuration].eqv)
 }
