@@ -1,3 +1,56 @@
+## Version 2.2.0-M3
+
+_2020 June 17
+
+### 1 source breaking change
+
+* [#3462](https://github.com/typelevel/cats/pull/3462) Reverse argument order for Kleisli ap method  by @justinhj
+
+
+### 15 API / feature enhancements
+
+* [#3467](https://github.com/typelevel/cats/pull/3467) Add Parallel traverseFilter functions  by @LukaJCB
+* [#3464](https://github.com/typelevel/cats/pull/3464) Add BinCompat extensions to syntax.apply import  by @gagandeepkalra
+* [#3463](https://github.com/typelevel/cats/pull/3463) Added CommutativeMonoid for Option to scope  by @barambani
+* [#3457](https://github.com/typelevel/cats/pull/3457) Add EitherT and IorT constructors from Option with monad left value  by @ivan-klass
+* [#3456](https://github.com/typelevel/cats/pull/3456) Override map2Eval and combineKEval for monad transformers  by @LukaJCB
+* [#3451](https://github.com/typelevel/cats/pull/3451) Issue 3447: Add more foldMapK shortcircuiting  by @barambani
+* [#3446](https://github.com/typelevel/cats/pull/3446) Add combineKEval and add short-circuiting for foldMapK  by @LukaJCB
+* [#3440](https://github.com/typelevel/cats/pull/3440) Mark Ops traits as Serializable  by @travisbrown
+* [#3439](https://github.com/typelevel/cats/pull/3439) Make boilerplate syntax classes extend Serializable  by @ceedubs
+* [#3436](https://github.com/typelevel/cats/pull/3436) Add auto variance as additional import  by @LukaJCB
+* [#3432](https://github.com/typelevel/cats/pull/3432) NonEmptyList.groupByNelA  by @pk044
+* [#3397](https://github.com/typelevel/cats/pull/3397) Remove Order constraints from SortedMap and NonEmptyMap instances  by @joroKr21
+* [#3396](https://github.com/typelevel/cats/pull/3396) Syntax for function1 kleisli-composition  by @valenterry
+* [#3392](https://github.com/typelevel/cats/pull/3392) Add PartialFunction instance for Profunctor typeclass  by @gagandeepkalra
+* [#3382](https://github.com/typelevel/cats/pull/3382) Optimise NonEmptyTraverse implementation  by @gagandeepkalra
+
+
+### 3 documentation improvements
+
+* [#3469](https://github.com/typelevel/cats/pull/3469) Move nomenclature questions below introductory paragraph  by @rmehri01
+* [#3468](https://github.com/typelevel/cats/pull/3468) Add Filippo Mariotti as a maintainer  by @LukaJCB
+* [#3455](https://github.com/typelevel/cats/pull/3455) Update faq for ammonite  by @psilospore
+
+
+### 14 build improvements
+
+* [#3471](https://github.com/typelevel/cats/pull/3471) Some travis ci updates  by @barambani
+* [#3466](https://github.com/typelevel/cats/pull/3466) Adding travis job names  by @barambani
+* [#3461](https://github.com/typelevel/cats/pull/3461) Update sbt-scalafix to 0.9.17  by @scala-steward
+* [#3448](https://github.com/typelevel/cats/pull/3448) Update simulacrum-scalafix-annotations to 0.3.0  by @scala-steward
+* [#3445](https://github.com/typelevel/cats/pull/3445) Update sbt to 1.3.12  by @scala-steward
+* [#3444](https://github.com/typelevel/cats/pull/3444) Scalafmt 2.5.3  by @travisbrown
+* [#3442](https://github.com/typelevel/cats/pull/3442) Deprecate Simulacrum ops objects  by @travisbrown
+* [#3441](https://github.com/typelevel/cats/pull/3441) Update sbt to 1.3.11  by @scala-steward
+* [#3438](https://github.com/typelevel/cats/pull/3438) Change value-level kind-projector syntax  by @travisbrown
+* [#3437](https://github.com/typelevel/cats/pull/3437) Update sbt-scalafix to 0.9.16  by @scala-steward
+* [#3435](https://github.com/typelevel/cats/pull/3435) Use FullOptStage  by @travisbrown
+* [#3428](https://github.com/typelevel/cats/pull/3428) Configure codecov to simplify PR comments  by @travisbrown
+* [#3425](https://github.com/typelevel/cats/pull/3425) Update Scalafmt to 2.5.2  by @travisbrown
+* [#3357](https://github.com/typelevel/cats/pull/3357) Update Scala.js to 1.0, disable Scala.js coverage reporting  by @travisbrown
+
+
 ## Version 2.2.0-M2
 
 _2020 May 25_

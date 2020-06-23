@@ -43,13 +43,12 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * scala> val b: Either[String, List[Int]] = TraverseFilter[List].sequenceFilter(a)
    * b: Either[String, List[Int]] = Right(List(1, 5, 3))
    * }}}
-   * */
+   */
   @noop
   def sequenceFilter[G[_], A](fgoa: F[G[Option[A]]])(implicit G: Applicative[G]): G[F[A]] =
     traverseFilter(fgoa)(identity)
 
   /**
-   *
    * Filter values inside a `G` context.
    *
    * This is a generalized version of Haskell's [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
@@ -90,15 +89,26 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
 object TraverseFilter {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[TraverseFilter]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: TraverseFilter[F]): TraverseFilter[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): AllOps[F, A] {
+      type TypeClassType = TraverseFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = TraverseFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: TraverseFilter[F]
     def self: F[A]
@@ -123,20 +133,11 @@ object TraverseFilter {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToTraverseFilterOps
-  object ops {
-    implicit def toAllTraverseFilterOps[F[_], A](target: F[A])(implicit tc: TraverseFilter[F]): AllOps[F, A] {
-      type TypeClassType = TraverseFilter[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = TraverseFilter[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

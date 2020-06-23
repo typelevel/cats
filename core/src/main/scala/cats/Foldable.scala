@@ -311,12 +311,12 @@ import scala.annotation.implicitNotFound
 
   /**
    * Tear down a subset of this structure using a `PartialFunction`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   @noop
   def collectFold[A, B](fa: F[A])(f: PartialFunction[A, B])(implicit B: Monoid[B]): B =
@@ -324,13 +324,13 @@ import scala.annotation.implicitNotFound
 
   /**
    * Tear down a subset of this structure using a `A => Option[M]`.
-   *{{{
+   * {{{
    * scala> import cats.implicits._
    * scala> val xs = List(1, 2, 3, 4)
    * scala> def f(n: Int): Option[Int] = if (n % 2 == 0) Some(n) else None
    * scala> Foldable[List].collectFoldSome(xs)(f)
    * res0: Int = 6
-   *}}}
+   * }}}
    */
   def collectFoldSome[A, B](fa: F[A])(f: A => Option[B])(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((acc, a) =>
@@ -424,7 +424,7 @@ import scala.annotation.implicitNotFound
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   @noop
   def foldMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: MonoidK[G]): G[B] =
     foldRight(fa, Eval.now(G.empty[B])) { (a, evalGb) =>
@@ -912,15 +912,26 @@ object Foldable {
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
   }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Foldable]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Foldable[F]): Foldable[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): AllOps[F, A] {
+      type TypeClassType = Foldable[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Foldable[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Foldable[F]
     def self: F[A]
@@ -991,20 +1002,11 @@ object Foldable {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFoldableOps
-  object ops {
-    implicit def toAllFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): AllOps[F, A] {
-      type TypeClassType = Foldable[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Foldable[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

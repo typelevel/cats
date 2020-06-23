@@ -27,15 +27,26 @@ import scala.annotation.implicitNotFound
 
 object Category {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Category]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Category[F]): Category[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): AllOps[F, A, B] {
+      type TypeClassType = Category[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Category[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Category[F]
     def self: F[A, B]
@@ -54,20 +65,11 @@ object Category {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCategoryOps
-  object ops {
-    implicit def toAllCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): AllOps[F, A, B] {
-      type TypeClassType = Category[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = Category[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

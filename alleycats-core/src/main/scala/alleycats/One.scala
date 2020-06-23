@@ -20,15 +20,26 @@ object One {
   def apply[A](a: => A): One[A] =
     new One[A] { lazy val one: A = a }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[One]] for `A`.
    */
   @inline def apply[A](implicit instance: One[A]): One[A] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllOneOps[A](target: A)(implicit tc: One[A]): AllOps[A] {
+      type TypeClassType = One[A]
+    } =
+      new AllOps[A] {
+        type TypeClassType = One[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[A] extends Serializable {
     type TypeClassType <: One[A]
     def self: A
@@ -47,20 +58,11 @@ object One {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToOneOps
-  object ops {
-    implicit def toAllOneOps[A](target: A)(implicit tc: One[A]): AllOps[A] {
-      type TypeClassType = One[A]
-    } =
-      new AllOps[A] {
-        type TypeClassType = One[A]
-        val self: A = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

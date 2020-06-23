@@ -84,22 +84,33 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
   implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
   implicit def catsTraverseFilterForVector: TraverseFilter[Vector] =
     cats.instances.vector.catsStdTraverseFilterForVector
-  implicit def catsFunctorFilterForMap[K: Order]: FunctorFilter[Map[K, *]] =
+  implicit def catsFunctorFilterForMap[K]: FunctorFilter[Map[K, *]] =
     cats.instances.map.catsStdFunctorFilterForMap[K]
-  implicit def catsTraverseFilterForSortedMap[K: Order]: TraverseFilter[SortedMap[K, *]] =
+  implicit def catsTraverseFilterForSortedMap[K]: TraverseFilter[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdTraverseFilterForSortedMap[K]
   implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
     cats.instances.queue.catsStdTraverseFilterForQueue
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[FunctorFilter]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: FunctorFilter[F]
     def self: F[A]
@@ -122,20 +133,11 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToFunctorFilterOps
-  object ops {
-    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
-      type TypeClassType = FunctorFilter[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = FunctorFilter[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

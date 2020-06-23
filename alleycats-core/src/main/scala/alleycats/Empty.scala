@@ -23,15 +23,26 @@ object Empty extends EmptyInstances0 {
 
   def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Empty]] for `A`.
    */
   @inline def apply[A](implicit instance: Empty[A]): Empty[A] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
+      type TypeClassType = Empty[A]
+    } =
+      new AllOps[A] {
+        type TypeClassType = Empty[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[A] extends Serializable {
     type TypeClassType <: Empty[A]
     def self: A
@@ -50,21 +61,12 @@ object Empty extends EmptyInstances0 {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToEmptyOps
-  object ops {
-    implicit def toAllEmptyOps[A](target: A)(implicit tc: Empty[A]): AllOps[A] {
-      type TypeClassType = Empty[A]
-    } =
-      new AllOps[A] {
-        type TypeClassType = Empty[A]
-        val self: A = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

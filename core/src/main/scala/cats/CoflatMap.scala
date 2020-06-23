@@ -50,15 +50,26 @@ import scala.annotation.implicitNotFound
 
 object CoflatMap {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CoflatMap]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CoflatMap[F]): CoflatMap[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): AllOps[F, A] {
+      type TypeClassType = CoflatMap[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CoflatMap[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CoflatMap[F]
     def self: F[A]
@@ -79,20 +90,11 @@ object CoflatMap {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCoflatMapOps
-  object ops {
-    implicit def toAllCoflatMapOps[F[_], A](target: F[A])(implicit tc: CoflatMap[F]): AllOps[F, A] {
-      type TypeClassType = CoflatMap[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = CoflatMap[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

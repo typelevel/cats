@@ -58,7 +58,7 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.either.catsStdInstancesForEither[A]
   implicit def catsSemigroupalForSortedSet: Semigroupal[SortedSet] =
     cats.instances.sortedSet.catsStdSemigroupalForSortedSet
-  implicit def catsSemigroupalForSortedMap[K: Order]: Semigroupal[SortedMap[K, *]] =
+  implicit def catsSemigroupalForSortedMap[K]: Semigroupal[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsSemigroupalForFunction1[A]: Semigroupal[A => *] =
     cats.instances.function.catsStdMonadForFunction1[A]
@@ -84,15 +84,26 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
   implicit val catsSemigroupalForCommutativeSemigroup: Semigroupal[CommutativeSemigroup] =
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Semigroupal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Semigroupal[F]): Semigroupal[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllSemigroupalOps[F[_], A](target: F[A])(implicit tc: Semigroupal[F]): AllOps[F, A] {
+      type TypeClassType = Semigroupal[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Semigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Semigroupal[F]
     def self: F[A]
@@ -110,20 +121,11 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupalOps
-  object ops {
-    implicit def toAllSemigroupalOps[F[_], A](target: F[A])(implicit tc: Semigroupal[F]): AllOps[F, A] {
-      type TypeClassType = Semigroupal[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Semigroupal[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

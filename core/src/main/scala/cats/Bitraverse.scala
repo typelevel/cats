@@ -4,7 +4,7 @@ import simulacrum.{noop, typeclass}
 import scala.annotation.implicitNotFound
 
 /**
- *  A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
+ * A type class abstracting over types that give rise to two independent [[cats.Traverse]]s.
  */
 @implicitNotFound("Could not find an instance of Bitraverse for ${F}")
 @typeclass trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
@@ -54,7 +54,9 @@ import scala.annotation.implicitNotFound
   def bisequence[G[_]: Applicative, A, B](fab: F[G[A], G[B]]): G[F[A, B]] =
     bitraverse(fab)(identity, identity)
 
-  /** If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]] */
+  /**
+   * If F and G are both [[cats.Bitraverse]] then so is their composition F[G[_, _], G[_, _]]
+   */
   def compose[G[_, _]](implicit ev: Bitraverse[G]): Bitraverse[λ[(α, β) => F[G[α, β], G[α, β]]]] =
     new ComposedBitraverse[F, G] {
       val F = self
@@ -113,15 +115,26 @@ import scala.annotation.implicitNotFound
 
 object Bitraverse {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Bitraverse]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Bitraverse[F]): Bitraverse[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllBitraverseOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bitraverse[F]): AllOps[F, A, B] {
+      type TypeClassType = Bitraverse[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Bitraverse[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Bitraverse[F]
     def self: F[A, B]
@@ -144,21 +157,12 @@ object Bitraverse {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToBitraverseOps
-  object ops {
-    implicit def toAllBitraverseOps[F[_, _], A, B](target: F[A, B])(implicit tc: Bitraverse[F]): AllOps[F, A, B] {
-      type TypeClassType = Bitraverse[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = Bitraverse[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

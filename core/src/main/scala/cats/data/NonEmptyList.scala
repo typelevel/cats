@@ -69,7 +69,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   def length: Int = size
 
   /**
-   *  Applies f to all the elements of the structure
+   * Applies f to all the elements of the structure
    */
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))
@@ -413,7 +413,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
    * scala> import cats.implicits._
    * scala> val nel = NonEmptyList((0, "a"), List((1, "b"),(0, "c"), (2, "d")))
@@ -421,28 +421,27 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * scala> val result = nel.toNem
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
-   *
+   * }}}
    */
   def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
     NonEmptyMap.fromMapUnsafe(SortedMap(toList.map(ev): _*)(order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nel = NonEmptyList(1, List(2,2,3,4))
    * scala> nel.toNes
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-   *}}}
+   * }}}
    */
   def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)
 
   /**
    * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nel = NonEmptyList(1, List(2,3,4))
@@ -450,7 +449,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * scala> val result = nel.toNev
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
+   * }}}
    */
   def toNev[B >: A]: NonEmptyVector[B] =
     NonEmptyVector.fromVectorUnsafe(toList.toVector)

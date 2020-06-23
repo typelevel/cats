@@ -19,14 +19,20 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     extends AnyVal
     with NonEmptyCollection[A, Vector, NonEmptyVector] {
 
-  /** Gets the element at the index, if it exists */
+  /**
+   * Gets the element at the index, if it exists
+   */
   def get(i: Int): Option[A] =
     toVector.lift(i)
 
-  /** Gets the element at the index, or throws an exception if none exists */
+  /**
+   * Gets the element at the index, or throws an exception if none exists
+   */
   def getUnsafe(i: Int): A = toVector(i)
 
-  /** Updates the element at the index, if it exists */
+  /**
+   * Updates the element at the index, if it exists
+   */
   def updated[AA >: A](i: Int, a: AA): Option[NonEmptyVector[AA]] =
     if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
@@ -159,7 +165,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     new NonEmptyVector(toVector.map(f))
 
   /**
-   *  Applies f to all elements and combines the result
+   * Applies f to all elements and combines the result
    */
   def flatMap[B](f: A => NonEmptyVector[B]): NonEmptyVector[B] =
     new NonEmptyVector(toVector.flatMap(a => f(a).toVector))
@@ -296,7 +302,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 
   /**
    * Creates new `NonEmptyMap`, similarly to List#toMap from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
    * scala> import cats.implicits._
    * scala> val nev = NonEmptyVector((0, "a"), Vector((1, "b"),(0, "c"), (2, "d")))
@@ -304,21 +310,20 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * scala> val result = nev.toNem
    * scala> result === expectedResult
    * res0: Boolean = true
-   *}}}
-   *
+   * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
     NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
-   *{{{
+   * {{{
    * scala> import cats.data._
    * scala> import cats.instances.int._
    * scala> val nev = NonEmptyVector(1, Vector(2,2,3,4))
    * scala> nev.toNes
    * res0: cats.data.NonEmptySet[Int] = TreeSet(1, 2, 3, 4)
-   *}}}
+   * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
     NonEmptySet.of(head, tail: _*)

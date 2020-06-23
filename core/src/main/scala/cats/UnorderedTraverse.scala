@@ -16,15 +16,26 @@ import scala.annotation.implicitNotFound
 
 object UnorderedTraverse {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[UnorderedTraverse]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: UnorderedTraverse[F]): UnorderedTraverse[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllUnorderedTraverseOps[F[_], A](target: F[A])(implicit tc: UnorderedTraverse[F]): AllOps[F, A] {
+      type TypeClassType = UnorderedTraverse[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = UnorderedTraverse[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: UnorderedTraverse[F]
     def self: F[A]
@@ -47,20 +58,11 @@ object UnorderedTraverse {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToUnorderedTraverseOps
-  object ops {
-    implicit def toAllUnorderedTraverseOps[F[_], A](target: F[A])(implicit tc: UnorderedTraverse[F]): AllOps[F, A] {
-      type TypeClassType = UnorderedTraverse[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = UnorderedTraverse[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

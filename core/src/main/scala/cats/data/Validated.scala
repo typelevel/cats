@@ -237,7 +237,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> v2.toEither
    * res1: Either[String, Int] = Right(123)
    * }}}
-   *
    */
   def toEither: Either[E, A] =
     this match {
@@ -496,7 +495,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> v2.ap(f)
    * res1: Validated[String, Option[Int]] = Valid(Some(123))
    * }}}
-   *
    */
   def ap[EE >: E, B](f: Validated[EE, A => B])(implicit EE: Semigroup[EE]): Validated[EE, B] =
     (this, f) match {
@@ -653,7 +651,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> v2.foldRight(Eval.now(456))((i,e) => e.map(_ + i)).value
    * res1: Int = 579
    * }}}
-   *
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     this match {
@@ -750,7 +747,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> v2.swap
    * res1: Validated[Int, String] = Invalid(123)
    * }}}
-   *
    */
   def swap: Validated[A, E] =
     this match {
@@ -772,7 +768,6 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
    * scala> v2.merge
    * res1: Seq[String] = List(Ok)
    * }}}
-   *
    */
   def merge[EE >: E](implicit ev: A <:< EE): EE =
     this match {

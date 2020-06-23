@@ -50,15 +50,26 @@ import scala.annotation.implicitNotFound
 
 object Choice {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Choice]] for `F`.
    */
   @inline def apply[F[_, _]](implicit instance: Choice[F]): Choice[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: Choice[F]): AllOps[F, A, B] {
+      type TypeClassType = Choice[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Choice[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_, _], A, B] extends Serializable {
     type TypeClassType <: Choice[F]
     def self: F[A, B]
@@ -79,20 +90,11 @@ object Choice {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToChoiceOps
-  object ops {
-    implicit def toAllChoiceOps[F[_, _], A, B](target: F[A, B])(implicit tc: Choice[F]): AllOps[F, A, B] {
-      type TypeClassType = Choice[F]
-    } =
-      new AllOps[F, A, B] {
-        type TypeClassType = Choice[F]
-        val self: F[A, B] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

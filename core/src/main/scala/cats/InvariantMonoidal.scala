@@ -36,15 +36,26 @@ object InvariantMonoidal {
   def monoid[F[_], A](implicit F: InvariantMonoidal[F], A: Monoid[A]): Monoid[F[A]] =
     new InvariantMonoidalMonoid[F, A](F, A)
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[InvariantMonoidal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: InvariantMonoidal[F]): InvariantMonoidal[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllInvariantMonoidalOps[F[_], A](target: F[A])(implicit tc: InvariantMonoidal[F]): AllOps[F, A] {
+      type TypeClassType = InvariantMonoidal[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = InvariantMonoidal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: InvariantMonoidal[F]
     def self: F[A]
@@ -63,21 +74,12 @@ object InvariantMonoidal {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToInvariantMonoidalOps
-  object ops {
-    implicit def toAllInvariantMonoidalOps[F[_], A](target: F[A])(implicit tc: InvariantMonoidal[F]): AllOps[F, A] {
-      type TypeClassType = InvariantMonoidal[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = InvariantMonoidal[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

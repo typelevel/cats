@@ -127,6 +127,7 @@ possible:
  * Ionuț G. Stan
  * Israel Pérez González
  * Itamar Ravid
+ * Ivan Klass
  * Jack Low
  * Jacob Barber
  * Jakub Kozłowski
@@ -241,6 +242,7 @@ possible:
  * Rüdiger Klaehn
  * Rutvik Patel
  * Ryan Case
+ * Ryan Mehri
  * Sam Ritchie
  * Sanjiv Sahayam
  * Sarunas Valaskevicius
@@ -259,6 +261,7 @@ possible:
  * Suhas Gaddam
  * sullis
  * Sumedh Mungee
+ * Syed Akber Jafri
  * Takayuki Sakai
  * Tanaka Takaya
  * Taylor Brown
@@ -269,6 +272,7 @@ possible:
  * Travis Brown
  * Trond Bjerkestrand
  * Tya
+ * Valentin Willscher
  * Valy Diarrassouba
  * Vasileios Lampridis
  * Vasilis Nicolaou

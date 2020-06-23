@@ -28,15 +28,28 @@ object CommutativeApplicative {
           .map2(x, y)(CommutativeMonoid[A].combine)
     }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CommutativeApplicative]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CommutativeApplicative[F]): CommutativeApplicative[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCommutativeApplicativeOps[F[_], A](
+      target: F[A]
+    )(implicit tc: CommutativeApplicative[F]): AllOps[F, A] {
+      type TypeClassType = CommutativeApplicative[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CommutativeApplicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CommutativeApplicative[F]
     def self: F[A]
@@ -55,22 +68,11 @@ object CommutativeApplicative {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeApplicativeOps
-  object ops {
-    implicit def toAllCommutativeApplicativeOps[F[_], A](
-      target: F[A]
-    )(implicit tc: CommutativeApplicative[F]): AllOps[F, A] {
-      type TypeClassType = CommutativeApplicative[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = CommutativeApplicative[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

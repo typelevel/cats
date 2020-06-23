@@ -3,7 +3,8 @@ package data
 
 import cats.arrow._
 
-/** Compose a two-slot type constructor `F[_, _]` with two single-slot type constructors
+/**
+ * Compose a two-slot type constructor `F[_, _]` with two single-slot type constructors
  *  `G[_]` and `H[_]`, resulting in a two-slot type constructor with respect to the inner types.
  *  For example, `List` and `Option` both have `Functor` instances, and `Either` has a
  *  `Bifunctor` instance. Therefore, `Binested[Either, List, Option, *, *]` has a `Bifunctor`

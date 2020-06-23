@@ -13,45 +13,67 @@ package free
  */
 final case class Cofree[S[_], A](head: A, tail: Eval[S[Cofree[S, A]]]) {
 
-  /** Evaluates and returns the tail of the computation. */
+  /**
+   * Evaluates and returns the tail of the computation.
+   */
   def tailForced: S[Cofree[S, A]] = tail.value
 
-  /** Applies `f` to the head and `g` to the tail. */
+  /**
+   * Applies `f` to the head and `g` to the tail.
+   */
   def transform[B](f: A => B, g: Cofree[S, A] => Cofree[S, B])(implicit S: Functor[S]): Cofree[S, B] =
     Cofree[S, B](f(head), tail.map(S.map(_)(g)))
 
-  /** Map over head and inner `S[_]` branches. */
+  /**
+   * Map over head and inner `S[_]` branches.
+   */
   def map[B](f: A => B)(implicit S: Functor[S]): Cofree[S, B] =
     transform(f, _.map(f))
 
-  /** Transform the branching functor at the root of the Cofree tree. */
+  /**
+   * Transform the branching functor at the root of the Cofree tree.
+   */
   def mapBranchingRoot(nat: S ~> S)(implicit S: Functor[S]): Cofree[S, A] =
     Cofree[S, A](head, tail.map(nat(_)))
 
-  /** Transform the branching functor, using the S functor to perform the recursion. */
+  /**
+   * Transform the branching functor, using the S functor to perform the recursion.
+   */
   def mapBranchingS[T[_]](nat: S ~> T)(implicit S: Functor[S]): Cofree[T, A] =
     Cofree[T, A](head, tail.map(v => nat(S.map(v)(_.mapBranchingS(nat)))))
 
-  /** Transform the branching functor, using the T functor to perform the recursion. */
+  /**
+   * Transform the branching functor, using the T functor to perform the recursion.
+   */
   def mapBranchingT[T[_]](nat: S ~> T)(implicit T: Functor[T]): Cofree[T, A] =
     Cofree.anaEval(this)(_.tail.map(nat(_)), _.head)
 
-  /** Map `f` over each subtree of the computation. */
+  /**
+   * Map `f` over each subtree of the computation.
+   */
   def coflatMap[B](f: Cofree[S, A] => B)(implicit S: Functor[S]): Cofree[S, B] =
     Cofree.anaEval(this)(_.tail, f)
 
-  /** Replace each node in the computation with the subtree from that node downwards */
+  /**
+   * Replace each node in the computation with the subtree from that node downwards
+   */
   def coflatten(implicit S: Functor[S]): Cofree[S, Cofree[S, A]] =
     Cofree.anaEval(this)(_.tail, identity)
 
-  /** Alias for head. */
+  /**
+   * Alias for head.
+   */
   def extract: A = head
 
-  /** Evaluate just the tail. */
+  /**
+   * Evaluate just the tail.
+   */
   def forceTail: Cofree[S, A] =
     Cofree[S, A](head, Eval.now(tail.value))
 
-  /** Evaluate the entire Cofree tree. */
+  /**
+   * Evaluate the entire Cofree tree.
+   */
   def forceAll(implicit S: Functor[S]): Cofree[S, A] =
     Cofree.anaEval(this)(sa => Eval.now(sa.tail.value), _.head)
 
@@ -59,15 +81,21 @@ final case class Cofree[S[_], A](head: A, tail: Eval[S[Cofree[S, A]]]) {
 
 object Cofree extends CofreeInstances {
 
-  /** Cofree anamorphism, lazily evaluated. */
+  /**
+   * Cofree anamorphism, lazily evaluated.
+   */
   def unfold[F[_], A](a: A)(f: A => F[A])(implicit F: Functor[F]): Cofree[F, A] =
     ana(a)(f, identity)
 
-  /** Cofree anamorphism with a fused map, lazily evaluated. */
+  /**
+   * Cofree anamorphism with a fused map, lazily evaluated.
+   */
   def ana[F[_], A, B](a: A)(coalg: A => F[A], f: A => B)(implicit F: Functor[F]): Cofree[F, B] =
     anaEval(a)(a => Eval.later(coalg(a)), f)
 
-  /** Cofree anamorphism with a fused map. */
+  /**
+   * Cofree anamorphism with a fused map.
+   */
   def anaEval[F[_], A, B](a: A)(coalg: A => Eval[F[A]], f: A => B)(implicit F: Functor[F]): Cofree[F, B] =
     Cofree[F, B](f(a), mapSemilazy(coalg(a))(fa => F.map(fa)(anaEval(_)(coalg, f))))
 

@@ -128,19 +128,32 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
   implicit def catsSemigroupKForEither[A]: SemigroupK[Either[A, *]] =
     cats.instances.either.catsStdSemigroupKForEither[A]
   implicit def catsSemigroupKForSortedSet: SemigroupK[SortedSet] = cats.instances.sortedSet.catsStdInstancesForSortedSet
+  implicit def catsSemigroupKForSortedMap[K]: SemigroupK[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdSemigroupKForSortedMap[K]
   implicit def catsMonoidKForSortedMap[K: Order]: MonoidK[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdMonoidKForSortedMap[K]
   implicit def catsMonoidKForEndo: MonoidK[Endo] = cats.instances.function.catsStdMonoidKForFunction1
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[SemigroupK]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: SemigroupK[F]): SemigroupK[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
+      type TypeClassType = SemigroupK[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = SemigroupK[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: SemigroupK[F]
     def self: F[A]
@@ -161,20 +174,11 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToSemigroupKOps
-  object ops {
-    implicit def toAllSemigroupKOps[F[_], A](target: F[A])(implicit tc: SemigroupK[F]): AllOps[F, A] {
-      type TypeClassType = SemigroupK[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = SemigroupK[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

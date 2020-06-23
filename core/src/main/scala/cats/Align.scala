@@ -113,7 +113,7 @@ object Align extends ScalaVersionSpecificAlignInstances {
   implicit def catsAlignForOption: Align[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsAlignForVector: Align[Vector] = cats.instances.vector.catsStdInstancesForVector
   implicit def catsAlignForMap[K]: Align[Map[K, *]] = cats.instances.map.catsStdInstancesForMap[K]
-  implicit def catsAlignForSortedMap[K: Order]: Align[SortedMap[K, *]] =
+  implicit def catsAlignForSortedMap[K]: Align[SortedMap[K, *]] =
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsAlignForEither[A]: Align[Either[A, *]] = cats.instances.either.catsStdInstancesForEither[A]
 
@@ -130,15 +130,26 @@ object Align extends ScalaVersionSpecificAlignInstances {
         )
     }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Align]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Align[F]): Align[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
+      type TypeClassType = Align[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Align[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Align[F]
     def self: F[A]
@@ -162,20 +173,11 @@ object Align extends ScalaVersionSpecificAlignInstances {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToAlignOps
-  object ops {
-    implicit def toAllAlignOps[F[_], A](target: F[A])(implicit tc: Align[F]): AllOps[F, A] {
-      type TypeClassType = Align[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Align[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

@@ -46,7 +46,9 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
   final def fold[B](r: A => B, s: S[Free[S, A]] => B)(implicit S: Functor[S]): B =
     resume.fold(s, r)
 
-  /** Takes one evaluation step in the Free monad, re-associating left-nested binds in the process. */
+  /**
+   * Takes one evaluation step in the Free monad, re-associating left-nested binds in the process.
+   */
   @tailrec
   final def step: Free[S, A] =
     this match {
@@ -173,16 +175,16 @@ sealed abstract class Free[S[_], A] extends Product with Serializable {
    * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
    * to `Free.inject` but lifts programs rather than constructors.
    *
-   *{{{
-   *scala> type Lo[A] = cats.data.EitherK[List, Option, A]
-   *defined type alias Lo
+   * {{{
+   * scala> type Lo[A] = cats.data.EitherK[List, Option, A]
+   * defined type alias Lo
    *
-   *scala> val fo = Free.liftF(Option("foo"))
-   *fo: cats.free.Free[Option,String] = Free(...)
+   * scala> val fo = Free.liftF(Option("foo"))
+   * fo: cats.free.Free[Option,String] = Free(...)
    *
-   *scala> fo.inject[Lo]
-   *res4: cats.free.Free[Lo,String] = Free(...)
-   *}}}
+   * scala> fo.inject[Lo]
+   * res4: cats.free.Free[Lo,String] = Free(...)
+   * }}}
    */
   final def inject[G[_]](implicit ev: InjectK[S, G]): Free[G, A] =
     mapK(new (S ~> G) { def apply[B](sb: S[B]): G[B] = ev.inj(sb) })
@@ -201,10 +203,14 @@ object Free extends FreeInstances {
    */
   final private[free] case class Pure[S[_], A](a: A) extends Free[S, A]
 
-  /** Suspend the computation with the given suspension. */
+  /**
+   * Suspend the computation with the given suspension.
+   */
   final private[free] case class Suspend[S[_], A](a: S[A]) extends Free[S, A]
 
-  /** Call a subroutine and continue with the given function. */
+  /**
+   * Call a subroutine and continue with the given function.
+   */
   final private[free] case class FlatMapped[S[_], B, C](c: Free[S, C], f: C => Free[S, B]) extends Free[S, B]
 
   /**

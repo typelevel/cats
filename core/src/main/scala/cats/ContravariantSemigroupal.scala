@@ -21,15 +21,28 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
   def semigroup[F[_], A](implicit f: ContravariantSemigroupal[F]): Semigroup[F[A]] =
     new ContravariantSemigroupalSemigroup[F, A](f)
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[ContravariantSemigroupal]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: ContravariantSemigroupal[F]): ContravariantSemigroupal[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllContravariantSemigroupalOps[F[_], A](
+      target: F[A]
+    )(implicit tc: ContravariantSemigroupal[F]): AllOps[F, A] {
+      type TypeClassType = ContravariantSemigroupal[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = ContravariantSemigroupal[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: ContravariantSemigroupal[F]
     def self: F[A]
@@ -50,23 +63,12 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToContravariantSemigroupalOps
-  object ops {
-    implicit def toAllContravariantSemigroupalOps[F[_], A](
-      target: F[A]
-    )(implicit tc: ContravariantSemigroupal[F]): AllOps[F, A] {
-      type TypeClassType = ContravariantSemigroupal[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = ContravariantSemigroupal[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

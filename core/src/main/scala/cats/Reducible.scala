@@ -67,7 +67,7 @@ import scala.annotation.implicitNotFound
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
+   */
   @noop
   def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
@@ -79,7 +79,7 @@ import scala.annotation.implicitNotFound
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
-   *  Monadic variant of [[reduceLeftTo]].
+   * Monadic variant of [[reduceLeftTo]].
    */
   def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
@@ -286,15 +286,26 @@ import scala.annotation.implicitNotFound
 
 object Reducible {
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Reducible]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Reducible[F]): Reducible[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllReducibleOps[F[_], A](target: F[A])(implicit tc: Reducible[F]): AllOps[F, A] {
+      type TypeClassType = Reducible[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Reducible[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Reducible[F]
     def self: F[A]
@@ -340,21 +351,12 @@ object Reducible {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToReducibleOps
-  object ops {
-    implicit def toAllReducibleOps[F[_], A](target: F[A])(implicit tc: Reducible[F]): AllOps[F, A] {
-      type TypeClassType = Reducible[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Reducible[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

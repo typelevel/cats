@@ -2,13 +2,10 @@ package cats
 package laws
 package discipline
 
-import cats.data.RepresentableStore
-import cats.Eq
-import cats.data.AndThen
+import cats.data.{AndThen, RepresentableStore}
 import cats.instances.boolean._
 import cats.instances.int._
 import cats.instances.string._
-import cats.instances.tuple._
 import cats.kernel._
 import cats.platform.Platform
 import cats.syntax.eq._
@@ -21,6 +18,13 @@ object eq {
 
   implicit def catsLawsEqForFn2[A, B, C](implicit ev: Eq[((A, B)) => C]): Eq[(A, B) => C] =
     Eq.by((_: (A, B) => C).tupled)
+
+  implicit def catsLawsEqForPartialFunctionExhaustive[A: ExhaustiveCheck, B: Eq]: Eq[PartialFunction[A, B]] =
+    Eq.instance((f, g) =>
+      ExhaustiveCheck[A].allValues
+        .filter(a => f.isDefinedAt(a) || g.isDefinedAt(a))
+        .forall(a => f.isDefinedAt(a) && g.isDefinedAt(a) && Eq[B].eqv(f(a), g(a)))
+    )
 
   implicit def catsLawsEqForAndThen[A, B](implicit eqAB: Eq[A => B]): Eq[AndThen[A, B]] =
     Eq.by[AndThen[A, B], A => B](identity)
@@ -64,15 +68,19 @@ object eq {
     Eq.by[Band[A], (A, A) => (A, A)](f => (x, y) => (f.combine(x, y), f.combine(f.combine(x, y), y)))
 
   implicit def catsLawsEqForGroup[A](implicit ev1: Eq[(A, A) => (A, Boolean)], eqA: Eq[A]): Eq[Group[A]] =
-    Eq.by[Group[A], (A, A) => (A, Boolean)](f =>
-      (x, y) =>
-        (
-          f.combine(x, y),
-          f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
-            f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
-            f.inverse(f.empty) == f.empty
-        )
-    )
+    Eq.by[Group[A], (A, A) => (A, Boolean)] {
+      f =>
+        { (x, y) =>
+          {
+            val xy = f.combine(x, y)
+            val p1 = f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty
+            val p2 = f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty
+            val p3 = f.inverse(f.empty) == f.empty
+
+            (xy, p1 && p2 && p3)
+          }
+        }
+    }
 
   implicit def catsLawsEqForMonoid[A](implicit eqSA: Eq[Semigroup[A]], eqA: Eq[A]): Eq[Monoid[A]] =
     new Eq[Monoid[A]] {
@@ -146,13 +154,17 @@ object eq {
    * and comparing the application of the two functions.
    */
   implicit def catsLawsEqForFn2[A, B, C](implicit A: Arbitrary[A], B: Arbitrary[B], C: Eq[C]): Eq[(A, B) => C] =
-    Eq.by((_: (A, B) => C).tupled)(catsLawsEqForFn1)
+    Eq.by((_: (A, B) => C).tupled)(catsLawsEqForFn1[(A, B), C])
 
-  /** `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]]. */
+  /**
+   * `Eq[AndThen]` instance, built by piggybacking on [[catsLawsEqForFn1]].
+   */
   implicit def catsLawsEqForAndThen[A, B](implicit A: Arbitrary[A], B: Eq[B]): Eq[AndThen[A, B]] =
     Eq.instance(catsLawsEqForFn1[A, B].eqv(_, _))
 
-  /** Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String] */
+  /**
+   * Create an approximation of Eq[Show[A]] by using catsLawsEqForFn1[A, String]
+   */
   implicit def catsLawsEqForShow[A: Arbitrary]: Eq[Show[A]] =
     Eq.by[Show[A], A => String] { showInstance => (a: A) =>
       showInstance.show(a)
@@ -257,14 +269,14 @@ object eq {
     }
 
     val inverseEq = Eq.by[Group[A], ((A, A)) => (A, Boolean)](f =>
-      Function.tupled((x, y) =>
-        (
-          f.combine(x, y),
-          f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty &&
-            f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty &&
-            f.inverse(f.empty) == f.empty
-        )
-      )
+      Function.tupled { (x, y) =>
+        val xy = f.combine(x, y)
+        val p1 = f.combine(f.inverse(x), x) === f.empty && f.combine(x, f.inverse(x)) === f.empty
+        val p2 = f.combine(f.inverse(y), y) === f.empty && f.combine(y, f.inverse(y)) === f.empty
+        val p3 = f.inverse(f.empty) == f.empty
+
+        (xy, p1 && p2 && p3)
+      }
     )(catsLawsEqForFn1[(A, A), (A, Boolean)])
 
     Eq.instance((f, g) => eqMA.eqv(f, g) && inverseEq.eqv(f, g))

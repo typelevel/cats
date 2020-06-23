@@ -24,15 +24,26 @@ object CommutativeApply {
           .map2(x, y)(CommutativeSemigroup[A].combine)
     }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[CommutativeApply]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: CommutativeApply[F]): CommutativeApply[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCommutativeApplyOps[F[_], A](target: F[A])(implicit tc: CommutativeApply[F]): AllOps[F, A] {
+      type TypeClassType = CommutativeApply[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = CommutativeApply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: CommutativeApply[F]
     def self: F[A]
@@ -51,20 +62,11 @@ object CommutativeApply {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToCommutativeApplyOps
-  object ops {
-    implicit def toAllCommutativeApplyOps[F[_], A](target: F[A])(implicit tc: CommutativeApply[F]): AllOps[F, A] {
-      type TypeClassType = CommutativeApply[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = CommutativeApply[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }

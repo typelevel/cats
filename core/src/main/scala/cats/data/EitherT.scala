@@ -13,7 +13,8 @@ import cats.syntax.EitherUtil
  */
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
-  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+  /**
+   * Transform this `EitherT[F, A, B]` into a `F[C]`.
    *
    * Example:
    * {{{
@@ -27,7 +28,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    */
   def fold[C](fa: A => C, fb: B => C)(implicit F: Functor[F]): F[C] = F.map(value)(_.fold(fa, fb))
 
-  /** Transform this `EitherT[F, A, B]` into a `F[C]`.
+  /**
+   * Transform this `EitherT[F, A, B]` into a `F[C]`.
    *
    * Example:
    * {{{
@@ -425,7 +427,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case r @ Right(_) => F.pure(EitherUtil.leftCast(r))
     })
 
-  /** Combine `leftSemiflatMap` and `semiflatMap` together.
+  /**
+   * Combine `leftSemiflatMap` and `semiflatMap` together.
    *
    * Example:
    * {{{
@@ -545,7 +548,8 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
       case Left(a)  => Validated.invalidNec(a)
     }
 
-  /** Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
+  /**
+   * Run this value as a `[[Validated]]` against the function and convert it back to an `[[EitherT]]`.
    *
    * The [[Applicative]] instance for `EitherT` "fails fast" - it is often useful to "momentarily" have
    * it accumulate errors instead, which is what the `[[Validated]]` data type gives us.
@@ -585,7 +589,6 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> EitherT((ff.toNested).ap(fa.toNested).value)
    * res1: EitherT[List,String,String] = EitherT(List(Right(1), Right(2), Left(error), Left(error)))
    * }}}
-   *
    */
   def toNested: Nested[F, Either[A, *], B] = Nested[F, Either[A, *], B](value)
 
@@ -769,7 +772,8 @@ object EitherT extends EitherTInstances {
   @deprecated("Use EitherT.liftF.", "1.0.0-RC1")
   final def liftT[F[_], A, B](fb: F[B])(implicit F: Functor[F]): EitherT[F, A, B] = right(fb)
 
-  /** Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
+  /**
+   * Transforms an `Either` into an `EitherT`, lifted into the specified `Applicative`.
    *
    * Note: The return type is a FromEitherPartiallyApplied[F], which has an apply method
    * on it, allowing you to call fromEither like this:
@@ -792,7 +796,8 @@ object EitherT extends EitherTInstances {
       EitherT(F.pure(either))
   }
 
-  /** Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
+  /**
+   * Transforms an `Option` into an `EitherT`, lifted into the specified `Applicative` and using
    *  the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.implicits._
@@ -820,7 +825,8 @@ object EitherT extends EitherTInstances {
       )
   }
 
-  /** Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
+  /**
+   * Transforms an `F[Option]` into an `EitherT`, using the second argument if the `Option` is a `None`.
    * {{{
    * scala> import cats.implicits._
    * scala> val o: Option[Int] = None
@@ -838,7 +844,9 @@ object EitherT extends EitherTInstances {
       }
     )
 
-  /** Similar to `fromOptionF` but the left is carried from monadic `F[_]` context when the option is `None` */
+  /**
+   * Similar to `fromOptionF` but the left is carried from monadic `F[_]` context when the option is `None`
+   */
   final def fromOptionM[F[_], E, A](fopt: F[Option[A]], ifNone: => F[E])(implicit F: Monad[F]): EitherT[F, E, A] =
     EitherT(
       F.flatMap(fopt) {
@@ -847,7 +855,8 @@ object EitherT extends EitherTInstances {
       }
     )
 
-  /**  If the condition is satisfied, return the given `A` in `Right`
+  /**
+   *  If the condition is satisfied, return the given `A` in `Right`
    *  lifted into the specified `Applicative`, otherwise, return the
    *  given `E` in `Left` lifted into the specified `Applicative`.
    *
@@ -998,7 +1007,8 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
 
 abstract private[data] class EitherTInstances2 extends EitherTInstances3 {
 
-  /**  Monad error instance for recovering errors in F instead of
+  /**
+   *  Monad error instance for recovering errors in F instead of
    *  the underlying Either.
    *
    * {{{
@@ -1049,6 +1059,12 @@ private[data] trait EitherTSemigroupK[F[_], L] extends SemigroupK[EitherT[F, L, 
       case l @ Left(_)  => y.value
       case r @ Right(_) => F.pure(r)
     })
+
+  override def combineKEval[A](x: EitherT[F, L, A], y: Eval[EitherT[F, L, A]]): Eval[EitherT[F, L, A]] =
+    Eval.now(EitherT(F.flatMap(x.value) {
+      case l @ Left(_)  => y.value.value
+      case r @ Right(_) => F.pure(r: Either[L, A])
+    }))
 }
 
 private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, *]] {

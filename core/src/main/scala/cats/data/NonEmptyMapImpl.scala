@@ -2,7 +2,6 @@ package cats
 package data
 
 import cats.kernel._
-import cats.{Always, Apply, Eval, Foldable, Functor, Later, NonEmptyTraverse, Now, SemigroupK, Show}
 
 import scala.collection.immutable._
 
@@ -14,12 +13,20 @@ private[data] object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 
   private[data] def unwrap[K, A](m: Type[K, A]): SortedMap[K, A] =
     m.asInstanceOf[SortedMap[K, A]]
 
-  def fromMap[K: Order, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
+  def fromMap[K, A](as: SortedMap[K, A]): Option[NonEmptyMap[K, A]] =
     if (as.nonEmpty) Option(create(as)) else None
 
-  def fromMapUnsafe[K: Order, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
+  @deprecated("Use fromMap override without Order", "2.2.0-M3")
+  def fromMap[K, A](as: SortedMap[K, A], orderK: Order[K]): Option[NonEmptyMap[K, A]] =
+    fromMap(as)
+
+  def fromMapUnsafe[K, A](m: SortedMap[K, A]): NonEmptyMap[K, A] =
     if (m.nonEmpty) create(m)
     else throw new IllegalArgumentException("Cannot create NonEmptyMap from empty map")
+
+  @deprecated("Use fromMapUnsafe override without Order", "2.2.0-M3")
+  def fromMapUnsafe[K, A](m: SortedMap[K, A], orderK: Order[K]): NonEmptyMap[K, A] =
+    fromMapUnsafe(m)
 
   def apply[K, A](head: (K, A), tail: SortedMap[K, A])(implicit K: Order[K]): NonEmptyMap[K, A] =
     create(SortedMap(head)(K.toOrdering) ++ tail)
@@ -62,7 +69,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
 
   /**
    * Adds a key-value pair to this map, returning a new `NonEmptyMap`.
-   * */
+   */
   def add(ka: (K, A)): NonEmptyMap[K, A] = NonEmptyMapImpl.create(toSortedMap + ka)
 
   /**
@@ -249,7 +256,7 @@ sealed class NonEmptyMapOps[K, A](val value: NonEmptyMap[K, A]) {
 
 sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInstances0 {
 
-  implicit def catsDataInstancesForNonEmptyMap[K: Order]
+  implicit def catsDataInstancesForNonEmptyMap[K]
     : SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
     new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] {
 
@@ -305,8 +312,18 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
         NonEmptyMap.fromMapUnsafe(Align[SortedMap[K, *]].align(fa.toSortedMap, fb.toSortedMap))
     }
 
-  implicit def catsDataHashForNonEmptyMap[K: Hash: Order, A: Hash]: Hash[NonEmptyMap[K, A]] =
+  @deprecated("Use catsDataInstancesForNonEmptyMap override without Order", "2.2.0-M3")
+  implicit def catsDataInstancesForNonEmptyMap[K](
+    orderK: Order[K]
+  ): SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] =
+    catsDataInstancesForNonEmptyMap[K]
+
+  implicit def catsDataHashForNonEmptyMap[K: Hash, A: Hash]: Hash[NonEmptyMap[K, A]] =
     Hash[SortedMap[K, A]].asInstanceOf[Hash[NonEmptyMap[K, A]]]
+
+  @deprecated("Use catsDataHashForNonEmptyMap override without Order", "2.2.0-M3")
+  def catsDataHashForNonEmptyMap[K, A](hashK: Hash[K], orderK: Order[K], hashA: Hash[A]): Hash[NonEmptyMap[K, A]] =
+    catsDataHashForNonEmptyMap(hashK, hashA)
 
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] =
     Show.show[NonEmptyMap[K, A]](_.show)
@@ -318,8 +335,9 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
 }
 
 sealed abstract private[data] class NonEmptyMapInstances0 {
-  implicit def catsDataEqForNonEmptyMap[K: Order, A: Eq]: Eq[NonEmptyMap[K, A]] =
-    new Eq[NonEmptyMap[K, A]] {
-      def eqv(x: NonEmptyMap[K, A], y: NonEmptyMap[K, A]): Boolean = x === y
-    }
+  implicit def catsDataEqForNonEmptyMap[K, A: Eq]: Eq[NonEmptyMap[K, A]] = _ === _
+
+  @deprecated("Use catsDataEqForNonEmptyMap override without Order", "2.2.0-M3")
+  def catsDataEqForNonEmptyMap[K, A](orderK: Order[K], eqA: Eq[A]): Eq[NonEmptyMap[K, A]] =
+    catsDataEqForNonEmptyMap(eqA)
 }

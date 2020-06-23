@@ -49,6 +49,7 @@ package object syntax {
       with ParallelBitraverseSyntax
       with ParallelUnorderedTraverseSyntax
       with ParallelFoldMapASyntax
+      with ParallelTraverseFilterSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0

@@ -2,7 +2,6 @@ package cats.tests
 
 import cats.{Invariant, InvariantMonoidal, Semigroupal}
 import cats.kernel.Semigroup
-import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks

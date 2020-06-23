@@ -71,7 +71,6 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
    * scala> Apply[ErrOr].productR(invalidInt)(invalidBool)
    * res3: ErrOr[Boolean] = Invalid(Invalid int.Invalid boolean.)
    * }}}
-   *
    */
   def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     ap(map(fa)(_ => (b: B) => b))(fb)
@@ -113,24 +112,34 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
   override def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
     ap(map(fa)(a => (b: B) => (a, b)))(fb)
 
-  /** Alias for [[ap]]. */
+  /**
+   * Alias for [[ap]].
+   */
   @inline final def <*>[A, B](ff: F[A => B])(fa: F[A]): F[B] =
     ap(ff)(fa)
 
-  /** Alias for [[productR]]. */
+  /**
+   * Alias for [[productR]].
+   */
   @inline final def *>[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
-  /** Alias for [[productL]]. */
+  /**
+   * Alias for [[productL]].
+   */
   @inline final def <*[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
 
-  /** Alias for [[productR]]. */
+  /**
+   * Alias for [[productR]].
+   */
   @deprecated("Use *> or productR instead.", "1.0.0-RC2")
   @noop @inline final private[cats] def followedBy[A, B](fa: F[A])(fb: F[B]): F[B] =
     productR(fa)(fb)
 
-  /** Alias for [[productL]]. */
+  /**
+   * Alias for [[productL]].
+   */
   @deprecated("Use <* or productL instead.", "1.0.0-RC2")
   @noop @inline final private[cats] def forEffect[A, B](fa: F[A])(fb: F[B]): F[A] =
     productL(fa)(fb)
@@ -267,15 +276,26 @@ object Apply {
       def functor: Functor[F] = Apply[F]
     }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
-  /****************************************************************************/
+  /* ======================================================================== */
 
   /**
    * Summon an instance of [[Apply]] for `F`.
    */
   @inline def apply[F[_]](implicit instance: Apply[F]): Apply[F] = instance
 
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): AllOps[F, A] {
+      type TypeClassType = Apply[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Apply[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
   trait Ops[F[_], A] extends Serializable {
     type TypeClassType <: Apply[F]
     def self: F[A]
@@ -306,21 +326,12 @@ object Apply {
         val typeClassInstance: TypeClassType = tc
       }
   }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
   object nonInheritedOps extends ToApplyOps
-  object ops {
-    implicit def toAllApplyOps[F[_], A](target: F[A])(implicit tc: Apply[F]): AllOps[F, A] {
-      type TypeClassType = Apply[F]
-    } =
-      new AllOps[F, A] {
-        type TypeClassType = Apply[F]
-        val self: F[A] = target
-        val typeClassInstance: TypeClassType = tc
-      }
-  }
 
-  /****************************************************************************/
+  /* ======================================================================== */
   /* END OF SIMULACRUM-MANAGED CODE                                           */
-  /****************************************************************************/
+  /* ======================================================================== */
 
 }
 

@@ -1,12 +1,14 @@
 package cats.kernel
 
 import java.util.UUID
+
+import cats.kernel.compat.scalaVersionSpecific._
+
 import scala.collection.immutable.{BitSet, Queue, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.math.Equiv
-import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
-import compat.scalaVersionSpecific._
+import scala.{specialized => sp}
 
 /**
  * A type class used to determine equality between 2 instances of the same
@@ -245,7 +247,7 @@ private[kernel] trait HashInstances extends EqInstances {
     cats.kernel.instances.function.catsKernelHashForFunction0[A]
   implicit def catsKernelHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =
     cats.kernel.instances.map.catsKernelStdHashForMap[K, V]
-  implicit def catsKernelHashForSortedMap[K: Order: Hash, V: Hash]: Hash[SortedMap[K, V]] =
+  implicit def catsKernelHashForSortedMap[K: Hash, V: Hash]: Hash[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdHashForSortedMap[K, V]
   implicit def catsKernelHashForEither[A: Hash, B: Hash]: Hash[Either[A, B]] =
     cats.kernel.instances.either.catsStdHashForEither[A, B]
@@ -258,7 +260,7 @@ private[kernel] trait EqInstances {
   implicit def catsKernelEqForQueue[A: Eq]: Eq[Queue[A]] = cats.kernel.instances.queue.catsKernelStdEqForQueue[A]
   implicit def catsKernelEqForFunction0[A: Eq]: Eq[() => A] = cats.kernel.instances.function.catsKernelEqForFunction0[A]
   implicit def catsKernelEqForMap[K, V: Eq]: Eq[Map[K, V]] = cats.kernel.instances.map.catsKernelStdEqForMap[K, V]
-  implicit def catsKernelEqForSortedMap[K: Order, V: Eq]: Eq[SortedMap[K, V]] =
+  implicit def catsKernelEqForSortedMap[K, V: Eq]: Eq[SortedMap[K, V]] =
     cats.kernel.instances.sortedMap.catsKernelStdEqForSortedMap[K, V]
   implicit def catsKernelEqForEither[A: Eq, B: Eq]: Eq[Either[A, B]] =
     cats.kernel.instances.either.catsStdEqForEither[A, B]

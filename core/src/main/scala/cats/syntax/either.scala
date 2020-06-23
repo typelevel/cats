@@ -129,8 +129,10 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
       case Right(b) => Validated.valid(b)
     }
 
-  /** Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+  /**
+   * Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   */
   def toValidatedNel[AA >: A]: ValidatedNel[AA, B] =
     eab match {
       case Left(a)  => Validated.invalidNel(a)
@@ -389,28 +391,38 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal { //
       case Some(a) => right(a)
     }
 
-  /** Cached value of `Right(())` to avoid allocations for a common case. */
+  /**
+   * Cached value of `Right(())` to avoid allocations for a common case.
+   */
   def unit[A]: Either[A, Unit] = EitherUtil.unit
 }
 
 final class LeftOps[A, B](private val left: Left[A, B]) extends AnyVal {
 
-  /** Cast the right type parameter of the `Left`. */
+  /**
+   * Cast the right type parameter of the `Left`.
+   */
   def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
 }
 
 final class RightOps[A, B](private val right: Right[A, B]) extends AnyVal {
 
-  /** Cast the left type parameter of the `Right`. */
+  /**
+   * Cast the left type parameter of the `Right`.
+   */
   def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
 }
 
 final class EitherIdOps[A](private val obj: A) extends AnyVal {
 
-  /** Wrap a value in `Left`. */
+  /**
+   * Wrap a value in `Left`.
+   */
   def asLeft[B]: Either[A, B] = Left(obj)
 
-  /** Wrap a value in `Right`. */
+  /**
+   * Wrap a value in `Right`.
+   */
   def asRight[B]: Either[B, A] = Right(obj)
 
   /**
@@ -476,8 +488,10 @@ final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) exten
 
 final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
 
-  /** Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]]. */
+  /**
+   * Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
+   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   */
   def toValidatedNec: ValidatedNec[A, B] =
     value match {
       case Left(a)  => Validated.invalidNec(a)
@@ -485,7 +499,9 @@ final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[
     }
 }
 
-/** Convenience methods to use `Either` syntax inside `Either` syntax definitions. */
+/**
+ * Convenience methods to use `Either` syntax inside `Either` syntax definitions.
+ */
 private[cats] object EitherUtil {
   def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
     right.asInstanceOf[Either[C, B]]
