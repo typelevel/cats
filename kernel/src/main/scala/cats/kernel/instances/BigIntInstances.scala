@@ -2,7 +2,7 @@ package cats.kernel
 package instances
 
 trait BigIntInstances {
-  implicit val catsKernelStdOrderForBigInt: Order[BigInt] with Hash[BigInt] with UnboundedEnum[BigInt] =
+  implicit val catsKernelStdOrderForBigInt: Order[BigInt] with Hash[BigInt] with UnboundedEnumerable[BigInt] =
     new BigIntOrder
   implicit val catsKernelStdGroupForBigInt: CommutativeGroup[BigInt] =
     new BigIntGroup
@@ -15,7 +15,7 @@ class BigIntGroup extends CommutativeGroup[BigInt] {
   override def remove(x: BigInt, y: BigInt): BigInt = x - y
 }
 
-trait BigIntUnboundedEnum extends UnboundedEnum[BigInt] {
+trait BigIntUnboundedEnum extends UnboundedEnumerable[BigInt] {
   override def next(a: BigInt): BigInt = a + 1
   override def previous(a: BigInt): BigInt = a - 1
 }

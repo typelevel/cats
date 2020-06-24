@@ -35,13 +35,18 @@ trait PartialPreviousTests[A] extends PartialOrderTests[A] {
 
 }
 
-trait BoundedEnumTests[A] extends OrderTests[A] with PartialNextTests[A] with PartialPreviousTests[A] {
+trait BoundedEnumerableTests[A] extends OrderTests[A] with PartialNextTests[A] with PartialPreviousTests[A] {
 
-  def laws: BoundedEnumLaws[A]
+  def laws: BoundedEnumerableLaws[A]
 
-  def boundedEnum(implicit arbA: Arbitrary[A], arbF: Arbitrary[A => A], eqOA: Eq[Option[A]], eqA: Eq[A]): RuleSet =
+  def boundedEnumerable(implicit
+    arbA: Arbitrary[A],
+    arbF: Arbitrary[A => A],
+    eqOA: Eq[Option[A]],
+    eqA: Eq[A]
+  ): RuleSet =
     new RuleSet {
-      val name: String = "boundedEnum"
+      val name: String = "boundedEnumerable"
       val bases: Seq[(String, RuleSet)] = Nil
       val parents: Seq[RuleSet] = Seq(partialNext, partialPrevious, order)
       val props: Seq[(String, Prop)] = Seq(
@@ -54,7 +59,7 @@ trait BoundedEnumTests[A] extends OrderTests[A] with PartialNextTests[A] with Pa
 
 }
 
-object BoundedEnumTests {
-  def apply[A: BoundedEnum]: BoundedEnumTests[A] =
-    new BoundedEnumTests[A] { def laws: BoundedEnumLaws[A] = BoundedEnumLaws[A] }
+object BoundedEnumerableTests {
+  def apply[A: BoundedEnumerable]: BoundedEnumerableTests[A] =
+    new BoundedEnumerableTests[A] { def laws: BoundedEnumerableLaws[A] = BoundedEnumerableLaws[A] }
 }

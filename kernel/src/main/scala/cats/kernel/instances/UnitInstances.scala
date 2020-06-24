@@ -4,21 +4,24 @@ import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait UnitInstances {
-  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnum[Unit] =
+  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnumerable[Unit] =
     new UnitOrder
 
   implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
     new UnitAlgebra
 }
 
-trait UnitBounded extends BoundedEnum[Unit] {
-  override def minBound: Unit = ()
-  override def maxBound: Unit = ()
+trait UnitEnumerable extends BoundedEnumerable[Unit] {
   override def partialNext(x: Unit): Option[Unit] = None
   override def partialPrevious(x: Unit): Option[Unit] = None
 }
 
-class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded { self =>
+trait UnitBounded extends LowerBounded[Unit] with UpperBounded[Unit] {
+  override def minBound: Unit = ()
+  override def maxBound: Unit = ()
+}
+
+class UnitOrder extends Order[Unit] with Hash[Unit] with UnitBounded with UnitEnumerable { self =>
   def compare(x: Unit, y: Unit): Int = 0
 
   def hash(x: Unit): Int = 0 // ().hashCode() == 0

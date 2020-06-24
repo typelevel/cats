@@ -221,12 +221,12 @@ class Tests extends TestsConfig with AnyFunSuiteLike with FunSuiteDiscipline wit
   checkAll("UpperBounded[FiniteDuration]", UpperBoundedTests[FiniteDuration].upperBounded)
   checkAll("UpperBounded[UUID]", UpperBoundedTests[UUID].upperBounded)
 
-  checkAll("BoundedEnum[Unit]", BoundedEnumTests[Unit].boundedEnum)
-  checkAll("BoundedEnum[Boolean]", BoundedEnumTests[Boolean].boundedEnum)
-  checkAll("BoundedEnum[Short]", BoundedEnumTests[Short].boundedEnum)
-  checkAll("BoundedEnum[Int]", BoundedEnumTests[Int].boundedEnum)
-  checkAll("BoundedEnum[Char]", BoundedEnumTests[Char].boundedEnum)
-  checkAll("BoundedEnum[Long]", BoundedEnumTests[Long].boundedEnum)
+  checkAll("BoundedEnumerable[Unit]", BoundedEnumerableTests[Unit].boundedEnumerable)
+  checkAll("BoundedEnumerable[Boolean]", BoundedEnumerableTests[Boolean].boundedEnumerable)
+  checkAll("BoundedEnumerable[Short]", BoundedEnumerableTests[Short].boundedEnumerable)
+  checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
+  checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
+  checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable)
 
   checkAll("Monoid[String]", MonoidTests[String].monoid)
   checkAll("Monoid[String]", SerializableTests.serializable(Monoid[String]))

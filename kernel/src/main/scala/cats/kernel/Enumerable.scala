@@ -45,12 +45,16 @@ trait Previous[@sp A] extends PartialPrevious[A] {
  * A typeclass which has both `previous` and `next` operations
  * such that `next . previous == identity`.
  */
-trait UnboundedEnum[@sp A] extends Next[A] with Previous[A] {
+trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
 
-trait BoundedEnum[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] with LowerBounded[A] {
+trait BoundedEnumerable[@sp A]
+    extends PartialPrevious[A]
+    with PartialNext[A]
+    with UpperBounded[A]
+    with LowerBounded[A] {
 
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
@@ -61,7 +65,7 @@ trait BoundedEnum[@sp A] extends PartialPrevious[A] with PartialNext[A] with Upp
   def cyclePrevious(a: A): A =
     partialPrevious(a).getOrElse(maxBound)
 
-  /** Enumerate the members in ascending order. */
+  /** Enumerableerate the members in ascending order. */
   def members: List[A] = {
     @tailrec
     def go(a: A, acc: List[A]): List[A] =
@@ -74,12 +78,12 @@ trait BoundedEnum[@sp A] extends PartialPrevious[A] with PartialNext[A] with Upp
 
 }
 
-trait LowerBoundedEnum[@sp A] extends Next[A] with PartialPrevious[A] with LowerBounded[A] {
+trait LowerBoundedEnumerable[@sp A] extends Next[A] with PartialPrevious[A] with LowerBounded[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
 
-trait UpperBoundedEnum[@sp A] extends PartialNext[A] with Previous[A] with UpperBounded[A] {
+trait UpperBoundedEnumerable[@sp A] extends PartialNext[A] with Previous[A] with UpperBounded[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
