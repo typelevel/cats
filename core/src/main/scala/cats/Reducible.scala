@@ -1,5 +1,6 @@
 package cats
 
+import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
 import simulacrum.{noop, typeclass}
 import scala.annotation.implicitNotFound
@@ -386,14 +387,18 @@ abstract class NonEmptyReducible[F[_], G[_]](implicit G: Foldable[G]) extends Re
     G.foldLeft(ga, f(a))((b, a) => g(b, a))
   }
 
-  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+  def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] = {
+    def loop(now: A, source: Source[A]): Eval[B] =
+      source.uncons match {
+        case Some((next, s)) => g(now, Eval.defer(loop(next, s.value)))
+        case None            => Eval.later(f(now))
+      }
+
     Always(split(fa)).flatMap {
       case (a, ga) =>
-        G.reduceRightToOption(ga)(f)(g).flatMap {
-          case Some(b) => g(a, Now(b))
-          case None    => Later(f(a))
-        }
+        Eval.defer(loop(a, Foldable.Source.fromFoldable(ga)))
     }
+  }
 
   override def size[A](fa: F[A]): Long = {
     val (_, tail) = split(fa)

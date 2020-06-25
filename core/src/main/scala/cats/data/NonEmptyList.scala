@@ -606,7 +606,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
 
       override def nonEmptyPartition[A, B, C](
         fa: NonEmptyList[A]
-      )(f: (A) => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
+      )(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
         val reversed = fa.reverse
         val lastIor = f(reversed.head) match {
           case Right(c) => Ior.right(NonEmptyList.one(c))
