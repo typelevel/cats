@@ -102,7 +102,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) {
 }
 ```
 
-Below are some more methods on `Kleisli` that can be used so long as the constraint on `F[_]`
+Below are some more methods on `Kleisli` that can be used as long as the constraint on `F[_]`
 is satisfied.
 
 ```
@@ -119,8 +119,8 @@ traverse  | Applicative
 ### Type class instances
 The type class instances for `Kleisli`, like that for functions, often fix the input type (and the `F[_]`) and leave
 the output type free. What type class instances it has tends to depend on what instances the `F[_]` has. For
-instance, `Kleisli[F, A, B]` has a `Functor` instance so long as the chosen `F[_]` does. It has a `Monad`
-instance so long as the chosen `F[_]` does. The instances in Cats are laid out in a way such that implicit
+instance, `Kleisli[F, A, B]` has a `Functor` instance as long as the chosen `F[_]` does. It has a `Monad`
+instance as long as the chosen `F[_]` does. The instances in Cats are laid out in a way such that implicit
 resolution will pick up the most specific instance it can (depending on the `F[_]`).
 
 An example of a `Monad` instance for `Kleisli` is shown below.
@@ -259,7 +259,7 @@ final case class Kleisli[F[_], A, B](run: A => F[B]) {
 
 What `local` allows us to do is essentially "expand" our input type to a more "general" one. In our case, we
 can take a `Kleisli` that expects a `DbConfig` or `ServiceConfig` and turn it into one that expects an `AppConfig`,
-so long as we tell it how to go from an `AppConfig` to the other configs.
+as long as we tell it how to go from an `AppConfig` to the other configs.
 
 Now we can create our application config validator!
 
