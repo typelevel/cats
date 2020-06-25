@@ -44,7 +44,7 @@ trait PartialNextLaws[A] extends PartialOrderLaws[A] {
 trait PartialNextBoundedLaws[A] extends PartialNextLaws[A] with UpperBoundedLaws[A] {
 
   def minBoundTerminal: IsEq[Option[A]] =
-    N.partialNext(UB.maxBound) <-> None
+    N.partialNext(B.maxBound) <-> None
 
 }
 
@@ -65,21 +65,22 @@ trait PartialPreviousNextLaws[A] extends PartialNextLaws[A] with PartialPrevious
 trait PartialPreviousBoundedLaws[A] extends PartialPreviousLaws[A] with LowerBoundedLaws[A] {
 
   def maxBoundTerminal: IsEq[Option[A]] =
-    P.partialPrevious(LB.minBound) <-> None
+    P.partialPrevious(B.minBound) <-> None
 
 }
 
 trait BoundedEnumerableLaws[A]
     extends PartialPreviousNextLaws[A]
     with PartialPreviousBoundedLaws[A]
-    with PartialNextBoundedLaws[A] {}
+    with PartialNextBoundedLaws[A] {
+  override def B: LowerBounded[A] with UpperBounded[A]
+}
 
 object BoundedEnumerableLaws {
   def apply[A](implicit ev: BoundedEnumerable[A]): BoundedEnumerableLaws[A] =
     new BoundedEnumerableLaws[A] {
-      val LB = ev
+      val B: LowerBounded[A] with UpperBounded[A] = ev
       val E = ev.order
-      val UB = ev
       val N = ev
       val P = ev
     }
