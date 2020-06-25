@@ -10,11 +10,10 @@ trait ContravariantAddSemigroupalLaws[F[_]] extends ContravariantLaws[F] with In
 
   def contramapSumRightDistributivity[A, B, C](fa: F[A], fb: F[B], f: C => A, g: C => B): IsEq[F[Either[C, C]]] =
     I.sum(F.contramap(fa)(f), F.contramap(fb)(g)) <->
-      F.contramap(I.sum(fa, fb))(
-        (e: Either[C, C]) =>
-          e.fold(
-            f.andThen(Left(_)),
-            g.andThen(Right(_))
+      F.contramap(I.sum(fa, fb))((e: Either[C, C]) =>
+        e.fold(
+          f.andThen(Left(_)),
+          g.andThen(Right(_))
         )
       )
 

@@ -8,8 +8,7 @@ import org.scalacheck.{Arbitrary, Cogen}
 trait InvariantAddSemigroupalTests[F[_]] extends InvariantTests[F] {
   def laws: InvariantAddSemigroupalLaws[F]
 
-  def invariantAddSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](
-    implicit
+  def invariantAddSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -20,14 +19,15 @@ trait InvariantAddSemigroupalTests[F[_]] extends InvariantTests[F] {
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
     EqFABC: Eq[F[Either[A, Either[B, C]]]]
-  ): RuleSet = new RuleSet {
-    val name = "invariantAddSemigroupal"
-    val parents = Seq(invariant[A, B, C])
-    val bases = Nil
-    val props = Seq(
-      "invariant additive associativity" -> forAll(laws.sumAssociativity[A, B, C] _)
-    )
-  }
+  ): RuleSet =
+    new RuleSet {
+      val name = "invariantAddSemigroupal"
+      val parents = Seq(invariant[A, B, C])
+      val bases = Nil
+      val props = Seq(
+        "invariant additive associativity" -> forAll(laws.sumAssociativity[A, B, C] _)
+      )
+    }
 }
 
 object InvariantAddSemigroupalTests {

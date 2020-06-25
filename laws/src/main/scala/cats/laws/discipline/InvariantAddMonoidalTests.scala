@@ -9,16 +9,17 @@ trait InvariantAddMonoidalTests[F[_]] extends InvariantAddSemigroupalTests[F] {
   def laws: InvariantAddMonoidalLaws[F]
 
   def invariantAddMonoidal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                                     arbFA: Arbitrary[F[A]],
-                                                                     arbFB: Arbitrary[F[B]],
-                                                                     arbFC: Arbitrary[F[C]],
-                                                                     CogenA: Cogen[A],
-                                                                     CogenB: Cogen[B],
-                                                                     CogenC: Cogen[C],
-                                                                     EqFA: Eq[F[A]],
-                                                                     EqFB: Eq[F[B]],
-                                                                     EqFC: Eq[F[C]],
-                                                                     EqFABC: Eq[F[Either[A, Either[B, C]]]]): RuleSet =
+    arbFA: Arbitrary[F[A]],
+    arbFB: Arbitrary[F[B]],
+    arbFC: Arbitrary[F[C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[Either[A, Either[B, C]]]]
+  ): RuleSet =
     new RuleSet {
       val name = "invariantAddMonoidal"
       val parents = Seq(invariantAddSemigroupal[A, B, C])

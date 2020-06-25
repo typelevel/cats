@@ -9,17 +9,18 @@ trait ContravariantAddSemigroupalTests[F[_]] extends ContravariantTests[F] with 
   def laws: ContravariantAddSemigroupalLaws[F]
 
   def contravariantAddSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
-                                                                            arbFA: Arbitrary[F[A]],
-                                                                            arbFB: Arbitrary[F[B]],
-                                                                            arbFC: Arbitrary[F[C]],
-                                                                            CogenA: Cogen[A],
-                                                                            CogenB: Cogen[B],
-                                                                            CogenC: Cogen[C],
-                                                                            EqFA: Eq[F[A]],
-                                                                            EqFB: Eq[F[B]],
-                                                                            EqFC: Eq[F[C]],
-                                                                            EqFABC: Eq[F[Either[A, Either[B, C]]]],
-                                                                            EqFECC: Eq[F[Either[C, C]]]): RuleSet =
+    arbFA: Arbitrary[F[A]],
+    arbFB: Arbitrary[F[B]],
+    arbFC: Arbitrary[F[C]],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    CogenC: Cogen[C],
+    EqFA: Eq[F[A]],
+    EqFB: Eq[F[B]],
+    EqFC: Eq[F[C]],
+    EqFABC: Eq[F[Either[A, Either[B, C]]]],
+    EqFECC: Eq[F[Either[C, C]]]
+  ): RuleSet =
     new RuleSet {
       val name = "contravariantAddSemigroupal"
       val parents = Seq(contravariant[A, B, C], invariantAddSemigroupal[A, B, C])

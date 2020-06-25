@@ -14,15 +14,17 @@ trait InvariantSemiringalLaws[F[_]] extends InvariantMonoidalLaws[F] with Invari
   def semiringalRightDistributivity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[(Either[A, B], C)]] =
     I.product(I.sum(fa, fb), fc) <-> I.sum(I.product(fa, fc), I.product(fb, fc)).imap(eitherToTuple)(tupleToEither)
 
-  private def eitherToTuple[A, B, C](e: Either[(A, C), (B, C)]): (Either[A, B], C) = e match {
-    case Left((a, c))  => (Left(a), c)
-    case Right((b, c)) => (Right(b), c)
-  }
+  private def eitherToTuple[A, B, C](e: Either[(A, C), (B, C)]): (Either[A, B], C) =
+    e match {
+      case Left((a, c))  => (Left(a), c)
+      case Right((b, c)) => (Right(b), c)
+    }
 
-  private def tupleToEither[A, B, C](t: (Either[A, B], C)): Either[(A, C), (B, C)] = t match {
-    case (Left(a), c)  => Left((a, c))
-    case (Right(b), c) => Right((b, c))
-  }
+  private def tupleToEither[A, B, C](t: (Either[A, B], C)): Either[(A, C), (B, C)] =
+    t match {
+      case (Left(a), c)  => Left((a, c))
+      case (Right(b), c) => Right((b, c))
+    }
 }
 
 object InvariantSemiringalLaws {
