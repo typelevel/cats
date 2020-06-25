@@ -2,6 +2,7 @@ package cats.kernel
 
 import java.lang.Double.isNaN
 import scala.{specialized => sp}
+import compat.scalaVersionSpecific._
 
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.
@@ -50,8 +51,8 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * - positive iff `x > y`
    */
   def tryCompare(x: A, y: A): Option[Int] = {
-    val c = partialCompare(x, y)
-    if (isNaN(c)) None else Some(c.signum)
+    val c = partialCompare(x, y).sign
+    if (isNaN(c)) None else Some(c.toInt)
   }
 
   /**
@@ -124,6 +125,7 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
     ev.gt(x, y)
 }
 
+@suppressUnusedImportWarningForScalaVersionSpecific
 object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrderToPartialOrderingConversion {
 
   /**
@@ -156,10 +158,11 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
       def partialCompare(x: A, y: A) = f(x, y)
     }
 
-  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] = new PartialOrder[A] {
-    def partialCompare(x: A, y: A): Double =
-      ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
-  }
+  def fromPartialOrdering[A](implicit ev: PartialOrdering[A]): PartialOrder[A] =
+    new PartialOrder[A] {
+      def partialCompare(x: A, y: A): Double =
+        ev.tryCompare(x, y).fold(Double.NaN)(_.toDouble)
+    }
 }
 
 trait PartialOrderToPartialOrderingConversion {

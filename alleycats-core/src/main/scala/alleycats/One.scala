@@ -1,11 +1,12 @@
 package alleycats
 
-import cats.{Eq, Monoid}
+import cats.Eq
 import cats.syntax.eq._
-import export.imports
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
-@typeclass trait One[A] {
+@implicitNotFound("Could not find an instance of One for ${A}")
+@typeclass trait One[A] extends Serializable {
   def one: A
 
   def isOne(a: A)(implicit ev: Eq[A]): Boolean =
@@ -15,10 +16,53 @@ import simulacrum.typeclass
     one =!= a
 }
 
-object One extends One0 {
+object One {
   def apply[A](a: => A): One[A] =
     new One[A] { lazy val one: A = a }
-}
 
-@imports[One]
-trait One0
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[One]] for `A`.
+   */
+  @inline def apply[A](implicit instance: One[A]): One[A] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllOneOps[A](target: A)(implicit tc: One[A]): AllOps[A] {
+      type TypeClassType = One[A]
+    } =
+      new AllOps[A] {
+        type TypeClassType = One[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[A] extends Serializable {
+    type TypeClassType <: One[A]
+    def self: A
+    val typeClassInstance: TypeClassType
+    def isOne(implicit ev: Eq[A]): Boolean = typeClassInstance.isOne(self)(ev)
+    def nonOne(implicit ev: Eq[A]): Boolean = typeClassInstance.nonOne(self)(ev)
+  }
+  trait AllOps[A] extends Ops[A]
+  trait ToOneOps extends Serializable {
+    implicit def toOneOps[A](target: A)(implicit tc: One[A]): Ops[A] {
+      type TypeClassType = One[A]
+    } =
+      new Ops[A] {
+        type TypeClassType = One[A]
+        val self: A = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToOneOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
+}

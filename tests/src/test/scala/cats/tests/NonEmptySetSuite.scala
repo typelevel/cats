@@ -1,35 +1,44 @@
-/*
- * Copyright (c) 2018 Luka Jacobowitz
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package cats.tests
 
-package cats
-package tests
-
+import cats.{Eval, Now, Reducible, SemigroupK, Show}
+import cats.data.NonEmptySet
+import cats.kernel.{Eq, Order, PartialOrder, Semilattice}
+import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, SemilatticeTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.data.NonEmptySet
-import cats.kernel.laws.discipline.{EqTests, SemilatticeTests}
-
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
 import scala.collection.immutable.SortedSet
 
 class NonEmptySetSuite extends CatsSuite {
 
   checkAll("NonEmptySet[Int]", SemigroupKTests[NonEmptySet].semigroupK[Int])
+  checkAll("SemigroupK[NonEmptySet[A]]", SerializableTests.serializable(SemigroupK[NonEmptySet]))
+
   checkAll("NonEmptySet[Int]", ReducibleTests[NonEmptySet].reducible[Option, Int, Int])
+  checkAll("Reducible[NonEmptySet]", SerializableTests.serializable(Reducible[NonEmptySet]))
+
   checkAll("NonEmptySet[String]", SemilatticeTests[NonEmptySet[String]].band)
+  checkAll("Semilattice[NonEmptySet]", SerializableTests.serializable(Semilattice[NonEmptySet[String]]))
+
   checkAll("NonEmptySet[String]", EqTests[NonEmptySet[String]].eqv)
+  checkAll("NonEmptySet[String]", HashTests[NonEmptySet[String]].hash)
+
+  {
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
+    checkAll("Eq[NonEmptySet[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptySet[ListWrapper[Int]]]))
+
+    checkAll("NonEmptySet[ListWrapper[Int]]", OrderTests[NonEmptySet[ListWrapper[Int]]].order)
+    checkAll("Order[NonEmptySet[ListWrapper[Int]]]",
+             SerializableTests.serializable(Order[NonEmptySet[ListWrapper[Int]]])
+    )
+
+    Eq[NonEmptySet[ListWrapper[Int]]]
+    PartialOrder[NonEmptySet[ListWrapper[Int]]]
+  }
+
+  checkAll("NonEmptySet[Int]", ShortCircuitingTests[NonEmptySet].foldable[Int])
 
   test("First element is always the smallest") {
     forAll { (nes: NonEmptySet[Int]) =>
@@ -177,17 +186,17 @@ class NonEmptySetSuite extends CatsSuite {
   }
 
   test("fromSet round trip") {
-    forAll { l: SortedSet[Int] =>
+    forAll { (l: SortedSet[Int]) =>
       NonEmptySet.fromSet(l).map(_.toSortedSet).getOrElse(SortedSet.empty[Int]) should ===(l)
     }
 
-    forAll { nes: NonEmptySet[Int] =>
+    forAll { (nes: NonEmptySet[Int]) =>
       NonEmptySet.fromSet(nes.toSortedSet) should ===(Some(nes))
     }
   }
 
   test("fromSetUnsafe/fromSet consistency") {
-    forAll { nes: NonEmptySet[Int] =>
+    forAll { (nes: NonEmptySet[Int]) =>
       NonEmptySet.fromSet(nes.toSortedSet) should ===(Some(NonEmptySet.fromSetUnsafe(nes.toSortedSet)))
     }
   }
@@ -205,13 +214,13 @@ class NonEmptySetSuite extends CatsSuite {
   }
 
   test("NonEmptySet#zipWithIndex is consistent with Set#zipWithIndex") {
-    forAll { nes: NonEmptySet[Int] =>
+    forAll { (nes: NonEmptySet[Int]) =>
       nes.zipWithIndex.toSortedSet should ===(nes.toSortedSet.zipWithIndex)
     }
   }
 
   test("NonEmptySet#length is consistent with Set#size") {
-    forAll { nes: NonEmptySet[Int] =>
+    forAll { (nes: NonEmptySet[Int]) =>
       nes.length should ===(nes.toSortedSet.size)
     }
   }

@@ -1,18 +1,18 @@
-package cats
-package jvm
-package tests
+package cats.jvm.tests
 
+import cats.instances.future._
+import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
+import cats.syntax.either._
 import cats.tests.{CatsSuite, ListWrapper}
-
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.rng.Seed
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class FutureSuite extends CatsSuite {
   val timeout = 3.seconds
@@ -45,7 +45,7 @@ class FutureSuite extends CatsSuite {
   checkAll("Future", CoflatMapTests[Future].coflatMap[Int, Int, Int])
 
   {
-    implicit val F = ListWrapper.semigroup[Int]
+    implicit val F: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
     checkAll("Future[ListWrapper[Int]]", SemigroupLawTests[Future[ListWrapper[Int]]].semigroup)
   }
 

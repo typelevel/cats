@@ -40,7 +40,7 @@ sealed abstract class ContT[M[_], A, +B] extends Serializable {
     // allocate/pattern match once
     val fnAndThen = AndThen(fn)
     ContT[M, A, C] { fn2 =>
-      val contRun: ContT[M, A, C] => M[A] = (_.run(fn2))
+      val contRun: ContT[M, A, C] => M[A] = _.run(fn2)
       val fn3: B => M[A] = fnAndThen.andThen(contRun)
       M.defer(run(fn3))
     }
@@ -65,19 +65,103 @@ object ContT {
     lazy val runAndThen: AndThen[B => M[A], M[A]] = loop(next).runAndThen
   }
 
+  /**
+   * Lift a pure value into `ContT`
+   */
   def pure[M[_], A, B](b: B): ContT[M, A, B] =
     apply { cb =>
       cb(b)
     }
 
+  /**
+   * Lifts the `M[B]` into an `ContT[M, A, B]`.
+   * {{{
+   * scala> import cats._, data._,  implicits._
+   * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, *]]
+   * scala> val c: cats.data.ContT[EitherT[Eval, String, *], Int, Int] = ContT.liftF(a)
+   * scala> c.run(EitherT.rightT(_)).value.value
+   * res0: Either[String, Int] = Right(1)
+   * scala> c.run(_ => EitherT.leftT("a")).value.value
+   * res1: Either[String, Int] = Left(a)
+   * }}}
+   */
+  def liftF[M[_], A, B](mb: M[B])(implicit M: FlatMap[M]): ContT[M, A, B] =
+    apply(M.flatMap(mb)(_))
+
+  /**
+   * Same as [[liftF]], but expressed as a FunctionK for use with mapK
+   * {{{
+   * scala> import cats._, data._
+   * scala> trait Foo[F[_]] { def bar: F[Int] }
+   * scala> def mapK[F[_], G[_]](fooF: Foo[F])(f: F ~> G): Foo[G] = new Foo[G] { def bar: G[Int] = f(fooF.bar) }
+   * scala> val eitherTFoo = new Foo[EitherT[Eval, String, *]] { def bar = EitherT.rightT(1) }
+   * scala> val contTFoo: Foo[ContT[EitherT[Eval, String, *], Int, *]] = mapK(eitherTFoo)(ContT.liftK)
+   * scala> contTFoo.bar.run(EitherT.rightT(_)).value.value
+   * res0: Either[String, Int] = Right(1)
+   * }}}
+   */
+  def liftK[M[_], B](implicit M: FlatMap[M]): M ~> ContT[M, B, *] =
+    new (M ~> ContT[M, B, *]) {
+      def apply[A](ma: M[A]): ContT[M, B, A] = ContT.liftF(ma)
+    }
+
+  /**
+   * Similar to [[pure]] but evaluation of the argument is deferred.
+   *
+   * This is useful for building a computation which calls its continuation as the final step.
+   * Instead of writing:
+   *
+   * {{{
+   *   ContT.apply { cb =>
+   *     val x = foo()
+   *     val y = bar(x)
+   *     val z = baz(y)
+   *     cb(z)
+   *   }
+   * }}}
+   *
+   * you can write:
+   *
+   * {{{
+   *   ContT.defer {
+   *     val x = foo()
+   *     val y = bar(x)
+   *     baz(y)
+   *   }
+   * }}}
+   */
+  def defer[M[_], A, B](b: => B): ContT[M, A, B] =
+    apply { cb =>
+      cb(b)
+    }
+
+  /**
+   * Build a computation that makes use of a callback, also known as a continuation.
+   *
+   * Example:
+   *
+   * {{{
+   *   ContT.apply { callback =>
+   *     for {
+   *       a <- doFirstThing()
+   *       b <- doSecondThing(a)
+   *       c <- callback(b)
+   *       d <- doFourthThing(c)
+   *     } yield d
+   *   }
+   * }}}
+   */
   def apply[M[_], A, B](fn: (B => M[A]) => M[A]): ContT[M, A, B] =
     FromFn(AndThen(fn))
 
+  /**
+   * Similar to [[apply]] but evaluation of the argument is deferred.
+   */
   def later[M[_], A, B](fn: => (B => M[A]) => M[A]): ContT[M, A, B] =
     DeferCont(() => FromFn(AndThen(fn)))
 
   def tailRecM[M[_], A, B, C](a: A)(fn: A => ContT[M, C, Either[A, B]])(implicit M: Defer[M]): ContT[M, C, B] =
-    ContT[M, C, B] { cb: (B => M[C]) =>
+    ContT[M, C, B] { (cb: (B => M[C])) =>
       def go(a: A): M[C] =
         fn(a).run {
           case Left(a)  => M.defer(go(a))
@@ -87,14 +171,14 @@ object ContT {
       go(a)
     }
 
-  implicit def catsDataContTDefer[M[_], B]: Defer[ContT[M, B, ?]] =
-    new Defer[ContT[M, B, ?]] {
+  implicit def catsDataContTDefer[M[_], B]: Defer[ContT[M, B, *]] =
+    new Defer[ContT[M, B, *]] {
       def defer[A](c: => ContT[M, B, A]): ContT[M, B, A] =
         DeferCont(() => c)
     }
 
-  implicit def catsDataContTMonad[M[_]: Defer, A]: Monad[ContT[M, A, ?]] =
-    new Monad[ContT[M, A, ?]] {
+  implicit def catsDataContTMonad[M[_]: Defer, A]: Monad[ContT[M, A, *]] =
+    new Monad[ContT[M, A, *]] {
       def pure[B](b: B): ContT[M, A, B] =
         ContT.pure(b)
 

@@ -38,7 +38,7 @@ The name `Monoid` is taken from abstract algebra which specifies precisely this 
 We can now write the functions above against this interface.
 
 ```tut:book:silent
-def combineAll[A](list: List[A], A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
+def combineAll[A](list: List[A], m: Monoid[A]): A = list.foldRight(m.empty)(m.combine)
 ```
 
 ## Type classes vs. subtyping
@@ -223,7 +223,7 @@ type class instances easy.
 
 You can find out more about law testing [here](typeclasses/lawtesting.html).
 
-## Type classes in cats
+## Type classes in Cats
 
 <img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
@@ -258,4 +258,4 @@ Originally from [@alexknvl](https://gist.github.com/alexknvl/d63508ddb6a728015ac
 
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
-[simulacrum]: https://github.com/mpilquist/simulacrum "First class syntax support for type classes in Scala"
+[simulacrum]: https://github.com/typelevel/simulacrum "First class syntax support for type classes in Scala"

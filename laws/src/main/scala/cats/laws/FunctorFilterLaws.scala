@@ -24,6 +24,9 @@ trait FunctorFilterLaws[F[_]] {
   def filterConsistentWithMapFilter[A](fa: F[A], f: A => Boolean): IsEq[F[A]] =
     F.filter(fa)(f) <->
       F.mapFilter(fa)(a => if (f(a)) Some(a) else None)
+
+  def filterNotConsistentWithFilter[A](fa: F[A], f: A => Boolean): IsEq[F[A]] =
+    F.filterNot(fa)(f) <-> F.filter(fa)(!f(_))
 }
 
 object FunctorFilterLaws {

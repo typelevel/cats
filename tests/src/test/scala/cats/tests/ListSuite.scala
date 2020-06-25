@@ -1,18 +1,23 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   CommutativeApplyTests,
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
 import cats.laws.discipline.arbitrary._
+import cats.syntax.list._
+import cats.syntax.show._
+import org.scalatest.funsuite.AnyFunSuiteLike
 
 class ListSuite extends CatsSuite {
 
@@ -34,10 +39,16 @@ class ListSuite extends CatsSuite {
   checkAll("List[Int]", TraverseFilterTests[List].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[List]", SerializableTests.serializable(TraverseFilter[List]))
 
+  checkAll("List[Int]", AlignTests[List].align[Int, Int, Int, Int])
+  checkAll("Align[List]", SerializableTests.serializable(Align[List]))
+
+  checkAll("List[Int]", ShortCircuitingTests[List].traverseFilter[Int])
+  checkAll("List[Int]", ShortCircuitingTests[List].foldable[Int])
+
   checkAll("ZipList[Int]", CommutativeApplyTests[ZipList].commutativeApply[Int, Int, Int])
 
   test("nel => list => nel returns original nel")(
-    forAll { fa: NonEmptyList[Int] =>
+    forAll { (fa: NonEmptyList[Int]) =>
       fa.toList.toNel should ===(Some(fa))
     }
   )
@@ -52,11 +63,27 @@ class ListSuite extends CatsSuite {
     }
   )
 
+  test("groupByNelA should be consistent with groupByNel")(
+    forAll { (fa: List[Int], f: Int => Int) =>
+      fa.groupByNelA(f.andThen(Option(_))) should ===(Option(fa.groupByNel(f)))
+    }
+  )
+
   test("show") {
     List(1, 2, 3).show should ===("List(1, 2, 3)")
     (Nil: List[Int]).show should ===("List()")
-    forAll { l: List[String] =>
+    forAll { (l: List[String]) =>
       l.show should ===(l.toString)
     }
+  }
+}
+
+final class ListInstancesSuite extends AnyFunSuiteLike {
+
+  test("NonEmptyParallel instance in cats.instances.list") {
+    import cats.instances.list._
+    import cats.syntax.parallel._
+
+    (List(1, 2, 3), List("A", "B", "C")).parTupled
   }
 }

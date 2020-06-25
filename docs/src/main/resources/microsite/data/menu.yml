@@ -40,22 +40,14 @@ options:
        menu_section: applicative
 
   - title: Monads
-    url: typeclasses/functor.html
+    url: typeclasses/monad.html
     menu_type: typeclasses
     menu_section: monads
 
-    nested_options:
-     - title: Functor
-       url: typeclasses/functor.html
-       menu_section: monads
-       menu_section: monads
-     - title: Applicative
-       url: typeclasses/applicative.html
-       menu_section: monads
-     - title: Monad
-       url: typeclasses/monad.html
-       menu_type: typeclasses
-       menu_section: monads
+  - title: Comonads
+    url: typeclasses/comonad.html
+    menu_type: typeclasses
+    menu_section: comonads
 
   - title: Variance and Functors
     url: typeclasses/functor.html
@@ -123,6 +115,10 @@ options:
     url: typeclasses/arrow.html
     menu_type: typeclasses
 
+  - title: Arrow Choice
+    url: typeclasses/arrowchoice.html
+    menu_type: typeclasses
+
   - title: Law Testing
     url: typeclasses/lawtesting.html
     menu_type: typeclasses
@@ -141,6 +137,10 @@ options:
 
   - title: Const
     url: datatypes/const.html
+    menu_type: data
+    
+  - title: ContT
+    url: datatypes/contt.html
     menu_type: data
 
   - title: Either

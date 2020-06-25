@@ -19,7 +19,7 @@ def nonEmptySequence[G[_]: Apply, A](fga: F[G[A]]): G[F[A]]
 ```
 
 In the [Applicative tutorial](applicative.html) we learned of `Apply` as a weakened `Applicative` lacking the `pure` method.
-One example type lacking an `Applicative` instance is `Map[K, ?]`, it's impossible to implement a `pure` method for it.
+One example type lacking an `Applicative` instance is `Map[K, *]`, it's impossible to implement a `pure` method for it.
 
 Knowing this, we can make use of `NonEmptyTraverse`, to traverse over a sequence of `Map`s.
 One example application one could think of is, when we have a list of text snippets,

@@ -15,7 +15,7 @@ import arrow.Category
  * function that expects a `B` as input.)
  *
  * This code was ported directly from scalaz to cats using this version from scalaz:
- * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/As.scala
+ * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala
  *
  *  The original contribution to scalaz came from Jason Zaugg
  */
@@ -27,7 +27,7 @@ sealed abstract class As[-A, +B] extends Serializable {
    * to a function, such as F in: `type F[-B] = B => String`. In this
    * case, we could use A As B to turn an F[B] Into F[A].
    */
-  def substitute[F[- _]](p: F[B]): F[A]
+  def substitute[F[-_]](p: F[B]): F[A]
 
   @inline final def andThen[C](that: (B As C)): (A As C) = As.compose(that, this)
 
@@ -56,7 +56,7 @@ object As extends AsInstances {
    * single value.
    */
   private[this] val reflAny = new (Any As Any) {
-    def substitute[F[- _]](fa: F[Any]) = fa
+    def substitute[F[-_]](fa: F[Any]) = fa
   }
 
   /**
@@ -68,14 +68,18 @@ object As extends AsInstances {
   /**
    * We can witness the relationship by using it to make a substitution *
    */
-  implicit def witness[A, B](lt: A As B): A => B =
-    lt.substitute[-? => B](identity)
+  implicit def witness[A, B](lt: A As B): A => B = {
+    type L[-α] = α => B
+    lt.substitute[L](identity)
+  }
 
   /**
    * Subtyping is transitive
    */
-  def compose[A, B, C](f: B As C, g: A As B): A As C =
-    g.substitute[λ[`-α` => α As C]](f)
+  def compose[A, B, C](f: B As C, g: A As B): A As C = {
+    type L[-α] = α As C
+    g.substitute[L](f)
+  }
 
   /**
    * reify a subtype relationship as a Liskov relationship
@@ -94,31 +98,43 @@ object As extends AsInstances {
   /**
    * We can lift subtyping into any covariant type constructor
    */
-  def co[T[+ _], A, A2](a: A As A2): (T[A] As T[A2]) =
-    a.substitute[λ[`-α` => T[α] As T[A2]]](refl)
+  def co[T[+_], A, A2](a: A As A2): (T[A] As T[A2]) = {
+    type L[-α] = T[α] As T[A2]
+    a.substitute[L](refl)
+  }
 
   // Similarly, we can do this any time we find a covariant type
   // parameter. Here we provide the proof for what we expect to be the
   // most common shapes.
 
-  def co2[T[+ _, _], Z, A, B](a: A As Z): T[A, B] As T[Z, B] =
-    a.substitute[λ[`-α` => T[α, B] As T[Z, B]]](refl)
+  def co2[T[+_, _], Z, A, B](a: A As Z): T[A, B] As T[Z, B] = {
+    type L[-α] = T[α, B] As T[Z, B]
+    a.substitute[L](refl)
+  }
 
   /**
    * Widen a F[X,+A] to a F[X,B] if (A As B). This can be used to widen
    * the output of a Function1, for example.
    */
-  def co2_2[T[_, + _], Z, A, B](a: B As Z): T[A, B] As T[A, Z] =
-    a.substitute[λ[`-α` => T[A, α] As T[A, Z]]](refl)
+  def co2_2[T[_, +_], Z, A, B](a: B As Z): T[A, B] As T[A, Z] = {
+    type L[-α] = T[A, α] As T[A, Z]
+    a.substitute[L](refl)
+  }
 
-  def co3[T[+ _, _, _], Z, A, B, C](a: A As Z): T[A, B, C] As T[Z, B, C] =
-    a.substitute[λ[`-α` => T[α, B, C] As T[Z, B, C]]](refl)
+  def co3[T[+_, _, _], Z, A, B, C](a: A As Z): T[A, B, C] As T[Z, B, C] = {
+    type L[-α] = T[α, B, C] As T[Z, B, C]
+    a.substitute[L](refl)
+  }
 
-  def co3_2[T[_, + _, _], Z, A, B, C](a: B As Z): T[A, B, C] As T[A, Z, C] =
-    a.substitute[λ[`-α` => T[A, α, C] As T[A, Z, C]]](refl)
+  def co3_2[T[_, +_, _], Z, A, B, C](a: B As Z): T[A, B, C] As T[A, Z, C] = {
+    type L[-α] = T[A, α, C] As T[A, Z, C]
+    a.substitute[L](refl)
+  }
 
-  def co3_3[T[+ _, _, + _], Z, A, B, C](a: C As Z): T[A, B, C] As T[A, B, Z] =
-    a.substitute[λ[`-α` => T[A, B, α] As T[A, B, Z]]](refl)
+  def co3_3[T[+_, _, +_], Z, A, B, C](a: C As Z): T[A, B, C] As T[A, B, Z] = {
+    type L[-α] = T[A, B, α] As T[A, B, Z]
+    a.substitute[L](refl)
+  }
 
   /**
    * Use this relationship to widen the output type of a Function1
@@ -131,7 +147,7 @@ object As extends AsInstances {
    *
    * lift2(a,b) = co1_2(a) compose co2_2(b)
    */
-  def lift2[T[+ _, + _], A, A2, B, B2](
+  def lift2[T[+_, +_], A, A2, B, B2](
     a: A As A2,
     b: B As B2
   ): (T[A, B] As T[A2, B2]) = {
@@ -147,27 +163,39 @@ object As extends AsInstances {
    *  Given that F has the shape: F[-_], we show that:
    *     (A As B) implies (F[B] As F[A])
    */
-  def contra[T[- _], A, B](a: A As B): (T[B] As T[A]) =
-    a.substitute[λ[`-α` => T[B] As T[α]]](refl)
+  def contra[T[-_], A, B](a: A As B): (T[B] As T[A]) = {
+    type L[-α] = T[B] As T[α]
+    a.substitute[L](refl)
+  }
 
   // Similarly, we can do this any time we find a contravariant type
   // parameter. Here we provide the proof for what we expect to be the
   // most common shapes.
 
-  def contra1_2[T[- _, _], Z, A, B](a: A As Z): (T[Z, B] As T[A, B]) =
-    a.substitute[λ[`-α` => T[Z, B] As T[α, B]]](refl)
+  def contra1_2[T[-_, _], Z, A, B](a: A As Z): (T[Z, B] As T[A, B]) = {
+    type L[-α] = T[Z, B] As T[α, B]
+    a.substitute[L](refl)
+  }
 
-  def contra2_2[T[_, - _], Z, A, B](a: B As Z): (T[A, Z] As T[A, B]) =
-    a.substitute[λ[`-α` => T[A, Z] As T[A, α]]](refl)
+  def contra2_2[T[_, -_], Z, A, B](a: B As Z): (T[A, Z] As T[A, B]) = {
+    type L[-α] = T[A, Z] As T[A, α]
+    a.substitute[L](refl)
+  }
 
-  def contra1_3[T[- _, _, _], Z, A, B, C](a: A As Z): (T[Z, B, C] As T[A, B, C]) =
-    a.substitute[λ[`-α` => T[Z, B, C] As T[α, B, C]]](refl)
+  def contra1_3[T[-_, _, _], Z, A, B, C](a: A As Z): (T[Z, B, C] As T[A, B, C]) = {
+    type L[-α] = T[Z, B, C] As T[α, B, C]
+    a.substitute[L](refl)
+  }
 
-  def contra2_3[T[_, - _, _], Z, A, B, C](a: B As Z): (T[A, Z, C] As T[A, B, C]) =
-    a.substitute[λ[`-α` => T[A, Z, C] As T[A, α, C]]](refl)
+  def contra2_3[T[_, -_, _], Z, A, B, C](a: B As Z): (T[A, Z, C] As T[A, B, C]) = {
+    type L[-α] = T[A, Z, C] As T[A, α, C]
+    a.substitute[L](refl)
+  }
 
-  def contra3_3[T[_, _, - _], Z, A, B, C](a: C As Z): (T[A, B, Z] As T[A, B, C]) =
-    a.substitute[λ[`-α` => T[A, B, Z] As T[A, B, α]]](refl)
+  def contra3_3[T[_, _, -_], Z, A, B, C](a: C As Z): (T[A, B, Z] As T[A, B, C]) = {
+    type L[-α] = T[A, B, Z] As T[A, B, α]
+    a.substitute[L](refl)
+  }
 
   /**
    * Use this relationship to narrow the input type of a Function1

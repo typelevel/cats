@@ -1,7 +1,17 @@
 package cats
 package syntax
 
-import cats.data.{Ior, OptionT, Validated, ValidatedNec, ValidatedNel}
+import cats.data.{
+  EitherNec,
+  EitherNel,
+  Ior,
+  NonEmptyChain,
+  NonEmptyList,
+  OptionT,
+  Validated,
+  ValidatedNec,
+  ValidatedNel
+}
 import cats.syntax.OptionOps.LiftToPartiallyApplied
 
 trait OptionSyntax {
@@ -203,6 +213,94 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toLeftIor[B](b: => B): Ior[A, B] = oa.fold[Ior[A, B]](Ior.Right(b))(Ior.Left(_))
 
   /**
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
+   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyList]]
+   * and return the result in a [[scala.Left]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherNel
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: Option[Int] = Some(3)
+   * scala> result1.toRightNel("error!")
+   * res0: EitherNel[String, Int] = Right(3)
+   *
+   * scala> val result2: Option[Int] = None
+   * scala> result2.toRightNel("error!")
+   * res1: EitherNel[String, Int] = Left(NonEmptyList(error!))
+   * }}}
+   */
+  def toRightNel[B](b: => B): EitherNel[B, A] = oa.toRight(NonEmptyList.one(b))
+
+  /**
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
+   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyChain]]
+   * and return the result in a [[scala.Left]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherNec
+   * scala> import cats.implicits._
+   *
+   * scala> val result1: Option[Int] = Some(3)
+   * scala> result1.toRightNec("error!")
+   * res0: EitherNec[String, Int] = Right(3)
+   *
+   * scala> val result2: Option[Int] = None
+   * scala> result2.toRightNec("error!")
+   * res1: EitherNec[String, Int] = Left(Chain(error!))
+   * }}}
+   */
+  def toRightNec[B](b: => B): EitherNec[B, A] = oa.toRight(NonEmptyChain.one(b))
+
+  /**
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]]
+   * and return it in a [[scala.Left]].
+   * If the `Option` is `None`, return the provided `B` value in a
+   * [[scala.Right]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherNel
+   * scala> import cats.implicits._
+   *
+   * scala> val error1: Option[String] = Some("error!")
+   * scala> error1.toLeftNel(3)
+   * res0: EitherNel[String, Int] = Left(NonEmptyList(error!))
+   *
+   * scala> val error2: Option[String] = None
+   * scala> error2.toLeftNel(3)
+   * res1: EitherNel[String, Int] = Right(3)
+   * }}}
+   */
+  def toLeftNel[B](b: => B): EitherNel[A, B] =
+    oa.fold[EitherNel[A, B]](Right(b))(a => Left(NonEmptyList.one(a)))
+
+  /**
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyChain]]
+   * and return it in a [[scala.Left]].
+   * If the `Option` is `None`, return the provided `B` value in a
+   * [[scala.Right]].
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.EitherNec
+   * scala> import cats.implicits._
+   *
+   * scala> val error1: Option[String] = Some("error!")
+   * scala> error1.toLeftNec(3)
+   * res0: EitherNec[String, Int] = Left(Chain(error!))
+   *
+   * scala> val error2: Option[String] = None
+   * scala> error2.toLeftNec(3)
+   * res1: EitherNec[String, Int] = Right(3)
+   * }}}
+   */
+  def toLeftNec[B](b: => B): EitherNec[A, B] =
+    oa.fold[EitherNec[A, B]](Right(b))(a => Left(NonEmptyChain.one(a)))
+
+  /**
    * If the `Option` is a `Some`, return its value. If the `Option` is `None`,
    * return the `empty` value for `Monoid[A]`.
    *
@@ -227,14 +325,35 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> Some(1).liftTo[Either[CharSequence, ?]]("Empty")
+   * scala> Some(1).liftTo[Either[CharSequence, *]]("Empty")
    * res0: scala.Either[CharSequence, Int] = Right(1)
    *
-   * scala> Option.empty[Int].liftTo[Either[CharSequence, ?]]("Empty")
+   * scala> Option.empty[Int].liftTo[Either[CharSequence, *]]("Empty")
    * res1: scala.Either[CharSequence, Int] = Left(Empty)
    * }}}
    */
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
+
+  /**
+   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance
+   * If the option is empty, an empty unit effect is given.
+   * If the option contains an error, it is raised.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   *
+   * scala> type F[A] = Either[String, A]
+   *
+   * scala> Option.empty[String].raiseTo[F]
+   * res0: scala.Either[String, Unit] = Right(())
+   *
+   * scala> Option("Failed").raiseTo[F]
+   * res1: scala.Either[String, Unit] = Left(Failed)
+   * }}}
+   */
+  def raiseTo[F[_]](implicit F: ApplicativeError[F, A]): F[Unit] =
+    oa.fold(F.unit)(F.raiseError)
 
   /**
    * Transform the `Option` into a [[cats.data.OptionT]] while lifting it into the specified Applicative.

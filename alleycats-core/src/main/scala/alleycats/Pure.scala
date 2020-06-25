@@ -1,14 +1,15 @@
 package alleycats
 
 import cats.{Applicative, FlatMap, Monad}
-import export.imports
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
-@typeclass trait Pure[F[_]] {
+@implicitNotFound("Could not find an instance of Pure for ${F}")
+@typeclass trait Pure[F[_]] extends Serializable {
   def pure[A](a: A): F[A]
 }
 
-object Pure extends Pure0 {
+object Pure {
   // Ideally this would be an exported subclass instance provided by Applicative
   implicit def applicativeIsPure[F[_]](implicit ev: Applicative[F]): Pure[F] =
     new Pure[F] {
@@ -23,7 +24,48 @@ object Pure extends Pure0 {
       def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] = fm.flatMap(fa)(f)
       def tailRecM[A, B](a: A)(f: (A) => F[Either[A, B]]): F[B] = fm.tailRecM(a)(f)
     }
-}
 
-@imports[Pure]
-trait Pure0
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Pure]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Pure[F]): Pure[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllPureOps[F[_], A](target: F[A])(implicit tc: Pure[F]): AllOps[F, A] {
+      type TypeClassType = Pure[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Pure[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Pure[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToPureOps extends Serializable {
+    implicit def toPureOps[F[_], A](target: F[A])(implicit tc: Pure[F]): Ops[F, A] {
+      type TypeClassType = Pure[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Pure[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToPureOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
+}

@@ -26,10 +26,7 @@ final class UniteOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
    * res0: List[Int] = List(1, 2, 3, 4)
    * }}}
    */
-  def unite(implicit
-            F: Monad[F],
-            A: Alternative[F],
-            G: Foldable[G]): F[A] = A.unite[G, A](fga)
+  def unite(implicit F: Monad[F], A: Alternative[F], G: Foldable[G]): F[A] = A.unite[G, A](fga)
 }
 
 final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) extends AnyVal {
@@ -45,10 +42,21 @@ final class SeparateOps[F[_], G[_, _], A, B](private val fgab: F[G[A, B]]) exten
    * res0: (List[String], List[Int]) = (List(error),List(1))
    * }}}
    */
-  def separate(implicit
-               F: Monad[F],
-               A: Alternative[F],
-               G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
+  def separate(implicit F: Monad[F], A: Alternative[F], G: Bifoldable[G]): (F[A], F[B]) = A.separate[G, A, B](fgab)
+
+  /**
+   * @see [[Alternative.separateFoldable]]
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> val l: List[Either[String, Int]] = List(Right(1), Left("error"))
+   * scala> l.separateFoldable
+   * res0: (List[String], List[Int]) = (List(error),List(1))
+   * }}}
+   */
+  def separateFoldable(implicit F: Foldable[F], A: Alternative[F], G: Bifoldable[G]): (F[A], F[B]) =
+    A.separateFoldable[G, A, B](fgab)
 }
 
 final class GuardOps(private val condition: Boolean) extends AnyVal {

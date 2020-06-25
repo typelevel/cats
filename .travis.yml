@@ -2,56 +2,129 @@ language: scala
 
 sudo: required
 
-dist: trusty
-
 group: edge
 
 git:
   depth: 9999
 
-scala:
-  - 2.11.12
-  - 2.13.0-M5
-  - 2.12.7
-
 jdk:
-  - oraclejdk8
+  - openjdk8
+
+
+scala_version_212: &scala_version_212 2.12.11
+scala_version_213: &scala_version_213 2.13.2
+dotty_version: &dotty_version 0.24.0
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
+ - if [[ ! -z "$HydraLicense" ]]; then
+     mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.conf /home/travis/.triplequote/metrics/config/metrics-service.conf;
+   fi
 
-script:
-  - scripts/travis-publish.sh
+stages:
+  - name: styling
+  - name: test
+  - name: publish snapshot
+    if: (branch = master AND type = push)
 
-# http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
-install:
-  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - pip install --user codecov
-  - gem install jekyll -v 2.5
+jobs:
+  include:
+    # it can speed up the overall build to have the longer-running jobs at the top of this list.
+    - &js_tests
+      stage: test
+      name: Js tests 2.12
+      env: TEST="JS tests"
+      # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
+      install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+      script: sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
+      scala: *scala_version_212
+    - <<: *js_tests
+      name: Js tests 2.13
+      scala: *scala_version_213
+
+    - &jvm_tests
+      stage: test
+      name: Jvm tests 2.12
+      env: TEST="JVM tests"
+      install: pip install --user codecov
+      script: sbt ++$TRAVIS_SCALA_VERSION! coverage buildJVM bench/test coverageReport
+      scala: *scala_version_212
+      after_success: codecov -F scala_version_212
+    - <<: *jvm_tests
+      name: Jvm tests 2.13
+      scala: *scala_version_213
+      after_success: codecov -F scala_version_213
+
+
+    - stage: test
+      name: Make Microsite on 2.12.10
+      env: TEST="docs"
+      install: gem install jekyll -v 4.0.0
+      script: sbt ++2.12.10! docs/makeMicrosite
+
+    - stage: test
+      name: Scalafix tests
+      env: TEST="scalafix"
+      script: cd scalafix && sbt tests/test
+
+    - &bincompat
+      stage: test
+      name: Binary compatibility 2.12
+      env: TEST="binary compatibility"
+      script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
+      scala: *scala_version_212
+    - <<: *bincompat
+      name: Binary compatibility 2.13
+      scala: *scala_version_213
+
+    # Note that we're currently only building some modules on Dotty, not running tests.
+    - &dotty_tests
+      stage: test
+      name: Dotty tests
+      env: TEST="Dotty tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! alleycatsLawsJVM/compile
+      scala: *dotty_version
+
+    - stage: styling
+      name: Linting
+      env: TEST="linting"
+      script: sbt +fmtCheck
+
+    - stage: publish snapshot
+      script: |
+        if [[ $(cat version.sbt) =~ "-SNAPSHOT" ]]; then
+          sbt +publish gitSnapshots +publish
+        else
+          echo Not publishing a snapshot because the version does not end with -SNAPSHOT for version $TRAVIS_SCALA_VERSION
+        fi
 
 notifications:
   webhooks:
     urls:
-    - https://webhooks.gitter.im/e/2d5ea16a2f66f60a590b
+    - ${GITTER_WEBHOOK_URL}
     on_success: change
     on_failure: always
     on_start: false
 
 env:
-  matrix:
-    - JS_BUILD=false
-    - JS_BUILD=true
   global:
+    # Sonatype Credential
     - secure: Kf44XQFpq2QGe3rn98Dsf5Uz3WXzPDralS54co7sqT5oQGs1mYLYZRYz+I75ZSo5ffZ86H7M+AI9YFofqGwAjBixBbqf1tGkUh3oZp2fN3QfqzazGV3HzC+o41zALG5FL+UBaURev9ChQ5fYeTtFB7YAzejHz4y5E97awk934Rg=
     - secure: QbNAu0jCaKrwjJi7KZtYEBA/pYbTJ91Y1x/eLAJpsamswVOvwnThA/TLYuux+oiZQCiDUpBzP3oxksIrEEUAhl0lMtqRFY3MrcUr+si9NIjX8hmoFwkvZ5o1b7pmLF6Vz3rQeP/EWMLcljLzEwsrRXeK0Ei2E4vFpsg8yz1YXJg=
     - TRAVIS_NODE_VERSION="4"
+    # Hydra License
+    - secure: "Nwd0ySmT7BQJcQb/Dyrkv/B1uYLrE5u+Ppz3Q3d6FvEB5z3XzzDai03hjMwwFwMgXGtZ2Aio0KqF2qf3oINPkmSVx1ntvL0JqwRZqxF5YPLp/vb8b4LbvHrzsf5Jh/EFK5JOdN6ApPlhw8u1X1ifvJbG6yVt9qRxCejHOI0ZT4k="
+    # Hydra Metrics Credential
+    - secure: "Xbc3y1rTRDj2ThfsT3Pj98T3OgC90aZlVrgAFtOrSTknZAK0jArlvsKg456PvTPcR2uY6c7wvyebSaq+RYReFX2XpCfRjc4ywGCUtnbfcvzO4IA/MIUkFtFQJJqBXHlN5IFqjOZyaX6svD9fNscYg0NP1pqJ6vW54ArvKTALtHM="
+    - secure: "hbKDZntISUgbYAXK8Q6M8XwhjB7l5yHyWIs9RjnEdV0YRfcTZIba8WEaE2JFe3MdyPUhGYAWf1AVFXLdfRSmvNHMEeVPitw5cAVxPMxhfgJnPRBVhgBsr9oMl/QQbLu7/w013m6ChYmZspApzyAfmZM2ZNKsYiX/AvoBVYeGdPQ="
 
 cache:
   directories:
+    - .hydra
     - $HOME/.m2
     - $HOME/.ivy2/cache
     - $HOME/.sbt
-    - $HOME/.coursier
+    - $HOME/.cache/coursier
     # Pants cache
     - $HOME/.cache
 

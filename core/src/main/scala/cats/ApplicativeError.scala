@@ -1,8 +1,12 @@
 package cats
 
-import cats.data.EitherT
-import scala.util.{Failure, Success, Try}
+import cats.ApplicativeError.CatchOnlyPartiallyApplied
+import cats.data.{EitherT, Validated}
+import cats.data.Validated.{Invalid, Valid}
+
+import scala.reflect.ClassTag
 import scala.util.control.NonFatal
+import scala.util.{Failure, Success, Try}
 
 /**
  * An applicative that also allows you to raise and or handle an error value.
@@ -74,6 +78,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
 
   /**
+   * Similar to [[attempt]], but it only handles errors of type `EE`.
+   */
+  def attemptNarrow[EE <: Throwable, A](fa: F[A])(implicit tag: ClassTag[EE], ev: EE <:< E): F[Either[EE, A]] =
+    recover(map(fa)(Right[EE, A](_): Either[EE, A])) { case e: EE => Left[EE, A](e) }
+
+  /**
    * Recover from certain errors by mapping them to an `A` value.
    *
    * @see [[handleError]] to handle any/all errors.
@@ -82,7 +92,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
-    handleErrorWith(fa)(e => (pf.andThen(pure)).applyOrElse(e, raiseError))
+    handleErrorWith(fa)(e => (pf.andThen(pure(_))).applyOrElse(e, raiseError[A](_)))
 
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
@@ -94,6 +104,63 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    */
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e => pf.applyOrElse(e, raiseError))
+
+  /**
+   * Transform certain errors using `pf` and rethrow them.
+   * Non matching errors and successful values are not affected by this function.
+   *
+   * Example:
+   * {{{
+   * scala> import cats._, implicits._
+   *
+   * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError("error".asLeft[Int])(pf)
+   * res0: Either[String,Int] = Left(ERROR)
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError("err".asLeft[Int])(pf)
+   * res1: Either[String,Int] = Left(err)
+   *
+   * scala> ApplicativeError[Either[String, *], String].adaptError(1.asRight[String])(pf)
+   * res2: Either[String,Int] = Right(1)
+   * }}}
+   *
+   * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same
+   * name because this would result in ambiguous implicits due to `adaptError`
+   * having originally been included in the `MonadError` API and syntax.
+   */
+  def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
+    recoverWith(fa)(pf.andThen(raiseError[A] _))
+
+  /**
+   * Returns a new value that transforms the result of the source,
+   * given the `recover` or `map` functions, which get executed depending
+   * on whether the result is successful or if it ends in error.
+   *
+   * This is an optimization on usage of [[attempt]] and [[map]],
+   * this equivalence being available:
+   *
+   * {{{
+   *   fa.redeem(fe, fs) <-> fa.attempt.map(_.fold(fe, fs))
+   * }}}
+   *
+   * Usage of `redeem` subsumes [[handleError]] because:
+   *
+   * {{{
+   *   fa.redeem(fe, id) <-> fa.handleError(fe)
+   * }}}
+   *
+   * Implementations are free to override it in order to optimize
+   * error recovery.
+   *
+   * @see [[MonadError.redeemWith]], [[attempt]] and [[handleError]]
+   *
+   * @param fa is the source whose result is going to get transformed
+   * @param recover is the function that gets called to recover the source
+   *        in case of error
+   */
+  def redeem[A, B](fa: F[A])(recover: E => B, f: A => B): F[B] =
+    handleError(map(fa)(f))(recover)
 
   /**
    * Execute a callback on certain errors, then rethrow them.
@@ -108,7 +175,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * scala> case class Err(msg: String)
    *
-   * scala> type F[A] = EitherT[State[String, ?], Err, A]
+   * scala> type F[A] = EitherT[State[String, *], Err, A]
    *
    * scala> val action: PartialFunction[Err, F[Unit]] = {
    *      |   case Err("one") => EitherT.liftF(State.set("one"))
@@ -118,7 +185,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * scala> val prog2: F[Int] = (Err("two")).raiseError[F, Int]
    *
    * scala> prog1.onError(action).value.run("").value
-
+   *
    * res0: (String, Either[Err,Int]) = (one,Left(Err(one)))
    *
    * scala> prog2.onError(action).value.run("").value
@@ -147,6 +214,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     catch {
       case NonFatal(e) => raiseError(e)
     }
+
+  /**
+   * Evaluates the specified block, catching exceptions of the specified type. Uncaught exceptions are propagated.
+   */
+  def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T, F, E] =
+    new CatchOnlyPartiallyApplied[T, F, E](this)
 
   /**
    * If the error type is Throwable, we can convert from a scala.util.Try
@@ -178,6 +251,48 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
       case Left(e)  => raiseError(e)
     }
 
+  /**
+   * Convert from scala.Option
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   * scala> val F = ApplicativeError[Either[String, *], String]
+   *
+   * scala> F.fromOption(Some(1), "Empty")
+   * res0: scala.Either[String, Int] = Right(1)
+   *
+   * scala> F.fromOption(Option.empty[Int], "Empty")
+   * res1: scala.Either[String, Int] = Left(Empty)
+   * }}}
+   */
+  def fromOption[A](oa: Option[A], ifEmpty: => E): F[A] =
+    oa match {
+      case Some(a) => pure(a)
+      case None    => raiseError(ifEmpty)
+    }
+
+  /**
+   * Convert from cats.data.Validated
+   *
+   * Example:
+   * {{{
+   * scala> import cats.implicits._
+   * scala> import cats.ApplicativeError
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(1.valid[Unit])
+   * res0: scala.Option[Int] = Some(1)
+   *
+   * scala> ApplicativeError[Option, Unit].fromValidated(().invalid[Int])
+   * res1: scala.Option[Int] = None
+   * }}}
+   */
+  def fromValidated[A](x: Validated[E, A]): F[A] =
+    x match {
+      case Invalid(e) => raiseError(e)
+      case Valid(a)   => pure(a)
+    }
 }
 
 object ApplicativeError {
@@ -191,6 +306,17 @@ object ApplicativeError {
       }
   }
 
+  final private[cats] class CatchOnlyPartiallyApplied[T, F[_], E](private val F: ApplicativeError[F, E])
+      extends AnyVal {
+    def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T], ev: Throwable <:< E): F[A] =
+      try {
+        F.pure(f)
+      } catch {
+        case t if CT.runtimeClass.isInstance(t) =>
+          F.raiseError(t)
+      }
+  }
+
   /**
    * lift from scala.Option[A] to a F[A]
    *
@@ -199,10 +325,10 @@ object ApplicativeError {
    * scala> import cats.implicits._
    * scala> import cats.ApplicativeError
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Some(1), "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Some(1), "Empty")
    * res0: scala.Either[String, Int] = Right(1)
    *
-   * scala> ApplicativeError.liftFromOption[Either[String, ?]](Option.empty[Int], "Empty")
+   * scala> ApplicativeError.liftFromOption[Either[String, *]](Option.empty[Int], "Empty")
    * res1: scala.Either[String, Int] = Left(Empty)
    * }}}
    */

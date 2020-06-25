@@ -7,7 +7,7 @@ position: 70
 
 # Guidelines
 
-All guidelines in cats should have clear justifications. There is no room for tribal wisdom in a simple library.
+All guidelines in Сats should have clear justifications. There is no room for tribal wisdom in a simple library.
 
 ## Syntax
 
@@ -42,8 +42,8 @@ pure[List, Int](1)
 ```
 
 Note that the type `A` should've been given by the `a: A` argument, but since scalac cannot infer `F[_]`, the user still has to specify all type params.
-In cats, we use a technique described in
- Rob Norris’s [Kinda-Curried Type Parameters](https://tpolecat.github.io/2015/07/30/infer.html) to overcome this restriction of scala inference. Here is a version of the `pure` using this technique in cats.
+In Сats, we use a technique described in
+ Rob Norris’s [Kinda-Curried Type Parameters](https://tpolecat.github.io/2015/07/30/infer.html) to overcome this restriction of scala inference. Here is a version of the `pure` using this technique in Сats.
 
 ```scala
 package cats.data
@@ -80,7 +80,7 @@ therefore name our implicits according to the following rules:
 - If the instance is for multiple type classes, use `InstancesFor` instead of a type class name.
 - If the instance is for a standard library type add `Std` after the package. i.e. `catsStdShowForVector` and `catsKernelStdGroupForTuple`.
 
-As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelMonoidForList`.
+As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelStdMonoidForList`.
 
 This rule is relatively flexible. Use what you see appropriate. The goal is to maintain uniqueness and avoid conflicts.
 
@@ -88,34 +88,54 @@ This rule is relatively flexible. Use what you see appropriate. The goal is to m
 
 ### <a id="implicit-priority" href="#implicit-priority"></a> Implicit instance priority
 
-When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy, 
+When there are multiple instances provided implicitly, if the type class of them are in the same inheritance hierarchy,
 the instances need to be separated out into different abstract class/traits so that they don't conflict with each other. The names of these abstract classes/traits should be numbered with a priority with 0 being the highest priority. The abstract classes/trait
-with higher priority inherits from the ones with lower priority. The most specific (whose type class is the lowest in the hierarchy) instance should be placed in the abstract class/ trait with the highest priority.  Here is an example. 
+with higher priority inherits from the ones with lower priority. The most specific (whose type class is the lowest in the hierarchy) instance should be placed in the abstract class/ trait with the highest priority.  Here is an example.
 
 ```scala
-@typeclass 
+@typeclass
 trait Functor[F[_]]
 
 @typeclass
 trait Monad[F[_]] extends Functor
 
 ...
-object Kleisli extends KleisliInstance0 
+object Kleisli extends KleisliInstance0
 
 abstract class KleisliInstance0 extends KleisliInstance1 {
-  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, ?]] = ...
+  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, *]] = ...
 }
 
 abstract class KleisliInstance1 {
-  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, ?]] = ...
+  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, *]] = ...
 }
 ```
 
 ### Type classes that ONLY define laws.
 
-We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and 
+We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and
 `CommutativeArrow`.
 
-#### TODO:
+### <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a>
 
-Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
+We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, *]` given an `Applicative[F]`.
+An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance
+for `EitherT[F, String, *]`. Such an instance will be derived if you use `Nested` instead:
+
+```scala
+import cats._, cats.data._, cats.implicits._
+
+val a = EitherT(List(Left("err"), Right(1)))
+val x = (a *> a).value
+> x: List[Either[String, Int]] = List(Left("err"), Left("err"), Right(1))
+
+val y = (a.toNested *> a.toNested).value
+> y: List[Either[String, Int]] = List(Left("err"), Left("err"), Left("err"), Right(1))
+
+x === y
+> false
+```
+
+### Classes extending AnyVal
+
+AnyVal-extending class constructor parameters must be marked as private.

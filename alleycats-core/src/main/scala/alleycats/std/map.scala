@@ -8,16 +8,16 @@ object map extends MapInstances
 trait MapInstances {
 
   // toList is inconsistent. See https://github.com/typelevel/cats/issues/1831
-  implicit def alleycatsStdInstancesForMap[K]: Traverse[Map[K, ?]] =
-    new Traverse[Map[K, ?]] {
+  implicit def alleycatsStdInstancesForMap[K]: Traverse[Map[K, *]] =
+    new Traverse[Map[K, *]] {
 
       def traverse[G[_], A, B](fa: Map[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[Map[K, B]] = {
         val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
         val gbb = Foldable
           .iterateRight(fa, gba) { (kv, lbuf) =>
-            G.map2Eval(f(kv._2), lbuf)({ (b, buf) =>
+            G.map2Eval(f(kv._2), lbuf) { (b, buf) =>
               buf + (kv._1 -> b)
-            })
+            }
           }
           .value
         G.map(gbb)(_.toMap)
@@ -57,5 +57,21 @@ trait MapInstances {
 
       override def collectFirstSome[A, B](fa: Map[K, A])(f: A => Option[B]): Option[B] =
         collectFirst(fa)(Function.unlift(f))
+    }
+
+  implicit def alleycatsStdMapTraverseFilter[K]: TraverseFilter[Map[K, *]] =
+    new TraverseFilter[Map[K, *]] {
+      def traverse: Traverse[Map[K, *]] = alleycatsStdInstancesForMap
+
+      def traverseFilter[G[_], A, B](fa: Map[K, A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Map[K, B]] = {
+        val gba: Eval[G[Map[K, B]]] = Always(G.pure(Map.empty))
+        Foldable
+          .iterateRight(fa, gba) { (kv, lbuf) =>
+            G.map2Eval(f(kv._2), lbuf) { (ob, buf) =>
+              ob.fold(buf)(b => buf + (kv._1 -> b))
+            }
+          }
+          .value
+      }
     }
 }

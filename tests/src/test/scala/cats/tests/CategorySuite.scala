@@ -1,18 +1,18 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.MonoidTests
-
+import cats.Endo
 import cats.arrow.Category
-import cats.laws.discipline.{MonoidKTests, SerializableTests}
-import cats.laws.discipline.eq.catsLawsEqForFn1
+import cats.kernel.laws.discipline.MonoidTests
+import cats.laws.discipline.{MiniInt, MonoidKTests, SerializableTests}
+import cats.laws.discipline.eq.catsLawsEqForFn1Exhaustive
+import cats.laws.discipline.arbitrary.{catsLawsArbitraryForMiniInt, catsLawsCogenForMiniInt}
 
 class CategorySuite extends CatsSuite {
   val functionCategory = Category[Function1]
 
-  checkAll("Category[Function1].algebraK", MonoidKTests[Endo](functionCategory.algebraK).monoidK[Int])
+  checkAll("Category[Function1].algebraK", MonoidKTests[Endo](functionCategory.algebraK).monoidK[MiniInt])
   checkAll("Category[Function1].algebraK", SerializableTests.serializable(functionCategory.algebraK))
 
-  val functionAlgebra = functionCategory.algebra[Int]
-  checkAll("Category[Function1].algebra[Int]", MonoidTests[Endo[Int]](functionAlgebra).monoid)
+  val functionAlgebra = functionCategory.algebra[MiniInt]
+  checkAll("Category[Function1].algebra[MiniInt]", MonoidTests[Endo[MiniInt]](functionAlgebra).monoid)
 }

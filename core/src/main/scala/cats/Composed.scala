@@ -30,7 +30,7 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] 
   def G: Apply[G]
 
   override def ap[A, B](fgf: F[G[A => B]])(fga: F[G[A]]): F[G[B]] =
-    F.ap(F.map(fgf)(gf => G.ap(gf)(_)))(fga)
+    F.ap(F.map(fgf)(gf => (ga: G[A]) => G.ap(gf)(ga)))(fga)
 
   override def product[A, B](fga: F[G[A]], fgb: F[G[B]]): F[G[(A, B)]] =
     F.map2(fga, fgb)(G.product)
@@ -50,7 +50,8 @@ private[cats] trait ComposedSemigroupK[F[_], G[_]] extends SemigroupK[λ[α => F
   override def combineK[A](x: F[G[A]], y: F[G[A]]): F[G[A]] = F.combineK(x, y)
 }
 
-private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]]]] with ComposedSemigroupK[F, G] { outer =>
+private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]]]] with ComposedSemigroupK[F, G] {
+  outer =>
   def F: MonoidK[F]
 
   override def empty[A]: F[G[A]] = F.empty
@@ -96,7 +97,8 @@ private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]
     F.nonEmptyTraverse(fga)(ga => G.nonEmptyTraverse(ga)(f))
 }
 
-private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] { outer =>
+private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] {
+  outer =>
   def F: Reducible[F]
   def G: Reducible[G]
 
@@ -152,7 +154,7 @@ private[cats] trait ComposedSemigroupal[F[_], G[_]]
   def G: Functor[G]
 
   def product[A, B](fa: F[G[A]], fb: F[G[B]]): F[G[(A, B)]] =
-    F.contramap(F.product(fa, fb)) { g: G[(A, B)] =>
+    F.contramap(F.product(fa, fb)) { (g: G[(A, B)]) =>
       (G.map(g)(_._1), G.map(g)(_._2))
     }
 }
@@ -167,7 +169,7 @@ private[cats] trait ComposedInvariantApplySemigroupal[F[_], G[_]]
     F.imap(F.product(fa, fb)) {
       case (ga, gb) =>
         G.map2(ga, gb)(_ -> _)
-    } { g: G[(A, B)] =>
+    } { (g: G[(A, B)]) =>
       (G.map(g)(_._1), G.map(g)(_._2))
     }
 }

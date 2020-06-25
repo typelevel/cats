@@ -72,9 +72,7 @@ a `List[Option[A]]`. Since the values themselves are effects, traversing with `i
 will turn the traversable "inside out."
 
 ```tut:reset:book:silent
-import cats.instances.list._
-import cats.instances.option._
-import cats.syntax.traverse._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -159,8 +157,10 @@ import cats.{Applicative, Monoid, Traverse}
 import cats.data.Const
 
 def foldMap[F[_]: Traverse, A, B: Monoid](fa: F[A])(f: A => B): B =
-  Traverse[F].traverse[Const[B, ?], A, B](fa)(a => Const(f(a))).getConst
+  Traverse[F].traverse[Const[B, *], A, B](fa)(a => Const(f(a))).getConst
 ```
+
+This works because `Const[B, *]` is an `Applicative` if `B` is a `Monoid`, as explained in [the documentation of `Const`](../datatypes/const.html#example-2-traverse).
 
 ## Further Reading
 

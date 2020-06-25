@@ -33,13 +33,13 @@ final class FlatMapOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def >>[B](fb: => F[B])(implicit F: FlatMap[F]): F[B] = F.flatMap(fa)(_ => fb)
 
   @deprecated("Use <* instead", "1.0.0-RC1")
-  def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
+  private[syntax] def <<[B](fb: F[B])(implicit F: FlatMap[F]): F[A] = F.productL(fa)(fb)
   @deprecated("Use productREval instead.", "1.0.0-RC2")
-  def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
+  private[syntax] def followedByEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[B] =
     F.productREval(fa)(fb)
 
   @deprecated("Use productLEval instead.", "1.0.0-RC2")
-  def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
+  private[syntax] def forEffectEval[B](fb: Eval[F[B]])(implicit F: FlatMap[F]): F[A] =
     F.productLEval(fa)(fb)
 
   /**
@@ -54,13 +54,7 @@ final class FlatMapOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * allocating single element lists, but if we have a k > 1, we will allocate
    * exponentially increasing memory and very quickly OOM.
    */
-  def foreverM[B](implicit F: FlatMap[F]): F[B] = {
-    // allocate two things once for efficiency.
-    val leftUnit = Left(())
-    val stepResult: F[Either[Unit, B]] = F.map(fa)(_ => leftUnit)
-    F.tailRecM(())(_ => stepResult)
-  }
-
+  def foreverM[B](implicit F: FlatMap[F]): F[B] = F.foreverM[A, B](fa)
 }
 
 final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
@@ -72,7 +66,7 @@ final class FlattenOps[F[_], A](private val ffa: F[F[A]]) extends AnyVal {
    * {{{
    * scala> import cats.implicits._
    * scala> type ErrorOr[A] = Either[String, A]
-   * scala> val x: ErrorOr[ErrorOr[Int]] = Right(Right(3))
+   * scala> val x: ErrorOr[ErrorOr[Int]] = 3.asRight.asRight
    * scala> x.flatten
    * res0: ErrorOr[Int] = Right(3)
    * }}}
@@ -115,7 +109,7 @@ final class FlatMapIdOps[A](private val a: A) extends AnyVal {
    * scala> a.tailRecM[Option,String](i => if (i == 20) Some(Right("done")) else Some(Left(i+1)))
    * res0: Option[String] = Some(done)
    *
-   *}}}
+   * }}}
    */
   def tailRecM[F[_], B](f: A => F[Either[A, B]])(implicit F: FlatMap[F]): F[B] = F.tailRecM(a)(f)
 
@@ -124,10 +118,7 @@ final class FlatMapIdOps[A](private val a: A) extends AnyVal {
    * A may be some state, we may take the current state, run some effect to get
    * a new state and repeat.
    */
-  def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] =
-    tailRecM[F, B](f.andThen { fa =>
-      F.map(fa)(Left(_): Either[A, B])
-    })
+  def iterateForeverM[F[_], B](f: A => F[A])(implicit F: FlatMap[F]): F[B] = F.iterateForeverM[A, B](a)(f)
 }
 
 trait FlatMapOptionSyntax {
@@ -142,12 +133,5 @@ final class FlatMapOptionOps[F[_], A](private val fopta: F[Option[A]]) extends A
    * for polling type operations on State (or RNG) Monads, or in effect
    * monads.
    */
-  def untilDefinedM(implicit F: FlatMap[F]): F[A] = {
-    val leftUnit: Either[Unit, A] = Left(())
-    val feither: F[Either[Unit, A]] = F.map(fopta) {
-      case None    => leftUnit
-      case Some(a) => Right(a)
-    }
-    F.tailRecM(())(_ => feither)
-  }
+  def untilDefinedM(implicit F: FlatMap[F]): F[A] = F.untilDefinedM[A](fopta)
 }

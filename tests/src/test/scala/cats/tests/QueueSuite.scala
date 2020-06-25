@@ -1,16 +1,18 @@
-package cats
-package tests
+package cats.tests
 
-import scala.collection.immutable.Queue
-
+import cats.{Alternative, CoflatMap, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.laws.discipline.{
   AlternativeTests,
   CoflatMapTests,
   MonadTests,
   SemigroupalTests,
   SerializableTests,
+  ShortCircuitingTests,
+  TraverseFilterTests,
   TraverseTests
 }
+import cats.syntax.show._
+import scala.collection.immutable.Queue
 
 class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", SemigroupalTests[Queue].semigroupal[Int, Int, Int])
@@ -27,6 +29,12 @@ class QueueSuite extends CatsSuite {
 
   checkAll("Queue[Int] with Option", TraverseTests[Queue].traverse[Int, Int, Int, Set[Int], Option, Option])
   checkAll("Traverse[Queue]", SerializableTests.serializable(Traverse[Queue]))
+
+  checkAll("Queue[Int]", TraverseFilterTests[Queue].traverseFilter[Int, Int, Int])
+  checkAll("TraverseFilter[Queue]", SerializableTests.serializable(TraverseFilter[Queue]))
+
+  checkAll("Queue[Int]", ShortCircuitingTests[Queue].foldable[Int])
+  checkAll("Queue[Int]", ShortCircuitingTests[Queue].traverseFilter[Int])
 
   test("show") {
     Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")

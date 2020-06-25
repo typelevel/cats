@@ -1,42 +1,45 @@
-package cats
-package free
+package cats.free
 
+import cats.{:<:, Foldable, Functor, Id, Monad, Traverse}
 import cats.arrow.FunctionK
 import cats.data.EitherK
-import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SemigroupalTests, SerializableTests, TraverseTests}
+import cats.instances.all._
+import cats.kernel.Eq
+import cats.laws.discipline.{DeferTests, FoldableTests, MonadTests, SerializableTests, TraverseTests}
 import cats.laws.discipline.arbitrary.catsLawsArbitraryForFn0
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.apply._
 import cats.tests.CatsSuite
-
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import Arbitrary.arbFunction1
+import org.scalacheck.Arbitrary.arbFunction1
 
 class FreeSuite extends CatsSuite {
   import FreeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[Free[Option, ?]]
+  implicit val iso: Isomorphisms[Free[Option, *]] = Isomorphisms.invariant[Free[Option, *]]
 
-  Monad[Free[Id, ?]]
-  implicitly[Monad[Free[Id, ?]]]
+  Monad[Free[Id, *]]
+  implicitly[Monad[Free[Id, *]]]
 
-  checkAll("Free[Id, ?]", DeferTests[Free[Id, ?]].defer[Int])
-  checkAll("Free[Id, ?]", MonadTests[Free[Id, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Id, ?]]", SerializableTests.serializable(Monad[Free[Id, ?]]))
+  checkAll("Free[Id, *]", DeferTests[Free[Id, *]].defer[Int])
+  checkAll("Free[Id, *]", MonadTests[Free[Id, *]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Id, *]]", SerializableTests.serializable(Monad[Free[Id, *]]))
 
-  checkAll("Free[Option, ?]", DeferTests[Free[Option, ?]].defer[Int])
-  checkAll("Free[Option, ?]", MonadTests[Free[Option, ?]].monad[Int, Int, Int])
-  checkAll("Monad[Free[Option, ?]]", SerializableTests.serializable(Monad[Free[Option, ?]]))
+  checkAll("Free[Option, *]", DeferTests[Free[Option, *]].defer[Int])
+  checkAll("Free[Option, *]", MonadTests[Free[Option, *]].monad[Int, Int, Int])
+  checkAll("Monad[Free[Option, *]]", SerializableTests.serializable(Monad[Free[Option, *]]))
 
   locally {
-    implicit val instance = Free.catsFreeFoldableForFree[Option]
+    implicit val instance: Foldable[Free[Option, *]] = Free.catsFreeFoldableForFree[Option]
 
-    checkAll("Free[Option, ?]", FoldableTests[Free[Option, ?]].foldable[Int, Int])
-    checkAll("Foldable[Free[Option,?]]", SerializableTests.serializable(Foldable[Free[Option, ?]]))
+    checkAll("Free[Option, *]", FoldableTests[Free[Option, *]].foldable[Int, Int])
+    checkAll("Foldable[Free[Option,*]]", SerializableTests.serializable(Foldable[Free[Option, *]]))
   }
 
   locally {
-    implicit val instance = Free.catsFreeTraverseForFree[Option]
-    checkAll("Free[Option,?]", TraverseTests[Free[Option, ?]].traverse[Int, Int, Int, Int, Option, Option])
-    checkAll("Traverse[Free[Option,?]]", SerializableTests.serializable(Traverse[Free[Option, ?]]))
+    implicit val instance: Traverse[Free[Option, *]] = Free.catsFreeTraverseForFree[Option]
+    checkAll("Free[Option,*]", TraverseTests[Free[Option, *]].traverse[Int, Int, Int, Int, Option, Option])
+    checkAll("Traverse[Free[Option,*]]", SerializableTests.serializable(Traverse[Free[Option, *]]))
   }
 
   test("toString is stack-safe") {
@@ -46,7 +49,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("compile id") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       x.compile(FunctionK.id[List]) should ===(x)
       val fk = Free.compile(FunctionK.id[List])
       fk(x) === x
@@ -54,7 +57,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("defer doesn't change value") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       Free.defer(x) should ===(x)
     }
   }
@@ -66,7 +69,7 @@ class FreeSuite extends CatsSuite {
   }
 
   test("compile consistent with foldMap") {
-    forAll { x: Free[List, Int] =>
+    forAll { (x: Free[List, Int]) =>
       val mapped = x.compile(headOptionU)
       val folded = mapped.foldMap(FunctionK.id[Option])
       folded should ===(x.foldMap(headOptionU))
@@ -79,14 +82,13 @@ class FreeSuite extends CatsSuite {
   test("tailRecM is stack safe") {
     val n = 50000
     val fa =
-      Monad[Free[Option, ?]].tailRecM(0)(i => Free.pure[Option, Either[Int, Int]](if (i < n) Left(i + 1) else Right(i)))
+      Monad[Free[Option, *]].tailRecM(0)(i => Free.pure[Option, Either[Int, Int]](if (i < n) Left(i + 1) else Right(i)))
     fa should ===(Free.pure[Option, Int](n))
   }
 
-  test("foldMap is stack safe") {
-    trait FTestApi[A]
-    case class TB(i: Int) extends FTestApi[Int]
-
+  trait FTestApi[A]
+  case class TB(i: Int) extends FTestApi[Int]
+  object FTestApi {
     type FTest[A] = Free[FTestApi, A]
 
     def tb(i: Int): FTest[Int] = Free.liftF(TB(i))
@@ -97,11 +99,21 @@ class FreeSuite extends CatsSuite {
         z <- if (j < 10000) a(j) else Free.pure[FTestApi, Int](j)
       } yield z
 
-    def runner: FunctionK[FTestApi, Id] = λ[FunctionK[FTestApi, Id]] {
-      case TB(i) => i + 1
-    }
+    def runner: FunctionK[FTestApi, Id] =
+      new FunctionK[FTestApi, Id] {
+        def apply[A](a: FTestApi[A]): A =
+          a match {
+            case TB(i) => i + 1
+          }
+      }
+  }
 
-    assert(10000 == a(0).foldMap(runner))
+  test("foldMap is stack safe") {
+    assert(10000 == FTestApi.a(0).foldMap(FTestApi.runner))
+  }
+
+  test("toFreeT is stack-safe") {
+    FTestApi.a(0).toFreeT[Id].foldMap(FTestApi.runner) should ===(FTestApi.a(0).foldMap(FTestApi.runner))
   }
 
   test(".runTailRec") {
@@ -129,13 +141,16 @@ class FreeSuite extends CatsSuite {
   object Test1Algebra {
     implicit def test1AlgebraAFunctor: Functor[Test1Algebra] =
       new Functor[Test1Algebra] {
-        def map[A, B](a: Test1Algebra[A])(f: A => B): Test1Algebra[B] = a match {
-          case Test1(k, h) => Test1(k, x => f(h(x)))
-        }
+        def map[A, B](a: Test1Algebra[A])(f: A => B): Test1Algebra[B] =
+          a match {
+            case Test1(k, h) => Test1(k, x => f(h(x)))
+          }
       }
 
-    implicit def test1AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
-                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test1Algebra[A]] =
+    implicit def test1AlgebraArbitrary[A](implicit
+      seqArb: Arbitrary[Int],
+      intAArb: Arbitrary[Int => A]
+    ): Arbitrary[Test1Algebra[A]] =
       Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test1(s, f))
   }
 
@@ -148,28 +163,33 @@ class FreeSuite extends CatsSuite {
   object Test2Algebra {
     implicit def test2AlgebraAFunctor: Functor[Test2Algebra] =
       new Functor[Test2Algebra] {
-        def map[A, B](a: Test2Algebra[A])(f: A => B): Test2Algebra[B] = a match {
-          case Test2(k, h) => Test2(k, x => f(h(x)))
-        }
+        def map[A, B](a: Test2Algebra[A])(f: A => B): Test2Algebra[B] =
+          a match {
+            case Test2(k, h) => Test2(k, x => f(h(x)))
+          }
       }
 
-    implicit def test2AlgebraArbitrary[A](implicit seqArb: Arbitrary[Int],
-                                          intAArb: Arbitrary[Int => A]): Arbitrary[Test2Algebra[A]] =
+    implicit def test2AlgebraArbitrary[A](implicit
+      seqArb: Arbitrary[Int],
+      intAArb: Arbitrary[Int => A]
+    ): Arbitrary[Test2Algebra[A]] =
       Arbitrary(for { s <- seqArb.arbitrary; f <- intAArb.arbitrary } yield Test2(s, f))
   }
 
   type T[A] = EitherK[Test1Algebra, Test2Algebra, A]
 
   object Test1Interpreter extends FunctionK[Test1Algebra, Id] {
-    override def apply[A](fa: Test1Algebra[A]): Id[A] = fa match {
-      case Test1(k, h) => h(k)
-    }
+    override def apply[A](fa: Test1Algebra[A]): Id[A] =
+      fa match {
+        case Test1(k, h) => h(k)
+      }
   }
 
   object Test2Interpreter extends FunctionK[Test2Algebra, Id] {
-    override def apply[A](fa: Test2Algebra[A]): Id[A] = fa match {
-      case Test2(k, h) => h(k)
-    }
+    override def apply[A](fa: Test2Algebra[A]): Id[A] =
+      fa match {
+        case Test2(k, h) => h(k)
+      }
   }
 
   val eitherKInterpreter: FunctionK[T, Id] = Test1Interpreter.or(Test2Interpreter)
@@ -199,10 +219,9 @@ class FreeSuite extends CatsSuite {
   val x: Free[T, Int] = Free.inject[Test1Algebra, T](Test1(1, identity))
 
   test(".injectRoll") {
-    def distr[F[_], A](f: Free[F, A])(implicit
-                                      F: Functor[F],
-                                      I0: Test1Algebra :<: F,
-                                      I1: Test2Algebra :<: F): Option[Free[F, A]] =
+    def distr[F[_], A](
+      f: Free[F, A]
+    )(implicit F: Functor[F], I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Option[Free[F, A]] =
       for {
         Test1(x, h) <- Free.match_[F, Test1Algebra, A](f)
         Test2(y, k) <- Free.match_[F, Test2Algebra, A](h(x))
@@ -218,8 +237,6 @@ class FreeSuite extends CatsSuite {
 }
 
 object FreeSuite extends FreeSuiteInstances {
-  import cats.instances.function._
-
   implicit def trampolineArbitrary[A: Arbitrary]: Arbitrary[Trampoline[A]] =
     freeArbitrary[Function0, A]
 
@@ -235,7 +252,7 @@ sealed trait FreeSuiteInstances extends FreeSuiteInstances1 {
 }
 
 sealed trait FreeSuiteInstances1 {
-  val headOptionU = λ[FunctionK[List, Option]](_.headOption)
+  val headOptionU = new FunctionK[List, Option] { def apply[A](a: List[A]): Option[A] = a.headOption }
 
   private def freeGen[F[_], A](maxDepth: Int)(implicit F: Arbitrary[F[A]], A: Arbitrary[A]): Gen[Free[F, A]] = {
     val noFlatMapped = Gen.oneOf(A.arbitrary.map(Free.pure[F, A]), F.arbitrary.map(Free.liftF[F, A]))

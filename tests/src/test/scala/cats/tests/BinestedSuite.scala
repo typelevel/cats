@@ -1,69 +1,77 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bifoldable, Bifunctor, Bitraverse, Foldable, Functor, Traverse}
 import cats.arrow.Profunctor
 import cats.data.Binested
-
+import cats.kernel.Eq
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.bifunctor._
+import cats.syntax.binested._
 
 class BinestedSuite extends CatsSuite {
   // we have a lot of generated lists of lists in these tests. We have to tell
-  // Scalacheck to calm down a bit so we don't hit memory and test duration
+  // ScalaCheck to calm down a bit so we don't hit memory and test duration
   // issues.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
 
   {
     // Bifunctor + Functor + Functor = Bifunctor
-    implicit val instance = ListWrapper.functor
+    implicit val instance: Functor[ListWrapper] = ListWrapper.functor
     checkAll(
-      "Binested[Either, ListWrapper, Option, ?, ?]",
-      BifunctorTests[Binested[Either, ListWrapper, Option, ?, ?]].bifunctor[Int, Int, Int, String, String, String]
+      "Binested[Either, ListWrapper, Option, *, *]",
+      BifunctorTests[Binested[Either, ListWrapper, Option, *, *]].bifunctor[Int, Int, Int, String, String, String]
     )
-    checkAll("Bifunctor[Binested[Either, ListWrapper, Option, ?, ?]]",
-             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, ?, ?]]))
+    checkAll("Bifunctor[Binested[Either, ListWrapper, Option, *, *]]",
+             SerializableTests.serializable(Bifunctor[Binested[Either, ListWrapper, Option, *, *]])
+    )
   }
 
   {
     // Profunctor + Functor + Functor = Profunctor
-    implicit val instance = ListWrapper.functor
+    implicit val instance: Functor[OptionWrapper] = OptionWrapper.functor
+    Eq[OptionWrapper[MiniInt] => Option[Int]]
     checkAll(
-      "Binested[Function1, ListWrapper, Option, ?, ?]",
-      ProfunctorTests[Binested[Function1, ListWrapper, Option, ?, ?]].profunctor[Int, Int, Int, String, String, String]
+      "Binested[Function1, OptionWrapper, Option, *, *]",
+      ProfunctorTests[Binested[Function1, OptionWrapper, Option, *, *]]
+        .profunctor[MiniInt, Int, Int, String, String, String]
     )
-    checkAll("Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]",
-             SerializableTests.serializable(Profunctor[Binested[Function1, ListWrapper, Option, ?, ?]]))
+    checkAll(
+      "Profunctor[Binested[Function1, OptionWrapper, Option, *, *]]",
+      SerializableTests.serializable(Profunctor[Binested[Function1, OptionWrapper, Option, *, *]])
+    )
   }
 
   {
     // Bifoldable + foldable + foldable = Bifoldable
-    implicit val instance = ListWrapper.foldable
-    checkAll("Binested[Either, ListWrapper, ListWrapper, ?, ?]",
-             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, ?, ?]].bifoldable[Int, Int, Int])
+    implicit val instance: Foldable[ListWrapper] = ListWrapper.foldable
+    checkAll("Binested[Either, ListWrapper, ListWrapper, *, *]",
+             BifoldableTests[Binested[Either, ListWrapper, ListWrapper, *, *]].bifoldable[Int, Int, Int]
+    )
     checkAll(
-      "Bifoldable[Binested[Either, ListWrapper, ListWrapper, ?, ?]]",
-      SerializableTests.serializable(Bifoldable[Binested[Either, ListWrapper, ListWrapper, ?, ?]])
+      "Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]]",
+      SerializableTests.serializable(Bifoldable[Binested[Either, ListWrapper, ListWrapper, *, *]])
     )
   }
 
   {
     // Bitraverse + traverse + traverse = Bitraverse
-    implicit val instance = ListWrapper.traverse
+    implicit val instance: Traverse[ListWrapper] = ListWrapper.traverse
     checkAll(
-      "Binested[Either, ListWrapper, ListWrapper, ?, ?]",
-      BitraverseTests[Binested[Either, ListWrapper, ListWrapper, ?, ?]]
+      "Binested[Either, ListWrapper, ListWrapper, *, *]",
+      BitraverseTests[Binested[Either, ListWrapper, ListWrapper, *, *]]
         .bitraverse[Option, Int, Int, Int, String, String, String]
     )
     checkAll(
-      "Bitraverse[Binested[Either, ListWrapper, ListWrapper, ?, ?]]",
-      SerializableTests.serializable(Bitraverse[Binested[Either, ListWrapper, ListWrapper, ?, ?]])
+      "Bitraverse[Binested[Either, ListWrapper, ListWrapper, *, *]]",
+      SerializableTests.serializable(Bitraverse[Binested[Either, ListWrapper, ListWrapper, *, *]])
     )
   }
 
   test("simple syntax-based usage") {
-    forAll { value: (Option[Int], List[Int]) =>
+    forAll { (value: (Option[Int], List[Int])) =>
       value.binested.bimap(_.toString, _.toString).value should ===(value.bimap(_.map(_.toString), _.map(_.toString)))
     }
   }

@@ -1,6 +1,6 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Bimonad, CommutativeMonad, Eval, Reducible}
 import cats.laws.ComonadLaws
 import cats.laws.discipline.{
   BimonadTests,
@@ -11,6 +11,7 @@ import cats.laws.discipline.{
   SerializableTests
 }
 import cats.laws.discipline.arbitrary._
+import cats.kernel.{Eq, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
@@ -96,7 +97,8 @@ class EvalSuite extends CatsSuite {
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[Eval]
+    implicit val iso: SemigroupalTests.Isomorphisms[Eval] =
+      SemigroupalTests.Isomorphisms.invariant[Eval]
     checkAll("Eval[Int]", BimonadTests[Eval].bimonad[Int, Int, Int])
   }
 
@@ -112,27 +114,27 @@ class EvalSuite extends CatsSuite {
   checkAll("Eval[Int]", GroupTests[Eval[Int]].group)
 
   {
-    implicit val A = ListWrapper.monoid[Int]
+    implicit val A: Monoid[ListWrapper[Int]] = ListWrapper.monoid[Int]
     checkAll("Eval[ListWrapper[Int]]", MonoidTests[Eval[ListWrapper[Int]]].monoid)
   }
 
   {
-    implicit val A = ListWrapper.semigroup[Int]
+    implicit val A: Semigroup[ListWrapper[Int]] = ListWrapper.semigroup[Int]
     checkAll("Eval[ListWrapper[Int]]", SemigroupTests[Eval[ListWrapper[Int]]].semigroup)
   }
 
   {
-    implicit val A = ListWrapper.order[Int]
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("Eval[ListWrapper[Int]]", OrderTests[Eval[ListWrapper[Int]]].order)
   }
 
   {
-    implicit val A = ListWrapper.partialOrder[Int]
+    implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Eval[ListWrapper[Int]]", PartialOrderTests[Eval[ListWrapper[Int]]].partialOrder)
   }
 
   {
-    implicit val A = ListWrapper.eqv[Int]
+    implicit val A: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Eval[ListWrapper[Int]]", EqTests[Eval[ListWrapper[Int]]].eqv)
   }
 
@@ -194,8 +196,9 @@ class EvalSuite extends CatsSuite {
       Arbitrary(
         Gen.oneOf(arbitrary[A => A].map(OMap(_)),
                   arbitrary[A => Eval[A]].map(OFlatMap(_)),
-                  Gen.const(OMemoize[A]),
-                  Gen.const(ODefer[A]))
+                  Gen.const(OMemoize[A]()),
+                  Gen.const(ODefer[A]())
+        )
       )
 
     def build[A](leaf: () => Eval[A], os: Vector[O[A]]): DeepEval[A] = {

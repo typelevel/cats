@@ -2,10 +2,12 @@ package cats
 package arrow
 
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Must obey the laws defined in cats.laws.CategoryLaws.
  */
+@implicitNotFound("Could not find an instance of Category for ${F}")
 @typeclass trait Category[F[_, _]] extends Compose[F] { self =>
 
   def id[A]: F[A, A]
@@ -21,4 +23,53 @@ import simulacrum.typeclass
       def empty: F[A, A] = id
       def combine(f1: F[A, A], f2: F[A, A]): F[A, A] = self.compose(f1, f2)
     }
+}
+
+object Category {
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Category]] for `F`.
+   */
+  @inline def apply[F[_, _]](implicit instance: Category[F]): Category[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): AllOps[F, A, B] {
+      type TypeClassType = Category[F]
+    } =
+      new AllOps[F, A, B] {
+        type TypeClassType = Category[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_, _], A, B] extends Serializable {
+    type TypeClassType <: Category[F]
+    def self: F[A, B]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Compose.AllOps[F, A, B] {
+    type TypeClassType <: Category[F]
+  }
+  trait ToCategoryOps extends Serializable {
+    implicit def toCategoryOps[F[_, _], A, B](target: F[A, B])(implicit tc: Category[F]): Ops[F, A, B] {
+      type TypeClassType = Category[F]
+    } =
+      new Ops[F, A, B] {
+        type TypeClassType = Category[F]
+        val self: F[A, B] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToCategoryOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

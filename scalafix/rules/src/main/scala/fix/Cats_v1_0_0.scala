@@ -1,9 +1,8 @@
 package fix
 package v1_0_0
 
-import scalafix._
+import scalafix.v0._
 import scalafix.syntax._
-import scalafix.util.SymbolMatcher
 import scala.meta._
 import scala.meta.contrib._
 
@@ -12,22 +11,22 @@ case class RemoveCartesianBuilder(index: SemanticdbIndex)
     extends SemanticRule(index, "RemoveCartesianBuilder") {
 
   private[this] val cartesianBuilders = SymbolMatcher.normalized(
-    Symbol("_root_.cats.syntax.CartesianOps.`|@|`.") ::
+    Symbol("cats/syntax/CartesianOps#`|@|`().") ::
       (1 to 22).toList.map(arity =>
       Symbol(
-        s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.`|@|`.")): _*
+        s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#`|@|`().")): _*
   )
 
   private[this] val partialApplies = SymbolMatcher.normalized(
-    Symbol(s"_root_.cats.syntax.CartesianOps.`*>`."),
-    Symbol(s"_root_.cats.syntax.CartesianOps.`<*`.")
+    Symbol(s"cats/syntax/CartesianOps#`*>`()."),
+    Symbol(s"cats/syntax/CartesianOps#`<*`().")
   )
 
   private[this] val renames: Map[String, String] = (1 to 22).flatMap { arity =>
     Seq(
-      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.map." -> "mapN",
-      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.imap." -> "imapN",
-      s"_root_.cats.syntax.CartesianBuilder.CartesianBuilder$arity.contramap." -> "contramapN"
+      s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#map()." -> "mapN",
+      s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#imap()." -> "imapN",
+      s"cats/syntax/CartesianBuilder#CartesianBuilder$arity#contramap()." -> "contramapN"
     )
   }.toMap
 
@@ -80,9 +79,9 @@ case class ContraMapToLMap(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch = {
 
-    val contraMatcher = SymbolMatcher.normalized(Symbol("_root_.cats.functor.Contravariant.Ops.`contramap`."))
+    val contraMatcher = SymbolMatcher.normalized(Symbol("cats/functor/Contravariant.Ops#contramap()."))
 
-    val unApplyName = "catsUnapply2left"
+    val unApplyName = "catsSyntaxUContravariant"
 
     ctx.tree.collect {
       case Term.Apply(Term.Select(f, contraMatcher(contramap)), _) if f.denotation.exists(_.name == unApplyName) =>
@@ -96,14 +95,14 @@ case class RemoveUnapply(index: SemanticdbIndex)
     extends SemanticRule(index, "RemoveUnapply") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
-    "_root_.cats.Traverse.Ops.traverseU." -> "traverse",
-    "_root_.cats.Foldable.Ops.traverseU_." -> "traverse_",
-    "_root_.cats.Foldable.traverseU_." -> "traverse_",
-    "_root_.cats.Traverse.Ops.sequenceU." -> "sequence",
-    "_root_.cats.Foldable.Ops.sequenceU_." -> "sequence_",
-    "_root_.cats.Foldable.sequenceU_." -> "sequence_",
-    "_root_.cats.data.Func.appFuncU." -> "appFunc",
-    "_root_.cats.free.FreeT.liftTU." -> "liftT"
+    "cats/Traverse.Ops#traverseU()." -> "traverse",
+    "cats/Foldable.Ops#traverseU_()." -> "traverse_",
+    "cats/Foldable#traverseU_()." -> "traverse_",
+    "cats/Traverse.Ops#sequenceU()." -> "sequence",
+    "cats/Foldable.Ops#sequenceU_()." -> "sequence_",
+    "cats/Foldable#sequenceU_()." -> "sequence_",
+    "cats/data/Func.appFuncU()." -> "appFunc",
+    "cats/free/FreeT.liftTU()." -> "liftT"
   )
 }
 
@@ -112,8 +111,8 @@ case class RenameFreeSuspend(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameFreeSuspend") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
-    "_root_.cats.free.Free.suspend." -> "defer",
-    "_root_.cats.free.TrampolineFunctions.suspend." -> "defer"
+    "cats/free/Free.suspend()." -> "defer",
+    "cats/free/TrampolineFunctions#suspend()." -> "defer"
   )
 
 }
@@ -123,12 +122,12 @@ case class RenameReducibleMethods(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameReducibleMethods") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
-    "_root_.cats.Reducible.traverse1_." -> "nonEmptyTraverse_",
-    "_root_.cats.Reducible.Ops.traverse1_." -> "nonEmptyTraverse_",
-    "_root_.cats.Reducible.intercalate1." -> "nonEmptyIntercalate",
-    "_root_.cats.Reducible.Ops.intercalate1." -> "nonEmptyIntercalate",
-    "_root_.cats.Reducible.sequence1_." -> "nonEmptySequence_",
-    "_root_.cats.Reducible.Ops.sequence1_." -> "nonEmptySequence_"
+    "cats/Reducible#traverse1_()." -> "nonEmptyTraverse_",
+    "cats/Reducible.Ops#traverse1_()." -> "nonEmptyTraverse_",
+    "cats/Reducible#intercalate1()." -> "nonEmptyIntercalate",
+    "cats/Reducible.Ops#intercalate1()." -> "nonEmptyIntercalate",
+    "cats/Reducible#sequence1_()." -> "nonEmptySequence_",
+    "cats/Reducible.Ops#sequence1_()." -> "nonEmptySequence_"
   )
 
 }
@@ -138,10 +137,10 @@ case class SimplifyEitherTLift(index: SemanticdbIndex)
     extends SemanticRule(index, "SimplifyEitherTLift") {
 
   private[this] val leftSymbol = SymbolMatcher.normalized(
-    Symbol("_root_.cats.data.EitherTFunctions.left.")
+    Symbol("cats/data/EitherTFunctions/left.")
   )
   private[this] val rightSymbol = SymbolMatcher.normalized(
-    Symbol("_root_.cats.data.EitherTFunctions.right.")
+    Symbol("cats/data/EitherTFunctions/right.")
   )
 
   private[this] def removeWithLeadingComma(ctx: RuleCtx, t: Tree): Patch =
@@ -173,9 +172,9 @@ case class RenameInjectProdAndCoproduct(index: SemanticdbIndex)
     extends SemanticRule(index, "RenameInjectProdAndCoproduct") {
 
   override def fix(ctx: RuleCtx): Patch = ctx.replaceSymbols(
-    "_root_.cats.free.Inject." -> "_root_.cats.InjectK.",
-    "_root_.cats.data.Prod." -> "_root_.cats.data.Tuple2K.",
-    "_root_.cats.data.Coproduct." -> "_root_.cats.data.EitherK."
+    "cats/free/Inject." -> "cats/InjectK.",
+    "cats/data/Prod." -> "cats/data/Tuple2K.",
+    "cats/data/Coproduct." -> "cats/data/EitherK."
   )
 
 }
@@ -188,9 +187,9 @@ case class RenameTupleApplySyntax(index: SemanticdbIndex)
     ctx.replaceSymbols(
       (1 to 22).flatMap { arity =>
         Seq(
-          s"_root_.cats.syntax.Tuple${arity}CartesianOps.map$arity." -> "mapN",
-          s"_root_.cats.syntax.Tuple${arity}CartesianOps.contramap$arity." -> "contramapN",
-          s"_root_.cats.syntax.Tuple${arity}CartesianOps.imap$arity." -> "imapN"
+          s"cats/syntax/Tuple${arity}CartesianOps#map$arity()." -> "mapN",
+          s"cats/syntax/Tuple${arity}CartesianOps#contramap$arity()." -> "contramapN",
+          s"cats/syntax/Tuple${arity}CartesianOps#imap$arity()." -> "imapN"
         )
       }: _*
     ) ++
@@ -207,7 +206,7 @@ case class RemoveSplit(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
-      "_root_.cats.arrow.Split." -> "_root_.cats.arrow.Arrow."
+      "cats/arrow/Split." -> "cats/arrow/Arrow."
     ) + ctx.tree.collect {
       case t @ q"import cats.syntax.split._" =>
         ctx.replaceTree(t, "import cats.syntax.arrow._")
@@ -222,7 +221,7 @@ case class RenameEitherTLiftT(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
-      "_root_.cats.data.EitherTFunctions.liftT." -> "liftF"
+      "cats/data/EitherTFunctions#liftT()." -> "liftF",
     )
 
 }
@@ -233,11 +232,11 @@ case class RenameTransformersLift(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
-      "_root_.cats.data.WriterT.lift." -> "liftF",
-      "_root_.cats.data.StateT.lift." -> "liftF",
-      "_root_.cats.data.CommonStateTConstructors.lift." -> "liftF",
-      "_root_.cats.data.CommonIRWSTConstructors.lift." -> "liftF",
-      "_root_.cats.data.KleisliFunctions.lift." -> "liftF"
+      "cats/data/WriterT.lift()." -> "liftF",
+      "cats/data/StateT.lift()." -> "liftF",
+      "cats/data/CommonStateTConstructors#lift()." -> "liftF",
+      "cats/data/CommonIRWSTConstructors#lift()." -> "liftF",
+      "cats/data/KleisliFunctions#lift()." -> "liftF"
     )
 
 }
@@ -247,14 +246,14 @@ case class RenameApplyApConst(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch =
     ctx.replaceSymbols(
-      "_root_.cats.Apply.forEffect." -> "productL",
-      "_root_.cats.Apply.followedBy." -> "productR",
-      "_root_.cats.Apply.Ops.forEffect." -> "productL",
-      "_root_.cats.Apply.Ops.followedBy." -> "productR",
-      "_root_.cats.NonEmptyParallel.parForEffect." -> "parProductL",
-      "_root_.cats.NonEmptyParallel.parFollowedBy." -> "parProductR",
-      "_root_.cats.FlatMap.forEffectEval." -> "productLEval",
-      "_root_.cats.FlatMap.followedByEval." -> "productREval"
+      "cats/Apply#forEffect()." -> "productL",
+      "cats/Apply#followedBy()." -> "productR",
+      "cats/Apply.Ops#forEffect()." -> "productL",
+      "cats/Apply.Ops#followedBy()." -> "productR",
+      "cats/NonEmptyParallel#parForEffect()." -> "parProductL",
+      "cats/NonEmptyParallel#parFollowedBy()." -> "parProductR",
+      "cats/FlatMap#forEffectEval()." -> "productLEval",
+      "cats/FlatMap#followedByEval()." -> "productREval"
     )
 
 }
@@ -266,7 +265,7 @@ case class RenameCartesian(index: SemanticdbIndex)
 
   override def fix(ctx: RuleCtx): Patch = {
     ctx.replaceSymbols(
-      "_root_.cats.Cartesian." -> "_root_.cats.Semigroupal."
+      "cats/Cartesian." -> "cats/Semigroupal."
     )+ ctx.tree.collect {
       case t @ q"import cats.syntax.cartesian._" =>
         ctx.replaceTree(t, "import cats.syntax.semigroupal._")

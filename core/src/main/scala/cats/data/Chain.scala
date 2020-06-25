@@ -2,10 +2,10 @@ package cats
 package data
 
 import Chain._
+import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{SortedMap, TreeSet}
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -47,9 +47,45 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Returns the init and last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def initLast: Option[(Chain[A], A)] = {
+    var c: Chain[A] = this
+    val lefts = new collection.mutable.ArrayBuffer[Chain[A]]
+    // scalastyle:off null
+    var result: Option[(Chain[A], A)] = null
+    while (result eq null) {
+      c match {
+        case Singleton(a) =>
+          val pre =
+            if (lefts.isEmpty) nil
+            else lefts.reduceLeft((x, y) => Append(x, y))
+          result = Some(pre -> a)
+        case Append(l, r) => c = r; lefts += l
+        case Wrap(seq) =>
+          val init = fromSeq(seq.init)
+          val pre =
+            if (lefts.isEmpty) init
+            else lefts.reduceLeft((x, y) => Append(x, y)) ++ init
+          result = Some((pre, seq.last))
+        case Empty =>
+          // Empty is only top level, it is never internal to an Append
+          result = None
+      }
+    }
+    // scalastyle:on null
+    result
+  }
+
+  /**
    * Returns the head of this Chain if non empty, none otherwise. Amortized O(1).
    */
   def headOption: Option[A] = uncons.map(_._1)
+
+  /**
+   * Returns the last of this Chain if non empty, none otherwise. Amortized O(1).
+   */
+  final def lastOption: Option[A] = initLast.map(_._2)
 
   /**
    * Returns true if there are no elements in this collection.
@@ -101,7 +137,10 @@ sealed abstract class Chain[+A] {
    * Applies the supplied function to each element and returns a new Chain.
    */
   final def map[B](f: A => B): Chain[B] =
-    fromSeq(iterator.map(f).toVector)
+    this match {
+      case Wrap(seq) => Wrap(seq.map(f))
+      case _         => fromSeq(iterator.map(f).toVector)
+    }
 
   /**
    * Applies the supplied function to each element and returns a new Chain from the concatenated results
@@ -124,6 +163,40 @@ sealed abstract class Chain[+A] {
   }
 
   /**
+   * Takes longest prefix of elements that satisfy a predicate.
+   * @param p The predicate used to test elements.
+   * @return the longest prefix of this chain whose elements all satisfy the predicate p.
+   */
+  final def takeWhile(p: A => Boolean): Chain[A] = {
+    var result = Chain.empty[A]
+    foreachUntil { a =>
+      val pr = p(a)
+      if (pr) result = result :+ a
+      !pr
+    }
+    result
+  }
+
+  /**
+   * Drops longest prefix of elements that satisfy a predicate.
+   *
+   * @param p The predicate used to test elements.
+   * @return the longest suffix of this sequence whose first element does not satisfy the predicate p.
+   */
+  final def dropWhile(p: A => Boolean): Chain[A] = {
+    @tailrec
+    def go(rem: Chain[A]): Chain[A] =
+      rem.uncons match {
+        case Some((a, tail)) =>
+          if (p(a)) go(tail)
+          else rem
+
+        case None => nil
+      }
+    go(this)
+  }
+
+  /**
    * Folds over the elements from right to left using the supplied initial value and function.
    */
   final def foldRight[B](z: B)(f: (A, B) => B): B = {
@@ -143,6 +216,39 @@ sealed abstract class Chain[+A] {
       if (x.asInstanceOf[AnyRef] ne sentinel) acc :+ x.asInstanceOf[B]
       else acc
     }
+
+  /**
+   * Finds the first element of this `Chain` for which the given partial
+   * function is defined, and applies the partial function to it.
+   */
+  final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      // trick from TraversableOnce, used to avoid calling both isDefined and apply (or calling lift)
+      val x = pf.applyOrElse(a, sentinel)
+      if (x.asInstanceOf[AnyRef] ne sentinel) {
+        result = Some(x.asInstanceOf[B])
+        true
+      } else false
+    }
+    result
+  }
+
+  /**
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
+   * instead of `PartialFunction`s.
+   */
+  final def collectFirstSome[B](f: A => Option[B]): Option[B] = {
+    var result: Option[B] = None
+    foreachUntil { a =>
+      val x = f(a)
+      if (x.isDefined) {
+        result = x
+        true
+      } else false
+    }
+    result
+  }
 
   /**
    * Remove elements not matching the predicate
@@ -219,6 +325,19 @@ sealed abstract class Chain[+A] {
     }
 
   /**
+   * Zips each element of this `Chain` with its index.
+   */
+  final def zipWithIndex: Chain[(A, Int)] =
+    this match {
+      case Empty        => Empty
+      case Singleton(a) => Singleton((a, 0))
+      case Append(left, right) =>
+        val leftSize = left.length.toInt
+        Append(left.zipWithIndex, right.zipWithIndex.map { case (a, i) => (a, leftSize + i) })
+      case Wrap(seq) => Wrap(seq.zipWithIndex)
+    }
+
+  /**
    * Groups elements inside this `Chain` according to the `Order`
    * of the keys produced by the given mapping function.
    */
@@ -266,9 +385,10 @@ sealed abstract class Chain[+A] {
   /**
    * Applies the supplied function to each element, left to right.
    */
-  final private def foreach(f: A => Unit): Unit = foreachUntil { a =>
-    f(a); false
-  }
+  final private def foreach(f: A => Unit): Unit =
+    foreachUntil { a =>
+      f(a); false
+    }
 
   /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
@@ -306,15 +426,17 @@ sealed abstract class Chain[+A] {
   }
   // scalastyle:on null return cyclomatic.complexity
 
-  final def iterator: Iterator[A] = this match {
-    case Wrap(seq) => seq.iterator
-    case _         => new ChainIterator[A](this)
-  }
+  final def iterator: Iterator[A] =
+    this match {
+      case Wrap(seq) => seq.iterator
+      case _         => new ChainIterator[A](this)
+    }
 
-  final def reverseIterator: Iterator[A] = this match {
-    case Wrap(seq) => seq.reverseIterator
-    case _         => new ChainReverseIterator[A](this)
-  }
+  final def reverseIterator: Iterator[A] =
+    this match {
+      case Wrap(seq) => seq.reverseIterator
+      case _         => new ChainReverseIterator[A](this)
+    }
 
   /**
    * Returns the number of elements in this structure
@@ -368,7 +490,7 @@ sealed abstract class Chain[+A] {
    * Remove duplicates. Duplicates are checked using `Order[_]` instance.
    */
   def distinct[AA >: A](implicit O: Order[AA]): Chain[AA] = {
-    implicit val ord = O.toOrdering
+    implicit val ord: Ordering[AA] = O.toOrdering
 
     var alreadyIn = TreeSet.empty[AA]
 
@@ -387,21 +509,65 @@ sealed abstract class Chain[+A] {
     var first = true
 
     foreach { a =>
-      if (first) { builder ++= AA.show(a); first = false } else builder ++= ", " + AA.show(a)
+      if (first) {
+        builder ++= AA.show(a); first = false
+      } else builder ++= ", " + AA.show(a)
       ()
     }
     builder += ')'
     builder.result
   }
 
+  def hash[AA >: A](implicit hashA: Hash[AA]): Int = StaticMethods.orderedHash((this: Chain[AA]).iterator)
+
   override def toString: String = show(Show.show[A](_.toString))
+
+  override def equals(o: Any): Boolean =
+    if (o.isInstanceOf[Chain[_]])
+      (this: Chain[Any]).===(o.asInstanceOf[Chain[Any]])(Eq.fromUniversalEquals[Any])
+    else false
+
+  override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
+
+  final def get(idx: Long): Option[A] =
+    if (idx < 0) None
+    else {
+      var result: Option[A] = None
+      var i = 0L
+      foreachUntil { a =>
+        if (idx == i) {
+          result = Some(a)
+          true
+        } else {
+          i += 1
+          false
+        }
+      }
+      result
+    }
+
+  final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
+    this match {
+      case Empty        => this
+      case Singleton(_) => this
+      case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+    }
+
+  final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
+    this match {
+      case Empty        => this
+      case Singleton(_) => this
+      case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+    }
 }
 
 object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
-  final private[data] case object Empty extends Chain[Nothing] {
+  private[data] case object Empty extends Chain[Nothing] {
     def isEmpty: Boolean = true
   }
   final private[data] case class Singleton[A](a: A) extends Chain[A] {
@@ -416,27 +582,50 @@ object Chain extends ChainInstances {
       false // b/c `fromSeq` constructor doesn't allow either branch to be empty
   }
 
-  /** Empty Chain. */
+  def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
+    Some(chain.toList)
+
+  object ==: {
+    def unapply[T](c: Chain[T]): Option[(T, Chain[T])] =
+      c.uncons
+  }
+
+  object :== {
+    def unapply[T](c: Chain[T]): Option[(Chain[T], T)] =
+      c.initLast
+  }
+
+  /**
+   * Empty Chain.
+   */
   val nil: Chain[Nothing] = Empty
 
   def empty[A]: Chain[A] = nil
 
-  /** Creates a Chain of 1 element. */
+  /**
+   * Creates a Chain of 1 element.
+   */
   def one[A](a: A): Chain[A] = Singleton(a)
 
-  /** Concatenates two Chains. */
+  /**
+   * Concatenates two Chains.
+   */
   def concat[A](c: Chain[A], c2: Chain[A]): Chain[A] =
     if (c.isEmpty) c2
     else if (c2.isEmpty) c
     else Append(c, c2)
 
-  /** Creates a Chain from the specified sequence. */
+  /**
+   * Creates a Chain from the specified sequence.
+   */
   def fromSeq[A](s: Seq[A]): Chain[A] =
     if (s.isEmpty) nil
     else if (s.lengthCompare(1) == 0) one(s.head)
     else Wrap(s)
 
-  /** Creates a Chain from the specified elements. */
+  /**
+   * Creates a Chain from the specified elements.
+   */
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
@@ -528,20 +717,28 @@ object Chain extends ChainInstances {
 }
 
 sealed abstract private[data] class ChainInstances extends ChainInstances1 {
-  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = new Monoid[Chain[A]] {
-    def empty: Chain[A] = Chain.nil
-    def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
-  }
+  implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] =
+    new Monoid[Chain[A]] {
+      def empty: Chain[A] = Chain.nil
+      def combine(c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
+    }
 
   implicit val catsDataInstancesForChain
-    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] =
-    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] {
+    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
+    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] {
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
-      def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-        Eval.defer(fa.foldRight(lb) { (a, lb) =>
-          Eval.defer(f(a, lb))
-        })
+      def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {
+        def loop(as: Chain[A]): Eval[B] =
+          // In Scala 2 the compiler silently ignores the fact that it can't
+          // prove that this match is exhaustive, but Dotty warns, so we
+          // explicitly mark it as unchecked.
+          (as: @unchecked) match {
+            case Chain.nil => lb
+            case h ==: t   => f(h, Eval.defer(loop(t)))
+          }
+        Eval.defer(loop(fa))
+      }
 
       override def map[A, B](fa: Chain[A])(f: A => B): Chain[B] = fa.map(f)
       override def toList[A](fa: Chain[A]): List[A] = fa.toList
@@ -550,6 +747,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       override def forall[A](fa: Chain[A])(p: A => Boolean): Boolean = fa.forall(p)
       override def find[A](fa: Chain[A])(f: A => Boolean): Option[A] = fa.find(f)
       override def size[A](fa: Chain[A]): Long = fa.length
+      override def collectFirst[A, B](fa: Chain[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
+      override def collectFirstSome[A, B](fa: Chain[A])(f: A => Option[B]): Option[B] = fa.collectFirstSome(f)
 
       def coflatMap[A, B](fa: Chain[A])(f: Chain[A] => B): Chain[B] = {
         @tailrec def go(as: Chain[A], res: ListBuffer[B]): Chain[B] =
@@ -562,9 +761,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-        fa.foldRight[G[Chain[B]]](G.pure(nil)) { (a, gcatb) =>
-          G.map2(f(a), gcatb)(_ +: _)
-        }
+        foldRight[A, G[Chain[B]]](fa, Always(G.pure(nil))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)(_ +: _)
+        }.value
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
       def pure[A](a: A): Chain[A] = Chain.one(a)
@@ -591,6 +790,37 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           }
         go(f(a) :: Nil)
         acc
+      }
+
+      override def map2[A, B, Z](fa: Chain[A], fb: Chain[B])(f: (A, B) => Z): Chain[Z] =
+        if (fb.isEmpty) nil // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Chain[A], fb: Eval[Chain[B]])(f: (A, B) => Z): Eval[Chain[Z]] =
+        if (fa.isEmpty) Eval.now(nil) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
+
+      override def get[A](fa: Chain[A])(idx: Long): Option[A] = fa.get(idx)
+
+      def functor: Functor[Chain] = this
+
+      def align[A, B](fa: Chain[A], fb: Chain[B]): Chain[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Chain[A], fb: Chain[B])(f: Ior[A, B] => C): Chain[C] = {
+        val iterA = fa.iterator
+        val iterB = fb.iterator
+
+        var result: Chain[C] = Chain.empty
+
+        while (iterA.hasNext || iterB.hasNext) {
+          val ior =
+            if (iterA.hasNext && iterB.hasNext) Ior.both(iterA.next(), iterB.next())
+            else if (iterA.hasNext) Ior.left(iterA.next())
+            else Ior.right(iterB.next())
+          result = result :+ f(ior)
+        }
+        result
       }
     }
 
@@ -623,6 +853,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 
+    override def filterNot[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: Chain[A])(f: PartialFunction[A, B]): Chain[B] = fa.collect(f)
 
     override def mapFilter[A, B](fa: Chain[A])(f: A => Option[B]): Chain[B] = fa.collect(Function.unlift(f))
@@ -630,12 +862,16 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     override def flattenOption[A](fa: Chain[Option[A]]): Chain[A] = fa.collect { case Some(a) => a }
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
-      fa.foldRight(G.pure(Chain.empty[B]))(
-        (a, gcb) => G.map2(f(a), gcb)((ob, cb) => ob.fold(cb)(_ +: cb))
-      )
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
+        .value
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
-      fa.foldRight(G.pure(Chain.empty[A]))((a, gca) => G.map2(f(a), gca)((b, chain) => if (b) a +: chain else chain))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Chain.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, chain) => if (b) x +: chain else chain)
+        )
+        .value
 
   }
 
@@ -646,10 +882,20 @@ sealed abstract private[data] class ChainInstances1 extends ChainInstances2 {
     new ChainPartialOrder[A] { implicit def A: PartialOrder[A] = A0 }
 }
 
-sealed abstract private[data] class ChainInstances2 {
-  implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] = new Eq[Chain[A]] {
-    def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
-  }
+sealed abstract private[data] class ChainInstances2 extends ChainInstances3 {
+  implicit def catsDataHashForChain[A](implicit A: Hash[A]): Hash[Chain[A]] =
+    new Hash[Chain[A]] {
+      def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+
+      def hash(fa: Chain[A]): Int = fa.hash
+    }
+}
+
+sealed abstract private[data] class ChainInstances3 {
+  implicit def catsDataEqForChain[A](implicit A: Eq[A]): Eq[Chain[A]] =
+    new Eq[Chain[A]] {
+      def eqv(x: Chain[A], y: Chain[A]): Boolean = x === y
+    }
 }
 
 private[data] trait ChainPartialOrder[A] extends PartialOrder[Chain[A]] {

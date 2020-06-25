@@ -1,15 +1,17 @@
-package cats
-package tests
+package cats.tests
 
-import catalysts.Platform
+import cats._
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IndexedStateT, State, StateT}
-import cats.arrow.Profunctor
-import cats.kernel.instances.tuple._
+import cats.kernel.Eq
 import cats.laws.discipline._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
-import org.scalacheck.Arbitrary
+import cats.platform.Platform
+import cats.syntax.apply._
+import cats.syntax.flatMap._
+import cats.syntax.traverse._
 
 class IndexedStateTSuite extends CatsSuite {
 
@@ -166,7 +168,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("flatMap and flatMapF consistent") {
-    forAll { (stateT: StateT[Option, Long, Int], f: Int => Option[Int]) =>
+    forAll { (stateT: StateT[Option, MiniInt, Int], f: Int => Option[Int]) =>
       stateT.flatMap(a => StateT(s => f(a).map(b => (s, b)))) should ===(stateT.flatMapF(f))
     }
   }
@@ -178,7 +180,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("modify identity is a noop") {
-    forAll { (f: StateT[List, Long, Int]) =>
+    forAll { (f: StateT[List, MiniInt, Int]) =>
       f.modify(identity) should ===(f)
     }
   }
@@ -196,9 +198,9 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("State.modify equivalent to get then set") {
-    forAll { (f: Long => Long) =>
+    forAll { (f: MiniInt => MiniInt) =>
       val s1 = for {
-        l <- State.get[Long]
+        l <- State.get[MiniInt]
         _ <- State.set(f(l))
       } yield ()
 
@@ -232,19 +234,19 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test(".get equivalent to flatMap with State.get") {
-    forAll { (s: State[Long, Int]) =>
+    forAll { (s: State[MiniInt, Int]) =>
       s.get should ===(s.flatMap(_ => State.get))
     }
   }
 
   test("StateT#transformS with identity is identity") {
-    forAll { (s: StateT[List, Long, Int]) =>
-      s.transformS[Long](identity, (s, i) => i) should ===(s)
+    forAll { (s: StateT[List, MiniInt, Int]) =>
+      s.transformS[MiniInt](identity, (s, i) => i) should ===(s)
     }
   }
 
   test("StateT#mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: StateT[Eval, Long, Int], initial: Long) =>
       state.mapK(f).runA(initial) should ===(state.runA(initial).value)
     }
@@ -263,6 +265,15 @@ class IndexedStateTSuite extends CatsSuite {
 
   private val stackSafeTestSize =
     if (Platform.isJvm) 100000 else 100
+
+  test("repeated map is stack safe") {
+    val unit = StateT.pure[Eval, Unit, Int](0)
+    val count = stackSafeTestSize
+    val result = (0 until count).foldLeft(unit) { (acc, _) =>
+      acc.map(_ + 1)
+    }
+    result.run(()).value should ===(((), count))
+  }
 
   test("flatMap is stack safe on repeated left binds when F is") {
     val unit = StateT.pure[Eval, Unit, Unit](())
@@ -283,7 +294,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("untilDefinedM works") {
-    val counter = State { i: Int =>
+    val counter = State { (i: Int) =>
       val res = if (i > stackSafeTestSize) Some(i) else None
       (i + 1, res)
     }
@@ -292,7 +303,7 @@ class IndexedStateTSuite extends CatsSuite {
   }
 
   test("foreverM works") {
-    val step = StateT[Either[Int, ?], Int, Unit] { i =>
+    val step = StateT[Either[Int, *], Int, Unit] { i =>
       if (i > stackSafeTestSize) Left(i) else Right((i + 1, ()))
     }
     step.foreverM.run(0) match {
@@ -303,7 +314,7 @@ class IndexedStateTSuite extends CatsSuite {
 
   test("iterateForeverM works") {
     val result = 0.iterateForeverM { i =>
-      StateT[Either[Int, ?], Int, Int] { j =>
+      StateT[Either[Int, *], Int, Int] { j =>
         if (j > stackSafeTestSize) Left(j) else Right((j + 1, i + 1))
       }
     }
@@ -313,182 +324,204 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, ?]](
-    IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad)
-  )
+  implicit val iso: Isomorphisms[IndexedStateT[ListWrapper, String, Int, *]] =
+    Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, *]](
+      IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad)
+    )
 
   {
     // F has a Functor
     implicit val F: Functor[ListWrapper] = ListWrapper.functor
     // We only need a Functor on F to find a Functor on StateT
-    Functor[IndexedStateT[ListWrapper, String, Int, ?]]
+    Functor[IndexedStateT[ListWrapper, String, Int, *]]
   }
 
   {
     // We only need a Functor to derive a Contravariant for IndexedStateT
     implicit val F: Functor[ListWrapper] = ListWrapper.monad
-    Contravariant[IndexedStateT[ListWrapper, ?, Int, String]]
+    Contravariant[IndexedStateT[ListWrapper, *, Int, String]]
   }
 
   {
     // We only need a Functor to derive a Bifunctor for IndexedStateT
     implicit val F: Functor[ListWrapper] = ListWrapper.monad
-    Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]
+    Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]
   }
 
   {
     // We only need a Functor to derive a Profunctor for IndexedStateT
     implicit val F: Functor[ListWrapper] = ListWrapper.monad
-    Profunctor[IndexedStateT[ListWrapper, ?, ?, String]]
+    Profunctor[IndexedStateT[ListWrapper, *, *, String]]
   }
 
-  checkAll("IndexedStateT[Eval, String, String, ?]", DeferTests[IndexedStateT[Eval, String, String, ?]].defer[Int])
+  checkAll("IndexedStateT[Eval, MiniInt, String, *]", DeferTests[IndexedStateT[Eval, MiniInt, String, *]].defer[Int])
 
   {
     // F needs a Monad to do Eq on StateT
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Functor[IndexedStateT[ListWrapper, String, Int, ?]] = IndexedStateT.catsDataFunctorForIndexedStateT
+    implicit val FS: Functor[IndexedStateT[ListWrapper, String, Int, *]] = IndexedStateT.catsDataFunctorForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
-             FunctorTests[IndexedStateT[ListWrapper, String, Int, ?]].functor[Int, Int, Int])
-    checkAll("Functor[IndexedStateT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, ?]]))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
+             FunctorTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functor[Int, Int, Int]
+    )
+    checkAll("Functor[IndexedStateT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(Functor[IndexedStateT[ListWrapper, String, Int, *]])
+    )
 
-    Functor[IndexedStateT[ListWrapper, String, Int, ?]]
+    Functor[IndexedStateT[ListWrapper, String, Int, *]]
   }
 
   {
-    implicit val F0 = ListWrapper.monad
-    implicit val FF = ListWrapper.functorFilter
+    implicit val F0: Monad[ListWrapper] = ListWrapper.monad
+    implicit val FF: FunctorFilter[ListWrapper] = ListWrapper.functorFilter
 
-    checkAll("IndexedStateT[ListWrapper, String, Int, ?]",
-             FunctorFilterTests[IndexedStateT[ListWrapper, String, Int, ?]].functorFilter[Int, Int, Int])
-    checkAll("FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]",
-             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
+             FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int]
+    )
+    checkAll("FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]",
+             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]])
+    )
 
-    FunctorFilter[IndexedStateT[ListWrapper, String, Int, ?]]
+    FunctorFilter[IndexedStateT[ListWrapper, String, Int, *]]
   }
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]] =
+    implicit val FS: Contravariant[IndexedStateT[ListWrapper, *, Int, Int]] =
       IndexedStateT.catsDataContravariantForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, Int, Int, Int]",
-             ContravariantTests[IndexedStateT[ListWrapper, ?, Int, Int]].contravariant[Int, Int, Int])
-    checkAll("Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]",
-             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]))
+    checkAll("IndexedStateT[ListWrapper, *, Int, Boolean]",
+             ContravariantTests[IndexedStateT[ListWrapper, *, Int, Int]].contravariant[MiniInt, Int, Boolean]
+    )
+    checkAll("Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]",
+             SerializableTests.serializable(Contravariant[IndexedStateT[ListWrapper, *, Int, Int]])
+    )
 
-    Contravariant[IndexedStateT[ListWrapper, ?, Int, Int]]
+    Contravariant[IndexedStateT[ListWrapper, *, Int, Int]]
   }
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]] = IndexedStateT.catsDataBifunctorForIndexedStateT
+    implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, *, *]] = IndexedStateT.catsDataBifunctorForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, Int, String, Int]",
-             BifunctorTests[IndexedStateT[ListWrapper, Int, ?, ?]].bifunctor[String, String, String, Int, Int, Int])
-    checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]",
-             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, String, Int]",
+             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int]
+    )
+    checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]",
+             SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]])
+    )
 
-    Bifunctor[IndexedStateT[ListWrapper, Int, ?, ?]]
+    Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]
   }
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]] =
+    implicit val FS: Profunctor[IndexedStateT[ListWrapper, *, *, Int]] =
       IndexedStateT.catsDataProfunctorForIndexedStateT
 
     checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
-             ProfunctorTests[IndexedStateT[ListWrapper, ?, ?, Int]].profunctor[String, String, String, Int, Int, Int])
-    checkAll("Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]",
-             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]))
+             ProfunctorTests[IndexedStateT[ListWrapper, *, *, Int]].profunctor[MiniInt, String, String, Int, Int, Int]
+    )
+    checkAll("Profunctor[IndexedStateT[ListWrapper, *, *, Int]]",
+             SerializableTests.serializable(Profunctor[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
-    Profunctor[IndexedStateT[ListWrapper, ?, ?, Int]]
+    Profunctor[IndexedStateT[ListWrapper, *, *, Int]]
   }
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
-    implicit val FS: Strong[IndexedStateT[ListWrapper, ?, ?, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
+    implicit val FS: Strong[IndexedStateT[ListWrapper, *, *, Int]] = IndexedStateT.catsDataStrongForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, String, Int, Int]",
-             StrongTests[IndexedStateT[ListWrapper, ?, ?, Int]].strong[String, String, String, Int, Int, Int])
-    checkAll("Strong[IndexedStateT[ListWrapper, ?, ?, Int]]",
-             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, ?, ?, Int]]))
+    checkAll("IndexedStateT[ListWrapper, *, *, Int]",
+             StrongTests[IndexedStateT[ListWrapper, *, *, Int]].strong[MiniInt, Int, Boolean, Boolean, Boolean, String]
+    )
+    checkAll("Strong[IndexedStateT[ListWrapper, *, *, Int]]",
+             SerializableTests.serializable(Strong[IndexedStateT[ListWrapper, *, *, Int]])
+    )
 
-    Strong[IndexedStateT[ListWrapper, ?, ?, Int]]
+    Strong[IndexedStateT[ListWrapper, *, *, Int]]
   }
 
   {
     // F has a Monad
-    implicit val F = ListWrapper.monad
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
-    checkAll("IndexedStateT[ListWrapper, Int, Int]",
-             MonadTests[IndexedStateT[ListWrapper, Int, Int, ?]].monad[Int, Int, Int])
-    checkAll("Monad[StateT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, ?]]))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
+             MonadTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]].monad[Int, Int, Int]
+    )
+    checkAll("Monad[IndexedStateT[ListWrapper, Int, Int, *]]",
+             SerializableTests.serializable(Monad[IndexedStateT[ListWrapper, Int, Int, *]])
+    )
 
-    Monad[IndexedStateT[ListWrapper, Int, Int, ?]]
-    FlatMap[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Applicative[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Apply[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Functor[IndexedStateT[ListWrapper, Int, Int, ?]]
+    Monad[IndexedStateT[ListWrapper, Int, Int, *]]
+    FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
+    Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
+    Apply[IndexedStateT[ListWrapper, Int, Int, *]]
+    Functor[IndexedStateT[ListWrapper, Int, Int, *]]
   }
 
   {
     // F has a Monad and a SemigroupK
-    implicit val F = ListWrapper.monad
-    implicit val S = ListWrapper.semigroupK
+    implicit val F: Monad[ListWrapper] = ListWrapper.monad
+    implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
-    checkAll("IndexedStateT[ListWrapper, Int, Int]",
-             SemigroupKTests[IndexedStateT[ListWrapper, Int, Int, ?]].semigroupK[Int])
-    checkAll("SemigroupK[IndexedStateT[ListWrapper, Int, ?]]",
-             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, ?]]))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
+             SemigroupKTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].semigroupK[Int]
+    )
+    checkAll("SemigroupK[IndexedStateT[ListWrapper, Int, *]]",
+             SerializableTests.serializable(SemigroupK[IndexedStateT[ListWrapper, String, Int, *]])
+    )
   }
 
   {
     // F has an Alternative
-    implicit val G = ListWrapper.monad
-    implicit val F = ListWrapper.alternative
+    implicit val G: Monad[ListWrapper] = ListWrapper.monad
+    implicit val F: Alternative[ListWrapper] = ListWrapper.alternative
     val SA =
-      IndexedStateT.catsDataAlternativeForIndexedStateT[ListWrapper, Int](ListWrapper.monad, ListWrapper.alternative)
+      IndexedStateT
+        .catsDataAlternativeForIndexedStateT[ListWrapper, MiniInt](ListWrapper.monad, ListWrapper.alternative)
 
-    checkAll("IndexedStateT[ListWrapper, Int, Int, Int]",
-             AlternativeTests[IndexedStateT[ListWrapper, Int, Int, ?]](SA).alternative[Int, Int, Int])
-    checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, ?]]", SerializableTests.serializable(SA))
+    checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
+             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+    )
+    checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, *]]", SerializableTests.serializable(SA))
 
-    Monad[IndexedStateT[ListWrapper, Int, Int, ?]]
-    FlatMap[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Alternative[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Applicative[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Apply[IndexedStateT[ListWrapper, Int, Int, ?]]
-    Functor[IndexedStateT[ListWrapper, Int, Int, ?]]
-    MonoidK[IndexedStateT[ListWrapper, Int, Int, ?]]
-    SemigroupK[IndexedStateT[ListWrapper, Int, Int, ?]]
+    Monad[IndexedStateT[ListWrapper, Int, Int, *]]
+    FlatMap[IndexedStateT[ListWrapper, Int, Int, *]]
+    Alternative[IndexedStateT[ListWrapper, Int, Int, *]]
+    Applicative[IndexedStateT[ListWrapper, Int, Int, *]]
+    Apply[IndexedStateT[ListWrapper, Int, Int, *]]
+    Functor[IndexedStateT[ListWrapper, Int, Int, *]]
+    MonoidK[IndexedStateT[ListWrapper, Int, Int, *]]
+    SemigroupK[IndexedStateT[ListWrapper, Int, Int, *]]
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[State[Long, ?]]
+    implicit val iso: Isomorphisms[State[MiniInt, *]] = Isomorphisms.invariant[State[MiniInt, *]]
 
-    checkAll("State[Long, ?]", MonadTests[State[Long, ?]].monad[Int, Int, Int])
-    checkAll("Monad[State[Long, ?]]", SerializableTests.serializable(Monad[State[Long, ?]]))
+    checkAll("State[MiniInt, *]", MonadTests[State[MiniInt, *]].monad[Int, Int, Int])
+    checkAll("Monad[State[Long, *]]", SerializableTests.serializable(Monad[State[Long, *]]))
   }
 
   {
     // F has a MonadError
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[StateT[Option, Int, ?]]
-    implicit val eqEitherTFA: Eq[EitherT[StateT[Option, Int, ?], Unit, Int]] =
-      EitherT.catsDataEqForEitherT[StateT[Option, Int, ?], Unit, Int]
+    implicit val iso: Isomorphisms[StateT[Option, MiniInt, *]] = Isomorphisms.invariant[StateT[Option, MiniInt, *]]
+    implicit val eqEitherTFA: Eq[EitherT[StateT[Option, MiniInt, *], Unit, Int]] =
+      EitherT.catsDataEqForEitherT[StateT[Option, MiniInt, *], Unit, Int]
 
-    checkAll("StateT[Option, Int, Int]", MonadErrorTests[StateT[Option, Int, ?], Unit].monadError[Int, Int, Int])
-    checkAll("MonadError[StateT[Option, Int, ?], Unit]",
-             SerializableTests.serializable(MonadError[StateT[Option, Int, ?], Unit]))
+    checkAll("StateT[Option, MiniInt, Int]",
+             MonadErrorTests[StateT[Option, MiniInt, *], Unit].monadError[Int, Int, Int]
+    )
+    checkAll("MonadError[StateT[Option, Int, *], Unit]",
+             SerializableTests.serializable(MonadError[StateT[Option, Int, *], Unit])
+    )
   }
 
 }
 
 object IndexedStateTSuite extends IndexedStateTSuiteInstances {
-  implicit def stateEq[S: Eq: Arbitrary, A: Eq]: Eq[State[S, A]] =
+  implicit def stateEq[S: Eq: ExhaustiveCheck, A: Eq]: Eq[State[S, A]] =
     indexedStateTEq[Eval, S, S, A]
 
   val add1: State[Int, Int] = State(n => (n + 1, n))
@@ -496,8 +529,10 @@ object IndexedStateTSuite extends IndexedStateTSuiteInstances {
 
 sealed trait IndexedStateTSuiteInstances {
 
-  implicit def indexedStateTEq[F[_], SA, SB, A](implicit SA: Arbitrary[SA],
-                                                FSB: Eq[F[(SB, A)]],
-                                                F: FlatMap[F]): Eq[IndexedStateT[F, SA, SB, A]] =
+  implicit def indexedStateTEq[F[_], SA, SB, A](implicit
+    SA: ExhaustiveCheck[SA],
+    FSB: Eq[F[(SB, A)]],
+    F: FlatMap[F]
+  ): Eq[IndexedStateT[F, SA, SB, A]] =
     Eq.by[IndexedStateT[F, SA, SB, A], SA => F[(SB, A)]](state => s => state.run(s))
 }

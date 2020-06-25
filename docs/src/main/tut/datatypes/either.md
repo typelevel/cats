@@ -69,7 +69,7 @@ in the standard library. Since Cats builds on 2.10.x and 2.11.x, the gaps have b
 enrichments available under `cats.syntax.either._` or `cats.implicits._`.
 
 ```tut:book
-import cats.syntax.either._
+import cats.implicits._
 
 val right: Either[String, Int] = Right(5)
 right.map(_ + 1)
@@ -85,7 +85,7 @@ Because `Either` is right-biased, it is possible to define a `Monad` instance fo
 Since we only ever want the computation to continue in the case of `Right`, we fix the left type parameter
 and leave the right one free.
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.Monad
@@ -180,7 +180,7 @@ can go wrong in our program.
 object EitherStyle {
   sealed abstract class Error
   final case class NotANumber(string: String) extends Error
-  final case object NoZeroReciprocal extends Error
+  case object NoZeroReciprocal extends Error
 
   def parse(s: String): Either[Error, Int] =
     if (s.matches("-?[0-9]+")) Either.right(s.toInt)
@@ -261,10 +261,10 @@ We may then be tempted to make our entire application share an error data type.
 
 ```tut:silent
 sealed abstract class AppError
-final case object DatabaseError1 extends AppError
-final case object DatabaseError2 extends AppError
-final case object ServiceError1 extends AppError
-final case object ServiceError2 extends AppError
+case object DatabaseError1 extends AppError
+case object DatabaseError2 extends AppError
+case object ServiceError1 extends AppError
+case object ServiceError2 extends AppError
 
 trait DatabaseValue
 

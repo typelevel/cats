@@ -1,14 +1,14 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalatest.prop.PropertyChecks
+import cats.{Applicative, Eval, Traverse}
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
 
-import cats.instances.all._
-
-abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]])
-    extends CatsSuite
-    with PropertyChecks {
+@suppressUnusedImportWarningForScalaVersionSpecific
+abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>
@@ -24,7 +24,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
 
   test(s"Traverse[$name].traverseWithIndexM") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
-      val left = fa.traverseWithIndexM((a, i) => fn((a, i))).map(_.toList)
+      val left = fa.traverseWithIndexM((a, i) => fn((a, i))).fmap(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
       left should ===((xs.combineAll, values))
     }
@@ -39,14 +39,15 @@ object TraverseSuite {
 
   // proxies a traverse instance so we can test default implementations
   // to achieve coverage using default datatype instances
-  private def proxyTraverse[F[_]: Traverse]: Traverse[F] = new Traverse[F] {
-    def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
-      Traverse[F].foldLeft(fa, b)(f)
-    def foldRight[A, B](fa: F[A], lb: cats.Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
-      Traverse[F].foldRight(fa, lb)(f)
-    def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] =
-      Traverse[F].traverse(fa)(f)
-  }
+  private def proxyTraverse[F[_]: Traverse]: Traverse[F] =
+    new Traverse[F] {
+      def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
+        Traverse[F].foldLeft(fa, b)(f)
+      def foldRight[A, B](fa: F[A], lb: cats.Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+        Traverse[F].foldRight(fa, lb)(f)
+      def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] =
+        Traverse[F].traverse(fa)(f)
+    }
 }
 
 class TraverseListSuite extends TraverseSuite[List]("List")
@@ -57,7 +58,7 @@ class TraverseListSuiteUnderlying extends TraverseSuite.Underlying[List]("List")
 class TraverseStreamSuiteUnderlying extends TraverseSuite.Underlying[Stream]("Stream")
 class TraverseVectorSuiteUnderlying extends TraverseSuite.Underlying[Vector]("Vector")
 
-class TraverseSuiteAdditional extends CatsSuite {
+class TraverseSuiteAdditional extends CatsSuite with ScalaVersionSpecificTraverseSuite {
 
   def checkZipWithIndexedStackSafety[F[_]](fromRange: Range => F[Int])(implicit F: Traverse[F]): Unit = {
     F.zipWithIndex(fromRange(1 to 70000))

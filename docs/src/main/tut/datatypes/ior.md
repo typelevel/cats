@@ -33,7 +33,7 @@ val both = Ior.both("Warning", 3)
 Cats also offers syntax enrichment for `Ior`. The `leftIor` and `rightIor` functions can be imported from `cats.syntax.ior._`:
 
 ```tut
-import cats.syntax.ior._
+import cats.implicits._
 
 val right = 3.rightIor
 
@@ -43,7 +43,7 @@ val left = "Error".leftIor
 
 When we look at the `Monad` or `Applicative` instances of `Ior`, we can see that they actually requires a `Semigroup` instance on the left side.
 This is because `Ior` will actually accumulate failures on the left side, very similar to how the [`Validated`](validated.html) data type does.
-This means we can accumulate data on the left side while also being able to short-circuit upon the first right-side-only value.
+This means we can accumulate data on the left side while also being able to short-circuit upon the first left-side-only value.
 For example, sometimes, we might want to accumulate warnings together with a valid result and only halt the computation on a "hard error"
 Here's an example of how we might be able to do that:
 

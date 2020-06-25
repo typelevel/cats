@@ -34,7 +34,7 @@ trait Applicative[F[_]] extends Functor[F] {
 }
 
 // Example implementation for right-biased Either
-implicit def applicativeForEither[L]: Applicative[Either[L, ?]] = new Applicative[Either[L, ?]] {
+implicit def applicativeForEither[L]: Applicative[Either[L, *]] = new Applicative[Either[L, *]] {
   def product[A, B](fa: Either[L, A], fb: Either[L, B]): Either[L, (A, B)] = (fa, fb) match {
     case (Right(a), Right(b)) => Right((a, b))
     case (Left(l) , _       ) => Left(l)
@@ -87,7 +87,7 @@ def product3[F[_]: Applicative, A, B, C](fa: F[A], fb: F[B], fc: F[C]): F[(A, B,
 Let's see what happens if we try to compose two effectful values with just `map`.
 
 ```tut:book:silent
-import cats.instances.option._
+import cats.implicits._
 
 val f: (Int, Char) => Double = (i, c) => (i + c).toDouble
 
@@ -109,7 +109,7 @@ does `F[G[_]]`.
 
 ```tut:book:silent
 import cats.data.Nested
-import cats.instances.future._
+import cats.implicits._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -120,7 +120,7 @@ val y: Future[Option[Char]] = Future.successful(Some('a'))
 ```tut:book
 val composed = Applicative[Future].compose[Option].map2(x, y)(_ + _)
 
-val nested = Applicative[Nested[Future, Option, ?]].map2(Nested(x), Nested(y))(_ + _)
+val nested = Applicative[Nested[Future, Option, *]].map2(Nested(x), Nested(y))(_ + _)
 ```
 
 ## Traverse
@@ -181,12 +181,12 @@ This works...but if we look carefully at the implementation there's nothing `Opt
 another example let's implement the same function but for `Either`.
 
 ```tut:book:silent
-import cats.instances.either._
+import cats.implicits._
 
 def traverseEither[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
   as.foldRight(Right(List.empty[B]): Either[E, List[B]]) { (a: A, acc: Either[E, List[B]]) =>
     val eitherB: Either[E, B] = f(a)
-    Applicative[Either[E, ?]].map2(eitherB, acc)(_ :: _)
+    Applicative[Either[E, *]].map2(eitherB, acc)(_ :: _)
   }
 ```
 
@@ -197,7 +197,7 @@ traverseEither(List(1, 2, 3))(i => if (i % 2 != 0) Left(s"${i} is not even") els
 The implementation of `traverseOption` and `traverseEither` are more or less identical, modulo the initial
 "accumulator" to `foldRight`. But even that could be made the same by delegating to `Applicative#pure`!
 Generalizing `Option` and `Either` to any `F[_]: Applicative` gives us the fully polymorphic version.
-Existing data types with `Applicative` instances (`Future`, `Option`, `Either[E, ?]`, `Try`) can call it by fixing `F`
+Existing data types with `Applicative` instances (`Future`, `Option`, `Either[E, *]`, `Try`) can call it by fixing `F`
 appropriately, and new data types need only be concerned with implementing `Applicative` to do so as well.
 
 ```tut:book:silent
@@ -212,8 +212,7 @@ This function is provided by Cats via the `Traverse[List]` instance and syntax, 
 tutorial.
 
 ```tut:book:silent
-import cats.instances.list._
-import cats.syntax.traverse._
+import cats.implicits._
 ```
 
 ```tut:book
@@ -242,11 +241,11 @@ The laws for `Apply` are just the laws of `Applicative` that don't mention `pure
 above, the only law would be associativity.
 
 One of the motivations for `Apply`'s existence is that some types have `Apply` instances but not
-`Applicative` - one example is `Map[K, ?]`. Consider the behavior of `pure` for `Map[K, A]`. Given
+`Applicative` - one example is `Map[K, *]`. Consider the behavior of `pure` for `Map[K, A]`. Given
 a value of type `A`, we need to associate some arbitrary `K` to it but we have no way of doing that.
 
 However, given existing `Map[K, A]` and `Map[K, B]` (or `Map[K, A => B]`), it is straightforward to
-pair up (or apply functions to) values with the same key. Hence `Map[K, ?]` has an `Apply` instance.
+pair up (or apply functions to) values with the same key. Hence `Map[K, *]` has an `Apply` instance.
 
 ## Syntax
 

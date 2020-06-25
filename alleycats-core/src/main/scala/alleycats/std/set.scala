@@ -1,12 +1,15 @@
-package alleycats.std
+package alleycats
+package std
 
-import cats.{Applicative, Eval, Foldable, Monad, Monoid, Traverse}
-import export._
+import alleycats.compat.scalaVersionSpecific._
+import cats.{Always, Applicative, Eval, Foldable, Monad, Monoid, Traverse, TraverseFilter}
 
 import scala.annotation.tailrec
 
-@exports
-object SetInstances {
+object set extends SetInstances
+
+@suppressUnusedImportWarningForScalaVersionSpecific
+trait SetInstances {
   // This method advertises parametricity, but relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
@@ -27,12 +30,19 @@ object SetInstances {
   // contain three. Since `g` is not a function (speaking strictly)
   // this would not be considered a law violation, but it still makes
   // people uncomfortable.
-  @export(Orphan)
-  implicit val setMonad: Monad[Set] =
+  implicit val alleyCatsStdSetMonad: Monad[Set] =
     new Monad[Set] {
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
+
+      override def map2[A, B, Z](fa: Set[A], fb: Set[B])(f: (A, B) => Z): Set[Z] =
+        if (fb.isEmpty) Set.empty[Z] // do O(1) work if fb is empty
+        else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
+
+      override def map2Eval[A, B, Z](fa: Set[A], fb: Eval[Set[B]])(f: (A, B) => Z): Eval[Set[Z]] =
+        if (fa.isEmpty) Eval.now(Set.empty[Z]) // no need to evaluate fb
+        else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: (A) => Set[Either[A, B]]): Set[B] = {
         val bldr = Set.newBuilder[B]
@@ -60,8 +70,7 @@ object SetInstances {
   // Since iteration order is not guaranteed for sets, folds and other
   // traversals may produce different results for input sets which
   // appear to be the same.
-  @export(Orphan)
-  implicit val setTraverse: Traverse[Set] =
+  implicit val alleyCatsSetTraverse: Traverse[Set] =
     new Traverse[Set] {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -73,9 +82,9 @@ object SetInstances {
 
       def traverse[G[_]: Applicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] = {
         val G = Applicative[G]
-        sa.foldLeft(G.pure(Set.empty[B])) { (buf, a) =>
-          G.map2(buf, f(a))(_ + _)
-        }
+        foldRight[A, G[Set[B]]](sa, Always(G.pure(Set.empty[B]))) { (a, lglb) =>
+          G.map2Eval(f(a), lglb)((b, set) => set + b)
+        }.value
       }
 
       override def get[A](fa: Set[A])(idx: Long): Option[A] = {
@@ -88,7 +97,7 @@ object SetInstances {
               go(idx - 1, it)
             }
           } else None
-        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.toIterator) else None
+        if (idx < Int.MaxValue && idx >= 0L) go(idx.toInt, fa.iterator) else None
       }
 
       override def size[A](fa: Set[A]): Long = fa.size.toLong
@@ -116,14 +125,14 @@ object SetInstances {
       override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
     }
-}
 
-@reexports(SetInstances)
-object set extends LegacySetInstances
+  implicit val alleyCatsSetTraverseFilter: TraverseFilter[Set] =
+    new TraverseFilter[Set] {
+      val traverse: Traverse[Set] = alleyCatsSetTraverse
 
-// TODO: remove when cats.{ Set, Traverse } support export-hook
-trait LegacySetInstances {
-  implicit def legacySetMonad(implicit e: ExportOrphan[Monad[Set]]): Monad[Set] = e.instance
-
-  implicit def legacySetTraverse(implicit e: ExportOrphan[Traverse[Set]]): Traverse[Set] = e.instance
+      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
+        traverse
+          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
+          .value
+    }
 }

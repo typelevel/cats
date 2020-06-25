@@ -1,7 +1,8 @@
 package cats
 
 import cats.data.{Ior, NonEmptyList}
-import simulacrum.typeclass
+import simulacrum.{noop, typeclass}
+import scala.annotation.implicitNotFound
 
 /**
  * Data structures that can be reduced to a summary value.
@@ -16,6 +17,7 @@ import simulacrum.typeclass
  *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
  *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
+@implicitNotFound("Could not find an instance of Reducible for ${F}")
 @typeclass trait Reducible[F[_]] extends Foldable[F] { self =>
 
   /**
@@ -55,22 +57,74 @@ import simulacrum.typeclass
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
 
   /**
+   * Apply `f` to each element of `fa` and combine them using the
+   * given `SemigroupK[G]`.
+   *
+   * {{{
+   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> val f: Int => Endo[String] = i => (s => s + i)
+   * scala> val x: Endo[String] = Reducible[NonEmptyList].reduceMapK(NonEmptyList.of(1, 2, 3))(f)
+   * scala> val a = x("foo")
+   * a: String = "foo321"
+   * }}}
+   */
+  @noop
+  def reduceMapK[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: SemigroupK[G]): G[B] =
+    reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
+
+  /**
    * Apply `f` to the "initial element" of `fa` and combine it with
    * every other value using the given function `g`.
    */
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
   /**
-   *  Monadic variant of [[reduceLeftTo]]
+   * Monadic variant of [[reduceLeftTo]].
    */
   def reduceLeftM[G[_], A, B](fa: F[A])(f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
-   * Monadic reducing by mapping the `A` values to `G[B]`. combining
+   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
+   * semigroup for `G[_]`.
+   *
+   * This method is similar to [[reduce]], but may short-circuit.
+   *
+   * See [[https://github.com/typelevel/simulacrum/issues/162 this issue]] for an explanation of `@noop` usage.
+   */
+  @noop def reduceA[G[_], A](fga: F[G[A]])(implicit G: Apply[G], A: Semigroup[A]): G[A] =
+    reduceMapA(fga)(identity)
+
+  /**
+   * Reduce in an [[Apply]] context by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `Semigroup[B]` instance.
    *
-   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`.
+   * Similar to [[reduceMapM]], but may be less efficient.
+   *
+   * {{{
+   * scala> import cats.Reducible
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.implicits._
+   * scala> val evenOpt: Int => Option[Int] =
+   *      |   i => if (i % 2 == 0) Some(i) else None
+   * scala> val allEven = NonEmptyList.of(2,4,6,8,10)
+   * allEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10)
+   * scala> val notAllEven = allEven ++ List(11)
+   * notAllEven: cats.data.NonEmptyList[Int] = NonEmptyList(2, 4, 6, 8, 10, 11)
+   * scala> Reducible[NonEmptyList].reduceMapA(allEven)(evenOpt)
+   * res0: Option[Int] = Some(30)
+   * scala> Reducible[NonEmptyList].reduceMapA(notAllEven)(evenOpt)
+   * res1: Option[Int] = None
+   * }}}
+   */
+  def reduceMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
+    reduceRightTo(fa)(f)((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
+
+  /**
+   * Reduce in an [[FlatMap]] context by mapping the `A` values to `G[B]`. combining
+   * the `B` values using the given `Semigroup[B]` instance.
+   *
+   * Similar to [[reduceLeftM]], but using a `Semigroup[B]`. May be more efficient than [[reduceMapA]].
    *
    * {{{
    * scala> import cats.Reducible
@@ -89,7 +143,7 @@ import simulacrum.typeclass
    * }}}
    */
   def reduceMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
-    reduceLeftM(fa)(f)((b, a) => G.map(f(a))(B.combine(b, _)))
+    reduceRightTo(fa)(f)((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 
   /**
    * Overridden from [[Foldable]] for efficiency.
@@ -157,6 +211,22 @@ import simulacrum.typeclass
     reduceLeft(fa)(A.max)
 
   /**
+   * Find the minimum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[maximumBy]] for maximum instead of minimum.
+   */
+  def minimumBy[A, B: Order](fa: F[A])(f: A => B): A =
+    minimum(fa)(Order.by(f))
+
+  /**
+   * Find the maximum `A` item in this structure according to an `Order.by(f)`.
+   *
+   * @see [[minimumBy]] for minimum instead of maximum.
+   */
+  def maximumBy[A, B: Order](fa: F[A])(f: A => B): A =
+    maximum(fa)(Order.by(f))
+
+  /**
    * Intercalate/insert an element between the existing elements while reducing.
    *
    * {{{
@@ -170,11 +240,7 @@ import simulacrum.typeclass
    * }}}
    */
   def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
-    toNonEmptyList(fa) match {
-      case NonEmptyList(hd, Nil) => hd
-      case NonEmptyList(hd, tl) =>
-        Reducible[NonEmptyList].reduce(NonEmptyList(hd, a :: intersperseList(tl, a)))
-    }
+    reduce(fa)(A.intercalate(a))
 
   /**
    * Partition this Reducible by a separating function `A => Either[B, C]`
@@ -189,20 +255,22 @@ import simulacrum.typeclass
    * }}}
    */
   def nonEmptyPartition[A, B, C](fa: F[A])(f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] = {
-    import cats.syntax.either._
-
     def g(a: A, eval: Eval[Ior[NonEmptyList[B], NonEmptyList[C]]]): Eval[Ior[NonEmptyList[B], NonEmptyList[C]]] =
-      eval.map(
-        ior =>
-          (f(a), ior) match {
-            case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
-            case (Right(c), _)           => ior.map(c :: _)
-            case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
-            case (Left(b), _)            => ior.leftMap(b :: _)
+      eval.map(ior =>
+        (f(a), ior) match {
+          case (Right(c), Ior.Left(_)) => ior.putRight(NonEmptyList.one(c))
+          case (Right(c), _)           => ior.map(c :: _)
+          case (Left(b), Ior.Right(r)) => Ior.bothNel(b, r)
+          case (Left(b), _)            => ior.leftMap(b :: _)
         }
       )
 
-    reduceRightTo(fa)(a => f(a).bimap(NonEmptyList.one, NonEmptyList.one).toIor)(g).value
+    reduceRightTo(fa)(a =>
+      f(a) match {
+        case Right(c) => Ior.right(NonEmptyList.one(c))
+        case Left(b)  => Ior.left(NonEmptyList.one(b))
+      }
+    )(g).value
   }
 
   override def isEmpty[A](fa: F[A]): Boolean = false
@@ -214,6 +282,82 @@ import simulacrum.typeclass
 
   override def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     Some(maximum(fa))
+}
+
+object Reducible {
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Reducible]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Reducible[F]): Reducible[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllReducibleOps[F[_], A](target: F[A])(implicit tc: Reducible[F]): AllOps[F, A] {
+      type TypeClassType = Reducible[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Reducible[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Reducible[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def reduceLeft(f: (A, A) => A): A = typeClassInstance.reduceLeft[A](self)(f)
+    def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] = typeClassInstance.reduceRight[A](self)(f)
+    def reduce(implicit A: Semigroup[A]): A = typeClassInstance.reduce[A](self)(A)
+    def reduceK[G[_], B](implicit ev$1: A <:< G[B], G: SemigroupK[G]): G[B] =
+      typeClassInstance.reduceK[G, B](self.asInstanceOf[F[G[B]]])(G)
+    def reduceMap[B](f: A => B)(implicit B: Semigroup[B]): B = typeClassInstance.reduceMap[A, B](self)(f)(B)
+    def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = typeClassInstance.reduceLeftTo[A, B](self)(f)(g)
+    def reduceLeftM[G[_], B](f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
+      typeClassInstance.reduceLeftM[G, A, B](self)(f)(g)(G)
+    def reduceMapA[G[_], B](f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
+      typeClassInstance.reduceMapA[G, A, B](self)(f)(G, B)
+    def reduceMapM[G[_], B](f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
+      typeClassInstance.reduceMapM[G, A, B](self)(f)(G, B)
+    def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
+      typeClassInstance.reduceRightTo[A, B](self)(f)(g)
+    def nonEmptyTraverse_[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptyTraverse_[G, A, B](self)(f)(G)
+    def nonEmptySequence_[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptySequence_[G, B](self.asInstanceOf[F[G[B]]])(G)
+    def toNonEmptyList: NonEmptyList[A] = typeClassInstance.toNonEmptyList[A](self)
+    def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(A)
+    def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
+    def minimumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.minimumBy[A, B](self)(f)
+    def maximumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.maximumBy[A, B](self)(f)
+    def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A = typeClassInstance.nonEmptyIntercalate[A](self, a)(A)
+    def nonEmptyPartition[B, C](f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] =
+      typeClassInstance.nonEmptyPartition[A, B, C](self)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Foldable.AllOps[F, A] {
+    type TypeClassType <: Reducible[F]
+  }
+  trait ToReducibleOps extends Serializable {
+    implicit def toReducibleOps[F[_], A](target: F[A])(implicit tc: Reducible[F]): Ops[F, A] {
+      type TypeClassType = Reducible[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Reducible[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToReducibleOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }
 
 /**

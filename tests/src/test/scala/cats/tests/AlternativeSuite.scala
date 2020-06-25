@@ -1,5 +1,6 @@
-package cats
-package tests
+package cats.tests
+
+import cats.Alternative
 
 class AlternativeSuite extends CatsSuite {
   test("unite") {
@@ -12,11 +13,21 @@ class AlternativeSuite extends CatsSuite {
 
   test("separate") {
     forAll { (list: List[Either[Int, String]]) =>
-      val ints = list.collect { case Left(i)     => i }
+      val ints = list.collect { case Left(i) => i }
       val strings = list.collect { case Right(s) => s }
       val expected = (ints, strings)
 
       Alternative[List].separate(list) should ===(expected)
+    }
+  }
+
+  test("separateFoldable") {
+    forAll { (list: List[Either[Int, String]]) =>
+      val ints = list.collect { case Left(i) => i }
+      val strings = list.collect { case Right(s) => s }
+      val expected = (ints, strings)
+
+      Alternative[List].separateFoldable(list) should ===(expected)
     }
   }
 

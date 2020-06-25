@@ -1,8 +1,8 @@
 package cats.tests
 
+import cats.syntax.show._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-
 import scala.collection.immutable.BitSet
 
 class BitSetSuite extends CatsSuite {
@@ -13,7 +13,7 @@ class BitSetSuite extends CatsSuite {
     BitSet(1, 1, 2, 3).show should ===("BitSet(1, 2, 3)")
     BitSet.empty.show should ===("BitSet()")
 
-    forAll { fs: BitSet =>
+    forAll { (fs: BitSet) =>
       fs.show should ===(fs.toString)
     }
   }

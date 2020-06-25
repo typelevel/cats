@@ -1,7 +1,8 @@
-package cats
-package tests
+package cats.tests
 
 import cats.data.Writer
+import cats.syntax.applicative._
+import cats.syntax.writer._
 
 class WriterSuite extends CatsSuite {
   test("pure syntax creates a writer with an empty log") {
@@ -21,5 +22,10 @@ class WriterSuite extends CatsSuite {
     forAll { (result: String, log: List[Int]) =>
       result.writer(log) should ===(Writer(log, result))
     }
+  }
+
+  test("catsDataCommutativeMonadForWriterT and catsDataTraverseForWriterTId instances are not ambiguous") {
+    import cats.Functor
+    Functor[Writer[Int, *]]
   }
 }

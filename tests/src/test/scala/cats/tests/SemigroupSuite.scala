@@ -1,19 +1,19 @@
-package cats
-package tests
+package cats.tests
 
-import org.scalatest._
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import cats.{Invariant, InvariantMonoidal, Semigroupal}
+import cats.kernel.Semigroup
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.funsuite._
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class SemigroupSuite extends FunSuite with Matchers with GeneratorDrivenPropertyChecks {
+class SemigroupSuite extends AnyFunSuiteLike with Matchers with ScalaCheckDrivenPropertyChecks {
   {
-    import cats.implicits._
     Invariant[Semigroup]
     Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]
   }
 
   {
-    import cats.instances.invariant._
     Invariant[Semigroup]
     Semigroupal[Semigroup]
     InvariantMonoidal[Semigroup]

@@ -125,7 +125,7 @@ resolution will pick up the most specific instance it can (depending on the `F[_
 
 An example of a `Monad` instance for `Kleisli` is shown below.
 
-*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/non/kind-projector) and will not compile if it is not being used in a project.
+*Note*: the example below assumes usage of the [kind-projector compiler plugin](https://github.com/typelevel/kind-projector) and will not compile if it is not being used in a project.
 
 ```tut:silent
 import cats.implicits._

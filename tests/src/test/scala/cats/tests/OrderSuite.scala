@@ -1,11 +1,13 @@
-package cats
-package tests
+package cats.tests
 
-import Helpers.Ord
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
+import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
-import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.order._
+import cats.tests.Helpers.Ord
 
 class OrderSuite extends CatsSuite {
   {
@@ -19,7 +21,7 @@ class OrderSuite extends CatsSuite {
   checkAll("Float", OrderTests[Float].order)
   checkAll("Long", OrderTests[Long].order)
 
-  checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[Int, Int, Int])
+  checkAll("Order", ContravariantMonoidalTests[Order].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Order]", SerializableTests.serializable(ContravariantMonoidal[Order]))
 
   test("order ops syntax") {
@@ -44,7 +46,6 @@ class OrderSuite extends CatsSuite {
 
 object OrderSuite {
   def summonInstance(): Unit = {
-    import cats.instances.order._
     Invariant[Order]
     Contravariant[Order]
     ContravariantMonoidal[Order]
@@ -55,7 +56,6 @@ object OrderSuite {
   // the Ordering instance from the Order instance should be trumped
   // by the one provided in the Ordering companion object
   {
-    import cats.instances.all._
     Ordering[String]
     class C
     implicit val ording: Ordering[C] = new Ordering[C] {

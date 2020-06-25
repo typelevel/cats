@@ -1,17 +1,32 @@
-package cats
-package tests
+package cats.tests
 
-import cats.data.{Chain, NonEmptyChain}
+import cats.{Align, Bimonad, SemigroupK, Show, Traverse}
+import cats.data.{Chain, NonEmptyChain, NonEmptyChainOps}
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline.{BimonadTests, NonEmptyTraverseTests, SemigroupKTests, SerializableTests}
+import cats.laws.discipline.{
+  AlignTests,
+  BimonadTests,
+  NonEmptyTraverseTests,
+  SemigroupKTests,
+  SerializableTests,
+  ShortCircuitingTests
+}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.either._
+import cats.syntax.foldable._
 
-class NonEmptyChainSuite extends CatsSuite {
+class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
+  protected def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList
+  protected def underlyingToList[A](underlying: Chain[A]): List[A] = underlying.toList
+  protected def toNonEmptyCollection[A](nea: NonEmptyChain[A]): NonEmptyChainOps[A] = nea
+
   checkAll("NonEmptyChain[Int]", SemigroupKTests[NonEmptyChain].semigroupK[Int])
   checkAll("SemigroupK[NonEmptyChain]", SerializableTests.serializable(SemigroupK[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyChain].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyChain]", SerializableTests.serializable(Traverse[NonEmptyChain]))
 
   checkAll("NonEmptyChain[Int]", BimonadTests[NonEmptyChain].bimonad[Int, Int, Int])
@@ -23,15 +38,23 @@ class NonEmptyChainSuite extends CatsSuite {
   checkAll("NonEmptyChain[Int]", OrderTests[NonEmptyChain[Int]].order)
   checkAll("Order[NonEmptyChain[Int]", SerializableTests.serializable(Order[NonEmptyChain[Int]]))
 
+  checkAll("NonEmptyChain[Int]", AlignTests[NonEmptyChain].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyChain]", SerializableTests.serializable(Align[NonEmptyChain]))
+
+  checkAll("NonEmptyChain[Int]", ShortCircuitingTests[NonEmptyChain].foldable[Int])
+  checkAll("NonEmptyChain[Int]", ShortCircuitingTests[NonEmptyChain].traverse[Int])
+  checkAll("NonEmptyChain[Int]", ShortCircuitingTests[NonEmptyChain].nonEmptyTraverse[Int])
+
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", PartialOrderTests[NonEmptyChain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyChain[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyChain[ListWrapper[Int]]])
+    )
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("NonEmptyChain[ListWrapper[Int]]", EqTests[NonEmptyChain[ListWrapper[Int]]].eqv)
     checkAll("Eq[NonEmptyChain[ListWrapper[Int]]", SerializableTests.serializable(Eq[NonEmptyChain[ListWrapper[Int]]]))
   }
@@ -106,7 +129,7 @@ class NonEmptyChainSuite extends CatsSuite {
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromSeq(ci.iterator.toList) should ===(Option(ci))
+      NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci))
     }
   }
 
@@ -135,8 +158,29 @@ class NonEmptyChainSuite extends CatsSuite {
   }
 
   test("NonEmptyChain#distinct is consistent with List#distinct") {
-    forAll { ci: NonEmptyChain[Int] =>
+    forAll { (ci: NonEmptyChain[Int]) =>
       ci.distinct.toList should ===(ci.toList.distinct)
     }
   }
+
+  test("init") {
+    forAll { (ci: NonEmptyChain[Int]) =>
+      ci.init.toList should ===(ci.toList.init)
+    }
+  }
+
+  test("last") {
+    forAll { (ci: NonEmptyChain[Int]) =>
+      ci.last should ===(ci.toList.last)
+    }
+  }
+}
+
+class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmptyChain") {
+  def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
+
+  def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
+    NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
+
+  def fromValues[A](el: A, els: A*): NonEmptyChain[A] = NonEmptyChain(el, els: _*)
 }

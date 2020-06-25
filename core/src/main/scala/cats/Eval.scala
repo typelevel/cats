@@ -2,8 +2,6 @@ package cats
 
 import scala.annotation.tailrec
 
-import cats.syntax.all._
-
 /**
  * Eval is a monad which controls evaluation.
  *
@@ -84,7 +82,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
               type Start = A
               val start = () => c.run(s)
               val run = f
-          }
+            }
         }
       case c: Eval.Defer[A] =>
         new Eval.FlatMap[B] {
@@ -156,7 +154,7 @@ final class Later[A](f: () => A) extends Eval[A] {
 }
 
 object Later {
-  def apply[A](a: => A): Later[A] = new Later(a _)
+  def apply[A](a: => A): Later[A] = new Later(() => a)
 }
 
 /**
@@ -175,7 +173,7 @@ final class Always[A](f: () => A) extends Eval[A] {
 }
 
 object Always {
-  def apply[A](a: => A): Always[A] = new Always(a _)
+  def apply[A](a: => A): Always[A] = new Always(() => a)
 }
 
 object Eval extends EvalInstances {
@@ -188,12 +186,12 @@ object Eval extends EvalInstances {
   /**
    * Construct a lazy Eval[A] value with caching (i.e. Later[A]).
    */
-  def later[A](a: => A): Eval[A] = new Later(a _)
+  def later[A](a: => A): Eval[A] = new Later(() => a)
 
   /**
    * Construct a lazy Eval[A] value without caching (i.e. Always[A]).
    */
-  def always[A](a: => A): Eval[A] = new Always(a _)
+  def always[A](a: => A): Eval[A] = new Always(() => a)
 
   /**
    * Defer a computation which produces an Eval[A] value.
@@ -202,7 +200,7 @@ object Eval extends EvalInstances {
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
-    new Eval.Defer[A](a _) {}
+    new Eval.Defer[A](() => a) {}
 
   /**
    * Static Eval instance for common value `Unit`.
@@ -325,7 +323,7 @@ object Eval extends EvalInstances {
     type M = Memoize[Any]
     type C = Any => Eval[Any]
 
-    def addToMemo(m: M): C = { a: Any =>
+    def addToMemo(m: M): C = { (a: Any) =>
       m.result = Some(a)
       Now(a)
     }
@@ -356,7 +354,7 @@ object Eval extends EvalInstances {
                 case Nil     => a
               }
             case None =>
-              loop(eval, addToMemo(m) :: fs)
+              loop(eval, addToMemo(m.asInstanceOf[M]) :: fs)
           }
         case x =>
           fs match {
@@ -378,6 +376,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
+      override def unit: Eval[Unit] = Eval.Unit
     }
 
   implicit val catsDeferForEval: Defer[Eval] =
@@ -415,7 +414,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value.compare(ly.value)
+        Order[A].compare(lx.value, ly.value)
     }
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
@@ -442,7 +441,7 @@ sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        lx.value.partialCompare(ly.value)
+        PartialOrder[A].partialCompare(lx.value, ly.value)
     }
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
@@ -453,7 +452,7 @@ sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        lx.value === ly.value
+        Eq[A].eqv(lx.value, ly.value)
     }
 
   implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
@@ -463,7 +462,7 @@ sealed abstract private[cats] class EvalInstances1 {
 trait EvalSemigroup[A] extends Semigroup[Eval[A]] {
   implicit def algebra: Semigroup[A]
   def combine(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |+| y
+    for { x <- lx; y <- ly } yield algebra.combine(x, y)
 }
 
 trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
@@ -474,7 +473,7 @@ trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
   implicit def algebra: Group[A]
   def inverse(lx: Eval[A]): Eval[A] =
-    lx.map(_.inverse())
+    lx.map(algebra.inverse)
   override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |-| y
+    for { x <- lx; y <- ly } yield algebra.remove(x, y)
 }

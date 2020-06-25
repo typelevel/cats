@@ -1,8 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Invariant, Semigroupal}
+import cats.kernel.Eq
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline.ContravariantMonoidalTests
+import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 
@@ -12,7 +13,7 @@ class EqSuite extends CatsSuite {
   Semigroupal[Eq]
   ContravariantSemigroupal[Eq]
 
-  checkAll("Eq[Int]", ContravariantMonoidalTests[Eq].contravariantMonoidal[Int, Int, Int])
+  checkAll("Eq", ContravariantMonoidalTests[Eq].contravariantMonoidal[MiniInt, Boolean, Boolean])
   checkAll("ContravariantMonoidal[Eq]", SerializableTests.serializable(ContravariantMonoidal[Eq]))
 
 }

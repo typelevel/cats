@@ -1,17 +1,24 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Align, Alternative, CoflatMap, Monad, Show, Traverse, TraverseFilter}
 import cats.data.Chain
+import cats.data.Chain.==:
+import cats.data.Chain.`:==`
+import cats.kernel.{Eq, Hash, Monoid, Order, PartialOrder}
+import cats.kernel.laws.discipline.{EqTests, HashTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.{
+  AlignTests,
   AlternativeTests,
   CoflatMapTests,
   MonadTests,
   SerializableTests,
+  ShortCircuitingTests,
   TraverseFilterTests,
   TraverseTests
 }
-import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.foldable._
+import cats.syntax.semigroup._
 
 class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])
@@ -32,26 +39,39 @@ class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", OrderTests[Chain[Int]].order)
   checkAll("Order[Chain]", SerializableTests.serializable(Order[Chain[Int]]))
 
+  checkAll("Chain[Int]", AlignTests[Chain].align[Int, Int, Int, Int])
+  checkAll("Align[Chain]", SerializableTests.serializable(Align[Chain]))
+
   checkAll("Chain[Int]", TraverseFilterTests[Chain].traverseFilter[Int, Int, Int])
   checkAll("TraverseFilter[Chain]", SerializableTests.serializable(TraverseFilter[Chain]))
 
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].foldable[Int])
+  checkAll("Chain[Int]", ShortCircuitingTests[Chain].traverseFilter[Int])
+
   {
-    implicit val partialOrder = ListWrapper.partialOrder[Int]
+    implicit val partialOrder: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("Chain[ListWrapper[Int]]", PartialOrderTests[Chain[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[Chain[ListWrapper[Int]]",
-             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[Chain[ListWrapper[Int]]])
+    )
   }
 
   {
-    implicit val eqv = ListWrapper.eqv[Int]
+    implicit val eqv: Eq[ListWrapper[Int]] = ListWrapper.eqv[Int]
     checkAll("Chain[ListWrapper[Int]]", EqTests[Chain[ListWrapper[Int]]].eqv)
     checkAll("Eq[Chain[ListWrapper[Int]]", SerializableTests.serializable(Eq[Chain[ListWrapper[Int]]]))
+  }
+
+  {
+    implicit val hash: Hash[ListWrapper[Int]] = ListWrapper.hash[Int]
+    checkAll("Chain[ListWrapper[Int]]", HashTests[Chain[ListWrapper[Int]]].hash)
+    checkAll("Hash[Chain[ListWrapper[Int]]", SerializableTests.serializable(Hash[Chain[ListWrapper[Int]]]))
   }
 
   test("show") {
     Show[Chain[Int]].show(Chain(1, 2, 3)) should ===("Chain(1, 2, 3)")
     Chain.empty[Int].show should ===("Chain()")
-    forAll { l: Chain[String] =>
+    forAll { (l: Chain[String]) =>
       l.show should ===(l.toString)
     }
   }
@@ -60,6 +80,27 @@ class ChainSuite extends CatsSuite {
     forAll { (s: Seq[Int]) =>
       Chain.fromSeq(s).headOption should ===(s.headOption)
     }
+  }
+
+  test("lastOption") {
+    forAll { (c: Chain[Int]) =>
+      c.lastOption should ===(c.toList.lastOption)
+    }
+  }
+
+  test("seq-like pattern match") {
+    Chain(1, 2, 3) match {
+      case Chain(a, b, c) => (a, b, c) should ===((1, 2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case h ==: t => (h, t) should ===(1 -> Chain(2, 3))
+    }
+
+    Chain(1, 2, 3) match {
+      case init :== last => (init, last) should ===(Chain(1, 2) -> 3)
+    }
+
   }
 
   test("size is consistent with toList.size") {
@@ -128,6 +169,24 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("zipWithIndex is consistent with toList.zipWithIndex") {
+    forAll { (ci: Chain[Int]) =>
+      ci.zipWithIndex.toList should ===(ci.toList.zipWithIndex)
+    }
+  }
+
+  test("sortBy is consistent with toList.sortBy") {
+    forAll { (ci: Chain[Int], f: Int => String) =>
+      ci.sortBy(f).toList should ===(ci.toList.sortBy(f))
+    }
+  }
+
+  test("sorted is consistent with toList.sorted") {
+    forAll { (ci: Chain[Int]) =>
+      ci.sorted.toList should ===(ci.toList.sorted)
+    }
+  }
+
   test("reverse . reverse is id") {
     forAll { (ci: Chain[Int]) =>
       ci.reverse.reverse should ===(ci)
@@ -182,8 +241,53 @@ class ChainSuite extends CatsSuite {
   }
 
   test("Chain#distinct is consistent with List#distinct") {
-    forAll { a: Chain[Int] =>
+    forAll { (a: Chain[Int]) =>
       a.distinct.toList should ===(a.toList.distinct)
     }
   }
+
+  test("=== is consistent with == (issue #2540)") {
+    (Chain.one(1) |+| Chain.one(2) |+| Chain.one(3)) should be(Chain.fromSeq(List(1, 2, 3)))
+
+    forAll { (a: Chain[Int], b: Chain[Int]) =>
+      (a === b) should ===(a == b)
+    }
+  }
+
+  test("== returns false for non-Chains") {
+    forAll { (a: Chain[Int], b: Int) =>
+      (a == b) should ===(false)
+    }
+  }
+
+  test("== returns false for Chains of different element types") {
+    forAll { (a: Chain[Option[String]], b: Chain[String]) =>
+      (a == b) should ===(a.isEmpty && b.isEmpty)
+    }
+  }
+
+  test("Chain#hashCode is consistent with List#hashCode") {
+    forAll { (x: Chain[Int]) =>
+      x.hashCode should ===(x.toList.hashCode)
+    }
+  }
+
+  test("Chain#takeWhile is consistent with List#takeWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.takeWhile(p).toList should ===(x.toList.takeWhile(p))
+    }
+  }
+
+  test("Chain#dropWhile is consistent with List#dropWhile") {
+    forAll { (x: Chain[Int], p: Int => Boolean) =>
+      x.dropWhile(p).toList should ===(x.toList.dropWhile(p))
+    }
+  }
+
+  test("Chain#get is consistent with List#lift") {
+    forAll { (x: Chain[Int], idx: Int) =>
+      x.get(idx.toLong) should ===(x.toList.lift(idx))
+    }
+  }
+
 }

@@ -23,7 +23,7 @@ This is because, with `List`, appending a single element requires iterating over
 
 So `List` isn't all that great for this use case, so let's use `Vector` or `NonEmptyVector` instead, right?
 
-Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`s issues.
+Well, `Vector` has its own problems and in this case it's unfortunately not that much faster than `List` at all. You can check [this blog post](http://www.lihaoyi.com/post/BenchmarkingScalaCollections.html#vectors-are-ok) by Li Haoyi for some deeper insight into `Vector`'s issues.
 
 
 `Chain` evolved from what used to be `fs2.Catenable` and Erik Osheim's [Chain](https://github.com/non/chain ) library.
@@ -67,14 +67,13 @@ You can also check out the benchmarks [here](https://github.com/typelevel/cats/b
 
 `Chain` is a fairly simple data structure compared to something like `Vector`.
 It's a simple ADT that has only 4 cases.
-It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collect
-ion.
+It is either an empty `Chain` with no elements, a singleton `Chain` with exactly one element, a concatenation of two chains or a wrapper for another collection.
 In code it looks like this:
 
 ```tut:book
 sealed abstract class Chain[+A]
 
-final case object Empty extends Chain[Nothing]
+case object Empty extends Chain[Nothing]
 final case class Singleton[A](a: A) extends Chain[A]
 final case class Append[A](left: Chain[A], right: Chain[A]) extends Chain[A]
 final case class Wrap[A](seq: Seq[A]) extends Chain[A]
@@ -118,7 +117,7 @@ This unbalanced tree will always allow iteration in linear time.
 ## NonEmptyChain 
 
 `NonEmptyChain` is the non empty version of `Chain` it does not have a `Monoid` instance since it cannot be empty, but it does have a `Semigroup` instance.
-Likewise, it defines a `NonEmptyTraverse` instace, but no `TraverseFilter` instance.
+Likewise, it defines a `NonEmptyTraverse` instance, but no `TraverseFilter` instance.
 
 There are numerous ways to construct a `NonEmptyChain`, e.g. you can create one from a single element, a `NonEmptyList` or a `NonEmptyVector`:
 

@@ -1,46 +1,61 @@
-package cats
-package tests
+package cats.tests
 
-import data.NonEmptyList
-
+import cats.{
+  Bitraverse,
+  CommutativeFlatMap,
+  CommutativeMonad,
+  Comonad,
+  ContravariantSemigroupal,
+  FlatMap,
+  Monad,
+  Reducible,
+  Show,
+  Traverse
+}
+import cats.data.NonEmptyList
+import cats.kernel.{Eq, Order}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import Helpers.CSemi
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.show._
+import cats.tests.Helpers.CSemi
 
 class TupleSuite extends CatsSuite {
 
-  implicit val iso1 = SemigroupalTests.Isomorphisms.invariant[(NonEmptyList[Int], ?)]
-  implicit val iso2 = SemigroupalTests.Isomorphisms.invariant[(String, ?)]
+  implicit val iso1: Isomorphisms[(NonEmptyList[Int], *)] = Isomorphisms.invariant[(NonEmptyList[Int], *)]
+  implicit val iso2: Isomorphisms[(String, *)] = Isomorphisms.invariant[(String, *)]
 
   checkAll("Tuple2", BitraverseTests[Tuple2].bitraverse[Option, Int, Int, Int, String, String, String])
   checkAll("Bitraverse[Tuple2]", SerializableTests.serializable(Bitraverse[Tuple2]))
 
-  checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, ?)].traverse[Int, Int, Int, Int, Option, Option])
-  checkAll("Traverse[(String, ?)]", SerializableTests.serializable(Traverse[(String, ?)]))
+  checkAll("Tuple2[String, Int] with Option", TraverseTests[(String, *)].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Traverse[(String, *)]", SerializableTests.serializable(Traverse[(String, *)]))
 
-  checkAll("Tuple2[String, Int]", ComonadTests[(String, ?)].comonad[Int, Int, Int])
-  checkAll("Comonad[(String, ?)]", SerializableTests.serializable(Comonad[(String, ?)]))
+  checkAll("Tuple2[String, Int]", ComonadTests[(String, *)].comonad[Int, Int, Int])
+  checkAll("Comonad[(String, *)]", SerializableTests.serializable(Comonad[(String, *)]))
 
   // Note that NonEmptyList has no Monoid, so we can make a FlatMap, but not a Monad
-  checkAll("FlatMap[(NonEmptyList[Int], ?)]", FlatMapTests[(NonEmptyList[Int], ?)].flatMap[String, Long, String])
-  checkAll("FlatMap[(String, ?)] serializable", SerializableTests.serializable(FlatMap[(String, ?)]))
+  checkAll("FlatMap[(NonEmptyList[Int], *)]", FlatMapTests[(NonEmptyList[Int], *)].flatMap[String, Long, String])
+  checkAll("FlatMap[(String, *)] serializable", SerializableTests.serializable(FlatMap[(String, *)]))
 
-  checkAll("Monad[(String, ?)]", MonadTests[(String, ?)].monad[Int, Int, String])
-  checkAll("Monad[(String, ?)] serializable", SerializableTests.serializable(Monad[(String, ?)]))
+  checkAll("Monad[(String, *)]", MonadTests[(String, *)].monad[Int, Int, String])
+  checkAll("Monad[(String, *)] serializable", SerializableTests.serializable(Monad[(String, *)]))
 
-  checkAll("CommutativeFlatMap[(CSemi, ?)]",
-           CommutativeFlatMapTests[(CSemi, ?)].commutativeFlatMap[CSemi, CSemi, CSemi])
-  checkAll("CommutativeFlatMap[(CSemi, ?)] serializable",
-           SerializableTests.serializable(CommutativeFlatMap[(CSemi, ?)]))
+  checkAll("CommutativeFlatMap[(CSemi, *)]",
+           CommutativeFlatMapTests[(CSemi, *)].commutativeFlatMap[CSemi, CSemi, CSemi]
+  )
+  checkAll("CommutativeFlatMap[(CSemi, *)] serializable",
+           SerializableTests.serializable(CommutativeFlatMap[(CSemi, *)])
+  )
 
-  checkAll("CommutativeMonad[(Int, ?)]", CommutativeMonadTests[(Int, ?)].commutativeMonad[Int, Int, Int])
-  checkAll("CommutativeMonad[(Int, ?)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, ?)]))
+  checkAll("CommutativeMonad[(Int, *)]", CommutativeMonadTests[(Int, *)].commutativeMonad[Int, Int, Int])
+  checkAll("CommutativeMonad[(Int, *)] serializable", SerializableTests.serializable(CommutativeMonad[(Int, *)]))
 
-  checkAll("Tuple2[String, Int]", ReducibleTests[(String, ?)].reducible[Option, Int, Int])
-  checkAll("Reducible[(String, ?)]", SerializableTests.serializable(Reducible[(String, ?)]))
+  checkAll("Tuple2[String, Int]", ReducibleTests[(String, *)].reducible[Option, Int, Int])
+  checkAll("Reducible[(String, *)]", SerializableTests.serializable(Reducible[(String, *)]))
 
   test("Semigroupal composition") {
-    val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, ?)]
+    val cart = ContravariantSemigroupal[Eq].composeFunctor[(Int, *)]
     val eq = cart.product(Eq[(Int, String)], Eq[(Int, Int)])
     forAll { (a: (Int, (String, Int)), b: (Int, (String, Int))) =>
       (a == b) should ===(eq.eqv(a, b))
@@ -49,16 +64,16 @@ class TupleSuite extends CatsSuite {
 
   test("eqv") {
     val eq = Eq[(Int, Long)]
-    forAll { t: (Int, Long) =>
+    forAll { (t: (Int, Long)) =>
       eq.eqv(t, t) should ===(true)
     }
-    forAll { t: (Int, Long) =>
+    forAll { (t: (Int, Long)) =>
       eq.eqv(t, t._1 -> (t._2 + 1)) should ===(false)
     }
   }
 
   test("order") {
-    forAll { t: (Int, Int) =>
+    forAll { (t: (Int, Int)) =>
       val u = t.swap
       Order[(Int, Int)].compare(t, u) should ===(scala.math.Ordering[(Int, Int)].compare(t, u))
     }
@@ -67,7 +82,7 @@ class TupleSuite extends CatsSuite {
   test("show") {
     (1, 2).show should ===("(1,2)")
 
-    forAll { fs: (String, String) =>
+    forAll { (fs: (String, String)) =>
       fs.show should ===(fs.toString)
     }
 
