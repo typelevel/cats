@@ -52,14 +52,14 @@ class VarianceSuite extends CatsSuite {
     def inferred[F[_, _]: Profunctor](fi: F[Int, Int]): F[Either[Foo, Foo], Either[Foo, Foo]] = shouldInfer[F](fi)
   }
 
-  test("Auto-variance should left narrow a profunctor automatically") {
+  test("Auto-variance should widen the second type parameter of a profunctor automatically") {
     def shouldInfer[F[_, _]: Profunctor](fi: F[Int, Int]): F[Int, Either[Bar, Baz.type]] =
       fi.dimap(identity[Int])(i => if (true) Left(Bar(i)) else Right(Baz))
 
     def inferred[F[_, _]: Profunctor](fi: F[Int, Int]): F[Int, Either[Foo, Foo]] = shouldInfer[F](fi)
   }
 
-  test("Auto-variance should right widen a profunctor automatically") {
+  test("Auto-variance should narrow the first type parameter of a profunctor automatically") {
     def shouldInfer[F[_, _]: Profunctor](fi: F[Int, Int]): F[Either[FooBar, FooBar], Int] =
       fi.dimap((_: Either[FooBar, FooBar]) => 1)(identity[Int])
 
