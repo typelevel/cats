@@ -6,7 +6,9 @@ import scala.collection.immutable.Stream
 
 trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] {
 
-  /** Enumerate the members in descending order. */
+  /**
+   * Enumerate the members in descending order.
+   */
   def membersDescending: Stream[A] = {
     def loop(a: A): Stream[A] =
       partialPrevious(a) match {
@@ -20,7 +22,9 @@ trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with Partial
 
 trait PartialNextLowerBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with LowerBounded[A] {
 
-  /** Enumerate the members in ascending order. */
+  /**
+   * Enumerate the members in ascending order.
+   */
   def membersAscending: Stream[A] = {
     def loop(a: A): Stream[A] =
       partialNext(a) match {
