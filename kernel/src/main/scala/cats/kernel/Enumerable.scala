@@ -62,6 +62,21 @@ trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Parti
 
 }
 
+object BoundedEnumerable {
+  implicit def catsKernelBoundedEnumerableForUnit: BoundedEnumerable[Unit] =
+    cats.kernel.instances.unit.catsKernelStdOrderForUnit
+  implicit def catsKernelBoundedEnumerableForBoolean: BoundedEnumerable[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
+  implicit def catsKernelBoundedEnumerableForInt: BoundedEnumerable[Int] =
+    cats.kernel.instances.int.catsKernelStdOrderForInt
+  implicit def catsKernelBoundedEnumerableForShort: BoundedEnumerable[Short] =
+    cats.kernel.instances.short.catsKernelStdOrderForShort
+  implicit def catsKernelBoundedEnumerableForLong: BoundedEnumerable[Long] =
+    cats.kernel.instances.long.catsKernelStdOrderForLong
+  implicit def catsKernelBoundedEnumerableForChar: BoundedEnumerable[Char] =
+    cats.kernel.instances.char.catsKernelStdOrderForChar
+}
+
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
