@@ -75,6 +75,8 @@ object BoundedEnumerable {
     cats.kernel.instances.long.catsKernelStdOrderForLong
   implicit def catsKernelBoundedEnumerableForChar: BoundedEnumerable[Char] =
     cats.kernel.instances.char.catsKernelStdOrderForChar
+
+  @inline def apply[A](implicit e: BoundedEnumerable[A]): BoundedEnumerable[A] = e
 }
 
 trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
