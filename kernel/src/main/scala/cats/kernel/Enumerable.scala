@@ -1,7 +1,7 @@
 package cats
 package kernel
 
-import scala.annotation.tailrec
+import scala.collection.immutable.Stream
 import scala.{specialized => sp}
 
 /**
@@ -41,6 +41,34 @@ trait Previous[@sp A] extends PartialPrevious[A] {
   override def partialPrevious(a: A): Option[A] = Some(previous(a))
 }
 
+trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] {
+
+  /** Enumerate the members in descending order. */
+  def membersDescending: Stream[A] = {
+    def loop(a: A): Stream[A] =
+      partialPrevious(a) match {
+        case Some(aa) => aa #:: loop(aa)
+        case _        => Stream.empty
+      }
+    maxBound #:: loop(maxBound)
+  }
+
+}
+
+trait PartialNextLowerBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with LowerBounded[A] {
+
+  /** Enumerate the members in ascending order. */
+  def membersAscending: Stream[A] = {
+    def loop(a: A): Stream[A] =
+      partialNext(a) match {
+        case Some(aa) => aa #:: loop(aa)
+        case _        => Stream.empty
+      }
+    minBound #:: loop(minBound)
+  }
+
+}
+
 /**
  * A typeclass which has both `previous` and `next` operations
  * such that `next . previous == identity`.
@@ -50,11 +78,7 @@ trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   override def partialOrder: PartialOrder[A] = order
 }
 
-trait BoundedEnumerable[@sp A]
-    extends PartialPrevious[A]
-    with PartialNext[A]
-    with UpperBounded[A]
-    with LowerBounded[A] {
+trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {
 
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
@@ -65,25 +89,14 @@ trait BoundedEnumerable[@sp A]
   def cyclePrevious(a: A): A =
     partialPrevious(a).getOrElse(maxBound)
 
-  /** Enumerableerate the members in ascending order. */
-  def members: List[A] = {
-    @tailrec
-    def go(a: A, acc: List[A]): List[A] =
-      partialPrevious(a) match {
-        case Some(aa) => go(aa, a :: acc)
-        case _        => a :: Nil
-      }
-    go(maxBound, List.empty)
-  }
-
 }
 
-trait LowerBoundedEnumerable[@sp A] extends Next[A] with PartialPrevious[A] with LowerBounded[A] {
+trait LowerBoundedEnumerable[@sp A] extends PartialNextLowerBounded[A] with Next[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
 
-trait UpperBoundedEnumerable[@sp A] extends PartialNext[A] with Previous[A] with UpperBounded[A] {
+trait UpperBoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
 }
