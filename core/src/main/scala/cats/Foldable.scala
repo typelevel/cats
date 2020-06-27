@@ -890,23 +890,14 @@ object Foldable {
    *     type Source[+A] = () => Option[(A, Source[A])]
    *
    * (except that recursive type aliases are not allowed).
-   *
-   * It could be made a value class after
-   * https://github.com/scala/bug/issues/9600 is resolved.
    */
-  sealed abstract private[cats] class Source[+A] {
-    def uncons: Option[(A, Eval[Source[A]])]
-  }
+  final private[cats] class Source[+A](val uncons: Option[(A, Eval[Source[A]])]) extends AnyVal
 
   private[cats] object Source {
-    val Empty: Source[Nothing] = new Source[Nothing] {
-      def uncons = None
-    }
+    val Empty: Source[Nothing] = new Source[Nothing](uncons = None)
 
     def cons[A](a: A, src: Eval[Source[A]]): Source[A] =
-      new Source[A] {
-        def uncons = Some((a, src))
-      }
+      new Source[A](uncons = Some((a, src)))
 
     def fromFoldable[F[_], A](fa: F[A])(implicit F: Foldable[F]): Source[A] =
       F.foldRight[A, Source[A]](fa, Now(Empty))((a, evalSrc) => Later(cons(a, evalSrc))).value
