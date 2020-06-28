@@ -44,8 +44,8 @@ import scala.annotation.implicitNotFound
    * Example:
    * {{{
    * scala> import cats.implicits._
-   * scala> MonoidK[List].algebra[Long]
-   * res0: Monoid[List[Long]]
+   * scala> MonoidK[List].algebra[Long].empty
+   * res0: List[Long] = List()
    * }}}
    */
   override def algebra[A]: Monoid[F[A]] =
@@ -61,8 +61,8 @@ import scala.annotation.implicitNotFound
    * {{{
    * scala> import cats.implicits._
    * scala> val monoidK = MonoidK[List].compose[Option]
-   * scala> monoidK.algebra[Long]
-   * res0: Monoid[List[Option[Long]]]
+   * scala> monoidK.combineK(List(Some(1)), List(Some(2), None))
+   * res0: List[Option[Int]] = List(Some(1), Some(2), None)
    * }}}
    */
   override def compose[G[_]]: MonoidK[λ[α => F[G[α]]]] =
