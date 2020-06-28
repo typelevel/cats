@@ -40,6 +40,12 @@ import scala.annotation.implicitNotFound
 
   /**
    * Given a type A, create a concrete Monoid[F[A]].
+   *
+   * {{{
+   * scala> import cats.implicits._
+   * scala> MonoidK[List].algebra[Long]
+   * res0: Monoid[List[Long]]
+   * }}}
    */
   override def algebra[A]: Monoid[F[A]] =
     new Monoid[F[A]] {
