@@ -189,6 +189,22 @@ sealed abstract private[data] class Tuple2KInstances8 {
       def F: Functor[F] = FF
       def G: Functor[G] = GG
     }
+  implicit def catsDataSemigroupalForTuple2K[F[_], G[_]](implicit
+    FF: Semigroupal[F],
+    GG: Semigroupal[G]
+  ): Semigroupal[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KSemigroupal[F, G] {
+      def F: Semigroupal[F] = FF
+      def G: Semigroupal[G] = GG
+    }
+}
+
+sealed private[data] trait Tuple2KSemigroupal[F[_], G[_]] extends Semigroupal[λ[α => Tuple2K[F, G, α]]] {
+  def F: Semigroupal[F]
+  def G: Semigroupal[G]
+
+  override def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
+    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
 }
 
 sealed private[data] trait Tuple2KFunctor[F[_], G[_]] extends Functor[λ[α => Tuple2K[F, G, α]]] {
