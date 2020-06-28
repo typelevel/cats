@@ -67,7 +67,7 @@ import scala.annotation.implicitNotFound
    */
   override def compose[G[_]]: MonoidK[λ[α => F[G[α]]]] =
     new ComposedMonoidK[F, G] {
-      val F = self
+      val F: MonoidK[F] = self
     }
 }
 
