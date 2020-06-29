@@ -257,8 +257,6 @@ sealed private[data] trait Tuple2KApply[F[_], G[_]]
   def G: Apply[G]
   override def ap[A, B](f: Tuple2K[F, G, A => B])(fa: Tuple2K[F, G, A]): Tuple2K[F, G, B] =
     Tuple2K(F.ap(f.first)(fa.first), G.ap(f.second)(fa.second))
-  override def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
-    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
   override def map2Eval[A, B, Z](fa: Tuple2K[F, G, A], fb: Eval[Tuple2K[F, G, B]])(
     f: (A, B) => Z
   ): Eval[Tuple2K[F, G, Z]] = {
