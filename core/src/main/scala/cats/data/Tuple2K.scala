@@ -249,7 +249,10 @@ sealed private[data] trait Tuple2KContravariantMonoidal[F[_], G[_]]
     Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
-sealed private[data] trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple2K[F, G, α]]] with Tuple2KFunctor[F, G] {
+sealed private[data] trait Tuple2KApply[F[_], G[_]]
+    extends Apply[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KFunctor[F, G]
+    with Tuple2KSemigroupal[F, G] {
   def F: Apply[F]
   def G: Apply[G]
   override def ap[A, B](f: Tuple2K[F, G, A => B])(fa: Tuple2K[F, G, A]): Tuple2K[F, G, B] =
