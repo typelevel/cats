@@ -348,6 +348,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Underscore Consulting](https://underscore.io/)
 - [Waves Platform](https://wavesplatform.com/)
 - [Wegtam GmbH](https://www.wegtam.com)
+- [Wejo](https://www.wejo.com/)
 - [WeWork](https://www.wework.com)
 - [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
