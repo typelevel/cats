@@ -189,6 +189,22 @@ sealed abstract private[data] class Tuple2KInstances8 {
       def F: Functor[F] = FF
       def G: Functor[G] = GG
     }
+  implicit def catsDataSemigroupalForTuple2K[F[_], G[_]](implicit
+    FF: Semigroupal[F],
+    GG: Semigroupal[G]
+  ): Semigroupal[λ[α => Tuple2K[F, G, α]]] =
+    new Tuple2KSemigroupal[F, G] {
+      def F: Semigroupal[F] = FF
+      def G: Semigroupal[G] = GG
+    }
+}
+
+sealed private[data] trait Tuple2KSemigroupal[F[_], G[_]] extends Semigroupal[λ[α => Tuple2K[F, G, α]]] {
+  def F: Semigroupal[F]
+  def G: Semigroupal[G]
+
+  override def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
+    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
 }
 
 sealed private[data] trait Tuple2KFunctor[F[_], G[_]] extends Functor[λ[α => Tuple2K[F, G, α]]] {
@@ -233,13 +249,14 @@ sealed private[data] trait Tuple2KContravariantMonoidal[F[_], G[_]]
     Tuple2K(F.contramap(fa.first)(f), G.contramap(fa.second)(f))
 }
 
-sealed private[data] trait Tuple2KApply[F[_], G[_]] extends Apply[λ[α => Tuple2K[F, G, α]]] with Tuple2KFunctor[F, G] {
+sealed private[data] trait Tuple2KApply[F[_], G[_]]
+    extends Apply[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KFunctor[F, G]
+    with Tuple2KSemigroupal[F, G] {
   def F: Apply[F]
   def G: Apply[G]
   override def ap[A, B](f: Tuple2K[F, G, A => B])(fa: Tuple2K[F, G, A]): Tuple2K[F, G, B] =
     Tuple2K(F.ap(f.first)(fa.first), G.ap(f.second)(fa.second))
-  override def product[A, B](fa: Tuple2K[F, G, A], fb: Tuple2K[F, G, B]): Tuple2K[F, G, (A, B)] =
-    Tuple2K(F.product(fa.first, fb.first), G.product(fa.second, fb.second))
   override def map2Eval[A, B, Z](fa: Tuple2K[F, G, A], fb: Eval[Tuple2K[F, G, B]])(
     f: (A, B) => Z
   ): Eval[Tuple2K[F, G, Z]] = {
