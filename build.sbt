@@ -91,7 +91,7 @@ lazy val simulacrumSettings = Seq(
     if (isDotty.value) Nil else Seq(s"-P:semanticdb:targetroot:${baseDirectory.value}/target/.semanticdb", "-Yrangepos")
   ),
   libraryDependencies +=
-    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.0").withDottyCompat(scalaVersion.value),
+    ("org.typelevel" %% "simulacrum-scalafix-annotations" % "0.5.0" % Provided).withDottyCompat(scalaVersion.value),
   pomPostProcess := { (node: xml.Node) =>
     new RuleTransformer(new RewriteRule {
       override def transform(node: xml.Node): Seq[xml.Node] =
