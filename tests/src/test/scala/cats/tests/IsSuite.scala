@@ -29,6 +29,15 @@ class IsSuite extends CatsSuite {
     val lift: Leibniz[List[Bar], List[Bar]] = lifted.lift[List]
     val coerce: Bar = lifted.coerce(new Bar {})
     val predefEq: =:=[Bar, Bar] = lifted.predefEq
+
+    {
+      trait Foo
+      implicit def eqFooBar: Foo =:= Bar = null
+      // make sure the above is found
+      implicitly[Is[Foo, Bar]]
+
+      val res: Foo =:= Bar = implicitly[Is[Foo, Bar]].toPredef
+    }
   }
 
 }
