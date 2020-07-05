@@ -1,6 +1,7 @@
 package cats.evidence
 
 private[evidence] trait AsSupport {
+
   /**
    * In 2.13 there is a method on ev that makes this safe.
    * But lack of this method does not make the cast unsafe
