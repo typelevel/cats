@@ -8,5 +8,5 @@ private[evidence] trait AsSupport {
    * it just makes it not provable without the cast.
    */
   @inline implicit def asFromPredef[A, B](implicit ev: A <:< B): A As B =
-    As.fromPredef(ev)
+    As.refl[A].asInstanceOf[A As B]
 }

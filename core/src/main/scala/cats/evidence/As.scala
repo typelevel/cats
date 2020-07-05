@@ -39,8 +39,10 @@ sealed abstract class As[-A, +B] extends Serializable {
    * A value `A As B` is always sufficient to produce a similar `Predef.<:<`
    * value.
    */
-  @inline final def toPredef: A <:< B =
-    substitute[<:<[*, B]](implicitly[B <:< B])
+  @inline final def toPredef: A <:< B = {
+    type F[-Z] = <:<[Z, B]
+    substitute[F](implicitly[B <:< B])
+  }
 }
 
 sealed abstract class AsInstances {

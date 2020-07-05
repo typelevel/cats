@@ -45,7 +45,7 @@ class AsSuite extends CatsSuite {
     {
       trait Foo
       trait Bar
-      implicit def subFooBar: Foo <:< Bar = null
+      implicit def subFooBar: Foo <:< Bar = implicitly[Foo <:< Foo].asInstanceOf[Foo <:< Bar]
       // make sure the above is found
       implicitly[As[Foo, Bar]]
       val res: Foo <:< Bar = implicitly[As[Foo, Bar]].toPredef
