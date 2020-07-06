@@ -415,7 +415,6 @@ lazy val docs = project
   .settings(docSettings)
   .settings(commonJvmSettings)
   .settings(
-    crossScalaVersions := crossScalaVersions.value.init,
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion
     ),
