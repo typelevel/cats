@@ -156,9 +156,11 @@ possible:
  * Justin Heyes-Jones
  * Kailuo Wang
  * Kamil Kloch
+ * kazchimo
  * Keir Lawson
  * kellen
  * Kenji Yoshida
+ * Kris Kalavantavanich
  * Lars Hupel
  * Leandro
  * Leandro Bolivar
@@ -292,6 +294,7 @@ possible:
  * ybasket
  * Yosef Fertel
  * Yilin Wei
+ * Yuki Kitakata
  * Yuriy Badalyantc
  * Zach Abbott
  * zainab-ali

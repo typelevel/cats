@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Jul 6 2020** [Cats 2.2.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-RC1)
 * **Jun 17 2020** [Cats 2.2.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M3)
 * **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
 * **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
