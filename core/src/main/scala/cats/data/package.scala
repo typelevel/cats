@@ -101,4 +101,10 @@ package object data extends ScalaVersionSpecificPackage {
     def tailRecM[A, B, C](a: A)(f: A => Cont[C, Either[A, B]]): Cont[C, B] =
       ContT.tailRecM(a)(f)
   }
+
+  type INothing <: Nothing
+  object INothing {
+    def absurd[A](n: INothing): A = throw new Exception("Somehow instantiated a value of INothing, this is a bug.")
+  }
+
 }

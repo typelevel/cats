@@ -4,7 +4,7 @@ import simulacrum.typeclass
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Could not find an instance of Alternative for ${F}")
-@typeclass trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] { self =>
+@typeclass trait Alternative[F[_]] extends Applicative[F] with MonoidK[F] with InvariantSemiringal[F] { self =>
 
   /**
    * Fold over the inner structure to combine all of the values with
@@ -83,6 +83,10 @@ import scala.annotation.implicitNotFound
   def guard(condition: Boolean): F[Unit] =
     if (condition) unit else empty
 
+  override def zero: F[cats.data.INothing] = empty
+
+  override def choice[A, B](fa: F[A], fb: F[B]): F[Either[A, B]] = sum(fa, fb)(this)
+
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
       val F = self
@@ -123,7 +127,11 @@ object Alternative {
     def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
       typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
   }
-  trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with MonoidK.AllOps[F, A] {
+  trait AllOps[F[_], A]
+      extends Ops[F, A]
+      with Applicative.AllOps[F, A]
+      with MonoidK.AllOps[F, A]
+      with InvariantSemiringal.AllOps[F, A] {
     type TypeClassType <: Alternative[F]
   }
   trait ToAlternativeOps extends Serializable {

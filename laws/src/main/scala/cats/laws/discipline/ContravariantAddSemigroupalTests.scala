@@ -5,10 +5,10 @@ package discipline
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Arbitrary, Cogen}
 
-trait ContravariantAddSemigroupalTests[F[_]] extends ContravariantTests[F] with InvariantAddSemigroupalTests[F] {
-  def laws: ContravariantAddSemigroupalLaws[F]
+trait ContravariantChoiceTests[F[_]] extends ContravariantTests[F] with InvariantChoiceTests[F] {
+  def laws: ContravariantChoiceLaws[F]
 
-  def contravariantAddSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def contravariantChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -22,18 +22,18 @@ trait ContravariantAddSemigroupalTests[F[_]] extends ContravariantTests[F] with 
     EqFECC: Eq[F[Either[C, C]]]
   ): RuleSet =
     new RuleSet {
-      val name = "contravariantAddSemigroupal"
-      val parents = Seq(contravariant[A, B, C], invariantAddSemigroupal[A, B, C])
+      val name = "contravariantChoice"
+      val parents = Seq(contravariant[A, B, C], invariantChoice[A, B, C])
       val bases = Nil
       val props = Seq(
-        "contramap sum distributivity" -> forAll(laws.contramapSumRightDistributivity[A, B, C] _)
+        "contramap sum distributivity" -> forAll(laws.contramapChoiceRightDistributivity[A, B, C] _)
       )
     }
 }
 
-object ContravariantAddSemigroupalTests {
-  def apply[F[_]: ContravariantAddSemigroupal]: ContravariantAddSemigroupalTests[F] =
-    new ContravariantAddSemigroupalTests[F] {
-      def laws: ContravariantAddSemigroupalLaws[F] = ContravariantAddSemigroupalLaws[F]
+object ContravariantChoiceTests {
+  def apply[F[_]: ContravariantChoice]: ContravariantChoiceTests[F] =
+    new ContravariantChoiceTests[F] {
+      def laws: ContravariantChoiceLaws[F] = ContravariantChoiceLaws[F]
     }
 }

@@ -2,14 +2,14 @@ package cats
 package laws
 
 /**
- * Laws that are expected for any `cats.InvariantAddSemigroupal`.
+ * Laws that are expected for any `cats.InvariantChoice`.
  */
-trait InvariantAddSemigroupalLaws[F[_]] extends InvariantLaws[F] {
-  implicit def I: InvariantAddSemigroupal[F]
+trait InvariantChoiceLaws[F[_]] extends InvariantLaws[F] {
+  implicit def I: InvariantChoice[F]
   implicit def F: Invariant[F] = I.invariant
 
-  def sumAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[Either[A, Either[B, C]]]] =
-    I.sum(fa, I.sum(fb, fc)) <-> F.imap(I.sum(I.sum(fa, fb), fc))(rightToLeft)(leftToRight)
+  def choiceAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[Either[A, Either[B, C]]]] =
+    I.choice(fa, I.choice(fb, fc)) <-> F.imap(I.choice(I.choice(fa, fb), fc))(rightToLeft)(leftToRight)
 
   private def leftToRight[A, B, C](l: Either[A, Either[B, C]]): Either[Either[A, B], C] =
     l match {
@@ -26,7 +26,7 @@ trait InvariantAddSemigroupalLaws[F[_]] extends InvariantLaws[F] {
     }
 
 }
-object InvariantAddSemigroupalLaws {
-  def apply[F[_]](implicit ev: InvariantAddSemigroupal[F]): InvariantAddSemigroupalLaws[F] =
-    new InvariantAddSemigroupalLaws[F] { def I: InvariantAddSemigroupal[F] = ev }
+object InvariantChoiceLaws {
+  def apply[F[_]](implicit ev: InvariantChoice[F]): InvariantChoiceLaws[F] =
+    new InvariantChoiceLaws[F] { def I: InvariantChoice[F] = ev }
 }

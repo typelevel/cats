@@ -8,6 +8,8 @@ import cats.laws.discipline.{ContravariantMonoidalTests, ExhaustiveCheck, MiniIn
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import org.scalacheck.{Arbitrary, Cogen}
+import cats.ContravariantChoosable
+import cats.laws.discipline.ContravariantChoosableTests
 
 class ContravariantSuite extends CatsSuite {
 
@@ -32,6 +34,20 @@ class ContravariantSuite extends CatsSuite {
         Predicate(x => fa.run(f(x)))
     }
 
+  implicit val contravariantChoosablePredicate: ContravariantChoosable[Predicate] =
+    new ContravariantChoosable[Predicate] {
+      def choice[A, B](fa: Predicate[A], fb: Predicate[B]): Predicate[Either[A, B]] =
+        Predicate {
+          case Left(a)  => fa.run(a)
+          case Right(b) => fb.run(b)
+        }
+
+      def zero: Predicate[cats.data.INothing] = Predicate(Function.const(false))
+
+      def contravariant: Contravariant[Predicate] = contravariantMonoidalPredicate
+
+    }
+
   implicit def eqPredicate[A: ExhaustiveCheck]: Eq[Predicate[A]] =
     Eq.by[Predicate[A], A => Boolean](_.run)
 
@@ -40,6 +56,9 @@ class ContravariantSuite extends CatsSuite {
 
   checkAll("ContravariantMonoidal[Predicate]",
            ContravariantMonoidalTests[Predicate].contravariantMonoidal[Boolean, Boolean, Boolean]
+  )
+  checkAll("ContravariantChoosable[Predicate]",
+           ContravariantChoosableTests[Predicate].contravariantChoosable[Boolean, Boolean, Boolean]
   )
 
   {

@@ -7,7 +7,7 @@ import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
-trait InvariantSemiringalTests[F[_]] extends InvariantAddMonoidalTests[F] with InvariantMonoidalTests[F] {
+trait InvariantSemiringalTests[F[_]] extends InvariantChoosableTests[F] with InvariantMonoidalTests[F] {
   def laws: InvariantSemiringalLaws[F]
 
   def invariantSemiringal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
@@ -29,11 +29,10 @@ trait InvariantSemiringalTests[F[_]] extends InvariantAddMonoidalTests[F] with I
   ): RuleSet =
     new RuleSet {
       val name = "invariantSemiringal"
-      val parents = Seq(invariantAddMonoidal[A, B, C], invariantMonoidal[A, B, C])
+      val parents = Seq(invariantChoosable[A, B, C], invariantMonoidal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
-        "invariant semiringal right absorption" -> forAll(laws.semiringalRightAbsorption[A] _),
-        "invariant semiringal right distributivity" -> forAll(laws.semiringalRightDistributivity[A, B, C] _)
+        "invariant semiringal right absorption" -> forAll(laws.semiringalRightAbsorption[A] _)
       )
     }
 }

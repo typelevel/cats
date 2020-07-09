@@ -1,14 +1,13 @@
 package cats.tests
 
-import cats.{InvariantMonoidal, InvariantSemigroupal}
+import cats.{InvariantMonoidal, InvariantSemigroupal, InvariantSemiringal}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.compat.scalaVersionSpecific._
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, MiniInt, SerializableTests}
+import cats.laws.discipline.{ExhaustiveCheck, InvariantSemiringalTests, MiniInt, SerializableTests}
 import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Gen}
+import cats.data.INothing
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object BinCodecInvariantMonoidalSuite {
@@ -82,6 +81,8 @@ object BinCodecInvariantMonoidalSuite {
      * Writes a value of type `A` to Bin format.
      */
     def write(a: A): Bin
+
+    def supported: Set[A]
   }
 
   object BinCodec {
@@ -92,6 +93,8 @@ object BinCodecInvariantMonoidalSuite {
         new BinCodec[Unit] {
           def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
           def write(a: Unit): Bin = MiniList.empty
+
+          def supported: Set[Unit] = Set(())
         }
     }
 
@@ -106,6 +109,8 @@ object BinCodecInvariantMonoidalSuite {
 
           def write(a: (A, B)): Bin =
             fa.write(a._1) ++ fb.write(a._2)
+
+          def supported: Set[(A, B)] = fa.supported.flatMap(a => fb.supported.map(b => (a, b)))
         }
     }
 
@@ -119,11 +124,47 @@ object BinCodecInvariantMonoidalSuite {
 
           def write(a: B): Bin =
             fa.write(g(a))
+
+          def supported: Set[B] = fa.supported.map(f)
         }
     }
 
-    implicit val binCodecIsInvariantMonoidal: InvariantMonoidal[BinCodec] =
-      new InvariantMonoidal[BinCodec] with CCPure with CCProduct with CCImap
+    trait CCZero {
+      def zero: BinCodec[INothing] =
+        new BinCodec[INothing] {
+          def read(s: Bin): (Option[INothing], Bin) = (None, s)
+
+          def write(a: INothing): Bin = MiniList.nil
+
+          def supported: Set[cats.data.INothing] = Set.empty
+        }
+    }
+
+    trait CCChoice {
+      def choice[A, B](fa: BinCodec[A], fb: BinCodec[B]) =
+        new BinCodec[Either[A, B]] {
+          def read(s: Bin): (Option[Either[A, B]], Bin) = {
+            val (oa, bin) = fa.read(s)
+            oa match {
+              case Some(a) => (Some(Left(a)), bin)
+              case None =>
+                val (ob, bin2) = fb.read(s)
+                (ob.map(Right(_)), bin2)
+            }
+
+          }
+          def write(a: Either[A, B]): Bin =
+            a match {
+              case Left(a)  => fa.write(a)
+              case Right(b) => fb.write(b)
+            }
+
+          def supported: Set[Either[A, B]] = fa.supported.map(Left(_): Either[A, B]).union(fb.supported.map(Right(_)))
+        }
+    }
+
+    implicit val binCodecIsInvariantSemiringal: InvariantSemiringal[BinCodec] =
+      new InvariantSemiringal[BinCodec] with CCPure with CCProduct with CCImap with CCChoice with CCZero
   }
 
   def genBinCodecForExhaustive[A](implicit exA: ExhaustiveCheck[A]): Gen[BinCodec[A]] =
@@ -144,6 +185,8 @@ object BinCodecInvariantMonoidalSuite {
           aToBin.getOrElse(a, MiniList.empty)
 
         override def toString: String = s"BinCodec($pairs)"
+
+        def supported: Set[A] = aToBin.keySet
       }
     }
 
@@ -153,11 +196,16 @@ object BinCodecInvariantMonoidalSuite {
   implicit val arbBooleanCodec: Arbitrary[BinCodec[Boolean]] =
     Arbitrary(genBinCodecForExhaustive[Boolean])
 
-  implicit def binCodecsEq[A: Eq: ExhaustiveCheck]: Eq[BinCodec[A]] = {
-    val writeEq: Eq[BinCodec[A]] = Eq.by[BinCodec[A], A => Bin](_.write)
+  implicit def binCodecsEq[A: Eq]: Eq[BinCodec[A]] = { (x, y) =>
+    val xBins: Set[Bin] = x.supported.map(x.write)
+    val yBins: Set[Bin] = y.supported.map(y.write)
 
-    val readEq: Eq[BinCodec[A]] = Eq.by[BinCodec[A], Bin => (Option[A], Bin)](_.read)
-    Eq.and(writeEq, readEq)
+    val xxRead = xBins.map(x.read)
+    val xyRead = xBins.map(y.read)
+    val yyRead = yBins.map(y.read)
+    val yxRead = yBins.map(x.read)
+
+    xBins === yBins && xxRead === xyRead && xyRead === yyRead && yyRead === yxRead
   }
 }
 
@@ -165,8 +213,12 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
   // Everything is defined in a companion object to be serializable.
   import BinCodecInvariantMonoidalSuite._
 
-  checkAll("InvariantMonoidal[BinCodec]", InvariantMonoidalTests[BinCodec].invariantMonoidal[MiniInt, MiniInt, MiniInt])
-  checkAll("InvariantMonoidal[BinCodec]", SerializableTests.serializable(InvariantMonoidal[BinCodec]))
+  implicit val eqBinCodecNothing: Eq[BinCodec[INothing]] = Eq.allEqual
+
+  checkAll("InvariantSemiringal[BinCodec]",
+           InvariantSemiringalTests[BinCodec].invariantSemiringal[Boolean, Boolean, Boolean]
+  )
+  checkAll("InvariantSemiringal[BinCodec]", SerializableTests.serializable(InvariantSemiringal[BinCodec]))
 
   {
     implicit val miniIntMonoid: Monoid[MiniInt] = MiniInt.miniIntAddition

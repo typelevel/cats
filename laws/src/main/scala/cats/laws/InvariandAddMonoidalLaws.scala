@@ -1,21 +1,30 @@
 package cats
 package laws
 
+import cats.data.INothing
+
 /**
- * Laws that must be obeyed by any `cats.InvariantAddMonoidal`.
+ * Laws that must be obeyed by any `cats.InvariantChoosable`.
  */
-trait InvariantAddMonoidalLaws[F[_]] extends InvariantAddSemigroupalLaws[F] {
-  implicit override def I: InvariantAddMonoidal[F]
+trait InvariantChoosableLaws[F[_]] extends InvariantChoiceLaws[F] {
+  implicit override def I: InvariantChoosable[F]
   import cats.syntax.invariant._
 
   def sumEmptyLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
-    I.sum(I.zero, fa).imap(_.right.get)(Right(_)) <-> fa
+    I.choice(I.zero, fa).imap(leftNothing)(Right(_)) <-> fa
 
   def sumEmptyRightIdentity[A, B](fa: F[A]): IsEq[F[A]] =
-    I.sum(fa, I.zero).imap(_.left.get)(Left(_)) <-> fa
+    I.choice(fa, I.zero).imap(rightNothing)(Left(_)) <-> fa
+
+  private def leftNothing[A](e: Either[INothing, A]): A =
+    e.fold(INothing.absurd, identity)
+
+  private def rightNothing[A](e: Either[A, INothing]): A =
+    e.fold(identity, INothing.absurd)
+
 }
 
-object InvariantAddMonoidalLaws {
-  def apply[F[_]](implicit i: InvariantAddMonoidal[F]): InvariantAddMonoidalLaws[F] =
-    new InvariantAddMonoidalLaws[F] { def I: InvariantAddMonoidal[F] = i }
+object InvariantChoosableLaws {
+  def apply[F[_]](implicit i: InvariantChoosable[F]): InvariantChoosableLaws[F] =
+    new InvariantChoosableLaws[F] { def I: InvariantChoosable[F] = i }
 }

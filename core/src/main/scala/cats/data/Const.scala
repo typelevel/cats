@@ -157,6 +157,14 @@ sealed abstract private[data] class ConstInstances0 extends ConstInstances1 {
         fa.retag[(A, B)].combine(fb.retag[(A, B)])
     }
 
+  implicit def catsDataContravariantChoosableForConst[D: Monoid]: ContravariantChoosable[Const[D, *]] =
+    new ContravariantChoosable[Const[D, *]] {
+      def contravariant: Contravariant[Const[D, *]] = catsDataContravariantForConst
+      def choice[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
+        fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
+      def zero: Const[D, INothing] = Const(Monoid[D].empty)
+    }
+
   implicit def catsDataCommutativeApplicativeForConst[C](implicit
     C: CommutativeMonoid[C]
   ): CommutativeApplicative[Const[C, *]] =

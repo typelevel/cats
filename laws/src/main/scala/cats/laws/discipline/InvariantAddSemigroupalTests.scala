@@ -5,10 +5,10 @@ package discipline
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Arbitrary, Cogen}
 
-trait InvariantAddSemigroupalTests[F[_]] extends InvariantTests[F] {
-  def laws: InvariantAddSemigroupalLaws[F]
+trait InvariantChoiceTests[F[_]] extends InvariantTests[F] {
+  def laws: InvariantChoiceLaws[F]
 
-  def invariantAddSemigroupal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def invariantChoice[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -21,16 +21,16 @@ trait InvariantAddSemigroupalTests[F[_]] extends InvariantTests[F] {
     EqFABC: Eq[F[Either[A, Either[B, C]]]]
   ): RuleSet =
     new RuleSet {
-      val name = "invariantAddSemigroupal"
+      val name = "invariantChoice"
       val parents = Seq(invariant[A, B, C])
       val bases = Nil
       val props = Seq(
-        "invariant additive associativity" -> forAll(laws.sumAssociativity[A, B, C] _)
+        "invariant additive associativity" -> forAll(laws.choiceAssociativity[A, B, C] _)
       )
     }
 }
 
-object InvariantAddSemigroupalTests {
-  def apply[F[_]: InvariantAddSemigroupal]: InvariantAddSemigroupalTests[F] =
-    new InvariantAddSemigroupalTests[F] { def laws: InvariantAddSemigroupalLaws[F] = InvariantAddSemigroupalLaws[F] }
+object InvariantChoiceTests {
+  def apply[F[_]: InvariantChoice]: InvariantChoiceTests[F] =
+    new InvariantChoiceTests[F] { def laws: InvariantChoiceLaws[F] = InvariantChoiceLaws[F] }
 }

@@ -2,12 +2,12 @@ package cats
 package laws
 
 /**
- * Laws that are expected for any `cats.ContravariantAddSemigroupal`.
+ * Laws that are expected for any `cats.ContravariantChoice`.
  */
-trait ContravariantAddMonoidalLaws[F[_]] extends ContravariantAddSemigroupalLaws[F] with InvariantAddMonoidalLaws[F] {
-  implicit override def I: ContravariantAddMonoidal[F]
+trait ContravariantChoosableLaws[F[_]] extends ContravariantChoiceLaws[F] with InvariantChoosableLaws[F] {
+  implicit override def I: ContravariantChoosable[F]
 }
-object ContravariantAddMonoidalLaws {
-  def apply[F[_]](implicit ev: ContravariantAddMonoidal[F]): ContravariantAddMonoidalLaws[F] =
-    new ContravariantAddMonoidalLaws[F] { def I: ContravariantAddMonoidal[F] = ev }
+object ContravariantChoosableLaws {
+  def apply[F[_]](implicit ev: ContravariantChoosable[F]): ContravariantChoosableLaws[F] =
+    new ContravariantChoosableLaws[F] { def I: ContravariantChoosable[F] = ev }
 }

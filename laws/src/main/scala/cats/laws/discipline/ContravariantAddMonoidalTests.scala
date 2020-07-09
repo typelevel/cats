@@ -4,12 +4,10 @@ package discipline
 
 import org.scalacheck.{Arbitrary, Cogen}
 
-trait ContravariantAddMonoidalTests[F[_]]
-    extends ContravariantAddSemigroupalTests[F]
-    with InvariantAddMonoidalTests[F] {
-  def laws: ContravariantAddMonoidalLaws[F]
+trait ContravariantChoosableTests[F[_]] extends ContravariantChoiceTests[F] with InvariantChoosableTests[F] {
+  def laws: ContravariantChoosableLaws[F]
 
-  def contravariantAddMonoidal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def contravariantChoosable[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -23,14 +21,14 @@ trait ContravariantAddMonoidalTests[F[_]]
     EqFECC: Eq[F[Either[C, C]]]
   ): RuleSet =
     new RuleSet {
-      val name = "contravariantAddMonoidal"
-      val parents = Seq(contravariantAddSemigroupal[A, B, C], invariantAddMonoidal[A, B, C])
+      val name = "contravariantChoosable"
+      val parents = Seq(contravariantChoice[A, B, C], invariantChoosable[A, B, C])
       val bases = Seq.empty
       val props = Seq.empty
     }
 }
 
-object ContravariantAddMonoidalTests {
-  def apply[F[_]: ContravariantAddMonoidal]: ContravariantAddMonoidalTests[F] =
-    new ContravariantAddMonoidalTests[F] { def laws: ContravariantAddMonoidalLaws[F] = ContravariantAddMonoidalLaws[F] }
+object ContravariantChoosableTests {
+  def apply[F[_]: ContravariantChoosable]: ContravariantChoosableTests[F] =
+    new ContravariantChoosableTests[F] { def laws: ContravariantChoosableLaws[F] = ContravariantChoosableLaws[F] }
 }

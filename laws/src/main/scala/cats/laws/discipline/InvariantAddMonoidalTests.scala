@@ -5,10 +5,10 @@ package discipline
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop._
 
-trait InvariantAddMonoidalTests[F[_]] extends InvariantAddSemigroupalTests[F] {
-  def laws: InvariantAddMonoidalLaws[F]
+trait InvariantChoosableTests[F[_]] extends InvariantChoiceTests[F] {
+  def laws: InvariantChoosableLaws[F]
 
-  def invariantAddMonoidal[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
+  def invariantChoosable[A: Arbitrary, B: Arbitrary, C: Arbitrary](implicit
     arbFA: Arbitrary[F[A]],
     arbFB: Arbitrary[F[B]],
     arbFC: Arbitrary[F[C]],
@@ -21,8 +21,8 @@ trait InvariantAddMonoidalTests[F[_]] extends InvariantAddSemigroupalTests[F] {
     EqFABC: Eq[F[Either[A, Either[B, C]]]]
   ): RuleSet =
     new RuleSet {
-      val name = "invariantAddMonoidal"
-      val parents = Seq(invariantAddSemigroupal[A, B, C])
+      val name = "invariantChoosable"
+      val parents = Seq(invariantChoice[A, B, C])
       val bases = Seq.empty
       val props = Seq(
         "invariant additive monoidal left identity" -> forAll(laws.sumEmptyLeftIdentity[A, B] _),
@@ -31,7 +31,7 @@ trait InvariantAddMonoidalTests[F[_]] extends InvariantAddSemigroupalTests[F] {
     }
 }
 
-object InvariantAddMonoidalTests {
-  def apply[F[_]: InvariantAddMonoidal]: InvariantAddMonoidalTests[F] =
-    new InvariantAddMonoidalTests[F] { def laws: InvariantAddMonoidalLaws[F] = InvariantAddMonoidalLaws[F] }
+object InvariantChoosableTests {
+  def apply[F[_]: InvariantChoosable]: InvariantChoosableTests[F] =
+    new InvariantChoosableTests[F] { def laws: InvariantChoosableLaws[F] = InvariantChoosableLaws[F] }
 }

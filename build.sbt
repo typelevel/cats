@@ -832,7 +832,7 @@ def commonScalacOptions(scalaVersion: String, isDotty: Boolean) =
                        "-language:existentials",
                        "-language:higherKinds",
                        "-language:implicitConversions",
-                       "-Ywarn-dead-code",
+                       //"-Ywarn-dead-code",
                        "-Ywarn-numeric-widen",
                        "-Ywarn-value-discard",
                        "-Xlint:-unused,_"
