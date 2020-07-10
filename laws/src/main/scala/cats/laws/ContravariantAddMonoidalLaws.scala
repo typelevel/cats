@@ -2,7 +2,7 @@ package cats
 package laws
 
 /**
- * Laws that are expected for any `cats.ContravariantChoice`.
+ * Laws that are expected for any `cats.ContravariantChoosable`.
  */
 trait ContravariantChoosableLaws[F[_]] extends ContravariantChoiceLaws[F] with InvariantChoosableLaws[F] {
   implicit override def I: ContravariantChoosable[F]
