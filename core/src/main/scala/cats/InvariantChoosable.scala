@@ -5,7 +5,7 @@ import cats.data.INothing
 
 /**
  * An Invariant Additive Monoidal.
- * Adds the ability to create an `empty` value which must serve as the identity for `sum`.
+ * Adds the ability to create an `empty` value which must serve as the identity for `choice`.
  *
  * Must obey the laws defined in cats.laws.InvariantChoosableLaws.
  */
