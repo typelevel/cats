@@ -10,10 +10,10 @@ trait InvariantChoosableLaws[F[_]] extends InvariantChoiceLaws[F] {
   implicit override def I: InvariantChoosable[F]
   import cats.syntax.invariant._
 
-  def choiceEmptyLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
+  def choiceZeroLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
     I.choice(I.zero, fa).imap(leftNothing)(Right(_)) <-> fa
 
-  def sumEmptyRightIdentity[A, B](fa: F[A]): IsEq[F[A]] =
+  def choiceZeroRightIdentity[A, B](fa: F[A]): IsEq[F[A]] =
     I.choice(fa, I.zero).imap(rightNothing)(Left(_)) <-> fa
 
   private def leftNothing[A](e: Either[INothing, A]): A =

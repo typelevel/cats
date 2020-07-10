@@ -25,8 +25,8 @@ trait InvariantChoosableTests[F[_]] extends InvariantChoiceTests[F] {
       val parents = Seq(invariantChoice[A, B, C])
       val bases = Seq.empty
       val props = Seq(
-        "invariant additive monoidal left identity" -> forAll(laws.sumEmptyLeftIdentity[A, B] _),
-        "invariant additive monoidal right identity" -> forAll(laws.sumEmptyRightIdentity[A, B] _)
+        "invariant chooasable left identity" -> forAll(laws.choiceZeroLeftIdentity[A, B] _),
+        "invariant chooasable right identity" -> forAll(laws.choiceZeroRightIdentity[A, B] _)
       )
     }
 }

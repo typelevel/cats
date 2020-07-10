@@ -25,7 +25,7 @@ trait InvariantChoiceTests[F[_]] extends InvariantTests[F] {
       val parents = Seq(invariant[A, B, C])
       val bases = Nil
       val props = Seq(
-        "invariant additive associativity" -> forAll(laws.choiceAssociativity[A, B, C] _)
+        "invariant choice associativity" -> forAll(laws.choiceAssociativity[A, B, C] _)
       )
     }
 }

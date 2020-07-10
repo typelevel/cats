@@ -26,7 +26,7 @@ trait ContravariantChoiceTests[F[_]] extends ContravariantTests[F] with Invarian
       val parents = Seq(contravariant[A, B, C], invariantChoice[A, B, C])
       val bases = Nil
       val props = Seq(
-        "contramap sum distributivity" -> forAll(laws.contramapChoiceRightDistributivity[A, B, C] _)
+        "contramap choice right distributivity" -> forAll(laws.contramapChoiceRightDistributivity[A, B, C] _)
       )
     }
 }
