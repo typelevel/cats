@@ -85,7 +85,7 @@ import scala.annotation.implicitNotFound
 
   override def zero: F[cats.data.INothing] = empty
 
-  override def choice[A, B](fa: F[A], fb: F[B]): F[Either[A, B]] = sum(fa, fb)(this)
+  override def choice[A, B](fa: F[A], fb: F[B]): F[Either[A, B]] = sum(fa, fb)(self)
 
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
