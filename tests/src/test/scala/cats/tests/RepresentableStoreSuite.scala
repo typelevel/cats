@@ -26,10 +26,10 @@ class RepresentableStoreSuite extends CatsSuite {
       cats.laws.discipline.eq
         .catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
     implicit val eqStoreStoreStore: Eq[
-      RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)],
-                                                                     Boolean,
-                                                                     RepresentableStore[λ[P => (P, P)], Boolean, Int]
-      ]]
+      RepresentableStore[λ[P => (P, P)],
+                         Boolean,
+                         RepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[P => (P, P)], Boolean, Int]]
+      ]
     ] =
       cats.laws.discipline.eq.catsLawsEqForRepresentableStore[λ[P => (P, P)], Boolean, RepresentableStore[λ[
         P => (P, P)
