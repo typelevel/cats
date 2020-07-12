@@ -81,7 +81,10 @@ sealed private[instances] trait Function0Instances extends Function0Instances0 {
         () => (fa(), fb())
 
       override def ap[A, B](f: () => A => B)(fa: () => A): () => B =
-        () => f().apply(fa())
+        () => {
+          val fnAB = f()
+          fnAB(fa())
+        }
 
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
