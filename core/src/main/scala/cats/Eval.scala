@@ -318,52 +318,61 @@ object Eval extends EvalInstances {
       }
   }
 
-  private def evaluate[A](e: Eval[A]): A = {
-    type L = Eval[Any]
-    type M = Memoize[Any]
-    type C = Any => Eval[Any]
+  /*
+   * This represents the stack of flatmap functions in a series
+   * of Eval operations
+   */
+  sealed abstract private class FnStack[-A, +B]
+  final private case class Ident[A, B](ev: A <:< B) extends FnStack[A, B]
+  final private case class Many[A, B, C](first: A => Eval[B], rest: FnStack[B, C]) extends FnStack[A, C]
 
-    def addToMemo(m: M): C = { (a: Any) =>
+  private def evaluate[A](e: Eval[A]): A = {
+    def addToMemo[A1](m: Memoize[A1]): A1 => Eval[A1] = { (a: A1) =>
       m.result = Some(a)
       Now(a)
     }
 
-    @tailrec def loop(curr: L, fs: List[C]): Any =
+    @tailrec def loop[A1](curr: Eval[A1], fs: FnStack[A1, A]): A =
       curr match {
-        case c: FlatMap[_] =>
+        case c: FlatMap[A1] =>
+          val nextFs: Many[c.Start, A1, A] = Many(c.run, fs)
           c.start() match {
-            case cc: FlatMap[_] =>
-              loop(cc.start().asInstanceOf[L], cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case cc: FlatMap[c.Start] =>
+              loop(cc.start(), Many(cc.run, nextFs))
             case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
-                  loop(Now(a), c.run.asInstanceOf[C] :: fs)
+                  loop(nextFs.first(a), nextFs.rest)
                 case None =>
-                  loop(eval, addToMemo(mm.asInstanceOf[M]) :: c.run.asInstanceOf[C] :: fs)
+                  loop(eval, Many(addToMemo(mm), nextFs))
               }
             case xx =>
+              // note: xx could be a Defer so calling .value
+              // could blow the stack?
               loop(c.run(xx.value), fs)
           }
-        case call: Defer[_] =>
+        case call: Defer[A1] =>
           loop(advance(call), fs)
-        case m @ Memoize(eval) =>
+        case m: Memoize[a] =>
+          // a <:< A1
           m.result match {
             case Some(a) =>
               fs match {
-                case f :: fs => loop(f(a), fs)
-                case Nil     => a
+                case Many(f, fs) => loop(f(a), fs)
+                case Ident(ev)   => ev(a)
               }
             case None =>
-              loop(eval, addToMemo(m.asInstanceOf[M]) :: fs)
+              loop[a](m.eval, Many[a, A1, A](addToMemo[a](m), fs))
           }
         case x =>
+          // Now, Later or Always don't have recursions
           fs match {
-            case f :: fs => loop(f(x.value), fs)
-            case Nil     => x.value
+            case Many(f, fs) => loop(f(x.value), fs)
+            case Ident(ev)   => ev(x.value)
           }
       }
 
-    loop(e.asInstanceOf[L], Nil).asInstanceOf[A]
+    loop(e, Ident(implicitly[A <:< A]))
   }
 }
 
