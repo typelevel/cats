@@ -270,7 +270,7 @@ object Eval extends EvalInstances {
       case compute: Eval.FlatMap[A] =>
         new Eval.FlatMap[A] {
           type Start = compute.Start
-          val start: () => Eval[Start] = () => compute.start()
+          val start: () => Eval[Start] = compute.start
           val run: Start => Eval[A] = s => advance1(compute.run(s))
         }
       case other => other
@@ -335,15 +335,16 @@ object Eval extends EvalInstances {
     @tailrec def loop[A1](curr: Eval[A1], fs: FnStack[A1, A]): A =
       curr match {
         case c: FlatMap[A1] =>
-          val nextFs: Many[c.Start, A1, A] = Many(c.run, fs)
           c.start() match {
             case cc: FlatMap[c.Start] =>
+              val nextFs: Many[c.Start, A1, A] = Many(c.run, fs)
               loop(cc.start(), Many(cc.run, nextFs))
             case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
-                  loop(nextFs.first(a), nextFs.rest)
+                  loop(c.run(a), fs)
                 case None =>
+                  val nextFs: Many[c.Start, A1, A] = Many(c.run, fs)
                   loop(eval, Many(addToMemo(mm), nextFs))
               }
             case xx =>
