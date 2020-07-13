@@ -5,7 +5,7 @@ import simulacrum.typeclass
 /**
  * [[ContravariantChoice]] is an Additive Semigroupal that is also contravariant.
  *
- * Must obey the laws defined in cats.laws.ContravariantChoosableLaws.
+ * Must obey the laws defined in cats.laws.ContravariantChoiceLaws.
  */
 @typeclass trait ContravariantChoice[F[_]] extends InvariantChoice[F] {
 
