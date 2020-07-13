@@ -116,7 +116,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-final case class Now[A](value: A) extends Eval[A] {
+final case class Now[A](value: A) extends Eval.Leaf[A] {
   def memoize: Eval[A] = this
 }
 
@@ -134,7 +134,7 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
+final class Later[A](f: () => A) extends Eval.Leaf[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -167,7 +167,7 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-final class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: () => A) extends Eval.Leaf[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
@@ -177,6 +177,13 @@ object Always {
 }
 
 object Eval extends EvalInstances {
+
+  /**
+   * A Leaf does not depend on any other Eval
+   * so calling .value does not trigger
+   * any flatMaps or defers
+   */
+  sealed abstract class Leaf[A] extends Eval[A]
 
   /**
    * Construct an eager Eval[A] value (i.e. Now[A]).
@@ -340,7 +347,7 @@ object Eval extends EvalInstances {
                   val nextFs = Many(c.run, fs)
                   loop(eval, Many(addToMemo(mm), nextFs))
               }
-            case xx =>
+            case xx: Leaf[c.Start] =>
               // xx must be Now, Later, Always, all of those
               // have safe .value:
               loop(c.run(xx.value), fs)
@@ -358,7 +365,7 @@ object Eval extends EvalInstances {
             case None =>
               loop[a](m.eval, Many[a, A1, A](addToMemo[a](m), fs))
           }
-        case x =>
+        case x: Leaf[A1] =>
           // Now, Later or Always don't have recursions
           // so they have safe .value:
           val a1 = x.value
