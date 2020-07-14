@@ -46,12 +46,48 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
         }
 
       override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined && fb.isDefined) Some(f(fa.get, fb.get))
+        else None
+
+      override def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined && fb.isDefined) Some((fa.get, fb.get))
+        else None
+
+      override def productR[A, B](fa: Option[A])(fb: Option[B]): Option[B] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined) fb
+        else None
+
+      override def productL[A, B](fa: Option[A])(fb: Option[B]): Option[A] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fb.isDefined) fa
+        else None
+
+      override def ap[A, B](f: Option[A => B])(fa: Option[A]): Option[B] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (f.isDefined && fa.isDefined) Some(f.get(fa.get))
+        else None
+
+      override def ap2[A, B, Z](ff: Option[(A, B) => Z])(fa: Option[A], fb: Option[B]): Option[Z] =
+        if (ff.isDefined && fa.isDefined && fb.isDefined) Some(ff.get(fa.get, fb.get))
+        else None
+
+      override def ifA[A](fcond: Option[Boolean])(ifTrue: Option[A], ifFalse: Option[A]): Option[A] =
+        if (fcond.isDefined) {
+          if (fcond.get) ifTrue
+          else ifFalse
+        } else None
 
       override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
-          case None    => Now(None)
-          case Some(a) => fb.map(_.map(f(a, _)))
+          case None => Now(None)
+          case Some(a) =>
+            fb.map {
+              case Some(b) => Some(f(a, b))
+              case None    => None
+            }
         }
 
       def coflatMap[A, B](fa: Option[A])(f: Option[A] => B): Option[B] =
