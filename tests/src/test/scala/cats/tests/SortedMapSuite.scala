@@ -62,4 +62,15 @@ class SortedMapSuite extends CatsSuite {
 
   checkAll("SortedMap[String, String]", MonoidKTests[SortedMap[String, *]].monoidK[String])
   checkAll("MonoidK[SortedMap[String, *]]", SerializableTests.serializable(MonoidK[SortedMap[String, *]]))
+
+  test("traverse is stack-safe") {
+    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }: _*)
+    val sumAll = Traverse[SortedMap[String, *]]
+      .traverse(items) { i => () => i }
+      .apply
+      .values
+      .sum
+
+    assert(sumAll == items.values.sum)
+  }
 }

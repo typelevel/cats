@@ -629,6 +629,106 @@ object Chain extends ChainInstances {
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
+  def traverseViaChain[G[_], A, B](iter: Iterator[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
+    if (!iter.hasNext) G.pure(Chain.nil)
+    else {
+      // we branch out by this factor
+      val width = 128
+      val as = collection.mutable.Buffer[A]()
+      as ++= iter
+      // By making a tree here we don't blow the stack
+      // even if the List is very long
+      // by construction, this is never called with start == end
+      def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
+        if (end - start <= width) {
+          // Here we are at the leafs of the trees
+          // we don't use map2Eval since it is always
+          // at most width in size.
+          var flist = Eval.later(G.map(f(as(end - 1)))(_ :: Nil))
+          var idx = end - 2
+          while (start <= idx) {
+            val a = as(idx)
+            // don't capture a var in the defer
+            val right = flist
+            flist = Eval.defer(G.map2Eval(f(a), right)(_ :: _))
+            idx = idx - 1
+          }
+          flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
+        } else {
+          // we have width + 1 or more nodes left
+          val step = (end - start) / width
+
+          var fchain = Eval.defer(loop(start, start + step))
+          var start0 = start + step
+          var end0 = start0 + step
+
+          while (start0 < end) {
+            val end1 = math.min(end, end0)
+            val right = loop(start0, end1)
+            fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
+            start0 = start0 + step
+            end0 = end0 + step
+          }
+          fchain
+        }
+
+      loop(0, as.size).value
+    }
+
+  def traverseFilterViaChain[G[_], A, B](
+    iter: Iterator[A]
+  )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
+    if (!iter.hasNext) G.pure(Chain.nil)
+    else {
+      // we branch out by this factor
+      val width = 128
+      val as = collection.mutable.Buffer[A]()
+      as ++= iter
+      // By making a tree here we don't blow the stack
+      // even if the List is very long
+      // by construction, this is never called with start == end
+      def loop(start: Int, end: Int): Eval[G[Chain[B]]] =
+        if (end - start <= width) {
+          // Here we are at the leafs of the trees
+          // we don't use map2Eval since it is always
+          // at most width in size.
+          var flist = Eval.later(G.map(f(as(end - 1))) { optB =>
+            if (optB.isDefined) optB.get :: Nil
+            else Nil
+          })
+          var idx = end - 2
+          while (start <= idx) {
+            val a = as(idx)
+            // don't capture a var in the defer
+            val right = flist
+            flist = Eval.defer(G.map2Eval(f(a), right) { (optB, tail) =>
+              if (optB.isDefined) optB.get :: tail
+              else tail
+            })
+            idx = idx - 1
+          }
+          flist.map { glist => G.map(glist)(Chain.fromSeq(_)) }
+        } else {
+          // we have width + 1 or more nodes left
+          val step = (end - start) / width
+
+          var fchain = Eval.defer(loop(start, start + step))
+          var start0 = start + step
+          var end0 = start0 + step
+
+          while (start0 < end) {
+            val end1 = math.min(end, end0)
+            val right = loop(start0, end1)
+            fchain = fchain.flatMap(G.map2Eval(_, right)(_.concat(_)))
+            start0 = start0 + step
+            end0 = end0 + step
+          }
+          fchain
+        }
+
+      loop(0, as.size).value
+    }
+
   // scalastyle:off null
   private class ChainIterator[A](self: Chain[A]) extends Iterator[A] {
     private[this] var c: Chain[A] = if (self.isEmpty) null else self
@@ -761,9 +861,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-        foldRight[A, G[Chain[B]]](fa, Always(G.pure(nil))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        if (fa.isEmpty) G.pure(Chain.nil)
+        else traverseViaChain(fa.iterator)(f)
+
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
       def pure[A](a: A): Chain[A] = Chain.one(a)
@@ -862,9 +962,8 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     override def flattenOption[A](fa: Chain[Option[A]]): Chain[A] = fa.collect { case Some(a) => a }
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
-      traverse
-        .foldRight(fa, Eval.now(G.pure(Chain.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o)))
-        .value
+      if (fa.isEmpty) G.pure(Chain.nil)
+      else traverseFilterViaChain(fa.iterator)(f)
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
