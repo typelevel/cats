@@ -2,7 +2,6 @@ package cats
 package data
 
 import NonEmptyChainImpl.create
-import cats.{Order, Semigroup}
 import cats.kernel._
 import scala.collection.immutable.SortedMap
 
