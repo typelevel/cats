@@ -607,7 +607,7 @@ We've established that an error-accumulating data type such as `Validated` can't
 
 Cats has decided to solve this problem by using separate data structures for error-accumulation (`Validated`) and short-circuiting monadic behavior (`Either`).
 
-If you are trying to decide whether you want to use `Validated` or `Either`, a simple heuristic is to use `Validated` if you want error-accumulation and to otherwise use `Either`.
+If you are trying to decide whether you want to use `Validated` or `Either`, a simple heuristic is to use `Either` if you want error-accumulation and to otherwise use `Validated`.
 
 ## Sequential Validation
 
