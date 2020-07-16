@@ -116,7 +116,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-final case class Now[A](value: A) extends Eval[A] {
+final case class Now[A](value: A) extends Eval.Leaf[A] {
   def memoize: Eval[A] = this
 }
 
@@ -134,7 +134,7 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
+final class Later[A](f: () => A) extends Eval.Leaf[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -167,7 +167,7 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-final class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: () => A) extends Eval.Leaf[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
@@ -177,6 +177,13 @@ object Always {
 }
 
 object Eval extends EvalInstances {
+
+  /**
+   * A Leaf does not depend on any other Eval
+   * so calling .value does not trigger
+   * any flatMaps or defers
+   */
+  sealed abstract class Leaf[A] extends Eval[A]
 
   /**
    * Construct an eager Eval[A] value (i.e. Now[A]).
@@ -256,34 +263,6 @@ object Eval extends EvalInstances {
   }
 
   /**
-   * Advance until we find a non-deferred Eval node.
-   *
-   * Often we may have deep chains of Defer nodes; the goal here is to
-   * advance through those to find the underlying "work" (in the case
-   * of FlatMap nodes) or "value" (in the case of Now, Later, or
-   * Always nodes).
-   */
-  @tailrec private def advance[A](fa: Eval[A]): Eval[A] =
-    fa match {
-      case call: Eval.Defer[A] =>
-        advance(call.thunk())
-      case compute: Eval.FlatMap[A] =>
-        new Eval.FlatMap[A] {
-          type Start = compute.Start
-          val start: () => Eval[Start] = () => compute.start()
-          val run: Start => Eval[A] = s => advance1(compute.run(s))
-        }
-      case other => other
-    }
-
-  /**
-   * Alias for advance that can be called in a non-tail position
-   * from an otherwise tailrec-optimized advance.
-   */
-  private def advance1[A](fa: Eval[A]): Eval[A] =
-    advance(fa)
-
-  /**
    * FlatMap is a type of Eval[A] that is used to chain computations
    * involving .map and .flatMap. Along with Eval#flatMap it
    * implements the trampoline that guarantees stack-safety.
@@ -318,52 +297,70 @@ object Eval extends EvalInstances {
       }
   }
 
-  private def evaluate[A](e: Eval[A]): A = {
-    type L = Eval[Any]
-    type M = Memoize[Any]
-    type C = Any => Eval[Any]
+  /*
+   * This represents the stack of flatmap functions in a series
+   * of Eval operations
+   */
+  sealed abstract private class FnStack[A, B]
+  final private case class Ident[A, B](ev: A <:< B) extends FnStack[A, B]
+  final private case class Many[A, B, C](first: A => Eval[B], rest: FnStack[B, C]) extends FnStack[A, C]
 
-    def addToMemo(m: M): C = { (a: Any) =>
+  private def evaluate[A](e: Eval[A]): A = {
+    def addToMemo[A1](m: Memoize[A1]): A1 => Eval[A1] = { (a: A1) =>
       m.result = Some(a)
       Now(a)
     }
 
-    @tailrec def loop(curr: L, fs: List[C]): Any =
+    @tailrec def loop[A1](curr: Eval[A1], fs: FnStack[A1, A]): A =
       curr match {
-        case c: FlatMap[_] =>
+        case c: FlatMap[A1] =>
           c.start() match {
-            case cc: FlatMap[_] =>
-              loop(cc.start().asInstanceOf[L], cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case cc: FlatMap[c.Start] =>
+              val nextFs = Many(c.run, fs)
+              loop(cc.start(), Many(cc.run, nextFs))
+            case call: Defer[c.Start] =>
+              // though the flatMap method handles defer(x).flatMap(f)
+              // by removing the Defer, we can nest defers,
+              // so defer(defer(x)).flatMap(f) could mean c.start()
+              // returns a Defer. We have to handle it here
+              loop(call.thunk(), Many(c.run, fs))
             case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
-                  loop(Now(a), c.run.asInstanceOf[C] :: fs)
+                  loop(c.run(a), fs)
                 case None =>
-                  loop(eval, addToMemo(mm.asInstanceOf[M]) :: c.run.asInstanceOf[C] :: fs)
+                  val nextFs = Many(c.run, fs)
+                  loop(eval, Many(addToMemo(mm), nextFs))
               }
-            case xx =>
+            case xx: Leaf[c.Start] =>
+              // xx must be Now, Later, Always, all of those
+              // have safe .value:
               loop(c.run(xx.value), fs)
           }
-        case call: Defer[_] =>
-          loop(advance(call), fs)
-        case m @ Memoize(eval) =>
+        case call: Defer[A1] =>
+          loop(call.thunk(), fs)
+        case m: Memoize[a] =>
+          // a <:< A1
           m.result match {
             case Some(a) =>
               fs match {
-                case f :: fs => loop(f(a), fs)
-                case Nil     => a
+                case Many(f, fs) => loop(f(a), fs)
+                case Ident(ev)   => ev(a)
               }
             case None =>
-              loop(eval, addToMemo(m.asInstanceOf[M]) :: fs)
+              loop[a](m.eval, Many[a, A1, A](addToMemo[a](m), fs))
           }
-        case x =>
+        case x: Leaf[A1] =>
+          // Now, Later or Always don't have recursions
+          // so they have safe .value:
+          val a1 = x.value
           fs match {
-            case f :: fs => loop(f(x.value), fs)
-            case Nil     => x.value
+            case Many(f, fs) => loop(f(a1), fs)
+            case Ident(ev)   => ev(a1)
           }
       }
 
-    loop(e.asInstanceOf[L], Nil).asInstanceOf[A]
+    loop(e, Ident(implicitly[A <:< A]))
   }
 }
 

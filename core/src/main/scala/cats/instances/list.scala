@@ -30,8 +30,10 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fb.isEmpty) Nil // do O(1) work if fb is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
+      private[this] val evalNil: Eval[List[Nothing]] = Eval.now(Nil)
+
       override def map2Eval[A, B, Z](fa: List[A], fb: Eval[List[B]])(f: (A, B) => Z): Eval[List[Z]] =
-        if (fa.isEmpty) Eval.now(Nil) // no need to evaluate fb
+        if (fa.isEmpty) evalNil // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
       def tailRecM[A, B](a: A)(f: A => List[Either[A, B]]): List[B] = {

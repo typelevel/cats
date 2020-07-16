@@ -93,13 +93,13 @@ Another great example are mutual tail-recursive calls:
 object MutualRecursion {
   def even(n: Int): Eval[Boolean] =
     Eval.always(n == 0).flatMap {
-      case true => Eval.now(true)
+      case true => Eval.True
       case false => odd(n - 1)
     }
 
   def odd(n: Int): Eval[Boolean] =
     Eval.always(n == 0).flatMap {
-      case true => Eval.now(false)
+      case true => Eval.False
       case false => even(n - 1)
     }
 }
