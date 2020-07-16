@@ -30,8 +30,10 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         if (fb.isEmpty) Vector.empty // do O(1) work if either is empty
         else fa.flatMap(a => fb.map(b => f(a, b))) // already O(1) if fa is empty
 
+      private[this] val evalEmpty: Eval[Vector[Nothing]] = Eval.now(Vector.empty)
+
       override def map2Eval[A, B, Z](fa: Vector[A], fb: Eval[Vector[B]])(f: (A, B) => Z): Eval[Vector[Z]] =
-        if (fa.isEmpty) Eval.now(Vector.empty) // no need to evaluate fb
+        if (fa.isEmpty) evalEmpty // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
       def coflatMap[A, B](fa: Vector[A])(f: Vector[A] => B): Vector[B] = {

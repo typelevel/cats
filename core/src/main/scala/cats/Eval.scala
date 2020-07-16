@@ -263,21 +263,6 @@ object Eval extends EvalInstances {
   }
 
   /**
-   * Advance until we find a non-deferred Eval node.
-   *
-   * Often we may have deep chains of Defer nodes; the goal here is to
-   * advance through those to find the underlying "work" (in the case
-   * of FlatMap nodes) or "value" (in the case of Now, Later, or
-   * Always nodes).
-   */
-  @tailrec private def advance[A](fa: Defer[A]): Eval[A] =
-    fa.thunk() match {
-      case call: Eval.Defer[A] =>
-        advance(call)
-      case other => other
-    }
-
-  /**
    * FlatMap is a type of Eval[A] that is used to chain computations
    * involving .map and .flatMap. Along with Eval#flatMap it
    * implements the trampoline that guarantees stack-safety.
@@ -338,7 +323,7 @@ object Eval extends EvalInstances {
               // by removing the Defer, we can nest defers,
               // so defer(defer(x)).flatMap(f) could mean c.start()
               // returns a Defer. We have to handle it here
-              loop(advance(call), Many(c.run, fs))
+              loop(call.thunk(), Many(c.run, fs))
             case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
@@ -353,7 +338,7 @@ object Eval extends EvalInstances {
               loop(c.run(xx.value), fs)
           }
         case call: Defer[A1] =>
-          loop(advance(call), fs)
+          loop(call.thunk(), fs)
         case m: Memoize[a] =>
           // a <:< A1
           m.result match {
