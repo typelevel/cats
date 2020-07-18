@@ -324,6 +324,17 @@ class IndexedStateTSuite extends CatsSuite {
     }
   }
 
+  test("fromState correctly turns State[A, F[B]] into StateT[F, A, B]") {
+    val state: State[Int, Option[Int]] = add1.map(Some.apply)
+    import cats.implicits.catsStdInstancesForOption
+    forAll { (initial: Int) =>
+      StateT.fromState(state).run(initial).get should === {
+        val (s, Some(result)) = state.run(initial).value
+        (s, result)
+      }
+    }
+  }
+
   implicit val iso: Isomorphisms[IndexedStateT[ListWrapper, String, Int, *]] =
     Isomorphisms.invariant[IndexedStateT[ListWrapper, String, Int, *]](
       IndexedStateT.catsDataFunctorForIndexedStateT(ListWrapper.monad)
