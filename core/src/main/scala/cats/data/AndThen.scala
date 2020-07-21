@@ -89,7 +89,7 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
 
   private def runLoop(start: T): R = {
     @tailrec
-    def loop[A, B](self: AndThen[A, B], current: A): B =
+    def loop[A](self: AndThen[A, R], current: A): R =
       self match {
         case Single(f, _) => f(current)
 
@@ -111,7 +111,7 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
   // converts left-leaning to right-leaning
   final protected def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
     @tailrec
-    def loop[A, B, C](left: AndThen[A, B], right: AndThen[B, C]): AndThen[A, C] =
+    def loop[A](left: AndThen[T, A], right: AndThen[A, E]): AndThen[T, E] =
       left match {
         case Concat(left1, right1) =>
           loop(left1, Concat(right1, right))
@@ -152,6 +152,41 @@ object AndThen extends AndThenInstances0 {
    * to be in danger of triggering a stack-overflow error.
    */
   final private val fusionMaxStackDepth = 127
+
+  /**
+   * If you are going to call this function many times, right associating it
+   * once can be a significant performance improvement for VERY long chains.
+   */
+  def toRightAssociated[A, B](fn: AndThen[A, B]): AndThen[A, B] = {
+    @tailrec
+    def loop[X, Y](beg: AndThen[A, X], middle: AndThen[X, Y], end: AndThen[Y, B], endDone: Boolean): AndThen[A, B] =
+      if (endDone) {
+        // end is right associated
+        middle match {
+          case sm @ Single(_, _) =>
+            val newEnd = Concat(sm, end)
+            beg match {
+              case sb @ Single(_, _)  => Concat(sb, newEnd)
+              case Concat(begA, begB) => loop(begA, begB, newEnd, true)
+            }
+          case Concat(mA, mB) =>
+            // rotate mA onto beg:
+            loop(Concat(beg, mA), mB, end, true)
+        }
+      } else {
+        // we are still right-associating the end
+        end match {
+          case se @ Single(_, _)  => loop(beg, middle, se, true)
+          case Concat(endA, endB) => loop(beg, Concat(middle, endA), endB, false)
+        }
+      }
+
+    fn match {
+      case Concat(Concat(a, b), c)                           => loop(a, b, c, false)
+      case Concat(a, Concat(b, c))                           => loop(a, b, c, false)
+      case Concat(Single(_, _), Single(_, _)) | Single(_, _) => fn
+    }
+  }
 }
 
 abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
