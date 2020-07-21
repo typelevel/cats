@@ -43,6 +43,7 @@ trait OrderingInstances {
 private[instances] trait OrderingInstancesBinCompat0 {
   implicit val catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
     new ContravariantMonoidal[Ordering] {
+
       /**
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
