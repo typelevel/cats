@@ -43,7 +43,7 @@ trait EqInstances extends kernel.instances.EqInstances {
     }
 }
 
-private [instances] trait EqInstancesBinCompat0 {
+private[instances] trait EqInstancesBinCompat0 {
   implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     new ContravariantMonoidal[Eq] {
 

@@ -51,7 +51,7 @@ trait EquivInstances {
     }
 }
 
-private [instances] trait EquivInstancesBinCompat0 {
+private[instances] trait EquivInstancesBinCompat0 {
   implicit val catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
     new ContravariantMonoidal[Equiv] {
 

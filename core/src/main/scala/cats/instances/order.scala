@@ -47,7 +47,7 @@ trait OrderInstances extends kernel.instances.OrderInstances {
     }
 }
 
-private [instances] trait OrderInstancesBinCompat0 {
+private[instances] trait OrderInstancesBinCompat0 {
   implicit val catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
     new ContravariantMonoidal[Order] {
 

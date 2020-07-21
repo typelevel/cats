@@ -40,8 +40,7 @@ trait OrderingInstances {
       override def zero[A]: Ordering[INothing] = Ordering.by(_ => ())
     }
 }
-private [instances] trait OrderingInstancesBinCompat0 {
-
+private[instances] trait OrderingInstancesBinCompat0 {
   implicit val catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
     new ContravariantMonoidal[Ordering] {
       /**
