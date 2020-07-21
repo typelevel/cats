@@ -1,11 +1,38 @@
 package cats.tests
 
-import cats.{Applicative, Bimonad, Contravariant, ContravariantMonoidal, Decidable, Defer, Distributive, Endo, Id, Monad, MonoidK, Semigroupal}
+import cats.{
+  Applicative,
+  Bimonad,
+  Contravariant,
+  ContravariantMonoidal,
+  Decidable,
+  Defer,
+  Distributive,
+  Endo,
+  Id,
+  Monad,
+  MonoidK,
+  Semigroupal
+}
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
 import cats.instances.function._
 import cats.kernel._
 import cats.kernel.laws.HashLaws
-import cats.kernel.laws.discipline.{BandTests, BoundedSemilatticeTests, CommutativeGroupTests, CommutativeMonoidTests, CommutativeSemigroupTests, EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests, SemilatticeTests, SerializableTests}
+import cats.kernel.laws.discipline.{
+  BandTests,
+  BoundedSemilatticeTests,
+  CommutativeGroupTests,
+  CommutativeMonoidTests,
+  CommutativeSemigroupTests,
+  EqTests,
+  GroupTests,
+  MonoidTests,
+  OrderTests,
+  PartialOrderTests,
+  SemigroupTests,
+  SemilatticeTests,
+  SerializableTests
+}
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.eq._

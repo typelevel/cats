@@ -68,9 +68,7 @@ class IdTSuite extends CatsSuite {
   {
     implicit val coproductIso = DecidableTests.Isomorphisms.invariant[IdT[Const[String, ?], ?]]
     checkAll("IdT[Const[String, ?], ?]", DecidableTests[IdT[Const[String, ?], ?]].decidable[Int, Int, Int])
-    checkAll("Decidable[IdT[Const[String, ?], ?]]",
-             SerializableTests.serializable(Decidable[IdT[Const[String, ?], ?]])
-    )
+    checkAll("Decidable[IdT[Const[String, ?], ?]]", SerializableTests.serializable(Decidable[IdT[Const[String, ?], ?]]))
   }
 
   {
