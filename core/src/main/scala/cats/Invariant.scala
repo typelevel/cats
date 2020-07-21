@@ -130,18 +130,10 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
     cats.instances.try_.catsStdInstancesForTry
 
-  implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
-    cats.instances.order.catsContravariantMonoidalForOrder
   implicit def catsContravariantMonoidalForPartialOrder: ContravariantMonoidal[PartialOrder] =
     cats.instances.partialOrder.catsContravariantMonoidalForPartialOrder
-  implicit def catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
-    cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit def catsContravariantMonoidalForPartialOrdering: ContravariantMonoidal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
-  implicit def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
-    cats.instances.eq.catsContravariantMonoidalForEq
-  implicit def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
-    cats.instances.equiv.catsContravariantMonoidalForEquiv
   implicit def catsContravariantForHash: Contravariant[Hash] =
     cats.instances.all.catsContravariantForHash
   implicit def catsInvariantMonoidalForSemigroup: InvariantMonoidal[Semigroup] =
@@ -150,6 +142,15 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
   implicit def catsInvariantSemigroupalForMonoid: InvariantSemigroupal[Monoid] =
     cats.instances.invariant.catsSemigroupalForMonoid
+
+  implicit def catsDecidableForEquiv: Decidable[Equiv] =
+    cats.instances.equiv.catsDecidableForEquiv
+  implicit def catsDecidableForEq: Decidable[Eq] =
+    cats.instances.eq.catsDecidableForEq
+  implicit def catsDecidableForOrder: Decidable[Order] =
+    cats.instances.order.catsDecidableForOrder
+  implicit def catsDecidableForOrdering: Decidable[Ordering] =
+    cats.instances.ordering.catsDecidableForOrdering
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

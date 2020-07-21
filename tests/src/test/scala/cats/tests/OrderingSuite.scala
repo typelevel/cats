@@ -1,13 +1,11 @@
 package cats.tests
 
 import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Decidable, Invariant, Semigroupal}
-import cats.instances.ordering._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 
 class OrderingSuite extends CatsSuite {
-
   Invariant[Ordering]
   Contravariant[Ordering]
   Semigroupal[Ordering]

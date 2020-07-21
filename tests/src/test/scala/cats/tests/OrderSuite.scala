@@ -1,7 +1,6 @@
 package cats.tests
 
 import cats.{Contravariant, ContravariantMonoidal, Decidable, Invariant}
-import cats.instances.order._
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
 import cats.laws.discipline.{DecidableTests, MiniInt}
