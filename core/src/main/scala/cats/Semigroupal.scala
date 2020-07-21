@@ -74,7 +74,7 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.ordering.catsContravariantMonoidalForOrdering
   implicit val catsSemigroupalForPartialOrdering: Semigroupal[PartialOrdering] =
     cats.instances.partialOrdering.catsContravariantMonoidalForPartialOrdering
-  implicit val catsSemigroupalForEq: Semigroupal[Eq] = cats.instances.eq.catsDecidableForEq
+  implicit val catsSemigroupalForEq: Semigroupal[Eq] = cats.instances.eq.catsContravariantMonoidalForEq
   implicit val catsSemigroupalForEquiv: Semigroupal[Equiv] =
     cats.instances.equiv.catsDecidableForEquiv
   implicit val catsSemigroupalForMonoid: Semigroupal[Monoid] =
