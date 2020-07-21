@@ -199,6 +199,15 @@ private[data] trait CommonStateTConstructors {
 
   def get[F[_], S](implicit F: Applicative[F]): IndexedStateT[F, S, S, S] =
     IndexedStateT(s => F.pure((s, s)))
+
+  /**
+   * Turn `State[A, F[B]]` into `StateT[F, A, B]`
+   */
+  def fromState[F[_], A, B](s: State[A, F[B]])(implicit F: Applicative[F]): StateT[F, A, B] =
+    s.transformF { eval =>
+      val (a, fb) = eval.value
+      F.map(fb)((a, _))
+    }
 }
 
 object IndexedStateT extends IndexedStateTInstances with CommonStateTConstructors0 {
