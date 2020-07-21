@@ -815,6 +815,9 @@ def commonScalacOptions(scalaVersion: String, isDotty: Boolean) =
     "UTF-8",
     "-feature",
     "-unchecked",
+    //"-Ywarn-dead-code",
+    "-Ywarn-numeric-widen",
+    "-Ywarn-value-discard",
     "-Xfatal-warnings",
     "-deprecation"
   ) ++ (if (priorTo2_13(scalaVersion))
