@@ -1,6 +1,6 @@
-package cats
-package tests
+package cats.tests
 
+import cats.kernel.Group
 import cats.kernel.laws.discipline.GroupTests
 
 class GroupSuite extends CatsSuite {

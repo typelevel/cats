@@ -1,22 +1,22 @@
 package cats
 package tests
 
-import cats.instances.list._
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 
-/** This data type exists purely for testing.
+/**
+ * This data type exists purely for testing.
  *
  * The problem this type solves is to assist in picking up type class
  * instances that have more general constraints.
  *
- * For instance, OneAnd[?, F[_]] has a Monad instance if F[_] does too.
+ * For instance, OneAnd[*, F[_]] has a Monad instance if F[_] does too.
  * By extension, it has an Applicative instance, since Applicative is
  * a superclass of Monad.
  *
  * However, if F[_] doesn't have a Monad instance but does have an
  * Applicative instance (e.g. Validated), you can still get an
- * Applicative instance for OneAnd[?, F[_]]. These two instances
+ * Applicative instance for OneAnd[*, F[_]]. These two instances
  * are different however, and it is a good idea to test to make sure
  * all "variants" of the instances are lawful.
  *
@@ -27,7 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
  *
  * {{{
  * {
- *   implicit val functor = ListWrapper.functor
+ *   implicit val functor: Functor[ListWrapper] = ListWrapper.functor
  *   checkAll(..., ...)
  * }
  * }}}
@@ -131,7 +131,9 @@ object ListWrapper {
 
   val applicative: Applicative[ListWrapper] = alternative
 
-  /** apply is taken due to ListWrapper being a case class */
+  /**
+   * apply is taken due to ListWrapper being a case class
+   */
   val applyInstance: Apply[ListWrapper] = alternative
 
   def monoidK: MonoidK[ListWrapper] = alternative

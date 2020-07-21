@@ -1,8 +1,6 @@
 package cats
 package syntax
 
-import cats.instances.long._
-
 trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
   implicit final def catsSyntaxUnorderedFoldableOps[F[_]: UnorderedFoldable, A](fa: F[A]): UnorderedFoldableOps[F, A] =
     new UnorderedFoldableOps[F, A](fa)
@@ -28,5 +26,5 @@ final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
    * }}}
    */
   def count(p: A => Boolean)(implicit F: UnorderedFoldable[F]): Long =
-    F.unorderedFoldMap(fa)(a => if (p(a)) 1L else 0L)
+    F.count(fa)(p)
 }

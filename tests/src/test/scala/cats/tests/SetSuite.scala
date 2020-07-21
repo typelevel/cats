@@ -1,10 +1,11 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.MonoidTests
+import cats.{MonoidK, Show, UnorderedTraverse}
 import cats.data.Validated
+import cats.kernel.laws.discipline.MonoidTests
 import cats.laws.discipline.{MonoidKTests, SerializableTests, UnorderedTraverseTests}
 import cats.laws.discipline.arbitrary._
+import cats.syntax.show._
 
 class SetSuite extends CatsSuite {
   checkAll("Set[Int]", MonoidTests[Set[Int]].monoid)
@@ -12,7 +13,7 @@ class SetSuite extends CatsSuite {
   checkAll("Set[Int]", MonoidKTests[Set].monoidK[Int])
   checkAll("MonoidK[Set]", SerializableTests.serializable(MonoidK[Set]))
 
-  checkAll("Set[Int]", UnorderedTraverseTests[Set].unorderedTraverse[Int, Int, Int, Validated[Int, ?], Option])
+  checkAll("Set[Int]", UnorderedTraverseTests[Set].unorderedTraverse[Int, Int, Int, Validated[Int, *], Option])
   checkAll("UnorderedTraverse[Set]", SerializableTests.serializable(UnorderedTraverse[Set]))
 
   test("show") {

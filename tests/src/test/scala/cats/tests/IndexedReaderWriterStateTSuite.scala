@@ -1,13 +1,17 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{~>, Bifunctor, Contravariant, Eval, Functor, Id, Monad, MonadError, SemigroupK}
+import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
-
+import cats.kernel.{Eq, Monoid}
 import cats.laws.discipline._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.apply._
+import cats.syntax.semigroup._
+import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
-import cats.arrow.{Profunctor, Strong}
 
 class ReaderWriterStateTSuite extends CatsSuite {
   import ReaderWriterStateTSuite._
@@ -29,12 +33,29 @@ class ReaderWriterStateTSuite extends CatsSuite {
     rws.runS("context", 0).value should ===(70001)
   }
 
+  test("flatMap is stack-safe on repeated left binds when F is") {
+    val ns = (0 to 70000).toList
+    val one = addLogUnit(1)
+    val rws = ns.foldLeft(one)((acc, _) => acc.flatMap(_ => one))
+
+    rws.runS("context", 0).value should ===(70002)
+  }
+
+  test("flatMap is stack-safe on repeated right binds when F is") {
+    val ns = (0 to 70000).toList
+    val one = addLogUnit(1)
+    val rws = ns.foldLeft(one)((acc, _) => one.flatMap(_ => acc))
+
+    rws.runS("context", 0).value should ===(70002)
+  }
+
   test("map2 combines logs") {
     forAll {
       (rwsa: ReaderWriterState[String, Vector[Int], Int, Int],
        rwsb: ReaderWriterState[String, Vector[Int], Int, Int],
        c: String,
-       s: Int) =>
+       s: Int
+      ) =>
         val logMap2 = rwsa.map2(rwsb)((_, _) => ()).runL(c, s).value
 
         val (logA, stateA, _) = rwsa.run(c, s).value
@@ -214,16 +235,22 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("flatMap and flatMapF+tell are consistent") {
-    forAll { (rwst: ReaderWriterStateT[Option, String, String, String, Int], f: Int => Option[Int], initial: String, context: String, log: String) =>
-      val flatMap = rwst.flatMap { a =>
-        ReaderWriterStateT { (e, s) =>
-          f(a).map((log, s, _))
+    forAll {
+      (rwst: ReaderWriterStateT[Option, String, String, String, Int],
+       f: Int => Option[Int],
+       initial: String,
+       context: String,
+       log: String
+      ) =>
+        val flatMap = rwst.flatMap { a =>
+          ReaderWriterStateT { (e, s) =>
+            f(a).map((log, s, _))
+          }
         }
-      }
 
-      val flatMapF = rwst.flatMapF(f).tell(log)
+        val flatMapF = rwst.flatMapF(f).tell(log)
 
-      flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
+        flatMap.run(context, initial) should ===(flatMapF.run(context, initial))
     }
   }
 
@@ -291,7 +318,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
   }
 
   test("ReaderWriterStateT.mapK transforms effect") {
-    val f: Eval ~> Id = λ[Eval ~> Id](_.value)
+    val f: Eval ~> Id = new (Eval ~> Id) { def apply[A](a: Eval[A]): A = a.value }
     forAll { (state: ReaderWriterStateT[Eval, Long, String, String, Int], env: Long, initial: String) =>
       state.mapK(f).runA(env, initial) should ===(state.runA(env, initial).value)
     }
@@ -311,66 +338,86 @@ class ReaderWriterStateTSuite extends CatsSuite {
     }
   }
 
-  implicit val iso = SemigroupalTests.Isomorphisms
-    .invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]](
+  test("pure + listen + map(_._1) + runEmptyA is identity") {
+    forAll { (i: Int) =>
+      IndexedReaderWriterStateT
+        .pure[Id, String, String, Int, Int](i)
+        .listen
+        .map(_._1)
+        .runEmptyA("") should ===(i)
+    }
+  }
+
+  test("tell + listen + map(_._2) + runEmptyA is identity") {
+    forAll { (s: String) =>
+      IndexedReaderWriterStateT
+        .tell[Id, String, String, Int](s)
+        .listen
+        .map(_._2)
+        .runEmptyA("") should ===(s)
+    }
+  }
+
+  implicit val iso: Isomorphisms[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]] =
+    Isomorphisms.invariant[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]](
       IndexedReaderWriterStateT.catsDataFunctorForIRWST(ListWrapper.functor)
     )
 
   checkAll(
-    "IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, ?]",
-    DeferTests[IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, ?]].defer[Int]
+    "IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, *]",
+    DeferTests[IndexedReaderWriterStateT[Eval, Boolean, String, MiniInt, String, *]].defer[Int]
   )
 
   {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, ?]",
-      FunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, ?]].functor[Int, Int, Int]
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, *]",
+      FunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, String, *]].functor[Int, Int, Int]
     )
     checkAll(
-      "Functor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]]",
-      SerializableTests.serializable(Functor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, ?]])
+      "Functor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]]",
+      SerializableTests.serializable(Functor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, String, *]])
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]",
-      ContravariantTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, Int, Int]]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, *, Int, Int]",
+      ContravariantTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, *, Int, Int]]
         .contravariant[MiniInt, String, Boolean]
     )
     checkAll(
-      "Contravariant[IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]]",
-      SerializableTests.serializable(Contravariant[IndexedReaderWriterStateT[ListWrapper, String, String, ?, Int, Int]])
+      "Contravariant[IndexedReaderWriterStateT[ListWrapper, String, String, *, Int, Int]]",
+      SerializableTests.serializable(Contravariant[IndexedReaderWriterStateT[ListWrapper, String, String, *, Int, Int]])
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]",
-      ProfunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, *, *, Int]",
+      ProfunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, *, *, Int]]
         .profunctor[MiniInt, Int, Int, String, String, String]
     )
     checkAll(
-      "Profunctor[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
-      SerializableTests.serializable(Profunctor[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]])
+      "Profunctor[IndexedReaderWriterStateT[ListWrapper, String, String, *, *, Int]]",
+      SerializableTests.serializable(Profunctor[IndexedReaderWriterStateT[ListWrapper, String, String, *, *, Int]])
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]",
-      StrongTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, ?, ?, Int]]
+      "IndexedReaderWriterStateT[ListWrapper, Boolean, String, *, *, Int]",
+      StrongTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, *, *, Int]]
         .strong[MiniInt, Int, Boolean, Boolean, Boolean, String]
     )
     checkAll(
-      "Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]]",
-      SerializableTests.serializable(Strong[IndexedReaderWriterStateT[ListWrapper, String, String, ?, ?, Int]])
+      "Strong[IndexedReaderWriterStateT[ListWrapper, String, String, *, *, Int]]",
+      SerializableTests.serializable(Strong[IndexedReaderWriterStateT[ListWrapper, String, String, *, *, Int]])
     )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]",
-      BifunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?, ?]]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, *, *]",
+      BifunctorTests[IndexedReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, *, *]]
         .bifunctor[Int, Int, Boolean, String, String, String]
     )
     checkAll(
-      "Bifunctor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]]",
-      SerializableTests.serializable(Bifunctor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, ?, ?]])
+      "Bifunctor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, *, *]]",
+      SerializableTests.serializable(Bifunctor[IndexedReaderWriterStateT[ListWrapper, String, String, Int, *, *]])
     )
   }
 
@@ -379,41 +426,44 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
     val SA = IRWST.catsDataAlternativeForIRWST[ListWrapper, Boolean, String, MiniInt](ListWrapper.monad,
                                                                                       ListWrapper.alternative,
-                                                                                      Monoid[String])
+                                                                                      Monoid[String]
+    )
 
     checkAll(
-      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, ?]",
-      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, ?]](SA).alternative[Int, Int, Int]
+      "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]",
+      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
     )
-    checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, ?]]",
-             SerializableTests.serializable(SA))
+    checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]]",
+             SerializableTests.serializable(SA)
+    )
   }
 
   {
     implicit val LWM: Monad[ListWrapper] = ListWrapper.monad
 
     checkAll(
-      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, ?]",
-      MonadTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]].monad[Int, Int, Int]
+      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, MiniInt, *]",
+      MonadTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, *]].monad[Int, Int, Int]
     )
     checkAll(
-      "Monad[ReaderWriterStateT[ListWrapper, String, String, Int, ?]]",
-      SerializableTests.serializable(Monad[ReaderWriterStateT[ListWrapper, String, String, Int, ?]])
+      "Monad[ReaderWriterStateT[ListWrapper, String, String, Int, *]]",
+      SerializableTests.serializable(Monad[ReaderWriterStateT[ListWrapper, String, String, Int, *]])
     )
   }
 
   {
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?]]
-    implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit, Int]] =
-      EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit, Int]
+    implicit val iso: Isomorphisms[ReaderWriterStateT[Option, Boolean, String, MiniInt, *]] =
+      Isomorphisms.invariant[ReaderWriterStateT[Option, Boolean, String, MiniInt, *]]
+    implicit val eqEitherTFA: Eq[EitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, *], Unit, Int]] =
+      EitherT.catsDataEqForEitherT[ReaderWriterStateT[Option, Boolean, String, MiniInt, *], Unit, Int]
 
     checkAll(
-      "ReaderWriterStateT[Option, Boolean, String, MiniIntInt, ?]",
-      MonadErrorTests[ReaderWriterStateT[Option, Boolean, String, MiniInt, ?], Unit].monadError[Int, Int, Int]
+      "ReaderWriterStateT[Option, Boolean, String, MiniIntInt, *]",
+      MonadErrorTests[ReaderWriterStateT[Option, Boolean, String, MiniInt, *], Unit].monadError[Int, Int, Int]
     )
     checkAll(
-      "MonadError[ReaderWriterStateT[Option, String, String, Int, ?], Unit]",
-      SerializableTests.serializable(MonadError[ReaderWriterStateT[Option, String, String, Int, ?], Unit])
+      "MonadError[ReaderWriterStateT[Option, String, String, Int, *], Unit]",
+      SerializableTests.serializable(MonadError[ReaderWriterStateT[Option, String, String, Int, *], Unit])
     )
   }
 
@@ -422,39 +472,35 @@ class ReaderWriterStateTSuite extends CatsSuite {
     implicit val S: SemigroupK[ListWrapper] = ListWrapper.semigroupK
 
     checkAll(
-      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]",
-      SemigroupKTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, ?]].semigroupK[Int]
+      "ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, *]",
+      SemigroupKTests[ReaderWriterStateT[ListWrapper, Boolean, String, MiniInt, *]].semigroupK[Int]
     )
     checkAll(
-      "SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, ?]]",
-      SerializableTests.serializable(SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, ?]])
+      "SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, *]]",
+      SerializableTests.serializable(SemigroupK[ReaderWriterStateT[ListWrapper, String, String, Int, *]])
     )
   }
 
 }
 
 object ReaderWriterStateTSuite {
-  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] = {
-    import cats.instances.vector._
-
+  def addAndLog(i: Int): ReaderWriterState[String, Vector[String], Int, Int] =
     ReaderWriterState { (context, state) =>
       (Vector(s"${context}: Added ${i}"), state + i, state + i)
     }
-  }
 
-  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] = {
-    import cats.kernel.instances.unit._
-
+  def addLogUnit(i: Int): ReaderWriterState[String, Unit, Int, Int] =
     ReaderWriterState { (context, state) =>
       ((), state + i, state + i)
     }
-  }
 
-  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit SA: ExhaustiveCheck[SA],
-                                              SB: Arbitrary[SB],
-                                              E: ExhaustiveCheck[E],
-                                              FLSB: Eq[F[(L, SB, A)]],
-                                              F: Monad[F]): Eq[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
+  implicit def IRWSTEq[F[_], E, L, SA, SB, A](implicit
+    SA: ExhaustiveCheck[SA],
+    SB: Arbitrary[SB],
+    E: ExhaustiveCheck[E],
+    FLSB: Eq[F[(L, SB, A)]],
+    F: Monad[F]
+  ): Eq[IndexedReaderWriterStateT[F, E, L, SA, SB, A]] =
     Eq.by[IndexedReaderWriterStateT[F, E, L, SA, SB, A], (E, SA) => F[(L, SB, A)]] { state => (e, s) =>
       state.run(e, s)
     }

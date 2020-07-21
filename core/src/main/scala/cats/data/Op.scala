@@ -17,26 +17,34 @@ final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
 object Op extends OpInstances
 
 sealed abstract private[data] class OpInstances extends OpInstances0 {
-  implicit def catsDataCategoryForOp[Arr[_, _]](implicit ArrC: Category[Arr]): Category[Op[Arr, ?, ?]] =
+  implicit def catsDataCategoryForOp[Arr[_, _]](implicit ArrC: Category[Arr]): Category[Op[Arr, *, *]] =
     new OpCategory[Arr] { def Arr: Category[Arr] = ArrC }
 
-  implicit def catsDataDecideableForOp[Arr[_, _], R](implicit ArrC: ArrowChoice[Arr],
-                                                     monn: Monoid[R]): Decideable[Op[Arr, R, ?]] =
-    new OpDecideable[Arr, R] {
+  implicit def catsDataDecidableForOp[Arr[_, _], R](implicit
+    ArrC: ArrowChoice[Arr],
+    monn: Monoid[R]
+  ): Decidable[Op[Arr, R, ?]] =
+    new OpDecidable[Arr, R] {
       def Arr: ArrowChoice[Arr] = ArrC
       def M: Monoid[R] = monn
     }
 
-  implicit def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
+  implicit def catsDataEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
     new OpEq[Arr, A, B] { def Arr: Eq[Arr[B, A]] = ArrEq }
+
+  @deprecated("Use catsDataEqForOp", "2.0.0-RC2")
+  def catsKernelEqForOp[Arr[_, _], A, B](implicit ArrEq: Eq[Arr[B, A]]): Eq[Op[Arr, A, B]] =
+    catsDataEqForOp[Arr, A, B]
 }
 
-sealed abstract private[data] class OpInstances0 extends OpInstances1 {
-  implicit def catsDataComposeForOp[Arr[_, _]](implicit ArrC: Compose[Arr]): Compose[Op[Arr, ?, ?]] =
+sealed abstract private[data] class OpInstances0 {
+  implicit def catsDataComposeForOp[Arr[_, _]](implicit ArrC: Compose[Arr]): Compose[Op[Arr, *, *]] =
     new OpCompose[Arr] { def Arr: Compose[Arr] = ArrC }
 
-  implicit def catsDataContravariantMonoidalForOp[Arr[_, _], R](implicit ArrC: Arrow[Arr],
-                                                                M0: Monoid[R]): ContravariantMonoidal[Op[Arr, R, ?]] =
+  implicit def catsDataContravariantMonoidalForOp[Arr[_, _], R](implicit
+    ArrC: Arrow[Arr],
+    M0: Monoid[R]
+  ): ContravariantMonoidal[Op[Arr, R, ?]] =
     new OpContravariantMonoidal[Arr, R] { def Arr = ArrC; def M = M0 }
 }
 
@@ -45,25 +53,29 @@ sealed abstract private[data] class OpInstances1 {
     new OpContravariant[Arr, R] { def Arr = ArrC }
 }
 
-private[data] trait OpCategory[Arr[_, _]] extends Category[Op[Arr, ?, ?]] with OpCompose[Arr] {
+private[data] trait OpCategory[Arr[_, _]] extends Category[Op[Arr, *, *]] with OpCompose[Arr] {
   implicit def Arr: Category[Arr]
 
   override def id[A]: Op[Arr, A, A] = Op(Arr.id)
 }
 
-private[data] trait OpCompose[Arr[_, _]] extends Compose[Op[Arr, ?, ?]] {
+private[data] trait OpCompose[Arr[_, _]] extends Compose[Op[Arr, *, *]] {
   implicit def Arr: Compose[Arr]
 
   def compose[A, B, C](f: Op[Arr, B, C], g: Op[Arr, A, B]): Op[Arr, A, C] =
     f.compose(g)
 }
 
-private[data] trait OpDecideable[Arr[_, _], R] extends Decideable[Op[Arr, R, ?]] with OpContravariantMonoidal[Arr, R] {
+private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, ?]] with OpContravariantMonoidal[Arr, R] {
   implicit def Arr: ArrowChoice[Arr]
   implicit def M: Monoid[R]
 
   def sum[A, B](fa: Op[Arr, R, A], fb: Op[Arr, R, B]): Op[Arr, R, Either[A, B]] =
     Op(Arr.choice(fa.run, fb.run))
+
+  // FIXME: Dicey. This instance maybe should not exist unless we get Ring constraints
+  override def zero[A]: Op[Arr, R, INothing] =
+    Op(Arr.lift(INothing.absurd))
 }
 
 private[data] trait OpContravariantMonoidal[Arr[_, _], R]

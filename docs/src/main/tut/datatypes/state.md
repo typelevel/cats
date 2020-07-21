@@ -141,7 +141,7 @@ The `map` method on `State` allows us to transform the `A` value without affecti
 
 ```tut:silent
 val nextBoolean: State[Seed, Boolean] = nextLong.map(long =>
-  long > 0)
+  long >= 0)
 ```
 
 The `flatMap` method on `State[S, A]` lets you use the result of one `State` in a subsequent `State`. The updated state (`S`) after the first call is passed into the second call. These `flatMap` and `map` methods allow us to use `State` in for-comprehensions:

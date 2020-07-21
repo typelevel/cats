@@ -2,21 +2,21 @@ package cats
 package instances
 
 import cats.arrow.{ArrowChoice, Category, CommutativeArrow}
-import cats.data.AndThen
+import cats.data.{AndThen, INothing}
 
 import annotation.tailrec
 
 trait FunctionInstances extends cats.kernel.instances.FunctionInstances with Function0Instances with Function1Instances
 
-trait FunctionInstancesBinCompat0 {
+private[instances] trait FunctionInstancesBinCompat0 {
 
   /**
    * Witness for: E => A <-> E => A
    */
-  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => ?]): Representable.Aux[E => ?, E] =
-    new Representable[E => ?] {
+  implicit def catsStdRepresentableForFunction1[E](implicit EF: Functor[E => *]): Representable.Aux[E => *, E] =
+    new Representable[E => *] {
       override type Representation = E
-      override val F: Functor[E => ?] = EF
+      override val F: Functor[E => *] = EF
       override def tabulate[A](f: E => A): E => A = f
       override def index[A](f: E => A): E => A = f
     }
@@ -40,8 +40,8 @@ trait FunctionInstancesBinCompat0 {
       }
     }
 
-  implicit def catsStdDeferForFunction1[A]: Defer[A => ?] =
-    new Defer[A => ?] {
+  implicit def catsStdDeferForFunction1[A]: Defer[A => *] =
+    new Defer[A => *] {
       case class Deferred[B](fa: () => A => B) extends (A => B) {
         def apply(a: A) = {
           @annotation.tailrec
@@ -59,17 +59,17 @@ trait FunctionInstancesBinCompat0 {
       }
     }
 
-  implicit def catsStdDecideableForPredicate: Decideable[? => Boolean] =
-    new Decideable[? => Boolean] {
-      def empty[A]: A => Boolean = Function.const(false)
-      def unit: Unit => Boolean = Function.const(true)
+  implicit def catsStdDecidableForPredicate: Decidable[* => Boolean] =
+    new Decidable[* => Boolean] {
+      def unit: Unit => Boolean = Function.const(false)
       def contramap[A, B](fa: A => Boolean)(f: B => A): B => Boolean =
         fa.compose(f)
       def product[A, B](fa: A => Boolean, fb: B => Boolean): ((A, B)) => Boolean = {
-        case (a, b) => fa(a) && fb(b)
+        case (a, b) => fa(a)|| fb(b)
       }
       def sum[A, B](fa: A => Boolean, fb: B => Boolean): Either[A, B] => Boolean =
         either => either.fold(fa, fb)
+      def zero[A]: INothing => Boolean = _ => true
     }
 }
 
@@ -83,16 +83,29 @@ sealed private[instances] trait Function0Instances extends Function0Instances0 {
 
       def pure[A](x: A): () => A = () => x
 
+      override def map[A, B](fa: () => A)(fn: A => B): () => B =
+        () => fn(fa())
+
+      override def map2[A, B, C](fa: () => A, fb: () => B)(fn: (A, B) => C): () => C =
+        () => fn(fa(), fb())
+
+      override def product[A, B](fa: () => A, fb: () => B): () => (A, B) =
+        () => (fa(), fb())
+
+      override def ap[A, B](f: () => A => B)(fa: () => A): () => B =
+        () => f()(fa())
+
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
 
       def tailRecM[A, B](a: A)(fn: A => () => Either[A, B]): () => B =
         () => {
           @tailrec
-          def loop(thisA: A): B = fn(thisA)() match {
-            case Right(b)    => b
-            case Left(nextA) => loop(nextA)
-          }
+          def loop(thisA: A): B =
+            fn(thisA)() match {
+              case Right(b)    => b
+              case Left(nextA) => loop(nextA)
+            }
           loop(a)
         }
     }
@@ -100,18 +113,19 @@ sealed private[instances] trait Function0Instances extends Function0Instances0 {
 }
 
 sealed private[instances] trait Function0Instances0 {
-  implicit def function0Distributive: Distributive[Function0] = new Distributive[Function0] {
-    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = { () =>
-      Functor[F].map(fa)(a => f(a)())
-    }
+  implicit def function0Distributive: Distributive[Function0] =
+    new Distributive[Function0] {
+      def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => Function0[B]): Function0[F[B]] = { () =>
+        Functor[F].map(fa)(a => f(a)())
+      }
 
-    def map[A, B](fa: Function0[A])(f: A => B): Function0[B] = () => f(fa())
-  }
+      def map[A, B](fa: Function0[A])(f: A => B): Function0[B] = () => f(fa())
+    }
 }
 
 sealed private[instances] trait Function1Instances extends Function1Instances0 {
-  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[? => R] =
-    new ContravariantMonoidal[? => R] {
+  implicit def catsStdContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[* => R] =
+    new ContravariantMonoidal[* => R] {
       def unit: Unit => R = Function.const(Monoid[R].empty)
       def contramap[A, B](fa: A => R)(f: B => A): B => R =
         fa.compose(f)
@@ -122,8 +136,8 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
           }
     }
 
-  implicit def catsStdMonadForFunction1[T1]: Monad[T1 => ?] =
-    new Monad[T1 => ?] {
+  implicit def catsStdMonadForFunction1[T1]: Monad[T1 => *] =
+    new Monad[T1 => *] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
@@ -132,24 +146,33 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
 
+      override def map2[A, B, C](fa: T1 => A, fb: T1 => B)(fn: (A, B) => C): T1 => C =
+        t => fn(fa(t), fb(t))
+
+      override def product[A, B](fa: T1 => A, fb: T1 => B): T1 => (A, B) =
+        t => (fa(t), fb(t))
+
+      override def ap[A, B](f: T1 => A => B)(fa: T1 => A): T1 => B =
+        t => f(t).apply(fa(t))
+
       def tailRecM[A, B](a: A)(fn: A => T1 => Either[A, B]): T1 => B =
         (t: T1) => {
           @tailrec
-          def step(thisA: A): B = fn(thisA)(t) match {
-            case Right(b)    => b
-            case Left(nextA) => step(nextA)
-          }
+          def step(thisA: A): B =
+            fn(thisA)(t) match {
+              case Right(b)    => b
+              case Left(nextA) => step(nextA)
+            }
           step(a)
         }
     }
 
   implicit val catsStdInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
     new ArrowChoice[Function1] with CommutativeArrow[Function1] {
-      def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] =
-        _ match {
-          case Left(a)  => Left(f(a))
-          case Right(b) => Right(g(b))
-        }
+      def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] = {
+        case Left(a)  => Left(f(a))
+        case Right(b) => Right(g(b))
+      }
 
       def lift[A, B](f: A => B): A => B = f
 
@@ -176,19 +199,20 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
 }
 
 sealed private[instances] trait Function1Instances0 {
-  implicit def catsStdContravariantForFunction1[R]: Contravariant[? => R] =
-    new Contravariant[? => R] {
+  implicit def catsStdContravariantForFunction1[R]: Contravariant[* => R] =
+    new Contravariant[* => R] {
       def contramap[T1, T0](fa: T1 => R)(f: T0 => T1): T0 => R =
         fa.compose(f)
     }
 
-  implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => ?] = new Distributive[T1 => ?] {
-    def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
-      Functor[F].map(fa)(a => f(a)(t1))
-    }
+  implicit def catsStdDistributiveForFunction1[T1]: Distributive[T1 => *] =
+    new Distributive[T1 => *] {
+      def distribute[F[_]: Functor, A, B](fa: F[A])(f: A => (T1 => B)): T1 => F[B] = { t1 =>
+        Functor[F].map(fa)(a => f(a)(t1))
+      }
 
-    def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
-      f(fa(t1))
+      def map[A, B](fa: T1 => A)(f: A => B): T1 => B = { t1 =>
+        f(fa(t1))
+      }
     }
-  }
 }

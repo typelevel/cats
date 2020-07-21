@@ -40,7 +40,8 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         }
     }
 
-  /** Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
+  /**
+   * Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
    * Tail recursive.
    */
   // scalastyle:off method.length
@@ -64,12 +65,13 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
         val lengthInitial = argsFLength
         // reassociate the functions into a single fn,
         // and move the arguments into argsF
-        do {
+        while ({
           val ap = argF.asInstanceOf[Ap[F, Any, Any]]
           argsF ::= ap.fp
           argsFLength += 1
           argF = ap.fn.asInstanceOf[FA[F, Any]]
-        } while (argF.isInstanceOf[Ap[F, _, _]])
+          argF.isInstanceOf[Ap[F, _, _]]
+        }) ()
         // consecutive `ap` calls have been queued as operations;
         // argF is no longer an `Ap` node, so the entire topmost left-associated
         // function application branch has been looped through and we've
@@ -139,27 +141,31 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
    * Stack-safe.
    */
   final def compile[G[_]](f: F ~> G): FA[G, A] =
-    foldMap[FA[G, ?]] {
-      λ[FunctionK[F, FA[G, ?]]](fa => lift(f(fa)))
+    foldMap[FA[G, *]] {
+      new FunctionK[F, FA[G, *]] { def apply[B](fb: F[B]): FA[G, B] = lift(f(fb)) }
     }
 
   /**
    * Interpret this algebra into a FreeApplicative over another algebra.
    * Stack-safe.
    */
-  def flatCompile[G[_]](f: F ~> FA[G, ?]): FA[G, A] =
+  def flatCompile[G[_]](f: F ~> FA[G, *]): FA[G, A] =
     foldMap(f)
 
-  /** Interpret this algebra into a Monoid. */
+  /**
+   * Interpret this algebra into a Monoid.
+   */
   final def analyze[M: Monoid](f: FunctionK[F, λ[α => M]]): M =
-    foldMap[Const[M, ?]](
-      λ[FunctionK[F, Const[M, ?]]](x => Const(f(x)))
+    foldMap[Const[M, *]](
+      new FunctionK[F, Const[M, *]] { def apply[B](fb: F[B]): Const[M, B] = Const(f(fb)) }
     ).getConst
 
-  /** Compile this FreeApplicative algebra into a Free algebra. */
+  /**
+   * Compile this FreeApplicative algebra into a Free algebra.
+   */
   final def monad: Free[F, A] =
-    foldMap[Free[F, ?]] {
-      λ[FunctionK[F, Free[F, ?]]](fa => Free.liftF(fa))
+    foldMap[Free[F, *]] {
+      new FunctionK[F, Free[F, *]] { def apply[B](fb: F[B]): Free[F, B] = Free.liftF(fb) }
     }
 
   override def toString: String = "FreeApplicative(...)"
@@ -176,7 +182,8 @@ object FreeApplicative {
       case x        => throw new RuntimeException(s"Impossible for a $x to reach here")
     }
 
-  /** Represents a curried function `F[A => B => C => ...]`
+  /**
+   * Represents a curried function `F[A => B => C => ...]`
    * that has been constructed with chained `ap` calls.
    * Fn#argc denotes the amount of curried params remaining.
    */
@@ -197,8 +204,8 @@ object FreeApplicative {
   final def lift[F[_], A](fa: F[A]): FA[F, A] =
     Lift(fa)
 
-  implicit final def freeApplicative[S[_]]: Applicative[FA[S, ?]] =
-    new Applicative[FA[S, ?]] {
+  implicit final def freeApplicative[S[_]]: Applicative[FA[S, *]] =
+    new Applicative[FA[S, *]] {
       override def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] =
         map2(fa, fb)((_, _))
 

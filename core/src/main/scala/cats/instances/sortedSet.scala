@@ -4,8 +4,6 @@ package instances
 import cats.kernel.{BoundedSemilattice, Hash, Order}
 import scala.collection.immutable.SortedSet
 import scala.annotation.tailrec
-import cats.implicits._
-import compat.lazyList._
 
 trait SortedSetInstances extends SortedSetInstances1 {
 
@@ -62,75 +60,66 @@ trait SortedSetInstances extends SortedSetInstances1 {
         fa.collectFirst(Function.unlift(f))
     }
 
-  implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] = new Show[SortedSet[A]] {
-    def show(fa: SortedSet[A]): String =
-      fa.iterator.map(_.show).mkString("SortedSet(", ", ", ")")
-  }
+  implicit def catsStdShowForSortedSet[A: Show]: Show[SortedSet[A]] =
+    new Show[SortedSet[A]] {
+      def show(fa: SortedSet[A]): String =
+        fa.iterator.map(Show[A].show).mkString("SortedSet(", ", ", ")")
+    }
 
-  implicit def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
-    new SortedSetOrder[A]
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet", "2.0.0-RC2")
+  private[instances] def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 }
 
-trait SortedSetInstances1 {
-  implicit def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
-    new SortedSetHash[A]
+private[instances] trait SortedSetInstances1 {
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
+  private[instances] def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 
-  implicit def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
-    new SortedSetSemilattice[A]
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdSemilatticeForSortedSet", "2.0.0-RC2")
+  def catsKernelStdSemilatticeForSortedSet[A: Order]: BoundedSemilattice[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdBoundedSemilatticeForSortedSet[A]
 }
 
-trait SortedSetInstancesBinCompat0 {
+private[instances] trait SortedSetInstancesBinCompat0 {
   implicit val catsStdSemigroupalForSortedSet: Semigroupal[SortedSet] = new Semigroupal[SortedSet] {
     override def product[A, B](fa: SortedSet[A], fb: SortedSet[B]): SortedSet[(A, B)] = {
-      implicit val orderingA = fa.ordering
-      implicit val orderingB = fb.ordering
+      implicit val orderingA: Ordering[A] = fa.ordering
+      implicit val orderingB: Ordering[B] = fb.ordering
 
       fa.flatMap(a => fb.map(b => a -> b))
     }
   }
 }
 
-class SortedSetOrder[A: Order] extends Order[SortedSet[A]] {
-  def compare(a1: SortedSet[A], a2: SortedSet[A]): Int =
-    Order[Int].compare(a1.size, a2.size) match {
-      case 0 => Order.compare(toLazyList(a1), toLazyList(a2))
-      case x => x
-    }
+private[instances] trait SortedSetInstancesBinCompat1 extends LowPrioritySortedSetInstancesBinCompat1 {
+  implicit def catsKernelStdHashForSortedSet1[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
-  }
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC3")
+  override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 
-class SortedSetHash[A: Order: Hash] extends Hash[SortedSet[A]] {
-  import scala.util.hashing.MurmurHash3._
+private[instances] trait LowPrioritySortedSetInstancesBinCompat1
+    extends cats.kernel.instances.SortedSetInstances
+    with SortedSetInstances {
+  implicit override def catsKernelStdOrderForSortedSet[A: Order]: Order[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdOrderForSortedSet[A]
 
-  // adapted from [[scala.util.hashing.MurmurHash3]],
-  // but modified standard `Any#hashCode` to `ev.hash`.
-  def hash(xs: SortedSet[A]): Int = {
-    var a, b, n = 0
-    var c = 1
-    xs.foreach { x =>
-      val h = Hash[A].hash(x)
-      a += h
-      b ^= h
-      c = cats.kernel.instances.StaticMethods.updateUnorderedHashC(c, h)
-      n += 1
-    }
-    var h = setSeed
-    h = mix(h, a)
-    h = mix(h, b)
-    h = mixLast(h, c)
-    finalizeHash(h, n)
-  }
-  override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean = {
-    implicit val x = Order[A].toOrdering
-    toLazyList(s1).corresponds(toLazyList(s2))(Order[A].eqv)
-  }
+  implicit override def catsKernelStdHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
+
+  @deprecated("Use cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet", "2.0.0-RC2")
+  override def catsKernelStdHashForSortedSet[A: Order: Hash]: Hash[SortedSet[A]] =
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
 }
 
-class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
-  def empty: SortedSet[A] = SortedSet.empty(implicitly[Order[A]].toOrdering)
-  def combine(x: SortedSet[A], y: SortedSet[A]): SortedSet[A] = x | y
-}
+@deprecated("Use cats.kernel.instances.SortedSetHash", "2.0.0-RC2")
+class SortedSetHash[A: Order: Hash] extends cats.kernel.instances.SortedSetHash[A]
+
+@deprecated("Use cats.kernel.instances.SortedSetOrder", "2.0.0-RC2")
+class SortedSetOrder[A: Order] extends cats.kernel.instances.SortedSetOrder[A]
+
+@deprecated("Use cats.kernel.instances.SortedSetSemilattice", "2.0.0-RC2")
+class SortedSetSemilattice[A: Order] extends cats.kernel.instances.SortedSetSemilattice[A]

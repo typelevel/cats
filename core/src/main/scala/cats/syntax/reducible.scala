@@ -10,7 +10,7 @@ final class NestedReducibleOps[F[_], G[_], A](private val fga: F[G[A]]) extends 
   def reduceK(implicit F: Reducible[F], G: SemigroupK[G]): G[A] = F.reduceK(fga)
 }
 
-trait ReducibleSyntaxBinCompat0 {
+private[syntax] trait ReducibleSyntaxBinCompat0 {
   implicit final def catsSyntaxReducibleOps0[F[_], A](fa: F[A]): ReducibleOps0[F, A] =
     new ReducibleOps0[F, A](fa)
 }
@@ -28,7 +28,9 @@ final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * scala> val a = x("foo")
    * a: String = "foo321"
    * }}}
-   * */
-  def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] =
-    F.reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
+   */
+  def reduceMapK[G[_], B](f: A => G[B])(implicit F: Reducible[F], G: SemigroupK[G]): G[B] = F.reduceMapK[G, A, B](fa)(f)
+
+  def reduceA[G[_], B](implicit F: Reducible[F], ev: A <:< G[B], G: Apply[G], B: Semigroup[B]): G[B] =
+    F.reduceA[G, B](fa.asInstanceOf[F[G[B]]])
 }

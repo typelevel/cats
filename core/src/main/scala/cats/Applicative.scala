@@ -1,8 +1,8 @@
 package cats
 
 import cats.arrow.Arrow
-import cats.instances.list._
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * Applicative functor.
@@ -14,6 +14,7 @@ import simulacrum.typeclass
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
+@implicitNotFound("Could not find an instance of Applicative for ${F}")
 @typeclass trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
 
   /**
@@ -137,10 +138,10 @@ import simulacrum.typeclass
       val G = ContravariantMonoidal[G]
     }
 
-  def composeDecideable[G[_]: Decideable]: Decideable[λ[α => F[G[α]]]] =
-    new ComposedApplicativeDecideable[F, G] {
+  def composeDecidable[G[_]: Decidable]: Decidable[λ[α => F[G[α]]]] =
+    new ComposedApplicativeDecidable[F, G] {
       val F = self
-      val G = Decideable[G]
+      val G = Decidable[G]
     }
 
   /**
@@ -207,12 +208,12 @@ object Applicative {
    * scala> import cats.Applicative.catsApplicativeForArrow
    * scala> val toLong: Int => Long = _.toLong
    * scala> val double: Int => Int = 2*_
-   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow.product(toLong, double)
+   * scala> val f: Int => (Long, Int) = catsApplicativeForArrow[Function1, Int].product(toLong, double)
    * scala> f(3)
    * res0: (Long, Int) = (3,6)
    * }}}
    */
-  implicit def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, ?]] =
+  def catsApplicativeForArrow[F[_, _], A](implicit F: Arrow[F]): Applicative[F[A, *]] =
     new ArrowApplicative[F, A](F)
 
   /**
@@ -235,6 +236,51 @@ object Applicative {
       def map[A, B](fa: F[A])(f: A => B): F[B] = F.map(fa)(f)
     }
 
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[Applicative]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: Applicative[F]): Applicative[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): AllOps[F, A] {
+      type TypeClassType = Applicative[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: Applicative[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+  }
+  trait AllOps[F[_], A] extends Ops[F, A] with Apply.AllOps[F, A] with InvariantMonoidal.AllOps[F, A] {
+    type TypeClassType <: Applicative[F]
+  }
+  trait ToApplicativeOps extends Serializable {
+    implicit def toApplicativeOps[F[_], A](target: F[A])(implicit tc: Applicative[F]): Ops[F, A] {
+      type TypeClassType = Applicative[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = Applicative[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToApplicativeOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }
 
 private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid[A])
@@ -243,7 +289,7 @@ private[cats] class ApplicativeMonoid[F[_], A](f: Applicative[F], monoid: Monoid
   def empty: F[A] = f.pure(monoid.empty)
 }
 
-private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, ?]] {
+private[cats] class ArrowApplicative[F[_, _], A](F: Arrow[F]) extends Applicative[F[A, *]] {
   def pure[B](b: B): F[A, B] = F.lift[A, B](_ => b)
   override def map[B, C](fb: F[A, B])(f: B => C): F[A, C] = F.rmap(fb)(f)
   def ap[B, C](ff: F[A, B => C])(fb: F[A, B]): F[A, C] =

@@ -1,38 +1,31 @@
-/*
- * Copyright (c) 2018 Luka Jacobowitz
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package cats.tests
 
-package cats
-package tests
-
+import cats.{Align, Eval, Foldable, Now, SemigroupK, Show}
+import cats.data.{NonEmptyList, NonEmptyMap}
+import cats.kernel.laws.discipline.{SerializableTests => _, _}
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
-import cats.data._
-import cats.kernel.laws.discipline._
-
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.show._
+import cats.syntax.reducible._
 import scala.collection.immutable.SortedMap
 
 class NonEmptyMapSuite extends CatsSuite {
 
-  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, ?]].semigroupK[Int])
+  checkAll("NonEmptyMap[String, Int]", SemigroupKTests[NonEmptyMap[String, *]].semigroupK[Int])
   checkAll(
     "NonEmptyMap[String, Int]",
-    NonEmptyTraverseTests[NonEmptyMap[String, ?]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
+    NonEmptyTraverseTests[NonEmptyMap[String, *]].nonEmptyTraverse[Option, Int, Int, Double, Int, Option, Option]
   )
   checkAll("NonEmptyMap[String, Int]", BandTests[NonEmptyMap[String, Int]].band)
   checkAll("NonEmptyMap[String, Int]", EqTests[NonEmptyMap[String, Int]].eqv)
+  checkAll("NonEmptyMap[String, Int]", HashTests[NonEmptyMap[String, Int]].hash)
+
+  checkAll("NonEmptyMap[String, Int]", AlignTests[NonEmptyMap[String, *]].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyMap]", SerializableTests.serializable(Align[NonEmptyMap[String, *]]))
+
+  checkAll("NonEmptyMap[Int, *]", ShortCircuitingTests[NonEmptyMap[Int, *]].nonEmptyTraverse[Int])
 
   test("Show is not empty and is formatted as expected") {
     forAll { (nem: NonEmptyMap[String, Int]) =>
@@ -104,7 +97,7 @@ class NonEmptyMapSuite extends CatsSuite {
 
   test("reduceLeft consistent with foldLeft") {
     forAll { (nem: NonEmptyMap[String, Int], f: (Int, Int) => Int) =>
-      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, ?]].foldLeft(nem.tail, nem.head._2)(f))
+      nem.reduceLeft(f) should ===(Foldable[SortedMap[String, *]].foldLeft(nem.tail, nem.head._2)(f))
     }
   }
 
@@ -113,7 +106,7 @@ class NonEmptyMapSuite extends CatsSuite {
       val got = nem.reduceRight(f).value
       val last = nem.last
       val rev = nem - last._1
-      val expected = Foldable[SortedMap[String, ?]]
+      val expected = Foldable[SortedMap[String, *]]
         .foldRight(rev, Now(last._2))((a, b) => f(a, b))
         .value
       got should ===(expected)
@@ -170,17 +163,17 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("fromMap round trip") {
-    forAll { l: SortedMap[String, Int] =>
+    forAll { (l: SortedMap[String, Int]) =>
       NonEmptyMap.fromMap(l).map(_.toSortedMap).getOrElse(SortedMap.empty[String, Int]) should ===(l)
     }
 
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(nem))
     }
   }
 
   test("fromMapUnsafe/fromMap consistency") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       NonEmptyMap.fromMap(nem.toSortedMap) should ===(Some(NonEmptyMap.fromMapUnsafe(nem.toSortedMap)))
     }
   }
@@ -198,14 +191,14 @@ class NonEmptyMapSuite extends CatsSuite {
   }
 
   test("NonEmptyMap#size and length is consistent with Map#size") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       nem.size should ===(nem.toSortedMap.size.toLong)
       nem.length should ===(nem.toSortedMap.size)
     }
   }
 
   test("NonEmptyMap#toNonEmptyList is consistent with Map#toList and creating NonEmptyList from it") {
-    forAll { nem: NonEmptyMap[String, Int] =>
+    forAll { (nem: NonEmptyMap[String, Int]) =>
       nem.toNel should ===(NonEmptyList.fromListUnsafe(nem.toSortedMap.toList))
     }
   }

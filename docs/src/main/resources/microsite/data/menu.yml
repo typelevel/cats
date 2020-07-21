@@ -115,6 +115,10 @@ options:
     url: typeclasses/arrow.html
     menu_type: typeclasses
 
+  - title: Arrow Choice
+    url: typeclasses/arrowchoice.html
+    menu_type: typeclasses
+
   - title: Law Testing
     url: typeclasses/lawtesting.html
     menu_type: typeclasses
@@ -133,6 +137,10 @@ options:
 
   - title: Const
     url: datatypes/const.html
+    menu_type: data
+    
+  - title: ContT
+    url: datatypes/contt.html
     menu_type: data
 
   - title: Either

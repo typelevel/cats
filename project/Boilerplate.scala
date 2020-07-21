@@ -16,7 +16,7 @@ object Boilerplate {
     def block(args: Any*): String = {
       val interpolated = sc.standardInterpolator(treatEscapes, args)
       val rawLines = interpolated.split('\n')
-      val trimmedLines = rawLines.map { _.dropWhile(_.isWhitespace) }
+      val trimmedLines = rawLines.map(_.dropWhile(_.isWhitespace))
       trimmedLines.mkString("\n")
     }
   }
@@ -33,12 +33,15 @@ object Boilerplate {
 
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
 
-  /** Returns a seq of the generated files.  As a side-effect, it actually generates them... */
-  def gen(dir: File) = for (t <- templates) yield {
-    val tgtFile = t.filename(dir)
-    IO.write(tgtFile, t.body)
-    tgtFile
-  }
+  /**
+   * Returns a seq of the generated files.  As a side-effect, it actually generates them...
+   */
+  def gen(dir: File) =
+    for (t <- templates) yield {
+      val tgtFile = t.filename(dir)
+      IO.write(tgtFile, t.body)
+      tgtFile
+    }
 
   val maxArity = 22
 
@@ -65,8 +68,8 @@ object Boilerplate {
           acc.map(_.tail)
         else {
           val pre = contents.head.takeWhile(_.startsWith("|"))
-          val instances = contents.flatMap { _.dropWhile(_.startsWith("|")).takeWhile(_.startsWith("-")) }
-          val next = contents.map { _.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")) }
+          val instances = contents.flatMap(_.dropWhile(_.startsWith("|")).takeWhile(_.startsWith("-")))
+          val next = contents.map(_.dropWhile(_.startsWith("|")).dropWhile(_.startsWith("-")))
           expandInstances(next, acc ++ pre ++ instances)
         }
 
@@ -149,10 +152,10 @@ object Boilerplate {
       |
       |
       |@deprecated("replaced by apply syntax", "1.0.0-MF")
-      |private[syntax] final class SemigroupalBuilder[F[_]] {
+      |private[syntax] final class SemigroupalBuilder[F[_]] extends Serializable {
       |  def |@|[A](a: F[A]) = new SemigroupalBuilder1(a)
       |
-        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) {
+        -  private[syntax] final class SemigroupalBuilder$arity[${`A..N`}]($params) extends Serializable {
         -    $next
         -    def apWith[Z](f: F[(${`A..N`}) => Z])(implicit apply: Apply[F]): F[Z] = apply.ap$n(f)(${`a..n`})
         -    $map
@@ -174,14 +177,14 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val fargs = (0 until arity).map { "f" + _ }
+      val fargs = (0 until arity).map("f" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
 
       val a = arity / 2
       val b = arity - a
 
-      val fArgsA = (0 until a).map { "f" + _ }.mkString(",")
-      val fArgsB = (a until arity).map { "f" + _ }.mkString(",")
+      val fArgsA = (0 until a).map("f" + _).mkString(",")
+      val fArgsB = (a until arity).map("f" + _).mkString(",")
       val argsA = (0 until a)
         .map { n =>
           "a" + n + ":A" + n
@@ -198,7 +201,7 @@ object Boilerplate {
         } else {
           s"ap$n"
         }
-      def allArgs = (0 until arity).map { "a" + _ }.mkString(",")
+      def allArgs = (0 until arity).map("a" + _).mkString(",")
 
       val apply =
         block"""
@@ -253,7 +256,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"M[$tpe]"
       }
-      val fargs = (0 until arity).map { "m" + _ }
+      val fargs = (0 until arity).map("m" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
@@ -270,7 +273,7 @@ object Boilerplate {
       | */
       |trait ParallelArityFunctions {
         -  /** @group ParMapArity */
-        -  def parMap$arity[M[_], F[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] =
+        -  def parMap$arity[M[_], ${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] =
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => f(${`a..n`}) }
       |}
       """
@@ -286,7 +289,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"M[$tpe]"
       }
-      val fargs = (0 until arity).map { "m" + _ }
+      val fargs = (0 until arity).map("m" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
       val nestedExpansion = ParallelNestedExpansions(arity)
@@ -303,7 +306,7 @@ object Boilerplate {
       | */
       |abstract class ParallelArityFunctions2 extends ParallelArityFunctions {
         -  /** @group ParTupleArity */
-        -  def parTuple$arity[M[_], F[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] =
+        -  def parTuple$arity[M[_], ${`A..N`}]($fparams)(implicit p: NonEmptyParallel[M]): M[(${`A..N`})] =
         -    p.flatMap.map(${nestedExpansion.products}) { case ${nestedExpansion.`(a..n)`} => (${`a..n`}) }
       |}
       """
@@ -319,7 +322,7 @@ object Boilerplate {
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
       }
-      val fargs = (0 until arity).map { "f" + _ }
+      val fargs = (0 until arity).map("f" + _)
       val fparams = (fargs.zip(tpes)).map { case (v, t) => s"$v:$t" }.mkString(", ")
       val fargsS = fargs.mkString(", ")
 
@@ -398,14 +401,14 @@ object Boilerplate {
 
       val parMap =
         if (arity == 1)
-          s"def parMap[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = p.flatMap.map($tupleArgs)(f)"
+          s"def parMap[Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] = p.flatMap.map($tupleArgs)(f)"
         else
-          s"def parMapN[F[_], Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M, F]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
+          s"def parMapN[Z](f: (${`A..N`}) => Z)(implicit p: NonEmptyParallel[M]): M[Z] = Parallel.parMap$arity($tupleArgs)(f)"
 
       val parTupled =
         if (arity == 1) ""
         else
-          s"def parTupled[F[_]](implicit p: NonEmptyParallel[M, F]): M[(${`A..N`})] = Parallel.parTuple$arity($tupleArgs)"
+          s"def parTupled(implicit p: NonEmptyParallel[M]): M[(${`A..N`})] = Parallel.parTuple$arity($tupleArgs)"
 
       block"""
       |package cats
@@ -417,7 +420,7 @@ object Boilerplate {
          -  implicit def catsSyntaxTuple${arity}Parallel[M[_], ${`A..N`}]($tupleTpe): Tuple${arity}ParallelOps[M, ${`A..N`}] = new Tuple${arity}ParallelOps(t$arity)
       |}
       |
-         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) {
+         -private[syntax] final class Tuple${arity}ParallelOps[M[_], ${`A..N`}](private val $tupleTpe) extends Serializable {
          -  $parMap
          -  $parTupled
          -}
@@ -487,7 +490,7 @@ object Boilerplate {
         -  implicit def catsSyntaxTuple${arity}Semigroupal[F[_], ${`A..N`}]($tupleTpe): Tuple${arity}SemigroupalOps[F, ${`A..N`}] = new Tuple${arity}SemigroupalOps(t$arity)
       |}
       |
-        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) {
+        -private[syntax] final class Tuple${arity}SemigroupalOps[F[_], ${`A..N`}](private val $tupleTpe) extends Serializable {
         -  $map
         -  $contramap
         -  $imap

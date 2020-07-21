@@ -1,21 +1,25 @@
-package cats
-package free
+package cats.free
 
-import cats.tests.CatsSuite
+import cats.{~>, Applicative, Apply, Id}
 import cats.arrow.FunctionK
-import cats.laws.discipline.{ApplicativeTests, SemigroupalTests, SerializableTests}
 import cats.data.State
-
+import cats.instances.all._
+import cats.kernel.Eq
+import cats.laws.discipline.{ApplicativeTests, SerializableTests}
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.apply._
+import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 
 class FreeApplicativeSuite extends CatsSuite {
   import FreeApplicativeSuite._
 
-  implicit val iso = SemigroupalTests.Isomorphisms.invariant[FreeApplicative[Option, ?]]
+  implicit val iso: Isomorphisms[FreeApplicative[Option, *]] = Isomorphisms.invariant[FreeApplicative[Option, *]]
 
-  checkAll("FreeApplicative[Option, ?]", ApplicativeTests[FreeApplicative[Option, ?]].applicative[Int, Int, Int])
-  checkAll("Applicative[FreeApplicative[Option, ?]]",
-           SerializableTests.serializable(Applicative[FreeApplicative[Option, ?]]))
+  checkAll("FreeApplicative[Option, *]", ApplicativeTests[FreeApplicative[Option, *]].applicative[Int, Int, Int])
+  checkAll("Applicative[FreeApplicative[Option, *]]",
+           SerializableTests.serializable(Applicative[FreeApplicative[Option, *]])
+  )
 
   test("toString is stack-safe") {
     val r = FreeApplicative.pure[List, Int](333)
@@ -51,9 +55,11 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#flatCompile") {
     forAll { (x: FreeApplicative[Option, Int]) =>
-      val nt = λ[FunctionK[Option, FreeApplicative[Option, ?]]](FreeApplicative.lift(_))
+      val nt = new FunctionK[Option, FreeApplicative[Option, *]] {
+        def apply[A](a: Option[A]): FreeApplicative[Option, A] = FreeApplicative.lift(a)
+      }
 
-      x.foldMap[FreeApplicative[Option, ?]](nt).fold should ===(x.flatCompile[Option](nt).fold)
+      x.foldMap[FreeApplicative[Option, *]](nt).fold should ===(x.flatCompile[Option](nt).fold)
     }
   }
 
@@ -81,7 +87,7 @@ class FreeApplicativeSuite extends CatsSuite {
 
   test("FreeApplicative#analyze") {
     type G[A] = List[Int]
-    val countingNT = λ[FunctionK[List, G]](la => List(la.length))
+    val countingNT = new FunctionK[List, G] { def apply[A](la: List[A]): G[A] = List(la.length) }
 
     val fli1 = FreeApplicative.lift[List, Int](List(1, 3, 5, 7))
     fli1.analyze[G[Int]](countingNT) should ===(List(4))
@@ -101,10 +107,11 @@ class FreeApplicativeSuite extends CatsSuite {
 
     type Tracked[A] = State[String, A]
 
-    val f = λ[FunctionK[Foo, Tracked]] { fa =>
-      State { s0 =>
-        (s0 + fa.toString + ";", fa.getA)
-      }
+    val f = new FunctionK[Foo, Tracked] {
+      def apply[A](fa: Foo[A]): Tracked[A] =
+        State { s0 =>
+          (s0 + fa.toString + ";", fa.getA)
+        }
     }
 
     val x: Dsl[Int] = FreeApplicative.lift(Bar(3))
@@ -124,7 +131,7 @@ class FreeApplicativeSuite extends CatsSuite {
 
     val z = Apply[Dsl].map2(x, y)((_, _) => ())
 
-    val asString = λ[FunctionK[Id, λ[α => String]]](_.toString)
+    val asString = new FunctionK[Id, λ[x => String]] { def apply[A](a: A): String = a.toString }
 
     z.analyze(asString) should ===("xy")
   }
@@ -152,9 +159,11 @@ object FreeApplicativeSuite {
     else Gen.oneOf(noFlatMapped, withFlatMapped)
   }
 
-  implicit def freeArbitrary[F[_], A](implicit F: Arbitrary[F[A]],
-                                      FF: Arbitrary[(A, A) => A],
-                                      A: Arbitrary[A]): Arbitrary[FreeApplicative[F, A]] =
+  implicit def freeArbitrary[F[_], A](implicit
+    F: Arbitrary[F[A]],
+    FF: Arbitrary[(A, A) => A],
+    A: Arbitrary[A]
+  ): Arbitrary[FreeApplicative[F, A]] =
     Arbitrary(freeGen[F, A](4))
 
   implicit def freeApplicativeEq[S[_]: Applicative, A](implicit SA: Eq[S[A]]): Eq[FreeApplicative[S, A]] =
@@ -164,9 +173,13 @@ object FreeApplicativeSuite {
     }
 
   implicit def catsLawsArbitraryForListNatTrans: Arbitrary[List ~> List] =
-    Arbitrary(Gen.oneOf(FunctionK.id[List], new (List ~> List) {
-      def apply[A](fa: List[A]): List[A] =
-        fa ++ fa
-    }))
+    Arbitrary(
+      Gen.oneOf(FunctionK.id[List],
+                new (List ~> List) {
+                  def apply[A](fa: List[A]): List[A] =
+                    fa ++ fa
+                }
+      )
+    )
 
 }

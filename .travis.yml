@@ -2,25 +2,24 @@ language: scala
 
 sudo: required
 
-dist: trusty
-
 group: edge
 
 git:
   depth: 9999
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
-scala_version_211: &scala_version_211 2.11.12
-scala_version_212: &scala_version_212 2.12.8
-scala_version_213: &scala_version_213 2.13.0
+
+scala_version_212: &scala_version_212 2.12.11
+scala_version_213: &scala_version_213 2.13.2
+dotty_version: &dotty_version 0.24.0
 
 before_install:
  - export PATH=${PATH}:./vendor/bundle
  - if [[ ! -z "$HydraLicense" ]]; then
      mkdir -p  /home/travis/.triplequote/metrics/config && echo "$HydraLicense" > "/home/travis/.triplequote/hydra.license" && cp hydra-metrics-service.conf /home/travis/.triplequote/metrics/config/metrics-service.conf;
-   fi  
+   fi
 
 stages:
   - name: styling
@@ -31,47 +30,65 @@ stages:
 jobs:
   include:
     # it can speed up the overall build to have the longer-running jobs at the top of this list.
-    - env: TEST="coverage"
-      install: pip install --user codecov
-      script: sbt coverage buildJVM bench/test coverageReport && codecov
-
     - &js_tests
+      stage: test
+      name: Js tests 2.12
       env: TEST="JS tests"
       # http://austinpray.com/ops/2015/09/20/change-travis-node-version.html
       install: rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
       script: sbt ++$TRAVIS_SCALA_VERSION! validateJS && sbt ++$TRAVIS_SCALA_VERSION! validateKernelJS && sbt ++$TRAVIS_SCALA_VERSION! validateFreeJS
-      scala: *scala_version_211
-    - <<: *js_tests
       scala: *scala_version_212
+    - <<: *js_tests
+      name: Js tests 2.13
+      scala: *scala_version_213
 
     - &jvm_tests
+      stage: test
+      name: Jvm tests 2.12
       env: TEST="JVM tests"
-      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM bench/test
-      scala: *scala_version_211
-    - <<: *jvm_tests
+      install: pip install --user codecov
+      script: sbt ++$TRAVIS_SCALA_VERSION! coverage buildJVM bench/test coverageReport
       scala: *scala_version_212
+      after_success: codecov -F scala_version_212
     - <<: *jvm_tests
+      name: Jvm tests 2.13
       scala: *scala_version_213
-      # the bench module has dependencies not available in Scala 2.13, so don't test it
-      script: sbt ++$TRAVIS_SCALA_VERSION! buildJVM
+      after_success: codecov -F scala_version_213
 
-    - env: TEST="docs"
-      install: gem install jekyll -v 2.5
-      script: sbt docs/makeMicrosite
 
-    - stage: styling
-      env: TEST="linting"
-      script: sbt fmtCheck
+    - stage: test
+      name: Make Microsite on 2.12.10
+      env: TEST="docs"
+      install: gem install jekyll -v 4.0.0
+      script: sbt ++2.12.10! docs/makeMicrosite
 
-    - env: TEST="scalafix"
+    - stage: test
+      name: Scalafix tests
+      env: TEST="scalafix"
       script: cd scalafix && sbt tests/test
 
-    - &bincompat_check
+    - &bincompat
+      stage: test
+      name: Binary compatibility 2.12
       env: TEST="binary compatibility"
       script: sbt ++$TRAVIS_SCALA_VERSION! validateBC
-      scala: *scala_version_211
-    - <<: *bincompat_check
       scala: *scala_version_212
+    - <<: *bincompat
+      name: Binary compatibility 2.13
+      scala: *scala_version_213
+
+    # Note that we're currently only building some modules on Dotty, not running tests.
+    - &dotty_tests
+      stage: test
+      name: Dotty tests
+      env: TEST="Dotty tests"
+      script: sbt ++$TRAVIS_SCALA_VERSION! alleycatsLawsJVM/compile
+      scala: *dotty_version
+
+    - stage: styling
+      name: Linting
+      env: TEST="linting"
+      script: sbt +fmtCheck
 
     - stage: publish snapshot
       script: |
@@ -107,7 +124,7 @@ cache:
     - $HOME/.m2
     - $HOME/.ivy2/cache
     - $HOME/.sbt
-    - $HOME/.coursier
+    - $HOME/.cache/coursier
     # Pants cache
     - $HOME/.cache
 

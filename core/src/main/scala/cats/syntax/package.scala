@@ -1,11 +1,12 @@
 package cats
 
 package object syntax {
+  object align extends AlignSyntax
   object all extends AllSyntaxBinCompat
   object alternative extends AlternativeSyntax
   object applicative extends ApplicativeSyntax
   object applicativeError extends ApplicativeErrorSyntax
-  object apply extends ApplySyntax
+  object apply extends ApplySyntax with ApplySyntaxBinCompat0
   object arrow extends ArrowSyntax
   object arrowChoice extends ArrowChoiceSyntax
   object bifunctor extends BifunctorSyntax
@@ -13,7 +14,7 @@ package object syntax {
   object binested extends BinestedSyntax
   object bitraverse extends BitraverseSyntax with BitraverseSyntaxBinCompat0
   @deprecated("use cats.syntax.semigroupal instead", "1.0.0-RC1")
-  object cartesian extends SemigroupalSyntax
+  private[syntax] object cartesian extends SemigroupalSyntax
   object choice extends ChoiceSyntax
   object coflatMap extends CoflatMapSyntax
   object distributive extends DistributiveSyntax
@@ -25,11 +26,12 @@ package object syntax {
   object contravariantMonoidal extends ContravariantMonoidalSyntax
   object either extends EitherSyntax with EitherSyntaxBinCompat0
   object eq extends EqSyntax
-  object flatMap extends FlatMapSyntax
+  object flatMap extends FlatMapSyntax with FlatMapOptionSyntax
   object foldable extends FoldableSyntax with FoldableSyntaxBinCompat0 with FoldableSyntaxBinCompat1
   object functor extends FunctorSyntax
   object functorFilter extends FunctorFilterSyntax
   object group extends GroupSyntax
+  object hash extends HashSyntax
   object invariant extends InvariantSyntax
   object ior extends IorSyntax
   object list extends ListSyntax with ListSyntaxBinCompat0
@@ -45,6 +47,9 @@ package object syntax {
       with ParallelFlatSyntax
       with ParallelApplySyntax
       with ParallelBitraverseSyntax
+      with ParallelUnorderedTraverseSyntax
+      with ParallelFoldMapASyntax
+      with ParallelTraverseFilterSyntax
   object partialOrder extends PartialOrderSyntax
   object profunctor extends ProfunctorSyntax
   object reducible extends ReducibleSyntax with ReducibleSyntaxBinCompat0

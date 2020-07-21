@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.Chain
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
@@ -79,9 +80,11 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         B.combineAll(fa.iterator.map(f))
 
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
-        foldRight[A, G[Queue[B]]](fa, Always(G.pure(Queue.empty))) { (a, lglb) =>
-          G.map2Eval(f(a), lglb)(_ +: _)
-        }.value
+        if (fa.isEmpty) G.pure(Queue.empty[B])
+        else
+          G.map(Chain.traverseViaChain(fa.iterator)(f)) { chain =>
+            chain.foldLeft(Queue.empty[B])(_ :+ _)
+          }
 
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] = {
         val b = Queue.newBuilder[B]
@@ -152,4 +155,37 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def show(fa: Queue[A]): String =
         fa.iterator.map(_.show).mkString("Queue(", ", ", ")")
     }
+
+  implicit def catsStdTraverseFilterForQueue: TraverseFilter[Queue] = QueueInstances.catsStdTraverseFilterForQueue
+}
+
+private object QueueInstances {
+  private val catsStdTraverseFilterForQueue: TraverseFilter[Queue] = new TraverseFilter[Queue] {
+    val traverse: Traverse[Queue] = cats.instances.queue.catsStdInstancesForQueue
+
+    override def mapFilter[A, B](fa: Queue[A])(f: (A) => Option[B]): Queue[B] =
+      fa.collect(Function.unlift(f))
+
+    override def filter[A](fa: Queue[A])(f: (A) => Boolean): Queue[A] = fa.filter(f)
+
+    override def filterNot[A](fa: Queue[A])(f: A => Boolean): Queue[A] = fa.filterNot(f)
+
+    override def collect[A, B](fa: Queue[A])(f: PartialFunction[A, B]): Queue[B] = fa.collect(f)
+
+    override def flattenOption[A](fa: Queue[Option[A]]): Queue[A] = fa.flatten
+
+    def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
+      if (fa.isEmpty) G.pure(Queue.empty[B])
+      else
+        G.map(Chain.traverseFilterViaChain(fa.iterator)(f)) { chain =>
+          chain.foldLeft(Queue.empty[B])(_ :+ _)
+        }
+
+    override def filterA[G[_], A](fa: Queue[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[Queue[A]] =
+      traverse
+        .foldRight(fa, Eval.now(G.pure(Queue.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, queue) => if (b) x +: queue else queue)
+        )
+        .value
+  }
 }

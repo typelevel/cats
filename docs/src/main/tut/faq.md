@@ -49,7 +49,7 @@ Please refer to the [jump start guide]({{ site.baseurl }}/jump_start_guide.html)
 
 Cats and [Scalaz](https://github.com/scalaz/scalaz) have the same goal: to facilitate pure functional programming in Scala applications. However the underlying core strategy is different; Scalaz took the approach of trying to provide a single batteries-included *standard library* for FP that powers the Scala applications. Cats, on the other hand, aims to help build an [ecosystem](/cats/#ecosystem) of pure FP libraries by providing a solid and stable foundation; these libraries can have their own styles and personalities, competing with each other, while at the same time playing nice. It is through this ecosystem of FP libraries (cats included) that Scala applications can be powered with "FP awesome-ness" and beyond by picking whatever best fit their needs.
 
-Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/. It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
+Based on this core strategy, Cats takes a [modular](/cats/motivations#modularity) approach and focuses on providing core, [binary compatible](/cats/#binary-compatibility-and-versioning), [approachable](/cats/motivations#approachability) and [efficient](/cats/motivations#efficiency) abstractions. It provides a welcoming and supportive environment for the [user community](https://gitter.im/typelevel/cats) governed by the [Scala code of conduct](https://www.scala-lang.org/conduct/). It also takes great effort in supplying a comprehensive and beginner-friendly [documentation](/cats/#documentation).
 
 ## <a id="either" href="#either"></a>Where is right-biased Either?
 Up through Cats 0.7.x we had `cats.data.Xor`, which was effectively `scala.util.Either`, but right-biased by default and with
@@ -72,7 +72,7 @@ Cats used to provide mitigation to this issue semi-transparently, but given the 
 
 ## <a id="example-compile" href="#example-compile"></a>Why is some example code not compiling for me?
 
-A portion of example code requires either the [Kind-projector](https://github.com/non/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
+A portion of example code requires either the [Kind-projector](https://github.com/typelevel/kind-projector) compiler plugin or partial unification turned on in scalac. The easiest way to turn partial unification on is through this [sbt plugin](https://github.com/fiadliel/sbt-partial-unification).
 
 ## <a id="future-instances" href="#future-instances"></a>Why can't the compiler find implicit instances for Future?
 
@@ -142,7 +142,7 @@ It may be worth keeping in mind that `IO` and `Task` are pretty blunt instrument
 
 ## <a id="simulacrum" href="#simulacrum"></a>What does `@typeclass` mean?
 
-Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, [Simulacrum](https://github.com/mpilquist/simulacrum) introduces `@typeclass`, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the [project page](https://github.com/mpilquist/simulacrum).
+Cats defines and implements numerous type classes. Unfortunately, encoding these type classes in Scala can incur a large amount of boilerplate. To address this, [Simulacrum](https://github.com/typelevel/simulacrum) introduces `@typeclass`, a macro annotation which generates a lot of this boilerplate. This elevates type classes to a first class construct and increases the legibility and maintainability of the code. Use of simulacrum also ensures consistency in how the type classes are encoded across a project. Cats uses simulacrum wherever possible to encode type classes, and you can read more about it at the [project page](https://github.com/typelevel/simulacrum).
 
 Note that the one area where simulacrum is intentionally not used is in the `cats-kernel` module. The `cats-kernel` module is intended to be a shared dependency for a number of projects, and as such, it is important that it is both lightweight and very stable from a binary compatibility perspective. At some point there may be a transition from simulacrum to [typeclassic](https://github.com/typelevel/typeclassic), and the binary compatibility of moving between simulacrum and typeclassic is unclear at this point. Avoiding the dependency on simulacrum in `cats-kernel`, provides insulation against any potential binary compatibility problems in such a transition.
 
@@ -152,7 +152,7 @@ Cats defines a wealth of type classes and type class instances. For a number of 
 
 **Enter type lambdas!** Type lambdas provide a mechanism to allow one or more of the type parameters for a particular type constructor to be fixed. In the case of `Either` then, when defining a `Monad` for `Either`, we want to fix one of the type parameters at the point where a `Monad` instance is summoned, so that the type parameters line up. As `Either` is right biased, a type lambda can be used to fix the left type parameter and allow the right type parameter to continue to vary when `Either` is treated as a `Monad`. The right biased nature of `Either` is discussed further in the [`Either` documentation]({{ site.baseurl }}/datatypes/either.html).
 
-**Enter [kind-projector](https://github.com/non/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/non/kind-projector).
+**Enter [kind-projector](https://github.com/typelevel/kind-projector)!** kind-projector is a compiler plugin which provides a convenient syntax for dealing with type lambdas. The symbols `?` and `λ` are treated specially by kind-projector, and expanded into the more verbose definitions that would be required were it not to be used. You can read more about kind-projector at the [project page](https://github.com/typelevel/kind-projector).
 
 ## <a id="tailrecm" href="#tailrecm"></a>What is `tailRecM`?
 
@@ -239,8 +239,8 @@ All other symbols can be imported with `import cats.implicits._`
 | `F ~> G`                         | natural transformation   |                  | `FunctionK[F[_], G[_]]` | `FunctionK` alias                                                   |
 | `F :<: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
 | `F :≺: G`                        | injectK                  |                  | `InjectK[F[_], G[_]]`   | `InjectK` alias                                                     |
-| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_], F[_]]`  | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
-| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_], F[_]]`  | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
+| `fa &> fb`                       | parallel product right     |                  | `Parallel[M[_]]`      | `parProductR[A, B](ma: M[A])(mb: M[B]): M[B]`                     |
+| `fa <& fb`                       | parallel product left      |                  | `Parallel[M[_]]`      | `parProductL[A, B](ma: M[A])(mb: M[B]): M[A]`                      |
 | `⊥`                              | bottom                   |                  | N/A                     | `Nothing`                                                           |
 | `⊤`                              | top                      |                  | N/A                     | `Any`                                                               |
 | `fa << fb` (Deprecated)          | product left               |                  | `FlatMap[F[_]]`         | `productL(fa: F[A])(fb: F[B]): F[A]`                               |
@@ -268,8 +268,8 @@ Of course. [sbt-catalysts](https://github.com/typelevel/sbt-catalysts) is create
 
 The easiest way is probably using [Ammonite-REPL](http://ammonite.io/). Install it following the instructions there. Then in the amm console you can type in
 ```scala
-interp.configureCompiler(_.settings.YpartialUnification.value = true)
-import $ivy.`org.typelevel::cats-core:1.0.1`, cats.implicits._
+// interp.configureCompiler(_.settings.YpartialUnification.value = true) // If using scala 2.11 or 2.12
+import $ivy.`org.typelevel::cats-core:2.1.1`, cats._, cats.data._, cats.implicits._
 ```
 Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they are enabled every ammonite session. 
 

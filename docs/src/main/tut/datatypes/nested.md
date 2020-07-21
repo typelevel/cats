@@ -30,7 +30,7 @@ x.map(_.map(_.toString))
 ```tut:silent
 import cats.data.Nested
 import cats.implicits._
-val nested: Nested[Option, Validated[String, ?], Int] = Nested(Some(Valid(123)))
+val nested: Nested[Option, Validated[String, *], Int] = Nested(Some(Valid(123)))
 ```
 
 ```tut:book
@@ -49,13 +49,13 @@ final case class Nested[F[_], G[_], A](value: F[G[A]])
 Instead, it provides a set of inference rules based on the properties of `F[_]`
 and `G[_]`. For example:
 
-* If `F[_]` and `G[_]` are both `Functor`s, then `Nested[F, G, ?]` is also a
+* If `F[_]` and `G[_]` are both `Functor`s, then `Nested[F, G, *]` is also a
     `Functor` (we saw this in action in the example above)
-* If `F[_]` and `G[_]` are both `Applicative`s, then `Nested[F, G, ?]` is also an
+* If `F[_]` and `G[_]` are both `Applicative`s, then `Nested[F, G, *]` is also an
     `Applicative`
 * If `F[_]` is an `ApplicativeError` and `G[_]` is an `Applicative`, then
-    `Nested[F, G, ?]` is an `ApplicativeError`
-* If `F[_]` and `G[_]` are both `Traverse`s, then `Nested[F, G, ?]` is also a
+    `Nested[F, G, *]` is an `ApplicativeError`
+* If `F[_]` and `G[_]` are both `Traverse`s, then `Nested[F, G, *]` is also a
     `Traverse`
 
 You can see the full list of these rules in the `Nested` companion object.

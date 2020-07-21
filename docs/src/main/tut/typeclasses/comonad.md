@@ -9,20 +9,20 @@ scaladoc: "#cats.Comonad"
 
 `Comonad` is a `Functor` and provides duals of the [`Monad`](monad.html) `pure`
 and `flatMap` functions.  A dual to a function has the same types but the 
-direction of the arrows are reversed. Whether or not that is useful even possible 
+direction of the arrows are reversed. Whether or not that is useful, or even possible, 
 depends on the particular type. For a more formal definition of duality, please 
 refer to [https://ncatlab.org/nlab/show/duality](https://ncatlab.org/nlab/show/duality).
 
 ### extract
 
-Monad's have `pure` from `Applicative` which gives you the ability to wrap 
+Monads have `pure` from `Applicative` which gives you the ability to wrap 
 a value `A` using the type constructor giving an `F[A]`. Comonad has 
 `extract` which instead takes an `F[A]` and extracts the `A`. Therefore, to be 
 able to implement extract we must have a type of which we are certain
 we can get an `A` from an `F[A]`. For example we cannot always get an `A` 
 from a `List[A]` because if the list is empty there is nothing to get.
 
-For the same reason, `Option` doesn't have a Comand instance, because we 
+For the same reason, `Option` doesn't have a `Comonad` instance, because we 
 cannot always get an `A` from an Option, it may be empty too.
 
 Some examples that we can implement `Comonad` for include `OneAnd`, `Tuple2` 

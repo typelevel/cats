@@ -1,10 +1,7 @@
 package cats
-import kernel.compat.scalaVersionSpecific._
-import compat.lazyList.toLazyList
 
-package object data {
+package object data extends ScalaVersionSpecificPackage {
 
-  type NonEmptyStream[A] = OneAnd[LazyList, A]
   type ValidatedNel[+E, +A] = Validated[NonEmptyList[E], A]
   type IorNel[+B, +A] = Ior[NonEmptyList[B], A]
   type IorNec[+B, +A] = Ior[NonEmptyChain[B], A]
@@ -13,13 +10,6 @@ package object data {
   type EitherNec[+E, +A] = Either[NonEmptyChain[E], A]
   type EitherNes[E, +A] = Either[NonEmptySet[E], A]
   type ValidatedNec[+E, +A] = Validated[NonEmptyChain[E], A]
-
-  def NonEmptyStream[A](head: A, tail: LazyList[A] = LazyList.empty): NonEmptyStream[A] =
-    OneAnd(head, tail)
-
-  @suppressUnusedImportWarningForScalaVersionSpecific
-  def NonEmptyStream[A](head: A, tail: A*): NonEmptyStream[A] =
-    OneAnd(head, toLazyList(tail))
 
   type NonEmptyMap[K, +A] = NonEmptyMapImpl.Type[K, A]
   val NonEmptyMap = NonEmptyMapImpl
@@ -87,13 +77,33 @@ package object data {
   type RWS[E, L, S, A] = ReaderWriterState[E, L, S, A]
   val RWS = ReaderWriterState
 
-  type Store[S, A] = RepresentableStore[S => ?, S, A]
+  type Store[S, A] = RepresentableStore[S => *, S, A]
   object Store {
-    import cats.instances.function._
     def apply[S, A](f: S => A, s: S): Store[S, A] =
-      RepresentableStore[S => ?, S, A](f, s)
+      RepresentableStore[S => *, S, A](f, s)
   }
 
-  type ZipLazyList[A] = ZipStream[A]
-  val ZipLazyList = ZipStream
+  type Cont[A, B] = ContT[Eval, A, B]
+
+  object Cont {
+    def apply[A, B](f: (B => Eval[A]) => Eval[A]): Cont[A, B] =
+      ContT[Eval, A, B](f)
+
+    def pure[A, B](b: B): Cont[A, B] =
+      ContT.pure[Eval, A, B](b)
+
+    def defer[A, B](b: => B): Cont[A, B] =
+      ContT.defer[Eval, A, B](b)
+
+    def later[A, B](fn: => (B => Eval[A]) => Eval[A]): Cont[A, B] =
+      ContT.later(fn)
+
+    def tailRecM[A, B, C](a: A)(f: A => Cont[C, Either[A, B]]): Cont[C, B] =
+      ContT.tailRecM(a)(f)
+  }
+
+  type INothing <: Nothing
+  object INothing {
+    def absurd[A](n: INothing): A = throw new Exception("Somehow instantiated a value of INothing, this is a bug.")
+  }
 }

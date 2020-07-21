@@ -3,6 +3,7 @@ package data
 
 import java.io.Serializable
 import cats.arrow.{ArrowChoice, CommutativeArrow}
+import scala.annotation.tailrec
 
 /**
  * A function type of a single input that can do function composition
@@ -12,7 +13,7 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
  * Example:
  *
  * {{{
- *   val seed = AndThen((x: Int) => x + 1))
+ *   val seed = AndThen((x: Int) => x + 1)
  *   val f = (0 until 10000).foldLeft(seed)((acc, _) => acc.andThen(_ + 1))
  *
  *   // This should not trigger stack overflow ;-)
@@ -87,25 +88,19 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     }
 
   private def runLoop(start: T): R = {
-    var self: AndThen[Any, Any] = this.asInstanceOf[AndThen[Any, Any]]
-    var current: Any = start.asInstanceOf[Any]
-    var continue = true
-
-    while (continue) {
+    @tailrec
+    def loop[A, B](self: AndThen[A, B], current: A): B =
       self match {
-        case Single(f, _) =>
-          current = f(current)
-          continue = false
+        case Single(f, _) => f(current)
 
         case Concat(Single(f, _), right) =>
-          current = f(current)
-          self = right.asInstanceOf[AndThen[Any, Any]]
+          loop(right, f(current))
 
         case Concat(left @ Concat(_, _), right) =>
-          self = left.rotateAccum(right)
+          loop(left.rotateAccum(right), current)
       }
-    }
-    current.asInstanceOf[R]
+
+    loop(this, start)
   }
 
   final private def andThenF[X](right: AndThen[R, X]): AndThen[T, X] =
@@ -115,21 +110,15 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
 
   // converts left-leaning to right-leaning
   final protected def rotateAccum[E](_right: AndThen[R, E]): AndThen[T, E] = {
-    var self: AndThen[Any, Any] = this.asInstanceOf[AndThen[Any, Any]]
-    var right: AndThen[Any, Any] = _right.asInstanceOf[AndThen[Any, Any]]
-    var continue = true
-    while (continue) {
-      self match {
-        case Concat(left, inner) =>
-          self = left.asInstanceOf[AndThen[Any, Any]]
-          right = inner.andThenF(right)
-
-        case _ => // Single
-          self = self.andThenF(right)
-          continue = false
+    @tailrec
+    def loop[A, B, C](left: AndThen[A, B], right: AndThen[B, C]): AndThen[A, C] =
+      left match {
+        case Concat(left1, right1) =>
+          loop(left1, Concat(right1, right))
+        case notConcat => Concat(notConcat, right)
       }
-    }
-    self.asInstanceOf[AndThen[T, E]]
+
+    loop(this, _right)
   }
 
   override def toString: String =
@@ -138,7 +127,9 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
 
 object AndThen extends AndThenInstances0 {
 
-  /** Builds an [[AndThen]] reference by wrapping a plain function. */
+  /**
+   * Builds an [[AndThen]] reference by wrapping a plain function.
+   */
   def apply[A, B](f: A => B): AndThen[A, B] =
     f match {
       case ref: AndThen[A, B] @unchecked => ref
@@ -168,8 +159,8 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.Monad]] instance for [[AndThen]].
    */
-  implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, ?]] =
-    new Monad[AndThen[T, ?]] {
+  implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, *]] =
+    new Monad[AndThen[T, *]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdMonadForFunction1[T]
 
@@ -189,8 +180,8 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
   /**
    * [[cats.ContravariantMonoidal]] instance for [[AndThen]].
    */
-  implicit def catsDataContravariantMonoidalForAndThen[R: Monoid]: ContravariantMonoidal[AndThen[?, R]] =
-    new ContravariantMonoidal[AndThen[?, R]] {
+  implicit def catsDataContravariantMonoidalForAndThen[R: Monoid]: ContravariantMonoidal[AndThen[*, R]] =
+    new ContravariantMonoidal[AndThen[*, R]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdContravariantMonoidalForFunction1[R]
 
@@ -236,8 +227,8 @@ abstract private[data] class AndThenInstances1 {
   /**
    * [[cats.Contravariant]] instance for [[AndThen]].
    */
-  implicit def catsDataContravariantForAndThen[R]: Contravariant[AndThen[?, R]] =
-    new Contravariant[AndThen[?, R]] {
+  implicit def catsDataContravariantForAndThen[R]: Contravariant[AndThen[*, R]] =
+    new Contravariant[AndThen[*, R]] {
       def contramap[T1, T0](fa: AndThen[T1, R])(f: T0 => T1): AndThen[T0, R] =
         fa.compose(f)
     }

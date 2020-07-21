@@ -1,11 +1,12 @@
-package cats
-package tests
+package cats.tests
 
+import cats.kernel.Eq
 import cats.laws.discipline.{CategoryTests, SerializableTests}
 import org.scalacheck.{Arbitrary, Gen}
 import cats.arrow.Category
+
 class AsSuite extends CatsSuite {
-  import evidence._
+  import cats.evidence._
 
   def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A, B)): Map[A, B] = {
     type RequiredFunc = (Map[A, B], X) => Map[A, B]
@@ -14,7 +15,7 @@ class AsSuite extends CatsSuite {
     fa.foldLeft(Map.empty[A, B])(subst(_ + _))
   }
 
-  implicit def arbAs[A, B](implicit ev: A <~< B) = Arbitrary(Gen.const(ev))
+  implicit def arbAs[A, B](implicit ev: A <~< B): Arbitrary[A <~< B] = Arbitrary(Gen.const(ev))
   implicit def eq[A, B]: Eq[As[A, B]] = Eq.fromUniversalEquals
 
   test("narrow an input of a function2") {
@@ -40,6 +41,15 @@ class AsSuite extends CatsSuite {
     implicitly[String <~< AnyRef]
     implicitly[(String, Int) <~< (AnyRef, Any)]
     implicitly[scala.collection.immutable.List[String] <~< scala.collection.Seq[Any]]
+
+    {
+      trait Foo
+      trait Bar
+      implicit def subFooBar: Foo <:< Bar = implicitly[Foo <:< Foo].asInstanceOf[Foo <:< Bar]
+      // make sure the above is found
+      implicitly[As[Foo, Bar]]
+      val res: Foo <:< Bar = implicitly[As[Foo, Bar]].toPredef
+    }
   }
 
   trait Top {
@@ -109,7 +119,7 @@ class AsSuite extends CatsSuite {
     val f2: Bottom => Any = As.conF(cAsA)(f)
   }
 
-  test("we can simultaneously narrow the input and widen the ouptut of a Function1") {
+  test("we can simultaneously narrow the input and widen the output of a Function1") {
     val f: Top => Bottom = _ => Bottom()
     val cAsA: Bottom As Top = implicitly
     val f2: Bottom => Top = As.invF(cAsA, cAsA)(f)

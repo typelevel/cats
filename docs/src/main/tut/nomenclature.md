@@ -5,12 +5,11 @@ section: "Glossary"
 position: 60
 ---
 
-> - What is the difference between `unit` and `void`?
-> - To discard the first value and keep only the first effect, is it `<*` or `*>`?
-> - How do I make a computation `F[A]` fail by checking a condition on the value?
+This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like these:
 
-
-This is a catalogue of the major functions, type classes, and data types in `Cats`. It serves as a bird's-eye view of each class capabilities. It is also intended as a go-to reference for `Cats` users, who may not recall the answer to questions like the ones above.
+- What is the difference between `unit` and `void`?
+- To discard the first value and keep only the first effect, is it `<*` or `*>`?
+- How do I make a computation `F[A]` fail by checking a condition on the value?
 
 The signatures and type-classes have been simplified, are described [below](#simplifications). If you want a printable version, you can also check out this [cats-cheatsheet](https://arosien.github.io/cats-cheatsheets/typeclasses.pdf).
 
@@ -26,6 +25,7 @@ _WARNING_: this page is written manually, and not automatically generated, so ma
 | `F[A] => B => F[B]`  | `as`   |
 | `F[A] => (A => B) => F[B]` | `map`   |
 | `F[A] => (A => B) => F[(A,B)]` | `fproduct`   |
+| `F[A] => (A => B) => F[(B,A)]` | `fproductLeft`   |
 | `F[A] => B => F[(B, A)]`  | `tupleLeft`  |
 | `F[A] => B => F[(A, B)]`  | `tupleRight` |
 | `(A => B) => (F[A] => F[B])` | `lift`   |
@@ -159,7 +159,7 @@ Like the previous section, we use the `E` for the error parameter type.
 | `WriterT[F[_], A, B]` | `F[(A,B)]`
 | `Tuple2K[F[_], G[_], A]` | `(F[A], G[A])`
 | `EitherK[F[_], G[_], A]` | `Either[F[A], G[A]]`
-| `FunctionK[F[_], G[_]`   | `F[X] => G[X]` for every `X`
+| `FunctionK[F[_], G[_]]`   | `F[X] => G[X]` for every `X`
 | `F ~> G`   | Alias of `FunctionK[F, G]`
 
 ### OptionT
@@ -197,6 +197,7 @@ Here, we use `ET` to abbreviate `EitherT`; and we use `A` and `B` as type variab
 | `Either[A, B] => ET[F, A, B]` | `fromEither` | `F: Applicative` |
 | `Option[B] => A => ET[F, A, B]` | `fromOption` | `F: Applicative` |
 | `F[Option[B]] => A => ET[F, A, B]` | `fromOptionF` | `F: Functor` |
+| `F[Option[B]] => F[A] => ET[F, A, B]` | `fromOptionM` | `F: Monad` |
 | `Boolean => B => A => ET[F, A, B]` | `cond`   | `F: Applicative` |
 | `ET[F, A, B] => (A => C) => (B => C) => F[C]` | `fold` | `F: Functor` |
 | `ET[F, A, B] => ET[F, B, A]` | `swap` | `F: Functor` |
@@ -280,7 +281,7 @@ Because `Сats` is a Scala library and Scala has many knobs and switches, the ac
 - We write type signatures in currified form: parameters are taken one at a time, and they are separated with the arrow `=>` operation. In Scala, a method's parameters may be split in several comma-separated lists.
 - We do not differentiate between methods from the type-class trait (e.g. `trait Functor`), or the companion object, or the syntax companion (`implicit class`).
 - For functions defined as method of the typeclass trait, we ignore the receiver object.
-- We ignore implicit parameters that represent type-class constraints; and write them on a side column instad.
+- We ignore implicit parameters that represent type-class constraints; and write them on a side column instead.
 - We use `A => B` for both `Function1[A, B]` and `PartialFunction[A, B]` parameters, without distinction. We add a side note when one is  a `PartialFunction`.
 - Some functions are defined through the [Partially Applied Type Params](http://typelevel.org/cats/guidelines.html#partially-applied-type-params) pattern. We ignore this.
 - We ignore the distinction between by-name and by-value input parameters. We use the notation `=> A`, without parameters, to indicate constant functions.

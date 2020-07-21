@@ -1,9 +1,9 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Functor
 import cats.laws.discipline.ExhaustiveCheck
-
-import org.scalacheck.{Arbitrary, Cogen}, Arbitrary.arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
+import org.scalacheck.Arbitrary.arbitrary
 
 /**
  * Similar to [[ListWrapper]], but using `Option` instead of `List` limits the size of the structure, which can be
@@ -22,8 +22,8 @@ object OptionWrapper {
   implicit def optionWrapperCogen[A: Cogen]: Cogen[OptionWrapper[A]] =
     Cogen[Option[A]].contramap(_.option)
 
-  implicit def catsLawsExhaustiveCheckForOptionWrapper[A](
-    implicit A: ExhaustiveCheck[A]
+  implicit def catsLawsExhaustiveCheckForOptionWrapper[A](implicit
+    A: ExhaustiveCheck[A]
   ): ExhaustiveCheck[OptionWrapper[A]] =
     ExhaustiveCheck.instance(ExhaustiveCheck[Option[A]].allValues.map(OptionWrapper(_)))
 }

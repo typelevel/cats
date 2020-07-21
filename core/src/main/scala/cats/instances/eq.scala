@@ -1,10 +1,12 @@
 package cats
 package instances
 
+import cats.data.INothing
 import cats.instances.either._
 import cats.syntax.apply._
 
 trait EqInstances extends kernel.instances.EqInstances {
+
   implicit val catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     new ContravariantMonoidal[Eq] {
 
@@ -14,7 +16,8 @@ trait EqInstances extends kernel.instances.EqInstances {
        */
       def unit: Eq[Unit] = Eq.allEqual
 
-      /** Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
+      /**
+       * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -30,8 +33,8 @@ trait EqInstances extends kernel.instances.EqInstances {
 }
 
 trait EqInstancesBinCompat0 {
-  implicit val catsDecideableForEq: Decideable[Eq] =
-    new Decideable[Eq] {
+  implicit val catsDecidableForEq: Decidable[Eq] =
+    new Decidable[Eq] {
 
       /**
        * Defaults to the trivial equivalence relation
@@ -39,7 +42,8 @@ trait EqInstancesBinCompat0 {
        */
       def unit: Eq[Unit] = Eq.allEqual
 
-      /** Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
+      /**
+       * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -61,5 +65,7 @@ trait EqInstancesBinCompat0 {
             (left.swap, right.swap).mapN(fa.eqv).right.get
           else false
         }
+
+      override def zero[A]: Eq[INothing] = Eq.allEqual[INothing]
     }
 }

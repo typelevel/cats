@@ -135,7 +135,7 @@ val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
 
 An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed to
 `EitherT.fromOption` and `EitherT.fromOptionF`, respectively, to produce an
-`EitherT`.
+`EitherT`. For `F[Option[B]]` and default `F[A]`, there is `EitherT.fromOptionM`.
 
 ```tut:book
 val myOption: Option[Int] = None
@@ -143,6 +143,20 @@ val myOptionList: List[Option[Int]] = List(None, Some(2), Some(3), None, Some(5)
 
 val myOptionET = EitherT.fromOption[Future](myOption, "option not defined")
 val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
+val myOptionListETM = EitherT.fromOptionM(myOptionList, List("option not defined"))
+```
+
+## From `ApplicativeError[F, E]` to `EitherT[F, E, A]`
+
+An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
+using the `attemptT` method on them.
+
+```tut:silent
+val myTry: Try[Int] = Try(2)
+val myFuture: Future[String] = Future.failed(new Exception())
+
+val myTryET: EitherT[Try, Throwable, Int] = myTry.attemptT
+val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
 ```
 
 ## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`

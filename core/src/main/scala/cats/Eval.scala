@@ -2,8 +2,6 @@ package cats
 
 import scala.annotation.tailrec
 
-import cats.syntax.all._
-
 /**
  * Eval is a monad which controls evaluation.
  *
@@ -118,7 +116,7 @@ sealed abstract class Eval[+A] extends Serializable { self =>
  * This type should be used when an A value is already in hand, or
  * when the computation to produce an A value is pure and very fast.
  */
-final case class Now[A](value: A) extends Eval[A] {
+final case class Now[A](value: A) extends Eval.Leaf[A] {
   def memoize: Eval[A] = this
 }
 
@@ -136,7 +134,7 @@ final case class Now[A](value: A) extends Eval[A] {
  * by the closure) will not be retained, and will be available for
  * garbage collection.
  */
-final class Later[A](f: () => A) extends Eval[A] {
+final class Later[A](f: () => A) extends Eval.Leaf[A] {
   private[this] var thunk: () => A = f
 
   // The idea here is that `f` may have captured very large
@@ -156,7 +154,7 @@ final class Later[A](f: () => A) extends Eval[A] {
 }
 
 object Later {
-  def apply[A](a: => A): Later[A] = new Later(a _)
+  def apply[A](a: => A): Later[A] = new Later(() => a)
 }
 
 /**
@@ -169,16 +167,23 @@ object Later {
  * required. It should be avoided except when laziness is required and
  * caching must be avoided. Generally, prefer Later.
  */
-final class Always[A](f: () => A) extends Eval[A] {
+final class Always[A](f: () => A) extends Eval.Leaf[A] {
   def value: A = f()
   def memoize: Eval[A] = new Later(f)
 }
 
 object Always {
-  def apply[A](a: => A): Always[A] = new Always(a _)
+  def apply[A](a: => A): Always[A] = new Always(() => a)
 }
 
 object Eval extends EvalInstances {
+
+  /**
+   * A Leaf does not depend on any other Eval
+   * so calling .value does not trigger
+   * any flatMaps or defers
+   */
+  sealed abstract class Leaf[A] extends Eval[A]
 
   /**
    * Construct an eager Eval[A] value (i.e. Now[A]).
@@ -188,12 +193,12 @@ object Eval extends EvalInstances {
   /**
    * Construct a lazy Eval[A] value with caching (i.e. Later[A]).
    */
-  def later[A](a: => A): Eval[A] = new Later(a _)
+  def later[A](a: => A): Eval[A] = new Later(() => a)
 
   /**
    * Construct a lazy Eval[A] value without caching (i.e. Always[A]).
    */
-  def always[A](a: => A): Eval[A] = new Always(a _)
+  def always[A](a: => A): Eval[A] = new Always(() => a)
 
   /**
    * Defer a computation which produces an Eval[A] value.
@@ -202,7 +207,7 @@ object Eval extends EvalInstances {
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
-    new Eval.Defer[A](a _) {}
+    new Eval.Defer[A](() => a) {}
 
   /**
    * Static Eval instance for common value `Unit`.
@@ -258,34 +263,6 @@ object Eval extends EvalInstances {
   }
 
   /**
-   * Advance until we find a non-deferred Eval node.
-   *
-   * Often we may have deep chains of Defer nodes; the goal here is to
-   * advance through those to find the underlying "work" (in the case
-   * of FlatMap nodes) or "value" (in the case of Now, Later, or
-   * Always nodes).
-   */
-  @tailrec private def advance[A](fa: Eval[A]): Eval[A] =
-    fa match {
-      case call: Eval.Defer[A] =>
-        advance(call.thunk())
-      case compute: Eval.FlatMap[A] =>
-        new Eval.FlatMap[A] {
-          type Start = compute.Start
-          val start: () => Eval[Start] = () => compute.start()
-          val run: Start => Eval[A] = s => advance1(compute.run(s))
-        }
-      case other => other
-    }
-
-  /**
-   * Alias for advance that can be called in a non-tail position
-   * from an otherwise tailrec-optimized advance.
-   */
-  private def advance1[A](fa: Eval[A]): Eval[A] =
-    advance(fa)
-
-  /**
    * FlatMap is a type of Eval[A] that is used to chain computations
    * involving .map and .flatMap. Along with Eval#flatMap it
    * implements the trampoline that guarantees stack-safety.
@@ -320,52 +297,70 @@ object Eval extends EvalInstances {
       }
   }
 
-  private def evaluate[A](e: Eval[A]): A = {
-    type L = Eval[Any]
-    type M = Memoize[Any]
-    type C = Any => Eval[Any]
+  /*
+   * This represents the stack of flatmap functions in a series
+   * of Eval operations
+   */
+  sealed abstract private class FnStack[A, B]
+  final private case class Ident[A, B](ev: A <:< B) extends FnStack[A, B]
+  final private case class Many[A, B, C](first: A => Eval[B], rest: FnStack[B, C]) extends FnStack[A, C]
 
-    def addToMemo(m: M): C = { a: Any =>
+  private def evaluate[A](e: Eval[A]): A = {
+    def addToMemo[A1](m: Memoize[A1]): A1 => Eval[A1] = { (a: A1) =>
       m.result = Some(a)
       Now(a)
     }
 
-    @tailrec def loop(curr: L, fs: List[C]): Any =
+    @tailrec def loop[A1](curr: Eval[A1], fs: FnStack[A1, A]): A =
       curr match {
-        case c: FlatMap[_] =>
+        case c: FlatMap[A1] =>
           c.start() match {
-            case cc: FlatMap[_] =>
-              loop(cc.start().asInstanceOf[L], cc.run.asInstanceOf[C] :: c.run.asInstanceOf[C] :: fs)
+            case cc: FlatMap[c.Start] =>
+              val nextFs = Many(c.run, fs)
+              loop(cc.start(), Many(cc.run, nextFs))
+            case call: Defer[c.Start] =>
+              // though the flatMap method handles defer(x).flatMap(f)
+              // by removing the Defer, we can nest defers,
+              // so defer(defer(x)).flatMap(f) could mean c.start()
+              // returns a Defer. We have to handle it here
+              loop(call.thunk(), Many(c.run, fs))
             case mm @ Memoize(eval) =>
               mm.result match {
                 case Some(a) =>
-                  loop(Now(a), c.run.asInstanceOf[C] :: fs)
+                  loop(c.run(a), fs)
                 case None =>
-                  loop(eval, addToMemo(mm.asInstanceOf[M]) :: c.run.asInstanceOf[C] :: fs)
+                  val nextFs = Many(c.run, fs)
+                  loop(eval, Many(addToMemo(mm), nextFs))
               }
-            case xx =>
+            case xx: Leaf[c.Start] =>
+              // xx must be Now, Later, Always, all of those
+              // have safe .value:
               loop(c.run(xx.value), fs)
           }
-        case call: Defer[_] =>
-          loop(advance(call), fs)
-        case m @ Memoize(eval) =>
+        case call: Defer[A1] =>
+          loop(call.thunk(), fs)
+        case m: Memoize[a] =>
+          // a <:< A1
           m.result match {
             case Some(a) =>
               fs match {
-                case f :: fs => loop(f(a), fs)
-                case Nil     => a
+                case Many(f, fs) => loop(f(a), fs)
+                case Ident(ev)   => ev(a)
               }
             case None =>
-              loop(eval, addToMemo(m) :: fs)
+              loop[a](m.eval, Many[a, A1, A](addToMemo[a](m), fs))
           }
-        case x =>
+        case x: Leaf[A1] =>
+          // Now, Later or Always don't have recursions
+          // so they have safe .value:
+          val a1 = x.value
           fs match {
-            case f :: fs => loop(f(x.value), fs)
-            case Nil     => x.value
+            case Many(f, fs) => loop(f(a1), fs)
+            case Ident(ev)   => ev(a1)
           }
       }
 
-    loop(e.asInstanceOf[L], Nil).asInstanceOf[A]
+    loop(e, Ident(implicitly[A <:< A]))
   }
 }
 
@@ -378,6 +373,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
       def extract[A](la: Eval[A]): A = la.value
       def coflatMap[A, B](fa: Eval[A])(f: Eval[A] => B): Eval[B] = Later(f(fa))
+      override def unit: Eval[Unit] = Eval.Unit
     }
 
   implicit val catsDeferForEval: Defer[Eval] =
@@ -415,7 +411,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
   implicit def catsOrderForEval[A: Order]: Order[Eval[A]] =
     new Order[Eval[A]] {
       def compare(lx: Eval[A], ly: Eval[A]): Int =
-        lx.value.compare(ly.value)
+        Order[A].compare(lx.value, ly.value)
     }
 
   implicit def catsGroupForEval[A: Group]: Group[Eval[A]] =
@@ -442,7 +438,7 @@ sealed abstract private[cats] class EvalInstances0 extends EvalInstances1 {
   implicit def catsPartialOrderForEval[A: PartialOrder]: PartialOrder[Eval[A]] =
     new PartialOrder[Eval[A]] {
       def partialCompare(lx: Eval[A], ly: Eval[A]): Double =
-        lx.value.partialCompare(ly.value)
+        PartialOrder[A].partialCompare(lx.value, ly.value)
     }
 
   implicit def catsMonoidForEval[A: Monoid]: Monoid[Eval[A]] =
@@ -453,7 +449,7 @@ sealed abstract private[cats] class EvalInstances1 {
   implicit def catsEqForEval[A: Eq]: Eq[Eval[A]] =
     new Eq[Eval[A]] {
       def eqv(lx: Eval[A], ly: Eval[A]): Boolean =
-        lx.value === ly.value
+        Eq[A].eqv(lx.value, ly.value)
     }
 
   implicit def catsSemigroupForEval[A: Semigroup]: Semigroup[Eval[A]] =
@@ -463,7 +459,7 @@ sealed abstract private[cats] class EvalInstances1 {
 trait EvalSemigroup[A] extends Semigroup[Eval[A]] {
   implicit def algebra: Semigroup[A]
   def combine(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |+| y
+    for { x <- lx; y <- ly } yield algebra.combine(x, y)
 }
 
 trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
@@ -474,7 +470,7 @@ trait EvalMonoid[A] extends Monoid[Eval[A]] with EvalSemigroup[A] {
 trait EvalGroup[A] extends Group[Eval[A]] with EvalMonoid[A] {
   implicit def algebra: Group[A]
   def inverse(lx: Eval[A]): Eval[A] =
-    lx.map(_.inverse())
+    lx.map(algebra.inverse)
   override def remove(lx: Eval[A], ly: Eval[A]): Eval[A] =
-    for { x <- lx; y <- ly } yield x |-| y
+    for { x <- lx; y <- ly } yield algebra.remove(x, y)
 }

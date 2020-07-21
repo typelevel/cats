@@ -80,7 +80,7 @@ therefore name our implicits according to the following rules:
 - If the instance is for multiple type classes, use `InstancesFor` instead of a type class name.
 - If the instance is for a standard library type add `Std` after the package. i.e. `catsStdShowForVector` and `catsKernelStdGroupForTuple`.
 
-As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelMonoidForList`.
+As an example, an implicit instance of `Monoid` for `List` defined in the package `Kernel` should be named `catsKernelStdMonoidForList`.
 
 This rule is relatively flexible. Use what you see appropriate. The goal is to maintain uniqueness and avoid conflicts.
 
@@ -103,11 +103,11 @@ trait Monad[F[_]] extends Functor
 object Kleisli extends KleisliInstance0
 
 abstract class KleisliInstance0 extends KleisliInstance1 {
-  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, ?]] = ...
+  implicit def catsDataMonadForKleisli[F[_], A]: Monad[Kleisli[F, A, *]] = ...
 }
 
 abstract class KleisliInstance1 {
-  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, ?]] = ...
+  implicit def catsDataFunctorForKleisli[F[_], A]: Functor[Kleisli[F, A, *]] = ...
 }
 ```
 
@@ -118,9 +118,9 @@ We can introduce new type classes for the sake of adding laws that don't apply t
 
 ### <a id="applicative-monad-transformers" href="#applicative-monad-transformers">Applicative instances for monad transformers</a>
 
-We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, ?]` given an `Applicative[F]`.
+We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, *]` given an `Applicative[F]`.
 An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance
-for `EitherT[F, String, ?]`. Such an instance will be derived if you use `Nested` instead:
+for `EitherT[F, String, *]`. Such an instance will be derived if you use `Nested` instead:
 
 ```scala
 import cats._, cats.data._, cats.implicits._
@@ -136,6 +136,6 @@ x === y
 > false
 ```
 
-#### TODO:
+### Classes extending AnyVal
 
-Once we drop 2.10 support, AnyVal-extending class constructor parameters can be marked as private.
+AnyVal-extending class constructor parameters must be marked as private.

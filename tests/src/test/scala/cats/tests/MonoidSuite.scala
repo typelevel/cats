@@ -1,5 +1,7 @@
-package cats
-package tests
+package cats.tests
+
+import cats.{Invariant, InvariantSemigroupal}
+import cats.kernel.Monoid
 
 class MonoidSuite extends CatsSuite {
   {

@@ -12,7 +12,7 @@ trait ListInstances extends ListInstances1 {
     new ListMonoid[A]
 }
 
-trait ListInstances1 extends ListInstances2 {
+private[instances] trait ListInstances1 extends ListInstances2 {
   implicit def catsKernelStdPartialOrderForList[A: PartialOrder]: PartialOrder[List[A]] =
     new ListPartialOrder[A]
 
@@ -20,7 +20,7 @@ trait ListInstances1 extends ListInstances2 {
     new ListHash[A]
 }
 
-trait ListInstances2 {
+private[instances] trait ListInstances2 {
   implicit def catsKernelStdEqForList[A: Eq]: Eq[List[A]] =
     new ListEq[A]
 }
@@ -83,7 +83,7 @@ class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {
   }
 }
 
-class ListMonoid[A] extends Monoid[List[A]] {
+class ListMonoid[A] extends Monoid[List[A]] { self =>
   def empty: List[A] = Nil
   def combine(x: List[A], y: List[A]): List[A] = x ::: y
 
@@ -92,4 +92,17 @@ class ListMonoid[A] extends Monoid[List[A]] {
 
   override def combineAll(xs: IterableOnce[List[A]]): List[A] =
     StaticMethods.combineAllIterable(List.newBuilder[A], xs)
+
+  override def reverse: Monoid[List[A]] =
+    new Monoid[List[A]] {
+      def empty: List[A] = Nil
+      def combine(x: List[A], y: List[A]) = y ::: x
+
+      override def combineAll(xs: IterableOnce[List[A]]): List[A] =
+        xs.iterator.foldLeft(empty) { (acc, item) =>
+          item ::: acc
+        }
+
+      override def reverse = self
+    }
 }

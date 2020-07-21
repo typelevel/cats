@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.INothing
 import cats.instances.either._
 import cats.syntax.apply._
 
@@ -12,11 +13,13 @@ trait EquivInstances {
        * Defaults to trivially contracting the type
        * to a point
        */
-      def unit: Equiv[Unit] = new Equiv[Unit] {
-        def equiv(x: Unit, y: Unit): Boolean = true
-      }
+      def unit: Equiv[Unit] =
+        new Equiv[Unit] {
+          def equiv(x: Unit, y: Unit): Boolean = true
+        }
 
-      /** Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
+      /**
+       * Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -35,18 +38,20 @@ trait EquivInstances {
 }
 
 trait EquivInstancesBinCompat0 {
-  implicit val catsDecideableForEquiv: Decideable[Equiv] =
-    new Decideable[Equiv] {
+  implicit val catsDecidableForEquiv: Decidable[Equiv] =
+    new Decidable[Equiv] {
 
       /**
        * Defaults to trivially contracting the type
        * to a point
        */
-      def unit: Equiv[Unit] = new Equiv[Unit] {
-        def equiv(x: Unit, y: Unit): Boolean = true
-      }
+      def unit: Equiv[Unit] =
+        new Equiv[Unit] {
+          def equiv(x: Unit, y: Unit): Boolean = true
+        }
 
-      /** Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
+      /**
+       * Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -73,6 +78,8 @@ trait EquivInstancesBinCompat0 {
               (x.swap, y.swap).mapN(fa.equiv).right.get
             else false
         }
+
+      override def zero[A]: Equiv[INothing] = Equiv.by(_ => ())
     }
 
 }

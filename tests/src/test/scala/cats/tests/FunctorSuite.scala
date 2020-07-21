@@ -1,5 +1,7 @@
-package cats
-package tests
+package cats.tests
+
+import cats.Functor
+import cats.syntax.functor._
 
 class FunctorSuite extends CatsSuite {
   test("void replaces values with unit preserving structure") {
@@ -29,6 +31,14 @@ class FunctorSuite extends CatsSuite {
     }
   }
 
+  test("unzip preserves structure") {
+    forAll { (l: List[Int], o: Option[Int], m: Map[String, Int]) =>
+      Functor[List].unzip(l.map(i => (i, i))) === ((l, l))
+      Functor[Option].unzip(o.map(i => (i, i))) === ((o, o))
+      Functor[Map[String, *]].unzip(m.map { case (k, v) => (k, (v, v)) }) === ((m, m))
+    }
+  }
+
   test("widen equals map(identity)") {
     forAll { (i: Int) =>
       val list: List[Some[Int]] = List(Some(i))
@@ -37,4 +47,21 @@ class FunctorSuite extends CatsSuite {
       assert(widened eq list)
     }
   }
+
+  test("ifF equals map(if(_) ifTrue else ifFalse)") {
+    forAll { (l: List[Boolean], o: Option[Boolean], m: Map[String, Boolean]) =>
+      Functor[List].ifF(l)(1, 0) should ===(l.map(if (_) 1 else 0))
+      Functor[Option].ifF(o)(1, 0) should ===(o.map(if (_) 1 else 0))
+    }
+  }
+
+  test("ifF equals map(if(_) ifTrue else ifFalse) for concrete lists and options") {
+    Functor[List].ifF(List(true, false, false, true))(1, 0) should ===(List(1, 0, 0, 1))
+    Functor[List].ifF(List.empty[Boolean])(1, 0) should ===(Nil)
+    Functor[Option].ifF(Some(true))(1, 0) should ===(Some(1))
+    Functor[Option].ifF(Some(false))(1, 0) should ===(Some(0))
+    Functor[Option].ifF(None)(1, 0) should ===(None)
+
+  }
+
 }

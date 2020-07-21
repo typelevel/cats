@@ -6,7 +6,7 @@ source: "core/src/main/scala/cats/Alternative.scala"
 scaladoc: "#cats.Alternative"
 ---
 # Alternative
-Alternative extends [`Applicative`](`applicative.html`) with a [`MonoidK`](`monoidk.html`).
+Alternative extends [`Applicative`](applicative.html) with a [`MonoidK`](monoidk.html).
 Let's stub out all the operations just to remind ourselves what that gets us.
 
 ```tut:book:silent
@@ -30,7 +30,7 @@ Like other type classes, `Alternative` instances must obey some laws, in additio
 * Right Absorption: Applying a contextual function `F[A => B]` to `empty [A]` should be `empty [B]`.
   * `ff ap F.empty[A] = F.empty[B]`.
 * Left Distributivity:  Mapping over a combined element must be the combinations of the mapped elements.
-  * `(fa <+> fa2) map f = ((fa map f) <+> (fa2 map f))` where `fa: F[A]` and `fb: F[B]` and `f: A => B`.
+  * `(fa <+> fb) map f = ((fa map f) <+> (fb map f))` where `fa: F[A]` and `fb: F[B]` and `f: A => B`.
 * Right Distributivity: Applying the combination of two functions must be the combination of their applications.
   * `(ff <+> fg) ap fa = (ff ap fa) <+> (fg ap fa)` where `ff: F[A => B]`, `fg: F[A => B]`, and `fa: F[A]`.
 

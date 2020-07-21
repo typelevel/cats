@@ -1,8 +1,7 @@
-package alleycats
-package tests
+package alleycats.tests
 
 import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.Configuration
 
 trait TestSettings extends Configuration with Matchers {

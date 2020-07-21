@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.INothing
 import cats.instances.either._
 import cats.syntax.apply._
 import cats.kernel.instances.unit._
@@ -26,8 +27,8 @@ trait OrderingInstances {
     }
 }
 trait OrderingInstancesBinCompat0 {
-  implicit val catsDecideableForOrdering: Decideable[Ordering] =
-    new Decideable[Ordering] {
+  implicit val catsDecidableForOrdering: Decidable[Ordering] =
+    new Decidable[Ordering] {
 
       /**
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
@@ -55,6 +56,8 @@ trait OrderingInstancesBinCompat0 {
               (x.swap, y.swap).mapN(fa.compare).right.get
             else -1
         }
+
+      override def zero[A]: Ordering[INothing] = Ordering.by(_ => ())
     }
 
 }

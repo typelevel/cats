@@ -1,9 +1,8 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.MonoidTests
-
+import cats.Endo
 import cats.arrow.Category
+import cats.kernel.laws.discipline.MonoidTests
 import cats.laws.discipline.{MiniInt, MonoidKTests, SerializableTests}
 import cats.laws.discipline.eq.catsLawsEqForFn1Exhaustive
 import cats.laws.discipline.arbitrary.{catsLawsArbitraryForMiniInt, catsLawsCogenForMiniInt}

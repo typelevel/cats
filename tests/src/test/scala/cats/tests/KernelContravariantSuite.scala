@@ -1,6 +1,7 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{Contravariant, ContravariantSemigroupal, Invariant, Semigroupal}
+import cats.kernel.{Eq, Hash, Order, PartialOrder}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline._
 import cats.laws.discipline.eq._

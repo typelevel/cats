@@ -1,6 +1,7 @@
 package cats
 package instances
 
+import cats.data.INothing
 import cats.instances.either._
 import cats.syntax.apply._
 import cats.kernel.instances.unit._
@@ -14,7 +15,8 @@ trait OrderInstances extends kernel.instances.OrderInstances {
        */
       def unit: Order[Unit] = Order[Unit]
 
-      /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
+      /**
+       * Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -32,15 +34,16 @@ trait OrderInstances extends kernel.instances.OrderInstances {
 }
 
 trait OrderInstancesBinCompat0 {
-  implicit val catsDecideableForOrder: Decideable[Order] =
-    new Decideable[Order] {
+  implicit val catsDecidableForOrder: Decidable[Order] =
+    new Decidable[Order] {
 
       /**
        * Provides trivial order
        */
       def unit: Order[Unit] = Order[Unit]
 
-      /** Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
+      /**
+       * Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
@@ -66,5 +69,7 @@ trait OrderInstancesBinCompat0 {
               (x.swap, y.swap).mapN(fa.compare).right.get
             else -1
         }
+
+      override def zero[A]: Order[INothing] = Order.by(_ => ())
     }
 }

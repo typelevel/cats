@@ -1,10 +1,13 @@
 package cats
 
+import scala.collection.immutable.{Queue, SortedMap}
 import simulacrum.typeclass
+import scala.annotation.implicitNotFound
 
 /**
  * `FunctorFilter[F]` allows you to `map` and filter out elements simultaneously.
  */
+@implicitNotFound("Could not find an instance of FunctorFilter for ${F}")
 @typeclass
 trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
@@ -20,7 +23,7 @@ trait FunctorFilter[F[_]] extends Serializable {
    * scala> val m: Map[Int, String] = Map(1 -> "one", 3 -> "three")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
    * scala> def asString(i: Int): Option[String] = m.get(i)
-   * scala> l.mapFilter(i => m.get(i))
+   * scala> l.mapFilter(asString)
    * res0: List[String] = List(one, three)
    * }}}
    */
@@ -66,4 +69,75 @@ trait FunctorFilter[F[_]] extends Serializable {
    */
   def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(a => if (f(a)) Some(a) else None)
+
+  /**
+   * Apply a filter to a structure such that the output structure contains all
+   * `A` elements in the input structure that do not satisfy the predicate `f`.
+   */
+  def filterNot[A](fa: F[A])(f: A => Boolean): F[A] =
+    mapFilter(fa)(Some(_).filterNot(f))
+}
+
+object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances {
+  implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
+    cats.instances.option.catsStdTraverseFilterForOption
+  implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
+  implicit def catsTraverseFilterForVector: TraverseFilter[Vector] =
+    cats.instances.vector.catsStdTraverseFilterForVector
+  implicit def catsFunctorFilterForMap[K]: FunctorFilter[Map[K, *]] =
+    cats.instances.map.catsStdFunctorFilterForMap[K]
+  implicit def catsTraverseFilterForSortedMap[K]: TraverseFilter[SortedMap[K, *]] =
+    cats.instances.sortedMap.catsStdTraverseFilterForSortedMap[K]
+  implicit def catsTraverseFilterForQueue: TraverseFilter[Queue] =
+    cats.instances.queue.catsStdTraverseFilterForQueue
+
+  /* ======================================================================== */
+  /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
+  /* ======================================================================== */
+
+  /**
+   * Summon an instance of [[FunctorFilter]] for `F`.
+   */
+  @inline def apply[F[_]](implicit instance: FunctorFilter[F]): FunctorFilter[F] = instance
+
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object ops {
+    implicit def toAllFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): AllOps[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new AllOps[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  trait Ops[F[_], A] extends Serializable {
+    type TypeClassType <: FunctorFilter[F]
+    def self: F[A]
+    val typeClassInstance: TypeClassType
+    def mapFilter[B](f: A => Option[B]): F[B] = typeClassInstance.mapFilter[A, B](self)(f)
+    def collect[B](f: PartialFunction[A, B]): F[B] = typeClassInstance.collect[A, B](self)(f)
+    def flattenOption[B](implicit ev$1: A <:< Option[B]): F[B] =
+      typeClassInstance.flattenOption[B](self.asInstanceOf[F[Option[B]]])
+    def filter(f: A => Boolean): F[A] = typeClassInstance.filter[A](self)(f)
+    def filterNot(f: A => Boolean): F[A] = typeClassInstance.filterNot[A](self)(f)
+  }
+  trait AllOps[F[_], A] extends Ops[F, A]
+  trait ToFunctorFilterOps extends Serializable {
+    implicit def toFunctorFilterOps[F[_], A](target: F[A])(implicit tc: FunctorFilter[F]): Ops[F, A] {
+      type TypeClassType = FunctorFilter[F]
+    } =
+      new Ops[F, A] {
+        type TypeClassType = FunctorFilter[F]
+        val self: F[A] = target
+        val typeClassInstance: TypeClassType = tc
+      }
+  }
+  @deprecated("Use cats.syntax object imports", "2.2.0")
+  object nonInheritedOps extends ToFunctorFilterOps
+
+  /* ======================================================================== */
+  /* END OF SIMULACRUM-MANAGED CODE                                           */
+  /* ======================================================================== */
+
 }

@@ -15,17 +15,19 @@ trait TryInstances extends TryInstances1 {
     new TryCoflatMap with MonadError[Try, Throwable] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
-      override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] = (ta, tb) match {
-        case (Success(a), Success(b)) => Success((a, b))
-        case (f: Failure[_], _)       => castFailure[(A, B)](f)
-        case (_, f: Failure[_])       => castFailure[(A, B)](f)
-      }
+      override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =
+        (ta, tb) match {
+          case (Success(a), Success(b)) => Success((a, b))
+          case (f: Failure[_], _)       => castFailure[(A, B)](f)
+          case (_, f: Failure[_])       => castFailure[(A, B)](f)
+        }
 
-      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] = (ta, tb) match {
-        case (Success(a), Success(b)) => Try(f(a, b))
-        case (f: Failure[_], _)       => castFailure[Z](f)
-        case (_, f: Failure[_])       => castFailure[Z](f)
-      }
+      override def map2[A, B, Z](ta: Try[A], tb: Try[B])(f: (A, B) => Z): Try[Z] =
+        (ta, tb) match {
+          case (Success(a), Success(b)) => Try(f(a, b))
+          case (f: Failure[_], _)       => castFailure[Z](f)
+          case (_, f: Failure[_])       => castFailure[Z](f)
+        }
 
       override def map2Eval[A, B, Z](ta: Try[A], tb: Eval[Try[B]])(f: (A, B) => Z): Eval[Try[Z]] =
         ta match {
@@ -69,7 +71,15 @@ trait TryInstances extends TryInstances1 {
         ta.recover { case t => f(t) }
 
       override def attempt[A](ta: Try[A]): Try[Either[Throwable, A]] =
-        (ta.map(a => Right[Throwable, A](a))).recover { case NonFatal(t) => Left(t) }
+        ta match { case Success(a) => Success(Right(a)); case Failure(e) => Success(Left(e)) }
+
+      override def redeem[A, B](ta: Try[A])(recover: Throwable => B, map: A => B): Try[B] =
+        ta match { case Success(a) => Try(map(a)); case Failure(e) => Try(recover(e)) }
+
+      override def redeemWith[A, B](ta: Try[A])(recover: Throwable => Try[B], bind: A => Try[B]): Try[B] =
+        try ta match {
+          case Success(a) => bind(a); case Failure(e) => recover(e)
+        } catch { case NonFatal(e) => Failure(e) }
 
       override def recover[A](ta: Try[A])(pf: PartialFunction[Throwable, A]): Try[A] =
         ta.recover(pf)
@@ -129,15 +139,20 @@ trait TryInstances extends TryInstances1 {
         }
 
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
+
+      override def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< Throwable): Try[A] = Try(a)
+
+      override def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< Throwable): Try[A] = Try(a.value)
     }
   // scalastyle:on method.length
 
   implicit def catsStdShowForTry[A](implicit A: Show[A]): Show[Try[A]] =
     new Show[Try[A]] {
-      def show(fa: Try[A]): String = fa match {
-        case Success(a) => s"Success(${A.show(a)})"
-        case Failure(e) => s"Failure($e)"
-      }
+      def show(fa: Try[A]): String =
+        fa match {
+          case Success(a) => s"Success(${A.show(a)})"
+          case Failure(e) => s"Failure($e)"
+        }
     }
 
   /**
@@ -147,11 +162,12 @@ trait TryInstances extends TryInstances1 {
    */
   implicit def catsStdEqForTry[A, T](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     new Eq[Try[A]] {
-      def eqv(x: Try[A], y: Try[A]): Boolean = (x, y) match {
-        case (Success(a), Success(b)) => A.eqv(a, b)
-        case (Failure(a), Failure(b)) => T.eqv(a, b)
-        case _                        => false
-      }
+      def eqv(x: Try[A], y: Try[A]): Boolean =
+        (x, y) match {
+          case (Success(a), Success(b)) => A.eqv(a, b)
+          case (Failure(a), Failure(b)) => T.eqv(a, b)
+          case _                        => false
+        }
     }
 }
 

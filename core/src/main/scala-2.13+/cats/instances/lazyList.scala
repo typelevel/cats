@@ -1,22 +1,22 @@
 package cats
 package instances
+
 import cats.kernel
 import cats.syntax.show._
+import cats.data.Ior
+import cats.data.ZipLazyList
 
 import scala.annotation.tailrec
 
-//For cross compile with backward compatibility
-trait StreamInstancesBinCompat0
+trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
-//For cross compile with backward compatibility
-trait StreamInstances extends LazyListInstances {
-  val catsStdInstancesForStream = catsStdInstancesForLazyList
-}
-
-trait LazyListInstances extends cats.kernel.instances.StreamInstances {
   implicit val catsStdInstancesForLazyList
-    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] =
-    new Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] {
+    : Traverse[LazyList] with Alternative[LazyList] with Monad[LazyList] with CoflatMap[LazyList] with Align[LazyList] =
+    new Traverse[LazyList]
+      with Alternative[LazyList]
+      with Monad[LazyList]
+      with CoflatMap[LazyList]
+      with Align[LazyList] {
 
       def empty[A]: LazyList[A] = LazyList.empty
 
@@ -69,56 +69,15 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
         fa.zipWithIndex
 
       def tailRecM[A, B](a: A)(fn: A => LazyList[Either[A, B]]): LazyList[B] = {
-        val it: Iterator[B] = new Iterator[B] {
-          var stack: List[Iterator[Either[A, B]]] = Nil
-          var state: Either[A, Option[B]] = Left(a)
-
-          @tailrec
-          def advance(): Unit = stack match {
-            case head :: tail =>
-              if (head.hasNext) {
-                head.next match {
-                  case Right(b) =>
-                    state = Right(Some(b))
-                  case Left(a) =>
-                    val nextFront = fn(a).iterator
-                    stack = nextFront :: stack
-                    advance()
-                }
-              } else {
-                stack = tail
-                advance()
-              }
-            case Nil =>
-              state = Right(None)
-          }
-
-          @tailrec
-          def hasNext: Boolean = state match {
-            case Left(a) =>
-              // this is the first run
-              stack = fn(a).iterator :: Nil
-              advance()
-              hasNext
-            case Right(o) =>
-              o.isDefined
-          }
-
-          @tailrec
-          def next(): B = state match {
-            case Left(a) =>
-              // this is the first run
-              stack = fn(a).iterator :: Nil
-              advance()
-              next()
-            case Right(o) =>
-              val b = o.get
-              advance()
-              b
-          }
+        val kernel = Iterator.unfold[Option[B], Iterator[Either[A, B]]](Iterator(Left(a))) { it =>
+          if (!it.hasNext) None
+          else
+            it.next match {
+              case Left(a)  => Some((None, fn(a).iterator ++ it))
+              case Right(b) => Some((Some(b), it))
+            }
         }
-
-        LazyList.from(it)
+        LazyList.from(kernel.collect { case Some(v) => v })
       }
 
       override def exists[A](fa: LazyList[A])(p: A => Boolean): Boolean =
@@ -159,17 +118,27 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
 
       override def toList[A](fa: LazyList[A]): List[A] = fa.toList
 
+      override def toIterable[A](fa: LazyList[A]): Iterable[A] = fa
+
       override def reduceLeftOption[A](fa: LazyList[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)
 
       override def find[A](fa: LazyList[A])(f: A => Boolean): Option[A] = fa.find(f)
 
-      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.StreamMonoid[A]
+      override def algebra[A]: Monoid[LazyList[A]] = new kernel.instances.LazyListMonoid[A]
 
       override def collectFirst[A, B](fa: LazyList[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
       override def collectFirstSome[A, B](fa: LazyList[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
+
+      def functor: Functor[LazyList] = this
+
+      def align[A, B](fa: LazyList[A], fb: LazyList[B]): LazyList[Ior[A, B]] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: LazyList[A], fb: LazyList[B])(f: Ior[A, B] => C): LazyList[C] =
+        LazyList.from(Align.alignWithIterator[A, B, C](fa, fb)(f))
     }
 
   implicit def catsStdShowForLazyList[A: Show]: Show[LazyList[A]] =
@@ -185,6 +154,8 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
 
     override def filter[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filter(f)
 
+    override def filterNot[A](fa: LazyList[A])(f: (A) => Boolean): LazyList[A] = fa.filterNot(f)
+
     override def collect[A, B](fa: LazyList[A])(f: PartialFunction[A, B]): LazyList[B] = fa.collect(f)
 
     override def flattenOption[A](fa: LazyList[Option[A]]): LazyList[A] = fa.flatten
@@ -192,16 +163,32 @@ trait LazyListInstances extends cats.kernel.instances.StreamInstances {
     def traverseFilter[G[_], A, B](
       fa: LazyList[A]
     )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[LazyList[B]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[B])))(
-          (x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
+      traverse
+        .foldRight(fa, Eval.now(G.pure(LazyList.empty[B])))((x, xse) =>
+          G.map2Eval(f(x), xse)((i, o) => i.fold(o)(_ +: o))
         )
         .value
 
     override def filterA[G[_], A](fa: LazyList[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[LazyList[A]] =
-      fa.foldRight(Eval.now(G.pure(LazyList.empty[A])))(
-          (x, xse) => G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
+      traverse
+        .foldRight(fa, Eval.now(G.pure(LazyList.empty[A])))((x, xse) =>
+          G.map2Eval(f(x), xse)((b, as) => if (b) x +: as else as)
         )
         .value
 
   }
+
+  implicit def catsStdParallelForLazyListZipLazyList[A]: Parallel.Aux[LazyList, ZipLazyList] =
+    new Parallel[LazyList] {
+      type F[x] = ZipLazyList[x]
+
+      def monad: Monad[LazyList] = cats.instances.lazyList.catsStdInstancesForLazyList
+      def applicative: Applicative[ZipLazyList] = ZipLazyList.catsDataAlternativeForZipLazyList
+
+      def sequential: ZipLazyList ~> LazyList =
+        new (ZipLazyList ~> LazyList) { def apply[B](zll: ZipLazyList[B]): LazyList[B] = zll.value }
+
+      def parallel: LazyList ~> ZipLazyList =
+        new (LazyList ~> ZipLazyList) { def apply[B](ll: LazyList[B]): ZipLazyList[B] = new ZipLazyList(ll) }
+    }
 }

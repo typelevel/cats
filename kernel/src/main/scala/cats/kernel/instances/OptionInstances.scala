@@ -4,21 +4,23 @@ package instances
 trait OptionInstances extends OptionInstances0 {
   implicit def catsKernelStdOrderForOption[A: Order]: Order[Option[A]] =
     new OptionOrder[A]
+  implicit def catsKernelStdCommutativeMonoidForOption[A: CommutativeSemigroup]: CommutativeMonoid[Option[A]] =
+    new OptionCommutativeMonoid[A]
   implicit def catsKernelStdMonoidForOption[A: Semigroup]: Monoid[Option[A]] =
     new OptionMonoid[A]
 }
 
-trait OptionInstances0 extends OptionInstances1 {
+private[instances] trait OptionInstances0 extends OptionInstances1 {
   implicit def catsKernelStdPartialOrderForOption[A: PartialOrder]: PartialOrder[Option[A]] =
     new OptionPartialOrder[A]
 }
 
-trait OptionInstances1 extends OptionInstances2 {
+private[instances] trait OptionInstances1 extends OptionInstances2 {
   implicit def catsKernelStdHashForOption[A: Hash]: Hash[Option[A]] =
     new OptionHash[A]
 }
 
-trait OptionInstances2 {
+private[instances] trait OptionInstances2 {
   implicit def catsKernelStdEqForOption[A: Eq]: Eq[Option[A]] =
     new OptionEq[A]
 }
@@ -50,10 +52,11 @@ class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Op
 }
 
 class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Option[A]] {
-  def hash(x: Option[A]): Int = x match {
-    case None     => None.hashCode()
-    case Some(xx) => StaticMethods.product1HashWithPrefix(A.hash(xx), x.productPrefix)
-  }
+  def hash(x: Option[A]): Int =
+    x match {
+      case None     => None.hashCode()
+      case Some(xx) => StaticMethods.product1HashWithPrefix(A.hash(xx), x.productPrefix)
+    }
 }
 
 class OptionEq[A](implicit A: Eq[A]) extends Eq[Option[A]] {
@@ -80,3 +83,7 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
         }
     }
 }
+
+private class OptionCommutativeMonoid[A](implicit A: CommutativeSemigroup[A])
+    extends OptionMonoid[A]()(A)
+    with CommutativeMonoid[Option[A]]

@@ -1,12 +1,14 @@
-package cats
-package tests
+package cats.tests
 
-import Helpers.POrd
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
+import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
-import org.scalatest.Assertion
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.partialOrder._
+import cats.tests.Helpers.POrd
+import org.scalatest.Assertion
 
 class PartialOrderSuite extends CatsSuite {
 
@@ -27,6 +29,7 @@ class PartialOrderSuite extends CatsSuite {
 
   test("companion object syntax") {
     forAll { (i: Int, j: Int) =>
+      val catsKernelStdOrderForInt: Order[Int] = Order[Int]
       checkPartialCompare(PartialOrder.partialCompare(i, j), catsKernelStdOrderForInt.partialCompare(i, j))
       PartialOrder.tryCompare(i, j) should ===(catsKernelStdOrderForInt.tryCompare(i, j))
       PartialOrder.pmin(i, j) should ===(catsKernelStdOrderForInt.pmin(i, j))
@@ -46,16 +49,16 @@ class PartialOrderSuite extends CatsSuite {
       (i <= j) should ===(PartialOrder.lteqv(i, j))
 
       checkPartialCompare(i.partialCompare(j), PartialOrder.partialCompare(i, j))
-      (i.tryCompare(j)) should ===(PartialOrder.tryCompare(i, j))
-      (i.pmin(j)) should ===(PartialOrder.pmin(i, j))
-      (i.pmax(j)) should ===(PartialOrder.pmax(i, j))
+      i.partialComparison(j) should ===(PartialOrder[POrd].partialComparison(i, j))
+      i.tryCompare(j) should ===(PartialOrder.tryCompare(i, j))
+      i.pmin(j) should ===(PartialOrder.pmin(i, j))
+      i.pmax(j) should ===(PartialOrder.pmax(i, j))
     }
   }
 }
 
 object PartialOrderSuite {
   def summonInstance(): Unit = {
-    import cats.instances.partialOrder._
     Invariant[PartialOrder]
     Contravariant[PartialOrder]
     ()

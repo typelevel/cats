@@ -16,12 +16,10 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa: F[A],
     f: A => M[B],
     g: B => N[C]
-  )(implicit
-    N: Applicative[N],
-    M: Applicative[M]): IsEq[Nested[M, N, F[C]]] = {
+  )(implicit N: Applicative[N], M: Applicative[M]): IsEq[Nested[M, N, F[C]]] = {
 
     val lhs = Nested(M.map(fa.traverse(f))(fb => fb.traverse(g)))
-    val rhs = fa.traverse[Nested[M, N, ?], C](a => Nested(M.map(f(a))(g)))
+    val rhs = fa.traverse[Nested[M, N, *], C](a => Nested(M.map(f(a))(g)))
     lhs <-> rhs
   }
 
@@ -29,11 +27,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa: F[A],
     f: A => M[B],
     g: A => N[B]
-  )(implicit
-    N: Applicative[N],
-    M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
+  )(implicit N: Applicative[N], M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
-    implicit val MN = new Applicative[MN] {
+    implicit val MN: Applicative[MN] = new Applicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
       def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {
         val (fam, fan) = fa
@@ -59,7 +55,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     fa: F[A],
     f: A => B
   )(implicit B: Monoid[B]): IsEq[B] = {
-    val lhs: B = fa.traverse[Const[B, ?], B](a => Const(f(a))).getConst
+    val lhs: B = fa.traverse[Const[B, *], B](a => Const(f(a))).getConst
     val rhs: B = fa.foldMap(f)
     lhs <-> rhs
   }
@@ -67,7 +63,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
   def traverseOrderConsistent[A](fa: F[A]): IsEq[Option[A]] = {
     class FirstOption[T](val o: Option[T])
 
-    implicit val firstOptionMonoid = new Monoid[FirstOption[A]] {
+    implicit val firstOptionMonoid: Monoid[FirstOption[A]] = new Monoid[FirstOption[A]] {
       def empty = new FirstOption(None)
       def combine(x: FirstOption[A], y: FirstOption[A]) = new FirstOption(x.o.orElse(y.o))
     }
@@ -75,9 +71,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     def liftId[T](a: T): Id[T] = a
     def store[T](a: T): Const[FirstOption[T], T] = Const(new FirstOption(Some(a)))
 
-    val first = F.traverse[Const[FirstOption[A], ?], A, A](fa)(store).getConst.o
+    val first = F.traverse[Const[FirstOption[A], *], A, A](fa)(store).getConst.o
     val traverseFirst = F
-      .traverse[Const[FirstOption[A], ?], A, A](
+      .traverse[Const[FirstOption[A], *], A, A](
         F.traverse(fa)(liftId)
       )(store)
       .getConst

@@ -2,6 +2,7 @@ package cats
 package instances
 
 import scala.annotation.tailrec
+import cats.data.Ior
 
 trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
@@ -9,13 +10,24 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
     with MonadError[Option, Unit]
     with Alternative[Option]
     with CommutativeMonad[Option]
-    with CoflatMap[Option] =
-    new Traverse[Option] with MonadError[Option, Unit] with Alternative[Option] with CommutativeMonad[Option]
-    with CoflatMap[Option] {
+    with CoflatMap[Option]
+    with Align[Option] =
+    new Traverse[Option]
+      with MonadError[Option, Unit]
+      with Alternative[Option]
+      with CommutativeMonad[Option]
+      with CoflatMap[Option]
+      with Align[Option] {
 
       def empty[A]: Option[A] = None
 
       def combineK[A](x: Option[A], y: Option[A]): Option[A] = x.orElse(y)
+
+      override def combineKEval[A](x: Option[A], y: Eval[Option[A]]): Eval[Option[A]] =
+        x match {
+          case None    => y
+          case Some(_) => Now(x)
+        }
 
       def pure[A](x: A): Option[A] = Some(x)
 
@@ -34,12 +46,48 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
         }
 
       override def map2[A, B, Z](fa: Option[A], fb: Option[B])(f: (A, B) => Z): Option[Z] =
-        fa.flatMap(a => fb.map(b => f(a, b)))
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined && fb.isDefined) Some(f(fa.get, fb.get))
+        else None
+
+      override def product[A, B](fa: Option[A], fb: Option[B]): Option[(A, B)] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined && fb.isDefined) Some((fa.get, fb.get))
+        else None
+
+      override def productR[A, B](fa: Option[A])(fb: Option[B]): Option[B] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fa.isDefined) fb
+        else None
+
+      override def productL[A, B](fa: Option[A])(fb: Option[B]): Option[A] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (fb.isDefined) fa
+        else None
+
+      override def ap[A, B](f: Option[A => B])(fa: Option[A]): Option[B] =
+        // we are avoiding flatMap/map to avoid allocating more closures
+        if (f.isDefined && fa.isDefined) Some(f.get(fa.get))
+        else None
+
+      override def ap2[A, B, Z](ff: Option[(A, B) => Z])(fa: Option[A], fb: Option[B]): Option[Z] =
+        if (ff.isDefined && fa.isDefined && fb.isDefined) Some(ff.get(fa.get, fb.get))
+        else None
+
+      override def ifA[A](fcond: Option[Boolean])(ifTrue: Option[A], ifFalse: Option[A]): Option[A] =
+        if (fcond.isDefined) {
+          if (fcond.get) ifTrue
+          else ifFalse
+        } else None
 
       override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
-          case None    => Now(None)
-          case Some(a) => fb.map(_.map(f(a, _)))
+          case None => Now(None)
+          case Some(a) =>
+            fb.map {
+              case Some(b) => Some(f(a, b))
+              case None    => None
+            }
         }
 
       def coflatMap[A, B](fa: Option[A])(f: Option[A] => B): Option[B] =
@@ -60,6 +108,20 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       def raiseError[A](e: Unit): Option[A] = None
 
       def handleErrorWith[A](fa: Option[A])(f: (Unit) => Option[A]): Option[A] = fa.orElse(f(()))
+
+      override def redeem[A, B](fa: Option[A])(recover: Unit => B, map: A => B): Option[B] =
+        fa match {
+          case Some(a) => Some(map(a))
+          // N.B. not pattern matching `case None` on purpose
+          case _ => Some(recover(()))
+        }
+
+      override def redeemWith[A, B](fa: Option[A])(recover: Unit => Option[B], bind: A => Option[B]): Option[B] =
+        fa match {
+          case Some(a) => bind(a)
+          // N.B. not pattern matching `case None` on purpose
+          case _ => recover(())
+        }
 
       def traverse[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
         fa match {
@@ -116,24 +178,40 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       override def collectFirst[A, B](fa: Option[A])(pf: PartialFunction[A, B]): Option[B] = fa.collectFirst(pf)
 
       override def collectFirstSome[A, B](fa: Option[A])(f: A => Option[B]): Option[B] = fa.flatMap(f)
+
+      def functor: Functor[Option] = this
+
+      def align[A, B](fa: Option[A], fb: Option[B]): Option[A Ior B] =
+        alignWith(fa, fb)(identity)
+
+      override def alignWith[A, B, C](fa: Option[A], fb: Option[B])(f: Ior[A, B] => C): Option[C] =
+        (fa, fb) match {
+          case (None, None)       => None
+          case (Some(a), None)    => Some(f(Ior.left(a)))
+          case (None, Some(b))    => Some(f(Ior.right(b)))
+          case (Some(a), Some(b)) => Some(f(Ior.both(a, b)))
+        }
     }
 
   implicit def catsStdShowForOption[A](implicit A: Show[A]): Show[Option[A]] =
     new Show[Option[A]] {
-      def show(fa: Option[A]): String = fa match {
-        case Some(a) => s"Some(${A.show(a)})"
-        case None    => "None"
-      }
+      def show(fa: Option[A]): String =
+        fa match {
+          case Some(a) => s"Some(${A.show(a)})"
+          case None    => "None"
+        }
     }
 }
 
-trait OptionInstancesBinCompat0 {
+private[instances] trait OptionInstancesBinCompat0 {
   implicit val catsStdTraverseFilterForOption: TraverseFilter[Option] = new TraverseFilter[Option] {
     val traverse: Traverse[Option] = cats.instances.option.catsStdInstancesForOption
 
     override def mapFilter[A, B](fa: Option[A])(f: (A) => Option[B]): Option[B] = fa.flatMap(f)
 
     override def filter[A](fa: Option[A])(f: (A) => Boolean): Option[A] = fa.filter(f)
+
+    override def filterNot[A](fa: Option[A])(f: A => Boolean): Option[A] = fa.filterNot(f)
 
     override def collect[A, B](fa: Option[A])(f: PartialFunction[A, B]): Option[B] = fa.collect(f)
 

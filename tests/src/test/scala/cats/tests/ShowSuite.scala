@@ -1,14 +1,14 @@
-package cats
-package tests
+package cats.tests
 
-import java.util.concurrent.TimeUnit
-
+import cats.{Contravariant, Show}
 import cats.Show.ContravariantShow
-import cats.laws.discipline.arbitrary._
+import cats.kernel.Order
+import cats.syntax.show._
 import cats.laws.discipline.{ContravariantTests, MiniInt, SerializableTests}
+import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import java.util.concurrent.TimeUnit
 import org.scalatest.funsuite.AnyFunSuiteLike
-
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 class ShowSuite extends CatsSuite {
@@ -57,9 +57,6 @@ final class ShowSuite2 extends AnyFunSuiteLike {
     "contravariant show for FiniteDuration can be inferred when importing both duration's and finiteDuration's instances"
   ) {
 
-    import cats.instances.duration._
-    import cats.instances.finiteDuration._
-
     implicitly[Order[Duration]]
     implicitly[Order[FiniteDuration]]
 
@@ -67,8 +64,6 @@ final class ShowSuite2 extends AnyFunSuiteLike {
   }
 
   test("all the Duration's and FiniteDuration's instances can be correctly inferred when importing implicits") {
-
-    import cats.implicits._
 
     implicitly[Order[Duration]]
     implicitly[Order[FiniteDuration]]

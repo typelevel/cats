@@ -1,8 +1,7 @@
-package cats
-package tests
+package cats.tests
 
+import cats.Show
 import cats.laws.discipline.SerializableTests
-
 import scala.concurrent.duration.{Duration, DurationInt}
 
 class DurationSuite extends CatsSuite {

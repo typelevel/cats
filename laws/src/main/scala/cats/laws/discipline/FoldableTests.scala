@@ -12,16 +12,17 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
   def laws: FoldableLaws[F]
 
   def foldable[A: Arbitrary, B: Arbitrary](implicit
-                                           ArbFA: Arbitrary[F[A]],
-                                           A: CommutativeMonoid[A],
-                                           B: CommutativeMonoid[B],
-                                           CogenA: Cogen[A],
-                                           CogenB: Cogen[B],
-                                           EqA: Eq[A],
-                                           EqFA: Eq[F[A]],
-                                           EqB: Eq[B],
-                                           EqOptionB: Eq[Option[B]],
-                                           EqOptionA: Eq[Option[A]]): RuleSet =
+    ArbFA: Arbitrary[F[A]],
+    A: CommutativeMonoid[A],
+    B: CommutativeMonoid[B],
+    CogenA: Cogen[A],
+    CogenB: Cogen[B],
+    EqA: Eq[A],
+    EqFA: Eq[F[A]],
+    EqB: Eq[B],
+    EqOptionB: Eq[Option[B]],
+    EqOptionA: Eq[Option[A]]
+  ): RuleSet =
     new DefaultRuleSet(
       name = "foldable",
       parent = Some(unorderedFoldable[A, B]),
@@ -42,7 +43,8 @@ trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {
       "takeWhile_ reference" -> forAll(laws.takeWhile_Ref[A] _),
       "dropWhile_ reference" -> forAll(laws.dropWhile_Ref[A] _),
       "collectFirstSome reference" -> forAll(laws.collectFirstSome_Ref[A, B] _),
-      "collectFirst reference" -> forAll(laws.collectFirst_Ref[A, B] _)
+      "collectFirst reference" -> forAll(laws.collectFirst_Ref[A, B] _),
+      "foldRightDefer consistency" -> forAll(laws.foldRightDeferConsistentWithFoldRight[A, B] _)
     )
 }
 

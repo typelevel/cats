@@ -1,23 +1,31 @@
-package cats
-package tests
+package cats.tests
 
-import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
-
+import cats.{Align, Bimonad, Eval, NonEmptyTraverse, Now, Reducible, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap, NonEmptySet, NonEmptyVector}
 import cats.data.NonEmptyList.ZipNonEmptyList
+import cats.kernel.{Eq, Order, PartialOrder, Semigroup}
+import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{
+  AlignTests,
   BimonadTests,
   CommutativeApplyTests,
   NonEmptyTraverseTests,
   ReducibleTests,
   SemigroupKTests,
-  SerializableTests
+  SerializableTests,
+  ShortCircuitingTests
 }
-import scala.collection.immutable.SortedMap
-import scala.collection.immutable.SortedSet
+import cats.syntax.foldable._
+import cats.syntax.reducible._
+import cats.syntax.show._
+import scala.collection.immutable.{SortedMap, SortedSet}
 
-class NonEmptyListSuite extends CatsSuite {
+class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonEmptyList] {
+  protected def toList[A](value: NonEmptyList[A]): List[A] = value.toList
+  protected def underlyingToList[A](underlying: List[A]): List[A] = underlying
+  protected def toNonEmptyCollection[A](nea: NonEmptyList[A]): NonEmptyList[A] = nea
+
   // Lots of collections here.. telling ScalaCheck to calm down a bit
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 20, sizeRange = 5)
@@ -25,7 +33,8 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("NonEmptyList[Int]", OrderTests[NonEmptyList[Int]].order)
 
   checkAll("NonEmptyList[Int] with Option",
-           NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+           NonEmptyTraverseTests[NonEmptyList].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option]
+  )
   checkAll("NonEmptyTraverse[NonEmptyList[A]]", SerializableTests.serializable(NonEmptyTraverse[NonEmptyList]))
 
   checkAll("NonEmptyList[Int]", ReducibleTests[NonEmptyList].reducible[Option, Int, Int])
@@ -43,22 +52,31 @@ class NonEmptyListSuite extends CatsSuite {
   checkAll("NonEmptyList[ListWrapper[Int]]", EqTests[NonEmptyList[ListWrapper[Int]]].eqv)
   checkAll("Eq[NonEmptyList[ListWrapper[Int]]]", SerializableTests.serializable(Eq[NonEmptyList[ListWrapper[Int]]]))
 
+  checkAll("NonEmptyList[Int]", AlignTests[NonEmptyList].align[Int, Int, Int, Int])
+  checkAll("Align[NonEmptyList]", SerializableTests.serializable(Align[NonEmptyList]))
+
   checkAll("ZipNonEmptyList[Int]", CommutativeApplyTests[ZipNonEmptyList].commutativeApply[Int, Int, Int])
 
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].foldable[Int])
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].traverse[Int])
+  checkAll("NonEmptyList[Int]", ShortCircuitingTests[NonEmptyList].nonEmptyTraverse[Int])
+
   {
-    implicit val A = ListWrapper.partialOrder[Int]
+    implicit val A: PartialOrder[ListWrapper[Int]] = ListWrapper.partialOrder[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", PartialOrderTests[NonEmptyList[ListWrapper[Int]]].partialOrder)
     checkAll("PartialOrder[NonEmptyList[ListWrapper[Int]]]",
-             SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(PartialOrder[NonEmptyList[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptyList[ListWrapper[Int]]]
   }
 
   {
-    implicit val A = ListWrapper.order[Int]
+    implicit val A: Order[ListWrapper[Int]] = ListWrapper.order[Int]
     checkAll("NonEmptyList[ListWrapper[Int]]", OrderTests[NonEmptyList[ListWrapper[Int]]].order)
     checkAll("Order[NonEmptyList[ListWrapper[Int]]]",
-             SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]]))
+             SerializableTests.serializable(Order[NonEmptyList[ListWrapper[Int]]])
+    )
 
     Eq[NonEmptyList[ListWrapper[Int]]]
     PartialOrder[NonEmptyList[ListWrapper[Int]]]
@@ -215,17 +233,17 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("fromList round trip") {
-    forAll { l: List[Int] =>
+    forAll { (l: List[Int]) =>
       NonEmptyList.fromList(l).map(_.toList).getOrElse(List.empty) should ===(l)
     }
 
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       NonEmptyList.fromList(nel.toList) should ===(Some(nel))
     }
   }
 
   test("fromListUnsafe/fromList consistency") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       NonEmptyList.fromList(nel.toList) should ===(Some(NonEmptyList.fromListUnsafe(nel.toList)))
     }
   }
@@ -244,44 +262,44 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#distinct is consistent with List#distinct") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.distinct.toList should ===(nel.toList.distinct)
     }
   }
 
   test("NonEmptyList#reverse is consistent with List#reverse") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.reverse.toList should ===(nel.toList.reverse)
     }
   }
 
   test("NonEmptyList#zipWithIndex is consistent with List#zipWithIndex") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.zipWithIndex.toList should ===(nel.toList.zipWithIndex)
     }
   }
 
   test("NonEmptyList#last is consistent with List#last") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.last should ===(nel.toList.last)
     }
   }
 
   test("NonEmptyList#init is consistent with List#init") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.init should ===(nel.toList.init)
     }
   }
 
   test("NonEmptyList#size and length is consistent with List#size") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.size should ===(nel.toList.size)
       nel.length should ===(nel.toList.size)
     }
   }
 
   test("NonEmptyList#sorted is consistent with List#sorted") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.sorted.toList should ===(nel.toList.sorted)
     }
   }
@@ -334,14 +352,20 @@ class NonEmptyListSuite extends CatsSuite {
   }
 
   test("NonEmptyList#toNem is consistent with List#toMap and creating NonEmptyMap from it") {
-    forAll { nel: NonEmptyList[(Int, String)] =>
+    forAll { (nel: NonEmptyList[(Int, String)]) =>
       nel.toNem should ===(NonEmptyMap.fromMapUnsafe(SortedMap.empty[Int, String] ++ nel.toList.toMap))
     }
   }
 
   test("NonEmptyList#toNes is consistent with List#toSet and creating NonEmptySet from it") {
-    forAll { nel: NonEmptyList[Int] =>
+    forAll { (nel: NonEmptyList[Int]) =>
       nel.toNes should ===(NonEmptySet.fromSetUnsafe(SortedSet.empty[Int] ++ nel.toList.toSet))
+    }
+  }
+
+  test("NonEmptyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
+    forAll { (nel: NonEmptyList[Int]) =>
+      nel.toNev should ===(NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ nel.toList.toVector))
     }
   }
 }
@@ -351,7 +375,7 @@ class DeprecatedNonEmptyListSuite extends CatsSuite {
 
   test("Deprecated NonEmptyList#concat is consistent with List#:::") {
     forAll { (nel: NonEmptyList[Int], l: List[Int], n: Int) =>
-      nel.concat(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
+      nel.concatNel(NonEmptyList(n, l)).toList should ===(nel.toList ::: (n :: l))
     }
   }
 }
@@ -363,7 +387,8 @@ class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyL
     // if we inline this we get a bewildering implicit numeric widening
     // error message in Scala 2.10
     val tailStart: Long = start + 1L
-    NonEmptyList(start, (tailStart).to(endInclusive).toList)
+    NonEmptyList(start, tailStart.to(endInclusive).toList)
   }
 
+  def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els: _*))
 }

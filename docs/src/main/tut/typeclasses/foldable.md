@@ -79,8 +79,8 @@ Foldable[List].dropWhile_(List[Int](1,2,4,5,6,7))(_ % 2 == 0)
 import cats.data.Nested
 val listOption0 = Nested(List(Option(1), Option(2), Option(3)))
 val listOption1 = Nested(List(Option(1), Option(2), None))
-Foldable[Nested[List, Option, ?]].fold(listOption0)
-Foldable[Nested[List, Option, ?]].fold(listOption1)
+Foldable[Nested[List, Option, *]].fold(listOption0)
+Foldable[Nested[List, Option, *]].fold(listOption1)
 ```
 
 Hence when defining some new data structure, if we can define a `foldLeft` and
@@ -133,5 +133,5 @@ With the lazy `foldRight` on `Foldable`, the calculation terminates
 after looking at only one value:
 
 ```tut:book
-Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.now(false)).value
+Foldable[Stream].foldRight(allFalse, Eval.True)((a,b) => if (a) b else Eval.False).value
 ```

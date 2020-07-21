@@ -1,14 +1,14 @@
-package cats
-package tests
+package cats.tests
 
+import cats.{InvariantMonoidal, InvariantSemigroupal}
+import cats.kernel.{Eq, Monoid, Semigroup}
+import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.discipline.eq._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, MiniInt, SerializableTests}
-import cats.implicits._
-import cats.Eq
-import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
+import cats.syntax.all._
 import org.scalacheck.{Arbitrary, Gen}
-import kernel.compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 object BinCodecInvariantMonoidalSuite {
@@ -59,7 +59,9 @@ object BinCodecInvariantMonoidalSuite {
       )
   }
 
-  /** A small amount of binary bits */
+  /**
+   * A small amount of binary bits
+   */
   type Bin = MiniList[Boolean]
 
   /**
@@ -71,10 +73,14 @@ object BinCodecInvariantMonoidalSuite {
    */
   trait BinCodec[A] extends Serializable { self =>
 
-    /** Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin. */
+    /**
+     * Reads the first value of a Bin, returning an optional value of type `A` and the remaining Bin.
+     */
     def read(s: Bin): (Option[A], Bin)
 
-    /** Writes a value of type `A` to Bin format. */
+    /**
+     * Writes a value of type `A` to Bin format.
+     */
     def write(a: A): Bin
   }
 
@@ -82,10 +88,11 @@ object BinCodecInvariantMonoidalSuite {
     // In tut/invariantmonoidal.md pure, product and imap are defined in
     // their own trait to be introduced one by one,
     trait CCPure {
-      def unit: BinCodec[Unit] = new BinCodec[Unit] {
-        def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
-        def write(a: Unit): Bin = MiniList.empty
-      }
+      def unit: BinCodec[Unit] =
+        new BinCodec[Unit] {
+          def read(s: Bin): (Option[Unit], Bin) = (Some(()), s)
+          def write(a: Unit): Bin = MiniList.empty
+        }
     }
 
     trait CCProduct {
@@ -124,7 +131,7 @@ object BinCodecInvariantMonoidalSuite {
       bitCount <- Gen.oneOf(1, 2, 3)
       shuffleSeed <- Gen.choose(Long.MinValue, Long.MaxValue)
     } yield {
-      val binValues: LazyList[Bin] = LazyList(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
+      val binValues: List[Bin] = List(false, true).replicateA(bitCount).map(MiniList.unsafe(_))
       val pairs: List[(A, Bin)] = new scala.util.Random(seed = shuffleSeed).shuffle(exA.allValues).toList.zip(binValues)
       val aToBin: Map[A, Bin] = pairs.toMap
       val binToA: Map[Bin, A] = pairs.map(_.swap).toMap
@@ -155,7 +162,7 @@ object BinCodecInvariantMonoidalSuite {
 }
 
 class BinCodecInvariantMonoidalSuite extends CatsSuite {
-  // Eveything is defined in a companion object to be serializable.
+  // Everything is defined in a companion object to be serializable.
   import BinCodecInvariantMonoidalSuite._
 
   checkAll("InvariantMonoidal[BinCodec]", InvariantMonoidalTests[BinCodec].invariantMonoidal[MiniInt, MiniInt, MiniInt])
@@ -163,13 +170,13 @@ class BinCodecInvariantMonoidalSuite extends CatsSuite {
 
   {
     implicit val miniIntMonoid: Monoid[MiniInt] = MiniInt.miniIntAddition
-    implicit val binMonoid = InvariantMonoidal.monoid[BinCodec, MiniInt]
+    implicit val binMonoid: Monoid[BinCodec[MiniInt]] = InvariantMonoidal.monoid[BinCodec, MiniInt]
     checkAll("InvariantMonoidal[BinCodec].monoid", MonoidTests[BinCodec[MiniInt]].monoid)
   }
 
   {
     implicit val miniIntSemigroup: Semigroup[MiniInt] = MiniInt.miniIntAddition
-    implicit val binSemigroup = InvariantSemigroupal.semigroup[BinCodec, MiniInt]
+    implicit val binSemigroup: Semigroup[BinCodec[MiniInt]] = InvariantSemigroupal.semigroup[BinCodec, MiniInt]
     checkAll("InvariantSemigroupal[BinCodec].semigroup", SemigroupTests[BinCodec[MiniInt]].semigroup)
   }
 }

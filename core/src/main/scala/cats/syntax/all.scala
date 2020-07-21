@@ -9,9 +9,11 @@ abstract class AllSyntaxBinCompat
     with AllSyntaxBinCompat3
     with AllSyntaxBinCompat4
     with AllSyntaxBinCompat5
+    with AllSyntaxBinCompat6
 
 trait AllSyntax
     extends AlternativeSyntax
+    with AlignSyntax
     with ApplicativeSyntax
     with ApplicativeErrorSyntax
     with ApplySyntax
@@ -57,6 +59,8 @@ trait AllSyntax
     with ValidatedSyntax
     with VectorSyntax
     with WriterSyntax
+    with ParallelFoldMapASyntax
+    with ParallelTraverseFilterSyntax
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
@@ -90,3 +94,5 @@ trait AllSyntaxBinCompat4
     with BitraverseSyntaxBinCompat0
 
 trait AllSyntaxBinCompat5 extends ParallelBitraverseSyntax
+
+trait AllSyntaxBinCompat6 extends ParallelUnorderedTraverseSyntax
