@@ -72,10 +72,10 @@ trait EquivInstancesBinCompat0 {
           def equiv(x: Either[A, B], y: Either[A, B]): Boolean =
             if (x.isRight)
               if (y.isRight)
-                (x, y).mapN(fb.equiv).right.get
+                (x, y).mapN(fb.equiv).toOption.get
               else false
             else if (y.isLeft)
-              (x.swap, y.swap).mapN(fa.equiv).right.get
+              (x.swap, y.swap).mapN(fa.equiv).toOption.get
             else false
         }
 

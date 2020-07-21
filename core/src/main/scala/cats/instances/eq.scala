@@ -59,10 +59,10 @@ trait EqInstancesBinCompat0 {
         Eq.instance { (left, right) =>
           if (left.isRight)
             if (right.isRight)
-              (left, right).mapN(fb.eqv).right.get
+              (left, right).mapN(fb.eqv).toOption.get
             else false
           else if (right.isLeft)
-            (left.swap, right.swap).mapN(fa.eqv).right.get
+            (left.swap, right.swap).mapN(fa.eqv).toOption.get
           else false
         }
 
