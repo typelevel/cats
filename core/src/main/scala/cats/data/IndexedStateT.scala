@@ -203,12 +203,10 @@ private[data] trait CommonStateTConstructors {
   /**
    * Turn `State[A, F[B]]` into `StateT[F, A, B]`
    */
-  def fromState[F[_]: Applicative, A, B](s: State[A, F[B]]): StateT[F, A, B] =
+  def fromState[F[_], A, B](s: State[A, F[B]])(implicit F: Applicative[F]): StateT[F, A, B] =
     s.transformF { eval =>
-      import cats.implicits._
-
       val (a, fb) = eval.value
-      fb.map((a, _))
+      F.map(fb)((a, _))
     }
 }
 
