@@ -24,8 +24,7 @@ import scala.annotation.implicitNotFound
   def decide[A, B, C](fa: F[A], fb: F[B])(f: C => Either[A, B]): F[C] =
     contramap(sum(fa, fb))(f)
 
-  def chosen[B, C](fb: F[B], fc: F[C]): F[Either[B, C]] =
-    decide(fb, fc)(identity[Either[B, C]])
+  def chosen[B, C](fb: F[B], fc: F[C]): F[Either[B, C]] = sum(fb, fc)
   def lose[A](f: A => INothing): F[A] = contramap[INothing, A](zero)(f)
   def zero[A]: F[INothing]
 }

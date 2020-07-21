@@ -502,14 +502,13 @@ private trait OptionTDecidable[F[_]] extends Decidable[OptionT[F, *]] with Optio
   def sum[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, Either[A, B]] =
     OptionT(
       F.decide(fa.value, fb.value)({
-          case Some(Right(b)) => Right(Option(b))
-          case Some(Left(a))  => Left(Option(a))
-          case None           => Left(None)
-        })
+        case Some(Right(b)) => Right(Option(b))
+        case Some(Left(a))  => Left(Option(a))
+        case None           => Left(None)
+      })
     )
 
-  // FIXME: Can this instance be made?
-  override def zero[A]: OptionT[F, INothing] = ???
+  override def zero[A]: OptionT[F, INothing] = OptionT(F.trivial[Option[INothing]])
 }
 
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, *]] {

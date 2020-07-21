@@ -21,7 +21,7 @@ import scala.annotation.implicitNotFound
    * the diagonal
    */
   def trivial[A]: F[A] = contramap(unit)(_ => ())
-
+  def conquer[A]: F[A] = trivial[A]
 }
 object ContravariantMonoidal extends SemigroupalArityFunctions {
   def monoid[F[_], A](implicit f: ContravariantMonoidal[F]): Monoid[F[A]] =

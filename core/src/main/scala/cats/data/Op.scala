@@ -73,7 +73,6 @@ private[data] trait OpDecidable[Arr[_, _], R] extends Decidable[Op[Arr, R, ?]] w
   def sum[A, B](fa: Op[Arr, R, A], fb: Op[Arr, R, B]): Op[Arr, R, Either[A, B]] =
     Op(Arr.choice(fa.run, fb.run))
 
-  // FIXME: Dicey. This instance maybe should not exist unless we get Ring constraints
   override def zero[A]: Op[Arr, R, INothing] =
     Op(Arr.lift(INothing.absurd))
 }
