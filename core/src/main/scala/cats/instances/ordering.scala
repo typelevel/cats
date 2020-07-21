@@ -50,10 +50,10 @@ trait OrderingInstancesBinCompat0 {
           def compare(x: Either[A, B], y: Either[A, B]): Int =
             if (x.isRight)
               if (y.isRight)
-                (x, y).mapN(fb.compare).right.get
+                (x, y).mapN(fb.compare).toOption.get
               else 1
             else if (y.isLeft)
-              (x.swap, y.swap).mapN(fa.compare).right.get
+              (x.swap, y.swap).mapN(fa.compare).toOption.get
             else -1
         }
 
