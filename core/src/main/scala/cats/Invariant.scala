@@ -141,7 +141,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsContravariantMonoidalForEq: ContravariantMonoidal[Eq] =
     cats.instances.eq.catsContravariantMonoidalForEq
   implicit def catsContravariantMonoidalForEquiv: ContravariantMonoidal[Equiv] =
-    cats.instances.equiv.catsDecidableForEquiv
+    cats.instances.equiv.catsContravariantMonoidalForEquiv
   implicit def catsContravariantForHash: Contravariant[Hash] =
     cats.instances.all.catsContravariantForHash
   implicit def catsInvariantMonoidalForSemigroup: InvariantMonoidal[Semigroup] =
