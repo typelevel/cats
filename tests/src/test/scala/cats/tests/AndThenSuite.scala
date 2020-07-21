@@ -132,7 +132,7 @@ class AndThenSuite extends CatsSuite with Checkers {
       }
   }
 
-  // generate a right associated function by construction
+  // generate a left associated function by construction
   def genLeft[A: Cogen: Arbitrary]: Gen[AndThen[A, A]] = {
     val gfn = Gen.function1[A, A](Arbitrary.arbitrary[A])
     // if we don't have a long list we don't see any Concat
