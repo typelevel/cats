@@ -56,7 +56,7 @@ object Const extends ConstInstances {
   def of[B]: OfPartiallyApplied[B] = new OfPartiallyApplied
 }
 
-sealed abstract private[data] class ConstInstances extends ConstInstancesBinCompat0 {
+sealed abstract private[data] class ConstInstances extends ConstInstances0 {
   implicit def catsDataUpperBoundedForConst[A, B](implicit A: UpperBounded[A]): UpperBounded[Const[A, B]] =
     new UpperBounded[Const[A, B]] {
       override def partialOrder: PartialOrder[Const[A, B]] = catsDataPartialOrderForConst(A.partialOrder)
@@ -204,22 +204,6 @@ sealed abstract private[data] class ConstInstances4 {
 
   implicit def catsDataContravariantForConst[C]: Contravariant[Const[C, *]] =
     new ConstContravariant[C] {}
-}
-
-trait ConstInstancesBinCompat0 extends ConstInstances0 {
-  implicit def catsDataDecidableForConst[D: Monoid]: Decidable[Const[D, ?]] =
-    new Decidable[Const[D, ?]] {
-      override def unit: Const[D, Unit] = Const.empty[D, Unit]
-      override def contramap[A, B](fa: Const[D, A])(f: B => A): Const[D, B] =
-        fa.retag[B]
-      override def product[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, (A, B)] =
-        fa.retag[(A, B)].combine(fb.retag[(A, B)])
-      def sum[A, B](fa: Const[D, A], fb: Const[D, B]): Const[D, Either[A, B]] =
-        fa.retag[Either[A, B]].combine(fb.retag[Either[A, B]])
-
-      // FIXME: This instance maybe should not exist unless we get Ring constraints
-      override def zero[A]: Const[D, INothing] = Const.empty[D, INothing]
-    }
 }
 
 sealed private[data] trait ConstFunctor[C] extends Functor[Const[C, *]] {
