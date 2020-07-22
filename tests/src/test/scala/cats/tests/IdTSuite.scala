@@ -66,10 +66,8 @@ class IdTSuite extends CatsSuite {
   }
 
   {
-    implicit val F: Decidable[IdT[* => Boolean, *]] = cats.data.IdT.catsDataDecidableForIdT[* => Boolean]
-
-    checkAll("IdT[* => Boolean], ?]", DecidableTests[IdT[* => Boolean, *]].decidable[MiniInt, MiniInt, MiniInt])
-    checkAll("Decidable[IdT[* => Boolean, ?], ?]]", SerializableTests.serializable(Decidable[IdT[* => Boolean, *]]))
+    checkAll("IdT[* => Boolean], ?]", DecidableTests[IdT[Predicate, *]].decidable[MiniInt, MiniInt, MiniInt])
+    checkAll("Decidable[IdT[* => Boolean, ?], ?]]", SerializableTests.serializable(Decidable[IdT[Predicate, *]]))
   }
 
   {

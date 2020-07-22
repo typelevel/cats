@@ -99,11 +99,13 @@ class OptionTSuite extends CatsSuite {
 
   {
     // F has a Decidable
-    implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[* => Boolean, *]]
+    implicit val iso = SemigroupalTests.Isomorphisms.invariant[OptionT[Predicate, *]](
+      OptionT.catsDataDecidableForOptionT(Predicate.decidablePredicate)
+    )
 
-    checkAll("OptionT[* => Boolean, Int]", DecidableTests[OptionT[* => Boolean, *]].decidable[Int, Int, Int])
-    checkAll("Decidable[OptionT[* => Boolean, Int]]",
-             SerializableTests.serializable(Decidable[OptionT[* => Boolean, *]])
+    checkAll("OptionT[Predicate, MiniInt]", DecidableTests[OptionT[Predicate, *]].decidable[MiniInt, MiniInt, MiniInt])
+    checkAll("Decidable[OptionT[Predicate, MiniInt]]",
+             SerializableTests.serializable(Decidable[OptionT[Predicate, *]])
     )
 
     // F has a ContravariantMonoidal

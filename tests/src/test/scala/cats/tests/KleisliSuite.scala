@@ -105,14 +105,12 @@ class KleisliSuite extends CatsSuite {
   checkAll("Alternative[Kleisli[Option, Int, *]]", SerializableTests.serializable(Alternative[Kleisli[Option, Int, *]]))
 
   {
-    implicit val catsDataDecidableForKleisli =
-      Kleisli.catsDataDecidableForKleisli[* => Boolean, Int]
-    checkAll("Kleisli[* => Boolean, Int, Int]",
-             DecidableTests[Kleisli[* => Boolean, MiniInt, *]].decidable[Int, Int, Int]
+    checkAll("Kleisli[Predicate, MiniInt, MiniInt]",
+             DecidableTests[Kleisli[Predicate, MiniInt, *]].decidable[MiniInt, MiniInt, MiniInt]
     )
     checkAll(
       "Decidable[Kleisli[Option, Int, ?]]",
-      SerializableTests.serializable[Decidable[Kleisli[* => Boolean, Int, ?]]](catsDataDecidableForKleisli)
+      SerializableTests.serializable[Decidable[Kleisli[Predicate, MiniInt, *]]](Decidable[Kleisli[Predicate, MiniInt, *]])
     )
   }
 

@@ -2,7 +2,6 @@ package cats.tests
 
 import cats._
 import cats.data._
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
@@ -116,12 +115,11 @@ class NestedSuite extends CatsSuite {
 
   {
     // Applicative + Decidable functor composition
-    implicit val isos = Isomorphisms.invariant[Nested[Option, Const[String, *], *]]
-    checkAll("Nested[Option, * => Boolean, ?]",
-             DecidableTests[Nested[Option, * => Boolean, *]].decidable[Int, Int, Int]
+    checkAll("Nested[Option, Predicate, ?]",
+             DecidableTests[Nested[Option, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
     )
-    checkAll("Decidable[Nested[Option, * => Boolean, ?]]",
-             SerializableTests.serializable(Decidable[Nested[Option, * => Boolean, *]])
+    checkAll("Decidable[Nested[Option, Predicate, ?]]",
+             SerializableTests.serializable(Decidable[Nested[Option, Predicate, *]])
     )
   }
 

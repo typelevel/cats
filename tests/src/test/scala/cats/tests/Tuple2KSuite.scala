@@ -39,12 +39,12 @@ class Tuple2KSuite extends CatsSuite {
     SerializableTests.serializable(ContravariantMonoidal[λ[α => Tuple2K[Const[String, *], Const[Int, *], α]]])
   )
 
-  checkAll("Tuple2K[Const[String, ?], Const[Int, ?], Long]",
-           DecidableTests[λ[α => Tuple2K[* => Boolean, * => Boolean, α]]].decidable[Long, Long, Long]
+  checkAll("Tuple2K[Predicate, Predicate, MiniInt]",
+           DecidableTests[Tuple2K[Predicate, Predicate, *]].decidable[MiniInt, MiniInt, MiniInt]
   )
   checkAll(
-    "Decidable[Tuple2K[Const[String, ?], Const[Int, ?], Long]]",
-    SerializableTests.serializable(Decidable[λ[α => Tuple2K[* => Boolean, * => Boolean, α]]])
+    "Decidable[Tuple2K[Predicate, Predicate, MiniInt]]",
+    SerializableTests.serializable(Decidable[Tuple2K[Predicate, Predicate, *]])
   )
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))
