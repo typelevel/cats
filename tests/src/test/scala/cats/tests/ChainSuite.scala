@@ -290,4 +290,14 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  test("traverse is stack-safe") {
+    val chain = (0 until 100000).map(Chain.one).reduce(_.concat(_))
+    val sumAll = Traverse[Chain]
+      .traverse(chain) { i => () => i }
+      .apply
+      .iterator
+      .sum
+
+    assert(sumAll == chain.iterator.sum)
+  }
 }

@@ -137,7 +137,7 @@ implicit val intAdditionMonoid: Monoid[Int] = new Monoid[Int] {
 def combineAll[A](list: List[A])(implicit A: Monoid[A]): A = list.foldRight(A.empty)(A.combine)
 ```
 
-Now we can also `combineAll` a list of `Pair`s so long as `Pair`'s type parameters themselves have `Monoid`
+Now we can also `combineAll` a list of `Pair`s as long as `Pair`'s type parameters themselves have `Monoid`
 instances.
 
 ```tut:book:silent

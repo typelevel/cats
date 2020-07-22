@@ -76,6 +76,16 @@ class ListSuite extends CatsSuite {
       l.show should ===(l.toString)
     }
   }
+
+  test("traverse is stack-safe") {
+    val lst = (0 until 100000).toList
+    val sumAll = Traverse[List]
+      .traverse(lst) { i => () => i }
+      .apply
+      .sum
+
+    assert(sumAll == lst.sum)
+  }
 }
 
 final class ListInstancesSuite extends AnyFunSuiteLike {

@@ -10,6 +10,8 @@ import cats.syntax.option._
 import cats.syntax.reducible._
 import org.scalacheck.Arbitrary
 
+import scala.collection.mutable
+
 class ReducibleSuiteAdditional extends CatsSuite {
 
   test("Reducible[NonEmptyList].reduceLeftM stack safety") {
@@ -20,6 +22,12 @@ class ReducibleSuiteAdditional extends CatsSuite {
     val expected = n * (n + 1) / 2
     val actual = (1L to n).toList.toNel.flatMap(_.reduceLeftM(Option.apply)(nonzero))
     actual should ===(Some(expected))
+  }
+
+  test("Reducible[NonEmptyList].reduceRightTo stack safety") {
+    val n = 100000L
+    val actual = (1L to n).toList.toNel.get.reduceRightTo(identity) { case (a, r) => r.map(_ + a) }.value
+    actual should ===((1L to n).sum)
   }
 
   // exists method written in terms of reduceRightTo
@@ -74,6 +82,15 @@ class ReducibleSuiteAdditional extends CatsSuite {
     // test trampolining
     val large = NonEmptyList(1, (2 to 10000).toList)
     assert(contains(large, 10000).value)
+  }
+
+  test("Reducible[NonEmptyList].reduceMapA can breakout") {
+    val notAllEven = NonEmptyList.of(2, 4, 6, 9, 10, 12, 14)
+    val out = mutable.ListBuffer[Int]()
+
+    notAllEven.reduceMapA { a => out += a; if (a % 2 == 0) Some(a) else None }
+
+    out.toList should ===(List(2, 4, 6, 9))
   }
 
   // A simple non-empty stream with lazy `foldRight` and `reduceRightTo` implementations.

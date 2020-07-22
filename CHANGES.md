@@ -1,3 +1,50 @@
+## Version 2.2.0-RC1
+
+_2020 July 6_
+
+### 10 API / feature enhancements
+
+* [#3458](https://github.com/typelevel/cats/pull/3458) Enum typeclass  by @yilinwei
+* [#3508](https://github.com/typelevel/cats/pull/3508) Put implicit support for evidence from predef types  by @johnynek
+* [#3459](https://github.com/typelevel/cats/pull/3459) attemptTap  by @RaasAhsan
+* [#3502](https://github.com/typelevel/cats/pull/3502) Add Tuple2K Semigroupal  by @rmehri01
+* [#3495](https://github.com/typelevel/cats/pull/3495) Add implicit variance support for Profunctor typeclass  by @gagandeepkalra
+* [#3358](https://github.com/typelevel/cats/pull/3358) ApplicativeError: add raiseOption operation.  by @diesalbla
+* [#3493](https://github.com/typelevel/cats/pull/3493) Don't skip PartialOrder antisymmetry and transitivity  by @rossabaker
+* [#3336](https://github.com/typelevel/cats/pull/3336) some convenient for IndexedReaderWriterStateT  by @enzief
+* [#3486](https://github.com/typelevel/cats/pull/3486) Another attempt at Dotty cross-building  by @travisbrown
+* [#3485](https://github.com/typelevel/cats/pull/3485) Remove unnecessary type parameter  by @travisbrown
+
+
+### 7 documentation improvements
+
+* [#3501](https://github.com/typelevel/cats/pull/3501) improved MonoidK docs  by @kazchimo
+* [#3492](https://github.com/typelevel/cats/pull/3492) Add invariant docs  by @kazchimo
+* [#3497](https://github.com/typelevel/cats/pull/3497) Modify document expressions  by @yu-croco
+* [#3390](https://github.com/typelevel/cats/pull/3390) Add document about Arrow Choice  by @jcouyang
+* [#3481](https://github.com/typelevel/cats/pull/3481) Improve documentation for typeclasses  by @kkalavantavanich
+* [#3478](https://github.com/typelevel/cats/pull/3478) Add ior docs  by @kazchimo
+* [#3479](https://github.com/typelevel/cats/pull/3479) Clean up Community Announcements a little  by @travisbrown
+
+
+### 14 build improvements
+
+* [#3496](https://github.com/typelevel/cats/pull/3510) Fix cross-versioning for docs  by @travisbrown
+* [#3506](https://github.com/typelevel/cats/pull/3509) Update scalafmt-core to 2.6.2  by @scala-steward
+* [#3506](https://github.com/typelevel/cats/pull/3506) Update sbt-scalafix to 0.9.18  by @scala-steward
+* [#3507](https://github.com/typelevel/cats/pull/3507) Update sbt-sonatype to 3.9.4  by @scala-steward
+* [#3496](https://github.com/typelevel/cats/pull/3496) Review Simulacrum Scalafix annotation practices  by @travisbrown
+* [#3504](https://github.com/typelevel/cats/pull/3504) Update sbt-scalajs, scalajs-compiler to 1.1.1  by @scala-steward
+* [#3500](https://github.com/typelevel/cats/pull/3500) Update sbt to 1.3.13  by @scala-steward
+* [#3491](https://github.com/typelevel/cats/pull/3491) Update sbt-sonatype to 3.9.3  by @scala-steward
+* [#3490](https://github.com/typelevel/cats/pull/3490) Fixed formatting on master  by @barambani
+* [#3488](https://github.com/typelevel/cats/pull/3488) Scalafmt core 2.6.1  by @barambani
+* [#3484](https://github.com/typelevel/cats/pull/3484) Add ScalaTest 3.2.0 dependencies  by @travisbrown
+* [#3482](https://github.com/typelevel/cats/pull/3482) Rerun Simulacrum after rearrangement for Scala.js  by @travisbrown
+* [#3476](https://github.com/typelevel/cats/pull/3476) Update to Scalafmt 2.6.0  by @travisbrown
+* [#3475](https://github.com/typelevel/cats/pull/3475) Merge 2.2.x after 2.2.0-M3 release  by @travisbrown
+
+
 ## Version 2.2.0-M3
 
 _2020 June 17

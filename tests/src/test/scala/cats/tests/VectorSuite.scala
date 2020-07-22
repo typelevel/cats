@@ -65,6 +65,16 @@ class VectorSuite extends CatsSuite {
   test("toNev on empty vector returns None") {
     assert(Vector.empty[Int].toNev == None)
   }
+
+  test("traverse is stack-safe") {
+    val vec = (0 until 100000).toVector
+    val sumAll = Traverse[Vector]
+      .traverse(vec) { i => () => i }
+      .apply
+      .sum
+
+    assert(sumAll == vec.sum)
+  }
 }
 
 final class VectorInstancesSuite extends AnyFunSuiteLike {

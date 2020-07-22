@@ -71,6 +71,18 @@ sealed private[instances] trait Function0Instances extends Function0Instances0 {
 
       def pure[A](x: A): () => A = () => x
 
+      override def map[A, B](fa: () => A)(fn: A => B): () => B =
+        () => fn(fa())
+
+      override def map2[A, B, C](fa: () => A, fb: () => B)(fn: (A, B) => C): () => C =
+        () => fn(fa(), fb())
+
+      override def product[A, B](fa: () => A, fb: () => B): () => (A, B) =
+        () => (fa(), fb())
+
+      override def ap[A, B](f: () => A => B)(fa: () => A): () => B =
+        () => f()(fa())
+
       def flatMap[A, B](fa: () => A)(f: A => () => B): () => B =
         () => f(fa())()
 
@@ -121,6 +133,15 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
 
       override def map[R1, R2](fa: T1 => R1)(f: R1 => R2): T1 => R2 =
         f.compose(fa)
+
+      override def map2[A, B, C](fa: T1 => A, fb: T1 => B)(fn: (A, B) => C): T1 => C =
+        t => fn(fa(t), fb(t))
+
+      override def product[A, B](fa: T1 => A, fb: T1 => B): T1 => (A, B) =
+        t => (fa(t), fb(t))
+
+      override def ap[A, B](f: T1 => A => B)(fa: T1 => A): T1 => B =
+        t => f(t).apply(fa(t))
 
       def tailRecM[A, B](a: A)(fn: A => T1 => Either[A, B]): T1 => B =
         (t: T1) => {

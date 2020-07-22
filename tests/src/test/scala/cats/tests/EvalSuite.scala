@@ -96,6 +96,14 @@ class EvalSuite extends CatsSuite {
     spooky.counter should ===(2)
   }
 
+  test("Defer and FlatMap compose without blowing the stack") {
+    def inc(a: Eval[Int], count: Int): Eval[Int] =
+      if (count <= 0) a
+      else Eval.defer(Eval.defer(inc(a, count - 1))).flatMap { i => Eval.now(i + 1) }
+
+    assert(inc(Eval.now(0), 1000000).value == 1000000)
+  }
+
   {
     implicit val iso: SemigroupalTests.Isomorphisms[Eval] =
       SemigroupalTests.Isomorphisms.invariant[Eval]

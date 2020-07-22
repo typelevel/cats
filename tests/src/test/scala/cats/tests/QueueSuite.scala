@@ -40,4 +40,15 @@ class QueueSuite extends CatsSuite {
     Queue(1, 2, 3).show should ===("Queue(1, 2, 3)")
     Queue.empty[Int].show should ===("Queue()")
   }
+
+  test("traverse is stack-safe") {
+    val queue = (0 until 100000).foldLeft(Queue.empty[Int])(_ :+ _)
+    val sumAll = Traverse[Queue]
+      .traverse(queue) { i => () => i }
+      .apply
+      .iterator
+      .sum
+
+    assert(sumAll == queue.sum)
+  }
 }

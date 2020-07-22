@@ -1,5 +1,6 @@
 
 ### ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Community Announcements ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+* **Jul 6 2020** [Cats 2.2.0-RC1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-RC1)
 * **Jun 17 2020** [Cats 2.2.0-M3 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M3)
 * **May 25 2020** [Cats 2.2.0-M2 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M2)
 * **Mar 31 2020** [Cats 2.2.0-M1 is released](https://github.com/typelevel/cats/releases/tag/v2.2.0-M1)
@@ -314,6 +315,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [HomeAway](https://www.homeaway.com)
 - [iHeartRadio](https://iheart.com)
 - [ImmobilienScout24](https://www.immobilienscout24.de/)
+- [Immozentral](https://www.immozentral.com/)
 - [Iterators](https://www.iteratorshq.com/)
 - [ITV](https://www.itv.com/)
 - [Lightform](https://lightform.com/)
@@ -348,6 +350,7 @@ Here's a (non-exhaustive) list of companies that use Cats in production. Don't s
 - [Underscore Consulting](https://underscore.io/)
 - [Waves Platform](https://wavesplatform.com/)
 - [Wegtam GmbH](https://www.wegtam.com)
+- [Wejo](https://www.wejo.com/)
 - [WeWork](https://www.wework.com)
 - [Wix.com](https://www.wix.com)
 - [Zalando](https://zalando.com)
