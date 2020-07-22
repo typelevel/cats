@@ -110,7 +110,9 @@ class KleisliSuite extends CatsSuite {
     )
     checkAll(
       "Decidable[Kleisli[Option, Int, ?]]",
-      SerializableTests.serializable[Decidable[Kleisli[Predicate, MiniInt, *]]](Decidable[Kleisli[Predicate, MiniInt, *]])
+      SerializableTests.serializable[Decidable[Kleisli[Predicate, MiniInt, *]]](
+        Decidable[Kleisli[Predicate, MiniInt, *]]
+      )
     )
   }
 

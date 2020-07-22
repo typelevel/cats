@@ -104,9 +104,7 @@ class OptionTSuite extends CatsSuite {
     )
 
     checkAll("OptionT[Predicate, MiniInt]", DecidableTests[OptionT[Predicate, *]].decidable[MiniInt, MiniInt, MiniInt])
-    checkAll("Decidable[OptionT[Predicate, MiniInt]]",
-             SerializableTests.serializable(Decidable[OptionT[Predicate, *]])
-    )
+    checkAll("Decidable[OptionT[Predicate, MiniInt]]", SerializableTests.serializable(Decidable[OptionT[Predicate, *]]))
 
     // F has a ContravariantMonoidal
     checkAll("OptionT[Const[String, *], Int]",

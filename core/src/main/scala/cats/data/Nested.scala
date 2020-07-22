@@ -83,7 +83,7 @@ sealed abstract private[data] class NestedInstances1 extends NestedInstances2 {
     }
 
   implicit def catsDataDecidableForApplicativeForNested[F[_]: Applicative, G[_]: Decidable]
-  : Decidable[Nested[F, G, *]] =
+    : Decidable[Nested[F, G, *]] =
     new NestedDecidable[F, G] with NestedContravariant[F, G] {
       val FG: Decidable[λ[α => F[G[α]]]] = Applicative[F].composeDecidable[G]
     }
@@ -102,7 +102,7 @@ sealed abstract private[data] class NestedInstances2 extends NestedInstances3 {
     }
 
   implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
-  : ContravariantMonoidal[Nested[F, G, *]] =
+    : ContravariantMonoidal[Nested[F, G, *]] =
     new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
       val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
