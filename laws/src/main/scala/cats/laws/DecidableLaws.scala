@@ -4,10 +4,13 @@ package laws
 trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
   implicit override def F: Decidable[F]
 
-  def decideableDecideRightAbsorption[A](fa: F[A]): IsEq[F[A]] =
+  def decidableDecideLeftIdentity[A](fa: F[A]): IsEq[F[A]] =
+    F.decide(fa, F.trivial[A])(Left.apply[A, A]) <-> fa
+
+  def decidableDecideRightIdentity[A](fa: F[A]): IsEq[F[A]] =
     F.decide(F.trivial[A], fa)(Right.apply[A, A]) <-> fa
 
-  def decideableSumAssociativity[A, B, C](
+  def decidableSumAssociativity[A, B, C](
     fa: F[A],
     fb: F[B],
     fc: F[C]
@@ -21,13 +24,20 @@ trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
       }
     ) <-> F.sum(F.sum(fa, fb), fc)
 
-  def decideableRightDistributivity[A, B, C](fa: F[A], fb: F[B], f: C => A, g: C => B): IsEq[F[Either[C, C]]] =
+  def decidableRightDistributivity[A, B, C](fa: F[A], fb: F[B], f: C => A, g: C => B): IsEq[F[Either[C, C]]] =
     F.contramap(F.sum(fa, fb))((eit: Either[C, C]) =>
       eit.fold(
         f.andThen(Left.apply),
         g.andThen(Right.apply)
       )
     ) <-> F.sum(F.contramap(fa)(f), F.contramap(fb)(g))
+
+  def decidableRightDistributivitySum[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[(A, Either[B, C])]] =
+    F.product(fa, F.sum(fb, fc)) <->
+      F.contramap(F.sum(F.product(fa, fb), F.product(fa, fc)))({
+        case (a, Left(b)) => Left((a, b))
+        case (a, Right(c)) => Right((a, c))
+      })
 }
 
 object DecidableLaws {

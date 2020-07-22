@@ -21,6 +21,7 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
     EqFABC: Eq[F[(A, B, C)]],
     EqCC: Eq[F[Either[C, C]]],
     EqFEitABC: Eq[F[Either[Either[A, B], C]]],
+    EqFTupAEitBC: Eq[F[(A, Either[B, C])]],
     iso: SemigroupalTests.Isomorphisms[F]
   ): RuleSet =
     new RuleSet {
@@ -28,12 +29,16 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
       val parents = Seq(contravariantMonoidal[A, B, C])
       val bases = Seq.empty
       val props = Seq(
-        "decideable right absorption" ->
-          forAll(laws.decideableDecideRightAbsorption[A] _),
-        "decideable sum associativity" ->
-          forAll(laws.decideableSumAssociativity[A, B, C] _),
-        "decideable right distributivity" ->
-          forAll(laws.decideableRightDistributivity[A, B, C] _)
+        "decideable left identity" ->
+          forAll(laws.decidableDecideLeftIdentity[A] _),
+        "decidable right identity" ->
+          forAll(laws.decidableDecideRightIdentity[A] _),
+        "decidable sum associativity" ->
+          forAll(laws.decidableSumAssociativity[A, B, C] _),
+        "decidable right distributivity" ->
+          forAll(laws.decidableRightDistributivity[A, B, C] _),
+        "dedicable right sum distributivituy" ->
+          forAll(laws.decidableRightDistributivitySum[A, B, C] _)
       )
     }
 }
