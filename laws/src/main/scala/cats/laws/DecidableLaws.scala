@@ -11,8 +11,15 @@ trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
     fa: F[A],
     fb: F[B],
     fc: F[C]
-  ): (F[Either[A, Either[B, C]]], F[Either[Either[A, B], C]]) =
-    (F.sum(fa, F.sum(fb, fc)), F.sum(F.sum(fa, fb), fc))
+  ): IsEq[F[Either[Either[A, B], C]]] =
+    F.contramap[Either[A, Either[B, C]], Either[Either[A, B], C]](
+      F.sum(fa, F.sum(fb, fc)))(
+      {
+        case Left(Left(x)) => Left(x)
+        case Left(Right(x)) => Right(Left(x))
+        case Right(x) => Right(Right(x))
+      }
+    ) <-> F.sum(F.sum(fa, fb), fc)
 
   def decideableRightDistributivity[A, B, C](fa: F[A], fb: F[B], f: C => A, g: C => B): IsEq[F[Either[C, C]]] =
     F.contramap(F.sum(fa, fb))((eit: Either[C, C]) =>

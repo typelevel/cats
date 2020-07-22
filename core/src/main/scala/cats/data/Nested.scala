@@ -44,12 +44,6 @@ sealed abstract private[data] class NestedInstances extends NestedInstances0 {
       val FG: NonEmptyTraverse[λ[α => F[G[α]]]] = NonEmptyTraverse[F].compose[G]
     }
 
-  implicit def catsDataDecidableForApplicativeForNested[F[_]: Applicative, G[_]: Decidable]
-    : Decidable[Nested[F, G, *]] =
-    new NestedDecidable[F, G] with NestedContravariant[F, G] {
-      val FG: Decidable[λ[α => F[G[α]]]] = Applicative[F].composeDecidable[G]
-    }
-
   implicit def catsDataDeferForNested[F[_], G[_]](implicit F: Defer[F]): Defer[Nested[F, G, *]] =
     new Defer[Nested[F, G, *]] {
       def defer[A](fa: => Nested[F, G, A]): Nested[F, G, A] =
@@ -80,18 +74,18 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
       implicit val F: Functor[F] = F0
       implicit val G: FunctorFilter[G] = G0
     }
-
-  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
-    : ContravariantMonoidal[Nested[F, G, *]] =
-    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
-      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
-    }
 }
 
 sealed abstract private[data] class NestedInstances1 extends NestedInstances2 {
   implicit def catsDataReducibleForNested[F[_]: Reducible, G[_]: Reducible]: Reducible[Nested[F, G, *]] =
     new NestedReducible[F, G] {
       val FG: Reducible[λ[α => F[G[α]]]] = Reducible[F].compose[G]
+    }
+
+  implicit def catsDataDecidableForApplicativeForNested[F[_]: Applicative, G[_]: Decidable]
+  : Decidable[Nested[F, G, *]] =
+    new NestedDecidable[F, G] with NestedContravariant[F, G] {
+      val FG: Decidable[λ[α => F[G[α]]]] = Applicative[F].composeDecidable[G]
     }
 
   implicit def catsDataFunctorForContravariantForNested[F[_]: Contravariant, G[_]: Contravariant]
@@ -105,6 +99,12 @@ sealed abstract private[data] class NestedInstances2 extends NestedInstances3 {
   implicit def catsDataFoldableForNested[F[_]: Foldable, G[_]: Foldable]: Foldable[Nested[F, G, *]] =
     new NestedFoldable[F, G] {
       val FG: Foldable[λ[α => F[G[α]]]] = Foldable[F].compose[G]
+    }
+
+  implicit def catsDataContravariantMonoidalForApplicativeForNested[F[_]: Applicative, G[_]: ContravariantMonoidal]
+  : ContravariantMonoidal[Nested[F, G, *]] =
+    new NestedContravariantMonoidal[F, G] with NestedContravariant[F, G] {
+      val FG: ContravariantMonoidal[λ[α => F[G[α]]]] = Applicative[F].composeContravariantMonoidal[G]
     }
 
   implicit def catsDataContravariantForCovariantNested[F[_]: Contravariant, G[_]: Functor]

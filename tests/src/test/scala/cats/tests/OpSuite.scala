@@ -24,7 +24,6 @@ class OpSuite extends CatsSuite {
 
   {
     implicit val catsDataDecidableForOp = Op.catsDataDecidableForOp[Function1, Int]
-    implicit val coproductIsos = DecidableTests.Isomorphisms.invariant[Op[Function1, Int, *]]
     checkAll("Op[Function1, Monoid, ?]", DecidableTests[Op[Function1, Int, *]].decidable[MiniInt, MiniInt, MiniInt])
     checkAll("Decidable[Op[Function1, Monoid, ?]]", SerializableTests.serializable(Decidable[Op[Function1, Int, *]]))
   }

@@ -28,6 +28,8 @@ class Tuple2KSuite extends CatsSuite {
            SerializableTests.serializable(Contravariant[λ[α => Tuple2K[Show, Order, α]]])
   )
 
+  implicit val isoConst: Isomorphisms[λ[α => Tuple2K[Const[String, *], Const[String, *], α]]] =
+    Isomorphisms.invariant[λ[α => Tuple2K[Const[String, *], Const[String, *], α]]]
   checkAll(
     "Tuple2K[Const[String, *], Const[Int, *], Int]",
     ContravariantMonoidalTests[λ[α => Tuple2K[Const[String, *], Const[Int, *], α]]].contravariantMonoidal[Int, Int, Int]
@@ -37,15 +39,12 @@ class Tuple2KSuite extends CatsSuite {
     SerializableTests.serializable(ContravariantMonoidal[λ[α => Tuple2K[Const[String, *], Const[Int, *], α]]])
   )
 
-  // Coproduct isos for DecidableTests
-  implicit val coproductIso = DecidableTests.Isomorphisms.invariant[Tuple2K[Const[String, ?], Const[Int, ?], ?]]
-
   checkAll("Tuple2K[Const[String, ?], Const[Int, ?], Long]",
-           DecidableTests[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]].decidable[Long, Long, Long]
+           DecidableTests[λ[α => Tuple2K[* => Boolean, * => Boolean, α]]].decidable[Long, Long, Long]
   )
   checkAll(
     "Decidable[Tuple2K[Const[String, ?], Const[Int, ?], Long]]",
-    SerializableTests.serializable(Decidable[λ[α => Tuple2K[Const[String, ?], Const[Int, ?], α]]])
+    SerializableTests.serializable(Decidable[λ[α => Tuple2K[* => Boolean, * => Boolean, α]]])
   )
 
   checkAll("Show[Tuple2K[Option, Option, Int]]", SerializableTests.serializable(Show[Tuple2K[Option, Option, Int]]))

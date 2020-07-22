@@ -2,6 +2,7 @@ package cats.tests
 
 import cats._
 import cats.data._
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms._
 import cats.laws.discipline.arbitrary._
@@ -104,22 +105,23 @@ class NestedSuite extends CatsSuite {
 
   {
     // Applicative + ContravariantMonoidal functor composition
+//    implicit val isos = Isomorphisms.invariant[Nested[Option, Const[String, *], *]]
     checkAll("Nested[Option, Const[String, *], *]",
-             ContravariantMonoidalTests[Nested[Option, Const[String, *], *]].contravariantMonoidal[Int, Int, Int]
+             ContravariantMonoidalTests[λ[α => Nested[Option, Const[String, *], α]]].contravariantMonoidal[Int, Int, Int]
     )
     checkAll("ContravariantMonoidal[Nested[Option, Const[String, *], *]",
-             SerializableTests.serializable(ContravariantMonoidal[Nested[Option, Const[String, *], *]])
+             SerializableTests.serializable(ContravariantMonoidal[λ[α => Nested[Option, Const[String, *], α]]])
     )
   }
 
   {
-    // Applicative + Decidable functor compositoin
-    implicit val coproductIsos = DecidableTests.Isomorphisms.invariant[Nested[Option, Const[String, ?], ?]]
-    checkAll("Nested[Option, Const[String, ?], ?]",
-             DecidableTests[Nested[Option, Const[String, ?], ?]].decidable[Int, Int, Int]
+    // Applicative + Decidable functor composition
+    implicit val isos = Isomorphisms.invariant[Nested[Option, Const[String, *], *]]
+    checkAll("Nested[Option, * => Boolean, ?]",
+             DecidableTests[Nested[Option, * => Boolean, *]].decidable[Int, Int, Int]
     )
-    checkAll("Decidable[Nested[Option, Const[String, ?], ?]]",
-             SerializableTests.serializable(Decidable[Nested[Option, Const[String, ?], ?]])
+    checkAll("Decidable[Nested[Option, * => Boolean, ?]]",
+             SerializableTests.serializable(Decidable[Nested[Option, * => Boolean, *]])
     )
   }
 

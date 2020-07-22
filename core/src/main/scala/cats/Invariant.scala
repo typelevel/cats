@@ -123,8 +123,6 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsBimonadForFunction0: Bimonad[Function0] = cats.instances.function.catsStdBimonadForFunction0
   implicit def catsMonadForFunction1[I]: Monad[I => *] = cats.instances.function.catsStdMonadForFunction1[I]
-  implicit def catsContravariantMonoidalForFunction1[R: Monoid]: ContravariantMonoidal[* => R] =
-    cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsFunctorForPair: Functor[λ[P => (P, P)]] = cats.instances.tuple.catsDataFunctorForPair
 
   implicit def catsInstancesForTry: MonadError[Try, Throwable] with CoflatMap[Try] =
@@ -151,6 +149,8 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
     cats.instances.order.catsDecidableForOrder
   implicit def catsDecidableForOrdering: Decidable[Ordering] =
     cats.instances.ordering.catsDecidableForOrdering
+  implicit def catsDecidableForPredicate: Decidable[* => Boolean] =
+    cats.instances.function.catsStdDecidableForPredicate
 
   implicit val catsInvariantMonoid: Invariant[Monoid] = new Invariant[Monoid] {
 

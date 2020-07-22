@@ -172,7 +172,7 @@ sealed abstract private[data] class IdTInstances5 extends IdTInstances6 {
 
   implicit def catsDataDecidableForIdT[F[_]](implicit
     F: Decidable[F]
-  ): Decidable[IdT[F, ?]] =
+  ): Decidable[IdT[F, *]] =
     new IdTDecidable[F] { implicit val F0: Decidable[F] = F }
 }
 

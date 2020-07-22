@@ -62,8 +62,8 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.sortedMap.catsStdInstancesForSortedMap[K]
   implicit def catsSemigroupalForFunction1[A]: Semigroupal[A => *] =
     cats.instances.function.catsStdMonadForFunction1[A]
-  implicit def catsSemigroupalForFunction1Contravariant[R: Monoid]: Semigroupal[* => R] =
-    cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
+//  implicit def catsSemigroupalForFunction1Contravariant[R: Monoid]: Semigroupal[* => R] =
+//    cats.instances.function.catsStdContravariantMonoidalForFunction1[R]
   implicit def catsSemigroupalForFunction0: Semigroupal[Function0] =
     cats.instances.function.catsStdBimonadForFunction0
 
@@ -83,6 +83,8 @@ object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with Semigro
     cats.instances.invariant.catsInvariantMonoidalSemigroup
   implicit val catsSemigroupalForCommutativeSemigroup: Semigroupal[CommutativeSemigroup] =
     cats.instances.invariant.catsInvariantMonoidalCommutativeSemigroup
+  implicit val catsSemigroupalForPredicate: Semigroupal[* => Boolean] =
+    cats.instances.function.catsStdDecidableForPredicate
 
   /* ======================================================================== */
   /* THE FOLLOWING CODE IS MANAGED BY SIMULACRUM; PLEASE DO NOT EDIT!!!!      */
