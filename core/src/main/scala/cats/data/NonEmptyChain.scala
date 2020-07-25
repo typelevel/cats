@@ -457,6 +457,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
 
       override def alignWith[A, B, C](fa: NonEmptyChain[A], fb: NonEmptyChain[B])(f: Ior[A, B] => C): NonEmptyChain[C] =
         alignInstance.alignWith(fa, fb)(f)
+
+      override def toNonEmptyList[A](fa: NonEmptyChain[A]): NonEmptyList[A] = fa.toNonEmptyList
     }
 
   implicit def catsDataOrderForNonEmptyChain[A: Order]: Order[NonEmptyChain[A]] =
