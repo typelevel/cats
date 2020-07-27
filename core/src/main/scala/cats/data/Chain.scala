@@ -339,8 +339,11 @@ sealed abstract class Chain[+A] {
    */
   final def zipWithIndex: Chain[(A, Int)] =
     this match {
-      case non: Chain.NonEmpty[A] => non.zipWithIndexNE
-      case _                      => Empty
+      case Singleton(a) => Singleton((a, 0))
+      case a @ Append(_, _) =>
+        Wrap(a.iterator.zipWithIndex.toVector)
+      case Wrap(seq) => Wrap(seq.zipWithIndex)
+      case _         => Empty
     }
 
   /**
@@ -588,15 +591,7 @@ object Chain extends ChainInstances {
 
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] { def apply(a: Any) = this }
 
-  sealed abstract private[data] class NonEmpty[A] extends Chain[A] {
-    final def zipWithIndexNE: NonEmpty[(A, Int)] =
-      this match {
-        case Singleton(a) => Singleton((a, 0))
-        case a @ Append(_, _) =>
-          Wrap(a.iterator.zipWithIndex.toVector)
-        case Wrap(seq) => Wrap(seq.zipWithIndex)
-      }
-  }
+  sealed abstract private[data] class NonEmpty[A] extends Chain[A]
 
   private[data] case object Empty extends Chain[Nothing]
   final private[data] case class Singleton[A](a: A) extends NonEmpty[A]
