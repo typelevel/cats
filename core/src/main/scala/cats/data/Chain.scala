@@ -329,8 +329,8 @@ sealed abstract class Chain[+A] {
    */
   final def zipWithIndex: Chain[(A, Int)] =
     this match {
-      case Empty                  => Empty
       case non: Chain.NonEmpty[A] => non.zipWithIndexNE
+      case _                      => Empty
     }
 
   /**
@@ -392,7 +392,6 @@ sealed abstract class Chain[+A] {
   // scalastyle:off null return cyclomatic.complexity
   final private def foreachUntil(f: A => Boolean): Unit =
     this match {
-      case Empty => ()
       case non: Chain.NonEmpty[A] =>
         var c: Chain.NonEmpty[A] = non
         val rights = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
@@ -419,21 +418,24 @@ sealed abstract class Chain[+A] {
               rights.clear()
           }
         }
+      case _ => ()
     }
   // scalastyle:on null return cyclomatic.complexity
 
   final def iterator: Iterator[A] =
     this match {
-      case Wrap(seq)        => seq.iterator
-      case non: NonEmpty[A] => new ChainIterator[A](non)
-      case _                => Iterator.empty
+      case Wrap(seq)      => seq.iterator
+      case Singleton(a)   => Iterator.single(a)
+      case app: Append[A] => new ChainIterator[A](app)
+      case _              => Iterator.empty
     }
 
   final def reverseIterator: Iterator[A] =
     this match {
-      case Wrap(seq)        => seq.reverseIterator
-      case non: NonEmpty[A] => new ChainReverseIterator[A](non)
-      case _                => Iterator.empty
+      case Wrap(seq)      => seq.reverseIterator
+      case Singleton(a)   => Iterator.single(a)
+      case app: Append[A] => new ChainReverseIterator[A](app)
+      case _              => Iterator.empty
     }
 
   /**
@@ -548,18 +550,18 @@ sealed abstract class Chain[+A] {
 
   final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
     this match {
-      case Empty        => this
       case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
       case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+      case _            => this
     }
 
   final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
     this match {
-      case Empty        => this
       case Singleton(_) => this
       case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
       case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+      case _            => this
     }
 }
 
@@ -629,12 +631,12 @@ object Chain extends ChainInstances {
    */
   def concat[A](c: Chain[A], c2: Chain[A]): Chain[A] =
     c match {
-      case Empty => c2
       case non: NonEmpty[A] =>
         c2 match {
-          case Empty             => non
           case non2: NonEmpty[A] => Append(non, non2)
+          case _                 => non
         }
+      case _ => c2
     }
 
   /**
@@ -755,8 +757,8 @@ object Chain extends ChainInstances {
   private class ChainIterator[A](self: NonEmpty[A]) extends Iterator[A] {
     def this(chain: Chain[A]) =
       this(chain match {
-        case Empty            => null: NonEmpty[A]
         case non: NonEmpty[A] => non
+        case _                => null: NonEmpty[A]
       })
 
     private[this] var c: NonEmpty[A] = self
@@ -804,8 +806,8 @@ object Chain extends ChainInstances {
   private class ChainReverseIterator[A](self: NonEmpty[A]) extends Iterator[A] {
     def this(chain: Chain[A]) =
       this(chain match {
-        case Empty            => null: NonEmpty[A]
         case non: NonEmpty[A] => non
+        case _                => null: NonEmpty[A]
       })
 
     private[this] var c: NonEmpty[A] = self
