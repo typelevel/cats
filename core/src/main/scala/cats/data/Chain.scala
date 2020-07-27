@@ -22,22 +22,27 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        val rights = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
+        var rights: Chain.NonEmpty[A] = null
         // scalastyle:off null
         var result: Option[(A, Chain[A])] = null
         while (result eq null) {
           c match {
             case Singleton(a) =>
               val next =
-                if (rights.isEmpty) nil
-                else rights.reduceLeft((x, y) => Append(y, x))
-              result = Some(a -> next)
-            case Append(l, r) => c = l; rights += r
+                if (rights eq null) nil
+                else rights
+              result = Some((a, next))
+            case Append(l, r) =>
+              rights =
+                if (rights eq null) r
+                else Append(r, rights)
+              c = l
             case Wrap(seq) =>
               val tail = fromSeq(seq.tail)
               val next =
-                if (rights.isEmpty) tail
-                else tail ++ rights.reduceLeft((x, y) => Append(y, x))
+                if (rights eq null) tail
+                else if (tail.isEmpty) rights
+                else Append(tail.asInstanceOf[Chain.NonEmpty[A]], rights)
               result = Some((seq.head, next))
           }
         }
@@ -53,22 +58,27 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        val lefts = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
+        var lefts: NonEmpty[A] = null
         // scalastyle:off null
         var result: Option[(Chain[A], A)] = null
         while (result eq null) {
           c match {
             case Singleton(a) =>
               val pre =
-                if (lefts.isEmpty) nil
-                else lefts.reduceLeft((x, y) => Append(x, y))
-              result = Some(pre -> a)
-            case Append(l, r) => c = r; lefts += l
+                if (lefts eq null) nil
+                else lefts
+              result = Some((pre, a))
+            case Append(l, r) =>
+              lefts =
+                if (lefts eq null) l
+                else Append(lefts, l)
+              c = r
             case Wrap(seq) =>
               val init = fromSeq(seq.init)
               val pre =
-                if (lefts.isEmpty) init
-                else lefts.reduceLeft((x, y) => Append(x, y)) ++ init
+                if (lefts eq null) init
+                else if (init.isEmpty) lefts
+                else Append(lefts, init.asInstanceOf[Chain.NonEmpty[A]])
               result = Some((pre, seq.last))
           }
         }
@@ -394,7 +404,8 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: Chain.NonEmpty[A] = non
-        val rights = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
+        // a stack of rights
+        var rights: List[Chain.NonEmpty[A]] = Nil
 
         while (c ne null) {
           c match {
@@ -403,9 +414,14 @@ sealed abstract class Chain[+A] {
               if (b) return ()
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
-            case Append(l, r) => c = l; rights += r
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
+            case Append(l, r) =>
+              rights = r :: rights
+              c = l
             case Wrap(seq) =>
               val iterator = seq.iterator
               while (iterator.hasNext) {
@@ -414,8 +430,11 @@ sealed abstract class Chain[+A] {
               }
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
           }
         }
       case _ => ()
@@ -762,7 +781,7 @@ object Chain extends ChainInstances {
       })
 
     private[this] var c: NonEmpty[A] = self
-    private[this] val rights = new collection.mutable.ArrayBuffer[NonEmpty[A]]
+    private[this] var rights: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
@@ -778,18 +797,24 @@ object Chain extends ChainInstances {
             case Singleton(a) =>
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
               a
             case Append(l, r) =>
               c = l
-              rights += r
+              rights = r :: rights
               go
             case Wrap(seq) =>
               c =
                 if (rights.isEmpty) null
-                else rights.reduceLeft((x, y) => Append(y, x))
-              rights.clear()
+                else {
+                  val head = rights.head
+                  rights = rights.tail
+                  head
+                }
               currentIterator = seq.iterator
               currentIterator.next
             case null =>
@@ -811,7 +836,7 @@ object Chain extends ChainInstances {
       })
 
     private[this] var c: NonEmpty[A] = self
-    private[this] val lefts = new collection.mutable.ArrayBuffer[NonEmpty[A]]
+    private[this] var lefts: List[NonEmpty[A]] = Nil
     private[this] var currentIterator: Iterator[A] = null
 
     override def hasNext: Boolean = (c ne null) || ((currentIterator ne null) && currentIterator.hasNext)
@@ -827,18 +852,24 @@ object Chain extends ChainInstances {
             case Singleton(a) =>
               c =
                 if (lefts.isEmpty) null
-                else lefts.reduceLeft((x, y) => Append(x, y))
-              lefts.clear()
+                else {
+                  val head = lefts.head
+                  lefts = lefts.tail
+                  head
+                }
               a
             case Append(l, r) =>
               c = r
-              lefts += l
+              lefts = l :: lefts
               go
             case Wrap(seq) =>
               c =
                 if (lefts.isEmpty) null
-                else lefts.reduceLeft((x, y) => Append(x, y))
-              lefts.clear()
+                else {
+                  val head = lefts.head
+                  lefts = lefts.tail
+                  head
+                }
               currentIterator = seq.reverseIterator
               currentIterator.next
             case null =>
