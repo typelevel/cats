@@ -383,14 +383,6 @@ sealed abstract class Chain[+A] {
   }
 
   /**
-   * Applies the supplied function to each element, left to right.
-   */
-  final private def foreach(f: A => Unit): Unit =
-    foreachUntil { a =>
-      f(a); false
-    }
-
-  /**
    * Applies the supplied function to each element, left to right, but stops when true is returned
    */
   // scalastyle:off null return cyclomatic.complexity
@@ -508,11 +500,11 @@ sealed abstract class Chain[+A] {
     val builder = new StringBuilder("Chain(")
     var first = true
 
-    foreach { a =>
+    foreachUntil { a =>
       if (first) {
         builder ++= AA.show(a); first = false
       } else builder ++= ", " + AA.show(a)
-      ()
+      false
     }
     builder += ')'
     builder.result
