@@ -82,7 +82,11 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       def traverse[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Queue[B]] =
         if (fa.isEmpty) G.pure(Queue.empty[B])
         else
-          G.map(Chain.traverseViaChain(fa.iterator)(f)) { chain =>
+          G.map(Chain.traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa
+            as
+          }(f)) { chain =>
             chain.foldLeft(Queue.empty[B])(_ :+ _)
           }
 
@@ -177,7 +181,11 @@ private object QueueInstances {
     def traverseFilter[G[_], A, B](fa: Queue[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Queue[B]] =
       if (fa.isEmpty) G.pure(Queue.empty[B])
       else
-        G.map(Chain.traverseFilterViaChain(fa.iterator)(f)) { chain =>
+        G.map(Chain.traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa
+          as
+        }(f)) { chain =>
           chain.foldLeft(Queue.empty[B])(_ :+ _)
         }
 

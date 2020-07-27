@@ -629,13 +629,11 @@ object Chain extends ChainInstances {
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
-  def traverseViaChain[G[_], A, B](iter: Iterator[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
-    if (!iter.hasNext) G.pure(Chain.nil)
+  def traverseViaChain[G[_], A, B](as: IndexedSeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
+    if (as.isEmpty) G.pure(Chain.nil)
     else {
       // we branch out by this factor
       val width = 128
-      val as = collection.mutable.Buffer[A]()
-      as ++= iter
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
@@ -676,14 +674,12 @@ object Chain extends ChainInstances {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    iter: Iterator[A]
+    as: IndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
-    if (!iter.hasNext) G.pure(Chain.nil)
+    if (as.isEmpty) G.pure(Chain.nil)
     else {
       // we branch out by this factor
       val width = 128
-      val as = collection.mutable.Buffer[A]()
-      as ++= iter
       // By making a tree here we don't blow the stack
       // even if the List is very long
       // by construction, this is never called with start == end
@@ -862,7 +858,12 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       def traverse[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
         if (fa.isEmpty) G.pure(Chain.nil)
-        else traverseViaChain(fa.iterator)(f)
+        else
+          traverseViaChain {
+            val as = collection.mutable.ArrayBuffer[A]()
+            as ++= fa.iterator
+            as
+          }(f)
 
       def empty[A]: Chain[A] = Chain.nil
       def combineK[A](c: Chain[A], c2: Chain[A]): Chain[A] = Chain.concat(c, c2)
@@ -963,7 +964,12 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
     def traverseFilter[G[_], A, B](fa: Chain[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
       if (fa.isEmpty) G.pure(Chain.nil)
-      else traverseFilterViaChain(fa.iterator)(f)
+      else
+        traverseFilterViaChain {
+          val as = collection.mutable.ArrayBuffer[A]()
+          as ++= fa.iterator
+          as
+        }(f)
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
       traverse
