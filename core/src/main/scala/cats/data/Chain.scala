@@ -478,8 +478,14 @@ sealed abstract class Chain[+A] {
   /**
    * Converts to a list.
    */
-  final def toList: List[A] =
-    iterator.toList
+  final def toList: List[A] = {
+    val iter = reverseIterator
+    var res: List[A] = Nil
+    while (iter.hasNext) {
+      res = iter.next() :: res
+    }
+    res
+  }
 
   /**
    * Converts to a vector.
