@@ -20,7 +20,6 @@ sealed abstract class Chain[+A] {
    */
   final def uncons: Option[(A, Chain[A])] =
     this match {
-      case Chain.Empty => None
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
         val rights = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
@@ -44,6 +43,7 @@ sealed abstract class Chain[+A] {
         }
         // scalastyle:on null
         result
+      case _ => None
     }
 
   /**
@@ -51,7 +51,6 @@ sealed abstract class Chain[+A] {
    */
   final def initLast: Option[(Chain[A], A)] =
     this match {
-      case Chain.Empty => None
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
         val lefts = new collection.mutable.ArrayBuffer[Chain.NonEmpty[A]]
@@ -75,6 +74,7 @@ sealed abstract class Chain[+A] {
         }
         // scalastyle:on null
         result
+      case _ => None
     }
 
   /**
