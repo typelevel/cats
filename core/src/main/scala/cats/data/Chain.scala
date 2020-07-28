@@ -24,14 +24,14 @@ sealed abstract class Chain[+A] {
         var c: NonEmpty[A] = non
         // scalastyle:off null
         var rights: Chain.NonEmpty[A] = null
-        var result: Option[(A, Chain[A])] = null
+        var result: (A, Chain[A]) = null
         while (result eq null) {
           c match {
             case Singleton(a) =>
               val next =
                 if (rights eq null) nil
                 else rights
-              result = Some((a, next))
+              result = (a, next)
             case Append(l, r) =>
               rights =
                 if (rights eq null) r
@@ -41,13 +41,17 @@ sealed abstract class Chain[+A] {
               val tail = fromSeq(seq.tail)
               val next =
                 if (rights eq null) tail
-                else if (tail.isEmpty) rights
-                else Append(tail.asInstanceOf[Chain.NonEmpty[A]], rights)
-              result = Some((seq.head, next))
+                else {
+                  tail match {
+                    case non: Chain.NonEmpty[A] => Append(non, rights)
+                    case _                      => rights
+                  }
+                }
+              result = (seq.head, next)
           }
         }
         // scalastyle:on null
-        result
+        Some(result)
       case _ => None
     }
 
@@ -60,14 +64,14 @@ sealed abstract class Chain[+A] {
         var c: NonEmpty[A] = non
         // scalastyle:off null
         var lefts: NonEmpty[A] = null
-        var result: Option[(Chain[A], A)] = null
+        var result: (Chain[A], A) = null
         while (result eq null) {
           c match {
             case Singleton(a) =>
               val pre =
                 if (lefts eq null) nil
                 else lefts
-              result = Some((pre, a))
+              result = (pre, a)
             case Append(l, r) =>
               lefts =
                 if (lefts eq null) l
@@ -77,13 +81,17 @@ sealed abstract class Chain[+A] {
               val init = fromSeq(seq.init)
               val pre =
                 if (lefts eq null) init
-                else if (init.isEmpty) lefts
-                else Append(lefts, init.asInstanceOf[Chain.NonEmpty[A]])
-              result = Some((pre, seq.last))
+                else {
+                  init match {
+                    case non: Chain.NonEmpty[A] => Append(lefts, non)
+                    case _                      => lefts
+                  }
+                }
+              result = (pre, seq.last)
           }
         }
         // scalastyle:on null
-        result
+        Some(result)
       case _ => None
     }
 
@@ -622,7 +630,14 @@ object Chain extends ChainInstances {
     def apply[A](left: Chain[A], right: Chain[A]): Append[A] = new Append(left, right)
   }
 
-  // `fromSeq` constructor doesn't allow either branch to be empty
+  /*
+   * Invariant: (seq.length >= 2)
+   * if the length is zero, fromSeq returns Empty
+   * if the length is one, fromSeq returns Singleton
+   *
+   * The only places we create Wrap is in fromSeq and in methods that preserve
+   * length: zipWithIndex, map, sort
+   */
   final private[data] case class Wrap[A](seq: Seq[A]) extends NonEmpty[A]
 
   def unapplySeq[A](chain: Chain[A]): Option[Seq[A]] =
@@ -942,26 +957,23 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       def flatMap[A, B](fa: Chain[A])(f: A => Chain[B]): Chain[B] =
         fa.flatMap(f)
       def tailRecM[A, B](a: A)(f: A => Chain[Either[A, B]]): Chain[B] = {
-        var acc: Chain[B] = Chain.nil
-        @tailrec def go(rest: List[Chain[Either[A, B]]]): Unit =
+        @tailrec def go(rest: List[Chain[Either[A, B]]], acc: Chain[B]): Chain[B] =
           rest match {
             case hd :: tl =>
               hd.uncons match {
                 case Some((hdh, hdt)) =>
                   hdh match {
                     case Right(b) =>
-                      acc = acc :+ b
-                      go(hdt :: tl)
+                      go(hdt :: tl, acc :+ b)
                     case Left(a) =>
-                      go(f(a) :: hdt :: tl)
+                      go(f(a) :: hdt :: tl, acc)
                   }
                 case None =>
-                  go(tl)
+                  go(tl, acc)
               }
-            case _ => ()
+            case _ => acc
           }
-        go(f(a) :: Nil)
-        acc
+        go(f(a) :: Nil, Chain.nil)
       }
 
       override def map2[A, B, Z](fa: Chain[A], fb: Chain[B])(f: (A, B) => Z): Chain[Z] =
