@@ -3,6 +3,7 @@ package std
 
 import cats._
 import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 
 object map extends MapInstances
 
@@ -18,7 +19,7 @@ trait MapInstances {
           G.map(Chain.traverseViaChain {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
-            as
+            wrapMutableIndexedSeq(as)
           } {
             case (k, a) => G.map(f(a))((k, _))
           }) { chain => chain.foldLeft(Map.empty[K, B]) { case (m, (k, b)) => m.updated(k, b) } }
@@ -69,7 +70,7 @@ trait MapInstances {
           G.map(Chain.traverseFilterViaChain {
             val as = collection.mutable.ArrayBuffer[(K, A)]()
             as ++= fa
-            as
+            wrapMutableIndexedSeq(as)
           } {
             case (k, a) =>
               G.map(f(a)) { optB =>

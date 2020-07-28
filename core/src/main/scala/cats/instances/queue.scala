@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.Chain
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 import scala.annotation.tailrec
 import scala.collection.immutable.Queue
@@ -85,7 +86,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
           G.map(Chain.traverseViaChain {
             val as = collection.mutable.ArrayBuffer[A]()
             as ++= fa
-            as
+            wrapMutableIndexedSeq(as)
           }(f)) { chain =>
             chain.foldLeft(Queue.empty[B])(_ :+ _)
           }
@@ -184,7 +185,7 @@ private object QueueInstances {
         G.map(Chain.traverseFilterViaChain {
           val as = collection.mutable.ArrayBuffer[A]()
           as ++= fa
-          as
+          wrapMutableIndexedSeq(as)
         }(f)) { chain =>
           chain.foldLeft(Queue.empty[B])(_ :+ _)
         }

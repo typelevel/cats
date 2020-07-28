@@ -2,6 +2,7 @@ package cats
 package instances
 
 import cats.data.{Chain, ZipList}
+import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 import cats.syntax.show._
 
 import scala.annotation.tailrec
@@ -91,7 +92,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
           G.map(Chain.traverseViaChain {
             val as = collection.mutable.ArrayBuffer[A]()
             as ++= fa
-            as
+            wrapMutableIndexedSeq(as)
           }(f))(_.toList)
 
       def functor: Functor[List] = this
@@ -221,7 +222,7 @@ private[instances] trait ListInstancesBinCompat0 {
         G.map(Chain.traverseFilterViaChain {
           val as = collection.mutable.ArrayBuffer[A]()
           as ++= fa
-          as
+          wrapMutableIndexedSeq(as)
         }(f))(_.toList)
 
     override def filterA[G[_], A](fa: List[A])(f: (A) => G[Boolean])(implicit G: Applicative[G]): G[List[A]] =

@@ -5,7 +5,7 @@ import Chain._
 import cats.kernel.instances.StaticMethods
 
 import scala.annotation.tailrec
-import scala.collection.immutable.{SortedMap, TreeSet}
+import scala.collection.immutable.{SortedMap, TreeSet, IndexedSeq => ImIndexedSeq}
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -622,7 +622,7 @@ object Chain extends ChainInstances {
     fromSeq(as)
 
   def traverseViaChain[G[_], A, B](
-    as: collection.IndexedSeq[A]
+    as: ImIndexedSeq[A]
   )(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
@@ -668,7 +668,7 @@ object Chain extends ChainInstances {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    as: collection.IndexedSeq[A]
+    as: ImIndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
@@ -856,7 +856,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           traverseViaChain {
             val as = collection.mutable.ArrayBuffer[A]()
             as ++= fa.iterator
-            as
+            StaticMethods.wrapMutableIndexedSeq(as)
           }(f)
 
       def empty[A]: Chain[A] = Chain.nil
@@ -962,7 +962,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         traverseFilterViaChain {
           val as = collection.mutable.ArrayBuffer[A]()
           as ++= fa.iterator
-          as
+          StaticMethods.wrapMutableIndexedSeq(as)
         }(f)
 
     override def filterA[G[_], A](fa: Chain[A])(f: A => G[Boolean])(implicit G: Applicative[G]): G[Chain[A]] =
