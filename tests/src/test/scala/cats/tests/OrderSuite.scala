@@ -1,9 +1,9 @@
 package cats.tests
 
-import cats.{Contravariant, ContravariantMonoidal, Decidable, Invariant}
+import cats.{Contravariant, ContravariantMonoidal, Invariant}
 import cats.kernel.{Order, PartialOrder}
 import cats.kernel.laws.discipline.{OrderTests, SerializableTests}
-import cats.laws.discipline.{ContravariantMonoidalTests, DecidableTests, MiniInt}
+import cats.laws.discipline.{ContravariantMonoidalTests, MiniInt}
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.syntax.order._
