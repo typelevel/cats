@@ -49,7 +49,7 @@ class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLa
   checkAll("NonEmptyLazyList[Int]", ShortCircuitingTests[NonEmptyLazyList].nonEmptyTraverse[Int])
 
   test("show") {
-assert(    Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) === ("NonEmptyLazyList(1, ?)"))
+    assert(Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) === ("NonEmptyLazyList(1, ?)"))
   }
   checkAll("Show[NonEmptyLazyList[Int]]", SerializableTests.serializable(Show[NonEmptyLazyList[Int]]))
 
@@ -71,95 +71,95 @@ assert(    Show[NonEmptyLazyList[Int]].show(NonEmptyLazyList(1, 2, 3)) === ("Non
 
   test("size is consistent with toLazyList.size") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      ci.size === (ci.toLazyList.size.toLong))
+      assert(ci.size === (ci.toLazyList.size.toLong))
     }
   }
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-assert(      ci.filterNot(f).exists(f) === (false))
+      assert(ci.filterNot(f).exists(f) === (false))
     }
   }
 
   test("filter and then forall should always be true") {
     forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-assert(      ci.filter(f).forall(f) === (true))
+      assert(ci.filter(f).forall(f) === (true))
     }
   }
 
   test("exists should be consistent with find + isDefined") {
     forAll { (ci: NonEmptyLazyList[Int], f: Int => Boolean) =>
-assert(      ci.exists(f) === (ci.find(f).isDefined))
+      assert(ci.exists(f) === (ci.find(f).isDefined))
     }
   }
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: NonEmptyLazyList[Int], i: Int) =>
-assert(      ci.filterNot(_ === i).contains(i) === (false))
+      assert(ci.filterNot(_ === i).contains(i) === (false))
     }
   }
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) === (ci))
+      assert(NonEmptyLazyList.fromNonEmptyVector(ci.toNonEmptyVector) === (ci))
     }
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) === (ci))
+      assert(NonEmptyLazyList.fromNonEmptyList(ci.toNonEmptyList) === (ci))
     }
   }
 
   test("fromLazyList . toLazyList is Option.some") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      NonEmptyLazyList.fromLazyList(ci.toLazyList) === (Some(ci)))
+      assert(NonEmptyLazyList.fromLazyList(ci.toLazyList) === (Some(ci)))
     }
   }
 
   test("fromLazyListUnsafe throws exception when used with empty LazyList") {
-assert(    Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft === (true))
+    assert(Either.catchNonFatal(NonEmptyLazyList.fromLazyListUnsafe(LazyList.empty[Int])).isLeft === (true))
   }
 
   test("fromLazyListAppend is consistent with LazyList#:+") {
     forAll { (lli: LazyList[Int], i: Int) =>
-assert(      NonEmptyLazyList.fromLazyListAppend(lli, i).toLazyList === (lli :+ i))
+      assert(NonEmptyLazyList.fromLazyListAppend(lli, i).toLazyList === (lli :+ i))
     }
   }
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      NonEmptyLazyList.fromSeq(ci.iterator.toList) === (Option(ci)))
+      assert(NonEmptyLazyList.fromSeq(ci.iterator.toList) === (Option(ci)))
     }
   }
 
   test("zipWith consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyLazyList[String], b: NonEmptyLazyList[Int], f: (String, Int) => Int) =>
-assert(      a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
+      assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
     }
   }
 
   test("reverse . reverse is id") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      ci.reverse.reverse === (ci))
+      assert(ci.reverse.reverse === (ci))
     }
   }
 
   test("reverse consistent with LazyList#reverse") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      ci.reverse.toLazyList === (ci.toLazyList.reverse))
+      assert(ci.reverse.toLazyList === (ci.toLazyList.reverse))
     }
   }
 
   test("NonEmptyLazyList#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      ci.distinct.toList === (ci.toList.distinct))
+      assert(ci.distinct.toList === (ci.toList.distinct))
     }
   }
 
   test("NonEmptyLazyList#toNev is consistent with List#toVector and creating NonEmptyVector from it") {
     forAll { (ci: NonEmptyLazyList[Int]) =>
-assert(      ci.toNev === (NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector)))
+      assert(ci.toNev === (NonEmptyVector.fromVectorUnsafe(Vector.empty[Int] ++ ci.toList.toVector)))
     }
   }
 }
