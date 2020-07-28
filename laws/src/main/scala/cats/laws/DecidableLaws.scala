@@ -30,13 +30,6 @@ trait DecidableLaws[F[_]] extends ContravariantMonoidalLaws[F] {
         g.andThen(Right.apply)
       )
     ) <-> F.sum(F.contramap(fa)(f), F.contramap(fb)(g))
-
-  def decidableRightDistributivitySum[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[(A, Either[B, C])]] =
-    F.product(fa, F.sum(fb, fc)) <->
-      F.contramap(F.sum(F.product(fa, fb), F.product(fa, fc)))({
-        case (a, Left(b))  => Left((a, b))
-        case (a, Right(c)) => Right((a, c))
-      })
 }
 
 object DecidableLaws {

@@ -32,9 +32,10 @@ trait OrderingInstances {
               if (y.isRight)
                 (x, y).mapN(fb.compare).toOption.get
               else 1
-            else if (y.isLeft)
-              (x.swap, y.swap).mapN(fa.compare).toOption.get
-            else -1
+            else
+              if (y.isLeft)
+                (x.swap, y.swap).mapN(fa.compare).toOption.get
+              else -1
         }
 
       override def zero[A]: Ordering[INothing] = Ordering.by(_ => ())

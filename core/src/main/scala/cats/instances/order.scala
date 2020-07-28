@@ -38,9 +38,10 @@ trait OrderInstances extends kernel.instances.OrderInstances {
               if (y.isRight)
                 (x, y).mapN(fb.compare).toOption.get
               else 1
-            else if (y.isLeft)
-              (x.swap, y.swap).mapN(fa.compare).toOption.get
-            else -1
+            else
+              if (y.isLeft)
+                (x.swap, y.swap).mapN(fa.compare).toOption.get
+              else -1
         }
 
       override def zero[A]: Order[INothing] = Order.by(_ => ())
