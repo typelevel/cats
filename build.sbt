@@ -161,10 +161,8 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test
-  ),
-  libraryDependencies ++= Seq(
-    ("org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test)
+    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
+    "org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test
   ).map(
     _.withDottyCompat(scalaVersion.value)
   )
@@ -573,7 +571,10 @@ lazy val tests = crossProject(JSPlatform, JVMPlatform)
   .settings(testingDependencies)
   .jsSettings(commonJsSettings)
   .jvmSettings(commonJvmSettings)
-  .settings(scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"))
+  .settings(
+    scalacOptions in Test := (scalacOptions in Test).value.filter(_ != "-Xfatal-warnings"),
+    testFrameworks += new TestFramework("munit.Framework")
+  )
 
 lazy val testkit = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)

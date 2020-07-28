@@ -6,6 +6,8 @@ import cats.kernel.laws.discipline.EqTests
 import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class EitherKSuite extends CatsSuite {
 
@@ -41,26 +43,26 @@ class EitherKSuite extends CatsSuite {
 
   test("double swap is identity") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      x.swap.swap should ===(x)
+      assert(x.swap.swap === (x))
     }
   }
 
   test("swap negates isLeft/isRight") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      x.isLeft should !==(x.swap.isLeft)
-      x.isRight should !==(x.swap.isRight)
+      assert(x.isLeft =!= (x.swap.isLeft))
+      assert(x.isRight =!= (x.swap.isRight))
     }
   }
 
   test("isLeft consistent with isRight") {
     forAll { (x: EitherK[Option, Option, Int]) =>
-      x.isLeft should !==(x.isRight)
+      assert(x.isLeft =!= (x.isRight))
     }
   }
 
   test("toValidated + toEither is identity") {
     forAll { (x: EitherK[Option, List, Int]) =>
-      x.toValidated.toEither should ===(x.run)
+      assert(x.toValidated.toEither === (x.run))
     }
   }
 }

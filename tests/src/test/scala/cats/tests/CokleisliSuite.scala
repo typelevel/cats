@@ -8,13 +8,14 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.eq._
+import org.scalacheck.Prop._
+import org.scalacheck.Test.Parameters
 
 class CokleisliSuite extends SlowCatsSuite {
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    slowCheckConfiguration.copy(sizeRange = slowCheckConfiguration.sizeRange.min(5),
-                                minSuccessful = slowCheckConfiguration.minSuccessful.min(20)
-    )
+  implicit override val scalaCheckTestParameters: Parameters =
+    slowCheckConfiguration.withMinSuccessfulTests(20)
 
   implicit def cokleisliEq[F[_], A, B](implicit ev: Eq[F[A] => B]): Eq[Cokleisli[F, A, B]] =
     Eq.by[Cokleisli[F, A, B], F[A] => B](_.run)
@@ -75,7 +76,7 @@ class CokleisliSuite extends SlowCatsSuite {
 
   test("contramapValue with Id consistent with lmap") {
     forAll { (c: Cokleisli[Id, Int, Long], f: MiniInt => Int) =>
-      c.contramapValue[MiniInt](f) should ===(c.lmap(f))
+      assert(c.contramapValue[MiniInt](f) === (c.lmap(f)))
     }
   }
 }

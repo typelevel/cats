@@ -48,7 +48,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList] laziness of foldM") {
-    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
+assert(    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === (None))
   }
 
   def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
@@ -110,19 +110,19 @@ trait ScalaVersionSpecificParallelSuite { self: ParallelSuite =>
           case (a, b) => a + b
         }
 
-      (as, bs, cs).parMapN(_ + _ + _) should ===(zipped)
+assert(      (as, bs, cs).parMapN(_ + _ + _) === (zipped))
     }
   }
 
   test("ParTupled of LazyList should be consistent with ParMap of Tuple.apply") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===((fa, fb, fc, fd).parMapN(Tuple4.apply))
+assert(      (fa, fb, fc, fd).parTupled === ((fa, fb, fc, fd).parMapN(Tuple4.apply)))
     }
   }
 
   test("ParTupled of LazyList should be consistent with zip") {
     forAll { (fa: LazyList[Int], fb: LazyList[Int], fc: LazyList[Int], fd: LazyList[Int]) =>
-      (fa, fb, fc, fd).parTupled should ===(fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) })
+assert(      (fa, fb, fc, fd).parTupled === (fa.zip(fb).zip(fc).zip(fd).map { case (((a, b), c), d) => (a, b, c, d) }))
     }
   }
 
@@ -141,15 +141,15 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
     }
 
     def checkAndResetCount(expected: Int): Unit = {
-      count should ===(expected)
+assert(      count === (expected))
       count = 0
     }
 
-    LazyList(1, 2, 6, 8).traverse(validate) should ===(Either.left("6 is greater than 5"))
+assert(    LazyList(1, 2, 6, 8).traverse(validate) === (Either.left("6 is greater than 5")))
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
-    LazyList(1, 2, 6, 8).traverse_(validate) should ===(Either.left("6 is greater than 5"))
+assert(    LazyList(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
     checkAndResetCount(3)
   }
 }

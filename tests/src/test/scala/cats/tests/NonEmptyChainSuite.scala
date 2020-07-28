@@ -15,6 +15,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.arbitrary._
 import cats.syntax.either._
 import cats.syntax.foldable._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
   protected def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList
@@ -60,118 +62,118 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
   }
 
   test("show") {
-    Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) should ===("NonEmptyChain(1, 2, 3)")
+    assert(Show[NonEmptyChain[Int]].show(NonEmptyChain(1, 2, 3)) === ("NonEmptyChain(1, 2, 3)"))
   }
 
   test("size is consistent with toChain.size") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.size should ===(ci.toChain.size)
+      assert(ci.size === (ci.toChain.size))
     }
   }
 
   test("filterNot and then exists should always be false") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.filterNot(f).exists(f) should ===(false)
+      assert(ci.filterNot(f).exists(f) === (false))
     }
   }
 
   test("filter and then forall should always be true") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.filter(f).forall(f) should ===(true)
+      assert(ci.filter(f).forall(f) === (true))
     }
   }
 
   test("exists should be consistent with find + isDefined") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.exists(f) should ===(ci.find(f).isDefined)
+      assert(ci.exists(f) === (ci.find(f).isDefined))
     }
   }
 
   test("deleteFirst consistent with find") {
     forAll { (ci: NonEmptyChain[Int], f: Int => Boolean) =>
-      ci.find(f) should ===(ci.deleteFirst(f).map(_._1))
+      assert(ci.find(f) === (ci.deleteFirst(f).map(_._1)))
     }
   }
 
   test("filterNot element and then contains should be false") {
     forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      ci.filterNot(_ === i).contains(i) should ===(false)
+      assert(ci.filterNot(_ === i).contains(i) === (false))
     }
   }
 
   test("Always nonempty after cons") {
     forAll { (ci: NonEmptyChain[Int], i: Int) =>
-      (i +: ci).nonEmpty should ===(true)
+      assert((i +: ci).nonEmpty === (true))
     }
   }
 
   test("fromNonEmptyVector . toNonEmptyVector is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) should ===(ci)
+      assert(NonEmptyChain.fromNonEmptyVector(ci.toNonEmptyVector) === (ci))
     }
   }
 
   test("fromNonEmptyList . toNonEmptyList is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) should ===(ci)
+      assert(NonEmptyChain.fromNonEmptyList(ci.toNonEmptyList) === (ci))
     }
   }
 
   test("fromChain . toChain is Option.some") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromChain(ci.toChain) should ===(Some(ci))
+      assert(NonEmptyChain.fromChain(ci.toChain) === (Some(ci)))
     }
   }
 
   test("fromChainUnsafe throws exception when used with empty chain") {
-    Either.catchNonFatal(NonEmptyChain.fromChainUnsafe(Chain.empty[Int])).isLeft should ===(true)
+    assert(Either.catchNonFatal(NonEmptyChain.fromChainUnsafe(Chain.empty[Int])).isLeft === (true))
   }
 
   test("fromSeq . toList . iterator is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      NonEmptyChain.fromSeq(ci.iterator.toSeq) should ===(Option(ci))
+      assert(NonEmptyChain.fromSeq(ci.iterator.toSeq) === (Option(ci)))
     }
   }
 
   test("zipWith consistent with List#zip and then List#map") {
     forAll { (a: NonEmptyChain[String], b: NonEmptyChain[Int], f: (String, Int) => Int) =>
-      a.zipWith(b)(f).toList should ===(a.toList.zip(b.toList).map { case (x, y) => f(x, y) })
+      assert(a.zipWith(b)(f).toList === (a.toList.zip(b.toList).map { case (x, y) => f(x, y) }))
     }
   }
 
   test("groupBy consistent with List#groupBy") {
     forAll { (cs: NonEmptyChain[String], f: String => Int) =>
-      cs.groupBy(f).map(_.toNonEmptyList) should ===(cs.toNonEmptyList.groupByNem(f))
+      assert(cs.groupBy(f).map(_.toNonEmptyList) === (cs.toNonEmptyList.groupByNem(f)))
     }
   }
 
   test("reverse . reverse is id") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.reverse.reverse should ===(ci)
+      assert(ci.reverse.reverse === (ci))
     }
   }
 
   test("reverse consistent with Chain#reverse") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.reverse.toChain should ===(ci.toChain.reverse)
+      assert(ci.reverse.toChain === (ci.toChain.reverse))
     }
   }
 
   test("NonEmptyChain#distinct is consistent with List#distinct") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.distinct.toList should ===(ci.toList.distinct)
+      assert(ci.distinct.toList === (ci.toList.distinct))
     }
   }
 
   test("init") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.init.toList should ===(ci.toList.init)
+      assert(ci.init.toList === (ci.toList.init))
     }
   }
 
   test("last") {
     forAll { (ci: NonEmptyChain[Int]) =>
-      ci.last should ===(ci.toList.last)
+      assert(ci.last === (ci.toList.last))
     }
   }
 }

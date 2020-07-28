@@ -47,8 +47,8 @@ class LazyListSuite extends CatsSuite {
   checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
 
   test("show") {
-    LazyList(1, 2, 3).show should ===(s"LazyList(1, ?)")
-    LazyList.empty[Int].show should ===(s"LazyList()")
+assert(    LazyList(1, 2, 3).show === (s"LazyList(1, ?)"))
+assert(    LazyList.empty[Int].show === (s"LazyList()"))
   }
 
   test("Show[LazyList] is referentially transparent, unlike LazyList.toString") {
@@ -61,9 +61,9 @@ class LazyListSuite extends CatsSuite {
         // depending on the internal state of the LazyList. Show[LazyList] should return
         // consistent values independent of internal state.
         unevaluatedLL.tail
-        initialShow should ===(unevaluatedLL.show)
+assert(        initialShow === (unevaluatedLL.show))
       } else {
-        lazyList.show should ===(lazyList.toString)
+assert(        lazyList.show === (lazyList.toString))
       }
     }
   }

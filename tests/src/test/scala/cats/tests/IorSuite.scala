@@ -15,6 +15,8 @@ import cats.laws.discipline.{
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary._
 import org.scalacheck.Arbitrary._
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class IorSuite extends CatsSuite {
 
@@ -42,72 +44,72 @@ class IorSuite extends CatsSuite {
 
   test("left Option is defined left and both") {
     forAll { (i: Int Ior String) =>
-      (i.isLeft || i.isBoth) should ===(i.left.isDefined)
+      assert((i.isLeft || i.isBoth) === (i.left.isDefined))
     }
   }
 
   test("right Option is defined for right and both") {
     forAll { (i: Int Ior String) =>
-      (i.isRight || i.isBoth) should ===(i.right.isDefined)
+      assert((i.isRight || i.isBoth) === (i.right.isDefined))
     }
   }
 
   test("onlyLeftOrRight") {
     forAll { (i: Int Ior String) =>
-      i.onlyLeft.map(Left(_)).orElse(i.onlyRight.map(Right(_))) should ===(i.onlyLeftOrRight)
+      assert(i.onlyLeft.map(Left(_)).orElse(i.onlyRight.map(Right(_))) === (i.onlyLeftOrRight))
     }
   }
 
   test("onlyBoth consistent with left and right") {
     forAll { (i: Int Ior String) =>
-      i.onlyBoth should ===(for {
+      assert(i.onlyBoth === (for {
         left <- i.left
         right <- i.right
-      } yield (left, right))
+      } yield (left, right)))
     }
   }
 
   test("pad") {
     forAll { (i: Int Ior String) =>
-      i.pad should ===((i.left, i.right))
+      assert(i.pad === ((i.left, i.right)))
     }
   }
 
   test("unwrap consistent with isBoth") {
     forAll { (i: Int Ior String) =>
-      i.unwrap.isRight should ===(i.isBoth)
+      assert(i.unwrap.isRight === (i.isBoth))
     }
   }
 
   test("valueOr consistent with leftMap") {
     forAll { (i: Int Ior String, f: Int => String) =>
-      i.valueOr(f) should ===(i.leftMap(f).fold(identity, identity, _ + _))
+      assert(i.valueOr(f) === (i.leftMap(f).fold(identity, identity, _ + _)))
     }
   }
 
   test("isLeft consistent with toOption") {
     forAll { (i: Int Ior String) =>
-      i.isLeft should ===(i.toOption.isEmpty)
+      assert(i.isLeft === (i.toOption.isEmpty))
     }
   }
 
   test("isLeft consistent with toList") {
     forAll { (i: Int Ior String) =>
-      i.isLeft should ===(i.toList.isEmpty)
+      assert(i.isLeft === (i.toList.isEmpty))
     }
   }
 
   test("isLeft consistent with forall and exists") {
     forAll { (i: Int Ior String, p: String => Boolean) =>
       if (i.isLeft) {
-        (i.forall(p) && !i.exists(p)) should ===(true)
+        assert((i.forall(p) && !i.exists(p)) === (true))
       }
     }
   }
 
   test("leftMap then swap equivalent to swap then map") {
     forAll { (i: Int Ior String, f: Int => Double) =>
-      i.leftMap(f).swap should ===(i.swap.map(f))
+      assert(i.leftMap(f).swap === (i.swap.map(f)))
     }
   }
 
@@ -125,8 +127,8 @@ class IorSuite extends CatsSuite {
       i.foreach { _ =>
         count += 1
       }
-      if (i.isRight || i.isBoth) count should ===(1)
-      else count should ===(0)
+      if (i.isRight || i.isBoth) assertEquals(count, 1)
+      else assertEquals(count, 0)
     }
   }
 
@@ -134,25 +136,25 @@ class IorSuite extends CatsSuite {
     val iorShow = implicitly[Show[Int Ior String]]
 
     forAll { (i: Int Ior String) =>
-      iorShow.show(i).nonEmpty should ===(true)
+      assert(iorShow.show(i).nonEmpty === (true))
     }
   }
 
   test("merge") {
     forAll { (i: Int Ior Int) =>
-      i.merge should ===(i.left.getOrElse(0) + i.right.getOrElse(0))
+      assert(i.merge === (i.left.getOrElse(0) + i.right.getOrElse(0)))
     }
   }
 
   test("mergeLeft") {
     forAll { (i: Int Ior Int) =>
-      i.mergeLeft should ===(i.left.orElse(i.right).get)
+      assert(i.mergeLeft === (i.left.orElse(i.right).get))
     }
   }
 
   test("mergeRight") {
     forAll { (i: Int Ior Int) =>
-      i.mergeRight should ===(i.right.orElse(i.left).get)
+      assert(i.mergeRight === (i.right.orElse(i.left).get))
     }
   }
 
@@ -163,7 +165,7 @@ class IorSuite extends CatsSuite {
           Ior.left(2)
         else
           Ior.both(2, i.right.get)
-      i.putLeft(2) should ===(expectedResult)
+      assert(i.putLeft(2) === (expectedResult))
     }
   }
 
@@ -174,129 +176,129 @@ class IorSuite extends CatsSuite {
           Ior.right(2)
         else
           Ior.both(i.left.get, 2)
-      i.putRight(2) should ===(expectedResult)
+      assert(i.putRight(2) === (expectedResult))
     }
   }
 
   test("combine left") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.combine(j).left should ===(i.left.map(_ + j.left.getOrElse(0)).orElse(j.left))
+      assert(i.combine(j).left === (i.left.map(_ + j.left.getOrElse(0)).orElse(j.left)))
     }
   }
 
   test("combine right") {
     forAll { (i: Int Ior String, j: Int Ior String) =>
-      i.combine(j).right should ===(i.right.map(_ + j.right.getOrElse("")).orElse(j.right))
+      assert(i.combine(j).right === (i.right.map(_ + j.right.getOrElse("")).orElse(j.right)))
     }
   }
 
   test("fromOptions left/right consistent with input options") {
     forAll { (oa: Option[String], ob: Option[Int]) =>
       val x = Ior.fromOptions(oa, ob)
-      x.flatMap(_.left) should ===(oa)
-      x.flatMap(_.right) should ===(ob)
+      assert(x.flatMap(_.left) === (oa))
+      assert(x.flatMap(_.right) === (ob))
     }
   }
 
   test("Option roundtrip") {
     forAll { (ior: String Ior Int) =>
       val iorMaybe = Ior.fromOptions(ior.left, ior.right)
-      iorMaybe should ===(Some(ior))
+      assert(iorMaybe === (Some(ior)))
     }
   }
 
   test("to consistent with toList") {
     forAll { (x: Int Ior String) =>
-      x.to[List, String] should ===(x.toList)
+      assert(x.to[List, String] === (x.toList))
     }
   }
 
   test("to consistent with toOption") {
     forAll { (x: Int Ior String) =>
-      x.to[Option, String] should ===(x.toOption)
+      assert(x.to[Option, String] === (x.toOption))
     }
   }
 
   test("toEither consistent with right") {
     forAll { (x: Int Ior String) =>
-      x.toEither.toOption should ===(x.right)
+      assert(x.toEither.toOption === (x.right))
     }
   }
 
   test("toValidated consistent with right") {
     forAll { (x: Int Ior String) =>
-      x.toValidated.toOption should ===(x.right)
+      assert(x.toValidated.toOption === (x.right))
     }
   }
 
   test("toIorNec Left") {
     val ior = Ior.left[String, Int]("oops")
-    ior.toIorNec should ===(Ior.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops")))
+    assert(ior.toIorNec === (Ior.left[NonEmptyChain[String], Int](NonEmptyChain.one("oops"))))
   }
   test("toIorNec Right") {
     val ior = Ior.right[String, Int](42)
-    ior.toIorNec should ===(Ior.right[NonEmptyChain[String], Int](42))
+    assert(ior.toIorNec === (Ior.right[NonEmptyChain[String], Int](42)))
   }
   test("toIorNec Both") {
     val ior = Ior.both[String, Int]("oops", 42)
-    ior.toIorNec should ===(Ior.both[NonEmptyChain[String], Int](NonEmptyChain.one("oops"), 42))
+    assert(ior.toIorNec === (Ior.both[NonEmptyChain[String], Int](NonEmptyChain.one("oops"), 42)))
   }
 
   test("toIorNes Left") {
     val ior = Ior.left[String, Int]("oops")
-    ior.toIorNes should ===(Ior.left[NonEmptySet[String], Int](NonEmptySet.one("oops")))
+    assert(ior.toIorNes === (Ior.left[NonEmptySet[String], Int](NonEmptySet.one("oops"))))
   }
   test("toIorNes Right") {
     val ior = Ior.right[String, Int](42)
-    ior.toIorNes should ===(Ior.right[NonEmptySet[String], Int](42))
+    assert(ior.toIorNes === (Ior.right[NonEmptySet[String], Int](42)))
   }
   test("toIorNes Both") {
     val ior = Ior.both[String, Int]("oops", 42)
-    ior.toIorNes should ===(Ior.both[NonEmptySet[String], Int](NonEmptySet.one("oops"), 42))
+    assert(ior.toIorNes === (Ior.both[NonEmptySet[String], Int](NonEmptySet.one("oops"), 42)))
   }
 
   test("toIorNel Left") {
     val ior = Ior.left[String, Int]("oops")
-    ior.toIorNel should ===(Ior.left[NonEmptyList[String], Int](NonEmptyList.one("oops")))
+    assert(ior.toIorNel === (Ior.left[NonEmptyList[String], Int](NonEmptyList.one("oops"))))
   }
 
   test("toIorNel Right") {
     val ior = Ior.right[String, Int](42)
-    ior.toIorNel should ===(Ior.right[NonEmptyList[String], Int](42))
+    assert(ior.toIorNel === (Ior.right[NonEmptyList[String], Int](42)))
   }
 
   test("toIorNel Both") {
     val ior = Ior.both[String, Int]("oops", 42)
-    ior.toIorNel should ===(Ior.both[NonEmptyList[String], Int](NonEmptyList.one("oops"), 42))
+    assert(ior.toIorNel === (Ior.both[NonEmptyList[String], Int](NonEmptyList.one("oops"), 42)))
   }
 
   test("leftNel") {
     forAll { (x: String) =>
-      Ior.leftNel(x).left should ===(Some(NonEmptyList.one(x)))
+      assert(Ior.leftNel(x).left === (Some(NonEmptyList.one(x))))
     }
   }
 
   test("leftNec") {
     forAll { (x: String) =>
-      Ior.leftNec(x).left should ===(Some(NonEmptyChain.one(x)))
+      assert(Ior.leftNec(x).left === (Some(NonEmptyChain.one(x))))
     }
   }
 
   test("bothNel") {
     forAll { (x: Int, y: String) =>
-      Ior.bothNel(y, x).onlyBoth should ===(Some((NonEmptyList.one(y), x)))
+      assert(Ior.bothNel(y, x).onlyBoth === (Some((NonEmptyList.one(y), x))))
     }
   }
 
   test("bothNec") {
     forAll { (x: Int, y: String) =>
-      Ior.bothNec(y, x).onlyBoth should ===(Some((NonEmptyChain.one(y), x)))
+      assert(Ior.bothNec(y, x).onlyBoth === (Some((NonEmptyChain.one(y), x))))
     }
   }
 
   test("getOrElse consistent with Option getOrElse") {
     forAll { (x: Int Ior String, default: String) =>
-      x.getOrElse(default) should ===(x.toOption.getOrElse(default))
+      assert(x.getOrElse(default) === (x.toOption.getOrElse(default)))
     }
   }
 }

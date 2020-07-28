@@ -15,7 +15,10 @@ trait TestSettings {
 
   lazy val slowCheckConfiguration: ScalaCheckTest.Parameters =
     if (Platform.isJvm) checkConfiguration
-    else ScalaCheckTest.Parameters.default.withMinSuccessfulTests(1).withMaxSize(ScalaCheckTest.Parameters.default.minSize + 1)
+    else
+      ScalaCheckTest.Parameters.default
+        .withMinSuccessfulTests(1)
+        .withMaxSize(ScalaCheckTest.Parameters.default.minSize + 1)
 }
 
 /**

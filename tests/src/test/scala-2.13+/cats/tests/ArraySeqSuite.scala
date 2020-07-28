@@ -60,13 +60,13 @@ class ArraySeqSuite extends CatsSuite {
   }
 
   test("show") {
-    ArraySeq(1, 2, 3).show should ===(s"ArraySeq(1, 2, 3)")
-    ArraySeq.empty[Int].show should ===(s"ArraySeq()")
+assert(    ArraySeq(1, 2, 3).show === (s"ArraySeq(1, 2, 3)"))
+assert(    ArraySeq.empty[Int].show === (s"ArraySeq()"))
   }
 
   test("MonoidK.algebra consistent with Monoid") {
     forAll { (xs: ArraySeq[Int], ys: ArraySeq[Int]) =>
-      MonoidK[ArraySeq].algebra[Int].combine(xs, ys) should ===(Monoid[ArraySeq[Int]].combine(xs, ys))
+assert(      MonoidK[ArraySeq].algebra[Int].combine(xs, ys) === (Monoid[ArraySeq[Int]].combine(xs, ys)))
     }
   }
 }

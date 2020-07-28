@@ -2,6 +2,8 @@ package cats.tests
 
 import cats.Inject
 import cats.laws.discipline.InjectTests
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class InjectSuite extends CatsSuite {
 
@@ -18,7 +20,7 @@ class InjectSuite extends CatsSuite {
       val expr1: StringOrInt = Inject[String, StringOrInt].inj(x)
       val expr2: StringOrInt = Inject[Int, StringOrInt].inj(y)
       val res = distr(expr1, expr2)
-      res should ===(Some(s"$x $y"))
+      assert(res === (Some(s"$x $y")))
     }
   }
 
@@ -33,26 +35,26 @@ class InjectSuite extends CatsSuite {
       val expr1: StringOrInt = Inject[String, StringOrInt].apply(x)
       val expr2: StringOrInt = Inject[Int, StringOrInt].apply(y)
       val res = distr(expr1, expr2)
-      res should ===(Some(s"$x $y"))
+      assert(res === (Some(s"$x $y")))
     }
   }
 
   test("apply in left") {
     forAll { (y: String) =>
-      Inject[String, StringOrInt].inj(y) == Left(y) should ===(true)
+      assert(Inject[String, StringOrInt].inj(y) == Left(y) === (true))
     }
   }
 
   test("apply in right") {
     forAll { (y: Int) =>
-      Inject[Int, StringOrInt].inj(y) == Right(y) should ===(true)
+      assert(Inject[Int, StringOrInt].inj(y) == Right(y) === (true))
     }
   }
 
   test("null identity") {
     val stringNull = null.asInstanceOf[String]
-    Inject.catsReflexiveInjectInstance[String].inj(stringNull) should ===(stringNull)
-    Inject.catsReflexiveInjectInstance[String].prj(stringNull) should ===(Some(stringNull))
+    assert(Inject.catsReflexiveInjectInstance[String].inj(stringNull) === (stringNull))
+    assert(Inject.catsReflexiveInjectInstance[String].prj(stringNull) === (Some(stringNull)))
   }
 
   checkAll("Inject[String, StringOrInt]", InjectTests[String, StringOrInt].inject)

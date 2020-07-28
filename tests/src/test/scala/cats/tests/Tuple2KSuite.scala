@@ -7,6 +7,8 @@ import cats.laws.discipline._
 import cats.laws.discipline.arbitrary._
 import cats.laws.discipline.eq._
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class Tuple2KSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Tuple2K[Option, List, *]] = Isomorphisms.invariant[Tuple2K[Option, List, *]]
@@ -166,8 +168,9 @@ class Tuple2KSuite extends CatsSuite {
     forAll { (l1: Option[Int], l2: Option[Int]) =>
       val tuple = Tuple2K(l1, l2)
 
-      Show[Tuple2K[Option, Option, Int]].show(tuple) should ===(
-        s"Tuple2K(${Show[Option[Int]].show(l1)}, ${Show[Option[Int]].show(l2)})"
+      assert(
+        Show[Tuple2K[Option, Option, Int]].show(tuple) ===
+          s"Tuple2K(${Show[Option[Int]].show(l1)}, ${Show[Option[Int]].show(l2)})"
       )
     }
   }
@@ -176,7 +179,7 @@ class Tuple2KSuite extends CatsSuite {
     forAll { (l1: Option[String], l2: List[String]) =>
       val tuple = Tuple2K(l1, l2)
 
-      tuple.swap.swap should ===(tuple)
+      assert(tuple.swap.swap === (tuple))
     }
   }
 
