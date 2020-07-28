@@ -22,8 +22,8 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        var rights: Chain.NonEmpty[A] = null
         // scalastyle:off null
+        var rights: Chain.NonEmpty[A] = null
         var result: Option[(A, Chain[A])] = null
         while (result eq null) {
           c match {
@@ -58,8 +58,8 @@ sealed abstract class Chain[+A] {
     this match {
       case non: Chain.NonEmpty[A] =>
         var c: NonEmpty[A] = non
-        var lefts: NonEmpty[A] = null
         // scalastyle:off null
+        var lefts: NonEmpty[A] = null
         var result: Option[(Chain[A], A)] = null
         while (result eq null) {
           c match {
@@ -478,20 +478,24 @@ sealed abstract class Chain[+A] {
   /**
    * Converts to a list.
    */
-  final def toList: List[A] = {
-    val iter = reverseIterator
-    var res: List[A] = Nil
-    while (iter.hasNext) {
-      res = iter.next() :: res
+  final def toList: List[A] =
+    this match {
+      case Wrap(seq)      => seq.toList // this may be a List already
+      case Singleton(a)   => a :: Nil
+      case app: Append[A] => (new ChainIterator(app)).toList
+      case _              => Nil
     }
-    res
-  }
 
   /**
    * Converts to a vector.
    */
   final def toVector: Vector[A] =
-    iterator.toVector
+    this match {
+      case Wrap(seq)      => seq.toVector // this may be a Vector already
+      case Singleton(a)   => Vector.empty :+ a
+      case app: Append[A] => (new ChainIterator(app)).toVector
+      case _              => Vector.empty
+    }
 
   /**
    * Typesafe equality operator.
