@@ -2,6 +2,7 @@ package cats.tests
 
 import cats.data.{AppFunc, Const}
 import cats.data.Func.appFunc
+import cats.syntax.eq._
 
 /*
  * This an example of applicative function composition.
@@ -46,8 +47,8 @@ class WordCountSuite extends CatsSuite {
     val lineCount = allResults.first.second
     val charCount = allResults.second
     val wordCount = wordCountState.value.runA(false).value
-    charCount.getConst should ===(96)
-    lineCount.getConst should ===(2)
-    wordCount.getConst should ===(17)
+    assert(charCount.getConst === (96))
+    assert(lineCount.getConst === (2))
+    assert(wordCount.getConst === (17))
   }
 }

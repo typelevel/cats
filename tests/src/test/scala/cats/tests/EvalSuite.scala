@@ -17,6 +17,8 @@ import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import scala.annotation.tailrec
 import scala.math.min
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 class EvalSuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
@@ -43,10 +45,10 @@ class EvalSuite extends CatsSuite {
       val (spooky, lz) = init(value)
       (0 until n).foreach { _ =>
         val result = lz.value
-        result should ===(value)
+        assert(result === (value))
         spin ^= result.##
       }
-      spooky.counter should ===(numEvals)
+      assert(spooky.counter === (numEvals))
       ()
     }
     (0 to 2).foreach(n => nTimes(n, numCalls(n)))
@@ -87,13 +89,13 @@ class EvalSuite extends CatsSuite {
     val i2 = Eval.always(spooky.increment()).memoize
     val i3 = Eval.now(()).flatMap(_ => Eval.later(spooky.increment())).memoize
     i2.value
-    spooky.counter should ===(1)
+    assert(spooky.counter === (1))
     i2.value
-    spooky.counter should ===(1)
+    assert(spooky.counter === (1))
     i3.value
-    spooky.counter should ===(2)
+    assert(spooky.counter === (2))
     i3.value
-    spooky.counter should ===(2)
+    assert(spooky.counter === (2))
   }
 
   test("Defer and FlatMap compose without blowing the stack") {
@@ -154,14 +156,14 @@ class EvalSuite extends CatsSuite {
   test("cokleisli left identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliLeftIdentity(fa, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
   test("cokleisli right identity") {
     forAll { (fa: Eval[Int], f: Eval[Int] => Long) =>
       val isEq = ComonadLaws[Eval].cokleisliRightIdentity(fa, f)
-      isEq.lhs should ===(isEq.rhs)
+      assert(isEq.lhs === (isEq.rhs))
     }
   }
 
@@ -246,7 +248,7 @@ class EvalSuite extends CatsSuite {
     forAll { (d: DeepEval[Int]) =>
       try {
         d.eval.value
-        succeed
+        assert(true)
       } catch {
         case (e: StackOverflowError) =>
           fail(s"stack overflowed with eval-depth ${DeepEval.MaxDepth}")

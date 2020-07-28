@@ -6,19 +6,21 @@ import cats.syntax.foldable._
 import cats.syntax.functor._
 import cats.syntax.traverse._
 import org.scalacheck.Arbitrary
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {
 
   test(s"Traverse[$name].zipWithIndex") {
     forAll { (fa: F[Int]) =>
-      fa.zipWithIndex.toList should ===(fa.toList.zipWithIndex)
+      assert(fa.zipWithIndex.toList === (fa.toList.zipWithIndex))
     }
   }
 
   test(s"Traverse[$name].mapWithIndex") {
     forAll { (fa: F[Int], fn: ((Int, Int)) => Int) =>
-      fa.mapWithIndex((a, i) => fn((a, i))).toList should ===(fa.toList.zipWithIndex.map(fn))
+      assert(fa.mapWithIndex((a, i) => fn((a, i))).toList === (fa.toList.zipWithIndex.map(fn)))
     }
   }
 
@@ -26,7 +28,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
     forAll { (fa: F[Int], fn: ((Int, Int)) => (Int, Int)) =>
       val left = fa.traverseWithIndexM((a, i) => fn((a, i))).fmap(_.toList)
       val (xs, values) = fa.toList.zipWithIndex.map(fn).unzip
-      left should ===((xs.combineAll, values))
+      assert(left === ((xs.combineAll, values)))
     }
   }
 

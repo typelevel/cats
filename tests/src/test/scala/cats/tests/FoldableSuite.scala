@@ -16,6 +16,8 @@ import cats.syntax.semigroupk._
 import org.scalacheck.Arbitrary
 import scala.collection.immutable.{SortedMap, SortedSet}
 import scala.util.Try
+import cats.syntax.eq._
+import org.scalacheck.Prop._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
@@ -28,7 +30,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
   test(s"Foldable[$name].size/get") {
     forAll { (fa: F[Int], n: Int) =>
       val s = fa.size
-      s should ===(iterator(fa).size.toLong)
+      assert(s === (iterator(fa).size.toLong))
       if (n < s && n >= 0) {
         fa.get(n.toLong) === Some(iterator(fa).take(n + 1).toList.last)
       } else {
@@ -41,7 +43,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
     forAll { (fi: F[Int], f: Int => Either[String, String]) =>
       val vector = Foldable[F].toList(fi).toVector
       val (lefts, rights) = Foldable[Vector].partitionEither(vector)(f)
-      (lefts <+> rights).size.toLong should ===(fi.size)
+      assert((lefts <+> rights).size.toLong === (fi.size))
     }
   }
 
@@ -56,8 +58,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
           case Right(_) => false
         })
 
-      lefts.map(_.asLeft[String]) should ===(ls)
-      rights.map(_.asRight[String]) should ===(rs)
+      assert(lefts.map(_.asLeft[String]) === (ls))
+      assert(rights.map(_.asRight[String]) === (rs))
     }
   }
 
@@ -68,10 +70,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val h: Int => Either[String, Double] = f.andThen(Left.apply)
 
       val withG = Foldable[List].partitionEither(list)(g)._2
-      withG should ===(list.map(f))
+      assert(withG === (list.map(f)))
 
       val withH = Foldable[List].partitionEither(list)(h)._1
-      withH should ===(list.map(f))
+      assert(withH === (list.map(f)))
     }
   }
 
@@ -82,8 +84,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val sorted = list.map(f).sorted
       val (lefts, rights) = Foldable[List].partitionEither(sorted)(identity)
 
-      lefts.sorted should ===(lefts)
-      rights.sorted should ===(rights)
+      assert(lefts.sorted === (lefts))
+      assert(rights.sorted === (rights))
     }
   }
 
@@ -94,7 +96,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
         case (lefts, rights) =>
           (lefts <+> rights).size
       }
-      result should ===(Option(vector.size))
+      assert(result === (Option(vector.size)))
     }
   }
 
@@ -109,8 +111,8 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
           case Right(_) => false
         })
 
-      partitioned.map(_._1.map(_.asLeft[String])) should ===(Option(ls))
-      partitioned.map(_._2.map(_.asRight[String])) should ===(Option(rs))
+      assert(partitioned.map(_._1.map(_.asLeft[String])) === (Option(ls)))
+      assert(partitioned.map(_._2.map(_.asRight[String])) === (Option(rs)))
     }
   }
 
@@ -121,10 +123,10 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val h: Int => Option[Either[String, Double]] = f.andThen(Left.apply).andThen(Option.apply)
 
       val withG = Foldable[List].partitionEitherM(list)(g).map(_._2)
-      withG should ===(Option(list.map(f)))
+      assert(withG === (Option(list.map(f))))
 
       val withH = Foldable[List].partitionEitherM(list)(h).map(_._1)
-      withH should ===(Option(list.map(f)))
+      assert(withH === (Option(list.map(f))))
     }
   }
 
@@ -135,18 +137,18 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val sorted = list.map(f).sorted
       val pairs = Foldable[List].partitionEitherM(sorted)(Option.apply)
 
-      pairs.map(_._1.sorted) should ===(pairs.map(_._1))
-      pairs.map(_._2.sorted) should ===(pairs.map(_._2))
+      assert(pairs.map(_._1.sorted) === (pairs.map(_._1)))
+      assert(pairs.map(_._2.sorted) === (pairs.map(_._2)))
     }
   }
 
   test(s"Foldable[$name] summation") {
     forAll { (fa: F[Int]) =>
       val total = iterator(fa).sum
-      fa.foldLeft(0)(_ + _) should ===(total)
-      fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value should ===(total)
-      fa.fold should ===(total)
-      fa.foldMap(identity) should ===(total)
+      assert(fa.foldLeft(0)(_ + _) === (total))
+      assert(fa.foldRight(Now(0))((x, ly) => ly.map(x + _)).value === (total))
+      assert(fa.fold === (total))
+      assert(fa.foldMap(identity) === (total))
     }
   }
 
@@ -157,7 +159,7 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val pf: PartialFunction[String, String] = {
         case n if f(n) => n
       }
-      fa.collectFold(pf) should ===(fa.toList.collect(pf).fold(m.empty)(m.combine))
+      assert(fa.collectFold(pf) === (fa.toList.collect(pf).fold(m.empty)(m.combine)))
 
       def g(a: String): Option[String] = Some(a).filter(f)
 
@@ -167,29 +169,29 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       // that might still be in use.
       //
       // https://github.com/typelevel/cats/pull/3278#discussion_r372841693
-      fa.collectSomeFold(g) should ===(fa.toList.filter(f).fold(m.empty)(m.combine))
+      assert(fa.collectSomeFold(g) === (fa.toList.filter(f).fold(m.empty)(m.combine)))
     }
   }
 
   test(s"Foldable[$name].find/exists/forall/findM/existsM/forallM/filter_/dropWhile_") {
     forAll { (fa: F[Int], n: Int) =>
-      fa.find(_ > n) should ===(iterator(fa).find(_ > n))
-      fa.exists(_ > n) should ===(iterator(fa).exists(_ > n))
-      fa.forall(_ > n) should ===(iterator(fa).forall(_ > n))
-      fa.findM(k => Option(k > n)) should ===(Option(iterator(fa).find(_ > n)))
-      fa.existsM(k => Option(k > n)) should ===(Option(iterator(fa).exists(_ > n)))
-      fa.forallM(k => Option(k > n)) should ===(Option(iterator(fa).forall(_ > n)))
-      fa.filter_(_ > n) should ===(iterator(fa).filter(_ > n).toList)
-      fa.dropWhile_(_ > n) should ===(iterator(fa).dropWhile(_ > n).toList)
-      fa.takeWhile_(_ > n) should ===(iterator(fa).takeWhile(_ > n).toList)
+      assert(fa.find(_ > n) === (iterator(fa).find(_ > n)))
+      assert(fa.exists(_ > n) === (iterator(fa).exists(_ > n)))
+      assert(fa.forall(_ > n) === (iterator(fa).forall(_ > n)))
+      assert(fa.findM(k => Option(k > n)) === (Option(iterator(fa).find(_ > n))))
+      assert(fa.existsM(k => Option(k > n)) === (Option(iterator(fa).exists(_ > n))))
+      assert(fa.forallM(k => Option(k > n)) === (Option(iterator(fa).forall(_ > n))))
+      assert(fa.filter_(_ > n) === (iterator(fa).filter(_ > n).toList))
+      assert(fa.dropWhile_(_ > n) === (iterator(fa).dropWhile(_ > n).toList))
+      assert(fa.takeWhile_(_ > n) === (iterator(fa).takeWhile(_ > n).toList))
     }
   }
 
   test(s"Foldable[$name].toList/isEmpty/nonEmpty") {
     forAll { (fa: F[Int]) =>
-      fa.toList should ===(iterator(fa).toList)
-      fa.isEmpty should ===(iterator(fa).isEmpty)
-      fa.nonEmpty should ===(iterator(fa).nonEmpty)
+      assert(fa.toList === (iterator(fa).toList))
+      assert(fa.isEmpty === (iterator(fa).isEmpty))
+      assert(fa.nonEmpty === (iterator(fa).nonEmpty))
     }
   }
 
@@ -199,12 +201,12 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val minOpt = fa.minimumOption
       val list = fa.toList
       val nelOpt = list.toNel
-      maxOpt should ===(nelOpt.map(_.maximum))
-      maxOpt should ===(nelOpt.map(_.toList.max))
-      minOpt should ===(nelOpt.map(_.minimum))
-      minOpt should ===(nelOpt.map(_.toList.min))
-      maxOpt.forall(i => fa.forall(_ <= i)) should ===(true)
-      minOpt.forall(i => fa.forall(_ >= i)) should ===(true)
+      assert(maxOpt === (nelOpt.map(_.maximum)))
+      assert(maxOpt === (nelOpt.map(_.toList.max)))
+      assert(minOpt === (nelOpt.map(_.minimum)))
+      assert(minOpt === (nelOpt.map(_.toList.min)))
+      assert(maxOpt.forall(i => fa.forall(_ <= i)) === (true))
+      assert(minOpt.forall(i => fa.forall(_ >= i)) === (true))
     }
   }
 
@@ -213,69 +215,70 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
       val maxOpt = fa.maximumByOption(f).map(f)
       val minOpt = fa.minimumByOption(f).map(f)
       val nelOpt = fa.toList.toNel
-      maxOpt should ===(nelOpt.map(_.maximumBy(f)).map(f))
-      maxOpt should ===(nelOpt.map(_.toList.maxBy(f)).map(f))
-      minOpt should ===(nelOpt.map(_.minimumBy(f)).map(f))
-      minOpt should ===(nelOpt.map(_.toList.minBy(f)).map(f))
-      maxOpt.forall(i => fa.forall(f(_) <= i)) should ===(true)
-      minOpt.forall(i => fa.forall(f(_) >= i)) should ===(true)
+      assert(maxOpt === (nelOpt.map(_.maximumBy(f)).map(f)))
+      assert(maxOpt === (nelOpt.map(_.toList.maxBy(f)).map(f)))
+      assert(minOpt === (nelOpt.map(_.minimumBy(f)).map(f)))
+      assert(minOpt === (nelOpt.map(_.toList.minBy(f)).map(f)))
+      assert(maxOpt.forall(i => fa.forall(f(_) <= i)) === (true))
+      assert(minOpt.forall(i => fa.forall(f(_) >= i)) === (true))
     }
   }
 
   test(s"Foldable[$name].reduceLeftOption/reduceRightOption") {
     forAll { (fa: F[Int]) =>
       val list = fa.toList
-      fa.reduceLeftOption(_ - _) should ===(list.reduceLeftOption(_ - _))
-      fa.reduceRightOption((x, ly) => ly.map(x - _)).value should ===(list.reduceRightOption(_ - _))
+      assert(fa.reduceLeftOption(_ - _) === (list.reduceLeftOption(_ - _)))
+      assert(fa.reduceRightOption((x, ly) => ly.map(x - _)).value === (list.reduceRightOption(_ - _)))
     }
   }
 
   test(s"Foldable[$name].combineAllOption") {
     forAll { (fa: F[Int]) =>
-      fa.combineAllOption should ===(fa.toList.combineAllOption)
-      fa.combineAllOption should ===(iterator(fa).toList.combineAllOption)
+      assert(fa.combineAllOption === (fa.toList.combineAllOption))
+      assert(fa.combineAllOption === (iterator(fa).toList.combineAllOption))
     }
   }
 
   test(s"Foldable[$name].iterable") {
     forAll { (fa: F[Int]) =>
-      fa.toIterable.toList should ===(fa.toList)
-      fa.toIterable.toList should ===(iterator(fa).toList)
+      assert(fa.toIterable.toList === (fa.toList))
+      assert(fa.toIterable.toList === (iterator(fa).toList))
     }
   }
 
   test(s"Foldable[$name].intercalate") {
     forAll { (fa: F[String], a: String) =>
-      fa.intercalate(a) should ===(fa.toList.mkString(a))
+      assert(fa.intercalate(a) === (fa.toList.mkString(a)))
     }
   }
 
   test(s"Foldable[$name].toList") {
     forAll { (fa: F[Int]) =>
-      fa.toList should ===(iterator(fa).toList)
+      assert(fa.toList === (iterator(fa).toList))
     }
   }
 
   test(s"Foldable[$name] mkString_") {
     forAll { (fa: F[Int]) =>
-      fa.mkString_("L[", ";", "]") should ===(fa.toList.mkString("L[", ";", "]"))
+      assert(fa.mkString_("L[", ";", "]") === (fa.toList.mkString("L[", ";", "]")))
     }
   }
 
   test(s"Foldable[$name] mkString_ delimiter only") {
     forAll { (fa: F[Int]) =>
-      fa.mkString_(",") should ===(fa.toList.mkString(","))
+      assert(fa.mkString_(",") === (fa.toList.mkString(",")))
     }
   }
 
   test(s"Foldable[$name].collectFirstSomeM") {
     forAll { (fa: F[Int], n: Int) =>
-      fa.collectFirstSomeM(x => (x > n).guard[Option].as(x).asRight[String]) should ===(
-        fa.toList
-          .collectFirst {
-            case x if x > n => x
-          }
-          .asRight[String]
+      assert(
+        fa.collectFirstSomeM(x => (x > n).guard[Option].as(x).asRight[String]) ===
+          fa.toList
+            .collectFirst {
+              case x if x > n => x
+            }
+            .asRight[String]
       )
     }
   }
@@ -295,13 +298,13 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     // some basic sanity checks
     val ns = (1 to 10).toList
     val total = ns.sum
-    F.foldLeft(ns, 0)(_ + _) should ===(total)
-    F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value should ===(total)
-    F.fold(ns) should ===(total)
+    assert(F.foldLeft(ns, 0)(_ + _) === (total))
+    assert(F.foldRight(ns, Now(0))((x, ly) => ly.map(x + _)).value === (total))
+    assert(F.fold(ns) === (total))
 
     // more basic checks
     val names = List("Aaron", "Betty", "Calvin", "Deirdra")
-    F.foldMap(names)(_.length) should ===(names.map(_.length).sum)
+    assert(F.foldMap(names)(_.length) === (names.map(_.length).sum))
     val sumM = F.foldM(names, "") { (acc, x) =>
       (Some(acc + x): Option[String])
     }
@@ -315,7 +318,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
     val f = (_: String) match {
       case "Calvin" => None
       case "Deirdra" =>
-        fail: Unit // : Unit ascription suppresses unreachable code warning
+        assert(false)
         None
       case x => Some(x)
     }
@@ -337,10 +340,10 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
 
     // safely build large lists
     val larger = F.foldRight(large, Now(List.empty[Int]))((x, lxs) => lxs.map((x + 1) :: _))
-    larger.value should ===(large.map(_ + 1))
+    assert(larger.value === (large.map(_ + 1)))
 
     val sum = F.foldRightDefer(large, Eval.later(0))((elem, acc) => acc.map(_ + elem))
-    sum.value should ===(large.sum)
+    assert(sum.value === (large.sum))
 
     def boom[A]: Eval[A] = Eval.later(sys.error("boom"))
     // Ensure that the lazy param is actually handled lazily
@@ -389,10 +392,10 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
         Eval.always(a + eb.value)
       }
 
-      eval.value should ===(fa.sum)
+      assert(eval.value === (fa.sum))
 
       // Repeat here so the result is evaluated again
-      eval.value should ===(fa.sum)
+      assert(eval.value === (fa.sum))
     }
   }
 
@@ -461,7 +464,7 @@ class FoldableSuiteAdditional extends CatsSuite with ScalaVersionSpecificFoldabl
   }
 
   test("Foldable[Stream] laziness of foldM") {
-    dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) should ===(None)
+    assert(dangerous.foldM(0)((acc, a) => if (a < 2) Some(acc + a) else None) === (None))
   }
 
   def foldableStreamWithDefaultImpl: Foldable[Stream] =
