@@ -24,8 +24,8 @@ package object instances {
   object long extends LongInstances
   object option extends OptionInstances with OptionInstancesBinCompat0
   object map extends MapInstances with MapInstancesBinCompat0 with MapInstancesBinCompat1
-  object order extends OrderInstances with OrderInstancesBinCompat0
-  object ordering extends OrderingInstances with OrderingInstancesBinCompat0
+  object order extends OrderInstances
+  object ordering extends OrderingInstances
   object parallel extends ParallelInstances
   object partialOrder extends PartialOrderInstances
   object partialOrdering extends PartialOrderingInstances

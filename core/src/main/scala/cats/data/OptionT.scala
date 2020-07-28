@@ -385,9 +385,6 @@ sealed abstract private[data] class OptionTInstances0 extends OptionTInstances1 
       implicit val F = F0
     }
 
-  implicit def catsDataDecidableForOptionT[F[_]](implicit F0: Decidable[F]): Decidable[OptionT[F, *]] =
-    new OptionTDecidable[F] { implicit val F = F0 }
-
   implicit def catsDataMonoidKForOptionT[F[_]](implicit F0: Monad[F]): MonoidK[OptionT[F, *]] =
     new OptionTMonoidK[F] { implicit val F = F0 }
 
@@ -496,26 +493,6 @@ private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, *], E] wi
     OptionT(F.handleErrorWith(fa.value)(f(_).value))
 }
 
-private trait OptionTDecidable[F[_]] extends Decidable[OptionT[F, *]] with OptionTContravariantMonoidal[F] {
-  def F: Decidable[F]
-
-  override def decide[A, B, C](fa: OptionT[F, A], fb: OptionT[F, B])(f: C => Either[A, B]): OptionT[F, C] =
-      OptionT(
-        F.contramap(F.product(fa.value, fb.value))(c =>
-          c.map(f)
-            .fold[(Option[A], Option[B])]((None, None))(
-              _.fold(
-                b => (Some(b), None),
-                c => (None, Some(c))
-              )))
-      )
-
-  override def sum[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, Either[A, B]] =
-    decide(fa, fb)(identity)
-
-  override def zero[A]: OptionT[F, INothing] = OptionT(F.trivial[Option[INothing]])
-}
-
 private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[OptionT[F, *]] {
   def F: ContravariantMonoidal[F]
 
@@ -527,9 +504,9 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
   override def product[A, B](fa: OptionT[F, A], fb: OptionT[F, B]): OptionT[F, (A, B)] =
     OptionT(
       F.contramap(F.product(fa.value, fb.value))({
-          case Some((x, y)) => (Some(x), Some(y))
-          case None         => (None, None)
-        })
+        case Some((x, y)) => (Some(x), Some(y))
+        case None         => (None, None)
+      })
     )
 }
 

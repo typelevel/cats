@@ -50,8 +50,6 @@ trait AllInstancesBinCompat0
     with Tuple2InstancesBinCompat0
     with EqInstancesBinCompat0
     with EquivInstancesBinCompat0
-    with OrderInstancesBinCompat0
-    with OrderingInstancesBinCompat0
 
 trait AllInstancesBinCompat1
     extends OptionInstancesBinCompat0

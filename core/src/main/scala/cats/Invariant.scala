@@ -141,14 +141,15 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInvariantSemigroupalForMonoid: InvariantSemigroupal[Monoid] =
     cats.instances.invariant.catsSemigroupalForMonoid
 
+  implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
+    cats.instances.order.catsContravariantMonoidalForOrder
+  implicit def catsContravariantMonoidalForOrdering: ContravariantMonoidal[Ordering] =
+    cats.instances.ordering.catsContravariantMonoidalForOrdering
+
   implicit def catsDecidableForEquiv: Decidable[Equiv] =
     cats.instances.equiv.catsDecidableForEquiv
   implicit def catsDecidableForEq: Decidable[Eq] =
     cats.instances.eq.catsDecidableForEq
-  implicit def catsDecidableForOrder: Decidable[Order] =
-    cats.instances.order.catsDecidableForOrder
-  implicit def catsDecidableForOrdering: Decidable[Ordering] =
-    cats.instances.ordering.catsDecidableForOrdering
   implicit def catsDecidableForPredicate: Decidable[* => Boolean] =
     cats.instances.function.catsStdDecidableForPredicate
 
