@@ -621,7 +621,9 @@ object Chain extends ChainInstances {
   def apply[A](as: A*): Chain[A] =
     fromSeq(as)
 
-  def traverseViaChain[G[_], A, B](as: IndexedSeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
+  def traverseViaChain[G[_], A, B](
+    as: collection.IndexedSeq[A]
+  )(f: A => G[B])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
       // we branch out by this factor
@@ -666,7 +668,7 @@ object Chain extends ChainInstances {
     }
 
   def traverseFilterViaChain[G[_], A, B](
-    as: IndexedSeq[A]
+    as: collection.IndexedSeq[A]
   )(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Chain[B]] =
     if (as.isEmpty) G.pure(Chain.nil)
     else {
