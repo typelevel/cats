@@ -11,8 +11,8 @@ package object instances {
   object double extends DoubleInstances
   object duration extends CoreDurationInstances with DurationInstances
   object either extends EitherInstances
-  object eq extends EqInstances with EqInstancesBinCompat0
-  object equiv extends EquivInstances with EquivInstancesBinCompat0
+  object eq extends EqInstances
+  object equiv extends EquivInstances
   object float extends FloatInstances
   object finiteDuration extends CoreFiniteDurationInstances with FiniteDurationInstances
   object function extends FunctionInstances with FunctionInstancesBinCompat0

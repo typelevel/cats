@@ -48,8 +48,6 @@ trait AllInstances
 trait AllInstancesBinCompat0
     extends FunctionInstancesBinCompat0
     with Tuple2InstancesBinCompat0
-    with EqInstancesBinCompat0
-    with EquivInstancesBinCompat0
 
 trait AllInstancesBinCompat1
     extends OptionInstancesBinCompat0
