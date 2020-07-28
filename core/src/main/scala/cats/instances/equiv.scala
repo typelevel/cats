@@ -6,7 +6,7 @@ import cats.instances.either._
 import cats.syntax.apply._
 
 trait EquivInstances extends EquivInstances0 {
-  implicit val catsDecidableForEquiv: Decidable[Equiv] =
+  implicit def catsDecidableForEquiv: Decidable[Equiv] =
     new Decidable[Equiv] {
 
       /**
