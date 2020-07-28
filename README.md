@@ -208,6 +208,7 @@ By sharing the same set of type classes, instances and data types provided by Ca
  * [seals](https://github.com/durban/seals): tools for schema evolution and language-integrated schemata
  * [sup](https://github.com/kubukoz/sup): Composable, purely functional healthchecks in Scala
  * [tsec](https://github.com/jmcardon/tsec/): Typesafe, functional, general purpose cryptography and security library
+ * [coulomb-cats](https://github.com/erikerlandson/coulomb/tree/develop/coulomb-cats): cats typeclass instances for coulomb Quantity
 
 Your project talks Cats too? [Submit a PR to add it here!](https://github.com/typelevel/cats/edit/master/README.md)
 
