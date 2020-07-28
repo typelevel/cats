@@ -21,11 +21,13 @@ isTravisBuild in Global := sys.env.get("TRAVIS").isDefined
 val scalaCheckVersion = "1.14.3"
 
 val scalatestVersion = "3.2.0"
+val munitVersion = "0.7.10"
 val scalatestplusScalaCheckVersion = "3.2.0.0"
 
 val disciplineVersion = "1.0.2"
 
 val disciplineScalatestVersion = "2.0.0"
+val disciplineMunitVersion = "0.2.2"
 
 val kindProjectorVersion = "0.11.0"
 
@@ -159,17 +161,12 @@ lazy val disciplineDependencies = Seq(
 
 lazy val testingDependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-shouldmatchers" % scalatestVersion % Test,
-    "org.scalatest" %%% "scalatest-funsuite" % scalatestVersion % Test,
-    "org.scalatestplus" %%% "scalacheck-1-14" % scalatestplusScalaCheckVersion % Test
+    "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test
   ),
   libraryDependencies ++= Seq(
-    ("org.typelevel" %%% "discipline-scalatest" % disciplineScalatestVersion % Test)
+    ("org.typelevel" %%% "discipline-munit" % disciplineMunitVersion % Test)
   ).map(
-    _.exclude("org.scalatestplus", "scalacheck-1-14_2.13")
-      .exclude("org.scalactic", "scalactic_2.13")
-      .exclude("org.scalatest", "scalatest_2.13")
-      .withDottyCompat(scalaVersion.value)
+    _.withDottyCompat(scalaVersion.value)
   )
 )
 

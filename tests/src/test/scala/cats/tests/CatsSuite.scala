@@ -1,42 +1,30 @@
 package cats.tests
 
 import cats.platform.Platform
-import org.scalactic.anyvals.{PosInt, PosZDouble, PosZInt}
-import org.scalatest.funsuite.AnyFunSuiteLike
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.prop.Configuration
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
+import org.scalacheck.{Test => ScalaCheckTest}
 
-trait TestSettings extends Configuration with Matchers {
+trait TestSettings {
 
-  lazy val checkConfiguration: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(
-      minSuccessful = if (Platform.isJvm) PosInt(50) else PosInt(5),
-      maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
-      minSize = PosZInt(0),
-      sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
-      workers = if (Platform.isJvm) PosInt(2) else PosInt(1)
-    )
+  lazy val checkConfiguration: ScalaCheckTest.Parameters =
+    ScalaCheckTest.Parameters.default
+      .withMinSuccessfulTests(if (Platform.isJvm) 50 else 5)
+      .withMaxDiscardRatio(if (Platform.isJvm) 5.0f else 50.0f)
+      .withMaxSize(if (Platform.isJvm) 10 else 5)
+      .withMinSize(0)
+      .withWorkers(if (Platform.isJvm) 2 else 1)
 
-  lazy val slowCheckConfiguration: PropertyCheckConfiguration =
+  lazy val slowCheckConfiguration: ScalaCheckTest.Parameters =
     if (Platform.isJvm) checkConfiguration
-    else PropertyCheckConfiguration(minSuccessful = 1, sizeRange = 1)
+    else ScalaCheckTest.Parameters.default.withMinSuccessfulTests(1).withMaxSize(ScalaCheckTest.Parameters.default.minSize + 1)
 }
 
 /**
  * An opinionated stack of traits to improve consistency and reduce
  * boilerplate in Cats tests.
  */
-trait CatsSuite
-    extends AnyFunSuiteLike
-    with Matchers
-    with ScalaCheckDrivenPropertyChecks
-    with FunSuiteDiscipline
-    with TestSettings
-    with StrictCatsEquality {
+trait CatsSuite extends munit.DisciplineSuite with TestSettings {
 
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+  implicit override def scalaCheckTestParameters: ScalaCheckTest.Parameters =
     checkConfiguration
 
   def even(i: Int): Boolean = i % 2 == 0
@@ -45,6 +33,6 @@ trait CatsSuite
 }
 
 trait SlowCatsSuite extends CatsSuite {
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+  implicit override def scalaCheckTestParameters: ScalaCheckTest.Parameters =
     slowCheckConfiguration
 }
