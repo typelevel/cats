@@ -36,9 +36,7 @@ trait DecidableTests[F[_]] extends ContravariantMonoidalTests[F] {
         "decidable sum associativity" ->
           forAll(laws.decidableSumAssociativity[A, B, C] _),
         "decidable right distributivity" ->
-          forAll(laws.decidableRightDistributivity[A, B, C] _),
-        "dedicable right sum distributivituy" ->
-          forAll(laws.decidableRightDistributivitySum[A, B, C] _)
+          forAll(laws.decidableRightDistributivity[A, B, C] _)
       )
     }
 }
